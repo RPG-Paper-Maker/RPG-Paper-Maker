@@ -1,0 +1,30 @@
+{
+    "currencies": [
+        {
+            "id": 1,
+            "names": {
+                "1": "G"
+            }
+        }
+    ],
+    "idMapHero": {
+        "k": 3,
+        "v": 1
+    },
+    "idObjHero": {
+        "k": 3,
+        "v": 1
+    },
+    "itemsTypes": [
+        {
+            "id": 1,
+            "name": "ingredients"
+        },
+        {
+            "id": 2,
+            "name": "key items"
+        }
+    ],
+    "pr": 1,
+    "ss": 16
+}

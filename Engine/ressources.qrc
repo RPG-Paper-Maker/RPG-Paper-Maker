@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>Ressources/new_file.png</file>
+        <file>Ressources/open_file.png</file>
+        <file>Ressources/save.png</file>
+        <file>Ressources/play.png</file>
+        <file>Ressources/datas.png</file>
+        <file>Ressources/map.png</file>
+        <file>Ressources/dir.png</file>
+        <file>Ressources/lang.png</file>
+    </qresource>
+    <qresource prefix="/stylesheets">
+        <file>style.qss</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>Shaders/cursor.frag</file>
+        <file>Shaders/cursor.vert</file>
+        <file>Shaders/static.frag</file>
+        <file>Shaders/static.vert</file>
+        <file>Shaders/grid.frag</file>
+        <file>Shaders/grid.vert</file>
+    </qresource>
+</RCC>

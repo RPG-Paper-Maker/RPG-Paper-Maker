@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WidgetMenuBarMapEditor</class>
+ <widget class="QMenuBar" name="WidgetMenuBarMapEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>29</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="nativeMenuBar">
+   <bool>false</bool>
+  </property>
+  <widget class="WidgetMenuMapEditor" name="menuFloors">
+   <property name="title">
+    <string>Floors</string>
+   </property>
+   <addaction name="actionFloors"/>
+  </widget>
+  <widget class="WidgetMenuMapEditor" name="menuEvents">
+   <property name="title">
+    <string>Objects</string>
+   </property>
+   <addaction name="actionEvents"/>
+  </widget>
+  <widget class="QMenu" name="menuFace_Sprite">
+   <property name="title">
+    <string>Face Sprite</string>
+   </property>
+   <addaction name="actionFace_Sprite"/>
+   <addaction name="actionFix_Sprite"/>
+  </widget>
+  <action name="actionFloors">
+   <property name="text">
+    <string>Floors</string>
+   </property>
+  </action>
+  <action name="actionEvents">
+   <property name="text">
+    <string>Objects</string>
+   </property>
+  </action>
+  <action name="actionFace_Sprite">
+   <property name="text">
+    <string>Face Sprite</string>
+   </property>
+  </action>
+  <action name="actionFix_Sprite">
+   <property name="text">
+    <string>Fix Sprite</string>
+   </property>
+  </action>
+  <addaction name="menuFloors"/>
+  <addaction name="menuFace_Sprite"/>
+  <addaction name="menuEvents"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetMenuMapEditor</class>
+   <extends>QMenu</extends>
+   <header>widgetmenumapeditor.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

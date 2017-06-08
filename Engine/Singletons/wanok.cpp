@@ -1,0 +1,257 @@
+/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <QDir>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QDebug>
+#include <QStandardPaths>
+#include <QDirIterator>
+#include "wanok.h"
+
+QSet<int> Wanok::mapsToSave;
+
+// PATHS DATAS
+const QString Wanok::pathDatas = pathCombine("Content", "Datas");
+const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
+const QString Wanok::pathScriptsDir = pathCombine(pathDatas, "Scripts");
+const QString Wanok::pathCommonEvents =
+        pathCombine(pathDatas, "commonEvents.json");
+const QString Wanok::pathVariablesSwitches =
+        pathCombine(pathDatas, "variablesSwitches.json");
+const QString Wanok::pathSystem = pathCombine(pathDatas, "system.json");
+const QString Wanok::pathBattleSystem =
+        pathCombine(pathDatas, "battleSystem.json");
+const QString Wanok::pathItems = pathCombine(pathDatas, "items.json");
+const QString Wanok::pathSkills = pathCombine(pathDatas, "skills.json");
+const QString Wanok::pathWeapons = pathCombine(pathDatas, "weapons.json");
+const QString Wanok::pathArmors = pathCombine(pathDatas, "armors.json");
+const QString Wanok::pathHeroes = pathCombine(pathDatas, "heroes.json");
+const QString Wanok::pathMonsters = pathCombine(pathDatas, "monsters.json");
+const QString Wanok::pathTroops = pathCombine(pathDatas, "troops.json");
+const QString Wanok::pathClasses = pathCombine(pathDatas, "classes.json");
+const QString Wanok::pathTreeMap = pathCombine(pathDatas, "treeMap.json");
+const QString Wanok::pathLangs = pathCombine(pathDatas, "langs.json");
+const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");
+const QString Wanok::pathKeyBoard = pathCombine(pathDatas, "keyBoard.json");
+
+// PATHS PICTURES
+const QString Wanok::pathPictures = pathCombine("Content", "Pictures");
+const QString Wanok::pathHUD = pathCombine(pathPictures, "HUD");
+const QString Wanok::pathTextures2D = pathCombine(pathPictures, "Textures2D");
+const QString Wanok::pathBars = pathCombine(pathHUD, "Bars");
+const QString Wanok::pathIcons = pathCombine(pathHUD, "Icons");
+const QString Wanok::pathAutotiles = pathCombine(pathTextures2D, "Autotiles");
+const QString Wanok::pathCharacters = pathCombine(pathTextures2D, "Characters");
+const QString Wanok::pathReliefs = pathCombine(pathTextures2D, "Reliefs");
+const QString Wanok::pathTilesets = pathCombine(pathTextures2D, "Tilesets");
+
+const QString Wanok::pathEngineSettings =
+        pathCombine("Content", "engineSettings.json");
+const QString Wanok::fileMapInfos = "infos.json";
+const QString Wanok::fileMapObjects = "objects.json";
+const QString Wanok::gamesFolderName = "RPG Paper Maker Games";
+const QString Wanok::tempMapFolderName = "temp";
+const QString Wanok::dirGames = Wanok::pathCombine(
+            QStandardPaths::writableLocation(
+                QStandardPaths::StandardLocation::DocumentsLocation),
+            gamesFolderName);
+const QString Wanok::dirDesktop = "desktop";
+
+const int Wanok::portionSize = 16;
+
+bool Wanok::isInConfig = false;
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+Wanok::Wanok() :
+    p_project(nullptr),
+    m_engineSettings(nullptr)
+{
+
+}
+
+Wanok::~Wanok()
+{
+    if (p_project != nullptr){
+        delete p_project;
+        p_project = nullptr;
+    }
+
+    delete m_engineSettings;
+}
+
+Project* Wanok::project() const { return p_project; }
+
+EngineSettings* Wanok::engineSettings() const { return m_engineSettings; }
+
+int Wanok::getPortionsRay() const {
+    return project()->gameDatas()->systemDatas()->portionsRay();
+}
+
+int Wanok::getSquareSize() const {
+    return project()->gameDatas()->systemDatas()->squareSize();
+}
+
+void Wanok::setProject(Project* p) { p_project = p; }
+
+void Wanok::setEngineSettings(EngineSettings* e) { m_engineSettings = e; }
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QString Wanok::pathCombine(const QString & p1, const QString & p2){
+    return QDir::cleanPath(p1 + QDir::separator() + p2);
+}
+
+// -------------------------------------------------------
+
+void Wanok::writeJSON(QString path, const Serializable &obj){
+    QJsonObject gameObject;
+    obj.write(gameObject);
+    writeOtherJSON(path, gameObject);
+}
+
+// -------------------------------------------------------
+
+void Wanok::readJSON(QString path, Serializable &obj){
+    QJsonDocument loadDoc;
+    readOtherJSON(path, loadDoc);
+    obj.read(loadDoc.object());
+}
+
+// -------------------------------------------------------
+
+void Wanok::writeOtherJSON(QString path, const QJsonObject &obj){
+    QFile saveFile(path);
+    if (!saveFile.open(QIODevice::WriteOnly)) { return; }
+    QJsonDocument saveDoc(obj);
+    saveFile.write(saveDoc.toJson());
+}
+
+// -------------------------------------------------------
+
+void Wanok::readOtherJSON(QString path, QJsonDocument& loadDoc){
+    QFile loadFile(path);
+    loadFile.open(QIODevice::ReadOnly);
+    QByteArray saveData = loadFile.readAll();
+    loadDoc = QJsonDocument::fromJson(saveData);
+}
+
+// -------------------------------------------------------
+
+bool Wanok::copyPath(QString src, QString dst)
+{
+    QDir dir(src);
+    if (!dir.exists())
+        return false;
+
+    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QString dst_path = pathCombine(dst, d);
+        if (!dir.mkpath(dst_path)) return false;
+        if (!copyPath(pathCombine(src, d), dst_path)) return false;
+    }
+
+    foreach (QString f, dir.entryList(QDir::Files)) {
+        if (!QFile::copy(pathCombine(src, f), pathCombine(dst, f)))
+            return false;
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+QString Wanok::getDirectoryPath(QString& file){
+    return QFileInfo(file).dir().absolutePath();
+}
+
+// -------------------------------------------------------
+
+bool Wanok::isDirEmpty(QString path){
+    return QDir(path).entryInfoList(QDir::NoDotAndDotDot |
+                                    QDir::AllEntries).count() == 0;
+}
+
+// -------------------------------------------------------
+
+void Wanok::copyAllFiles(QString pathSource, QString pathTarget){
+    QDirIterator files(pathSource, QDir::Files);
+
+    while (files.hasNext()){
+        files.next();
+        QFile::copy(files.filePath(), Wanok::pathCombine(pathTarget,
+                                                         files.fileName()));
+    }
+}
+
+// -------------------------------------------------------
+
+void Wanok::deleteAllFiles(QString pathSource){
+    QDirIterator files(pathSource, QDir::Files);
+
+    while (files.hasNext()){
+        files.next();
+        QFile(files.filePath()).remove();
+    }
+}
+
+// -------------------------------------------------------
+
+QString Wanok::getFormatNumber(int number, int format, int type){
+    return QString("%1").arg(number, format, type, QChar('0'));
+}
+
+// -------------------------------------------------------
+
+QKeySequence Wanok::getKeySequence(QKeyEvent *event){
+    int keyInt = event->key();
+    Qt::Key key = static_cast<Qt::Key>(keyInt);
+    if(key != Qt::Key_unknown){
+        // the user have clicked just and only the special keys Ctrl, Shift,
+        // Alt, Meta.
+        if(key != Qt::Key_Control &&
+            key != Qt::Key_Shift &&
+            key != Qt::Key_Alt &&
+            key != Qt::Key_Meta)
+        {
+            // check for a combination of user clicks
+            Qt::KeyboardModifiers modifiers = event->modifiers();
+            if(modifiers & Qt::ShiftModifier)
+                keyInt += Qt::SHIFT;
+            if(modifiers & Qt::ControlModifier)
+                keyInt += Qt::CTRL;
+            if(modifiers & Qt::AltModifier)
+                keyInt += Qt::ALT;
+            if(modifiers & Qt::MetaModifier)
+                keyInt += Qt::META;
+
+            return QKeySequence(keyInt);
+        }
+    }
+
+    return QKeySequence();
+}

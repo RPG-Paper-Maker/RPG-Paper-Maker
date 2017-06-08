@@ -1,0 +1,32 @@
+{
+    "heroes": [
+        {
+            "class": 1,
+            "id": 1,
+            "names": {
+                "1": "Lucas"
+            }
+        },
+        {
+            "class": 2,
+            "id": 2,
+            "names": {
+                "1": "Kate"
+            }
+        },
+        {
+            "class": 3,
+            "id": 3,
+            "names": {
+                "1": "Guy"
+            }
+        },
+        {
+            "class": 4,
+            "id": 4,
+            "names": {
+                "1": "Pa"
+            }
+        }
+    ]
+}

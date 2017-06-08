@@ -1,0 +1,586 @@
+/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "battlesystemdatas.h"
+#include "systemlang.h"
+#include "systemweaponarmorkind.h"
+#include "systemelement.h"
+#include "systemstatistic.h"
+#include "systembattlecommand.h"
+#include "wanok.h"
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+BattleSystemDatas::BattleSystemDatas()
+{
+    m_modelCommonEquipment = new QStandardItemModel;
+    m_modelWeaponsKind = new QStandardItemModel;
+    m_modelArmorsKind = new QStandardItemModel;
+    m_modelBattleMaps = new QStandardItemModel;
+    m_modelElements = new QStandardItemModel;
+    m_modelCommonStatistics = new QStandardItemModel;
+    m_modelCommonBattleCommand = new QStandardItemModel;
+}
+
+BattleSystemDatas::~BattleSystemDatas()
+{
+    SuperListItem::deleteModel(m_modelCommonEquipment);
+    SuperListItem::deleteModel(m_modelWeaponsKind);
+    SuperListItem::deleteModel(m_modelArmorsKind);
+    SuperListItem::deleteModel(m_modelBattleMaps);
+    SuperListItem::deleteModel(m_modelElements);
+    SuperListItem::deleteModel(m_modelCommonStatistics);
+    SuperListItem::deleteModel(m_modelCommonBattleCommand);
+}
+
+void BattleSystemDatas::read(QString path){
+    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathBattleSystem), *this);
+}
+
+int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }
+
+int BattleSystemDatas::idStatisticExp() const { return m_idStatisticExp; }
+
+QStandardItemModel* BattleSystemDatas::modelWeaponsKind() const {
+    return m_modelWeaponsKind;
+}
+
+QStandardItemModel* BattleSystemDatas::modelArmorsKind() const {
+    return m_modelArmorsKind;
+}
+
+QStandardItemModel* BattleSystemDatas::modelBattleMaps() const {
+    return m_modelBattleMaps;
+}
+
+QStandardItemModel* BattleSystemDatas::modelElements() const {
+    return m_modelElements;
+}
+
+QStandardItemModel* BattleSystemDatas:: modelCommonEquipment() const {
+    return m_modelCommonEquipment;
+}
+
+QStandardItemModel* BattleSystemDatas::modelCommonStatistics() const {
+    return m_modelCommonStatistics;
+}
+
+QStandardItemModel* BattleSystemDatas::modelCommonBattleCommand() const {
+    return m_modelCommonBattleCommand;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QVector<SystemStatistic*> BattleSystemDatas::getFixStatisticsList() const{
+    QVector<SystemStatistic*> list;
+    int l;
+
+    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        SystemStatistic* statistic =
+                (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
+                .value<quintptr>();
+        if (statistic->commands().at(0) == "0") list.append(statistic);
+    }
+
+    return list;
+}
+
+// -------------------------------------------------------
+
+QVector<SystemStatistic*> BattleSystemDatas::getBarStatisticsList() const{
+    QVector<SystemStatistic*> list;
+    int l;
+
+    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        SystemStatistic* statistic =
+                (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
+                .value<quintptr>();
+        if (statistic->commands().at(0) == "1") list.append(statistic);
+    }
+
+    return list;
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefault(){
+    setDefaultOptions();
+    setDefaultCommonEquipment();
+    setDefaultWeaponsKind();
+    setDefaultArmorsKind();
+    setDefaultBattleMaps();
+    setDefaultElements();
+    setDefaultCommonStatistics();
+    setDefaultCommonBattleCommand();
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultOptions(){
+    m_idStatisticLevel = 1;
+    m_idStatisticExp = 2;
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultWeaponsKind(){
+    SystemWeaponArmorKind* sysWeaponArmorKind;
+    QStandardItem* item;
+    SuperListItem* equipment;
+    QStandardItemModel* equipments;
+    QString names[] = {"Sword", "Axe", "Spear", "Tome", "Staff", "Bow",
+                       "Firearm"};
+    QVector<bool> equipmentsAssigment =
+            QVector<bool>({true,true,false,false,false,false,false});
+    int length = (sizeof(names)/sizeof(*names));
+
+    for (int i = 0; i < length; i++){
+        equipments = new QStandardItemModel;
+
+        for (int j = 0; j < equipmentsAssigment.size(); j++){
+            item = new QStandardItem;
+            equipment = SuperListItem::getById(m_modelCommonEquipment
+                                               ->invisibleRootItem(), j+1);
+            item->setData(QVariant::fromValue(
+                              reinterpret_cast<quintptr>(equipment)));
+            item->setCheckable(true);
+            if (equipmentsAssigment[j]) item->setCheckState(Qt::Checked);
+            item->setText(equipment->toString());
+            equipments->appendRow(item);
+        }
+
+        sysWeaponArmorKind =
+                new SystemWeaponArmorKind(i+1,
+                                          new LangsTranslation(names[i]),
+                                          equipments);
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysWeaponArmorKind)));
+        item->setText(sysWeaponArmorKind->toString());
+
+        m_modelWeaponsKind->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultArmorsKind(){
+    SystemWeaponArmorKind* sysWeaponArmorKind;
+    QStandardItem* item;
+    SuperListItem* equipment;
+    QStandardItemModel* equipments;
+    QString names[] = {"Helmet", "Cap", "Mail", "Vest", "Vambraces",
+                       "Guards", "Greaves", "Leggings", "Ring", "Necklace"};
+    QVector<bool> equipmentsAssigment[] = {
+        QVector<bool>({false,false,true,false,false,false,false}),
+        QVector<bool>({false,false,true,false,false,false,false}),
+        QVector<bool>({false,false,false,true,false,false,false}),
+        QVector<bool>({false,false,false,true,false,false,false}),
+        QVector<bool>({false,false,false,false,true,false,false}),
+        QVector<bool>({false,false,false,false,true,false,false}),
+        QVector<bool>({false,false,false,false,false,true,false}),
+        QVector<bool>({false,false,false,false,false,true,false}),
+        QVector<bool>({false,false,false,false,false,false,true}),
+        QVector<bool>({false,false,false,false,false,false,true})
+    };
+
+    int length = (sizeof(names)/sizeof(*names));
+
+    for (int i = 0; i < length; i++){
+        equipments = new QStandardItemModel;
+
+        for (int j = 0; j < equipmentsAssigment[i].size(); j++){
+            item = new QStandardItem;
+            equipment = SuperListItem::getById(
+                        m_modelCommonEquipment->invisibleRootItem(), j+1);
+            item->setData(QVariant::fromValue(
+                              reinterpret_cast<quintptr>(equipment)));
+            item->setCheckable(true);
+            if (equipmentsAssigment[i][j]) item->setCheckState(Qt::Checked);
+            item->setText(equipment->toString());
+            equipments->appendRow(item);
+        }
+
+        sysWeaponArmorKind =
+                new SystemWeaponArmorKind(i+1,
+                                          new LangsTranslation(names[i]),
+                                          equipments);
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysWeaponArmorKind)));
+        item->setText(sysWeaponArmorKind->toString());
+
+        m_modelArmorsKind->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultBattleMaps(){
+
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultElements(){
+    SystemElement* sysElement;
+    QStandardItem* itemElement;
+    QStandardItem* itemEfficiency;
+    QStandardItem* item;
+    SuperListItem* element;
+    QList<QStandardItem*> row;
+    QStandardItemModel* efficiency;
+    QString names[] = {"Fire", "Water", "Grass"};
+    QVector<int> efficiencies[] = {QVector<int>({100, 50, 200}), // Fire
+                                   QVector<int>({200, 100, 50}), // Water
+                                   QVector<int>({50, 200, 100})}; // Grass
+    int length = (sizeof(names)/sizeof(*names));
+
+    // First create all the elements
+    for (int i = 0; i < length; i++){
+        item = new QStandardItem();
+        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]));
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysElement)));
+        item->setText(sysElement->toString());
+        m_modelElements->appendRow(item);
+    }
+
+    // Fill the efficiencies
+    for (int i = 0; i < length; i++){
+        sysElement =
+                (SystemElement*) SuperListItem::getById(m_modelElements
+                                                        ->invisibleRootItem(),
+                                                        i+1);
+        efficiency = sysElement->efficiency();
+        for (int j = 0; j < efficiencies[i].size(); j++){
+            row = QList<QStandardItem*>();
+            element = SuperListItem::getById(m_modelElements
+                                             ->invisibleRootItem(), j+1);
+            itemElement = new QStandardItem;
+            itemElement->setData(QVariant::fromValue(
+                                     reinterpret_cast<quintptr>(element)));
+            itemElement->setText(element->toString());
+            itemEfficiency = new QStandardItem;
+            itemEfficiency->setData(QVariant::fromValue(efficiencies[i][j]));
+            itemEfficiency->setText(QString::number(efficiencies[i][j]) + "%");
+            row.append(itemElement);
+            row.append(itemEfficiency);
+            efficiency->appendRow(row);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultCommonEquipment(){
+    int i = 1;
+    SystemLang* items[] = {
+        new SystemLang(i++, new LangsTranslation("Left hand")),
+        new SystemLang(i++, new LangsTranslation("Right hand")),
+        new SystemLang(i++, new LangsTranslation("Head")),
+        new SystemLang(i++, new LangsTranslation("Chest")),
+        new SystemLang(i++, new LangsTranslation("Arms")),
+        new SystemLang(i++, new LangsTranslation("Legs")),
+        new SystemLang(i++, new LangsTranslation("Accessory"))
+    };
+    int length = (sizeof(items)/sizeof(*items));
+    QStandardItem* item;
+
+    for (i = 0; i < length; i++){
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(items[i])));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(items[i]->toString());
+        m_modelCommonEquipment->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultCommonStatistics(){
+    int i = 1;
+    SystemStatistic* items[] = {
+        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp",
+        QVector<QString>({"1"})),
+        new SystemStatistic(i++, new LangsTranslation("HP"), "hp",
+        QVector<QString>({"1"})),
+        new SystemStatistic(i++, new LangsTranslation("MP"), "mp",
+        QVector<QString>({"1"})),
+        new SystemStatistic(i++, new LangsTranslation("TP"), "tp",
+        QVector<QString>({"1"})),
+        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Strength"), "str",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Intelligence"), "int",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("P. Defense"), "pdef",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi",
+        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("CC"), "cc",
+        QVector<QString>({"0"}))
+    };
+
+    int length = (sizeof(items)/sizeof(*items));
+    QStandardItem* item;
+
+    for (i = 0; i < length; i++){
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(items[i])));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(items[i]->toString());
+        m_modelCommonStatistics->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::setDefaultCommonBattleCommand(){
+    int i = 1;
+    SystemBattleCommand* items[] = {
+        new SystemBattleCommand(i++, new LangsTranslation("Attack"), 1),
+        new SystemBattleCommand(i++, new LangsTranslation("Skill"), 2),
+        new SystemBattleCommand(i++, new LangsTranslation("Item"), 3),
+        new SystemBattleCommand(i++, new LangsTranslation("Escape"), 4)
+    };
+
+    int length = (sizeof(items)/sizeof(*items));
+    QStandardItem* item;
+
+    for (i = 0; i < length; i++){
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(items[i])));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(items[i]->toString());
+        m_modelCommonBattleCommand->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void BattleSystemDatas::read(const QJsonObject &json){
+    // Options
+    m_idStatisticLevel = json["lv"].toInt();
+    m_idStatisticExp = json["xp"].toInt();
+
+    QJsonArray jsonList;
+
+    // Equipments
+    jsonList = json["equipments"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemLang* sysEquipment = new SystemLang;
+        sysEquipment->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysEquipment)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysEquipment->toString());
+        m_modelCommonEquipment->appendRow(item);
+    }
+
+    // Weapons kind
+    jsonList = json["weaponsKind"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemWeaponArmorKind* sysWeaponKind = new SystemWeaponArmorKind;
+        QJsonObject jsonKind = jsonList[i].toObject();
+        sysWeaponKind->read(jsonKind);
+        sysWeaponKind->readEquipments(m_modelCommonEquipment, jsonKind);
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysWeaponKind)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysWeaponKind->toString());
+        m_modelWeaponsKind->appendRow(item);
+    }
+
+    // Armors kind
+    jsonList = json["armorsKind"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemWeaponArmorKind* sysArmorKind = new SystemWeaponArmorKind;
+        QJsonObject jsonKind = jsonList[i].toObject();
+        sysArmorKind->read(jsonKind);
+        sysArmorKind->readEquipments(m_modelCommonEquipment, jsonKind);
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysArmorKind)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysArmorKind->toString());
+        m_modelArmorsKind->appendRow(item);
+    }
+
+    // Elements
+    jsonList = json["elements"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemElement* sysElement = new SystemElement;
+        sysElement->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysElement)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysElement->toString());
+        m_modelElements->appendRow(item);
+    }
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemElement* sysElement =
+                ((SystemElement*)m_modelElements->item(i)->data()
+                 .value<quintptr>());
+        sysElement->readEfficiency(m_modelElements, jsonList[i].toObject());
+    }
+
+    // Statistics
+    jsonList = json["statistics"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemStatistic* sysStatistic = new SystemStatistic;
+        sysStatistic->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysStatistic)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysStatistic->toString());
+        m_modelCommonStatistics->appendRow(item);
+    }
+
+    // Battle commands
+    jsonList = json["battleCommands"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemBattleCommand* sysBattleCommand = new SystemBattleCommand;
+        sysBattleCommand->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysBattleCommand)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysBattleCommand->toString());
+        m_modelCommonBattleCommand->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void BattleSystemDatas::write(QJsonObject &json) const{
+    int l;
+
+    // Options
+    json["lv"] = m_idStatisticLevel;
+    json["xp"] = m_idStatisticExp;
+
+    QJsonArray jsonArray;
+
+    // Equipments
+    jsonArray = QJsonArray();
+    l = m_modelCommonEquipment->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemLang* sysEquipment =
+                ((SystemLang*)m_modelCommonEquipment->item(i)->data()
+                 .value<quintptr>());
+        sysEquipment->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["equipments"] = jsonArray;
+
+    // Weapons kind
+    jsonArray = QJsonArray();
+    l = m_modelWeaponsKind->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemLang* sysWeaponKind =
+                ((SystemLang*)m_modelWeaponsKind->item(i)->data()
+                 .value<quintptr>());
+        sysWeaponKind->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["weaponsKind"] = jsonArray;
+
+    // Armors kind
+    jsonArray = QJsonArray();
+    l = m_modelArmorsKind->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemLang* sysArmorKind =
+                ((SystemLang*)m_modelArmorsKind->item(i)->data()
+                 .value<quintptr>());
+        sysArmorKind->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["armorsKind"] = jsonArray;
+
+    // Elements
+    jsonArray = QJsonArray();
+    l = m_modelElements->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemElement* sysElement =
+                ((SystemElement*)m_modelElements->item(i)->data()
+                 .value<quintptr>());
+        sysElement->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["elements"] = jsonArray;
+
+    // Statistics
+    jsonArray = QJsonArray();
+    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemStatistic* sysStatistics =
+                ((SystemStatistic*)m_modelCommonStatistics->item(i)->data()
+                 .value<quintptr>());
+        sysStatistics->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["statistics"] = jsonArray;
+
+    // Battle commands
+    l = m_modelCommonBattleCommand->invisibleRootItem()->rowCount();
+    jsonArray = QJsonArray();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemBattleCommand* sysBattleCommand =
+                ((SystemBattleCommand*)m_modelCommonBattleCommand->item(i)
+                 ->data().value<quintptr>());
+        sysBattleCommand->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json["battleCommands"] = jsonArray;
+}

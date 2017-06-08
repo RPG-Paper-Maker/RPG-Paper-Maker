@@ -1,0 +1,64 @@
+{
+    "items": [
+        {
+            "cons": true,
+            "id": 1,
+            "name": "HP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 2,
+            "name": "Super HP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 3,
+            "name": "Mega HP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 4,
+            "name": "MP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 5,
+            "name": "Super MP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 6,
+            "name": "Mega MP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 7,
+            "name": "TP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 8,
+            "name": "Super TP potion",
+            "t": 0
+        },
+        {
+            "cons": true,
+            "id": 9,
+            "name": "Mega TP potion",
+            "t": 0
+        },
+        {
+            "cons": false,
+            "id": 10,
+            "name": "key",
+            "t": 2
+        }
+    ]
+}

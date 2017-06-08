@@ -1,0 +1,48 @@
+{
+    "skills": [
+        {
+            "id": 1,
+            "name": "Attack"
+        },
+        {
+            "id": 2,
+            "name": "Skill"
+        },
+        {
+            "id": 3,
+            "name": "Item"
+        },
+        {
+            "id": 4,
+            "name": "Escape"
+        },
+        {
+            "id": 5,
+            "name": "Fire"
+        },
+        {
+            "id": 6,
+            "name": "Water"
+        },
+        {
+            "id": 7,
+            "name": "Wind"
+        },
+        {
+            "id": 8,
+            "name": "Shadow"
+        },
+        {
+            "id": 9,
+            "name": "Blazing sword"
+        },
+        {
+            "id": 10,
+            "name": "Bandage"
+        },
+        {
+            "id": 11,
+            "name": "Concentration"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "weapons": [
+        {
+            "id": 1,
+            "k": 1,
+            "names": {
+                "1": "Wooden sword"
+            }
+        },
+        {
+            "id": 2,
+            "k": 2,
+            "names": {
+                "1": "Wooden axe"
+            }
+        }
+    ]
+}

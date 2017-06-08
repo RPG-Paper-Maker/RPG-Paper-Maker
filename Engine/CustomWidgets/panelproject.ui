@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PanelProject</class>
+ <widget class="QWidget" name="PanelProject">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>573</width>
+    <height>336</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="WidgetTreeCommands" name="widget" native="true"/>
+      <widget class="WidgetTreeLocalMaps" name="treeViewLocalMaps">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="WidgetMenuBarMapEditor" name="widgetMenuBar" native="true"/>
+       </item>
+       <item>
+        <widget class="WidgetMapEditor" name="openGLWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetTreeCommands</class>
+   <extends>QWidget</extends>
+   <header>widgettreecommands.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetMapEditor</class>
+   <extends>QOpenGLWidget</extends>
+   <header>widgetmapeditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetMenuBarMapEditor</class>
+   <extends>QWidget</extends>
+   <header>widgetmenubarmapeditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTreeLocalMaps</class>
+   <extends>QTreeView</extends>
+   <header>widgettreelocalmaps.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

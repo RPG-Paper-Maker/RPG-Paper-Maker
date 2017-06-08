@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Content/Datas/Scripts/wanok.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Content/Datas/Scripts/wanok.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// -------------------------------------------------------
+//
+//  CLASS Wanok
+//
+//  Utility class with a lot of functions.
+//
+// -------------------------------------------------------
+
+function Wanok(){
+
+}
+
+Wanok.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
+Wanok.FILE_MAPS = Wanok.PATH_DATAS + "Maps/";
+Wanok.FILE_MAP_INFOS = "/infos.json";
+Wanok.FILE_MAP_OBJECTS = "/objects.json";
+Wanok.FILE_COMMON_EVENTS = Wanok.PATH_DATAS + "commonEvents.json";
+Wanok.FILE_ITEMS = Wanok.PATH_DATAS + "items.json";
+Wanok.FILE_SKILLS = Wanok.PATH_DATAS + "skills.json";
+Wanok.FILE_WEAPONS = Wanok.PATH_DATAS + "weapons.json";
+Wanok.FILE_ARMORS = Wanok.PATH_DATAS + "armors.json";
+Wanok.FILE_HEROES = Wanok.PATH_DATAS + "heroes.json";
+Wanok.FILE_MONSTERS = Wanok.PATH_DATAS + "monsters.json";
+Wanok.FILE_TROOPS = Wanok.PATH_DATAS + "troops.json";
+Wanok.FILE_BATTLE_SYSTEM = Wanok.PATH_DATAS + "battleSystem.json";
+Wanok.FILE_KEYBOARD = Wanok.PATH_DATAS + "keyBoard.json";
+Wanok.FILE_SYSTEM = Wanok.PATH_DATAS + "system.json";
+Wanok.FILE_CLASSES = Wanok.PATH_DATAS + "classes.json";
+Wanok.FILE_VARIABLES_SWITCHES = Wanok.PATH_DATAS + "variablesSwitches.json";
+Wanok.FILE_SETTINGS = Wanok.PATH_DATAS + "settings.json";
+Wanok.fileSave = function(i) { return $ROOT_DIRECTORY + "save" + i + ".json"; }
+Wanok.PATH_PICTURES = $ROOT_DIRECTORY + "Content/Pictures";
+Wanok.PATH_HUD = Wanok.PATH_PICTURES + "/HUD";
+Wanok.PATH_TEXTURES2D = Wanok.PATH_PICTURES + "/Textures2D";
+Wanok.PATH_BARS = Wanok.PATH_HUD + "/Bars";
+Wanok.PATH_ICONS = Wanok.PATH_HUD + "/Icons";
+Wanok.PATH_AUTOTILES = Wanok.PATH_TEXTURES2D + "/Autotiles";
+Wanok.PATH_CHARACTERS = Wanok.PATH_TEXTURES2D + "/Characters";
+Wanok.PATH_RELIEFS = Wanok.PATH_TEXTURES2D + "/Reliefs";
+Wanok.PATH_TILESETS = Wanok.PATH_TEXTURES2D + "/Tilesets";
+
+// -------------------------------------------------------
+//  openFile : read a json file
+
+Wanok.openFile = function(base, url, loading, callback){
+    if (loading)
+        $filesToLoad++;
+    var doc = new XMLHttpRequest();
+    doc.onreadystatechange = function() {
+        if (doc.readyState === XMLHttpRequest.DONE) {
+            callback.call(base, doc.responseText);
+            if (loading)
+                $loadedFiles++;
+        }
+    }
+    doc.open("GET", url, true);
+    doc.send();
+}
+
+// -------------------------------------------------------
+//  saveFile : write a json file
+
+Wanok.saveFile = function(url, obj){
+    var doc = new XMLHttpRequest();
+    doc.open("PUT", url, false);
+    doc.send(JSON.stringify(obj));
+}
+
+/**
+    Determinate if files needs to be loaded asynchronously.
+*/
+Wanok.isLoading = function(){
+    if ($filesToLoad === $loadedFiles){
+        $filesToLoad = 0;
+        $loadedFiles = 0;
+        return false;
+    }
+    return true;
+}
+
+// -------------------------------------------------------
+//  [createFont fontSize fontName] Link the [fontSize] and the [fontName].
+//
+//  @returns a string that can be used by the canvasHUD.
+// -------------------------------------------------------
+
+Wanok.createFont = function(fontSize, fontName){
+    return fontSize + "px " + fontName;
+}
+
+// -------------------------------------------------------
+//  [updateTimer] If a current game exists, add one second to the timer.
+// -------------------------------------------------------
+
+Wanok.updateTimer = function(){
+    if ($game !== null){
+        $game.playTime++;
+    }
+}
+
+// -------------------------------------------------------
+//  describe
+
+Wanok.describe = function(obj){
+    var res = "";
+    for (var p in obj)
+        res += console.log(p + ": " + obj[p]);
+
+    return res;
+}
+
+// -------------------------------------------------------
+//  show
+
+Wanok.show = function(text){
+    alert(text)
+}
+
+// -------------------------------------------------------
+//  getStringDate : return a string of the date by passing all the seconds
+
+Wanok.getStringDate = function(total){
+    var hours = Wanok.formatNumber(Math.floor(total / 3600),4);
+    var minutes = Wanok.formatNumber(Math.floor((total % 3600) / 60),2);
+    var seconds = Wanok.formatNumber(Math.floor(total % 60),2);
+
+    return (hours + ":" + minutes + ":" + seconds);
+}
+
+// -------------------------------------------------------
+//  formatNumber : return the string of a number and parse with 0 according to a given size
+
+Wanok.formatNumber = function(num, size){
+    return ('000000000' + num).substr(-size);
+}
+
+Wanok.generateMapName = function(id){
+    return "MAP" + Wanok.formatNumber(id, 4);
+}
+
+Wanok.positionToVector3 = function(position){
+    return new THREE.Vector3(position[0] * $SQUARE_SIZE,
+                             (position[1] * $SQUARE_SIZE) + (position[2] * $SQUARE_SIZE / 100),
+                             position[3] * $SQUARE_SIZE);
+}
+
+Wanok.getScreenX = function(x){
+    return Math.round($windowX * x);
+}
+
+Wanok.getScreenY = function(y){
+    return Math.round($windowY * y);
+}
+
+Wanok.getScreenXY = function(xy){
+    return Math.round(($windowX + $windowY) / 2 * xy);
+}
+
+Wanok.getDoubleScreenX = function(x){
+    return $windowX * x;
+}
+
+Wanok.getDoubleScreenY = function(y){
+    return $windowY * y;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Battler.html">Battler</a></li><li><a href="Bitmap.html">Bitmap</a></li><li><a href="Class.html">Class</a></li><li><a href="DatasArmors.html">DatasArmors</a></li><li><a href="GameStack.html">GameStack</a></li><li><a href="StateBattle.html">StateBattle</a></li><li><a href="SystemArmor.html">SystemArmor</a></li><li><a href="WindowBattle.html">WindowBattle</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$blockingHero">$blockingHero</a></li><li><a href="global.html#$canvasHeight">$canvasHeight</a></li><li><a href="global.html#$canvasHUD">$canvasHUD</a></li><li><a href="global.html#$canvasWidth">$canvasWidth</a></li><li><a href="global.html#$datasGame">$datasGame</a></li><li><a href="global.html#$DESKTOP">$DESKTOP</a></li><li><a href="global.html#$elapsedTime">$elapsedTime</a></li><li><a href="global.html#$filesToLoad">$filesToLoad</a></li><li><a href="global.html#$fontName">$fontName</a></li><li><a href="global.html#$fontSize">$fontSize</a></li><li><a href="global.html#$game">$game</a></li><li><a href="global.html#$gameStack">$gameStack</a></li><li><a href="global.html#$keysPressed">$keysPressed</a></li><li><a href="global.html#$loadedFiles">$loadedFiles</a></li><li><a href="global.html#$modelHero">$modelHero</a></li><li><a href="global.html#$PORTION_SIZE">$PORTION_SIZE</a></li><li><a href="global.html#$PORTIONS_RAY_FAR">$PORTIONS_RAY_FAR</a></li><li><a href="global.html#$PORTIONS_RAY_NEAR">$PORTIONS_RAY_NEAR</a></li><li><a href="global.html#$renderer">$renderer</a></li><li><a href="global.html#$ROOT_DIRECTORY">$ROOT_DIRECTORY</a></li><li><a href="global.html#$SCREEN_X">$SCREEN_X</a></li><li><a href="global.html#$SCREEN_Y">$SCREEN_Y</a></li><li><a href="global.html#$SQUARE_SIZE">$SQUARE_SIZE</a></li><li><a href="global.html#$windowX">$windowX</a></li><li><a href="global.html#$windowY">$windowY</a></li><li><a href="global.html#draw3D">draw3D</a></li><li><a href="global.html#drawHUD">drawHUD</a></li><li><a href="global.html#getCorrectedKey">getCorrectedKey</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeGL">initializeGL</a></li><li><a href="global.html#ItemKind">ItemKind</a></li><li><a href="global.html#onKeyPressed">onKeyPressed</a></li><li><a href="global.html#onKeyPressedAndRepeat">onKeyPressedAndRepeat</a></li><li><a href="global.html#onKeyPressedRepeat">onKeyPressedRepeat</a></li><li><a href="global.html#onKeyReleased">onKeyReleased</a></li><li><a href="global.html#quit">quit</a></li><li><a href="global.html#resizeGL">resizeGL</a></li><li><a href="global.html#THREE">THREE</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Jun 04 2017 21:54:06 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
