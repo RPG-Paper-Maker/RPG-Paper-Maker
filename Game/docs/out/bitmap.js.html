@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: bitmap.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,43 +17,112 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: bitmap.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><p>The game engine can be identified by the files' name beginning.</p>
-<ul>
-<li><strong>System</strong> : All the system datas linked to the game (statistics, weapons, items...).</li>
-<li><strong>Datas</strong> : generally contains lists of system values.</li>
-<li><strong>Window</strong> : dialog box for interactions between PNGs.</li>
-<li><strong>Graphic</strong> : informations that can be drawn inside windows (dialog box).</li>
-<li><strong>Scene</strong> : the game is excecuted thanks to a stack which is containing scenes. For example, if you are in a battle, you will have the local map scene and the battle map scene inside the stack.</li>
-</ul></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/>.
+*/
+
+// -------------------------------------------------------
+//
+//  CLASS Bitmap
+//
+// -------------------------------------------------------
+
+/** @class
+*   A bitmap is something that can be drawn on the HUD. It can be a window,
+*   a text, an image...
+*   @property {number} x Coords of battler.
+*   @property {number} y Coords of battler.
+*   @property {number} w Coords of battler.
+*   @property {number} h Coords of battler.
+*   @param {number} x Coords of battler.
+*   @param {number} y Coords of battler.
+*   @param {number} w Coords of battler.
+*   @param {number} h Coords of battler.
+*/
+function Bitmap(x, y, w, h){
+
+    // Default values
+    if (typeof x === 'undefined') x = 0;
+    if (typeof y === 'undefined') y = 0;
+    if (typeof w === 'undefined') w = 0;
+    if (typeof h === 'undefined') h = 0;
+
+    this.setX(x);
+    this.setY(y);
+    this.setW(w);
+    this.setH(h);
+}
+
+Bitmap.prototype = {
+
+    /** Set the x value.
+    *   @param {number} The x value.
+    */
+    setX: function(x){
+        this.x = Wanok.getScreenX(x);
+    },
+
+    /** Set the y value.
+    *   @param {number} The y value.
+    */
+    setY: function(y){
+        this.y = Wanok.getScreenY(y);
+    },
+
+    /** Set the w value.
+    *   @param {number} The w value.
+    */
+    setW: function(w){
+        this.w = Wanok.getScreenX(w);
+    },
+
+    /** Set the h value.
+    *   @param {number} The h value.
+    */
+    setH: function(h){
+        this.h = Wanok.getScreenY(h);
+    },
+
+    /** Set all the coords values.
+    *   @param {number} The x value.
+    *   @param {number} The y value.
+    *   @param {number} The w value.
+    *   @param {number} The h value.
+    */
+    setCoords: function(x, y, w, h){
+        this.setX(x);
+        this.setY(y);
+        this.setW(w);
+        this.setH(h);
+    }
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

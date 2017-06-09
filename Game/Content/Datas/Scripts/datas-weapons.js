@@ -21,24 +21,29 @@
 //
 //  CLASS WeaponsDatas
 //
-//  All the weapons datas.
-//
-//  @list           -> List of all the weapons of the game
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the weapons datas.
+*   @property {SystemWeapon[]} list List of all the weapons of the game
+*   according to ID.
+*/
 function DatasWeapons(){
     this.read();
 }
 
 DatasWeapons.prototype = {
 
+    /**
+    *   Read the JSON file associated to weapons.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_WEAPONS, true, function(res){
             var json = JSON.parse(res)["weapons"];
             var i, l = json.length;
             this.list = new Array(l+1);
 
+            // Sorting all the weapons according to the ID
             for (var i = 0; i < l; i++){
                 var jsonWeapon = json[i];
                 var id = jsonWeapon["id"];

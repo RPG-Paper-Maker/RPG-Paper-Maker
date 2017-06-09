@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: DatasArmors</title>
+    <title>JSDoc: Class: DatasBattleSystem</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: DatasArmors</h1>
+    <h1 class="page-title">Class: DatasBattleSystem</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2>DatasArmors</h2>
+        <h2>DatasBattleSystem</h2>
         
-            <div class="class-description">All the armors datas.</div>
+            <div class="class-description">All the battle system datas.</div>
         
     
 </header>
@@ -44,7 +44,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="DatasArmors"><span class="type-signature"></span>new DatasArmors<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DatasBattleSystem"><span class="type-signature"></span>new DatasBattleSystem<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -88,13 +88,13 @@
 
         <tr>
             
-                <td class="name"><code>list</code></td>
+                <td class="name"><code>statistics</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="SystemArmor.html">SystemArmor</a>></span>
+<span class="param-type">Array.&lt;SystemStatistic></span>
 
 
             
@@ -104,8 +104,170 @@
 
             
 
-            <td class="description last">List of all the armors of the game according
-  to ID.</td>
+            <td class="description last">List of all the statistics.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>equipments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of all the equipments name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>elements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;SystemElement></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of all the elements.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>weaponsKind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;SystemWeaponArmorKind></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of all the weapons
+  kind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>armorsKind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;SystemWeaponArmorKind></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of all the armors kind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>battleCommands</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of all the battle
+  commands (skill ID).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>idLevelStatistic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Id of the level statistic.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>idExpStatistic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Id of the experience statistic.</td>
         </tr>
 
     
@@ -144,7 +306,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="datas-armors.js.html">datas-armors.js</a>, <a href="datas-armors.js.html#line31">line 31</a>
+        <a href="datas-battle-system.js.html">datas-battle-system.js</a>, <a href="datas-battle-system.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -193,14 +355,14 @@
 
     
 
-    <h4 class="name" id="read"><span class="type-signature"></span>read<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getExpStatistic"><span class="type-signature"></span>getExpStatistic<span class="signature">()</span><span class="type-signature"> &rarr; {SystemStatistic}</span></h4>
 
     
 
 
 
 <div class="description">
-    Read the JSON file associated to armors.
+    Get the statistic corresponding to the experience.
 </div>
 
 
@@ -244,7 +406,207 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="datas-armors.js.html">datas-armors.js</a>, <a href="datas-armors.js.html#line40">line 40</a>
+        <a href="datas-battle-system.js.html">datas-battle-system.js</a>, <a href="datas-battle-system.js.html#line143">line 143</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">SystemStatistic</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getLevelStatistic"><span class="type-signature"></span>getLevelStatistic<span class="signature">()</span><span class="type-signature"> &rarr; {SystemStatistic}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the statistic corresponding to the level.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="datas-battle-system.js.html">datas-battle-system.js</a>, <a href="datas-battle-system.js.html#line135">line 135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">SystemStatistic</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="read"><span class="type-signature"></span>read<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Read the JSON file associated to battle system.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="datas-battle-system.js.html">datas-battle-system.js</a>, <a href="datas-battle-system.js.html#line48">line 48</a>
     </li></ul></dd>
     
 

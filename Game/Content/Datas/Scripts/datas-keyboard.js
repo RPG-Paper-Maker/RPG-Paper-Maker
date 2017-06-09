@@ -21,17 +21,23 @@
 //
 //  CLASS KeyBoardDatas
 //
-//  All the keyBoard datas.
-//
-//  @list           -> List of all the keys sorted by id.
-//  @menuControls   -> All the menu controls assigns.
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the keyBoard datas.
+*   @property {SystemKeyBoard[]} list List of all the keys of the game according
+*   to ID.
+*   @property {Object} menuControls All the menu controls assigns.
+*/
 function DatasKeyBoard(){
     this.read();
 }
 
+/** Test if a key id can be equal to a keyboard system object.
+*   @static
+*   @param {number} key The key id that needs to be compared.
+*   @param {SystemKeyBoard} abr The keyBoard to compare to the key.
+*/
 DatasKeyBoard.isKeyEqual = function(key, abr){
     var sc = abr.sc;
 
@@ -42,7 +48,7 @@ DatasKeyBoard.isKeyEqual = function(key, abr){
                 return true;
         }
         else{
-            return false; // TODO
+            return false;
         }
     }
 
@@ -51,6 +57,9 @@ DatasKeyBoard.isKeyEqual = function(key, abr){
 
 DatasKeyBoard.prototype = {
 
+    /**
+    *   Read the JSON file associated to keyboard.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_KEYBOARD, true, function(res){
             var json = JSON.parse(res);

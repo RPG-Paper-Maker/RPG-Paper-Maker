@@ -29,10 +29,6 @@
 //
 // -------------------------------------------------------
 
-/** @class
-*   Class
-*   @property {String}   source path
-*/
 function SceneGame(){
     this.reactionInterpreters = new Array;
     this.parallelCommands = new Array;

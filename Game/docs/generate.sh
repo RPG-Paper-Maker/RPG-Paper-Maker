@@ -1,1 +1,1 @@
-./node_modules/.bin/jsdoc -R HOME.md ../{.,Content/Datas/Scripts}
+./node_modules/.bin/jsdoc HOME.md ../Content/Datas/Scripts

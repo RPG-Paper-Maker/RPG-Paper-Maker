@@ -61,7 +61,7 @@ MapObject.prototype = {
         this.system.readJSON(json.v);
     },
 
-    move: function(orientation, w, w){
+    move: function(orientation, w, h){
 
         // The speed depends on the time elapsed since the last update
         var speed = this.speed * ((new Date().getTime() - $elapsedTime) *
@@ -94,7 +94,7 @@ MapObject.prototype = {
             if ((x_s >= 0 && x_plus < 0) || (x_s < (w - 1) && x_plus > 0))
                 this.mesh.position.setX(this.mesh.position.x + x_plus);
             if (x_f === 0 && ((z_s >= 0 && z_plus < 0) ||
-                              (z_s < (w - 1) && z_plus > 0)))
+                              (z_s < (h - 1) && z_plus > 0)))
             {
                 this.mesh.position.setZ(this.mesh.position.z + z_plus);
             }
@@ -119,7 +119,7 @@ MapObject.prototype = {
 
             if ((x_s < (w - 1) && x_plus < 0) || (x_s > 0 && x_plus >= 0))
                 this.mesh.position.setX(this.mesh.position.x - x_plus);
-            if (x_f === 0 && ((z_s < (w- 1) && z_plus < 0) ||
+            if (x_f === 0 && ((z_s < (h - 1) && z_plus < 0) ||
                               (z_s > 0 && z_plus >= 0)))
             {
                 this.mesh.position.setZ(this.mesh.position.z - z_plus);

@@ -23,7 +23,6 @@
 //
 //  All the global informations of the game.
 //
-//  @title                -> Title of the game
 //  @settings             -> Settings of the game
 //  @commonEventsDatas    -> Common events datas
 //  @itemsDatas           -> Items datas
@@ -41,6 +40,22 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   All the global informations of the game.
+*   @property {Object} settings All the general settings.
+*   @property {DatasCommonEvents} commonEvents Common events datas.
+*   @property {DatasCommonEvents} items Items datas.
+*   @property {DatasCommonEvents} skills Skills datas.
+*   @property {DatasCommonEvents} weapons Weapons datas.
+*   @property {DatasCommonEvents} armors Armors datas.
+*   @property {DatasCommonEvents} classes Classes datas.
+*   @property {DatasCommonEvents} heroes Heroes datas.
+*   @property {DatasCommonEvents} monsters Monsters datas.
+*   @property {DatasCommonEvents} troops Troops datas.
+*   @property {DatasCommonEvents} system System datas.
+*   @property {DatasCommonEvents} battleSystem Battle System datas.
+*   @property {DatasCommonEvents} keyBoard KeyBoard datas.
+*/
 function DatasGame(){
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
@@ -61,6 +76,9 @@ DatasGame.VARIABLES_SWITCHES_PER_PAGE = 25;
 
 DatasGame.prototype = {
 
+    /**
+    *   Read the JSON files associated to the settings.
+    */
     readSettings: function(){
         this.settings = {};
 
@@ -78,6 +96,9 @@ DatasGame.prototype = {
         });
     },
 
+    /**
+    *   Save the JSON file associated to the settings.
+    */
     saveSettings: function(){
         Wanok.saveFile(Wanok.FILE_SETTINGS,
             {

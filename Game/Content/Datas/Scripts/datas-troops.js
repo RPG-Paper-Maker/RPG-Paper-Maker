@@ -21,24 +21,29 @@
 //
 //  CLASS DatasTroops
 //
-//  All the troops datas.
-//
-//  @list           -> List of all the troops of the game
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the troops datas.
+*   @property {SystemTroop[]} list List of all the troops of the game according
+*   to ID.
+*/
 function DatasTroops(){
     this.read();
 }
 
 DatasTroops.prototype = {
 
+    /**
+    *   Read the JSON file associated to troops.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_TROOPS, true, function(res){
             var json = JSON.parse(res).troops;
             var i, l = json.length;
             this.list = new Array(l+1);
 
+            // Sorting all the troops according to the ID
             for (i = 0; i < l; i++){
                 var jsonTroop = json[i];
                 var id = jsonTroop.id;

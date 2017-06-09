@@ -1,4 +1,32 @@
-/*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: datas-battle-system.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: datas-battle-system.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
     RPG Paper Maker Copyright (C) 2017 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -14,7 +42,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/>.
 */
 
 // -------------------------------------------------------
@@ -55,7 +83,7 @@ DatasBattleSystem.prototype = {
             var i, l = jsonStatistics.length;
             this.statistics = new Array(l+1);
             this.statisticsOrder = new Array(l);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonStatistic = jsonStatistics[i];
                 id = jsonStatistic.id;
                 var statistic = new SystemStatistic();
@@ -68,7 +96,7 @@ DatasBattleSystem.prototype = {
             var jsonEquipments = json.equipments;
             l = jsonEquipments.length;
             this.equipments = new Array(l+1);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonEquipment = jsonEquipments[i];
                 id = jsonEquipment.id;
                 this.equipments[id] = jsonEquipment.names[1];
@@ -78,7 +106,7 @@ DatasBattleSystem.prototype = {
             var jsonElements = json.elements;
             l = jsonElements.length;
             this.elements = new Array(l+1);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonElement = jsonElements[i];
                 id = jsonElement.id;
                 var element = new SystemElement();
@@ -90,7 +118,7 @@ DatasBattleSystem.prototype = {
             var jsonWeaponsKind = json.weaponsKind;
             l = jsonWeaponsKind.length;
             this.weaponsKind = new Array(l+1);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonWeaponKind = jsonWeaponsKind[i];
                 id = jsonWeaponKind.id;
                 var weaponKind = new SystemWeaponArmorKind();
@@ -102,7 +130,7 @@ DatasBattleSystem.prototype = {
             var jsonArmorsKind = json.armorsKind;
             l = jsonArmorsKind.length;
             this.armorsKind = new Array(l+1);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonArmorKind = jsonArmorsKind[i];
                 id = jsonArmorKind.id;
                 var armorKind = new SystemWeaponArmorKind();
@@ -115,7 +143,7 @@ DatasBattleSystem.prototype = {
             l = jsonBattleCommands.length;
             this.battleCommands = new Array(l+1);
             this.battleCommandsOrder = new Array(l);
-            for (i = 0; i < l; i++){
+            for (i = 0; i &lt; l; i++){
                 var jsonBattleCommand = jsonBattleCommands[i];
                 id = jsonBattleCommand.id;
                 this.battleCommands[id] = jsonBattleCommand.s;
@@ -144,3 +172,26 @@ DatasBattleSystem.prototype = {
         return this.statistics[this.idExpStatistic];
     }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Battler.html">Battler</a></li><li><a href="Bitmap.html">Bitmap</a></li><li><a href="Camera.html">Camera</a></li><li><a href="DatasArmors.html">DatasArmors</a></li><li><a href="DatasBattleSystem.html">DatasBattleSystem</a></li><li><a href="DatasClasses.html">DatasClasses</a></li><li><a href="DatasCommonEvents.html">DatasCommonEvents</a></li><li><a href="DatasGame.html">DatasGame</a></li><li><a href="DatasHeroes.html">DatasHeroes</a></li><li><a href="DatasItems.html">DatasItems</a></li><li><a href="DatasKeyBoard.html">DatasKeyBoard</a></li><li><a href="DatasMonsters.html">DatasMonsters</a></li><li><a href="DatasSkills.html">DatasSkills</a></li><li><a href="DatasSystem.html">DatasSystem</a></li><li><a href="DatasTroops.html">DatasTroops</a></li><li><a href="DatasWeapons.html">DatasWeapons</a></li><li><a href="GameStack.html">GameStack</a></li><li><a href="SceneBattle.html">SceneBattle</a></li><li><a href="SystemArmor.html">SystemArmor</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$blockingHero">$blockingHero</a></li><li><a href="global.html#$canvasHeight">$canvasHeight</a></li><li><a href="global.html#$canvasHUD">$canvasHUD</a></li><li><a href="global.html#$canvasWidth">$canvasWidth</a></li><li><a href="global.html#$datasGame">$datasGame</a></li><li><a href="global.html#$elapsedTime">$elapsedTime</a></li><li><a href="global.html#$filesToLoad">$filesToLoad</a></li><li><a href="global.html#$fontName">$fontName</a></li><li><a href="global.html#$fontSize">$fontSize</a></li><li><a href="global.html#$game">$game</a></li><li><a href="global.html#$gameStack">$gameStack</a></li><li><a href="global.html#$keysPressed">$keysPressed</a></li><li><a href="global.html#$loadedFiles">$loadedFiles</a></li><li><a href="global.html#$modelHero">$modelHero</a></li><li><a href="global.html#$PORTION_SIZE">$PORTION_SIZE</a></li><li><a href="global.html#$PORTIONS_RAY_FAR">$PORTIONS_RAY_FAR</a></li><li><a href="global.html#$PORTIONS_RAY_NEAR">$PORTIONS_RAY_NEAR</a></li><li><a href="global.html#$renderer">$renderer</a></li><li><a href="global.html#$SCREEN_X">$SCREEN_X</a></li><li><a href="global.html#$SCREEN_Y">$SCREEN_Y</a></li><li><a href="global.html#$SQUARE_SIZE">$SQUARE_SIZE</a></li><li><a href="global.html#$windowX">$windowX</a></li><li><a href="global.html#$windowY">$windowY</a></li><li><a href="global.html#draw3D">draw3D</a></li><li><a href="global.html#drawHUD">drawHUD</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeGL">initializeGL</a></li><li><a href="global.html#ItemKind">ItemKind</a></li><li><a href="global.html#onKeyPressed">onKeyPressed</a></li><li><a href="global.html#onKeyPressedAndRepeat">onKeyPressedAndRepeat</a></li><li><a href="global.html#onKeyPressedRepeat">onKeyPressedRepeat</a></li><li><a href="global.html#onKeyReleased">onKeyReleased</a></li><li><a href="global.html#resizeGL">resizeGL</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 09 2017 21:14:22 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

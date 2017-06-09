@@ -21,16 +21,19 @@
 //
 //  CLASS Camera
 //
-//  The camera of the current map.
-//
-//  @threeCamera                    -> The three.js camera.
-//  @distance                       -> The x/z axis distance between the camera and the target.
-//  @height                         -> The y distance between the camera and the target.
-//  @horizontalAngle                -> The horizontal angle.
-//  @target                         -> The position of the target.
-//
 // -------------------------------------------------------
 
+/** @class
+*   The camera of the current map.
+*   @property {THREE.PerspectiveCamera} threeCamera The three.js camera.
+*   @property {number} distance The x/z axis distance between the camera and
+*   the target.
+*   @property {number} height The y distance between the camera and the target.
+*   @property {number} horizontalAngle The horizontal angle of the camera.
+*   @property {THREE.Vector3} target The position of the target.
+*   @param {number} d The camera distance.
+*   @param {number} h The camera height.
+*/
 function Camera(d, h){
     this.threeCamera = new THREE.PerspectiveCamera(45,
                                                    $canvasWidth / $canvasHeight,
@@ -43,10 +46,9 @@ function Camera(d, h){
 
 Camera.prototype = {
 
-    // -------------------------------------------------------
-    //  [update] Update the camera position and target.
-    // -------------------------------------------------------
-
+    /**
+    *   Update the camera position and target.
+    */
     update: function(){
 
         // Horizontal angle should stay in [-450;270] interval

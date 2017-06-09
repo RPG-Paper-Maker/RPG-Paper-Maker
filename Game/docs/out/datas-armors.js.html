@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: datas-armors.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,43 +17,74 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: datas-armors.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><p>The game engine can be identified by the files' name beginning.</p>
-<ul>
-<li><strong>System</strong> : All the system datas linked to the game (statistics, weapons, items...).</li>
-<li><strong>Datas</strong> : generally contains lists of system values.</li>
-<li><strong>Window</strong> : dialog box for interactions between PNGs.</li>
-<li><strong>Graphic</strong> : informations that can be drawn inside windows (dialog box).</li>
-<li><strong>Scene</strong> : the game is excecuted thanks to a stack which is containing scenes. For example, if you are in a battle, you will have the local map scene and the battle map scene inside the stack.</li>
-</ul></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/>.
+*/
+
+// -------------------------------------------------------
+//
+//  CLASS ARMORSDATAS
+//
+// -------------------------------------------------------
+
+/** @class
+*   All the armors datas.
+*   @property {SystemArmor[]} list List of all the armors of the game according
+*   to ID.
+*/
+function DatasArmors(){
+    this.read();
+}
+
+DatasArmors.prototype = {
+
+    /**
+    *   Read the JSON file associated to armors.
+    */
+    read: function(){
+        Wanok.openFile(this, Wanok.FILE_ARMORS, true, function(res){
+            var json = JSON.parse(res)["armors"];
+            var i, l = json.length;
+            this.list = new Array(l+1);
+
+            // Sorting all the armors according to the ID
+            for (i = 0; i &lt; l; i++){
+                var jsonArmor = json[i];
+                var id = jsonArmor["id"];
+                var armor = new SystemArmor();
+                armor.readJSON(jsonArmor);
+                this.list[id] = armor;
+            }
+        });
+    }
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Bitmap</title>
+    <title>JSDoc: Class: DatasGame</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Bitmap</h1>
+    <h1 class="page-title">Class: DatasGame</h1>
 
     
 
@@ -28,10 +28,9 @@
 
 <header>
     
-        <h2>Bitmap</h2>
+        <h2>DatasGame</h2>
         
-            <div class="class-description">A bitmap is something that can be drawn on the HUD. It can be a window,
-  a text, an image...</div>
+            <div class="class-description">All the global informations of the game.</div>
         
     
 </header>
@@ -45,7 +44,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Bitmap"><span class="type-signature"></span>new Bitmap<span class="signature">(x, y, w, h)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DatasGame"><span class="type-signature"></span>new DatasGame<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -57,124 +56,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Coords of battler.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Coords of battler.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>w</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Coords of battler.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>h</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Coords of battler.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -207,13 +88,13 @@
 
         <tr>
             
-                <td class="name"><code>x</code></td>
+                <td class="name"><code>settings</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Object</span>
 
 
             
@@ -223,20 +104,20 @@
 
             
 
-            <td class="description last">Coords of battler.</td>
+            <td class="description last">All the general settings.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>y</code></td>
+                <td class="name"><code>commonEvents</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
 
 
             
@@ -246,20 +127,20 @@
 
             
 
-            <td class="description last">Coords of battler.</td>
+            <td class="description last">Common events datas.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>w</code></td>
+                <td class="name"><code>items</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
 
 
             
@@ -269,20 +150,20 @@
 
             
 
-            <td class="description last">Coords of battler.</td>
+            <td class="description last">Items datas.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>h</code></td>
+                <td class="name"><code>skills</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
 
 
             
@@ -292,7 +173,214 @@
 
             
 
-            <td class="description last">Coords of battler.</td>
+            <td class="description last">Skills datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>weapons</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Weapons datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>armors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Armors datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>classes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Classes datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>heroes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Heroes datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>monsters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Monsters datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>troops</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Troops datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>system</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">System datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>battleSystem</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Battle System datas.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyBoard</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="DatasCommonEvents.html">DatasCommonEvents</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">KeyBoard datas.</td>
         </tr>
 
     
@@ -331,7 +419,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line38">line 38</a>
+        <a href="datas-game.js.html">datas-game.js</a>, <a href="datas-game.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -380,14 +468,14 @@
 
     
 
-    <h4 class="name" id="setCoords"><span class="type-signature"></span>setCoords<span class="signature">(The, The, The, The)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="readSettings"><span class="type-signature"></span>readSettings<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Set all the coords values.
+    Read the JSON files associated to the settings.
 </div>
 
 
@@ -396,124 +484,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">x value.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">y value.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">w value.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">h value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -549,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line88">line 88</a>
+        <a href="datas-game.js.html">datas-game.js</a>, <a href="datas-game.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -580,14 +550,14 @@
 
     
 
-    <h4 class="name" id="setH"><span class="type-signature"></span>setH<span class="signature">(The)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="saveSettings"><span class="type-signature"></span>saveSettings<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Set the h value.
+    Save the JSON file associated to the settings.
 </div>
 
 
@@ -596,55 +566,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">h value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -680,400 +601,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line78">line 78</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="setW"><span class="type-signature"></span>setW<span class="signature">(The)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Set the w value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">w value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line71">line 71</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="setX"><span class="type-signature"></span>setX<span class="signature">(The)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Set the x value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">x value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line57">line 57</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="setY"><span class="type-signature"></span>setY<span class="signature">(The)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Set the y value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>The</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">y value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bitmap.js.html">bitmap.js</a>, <a href="bitmap.js.html#line64">line 64</a>
+        <a href="datas-game.js.html">datas-game.js</a>, <a href="datas-game.js.html#line102">line 102</a>
     </li></ul></dd>
     
 

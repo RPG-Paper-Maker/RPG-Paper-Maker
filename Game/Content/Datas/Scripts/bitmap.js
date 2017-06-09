@@ -24,8 +24,8 @@
 // -------------------------------------------------------
 
 /** @class
-*   A bitmap is something that can be drawn on the HUD. It can also be moved,
-*   zoom... It can be a window, a text, an image...
+*   A bitmap is something that can be drawn on the HUD. It can be a window,
+*   a text, an image...
 *   @property {number} x Coords of battler.
 *   @property {number} y Coords of battler.
 *   @property {number} w Coords of battler.

@@ -26,7 +26,7 @@
 /** @class
 *   All the armors datas.
 *   @property {SystemArmor[]} list List of all the armors of the game according
-*                             to ID.
+*   to ID.
 */
 function DatasArmors(){
     this.read();
