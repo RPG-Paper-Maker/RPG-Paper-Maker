@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: EventCommandModifyInventory</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: EventCommandModifyInventory</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>EventCommandModifyInventory</h2>
+        
+            <div class="class-description">An event command for modifying the inventory.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="EventCommandModifyInventory"><span class="type-signature"></span>new EventCommandModifyInventory<span class="signature">(command)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Direct JSON command to parse.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>isDirectNode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Indicates if this node is directly
+  going to the next node (takes only one frame).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Direct JSON command to parse.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line713">line 713</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="addItems"><span class="type-signature"></span>addItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Add the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line768">line 768</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="divItems"><span class="type-signature"></span>divItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Modify the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line811">line 811</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="equalItems"><span class="type-signature"></span>equalItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Modify the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line752">line 752</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="modifyItems"><span class="type-signature"></span>modifyItems<span class="signature">(kind, id, nb, callback)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Modify items only if already in inventory
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback function for action.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line730">line 730</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Indicates if the item is already inside the
+  inventory.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="moduloItems"><span class="type-signature"></span>moduloItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Modulo the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line820">line 820</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multItems"><span class="type-signature"></span>multItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Multiply the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line800">line 800</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeItems"><span class="type-signature"></span>removeItems<span class="signature">(kind, id, nb)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Remove the number of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ItemKind">ItemKind</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The kind of item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of item to modify.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line784">line 784</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(currentState, object, state)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Update the inventory and finish.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>currentState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current state of the event.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MapObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current object reacting.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The state ID.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event-command.js.html">event-command.js</a>, <a href="event-command.js.html#line832">line 832</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The number of node to pass.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Battler.html">Battler</a></li><li><a href="Bitmap.html">Bitmap</a></li><li><a href="Camera.html">Camera</a></li><li><a href="DatasArmors.html">DatasArmors</a></li><li><a href="DatasBattleSystem.html">DatasBattleSystem</a></li><li><a href="DatasClasses.html">DatasClasses</a></li><li><a href="DatasCommonEvents.html">DatasCommonEvents</a></li><li><a href="DatasGame.html">DatasGame</a></li><li><a href="DatasHeroes.html">DatasHeroes</a></li><li><a href="DatasItems.html">DatasItems</a></li><li><a href="DatasKeyBoard.html">DatasKeyBoard</a></li><li><a href="DatasMonsters.html">DatasMonsters</a></li><li><a href="DatasSkills.html">DatasSkills</a></li><li><a href="DatasSystem.html">DatasSystem</a></li><li><a href="DatasTroops.html">DatasTroops</a></li><li><a href="DatasWeapons.html">DatasWeapons</a></li><li><a href="EventCommandChangeState.html">EventCommandChangeState</a></li><li><a href="EventCommandChangeSwitches.html">EventCommandChangeSwitches</a></li><li><a href="EventCommandChangeVariables.html">EventCommandChangeVariables</a></li><li><a href="EventCommandElse.html">EventCommandElse</a></li><li><a href="EventCommandEndGame.html">EventCommandEndGame</a></li><li><a href="EventCommandIf.html">EventCommandIf</a></li><li><a href="EventCommandIfLose.html">EventCommandIfLose</a></li><li><a href="EventCommandIfWin.html">EventCommandIfWin</a></li><li><a href="EventCommandInputNumber.html">EventCommandInputNumber</a></li><li><a href="EventCommandModifyInventory.html">EventCommandModifyInventory</a></li><li><a href="EventCommandModifyTeam.html">EventCommandModifyTeam</a></li><li><a href="EventCommandMoveObject.html">EventCommandMoveObject</a></li><li><a href="EventCommandOpenMainMenu.html">EventCommandOpenMainMenu</a></li><li><a href="EventCommandOpenSavesMenu.html">EventCommandOpenSavesMenu</a></li><li><a href="EventCommandSendEvent.html">EventCommandSendEvent</a></li><li><a href="EventCommandShowText.html">EventCommandShowText</a></li><li><a href="EventCommandStartBattle.html">EventCommandStartBattle</a></li><li><a href="EventCommandTeleportObject.html">EventCommandTeleportObject</a></li><li><a href="EventCommandWhile.html">EventCommandWhile</a></li><li><a href="EventCommandWhileBreak.html">EventCommandWhileBreak</a></li><li><a href="Game.html">Game</a></li><li><a href="GameItem.html">GameItem</a></li><li><a href="GamePlayer.html">GamePlayer</a></li><li><a href="GameSkill.html">GameSkill</a></li><li><a href="GameStack.html">GameStack</a></li><li><a href="SceneBattle.html">SceneBattle</a></li><li><a href="SystemArmor.html">SystemArmor</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$blockingHero">$blockingHero</a></li><li><a href="global.html#$canvasHeight">$canvasHeight</a></li><li><a href="global.html#$canvasHUD">$canvasHUD</a></li><li><a href="global.html#$canvasWidth">$canvasWidth</a></li><li><a href="global.html#$datasGame">$datasGame</a></li><li><a href="global.html#$elapsedTime">$elapsedTime</a></li><li><a href="global.html#$filesToLoad">$filesToLoad</a></li><li><a href="global.html#$fontName">$fontName</a></li><li><a href="global.html#$fontSize">$fontSize</a></li><li><a href="global.html#$game">$game</a></li><li><a href="global.html#$gameStack">$gameStack</a></li><li><a href="global.html#$keysPressed">$keysPressed</a></li><li><a href="global.html#$loadedFiles">$loadedFiles</a></li><li><a href="global.html#$modelHero">$modelHero</a></li><li><a href="global.html#$PORTION_SIZE">$PORTION_SIZE</a></li><li><a href="global.html#$PORTIONS_RAY_FAR">$PORTIONS_RAY_FAR</a></li><li><a href="global.html#$PORTIONS_RAY_NEAR">$PORTIONS_RAY_NEAR</a></li><li><a href="global.html#$renderer">$renderer</a></li><li><a href="global.html#$SCREEN_X">$SCREEN_X</a></li><li><a href="global.html#$SCREEN_Y">$SCREEN_Y</a></li><li><a href="global.html#$SQUARE_SIZE">$SQUARE_SIZE</a></li><li><a href="global.html#$windowX">$windowX</a></li><li><a href="global.html#$windowY">$windowY</a></li><li><a href="global.html#CharacterKind">CharacterKind</a></li><li><a href="global.html#CommandMoveKind">CommandMoveKind</a></li><li><a href="global.html#draw3D">draw3D</a></li><li><a href="global.html#drawHUD">drawHUD</a></li><li><a href="global.html#EventCommandKind">EventCommandKind</a></li><li><a href="global.html#GroupKind">GroupKind</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeGL">initializeGL</a></li><li><a href="global.html#ItemKind">ItemKind</a></li><li><a href="global.html#onKeyPressed">onKeyPressed</a></li><li><a href="global.html#onKeyPressedAndRepeat">onKeyPressedAndRepeat</a></li><li><a href="global.html#onKeyPressedRepeat">onKeyPressedRepeat</a></li><li><a href="global.html#onKeyReleased">onKeyReleased</a></li><li><a href="global.html#resizeGL">resizeGL</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jun 09 2017 23:27:33 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

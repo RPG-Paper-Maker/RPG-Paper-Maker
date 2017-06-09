@@ -21,14 +21,17 @@
 //
 //  CLASS GameItem
 //
-//  An item in the inventory.
-//
-//  @k          -> Kind of item (item, weapon, or armor)
-//  @id         -> The id of the item
-//  @nb         -> The occurence of the item in the inventory
-//
 // -------------------------------------------------------
 
+/** @class
+*   An item in the inventory.
+*   @property {ItemKind} k Kind of item (item, weapon, or armor).
+*   @property {number} id The ID of the item.
+*   @property {number} nb The occurence of the item in the inventory.
+*   @param {ItemKind} kind Kind of item (item, weapon, or armor).
+*   @param {number} id The ID of the item.
+*   @param {number} nb The occurence of the item in the inventory.
+*/
 function GameItem(kind, id, nb){
     this.k = kind;
     this.id = id;
@@ -37,6 +40,9 @@ function GameItem(kind, id, nb){
 
 GameItem.prototype = {
 
+    /** Get the item informations system.
+    *   @returns {SystemItem|SystemWeapon|SystemArmor}
+    */
     getItemInformations: function(){
         switch (this.k){
         case ItemKind.Item:

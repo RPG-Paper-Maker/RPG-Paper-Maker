@@ -45,6 +45,10 @@ GraphicEquip.prototype = {
 
     draw: function(context, x, y, w, h){
         this.graphicEquipmentName.draw(context, x, y, w, h);
-        this.graphicEquipment.draw(context, x + this.equipmentLength + 10, y, w, h);
+        this.graphicEquipment.draw(context,
+                                   x + this.equipmentLength + 10,
+                                   y,
+                                   w,
+                                   h);
     }
 }

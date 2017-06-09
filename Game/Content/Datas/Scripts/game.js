@@ -18,10 +18,10 @@
 */
 
 /**
- * Enum for the different items kind.
- * @enum {number}
- * @readonly
- */
+*   Enum for the different items kind.
+*   @enum {number}
+*   @readonly
+*/
 var ItemKind = {
      Item: 0,
      Weapon: 1,
@@ -29,38 +29,49 @@ var ItemKind = {
 };
 Object.freeze(ItemKind);
 
-var CharacterKind = Object.freeze(
-  {
-     Hero: 0,
-     Monster: 1
-  }
-)
+/**
+*   Enum for the different players kind.
+*   @enum {number}
+*   @readonly
+*/
+var CharacterKind = {
+    Hero: 0,
+    Monster: 1
+}
 
-var GroupKind = Object.freeze(
-  {
-     Team: 0,
-     Reserve: 1,
-     Hidden: 2
-  }
-)
+Object.freeze(CharacterKind);
+
+/**
+*   Enum for the different groups kind.
+*   @enum {number}
+*   @readonly
+*/
+var GroupKind = {
+    Team: 0,
+    Reserve: 1,
+    Hidden: 2
+}
+Object.freeze(GroupKind);
 
 // -------------------------------------------------------
 //
-//  CLASS CurrentGameDatas
-//
-//  All the global informations of a particular game.
-//
-//  @playTime               -> The current time played since the beginning of the game in seconds.
-//  @teamHeroes             -> List of all the heroes in the team.
-//  @reserveHeroes          -> List of all the heroes in the reserve.
-//  @hiddenHeroes           -> List of all the hidden heroes.
-//  @items                  -> List of all the items, weapons, and armors in the inventory.
-//  @charactersInstances    -> Id of the last instance character.
-//  @hero                   -> Hero informations.
-//  @mapsDatas              -> All the informations for each datas.
+//  CLASS Game
 //
 // -------------------------------------------------------
 
+/** @class
+*   All the global informations of a particular game.
+*   @property {number} playTime The current time played since the beginning of
+*   the game in seconds.
+*   @property {number} teamHeroes List of all the heroes in the team.
+*   @property {number} reserveHeroes List of all the heroes in the reserve.
+*   @property {number} hiddenHeroes List of all the hidden heroes.
+*   @property {number} items List of all the items, weapons, and armors in the
+*   inventory.
+*   @property {number} charactersInstances IDs of the last instance character.
+*   @property {number} hero Hero informations.
+*   @property {number} mapsDatas All the informations for each maps.
+*/
 function Game(){
     this.currentSlot = -1;
     this.hero = $modelHero;
@@ -68,6 +79,8 @@ function Game(){
 
 Game.prototype = {
 
+    /** Initialize a default game.
+    */
     initializeDefault: function(){
         this.playTime = 0;
         this.teamHeroes = [];
@@ -85,6 +98,8 @@ Game.prototype = {
 
     // -------------------------------------------------------
 
+    /** Initialize the default variables.
+    */
     initializeVariables: function(){
         this.listVariables = new Array($datasGame.variablesNumbers);
         for (var i = 0; i < $datasGame.variablesNumbers; i++)
@@ -93,6 +108,11 @@ Game.prototype = {
 
     // -------------------------------------------------------
 
+    /** Read a game file.
+    *   @param {number} slot The number of the slot to load.
+    *   @param {callback} The function to apply after finishing loading.
+    *   @param {Object} base The base object which is calling this function.
+    */
     read: function(slot, callback, base){
         this.currentSlot = slot;
         Wanok.openFile(this, Wanok.fileSave(slot), true, function(res){
@@ -107,7 +127,9 @@ Game.prototype = {
             this.items = new Array(l);
             for (i = 0; i < l; i++){
                 var itemJson = itemsJson[i];
-                this.items[i] = new Item(itemJson.k, itemJson.id, itemJson.nb);
+                this.items[i] = new Item(itemJson.k,
+                                         itemJson.id,
+                                         itemJson.nb);
             }
 
             // Heroes
@@ -117,7 +139,9 @@ Game.prototype = {
             var heroJson, character;
             for (i = 0; i < l; i++){
                 heroJson = heroesJson[i];
-                character = new Player(heroJson.k, heroJson.id, heroJson.instid,
+                character = new Player(heroJson.k,
+                                       heroJson.id,
+                                       heroJson.instid,
                                        heroJson.sk);
                 character.readJSON(heroJson, this.items);
                 this.teamHeroes[i] = character;
@@ -127,7 +151,9 @@ Game.prototype = {
             this.reserveHeroes = new Array(l);
             for (i = 0; i < l; i++){
                 heroJson = heroesJson[i];
-                character = new Player(heroJson.k, heroJson.id, heroJson.instid,
+                character = new Player(heroJson.k,
+                                       heroJson.id,
+                                       heroJson.instid,
                                        heroJson.sk);
                 character.readJSON(heroJson, this.items);
                 this.reserveHeroes[i] = character;
@@ -137,12 +163,15 @@ Game.prototype = {
             this.hiddenHeroes = new Array(l);
             for (i = 0; i < l; i++){
                 heroJson = heroesJson[i];
-                character = new Player(heroJson.k, heroJson.id, heroJson.instid,
+                character = new Player(heroJson.k,
+                                       heroJson.id,
+                                       heroJson.instid,
                                        heroJson.sk);
                 character.readJSON(heroJson, this.items);
                 this.hiddenHeroes[i] = character;
             }
 
+            // Map infos
             this.currentMapId = json.currentMapId;
             var positionHero = json.heroPosition;
             this.hero.mesh.position.set(positionHero[0],
@@ -155,10 +184,16 @@ Game.prototype = {
         });
     },
 
+    /** Read all the maps datas.
+    *   @param {Object} json Json object describing the maps datas.
+    */
     readMapsDatas: function(json){
         this.mapsDatas = json;
     },
 
+    /** Save a game file.
+    *   @param {number} slot The number of the slot to save.
+    */
     write: function(slot){
         this.currentSlot = slot;
         var i, l = this.teamHeroes.length;
@@ -193,6 +228,9 @@ Game.prototype = {
         );
     },
 
+    /** Get a compressed version of mapsDatas (don't retain meshs).
+    *   @returns {Object}
+    */
     getCompressedMapsDatas: function(){
         var obj = {};
 

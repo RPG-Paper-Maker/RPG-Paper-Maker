@@ -17,44 +17,51 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var EventCommandKind = Object.freeze(
-    {
-        None: 0,
-        ShowText: 1,
-        ChangeVariables: 2,
-        EndGame: 3,
-        While: 4,
-        EndWhile: 5,
-        WhileBreak: 6,
-        InputNumber: 7,
-        If: 8,
-        Else: 9,
-        EndIf: 10,
-        ChangeSwitches: 11,
-        OpenMainMenu: 12,
-        OpenSavesMenu: 13,
-        ModifyInventory: 14,
-        ModifyTeam: 15,
-        StartBattle: 16,
-        IfWin: 17,
-        IfLose: 18,
-        ChangeState: 19,
-        SendEvent: 20,
-        TeleportObject: 21,
-        MoveObject: 22
-    }
-)
+/**
+*   Enum for the different event commands kind.
+*   @enum {number}
+*   @readonly
+*/
+var EventCommandKind = {
+    None: 0,
+    ShowText: 1,
+    ChangeVariables: 2,
+    EndGame: 3,
+    While: 4,
+    EndWhile: 5,
+    WhileBreak: 6,
+    InputNumber: 7,
+    If: 8,
+    Else: 9,
+    EndIf: 10,
+    ChangeSwitches: 11,
+    OpenMainMenu: 12,
+    OpenSavesMenu: 13,
+    ModifyInventory: 14,
+    ModifyTeam: 15,
+    StartBattle: 16,
+    IfWin: 17,
+    IfLose: 18,
+    ChangeState: 19,
+    SendEvent: 20,
+    TeleportObject: 21,
+    MoveObject: 22
+};
+Object.freeze(EventCommandKind);
 
 // -------------------------------------------------------
 //
 //  CLASS EventCommandShowText
 //
-//  An event command for displaying text.
-//
-//  @message -> Message to display.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for displaying text.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {WindowBox} window Window containins the message to display.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandShowText(command){
     this.message = command[0];
     this.isDirectNode = false;
@@ -64,12 +71,23 @@ function EventCommandShowText(command){
 
 EventCommandShowText.prototype = {
 
+    /** Initialize the current state.
+    *   @returns {Object} The current state (clicked).
+    */
     initialize: function(){
         return {
             clicked: false
         }
     },
 
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
         if (currentState.clicked)
             return 1;
@@ -77,6 +95,12 @@ EventCommandShowText.prototype = {
         return 0;
     },
 
+    // -------------------------------------------------------
+
+    /** Update clicked to true.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {number} key The key ID pressed.
+    */
     onKeyPressed: function(currentState, key){
         if (DatasKeyBoard.isKeyEqual(key,
                                      $datasGame.keyBoard.menuControls.Action))
@@ -85,12 +109,16 @@ EventCommandShowText.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
     onKeyReleased: function(currentState, key){},
-
     onKeyPressedRepeat: function(currentState, key){ return true; },
-
     onKeyPressedAndRepeat: function(currentState, key){},
 
+    /** Draw the dialog box.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {Canvas.Context} context The context of the canvas.
+    */
     drawHUD: function(currentState, context){
         this.window.draw(context);
     }
@@ -100,12 +128,15 @@ EventCommandShowText.prototype = {
 //
 //  CLASS EventCommandChangeVariables
 //
-//  An event command for changing variables values.
-//
-//  @command -> Command.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing variables values.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {JSON} command Direct JSON command to parse.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandChangeVariables(command){
     this.command = command;
     this.isDirectNode = true;
@@ -115,6 +146,12 @@ EventCommandChangeVariables.prototype = {
 
     initialize: function(){ return null; },
 
+    /** Parse command and change the variable values, and then finish.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
 
         // Parsing
@@ -142,14 +179,12 @@ EventCommandChangeVariables.prototype = {
         return 1;
     },
 
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
-
     onKeyReleased: function(currentState, key){},
-
     onKeyPressedRepeat: function(currentState, key){ return true; },
-
     onKeyPressedAndRepeat: function(currentState, key){},
-
     drawHUD: function(currentState, context){}
 }
 
@@ -157,12 +192,15 @@ EventCommandChangeVariables.prototype = {
 //
 //  CLASS EventCommandChangeSwitches
 //
-//  An event command for changing switches values.
-//
-//  @command -> Command.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for changing switches values.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {JSON} command Direct JSON command to parse.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandChangeSwitches(command){
     this.command = command;
     this.isDirectNode = true;
@@ -172,6 +210,12 @@ EventCommandChangeSwitches.prototype = {
 
     initialize: function(){ return null; },
 
+    /** Parse command and change the switches values, and then finish.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
 
         // Parsing
@@ -205,14 +249,12 @@ EventCommandChangeSwitches.prototype = {
         return 1;
     },
 
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
-
     onKeyReleased: function(currentState, key){},
-
     onKeyPressedRepeat: function(currentState, key){ return true; },
-
     onKeyPressedAndRepeat: function(currentState, key){},
-
     drawHUD: function(currentState, context){}
 }
 
@@ -220,17 +262,34 @@ EventCommandChangeSwitches.prototype = {
 //
 //  CLASS EventCommandEndGame
 //
-//  An event command for ending the game.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for ending the game.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandEndGame(command){
     this.isDirectNode = true;
 }
 
 EventCommandEndGame.prototype = {
+
     initialize: function(){ return null; },
-    update: function(currentState, object, state){ quit(); },
+
+    /** Quit the game.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state){
+        quit();
+    },
+
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
@@ -242,17 +301,34 @@ EventCommandEndGame.prototype = {
 //
 //  CLASS EventCommandWhile
 //
-//  An event command for loop event command block.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for loop event command block.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandWhile(command){
     this.isDirectNode = true;
 }
 
 EventCommandWhile.prototype = {
+
     initialize: function(){ return null; },
-    update: function(currentState, object, state){ return -1; },
+
+    /** Go inside the loop block.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state){
+        return -1;
+    },
+
+    // -------------------------------------------------------
+
     goToNextCommand : function(){ return 2; },
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
@@ -265,17 +341,32 @@ EventCommandWhile.prototype = {
 //
 //  CLASS EventCommandWhileBreak
 //
-//  An event command for leaving while event command.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for leaving while event command.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandWhileBreak(command){
     this.isDirectNode = true;
 }
 
 EventCommandWhileBreak.prototype = {
+
     initialize: function(){ return null; },
+
+    /** Go outside the loop block.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){ return -2; },
+
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
@@ -287,12 +378,15 @@ EventCommandWhileBreak.prototype = {
 //
 //  CLASS EventCommandInputNumber
 //
-//  An event command for entering a number inside a variable.
-//
-//  @id -> Id of the variable.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for entering a number inside a variable.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {number} id Id of the variable.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandInputNumber(command){
     this.id = parseInt(command[0]);
     this.isDirectNode = false;
@@ -300,6 +394,9 @@ function EventCommandInputNumber(command){
 
 EventCommandInputNumber.prototype = {
 
+    /** Initialize the current state.
+    *   @returns {Object} The current state (entered, confirmed).
+    */
     initialize: function(){
         return {
             entered: "",
@@ -307,6 +404,14 @@ EventCommandInputNumber.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
+    /** Finish after confirmation.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
         if (currentState.confirmed){
             $datasGame.listVariables[this.id] = currentState.entered;
@@ -316,6 +421,12 @@ EventCommandInputNumber.prototype = {
         return 0;
     },
 
+    // -------------------------------------------------------
+
+    /** Update confirmed to true, or update text entered.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {number} key The key ID pressed.
+    */
     onKeyPressed: function(currentState, key){
         if (key === KeyEvent.DOM_VK_ENTER)
             currentState.confirmed = true;
@@ -325,12 +436,16 @@ EventCommandInputNumber.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
     onKeyReleased: function(currentState, key){},
-
     onKeyPressedRepeat: function(currentState, key){ return true; },
-
     onKeyPressedAndRepeat: function(currentState, key){},
 
+    /** Draw number entered.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {Canvas.Context} context The context of the canvas.
+    */
     drawHUD: function(currentState, context){
         context.fillText(currentState.entered, $canvasWidth / 2,
                          $canvasHeight / 2);
@@ -341,13 +456,15 @@ EventCommandInputNumber.prototype = {
 //
 //  CLASS EventCommandIf
 //
-//  An event command for condition event command block.
-//
-//  @hasElse  -> Boolean indicating if there an else node or not.
-//  @command -> Command.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for condition event command block.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {boolean} hasElse Boolean indicating if there an else node or not.
+*   @property {JSON} command Direct JSON command to parse.
+*/
 function EventCommandIf(command){
     this.hasElse = command[0] === 1;
     command.shift();
@@ -356,6 +473,7 @@ function EventCommandIf(command){
 }
 
 EventCommandIf.prototype = {
+
     initialize: function(){ return null; },
 
     getBool: function(){
@@ -394,6 +512,12 @@ EventCommandIf.prototype = {
                                              value);
     },
 
+    /** Check where to go according to the condition.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
         var result = this.getBool();
 
@@ -401,18 +525,21 @@ EventCommandIf.prototype = {
         else return 1 + (this.hasElse ? 0 : 1);
     },
 
+    // -------------------------------------------------------
+
+    /** Returns the number of node to pass.
+    *   @returns {number}
+    */
     goToNextCommand : function(){
         return 2 + (this.hasElse ? 1 : 0);
     },
 
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
-
     onKeyReleased: function(currentState, key){},
-
     onKeyPressedRepeat: function(currentState, key){ return true; },
-
     onKeyPressedAndRepeat: function(currentState, key){},
-
     drawHUD: function(currentState, context){}
 }
 
@@ -420,20 +547,43 @@ EventCommandIf.prototype = {
 //
 //  CLASS EventCommandElse
 //
-//  An event command for condition else event command block.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for condition else event command block.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandElse(command){
     this.isDirectNode = true;
 }
 
 EventCommandElse.prototype = {
+
     initialize: function(){ return null; },
-    update: function(currentState, object, state){ return -1; },
+
+    /** Go inside the else block.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state){
+        return -1;
+    },
+
+    // -------------------------------------------------------
+
+    /** Returns the number of node to pass.
+    *   @returns {number}
+    */
     goToNextCommand : function(){
         return 2;
     },
+
+    // -------------------------------------------------------
+
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
     onKeyPressedRepeat: function(currentState, key){ return true; },
@@ -445,28 +595,47 @@ EventCommandElse.prototype = {
 //
 //  CLASS EventCommandOpenMainMenu
 //
-//  An event command for opening the main menu.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for opening the main menu.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandOpenMainMenu(command){
     this.isDirectNode = false;
 }
 
 EventCommandOpenMainMenu.prototype = {
+
+    /** Initialize the current state.
+    *   @returns {Object} The current state (opened).
+    */
     initialize: function(){
         return {
             opened: false
         }
     },
 
+    // -------------------------------------------------------
+
+    /** Open the menu.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
-        if (currentState.opened) return 1;
+        if (currentState.opened)
+            return 1;
         $gameStack.push(new SceneMenu());
         currentState.opened = true;
 
         return 0;
     },
+
+    // -------------------------------------------------------
 
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
@@ -479,28 +648,47 @@ EventCommandOpenMainMenu.prototype = {
 //
 //  CLASS EventCommandOpenSavesMenu
 //
-//  An event command for opening the main menu.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for opening the saves menu.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandOpenSavesMenu(command){
     this.isDirectNode = false;
 }
 
 EventCommandOpenSavesMenu.prototype = {
+
+    /** Initialize the current state.
+    *   @returns {Object} The current state (opened).
+    */
     initialize: function(){
         return {
             opened: false
         }
     },
 
+    // -------------------------------------------------------
+
+    /** Open the menu.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
-        if (currentState.opened) return 1;
+        if (currentState.opened)
+            return 1;
         $gameStack.push(new SceneSaveGame());
         currentState.opened = true;
 
         return 0;
     },
+
+    // -------------------------------------------------------
 
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},
@@ -513,12 +701,15 @@ EventCommandOpenSavesMenu.prototype = {
 //
 //  CLASS EventCommandModifyInventory
 //
-//  An event command for modifying the inventory.
-//
-//  @command    -> command
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for modifying the inventory.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {JSON} command Direct JSON command to parse.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandModifyInventory(command){
     this.command = command;
     this.isDirectNode = true;
@@ -528,13 +719,20 @@ EventCommandModifyInventory.prototype = {
 
     initialize: function(){ return null; },
 
-    // -------------------------------------------------------
-
+    /** Modify items only if already in inventory
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    *   @param {function} callback callback function for action.
+    *   @returns {boolean} Indicates if the item is already inside the
+    *   inventory.
+    */
     modifyItems: function(kind, id, nb, callback){
         var i, l = $game.items.length;
         for (i = 0; i < l; i++){
             var item = $game.items[i];
             if (item.k === kind && item.id === id){
+
                 // If the item already is in the inventory...
                 callback.call(this, item, i);
                 return true;
@@ -546,6 +744,11 @@ EventCommandModifyInventory.prototype = {
 
     // -------------------------------------------------------
 
+    /** Modify the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     equalItems: function(kind, id, nb){
         var alreadyInInventory = this.modifyItems(kind, id, nb,
                                                   function(item,index){
@@ -557,6 +760,11 @@ EventCommandModifyInventory.prototype = {
 
     // -------------------------------------------------------
 
+    /** Add the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     addItems: function(kind, id, nb){
         var alreadyInInventory = this.modifyItems(kind, id, nb,
                                                   function(item,index){
@@ -568,6 +776,11 @@ EventCommandModifyInventory.prototype = {
 
     // -------------------------------------------------------
 
+    /** Remove the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     removeItems: function(kind, id, nb){
         var alreadyInInventory = this.modifyItems(kind, id, nb,
         function(item,index){
@@ -579,24 +792,43 @@ EventCommandModifyInventory.prototype = {
 
     // -------------------------------------------------------
 
+    /** Multiply the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     multItems: function(kind, id, nb){
         this.modifyItems(kind, id, nb, function(item,index){ item.nb *= nb; });
     },
 
     // -------------------------------------------------------
 
+    /** Modify the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     divItems: function(kind, id, nb){
         this.modifyItems(kind, id, nb, function(item,index){ item.nb /= nb; });
     },
 
-    // -------------------------------------------------------
-
+    /** Modulo the number of the item.
+    *   @param {ItemKind} kind The kind of item.
+    *   @param {number} id ID of the item.
+    *   @param {number} nb Number of item to modify.
+    */
     moduloItems: function(kind, id, nb){
         this.modifyItems(kind, id, nb, function(item,index){ item.nb %= nb; });
     },
 
     // -------------------------------------------------------
 
+    /** Update the inventory and finish.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
 
         // Parsing
@@ -641,17 +873,28 @@ EventCommandModifyInventory.prototype = {
 //
 //  CLASS EventCommandModifyTeam
 //
-//  An event command for modifying team.
-//
-//  @command    -> command
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event command for modifying team.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {JSON} command Direct JSON command to parse.
+*   @param {JSON} command Direct JSON command to parse.
+*/
 function EventCommandModifyTeam(command){
     this.command = command;
     this.isDirectNode = true;
 }
 
+/** Instanciate a new character in a group.
+*   @static
+*   @param {GroupKind} where In which group we should instanciate.
+*   @param {CharacterKind} type The type of character to instanciate.
+*   @param {number} id The ID of the character to instanciate.
+*   @param {number} stockId The ID of the variable where we will stock the
+*   instantiate ID.
+*/
 EventCommandModifyTeam.instanciateTeam = function(where, type, id, level,
                                                   stockId)
 {
@@ -676,8 +919,11 @@ EventCommandModifyTeam.prototype = {
 
     initialize: function(){ return null; },
 
-    // -------------------------------------------------------
-
+    /** Add or remove a character in a group.
+    *   @param {CharacterKind} kind The type of character to instanciate.
+    *   @param {number} id The ID of the character to instanciate.
+    *   @param {GroupKind} where In which group we should instanciate.
+    */
     addRemove: function(kind, id, where){
         // Serching for the id
         var groups = [$game.teamHeroes, $game.reserveHeroes,
@@ -705,7 +951,14 @@ EventCommandModifyTeam.prototype = {
 
     // -------------------------------------------------------
 
+    /** Parsing, modifying the team and finishing.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
     update: function(currentState, object, state){
+
         // Parsing
         var i = 0;
         var addingKind = this.command[i++];
@@ -737,366 +990,6 @@ EventCommandModifyTeam.prototype = {
     },
 
     // -------------------------------------------------------
-
-    onKeyPressed: function(currentState, key){},
-    onKeyReleased: function(currentState, key){},
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-    onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandStartBattle
-//
-//  An event command for battle processing.
-//
-//  @canEscape    -> Boolean indicating if the player can escape this battle.
-//  @canGameOver  -> Boolean indicating if there a win/lose node or not.
-//  @command      -> Command.
-//
-// -------------------------------------------------------
-
-function EventCommandStartBattle(command){
-    this.canEscape = command[0] === 1;
-    this.canGameOver = command[1] === 1;
-    command.shift();
-    command.shift();
-    this.command = command;
-    this.isDirectNode = false;
-}
-
-EventCommandStartBattle.prototype = {
-    initialize: function(){
-        return {
-            sceneBattle: null
-        };
-    },
-
-    update: function(currentState, object, state){
-
-        // Initializing battle
-        if (currentState.sceneBattle === null){
-            var i = 0;
-            var type = this.command[i++];
-
-            // Getting the troop ID
-            var troopId;
-            switch(type){
-            case 0: // If only selecting a troop ID with comboBox
-                troopId = this.command[i++];
-                break;
-            case 1: // If only selecting a troop ID with variable or constant
-                var varConstType = this.command[i++];
-                var varConstVal = this.command[i++];
-                troopId =
-                        (varConstType === 0) ? $game.listVariables[varConstVal]
-                                             : varConstVal;
-                break;
-            case 2: // If random troop in map properties
-                // TODO
-            }
-
-            // Defining the battle state instance
-            var sceneBattle = new SceneBattle(troopId, this.canGameOver,
-                                              this.canEscape);
-             // Keep instance of battle state for results
-            currentState.sceneBattle = sceneBattle;
-            $gameStack.push(sceneBattle);
-
-            return 0; // Stay on this command as soon as we are in battle state
-        }
-
-        // After the battle...
-        var result = 1;
-        // If there are not game overs, go to win/lose nodes
-        if (!this.canGameOver){
-            if (!currentState.sceneBattle.winning)
-                result = 2;
-        }
-
-        return result;
-    },
-
-    onKeyPressed: function(currentState, key){},
-
-    onKeyReleased: function(currentState, key){},
-
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-
-    onKeyPressedAndRepeat: function(currentState, key){},
-
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandIfWin
-//
-//  An event command for after a battle winning.
-//
-// -------------------------------------------------------
-
-function EventCommandIfWin(command){
-    this.isDirectNode = true;
-}
-
-EventCommandIfWin.prototype = {
-    initialize: function(){ return null; },
-    update: function(currentState, object, state){ return -1; },
-    goToNextCommand : function(){
-        return 3;
-    },
-    onKeyPressed: function(currentState, key){},
-    onKeyReleased: function(currentState, key){},
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-    onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandIfLose
-//
-//  An event command for after a battle winning.
-//
-// -------------------------------------------------------
-
-function EventCommandIfLose(command){
-    this.isDirectNode = true;
-}
-
-EventCommandIfLose.prototype = {
-    initialize: function(){ return null; },
-    update: function(currentState, object, state){ return -1; },
-    goToNextCommand : function(){
-        return 2;
-    },
-    onKeyPressed: function(currentState, key){},
-    onKeyReleased: function(currentState, key){},
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-    onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandChangeState
-//
-//  An event command for changing an object state.
-//
-//  @idState        -> The ID of the state to change
-//  @operationKind  -> Index of operation
-//
-// -------------------------------------------------------
-
-function EventCommandChangeState(command){
-
-    // Parsing
-    var i = 1;
-    this.idState = command[i++];
-    this.operationKind = command[i++];
-
-    this.isDirectNode = true;
-}
-
-EventCommandChangeState.addState = function(portionDatas, index, state){
-    var states = portionDatas.s[index];
-
-    if (states.indexOf(state) === -1)
-        states.unshift(state);
-
-    EventCommandChangeState.removeFromDatas(portionDatas, index, states);
-}
-
-EventCommandChangeState.removeState = function(portionDatas, index, state){
-    var states = portionDatas.s[index];
-
-    var indexState = states.indexOf(state);
-    if (states.indexOf(state) !== -1)
-        states.splice(indexState, 1);
-
-    EventCommandChangeState.removeFromDatas(portionDatas, index, states);
-}
-
-EventCommandChangeState.removeAll = function(portionDatas, index){
-    portionDatas.s[index] = [];
-}
-
-EventCommandChangeState.removeFromDatas = function(portionDatas, index, states){
-    if (states.length === 1 && states[0] === 1){
-        portionDatas.si.splice(index, 1);
-        portionDatas.s.splice(index, 1);
-    }
-}
-
-EventCommandChangeState.prototype = {
-    initialize: function(){ return null; },
-
-    update: function(currentState, object, state){
-        var portion = $gameStack.top().allObjects[object.system.id];
-        var portionDatas = $game.mapsDatas[$gameStack.top().id]
-                [portion[0]][portion[1]][portion[2]];
-        var indexState = portionDatas.si.indexOf(object.system.id);
-        if (indexState === -1){
-            indexState = 0;
-            portionDatas.si.unshift(object.system.id);
-            portionDatas.s.unshift([1]);
-        }
-
-        switch(this.operationKind){
-        case 0: // Replacing
-            EventCommandChangeState.removeAll(portionDatas, indexState);
-            EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState);
-            break;
-        case 1: // Adding
-            EventCommandChangeState.addState(portionDatas, indexState,
-                                             this.idState);
-            break;
-        case 2: // Deleting
-            EventCommandChangeState.removeState(portionDatas, indexState,
-                                                this.idState);
-            break;
-        }
-
-        return 1;
-    },
-
-    onKeyPressed: function(currentState, key){},
-    onKeyReleased: function(currentState, key){},
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-    onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandSendEvent
-//
-//  An event command for sending an event.
-//
-//  @targetKind  -> Kind of target
-//  @idTarget    -> ID of target
-//  @isSystem    -> Boolean indicating if it is an event system.
-//  @eventId     -> ID of the event
-//  @parameters  -> List of all the parameters
-//
-// -------------------------------------------------------
-
-function EventCommandSendEvent(command){
-
-    // Target
-    var i = 0, j = 0;
-    var l = command.length;
-    this.targetKind = command[i++];
-    switch(this.targetKind){
-    case 1:
-    case 2:
-        this.idTarget = command[i++];
-        break;
-    }
-
-    this.isSystem = command[i++] === "1";
-    this.eventId = command[i++];
-
-
-    // Parameters
-    var events = this.isSystem ? $datasGame.commonEvents.eventsSystem :
-                                 $datasGame.commonEvents.eventsUser;
-    var parameters = events[this.eventId].parameters;
-    this.parameters = [];
-    while (i < l){
-        var paramId = command[i++];
-        var k = command[i++];
-        var v = command[i++];
-        var parameter = SystemValue.createValue(k, v);
-
-        // If default value
-        if (parameter.kind === 2)
-            parameter = parameters[j].value;
-
-        this.parameters.push(parameter);
-        i++;
-        j++;
-    }
-
-    this.isDirectNode = true;
-}
-
-EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
-                                           isSystem, idEvent, parameters)
-{
-    var i, j, k, l, ll, portion, objects;
-    var group = $gameStack.top().mapPortions;
-
-    switch (targetKind){
-    case 0: // Send to all
-        break;
-    case 1: // Send to detection
-        var pos = $game.hero.mesh.position;
-        var length = 1;
-        var width = 1;
-        var height = 1;
-
-        for (var x = 0; x < length; x++){
-            for (var y = 0; y < width; y++){
-                for (var z = 0; z < height; z++){
-                    portion = group[x][y][z];
-                    objects = portion.objectsList;
-                    ll = objects.length;
-                    for (j = 0; j < ll; j++){
-                        var object = objects[j];
-                        var posObject = object.mesh.position;
-                        if (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
-                            posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
-                            posObject.y >= pos.y &&
-                            posObject.y <= pos.y + $SQUARE_SIZE &&
-                            posObject.z >= pos.z - $SQUARE_SIZE  -
-                                ($SQUARE_SIZE / 2) &&
-                            posObject.z <= pos.z + ($SQUARE_SIZE / 2)
-                           )
-                        {
-                            // Get states
-                            var states = [1];
-                            var portionDatas =
-                                    $game.mapsDatas[$gameStack.top().id]
-                                    [x][y][z];
-                            var indexState =
-                                    portionDatas.si.indexOf(object.system.id);
-                            if (indexState !== -1)
-                                states = portionDatas.s[indexState];
-
-                            // Make the object receive the event
-                            object.receiveEvent(sender, isSystem, idEvent,
-                                                parameters, states);
-                        }
-                    }
-                }
-            }
-        }
-        break;
-    case 2: // Send to a particular object
-        break;
-    case 3: // Send to sender
-        break;
-    case 4: // Send to the hero
-        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
-                                $game.heroStates);
-        break;
-    }
-}
-
-EventCommandSendEvent.prototype = {
-    initialize: function(){ return null; },
-
-    update: function(currentState, object, state){
-        EventCommandSendEvent.sendEvent(object, this.targetKind, this.idTarget,
-                                        this.isSystem, this.eventId,
-                                        this.parameters);
-
-        return 1;
-    },
 
     onKeyPressed: function(currentState, key){},
     onKeyReleased: function(currentState, key){},

@@ -24,8 +24,8 @@
 // -------------------------------------------------------
 
 /** @class
-*   Class representing a point.
-*   @property {String}   source path
+*   The game stack that is organizing the game scenes.
+*   @property {SceneGame[]} content The stack content.
 */
 function GameStack(){
     this.content = [];
@@ -33,18 +33,28 @@ function GameStack(){
 
 GameStack.prototype = {
 
+    /** Push a new scene in the stack.
+    *   @param {SceneGame} scene The scene to push.
+    */
     push: function(scene) {
         this.content.unshift(scene);
     },
 
     // -------------------------------------------------------
 
+    /** Pop (remove) the last scene in the stack.
+    *   @returns {SceneGame} The last scene that is removed.
+    */
     pop: function() {
         return this.content.shift();
     },
 
     // -------------------------------------------------------
 
+    /** Replace the last scene in the stack by a new scene.
+    *   @param {SceneGame} scene The scene to replace.
+    *   @returns {SceneGame} The last scene that is replaced.
+    */
     replace: function(scene) {
         var pop = this.pop();
         this.push(scene);
@@ -54,32 +64,45 @@ GameStack.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get the scene at a specific index in the stack. 0 is the bottom of the
+    *   stack.
+    *   @param {number} i Index in the stack.
+    *   @returns {SceneGame} The scene in the index of the stack.
+    */
     at: function(i) {
         return this.content[i];
     },
 
     // -------------------------------------------------------
 
+    /** Get the scene on the top of the stack.
+    *   @returns {SceneGame}
+    */
     top: function() {
         return this.at(0);
     },
 
     // -------------------------------------------------------
 
+    /** Get the scene on the bottom of the stack.
+    *   @returns {SceneGame}
+    */
     bot: function() {
         return this.at(this.content.length - 1);
     },
 
     // -------------------------------------------------------
 
+    /** Check if the stack is empty.
+    *   @returns {boolean}
+    */
     isEmpty: function() {
         return this.top() == null;
     },
 
     // -------------------------------------------------------
 
-    /**
-    * Create an array of all the right files in the source dir
+    /** Update the stack
     */
     update: function() {
         if (!this.isEmpty())
@@ -91,6 +114,7 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** First key press handle for the current stack.
+    *   @param {number} key The key ID pressed.
     */
     onKeyPressed: function(key){
         if (!this.isEmpty())
@@ -100,6 +124,7 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** First key release handle for the current stack.
+    *   @param {number} key The key ID released.
     */
     onKeyReleased: function(key){
         if (!this.isEmpty())
@@ -109,6 +134,7 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** Key pressed repeat handle for the current stack.
+    *   @param {number} key The key ID pressed.
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedRepeat: function(key){
@@ -122,6 +148,7 @@ GameStack.prototype = {
 
     /** Key pressed repeat handle for the current stack, but with
     *   a small wait after the first pressure (generally used for menus).
+    *   @param {number} key The key ID pressed.
     *   @returns {boolean} false if the other keys are blocked after it.
     */
     onKeyPressedAndRepeat: function(key){
@@ -134,6 +161,7 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** Draw the 3D for the current stack.
+    *   @param {Canvas} canvas The 3D canvas.
     */
     draw3D: function(canvas){
         if (!this.isEmpty())
@@ -143,6 +171,7 @@ GameStack.prototype = {
     // -------------------------------------------------------
 
     /** Draw HUD for the current stack.
+    *   @param {Canvas.Context} context The canvas context.
     */
     drawHUD: function(context){
         if (!this.isEmpty())
