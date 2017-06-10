@@ -111,7 +111,7 @@ win32{
     } else {
         VARIANT = release
     }
-    DEST = \"$$shell_path($$OUT_PWD\\$$VARIANT)\"
+    DEST = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content)\"
 }
 
 copyBR.commands = $(COPY_DIR) \"$$shell_path($$PWD\\Content)\" $$DEST
