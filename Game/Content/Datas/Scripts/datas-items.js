@@ -34,8 +34,7 @@ function DatasItems(){
 
 DatasItems.prototype = {
 
-    /**
-    *   Read the JSON file associated to items.
+    /** Read the JSON file associated to items.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_ITEMS, true, function(res){

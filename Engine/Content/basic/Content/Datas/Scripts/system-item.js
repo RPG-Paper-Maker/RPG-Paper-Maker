@@ -21,20 +21,23 @@
 //
 //  CLASS SystemItem
 //
-//  An item of the game.
-//
-//  @name         -> The name of the item
-//  @idType       -> The id of the item's type
-//  @consumable   -> Wether the item is consumable or not
-//
 // -------------------------------------------------------
 
+/** @class
+*   An item of the game.
+*   @property {string} name The name of the item.
+*   @property {number} idType The id of the item's type.
+*   @property {boolean} consumable Indicate if the item is consumable.
+*/
 function SystemItem(){
 
 }
 
 SystemItem.prototype = {
 
+    /** Read the JSON associated to the item.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.name;
         this.idType = json.t;

@@ -19,15 +19,18 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneMenuSkills : GameState
-//
-//  @windowTop          -> Window on top with "Skills" text
-//  @windowChoicesTabs  -> Window for each tabs
-//  @windowChoicesList  -> Window for each skills
-//  @windowInformations -> Window for skill informations
+//  CLASS SceneMenuSkills : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene in the menu for describing players skills.
+*   @extends SceneGame
+*   @property {WindowBox} windowTop Window on top with "Skills" text.
+*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowBox} windowInformations Window for skill informations.
+*   @property {WindowChoices} windowChoicesList Window for each skill.
+*/
 function SceneMenuSkills() {
     SceneGame.call(this);
 
@@ -58,6 +61,8 @@ function SceneMenuSkills() {
 
 SceneMenuSkills.prototype = {
 
+    /** Update tab.
+    */
     updateForTab: function(){
         var i, j, list = new Array(SceneMenu.nbItemsToDisplay);
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;

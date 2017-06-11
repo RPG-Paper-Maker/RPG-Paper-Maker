@@ -23,14 +23,30 @@
 //
 // -------------------------------------------------------
 
-function GraphicPlayerDescription(player){
+/** @class
+*   The graphic displaying all the stats in the player description state menu.
+*   @property {GraphicText} graphicNameCenter The player's name graphic (for
+*   menu choices).
+*   @property {GraphicText} graphicName The player's name graphic (for
+*   menu description).
+*   @property {GraphicText} graphicClass The player's class name graphic.
+*   @property {GraphicText} graphicLevelName The player's level name graphic.
+*   @property {GraphicText} graphicLevel The player's level graphic.
+*   @property {GraphicText} listStatsNames All the player's stats names
+*   graphics.
+*   @property {GraphicText} listStats All the player's stats values
+*   graphics.
+*   @property {number} listLength The max length of the stats for each column.
+*   @param {GamePlayer} gamePlayer The current selected player.
+*/
+function GraphicPlayerDescription(gamePlayer){
     var character, cl, levelStat;
     var context;
     var i, j, l, c, maxLength, txt;
     var statistic, graphicName;
 
     // Informations
-    character = player.getCharacterInformations();
+    character = gamePlayer.getCharacterInformations();
     cl = $datasGame.classes.list[character.idClass];
     levelStat = $datasGame.battleSystem.getLevelStatistic();
 
@@ -39,7 +55,7 @@ function GraphicPlayerDescription(player){
     this.graphicName = new GraphicText(character.name, Align.Left);
     this.graphicClass = new GraphicText(cl.name, Align.Left, 10);
     this.graphicLevelName = new GraphicText(levelStat.name, Align.Left);
-    this.graphicLevel = new GraphicText("" + player[levelStat.abbreviation],
+    this.graphicLevel = new GraphicText("" + gamePlayer[levelStat.abbreviation],
                                         Align.Left);
 
     // Adding stats
@@ -66,9 +82,9 @@ function GraphicPlayerDescription(player){
                 maxLength = 0;
             }
             this.listStatsNames.push(graphicName);
-            txt = "" + player[statistic.abbreviation];
+            txt = "" + gamePlayer[statistic.abbreviation];
             if (!statistic.isFix)
-                txt += "/" + player["max" + statistic.abbreviation];
+                txt += "/" + gamePlayer["max" + statistic.abbreviation];
             this.listStats.push(new GraphicText(txt, Align.Left));
             j++;
         }
@@ -79,10 +95,24 @@ function GraphicPlayerDescription(player){
 
 GraphicPlayerDescription.prototype = {
 
+    /** Drawing the player in choice box.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     draw: function(context, x, y, w, h){
         this.graphicNameCenter.draw(context, x, y, w, h);
     },
 
+    /** Drawing the player description.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     drawInformations: function(context, x, y, w, h){
         var yName, xLevelName, xLevel, yClass, yStats, xStat, yStat;
         var i, l;

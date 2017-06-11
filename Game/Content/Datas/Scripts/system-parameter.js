@@ -21,16 +21,20 @@
 //
 //  CLASS SystemParameter
 //
-//  A parameter of a reaction.
-//
-//  @defaultValue    -> The default value
-//
 // -------------------------------------------------------
 
+/** @class
+*   A parameter of a reaction.
+*   @property {SystemValue} value The value of the parameter.
+*/
 function SystemParameter(){
 
 }
 
+/** Read the parameters.
+*   @param {Object} json Json object describing the object.
+*   @returns {SystemParameter[]}
+*/
 SystemParameter.readParameters = function(json){
     var i, l;
     var jsonParameters = json.p;
@@ -46,6 +50,13 @@ SystemParameter.readParameters = function(json){
     return parameters;
 }
 
+// -------------------------------------------------------
+
+/** Read the parameters with default values.
+*   @param {Object} json Json object describing the object.
+*   @param {SystemParameter[]} list List of all the parameters default.
+*   @returns {SystemParameter[]}
+*/
 SystemParameter.readParametersWithDefault = function(json, list){
     var i, l;
     var jsonParameters = json.p;
@@ -66,18 +77,30 @@ SystemParameter.readParametersWithDefault = function(json, list){
     return parameters;
 }
 
+// -------------------------------------------------------
+
 SystemParameter.prototype = {
 
+    /** Read the JSON associated to the parameter value.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.value = new SystemValue;
         this.value.read(json.d);
     },
 
+    /** Read the JSON associated to the parameter default value.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSONDefault: function(json){
         this.value = new SystemValue;
         this.value.read(json);
     },
 
+    /** Check if the parameter is equal to another one.
+    *   @param {SystemParameter()} parameter The parameter to compare.
+    *   @returns {boolean}
+    */
     isEqual: function(parameter){
         return (this.value === parameter.value && this.kind === parameter.kind);
     }

@@ -21,13 +21,16 @@
 //
 //  CLASS SceneMenuInventory : GameState
 //
-//  @windowTop          -> Window on top with "Inventory" text
-//  @windowChoicesTabs  -> Window for each tabs
-//  @windowChoicesList  -> Window for each items
-//  @windowInformations -> Window for item informations
-//
 // -------------------------------------------------------
 
+/** @class
+*   A scene in the menu for describing inventory.
+*   @extends SceneGame
+*   @property {WindowBox} windowTop Window on top with "Inventory" text.
+*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowBox} windowInformations Window for item informations.
+*   @property {WindowChoices} windowChoicesList Window for each items.
+*/
 function SceneMenuInventory() {
     SceneGame.call(this);
 
@@ -63,6 +66,8 @@ function SceneMenuInventory() {
 
 SceneMenuInventory.prototype = {
 
+    /** Update tab.
+    */
     updateForTab: function(){
         var i, j, list = new Array(SceneMenu.nbItemsToDisplay);
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;

@@ -23,6 +23,11 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   The graphic displaying the player skills informations in skill menu.
+*   @property {GraphicText} graphicName The skill name graphic.
+*   @param {GameSkill} gameSkill The current selected skill.
+*/
 function GraphicSkill(gameSkill){
     var skill;
     skill = $datasGame.skills.list[gameSkill.id];
@@ -32,10 +37,25 @@ function GraphicSkill(gameSkill){
 }
 
 GraphicSkill.prototype = {
+
+    /** Drawing the skill in choice box.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     draw: function(context, x, y, w, h){
         this.graphicName.draw(context, x, y, w, h);
     },
 
+    /** Drawing the skill description.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     drawInformations: function(context, x, y, w, h){
         this.graphicName.draw(context, x + 30, y + 5, 100, 25);
     }

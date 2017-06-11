@@ -19,35 +19,13 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneBattle : GameState
-//
-//  A state for battling.
-//
-//  @winning                        -> Boolean indicating whether the player won the battle or not
-//  @troopID                        -> Current troop the allies are fighting
-//  @canEscape                      -> Boolean indicating if the player can escape this battle.
-//  @canGameOver                    -> Boolean indicating if there a win/lose node or not.
-//  @kindSelection                  -> Indicating which group is currently selected
-//  @attackingGroup                 -> Indicating which group is currently attacking
-//  @step                           -> Step of the battle
-//  @subStep                        -> sub-step of the battle (usefull for menus or other sub-steps)
-//  @selectedUserIndex              -> Index of the selected user
-//  @selectedTargetIndex            -> Index of the selected target
-//  @distanceCenterAlly             -> The distance between the center of map battle and ally
-//  @time                           -> Chrono
-//  @targets                        -> List of all the current targets
-//  @battlers                       -> Battlers of all the allies/enemies
-//  @windowTopInformations          -> The window on top that shows specific informations
-//  @windowCharacterInformations    -> The window on bot that shows caracteristics informations
-//  @windowChoicesBattleCommands    -> The window for battle commands
-//  @arrowSelection                 -> The arrow used to select allies/ennemies
-//  @textsDamages                   -> List of all the damages to display
+//  CLASS SceneBattle : SceneGame
 //
 // -------------------------------------------------------
 
 /** @class
-*   A state for battling.
-*   @extends GameState
+*   A scene for battling.
+*   @extends SceneGame
 *   @property {boolean} winning Boolean indicating whether the player won the
 *                       battle or not.
 *   @property {number} troopID Current troop the allies are fighting.
@@ -69,6 +47,15 @@
 *   @property {Player[]} targets List of all the current targets.
 *   @property {Array.<Array.<Player>>} battlers Battlers of all the
 *                                      allies/enemies.
+*   @property {WindowBox} windowTopInformations The window on top that shows
+*   specific informations.
+*   @property {WindowBox} windowCharacterInformations The window on bot that
+*   shows caracteristics informations.
+*   @property {WindowChoice} windowChoicesBattleCommands The window for battle
+*   commands.
+*   @property {WindowBox} arrowSelection The arrow used to select
+*   allies/ennemies.
+*   @property {GraphicText} textsDamages List of all the damages to display.
 */
 function SceneBattle(troopID, canGameOver, canEscape) {
     SceneGame.call(this);
@@ -81,6 +68,8 @@ function SceneBattle(troopID, canGameOver, canEscape) {
 
 SceneBattle.prototype = {
 
+    /** Make the attacking group all actives.
+    */
     activeGroup: function(){
         var i, l;
         for (i = 0, l = this.battlers[this.attackingGroup].length; i < l; i++){
@@ -90,14 +79,21 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Check if a player is defined (active and not dead).
+    *   @param {CharacterKind} kind Kind of player.
+    *   @param {number} index Index in the group.
+    *   @returns {boolean}
+    */
     isDefined: function(kind, index){
         return (this.battlers[kind][index].active &&
                 !this.battlers[kind][index].character.isDead())
     },
 
     // -------------------------------------------------------
-    // When all the heroes or enemies are inactive
 
+    /** Check if all the heroes or enemies are inactive.
+    *   @returns {boolean}
+    */
     isEndTurn: function(){
         var i, l;
 
@@ -111,6 +107,10 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Check if all the heroes or enemies are dead.
+    *   @param {CharacterKind} group Kind of player.
+    *   @returns {boolean}
+    */
     isGroupDead: function(group){
         var i, l;
 
@@ -123,21 +123,27 @@ SceneBattle.prototype = {
     },
 
     // -------------------------------------------------------
-    // When all the enemies are dead
 
+    /** Check if all the enemies are dead.
+    *   @returns {boolean}
+    */
     isWin: function(){
         return this.isGroupDead(CharacterKind.Monster);
     },
 
     // -------------------------------------------------------
-    //  When all the heroes are dead
 
+    /** Check if all the heroes are dead.
+    *   @returns {boolean}
+    */
     isLose: function(){
         return this.isGroupDead(CharacterKind.Hero);
     },
 
     // -------------------------------------------------------
 
+    /** Transition to game over scene.
+    */
     gameOver: function(){
         if (this.canGameOver){
             quit(); // TODO
@@ -148,6 +154,8 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Win the battle.
+    */
     win: function(){
         this.winning = true;
         $gameStack.pop();
@@ -155,6 +163,9 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Change the step of the battle.
+    *   @param {number} i Step of the battle.
+    */
     changeStep: function(i){
         this.step = i;
         this.subStep = 0;
@@ -163,6 +174,8 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Initialize the current step.
+    */
     initialize: function(){
         switch(this.step){
         case 0:
@@ -265,6 +278,9 @@ SceneBattle.prototype = {
 
     // -------------------------------------------------------
 
+    /** Draw all the battlers.
+    *   @param {Canvas.Context} context The canvas context.
+    */
     drawBattlers: function(context){
         var i, l;
 

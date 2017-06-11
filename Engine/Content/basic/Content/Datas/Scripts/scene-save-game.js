@@ -19,11 +19,14 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneSaveGame : SaveLoadState
-//
+//  CLASS SceneSaveGame : SceneSaveLoadGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   @extends SceneSaveLoadGame
+*   A scene in the menu for saving a game.
+*/
 function SceneSaveGame() {
     SceneSaveLoadGame.call(this);
 

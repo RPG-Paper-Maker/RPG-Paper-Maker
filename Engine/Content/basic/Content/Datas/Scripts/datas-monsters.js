@@ -21,24 +21,28 @@
 //
 //  CLASS DatasMonsters
 //
-//  All the monsters datas.
-//
-//  @list           -> List of all the monsters of the game
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the monsters datas.
+*   @property {SystemMonster[]} list List of all the monsters of the game
+*   according to ID.
+*/
 function DatasMonsters(){
     this.read();
 }
 
 DatasMonsters.prototype = {
 
+    /** Read the JSON file associated to monsters.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_MONSTERS, true, function(res){
             var json = JSON.parse(res).monsters;
             var i, l = json.length;
             this.list = new Array(l+1);
 
+            // Sorting all the monsters according to the ID
             for (i = 0; i < l; i++){
                 var jsonMonster = json[i];
                 var id = jsonMonster.id;

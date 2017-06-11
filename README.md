@@ -18,6 +18,28 @@ If you are having any error that means that you are missing a package. Check the
 
 You can help by contributing on the engine or/and the game engine. First, be sure to be familiar with **git**, how to **fork a project** and how to **submit a pull request**.
 
+That means that you should:
+
+* Click on the fork button.
+* Clone your fork.
+* Add a remote to the original project in order to always have access to the `develop` branch:
+
+#
+
+    git remote add rpm https://github.com/Wano-k/RPG-Paper-Maker.git
+
+* Before starting any correction, you should first pull the develop progress in order to be sure that you have the most recent version of development:
+
+#
+
+    git pull rpm develop
+
+After that, you should create a branch for your correction:
+    
+    git checkout -b <choose_a_branch_name>
+
+When your correction is done, push it (always in your branch). Finally, just propose you branch as a new pull request in the original project.
+
 ### How to contribute
 RPG Paper Maker has a `master` branch for stable releases and a `develop` branch for development where you should always try to submit your features.
 

@@ -19,15 +19,20 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneMenu : GameState
-//
-//  @windowChoicesCommands  -> A window choices for choosing a command
-//  @windowChoicesTeam      -> A Window for displaying informations about team
-//  @textPlayTime           -> A text for displaying play time
-//  @selectedOrder          -> Index of the selected hero to order
+//  CLASS SceneMenu : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene for the main menu.
+*   @extends SceneGame
+*   @property {WindowChoices} windowChoicesCommands A window choices for
+*   choosing a command.
+*   @property {WindowChoices} windowChoicesTeam A Window for displaying
+*   informations about team.
+*   @property {GraphicText} textPlayTime A text for displaying play time.
+*   @property {number} selectedOrder Index of the selected hero to order.
+*/
 function SceneMenu() {
     SceneGame.call(this);
 
@@ -82,43 +87,56 @@ SceneMenu.nbItemsToDisplay = 14;
 
 SceneMenu.prototype = {
 
+    /** Callback function for opening inventory.
+    */
     openInventory: function(){
         $gameStack.push(new SceneMenuInventory());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for opening skills menu.
+    */
     openSkills: function(){
         $gameStack.push(new SceneMenuSkills());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for opening equipment menu.
+    */
     openEquip: function(){
         $gameStack.push(new SceneMenuEquip());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for opening player description state menu.
+    */
     openState: function(){
         $gameStack.push(new SceneDescriptionState());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for reordering heroes.
+    */
     openOrder: function(){
         this.windowChoicesTeam.select(0);
     },
 
     // -------------------------------------------------------
 
-
+    /** Callback function for opening save menu.
+    */
     openSave: function(){
         $gameStack.push(new SceneSaveGame());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for quiting the game.
+    */
     exit: function(){
         quit();
     },

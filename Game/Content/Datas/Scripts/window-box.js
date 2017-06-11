@@ -21,16 +21,25 @@
 //
 //  CLASS WindowBox
 //
-//  A class for window boxes.
-//
-//  @windowDimension   -> Dimensions of the window (rectangle)
-//  @content           -> Content (containing a draw function) to display inside the window
-//  @padding           -> Padding of the box
-//  @contentDimension  -> Dimension of content
-//  @color             -> The color of the background
-//
 // -------------------------------------------------------
 
+/** @class
+*   A class for window boxes.
+*   @extends Bitmap
+*   @property {number[]} windowDimension Dimensions of the window (rectangle).
+*   @property {Object} content Content (containing a draw function) to display
+*   inside the window.
+*   @property {number[]} padding Padding of the box.
+*   @property {number[]} contentDimension Dimension of content.
+*   @property {string} backgroundColor The color of the background.
+*   @param {number} x The x coords.
+*   @param {number} y The y coords.
+*   @param {number} w The w coords.
+*   @param {number} h The h coords.
+*   @param {Object} [content=null] - Content (containing a draw function) to
+*   display inside the window.
+*   @param {number[]} [padding=[0,0,0,0]] - Padding of the box.
+*/
 function WindowBox(x, y, w, h, content, padding) {
     Bitmap.call(this, x, y, w, h);
 
@@ -66,18 +75,31 @@ WindowBox.prototype = {
         Bitmap.prototype.setX.call(this, x);
     },
 
+    // -------------------------------------------------------
+
     setY: function(y){
         Bitmap.prototype.setY.call(this, y);
     },
+
+    // -------------------------------------------------------
 
     setW: function(w){
         Bitmap.prototype.setW.call(this, w);
     },
 
+    // -------------------------------------------------------
+
     setH: function(h){
         Bitmap.prototype.setH.call(this, h);
     },
 
+    // -------------------------------------------------------
+
+    /** Draw the window
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {boolean} [isChoice=false] - Indicate if this window box is used
+    *   for a window choices.
+    */
     draw: function(context, isChoice){
 
         // Default values

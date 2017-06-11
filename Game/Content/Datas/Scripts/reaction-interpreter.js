@@ -32,23 +32,38 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   A reaction command interpreter.
+*   @property {MapObject} currentSender Current event sender (null for system
+*   events).
+*   @property {SystemReaction} currentReaction Current reaction excecuted (only
+*   one per state).
+*   @property {MapObject} currentMapObject Current map object.
+*   @property {number} currentState Current state of map object reaction.
+*   @property {Node} currentCommand A node of a command Reaction.
+*   @property {Object} currentCommandState Current state of the current command.
+*   @param {MapObject} sender Current event sender (null for system
+*   events).
+*   @param {SystemReaction} reaction Current reaction excecuted (only
+*   one per state).
+*   @param {MapObject} object Current map object.
+*   @param {number} state Current state of map object reaction.
+*/
 function ReactionInterpreter(sender, reaction, object, state){
-    this.setCurrentReaction(sender, reaction, object, state);
+    this.currentSender = sender;
+    this.currentReaction = reaction;
+    this.currentMapObject = object;
+    this.currentState = state;
+    this.currentCommand = reaction.getFirstCommand();
+    this.currentCommandState = this.currentCommand.data.initialize();
 }
 
 ReactionInterpreter.prototype = {
 
-    setCurrentReaction: function(sender, reaction, object, state){
-        this.currentSender = sender;
-        this.currentReaction = reaction;
-        this.currentMapObject = object;
-        this.currentState = state;
-        this.currentCommand = reaction.getFirstCommand();
-        this.currentCommandState = this.currentCommand.data.initialize();
-    },
-
-    // -------------------------------------------------------
-
+    /** Check if the current reaction is finished (no more commands to
+    *   excecute).
+    *   @returns {boolean}
+    */
     isFinished: function(){
         if (this.currentCommand === null)
             return true;
@@ -58,6 +73,8 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the current commands.
+    */
     update: function(){
         var directNode = true;
 
@@ -80,7 +97,10 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
-    updateCommand: function(i){
+    /** Update a command and return the next command to excecute (if finished).
+    *   @returns {Node}
+    */
+    updateCommand: function(){
 
         // Update can return different type of values :
         var result = this.currentCommand.data.update(this.currentCommandState,
@@ -127,8 +147,14 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update a command that corresponds to the end of a block and return the
+    *   next command to excecute (if finished).
+    *   @param {Node} command The command before updating.
+    *   @returns {Node} value The next command after updating.
+    */
     endOfBlock: function(command, value){
         if (value === null){
+
             // If end of the event
             if (command.parent.parent === null)
                 return null;
@@ -152,6 +178,10 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** After the end of a block, go to the next command.
+    *   @param {Node} command The command before updating.
+    *   @returns {Node}
+    */
     goToNextCommand: function(node){
         var nb = node.data.goToNextCommand();
         var value = node;
@@ -163,18 +193,28 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** First key press handle for the current command.
+    *   @param {number} key The key ID pressed.
+    */
     onKeyPressed: function(key){
         this.currentCommand.data.onKeyPressed(this.currentCommandState, key);
     },
 
     // -------------------------------------------------------
 
+    /** First key release handle for the current command.
+    *   @param {number} key The key ID released.
+    */
     onKeyReleased: function(key){
         this.currentCommand.data.onKeyReleased(this.currentCommandState, key);
     },
 
     // -------------------------------------------------------
 
+    /** Key pressed repeat handle for the current command.
+    *   @param {number} key The key ID pressed.
+    *   @returns {boolean} false if the other keys are blocked after it.
+    */
     onKeyPressedRepeat: function(key){
         return this.currentCommand.data.onKeyPressedRepeat(
                     this.currentCommandState, key);
@@ -182,6 +222,11 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** Key pressed repeat handle for the current command, but with
+    *   a small wait after the first pressure (generally used for menus).
+    *   @param {number} key The key ID pressed.
+    *   @returns {boolean} false if the other keys are blocked after it.
+    */
     onKeyPressedAndRepeat: function(key){
         return this.currentCommand.data.onKeyPressedAndRepeat(
                     this.currentCommandState, key);
@@ -189,6 +234,9 @@ ReactionInterpreter.prototype = {
 
     // -------------------------------------------------------
 
+    /** Draw HUD for the current command.
+    *   @param {Canvas.Context} context The canvas context.
+    */
     drawHUD: function(context){
         this.currentCommand.data.drawHUD(this.currentCommandState, context);
     }

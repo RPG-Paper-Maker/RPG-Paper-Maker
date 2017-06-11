@@ -34,8 +34,7 @@ function DatasArmors(){
 
 DatasArmors.prototype = {
 
-    /**
-    *   Read the JSON file associated to armors.
+    /** Read the JSON file associated to armors.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_ARMORS, true, function(res){

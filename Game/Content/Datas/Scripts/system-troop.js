@@ -21,17 +21,21 @@
 //
 //  CLASS SystemTroop
 //
-//  An troop of the game.
-//
-//
 // -------------------------------------------------------
 
+/** @class
+*   A troop of the game.
+*   @property {Object[]} list of the monsters (ids,level).
+*/
 function SystemTroop(){
 
 }
 
 SystemTroop.prototype = {
 
+    /** Read the JSON associated to the troop.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         var jsonList = json.l;
         var i, l = jsonList.length;

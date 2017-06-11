@@ -21,20 +21,25 @@
 //
 //  CLASS DatasSystem
 //
-//  All the system datas.
-//
-//  @itemsTypes     -> List of all the possible types of items
-//  @idMapStartHero -> Id of the map where the hero is in the beginning of a game.
-//  @idObjectStartHero -> Id of the object where the hero is in the beginning of a game.
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the system datas.
+*   @property {string[]} itemsTypes List of all the possible types of items of
+*   the game according to ID.
+*   @property {number} idMapStartHero Id of the map where the hero is in the
+*   beginning of a game.
+*   @property {number} idObjectStartHero Id of the object where the hero is in
+*   the beginning of a game.
+*/
 function DatasSystem(){
     this.read();
 }
 
 DatasSystem.prototype = {
 
+    /** Read the JSON file associated to system.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
@@ -57,6 +62,10 @@ DatasSystem.prototype = {
         });
     },
 
+    // -------------------------------------------------------
+
+    /** Update the $modelHero global variable by loading the hero model.
+    */
     getModelHero: function(){
         var mapName = Wanok.generateMapName(this.idMapStartHero.getValue());
         Wanok.openFile(null, Wanok.FILE_MAPS + mapName + Wanok.FILE_MAP_OBJECTS,
@@ -85,6 +94,8 @@ DatasSystem.prototype = {
                 var json = JSON.parse(res);
                 var mapPortion = new MapPortion(portion[0], portion[1],
                                                 portion[2]);
+
+                // Update the hero model
                 $modelHero = mapPortion.getHeroModel(json);
             });
         });

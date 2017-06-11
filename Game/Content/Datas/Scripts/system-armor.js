@@ -34,20 +34,20 @@ function SystemArmor(){
 
 SystemArmor.prototype = {
 
-    /**
-    *   Get the type of this armor.
-    *   @returns {SystemWeaponArmorKind}
-    */
-    getType: function(){
-        return $datasGame.battleSystem.armorsKind[this.idType];
-    },
-
-    /**
-    *   Read the JSON associated to the armor.
+    /** Read the JSON associated to the armor.
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
         this.name = json.names[1];
         this.idType = json.k;
+    },
+
+    // -------------------------------------------------------
+
+    /** Get the type of this armor.
+    *   @returns {SystemWeaponArmorKind}
+    */
+    getType: function(){
+        return $datasGame.battleSystem.armorsKind[this.idType];
     }
 }

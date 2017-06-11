@@ -31,6 +31,14 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   A character in the team/hidden/reserve.
+*   @property {CharacterKind} k The kind of the character (hero or monster).
+*   @property {number} id The ID of the character
+*   @property {number} instid The instance id of the character.
+*   @param {GameSkill[]} sk List of all the learned skills.
+*   @param {GameItem[]} equip List of the equiped weapons/armors.
+*/
 function GamePlayer(kind, id, instanceId, skills){
     this.k = kind;
     this.id = id;
@@ -44,6 +52,10 @@ function GamePlayer(kind, id, instanceId, skills){
     }
 }
 
+/** Get the max size of equipment kind names.
+*   @static
+*   @returns {number}
+*/
 GamePlayer.getEquipmentLength = function(){
     var context = $canvasHUD.getContext('2d');
 
@@ -61,8 +73,13 @@ GamePlayer.getEquipmentLength = function(){
     return maxLength;
 }
 
+// -------------------------------------------------------
+
 GamePlayer.prototype = {
 
+    /** Get a compressed object for saving the character in a file.
+    *   @returns {Object}
+    */
     getSaveCharacter: function(){
         return {
             k: this.k,
@@ -76,6 +93,9 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get a compressed object for saving the stats in a file.
+    *   @returns {Object}
+    */
     getSaveStat: function(){
         var i, l = $datasGame.battleSystem.statistics.length - 1;
         var list = new Array(l);
@@ -92,6 +112,9 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get a compressed object for saving the equipments in a file.
+    *   @returns {Object}
+    */
     getSaveEquip: function(){
         var i, l = this.equip.length - 1;
         var list = new Array(l);
@@ -103,13 +126,19 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    /** Check if the character is dead.
+    *   @returns {boolean}
+    */
     isDead: function(){
-        var b = (this.hp === 0);
+        var b = (this.hp === 0); // Will be a script
         return b;
     },
 
     // -------------------------------------------------------
 
+    /** Instanciate a character in a particular level.
+    *   @param {number} level The level of the new character.
+    */
     instanciate: function(level){
         var i, j, l;
 
@@ -162,7 +191,12 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    /** Read the JSON associated to the character and items.
+    *   @param {object} json Json object describing the character.
+    *   @param {Object} items Json object describing the items.
+    */
     readJSON: function(json, items){
+
         // Stats
         var jsonStats = json.stats;
         var i, l = $datasGame.battleSystem.statistics.length;
@@ -190,6 +224,9 @@ GamePlayer.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get the character informations system.
+    *   @returns {SystemHero|SystemMonster}
+    */
     getCharacterInformations: function(){
         switch (this.k){
         case CharacterKind.Hero:

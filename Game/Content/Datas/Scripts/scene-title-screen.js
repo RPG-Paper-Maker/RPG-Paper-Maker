@@ -19,12 +19,16 @@
 
 // -------------------------------------------------------
 //
-//  CLASS TitleScreenState : GameState
-//
-//  @windowChoicesCommands  -> A window choices for choosing a command
+//  CLASS SceneTitleScreen : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene for the title screen.
+*   @extends SceneGame
+*   @property {WindowChoices} windowChoicesCommands A window choices for
+*   choosing a command.
+*/
 function SceneTitleScreen() {
     SceneGame.call(this);
 
@@ -50,6 +54,8 @@ function SceneTitleScreen() {
 
 SceneTitleScreen.prototype = {
 
+    /** Callback function for starting a new game.
+    */
     startNewGame: function(){
 
         // Create a new game
@@ -63,12 +69,16 @@ SceneTitleScreen.prototype = {
 
     // -------------------------------------------------------
 
+    /** Callback function for loading an existing game.
+    */
     loadGame: function(){
         $gameStack.push(new SceneLoadGame());
     },
 
     // -------------------------------------------------------
 
+    /** Callback function for closing the window.
+    */
     exit: function(){
         quit();
     },

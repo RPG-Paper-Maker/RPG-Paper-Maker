@@ -21,24 +21,28 @@
 //
 //  CLASS ItemsDatas
 //
-//  All the items datas.
-//
-//  @list           -> List of all the items of the game
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the items datas.
+*   @property {SystemItem[]} list List of all the items of the game according
+*   to ID.
+*/
 function DatasItems(){
     this.read();
 }
 
 DatasItems.prototype = {
 
+    /** Read the JSON file associated to items.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_ITEMS, true, function(res){
             var json = JSON.parse(res).items;
             var i, l = json.length;
             this.list = new Array(l+1);
 
+            // Sorting all the items according to the ID
             for (i = 0; i < l; i++){
                 var jsonItem = json[i];
                 var id = jsonItem.id;

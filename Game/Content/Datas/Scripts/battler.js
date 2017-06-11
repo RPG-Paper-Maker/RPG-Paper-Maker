@@ -42,8 +42,7 @@ function Battler(character, x, y, w, h){
 
 Battler.prototype = {
 
-    /**
-    *   Draw the battler.
+    /** Draw the battler.
     *   @param {Context} context The canvas context.
     */
     draw: function(context){

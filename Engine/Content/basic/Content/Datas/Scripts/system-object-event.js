@@ -21,21 +21,25 @@
 //
 //  CLASS SystemObjectEvent
 //
-//  An event that an object can react on.
-//
-//  @isSystem       -> Boolean indicating if it is an event system.
-//  @idEvent        -> ID of the event
-//  @parameters     -> All the parameters values
-//  @reactions      -> List of all the reactions according to states id
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event that an object can react on.
+*   @property {boolean} isSystem Boolean indicating if it is an event system.
+*   @property {number} idEvent ID of the event.
+*   @property {SystemValue[]} parameters All the parameters values.
+*   @property {SystemReaction[]} reactions List of all the reactions according
+*   to states id.
+*/
 function SystemObjectEvent(){
 
 }
 
 SystemObjectEvent.prototype = {
 
+    /** Read the JSON associated to the object event.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         var i, l, id, idState;
 
@@ -61,6 +65,12 @@ SystemObjectEvent.prototype = {
         }
     },
 
+    // -------------------------------------------------------
+
+    /** Check if this event is equal to another.
+    *   @param {SystemObjectEvent} event The event to compare.
+    *   @returns {boolean}
+    */
     isEqual: function(event){
         if (this.isSystem !== event.isSystem || this.idEvent !== event.idEvent)
             return false;
@@ -73,6 +83,11 @@ SystemObjectEvent.prototype = {
         return true;
     },
 
+    // -------------------------------------------------------
+
+    /** Add reactions to the event.
+    *   @param {Object} reactions The reactions to add.
+    */
     addReactions: function(reactions){
         for (var idState in reactions){
             this.reactions[idState] = reactions[idState];

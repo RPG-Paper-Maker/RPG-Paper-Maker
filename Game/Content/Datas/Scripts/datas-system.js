@@ -38,8 +38,7 @@ function DatasSystem(){
 
 DatasSystem.prototype = {
 
-    /**
-    *   Read the JSON file associated to system.
+    /** Read the JSON file associated to system.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_SYSTEM, true, function(res){
@@ -63,8 +62,9 @@ DatasSystem.prototype = {
         });
     },
 
-    /**
-    *   Update the $modelHero global variable by loading the hero model.
+    // -------------------------------------------------------
+
+    /** Update the $modelHero global variable by loading the hero model.
     */
     getModelHero: function(){
         var mapName = Wanok.generateMapName(this.idMapStartHero.getValue());

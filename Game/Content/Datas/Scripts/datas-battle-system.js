@@ -42,8 +42,7 @@ function DatasBattleSystem(){
 
 DatasBattleSystem.prototype = {
 
-    /**
-    *   Read the JSON file associated to battle system.
+    /** Read the JSON file associated to battle system.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_BATTLE_SYSTEM, true, function(res){
@@ -128,16 +127,18 @@ DatasBattleSystem.prototype = {
         });
     },
 
-    /**
-    *   Get the statistic corresponding to the level.
+    // -------------------------------------------------------
+
+    /** Get the statistic corresponding to the level.
     *   @returns {SystemStatistic}
     */
     getLevelStatistic: function(){
         return this.statistics[this.idLevelStatistic];
     },
 
-    /**
-    *   Get the statistic corresponding to the experience.
+    // -------------------------------------------------------
+
+    /** Get the statistic corresponding to the experience.
     *   @returns {SystemStatistic}
     */
     getExpStatistic: function(){

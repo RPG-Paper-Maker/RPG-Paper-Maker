@@ -19,26 +19,26 @@
 
 // -------------------------------------------------------
 //
-//  [CLASS Sprite]
-//
-//  A sprite in the map.
-//
-//  @widthPosition      -> (in %) position in the square in the X / Z axis.
-//  @angle              -> Angle in the X / Z axis.
-//  @textureRect        -> Texture UV coords.
+//  CLASS Sprite
 //
 // -------------------------------------------------------
 
+/** @class
+*   A sprite in the map.
+*   @property {number} widthPosition (in %) position in the square in the
+*   X / Z axis.
+*   @property {number} angle Angle in the X / Z axis.
+*   @property {number[]} textureRect Texture UV coords.
+*/
 function Sprite() {
 
 }
 
 Sprite.prototype = {
 
-    // -------------------------------------------------------
-    //  [read json] Read [json] the sprite.
-    // -------------------------------------------------------
-
+    /** Read the JSON associated to the sprite.
+    *   @param {Object} json Json object describing the object.
+    */
     read: function(json){
         this.angle = json.a;
         this.widthPosition = json.p;

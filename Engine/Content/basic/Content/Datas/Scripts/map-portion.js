@@ -30,6 +30,18 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   A portion of the map.
+*   @property {THREE.Vector3} positionOrigin The position of the origin of the
+*   portion.
+*   @property {THREE.Mesh} staticFloorsList List of all the floors in the scene.
+*   @property {THREE.Mesh} staticSpritesList List of all the sprites in the
+*   scene.
+*   @property {MapObject} objectsList List of all the objects in the portion.
+*   @param {number} realX The real x portion.
+*   @param {number} realY The real y portion.
+*   @param {number} realZ The real z portion.
+*/
 function MapPortion(realX, realY, realZ){
     var pixPortion = $PORTION_SIZE * $SQUARE_SIZE;
     this.positionOrigin = new THREE.Vector3(realX * pixPortion,
@@ -42,10 +54,11 @@ function MapPortion(realX, realY, realZ){
 
 MapPortion.prototype = {
 
-    // -------------------------------------------------------
-    //  [read json] Read [json] the map portion file.
-    // -------------------------------------------------------
-
+    /** Read the JSON associated to the map portion.
+    *   @param {Object} json Json object describing the object.
+    *   @param {boolean} isMapHero Indicates if this map is where the hero is
+    *   at the beginning of the game.
+    */
     read: function(json, isMapHero){
         this.readFloors(json.floors);
         this.readSprites(json.sprites);
@@ -53,9 +66,10 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [readFloors json] Read the [json] for sprites in the portion.
-    // -------------------------------------------------------
 
+    /** Read the JSON associated to the floors in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
     readFloors: function(json){
 
         // Static floors
@@ -107,18 +121,19 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [readSprites json] Read the [json] for sprites in the portion.
-    // -------------------------------------------------------
 
+    /** Read the JSON associated to the sprites in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
     readSprites: function(json){
         this.readSpritesStatics(json.statics);
     },
 
     // -------------------------------------------------------
-    //  [readSpritesStatic json] Read the [json] for static sprites in the
-    //  portion.
-    // -------------------------------------------------------
 
+    /** Read the JSON associated to the static sprites in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
     readSpritesStatics: function(json){
         for (var i = 0, l = json.length; i < l; i++){
             var s = json[i];
@@ -142,18 +157,23 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [readObjects json] Read the [json] for objects in the portion.
-    // -------------------------------------------------------
 
+    /** Read the JSON associated to the objects in the portion.
+    *   @param {Object} json Json object describing the object.
+    *   @param {boolean} isMapHero Indicates if this map is where the hero is
+    *   at the beginning of the game.
+    */
     readObjects: function(json, isMapHero){
         this.readObjectsSprites(json.sprites, isMapHero);
     },
 
     // -------------------------------------------------------
-    //  [readObjectsSprites json] Read the [json] for sprites objects in the
-    //  portion.
-    // -------------------------------------------------------
 
+    /** Read the JSON associated to the sprites objects in the portion.
+    *   @param {Object} json Json object describing the object.
+    *   @param {boolean} isMapHero Indicates if this map is where the hero is
+    *   at the beginning of the game.
+    */
     readObjectsSprites: function(json, isMapHero){
         for (var i = 0, l = json.length; i < l; i++){
             var jsonTextures = json[i];
@@ -191,9 +211,15 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [getSpriteMesh position material] Remove all the objects from the scene.
-    // -------------------------------------------------------
 
+    /** Get the THREE mesh for a sprite.
+    *   @param {number[]} position The position of the mesh.
+    *   @param {Three.material} material The material used for this mesh.
+    *   @param {number} x The x UV texture position.
+    *   @param {number} y The y UV texture position.
+    *   @param {number} w The w UV texture position.
+    *   @param {number} h The h UV texture position.
+    */
     getSpriteMesh: function(position, material, x, y, w, h){
         var localPosition = Wanok.positionToVector3(position);
         localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
@@ -229,9 +255,9 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [cleanAll] Remove all the objects from the scene.
-    // -------------------------------------------------------
 
+    /** Remove all the objects from the scene.
+    */
     cleanAll: function(){
         var i, l;
         // TODO
@@ -249,9 +275,11 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [getObjFromID id] Search for the object with the ID [id].
-    // -------------------------------------------------------
 
+    /** Search for the object with the ID.
+    *   @param {number} id The ID of the object.
+    *   @returns {MapObject}
+    */
     getObjFromID: function(id){
         if (this.objectHero !== null && this.objectHero.id === id)
             return this.objectHero;
@@ -266,9 +294,11 @@ MapPortion.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [getHeroModel json] Get hero model.
-    // -------------------------------------------------------
 
+    /** Get hero model.
+    *   @param {Object} json Json object describing the object.
+    *   @returns {MapObject}
+    */
     getHeroModel: function(json){
         json = json.objs.sprites;
         for (var i = 0, l = json.length; i < l; i++){

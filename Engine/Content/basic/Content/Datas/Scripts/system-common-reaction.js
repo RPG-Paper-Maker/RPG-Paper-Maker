@@ -21,18 +21,20 @@
 //
 //  CLASS SystemCommonReaction
 //
-//  A reaction to an event.
-//
-//  @reaction
-//
 // -------------------------------------------------------
 
+/** @class
+*   A reaction to an event.
+*/
 function SystemCommonReaction(){
 
 }
 
 SystemCommonReaction.prototype = {
 
+    /** Read the JSON associated to the common reaction.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
 
     }

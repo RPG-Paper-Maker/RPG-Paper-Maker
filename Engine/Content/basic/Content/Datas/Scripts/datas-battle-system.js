@@ -21,25 +21,29 @@
 //
 //  CLASS BattleSystemDatas
 //
-//  All the battle system datas.
-//
-//  @statistics         -> List of all the statistics
-//  @equipments         -> List of all the equipments name
-//  @elements           -> List of all the elements
-//  @weaponsKind        -> List of all the weapons kind
-//  @armorsKind         -> List of all the armors kind
-//  @battleCommands     -> List of all the battle commands
-//  @idLevelStatistic   -> Id of the level statistic
-//  @idExpStatistic     -> Id of the experience statistic
-//
 // -------------------------------------------------------
 
+/** @class
+*   All the battle system datas.
+*   @property {SystemStatistic[]} statistics List of all the statistics.
+*   @property {string[]} equipments List of all the equipments name.
+*   @property {SystemElement[]} elements List of all the elements.
+*   @property {SystemWeaponArmorKind[]} weaponsKind List of all the weapons
+*   kind.
+*   @property {SystemWeaponArmorKind[]} armorsKind List of all the armors kind.
+*   @property {number[]} battleCommands List of all the battle
+*   commands (skill ID).
+*   @property {number} idLevelStatistic Id of the level statistic.
+*   @property {number} idExpStatistic Id of the experience statistic.
+*/
 function DatasBattleSystem(){
     this.read();
 }
 
 DatasBattleSystem.prototype = {
 
+    /** Read the JSON file associated to battle system.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_BATTLE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
@@ -123,10 +127,20 @@ DatasBattleSystem.prototype = {
         });
     },
 
+    // -------------------------------------------------------
+
+    /** Get the statistic corresponding to the level.
+    *   @returns {SystemStatistic}
+    */
     getLevelStatistic: function(){
         return this.statistics[this.idLevelStatistic];
     },
 
+    // -------------------------------------------------------
+
+    /** Get the statistic corresponding to the experience.
+    *   @returns {SystemStatistic}
+    */
     getExpStatistic: function(){
         return this.statistics[this.idExpStatistic];
     }

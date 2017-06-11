@@ -23,6 +23,16 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   The graphic displaying all the equipment information in the equip menu.
+*   @property {GraphicText} graphicEquipmentName All the equipment kind names
+*   graphics.
+*   @property {GraphicText} graphicEquipment All the equipment names graphics.
+*   @property {number} equipmentLength The max length of the equipment names.
+*   @param {GamePlayer} gamePlayer The current selected player.
+*   @param {number} index Index of the equiped item.
+*   @param {number} length Max length of equipment kind name.
+*/
 function GraphicEquip(gamePlayer, index, length){
     var character, equiped;
 
@@ -43,6 +53,13 @@ function GraphicEquip(gamePlayer, index, length){
 
 GraphicEquip.prototype = {
 
+    /** Drawing the equipment kind and equipment name.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     draw: function(context, x, y, w, h){
         this.graphicEquipmentName.draw(context, x, y, w, h);
         this.graphicEquipment.draw(context,

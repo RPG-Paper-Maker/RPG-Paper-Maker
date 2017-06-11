@@ -30,12 +30,22 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   All the battle system datas.
+*   @property {SystemEvent[]} eventsSystem List of all the events system.
+*   @property {SystemEvent[]} eventsUser List of all the events user.
+*   @property {SystemCommonReaction[]} commonReactions List of all the common
+*   reactions.
+*   @property {SystemObject[]} commonObjects List of all the common objects.
+*/
 function DatasCommonEvents(){
     this.read();
 }
 
 DatasCommonEvents.prototype = {
 
+    /** Read the JSON file associated to common events.
+    */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_COMMON_EVENTS, true, function(res){
             var json = JSON.parse(res);
@@ -98,6 +108,15 @@ DatasCommonEvents.prototype = {
         });
     },
 
+    // -------------------------------------------------------
+
+    /** Reorder the models in the right order for inheritance.
+    *   @param {JSON} jsonObject The json corresponding to the current object
+    *   to analyze.
+    *   @param {JSON[]} reorderedList The reordered list we are updating.
+    *   @param {JSON[]} jsonObjects The brutal JSON list of objects.
+    *   @param {number} objectsLength The number of objects to identify.
+    */
     modelReOrder: function(jsonObject, reorderedList, jsonObjects,
                            objectsLength)
     {

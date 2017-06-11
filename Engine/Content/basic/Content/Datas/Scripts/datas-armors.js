@@ -26,7 +26,7 @@
 /** @class
 *   All the armors datas.
 *   @property {SystemArmor[]} list List of all the armors of the game according
-*                             to ID.
+*   to ID.
 */
 function DatasArmors(){
     this.read();
@@ -34,8 +34,7 @@ function DatasArmors(){
 
 DatasArmors.prototype = {
 
-    /**
-    *   Read the JSON file associated to armors.
+    /** Read the JSON file associated to armors.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_ARMORS, true, function(res){

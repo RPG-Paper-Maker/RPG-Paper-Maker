@@ -19,16 +19,22 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneSaveLoadGame : GameState <ABSTRACT>
-//
-//  @gamesDatas          -> List of all games datas
-//  @windowTop           -> A Window for displaying informations on top
-//  @windowChoicesSlots  -> A window choices for choosing a slot
-//  @windowInformations  -> A Window for displaying informations about the selected slot
-//  @windowBot           -> A Window for displaying informations on bottom
+//  CLASS SceneSaveLoadGame : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   Abstract class for the game save and loading menus.
+*   @extends SceneGame
+*   @property {Game[]} gamesDatas List of all games datas.
+*   @property {WindowBox} windowTop A Window for displaying informations on top.
+*   @property {WindowChoices} windowChoicesSlots A window choices for choosing
+*   a slot.
+*   @property {WindowBox} windowInformations A Window for displaying
+*   informations about the selected slot.
+*   @property {WindowBox} windowBot A Window for displaying informations on
+*   bottom.
+*/
 function SceneSaveLoadGame() {
     SceneGame.call(this);
 
@@ -40,6 +46,8 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Initialize all the windows graphics.
+    */
     initializeWindows: function(){
         var commands = [
             new GraphicText("Slot 1"),
@@ -58,6 +66,8 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Initialize all the games.
+    */
     initializeGames: function(){
         var i, l;
         var list, game;
@@ -74,6 +84,8 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Initialize a non empty game displaying.
+    */
     initializeNonEmpty: function(game){
         this.gamesDatas[game.currentSlot-1] = game;
         if (game.currentSlot-1 === this.windowChoicesSlots.currentSelectedIndex)
@@ -85,6 +97,8 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Set the contents in the bottom and top bars.
+    */
     setContents: function(top, bot){
         this.windowTop.content = top;
         this.windowBot.content = bot;
@@ -92,6 +106,8 @@ SceneSaveLoadGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the information to display inside the save informations.
+    */
     updateInformations: function(i){
         if (this.gamesDatas[i] === null){
             this.windowInformations.content = new GraphicText("empty");

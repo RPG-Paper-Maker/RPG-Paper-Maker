@@ -21,20 +21,25 @@
 //
 //  CLASS SystemObject
 //
-//  A common object.
-//
-//  @id              -> The ID of the object.
-//  @states          -> List of all the possible states of the object.
-//  @events          -> List of all the event that the object can react on.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An object.
+*   @property {number} id The ID of the object.
+*   @property {SystemObjectState[]} states List of all the possible states of
+*   the object.
+*   @property {SystemObjectEvent[]} events List of all the event that the object
+*   can react on.
+*/
 function SystemObject(){
 
 }
 
 SystemObject.prototype = {
 
+    /** Read the JSON associated to the object.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         var i, j, l, ll, id, hId;
         var jsonStates, jsonState, jsonEvents, jsonEvent;
@@ -108,6 +113,12 @@ SystemObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Get the reactions corresponding to a given event and parameters.
+    *   @param {boolean} isSystem Boolean indicating if it is an event system.
+    *   @param {number} idEvent ID of the event.
+    *   @param {number} state The ID of the state.
+    *   @param {SystemValue[]} parameters List of all the parameters.
+    */
     getReactions: function(isSystem, idEvent, state, parameters){
         var i, j, l, ll, test;
         var reactions = [];

@@ -46,8 +46,7 @@ function Camera(d, h){
 
 Camera.prototype = {
 
-    /**
-    *   Update the camera position and target.
+    /** Update the camera position and target.
     */
     update: function(){
 

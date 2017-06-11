@@ -19,14 +19,17 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneDescriptionState : GameState
-//
-//  @windowTop          -> Window on top with "State" text
-//  @windowChoicesTabs  -> Window for each tabs
-//  @windowInformations -> Window for skill informations
+//  CLASS SceneDescriptionState : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene in the menu for describing players statistics.
+*   @extends SceneGame
+*   @property {WindowBox} windowTop Window on top with "State" text.
+*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowBox} windowInformations Window for skill informations.
+*/
 function SceneDescriptionState() {
     SceneGame.call(this);
 

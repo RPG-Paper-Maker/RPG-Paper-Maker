@@ -19,12 +19,17 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneSaveGame : SaveLoadState
+//  CLASS SceneLoadGame : SceneSaveLoadGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   @extends SceneSaveLoadGame
+*   A scene in the menu for loading a game.
+*/
 function SceneLoadGame() {
     SceneSaveLoadGame.call(this);
+
     SceneSaveLoadGame.prototype.setContents.call(
                 this,
                 new GraphicText("Load a game"),
@@ -33,10 +38,6 @@ function SceneLoadGame() {
 }
 
 SceneLoadGame.prototype = {
-
-    loadGame: function(){
-
-    },
 
     update: function(){
 

@@ -17,21 +17,44 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/** Enum for the different primitive values kind.
+*   @enum {number}
+*   @readonly
+*/
+var PrimitiveValueKind = {
+    None: 0,
+    Number: 1,
+    Variable: 2,
+    Parameter: 3,
+    Property: 4,
+    DataBase: 5,
+    Message: 6,
+    Script: 7,
+    Switch: 8
+};
+Object.freeze(PrimitiveValueKind);
+
 // -------------------------------------------------------
 //
 //  CLASS SystemValue
 //
-//  A value in the system.
-//
-//  @kind   -> The kind of value
-//  @value  -> The value
-//
 // -------------------------------------------------------
 
+/** @class
+*   A value in the system.
+*   @property {number} kind The kind of value.
+*   @property {number} value The value.
+*/
 function SystemValue(){
 
 }
 
+/** Create a new value.
+*   @static
+*   @property {number} k The kind of value.
+*   @property {number} v The value.
+*   @returns {SystemValue}
+*/
 SystemValue.createValue = function(k, v){
     var value = new SystemValue();
     value.kind = k;
@@ -39,29 +62,66 @@ SystemValue.createValue = function(k, v){
     return value;
 }
 
+// -------------------------------------------------------
+
+/** Create a new value number.
+*   @static
+*   @property {number} n The number.
+*   @returns {SystemValue}
+*/
 SystemValue.createNumber = function(n){
     return SystemValue.createValue(3, n);
 }
 
+// -------------------------------------------------------
+
+/** Create a new value keyBoard.
+*   @static
+*   @property {number} k The key number.
+*   @returns {SystemValue}
+*/
 SystemValue.createKeyBoard = function(k){
     return SystemValue.createValue(11, k);
 }
 
+// -------------------------------------------------------
+
+/** Create a new value switch.
+*   @static
+*   @property {boolean} b The value of the switch.
+*   @returns {SystemValue}
+*/
 SystemValue.createSwitch = function(b){
     return SystemValue.createValue(10, b);
 }
 
+// -------------------------------------------------------
+
 SystemValue.prototype = {
 
+    /** Read the JSON associated to the valuel.
+    *   @param {Object} json Json object describing the object.
+    */
     read: function(json){
         this.kind = json.k;
         this.value = json.v;
     },
 
+    // -------------------------------------------------------
+
+    /** Get the value.
+    *   @returns {number}
+    */
     getValue: function(){
         return this.value;
     },
 
+    // -------------------------------------------------------
+
+    /** Check if a value is equal to another one.
+    *   @param {SystemValue} value The value to compare.
+    *   @returns {boolean}
+    */
     isEqual: function(value){
 
         // If keyBoard

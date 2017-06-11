@@ -19,17 +19,22 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneMenuEquip : GameState
-//
-//  @windowTop                  -> Window on top with "Equip" text
-//  @windowChoicesTabs          -> Window for each tabs
-//  @windowInformations         -> Window for statistis changes informations
-//  @windowChoicesEquipment     -> Window for each equipment slot
-//  @windowChoicesList          -> Window for each weapon/armor
-//  @selectedEquipment          -> Index of selected equipment
+//  CLASS SceneMenuEquip : SceneGame
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene in the menu for describing players equipments.
+*   @extends SceneGame
+*   @property {WindowBox} windowTop Window on top with "Equip" text.
+*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowBox} windowInformations Window for equip stats
+*   informations.
+*   @property {WindowChoices} windowChoicesEquipment Window for each equipment
+*   slot.
+*   @property {WindowChoices} windowChoicesList Window for each weapon/armor.
+*   @property {number} selectedEquipment Index of selected equipment.
+*/
 function SceneMenuEquip() {
     SceneGame.call(this);
 
@@ -69,6 +74,8 @@ function SceneMenuEquip() {
 
 SceneMenuEquip.prototype = {
 
+    /** Update tab.
+    */
     updateForTab: function(){
         var equipLength, i, l;
         var list;
@@ -93,6 +100,8 @@ SceneMenuEquip.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the equipment list.
+    */
     updateEquipmentList: function(){
         var idEquipment, nb, i, j, l, c, ll, k, lll, nbItem;
         var list, type, systemItem, item, character;
@@ -141,6 +150,8 @@ SceneMenuEquip.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the informations to display for equipment stats.
+    */
     updateInformations: function(){
         var list;
         if (this.selectedEquipment === -1)
@@ -165,6 +176,8 @@ SceneMenuEquip.prototype = {
                  list);
     },
 
+    /** Remove the equipment of the character.
+    */
     remove: function(){
         var character =
                 $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
@@ -174,6 +187,8 @@ SceneMenuEquip.prototype = {
 
     // -------------------------------------------------------
 
+    /** Equip the selected equipment.
+    */
     equip: function(){
         var character =
                 $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];

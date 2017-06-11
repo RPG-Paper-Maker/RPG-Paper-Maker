@@ -21,21 +21,24 @@
 //
 //  CLASS SystemHero
 //
-//  An hero of the game.
-//
-//  @name      -> The name of the hero
-//  @idClass   -> The class id of the hero
-//
 // -------------------------------------------------------
 
+/** @class
+*   An hero of the game.
+*   @property {string} name The name of the hero.
+*   @property {number} idClass The class ID of the hero
+*/
 function SystemHero(){
 
 }
 
 SystemHero.prototype = {
 
+    /** Read the JSON associated to the hero.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.names[1];
-        this.idClass = json["class"];
+        this.idClass = json.class;
     }
 }

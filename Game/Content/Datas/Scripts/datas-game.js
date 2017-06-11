@@ -76,8 +76,7 @@ DatasGame.VARIABLES_SWITCHES_PER_PAGE = 25;
 
 DatasGame.prototype = {
 
-    /**
-    *   Read the JSON files associated to the settings.
+    /** Read the JSON files associated to the settings.
     */
     readSettings: function(){
         this.settings = {};
@@ -96,8 +95,9 @@ DatasGame.prototype = {
         });
     },
 
-    /**
-    *   Save the JSON file associated to the settings.
+    // -------------------------------------------------------
+
+    /** Save the JSON file associated to the settings.
     */
     saveSettings: function(){
         Wanok.saveFile(Wanok.FILE_SETTINGS,

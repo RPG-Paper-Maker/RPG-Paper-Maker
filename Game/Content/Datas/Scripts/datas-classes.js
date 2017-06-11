@@ -34,8 +34,7 @@ function DatasClasses(){
 
 DatasClasses.prototype = {
 
-    /**
-    *   Read the JSON file associated to classes.
+    /** Read the JSON file associated to classes.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_CLASSES, true, function(res){

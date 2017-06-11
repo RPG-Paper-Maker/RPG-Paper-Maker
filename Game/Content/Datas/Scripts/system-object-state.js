@@ -21,17 +21,21 @@
 //
 //  CLASS SystemState
 //
-//  A possible state of an object.
-//
-//
 // -------------------------------------------------------
 
+/** @class
+*   A possible state of an object.
+*   @property {number} id ID.
+*/
 function SystemObjectState(){
 
 }
 
 SystemObjectState.prototype = {
 
+    /** Read the JSON associated to the object state.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.id = json.id;
     }

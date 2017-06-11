@@ -44,8 +44,7 @@ function DatasCommonEvents(){
 
 DatasCommonEvents.prototype = {
 
-    /**
-    *   Read the JSON file associated to common events.
+    /** Read the JSON file associated to common events.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_COMMON_EVENTS, true, function(res){
@@ -109,8 +108,9 @@ DatasCommonEvents.prototype = {
         });
     },
 
-    /**
-    *   Reorder the models in the right order for inheritance.
+    // -------------------------------------------------------
+
+    /** Reorder the models in the right order for inheritance.
     *   @param {JSON} jsonObject The json corresponding to the current object
     *   to analyze.
     *   @param {JSON[]} reorderedList The reordered list we are updating.

@@ -21,18 +21,21 @@
 //
 //  CLASS SystemKeyBoard
 //
-//  A key shortcut of the game.
-//
-//  @sc   -> The shortcut values.
-//
 // -------------------------------------------------------
 
+/** @class
+*   A key shortcut of the game.
+*   @property {number[][]} sc The shortcut values.
+*/
 function SystemKeyBoard(){
 
 }
 
 SystemKeyBoard.prototype = {
 
+    /** Read the JSON associated to the key.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.sc = json.sc;
     }

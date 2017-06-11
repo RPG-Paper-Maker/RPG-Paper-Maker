@@ -55,10 +55,11 @@ DatasKeyBoard.isKeyEqual = function(key, abr){
     return false;
 }
 
+// -------------------------------------------------------
+
 DatasKeyBoard.prototype = {
 
-    /**
-    *   Read the JSON file associated to keyboard.
+    /** Read the JSON file associated to keyboard.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_KEYBOARD, true, function(res){

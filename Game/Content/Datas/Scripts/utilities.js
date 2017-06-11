@@ -17,6 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/** Binary operations.
+*   @type {function[]} */
 var $operators_compare =
 [
     function(a, b) { return a === b },
@@ -29,6 +31,9 @@ var $operators_compare =
 
 // -------------------------------------------------------
 
+/** @class
+*   The key events.
+*/
 var KeyEvent = {
     DOM_VK_CANCEL: 3,
     DOM_VK_HELP: 6,
@@ -146,20 +151,36 @@ var KeyEvent = {
     DOM_VK_QUOTE: 222,
     DOM_VK_META: 224,
 
+    /** Check if the pressed key is a PAD number.
+    *   @param {number} key The key ID.
+    *   @returns {boolean}
+    */
     isKeyNumberPADPressed: function(key){
         return key >= KeyEvent.DOM_VK_NUMPAD0 && key <= KeyEvent.DOM_VK_NUMPAD9;
     },
 
+    /** Check if the pressed key is a number with shift.
+    *   @param {number} key The key ID.
+    *   @returns {boolean}
+    */
     isKeyNumberTopPressed: function(key){
         var shift = $keysPressed.indexOf(KeyEvent.DOM_VK_SHIFT) !== -1;
         return shift && key >= KeyEvent.DOM_VK_0 && key <= KeyEvent.DOM_VK_9;
     },
 
+    /** Check if the pressed key is a number.
+    *   @param {number} key The key ID.
+    *   @returns {boolean}
+    */
     isKeyNumberPressed: function(key){
         return KeyEvent.isKeyNumberPADPressed(key) ||
                 KeyEvent.isKeyNumberTopPressed(key);
     },
 
+    /** Get the char associated to the key.
+    *   @param {number} key The key ID.
+    *   @returns {string}
+    */
     getKeyChar: function(key){
         // Character
         if (key >= KeyEvent.DOM_VK_A && key <= KeyEvent.DOM_VK_Z){
@@ -182,33 +203,19 @@ var KeyEvent = {
 };
 
 // -------------------------------------------------------
-
-var PrimitiveValueKind = Object.freeze(
-    {
-        None: 0,
-        Number: 1,
-        Variable: 2,
-        Parameter: 3,
-        Property: 4,
-        DataBase: 5,
-        Message: 6,
-        Script: 7,
-        Switch: 8
-    }
-)
-
-// -------------------------------------------------------
 //
 //  CLASS Node
 //
-//  Datas structure of tree.
-//
-//  @data       -> Data of the node.
-//  @parent     -> Parent of the node.
-//  @children   -> List of node children.
-//
 // -------------------------------------------------------
 
+/** @class
+*   Datas structure of tree.
+*   @property {Object} data Data of the node.
+*   @property {Node} parent Parent of the node.
+*   @property {Node} firstChild The first child of the node.
+*   @property {Node} lastChild The last child of the node.
+*   @property {Node} next The next parent child.
+*/
 function Node(parent, data){
     this.data = data;
     this.parent = parent;
@@ -218,6 +225,11 @@ function Node(parent, data){
 }
 
 Node.prototype = {
+
+    /** Add a new child.
+    *   @param {Object} data Data of the new child.
+    *   @returns {Node} The new child.
+    */
     add: function(data){
         var node = new Node(this, data);
         if (this.firstChild === null) this.firstChild = node;
@@ -226,9 +238,17 @@ Node.prototype = {
 
         return node;
     },
+
+    /** Check if this node is the root of the tree.
+    *   @returns {boolean}
+    */
     isRoot: function(){
         return this.parent === null;
     },
+
+    /** Get the next parent child.
+    *   @returns {Node}
+    */
     getNext: function(){
         if (this.next === null){
             return (this.parent.isRoot()) ? null : this.parent;
@@ -241,50 +261,23 @@ Node.prototype = {
 //
 //  CLASS Tree
 //
-//  Datas structure of tree.
-//
-//  @root -> Node representing the root of the tree.
-//
 // -------------------------------------------------------
 
+/** @class
+*   Datas structure of tree.
+*   @property {Node} root Node representing the root of the tree.
+*/
 function Tree(data){
     this.root = new Node(null, data);
 }
 
 Tree.prototype = {
+
+    /** Add a new child.
+    *   @param {Object} data Data of the new child.
+    *   @returns {Node} The new child.
+    */
     add: function(data){
         return this.root.add(data);
     }
-}
-
-// -------------------------------------------------------
-//
-//  CLASS Vector3D
-//
-// -------------------------------------------------------
-
-function Vector3D() {
-
-}
-
-Vector3D.getSquare = function(x){
-    return Math.floor(x / $SQUARE_SIZE);
-};
-
-// -------------------------------------------------------
-//
-//  CLASS Position : Vector3D
-//
-//  Describe the position of an element
-//
-//  @z       -> z position
-//  @z_plus  -> offset pixels to add for z position
-//  @layer   -> layer number
-//
-// -------------------------------------------------------
-
-function Position(x, y, z, z_plus, layer) {
-    Vector3D.call(this, x, y, z);
-    this.z_plus = z_plus;
-    this.layer = layer;
 }

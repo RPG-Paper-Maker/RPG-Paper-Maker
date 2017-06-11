@@ -21,20 +21,24 @@
 //
 //  CLASS SystemStatistic
 //
-//  A statistic of the game.
-//
-//  @name           -> The name of the hero
-//  @abbreviation   -> The abbreviation of the statistic (for javascript code)
-//  @isFix          -> Indicate if this statistic is fix (no bar)
-//
 // -------------------------------------------------------
 
+/** @class
+*   A statistic of the game.
+*   @property {string} name The name of the statistic.
+*   @property {string} abbreviation The abbreviation of the statistic
+*   (for javascript code).
+*   @property {boolean} isFix Indicate if this statistic is fix (no bar).
+*/
 function SystemStatistic(){
 
 }
 
 SystemStatistic.prototype = {
 
+    /** Read the JSON associated to the statistic.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.names[1];
         this.abbreviation = json.abr;

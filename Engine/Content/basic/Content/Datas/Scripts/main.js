@@ -30,18 +30,13 @@
 //  GLOBAL VARIABLES
 // -------------------------------------------------------
 
-/** The game stack containing all the different states of the game. Can only
-*   contains GameState instances.
-*   @type {GameState[]} */
+/** The game stack containing all the different scenes of the game.
+*   @type {GameStack} */
 var $gameStack;
 
 /** All the game datas.
 *   @type {DatasGame} */
 var $datasGame;
-
-/** The current game datas.
-*   @type {CurrentGameDatas} */
-var $game;
 
 /** Defines the size (in pixels) of a square in a map.
 *   @constant
@@ -136,12 +131,12 @@ var $SCREEN_Y = 480;
 *   @type {THREE.WebGLRenderer} */
 var $renderer;
 
-/** The current game party.
+/** The current game played.
 *   @type {Game} */
 var $game = null;
 
 // -------------------------------------------------------
-//  FUNCTIONS
+//  GLOBAL FUNCTIONS
 // -------------------------------------------------------
 
 /** Initialize the game stack and datas.
@@ -154,6 +149,7 @@ function initialize(){
 // -------------------------------------------------------
 
 /** Initialize the openGL stuff.
+*   @param {Canvas} canvas The 3D canvas.
 */
 function initializeGL(canvas){
 
@@ -175,6 +171,7 @@ function initializeGL(canvas){
 // -------------------------------------------------------
 
 /** Set the camera aspect while resizing the window.
+*   @param {Canvas} canvas The 3D canvas.
 */
 function resizeGL(canvas){
     var camera = $gameStack.camera;
@@ -208,6 +205,7 @@ function update(){
 // -------------------------------------------------------
 
 /** First key press handle for the current stack.
+*   @param {number} key The key ID pressed.
 */
 function onKeyPressed(key){
     $gameStack.onKeyPressed(key)
@@ -216,6 +214,7 @@ function onKeyPressed(key){
 // -------------------------------------------------------
 
 /** First key release handle for the current stack.
+*   @param {number} key The key ID released.
 */
 function onKeyReleased(key){
     $gameStack.onKeyReleased(key)
@@ -224,6 +223,7 @@ function onKeyReleased(key){
 // -------------------------------------------------------
 
 /** Key pressed repeat handle for the current stack.
+*   @param {number} key The key ID pressed.
 *   @returns {boolean} false if the other keys are blocked after it.
 */
 function onKeyPressedRepeat(key){
@@ -234,6 +234,7 @@ function onKeyPressedRepeat(key){
 
 /** Key pressed repeat handle for the current stack, but with
 *   a small wait after the first pressure (generally used for menus).
+*   @param {number} key The key ID pressed.
 *   @returns {boolean} false if the other keys are blocked after it.
 */
 function onKeyPressedAndRepeat(key){
@@ -243,6 +244,7 @@ function onKeyPressedAndRepeat(key){
 // -------------------------------------------------------
 
 /** Draw the 3D for the current stack.
+*   @param {Canvas} canvas The 3D canvas.
 */
 function draw3D(canvas){
     $gameStack.draw3D(canvas);
@@ -251,6 +253,7 @@ function draw3D(canvas){
 // -------------------------------------------------------
 
 /** Draw HUD for the current stack.
+*   @param {Canvas} canvas The HUD canvas.
 */
 function drawHUD(canvas){
 

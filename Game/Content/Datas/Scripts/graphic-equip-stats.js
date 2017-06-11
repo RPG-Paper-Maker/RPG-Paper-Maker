@@ -23,6 +23,22 @@
 //
 // -------------------------------------------------------
 
+/** @class
+*   The graphic displaying all the stats modifications in the equip menu.
+*   @property {boolean} isChanging Indicates if we are currently trying to
+*   equip something.
+*   @property {GraphicText} listStatsNames All the stats names graphics.
+*   @property {GraphicText} listStats All the stats values graphics.
+*   @property {GraphicText} graphicArrow A graphic for an arrow.
+*   @property {GraphicText} listNewStats All the stats new values graphics.
+*   @property {number} nameLength The max length of the stats names.
+*   @property {number} valueLength The max length of the stats values.
+*   @property {number} arrowLength The max length of the stats values.
+*   @param {GamePlayer} gamePlayer The current selected player.
+*   @param {number[]} newValues The new values of statistics with the
+*   equipment we are currently trying to equip. This array is empty if we are
+*   not trying to equip something.
+*/
 function GraphicEquipStats(gamePlayer, newValues){
     var character, statistic;
     var context, graphicName, graphicValue;
@@ -92,6 +108,13 @@ function GraphicEquipStats(gamePlayer, newValues){
 
 GraphicEquipStats.prototype = {
 
+    /** Drawing the statistics modifications.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     drawInformations: function(context, x, y, w, h){
         var xStats, yStats, yStat, xStat;
         var i, l;

@@ -49,6 +49,9 @@ SceneBattle.prototype.initializeStep1 = function(){
 
 // -------------------------------------------------------
 
+/** Return the index of the array after going up.
+*   @returns {number}
+*/
 SceneBattle.prototype.indexArrowUp = function(){
     var index = this.selectedUserTargetIndex();
     do {
@@ -63,6 +66,9 @@ SceneBattle.prototype.indexArrowUp = function(){
 
 // -------------------------------------------------------
 
+/** Return the index of the array after going down.
+*   @returns {number}
+*/
 SceneBattle.prototype.indexArrowDown = function(){
     var index = this.selectedUserTargetIndex();
     do {
@@ -77,6 +83,8 @@ SceneBattle.prototype.indexArrowDown = function(){
 
 // -------------------------------------------------------
 
+/** Move the arrow.
+*/
 SceneBattle.prototype.moveArrow = function(){
     var dim = this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
               .rect.windowDimension;
@@ -85,12 +93,17 @@ SceneBattle.prototype.moveArrow = function(){
 
     // Updating window informations
     this.windowCharacterInformations.content =
-         this.battlers[this.kindSelection][this.selectedUserTargetIndex()]
-         .character.createBattleDescriptionGraphics();
+         new GraphicPlayer(this.battlers
+                           [this.kindSelection]
+                           [this.selectedUserTargetIndex()]
+                           .character);
 };
 
 // -------------------------------------------------------
 
+/** Return the index of the target.
+*   @returns {number}
+*/
 SceneBattle.prototype.selectedUserTargetIndex = function(){
     return (this.subStep === 0) ? this.selectedUserIndex
                                 : this.selectedTargetIndex;
@@ -203,74 +216,4 @@ SceneBattle.prototype.drawHUDStep1 = function(context){
     if (this.subStep === 1){
         this.windowChoicesBattleCommands.draw(context);
     }
-};
-
-// -------------------------------------------------------
-// createBattleDescriptionGraphics: create graphic for description state display
-GamePlayer.prototype.createBattleDescriptionGraphics = function(){
-    var item = this.getCharacterInformations();
-    var cl = $datasGame.classes.list[item.idClass];
-    var levelStat = $datasGame.battleSystem.getLevelStatistic();
-
-    var obj = {
-        textName: new GraphicText(item.name, Align.Left),
-        textLevelName: new GraphicText(levelStat.name, Align.Left),
-        textLevel: new GraphicText("" + this[levelStat.abbreviation],
-                                   Align.Left),
-
-        drawInformations: function(context, x, y, w, h){
-            var yName = y + 10;
-            this.textName.draw(context, x, yName, 0, 0);
-            var xLevelName = x +
-                    context.measureText(this.textName.text).width + 10;
-            this.textLevelName.draw(context, xLevelName, yName, 0, 0);
-            var xLevel = xLevelName +
-                    context.measureText(this.textLevelName.text).width;
-            this.textLevel.draw(context, xLevel, yName, 0, 0);
-            var yStats = yName + 20;
-
-            // Stats
-            var i, l = this.listStatsNames.length;
-            for (i = 0; i < l; i++){
-                var xStat = x;
-                var yStat = yStats + (i*20);
-                this.listStatsNames[i].draw(context, xStat, yStat, 0, 0);
-                this.listStats[i].draw(context,
-                                       xStat + this.maxStatNamesLength + 10,
-                                       yStat, 0, 0);
-            }
-        },
-    };
-
-    // Adding stats:
-    var context = $canvasHUD.getContext('2d');
-    obj.listStatsNames = [];
-    obj.listStats = [];
-    obj.maxStatNamesLength = 0;
-    var i, j = 0, l = $datasGame.battleSystem.statisticsOrder.length;
-    for (i = 0; i < l; i++){
-        var id = $datasGame.battleSystem.statisticsOrder[i];
-        if (id !== $datasGame.battleSystem.idLevelStatistic &&
-            id !== $datasGame.battleSystem.idExpStatistic)
-        {
-            var statistic = $datasGame.battleSystem.statistics[id];
-
-            // Only display bars
-            if (!statistic.isFix){
-                var textName = new GraphicText(statistic.name + ":",
-                                               Align.Left);
-                context.font = textName.font;
-                var c = context.measureText(textName.text).width;
-                if (c > obj.maxStatNamesLength) obj.maxStatNamesLength = c;
-                obj.listStatsNames.push(textName);
-                var txt = "" + this[statistic.abbreviation];
-                if (!statistic.isFix)
-                    txt += "/" + this["max" + statistic.abbreviation];
-                obj.listStats.push(new GraphicText(txt, Align.Left));
-                j++;
-            }
-        }
-    }
-
-    return obj;
 };

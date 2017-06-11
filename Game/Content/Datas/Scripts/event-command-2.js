@@ -365,7 +365,7 @@ EventCommandChangeState.prototype = {
 *   @property {number} idTarget ID of target.
 *   @property {boolean} isSystem Boolean indicating if it is an event system.
 *   @property {number} eventId ID of the event.
-*   @property {SystemParameter[]} parameters List of all the parameters
+*   @property {SystemParameter[]} parameters List of all the parameters.
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandSendEvent(command){
@@ -415,7 +415,7 @@ function EventCommandSendEvent(command){
 *   @param {number} idTarget ID of target.
 *   @param {boolean} isSystem Boolean indicating if it is an event system.
 *   @param {number} eventId ID of the event.
-*   @param {SystemParameter[]} parameters List of all the parameters
+*   @param {SystemParameter[]} parameters List of all the parameters.
 */
 EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                                            isSystem, idEvent, parameters)

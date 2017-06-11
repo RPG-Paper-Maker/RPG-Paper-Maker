@@ -21,18 +21,21 @@
 //
 //  CLASS SystemEvent
 //
-//  An event that can be called.
-//
-//  @parameters -> A list of parameters.
-//
 // -------------------------------------------------------
 
+/** @class
+*   An event that can be called.
+*   @property {SystemParameters[]} parameters A list of parameters.
+*/
 function SystemEvent(){
 
 }
 
 SystemEvent.prototype = {
 
+    /** Read the JSON associated to the event.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.parameters = SystemParameter.readParameters(json);
     }

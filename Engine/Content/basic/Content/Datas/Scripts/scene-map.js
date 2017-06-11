@@ -19,7 +19,7 @@
 
 // -------------------------------------------------------
 //
-//  [CLASS SceneMap : GameState]
+//  CLASS SceneMap : GameState
 //
 //  A local map.
 //
@@ -30,10 +30,23 @@
 //  @mapInfos                       -> General map informations (real name, name, width, height)
 //  @allObjects                     -> All the objects portions according to ID.
 //  @mapPortions                    -> All the portions in the visible ray of the map
-//  @lastTriggeredObjectPosition    -> The last object triggered position
 //
 // -------------------------------------------------------
 
+/** @class
+*   A scene for a local map.
+*   @extends SceneGame
+*   @property {number} id The ID of the map.
+*   @property {string} mapName The map name.
+*   @property {THREE.Scene} scene The 3D scene of the map.
+*   @property {Camera} camera he camera of the scene.
+*   @property {Object} mapInfos General map informations (real name, name,
+*   width, height).
+*   @property {number[][]} allObjects All the objects portions according to ID.
+*   @property {MapPortion[][][]} mapPortions All the portions in the visible ray of the
+*   map.
+*   @param {number} id The ID of the map.
+*/
 function SceneMap(id){
     SceneGame.call(this);
 
@@ -44,24 +57,26 @@ function SceneMap(id){
     this.readMapInfos();
     this.initializePortions();
     this.initializeObjects();
-    this.lastTriggeredObjectPosition = null;
     this.loadTextures();
 }
 
-// -------------------------------------------------------
-//  [getPortionName x y z] Initialize the map objects.
-// -------------------------------------------------------
-
+/** Get the portion file name.
+*   @static
+*   @param {number} x The global x portion.
+*   @param {number} y The global y portion.
+*   @param {number} z The global z portion.
+*   @returns {string}
+*/
 SceneMap.getPortionName = function(x, y, z){
     return (x + "_" + y + "_" + z + ".json");
 }
 
+// -------------------------------------------------------
+
 SceneMap.prototype = {
 
-    // -------------------------------------------------------
-    //  [readMapInfos realName] Read the map infos file.
-    // -------------------------------------------------------
-
+    /** Read the map infos file.
+    */
     readMapInfos: function(){
         Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName +
                        Wanok.FILE_MAP_INFOS, true, function(res)
@@ -83,9 +98,9 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [initializePortions] Initialize the map portions.
-    // -------------------------------------------------------
 
+    /** Initialize the map portions.
+    */
     initializePortions: function(){
         var ray = ($PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR) * 2 + 1;
         this.mapPortions = new Array(ray);
@@ -104,9 +119,15 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [loadPortion realX realY realZ x y z] Initialize the map objects.
-    // -------------------------------------------------------
 
+    /** Load a portion.
+    *   @param {number} realX The global x portion.
+    *   @param {number} realY The global y portion.
+    *   @param {number} realZ The global z portion.
+    *   @param {number} x The local x portion.
+    *   @param {number} y The local y portion.
+    *   @param {number} z The local z portion.
+    */
     loadPortion: function(realX, realY, realZ, x, y, z){
         var fileName = SceneMap.getPortionName(realX, realY, realZ);
 
@@ -128,9 +149,9 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [initializeObjects] Initialize the map objects
-    // -------------------------------------------------------
 
+    /** Initialize the map objects
+    */
     initializeObjects: function(){
         Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName +
                        Wanok.FILE_MAP_OBJECTS, true, function(res)
@@ -149,10 +170,9 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [initializePortionsObjects] All the objects moved or/and with changed
-    //  states
-    // -------------------------------------------------------
 
+    /** All the objects moved or/and with changed states.
+    */
     initializePortionsObjects: function(){
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
@@ -184,9 +204,9 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [loadTextures] Load all the textures of the map.
-    // -------------------------------------------------------
 
+    /** Load all the textures of the map.
+    */
     loadTextures: function(){
 
         // Load textures
@@ -204,9 +224,12 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [loadTexture textureLoader path] Load a texture.
-    // -------------------------------------------------------
 
+    /** Load a texture.
+    *   @param {THREE.TextureLoader} The texture loader.
+    *   @param {string} The path of the texture.
+    *   @retuns {THREE.MeshBasicMaterial}
+    */
     loadTexture: function(textureLoader, path){
         var texture = textureLoader.load(path);
         texture.magFilter = THREE.NearestFilter;
@@ -221,9 +244,9 @@ SceneMap.prototype = {
     },
 
     // -------------------------------------------------------
-    //  [closeMap] Close the map.
-    // -------------------------------------------------------
 
+    /** Close the map.
+    */
     closeMap: function(){
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
@@ -252,12 +275,6 @@ SceneMap.prototype = {
 
         // Update camera
         this.camera.update();
-    },
-
-    // -------------------------------------------------------
-
-    getPortion: function(x,y){
-        return [0,0]; // TODO
     },
 
     // -------------------------------------------------------

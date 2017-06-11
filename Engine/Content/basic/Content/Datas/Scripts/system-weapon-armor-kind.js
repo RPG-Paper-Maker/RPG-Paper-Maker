@@ -21,19 +21,23 @@
 //
 //  CLASS SystemWeaponArmorKind
 //
-//  A weapon/armor kind of the game.
-//
-//  @name           -> The name of the hero
-//  @equipments     -> List of booleans indicating which equipment is ok
-//
 // -------------------------------------------------------
 
+/** @class
+*   A weapon/armor kind of the game.
+*   @property {string} name The name of the weapon / armor kind.
+*   @property {boolean[]} equipments List of booleans indicating which equipment
+*   is ok.
+*/
 function SystemWeaponArmorKind(){
 
 }
 
 SystemWeaponArmorKind.prototype = {
 
+    /** Read the JSON associated to the weapon / armor kind.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.names[1];
         this.equipments = json.equipment;

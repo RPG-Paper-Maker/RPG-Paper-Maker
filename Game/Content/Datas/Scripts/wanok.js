@@ -21,13 +21,18 @@
 //
 //  CLASS Wanok
 //
-//  Utility class with a lot of functions.
-//
 // -------------------------------------------------------
 
+/** @class
+*   Utility class with a lot of functions.
+*/
 function Wanok(){
 
 }
+
+// -------------------------------------------------------
+//  PATHS
+// -------------------------------------------------------
 
 Wanok.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
 Wanok.FILE_MAPS = Wanok.PATH_DATAS + "Maps/";
@@ -59,8 +64,18 @@ Wanok.PATH_RELIEFS = Wanok.PATH_TEXTURES2D + "/Reliefs";
 Wanok.PATH_TILESETS = Wanok.PATH_TEXTURES2D + "/Tilesets";
 
 // -------------------------------------------------------
-//  openFile : read a json file
+//  FUNCTIONS
+// -------------------------------------------------------
 
+/** Read a json file
+*   @static
+*   @param {Object} base The class calling this function.
+*   @param {string} url The path of the file.
+*   @param {boolean} loading Indicate if there's a loading screen while loading
+*   the file.
+*   @param {function} callback A callback function to excecute when the file is
+*   loaded.
+*/
 Wanok.openFile = function(base, url, loading, callback){
     if (loading)
         $filesToLoad++;
@@ -77,16 +92,23 @@ Wanok.openFile = function(base, url, loading, callback){
 }
 
 // -------------------------------------------------------
-//  saveFile : write a json file
 
+/** Write a json file
+*   @static
+*   @param {string} url The path of the file.
+*   @param {Object} obj An object that can be stringified by JSON.
+*/
 Wanok.saveFile = function(url, obj){
     var doc = new XMLHttpRequest();
     doc.open("PUT", url, false);
     doc.send(JSON.stringify(obj));
 }
 
-/**
-    Determinate if files needs to be loaded asynchronously.
+// -------------------------------------------------------
+
+/** Check if all the files are loaded.
+*   @static
+*   @returns {boolean}
 */
 Wanok.isLoading = function(){
     if ($filesToLoad === $loadedFiles){
@@ -98,19 +120,23 @@ Wanok.isLoading = function(){
 }
 
 // -------------------------------------------------------
-//  [createFont fontSize fontName] Link the [fontSize] and the [fontName].
-//
-//  @returns a string that can be used by the canvasHUD.
-// -------------------------------------------------------
 
+/** Link the fontSize and the fontName to a string that can be used by the
+*   canvasHUD.
+*   @static
+*   @param {number} fontSize The fontSize.
+*   @param {string} fontName The fontName.
+*   @returns {string}
+*/
 Wanok.createFont = function(fontSize, fontName){
     return fontSize + "px " + fontName;
 }
 
 // -------------------------------------------------------
-//  [updateTimer] If a current game exists, add one second to the timer.
-// -------------------------------------------------------
 
+/** If a current game exists, add one second to the timer.
+*   @static
+*/
 Wanok.updateTimer = function(){
     if ($game !== null){
         $game.playTime++;
@@ -118,8 +144,12 @@ Wanok.updateTimer = function(){
 }
 
 // -------------------------------------------------------
-//  describe
 
+/** Describe a javascript object.
+*   @static
+*   @param {Object} obj The javascript object.
+*   @returns {string}
+*/
 Wanok.describe = function(obj){
     var res = "";
     for (var p in obj)
@@ -129,15 +159,22 @@ Wanok.describe = function(obj){
 }
 
 // -------------------------------------------------------
-//  show
 
+/** Show alert dialog box.
+*   @static
+*   @param {string} text text to display.
+*/
 Wanok.show = function(text){
     alert(text)
 }
 
 // -------------------------------------------------------
-//  getStringDate : return a string of the date by passing all the seconds
 
+/** Return a string of the date by passing all the seconds.
+*   @static
+*   @param {number} total Total number of seconds.
+*   @returns {string}
+*/
 Wanok.getStringDate = function(total){
     var hours = Wanok.formatNumber(Math.floor(total / 3600),4);
     var minutes = Wanok.formatNumber(Math.floor((total % 3600) / 60),2);
@@ -147,17 +184,35 @@ Wanok.getStringDate = function(total){
 }
 
 // -------------------------------------------------------
-//  formatNumber : return the string of a number and parse with 0 according
-//  to a given size
 
+/** Return the string of a number and parse with 0 according to a given size.
+*   @static
+*   @param {number} num Number.
+*   @param {number} size Max number to display.
+*   @returns {string}
+*/
 Wanok.formatNumber = function(num, size){
     return ('000000000' + num).substr(-size);
 }
 
+// -------------------------------------------------------
+
+/** Generate the map name according to the ID.
+*   @static
+*   @param {number} id ID of the map.
+*   @returns {string}
+*/
 Wanok.generateMapName = function(id){
     return "MAP" + Wanok.formatNumber(id, 4);
 }
 
+// -------------------------------------------------------
+
+/** Transform a json position to a THREE.Vector3.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns {THREE.Vector3}
+*/
 Wanok.positionToVector3 = function(position){
     return new THREE.Vector3(
                 position[0] * $SQUARE_SIZE,
@@ -166,22 +221,71 @@ Wanok.positionToVector3 = function(position){
                 position[3] * $SQUARE_SIZE);
 }
 
+// -------------------------------------------------------
+
+/** Get the pixel position transformation according to screen size.
+*   @static
+*   @param {number} x The position on screen.
+*   @returns {number}
+*/
 Wanok.getScreenX = function(x){
-    return Math.round($windowX * x);
+    return Math.round(Wanok.getDoubleScreenX(x));
 }
 
+// -------------------------------------------------------
+
+/** Get the pixel position transformation according to screen size.
+*   @static
+*   @param {number} y The position on screen.
+*   @returns {number}
+*/
 Wanok.getScreenY = function(y){
-    return Math.round($windowY * y);
+    return Math.round(Wanok.getDoubleScreenY(y));
 }
+
+// -------------------------------------------------------
+
+/** Get the pixel position transformation according to screen size.
+*   @static
+*   @param {number} xy The position on screen.
+*   @returns {number}
+*/
 
 Wanok.getScreenXY = function(xy){
     return Math.round(($windowX + $windowY) / 2 * xy);
 }
 
+// -------------------------------------------------------
+
+/** Get the pixel position transformation according to screen size, but without
+*   rounding it.
+*   @static
+*   @param {number} x The position on screen.
+*   @returns {number}
+*/
 Wanok.getDoubleScreenX = function(x){
     return $windowX * x;
 }
 
+// -------------------------------------------------------
+
+/** Get the pixel position transformation according to screen size, but without
+*   rounding it.
+*   @static
+*   @param {number} y The position on screen.
+*   @returns {number}
+*/
 Wanok.getDoubleScreenY = function(y){
     return $windowY * y;
 }
+
+// -------------------------------------------------------
+
+/** Get the position according to the square size.
+*   @static
+*   @param {number} x The position.
+*   @returns {number}
+*/
+Wanok.getSquare = function(x){
+    return Math.floor(x / $SQUARE_SIZE);
+};

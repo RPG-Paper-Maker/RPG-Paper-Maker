@@ -17,27 +17,40 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var Align = Object.freeze(
-    {
-        Left: "left",
-        Right: "right",
-        Center: "center"
-    }
-)
+/**
+*   Enum for the different aligns kind.
+*   @enum {string}
+*   @readonly
+*/
+var Align = {
+    Left: "left",
+    Right: "right",
+    Center: "center"
+}
+Object.freeze(Align);
 
 // -------------------------------------------------------
 //
-//  CLASS Text : Bitmap
-//
-//  A class for all the texts to display in screen.
-//
-//  @text   -> The brut text to display
-//  @align  -> Alignement of the text
-//  @font          -> The font used for the text
-//  @fontSize      -> The font height used for the text
+//  CLASS GraphicText : Bitmap
 //
 // -------------------------------------------------------
 
+/** @class
+*   A class for all the texts to display in screen.
+*   @extends Bitmap
+*   @property {string} text The brut text to display.
+*   @property {Align} align Alignement of the text.
+*   @property {string} font The font used for the text.
+*   @property {number} fontSize The font height used for the text.
+*   @param {string} text The brut text to display.
+*   @param {Align} [align=Align.Center] - Alignement of the text.
+*   @param {number} [fontSize=$fontSize] - The font height used for the text.
+*   @param {string} [fontName=$fontName] - The font name used for the text.
+*   @param {number} x The x coords of the text.
+*   @param {number} y The y coords of the text.
+*   @param {number} w The w coords of the text.
+*   @param {number} h The h coords of the text.
+*/
 function GraphicText(text, align, fontSize, fontName, x, y, w, h){
     Bitmap.call(this, x, y, w, h);
 
@@ -81,6 +94,19 @@ GraphicText.prototype = {
 
     // -------------------------------------------------------
 
+    setCoords: function(x, y, w, h){
+        Bitmap.prototype.setCoords.call(this, x, y, w, h);
+    },
+
+    // -------------------------------------------------------
+
+    /** Drawing the text in choice box.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     draw: function(context, x, y, w, h){
 
         // Default values
@@ -109,6 +135,13 @@ GraphicText.prototype = {
 
     // -------------------------------------------------------
 
+    /** Drawing the text in choice box.
+    *   @param {Canvas.Context} context The canvas context.
+    *   @param {number} x The x position to draw graphic.
+    *   @param {number} y The y position to draw graphic.
+    *   @param {number} w The width dimention to draw graphic.
+    *   @param {number} h The height dimention to draw graphic.
+    */
     drawInformations: function(context, x, y, w, h){
         this.draw(context, x, y, w, h);
     }

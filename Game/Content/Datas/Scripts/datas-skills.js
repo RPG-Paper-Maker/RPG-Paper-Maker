@@ -34,8 +34,7 @@ function DatasSkills(){
 
 DatasSkills.prototype = {
 
-    /**
-    *   Read the JSON file associated to skills.
+    /** Read the JSON file associated to skills.
     */
     read: function(){
         Wanok.openFile(this, Wanok.FILE_SKILLS, true, function(res){

@@ -21,19 +21,22 @@
 //
 //  CLASS SystemClass
 //
-//  A class of the game.
-//
-//  @name     -> The name of the class
-//  @skills   -> The skills to learn of the class
-//
 // -------------------------------------------------------
 
+/** @class
+*   A class of the game.
+*   @property {string} name The name of the class.
+*   @property {SystemClassSkill[]} skills The skills to learn of the class.
+*/
 function SystemClass(){
 
 }
 
 SystemClass.prototype = {
 
+    /** Read the JSON associated to the class.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.name;
         this.experienceBase = json.eB;

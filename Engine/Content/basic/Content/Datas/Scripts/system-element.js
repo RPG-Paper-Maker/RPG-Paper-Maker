@@ -21,19 +21,23 @@
 //
 //  CLASS SystemElement
 //
-//  An element of the game.
-//
-//  @name           -> The name of the hero
-//  @efficiency     -> The list of efficiency according to each element
-//
 // -------------------------------------------------------
 
+/** @class
+*   An element of the game.
+*   @property {string} name The name of the element.
+*   @property {number[]} efficiency The list of efficiency according.
+*   to each element.
+*/
 function SystemElement(){
 
 }
 
 SystemElement.prototype = {
 
+    /** Read the JSON associated to the element.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.name = json.names[1];
         this.efficiency = json.efficiency;

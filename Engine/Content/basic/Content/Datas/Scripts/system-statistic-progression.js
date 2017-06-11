@@ -21,20 +21,23 @@
 //
 //  CLASS SystemStatisticProgression
 //
-//  A statistic progression of the game.
-//
-//  @initialValue   -> The initial value of the statistic
-//  @finalValue     -> The final value of the statistic
-//  @id             -> The id of the statistic
-//
 // -------------------------------------------------------
 
+/** @class
+*   A statistic progression of the game.
+*   @property {number} initialValue The initial value of the statistic.
+*   @property {number} finalValue The final value of the statistic.
+*   @property {number} id The id of the statistic.
+*/
 function SystemStatisticProgression(){
 
 }
 
 SystemStatisticProgression.prototype = {
 
+    /** Read the JSON associated to the statistic progression.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         this.initialValue = json.i;
         this.finalValue = json.f;

@@ -102,7 +102,7 @@ GameStack.prototype = {
 
     // -------------------------------------------------------
 
-    /** Update the stack
+    /** Update the stack.
     */
     update: function() {
         if (!this.isEmpty())

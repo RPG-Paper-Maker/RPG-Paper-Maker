@@ -26,14 +26,14 @@
 /** @class
 *   A bitmap is something that can be drawn on the HUD. It can be a window,
 *   a text, an image...
-*   @property {number} x Coords of battler.
-*   @property {number} y Coords of battler.
-*   @property {number} w Coords of battler.
-*   @property {number} h Coords of battler.
-*   @param {number} x Coords of battler.
-*   @param {number} y Coords of battler.
-*   @param {number} w Coords of battler.
-*   @param {number} h Coords of battler.
+*   @property {number} x Coords of the bitmap.
+*   @property {number} y Coords of the bitmap.
+*   @property {number} w Coords of the bitmap.
+*   @property {number} h Coords of the bitmap.
+*   @param {number} [x=0] - Coords of the bitmap.
+*   @param {number} [y=0] - Coords of the bitmap.
+*   @param {number} [w=0] - Coords of the bitmap.
+*   @param {number} [h=0] - Coords of the bitmap.
 */
 function Bitmap(x, y, w, h){
 
@@ -52,38 +52,46 @@ function Bitmap(x, y, w, h){
 Bitmap.prototype = {
 
     /** Set the x value.
-    *   @param {number} The x value.
+    *   @param {number} x The x value.
     */
     setX: function(x){
         this.x = Wanok.getScreenX(x);
     },
 
+    // -------------------------------------------------------
+
     /** Set the y value.
-    *   @param {number} The y value.
+    *   @param {number} y The y value.
     */
     setY: function(y){
         this.y = Wanok.getScreenY(y);
     },
 
+    // -------------------------------------------------------
+
     /** Set the w value.
-    *   @param {number} The w value.
+    *   @param {number} w The w value.
     */
     setW: function(w){
         this.w = Wanok.getScreenX(w);
     },
 
+    // -------------------------------------------------------
+
     /** Set the h value.
-    *   @param {number} The h value.
+    *   @param {number} h The h value.
     */
     setH: function(h){
         this.h = Wanok.getScreenY(h);
     },
 
+    // -------------------------------------------------------
+
     /** Set all the coords values.
-    *   @param {number} The x value.
-    *   @param {number} The y value.
-    *   @param {number} The w value.
-    *   @param {number} The h value.
+    *   @param {number} x The x value.
+    *   @param {number} y The y value.
+    *   @param {number} w The w value.
+    *   @param {number} h The h value.
     */
     setCoords: function(x, y, w, h){
         this.setX(x);

@@ -21,16 +21,21 @@
 //
 //  CLASS SystemMonster : SystemHero
 //
-//  A monster of the game.
-//
 // -------------------------------------------------------
 
+/** @class
+*   A monster of the game.
+*   @extends SystemHero
+*/
 function SystemMonster(){
     SystemHero.call(this);
 }
 
 SystemMonster.prototype = {
 
+    /** Read the JSON associated to the monster.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
         SystemHero.prototype.readJSON.call(this, json);
     }

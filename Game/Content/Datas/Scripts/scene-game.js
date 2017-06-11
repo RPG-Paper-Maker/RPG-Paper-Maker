@@ -21,14 +21,15 @@
 //
 //  CLASS SceneGame
 //
-//  Abstract class for the game stack.
-//
-//  @reactionInterpreters  -> The reaction interpreters for parallel reactions
-//  @parallelCommands      -> Commands that are still running without blocking
-//                                    any other command
-//
 // -------------------------------------------------------
 
+/** @class
+*   Abstract class for the game stack.
+*   @property {ReactionInterpreter[]} reactionInterpreters The reaction
+*   interpreters for parallel reactions.
+*   @property {Node[]} parallelCommands Commands that are still running without
+*   blocking any other command.
+*/
 function SceneGame(){
     this.reactionInterpreters = new Array;
     this.parallelCommands = new Array;
@@ -36,8 +37,7 @@ function SceneGame(){
 
 SceneGame.prototype = {
 
-    /**
-    * Create an array of all the right files in the source dir
+    /** Update the scene.
     */
     update: function() {
         var i, l;
@@ -51,6 +51,8 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update all the reactions.
+    */
     updateInterpreters: function(){
         var i, l;
         var interpreter;
@@ -83,6 +85,8 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update all the parallel commands.
+    */
     updateParallelCommands: function(){
         var i, l;
         var endingCommands = new Array; // Index of all the finished commands
@@ -100,6 +104,12 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Add a reaction in the interpreter list.
+    *   @param {MapObject} sender The sender of this reaction.
+    *   @param {SystemReaction} reaction The reaction to add.
+    *   @param {MapObject} object The object reacting.
+    *   @param {number} state The state ID.
+    */
     addReaction: function(sender, reaction, object, state){
         if (reaction.getFirstCommand() !== null){
             var reactionInterpreter;
@@ -128,6 +138,9 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** First key press handle.
+    *   @param {number} key The key ID pressed.
+    */
     onKeyPressed: function(key) {
         var i, l;
 
@@ -138,6 +151,9 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** First key release handle.
+    *   @param {number} key The key ID released.
+    */
     onKeyReleased: function(key){
         var i, l;
 
@@ -148,6 +164,10 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Key pressed repeat handle.
+    *   @param {number} key The key ID pressed.
+    *   @returns {boolean} false if the other keys are blocked after it.
+    */
     onKeyPressedRepeat: function(key){
         var i, l;
 
@@ -160,6 +180,11 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Key pressed repeat handle, but with
+    *   a small wait after the first pressure (generally used for menus).
+    *   @param {number} key The key ID pressed.
+    *   @returns {boolean} false if the other keys are blocked after it.
+    */
     onKeyPressedAndRepeat: function(key){
         var i, l;
 
@@ -170,10 +195,16 @@ SceneGame.prototype = {
 
     // -------------------------------------------------------
 
+    /** Draw the 3D.
+    *   @param {Canvas} canvas The 3D canvas.
+    */
     draw3D: function(canvas) {},
 
     // -------------------------------------------------------
 
+    /** Draw HUD.
+    *   @param {Canvas.Context} context The canvas context.
+    */
     drawHUD: function(context) {
         var i, l;
 

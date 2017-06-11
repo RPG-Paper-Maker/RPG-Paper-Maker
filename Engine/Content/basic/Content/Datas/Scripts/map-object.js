@@ -17,43 +17,52 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var Orientation = Object.freeze(
-    {
-        South: 0,
-        West: 1,
-        North: 2,
-        East: 3
-    }
-)
+/**
+*   Enum for the different orientations kind.
+*   @enum {string}
+*   @readonly
+*/
+var Orientation = {
+    South: 0,
+    West: 1,
+    North: 2,
+    East: 3
+}
+Object.freeze(Orientation);
 
 // -------------------------------------------------------
 //
 //  CLASS MapObject
 //
-//  Element movable in map.
-//
-//  @system         -> System infos.
-//  @position       -> Position in map.
-//  @speed          -> Speed coef.
-//  @orientationEye -> Where the character is looking.
-//  @mesh           -> The current mesh used for this object.
-//
 // -------------------------------------------------------
 
+/** @class
+*   Element movable in local map.
+*   @property {SystemObject} system System infos.
+*   @property {number} speed Speed coef.
+*   @property {Orientation} orientationEye Where the character is looking.
+*   @property {THREE.Mesh} mesh The current mesh used for this object.
+*   @param {THREE.Mesh} mesh The current mesh used for this object.
+*   @param {SystemObject} system System infos.
+*/
 function MapObject(mesh, system) {
     this.mesh = mesh;
     this.system = system;
     this.speed = 1.0;
 }
 
+/** Normal speed coef.
+*   @constant
+*   @static
+*   @default 0.004666
+*/
 MapObject.SPEED_NORMAL = 0.004666;
 
 MapObject.prototype = {
 
-    // -------------------------------------------------------
-    //  [read json] Read [json] of the object.
-    // -------------------------------------------------------
-
+    /** Read the JSON associated to the object.
+    *   @param {Object} json Json object describing the object.
+    */
     read: function(json){
         var jsonPosition = json.k;
         this.mesh.position = Wanok.positionToVector3(jsonPosition);
@@ -61,7 +70,12 @@ MapObject.prototype = {
         this.system.readJSON(json.v);
     },
 
-    move: function(orientation, w, w){
+    /** Move the object (one step).
+    *   @param {Orientation} orientation Where to move.
+    *   @param {number} w The width of the map.
+    *   @param {number} h The height of the map.
+    */
+    move: function(orientation, w, h){
 
         // The speed depends on the time elapsed since the last update
         var speed = this.speed * ((new Date().getTime() - $elapsedTime) *
@@ -69,8 +83,8 @@ MapObject.prototype = {
         var angle = -90;
         var x_plus, z_plus, x_s, z_s, x_f, z_f;
 
-        x_s = Vector3D.getSquare(this.mesh.position.x);
-        z_s = Vector3D.getSquare(this.mesh.position.z);
+        x_s = Wanok.getSquare(this.mesh.position.x);
+        z_s = Wanok.getSquare(this.mesh.position.z);
 
         switch (orientation){
         case Orientation.South:
@@ -94,7 +108,7 @@ MapObject.prototype = {
             if ((x_s >= 0 && x_plus < 0) || (x_s < (w - 1) && x_plus > 0))
                 this.mesh.position.setX(this.mesh.position.x + x_plus);
             if (x_f === 0 && ((z_s >= 0 && z_plus < 0) ||
-                              (z_s < (w - 1) && z_plus > 0)))
+                              (z_s < (h - 1) && z_plus > 0)))
             {
                 this.mesh.position.setZ(this.mesh.position.z + z_plus);
             }
@@ -119,7 +133,7 @@ MapObject.prototype = {
 
             if ((x_s < (w - 1) && x_plus < 0) || (x_s > 0 && x_plus >= 0))
                 this.mesh.position.setX(this.mesh.position.x - x_plus);
-            if (x_f === 0 && ((z_s < (w- 1) && z_plus < 0) ||
+            if (x_f === 0 && ((z_s < (h - 1) && z_plus < 0) ||
                               (z_s > 0 && z_plus >= 0)))
             {
                 this.mesh.position.setZ(this.mesh.position.z - z_plus);
@@ -132,6 +146,13 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Receive an event.
+    *   @param {MapObject} sender The sender of this event.
+    *   @param {boolean} isSystem Boolean indicating if it is an event system.
+    *   @param {number} eventId ID of the event.
+    *   @param {SystemParameter[]} parameters List of all the parameters.
+    *   @param {numbers[]} states List of all the current states of the object.
+    */
     receiveEvent: function(sender, isSystem, idEvent, parameters, states){
         var i, j, l, ll;
 
@@ -149,18 +170,6 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     update: function(){
-
-    },
-
-    // -------------------------------------------------------
-
-    draw3D: function(canvas){
-
-    },
-
-    // -------------------------------------------------------
-
-    drawHUD: function(context){
 
     }
 }

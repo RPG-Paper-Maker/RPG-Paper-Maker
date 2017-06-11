@@ -21,19 +21,22 @@
 //
 //  CLASS SystemSkill
 //
-//  A skill of the game.
-//
-//  @name   -> The name of the skill
-//
 // -------------------------------------------------------
 
+/** @class
+*   A skill of the game.
+*   @property {string} name The name of the skill.
+*/
 function SystemSkill(){
 
 }
 
 SystemSkill.prototype = {
 
+    /** Read the JSON associated to the skill.
+    *   @param {Object} json Json object describing the object.
+    */
     readJSON: function(json){
-        this.name = json["name"];
+        this.name = json.name;
     }
 }
