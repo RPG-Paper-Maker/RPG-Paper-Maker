@@ -230,7 +230,9 @@ QString Wanok::getFormatNumber(int number, int format, int type){
 QKeySequence Wanok::getKeySequence(QKeyEvent *event){
     int keyInt = event->key();
     Qt::Key key = static_cast<Qt::Key>(keyInt);
+
     if(key != Qt::Key_unknown){
+
         // the user have clicked just and only the special keys Ctrl, Shift,
         // Alt, Meta.
         if(key != Qt::Key_Control &&
@@ -254,4 +256,10 @@ QKeySequence Wanok::getKeySequence(QKeyEvent *event){
     }
 
     return QKeySequence();
+}
+
+// -------------------------------------------------------
+
+QKeySequence Wanok::getKeySequenceFromInt(int keyInt){
+    return QKeySequence(keyInt);
 }

@@ -18,6 +18,8 @@
 */
 
 #include "systemkeyboard.h"
+#include "dialogsystemkeyboard.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -66,16 +68,57 @@ void SystemKeyBoard::appendShortCut(QVector<int> v){
 
 // -------------------------------------------------------
 
+QString SystemKeyBoard::shortCutString() const{
+    QString strAND;
+    QStringList listOR, listAND;
+    int i, j, l, ll;
+
+    l = m_shortcuts.size();
+    for (i = 0, l = m_shortcuts.size(); i < l; i++){
+        listAND.clear();
+        for (j = 0, ll = m_shortcuts[i].size(); j < ll; j++){
+            int shortCut = m_shortcuts[i][j];
+            listAND.append(Wanok::getKeySequenceFromInt(shortCut)
+                           .toString());
+        }
+        strAND = listAND.join(" + ");
+        listOR.append(strAND);
+    }
+
+    return listOR.join(" | ");
+}
+
+// -------------------------------------------------------
+
+bool SystemKeyBoard::isEqual(int key) const{
+    int i, l, ll;
+
+    l = m_shortcuts.size();
+    for (i = 0; i < l; i++){
+        ll = m_shortcuts[i].size();
+        if (ll == 1){
+            if (m_shortcuts[i][0] == key)
+                return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
+
 bool SystemKeyBoard::openDialog(){
-    /*
     SystemKeyBoard key;
     key.setCopy(*this);
-    DialogSystemClassSkill dialog(skill);
+    DialogSystemKeyBoard dialog(key);
     if (dialog.exec() == QDialog::Accepted){
-        setCopy(skill);
+        setCopy(key);
         return true;
     }
-    */
+
     return false;
 }
 
@@ -98,18 +141,13 @@ void SystemKeyBoard::setCopy(const SystemKeyBoard& k){
 QList<QStandardItem *> SystemKeyBoard::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;
+    QStandardItem* itemShortCut = new QStandardItem;
+
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setText(toString());
+    itemShortCut->setText(shortCutString());
     row.append(item);
-    /*
-    QStandardItem* itemSkill = new QStandardItem;
-    QStandardItem* itemLevel = new QStandardItem;
-    itemSkill->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemSkill->setText(toString());
-    itemLevel->setData(QVariant::fromValue(level()));
-    itemLevel->setText(QString::number(level()));
-    row.append(itemSkill);
-    row.append(itemLevel);
-    */
+    row.append(itemShortCut);
 
     return row;
 }
@@ -122,6 +160,7 @@ QList<QStandardItem *> SystemKeyBoard::getModelRow() const{
 
 void SystemKeyBoard::read(const QJsonObject &json){
     SystemLang::read(json);
+
     m_abbreviation = json["abr"].toString();
 
     QJsonArray jsonShort = json["sc"].toArray();

@@ -174,7 +174,9 @@ HEADERS += \
     Dialogs/Systems/dialogsystemparameter.h \
     Dialogs/Commands/dialogcommandmoveobject.h \
     Enums/commandmovekind.h \
-    Models/System/systemcommandmove.h
+    Models/System/systemcommandmove.h \
+    Dialogs/Systems/dialogsystemkeyboard.h \
+    Enums/keyboardenginekind.h
 
 SOURCES += \
     main.cpp \
@@ -310,7 +312,8 @@ SOURCES += \
     Models/System/systemmapobject.cpp \
     Dialogs/Systems/dialogsystemparameter.cpp \
     Dialogs/Commands/dialogcommandmoveobject.cpp \
-    Models/System/systemcommandmove.cpp
+    Models/System/systemcommandmove.cpp \
+    Dialogs/Systems/dialogsystemkeyboard.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -359,7 +362,8 @@ FORMS += \
     Dialogs/Commands/dialogcommandteleportobjectselect.ui \
     Dialogs/dialogexport.ui \
     Dialogs/Systems/dialogsystemparameter.ui \
-    Dialogs/Commands/dialogcommandmoveobject.ui
+    Dialogs/Commands/dialogcommandmoveobject.ui \
+    Dialogs/Systems/dialogsystemkeyboard.ui
 
 OTHER_FILES += \
     style.qss

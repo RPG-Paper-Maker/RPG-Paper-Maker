@@ -40,6 +40,8 @@ public:
     virtual ~SystemKeyBoard();
     QString abbreviation() const;
     void appendShortCut(QVector<int> v);
+    QString shortCutString() const;
+    bool isEqual(int key) const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemKeyBoard &k);

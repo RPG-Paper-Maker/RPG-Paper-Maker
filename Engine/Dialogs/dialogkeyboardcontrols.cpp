@@ -39,6 +39,10 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
 
     // Engine keyBoard
     ui->treeViewEngine->initializeModel(settings->keyBoardDatas()->model());
+    ui->treeViewEngine->setColumnWidth(0,250);
+    ui->treeViewEngine->setColumnWidth(1,100);
+    ui->treeViewEngine->setCanMove(false);
+    ui->treeViewEngine->setHasContextMenu(false);
 
     // Game keyboard
     ui->treeViewGame->initializeModel(m_gameKeyBoardDatas->model());

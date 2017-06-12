@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "systemkeyboard.h"
+#include "keyboardenginekind.h"
 
 // -------------------------------------------------------
 //
@@ -54,6 +55,8 @@ public:
     void setKeyRight(int k);
     void setDefaultEngine();
     void setDefaultGame();
+
+    bool isEqual(int key, KeyBoardEngineKind kind) const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

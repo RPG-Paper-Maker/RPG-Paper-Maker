@@ -104,6 +104,7 @@ public:
     static void deleteAllFiles(QString pathSource);
     static QString getFormatNumber(int number, int format = 4, int type = 10);
     static QKeySequence getKeySequence(QKeyEvent *event);
+    static QKeySequence getKeySequenceFromInt(int keyInt);
 
 protected:
     Project* p_project;

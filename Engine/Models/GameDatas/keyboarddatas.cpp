@@ -30,7 +30,8 @@
 KeyBoardDatas::KeyBoardDatas()
 {
     m_model = new QStandardItemModel;
-    m_model->setHorizontalHeaderLabels(QStringList({"Description"}));
+    m_model->setHorizontalHeaderLabels(QStringList({"Description",
+                                                    "ShortCut"}));
 }
 
 KeyBoardDatas::~KeyBoardDatas()
@@ -82,22 +83,22 @@ void KeyBoardDatas::setDefaultEngine(){
     // Keys assigns
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor up"),
                                "CursorUp");
-    super->appendShortCut(QVector<int>({38}));
+    super->appendShortCut(QVector<int>({16777235}));
     super->appendShortCut(QVector<int>({90}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor down"),
                                "CursorDown");
-    super->appendShortCut(QVector<int>({40}));
+    super->appendShortCut(QVector<int>({16777237}));
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor left"),
                                "CursorLeft");
-    super->appendShortCut(QVector<int>({37}));
+    super->appendShortCut(QVector<int>({16777234}));
     super->appendShortCut(QVector<int>({81}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor right"),
                                "CursorRight");
-    super->appendShortCut(QVector<int>({39}));
+    super->appendShortCut(QVector<int>({16777236}));
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
     setDefault(list);
@@ -121,27 +122,27 @@ void KeyBoardDatas::setDefaultGame(){
     // Keys assigns
     super = new SystemKeyBoard(i++, new LangsTranslation("Move up"),
                                "Up");
-    super->appendShortCut(QVector<int>({38}));
+    super->appendShortCut(QVector<int>({16777235}));
     super->appendShortCut(QVector<int>({90}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move down"),
                                "Down");
-    super->appendShortCut(QVector<int>({40}));
+    super->appendShortCut(QVector<int>({16777237}));
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move left"),
                                "Left");
-    super->appendShortCut(QVector<int>({37}));
+    super->appendShortCut(QVector<int>({16777234}));
     super->appendShortCut(QVector<int>({81}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move right"),
                                "Right");
-    super->appendShortCut(QVector<int>({39}));
+    super->appendShortCut(QVector<int>({16777236}));
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Action"),
                                "Action");
-    super->appendShortCut(QVector<int>({13}));
+    super->appendShortCut(QVector<int>({16777221}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Cancel"),
                                "Cancel");
@@ -150,7 +151,7 @@ void KeyBoardDatas::setDefaultGame(){
     super = new SystemKeyBoard(i++,
                                new LangsTranslation("Open / Close main menu"),
                                "MainMenu");
-    super->appendShortCut(QVector<int>({27}));
+    super->appendShortCut(QVector<int>({16777216}));
     list.append(super);
     setDefault(list);
 
@@ -166,17 +167,24 @@ void KeyBoardDatas::setDefaultGame(){
 // -------------------------------------------------------
 
 void KeyBoardDatas::setDefault(QVector<SystemKeyBoard *> &list){
-    QStandardItem* item;
     SystemKeyBoard* super;
+    QList<QStandardItem*> row;
 
     for (int i = 0; i < list.size(); i++){
         super = list.at(i);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(super->toString());
-        m_model->appendRow(item);
+        row = super->getModelRow();
+        m_model->appendRow(row);
     }
+}
+
+// -------------------------------------------------------
+
+bool KeyBoardDatas::isEqual(int key, KeyBoardEngineKind kind) const{
+    int idKey = (int) kind;
+    SystemKeyBoard* super = ((SystemKeyBoard*) m_model->item(idKey)->data()
+                             .value<quintptr>());
+
+    return super->isEqual(key);
 }
 
 // -------------------------------------------------------
@@ -186,17 +194,15 @@ void KeyBoardDatas::setDefault(QVector<SystemKeyBoard *> &list){
 // -------------------------------------------------------
 
 void KeyBoardDatas::read(const QJsonObject &json){
+    QList<QStandardItem*> row;
     QJsonArray tab = json["list"].toArray();
 
     // Controls
     for (int i = 0; i < tab.size(); i++){
-        QStandardItem* item = new QStandardItem;
         SystemKeyBoard* super = new SystemKeyBoard;
         super->read(tab[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(super->toString());
-        m_model->appendRow(item);
+        row = super->getModelRow();
+        m_model->appendRow(row);
     }
 
     // Menu controls

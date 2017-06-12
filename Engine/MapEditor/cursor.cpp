@@ -21,6 +21,7 @@
 #include <QtMath>
 #include "wanok.h"
 #include "floors.h"
+#include "keyboardenginekind.h"
 
 // -------------------------------------------------------
 //
@@ -96,8 +97,9 @@ Portion Cursor::getPortion() const{
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h){
     int x = getSquareX(), z = getSquareZ(), xPlus, zPlus;
+    KeyBoardDatas* keyBoardDatas = Wanok::get()->project()->keyBoardDatas();
 
-    if (key == Qt::Key_Z){
+    if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp)){
         xPlus = (int)(m_squareSize * (qRound(qCos(angle * M_PI / 180.0))));
         zPlus = (int)(m_squareSize * (qRound(qSin(angle * M_PI / 180.0))));
         if ((z > 0 && zPlus < 0) || (z < h && zPlus > 0))
@@ -105,7 +107,7 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h){
         if (zPlus == 0 && ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0)))
             m_position->setX(m_position->x() + xPlus);
     }
-    else if (key == Qt::Key_S){
+    else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorDown)){
         xPlus = (int)(m_squareSize * (qRound(qCos(angle * M_PI / 180.0))));
         zPlus = (int)(m_squareSize * (qRound(qSin(angle * M_PI / 180.0))));
         if ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0))
@@ -113,17 +115,21 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h){
         if (zPlus == 0 && ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0)))
             m_position->setX(m_position->x() - xPlus);
     }
-    else if (key == Qt::Key_Q){
-        xPlus = (int)(m_squareSize * (qRound(qCos((angle - 90) * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize * (qRound(qSin((angle - 90) * M_PI / 180.0))));
+    else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorLeft)){
+        xPlus = (int)(m_squareSize *
+                      (qRound(qCos((angle - 90) * M_PI / 180.0))));
+        zPlus = (int)(m_squareSize *
+                      (qRound(qSin((angle - 90) * M_PI / 180.0))));
         if ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0))
             m_position->setX(m_position->x() + xPlus);
         if (xPlus == 0 && ((z > 0 && zPlus < 0) || (z < h - 1 && zPlus > 0)))
             m_position->setZ(m_position->z() + zPlus);
     }
-    else if (key == Qt::Key_D){
-        xPlus = (int)(m_squareSize * (qRound(qCos((angle - 90) * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize * (qRound(qSin((angle - 90) * M_PI / 180.0))));
+    else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorRight)){
+        xPlus = (int)(m_squareSize *
+                      (qRound(qCos((angle - 90) * M_PI / 180.0))));
+        zPlus = (int)(m_squareSize *
+                      (qRound(qSin((angle - 90) * M_PI / 180.0))));
         if ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0))
             m_position->setX(m_position->x() - xPlus);
         if (xPlus == 0 && ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0)))
