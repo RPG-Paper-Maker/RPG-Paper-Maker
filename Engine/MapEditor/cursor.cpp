@@ -19,9 +19,13 @@
 
 #include "cursor.h"
 #include <QtMath>
+#include <QDateTime>
 #include "wanok.h"
 #include "floors.h"
 #include "keyboardenginekind.h"
+
+const int Cursor::m_frameDuration = 250;
+const int Cursor::m_frameNumber = 4;
 
 // -------------------------------------------------------
 //
@@ -34,13 +38,17 @@ Cursor::Cursor(QVector3D* position) :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer)
 {
-
+    // Loading textures
+    m_texture = new QOpenGLTexture(
+                QImage(":/textures/Ressources/editor_cursor.png"));
+    m_texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+    m_texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 }
 
 Cursor::~Cursor()
 {
     delete m_program;
-    m_program = nullptr;
+    delete m_texture;
 }
 
 void Cursor::initializeSquareSize(int s){
@@ -150,13 +158,19 @@ void Cursor::initialize(){
 void Cursor::initializeVertices(){
 
     QVector3D pos(0.0f, 0.15f, 0.0f);
+    float w = 1.0f / 4.0f;
+    float h = 1.0f;
 
     // Vertices
     m_vertices.clear();
-    m_vertices.append(Floor::verticesQuad[0] + pos);
-    m_vertices.append(Floor::verticesQuad[1] * m_squareSize + pos);
-    m_vertices.append(Floor::verticesQuad[2] * m_squareSize + pos);
-    m_vertices.append(Floor::verticesQuad[3] * m_squareSize + pos);
+    m_vertices.append(Vertex(Floor::verticesQuad[0] * m_squareSize + pos,
+                      QVector2D(0.0f, 0.0f)));
+    m_vertices.append(Vertex(Floor::verticesQuad[1] * m_squareSize + pos,
+                      QVector2D(w, 0.0f)));
+    m_vertices.append(Vertex(Floor::verticesQuad[2] * m_squareSize + pos,
+                      QVector2D(w, h)));
+    m_vertices.append(Vertex(Floor::verticesQuad[3] * m_squareSize + pos,
+                      QVector2D(0.0f, h)));
 
     // indexes
     m_indexes.clear();
@@ -181,13 +195,14 @@ void Cursor::initializeGL(){
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");
     u_cursorPosition = m_program->uniformLocation("cursorPosition");
+    u_frameTex = m_program->uniformLocation("frameTex");
 
     // Create Buffer (Do not release until VAO is created)
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
     m_vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_vertexBuffer.allocate(m_vertices.constData(), Floor::nbVerticesQuad *
-                            sizeof(QVector3D));
+                            sizeof(Vertex));
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
@@ -199,7 +214,13 @@ void Cursor::initializeGL(){
     m_vao.create();
     m_vao.bind();
     m_program->enableAttributeArray(0);
-    m_program->setAttributeBuffer(0, GL_FLOAT, 0,3,0);
+    m_program->enableAttributeArray(1);
+    m_program->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
+                                        Vertex::positionTupleSize,
+                                        Vertex::stride());
+    m_program->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
+                                        Vertex::texCoupleSize,
+                                        Vertex::stride());
 
     // Release
     m_vao.release();
@@ -211,13 +232,25 @@ void Cursor::initializeGL(){
 // -------------------------------------------------------
 
 void Cursor::paintGL(QMatrix4x4 &modelviewProjection){
+
+    // Calculating frame
+    int totalTime = QTime::currentTime().msecsSinceStartOfDay() %
+            (m_frameDuration * m_frameNumber);
+    int frame = totalTime / m_frameDuration;
+
     m_program->bind();
+
+    // Uniforms
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
     m_program->setUniformValue(u_cursorPosition, *m_position);
+    m_program->setUniformValue(u_frameTex, frame / (float)(m_frameNumber));
+
+    // Draw
     {
       m_vao.bind();
+      m_texture->bind();
       m_indexBuffer.bind();
-      glDrawElements(GL_TRIANGLES, Floor::nbIndexesQuad, GL_UNSIGNED_INT, NULL);
+      glDrawElements(GL_TRIANGLES, Floor::nbIndexesQuad, GL_UNSIGNED_INT, 0);
       m_indexBuffer.release();
       m_vao.release();
     }

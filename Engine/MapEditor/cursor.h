@@ -24,7 +24,9 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLFunctions>
+#include <QOpenGLTexture>
 #include "position3d.h"
+#include "vertex.h"
 
 // -------------------------------------------------------
 //
@@ -67,10 +69,15 @@ protected:
     QOpenGLBuffer m_indexBuffer;
     QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram* m_program;
-    QVector<QVector3D> m_vertices;
+    QVector<Vertex> m_vertices;
     QVector<GLuint> m_indexes;
+    QOpenGLTexture* m_texture;
     int u_modelviewProjection;
     int u_cursorPosition;
+    int u_frameTex;
+
+    static const int m_frameDuration;
+    static const int m_frameNumber;
 };
 
 #endif // CURSOR_H

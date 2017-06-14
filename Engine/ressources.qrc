@@ -20,4 +20,10 @@
         <file>Shaders/grid.frag</file>
         <file>Shaders/grid.vert</file>
     </qresource>
+    <qresource prefix="/textures">
+        <file>Ressources/editor_cursor.png</file>
+        <file>Ressources/event_square.png</file>
+        <file>Ressources/event_square_select.png</file>
+        <file>Ressources/tileset_cursor.png</file>
+    </qresource>
 </RCC>
