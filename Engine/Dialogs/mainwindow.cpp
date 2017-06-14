@@ -339,7 +339,15 @@ void MainWindow::on_actionSwitches_manager_triggered(){
 
 void MainWindow::on_actionKeyboard_controls_triggered(){
     DialogKeyBoardControls dialog(project, Wanok::get()->engineSettings());
-    openDialog(dialog);
+    if (openDialog(dialog) == QDialog::Accepted){
+        Wanok::get()->saveEngineSettings();
+        project->writeKeyBoardDatas();
+        project->readKeyBoardDatas();
+    }
+    else{
+        Wanok::get()->loadEngineSettings();
+        project->readKeyBoardDatas();
+    }
 }
 
 

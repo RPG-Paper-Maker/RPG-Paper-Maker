@@ -30,7 +30,8 @@
 KeyBoardDatas::KeyBoardDatas()
 {
     m_model = new QStandardItemModel;
-    m_model->setHorizontalHeaderLabels(QStringList({"Description",
+    m_model->setHorizontalHeaderLabels(QStringList({"Abbreviation",
+                                                    "Description",
                                                     "ShortCut"}));
 }
 
@@ -142,6 +143,7 @@ void KeyBoardDatas::setDefaultGame(){
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Action"),
                                "Action");
+    super->appendShortCut(QVector<int>({16777220}));
     super->appendShortCut(QVector<int>({16777221}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Cancel"),
@@ -224,8 +226,11 @@ void KeyBoardDatas::write(QJsonObject &json) const{
         QJsonObject jsonKey;
         SystemKeyBoard* super = ((SystemKeyBoard*)m_model->item(i)->data()
                                  .value<quintptr>());
-        super->write(jsonKey);
-        tab.append(jsonKey);
+
+        if (super != nullptr){
+            super->write(jsonKey);
+            tab.append(jsonKey);
+        }
     }
     json["list"] = tab;
 

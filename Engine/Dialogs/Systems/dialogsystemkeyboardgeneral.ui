@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogSystemKeyBoard</class>
- <widget class="QDialog" name="DialogSystemKeyBoard">
+ <class>DialogSystemKeyBoardGeneral</class>
+ <widget class="QDialog" name="DialogSystemKeyBoardGeneral">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>119</height>
+    <width>444</width>
+    <height>157</height>
    </rect>
   </property>
-  <property name="focusPolicy">
-   <enum>Qt::NoFocus</enum>
-  </property>
   <property name="windowTitle">
-   <string>Enter shortcuts...</string>
+   <string>Keyboard...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -41,59 +38,51 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
+            <string>Abbreviation (for JavaScript):</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditAbbreviation"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Description:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditDescription"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Shortcut:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelShortcut">
+           <property name="text">
             <string>TextLabel</string>
            </property>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>338</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
-         <item>
-          <widget class="QPushButton" name="pushButtonRemoveLast">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
+          <widget class="QPushButton" name="pushButtonChange">
            <property name="text">
-            <string>Remove last</string>
+            <string>Change...</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonRemoveAll">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="text">
-            <string>Remove all</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>208</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -118,7 +107,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogSystemKeyBoard</receiver>
+   <receiver>DialogSystemKeyBoardGeneral</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -134,7 +123,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogSystemKeyBoard</receiver>
+   <receiver>DialogSystemKeyBoardGeneral</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

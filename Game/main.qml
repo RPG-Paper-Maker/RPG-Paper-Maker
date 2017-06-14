@@ -97,7 +97,7 @@ Window {
 
         Keys.onPressed: {
             if (!Game.Wanok.isLoading()){
-                var key = Game.getCorrectedKey(event.key);
+                var key = event.key;
                 if (!event.isAutoRepeat){
                     Game.$keysPressed.unshift(key);
                     Game.onKeyPressed(key);
@@ -115,7 +115,7 @@ Window {
         Keys.onReleased: {
             if (!Game.Wanok.isLoading()){
                 if (event.isAutoRepeat) return;
-                var key = Game.getCorrectedKey(event.key);
+                var key = event.key;
                 Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
                 Game.onKeyReleased(key);
             }

@@ -18,7 +18,7 @@
 */
 
 #include "systemkeyboard.h"
-#include "dialogsystemkeyboard.h"
+#include "dialogsystemkeyboardgeneral.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -56,6 +56,8 @@ SystemKeyBoard::~SystemKeyBoard(){
 
 QString SystemKeyBoard::abbreviation() const { return m_abbreviation; }
 
+void SystemKeyBoard::setAbbreviation(QString s) { m_abbreviation = s; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -64,6 +66,13 @@ QString SystemKeyBoard::abbreviation() const { return m_abbreviation; }
 
 void SystemKeyBoard::appendShortCut(QVector<int> v){
     m_shortcuts.append(v);
+}
+
+// -------------------------------------------------------
+
+
+void SystemKeyBoard::updateLastShortCut(QVector<int> v){
+    m_shortcuts[m_shortcuts.size() - 1] = v;
 }
 
 // -------------------------------------------------------
@@ -78,8 +87,7 @@ QString SystemKeyBoard::shortCutString() const{
         listAND.clear();
         for (j = 0, ll = m_shortcuts[i].size(); j < ll; j++){
             int shortCut = m_shortcuts[i][j];
-            listAND.append(Wanok::getKeySequenceFromInt(shortCut)
-                           .toString());
+            listAND.append(Wanok::keyToString(shortCut));
         }
         strAND = listAND.join(" + ");
         listOR.append(strAND);
@@ -110,10 +118,30 @@ bool SystemKeyBoard::isEqual(int key) const{
 
 // -------------------------------------------------------
 
+void SystemKeyBoard::removeLast(){
+    if (!m_shortcuts.isEmpty())
+        m_shortcuts.removeLast();
+}
+
+// -------------------------------------------------------
+
+void SystemKeyBoard::removeAll(){
+    m_shortcuts.clear();
+}
+
+// -------------------------------------------------------
+
+QString SystemKeyBoard::toString() const{
+    return (QString(beginningText) + idToString() + QString(": ") +
+            m_abbreviation);
+}
+
+// -------------------------------------------------------
+
 bool SystemKeyBoard::openDialog(){
     SystemKeyBoard key;
     key.setCopy(*this);
-    DialogSystemKeyBoard dialog(key);
+    DialogSystemKeyBoardGeneral dialog(key);
     if (dialog.exec() == QDialog::Accepted){
         setCopy(key);
         return true;
@@ -134,19 +162,38 @@ SuperListItem* SystemKeyBoard::createCopy() const{
 
 void SystemKeyBoard::setCopy(const SystemKeyBoard& k){
     SuperListItem::setCopy(k);
+
+    // Abbreviation
+    m_abbreviation = k.m_abbreviation;
+
+    // Shortcuts
+    m_shortcuts.clear();
+    for (int i = 0; i < k.m_shortcuts.size(); i++){
+        m_shortcuts.append(QVector<int>());
+        for (int j = 0; j < k.m_shortcuts[i].size(); j++)
+            m_shortcuts[i].append(k.m_shortcuts[i][j]);
+    }
 }
 
 // -------------------------------------------------------
 
 QList<QStandardItem *> SystemKeyBoard::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
+    QStandardItem* itemAbbreviation = new QStandardItem;
+    QStandardItem* itemDescription = new QStandardItem;
     QStandardItem* itemShortCut = new QStandardItem;
 
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    item->setText(toString());
+    itemAbbreviation->setData(QVariant::fromValue(
+                                 reinterpret_cast<quintptr>(this)));
+    itemAbbreviation->setText(toString());
+    itemDescription->setData(QVariant::fromValue(
+                                 reinterpret_cast<quintptr>(this)));
+    itemDescription->setText(name());
+    itemShortCut->setData(QVariant::fromValue(
+                                 reinterpret_cast<quintptr>(this)));
     itemShortCut->setText(shortCutString());
-    row.append(item);
+    row.append(itemAbbreviation);
+    row.append(itemDescription);
     row.append(itemShortCut);
 
     return row;
@@ -173,6 +220,8 @@ void SystemKeyBoard::read(const QJsonObject &json){
         m_shortcuts.append(list);
     }
 }
+
+// -------------------------------------------------------
 
 void SystemKeyBoard::write(QJsonObject &json) const{
     SystemLang::write(json);

@@ -39,13 +39,17 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
 
     // Engine keyBoard
     ui->treeViewEngine->initializeModel(settings->keyBoardDatas()->model());
-    ui->treeViewEngine->setColumnWidth(0,250);
-    ui->treeViewEngine->setColumnWidth(1,100);
+    ui->treeViewEngine->setColumnWidth(0,150);
+    ui->treeViewEngine->setColumnWidth(1,150);
     ui->treeViewEngine->setCanMove(false);
     ui->treeViewEngine->setHasContextMenu(false);
 
     // Game keyboard
     ui->treeViewGame->initializeModel(m_gameKeyBoardDatas->model());
+    ui->treeViewGame->initializeNewItemInstance(new SystemKeyBoard);
+    ui->treeViewGame->setUpdateId(true);
+    ui->treeViewGame->setColumnWidth(0,150);
+    ui->treeViewGame->setColumnWidth(1,150);
     connect(ui->treeViewGame,
             SIGNAL(needsUpdateJson(SuperListItem*)), this,
             SLOT(on_updateJsonGame(SuperListItem*)));
@@ -59,9 +63,6 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
 
 DialogKeyBoardControls::~DialogKeyBoardControls()
 {
-    ui->treeViewGame->getModel()->removeRow(ui->treeViewGame->getModel()
-                                            ->invisibleRootItem()
-                                            ->rowCount()-1);
     delete ui;
 }
 

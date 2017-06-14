@@ -117,6 +117,17 @@ void Wanok::setProject(Project* p) { p_project = p; }
 
 void Wanok::setEngineSettings(EngineSettings* e) { m_engineSettings = e; }
 
+void Wanok::saveEngineSettings() const{
+    m_engineSettings->write();
+}
+
+void Wanok::loadEngineSettings(){
+    delete m_engineSettings;
+
+    m_engineSettings = new EngineSettings;
+    m_engineSettings->read();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -260,6 +271,26 @@ QKeySequence Wanok::getKeySequence(QKeyEvent *event){
 
 // -------------------------------------------------------
 
-QKeySequence Wanok::getKeySequenceFromInt(int keyInt){
-    return QKeySequence(keyInt);
+QString Wanok::keyToString(int keyInt){
+    QKeySequence seq(keyInt);
+    Qt::Key key = static_cast<Qt::Key>(keyInt);
+
+    if (key != Qt::Key_unknown){
+        switch (key) {
+        case Qt::Key_Control:
+            return "CTRL";
+        case Qt::Key_Shift:
+            return "SHIFT";
+        case Qt::Key_Alt:
+            return "ALT";
+        case Qt::Key_Meta:
+            return "META";
+        case Qt::Key_AltGr:
+            return "ALTGR";
+        default:
+            return seq.toString();
+        }
+    }
+
+    return "?";
 }

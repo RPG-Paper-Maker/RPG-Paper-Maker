@@ -97,7 +97,8 @@ Portion Cursor::getPortion() const{
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h){
     int x = getSquareX(), z = getSquareZ(), xPlus, zPlus;
-    KeyBoardDatas* keyBoardDatas = Wanok::get()->project()->keyBoardDatas();
+    KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
+            ->keyBoardDatas();
 
     if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp)){
         xPlus = (int)(m_squareSize * (qRound(qCos(angle * M_PI / 180.0))));
