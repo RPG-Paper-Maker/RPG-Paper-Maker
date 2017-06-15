@@ -40,22 +40,19 @@ Window {
     id: window
     title: qsTr("Game")
     //visibility: "FullScreen"
+
     width: 640
     height: 480
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
     minimumWidth: width
+
     visible: true
     Component.onCompleted: {
         setX(Screen.width / 2 - width / 2);
         setY(Screen.height / 2 - height / 2);
-        Game.$canvasWidth = width;
-        Game.$canvasHeight = height;
-        Game.$windowX = width / Game.$SCREEN_X;
-        Game.$windowY = height / Game.$SCREEN_Y;
         Game.$canvasHUD = canvas;
-        Game.initialize();
     }
 
     Timer {
@@ -76,6 +73,11 @@ Window {
         focus: true
 
         onInitializeGL: {
+            Game.$canvasWidth = canvas3d.width;
+            Game.$canvasHeight = canvas3d.height;
+            Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
+            Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
+            Game.initialize();
             Game.initializeGL(canvas3d);
         }
 
@@ -83,6 +85,7 @@ Window {
             if (!Game.Wanok.isLoading()){
                 Game.update();
                 Game.draw3D(canvas3d);
+                Game.drawHUD(canvas);
                 canvas.requestPaint();
             }
         }
@@ -98,6 +101,11 @@ Window {
         Keys.onPressed: {
             if (!Game.Wanok.isLoading()){
                 var key = event.key;
+
+                if (key === Qt.Key_F12){
+                    Game.quit();
+                }
+
                 if (!event.isAutoRepeat){
                     Game.$keysPressed.unshift(key);
                     Game.onKeyPressed(key);
@@ -128,9 +136,5 @@ Window {
     Canvas {
       id:canvas
       anchors.fill: parent
-      onPaint:{
-        if (!Game.Wanok.isLoading())
-            Game.drawHUD(canvas);
-      }
     }
 }

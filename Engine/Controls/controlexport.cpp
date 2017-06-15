@@ -108,13 +108,18 @@ QString ControlExport::generateWebStuff(QString path){
     // Write include.html
     m_project->scriptsDatas()->writeBrowser(path);
 
-    // Write three.js library
+    // Write three.js library and other .js files to include
     QDir dir(path);
     if (!dir.mkdir("js"))
         return "The directory js already exists.";
     QString pathJS = Wanok::pathCombine(path, "js");
     QFile::copy(Wanok::pathCombine(pathWeb, "three.js"),
                 Wanok::pathCombine(pathJS, "three.js"));
+    QFile::copy(Wanok::pathCombine(pathWeb, "index.js"),
+                Wanok::pathCombine(pathJS, "index.js"));
+    QFile::copy(Wanok::pathCombine(pathWeb, "utilities.js"),
+                Wanok::pathCombine(pathJS, "utilities.js"));
+
 
     return NULL;
 }

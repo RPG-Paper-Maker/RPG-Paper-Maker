@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>391</width>
-    <height>243</height>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -81,7 +81,7 @@
              <string>Deploy a desktop application</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -105,7 +105,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="labelDeployOS">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>OS:</string>
@@ -115,7 +115,7 @@
               <item row="0" column="1">
                <widget class="QComboBox" name="comboBoxOSDeploy">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <item>
                  <property name="text">
@@ -145,7 +145,7 @@
               <item row="1" column="0" colspan="2">
                <widget class="QCheckBox" name="checkBoxProtect">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Protect datas</string>

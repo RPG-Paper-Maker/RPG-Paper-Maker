@@ -51,7 +51,8 @@ function WindowBox(x, y, w, h, content, padding) {
     this.contentDimension = [
         x + padding[0],
         y + padding[1],
-        w - (2*padding[2]),h - (2*padding[3])
+        w - (2*padding[2]),
+        h - (2*padding[3])
     ];
 
     // Adjusting dimensions

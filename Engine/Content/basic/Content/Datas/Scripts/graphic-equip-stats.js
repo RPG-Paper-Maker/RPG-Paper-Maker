@@ -66,6 +66,7 @@ function GraphicEquipStats(gamePlayer, newValues){
             // Name of the stat
             graphicName = new GraphicText(statistic.name + ":", Align.Left);
             context.font = graphicName.font;
+            graphicName.updateContextFont(context);
             c = context.measureText(graphicName.text).width;
             if (c > maxLength)
                 maxLength = c;
@@ -76,6 +77,7 @@ function GraphicEquipStats(gamePlayer, newValues){
                                   : gamePlayer["max" + statistic.abbreviation];
             graphicValue = new GraphicText(txt, Align.Left);
             context.font = graphicValue.font;
+            graphicValue.updateContextFont(context);
             c = context.measureText(graphicValue.text).width;
             if (c > maxLengthValue)
                 maxLengthValue = c;
@@ -103,6 +105,7 @@ function GraphicEquipStats(gamePlayer, newValues){
     // Arrow
     this.graphicArrow = new GraphicText("->", Align.Left);
     context.font = this.graphicArrow.font;
+    this.graphicArrow.updateContextFont(context);
     this.arrowLength = context.measureText(this.graphicArrow.text).width;
 }
 

@@ -299,6 +299,8 @@ SceneBattle.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
+        $gameStack.bot().draw3D(canvas);
+
         switch(this.step){
         case 0:
             this.draw3DStep0(canvas); break;

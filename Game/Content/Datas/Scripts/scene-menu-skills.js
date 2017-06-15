@@ -57,9 +57,20 @@ function SceneMenuSkills() {
 
     // Update for changing tab
     this.updateForTab();
+
+    this.synchronize();
 }
 
 SceneMenuSkills.prototype = {
+
+    /** Synchronize informations with selected hero.
+    */
+    synchronize: function(){
+        this.windowInformations.content =
+             this.windowChoicesList.getCurrentContent();
+    },
+
+    // -------------------------------------------------------
 
     /** Update tab.
     */
@@ -83,7 +94,7 @@ SceneMenuSkills.prototype = {
         this.windowChoicesList.setContents(list);
     },
 
-     // -------------------------------------------------------
+    // -------------------------------------------------------
 
     update: function(){
 
@@ -122,17 +133,16 @@ SceneMenuSkills.prototype = {
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
             this.updateForTab();
 
+        // List
         this.windowChoicesList.onKeyPressedAndRepeat(key);
 
-        // Synchronize informations with selected hero
-        this.windowInformations.content =
-             this.windowChoicesList.getCurrentContent();
+        this.synchronize();
     },
 
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-
+        $gameStack.bot().draw3D(canvas);
     },
 
     // -------------------------------------------------------

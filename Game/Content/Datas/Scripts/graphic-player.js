@@ -70,6 +70,7 @@ function GraphicPlayer(gamePlayer){
                 var textName = new GraphicText(statistic.name + ":",
                                                Align.Left);
                 context.font = textName.font;
+                textName.updateContextFont(context);
                 var c = context.measureText(textName.text).width;
                 if (c > this.maxStatNamesLength) this.maxStatNamesLength = c;
                 this.listStatsNames.push(textName);
@@ -98,9 +99,11 @@ GraphicPlayer.prototype = {
         xCharacter = x + 80;
         yName = y + 20;
         this.graphicName.draw(context, xCharacter, yName, 0, 0);
+        this.graphicName.updateContextFont(context);
         xLevelName = xCharacter +
                 context.measureText(this.graphicName.text).width + 10;
         this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont(context);
         xLevel = xLevelName +
                 context.measureText(this.graphicLevelName.text).width;
         this.graphicLevel.draw(context, xLevel, yName, 0, 0);
@@ -120,9 +123,11 @@ GraphicPlayer.prototype = {
 
         yName = y + 10;
         this.graphicName.draw(context, x, yName, 0, 0);
+        this.graphicName.updateContextFont(context);
         xLevelName = x +
                 context.measureText(this.graphicName.text).width + 10;
         this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont(context);
         xLevel = xLevelName +
                 context.measureText(this.graphicLevelName.text).width;
         this.graphicLevel.draw(context, xLevel, yName, 0, 0);

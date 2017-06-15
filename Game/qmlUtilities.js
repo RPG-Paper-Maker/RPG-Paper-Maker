@@ -39,20 +39,4 @@ function quit(){
     Qt.quit();
 }
 
-/**
-    Correct some QML wrong key typing.
-    @param {number} key The key to correct.
-    @returns {number} The corrected key.
-*/
-function getCorrectedKey(key) {
-    if (key >= Qt.Key_0 && key <= Qt.Key_9) return key + 48;
-    else if (key === Qt.Key_Enter - 1 || key === Qt.Key_Enter) return 13;
-    else if (key === Qt.Key_Up) return 38;
-    else if (key === Qt.Key_Down) return 40;
-    else if (key === Qt.Key_Left) return 37;
-    else if (key === Qt.Key_Right) return 39;
-    else if (key === Qt.Key_Escape) return 27;
-    return key;
-}
-
 Qt.include("file:Content/Datas/Scripts/desktop/includes.js")

@@ -223,6 +223,7 @@ SceneMenuEquip.prototype = {
                      this.windowChoicesEquipment.currentSelectedIndex;
                 this.windowChoicesList.currentSelectedIndex = 0;
                 this.updateInformations();
+                this.windowChoicesList.selectCurrent();
             }
         }
         else{
@@ -293,7 +294,7 @@ SceneMenuEquip.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-
+        $gameStack.bot().draw3D(canvas);
     },
 
     // -------------------------------------------------------

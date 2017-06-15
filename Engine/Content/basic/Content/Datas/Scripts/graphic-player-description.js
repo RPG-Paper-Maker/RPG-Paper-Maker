@@ -75,6 +75,7 @@ function GraphicPlayerDescription(gamePlayer){
             statistic = $datasGame.battleSystem.statistics[id];
             graphicName = new GraphicText(statistic.name + ":", Align.Left);
             context.font = graphicName.font;
+            graphicName.updateContextFont(context);
             c = context.measureText(graphicName.text).width;
             if (c > maxLength) maxLength = c;
             if (j%7 === 6){
@@ -119,8 +120,10 @@ GraphicPlayerDescription.prototype = {
 
         yName = y + 10;
         this.graphicName.draw(context, x, yName, 0, 0);
+        this.graphicName.updateContextFont(context);
         xLevelName = x + context.measureText(this.graphicName.text).width + 10;
         this.graphicLevelName.draw(context, xLevelName, yName, 0, 0);
+        this.graphicLevelName.updateContextFont(context);
         xLevel = xLevelName +
                 context.measureText(this.graphicLevelName.text).width;
         this.graphicLevel.draw(context, xLevel, yName, 0, 0);

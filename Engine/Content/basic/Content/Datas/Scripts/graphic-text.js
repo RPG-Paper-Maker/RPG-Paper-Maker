@@ -63,6 +63,7 @@ function GraphicText(text, align, fontSize, fontName, x, y, w, h){
     this.align = align;
 
     // Font
+    this.fontWithoutResize = Wanok.createFont(fontSize, fontName);
     fontSize = Wanok.getScreenXY(fontSize);
     this.font = Wanok.createFont(fontSize, fontName);
     this.fontSize = fontSize;
@@ -98,6 +99,14 @@ GraphicText.prototype = {
         Bitmap.prototype.setCoords.call(this, x, y, w, h);
     },
 
+    /** Update the context font (without window resizing). This function is
+    *   used before a context.measureText.
+    *   @param {Canvas.Context} context The canvas context.
+    */
+    updateContextFont: function(context){
+        context.font = this.fontWithoutResize;
+    },
+
     // -------------------------------------------------------
 
     /** Drawing the text in choice box.
@@ -114,6 +123,11 @@ GraphicText.prototype = {
         if (typeof y === 'undefined') y = this.y;
         if (typeof w === 'undefined') w = this.w;
         if (typeof h === 'undefined') h = this.h;
+
+        x = Wanok.getScreenX(x);
+        y = Wanok.getScreenY(y);
+        w = Wanok.getScreenX(w);
+        h = Wanok.getScreenY(h);
 
         // Set context options
         context.fillStyle = "white";

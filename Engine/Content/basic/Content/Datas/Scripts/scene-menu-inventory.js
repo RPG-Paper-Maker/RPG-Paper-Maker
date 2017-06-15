@@ -62,9 +62,20 @@ function SceneMenuInventory() {
 
     // Update for changing tab
     this.updateForTab();
+
+    this.synchronize();
 }
 
 SceneMenuInventory.prototype = {
+
+    /** Update informations to display.
+    */
+    synchronize: function(){
+        this.windowInformations.content =
+             this.windowChoicesList.getCurrentContent();
+    },
+
+    // -------------------------------------------------------
 
     /** Update tab.
     */
@@ -138,17 +149,16 @@ SceneMenuInventory.prototype = {
         if (indexTab !== this.windowChoicesTabs.currentSelectedIndex)
             this.updateForTab();
 
+        // List
         this.windowChoicesList.onKeyPressedAndRepeat(key);
 
-        // Update informations to display
-        this.windowInformations.content =
-             this.windowChoicesList.getCurrentContent();
+        this.synchronize();
     },
 
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-
+        $gameStack.bot().draw3D(canvas);
     },
 
     // -------------------------------------------------------

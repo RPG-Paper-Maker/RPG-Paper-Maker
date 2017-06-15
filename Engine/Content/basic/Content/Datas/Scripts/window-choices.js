@@ -201,11 +201,20 @@ WindowChoices.prototype = {
     // -------------------------------------------------------
 
     /** Select a choice.
+    *   @param {number} i The index of the choice.
     */
     select: function(i){
         this.currentSelectedIndex = i;
         this.listWindows[this.currentSelectedIndex].backgroundColor
              = this.selectedBackgroundColor;
+    },
+
+    // -------------------------------------------------------
+
+    /** Select the current choice.
+    */
+    selectCurrent: function(){
+        this.select(this.currentSelectedIndex);
     },
 
     // -------------------------------------------------------
@@ -283,7 +292,7 @@ WindowChoices.prototype = {
             }
         }
 
-        this.select(this.currentSelectedIndex);
+        this.selectCurrent();
     },
 
     // -------------------------------------------------------

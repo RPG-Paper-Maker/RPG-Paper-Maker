@@ -49,11 +49,19 @@ function SceneDescriptionState() {
                                                null);
     this.windowInformations = new WindowBox(20, 100, 600, 340, null,
                                             [30,30,30,30]);
+    this.synchronize();
 }
 
 SceneDescriptionState.prototype = {
 
-     // -------------------------------------------------------
+    /** Synchronize informations with selected hero.
+    */
+    synchronize: function(){
+        this.windowInformations.content =
+             this.windowChoicesTabs.getCurrentContent();
+    },
+
+    // -------------------------------------------------------
 
     update: function(){
 
@@ -88,16 +96,13 @@ SceneDescriptionState.prototype = {
     onKeyPressedAndRepeat: function(key){
         var indexTab = this.windowChoicesTabs.currentSelectedIndex;
         this.windowChoicesTabs.onKeyPressedAndRepeat(key);
-
-        // Synchronize informations with selected hero
-        this.windowInformations.content =
-             this.windowChoicesTabs.getCurrentContent();
+        this.synchronize();
     },
 
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-
+        $gameStack.bot().draw3D(canvas);
     },
 
     // -------------------------------------------------------
