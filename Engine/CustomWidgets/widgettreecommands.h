@@ -48,21 +48,22 @@ public:
     void initializeParameters(QStandardItemModel* parameters);
     QStandardItem* getSelected() const;
     QStandardItemModel* getModel() const;
+    QList<QStandardItem*> getAllSelected() const;
 
 private:
     QStandardItemModel* p_model;
     GameDatas* p_gameDatas;
     ContextMenuList* m_contextMenuCommonCommands;
-    EventCommand* m_copiedCommand;
+    QList<QStandardItem*> m_copiedCommands;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
 
 protected:
-    QStandardItem* getRootOfCommand(QStandardItem* selected);
+    QStandardItem* getRootOfCommand(QStandardItem* selected) const;
     void newCommand(QStandardItem *selected);
     void editCommand(QStandardItem *selected, EventCommand *command);
-    void copyCommand(QStandardItem *, EventCommand *);
-    void pasteCommand(QStandardItem *);
+    void copyCommand();
+    void pasteCommand(QStandardItem *selected);
     QStandardItem* insertCommand(EventCommand* command, QStandardItem* root,
                                  int pos);
     void insertWhileBlock(QStandardItem *root, int pos);
@@ -74,10 +75,15 @@ protected:
     void deleteElseBlock(QStandardItem *root, int row);
     void deleteStartBattleBlock(QStandardItem *root, int row);
     void updateAllNodesString(QStandardItem* item);
+    void selectChildren(QStandardItem* item);
+    static bool itemLessThan(const QStandardItem* item1,
+                             const QStandardItem* item2);
+
     virtual void keyPressEvent(QKeyEvent *event);
-    virtual void mouseDoubleClickEvent(QMouseEvent * event);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
 
 private slots:
+    void onTreeViewClicked(const QModelIndex &);
     void showContextMenu(const QPoint & p);
     void contextNew();
     void contextEdit();

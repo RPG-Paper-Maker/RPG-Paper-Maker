@@ -104,6 +104,7 @@ private:
     int u_modelviewProjectionStatic;
     QOpenGLTexture* m_textureTileset;
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
+    QOpenGLTexture* m_textureObjectSquare;
 };
 
 #endif // MAP_H

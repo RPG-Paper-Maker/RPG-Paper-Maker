@@ -112,18 +112,19 @@ void SystemReaction::copyCommands(const QStandardItemModel* from,
 void SystemReaction::copyCommandsItem(const QStandardItem* from,
                                       QStandardItem* to)
 {
-    for (int i = 0; i < from->rowCount(); i++){
-        // Copy the current row
-        EventCommand* command = (EventCommand*) from->child(i)->data()
-                .value<quintptr>();
+    // Copy the current row
+    EventCommand* command = (EventCommand*) from->data().value<quintptr>();
+    if (command != nullptr){
         EventCommand* copyCommand = new EventCommand;
         copyCommand->setCopy(*command);
-        QStandardItem * item = new QStandardItem();
-        item->setData(QVariant::fromValue(
+        to->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(copyCommand)));
-        to->appendRow(item);
+        to->setText(from->text());
+    }
 
-        // Copy child
+    // Copy children
+    for (int i = 0; i < from->rowCount(); i++){
+        to->appendRow(new QStandardItem);
         copyCommandsItem(from->child(i), to->child(i));
     }
 }
@@ -131,10 +132,13 @@ void SystemReaction::copyCommandsItem(const QStandardItem* from,
 // -------------------------------------------------------
 
 void SystemReaction::deleteCommands(QStandardItem* item){
-    for (int i = 0; i < item->rowCount(); i++){
+    EventCommand* command = (EventCommand*) item->data().value<quintptr>();
+
+    for (int i = 0; i < item->rowCount(); i++)
         deleteCommands(item->child(i));
-        delete (EventCommand*) item->child(i)->data().value<quintptr>();
-    }
+
+    if (command != nullptr)
+        delete command;
 }
 
 // -------------------------------------------------------

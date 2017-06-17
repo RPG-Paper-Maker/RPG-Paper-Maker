@@ -33,13 +33,18 @@
 WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     QTreeView(parent),
     p_model(nullptr),
-    m_copiedCommand(nullptr),
     m_linkedObject(nullptr),
     m_parameters(nullptr)
 {
     this->setHeaderHidden(true);
     this->setIndentation(15);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setSelectionMode(
+                QAbstractItemView::SelectionMode::ContiguousSelection);
+    connect(this,
+            SIGNAL(clicked(QModelIndex)),
+            this,
+            SLOT(onTreeViewClicked(QModelIndex)));
 
     // Context menu connections
     m_contextMenuCommonCommands = ContextMenuList::createContextCommand(this);
@@ -49,8 +54,15 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
 
 WidgetTreeCommands::~WidgetTreeCommands()
 {
+    QStandardItem* copiedCommand;
+
     delete m_contextMenuCommonCommands;
-    if (m_copiedCommand != nullptr) delete m_copiedCommand;
+
+    for (int i = 0; i < m_copiedCommands.size(); i++){
+        copiedCommand = m_copiedCommands.at(i);
+        SystemReaction::deleteCommands(copiedCommand);
+        delete copiedCommand;
+    }
 }
 
 // -------------------------------------------------------
@@ -81,13 +93,53 @@ void WidgetTreeCommands::initializeParameters(QStandardItemModel* parameters){
 //  getSelected: returns the current selected item of the tree commands
 
 QStandardItem* WidgetTreeCommands::getSelected() const{
-    return p_model->itemFromIndex(this->selectionModel()->currentIndex());
+    QModelIndexList list = this->selectionModel()->selectedIndexes();
+
+    if (list.isEmpty())
+        return nullptr;
+    else
+        return p_model->itemFromIndex(list.first());
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
+    QList<QStandardItem*> list;
+    QStandardItem* item;
+    EventCommand* command;
+    QModelIndexList indexes = this->selectionModel()->selectedRows();
+    item = p_model->itemFromIndex(indexes.at(0));
+    command = (EventCommand*) item->data().value<quintptr>();
+
+    if (command != nullptr && command->kind() != EventCommandKind::None){
+        QStandardItem* root = getRootOfCommand(item);
+
+        list.append(item);
+        for (int i = 1; i < indexes.size(); i++){
+            item = p_model->itemFromIndex(indexes.at(i));
+            if (getRootOfCommand(item) == root){
+                command = (EventCommand*) item->data().value<quintptr>();
+                if (command != nullptr &&
+                    command->kind() != EventCommandKind::None)
+                {
+                    list.append(item);
+                }
+            }
+        }
+    }
+
+    // Sorting in order to be sure to have commands in right order
+    qSort(list.begin(), list.end(), WidgetTreeCommands::itemLessThan);
+
+    return list;
 }
 
 // -------------------------------------------------------
 //  getRootOfCommand: returns the root of the current selected command
 
-QStandardItem* WidgetTreeCommands::getRootOfCommand(QStandardItem* selected){
+QStandardItem* WidgetTreeCommands::getRootOfCommand(QStandardItem* selected)
+const
+{
     return (selected->parent() == nullptr) ? p_model->invisibleRootItem()
                                            : selected->parent();
 }
@@ -190,35 +242,71 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
 // -------------------------------------------------------
 //  copyCommand: copy the selected command
 
-void WidgetTreeCommands::copyCommand(QStandardItem* , EventCommand* ){
-    // TODO
+void WidgetTreeCommands::copyCommand(){
+    QList<QStandardItem*> list = getAllSelected();
+    QStandardItem* selected;
+    QStandardItem* copiedCommand;
+    EventCommand* command;
+
+    // Clear previous copy
+    for (int i = 0; i < m_copiedCommands.size(); i++){
+        copiedCommand = m_copiedCommands.at(i);
+        SystemReaction::deleteCommands(copiedCommand);
+        delete copiedCommand;
+    }
+    m_copiedCommands.clear();
+
+    // Copy new commands
+    for (int i = 0; i < list.size(); i++){
+        selected = list.at(i);
+        command = (EventCommand*) selected->data().value<quintptr>();
+        copiedCommand = new QStandardItem;
+
+        if (command != nullptr){
+            SystemReaction::copyCommandsItem(selected, copiedCommand);
+        }
+
+        m_copiedCommands.append(copiedCommand);
+    }
 }
 
 // -------------------------------------------------------
 //  pasteCommand: paste the copied command in the selected command
 
-void WidgetTreeCommands::pasteCommand(QStandardItem* ){
-    // TODO
+void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
+    QStandardItem* copiedCommand;
+    QStandardItem* root = getRootOfCommand(selected);
+    QStandardItem* copy;
+
+    // Paste copy and fill a new list of copies
+    for (int i = 0; i < m_copiedCommands.size(); i++){
+        copiedCommand = m_copiedCommands.at(i);
+        copy = new QStandardItem;
+        SystemReaction::copyCommandsItem(copiedCommand, copy);
+        root->insertRow(selected->row(), copy);
+        expand(copy->index());
+        updateAllNodesString(copy);
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeCommands::deleteCommand(QStandardItem* selected){
     EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
+
     if (command->isErasable()){
         QStandardItem* root = getRootOfCommand(selected);
 
         // If block of instructions, more commands to delete
         switch (command->kind()){
         case EventCommandKind::While:
-            SystemCommonReaction::deleteCommands(selected);
-            deleteEndBlock(root, selected->row() + 1); break;
+            deleteEndBlock(root, selected->row() + 1);
+            break;
         case EventCommandKind::If:
-            SystemCommonReaction::deleteCommands(selected);
             if (command->hasElse()) deleteElseBlock(root, selected->row() + 1);
-            deleteEndBlock(root, selected->row() + 1); break;
+            deleteEndBlock(root, selected->row() + 1);
+            break;
         case EventCommandKind::StartBattle:
-            SystemCommonReaction::deleteCommands(selected);
             if (command->isBattleWithoutGameOver())
                 deleteStartBattleBlock(root, selected->row() + 1);
             break;
@@ -227,7 +315,7 @@ void WidgetTreeCommands::deleteCommand(QStandardItem* selected){
         }
 
         // Delete selected command
-        delete command;
+        SystemReaction::deleteCommands(selected);
         root->removeRow(selected->row());
     }
 }
@@ -302,11 +390,8 @@ void WidgetTreeCommands::deleteEndBlock(QStandardItem *root, int row){
 // -------------------------------------------------------
 
 void WidgetTreeCommands::deleteElseBlock(QStandardItem *root, int row){
-    EventCommand* elseCommand = (EventCommand*)(root->child(row)->data()
-                                                .value<quintptr>());
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
-    delete elseCommand;
 }
 
 // -------------------------------------------------------
@@ -316,12 +401,10 @@ void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
                                                .value<quintptr>());
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
-    delete winCommand;
     EventCommand* loseCommand = (EventCommand*)(root->child(row)->data()
                                                 .value<quintptr>());
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
-    delete loseCommand;
     deleteEndBlock(root, row);
 }
 
@@ -335,6 +418,74 @@ void WidgetTreeCommands::updateAllNodesString(QStandardItem *item){
         item->child(i)->setText(command->toString(m_linkedObject,
                                                   m_parameters));
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::selectChildren(QStandardItem* item){
+    QModelIndex index = item->index();
+
+    // Select children
+    for (int i = 0; i < item->rowCount(); i++){
+        QModelIndex childIndex = p_model->index(i, 0, index);
+        this->selectionModel()->select(childIndex,
+                                       QItemSelectionModel::Select);
+        selectChildren(item->child(i));
+    }
+
+    // Select others (end etc.)
+    EventCommand* command = (EventCommand*) item->data().value<quintptr>();
+    QStandardItem* root = getRootOfCommand(item);
+
+    if (command != nullptr){
+        switch(command->kind()){
+        case EventCommandKind::While:
+            this->selectionModel()->select(root->child(item->row()+1)->index(),
+                                           QItemSelectionModel::Select);
+            break;
+        case EventCommandKind::EndWhile:
+            this->selectionModel()->select(root->child(item->row()-1)->index(),
+                                           QItemSelectionModel::Select);
+            selectChildren(root->child(item->row()-1));
+            break;
+        case EventCommandKind::StartBattle:
+            if (command->isBattleWithoutGameOver()){
+                this->selectionModel()->select(
+                            root->child(item->row()+1)->index(),
+                            QItemSelectionModel::Select);
+                selectChildren(root->child(item->row()+1));
+                this->selectionModel()->select(
+                            root->child(item->row()+2)->index(),
+                            QItemSelectionModel::Select);
+                selectChildren(root->child(item->row()+2));
+                this->selectionModel()->select(
+                            root->child(item->row()+3)->index(),
+                            QItemSelectionModel::Select);
+            }
+            break;
+        case EventCommandKind::IfWin:
+            /*
+            this->selectionModel()->select(
+                        root->child(item->row()-1)->index(),
+                        QItemSelectionModel::Select);
+            selectChildren(root->child(item->row()));
+            this->selectionModel()->select(root->child(item->row()+1)->index(),
+                                           QItemSelectionModel::Select);
+            selectChildren(root->child(item->row()+1));
+            this->selectionModel()->select(root->child(item->row()+2)->index(),
+                                           QItemSelectionModel::Select);
+            */
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+bool WidgetTreeCommands::itemLessThan(const QStandardItem* item1,
+                                      const QStandardItem* item2)
+{
+    return item1->row() < item2->row();
 }
 
 // -------------------------------------------------------
@@ -352,6 +503,10 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
 
     if (actions.at(0)->shortcut().matches(seq))
         contextNew();
+    else if (actions.at(3)->shortcut().matches(seq))
+        contextCopy();
+    else if (actions.at(4)->shortcut().matches(seq))
+        contextPaste();
     else if (actions.at(6)->shortcut().matches(seq))
         contextDelete();
 }
@@ -380,26 +535,38 @@ void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 //
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &){
+    QModelIndexList l = this->selectionModel()->selectedIndexes();
+
+    for (int i = 0; i < l.size(); i++)
+        selectChildren(p_model->itemFromIndex(l.at(i)));
+}
+
+// -------------------------------------------------------
+//
 //  CONTEXT MENU SLOTS
 //
 // -------------------------------------------------------
+
 // -------------------------------------------------------
 //  showContextMenu: if right clicking, open this menu context
 
 void WidgetTreeCommands::showContextMenu(const QPoint & p){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr){
+    if (selected != nullptr)
         m_contextMenuCommonCommands->showContextMenu(p);
-    }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextNew(){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr){
+    if (selected != nullptr)
         newCommand(selected);
-    }
 }
 
 // -------------------------------------------------------
@@ -407,19 +574,16 @@ void WidgetTreeCommands::contextNew(){
 void WidgetTreeCommands::contextEdit(){
     QStandardItem* selected = getSelected();
     EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
-    if (selected != nullptr && command->kind() != EventCommandKind::None){
+    if (selected != nullptr && command->kind() != EventCommandKind::None)
         editCommand(selected, command);
-    }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextCopy(){
     QStandardItem* selected = getSelected();
-    EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
-    if (selected != nullptr && command->kind() != EventCommandKind::None){
-        copyCommand(selected,command);
-    }
+    if (selected != nullptr)
+        copyCommand();
 }
 
 // -------------------------------------------------------

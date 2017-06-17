@@ -86,6 +86,13 @@ Map::Map(int id) :
     texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
     m_texturesCharacters[1] = texture;
+
+    m_textureObjectSquare = new QOpenGLTexture(
+                QImage(":/textures/Ressources/object_square.png"));
+    m_textureObjectSquare->setMinificationFilter(
+                QOpenGLTexture::Filter::Nearest);
+    m_textureObjectSquare->setMagnificationFilter(
+                QOpenGLTexture::Filter::Nearest);
 }
 
 Map::Map(MapProperties* properties) :
@@ -117,6 +124,8 @@ Map::~Map() {
     QHash<int, QOpenGLTexture*>::iterator j;
     for (j = m_texturesCharacters.begin(); j != m_texturesCharacters.end(); j++)
         delete j.value();
+
+    delete m_textureObjectSquare;
 }
 
 MapProperties* Map::mapProperties() const { return m_mapProperties; }
@@ -532,14 +541,22 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
         }
     }
 
-    m_texturesCharacters[1]->bind();
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions[portion];
-                if (mapPortion != nullptr){
-                    mapPortion->paintObjects();
+    QOpenGLTexture* texture;
+    QHash<int, QOpenGLTexture*>::iterator l;
+    for (l = m_texturesCharacters.begin();
+         l != m_texturesCharacters.end();
+         l++)
+    {
+        texture = l.value();
+        texture->bind();
+        for (int i = -m_portionsRay; i <= m_portionsRay; i++){
+            for (int j = -m_portionsRay; j <= m_portionsRay; j++){
+                for (int k = -m_portionsRay; k <= m_portionsRay; k++){
+                    Portion portion(i, j, k);
+                    MapPortion* mapPortion = m_mapPortions[portion];
+                    if (mapPortion != nullptr){
+                        mapPortion->paintObjects();
+                    }
                 }
             }
         }
