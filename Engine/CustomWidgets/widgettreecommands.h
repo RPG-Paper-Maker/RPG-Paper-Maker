@@ -70,12 +70,13 @@ protected:
     void insertIfBlock(EventCommand* command, QStandardItem *root, int pos);
     void insertElseBlock(QStandardItem *root, int pos);
     void insertStartBattle(QStandardItem *root, int pos);
-    void deleteCommand(QStandardItem *selected);
+    void deleteCommand();
     void deleteEndBlock(QStandardItem *root, int row);
     void deleteElseBlock(QStandardItem *root, int row);
     void deleteStartBattleBlock(QStandardItem *root, int row);
     void updateAllNodesString(QStandardItem* item);
     void selectChildren(QStandardItem* item);
+    void selectChildrenOnly(QStandardItem* item);
     static bool itemLessThan(const QStandardItem* item1,
                              const QStandardItem* item2);
 

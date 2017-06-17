@@ -93,12 +93,12 @@ void WidgetTreeCommands::initializeParameters(QStandardItemModel* parameters){
 //  getSelected: returns the current selected item of the tree commands
 
 QStandardItem* WidgetTreeCommands::getSelected() const{
-    QModelIndexList list = this->selectionModel()->selectedIndexes();
+    QList<QStandardItem*> list = getAllSelected();
 
     if (list.isEmpty())
         return nullptr;
     else
-        return p_model->itemFromIndex(list.first());
+        return list.first();
 }
 
 // -------------------------------------------------------
@@ -108,28 +108,29 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
     QStandardItem* item;
     EventCommand* command;
     QModelIndexList indexes = this->selectionModel()->selectedRows();
-    item = p_model->itemFromIndex(indexes.at(0));
-    command = (EventCommand*) item->data().value<quintptr>();
 
-    if (command != nullptr && command->kind() != EventCommandKind::None){
-        QStandardItem* root = getRootOfCommand(item);
+    if (!indexes.isEmpty()){
+        item = p_model->itemFromIndex(indexes.at(0));
+        command = (EventCommand*) item->data().value<quintptr>();
 
-        list.append(item);
-        for (int i = 1; i < indexes.size(); i++){
-            item = p_model->itemFromIndex(indexes.at(i));
-            if (getRootOfCommand(item) == root){
-                command = (EventCommand*) item->data().value<quintptr>();
-                if (command != nullptr &&
-                    command->kind() != EventCommandKind::None)
-                {
-                    list.append(item);
+        if (command != nullptr){
+            QStandardItem* root = getRootOfCommand(item);
+
+            list.append(item);
+            for (int i = 1; i < indexes.size(); i++){
+                item = p_model->itemFromIndex(indexes.at(i));
+                if (getRootOfCommand(item) == root){
+                    command = (EventCommand*) item->data().value<quintptr>();
+                    if (command != nullptr){
+                        list.append(item);
+                    }
                 }
             }
         }
-    }
 
-    // Sorting in order to be sure to have commands in right order
-    qSort(list.begin(), list.end(), WidgetTreeCommands::itemLessThan);
+        // Sorting in order to be sure to have commands in right order
+        qSort(list.begin(), list.end(), WidgetTreeCommands::itemLessThan);
+    }
 
     return list;
 }
@@ -260,13 +261,12 @@ void WidgetTreeCommands::copyCommand(){
     for (int i = 0; i < list.size(); i++){
         selected = list.at(i);
         command = (EventCommand*) selected->data().value<quintptr>();
-        copiedCommand = new QStandardItem;
 
-        if (command != nullptr){
+        if (command != nullptr && command->kind() != EventCommandKind::None){
+            copiedCommand = new QStandardItem;
             SystemReaction::copyCommandsItem(selected, copiedCommand);
+            m_copiedCommands.append(copiedCommand);
         }
-
-        m_copiedCommands.append(copiedCommand);
     }
 }
 
@@ -291,32 +291,23 @@ void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::deleteCommand(QStandardItem* selected){
-    EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
+void WidgetTreeCommands::deleteCommand(){
+    QList<QStandardItem*> list = getAllSelected();
+    QStandardItem* selected;
+    EventCommand* command;
+    QStandardItem* root;
 
-    if (command->isErasable()){
-        QStandardItem* root = getRootOfCommand(selected);
+    for (int i = 0; i < list.size(); i++){
+        selected = list.at(i);
+        command = (EventCommand*) selected->data().value<quintptr>();
 
-        // If block of instructions, more commands to delete
-        switch (command->kind()){
-        case EventCommandKind::While:
-            deleteEndBlock(root, selected->row() + 1);
-            break;
-        case EventCommandKind::If:
-            if (command->hasElse()) deleteElseBlock(root, selected->row() + 1);
-            deleteEndBlock(root, selected->row() + 1);
-            break;
-        case EventCommandKind::StartBattle:
-            if (command->isBattleWithoutGameOver())
-                deleteStartBattleBlock(root, selected->row() + 1);
-            break;
-        default:
-            break;
+        if (command != nullptr && command->kind() != EventCommandKind::None){
+            root = getRootOfCommand(selected);
+
+            // Delete selected command
+            SystemReaction::deleteCommands(selected);
+            root->removeRow(selected->row());
         }
-
-        // Delete selected command
-        SystemReaction::deleteCommands(selected);
-        root->removeRow(selected->row());
     }
 }
 
@@ -397,12 +388,8 @@ void WidgetTreeCommands::deleteElseBlock(QStandardItem *root, int row){
 // -------------------------------------------------------
 
 void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
-    EventCommand* winCommand = (EventCommand*)(root->child(row)->data()
-                                               .value<quintptr>());
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
-    EventCommand* loseCommand = (EventCommand*)(root->child(row)->data()
-                                                .value<quintptr>());
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
     deleteEndBlock(root, row);
@@ -423,64 +410,108 @@ void WidgetTreeCommands::updateAllNodesString(QStandardItem *item){
 // -------------------------------------------------------
 
 void WidgetTreeCommands::selectChildren(QStandardItem* item){
-    QModelIndex index = item->index();
 
     // Select children
-    for (int i = 0; i < item->rowCount(); i++){
-        QModelIndex childIndex = p_model->index(i, 0, index);
-        this->selectionModel()->select(childIndex,
-                                       QItemSelectionModel::Select);
-        selectChildren(item->child(i));
-    }
+    selectChildrenOnly(item);
 
     // Select others (end etc.)
     EventCommand* command = (EventCommand*) item->data().value<quintptr>();
     QStandardItem* root = getRootOfCommand(item);
+    QItemSelectionModel* sm = this->selectionModel();
+    QStandardItem* st;
+    int j = item->row();
 
     if (command != nullptr){
         switch(command->kind()){
         case EventCommandKind::While:
-            this->selectionModel()->select(root->child(item->row()+1)->index(),
-                                           QItemSelectionModel::Select);
+            st = root->child(j+1);
+            sm->select(st->index(), QItemSelectionModel::Select);
             break;
         case EventCommandKind::EndWhile:
-            this->selectionModel()->select(root->child(item->row()-1)->index(),
-                                           QItemSelectionModel::Select);
-            selectChildren(root->child(item->row()-1));
+            st = root->child(j-1);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            selectChildrenOnly(st);
             break;
         case EventCommandKind::StartBattle:
             if (command->isBattleWithoutGameOver()){
-                this->selectionModel()->select(
-                            root->child(item->row()+1)->index(),
-                            QItemSelectionModel::Select);
-                selectChildren(root->child(item->row()+1));
-                this->selectionModel()->select(
-                            root->child(item->row()+2)->index(),
-                            QItemSelectionModel::Select);
-                selectChildren(root->child(item->row()+2));
-                this->selectionModel()->select(
-                            root->child(item->row()+3)->index(),
-                            QItemSelectionModel::Select);
+                st = root->child(j+1);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildrenOnly(st);
+                st = root->child(j+2);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildrenOnly(st);
+                st = root->child(j+3);
+                sm->select(st->index(), QItemSelectionModel::Select);
             }
             break;
         case EventCommandKind::IfWin:
-            /*
-            this->selectionModel()->select(
-                        root->child(item->row()-1)->index(),
-                        QItemSelectionModel::Select);
-            selectChildren(root->child(item->row()));
-            this->selectionModel()->select(root->child(item->row()+1)->index(),
-                                           QItemSelectionModel::Select);
-            selectChildren(root->child(item->row()+1));
-            this->selectionModel()->select(root->child(item->row()+2)->index(),
-                                           QItemSelectionModel::Select);
-            */
+            st = root->child(j-1);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            selectChildren(st);
+            break;
+        case EventCommandKind::IfLose:
+            st = root->child(j-2);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            selectChildren(st);
+            break;
+        case EventCommandKind::EndIf:
+            st = root->child(j-1);
+            command = (EventCommand*) st->data().value<quintptr>();
+
+            // Battle
+            if (command->kind() == EventCommandKind::IfLose){
+                st = root->child(j-3);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildren(st);
+            }
+            // Condition
+            else{
+                if (command->kind() == EventCommandKind::Else)
+                    st = root->child(j-2);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildren(st);
+            }
+            break;
+        case EventCommandKind::If:
+            st = root->child(j++);
+            command = (EventCommand*) st->data().value<quintptr>();
+
+            // Else
+            if (command->hasElse()){
+                st = root->child(j++);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildrenOnly(st);
+            }
+
+            // End
+            st = root->child(j);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            break;
+        case EventCommandKind::Else:
+            st = root->child(j-1);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            selectChildren(st);
             break;
         default:
             break;
         }
     }
 }
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::selectChildrenOnly(QStandardItem* item){
+    QModelIndex index = item->index();
+
+    // Select children
+    for (int i = 0; i < item->rowCount(); i++){
+        QModelIndex childIndex = p_model->index(i, 0, index);
+        this->selectionModel()->select(childIndex, QItemSelectionModel::Select);
+        selectChildren(item->child(i));
+    }
+}
+
+// -------------------------------------------------------
 
 bool WidgetTreeCommands::itemLessThan(const QStandardItem* item1,
                                       const QStandardItem* item2)
@@ -598,8 +629,5 @@ void WidgetTreeCommands::contextPaste(){
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextDelete(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr){
-        deleteCommand(selected);
-    }
+    deleteCommand();
 }
