@@ -50,12 +50,62 @@ WidgetTilesetSelector::~WidgetTilesetSelector()
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QRect WidgetTilesetSelector::currentTexture() const{
+    return m_selectionRectangle->getCoefRect();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::setRealCursorPosition(){
+    m_selectionRectangle->setRealPosition();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::makeFirstSelection(int x, int y, float zoom){
+    m_selectionRectangle->makeFirstSelection(x, y, zoom);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::makeSelection(int x, int y, float zoom){
+    m_selectionRectangle->makeSelection(x, y,
+                                        m_textureTileset.width(),
+                                        m_textureTileset.height(),
+                                        zoom);
+}
+
+// -------------------------------------------------------
+//
 //  EVENTS
 //
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::mousePressEvent(QMouseEvent *event){
+    if (event->button() == Qt::MouseButton::LeftButton){
+        makeFirstSelection(event->x(), event->y());
+        this->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::mouseMoveEvent(QMouseEvent *event){
+    if (event->buttons() == Qt::LeftButton){
+        makeSelection(event->x(), event->y());
+        this->repaint();
+    }
+}
+
 // -------------------------------------------------------
 
 void WidgetTilesetSelector::paintEvent(QPaintEvent *event){
     QPainter painter(this);
 
     painter.drawImage(0, 0, m_textureTileset);
+    m_selectionRectangle->draw(painter);
 }

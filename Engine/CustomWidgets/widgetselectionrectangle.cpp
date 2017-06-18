@@ -32,7 +32,9 @@ WidgetSelectionRectangle::WidgetSelectionRectangle(QWidget *parent) :
     QWidget(parent)
 {
     m_textureCursor = QImage(":/textures/Ressources/tileset_cursor.png");
-    m_rect.setCoords(0, 0, Wanok::BASIC_SQUARE_SIZE, Wanok::BASIC_SQUARE_SIZE);
+    m_rect.setCoords(0, 0,
+                     Wanok::BASIC_SQUARE_SIZE - 1,
+                     Wanok::BASIC_SQUARE_SIZE - 1);
     m_realX = 0;
     m_realY = 0;
     m_squareWidth = Wanok::BASIC_SQUARE_SIZE;
@@ -50,12 +52,26 @@ WidgetSelectionRectangle::~WidgetSelectionRectangle()
 //
 // -------------------------------------------------------
 
+QRect WidgetSelectionRectangle::getCoefRect() const{
+    if (m_squareWidth != 0 && m_squareHeight != 0){
+        return QRect(m_rect.x() / m_squareWidth,
+                     m_rect.y() / m_squareHeight,
+                     m_rect.width() / m_squareWidth,
+                     m_rect.height() / m_squareHeight
+                     );
+    }
+    else
+        return QRect(0, 0, 0, 0);
+}
+
+// -------------------------------------------------------
+
 void WidgetSelectionRectangle::setRectangle(int x, int y,
                                             int width, int height)
 {
     if (m_squareWidth != 0 && m_squareHeight != 0){
         m_rect.setX((x / m_squareWidth) * m_squareWidth);
-        m_rect.setY((x / m_squareHeight) * m_squareHeight);
+        m_rect.setY((y / m_squareHeight) * m_squareHeight);
         m_rect.setWidth(width * m_squareWidth);
         m_rect.setHeight(height * m_squareHeight);
     }
@@ -70,7 +86,48 @@ void WidgetSelectionRectangle::setRealPosition(){
 
 // -------------------------------------------------------
 
-void WidgetSelectionRectangle::draw(QPainter* painter, float zoom){
+void WidgetSelectionRectangle::makeFirstSelection(int x, int y, float zoom){
+    if (m_squareWidth != 0 && m_squareHeight != 0){
+        setRectangle((int)(x / zoom), (int)(y / zoom), 1, 1);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetSelectionRectangle::makeSelection(int x, int y, int w, int h,
+                                             float zoom)
+{
+    if (m_squareWidth != 0 && m_squareHeight != 0){
+
+        // Setting width
+        if (x < 0)
+            x = 0;
+        if (x >= w)
+            x = w - 1;
+        x = (int)(x / zoom);
+        int init_pos_x = m_rect.x() / m_squareWidth;
+        int pos_x = x / m_squareWidth;
+        int i_x = init_pos_x <= pos_x ? 1 : -1;
+        int width = (pos_x - init_pos_x) + i_x;
+        m_rect.setWidth(width * m_squareWidth);
+
+        // Setting height
+        if (y < 0)
+            y = 0;
+        if (y >= h)
+            y = h - 1;
+        y = (int)(y / zoom);
+        int init_pos_y = m_rect.y() / m_squareHeight;
+        int pos_y = y / m_squareHeight;
+        int i_y = init_pos_y <= pos_y ? 1 : -1;
+        int height = (pos_y - init_pos_y) + i_y;
+        m_rect.setHeight(height * m_squareHeight);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetSelectionRectangle::draw(QPainter& painter, float zoom){
 
     // Setting coords
     int x = m_rect.x();
@@ -101,8 +158,82 @@ void WidgetSelectionRectangle::draw(QPainter* painter, float zoom){
 
 // -------------------------------------------------------
 
-void WidgetSelectionRectangle::drawSquare(QPainter* painter,
+void WidgetSelectionRectangle::drawSquare(QPainter &painter,
                                           int x, int y, float zoom)
 {
+    // Left-Top
+    painter.drawImage(QRect((int)(x * zoom),
+                            (int)(y * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(0, 0, BORDER_SIZE, BORDER_SIZE)
+                      );
+    // Right-Top
+    painter.drawImage(QRect((int)((x + m_rect.width() - BORDER_SIZE) * zoom),
+                            (int)(y * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(m_textureCursor.width() - BORDER_SIZE,
+                            0,
+                            BORDER_SIZE,
+                            BORDER_SIZE)
+                      );
+    // Right-Bot
+    painter.drawImage(QRect((int)((x + m_rect.width() - BORDER_SIZE) * zoom),
+                            (int)((y + m_rect.height() - BORDER_SIZE) * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(m_textureCursor.width() - BORDER_SIZE,
+                            m_textureCursor.height() - BORDER_SIZE,
+                            BORDER_SIZE,
+                            BORDER_SIZE)
+                      );
+    // Left-Bot
+    painter.drawImage(QRect((int)(x * zoom),
+                            (int)((y + m_rect.height() - BORDER_SIZE) * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(0,
+                            m_textureCursor.height() - BORDER_SIZE,
+                            BORDER_SIZE,
+                            BORDER_SIZE)
+                      );
 
+    // Top
+    painter.drawImage(QRect((int)((x + BORDER_SIZE) * zoom),
+                            (int)(y * zoom),
+                            (int)((m_rect.width() - (BORDER_SIZE * 2)) * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(BORDER_SIZE, 0, 1, BORDER_SIZE)
+                      );
+    // Right
+    painter.drawImage(QRect((int)((x + m_rect.width() - BORDER_SIZE) * zoom),
+                            (int)((y + BORDER_SIZE) * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)((m_rect.height() - (BORDER_SIZE * 2))
+                                  * zoom)),
+                      m_textureCursor,
+                      QRect(0, BORDER_SIZE, BORDER_SIZE, 1)
+                      );
+    // Bot
+    painter.drawImage(QRect((int)((x + BORDER_SIZE) * zoom),
+                            (int)((y + m_rect.height() - BORDER_SIZE) * zoom),
+                            (int)((m_rect.width() - (BORDER_SIZE * 2)) * zoom),
+                            (int)(BORDER_SIZE * zoom)),
+                      m_textureCursor,
+                      QRect(BORDER_SIZE, 0, 1, BORDER_SIZE)
+                      );
+    // Left
+    painter.drawImage(QRect((int)(x * zoom),
+                            (int)((y + BORDER_SIZE) * zoom),
+                            (int)(BORDER_SIZE * zoom),
+                            (int)((m_rect.height() - (BORDER_SIZE * 2)))),
+                      m_textureCursor,
+                      QRect(0, BORDER_SIZE, BORDER_SIZE, 1)
+                      );
 }

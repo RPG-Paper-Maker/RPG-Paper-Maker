@@ -21,6 +21,7 @@
 #define WIDGETSELECTIONRECTANGLE_H
 
 #include <QWidget>
+#include <QPainter>
 
 // -------------------------------------------------------
 //
@@ -37,9 +38,12 @@ class WidgetSelectionRectangle  : public QWidget
     public:
         explicit WidgetSelectionRectangle(QWidget *parent = 0);
         ~WidgetSelectionRectangle();
+        QRect getCoefRect() const;
         void setRectangle(int x, int y, int width, int height);
         void setRealPosition();
-        void draw(QPainter* painter, float zoom = 1.0f);
+        void makeFirstSelection(int x, int y, float zoom);
+        void makeSelection(int x, int y, int w, int h, float zoom);
+        void draw(QPainter& painter, float zoom = 1.0f);
 
     protected:
         static const int BORDER_SIZE;
@@ -50,7 +54,7 @@ class WidgetSelectionRectangle  : public QWidget
         int m_realX;
         int m_realY;
 
-        void drawSquare(QPainter* painter, int x, int y, float zoom);
+        void drawSquare(QPainter& painter, int x, int y, float zoom);
 };
 
 #endif // WIDGETSELECTIONRECTANGLE_H
