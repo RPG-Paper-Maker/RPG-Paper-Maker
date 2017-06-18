@@ -17,41 +17,39 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETTILESETSELECTOR_H
-#define WIDGETTILESETSELECTOR_H
-
-#include <QWidget>
-#include <QPainter>
-#include <widgetselectionrectangle.h>
+#include "panelpicturepreview.h"
+#include "ui_panelpicturepreview.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetTilesetSelector
-//
-//  A widget representing tileset selector.
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-class WidgetTilesetSelector : public QWidget
+PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PanelPicturePreview)
 {
-    Q_OBJECT
+    ui->setupUi(this);
+    ui->widgetListIDs->showButtonMax(false);
 
-public:
-    explicit WidgetTilesetSelector(QWidget *parent = 0);
-    ~WidgetTilesetSelector();
-    QRect currentTexture() const;
+    connect(ui->checkBoxContent, SIGNAL(toggled(bool)),
+            this, SLOT(showAvailableContent(bool)));
+}
 
-protected:
-    QImage m_textureTileset;
-    WidgetSelectionRectangle* m_selectionRectangle;
+PanelPicturePreview::~PanelPicturePreview()
+{
+    delete ui;
+}
 
-    void setRealCursorPosition();
-    void makeFirstSelection(int x, int y, float zoom = 1.0f);
-    void makeSelection(int x, int y, float zoom = 1.0f);
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
 
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void paintEvent(QPaintEvent *);
-};
-
-#endif // WIDGETTILESETSELECTOR_H
+void PanelPicturePreview::showAvailableContent(bool b){
+    ui->treeViewAvailableContent->setVisible(b);
+    ui->pushButtonMove->setVisible(b);
+    ui->pushButtonAdd->setVisible(b);
+}

@@ -17,41 +17,28 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETTILESETSELECTOR_H
-#define WIDGETTILESETSELECTOR_H
+#ifndef PICTUREKIND_H
+#define PICTUREKIND_H
 
-#include <QWidget>
-#include <QPainter>
-#include <widgetselectionrectangle.h>
+#include <QMetaType>
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetTilesetSelector
+//  ENUM PictureKind
 //
-//  A widget representing tileset selector.
+//  All the possible picutres.
 //
 // -------------------------------------------------------
 
-class WidgetTilesetSelector : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit WidgetTilesetSelector(QWidget *parent = 0);
-    ~WidgetTilesetSelector();
-    QRect currentTexture() const;
-
-protected:
-    QImage m_textureTileset;
-    WidgetSelectionRectangle* m_selectionRectangle;
-
-    void setRealCursorPosition();
-    void makeFirstSelection(int x, int y, float zoom = 1.0f);
-    void makeSelection(int x, int y, float zoom = 1.0f);
-
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void paintEvent(QPaintEvent *);
+enum class PictureKind {
+    Bars,
+    Icons,
+    Autotiles,
+    Characters,
+    Reliefs,
+    Tilesets
 };
 
-#endif // WIDGETTILESETSELECTOR_H
+Q_DECLARE_METATYPE(PictureKind)
+
+#endif // PICTUREKIND_H

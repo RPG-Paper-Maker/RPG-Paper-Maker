@@ -28,6 +28,7 @@
 #include "dialogdatas.h"
 #include "dialogsystems.h"
 #include "dialogvariables.h"
+#include "dialogpictures.h"
 #include "dialogkeyboardcontrols.h"
 #include "dialogexport.h"
 #include "panelmainmenu.h"
@@ -191,6 +192,7 @@ void MainWindow::enableAll(bool b){
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
     ui->actionSwitches_manager->setEnabled(b);
+    ui->actionPictures_manager->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionPlay->setEnabled(b);
 }
@@ -215,6 +217,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
     ui->actionSwitches_manager->setEnabled(true);
+    ui->actionPictures_manager->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionPlay->setEnabled(true);
 }
@@ -333,6 +336,15 @@ void MainWindow::on_actionSwitches_manager_triggered(){
                            ->modelSwitches());
     dialog.applyAsSwitches();
     openDialog(dialog);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionPictures_manager_triggered(){
+    DialogPictures dialog;
+    if (openDialog(dialog) == QDialog::Accepted){
+
+    }
 }
 
 // -------------------------------------------------------

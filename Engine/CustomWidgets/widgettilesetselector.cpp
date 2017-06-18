@@ -103,7 +103,7 @@ void WidgetTilesetSelector::mouseMoveEvent(QMouseEvent *event){
 
 // -------------------------------------------------------
 
-void WidgetTilesetSelector::paintEvent(QPaintEvent *event){
+void WidgetTilesetSelector::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     painter.drawImage(0, 0, m_textureTileset);

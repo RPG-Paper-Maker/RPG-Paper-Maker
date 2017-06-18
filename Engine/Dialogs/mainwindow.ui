@@ -31,7 +31,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="acceptDrops">
@@ -81,6 +81,7 @@
     <addaction name="actionSystems_manager"/>
     <addaction name="actionVariables_manager"/>
     <addaction name="actionSwitches_manager"/>
+    <addaction name="actionPictures_manager"/>
     <addaction name="actionKeyboard_controls"/>
    </widget>
    <addaction name="menuFile"/>
@@ -112,6 +113,7 @@
    <addaction name="actionSystems_manager"/>
    <addaction name="actionVariables_manager"/>
    <addaction name="actionSwitches_manager"/>
+   <addaction name="actionPictures_manager"/>
    <addaction name="actionKeyboard_controls"/>
    <addaction name="separator"/>
    <addaction name="actionPlay"/>
@@ -250,7 +252,7 @@
   <action name="actionKeyboard_controls">
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/inputs.png</normaloff>:/icons/Ressources/inputs.png</iconset>
    </property>
    <property name="text">
     <string>Keyboard controls</string>
@@ -277,6 +279,18 @@
   <action name="actionExport_standalone">
    <property name="text">
     <string>Export standalone...</string>
+   </property>
+  </action>
+  <action name="actionPictures_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pictures manager</string>
+   </property>
+   <property name="iconText">
+    <string>Pictures</string>
    </property>
   </action>
  </widget>

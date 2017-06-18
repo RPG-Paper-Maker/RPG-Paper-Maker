@@ -179,7 +179,10 @@ HEADERS += \
     Enums/keyboardenginekind.h \
     Dialogs/Systems/dialogsystemkeyboardgeneral.h \
     CustomWidgets/widgettilesetselector.h \
-    CustomWidgets/widgetselectionrectangle.h
+    CustomWidgets/widgetselectionrectangle.h \
+    Dialogs/dialogpictures.h \
+    Enums/picturekind.h \
+    CustomWidgets/panelpicturepreview.h
 
 SOURCES += \
     main.cpp \
@@ -319,7 +322,9 @@ SOURCES += \
     Dialogs/Systems/dialogsystemkeyboard.cpp \
     Dialogs/Systems/dialogsystemkeyboardgeneral.cpp \
     CustomWidgets/widgettilesetselector.cpp \
-    CustomWidgets/widgetselectionrectangle.cpp
+    CustomWidgets/widgetselectionrectangle.cpp \
+    Dialogs/dialogpictures.cpp \
+    CustomWidgets/panelpicturepreview.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -370,7 +375,9 @@ FORMS += \
     Dialogs/Systems/dialogsystemparameter.ui \
     Dialogs/Commands/dialogcommandmoveobject.ui \
     Dialogs/Systems/dialogsystemkeyboard.ui \
-    Dialogs/Systems/dialogsystemkeyboardgeneral.ui
+    Dialogs/Systems/dialogsystemkeyboardgeneral.ui \
+    Dialogs/dialogpictures.ui \
+    CustomWidgets/panelpicturepreview.ui
 
 OTHER_FILES += \
     style.qss
