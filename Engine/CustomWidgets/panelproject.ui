@@ -35,7 +35,30 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="WidgetTreeCommands" name="widget" native="true"/>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="WidgetTilesetSelector" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>563</width>
+          <height>68</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
       <widget class="WidgetTreeLocalMaps" name="treeViewLocalMaps">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
@@ -71,12 +94,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetTreeCommands</class>
-   <extends>QWidget</extends>
-   <header>widgettreecommands.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetMapEditor</class>
    <extends>QOpenGLWidget</extends>
    <header>widgetmapeditor.h</header>
@@ -91,6 +108,12 @@
    <class>WidgetTreeLocalMaps</class>
    <extends>QTreeView</extends>
    <header>widgettreelocalmaps.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTilesetSelector</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetselector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

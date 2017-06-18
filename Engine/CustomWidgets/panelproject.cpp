@@ -34,9 +34,12 @@ PanelProject::PanelProject(QWidget *parent) :
     ui->setupUi(this);
 
     // Set default proportion of splitters
-    QList<int> sizes;
-    sizes << 100 << 500;
-    ui->splitter_2->setSizes(sizes);
+    QList<int> sizesVertical;
+    sizesVertical << 100 << 500;
+    ui->splitter_2->setSizes(sizesVertical);
+    QList<int> sizesHorizontal;
+    sizesHorizontal << 250 << 200;
+    ui->splitter->setSizes(sizesHorizontal);
     ui->openGLWidget->setMenuBar(ui->widgetMenuBar);
 }
 

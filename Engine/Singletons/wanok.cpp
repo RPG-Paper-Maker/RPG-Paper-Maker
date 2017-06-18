@@ -75,6 +75,7 @@ const QString Wanok::dirGames = Wanok::pathCombine(
 const QString Wanok::dirDesktop = "desktop";
 
 const int Wanok::portionSize = 16;
+const int Wanok::BASIC_SQUARE_SIZE = 32;
 
 bool Wanok::isInConfig = false;
 

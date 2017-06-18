@@ -177,7 +177,9 @@ HEADERS += \
     Models/System/systemcommandmove.h \
     Dialogs/Systems/dialogsystemkeyboard.h \
     Enums/keyboardenginekind.h \
-    Dialogs/Systems/dialogsystemkeyboardgeneral.h
+    Dialogs/Systems/dialogsystemkeyboardgeneral.h \
+    CustomWidgets/widgettilesetselector.h \
+    CustomWidgets/widgetselectionrectangle.h
 
 SOURCES += \
     main.cpp \
@@ -315,7 +317,9 @@ SOURCES += \
     Dialogs/Commands/dialogcommandmoveobject.cpp \
     Models/System/systemcommandmove.cpp \
     Dialogs/Systems/dialogsystemkeyboard.cpp \
-    Dialogs/Systems/dialogsystemkeyboardgeneral.cpp
+    Dialogs/Systems/dialogsystemkeyboardgeneral.cpp \
+    CustomWidgets/widgettilesetselector.cpp \
+    CustomWidgets/widgetselectionrectangle.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
