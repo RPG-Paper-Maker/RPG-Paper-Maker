@@ -104,11 +104,12 @@ QString SuperListItem::idToString() const {
 
 // -------------------------------------------------------
 
-void SuperListItem::deleteModel(QStandardItemModel *model){
+void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel){
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++)
         delete (SuperListItem*) model->item(i)->data().value<quintptr>();
 
-    delete model;
+    if (deleteModel)
+        delete model;
 }
 
 // -------------------------------------------------------

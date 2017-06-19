@@ -20,6 +20,10 @@
 #include "panelpicturepreview.h"
 #include "ui_panelpicturepreview.h"
 #include "wanok.h"
+#include <QDirIterator>
+
+QString PanelPicturePreview::pathIconRed = ":/icons/Ressources/point_r.png";
+QString PanelPicturePreview::pathIconBlue = ":/icons/Ressources/point_b.png";
 
 // -------------------------------------------------------
 //
@@ -37,10 +41,16 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     ui->widgetPanelIDs->showButtonMax(false);
     connect(ui->checkBoxContent, SIGNAL(toggled(bool)),
             this, SLOT(showAvailableContent(bool)));
+
+    ui->treeViewAvailableContent->initializeModel(new QStandardItemModel);
+    ui->treeViewAvailableContent->setHasContextMenu(false);
+    ui->treeViewAvailableContent->setCanBeControled(false);
+    ui->treeViewAvailableContent->setCanMove(false);
 }
 
 PanelPicturePreview::~PanelPicturePreview()
 {
+    SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel());
     delete ui;
 }
 
@@ -60,13 +70,20 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
         ui->widgetPanelIDs->initializeModel(
                     Wanok::get()->project()->picturesDatas()->model(kind));
 
-        // Connection of lists
+        // Connection of list
         connect(ui->widgetPanelIDs->list()->selectionModel(),
                 SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(on_listIDsIndexChanged(QModelIndex,QModelIndex)));
 
         QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0,0);
         ui->widgetPanelIDs->list()->setCurrentIndex(index);
+
+        // Loading first available content
+        loadAvailableContent();
+
+        connect(ui->treeViewAvailableContent->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
     }
 }
 
@@ -74,6 +91,59 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
 
 void PanelPicturePreview::showPictures(bool b){
     this->setVisible(b);
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::updateImage(QStandardItem* item){
+    SystemPicture* super;
+
+    super = (SystemPicture*) item->data().value<qintptr>();
+    if (super != nullptr){
+        if (super->id() == -1){
+            ui->widgetPreview->setNoneImage();
+        }
+        else{
+            ui->widgetPreview->setImage(super->getPath(m_pictureKind));
+        }
+        ui->widgetPreview->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::loadAvailableContent(){
+
+    // Clear
+    SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel(), false);
+    ui->treeViewAvailableContent->getModel()->clear();
+
+    // Load content from folders
+    loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, false),
+                          false);
+    loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, true),
+                          true);
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR){
+    QDirIterator files(path, QDir::Files);
+    QIcon icon = isBR ? QIcon(PanelPicturePreview::pathIconBlue)
+                      : QIcon(PanelPicturePreview::pathIconRed);
+    QStandardItem* item;
+    SystemPicture* super;
+
+    while (files.hasNext()){
+        files.next();
+        super = new SystemPicture(1, files.fileName(), isBR);
+        item = new QStandardItem;
+        item->setData(
+                    QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+        item->setIcon(icon);
+        item->setText(super->name());
+        ui->treeViewAvailableContent->getModel()->appendRow(item);
+    }
 }
 
 // -------------------------------------------------------
@@ -94,20 +164,13 @@ void PanelPicturePreview::showAvailableContent(bool b){
 void PanelPicturePreview::on_listIDsIndexChanged(QModelIndex index,
                                                  QModelIndex)
 {
-    QStandardItem* item;
-    SystemPicture* super;
+    updateImage(ui->widgetPanelIDs->list()->getModel()->itemFromIndex(index));
+}
 
-    item = ui->widgetPanelIDs->list()->getModel()->itemFromIndex(index);
-    super = (SystemPicture*) item->data().value<qintptr>();
+// -------------------------------------------------------
 
-    if (super != nullptr){
-        QImage image;
-
-        if (super->id() == -1){
-
-        }
-        else{
-            image = QImage(super->getPath(m_pictureKind));
-        }
-    }
+void PanelPicturePreview::on_listIndexChanged(QModelIndex index,
+                                              QModelIndex)
+{
+    updateImage(ui->treeViewAvailableContent->getModel()->itemFromIndex(index));
 }

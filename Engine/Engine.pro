@@ -184,7 +184,8 @@ HEADERS += \
     Enums/picturekind.h \
     CustomWidgets/panelpicturepreview.h \
     Models/System/systempicture.h \
-    Models/GameDatas/picturesdatas.h
+    Models/GameDatas/picturesdatas.h \
+    CustomWidgets/widgetpicturepreview.h
 
 SOURCES += \
     main.cpp \
@@ -328,7 +329,8 @@ SOURCES += \
     Dialogs/dialogpictures.cpp \
     CustomWidgets/panelpicturepreview.cpp \
     Models/System/systempicture.cpp \
-    Models/GameDatas/picturesdatas.cpp
+    Models/GameDatas/picturesdatas.cpp \
+    CustomWidgets/widgetpicturepreview.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

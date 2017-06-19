@@ -71,7 +71,7 @@ QString SystemPicture::getFolder(PictureKind kind, bool isBR){
         throw std::invalid_argument("Kind of picture path not implemented");
     }
 
-    return path;
+    return Wanok::pathCombine(folder, path);
 }
 
 // -------------------------------------------------------

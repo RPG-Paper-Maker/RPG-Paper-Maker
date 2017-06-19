@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QStandardItemModel>
 #include "picturekind.h"
 
 namespace Ui {
@@ -35,6 +36,8 @@ class PanelPicturePreview : public QWidget
 public:
     explicit PanelPicturePreview(QWidget *parent = 0);
     ~PanelPicturePreview();
+    static QString pathIconRed;
+    static QString pathIconBlue;
     void setPictureKind(PictureKind kind);
 
 private:
@@ -42,10 +45,14 @@ private:
     PictureKind m_pictureKind;
 
     void showPictures(bool b);
+    void updateImage(QStandardItem* item);
+    void loadAvailableContent();
+    void loadContentFromFolder(QString path, bool isBR);
 
 private slots:
     void showAvailableContent(bool b);
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
+    void on_listIndexChanged(QModelIndex index, QModelIndex);
 };
 
 #endif // PANELPICTUREPREVIEW_H

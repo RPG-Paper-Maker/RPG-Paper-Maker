@@ -59,7 +59,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
          <item>
-          <widget class="QTreeView" name="treeViewAvailableContent">
+          <widget class="WidgetSuperTree" name="treeViewAvailableContent">
            <property name="minimumSize">
             <size>
              <width>200</width>
@@ -72,6 +72,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
           </widget>
          </item>
          <item>
@@ -118,9 +121,23 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
          <item>
-          <widget class="QWidget" name="widgetPreview" native="true"/>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="WidgetPicturePreview" name="widgetPreview">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>311</width>
+              <height>372</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox">
@@ -143,6 +160,17 @@
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicturePreview</class>
+   <extends>QWidget</extends>
+   <header>widgetpicturepreview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources>

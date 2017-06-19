@@ -54,7 +54,7 @@ public:
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem& item);
     virtual QList<QStandardItem*> getModelRow() const;
-    static void deleteModel(QStandardItemModel* model);
+    static void deleteModel(QStandardItemModel* model, bool deleteModel = true);
     static void deleteModelTree(QStandardItem* item);
     static int getIndexById(QStandardItem* item, int id);
     static int getIdByIndex(QStandardItemModel* model, int index);
