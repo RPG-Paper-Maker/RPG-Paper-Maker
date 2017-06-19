@@ -75,7 +75,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1">
            <item>
             <widget class="QPushButton" name="pushButtonMove">
              <property name="maximumSize">
@@ -90,6 +90,13 @@
              <property name="icon">
               <iconset resource="../ressources.qrc">
                <normaloff>:/icons/Ressources/big_arrow_left.png</normaloff>:/icons/Ressources/big_arrow_left.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonRefresh">
+             <property name="text">
+              <string>Refresh</string>
              </property>
             </widget>
            </item>

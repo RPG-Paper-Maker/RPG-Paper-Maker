@@ -20,6 +20,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "systempicture.h"
+#include "picturekind.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +43,7 @@ public:
     void read(QString path);
     QStandardItemModel* model(PictureKind kind) const;
     void setDefault();
+    void setDefaultPictures(QList<SystemPicture*> &pictures, PictureKind kind);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

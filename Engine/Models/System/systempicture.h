@@ -36,14 +36,19 @@ class SystemPicture : public SuperListItem
 {
 public:
     SystemPicture();
-    SystemPicture(int i, QString n);
+    SystemPicture(int i, QString n, bool isBR);
     virtual ~SystemPicture();
+    static QString getFolder(PictureKind kind, bool isBR);
+    QString getPath(PictureKind kind) const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+
+protected:
+    bool m_isBR;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)

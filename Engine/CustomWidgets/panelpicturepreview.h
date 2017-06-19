@@ -21,6 +21,7 @@
 #define PANELPICTUREPREVIEW_H
 
 #include <QWidget>
+#include <QModelIndex>
 #include "picturekind.h"
 
 namespace Ui {
@@ -44,6 +45,7 @@ private:
 
 private slots:
     void showAvailableContent(bool b);
+    void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
 };
 
 #endif // PANELPICTUREPREVIEW_H

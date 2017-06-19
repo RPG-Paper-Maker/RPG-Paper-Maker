@@ -53,6 +53,7 @@ public:
     static bool isInConfig;
 
     // PATHS
+    const static QString pathBR;
     const static QString pathDatas;
     const static QString pathMaps;
     const static QString pathScriptsDir;

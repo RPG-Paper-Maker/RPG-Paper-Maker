@@ -28,6 +28,7 @@
 QSet<int> Wanok::mapsToSave;
 
 // PATHS DATAS
+const QString Wanok::pathBR = pathCombine("Content", "BR");
 const QString Wanok::pathDatas = pathCombine("Content", "Datas");
 const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
 const QString Wanok::pathScriptsDir = pathCombine(pathDatas, "Scripts");

@@ -53,23 +53,45 @@ QStandardItemModel* PicturesDatas::model(PictureKind kind) const {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefault(){
-    /*
-    int i = 1;
-    SystemArmor* items[] = {new SystemArmor(i++, new LangsTranslation("Dress"),
-                            4)};
+    QList<SystemPicture*> pictures;
 
-    int length = (sizeof(items)/sizeof(*items));
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Bars);
+    pictures.clear();
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Icons);
+    pictures.clear();
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Autotiles);
+    pictures.clear();
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Characters);
+    pictures.clear();
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Reliefs);
+    pictures.clear();
+    pictures << new SystemPicture;
+    setDefaultPictures(pictures, PictureKind::Tilesets);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultPictures(QList<SystemPicture*>& pictures,
+                                       PictureKind kind)
+{
     QStandardItem* item;
+    QStandardItemModel* model = new QStandardItemModel;
 
-    for (i = 0; i < length; i++){
+    for (int i = 0; i < pictures.size(); i++){
         item = new QStandardItem;
         item->setData(
-                    QVariant::fromValue(reinterpret_cast<quintptr>(items[i])));
+                    QVariant::fromValue(
+                        reinterpret_cast<quintptr>(pictures[i])));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
-        m_model->appendRow(item);
+        item->setText(pictures[i]->toString());
+        model->appendRow(item);
     }
-    */
+    m_models[kind] = model;
 }
 
 // -------------------------------------------------------
@@ -79,33 +101,54 @@ void PicturesDatas::setDefault(){
 // -------------------------------------------------------
 
 void PicturesDatas::read(const QJsonObject &json){
-    /*
-    QJsonArray jsonList = json["armors"].toArray();
+    QJsonArray jsonList = json["list"].toArray();
+    QJsonObject jsonObj;
+    QJsonArray jsonArray;
+    QStandardItemModel* model;
+
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
-        SystemArmor* sysArmor = new SystemArmor;
-        sysArmor->read(jsonList[i].toObject());
-        item->setData(
-                    QVariant::fromValue(reinterpret_cast<quintptr>(sysArmor)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysArmor->toString());
-        m_model->appendRow(item);
+        jsonObj = jsonList.at(i).toObject();
+        jsonArray = jsonObj["v"].toArray();
+        model = new QStandardItemModel;
+
+        for (int j = 0; j < jsonArray.size(); j++){
+            QStandardItem* item = new QStandardItem;
+            SystemPicture* super = new SystemPicture;
+            super->read(jsonArray[j].toObject());
+            item->setData(
+                        QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+            item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+            item->setText(super->toString());
+            model->appendRow(item);
+        }
+
+        m_models[static_cast<PictureKind>(jsonObj["k"].toInt())] = model;
     }
-    */
 }
 
 // -------------------------------------------------------
 
 void PicturesDatas::write(QJsonObject &json) const{
-    /*
-    QJsonArray jsonArray;
-    for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
-        QJsonObject jsonCommon;
-        SystemArmor* sysArmor =
-                ((SystemArmor*)m_model->item(i)->data().value<quintptr>());
-        sysArmor->write(jsonCommon);
-        jsonArray.append(jsonCommon);
+    QJsonArray jsonFinalArray;
+    QStandardItemModel* model;
+
+    QHash<PictureKind, QStandardItemModel*>::const_iterator i;
+    for (i = m_models.begin(); i != m_models.end(); i++){
+        model = i.value();
+        QJsonObject jsonObj;
+        QJsonArray jsonArray;
+        jsonObj["k"] = (int) i.key();
+        for (int j = 0; j < model->invisibleRootItem()->rowCount(); j++){
+            QJsonObject jsonObjPicture;
+
+            SystemPicture* super = ((SystemPicture*) model->item(j)->data()
+                                    .value<quintptr>());
+            super->write(jsonObjPicture);
+            jsonArray.append(jsonObjPicture);
+        }
+        jsonObj["v"] = jsonArray;
+        jsonFinalArray.append(jsonObj);
     }
-    json["armors"] = jsonArray;
-    */
+
+    json["list"] = jsonFinalArray;
 }

@@ -18,6 +18,7 @@
 */
 
 #include "systempicture.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -26,13 +27,14 @@
 // -------------------------------------------------------
 
 SystemPicture::SystemPicture() :
-    SystemPicture(1, "")
+    SystemPicture(-1, "<None>", false)
 {
 
 }
 
-SystemPicture::SystemPicture(int i, QString n) :
-    SuperListItem(i,n)
+SystemPicture::SystemPicture(int i, QString n, bool isBR) :
+    SuperListItem(i,n),
+    m_isBR(isBR)
 {
 
 }
@@ -45,6 +47,41 @@ SystemPicture::~SystemPicture(){
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString SystemPicture::getFolder(PictureKind kind, bool isBR){
+    QString folder = isBR ? Wanok::pathBR
+                          : Wanok::get()->project()->pathCurrentProject();
+    QString path;
+
+    switch (kind){
+    case PictureKind::Bars:
+        path = Wanok::pathBars; break;
+    case PictureKind::Icons:
+        path = Wanok::pathIcons; break;
+    case PictureKind::Autotiles:
+        path = Wanok::pathAutotiles; break;
+    case PictureKind::Characters:
+        path = Wanok::pathCharacters; break;
+    case PictureKind::Reliefs:
+        path = Wanok::pathReliefs; break;
+    case PictureKind::Tilesets:
+        path = Wanok::pathTilesets; break;
+    default:
+        throw std::invalid_argument("Kind of picture path not implemented");
+    }
+
+    return path;
+}
+
+// -------------------------------------------------------
+
+QString SystemPicture::getPath(PictureKind kind) const{
+    QString folder = getFolder(kind, m_isBR);
+
+    return Wanok::pathCombine(folder, name());
+}
+
 // -------------------------------------------------------
 
 SuperListItem* SystemPicture::createCopy() const{
@@ -68,6 +105,7 @@ void SystemPicture::setCopy(const SystemPicture& super){
 void SystemPicture::read(const QJsonObject &json){
     SuperListItem::read(json);
 
+    m_isBR = json["br"].toBool();
 }
 
 // -------------------------------------------------------
@@ -75,4 +113,5 @@ void SystemPicture::read(const QJsonObject &json){
 void SystemPicture::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
+    json["br"] = m_isBR;
 }

@@ -19,6 +19,7 @@
 
 #include "panelpicturepreview.h"
 #include "ui_panelpicturepreview.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -50,9 +51,23 @@ PanelPicturePreview::~PanelPicturePreview()
 // -------------------------------------------------------
 
 void PanelPicturePreview::setPictureKind(PictureKind kind){
+    bool isNone = kind == PictureKind::None;
     m_pictureKind = kind;
 
-    showPictures(m_pictureKind != PictureKind::None);
+    showPictures(!isNone);
+
+    if (!isNone){
+        ui->widgetPanelIDs->initializeModel(
+                    Wanok::get()->project()->picturesDatas()->model(kind));
+
+        // Connection of lists
+        connect(ui->widgetPanelIDs->list()->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(on_listIDsIndexChanged(QModelIndex,QModelIndex)));
+
+        QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0,0);
+        ui->widgetPanelIDs->list()->setCurrentIndex(index);
+    }
 }
 
 // -------------------------------------------------------
@@ -70,5 +85,29 @@ void PanelPicturePreview::showPictures(bool b){
 void PanelPicturePreview::showAvailableContent(bool b){
     ui->treeViewAvailableContent->setVisible(b);
     ui->pushButtonMove->setVisible(b);
+    ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonAdd->setVisible(b);
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_listIDsIndexChanged(QModelIndex index,
+                                                 QModelIndex)
+{
+    QStandardItem* item;
+    SystemPicture* super;
+
+    item = ui->widgetPanelIDs->list()->getModel()->itemFromIndex(index);
+    super = (SystemPicture*) item->data().value<qintptr>();
+
+    if (super != nullptr){
+        QImage image;
+
+        if (super->id() == -1){
+
+        }
+        else{
+            image = QImage(super->getPath(m_pictureKind));
+        }
+    }
 }
