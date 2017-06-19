@@ -31,6 +31,7 @@
 // -------------------------------------------------------
 
 enum class PictureKind {
+    None,
     Bars,
     Icons,
     Autotiles,
@@ -38,6 +39,11 @@ enum class PictureKind {
     Reliefs,
     Tilesets
 };
+
+inline uint qHash(PictureKind pos)
+{
+   return (int) pos;
+}
 
 Q_DECLARE_METATYPE(PictureKind)
 

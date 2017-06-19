@@ -33,8 +33,19 @@ DialogPictures::DialogPictures(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
+    // Tree model
     ui->treeView->setModel(createFoldersModel());
     ui->treeView->expandAll();
+    connect(ui->treeView->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this,
+            SLOT(on_folderSelected(QModelIndex,QModelIndex)));
+
+    // Keep space when hiding widget
+    QSizePolicy sp_retain;
+    sp_retain = ui->widgetPicturePreview->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->widgetPicturePreview->setSizePolicy(sp_retain);
 }
 
 DialogPictures::~DialogPictures()
@@ -57,12 +68,16 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
 
     // Pictures
     itemPictures = new QStandardItem;
+    itemPictures->setData(QVariant::fromValue(
+                      reinterpret_cast<PictureKind>(PictureKind::None)));
     itemPictures->setIcon(icon);
     itemPictures->setText("Pictures");
     model->appendRow(itemPictures);
 
     // HUD
     itemHUD = new QStandardItem;
+    itemHUD->setData(QVariant::fromValue(
+                      reinterpret_cast<PictureKind>(PictureKind::None)));
     itemHUD->setIcon(icon);
     itemHUD->setText("HUD");
     itemPictures->appendRow(itemHUD);
@@ -72,6 +87,8 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
 
     // Textures 2D
     itemTextures2D = new QStandardItem;
+    itemTextures2D->setData(QVariant::fromValue(
+                      reinterpret_cast<PictureKind>(PictureKind::None)));
     itemTextures2D->setIcon(icon);
     itemTextures2D->setText("Texures2D");
     itemPictures->appendRow(itemTextures2D);
@@ -102,4 +119,19 @@ void DialogPictures::addfolders(QIcon &icon,
         item->setText(names.at(i));
         root->appendRow(item);
     }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogPictures::on_folderSelected(const QModelIndex& current,
+                                       const QModelIndex&)
+{
+    QStandardItemModel* model = (QStandardItemModel*) ui->treeView->model();
+    QStandardItem* item = model->itemFromIndex(current);
+    PictureKind k = item->data().value<PictureKind>();
+    ui->widgetPicturePreview->setPictureKind(k);
 }

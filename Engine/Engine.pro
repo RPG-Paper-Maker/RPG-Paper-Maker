@@ -182,7 +182,9 @@ HEADERS += \
     CustomWidgets/widgetselectionrectangle.h \
     Dialogs/dialogpictures.h \
     Enums/picturekind.h \
-    CustomWidgets/panelpicturepreview.h
+    CustomWidgets/panelpicturepreview.h \
+    Models/System/systempicture.h \
+    Models/GameDatas/picturesdatas.h
 
 SOURCES += \
     main.cpp \
@@ -324,7 +326,9 @@ SOURCES += \
     CustomWidgets/widgettilesetselector.cpp \
     CustomWidgets/widgetselectionrectangle.cpp \
     Dialogs/dialogpictures.cpp \
-    CustomWidgets/panelpicturepreview.cpp
+    CustomWidgets/panelpicturepreview.cpp \
+    Models/System/systempicture.cpp \
+    Models/GameDatas/picturesdatas.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

@@ -17,33 +17,37 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PANELPICTUREPREVIEW_H
-#define PANELPICTUREPREVIEW_H
+#include <QStandardItemModel>
+#include "serializable.h"
+#include "systempicture.h"
 
-#include <QWidget>
-#include "picturekind.h"
+// -------------------------------------------------------
+//
+//  CLASS PicturesDatas
+//
+//  Contains all the possible pictures of a game. The data file is located in
+//  Content/Datas/pictures.json.
+//
+// -------------------------------------------------------
 
-namespace Ui {
-class PanelPicturePreview;
-}
+#ifndef PICTURESDATAS_H
+#define PICTURESDATAS_H
 
-class PanelPicturePreview : public QWidget
+
+class PicturesDatas : public Serializable
 {
-    Q_OBJECT
-
 public:
-    explicit PanelPicturePreview(QWidget *parent = 0);
-    ~PanelPicturePreview();
-    void setPictureKind(PictureKind kind);
+    PicturesDatas();
+    virtual ~PicturesDatas();
+    void read(QString path);
+    QStandardItemModel* model(PictureKind kind) const;
+    void setDefault();
+
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
 private:
-    Ui::PanelPicturePreview *ui;
-    PictureKind m_pictureKind;
-
-    void showPictures(bool b);
-
-private slots:
-    void showAvailableContent(bool b);
+    QHash<PictureKind, QStandardItemModel*> m_models;
 };
 
-#endif // PANELPICTUREPREVIEW_H
+#endif // PICTURESDATAS_H

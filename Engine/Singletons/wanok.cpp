@@ -50,6 +50,8 @@ const QString Wanok::pathTreeMap = pathCombine(pathDatas, "treeMap.json");
 const QString Wanok::pathLangs = pathCombine(pathDatas, "langs.json");
 const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");
 const QString Wanok::pathKeyBoard = pathCombine(pathDatas, "keyBoard.json");
+const QString Wanok::pathPicturesDatas =
+        pathCombine(pathDatas, "pictures.json");
 
 // PATHS PICTURES
 const QString Wanok::pathPictures = pathCombine("Content", "Pictures");

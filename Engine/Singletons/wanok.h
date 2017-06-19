@@ -72,6 +72,7 @@ public:
     const static QString pathLangs;
     const static QString pathScripts;
     const static QString pathKeyBoard;
+    const static QString pathPicturesDatas;
     const static QString pathPictures;
     const static QString pathHUD;
     const static QString pathTextures2D;

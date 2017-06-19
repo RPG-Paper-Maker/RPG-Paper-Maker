@@ -32,6 +32,7 @@ Project::Project() :
     m_treeMapDatas(nullptr),
     m_langsDatas(nullptr),
     m_scriptsDatas(nullptr),
+    m_picturesDatas(nullptr),
     m_keyBoardDatas(nullptr)
 {
 
@@ -43,6 +44,7 @@ Project::~Project()
     delete p_gameDatas;
     delete m_treeMapDatas;
     delete m_scriptsDatas;
+    delete m_picturesDatas;
     delete m_keyBoardDatas;
 }
 
@@ -64,6 +66,8 @@ LangsDatas* Project::langsDatas() const { return m_langsDatas; }
 
 ScriptsDatas* Project::scriptsDatas() const { return m_scriptsDatas; }
 
+PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
+
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 
 // -------------------------------------------------------
@@ -77,6 +81,8 @@ void Project::setDefault(){
     m_langsDatas->setDefault();
     m_keyBoardDatas = new KeyBoardDatas;
     m_keyBoardDatas->setDefaultGame();
+    m_picturesDatas = new PicturesDatas;
+    m_picturesDatas->setDefault();
     p_gameDatas = new GameDatas;
     p_gameDatas->setDefault();
     m_treeMapDatas = new TreeMapDatas;
@@ -102,6 +108,7 @@ void Project::read(QString path){
     setPathCurrentProject(path);
     readLangsDatas();
     readKeyBoardDatas();
+    readPicturesDatas();
     readGameDatas();
     readTreeMapDatas();
     readScriptsDatas();
@@ -155,10 +162,20 @@ void Project::readKeyBoardDatas(){
 
 // -------------------------------------------------------
 
+void Project::readPicturesDatas(){
+    if (m_picturesDatas != nullptr)
+        delete m_picturesDatas;
+    m_picturesDatas = new PicturesDatas;
+    m_picturesDatas->read(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::write(QString path){
     setPathCurrentProject(path);
     writeLangsDatas();
     writeKeyBoardDatas();
+    writePicturesDatas();
     writeGameDatas();
     writeTreeMapDatas();
     writeScriptsDatas();
@@ -196,4 +213,12 @@ void Project::writeScriptsDatas(){
 void Project::writeKeyBoardDatas(){
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::pathKeyBoard), *m_keyBoardDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writePicturesDatas(){
+    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+                                        Wanok::pathPicturesDatas),
+                     *m_picturesDatas);
 }

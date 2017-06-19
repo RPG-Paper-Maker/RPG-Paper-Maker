@@ -25,6 +25,7 @@
 #include "treemapdatas.h"
 #include "langsdatas.h"
 #include "scriptsdatas.h"
+#include "picturesdatas.h"
 #include "keyboarddatas.h"
 
 // -------------------------------------------------------
@@ -50,6 +51,7 @@ public:
     TreeMapDatas* treeMapDatas() const;
     LangsDatas* langsDatas() const;
     ScriptsDatas* scriptsDatas() const;
+    PicturesDatas* picturesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
 
     void read(QString path);
@@ -58,12 +60,14 @@ public:
     void readTreeMapDatas();
     void readScriptsDatas();
     void readKeyBoardDatas();
+    void readPicturesDatas();
     void write(QString path);
     void writeGameDatas();
     void writeLangsDatas();
     void writeTreeMapDatas();
     void writeScriptsDatas();
     void writeKeyBoardDatas();
+    void writePicturesDatas();
     void saveCurrentMap();
 
 private:
@@ -73,6 +77,7 @@ private:
     TreeMapDatas* m_treeMapDatas;
     LangsDatas* m_langsDatas;
     ScriptsDatas* m_scriptsDatas;
+    PicturesDatas* m_picturesDatas;
     KeyBoardDatas* m_keyBoardDatas;
 };
 

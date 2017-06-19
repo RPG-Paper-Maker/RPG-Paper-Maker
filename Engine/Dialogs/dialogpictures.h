@@ -43,6 +43,9 @@ public:
 
 private:
     Ui::DialogPictures *ui;
+
+private slots:
+    void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };
 
 #endif // DIALOGPICTURES_H

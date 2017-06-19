@@ -17,33 +17,35 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PANELPICTUREPREVIEW_H
-#define PANELPICTUREPREVIEW_H
+#ifndef SYSTEMPICTURE_H
+#define SYSTEMPICTURE_H
 
-#include <QWidget>
+#include <QMetaType>
+#include "superlistitem.h"
 #include "picturekind.h"
 
-namespace Ui {
-class PanelPicturePreview;
-}
+// -------------------------------------------------------
+//
+//  CLASS SystemPicture
+//
+//  A particulary picture.
+//
+// -------------------------------------------------------
 
-class PanelPicturePreview : public QWidget
+class SystemPicture : public SuperListItem
 {
-    Q_OBJECT
-
 public:
-    explicit PanelPicturePreview(QWidget *parent = 0);
-    ~PanelPicturePreview();
-    void setPictureKind(PictureKind kind);
+    SystemPicture();
+    SystemPicture(int i, QString n);
+    virtual ~SystemPicture();
 
-private:
-    Ui::PanelPicturePreview *ui;
-    PictureKind m_pictureKind;
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemPicture &super);
 
-    void showPictures(bool b);
-
-private slots:
-    void showAvailableContent(bool b);
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 };
 
-#endif // PANELPICTUREPREVIEW_H
+Q_DECLARE_METATYPE(SystemPicture)
+
+#endif // SYSTEMPICTURE_H

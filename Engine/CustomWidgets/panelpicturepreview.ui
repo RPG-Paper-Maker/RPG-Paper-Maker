@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
      <item>
       <widget class="QCheckBox" name="checkBoxContent">
        <property name="text">
@@ -39,9 +39,9 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,1">
        <item>
-        <widget class="PanelSuperList" name="widgetListIDs" native="true">
+        <widget class="PanelSuperList" name="widgetPanelIDs" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -78,6 +78,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QPushButton" name="pushButtonMove">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>22</height>
+              </size>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -89,6 +95,12 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButtonAdd">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>22</height>
+              </size>
+             </property>
              <property name="text">
               <string>+</string>
              </property>

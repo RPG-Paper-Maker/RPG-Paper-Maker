@@ -17,8 +17,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "panelpicturepreview.h"
-#include "ui_panelpicturepreview.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -26,21 +25,20 @@
 //
 // -------------------------------------------------------
 
-PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PanelPicturePreview),
-    m_pictureKind(PictureKind::None)
+SystemPicture::SystemPicture() :
+    SystemPicture(1, "")
 {
-    ui->setupUi(this);
 
-    ui->widgetPanelIDs->showButtonMax(false);
-    connect(ui->checkBoxContent, SIGNAL(toggled(bool)),
-            this, SLOT(showAvailableContent(bool)));
 }
 
-PanelPicturePreview::~PanelPicturePreview()
+SystemPicture::SystemPicture(int i, QString n) :
+    SuperListItem(i,n)
 {
-    delete ui;
+
+}
+
+SystemPicture::~SystemPicture(){
+
 }
 
 // -------------------------------------------------------
@@ -49,26 +47,32 @@ PanelPicturePreview::~PanelPicturePreview()
 //
 // -------------------------------------------------------
 
-void PanelPicturePreview::setPictureKind(PictureKind kind){
-    m_pictureKind = kind;
-
-    showPictures(m_pictureKind != PictureKind::None);
+SuperListItem* SystemPicture::createCopy() const{
+    SystemPicture* super = new SystemPicture;
+    super->setCopy(*this);
+    return super;
 }
 
 // -------------------------------------------------------
 
-void PanelPicturePreview::showPictures(bool b){
-    this->setVisible(b);
+void SystemPicture::setCopy(const SystemPicture& super){
+    SuperListItem::setCopy(super);
 }
 
 // -------------------------------------------------------
 //
-//  SLOTS
+//  READ / WRITE
 //
 // -------------------------------------------------------
 
-void PanelPicturePreview::showAvailableContent(bool b){
-    ui->treeViewAvailableContent->setVisible(b);
-    ui->pushButtonMove->setVisible(b);
-    ui->pushButtonAdd->setVisible(b);
+void SystemPicture::read(const QJsonObject &json){
+    SuperListItem::read(json);
+
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::write(QJsonObject &json) const{
+    SuperListItem::write(json);
+
 }

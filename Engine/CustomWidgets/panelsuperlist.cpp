@@ -103,9 +103,16 @@ void PanelSuperList::on_pushButtonMaximum_pressed(){
 
 void PanelSuperList::on_listIndexChanged(QModelIndex index ,QModelIndex){
     QStandardItem* selected = list()->getModel()->itemFromIndex(index);
+
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*) selected
                                ->data().value<quintptr>();
         ui->lineEditName->setText(super->name());
+
+        // If ID == -1, can't edit the name
+        if (super->id() == -1)
+            ui->lineEditName->setEnabled(false);
+        else
+            ui->lineEditName->setEnabled(true);
     }
 }
