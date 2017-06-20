@@ -21,6 +21,8 @@
 #include "ui_panelpicturepreview.h"
 #include "wanok.h"
 #include <QDirIterator>
+#include <QFileDialog>
+#include <QMessageBox>
 
 QString PanelPicturePreview::pathIconRed = ":/icons/Ressources/point_r.png";
 QString PanelPicturePreview::pathIconBlue = ":/icons/Ressources/point_b.png";
@@ -39,13 +41,27 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     ui->setupUi(this);
 
     ui->widgetPanelIDs->showButtonMax(false);
+    ui->widgetPanelIDs->list()->setCanBrutRemove(true);
+    ui->widgetPanelIDs->list()->setHasContextMenu(false);
     connect(ui->checkBoxContent, SIGNAL(toggled(bool)),
             this, SLOT(showAvailableContent(bool)));
 
+    // Available content
     ui->treeViewAvailableContent->initializeModel(new QStandardItemModel);
     ui->treeViewAvailableContent->setHasContextMenu(false);
     ui->treeViewAvailableContent->setCanBeControled(false);
     ui->treeViewAvailableContent->setCanMove(false);
+    ui->treeViewAvailableContent->setUpdateId(true);
+
+    connect(ui->treeViewAvailableContent,
+            SIGNAL(deletingItem(SuperListItem*, int)),
+            this,
+            SLOT(deletingContent(SuperListItem*, int)));
+
+    connect(ui->treeViewAvailableContent,
+            SIGNAL(doubleClicked(QModelIndex)),
+            this,
+            SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
 }
 
 PanelPicturePreview::~PanelPicturePreview()
@@ -79,7 +95,7 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
         ui->widgetPanelIDs->list()->setCurrentIndex(index);
 
         // Loading first available content
-        loadAvailableContent();
+        loadAvailableContent(-2);
 
         connect(ui->treeViewAvailableContent->selectionModel(),
                 SIGNAL(currentChanged(QModelIndex,QModelIndex)),
@@ -96,23 +112,34 @@ void PanelPicturePreview::showPictures(bool b){
 // -------------------------------------------------------
 
 void PanelPicturePreview::updateImage(QStandardItem* item){
-    SystemPicture* super;
+    if (item != nullptr){
+        SystemPicture* super;
 
-    super = (SystemPicture*) item->data().value<qintptr>();
-    if (super != nullptr){
-        if (super->id() == -1){
-            ui->widgetPreview->setNoneImage();
+        super = (SystemPicture*) item->data().value<qintptr>();
+        if (super != nullptr){
+            if (super->id() == -1){
+                ui->widgetPreview->setNoneImage();
+            }
+            else{
+                ui->widgetPreview->setImage(super->getPath(m_pictureKind));
+            }
+            ui->widgetPreview->repaint();
         }
-        else{
-            ui->widgetPreview->setImage(super->getPath(m_pictureKind));
-        }
+    }
+    else{
+        ui->widgetPreview->setNoneImage();
         ui->widgetPreview->repaint();
     }
 }
 
 // -------------------------------------------------------
 
-void PanelPicturePreview::loadAvailableContent(){
+void PanelPicturePreview::loadAvailableContent(int row){
+    if (row == -1){
+        QStandardItem* item = ui->treeViewAvailableContent->getSelected();
+        if (item != nullptr)
+            row = item->row();
+    }
 
     // Clear
     SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel(), false);
@@ -123,26 +150,54 @@ void PanelPicturePreview::loadAvailableContent(){
                           false);
     loadContentFromFolder(SystemPicture::getFolder(m_pictureKind, true),
                           true);
+
+    // Reselect index
+    if (row != -1 && row != -2){
+        QModelIndex index = ui->treeViewAvailableContent->getModel()->index(row,
+                                                                            0);
+        ui->treeViewAvailableContent->setCurrentIndex(index);
+    }
 }
 
 // -------------------------------------------------------
 
 void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR){
-    QDirIterator files(path, QDir::Files);
+    QDir dir(path);
+    QStringList files = dir.entryList(QDir::Files);
     QIcon icon = isBR ? QIcon(PanelPicturePreview::pathIconBlue)
                       : QIcon(PanelPicturePreview::pathIconRed);
     QStandardItem* item;
     SystemPicture* super;
 
-    while (files.hasNext()){
-        files.next();
-        super = new SystemPicture(1, files.fileName(), isBR);
+    for (int i = 0; i < files.size(); i++){
+        super = new SystemPicture(1, files.at(i), isBR);
         item = new QStandardItem;
         item->setData(
                     QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
         item->setText(super->name());
         ui->treeViewAvailableContent->getModel()->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::deleteContent(QString path){
+    if (!QFile(path).remove()){
+        QMessageBox::warning(this,
+                             "Warning", "Could not delete file at " + path);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::moveContent(){
+    QStandardItem* selected = ui->treeViewAvailableContent->getSelected();
+    SystemPicture* super;
+
+    if (selected != nullptr){
+        super = (SystemPicture*) selected->data().value<qintptr>();
+        ui->widgetPanelIDs->list()->addNewItem(super);
     }
 }
 
@@ -173,4 +228,71 @@ void PanelPicturePreview::on_listIndexChanged(QModelIndex index,
                                               QModelIndex)
 {
     updateImage(ui->treeViewAvailableContent->getModel()->itemFromIndex(index));
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonMove_clicked(){
+    moveContent();
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonRefresh_clicked(){
+    loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_pushButtonAdd_clicked(){
+
+    // Open dialog box
+    QStringList files = QFileDialog::getOpenFileNames(
+                this, "Add new contents", "", "Image (*.png *.jpg)");
+    QString path;
+
+    // Copy all the selected files
+    for (int i = 0; i < files.size(); i++){
+        path = files.at(i);
+        if (!QFile::copy(path,
+                    Wanok::pathCombine(
+                        SystemPicture::getFolder(m_pictureKind, false),
+                        QFileInfo(path).fileName())))
+        {
+            QMessageBox::warning(this,
+                                 "Warning", "Could not copy file at " + path);
+        }
+    }
+
+    // Refresh content
+    loadAvailableContent();
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::deletingContent(SuperListItem* super, int row){
+    QString path = ((SystemPicture*) super)->getPath(m_pictureKind);
+
+    // If is BR, ask if sure action before
+    if (((SystemPicture*) super)->isBR()){
+        loadAvailableContent(row);
+        QMessageBox::StandardButton box =
+                QMessageBox::question(this, "Deleting image",
+                                      "You are trying to remove a BR image. "
+                                      "Are you sure you want to do it?",
+                                      QMessageBox::Yes | QMessageBox::No);
+
+        if (box == QMessageBox::Yes){
+            deleteContent(path);
+            loadAvailableContent();
+        }
+    }
+    else
+        deleteContent(path);
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::on_treeViewAvailableContentDoubleClicked(QModelIndex){
+    moveContent();
 }

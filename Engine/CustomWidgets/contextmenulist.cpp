@@ -71,6 +71,36 @@ ContextMenuList* ContextMenuList::createContextCommand(QWidget *parent){
 
 // -------------------------------------------------------
 
+ContextMenuList* ContextMenuList::createContextSuperList(QWidget *parent){
+    ContextMenuList* menu = new ContextMenuList(parent);
+
+    // Creating actions
+    QAction* actionCopy = new QAction("Copy", parent);
+    QAction* actionPaste = new QAction("Paste", parent);
+    QAction* actionDelete = new QAction("Delete", parent);
+    menu->setActionDelete(actionDelete);
+
+    // Editing shortcut
+    actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
+    actionPaste->setShortcut(QKeySequence(QKeySequence::Paste));
+    actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
+
+    // Adding action to the menu
+    menu->addAction(actionCopy);
+    menu->addAction(actionPaste);
+    menu->addSeparator();
+    menu->addAction(actionDelete);
+
+    // Connexions
+    connect(actionCopy, SIGNAL(triggered()), parent, SLOT(contextCopy()));
+    connect(actionPaste, SIGNAL(triggered()), parent, SLOT(contextPaste()));
+    connect(actionDelete, SIGNAL(triggered()), parent, SLOT(contextDelete()));
+
+    return menu;
+}
+
+// -------------------------------------------------------
+
 ContextMenuList* ContextMenuList::createContextMap(QWidget *parent){
     ContextMenuList* menu = new ContextMenuList(parent);
 

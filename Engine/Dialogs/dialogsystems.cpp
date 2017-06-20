@@ -272,7 +272,7 @@ void DialogSystems::on_pageCommonObjectsSelected(QModelIndex index,
 void DialogSystems::on_commonObjectNameChanged(QString){
     int index = ui->panelSuperListCommonObjects->list()->getIndex();
     QStandardItem* item = ui->panelSuperListCommonObjects->list()
-            ->getCurrentItemModel();
+            ->getSelected();
     SystemCommonObject* object = (SystemCommonObject*) item->data()
             .value<quintptr>();
     ui->widgetCommonObject->setInheritanceName(index+1, object->toString());
@@ -291,7 +291,7 @@ void DialogSystems::on_commonObjectMaximumChanged(){
 
 void DialogSystems::on_checkBoxCommonReactionBlockingHero_toggled(bool checked){
     QStandardItem* selected = ui->panelSuperListCommonReactors->list()
-            ->getCurrentItemModel();
+            ->getSelected();
     if (selected != nullptr){
         SystemCommonReaction* react = (SystemCommonReaction*) selected->data()
                 .value<quintptr>();

@@ -38,6 +38,7 @@ public:
     SystemPicture();
     SystemPicture(int i, QString n, bool isBR);
     virtual ~SystemPicture();
+    bool isBR() const;
     static QString getFolder(PictureKind kind, bool isBR);
     QString getPath(PictureKind kind) const;
 

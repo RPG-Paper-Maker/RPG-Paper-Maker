@@ -342,9 +342,10 @@ void MainWindow::on_actionSwitches_manager_triggered(){
 
 void MainWindow::on_actionPictures_manager_triggered(){
     DialogPictures dialog;
-    if (openDialog(dialog) == QDialog::Accepted){
-
-    }
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writePicturesDatas();
+    else
+        project->readPicturesDatas();
 }
 
 // -------------------------------------------------------

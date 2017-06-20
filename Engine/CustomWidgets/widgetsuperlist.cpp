@@ -18,6 +18,8 @@
 */
 
 #include "widgetsuperlist.h"
+#include "widgetsupertree.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -27,7 +29,9 @@
 
 WidgetSuperList::WidgetSuperList(QWidget *parent) :
     QListView(parent),
-    m_newItemInstance(nullptr)
+    m_newItemInstance(nullptr),
+    m_canBrutRemove(false),
+    m_hasContextMenu(true)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setAcceptDrops(true);
@@ -39,17 +43,29 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
 
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this,
             SLOT(openDialog(QModelIndex)));
+
+    // Context
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_contextMenu = ContextMenuList::createContextSuperList(this);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(showContextMenu(const QPoint &)));
 }
 
 WidgetSuperList::~WidgetSuperList()
 {
-    if (m_newItemInstance != nullptr) delete m_newItemInstance;
+    delete m_contextMenu;
+    if (m_newItemInstance != nullptr)
+        delete m_newItemInstance;
 }
+
+void WidgetSuperList::setCanBrutRemove(bool b) { m_canBrutRemove = b; }
+
+void WidgetSuperList::setHasContextMenu(bool b) { m_hasContextMenu = b; }
 
 QStandardItemModel *WidgetSuperList::getModel() const { return p_model; }
 
 void WidgetSuperList::setName(const QString &s){
-    QStandardItem* selected = getCurrentItemModel();
+    QStandardItem* selected = getSelected();
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*)(selected->data()
                                                 .value<quintptr>());
@@ -73,7 +89,7 @@ void WidgetSuperList::initializeNewItemInstance(SuperListItem* item){
 //
 // -------------------------------------------------------
 
-QStandardItem* WidgetSuperList::getCurrentItemModel() const{
+QStandardItem* WidgetSuperList::getSelected() const{
     return p_model->itemFromIndex(this->selectionModel()->currentIndex());
 }
 
@@ -116,16 +132,100 @@ void WidgetSuperList::setMaximum(int newSize){
 }
 
 // -------------------------------------------------------
+
+void WidgetSuperList::addNewItem(SuperListItem* super){
+    SuperListItem* copy = new SuperListItem;
+    copy->setCopy(*super);
+    copy->setId(WidgetSuperTree::getNewId(p_model, 0));
+
+    QList<QStandardItem*> row = copy->getModelRow();
+    p_model->appendRow(row);
+    QModelIndex modelIndex = p_model->index(
+                p_model->invisibleRootItem()->rowCount() - 1, 0);
+    setCurrentIndex(modelIndex);
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::brutDelete(QStandardItem* item){
+    SuperListItem* super = (SuperListItem*) item->data().value<qintptr>();
+
+    if (super->id() != -1){
+        delete ((SuperListItem*) item->data().value<qintptr>());
+        p_model->removeRow(item->row());
+    }
+}
+
+// -------------------------------------------------------
+//
+//  EVENTS
+//
+// -------------------------------------------------------
+
+void WidgetSuperList::keyPressEvent(QKeyEvent *event){
+    if (m_hasContextMenu || m_canBrutRemove){
+
+        // Forcing shortcuts
+        QKeySequence seq = Wanok::getKeySequence(event);
+        QList<QAction*> actions =  m_contextMenu->actions();
+
+        if (actions.at(3)->shortcut().matches(seq))
+            contextDelete();
+
+        if (m_hasContextMenu){
+
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
 // -------------------------------------------------------
 
 void WidgetSuperList::openDialog(QModelIndex){
-    QStandardItem* selected = getCurrentItemModel();
+    QStandardItem* selected = getSelected();
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*)(selected->data()
                                                 .value<quintptr>());
         super->openDialog();
+    }
+}
+
+// -------------------------------------------------------
+//
+//  CONTEXT MENU SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetSuperList::showContextMenu(const QPoint & p){
+    if (m_hasContextMenu){
+        QStandardItem* selected = getSelected();
+        if (selected != nullptr){
+            m_contextMenu->showContextMenu(p);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::contextCopy(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::contextPaste(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::contextDelete(){
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        if (m_canBrutRemove)
+            brutDelete(selected);
     }
 }

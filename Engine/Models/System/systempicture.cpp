@@ -43,6 +43,8 @@ SystemPicture::~SystemPicture(){
 
 }
 
+bool SystemPicture::isBR() const { return m_isBR; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

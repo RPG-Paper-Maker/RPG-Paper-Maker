@@ -24,6 +24,7 @@
 #include <QModelIndex>
 #include <QStandardItemModel>
 #include "picturekind.h"
+#include "superlistitem.h"
 
 namespace Ui {
 class PanelPicturePreview;
@@ -46,13 +47,20 @@ private:
 
     void showPictures(bool b);
     void updateImage(QStandardItem* item);
-    void loadAvailableContent();
+    void loadAvailableContent(int row = -1);
     void loadContentFromFolder(QString path, bool isBR);
+    void deleteContent(QString path);
+    void moveContent();
 
 private slots:
     void showAvailableContent(bool b);
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
     void on_listIndexChanged(QModelIndex index, QModelIndex);
+    void on_pushButtonMove_clicked();
+    void on_pushButtonRefresh_clicked();
+    void on_pushButtonAdd_clicked();
+    void deletingContent(SuperListItem* super, int row);
+    void on_treeViewAvailableContentDoubleClicked(QModelIndex);
 };
 
 #endif // PANELPICTUREPREVIEW_H

@@ -290,7 +290,7 @@ void DialogDatas::on_comboBoxItemType_currentIndexChanged(int index){
 
 void DialogDatas::on_checkBoxItemConsumable_toggled(bool checked){
     QStandardItem* selected = ui->panelSuperListItems->list()
-            ->getCurrentItemModel();
+            ->getSelected();
     SystemItem* sysItem = ((SystemItem*)selected->data().value<quintptr>());
     sysItem->setConsumable(checked);
 }
@@ -369,7 +369,7 @@ void DialogDatas::on_pageTroopSelected(QModelIndex index, QModelIndex){
 
 void DialogDatas::on_pushButtonMonsterbattleRewards_clicked(){
     QStandardItem* selected = ui->panelSuperListMonsters->list()
-            ->getCurrentItemModel();
+            ->getSelected();
     SystemMonster* monster = (SystemMonster*)selected->data()
             .value<quintptr>();
     SystemMonster monsterCopy;

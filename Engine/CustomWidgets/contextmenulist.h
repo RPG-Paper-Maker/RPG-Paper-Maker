@@ -37,6 +37,7 @@ class ContextMenuList : public QMenu
 public:
     explicit ContextMenuList(QWidget *parent = 0);
     static ContextMenuList* createContextCommand(QWidget *parent = 0);
+    static ContextMenuList* createContextSuperList(QWidget *parent = 0);
     static ContextMenuList* createContextMap(QWidget *parent = 0);
     static ContextMenuList* createContextDirectory(QWidget *parent = 0);
     void setActionDelete(QAction* action);

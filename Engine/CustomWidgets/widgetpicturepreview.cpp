@@ -66,5 +66,7 @@ void WidgetPicturePreview::updateImageSize(){
 void WidgetPicturePreview::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
+    painter.fillRect(QRect(0, 0, m_image.width(), m_image.height()),
+                     QColor(220, 220, 220));
     painter.drawImage(0, 0, m_image);
 }

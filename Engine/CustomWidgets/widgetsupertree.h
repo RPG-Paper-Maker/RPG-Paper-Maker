@@ -50,8 +50,9 @@ public:
     void setCanBeEmpty(bool b);
     void setCanBeControled(bool b);
     void setCanMove(bool b);
-    int getNewId() const;
+    static int getNewId(QStandardItemModel* model, int offset = 1);
     QStandardItem* getSelected() const;
+    void addNewItem(SuperListItem* super, QStandardItem* root, int index);
 
     static void copy(QStandardItemModel *model,
                      QStandardItemModel *modelToCopy);
@@ -91,7 +92,7 @@ private slots:
 
 signals:
     void needsUpdateJson(SuperListItem* super);
-    void deletingItem(SuperListItem* super);
+    void deletingItem(SuperListItem* super, int row);
 };
 
 #endif // WIDGETSUPERTREE_H

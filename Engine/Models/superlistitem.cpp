@@ -206,6 +206,7 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(toString());
     row.append(item);
 

@@ -53,32 +53,53 @@ QStandardItemModel* PicturesDatas::model(PictureKind kind) const {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefault(){
-    QList<SystemPicture*> pictures;
+    QList<QString> names;
 
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Bars);
-    pictures.clear();
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Icons);
-    pictures.clear();
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Autotiles);
-    pictures.clear();
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Characters);
-    pictures.clear();
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Reliefs);
-    pictures.clear();
-    pictures << new SystemPicture;
-    setDefaultPictures(pictures, PictureKind::Tilesets);
+    // Bars
+    names << "hpBar" << "mpBar" << "spBar";
+    setDefaultPictures(names, PictureKind::Bars);
+
+    // Icons
+    names << "darkness" << "fire" << "grass" << "light" << "water" << "wind";
+    setDefaultPictures(names, PictureKind::Icons);
+
+    // Autotiles
+    names << "grass";
+    setDefaultPictures(names, PictureKind::Autotiles);
+
+    // Characters
+    names << "lucas";
+    setDefaultPictures(names, PictureKind::Characters);
+
+    // Reliefs
+    names << "grass";
+    setDefaultPictures(names, PictureKind::Reliefs);
+
+    // Tilesets
+    names << "plains";
+    setDefaultPictures(names, PictureKind::Tilesets);
 }
 
 // -------------------------------------------------------
 
-void PicturesDatas::setDefaultPictures(QList<SystemPicture*>& pictures,
+void PicturesDatas::fillList(QList<SystemPicture*> &pictures,
+                             QList<QString>& names)
+{
+    int i;
+
+    pictures << new SystemPicture;
+    for (i = 0; i < names.size() ; i++)
+        pictures << new SystemPicture(i + 1, names.at(i) + ".png", true);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultPictures(QList<QString> &names,
                                        PictureKind kind)
 {
+    QList<SystemPicture*> pictures;
+    fillList(pictures, names);
+
     QStandardItem* item;
     QStandardItemModel* model = new QStandardItemModel;
 
@@ -92,6 +113,8 @@ void PicturesDatas::setDefaultPictures(QList<SystemPicture*>& pictures,
         model->appendRow(item);
     }
     m_models[kind] = model;
+
+    names.clear();
 }
 
 // -------------------------------------------------------

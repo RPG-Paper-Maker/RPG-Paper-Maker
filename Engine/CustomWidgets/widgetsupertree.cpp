@@ -82,15 +82,9 @@ void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){
 void WidgetSuperTree::newItem(QStandardItem* selected){
     SuperListItem* super = m_newItemInstance->createCopy();
     if (super->openDialog()){
+        int index = getRootOfItem(selected)->row();
         QStandardItem* root = getRootOfItem(selected);
-        int index = selected->row();
-        if (m_updateId)
-            super->setId(getNewId());
-        QList<QStandardItem*> row = super->getModelRow();
-        root->insertRow(index, row);
-        QModelIndex modelIndex = p_model->index(index,0);
-        setCurrentIndex(modelIndex);
-        emit needsUpdateJson(super);
+        addNewItem(super, root, index);
     }
     else
         delete super;
@@ -128,13 +122,16 @@ void WidgetSuperTree::pasteItem(QStandardItem*){
 
 void WidgetSuperTree::deleteItem(QStandardItem* selected){
     SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    int row;
+
     // Can't delete empty node
     if (super != nullptr){
         // If can be empty
         if (m_canBeEmpty || p_model->invisibleRootItem()->rowCount() > 2){
             QStandardItem* root = getRootOfItem(selected);
-            root->removeRow(selected->row());
-            emit deletingItem(super);
+            row = selected->row();
+            root->removeRow(row);
+            emit deletingItem(super, row);
             delete super;
             emit needsUpdateJson(nullptr);
         }
@@ -176,12 +173,13 @@ void WidgetSuperTree::updateAllNodesString(QStandardItem *item){
 
 // -------------------------------------------------------
 
-int WidgetSuperTree::getNewId() const{
+int WidgetSuperTree::getNewId(QStandardItemModel *model, int offset){
     int id;
-    for (id = 1; id < p_model->invisibleRootItem()->rowCount(); id++){
+    for (id = 1; id < model->invisibleRootItem()->rowCount(); id++){
         bool test = false;
-        for (int j = 0; j < p_model->invisibleRootItem()->rowCount() - 1; j++){
-            SuperListItem* super = (SuperListItem*) p_model->item(j)->data()
+        int length = model->invisibleRootItem()->rowCount() - offset;
+        for (int j = 0; j < length; j++){
+            SuperListItem* super = (SuperListItem*) model->item(j)->data()
                                    .value<quintptr>();
             if (id == super->id()){
                 test = true;
@@ -192,6 +190,20 @@ int WidgetSuperTree::getNewId() const{
     }
 
     return id;
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
+                                 int index)
+{
+    if (m_updateId)
+        super->setId(getNewId(p_model));
+    QList<QStandardItem*> row = super->getModelRow();
+    root->insertRow(index, row);
+    QModelIndex modelIndex = p_model->index(index, 0);
+    setCurrentIndex(modelIndex);
+    emit needsUpdateJson(super);
 }
 
 // -------------------------------------------------------
@@ -276,6 +288,7 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
             }
         }
     }
+    QTreeView::mouseDoubleClickEvent(event);
 }
 
 // -------------------------------------------------------

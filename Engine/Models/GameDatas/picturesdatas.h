@@ -43,7 +43,8 @@ public:
     void read(QString path);
     QStandardItemModel* model(PictureKind kind) const;
     void setDefault();
-    void setDefaultPictures(QList<SystemPicture*> &pictures, PictureKind kind);
+    void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
+    void setDefaultPictures(QList<QString>& names, PictureKind kind);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

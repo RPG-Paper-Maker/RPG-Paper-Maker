@@ -24,6 +24,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include "superlistitem.h"
+#include "contextmenulist.h"
 
 // -------------------------------------------------------
 //
@@ -39,21 +40,36 @@ class WidgetSuperList : public QListView
 public:
     explicit WidgetSuperList(QWidget *parent = 0);
     virtual ~WidgetSuperList();
+    void setCanBrutRemove(bool b);
+    void setHasContextMenu(bool b);
     void initializeModel(QStandardItemModel* m);
     void initializeNewItemInstance(SuperListItem *item);
     QStandardItemModel* getModel() const;
-    QStandardItem* getCurrentItemModel() const;
+    QStandardItem* getSelected() const;
     void setName(const QString& s);
     void setIndex(int i);
     int getIndex();
     void setMaximum(int newSize);
+    void addNewItem(SuperListItem* super);
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     QStandardItemModel* p_model;
     SuperListItem* m_newItemInstance; 
+    ContextMenuList* m_contextMenu;
+    bool m_canBrutRemove;
+    bool m_hasContextMenu;
+
+    void brutDelete(QStandardItem* item);
 
 private slots:
     void openDialog(QModelIndex);
+    void showContextMenu(const QPoint & p);
+    void contextCopy();
+    void contextPaste();
+    void contextDelete();
 };
 
 #endif // WIDGETSUPERLIST_H
