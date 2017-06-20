@@ -26,6 +26,7 @@
 #include "camera.h"
 #include "mapeditorselectionkind.h"
 #include "cursor.h"
+#include "contextmenulist.h"
 
 // -------------------------------------------------------
 //
@@ -45,7 +46,9 @@ public:
     Map* map() const;
     Grid* grid() const;
     Cursor* cursor() const;
+    Cursor* cursorObject() const;
     Camera* camera() const;
+    void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
     void initialize();
     Map* loadMap(int idMap, QVector3D *position);
@@ -90,6 +93,8 @@ public:
     void stockSprite(Position& p);
     void removeSprite(Position& p);
     void eraseSprite(Position& p);
+    void setCursorObjectPosition(Position& p);
+    void showObjectMenuContext();
     void addObject(Position& p);
     void removeObject(Position& p);
 
@@ -97,7 +102,8 @@ public:
     Portion getLocalPortion(Position& position) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
 
-    void paintGL(QMatrix4x4& modelviewProjection);
+    void paintGL(QMatrix4x4& modelviewProjection,
+                 MapEditorSelectionKind selectionKind);
 
     void onMouseWheelMove(QWheelEvent *event);
     void onMouseMove(Qt::MouseButton k, QMouseEvent* event);
@@ -112,6 +118,7 @@ private:
     Map* m_map;
     Grid* m_grid;
     Cursor* m_cursor;
+    Cursor* m_cursorObject;
     Camera* m_camera;
 
     // Others
@@ -128,6 +135,8 @@ private:
     QSet<Portion> m_portionsToSave;
     bool m_displayGrid;
     QStandardItem* m_treeMapNode;
+    SystemCommonObject* m_selectedObject;
+    ContextMenuList* m_contextMenu;
 };
 
 #endif // CONTROLMAPEDITOR_H

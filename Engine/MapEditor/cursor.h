@@ -51,7 +51,11 @@ public:
     float getX() const;
     float getY() const;
     float getZ() const;
+    void setFrameDuration(int i);
+    void setFrameNumber(int i);
+    QVector3D* position() const;
     Portion getPortion() const;
+    void loadTexture(QString path);
     void initializeGL();
     void initializeVertices();
     void initializeSquareSize(int s);
@@ -76,8 +80,8 @@ protected:
     int u_cursorPosition;
     int u_frameTex;
 
-    static const int m_frameDuration;
-    static const int m_frameNumber;
+    int m_frameDuration;
+    int m_frameNumber;
 };
 
 #endif // CURSOR_H

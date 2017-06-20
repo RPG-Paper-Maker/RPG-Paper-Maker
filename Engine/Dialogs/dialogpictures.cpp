@@ -50,6 +50,7 @@ DialogPictures::DialogPictures(QWidget *parent) :
 
 DialogPictures::~DialogPictures()
 {
+    delete ui->treeView->model();
     delete ui;
 }
 

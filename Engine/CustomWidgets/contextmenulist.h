@@ -40,11 +40,27 @@ public:
     static ContextMenuList* createContextSuperList(QWidget *parent = 0);
     static ContextMenuList* createContextMap(QWidget *parent = 0);
     static ContextMenuList* createContextDirectory(QWidget *parent = 0);
+    static ContextMenuList* createContextObject(QWidget *parent = 0);
+    void setActionNew(QAction* action);
+    void setActionEdit(QAction* action);
+    void setActionCopy(QAction* action);
+    void setActionPaste(QAction* action);
     void setActionDelete(QAction* action);
+    void setActionHero(QAction* action);
+    void canNew(bool b);
+    void canEdit(bool b);
+    void canCopy(bool b);
+    void canPaste(bool b);
     void canDelete(bool b);
+    void canHero(bool b);
 
 protected:
+    QAction* m_actionNew;
+    QAction* m_actionEdit;
+    QAction* m_actionCopy;
+    QAction* m_actionPaste;
     QAction* m_actionDelete;
+    QAction* m_actionHero;
 
 public slots:
     void showContextMenu(const QPoint & p);

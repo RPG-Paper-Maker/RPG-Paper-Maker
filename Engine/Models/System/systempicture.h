@@ -38,12 +38,16 @@ public:
     SystemPicture();
     SystemPicture(int i, QString n, bool isBR);
     virtual ~SystemPicture();
+    static QString pathIconRed;
+    static QString pathIconBlue;
     bool isBR() const;
     static QString getFolder(PictureKind kind, bool isBR);
+    static QString getLocalFolder(PictureKind kind);
     QString getPath(PictureKind kind) const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);
+    virtual QList<QStandardItem*> getModelRow() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

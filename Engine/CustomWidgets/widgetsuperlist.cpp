@@ -134,8 +134,7 @@ void WidgetSuperList::setMaximum(int newSize){
 // -------------------------------------------------------
 
 void WidgetSuperList::addNewItem(SuperListItem* super){
-    SuperListItem* copy = new SuperListItem;
-    copy->setCopy(*super);
+    SuperListItem* copy = super->createCopy();
     copy->setId(WidgetSuperTree::getNewId(p_model, 0));
 
     QList<QStandardItem*> row = copy->getModelRow();

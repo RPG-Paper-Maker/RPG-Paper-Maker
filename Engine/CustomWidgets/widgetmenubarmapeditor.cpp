@@ -52,6 +52,10 @@ MapEditorSelectionKind WidgetMenuBarMapEditor::selectionKind() const {
     return m_selectionKind;
 }
 
+MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
+    return m_subSelectionKind;
+}
+
 // -------------------------------------------------------
 //
 //  EVENTS
@@ -73,6 +77,7 @@ void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
         // Select the pressed action
         m_selectionKind = static_cast<MapEditorSelectionKind>(actions()
                                                               .indexOf(action));
+
         action->setProperty("selection",true);
     }
 
@@ -107,4 +112,14 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
         opt.rect = adjustedActionRect;
         style()->drawControl(QStyle::CE_MenuBarItem, &opt, &p, this);
     }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction*){
+
 }

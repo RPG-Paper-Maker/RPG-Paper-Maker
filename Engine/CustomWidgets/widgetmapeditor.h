@@ -75,6 +75,7 @@ private:
     QSpinBox* m_spinBoxX;
     QSpinBox* m_spinBoxZ;
     QVector3D* m_position;
+    ContextMenuList* m_contextMenu;
 
 public slots:
     void update();
@@ -88,6 +89,13 @@ protected slots:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
+
+    void contextNew();
+    void contextEdit();
+    void contextCopy();
+    void contextPaste();
+    void contextDelete();
+    void contextHero();
 };
 
 #endif // WIDGETMAPEDITOR_H

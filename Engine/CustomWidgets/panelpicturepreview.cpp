@@ -24,9 +24,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-QString PanelPicturePreview::pathIconRed = ":/icons/Ressources/point_r.png";
-QString PanelPicturePreview::pathIconBlue = ":/icons/Ressources/point_b.png";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -100,6 +97,10 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
         connect(ui->treeViewAvailableContent->selectionModel(),
                 SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
+
+        // Update checkBox
+        ui->checkBoxContent->setText("Show available content of " +
+                                     SystemPicture::getLocalFolder(kind));
     }
 }
 
@@ -164,8 +165,8 @@ void PanelPicturePreview::loadAvailableContent(int row){
 void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR){
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(PanelPicturePreview::pathIconBlue)
-                      : QIcon(PanelPicturePreview::pathIconRed);
+    QIcon icon = isBR ? QIcon(SystemPicture::pathIconBlue)
+                      : QIcon(SystemPicture::pathIconRed);
     QStandardItem* item;
     SystemPicture* super;
 

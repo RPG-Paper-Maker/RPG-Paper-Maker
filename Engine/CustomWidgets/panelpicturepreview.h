@@ -37,8 +37,6 @@ class PanelPicturePreview : public QWidget
 public:
     explicit PanelPicturePreview(QWidget *parent = 0);
     ~PanelPicturePreview();
-    static QString pathIconRed;
-    static QString pathIconBlue;
     void setPictureKind(PictureKind kind);
 
 private:

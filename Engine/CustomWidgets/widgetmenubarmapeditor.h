@@ -25,6 +25,7 @@
 #include <QPaintEvent>
 #include <QColor>
 #include "mapeditorselectionkind.h"
+#include "mapeditorsubselectionkind.h"
 
 // -------------------------------------------------------
 //
@@ -47,15 +48,20 @@ public:
     ~WidgetMenuBarMapEditor();
     static QColor colorBackgroundSelected;
     MapEditorSelectionKind selectionKind() const;
+    MapEditorSubSelectionKind subSelectionKind() const;
 
 private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
+    MapEditorSubSelectionKind m_subSelectionKind;
 
 protected:
     void mouseMoveEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void paintEvent(QPaintEvent *e);
+
+private slots:
+    void on_menuFloors_triggered(QAction*);
 };
 
 #endif // WIDGETMENUBARMAPEDITOR_H

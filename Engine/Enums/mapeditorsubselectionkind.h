@@ -17,45 +17,27 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-QGroupBox {
-    border: 1px solid silver;
-    border-radius: 3px;
-    margin-top: 0.5em;
-}
-QGroupBox::title {
-    subcontrol-origin: margin;
-    left: 10px;
-    padding: 0 3px 0 3px;
-}
+#ifndef MAPEDITORSUBSELECTIONKIND_H
+#define MAPEDITORSUBSELECTIONKIND_H
 
+// -------------------------------------------------------
+//
+//  ENUM MapEditorSubSelectionKind
+//
+//  All the types of selection for the map editor.
+//
+// -------------------------------------------------------
 
-QMenuBar {
-     background: #333333;
-     color:white;
-}
+enum class MapEditorSubSelectionKind {
+    Floors,
+    Autotiles,
+    Water,
+    SpritesFace,
+    SpritesFix,
+    SpritesDouble,
+    SpritesQuadra,
+    SpritesWall,
+    Object
+};
 
-QMenu{
-     background: #333333;
-     color:white;
-}
-
-QMenu::item:disabled{
-     color:silver;
-}
-
-QMenu::item:selected {
-     background-color: CadetBlue;
-}
-
-WidgetMenuBarMapEditor{
-    spacing: 0;
-}
-
-WidgetMenuBarMapEditor::item{
-     padding: 10px;
-     background: transparent;
-}
-
-WidgetMenuBarMapEditor > QMenu::item:selected{
-     background-color: #8c8c8c;
-}
+#endif // MAPEDITORSUBSELECTIONKIND_H

@@ -26,7 +26,6 @@
    <property name="title">
     <string>Objects</string>
    </property>
-   <addaction name="actionEvents"/>
   </widget>
   <widget class="QMenu" name="menuFace_Sprite">
    <property name="title">

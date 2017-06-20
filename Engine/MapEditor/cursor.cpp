@@ -24,9 +24,6 @@
 #include "floors.h"
 #include "keyboardenginekind.h"
 
-const int Cursor::m_frameDuration = 250;
-const int Cursor::m_frameNumber = 4;
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -36,13 +33,11 @@ const int Cursor::m_frameNumber = 4;
 Cursor::Cursor(QVector3D* position) :
     m_position(position),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
-    m_indexBuffer(QOpenGLBuffer::IndexBuffer)
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_frameDuration(250),
+    m_frameNumber(4)
 {
-    // Loading textures
-    m_texture = new QOpenGLTexture(
-                QImage(":/textures/Ressources/editor_cursor.png"));
-    m_texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-    m_texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+
 }
 
 Cursor::~Cursor()
@@ -89,6 +84,12 @@ float Cursor::getY() const { return m_position->y(); }
 
 float Cursor::getZ() const { return m_position->z(); }
 
+void Cursor::setFrameDuration(int i) { m_frameDuration = i; }
+
+void Cursor::setFrameNumber(int i) { m_frameNumber = i; }
+
+QVector3D* Cursor::position() const { return m_position; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -99,6 +100,14 @@ Portion Cursor::getPortion() const{
     return Portion(getSquareX() / Wanok::portionSize,
                    getSquareY()/ Wanok::portionSize,
                    getSquareZ() / Wanok::portionSize);
+}
+
+// -------------------------------------------------------
+
+void Cursor::loadTexture(QString path){
+    m_texture = new QOpenGLTexture(QImage(path));
+    m_texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+    m_texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 }
 
 // -------------------------------------------------------
@@ -158,7 +167,7 @@ void Cursor::initialize(){
 void Cursor::initializeVertices(){
 
     QVector3D pos(0.0f, 0.15f, 0.0f);
-    float w = 1.0f / 4.0f;
+    float w = 1.0f / m_frameNumber;
     float h = 1.0f;
 
     // Vertices

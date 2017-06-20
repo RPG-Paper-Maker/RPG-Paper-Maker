@@ -100,17 +100,12 @@ void PicturesDatas::setDefaultPictures(QList<QString> &names,
     QList<SystemPicture*> pictures;
     fillList(pictures, names);
 
-    QStandardItem* item;
     QStandardItemModel* model = new QStandardItemModel;
+    QList<QStandardItem*> row;
 
     for (int i = 0; i < pictures.size(); i++){
-        item = new QStandardItem;
-        item->setData(
-                    QVariant::fromValue(
-                        reinterpret_cast<quintptr>(pictures[i])));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(pictures[i]->toString());
-        model->appendRow(item);
+        row = pictures.at(i)->getModelRow();
+        model->appendRow(row);
     }
     m_models[kind] = model;
 
@@ -128,6 +123,7 @@ void PicturesDatas::read(const QJsonObject &json){
     QJsonObject jsonObj;
     QJsonArray jsonArray;
     QStandardItemModel* model;
+    QList<QStandardItem*> row;
 
     for (int i = 0; i < jsonList.size(); i++){
         jsonObj = jsonList.at(i).toObject();
@@ -135,14 +131,10 @@ void PicturesDatas::read(const QJsonObject &json){
         model = new QStandardItemModel;
 
         for (int j = 0; j < jsonArray.size(); j++){
-            QStandardItem* item = new QStandardItem;
             SystemPicture* super = new SystemPicture;
             super->read(jsonArray[j].toObject());
-            item->setData(
-                        QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-            item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-            item->setText(super->toString());
-            model->appendRow(item);
+            row = super->getModelRow();
+            model->appendRow(row);
         }
 
         m_models[static_cast<PictureKind>(jsonObj["k"].toInt())] = model;

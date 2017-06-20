@@ -20,6 +20,9 @@
 #include "systempicture.h"
 #include "wanok.h"
 
+QString SystemPicture::pathIconRed = ":/icons/Ressources/point_r.png";
+QString SystemPicture::pathIconBlue = ":/icons/Ressources/point_b.png";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -54,26 +57,29 @@ bool SystemPicture::isBR() const { return m_isBR; }
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
     QString folder = isBR ? Wanok::pathBR
                           : Wanok::get()->project()->pathCurrentProject();
-    QString path;
 
+    return Wanok::pathCombine(folder, getLocalFolder(kind));
+}
+
+// -------------------------------------------------------
+
+QString SystemPicture::getLocalFolder(PictureKind kind){
     switch (kind){
     case PictureKind::Bars:
-        path = Wanok::pathBars; break;
+        return Wanok::pathBars;
     case PictureKind::Icons:
-        path = Wanok::pathIcons; break;
+        return Wanok::pathIcons;
     case PictureKind::Autotiles:
-        path = Wanok::pathAutotiles; break;
+        return Wanok::pathAutotiles;
     case PictureKind::Characters:
-        path = Wanok::pathCharacters; break;
+        return Wanok::pathCharacters;
     case PictureKind::Reliefs:
-        path = Wanok::pathReliefs; break;
+        return Wanok::pathReliefs;
     case PictureKind::Tilesets:
-        path = Wanok::pathTilesets; break;
+        return Wanok::pathTilesets;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }
-
-    return Wanok::pathCombine(folder, path);
 }
 
 // -------------------------------------------------------
@@ -96,6 +102,28 @@ SuperListItem* SystemPicture::createCopy() const{
 
 void SystemPicture::setCopy(const SystemPicture& super){
     SuperListItem::setCopy(super);
+
+    m_isBR = super.m_isBR;
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem *> SystemPicture::getModelRow() const{
+    QList<QStandardItem*> row = QList<QStandardItem*>();
+    QStandardItem* item = new QStandardItem;
+    QIcon icon = m_isBR ? QIcon(SystemPicture::pathIconBlue)
+                        : QIcon(SystemPicture::pathIconRed);
+
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+
+    if (id() != -1)
+        item->setIcon(icon);
+
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(toString());
+    row.append(item);
+
+    return row;
 }
 
 // -------------------------------------------------------

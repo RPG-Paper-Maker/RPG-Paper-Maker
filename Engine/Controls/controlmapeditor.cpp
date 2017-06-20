@@ -31,6 +31,7 @@ ControlMapEditor::ControlMapEditor() :
     m_map(nullptr),
     m_grid(nullptr),
     m_cursor(nullptr),
+    m_cursorObject(nullptr),
     m_camera(new Camera),
     m_displayGrid(true)
 {
@@ -41,6 +42,7 @@ ControlMapEditor::~ControlMapEditor(){
     deleteMap();
     delete m_camera;
     delete m_cursor;
+    delete m_cursorObject;
 }
 
 Map* ControlMapEditor::map() const { return m_map; }
@@ -49,7 +51,13 @@ Grid* ControlMapEditor::grid() const { return m_grid; }
 
 Cursor* ControlMapEditor::cursor() const { return m_cursor; }
 
+Cursor* ControlMapEditor::cursorObject() const { return m_cursorObject; }
+
 Camera* ControlMapEditor::camera() const { return m_camera; }
+
+void ControlMapEditor::setContextMenu(ContextMenuList* m){
+    m_contextMenu = m;
+}
 
 void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
     m_treeMapNode = item;
@@ -76,8 +84,19 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
 
     // Cursor
     m_cursor = new Cursor(position);
+    m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
     m_cursor->initializeSquareSize(m_map->squareSize());
     m_cursor->initialize();
+
+    // Cursor object
+    m_cursorObject = new Cursor(new QVector3D);
+    Position pos;
+    setCursorObjectPosition(pos);
+    m_cursorObject->setFrameNumber(1);
+    m_cursorObject->loadTexture(
+                ":/textures/Ressources/object_square_cursor.png");
+    m_cursorObject->initializeSquareSize(m_map->squareSize());
+    m_cursorObject->initialize();
 
     // Camera
     m_camera->setDistance(710);
@@ -91,10 +110,15 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
 
 void ControlMapEditor::deleteMap(){
 
-    // Cursor
+    // Cursors
     if (m_cursor != nullptr){
         delete m_cursor;
         m_cursor = nullptr;
+    }
+    if (m_cursorObject != nullptr){
+        delete m_cursorObject->position();
+        delete m_cursorObject;
+        m_cursorObject = nullptr;
     }
 
     // Grid
@@ -420,7 +444,7 @@ void ControlMapEditor::add(MapEditorSelectionKind selection, Position& p){
         addSprite(p);
         break;
     case MapEditorSelectionKind::Objects:
-        addObject(p); break;
+        setCursorObjectPosition(p); break;
     }
 }
 
@@ -435,7 +459,7 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p){
         removeSprite(p);
         break;
     case MapEditorSelectionKind::Objects:
-        removeObject(p);
+        showObjectMenuContext();
         break;
     }
 }
@@ -546,48 +570,80 @@ void ControlMapEditor::eraseSprite(Position& p){
 //
 // -------------------------------------------------------
 
+void ControlMapEditor::setCursorObjectPosition(Position& p){
+    m_cursorObject->setX(p.x());
+    m_cursorObject->setZ(p.z());
+
+    Portion portion = getLocalPortion(p);
+    if (m_map->isInPortion(portion)){
+        m_selectedObject = nullptr;
+        MapObjects* mapObjects = m_map->objectsPortion(portion);
+
+        // Generate object informations
+        if (mapObjects != nullptr)
+            m_selectedObject = mapObjects->getObjectAt(p);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::showObjectMenuContext(){
+    bool isEmpty = m_selectedObject == nullptr;
+
+    // Edit possible actions
+    m_contextMenu->canNew(isEmpty);
+    m_contextMenu->canEdit(!isEmpty);
+    m_contextMenu->canCopy(false);
+    m_contextMenu->canPaste(false);
+    m_contextMenu->canDelete(!isEmpty);
+    m_contextMenu->canHero(!isEmpty);
+
+    // Show menu context
+    m_contextMenu->showContextMenu(m_mouse);
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::addObject(Position& p){
-    if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
-        if (m_map->isInPortion(portion)){
-            Portion globalPortion = getGlobalPortion(p);
-            SystemCommonObject* originalObject = nullptr;
-            MapObjects* mapObjects = m_map->objectsPortion(portion);
-            SystemCommonObject* object = new SystemCommonObject;
+    Portion portion = getLocalPortion(p);
+    if (m_map->isInPortion(portion)){
+        Portion globalPortion = getGlobalPortion(p);
+        SystemCommonObject* originalObject = nullptr;
+        MapObjects* mapObjects = m_map->objectsPortion(portion);
+        SystemCommonObject* object = new SystemCommonObject;
 
-            // Generate object informations
-            if (mapObjects != nullptr)
-                originalObject = mapObjects->getObjectAt(p);
+        // Generate object informations
+        if (mapObjects != nullptr)
+            originalObject = mapObjects->getObjectAt(p);
 
-            if (originalObject != nullptr)
-                object->setCopy(*originalObject);
-            else{
-                object->setDefault(Wanok::get()->project()->gameDatas()
-                                   ->commonEventsDatas()->modelEventsUser());
-                int id = m_map->generateObjectId();
-                object->setId(id);
-                object->setName(Map::generateObjectName(id));
-            }
-
-            // Open the dialog box
-            DialogObject dialog(object);
-            if (dialog.exec() == QDialog::Accepted){
-                MapPortion* mapPortion = m_map->mapPortion(portion);
-                if (mapPortion == nullptr)
-                    mapPortion = m_map->createMapPortion(portion);
-                if (m_map->addObject(p, mapPortion, globalPortion, object) &&
-                    m_map->saved())
-                {
-                    setToNotSaved();
-                }
-
-                m_map->writeObjects(true);
-                m_portionsToUpdate += portion;
-                m_portionsToSave += portion;
-            }
-            else
-                delete object;
+        if (originalObject != nullptr)
+            object->setCopy(*originalObject);
+        else{
+            object->setDefault(Wanok::get()->project()->gameDatas()
+                               ->commonEventsDatas()->modelEventsUser());
+            int id = m_map->generateObjectId();
+            object->setId(id);
+            object->setName(Map::generateObjectName(id));
         }
+
+        // Open the dialog box
+        DialogObject dialog(object);
+        if (dialog.exec() == QDialog::Accepted){
+            MapPortion* mapPortion = m_map->mapPortion(portion);
+            if (mapPortion == nullptr)
+                mapPortion = m_map->createMapPortion(portion);
+            if (m_map->addObject(p, mapPortion, globalPortion, object) &&
+                m_map->saved())
+            {
+                setToNotSaved();
+            }
+
+            m_map->writeObjects(true);
+            m_portionsToUpdate += portion;
+            m_portionsToSave += portion;
+        }
+        else
+            delete object;
     }
 }
 
@@ -658,8 +714,15 @@ Portion ControlMapEditor::getGlobalFromLocalPortion(Portion& portion) const{
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection){
+void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
+                               MapEditorSelectionKind selectionKind)
+{
     m_map->paintFloors(modelviewProjection);
+
+    if (selectionKind == MapEditorSelectionKind::Objects)
+        m_cursorObject->paintGL(modelviewProjection);
+
+    m_cursor->paintGL(modelviewProjection);
 
     if (m_displayGrid){
         glDisable(GL_DEPTH_TEST);
@@ -668,8 +731,6 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection){
     }
 
     m_map->paintOthers(modelviewProjection);
-
-    m_cursor->paintGL(modelviewProjection);
 }
 
 // -------------------------------------------------------

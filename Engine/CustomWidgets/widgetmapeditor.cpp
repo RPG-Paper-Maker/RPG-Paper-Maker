@@ -40,8 +40,11 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
-    m_timerPressure->start(3);
+    m_timerPressure->start(1);
     connect(m_timerPressure, SIGNAL(timeout()), this, SLOT(onPressure()));
+
+    m_contextMenu = ContextMenuList::createContextObject(this);
+    m_control.setContextMenu(m_contextMenu);
 }
 
 WidgetMapEditor::~WidgetMapEditor()
@@ -127,7 +130,7 @@ void WidgetMapEditor::paintGL(){
         // Draw
         QMatrix4x4 modelviewProjection = m_control.camera()->projection() *
                                          m_control.camera()->view();
-        m_control.paintGL(modelviewProjection);
+        m_control.paintGL(modelviewProjection, m_menuBar->selectionKind());
     }
 }
 
@@ -307,3 +310,42 @@ void WidgetMapEditor::onKeyPress(int k){
     updateSpinBoxes();
 }
 
+// -------------------------------------------------------
+//
+//  CONTEXT MENU SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextNew(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextEdit(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextCopy(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextPaste(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextDelete(){
+
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::contextHero(){
+
+}

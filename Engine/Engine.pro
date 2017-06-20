@@ -185,7 +185,8 @@ HEADERS += \
     CustomWidgets/panelpicturepreview.h \
     Models/System/systempicture.h \
     Models/GameDatas/picturesdatas.h \
-    CustomWidgets/widgetpicturepreview.h
+    CustomWidgets/widgetpicturepreview.h \
+    Enums/mapeditorsubselectionkind.h
 
 SOURCES += \
     main.cpp \

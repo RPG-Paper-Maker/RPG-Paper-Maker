@@ -12,6 +12,20 @@
         <file>Ressources/big_arrow_left.png</file>
         <file>Ressources/point_b.png</file>
         <file>Ressources/point_r.png</file>
+        <file>Ressources/autotile.png</file>
+        <file>Ressources/ev.png</file>
+        <file>Ressources/floor.png</file>
+        <file>Ressources/height.png</file>
+        <file>Ressources/montain.png</file>
+        <file>Ressources/mousewheel.png</file>
+        <file>Ressources/none.png</file>
+        <file>Ressources/pencil.png</file>
+        <file>Ressources/pin.png</file>
+        <file>Ressources/rectangle.png</file>
+        <file>Ressources/sprite_double.png</file>
+        <file>Ressources/sprite_face.png</file>
+        <file>Ressources/sprite_quadra.png</file>
+        <file>Ressources/water.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>
