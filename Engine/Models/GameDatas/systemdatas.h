@@ -43,6 +43,9 @@ public:
     SystemDatas(QString path);
     int portionsRay() const;
     int squareSize() const;
+    void setIdMapHero(int i);
+    void setIdObjectHero(int i);
+
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelItemsTypes() const;
     void setDefault();
@@ -52,8 +55,8 @@ public:
 private:
     int m_portionsRay;
     int m_squareSize;
-    PrimitiveValue* m_idMapHero;
-    PrimitiveValue* m_idObjectHero;
+    int m_idMapHero;
+    int m_idObjectHero;
     QStandardItemModel* m_modelCurrencies;
     QStandardItemModel* m_modelItemsTypes;
 };

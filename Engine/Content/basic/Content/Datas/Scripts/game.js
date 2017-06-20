@@ -89,7 +89,7 @@ Game.prototype = {
         this.items = [];
         this.charactersInstances = 0;
         this.initializeVariables();
-        this.currentMapId = $datasGame.system.idMapStartHero.getValue();
+        this.currentMapId = $datasGame.system.idMapStartHero;
         this.heroStates = [1];
         EventCommandModifyTeam.instanciateTeam(GroupKind.Team,
                                                CharacterKind.Hero, 1, 1, 1);

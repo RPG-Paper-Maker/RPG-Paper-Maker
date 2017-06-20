@@ -207,6 +207,29 @@ void WidgetMapEditor::updateSpinBoxes(){
 }
 
 // -------------------------------------------------------
+
+void WidgetMapEditor::setObjectPosition(Position& position){
+    position.setX(m_control.cursorObject()->getSquareX());
+    position.setZ(m_control.cursorObject()->getSquareZ());
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::addObject(){
+    Position p;
+    setObjectPosition(p);
+    m_control.addObject(p);
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::deleteObject(){
+    Position p;
+    setObjectPosition(p);
+    m_control.removeObject(p);
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -258,6 +281,19 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
         if (m_menuBar != nullptr){
             m_mousesPressed -= event->button();
             m_control.onMousePressed(m_menuBar->selectionKind(), event);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent* event){
+    this->setFocus();
+    if (m_control.map() != nullptr){
+        if (m_menuBar != nullptr){
+            m_mousesPressed += event->button();
+            if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
+                addObject();
         }
     }
 }
@@ -317,13 +353,13 @@ void WidgetMapEditor::onKeyPress(int k){
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextNew(){
-
+    addObject();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextEdit(){
-
+    addObject();
 }
 
 // -------------------------------------------------------
@@ -341,11 +377,11 @@ void WidgetMapEditor::contextPaste(){
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextDelete(){
-
+    deleteObject();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextHero(){
-
+    m_control.defineAsHero();
 }

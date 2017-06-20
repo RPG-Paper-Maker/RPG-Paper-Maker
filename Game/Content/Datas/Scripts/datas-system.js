@@ -53,10 +53,8 @@ DatasSystem.prototype = {
             $PORTIONS_RAY_NEAR = json.pr;
 
             // Hero beginning
-            this.idMapStartHero = new SystemValue();
-            this.idMapStartHero.read(json.idMapHero);
-            this.idObjectStartHero = new SystemValue();
-            this.idObjectStartHero.read(json.idObjHero);
+            this.idMapStartHero = json.idMapHero;
+            this.idObjectStartHero = json.idObjHero;
 
             this.getModelHero();
         });
@@ -67,7 +65,7 @@ DatasSystem.prototype = {
     /** Update the $modelHero global variable by loading the hero model.
     */
     getModelHero: function(){
-        var mapName = Wanok.generateMapName(this.idMapStartHero.getValue());
+        var mapName = Wanok.generateMapName(this.idMapStartHero);
         Wanok.openFile(null, Wanok.FILE_MAPS + mapName + Wanok.FILE_MAP_OBJECTS,
                        true, function(res)
         {
@@ -76,7 +74,7 @@ DatasSystem.prototype = {
 
             var jsonObject;
             l = json.length;
-            var id = $datasGame.system.idObjectStartHero.getValue();
+            var id = $datasGame.system.idObjectStartHero;
             var portion;
             for (i = 0; i < l; i++){
                 jsonObject = json[i];

@@ -7,14 +7,8 @@
             }
         }
     ],
-    "idMapHero": {
-        "k": 3,
-        "v": 1
-    },
-    "idObjHero": {
-        "k": 3,
-        "v": 1
-    },
+    "idMapHero": 1,
+    "idObjHero": 1,
     "itemsTypes": [
         {
             "id": 1,

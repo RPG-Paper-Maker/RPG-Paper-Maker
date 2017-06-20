@@ -28,8 +28,8 @@
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
-    m_idMapHero(new PrimitiveValue(1)),
-    m_idObjectHero(new PrimitiveValue(1)),
+    m_idMapHero(1),
+    m_idObjectHero(1),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel)
 {
@@ -37,8 +37,6 @@ SystemDatas::SystemDatas() :
 }
 
 SystemDatas::~SystemDatas(){
-    delete m_idMapHero;
-    delete m_idObjectHero;
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
 }
@@ -50,6 +48,10 @@ void SystemDatas::read(QString path){
 int SystemDatas::portionsRay() const { return m_portionsRay; }
 
 int SystemDatas::squareSize() const { return m_squareSize; }
+
+void SystemDatas::setIdMapHero(int i) { m_idMapHero = i; }
+
+void SystemDatas::setIdObjectHero(int i) { m_idObjectHero = i; }
 
 QStandardItemModel* SystemDatas::modelCurrencies() const {
     return m_modelCurrencies;
@@ -114,8 +116,8 @@ void SystemDatas::read(const QJsonObject &json){
     // Other options
     m_portionsRay = json["pr"].toInt();
     m_squareSize = json["ss"].toInt();
-    m_idMapHero->read(json["idMapHero"].toObject());
-    m_idObjectHero->read(json["idObjHero"].toObject());
+    m_idMapHero = json["idMapHero"].toInt();
+    m_idObjectHero = json["idObjHero"].toInt();
 
     // Currencies
     jsonList = json["currencies"].toArray();
@@ -146,17 +148,13 @@ void SystemDatas::read(const QJsonObject &json){
 
 void SystemDatas::write(QJsonObject &json) const{
     QJsonArray jsonArray;
-    QJsonObject obj;
     int l;
 
     // Other options
     json["pr"] = m_portionsRay;
     json["ss"] = m_squareSize;
-    m_idMapHero->write(obj);
-    json["idMapHero"] = obj;
-    obj = QJsonObject();
-    m_idObjectHero->write(obj);
-    json["idObjHero"] = obj;
+    json["idMapHero"] = m_idMapHero;
+    json["idObjHero"] = m_idObjectHero;
 
     // Currencies
     jsonArray = QJsonArray();

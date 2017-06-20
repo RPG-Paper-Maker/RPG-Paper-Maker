@@ -95,6 +95,7 @@ public:
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
+    void defineAsHero();
     void addObject(Position& p);
     void removeObject(Position& p);
 

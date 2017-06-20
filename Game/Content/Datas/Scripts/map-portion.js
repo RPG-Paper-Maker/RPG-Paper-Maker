@@ -200,8 +200,7 @@ MapPortion.prototype = {
                 /* If it is the hero, you should not add it to the list of
                 objects to display */
                 if (!isMapHero ||
-                        $datasGame.system.idObjectStartHero.getValue() !==
-                        object.id)
+                    $datasGame.system.idObjectStartHero !== object.id)
                 {
                     $gameStack.top().scene.add(mesh);
                     this.objectsList.push(mapObject);
@@ -310,9 +309,7 @@ MapPortion.prototype = {
                 var position = jsonObject.k;
                 var jsonObjectValue = jsonObject.v;
 
-                if ($datasGame.system.idObjectStartHero.getValue() ===
-                        jsonObjectValue.id)
-                {
+                if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
                     var object = new SystemObject;
                     object.readJSON(jsonObjectValue);
 

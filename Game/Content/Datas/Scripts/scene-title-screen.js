@@ -63,8 +63,7 @@ SceneTitleScreen.prototype = {
         $game.initializeDefault();
 
         // Add local map to stack
-        $gameStack.replace(
-                    new SceneMap($datasGame.system.idMapStartHero.getValue()));
+        $gameStack.replace(new SceneMap($datasGame.system.idMapStartHero));
     },
 
     // -------------------------------------------------------

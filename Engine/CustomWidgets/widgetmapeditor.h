@@ -61,6 +61,9 @@ public:
     void setCursorZ(int z);
     Map* getMap() const;
     void updateSpinBoxes();
+    void setObjectPosition(Position& position);
+    void addObject();
+    void deleteObject();
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;
@@ -87,6 +90,7 @@ protected slots:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
 

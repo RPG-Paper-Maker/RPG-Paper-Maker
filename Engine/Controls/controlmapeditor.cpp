@@ -459,6 +459,7 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p){
         removeSprite(p);
         break;
     case MapEditorSelectionKind::Objects:
+        setCursorObjectPosition(p);
         showObjectMenuContext();
         break;
     }
@@ -604,47 +605,49 @@ void ControlMapEditor::showObjectMenuContext(){
 
 // -------------------------------------------------------
 
+void ControlMapEditor::defineAsHero(){
+   SystemDatas* datas = Wanok::get()->project()->gameDatas()->systemDatas();
+   datas->setIdMapHero(m_map->mapProperties()->id());
+   datas->setIdObjectHero(m_selectedObject->id());
+   Wanok::get()->project()->writeGameDatas();
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::addObject(Position& p){
     Portion portion = getLocalPortion(p);
-    if (m_map->isInPortion(portion)){
-        Portion globalPortion = getGlobalPortion(p);
-        SystemCommonObject* originalObject = nullptr;
-        MapObjects* mapObjects = m_map->objectsPortion(portion);
-        SystemCommonObject* object = new SystemCommonObject;
+    Portion globalPortion = getGlobalPortion(p);
+    SystemCommonObject* object = new SystemCommonObject;
 
-        // Generate object informations
-        if (mapObjects != nullptr)
-            originalObject = mapObjects->getObjectAt(p);
-
-        if (originalObject != nullptr)
-            object->setCopy(*originalObject);
-        else{
-            object->setDefault(Wanok::get()->project()->gameDatas()
-                               ->commonEventsDatas()->modelEventsUser());
-            int id = m_map->generateObjectId();
-            object->setId(id);
-            object->setName(Map::generateObjectName(id));
-        }
-
-        // Open the dialog box
-        DialogObject dialog(object);
-        if (dialog.exec() == QDialog::Accepted){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion == nullptr)
-                mapPortion = m_map->createMapPortion(portion);
-            if (m_map->addObject(p, mapPortion, globalPortion, object) &&
-                m_map->saved())
-            {
-                setToNotSaved();
-            }
-
-            m_map->writeObjects(true);
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
-        }
-        else
-            delete object;
+    if (m_selectedObject != nullptr)
+        object->setCopy(*m_selectedObject);
+    else{
+        object->setDefault(Wanok::get()->project()->gameDatas()
+                           ->commonEventsDatas()->modelEventsUser());
+        int id = m_map->generateObjectId();
+        object->setId(id);
+        object->setName(Map::generateObjectName(id));
     }
+
+    // Open the dialog box
+    DialogObject dialog(object);
+    if (dialog.exec() == QDialog::Accepted){
+        MapPortion* mapPortion = m_map->mapPortion(portion);
+        if (mapPortion == nullptr)
+            mapPortion = m_map->createMapPortion(portion);
+        if (m_map->addObject(p, mapPortion, globalPortion, object) &&
+            m_map->saved())
+        {
+            setToNotSaved();
+        }
+        m_selectedObject = object;
+
+        m_map->writeObjects(true);
+        m_portionsToUpdate += portion;
+        m_portionsToSave += portion;
+    }
+    else
+        delete object;
 }
 
 // -------------------------------------------------------

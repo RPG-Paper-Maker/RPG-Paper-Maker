@@ -139,7 +139,7 @@ SceneMap.prototype = {
                 var mapPortion = new MapPortion(realX, realY, realZ);
                 mapPortion.read(json,
                                 this.id ===
-                                $datasGame.system.idMapStartHero.getValue());
+                                $datasGame.system.idMapStartHero);
                 this.mapPortions[x][y][z] = mapPortion;
             });
         }
