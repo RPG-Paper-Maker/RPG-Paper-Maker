@@ -22,6 +22,66 @@
 // -------------------------------------------------------
 //
 //
+//  ---------- FLOORDATAS
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+FloorDatas::FloorDatas() :
+    FloorDatas(new QRect)
+{
+
+}
+
+FloorDatas::FloorDatas(QRect* texture) :
+    m_textureRect(texture)
+{
+
+}
+
+FloorDatas::~FloorDatas()
+{
+    delete m_textureRect;
+}
+
+QRect *FloorDatas::textureRect() const { return m_textureRect; }
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void FloorDatas::read(const QJsonObject & json){
+    QJsonArray tab = json["t"].toArray();
+
+    m_textureRect->setLeft(tab[0].toInt());
+    m_textureRect->setTop(tab[1].toInt());
+    m_textureRect->setWidth(tab[2].toInt());
+    m_textureRect->setHeight(tab[3].toInt());
+}
+
+// -------------------------------------------------------
+
+void FloorDatas::write(QJsonObject &json) const{
+    QJsonArray tab;
+
+    tab.append(m_textureRect->left());
+    tab.append(m_textureRect->top());
+    tab.append(m_textureRect->width());
+    tab.append(m_textureRect->height());
+    json["t"] = tab;
+}
+
+// -------------------------------------------------------
+//
+//
 //  ---------- FLOOR
 //
 //
@@ -46,7 +106,10 @@ int Floor::nbIndexesQuad(6);
 //
 // -------------------------------------------------------
 
-Floor::Floor()
+Floor::Floor() :
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_programStatic(nullptr)
 {
 
 }
@@ -58,58 +121,109 @@ Floor::~Floor()
 
 // -------------------------------------------------------
 //
-//
-//  ---------- FLOORDATAS
-//
+//  GL
 //
 // -------------------------------------------------------
 
-// -------------------------------------------------------
-//
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
-//
+void Floor::clearGL(){
+    m_vertices.clear();
+    m_indexes.clear();
+    m_count = 0;
+}
+
 // -------------------------------------------------------
 
-FloorDatas::FloorDatas() :
-    FloorDatas(0)
+void Floor::initializeVertices(int squareSize, Position3D &p,
+                               FloorDatas *floor)
 {
+    if (floor != nullptr){
+        QVector3D pos(p.x() * squareSize, 0.0f, p.z() * squareSize);
+        QVector3D size(squareSize, 0.0, squareSize);
 
-}
+        // Vertices
+        m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+                                      QVector2D(0.0f, 0.0f)));
+        m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+                                      QVector2D(1.0f, 0.0f)));
+        m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+                                   QVector2D(1.0f, 1.0f)));
+        m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+                                   QVector2D(0.0f, 1.0f)));
 
-FloorDatas::FloorDatas(int layer) :
-    m_layer(layer)
-{
+        // indexes
+        int offset = m_count * Floor::nbVerticesQuad;
+        for (int i = 0; i < Floor::nbIndexesQuad; i++)
+            m_indexes.append(Floor::indexesQuad[i] + offset);
 
-}
-
-FloorDatas::~FloorDatas()
-{
-
-}
-
-int FloorDatas::layer() const { return m_layer; }
-
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
-
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
-void FloorDatas::read(const QJsonObject & json){
-    m_layer = json["l"].toInt();
+        m_count++;
+    }
 }
 
 // -------------------------------------------------------
 
-void FloorDatas::write(QJsonObject &json) const{
-    json["l"] = m_layer;
+void Floor::initializeGL(QOpenGLShaderProgram *programStatic){
+    if (m_programStatic == nullptr){
+        initializeOpenGLFunctions();
+
+        // Programs
+        m_programStatic = programStatic;
+    }
+}
+
+// -------------------------------------------------------
+
+void Floor::updateGL(){
+
+    // If existing VAO or VBO, destroy it
+    if (m_vao.isCreated())
+        m_vao.destroy();
+    if (m_vertexBuffer.isCreated())
+        m_vertexBuffer.destroy();
+    if (m_indexBuffer.isCreated())
+        m_indexBuffer.destroy();
+
+    // Create new VBO for vertex
+    m_vertexBuffer.create();
+    m_vertexBuffer.bind();
+    m_vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vertexBuffer.allocate(m_vertices.constData(), m_vertices.size() *
+                            sizeof(Vertex));
+
+    // Create new VBO for indexes
+    m_indexBuffer.create();
+    m_indexBuffer.bind();
+    m_indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_indexBuffer.allocate(m_indexes.constData(), m_indexes.size() *
+                           sizeof(GLuint));
+
+    // Create new VAO
+    m_vao.create();
+    m_vao.bind();
+    m_programStatic->enableAttributeArray(0);
+    m_programStatic->enableAttributeArray(1);
+    m_programStatic->setAttributeBuffer(0, GL_FLOAT,
+                                        Vertex::positionOffset(),
+                                        Vertex::positionTupleSize,
+                                        Vertex::stride());
+    m_programStatic->setAttributeBuffer(1, GL_FLOAT,
+                                        Vertex::texOffset(),
+                                        Vertex::texCoupleSize,
+                                        Vertex::stride());
+    m_indexBuffer.bind();
+
+    // Releases
+    m_vao.release();
+    m_indexBuffer.release();
+    m_vertexBuffer.release();
+}
+
+// -------------------------------------------------------
+
+void Floor::paintGL(){
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(),
+                   GL_UNSIGNED_INT, 0);
+    m_vao.bind();
 }
 
 // -------------------------------------------------------
@@ -127,28 +241,24 @@ void FloorDatas::write(QJsonObject &json) const{
 // -------------------------------------------------------
 
 Floors::Floors() :
-    m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
-    m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr)
 {
-
+    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
+        m_floorsGL[i] = new Floor;
 }
 
 Floors::~Floors()
 {
     QHash<Position3D, QVector<FloorDatas*>*>::iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
+    for (i = m_floors.begin(); i != m_floors.end(); i++){
         QVector<FloorDatas*>* list = *i;
         for (int j = 0; j < list->size(); j++)
             delete list->at(j);
         delete list;
     }
 
-    QHash<Height, QRect*>::iterator j;
-    for (j = m_squares.begin(); j != m_squares.end(); j++){
-        QRect* r = j.value();
-        if (r != nullptr) delete r;
-    }
+    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
+        delete m_floorsGL[i];
 }
 
 // -------------------------------------------------------
@@ -158,46 +268,37 @@ Floors::~Floors()
 // -------------------------------------------------------
 
 bool Floors::isEmpty() const{
-    return m_all.size() == 0;
+    return m_floors.size() == 0;
 }
 
 // -------------------------------------------------------
 
 void Floors::setFloor(Position& p, FloorDatas *floor){
-    QVector<FloorDatas*>* list = m_all.value(p);
-    if (list != nullptr){
-        for (int i = 0; i < list->size(); i++){
-            FloorDatas* floor = list->at(i);
-            if (p.layer() < floor->layer()){
-                list->insert(i, floor);
-                return;
-            }
-        }
-        list->append(floor);
+    QVector<FloorDatas*>* list = m_floors.value(p);
+
+    if (list == nullptr){
+        list = new QVector<FloorDatas*>({nullptr, nullptr});
+        m_floors.insert(p, list);
     }
-    else{
-        QVector<FloorDatas*>* l = new QVector<FloorDatas*>;
-        l->append(floor);
-        m_all[p] = l;
-    }
+
+    list->replace(p.layer(), floor);
 }
 
 // -------------------------------------------------------
 
 FloorDatas *Floors::removeFloor(Position& p){
-    QVector<FloorDatas*>* list = m_all.value(p);
+    QVector<FloorDatas*>* list = m_floors.value(p);
+
     if (list != nullptr){
-        for (int i = 0; i < list->size(); i++){
-            FloorDatas* floor = list->at(i);
-            if (p.layer() == floor->layer()){
-                list->removeAt(i);
-                if (list->size() == 0){
-                    delete list;
-                    m_all.remove(p);
-                }
-                return floor;
-            }
+        FloorDatas* floor = list->at(p.layer());
+        list->replace(p.layer(), nullptr);
+
+        if (list->at(0) == nullptr && list->at(1) == nullptr){
+            delete list;
         }
+        m_floors.remove(p);
+
+        return floor;
     }
 
     return nullptr;
@@ -205,8 +306,7 @@ FloorDatas *Floors::removeFloor(Position& p){
 
 // -------------------------------------------------------
 
-bool Floors::addFloor(Position& p){
-    FloorDatas* floor = new FloorDatas(p.layer());
+bool Floors::addFloor(Position& p, FloorDatas *floor){
     FloorDatas* previousFloor = removeFloor(p);
 
     if (previousFloor != nullptr)
@@ -214,35 +314,7 @@ bool Floors::addFloor(Position& p){
 
     setFloor(p, floor);
 
-    updateFloorSquareAdding(p);
-
     return true;
-}
-
-// -------------------------------------------------------
-
-void Floors::updateFloorSquareAdding(Position& p){
-    Height h(p.y(), p.yPlus());
-    QRect* rect = m_squares[h];
-    if (rect == nullptr){
-        rect = new QRect(p.x(), p.z(), 1, 1);
-        m_squares[h] = rect;
-    }
-
-    if (p.x() < rect->left()){
-        rect->setLeft(p.x());
-        rect->setWidth(rect->width() + rect->left() - p.x());
-    }
-    if (p.x() > rect->left() + rect->width() - 1){
-        rect->setWidth(p.x() - rect->left() + 1);
-    }
-    if (p.z() < rect->top()){
-        rect->setTop(p.z());
-        rect->setHeight(rect->height() + rect->top() - p.z());
-    }
-    if (p.z() > rect->top() + rect->height() - 1){
-        rect->setHeight(p.z() - rect->top() + 1);
-    }
 }
 
 // -------------------------------------------------------
@@ -253,103 +325,7 @@ bool Floors::deleteFloor(Position& p){
     if (previousFloor != nullptr)
         delete previousFloor;
 
-    updateFloorSquareDeleting(p);
-
     return true;
-}
-
-// -------------------------------------------------------
-
-void Floors::updateFloorSquareDeleting(Position& p){
-    Height height(p.y(), p.yPlus());
-    QRect* rect = m_squares.value(height);
-    if (rect != nullptr){
-
-        // If only one square, delete
-        if (p.x() == rect->left() && p.z() == rect->top() &&
-                rect->width() == 1 && rect->height() == 1){
-            delete rect;
-            m_squares.remove(height);
-            return;
-        }
-
-        // Top border
-        if (p.z() == rect->top()){
-            int y = 0;
-            for (int j = 0; j < rect->height() - 1; j++){
-                if (updateFloorSquareDeletingCheck(false, j, y, rect, height,
-                                                   rect->width()))
-                    break;
-            }
-            rect->setTop(rect->top() + y);
-        }
-
-        // Bot border
-        if (p.z() == rect->top() + rect->height() - 1){
-            int h = 0;
-            for (int j = rect->height() - 1; j > 0; j--){
-                if (updateFloorSquareDeletingCheck(false, j, h, rect, height,
-                                                   rect->width()))
-                    break;
-            }
-            rect->setHeight(rect->height() - h);
-        }
-
-        // Left border
-        if (p.x() == rect->left()){
-            int x = 0;
-            for (int i = 0; i < rect->width() - 1; i++){
-                if (updateFloorSquareDeletingCheck(true, i, x, rect, height,
-                                                   rect->height()))
-                    break;
-            }
-            rect->setLeft(rect->left() + x);
-        }
-
-        // Right border
-        if (p.x() == rect->left() + rect->width() - 1){
-            int w = 0;
-            for (int i = rect->width() - 1; i > 0; i--){
-                if (updateFloorSquareDeletingCheck(true, i, w, rect, height,
-                                                   rect->height()))
-                    break;
-            }
-            rect->setWidth(rect->width() - w);
-        }
-    }
-}
-
-// -------------------------------------------------------
-
-bool Floors::updateFloorSquareDeletingCheck(bool isVertical, int i, int& v,
-                                            QRect* rect, Height& height,
-                                            int size)
-{
-    bool test = false;
-    for (int j = 0; j < size; j++){
-        int x, y;
-        if (isVertical){
-            x = i;
-            y = j;
-        }
-        else{
-            x = j;
-            y = i;
-        }
-        Position3D p3d(x + rect->left(), height.y(), height.yPlus(),
-                       y + rect->top());
-        QVector<FloorDatas*>* list = m_all.value(p3d);
-        if (list != nullptr){
-            test = true;
-            break;
-        }
-    }
-    if (test)
-        return true;
-    else
-        v++;
-
-    return false;
 }
 
 // -------------------------------------------------------
@@ -359,37 +335,16 @@ bool Floors::updateFloorSquareDeletingCheck(bool isVertical, int i, int& v,
 // -------------------------------------------------------
 
 void Floors::initializeVertices(int squareSize){
-    m_verticesStatic.clear();
-    m_indexesStatic.clear();
+    for (int j = 0; j < Position::LAYERS_NUMBER; j++)
+        m_floorsGL[j]->clearGL();
 
-    float w = 16.0f / 128.0f;
+    QHash<Position3D, QVector<FloorDatas*>*>::iterator i;
+    for (i = m_floors.begin(); i != m_floors.end(); i++){
+        QVector<FloorDatas*>* list = i.value();
+        Position3D p = i.key();
 
-    int count = 0;
-    QHash<Height, QRect*>::iterator i;
-    for (i = m_squares.begin(); i != m_squares.end(); i++){
-        int h = i.key().getY(squareSize);
-        QRect* rect = i.value();
-        QVector3D pos((float) rect->left() * squareSize, (float) h,
-                      (float) rect->top() * squareSize);
-        QVector3D size((float) rect->width() * squareSize, 0.0,
-                       (float) rect->height() * squareSize);
-
-        // Vertices
-        m_verticesStatic.append(Vertex(Floor::verticesQuad[0] * size + pos,
-                                QVector2D(0.0f, 0.0f)));
-        m_verticesStatic.append(Vertex(Floor::verticesQuad[1] * size + pos,
-                                QVector2D(w, 0.0f)));
-        m_verticesStatic.append(Vertex(Floor::verticesQuad[2] * size + pos,
-                                QVector2D(w, w)));
-        m_verticesStatic.append(Vertex(Floor::verticesQuad[3] * size + pos,
-                                QVector2D(0.0f, w)));
-
-        // indexes
-        int offset = count * Floor::nbVerticesQuad;
-        for (int i = 0; i < Floor::nbIndexesQuad; i++)
-            m_indexesStatic.append(Floor::indexesQuad[i] + offset);
-
-        count++;
+        for (int j = 0; j < Position::LAYERS_NUMBER; j++)
+            m_floorsGL[j]->initializeVertices(squareSize, p, list->at(j));
     }
 }
 
@@ -399,62 +354,30 @@ void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
 
-        // Programs
         m_programStatic = programStatic;
     }
+
+    // Floors
+    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
+        m_floorsGL[i]->initializeGL(programStatic);
 }
 
 // -------------------------------------------------------
 
 void Floors::updateGL(){
 
-    // If existing VAO or VBO, destroy it
-    if (m_vaoStatic.isCreated())
-        m_vaoStatic.destroy();
-    if (m_vertexBufferStatic.isCreated())
-        m_vertexBufferStatic.destroy();
-    if (m_indexBufferStatic.isCreated())
-        m_indexBufferStatic.destroy();
-
-    // Create new VBO for vertex
-    m_vertexBufferStatic.create();
-    m_vertexBufferStatic.bind();
-    m_vertexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vertexBufferStatic.allocate(m_verticesStatic.constData(),
-                                  m_verticesStatic.size() * sizeof(Vertex));
-
-    // Create new VBO for indexes
-    m_indexBufferStatic.create();
-    m_indexBufferStatic.bind();
-    m_indexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_indexBufferStatic.allocate(m_indexesStatic.constData(),
-                                 m_indexesStatic.size() * sizeof(GLuint));
-
-    // Create new VAO
-    m_vaoStatic.create();
-    m_vaoStatic.bind();
-    m_programStatic->enableAttributeArray(0);
-    m_programStatic->enableAttributeArray(1);
-    m_programStatic->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
-                                        Vertex::positionTupleSize,
-                                        Vertex::stride());
-    m_programStatic->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
-                                        Vertex::texCoupleSize,
-                                        Vertex::stride());
-    m_indexBufferStatic.bind();
-
-    // Releases
-    m_vaoStatic.release();
-    m_indexBufferStatic.release();
-    m_vertexBufferStatic.release();
+    // Floors
+    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
+        m_floorsGL[i]->updateGL();
 }
 
 // -------------------------------------------------------
 
 void Floors::paintGL(){
-    m_vaoStatic.bind();
-    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
-    m_vaoStatic.bind();
+
+    // Floors
+    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
+        m_floorsGL[i]->paintGL();
 }
 
 // -------------------------------------------------------
@@ -466,7 +389,7 @@ void Floors::paintGL(){
 void Floors::read(const QJsonObject & json){
     QJsonArray tab = json["all"].toArray();
 
-    // All
+    // Floors
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
         Position3D p;
@@ -478,22 +401,7 @@ void Floors::read(const QJsonObject & json){
             floor->read(tabVal.at(j).toObject());
             l->append(floor);
         }
-        m_all[p] = l;
-    }
-
-    // Squares
-    tab = json["squares"].toArray();
-    for (int i = 0; i < tab.size(); i++){
-        QJsonObject obj = tab.at(i).toObject();
-        Height h;
-        h.read(obj["k"].toArray());
-        QJsonArray tabVal = obj["v"].toArray();
-        QRect* r = new QRect;
-        r->setLeft(tabVal[0].toInt());
-        r->setTop(tabVal[1].toInt());
-        r->setWidth(tabVal[2].toInt());
-        r->setHeight(tabVal[3].toInt());
-        m_squares[h] = r;
+        m_floors[p] = l;
     }
 }
 
@@ -502,43 +410,30 @@ void Floors::read(const QJsonObject & json){
 void Floors::write(QJsonObject & json) const{
     QJsonArray tab;
 
-    // All
+    // Floors
     QHash<Position3D, QVector<FloorDatas*>*>::const_iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
+    for (i = m_floors.begin(); i != m_floors.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
         QJsonArray tabValue;
         i.key().write(tabKey);
         QVector<FloorDatas*>* list = i.value();
         for (int j = 0; j < list->size(); j++){
-            QJsonObject objFloor;
-            list->at(j)->write(objFloor);
-            tabValue.append(objFloor);
+            FloorDatas* floor = list->at(j);
+            if (floor != nullptr){
+                QJsonObject objFloor;
+                floor->write(objFloor);
+                tabValue.append(objFloor);
+            }
+            else{
+                QJsonValue jsonValue;
+                tabValue.append(jsonValue);
+            }
         }
 
         objHash["k"] = tabKey;
         objHash["v"] = tabValue;
         tab.append(objHash);
     }
-    json["all"] = tab;
-
-    // Squares
-    tab = QJsonArray();
-    QHash<Height, QRect*>::const_iterator j;
-    for (j = m_squares.begin(); j != m_squares.end(); j++){
-        QJsonObject objHash;
-        QJsonArray tabKey;
-        QJsonArray tabValue;
-        j.key().write(tabKey);
-        QRect* rect = j.value();
-        tabValue.append(rect->left());
-        tabValue.append(rect->top());
-        tabValue.append(rect->width());
-        tabValue.append(rect->height());
-
-        objHash["k"] = tabKey;
-        objHash["v"] = tabValue;
-        tab.append(objHash);
-    }
-    json["squares"] = tab;
+    json["floors"] = tab;
 }

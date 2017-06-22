@@ -37,6 +37,7 @@ public:
     Position();
     Position(int x, int y, int y_plus, int z, int layer);
 
+    const static int LAYERS_NUMBER = 2;
     bool operator==(const Position& other) const;
     bool operator!=(const Position& other) const;
     void setX(int x);

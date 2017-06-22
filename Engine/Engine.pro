@@ -186,7 +186,8 @@ HEADERS += \
     Models/System/systempicture.h \
     Models/GameDatas/picturesdatas.h \
     CustomWidgets/widgetpicturepreview.h \
-    Enums/mapeditorsubselectionkind.h
+    Enums/mapeditorsubselectionkind.h \
+    CustomWidgets/paneltextures.h
 
 SOURCES += \
     main.cpp \
@@ -331,7 +332,8 @@ SOURCES += \
     CustomWidgets/panelpicturepreview.cpp \
     Models/System/systempicture.cpp \
     Models/GameDatas/picturesdatas.cpp \
-    CustomWidgets/widgetpicturepreview.cpp
+    CustomWidgets/widgetpicturepreview.cpp \
+    CustomWidgets/paneltextures.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -384,7 +386,8 @@ FORMS += \
     Dialogs/Systems/dialogsystemkeyboard.ui \
     Dialogs/Systems/dialogsystemkeyboardgeneral.ui \
     Dialogs/dialogpictures.ui \
-    CustomWidgets/panelpicturepreview.ui
+    CustomWidgets/panelpicturepreview.ui \
+    CustomWidgets/paneltextures.ui
 
 OTHER_FILES += \
     style.qss

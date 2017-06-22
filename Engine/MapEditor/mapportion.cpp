@@ -53,8 +53,8 @@ bool MapPortion::isEmpty() const{
 //
 // -------------------------------------------------------
 
-bool MapPortion::addFloor(Position& p){
-    return m_floors->addFloor(p);
+bool MapPortion::addFloor(Position& p, FloorDatas *floor){
+    return m_floors->addFloor(p, floor);
 }
 
 // -------------------------------------------------------

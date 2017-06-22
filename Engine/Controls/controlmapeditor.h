@@ -86,7 +86,7 @@ public:
     void add(MapEditorSelectionKind selection, Position& p);
     void remove(MapEditorSelectionKind selection, Position& p);
     void addFloor(Position& p);
-    void stockFloor(Position& p);
+    void stockFloor(Position& p, FloorDatas* floor);
     void removeFloor(Position& p);
     void eraseFloor(Position& p);
     void addSprite(Position& p);

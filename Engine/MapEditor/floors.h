@@ -34,6 +34,29 @@
 
 // -------------------------------------------------------
 //
+//  CLASS FloorDatas
+//
+//  A square floor datas.
+//
+// -------------------------------------------------------
+
+class FloorDatas : public Serializable
+{
+public:
+    FloorDatas();
+    FloorDatas(QRect *texture);
+    virtual ~FloorDatas();
+    QRect* textureRect() const;
+
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject & json) const;
+
+protected:
+    QRect* m_textureRect;
+};
+
+// -------------------------------------------------------
+//
 //  CLASS Floor
 //
 //  A square floor.
@@ -49,29 +72,23 @@ public:
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
-};
 
-// -------------------------------------------------------
-//
-//  CLASS FloorDatas
-//
-//  A square floor datas.
-//
-// -------------------------------------------------------
-
-class FloorDatas : public Serializable
-{
-public:
-    FloorDatas();
-    FloorDatas(int layer);
-    virtual ~FloorDatas();
-    int layer() const;
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject & json) const;
+    void clearGL();
+    void initializeVertices(int squareSize, Position3D& p, FloorDatas* floor);
+    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void updateGL();
+    void paintGL();
 
 protected:
-    int m_layer;
+    int m_count;
+
+    // OpenGL informations
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_programStatic;
 };
 
 // -------------------------------------------------------
@@ -90,12 +107,8 @@ public:
     bool isEmpty() const;
     void setFloor(Position& p, FloorDatas* floor);
     FloorDatas* removeFloor(Position& p);
-    bool addFloor(Position& p);
-    void updateFloorSquareAdding(Position& p);
+    bool addFloor(Position& p, FloorDatas* floor);
     bool deleteFloor(Position& p);
-    void updateFloorSquareDeleting(Position& p);
-    bool updateFloorSquareDeletingCheck(bool isVertical, int i, int& v,
-                                        QRect* rect, Height& height, int size);
 
     void initializeVertices(int squareSize);
     void initializeGL(QOpenGLShaderProgram* programStatic);
@@ -106,15 +119,9 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position3D, QVector<FloorDatas*>*> m_all;
-    QHash<Height, QRect*> m_squares;
+    QHash<Position3D, QVector<FloorDatas*>*> m_floors;
+    Floor* m_floorsGL[2];
 
-    // OpenGL informations
-    QOpenGLBuffer m_vertexBufferStatic;
-    QOpenGLBuffer m_indexBufferStatic;
-    QVector<Vertex> m_verticesStatic;
-    QVector<GLuint> m_indexesStatic;
-    QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
 };
 

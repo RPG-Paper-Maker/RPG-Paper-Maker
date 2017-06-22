@@ -472,19 +472,22 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p){
 // -------------------------------------------------------
 
 void ControlMapEditor::addFloor(Position& p){
-    stockFloor(p);
+    FloorDatas* floor;
+
+    floor = new FloorDatas;
+    stockFloor(p, floor);
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockFloor(Position& p){
+void ControlMapEditor::stockFloor(Position& p, FloorDatas *floor){
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion == nullptr)
                 mapPortion = m_map->createMapPortion(portion);
-            if (mapPortion->addFloor(p) && m_map->saved())
+            if (mapPortion->addFloor(p, floor) && m_map->saved())
                 setToNotSaved();
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
