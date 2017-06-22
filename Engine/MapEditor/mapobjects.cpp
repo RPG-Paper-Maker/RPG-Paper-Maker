@@ -133,7 +133,7 @@ bool MapObjects::deleteObject(Position& p){
 //
 // -------------------------------------------------------
 
-void MapObjects::initializeVertices(int squareSize){
+void MapObjects::initializeVertices(int squareSize, int width, int height){
     m_verticesStatic.clear();
     m_indexesStatic.clear();
 
@@ -146,8 +146,9 @@ void MapObjects::initializeVertices(int squareSize){
             Position position = j.key();
             //SystemCommonObject* o = i.value();
             SpriteDatas sprite;
-            sprite.initializeVertices(squareSize, m_verticesStatic,
-                                      m_indexesStatic, position, count, false);
+            sprite.initializeVertices(squareSize, width, height,
+                                      m_verticesStatic, m_indexesStatic,
+                                      position, count, false);
         }
     }
 }

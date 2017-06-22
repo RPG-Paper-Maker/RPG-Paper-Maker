@@ -405,13 +405,13 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 // -------------------------------------------------------
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
-                                 QMouseEvent* event)
+                                 QRect& tileset, Qt::MouseButton button)
 {
     Position p = getPositionSelected(selection);
     if (m_map->isInGrid(p)){
-        if (event->button() == Qt::MouseButton::LeftButton)
-            add(selection, p);
-        else if (event->button() == Qt::MouseButton::RightButton)
+        if (button == Qt::MouseButton::LeftButton)
+            add(selection, tileset, p);
+        else if (button == Qt::MouseButton::RightButton)
             remove(selection, p);
     }
 }
@@ -435,13 +435,15 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 
 // -------------------------------------------------------
 
-void ControlMapEditor::add(MapEditorSelectionKind selection, Position& p){
+void ControlMapEditor::add(MapEditorSelectionKind selection, QRect& tileset,
+                           Position& p)
+{
     switch (selection){
     case MapEditorSelectionKind::Land:
-        addFloor(p);
+        addFloor(p, tileset);
         break;
     case MapEditorSelectionKind::Sprites:
-        addSprite(p);
+        addSprite(p, tileset);
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p); break;
@@ -450,7 +452,8 @@ void ControlMapEditor::add(MapEditorSelectionKind selection, Position& p){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p){
+void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p)
+{
     switch (selection){
     case MapEditorSelectionKind::Land:
         removeFloor(p);
@@ -471,11 +474,24 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addFloor(Position& p){
+void ControlMapEditor::addFloor(Position& p, QRect &tileset){
     FloorDatas* floor;
+    QRect* shortTexture;
 
-    floor = new FloorDatas;
-    stockFloor(p, floor);
+    for (int i = 0; i < tileset.width(); i++){
+        if (p.x() + i > m_map->mapProperties()->length())
+            break;
+
+        for (int j = 0; j < tileset.height(); j++){
+            if (p.z() + j > m_map->mapProperties()->width())
+                break;
+
+            Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
+            shortTexture = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
+            floor = new FloorDatas(shortTexture);
+            stockFloor(shortPosition, floor);
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -524,20 +540,23 @@ void ControlMapEditor::eraseFloor(Position& p){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addSprite(Position& p){
-    stockSprite(p);
+void ControlMapEditor::addSprite(Position& p, QRect& tileset){
+    SpriteDatas* sprite;
+
+    sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+    stockSprite(p, sprite);
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockSprite(Position& p){
+void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion == nullptr)
                 mapPortion = m_map->createMapPortion(portion);
-            if (mapPortion->addSprite(p) && m_map->saved())
+            if (mapPortion->addSprite(p, sprite) && m_map->saved())
                 setToNotSaved();
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
@@ -754,26 +773,27 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent* event){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseMove(Qt::MouseButton k, QMouseEvent* event){
-    m_mouse = event->pos();
+void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button){
+    m_mouse = point;
 
-    if (k == Qt::MouseButton::MiddleButton)
+    if (button == Qt::MouseButton::MiddleButton)
         m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
-                                      QMouseEvent* event)
+                                      QRect &tileset, QPoint point,
+                                      Qt::MouseButton button)
 {
     // Update mouse position
-    m_mouse = event->pos();
+    m_mouse = point;
 
-    // General updates
+    // Update
     update();
 
     // Add/Remove something
-    addRemove(selection, event);
+    addRemove(selection, tileset, button);
 }
 
 // -------------------------------------------------------

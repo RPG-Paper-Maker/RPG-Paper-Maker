@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QSpinBox>
 #include "widgetmenubarmapeditor.h"
+#include "paneltextures.h"
 #include "controlmapeditor.h"
 
 // -------------------------------------------------------
@@ -44,6 +45,7 @@ public:
     explicit WidgetMapEditor(QWidget *parent = 0);
     ~WidgetMapEditor();
     void setMenuBar(WidgetMenuBarMapEditor* m);
+    void setPanelTextures(PanelTextures* m);
     void setTreeMapNode(QStandardItem* item);
     Map* loadMap(int idMap, QVector3D *position);
     void deleteMap();
@@ -67,6 +69,7 @@ public:
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;
+    PanelTextures* m_panelTextures;
     ControlMapEditor m_control;
     bool m_needUpdateMap;
     bool isGLInitialized;

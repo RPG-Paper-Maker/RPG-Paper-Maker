@@ -74,7 +74,8 @@ public:
     static int nbIndexesQuad;
 
     void clearGL();
-    void initializeVertices(int squareSize, Position3D& p, FloorDatas* floor);
+    void initializeVertices(int squareSize, int width, int height,
+                            Position3D& p, FloorDatas* floor);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();
@@ -110,7 +111,7 @@ public:
     bool addFloor(Position& p, FloorDatas* floor);
     bool deleteFloor(Position& p);
 
-    void initializeVertices(int squareSize);
+    void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();
@@ -119,7 +120,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position3D, QVector<FloorDatas*>*> m_floors;
+    QHash<Position, FloorDatas*> m_floors;
     Floor* m_floorsGL[2];
 
     QOpenGLShaderProgram* m_programStatic;

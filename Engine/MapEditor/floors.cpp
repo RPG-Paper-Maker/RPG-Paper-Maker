@@ -108,7 +108,7 @@ int Floor::nbIndexesQuad(6);
 
 Floor::Floor() :
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
-    m_indexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr)
 {
 
@@ -133,30 +133,33 @@ void Floor::clearGL(){
 
 // -------------------------------------------------------
 
-void Floor::initializeVertices(int squareSize, Position3D &p,
-                               FloorDatas *floor)
+void Floor::initializeVertices(int squareSize, int width, int height,
+                               Position3D &p, FloorDatas *floor)
 {
-    if (floor != nullptr){
-        QVector3D pos(p.x() * squareSize, 0.0f, p.z() * squareSize);
-        QVector3D size(squareSize, 0.0, squareSize);
+    QVector3D pos(p.x() * squareSize, 0.0f, p.z() * squareSize);
+    QVector3D size(squareSize, 0.0, squareSize);
 
-        // Vertices
-        m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
-                                      QVector2D(0.0f, 0.0f)));
-        m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
-                                      QVector2D(1.0f, 0.0f)));
-        m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
-                                   QVector2D(1.0f, 1.0f)));
-        m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
-                                   QVector2D(0.0f, 1.0f)));
+    float x = (float)(floor->textureRect()->x() * squareSize) / width;
+    float y = (float)(floor->textureRect()->y() * squareSize) / height;
+    float w = (float)(floor->textureRect()->width() * squareSize) / width;
+    float h = (float)(floor->textureRect()->height() * squareSize) / height;
 
-        // indexes
-        int offset = m_count * Floor::nbVerticesQuad;
-        for (int i = 0; i < Floor::nbIndexesQuad; i++)
-            m_indexes.append(Floor::indexesQuad[i] + offset);
+    // Vertices
+    m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+                      QVector2D(x, y)));
+    m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+                      QVector2D(x + w, y)));
+    m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+                      QVector2D(x + w, y + h)));
+    m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+                      QVector2D(x, y + h)));
 
-        m_count++;
-    }
+    // indexes
+    int offset = m_count * Floor::nbVerticesQuad;
+    for (int i = 0; i < Floor::nbIndexesQuad; i++)
+        m_indexes.append(Floor::indexesQuad[i] + offset);
+
+    m_count++;
 }
 
 // -------------------------------------------------------
@@ -221,8 +224,7 @@ void Floor::updateGL(){
 
 void Floor::paintGL(){
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_indexes.size(),
-                   GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
     m_vao.bind();
 }
 
@@ -249,13 +251,9 @@ Floors::Floors() :
 
 Floors::~Floors()
 {
-    QHash<Position3D, QVector<FloorDatas*>*>::iterator i;
-    for (i = m_floors.begin(); i != m_floors.end(); i++){
-        QVector<FloorDatas*>* list = *i;
-        for (int j = 0; j < list->size(); j++)
-            delete list->at(j);
-        delete list;
-    }
+    QHash<Position, FloorDatas*>::iterator i;
+    for (i = m_floors.begin(); i != m_floors.end(); i++)
+        delete i.value();
 
     for (int i = 0; i < Position::LAYERS_NUMBER; i++)
         delete m_floorsGL[i];
@@ -274,34 +272,18 @@ bool Floors::isEmpty() const{
 // -------------------------------------------------------
 
 void Floors::setFloor(Position& p, FloorDatas *floor){
-    QVector<FloorDatas*>* list = m_floors.value(p);
-
-    if (list == nullptr){
-        list = new QVector<FloorDatas*>({nullptr, nullptr});
-        m_floors.insert(p, list);
-    }
-
-    list->replace(p.layer(), floor);
+    m_floors.insert(p, floor);
 }
 
 // -------------------------------------------------------
 
 FloorDatas *Floors::removeFloor(Position& p){
-    QVector<FloorDatas*>* list = m_floors.value(p);
+    FloorDatas* floor = m_floors.value(p);
 
-    if (list != nullptr){
-        FloorDatas* floor = list->at(p.layer());
-        list->replace(p.layer(), nullptr);
-
-        if (list->at(0) == nullptr && list->at(1) == nullptr){
-            delete list;
-        }
+    if (floor != nullptr)
         m_floors.remove(p);
 
-        return floor;
-    }
-
-    return nullptr;
+    return floor;
 }
 
 // -------------------------------------------------------
@@ -334,17 +316,16 @@ bool Floors::deleteFloor(Position& p){
 //
 // -------------------------------------------------------
 
-void Floors::initializeVertices(int squareSize){
+void Floors::initializeVertices(int squareSize, int width, int height){
     for (int j = 0; j < Position::LAYERS_NUMBER; j++)
         m_floorsGL[j]->clearGL();
 
-    QHash<Position3D, QVector<FloorDatas*>*>::iterator i;
+    QHash<Position, FloorDatas*>::iterator i;
     for (i = m_floors.begin(); i != m_floors.end(); i++){
-        QVector<FloorDatas*>* list = i.value();
-        Position3D p = i.key();
-
-        for (int j = 0; j < Position::LAYERS_NUMBER; j++)
-            m_floorsGL[j]->initializeVertices(squareSize, p, list->at(j));
+        FloorDatas* floor = i.value();
+        Position p = i.key();
+        m_floorsGL[p.layer()]->initializeVertices(squareSize, width, height,
+                                                  p, floor);
     }
 }
 
@@ -387,21 +368,17 @@ void Floors::paintGL(){
 // -------------------------------------------------------
 
 void Floors::read(const QJsonObject & json){
-    QJsonArray tab = json["all"].toArray();
+    QJsonArray tab = json["floors"].toArray();
 
     // Floors
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
-        Position3D p;
+        Position p;
         p.read(obj["k"].toArray());
-        QJsonArray tabVal = obj["v"].toArray();
-        QVector<FloorDatas*>* l = new QVector<FloorDatas*>;
-        for (int j = 0; j < tabVal.size(); j++){
-            FloorDatas* floor = new FloorDatas;
-            floor->read(tabVal.at(j).toObject());
-            l->append(floor);
-        }
-        m_floors[p] = l;
+        QJsonObject objFloor = obj["v"].toObject();
+        FloorDatas* floor = new FloorDatas;
+        floor->read(objFloor);
+        m_floors[p] = floor;
     }
 }
 
@@ -411,28 +388,17 @@ void Floors::write(QJsonObject & json) const{
     QJsonArray tab;
 
     // Floors
-    QHash<Position3D, QVector<FloorDatas*>*>::const_iterator i;
+    QHash<Position, FloorDatas*>::const_iterator i;
     for (i = m_floors.begin(); i != m_floors.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
-        QJsonArray tabValue;
         i.key().write(tabKey);
-        QVector<FloorDatas*>* list = i.value();
-        for (int j = 0; j < list->size(); j++){
-            FloorDatas* floor = list->at(j);
-            if (floor != nullptr){
-                QJsonObject objFloor;
-                floor->write(objFloor);
-                tabValue.append(objFloor);
-            }
-            else{
-                QJsonValue jsonValue;
-                tabValue.append(jsonValue);
-            }
-        }
+        FloorDatas* floor = i.value();
+        QJsonObject objFloor;
+        floor->write(objFloor);
 
         objHash["k"] = tabKey;
-        objHash["v"] = tabValue;
+        objHash["v"] = objFloor;
         tab.append(objHash);
     }
     json["floors"] = tab;

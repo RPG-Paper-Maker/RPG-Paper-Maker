@@ -71,7 +71,7 @@ Sprite::~Sprite()
 // -------------------------------------------------------
 
 SpriteDatas::SpriteDatas() :
-    SpriteDatas(0, 50, 0, new QRect(0, 0, 2, 2))
+    SpriteDatas(0, 50, 0, new QRect)
 {
 
 }
@@ -105,17 +105,19 @@ QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 //
 // -------------------------------------------------------
 
-void SpriteDatas::initializeVertices(int squareSize, QVector<Vertex>& vertices,
+void SpriteDatas::initializeVertices(int squareSize,
+                                     int width, int height,
+                                     QVector<Vertex>& vertices,
                                      QVector<GLuint>& indexes,
                                      Position3D& position, int& count,
                                      bool isTileset)
 {
     float x, y, w, h;
     if (isTileset){
-        x = 0.0f;
-        y = 16.0f / 128.0f;
-        w = 32.0f / 128.0f;
-        h = 32.0f / 128.0f;
+        x = (float)(m_textureRect->x() * squareSize) / width;
+        y = (float)(m_textureRect->y() * squareSize) / height;
+        w = (float)(m_textureRect->width() * squareSize) / width;
+        h = (float)(m_textureRect->height() * squareSize) / height;
     }
     else{
         x = 0.0f;
@@ -274,8 +276,7 @@ SpriteDatas* Sprites::removeSprite(Position& p){
 
 // -------------------------------------------------------
 
-bool Sprites::addSprite(Position& p){
-    SpriteDatas* sprite = new SpriteDatas;
+bool Sprites::addSprite(Position& p, SpriteDatas *sprite){
     SpriteDatas* previousSprite = removeSprite(p);
 
     if (previousSprite != nullptr)
@@ -303,7 +304,7 @@ bool Sprites::deleteSprite(Position& p){
 //
 // -------------------------------------------------------
 
-void Sprites::initializeVertices(int squareSize){
+void Sprites::initializeVertices(int squareSize, int width, int height){
     m_verticesStatic.clear();
     m_indexesStatic.clear();
 
@@ -314,8 +315,9 @@ void Sprites::initializeVertices(int squareSize){
         QVector<SpriteDatas*>* list = i.value();
         for (int j = 0; j < list->size(); j++){
             SpriteDatas* sprite = list->at(j);
-            sprite->initializeVertices(squareSize, m_verticesStatic,
-                                       m_indexesStatic, position, count, true);
+            sprite->initializeVertices(squareSize, width, height,
+                                       m_verticesStatic, m_indexesStatic,
+                                       position, count, true);
         }
     }
 }

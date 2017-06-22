@@ -65,8 +65,8 @@ bool MapPortion::deleteFloor(Position& p){
 
 // -------------------------------------------------------
 
-bool MapPortion::addSprite(Position& p){
-    return m_sprites->addSprite(p);
+bool MapPortion::addSprite(Position& p, SpriteDatas *sprite){
+    return m_sprites->addSprite(p, sprite);
 }
 
 // -------------------------------------------------------
@@ -94,10 +94,10 @@ bool MapPortion::deleteObject(Position& p){
 // -------------------------------------------------------
 
 
-void MapPortion::initializeVertices(int squareSize){
-    m_floors->initializeVertices(squareSize);
-    m_sprites->initializeVertices(squareSize);
-    m_mapObjects->initializeVertices(squareSize);
+void MapPortion::initializeVertices(int squareSize, int width, int height){
+    m_floors->initializeVertices(squareSize, width, height);
+    m_sprites->initializeVertices(squareSize, width, height);
+    m_mapObjects->initializeVertices(squareSize, width, height);
 }
 
 // -------------------------------------------------------

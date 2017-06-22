@@ -67,9 +67,9 @@ public:
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
-    void initializeVertices(int squareSize, QVector<Vertex>& vertices,
-                            QVector<GLuint>& indexes, Position3D& position,
-                            int& count, bool isTileset);
+    void initializeVertices(int squareSize, int width, int height,
+                            QVector<Vertex>& vertices, QVector<GLuint>& indexes,
+                            Position3D& position, int& count, bool isTileset);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -97,10 +97,10 @@ public:
     bool isEmpty() const;
     void setSprite(Position& p, SpriteDatas* sprite);
     SpriteDatas* removeSprite(Position& p);
-    bool addSprite(Position& p);
+    bool addSprite(Position& p, SpriteDatas* sprite);
     bool deleteSprite(Position& p);
 
-    void initializeVertices(int squareSize);
+    void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();

@@ -55,6 +55,8 @@ WidgetMapEditor::~WidgetMapEditor()
 
 void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor* m){ m_menuBar = m; }
 
+void WidgetMapEditor::setPanelTextures(PanelTextures* m){ m_panelTextures = m; }
+
 void WidgetMapEditor::setTreeMapNode(QStandardItem* item) {
     m_control.setTreeMapNode(item);
 }
@@ -256,7 +258,14 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
         // Multi keys
         QSet<Qt::MouseButton>::iterator i;
         for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++){
-            m_control.onMouseMove(*i, event);
+            Qt::MouseButton button = *i;
+            m_control.onMouseMove(event->pos(), button);
+
+            if (m_menuBar != nullptr){
+                QRect tileset = m_panelTextures->getTilesetTexture();
+                m_control.addRemove(m_menuBar->selectionKind(), tileset,
+                                    button);
+            }
         }
     }
 }
@@ -268,7 +277,11 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
     if (m_control.map() != nullptr){
         if (m_menuBar != nullptr){
             m_mousesPressed += event->button();
-            m_control.onMousePressed(m_menuBar->selectionKind(), event);
+            QRect tileset = m_panelTextures->getTilesetTexture();
+            m_control.onMousePressed(m_menuBar->selectionKind(),
+                                     tileset,
+                                     event->pos(),
+                                     event->button());
         }
     }
 }
@@ -278,10 +291,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
 void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
-        if (m_menuBar != nullptr){
+        if (m_menuBar != nullptr)
             m_mousesPressed -= event->button();
-            m_control.onMousePressed(m_menuBar->selectionKind(), event);
-        }
     }
 }
 

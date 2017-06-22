@@ -48,7 +48,7 @@
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
-       <widget class="WidgetTilesetSelector" name="scrollAreaWidgetContents">
+       <widget class="PanelTextures" name="scrollAreaWidgetContents">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -110,9 +110,9 @@
    <header>widgettreelocalmaps.h</header>
   </customwidget>
   <customwidget>
-   <class>WidgetTilesetSelector</class>
+   <class>PanelTextures</class>
    <extends>QWidget</extends>
-   <header>widgettilesetselector.h</header>
+   <header>paneltextures.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

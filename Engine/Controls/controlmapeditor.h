@@ -81,16 +81,17 @@ public:
     void getCorrectPositionOnRay(Position& position, QVector3D &ray,
                                  int distance);
 
-    void addRemove(MapEditorSelectionKind selection, QMouseEvent *event);
+    void addRemove(MapEditorSelectionKind selection, QRect& tileset,
+                   Qt::MouseButton button);
     Position getPositionSelected(MapEditorSelectionKind selection) const;
-    void add(MapEditorSelectionKind selection, Position& p);
+    void add(MapEditorSelectionKind selection, QRect& tileset, Position& p);
     void remove(MapEditorSelectionKind selection, Position& p);
-    void addFloor(Position& p);
+    void addFloor(Position& p, QRect& tileset);
     void stockFloor(Position& p, FloorDatas* floor);
     void removeFloor(Position& p);
     void eraseFloor(Position& p);
-    void addSprite(Position& p);
-    void stockSprite(Position& p);
+    void addSprite(Position& p, QRect& tileset);
+    void stockSprite(Position& p, SpriteDatas *sprite);
     void removeSprite(Position& p);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
@@ -107,8 +108,9 @@ public:
                  MapEditorSelectionKind selectionKind);
 
     void onMouseWheelMove(QWheelEvent *event);
-    void onMouseMove(Qt::MouseButton k, QMouseEvent* event);
-    void onMousePressed(MapEditorSelectionKind selection, QMouseEvent* event);
+    void onMouseMove(QPoint point, Qt::MouseButton button);
+    void onMousePressed(MapEditorSelectionKind selection, QRect& tileset,
+                        QPoint point, Qt::MouseButton button);
     void onKeyPressed(int k);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);

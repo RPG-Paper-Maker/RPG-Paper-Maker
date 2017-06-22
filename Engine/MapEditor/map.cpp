@@ -209,12 +209,14 @@ QString Map::writeMap(QString path, MapProperties& properties,
     QString dirMap = Wanok::pathCombine(dirMaps, mapName);
 
     // Properties
-     Wanok::writeJSON(Wanok::pathCombine(dirMap, Wanok::fileMapInfos), properties);
+    Wanok::writeJSON(Wanok::pathCombine(dirMap, Wanok::fileMapInfos),
+                     properties);
 
     // Objects
     QJsonObject json;
     json["objs"] = jsonObject;
-    Wanok::writeOtherJSON(Wanok::pathCombine(dirMap, Wanok::fileMapObjects), json);
+    Wanok::writeOtherJSON(Wanok::pathCombine(dirMap, Wanok::fileMapObjects),
+                          json);
 
     QDir(dirMap).mkdir(Wanok::tempMapFolderName);
 
@@ -263,7 +265,7 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
         Wanok::readJSON(path, *portion);
 
         // Static update
-        portion->initializeVertices(m_squareSize);
+        portion->initializeVertices(m_squareSize, 128, 128); // TODO
         portion->initializeGL(m_programStatic);
         m_programStatic->bind();
         portion->updateGL();
@@ -329,7 +331,7 @@ void Map::updatePortion(Portion& p){
         m_mapPortions[p] = nullptr;
     }
     else{
-        mapPortion->initializeVertices(m_squareSize);
+        mapPortion->initializeVertices(m_squareSize, 128, 128); // TODO
         mapPortion->initializeGL(m_programStatic);
         m_programStatic->bind();
         mapPortion->updateGL();
@@ -511,7 +513,7 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection){
         for (int j = -m_portionsRay; j <= m_portionsRay; j++){
             for (int k = -m_portionsRay; k <= m_portionsRay; k++){
                 Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions[portion];
+                MapPortion* mapPortion = m_mapPortions.value(portion);
                 if (mapPortion != nullptr){
                     mapPortion->paintFloors();
                 }
@@ -528,12 +530,13 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
+    m_textureTileset->bind();
 
     for (int i = -m_portionsRay; i <= m_portionsRay; i++){
         for (int j = -m_portionsRay; j <= m_portionsRay; j++){
             for (int k = -m_portionsRay; k <= m_portionsRay; k++){
                 Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions[portion];
+                MapPortion* mapPortion = m_mapPortions.value(portion);
                 if (mapPortion != nullptr){
                     mapPortion->paintSprites();
                 }
@@ -553,7 +556,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
             for (int j = -m_portionsRay; j <= m_portionsRay; j++){
                 for (int k = -m_portionsRay; k <= m_portionsRay; k++){
                     Portion portion(i, j, k);
-                    MapPortion* mapPortion = m_mapPortions[portion];
+                    MapPortion* mapPortion = m_mapPortions.value(portion);
                     if (mapPortion != nullptr){
                         mapPortion->paintObjects();
                     }

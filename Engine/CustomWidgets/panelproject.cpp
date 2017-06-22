@@ -41,6 +41,7 @@ PanelProject::PanelProject(QWidget *parent) :
     sizesHorizontal << 250 << 200;
     ui->splitter->setSizes(sizesHorizontal);
     ui->openGLWidget->setMenuBar(ui->widgetMenuBar);
+    ui->openGLWidget->setPanelTextures(ui->scrollAreaWidgetContents);
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :

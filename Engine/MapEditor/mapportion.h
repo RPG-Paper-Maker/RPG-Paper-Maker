@@ -43,12 +43,12 @@ public:
     bool isEmpty() const;
     bool addFloor(Position& p, FloorDatas* floor);
     bool deleteFloor(Position& p);
-    bool addSprite(Position& p);
+    bool addSprite(Position& p, SpriteDatas* sprite);
     bool deleteSprite(Position& p);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 
-    void initializeVertices(int squareSize);
+    void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram *programStatic);
     void updateGL();
     void paintFloors();

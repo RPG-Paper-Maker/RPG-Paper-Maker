@@ -51,7 +51,7 @@ public:
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
 
-    void initializeVertices(int squareSize);
+    void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();
