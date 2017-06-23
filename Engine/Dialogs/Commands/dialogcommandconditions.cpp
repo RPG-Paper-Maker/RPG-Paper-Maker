@@ -39,9 +39,6 @@ DialogCommandConditions::DialogCommandConditions(EventCommand* command,
     ui->widgetVariableVariable->initialize();
     ui->widgetVariableVariableConstant->initializeNumberVariable();
 
-    ui->widgetSwitch->setVariable(false);
-    ui->widgetSwitch->initialize();
-
     if (command != nullptr) initialize(command);
 }
 
@@ -62,15 +59,6 @@ void DialogCommandConditions::initialize(EventCommand* command){
     ui->tabWidget->setCurrentIndex(command->valueCommandAt(i++).toInt());
     switch(command->valueCommandAt(i++).toInt()){
     case 0:
-        ui->radioButtonSwitch->setChecked(true);
-        ui->widgetSwitch->setCurrentId(command->valueCommandAt(i++).toInt());
-        ui->comboBoxSwitch->setCurrentIndex(command->valueCommandAt(i++)
-                                            .toInt());
-        break;
-    case 1:
-        // TODO
-        break;
-    case 2:
         ui->radioButtonVariable->setChecked(true);
         ui->widgetVariableVariable->setCurrentId(command->valueCommandAt(i++)
                                                  .toInt());
@@ -88,11 +76,7 @@ EventCommand* DialogCommandConditions::getCommand() const{
     command.append(ui->checkBox->isChecked() ? "1" : "0");
     command.append("0"); // Page
 
-    if(ui->radioButtonSwitch->isChecked()){
-        command.append("0"); // Type switch
-        command.append(QString::number(ui->widgetSwitch->currentId()));
-        command.append(QString::number(ui->comboBoxSwitch->currentIndex()));
-    }else{
+    if(ui->radioButtonVariable->isChecked()){
         command.append("2"); // Type variable
         command.append(QString::number(ui->widgetVariableVariable
                                        ->currentId()));
@@ -107,22 +91,6 @@ EventCommand* DialogCommandConditions::getCommand() const{
 //
 //  SLOTS
 //
-// -------------------------------------------------------
-
-void DialogCommandConditions::on_radioButtonSwitch_toggled(bool checked){
-    ui->widgetSwitch->setEnabled(checked);
-    ui->labelSwitch->setEnabled(checked);
-    ui->comboBoxSwitch->setEnabled(checked);
-}
-
-// -------------------------------------------------------
-
-void DialogCommandConditions::on_radioButtonLocalSwitch_toggled(bool checked){
-    ui->widgetLocalSwitches->setEnabled(checked);
-    ui->labelLocalSwitch->setEnabled(checked);
-    ui->comboBoxLocalSwitch->setEnabled(checked);
-}
-
 // -------------------------------------------------------
 
 void DialogCommandConditions::on_radioButtonVariable_toggled(bool checked){

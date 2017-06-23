@@ -118,8 +118,6 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strShowText(); break;
     case EventCommandKind::ChangeVariables:
         str += strChangeVariables(); break;
-    case EventCommandKind::ChangeSwitches:
-        str += strChangeSwitches(); break;
     case EventCommandKind::EndGame:
         str += "Game Over"; break;
     case EventCommandKind::While:
@@ -176,7 +174,7 @@ QString EventCommand::strNumberVariable(int &i) const{
         return QString::number(value);
     case PrimitiveValueKind::Variable:
         return "Variable " + Wanok::get()->project()->gameDatas()
-                ->variablesSwitchesDatas()->getVariableById(value)->toString();
+                ->variablesDatas()->getVariableById(value)->toString();
     default:
         return "";
     }
@@ -196,7 +194,7 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel* dataBase,
         return QString::number(value);
     case PrimitiveValueKind::Variable:
         return "Variable " + Wanok::get()->project()->gameDatas()
-                ->variablesSwitchesDatas()->getVariableById(value)->toString();
+                ->variablesDatas()->getVariableById(value)->toString();
     case PrimitiveValueKind::DataBase:
         return SuperListItem::getById(dataBase->invisibleRootItem(), value)
                 ->toString();
@@ -220,7 +218,7 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const{
         return QString::number(value);
     case PrimitiveValueKind::Variable:
         return "Variable " + Wanok::get()->project()->gameDatas()
-                ->variablesSwitchesDatas()->getVariableById(value)->toString();
+                ->variablesDatas()->getVariableById(value)->toString();
     case PrimitiveValueKind::Parameter:
         return SuperListItem::getById(parameters->invisibleRootItem(), value)
                 ->toString();
@@ -256,7 +254,7 @@ QString EventCommand::strChangeVariablesSelection(int& i,
     QString selection = p_listCommand.at(i++);
     QString str = "";
     if (selection == "0"){
-        str += Wanok::get()->project()->gameDatas()->variablesSwitchesDatas()
+        str += Wanok::get()->project()->gameDatas()->variablesDatas()
                 ->getVariableById(p_listCommand.at(i++).toInt())->toString();
     }
     else{
@@ -302,54 +300,8 @@ QString EventCommand::strChangeVariablesValue(int &i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeSwitches() const{
-    int i = 0;
-    QString several = "";
-    QString chooseswitches = strChangeSwitchesChooseSwitches(i, several);
-    QString operation = strChangeSwitchesOperation(i);
-
-    return "Change switch" + several + ": " + chooseswitches + " " +
-            operation + " ";
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strChangeSwitchesChooseSwitches(int& i,
-                                                      QString& several) const
-{
-    QString selection = p_listCommand.at(i++);
-    QString str = "";
-    if (selection == "0"){
-        str += Wanok::get()->project()->gameDatas()->variablesSwitchesDatas()
-                ->getSwitchById(p_listCommand.at(i++).toInt())->toString();
-    }
-    else{
-        several += "es";
-        str += p_listCommand.at(i++);
-        str += " to ";
-        str += p_listCommand.at(i++);
-    }
-
-    return str;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strChangeSwitchesOperation(int& i) const{
-    QString operation = p_listCommand.at(i++);
-    QString str = "";
-    if (operation == "0") str += "ON";
-    else if (operation == "1") str += "OFF";
-    else if (operation == "2") str += "INVERT";
-
-    return str;
-}
-
-// -------------------------------------------------------
-
 QString EventCommand::strInputNumber() const{
-    QString variable = Wanok::get()->project()->gameDatas()
-            ->variablesSwitchesDatas()
+    QString variable = Wanok::get()->project()->gameDatas()->variablesDatas()
             ->getVariableById(p_listCommand.at(0).toInt())->toString();
     return "Input number in variable " + variable;
 }
@@ -375,11 +327,6 @@ QString EventCommand::strConditionPageVariablesSwitches(int &i) const{
     int type = p_listCommand.at(i++).toInt();
 
     switch (type){
-    case 0:
-        condition = strConditionTypeSwitche(i);
-        break;
-    case 1:
-        break;
     case 2:
         condition = strConditionTypeVariable(i);
         break;
@@ -397,35 +344,9 @@ QString EventCommand::strConditionTypeVariable(int &i) const{
     QString operation = WidgetComboBoxOperation::toString(p_listCommand.at(i++)
                                                           .toInt());
     condition += Wanok::get()->project()->gameDatas()
-            ->variablesSwitchesDatas()->getVariableById(variable)->toString();
+            ->variablesDatas()->getVariableById(variable)->toString();
     condition += " " + operation + " ";
     condition += strNumberVariable(i);
-
-    return condition;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strConditionTypeSwitche(int &i) const{
-    QString condition = "";
-    QString valueSwitch ="";
-    condition += "switch ";
-    int switche = p_listCommand.at(i++).toInt();
-    int value = p_listCommand.at(i++).toInt();
-    switch (value) {
-    case 0:
-        valueSwitch = "ON";
-        break;
-    case 1:
-        valueSwitch = "OFF";
-        break;
-    default:
-        break;
-    }
-
-    condition += Wanok::get()->project()->gameDatas()
-            ->variablesSwitchesDatas()->getSwitchById(switche)->toString();
-    condition += " is " + valueSwitch + " ";
 
     return condition;
 }
@@ -498,7 +419,7 @@ QString EventCommand::strModifyTeamInstance(int &i) const{
     QString teamNew = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
                                                    .toInt());
     QString stockVariable = Wanok::get()->project()->gameDatas()
-            ->variablesSwitchesDatas()->getSwitchById(p_listCommand.at(i++)
+            ->variablesDatas()->getVariableById(p_listCommand.at(i++)
                                                       .toInt())->toString();
     QString character = "";
     int kindNew = p_listCommand.at(i++).toInt();

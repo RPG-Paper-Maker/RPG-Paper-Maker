@@ -53,8 +53,6 @@ private:
     Ui::DialogCommandConditions *ui;
 
 private slots:
-    void on_radioButtonSwitch_toggled(bool checked);
-    void on_radioButtonLocalSwitch_toggled(bool checked);
     void on_radioButtonVariable_toggled(bool checked);
 };
 

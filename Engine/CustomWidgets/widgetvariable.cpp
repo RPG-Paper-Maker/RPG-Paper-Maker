@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "widgetvariableswitch.h"
-#include "ui_widgetvariableswitch.h"
+#include "widgetvariable.h"
+#include "ui_widgetvariable.h"
 #include "superlistitem.h"
 #include "dialogvariables.h"
 #include "wanok.h"
@@ -29,45 +29,41 @@
 //
 // -------------------------------------------------------
 
-WidgetVariableSwitch::WidgetVariableSwitch(QWidget *parent) :
+WidgetVariable::WidgetVariable(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetVariableSwitch)
+    ui(new Ui::WidgetVariable)
 {
-    isVariable = true;
     ui->setupUi(this);
     ui->listWidget->addItem("test");
 }
 
-WidgetVariableSwitch::~WidgetVariableSwitch()
+WidgetVariable::~WidgetVariable()
 {
     delete ui;
 }
 
-void WidgetVariableSwitch::setVariable(bool b) { isVariable = b; }
+int WidgetVariable::currentId() const { return p_currentId; }
 
-int WidgetVariableSwitch::currentId() const { return p_currentId; }
-
-void WidgetVariableSwitch::setCurrentId(int i) {
+void WidgetVariable::setCurrentId(int i) {
     if (i < 1) i = 1;
     p_currentId = i;
 
-    VariablesSwitchesDatas* datas = Wanok::get()->project()->gameDatas()
-                                    ->variablesSwitchesDatas();
+    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
+                                    ->variablesDatas();
 
     // Graphic update
-    SuperListItem* s = (isVariable) ? datas->getVariableById(p_currentId)
-                                    : datas->getSwitchById(p_currentId);
+    SuperListItem* s = datas->getVariableById(p_currentId);
+
     if (s == nullptr){
         p_currentId = 1;
-        s = (isVariable) ? datas->getVariableById(p_currentId)
-                         : datas->getSwitchById(p_currentId);
+        s = datas->getVariableById(p_currentId);
     }
     ui->listWidget->item(0)->setText(s->toString());
 }
 
-QListWidget* WidgetVariableSwitch::list() const { return ui->listWidget; }
+QListWidget* WidgetVariable::list() const { return ui->listWidget; }
 
-void WidgetVariableSwitch::initialize(int i){
+void WidgetVariable::initialize(int i){
     setCurrentId(i);
 }
 
@@ -77,13 +73,12 @@ void WidgetVariableSwitch::initialize(int i){
 //
 // -------------------------------------------------------
 
-void WidgetVariableSwitch::openDialog(){
+void WidgetVariable::openDialog(){
     DialogVariables dialog;
-    VariablesSwitchesDatas* datas = Wanok::get()->project()->gameDatas()
-                                    ->variablesSwitchesDatas();
-    QStandardItemModel* m = (isVariable) ? datas->modelVariables()
-                                         : datas->modelSwitches();
-    if (!isVariable) dialog.applyAsSwitches();
+    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
+                                    ->variablesDatas();
+    QStandardItemModel* m = datas->model();
+
     dialog.initializeModel(m);
     if (dialog.exec() == QDialog::Accepted){
         setCurrentId(dialog.getSelectedId());
@@ -96,12 +91,12 @@ void WidgetVariableSwitch::openDialog(){
 //
 // -------------------------------------------------------
 
-void WidgetVariableSwitch::on_listWidget_itemDoubleClicked(QListWidgetItem*){
+void WidgetVariable::on_listWidget_itemDoubleClicked(QListWidgetItem*){
     openDialog();
 }
 
 // -------------------------------------------------------
 
-void WidgetVariableSwitch::on_pushButton_clicked(){
+void WidgetVariable::on_pushButton_clicked(){
     openDialog();
 }

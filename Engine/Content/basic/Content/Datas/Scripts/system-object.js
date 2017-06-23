@@ -139,6 +139,11 @@ SystemObject.prototype = {
                 reactions.push(events[i].reactions[state]);
         }
 
+        if (reactions.length >0){
+            var a = 0;
+            a = 1;
+        }
+
         return reactions;
     }
 }

@@ -72,7 +72,7 @@ function DatasGame(){
     this.readSettings();
 }
 
-DatasGame.VARIABLES_SWITCHES_PER_PAGE = 25;
+DatasGame.VARIABLES_PER_PAGE = 25;
 
 DatasGame.prototype = {
 
@@ -81,11 +81,11 @@ DatasGame.prototype = {
     readSettings: function(){
         this.settings = {};
 
-        Wanok.openFile(this, Wanok.FILE_VARIABLES_SWITCHES, true, function(res){
-            var json = JSON.parse(res).Variables;
+        Wanok.openFile(this, Wanok.FILE_VARIABLES, true, function(res){
+            var json = JSON.parse(res).variables;
 
             this.variablesNumbers =
-                 json.length * DatasGame.VARIABLES_SWITCHES_PER_PAGE + 1;
+                 json.length * DatasGame.VARIABLES_PER_PAGE + 1;
         });
 
         Wanok.openFile(this, Wanok.FILE_SETTINGS, true, function(res){

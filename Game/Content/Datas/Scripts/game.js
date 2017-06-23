@@ -101,9 +101,9 @@ Game.prototype = {
     /** Initialize the default variables.
     */
     initializeVariables: function(){
-        this.listVariables = new Array($datasGame.variablesNumbers);
+        this.variables = new Array($datasGame.variablesNumbers);
         for (var i = 0; i < $datasGame.variablesNumbers; i++)
-            this.listVariables[i] = 0;
+            this.variables[i] = null;
     },
 
     // -------------------------------------------------------
@@ -119,7 +119,7 @@ Game.prototype = {
             var json = JSON.parse(res);
             this.playTime = json.t;
             this.charactersInstances = json.inst;
-            this.listVariables = json.vars;
+            this.variables = json.vars;
 
             // Items
             var itemsJson = json.itm;
@@ -217,7 +217,7 @@ Game.prototype = {
                 hh: hiddenHeroes,
                 itm: this.items,
                 inst: this.charactersInstances,
-                vars: this.listVariables,
+                vars: this.variables,
                 currentMapId: this.currentMapId,
                 heroPosition: [this.hero.mesh.position.x,
                                this.hero.mesh.position.y,

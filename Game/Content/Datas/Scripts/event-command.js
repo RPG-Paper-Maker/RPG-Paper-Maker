@@ -34,18 +34,17 @@ var EventCommandKind = {
     If: 8,
     Else: 9,
     EndIf: 10,
-    ChangeSwitches: 11,
-    OpenMainMenu: 12,
-    OpenSavesMenu: 13,
-    ModifyInventory: 14,
-    ModifyTeam: 15,
-    StartBattle: 16,
-    IfWin: 17,
-    IfLose: 18,
-    ChangeState: 19,
-    SendEvent: 20,
-    TeleportObject: 21,
-    MoveObject: 22
+    OpenMainMenu: 11,
+    OpenSavesMenu: 12,
+    ModifyInventory: 13,
+    ModifyTeam: 14,
+    StartBattle: 15,
+    IfWin: 16,
+    IfLose: 17,
+    ChangeState: 18,
+    SendEvent: 19,
+    TeleportObject: 20,
+    MoveObject: 21
 };
 Object.freeze(EventCommandKind);
 
@@ -172,77 +171,7 @@ EventCommandChangeVariables.prototype = {
 
         // Changing variable(s)
         for (i = 0; i < nbSelection; i++){
-            $datasGame.listVariables[selection + i] = value;
-        }
-
-        // End of command
-        return 1;
-    },
-
-    // -------------------------------------------------------
-
-    onKeyPressed: function(currentState, key){},
-    onKeyReleased: function(currentState, key){},
-    onKeyPressedRepeat: function(currentState, key){ return true; },
-    onKeyPressedAndRepeat: function(currentState, key){},
-    drawHUD: function(currentState, context){}
-}
-
-// -------------------------------------------------------
-//
-//  CLASS EventCommandChangeSwitches
-//
-// -------------------------------------------------------
-
-/** @class
-*   An event command for changing switches values.
-*   @property {boolean} isDirectNode Indicates if this node is directly
-*   going to the next node (takes only one frame).
-*   @property {JSON} command Direct JSON command to parse.
-*   @param {JSON} command Direct JSON command to parse.
-*/
-function EventCommandChangeSwitches(command){
-    this.command = command;
-    this.isDirectNode = true;
-}
-
-EventCommandChangeSwitches.prototype = {
-
-    initialize: function(){ return null; },
-
-    /** Parse command and change the switches values, and then finish.
-    *   @param {Object} currentState The current state of the event.
-    *   @param {MapObject} object The current object reacting.
-    *   @param {number} state The state ID.
-    *   @returns {number} The number of node to pass.
-    */
-    update: function(currentState, object, state){
-
-        // Parsing
-        var i = 2;
-        var selection = this.command[1];
-        var nbSelection = 1;
-        if (this.command[0] === 1) nbSelection = this.command[i++] - selection;
-        var operation = this.command[i++];
-        var value = true;
-        switch(operation){
-            case 0: // ON
-                value = true;
-                break;
-            case 1: // OFF
-                value = false;
-                break;
-        }
-
-        // Changing switch(es)
-        for (i = 0; i < nbSelection; i++){
-             // INVERT
-            if(operation === 2){
-                $datasGame.listSwitches[selection + i] =
-                        !$datasGame.listSwitches[selection + i];
-            }
-            else
-                $datasGame.listSwitches[selection + i] = value;
+            $datasGame.variables[selection + i] = value;
         }
 
         // End of command
@@ -414,7 +343,7 @@ EventCommandInputNumber.prototype = {
     */
     update: function(currentState, object, state){
         if (currentState.confirmed){
-            $datasGame.listVariables[this.id] = currentState.entered;
+            $datasGame.variables[this.id] = currentState.entered;
             return 1;
         }
 
@@ -506,9 +435,9 @@ EventCommandIf.prototype = {
         var varConstType = this.command[i++];
         var compare = this.command[i++];
 
-        var value = (varConstType === 0) ? $datasGame.listVariables[compare]
+        var value = (varConstType === 0) ? $datasGame.variables[compare]
                                          : compare;
-        return $operators_compare[operation]($datasGame.listVariables[idVar],
+        return $operators_compare[operation]($datasGame.variables[idVar],
                                              value);
     },
 
@@ -838,7 +767,7 @@ EventCommandModifyInventory.prototype = {
         var operation = this.command[i++];
         var varConstType = this.command[i++];
         var compare = this.command[i++];
-        var value = (varConstType === 0) ? $datasGame.listVariables[compare]
+        var value = (varConstType === 0) ? $datasGame.variables[compare]
                                          : compare;
 
         // Doing the coresponding operation
@@ -900,7 +829,7 @@ EventCommandModifyTeam.instanciateTeam = function(where, type, id, level,
 {
 
     // Stock the instanciation id in a variable
-    $game.listVariables[stockId] = $game.charactersInstances;
+    $game.variables[stockId] = $game.charactersInstances;
 
     // Adding the instanciated character in the right group
     var player = new GamePlayer(type, id, $game.charactersInstances++, []);
@@ -979,7 +908,7 @@ EventCommandModifyTeam.prototype = {
             var varConstType = this.command[i++];
             var compare = this.command[i++];
             var addRemoveId =
-                    (varConstType === 0) ? $game.listVariables[compare]
+                    (varConstType === 0) ? $game.variables[compare]
                                          : compare;
             var addRemoveTeam = this.command[i++];
             this.addRemove(addRemoveKind, addRemoveId, addRemoveTeam);

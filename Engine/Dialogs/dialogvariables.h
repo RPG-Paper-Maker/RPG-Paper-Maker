@@ -44,7 +44,6 @@ public:
     explicit DialogVariables(QWidget *parent = 0);
     ~DialogVariables();
     void initializeModel(QStandardItemModel* m);
-    void applyAsSwitches();
     int getSelectedId() const;
 
 private:

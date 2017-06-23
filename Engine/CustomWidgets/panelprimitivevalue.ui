@@ -141,7 +141,7 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetVariableSwitch" name="widgetVariable" native="true">
+        <widget class="WidgetVariable" name="widgetVariable" native="true">
          <property name="maximumSize">
           <size>
            <width>160</width>
@@ -229,9 +229,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetVariableSwitch</class>
+   <class>WidgetVariable</class>
    <extends>QWidget</extends>
-   <header>widgetvariableswitch.h</header>
+   <header>widgetvariable.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

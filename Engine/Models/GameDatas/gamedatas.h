@@ -21,7 +21,7 @@
 #define GAMEDATAS_H
 
 #include "commoneventsdatas.h"
-#include "variablesswitchesdatas.h"
+#include "variablesdatas.h"
 #include "systemdatas.h"
 #include "battlesystemdatas.h"
 #include "itemsdatas.h"
@@ -49,7 +49,7 @@ public:
     virtual ~GameDatas();
     void setDefault();
     CommonEventsDatas* commonEventsDatas() const;
-    VariablesSwitchesDatas* variablesSwitchesDatas() const;
+    VariablesDatas* variablesDatas() const;
     SystemDatas* systemDatas() const;
     BattleSystemDatas* battleSystemDatas() const;
     ItemsDatas* itemsDatas() const;
@@ -66,7 +66,7 @@ public:
 
 private:
     CommonEventsDatas* m_commonEventsDatas;
-    VariablesSwitchesDatas* m_variablesSwitchesDatas;
+    VariablesDatas* m_variablesDatas;
     SystemDatas* m_systemDatas;
     BattleSystemDatas* m_battleSystemDatas;
     ItemsDatas* m_itemsDatas;

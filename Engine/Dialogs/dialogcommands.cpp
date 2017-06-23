@@ -21,7 +21,6 @@
 #include "ui_dialogcommands.h"
 #include "dialogcommandshowtext.h"
 #include "dialogcommandchangevariables.h"
-#include "dialogcommandchangeswitches.h"
 #include "dialogcommandinputnumber.h"
 #include "dialogcommandconditions.h"
 #include "dialogcommandmodifyinventory.h"
@@ -73,8 +72,6 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandShowText(command);
     case EventCommandKind::ChangeVariables:
         return new DialogCommandChangeVariables(command);
-    case EventCommandKind::ChangeSwitches:
-        return new DialogCommandChangeSwitches(command);
     case EventCommandKind::InputNumber:
         return new DialogCommandInputNumber(command);
     case EventCommandKind::If:
@@ -139,12 +136,6 @@ void DialogCommands::on_pushButtonEndGame_clicked(){
 
 void DialogCommands::on_pushButtonChangeVariables_clicked(){
     openDialogCommand(EventCommandKind::ChangeVariables);
-}
-
-// -------------------------------------------------------
-
-void DialogCommands::on_pushButtonChangeSwitches_clicked(){
-    openDialogCommand(EventCommandKind::ChangeSwitches);
 }
 
 // -------------------------------------------------------

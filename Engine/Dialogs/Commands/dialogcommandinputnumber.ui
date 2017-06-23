@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>74</height>
+    <height>78</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetVariableSwitch" name="widgetVariable" native="true"/>
+        <widget class="WidgetVariable" name="widgetVariable" native="true"/>
        </item>
       </layout>
      </item>
@@ -74,9 +74,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetVariableSwitch</class>
+   <class>WidgetVariable</class>
    <extends>QWidget</extends>
-   <header>widgetvariableswitch.h</header>
+   <header>widgetvariable.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

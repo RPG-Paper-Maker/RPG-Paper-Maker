@@ -92,8 +92,6 @@ SystemObjectReaction.prototype = {
                 return new EventCommandIf(command);
             case EventCommandKind.Else:
                 return new EventCommandElse(command);
-            case EventCommandKind.ChangeSwitches:
-                return new EventCommandChangeSwitches(command);
             case EventCommandKind.OpenMainMenu:
                 return new EventCommandOpenMainMenu(command);
             case EventCommandKind.OpenSavesMenu:

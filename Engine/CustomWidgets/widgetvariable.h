@@ -17,28 +17,45 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETCOMBOBOXLOCALSWITCHES_H
-#define WIDGETCOMBOBOXLOCALSWITCHES_H
+#ifndef WIDGETVARIABLE_H
+#define WIDGETVARIABLE_H
 
-#include <QComboBox>
+#include <QWidget>
+#include <QListWidget>
+#include "variablesdatas.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetComboBoxLocalSwitches
+//  CLASS WidgetVariableSwitch
 //
-//  A comboBox used for local switches selection.
+//  Widget used for choosing a variable existing in the database.
 //
 // -------------------------------------------------------
 
-class WidgetComboBoxLocalSwitches : public QComboBox
+namespace Ui {
+class WidgetVariable;
+}
+
+class WidgetVariable : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit WidgetComboBoxLocalSwitches(QWidget *parent = 0);
+    explicit WidgetVariable(QWidget *parent = 0);
+    ~WidgetVariable();
+    int currentId() const;
+    void setCurrentId(int i);
+    QListWidget* list() const;
+    void initialize(int i = 1);
+    void openDialog();
 
-signals:
+private:
+    Ui::WidgetVariable *ui;
+    int p_currentId;
 
-public slots:
+private slots:
+    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
+    void on_pushButton_clicked();
 };
 
-#endif // WIDGETCOMBOBOXLOCALSWITCHES_H
+#endif // WIDGETVARIABLE_H

@@ -41,7 +41,6 @@ enum class EventCommandKind {
     If,
     Else,
     EndIf,
-    ChangeSwitches,
     OpenMainMenu,
     OpenSavesMenu,
     ModifyInventory,

@@ -22,7 +22,7 @@
 
 #include <QVector>
 #include "dialogcommand.h"
-#include "variablesswitchesdatas.h"
+#include "variablesdatas.h"
 
 // -------------------------------------------------------
 //

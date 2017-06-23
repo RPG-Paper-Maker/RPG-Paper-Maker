@@ -28,7 +28,7 @@
 
 GameDatas::GameDatas() :
     m_commonEventsDatas(nullptr),
-    m_variablesSwitchesDatas(nullptr),
+    m_variablesDatas(nullptr),
     m_systemDatas(nullptr),
     m_battleSystemDatas(nullptr),
     m_itemsDatas(nullptr),
@@ -46,7 +46,7 @@ GameDatas::GameDatas() :
 GameDatas::~GameDatas()
 {
     delete m_commonEventsDatas;
-    delete m_variablesSwitchesDatas;
+    delete m_variablesDatas;
     delete m_systemDatas;
     delete m_battleSystemDatas;
     delete m_itemsDatas;
@@ -63,8 +63,8 @@ CommonEventsDatas* GameDatas::commonEventsDatas() const {
     return m_commonEventsDatas;
 }
 
-VariablesSwitchesDatas* GameDatas::variablesSwitchesDatas() const {
-    return m_variablesSwitchesDatas;
+VariablesDatas* GameDatas::variablesDatas() const {
+    return m_variablesDatas;
 }
 
 SystemDatas* GameDatas::systemDatas() const {
@@ -115,7 +115,7 @@ ClassesDatas* GameDatas::classesDatas() const {
 
 void GameDatas::setDefault(){
     m_commonEventsDatas = new CommonEventsDatas;
-    m_variablesSwitchesDatas = new VariablesSwitchesDatas;
+    m_variablesDatas = new VariablesDatas;
     m_systemDatas = new SystemDatas;
     m_battleSystemDatas = new BattleSystemDatas;
     m_itemsDatas = new ItemsDatas;
@@ -127,7 +127,7 @@ void GameDatas::setDefault(){
     m_troopsDatas = new TroopsDatas;
     m_classesDatas = new ClassesDatas;
     m_commonEventsDatas->setDefault();
-    m_variablesSwitchesDatas->setDefault();
+    m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
     m_battleSystemDatas->setDefault();
     m_itemsDatas->setDefault();
@@ -181,9 +181,9 @@ void GameDatas::read(QString path){
 // -------------------------------------------------------
 
 void GameDatas::readVariablesSwitches(QString path){
-    if (m_variablesSwitchesDatas != nullptr) delete m_variablesSwitchesDatas;
-    m_variablesSwitchesDatas = new VariablesSwitchesDatas();
-    m_variablesSwitchesDatas->read(path);
+    if (m_variablesDatas != nullptr) delete m_variablesDatas;
+    m_variablesDatas = new VariablesDatas();
+    m_variablesDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -191,8 +191,8 @@ void GameDatas::readVariablesSwitches(QString path){
 void GameDatas::write(QString path){
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathCommonEvents),
                      *m_commonEventsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathVariablesSwitches),
-                     *m_variablesSwitchesDatas);
+    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathVariables),
+                     *m_variablesDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathSystem),
                      *m_systemDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathBattleSystem),

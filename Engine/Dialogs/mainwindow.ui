@@ -80,7 +80,6 @@
     <addaction name="actionDatas_manager"/>
     <addaction name="actionSystems_manager"/>
     <addaction name="actionVariables_manager"/>
-    <addaction name="actionSwitches_manager"/>
     <addaction name="actionPictures_manager"/>
     <addaction name="actionKeyboard_controls"/>
    </widget>
@@ -112,7 +111,6 @@
    <addaction name="actionDatas_manager"/>
    <addaction name="actionSystems_manager"/>
    <addaction name="actionVariables_manager"/>
-   <addaction name="actionSwitches_manager"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionKeyboard_controls"/>
    <addaction name="separator"/>
@@ -223,18 +221,6 @@
    </property>
    <property name="iconText">
     <string>Variables</string>
-   </property>
-  </action>
-  <action name="actionSwitches_manager">
-   <property name="icon">
-    <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
-   </property>
-   <property name="text">
-    <string>Switches manager</string>
-   </property>
-   <property name="iconText">
-    <string>Switches</string>
    </property>
   </action>
   <action name="actionSystems_manager">

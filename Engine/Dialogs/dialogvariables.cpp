@@ -18,7 +18,7 @@
 */
 
 #include "dialogvariables.h"
-#include "systemvariableswitch.h"
+#include "systemvariables.h"
 #include "ui_dialogvariables.h"
 #include "wanok.h"
 
@@ -61,13 +61,6 @@ void DialogVariables::initializeModel(QStandardItemModel* m){
 //
 // -------------------------------------------------------
 
-void DialogVariables::applyAsSwitches(){
-    this->setWindowTitle("Switches");
-    ui->groupBox->setTitle("Switches");
-}
-
-// -------------------------------------------------------
-
 int DialogVariables::getSelectedId() const{
     QStandardItem* selected = ui->panelList->list()->getModel()
             ->itemFromIndex(ui->panelList->list()->selectionModel()
@@ -86,7 +79,7 @@ void DialogVariables::on_pageSelected(QModelIndex index){
             ->itemFromIndex(index);
     if (selected != nullptr){
         ui->panelList->list()
-                ->initializeModel(((SystemVariableSwitch*)selected->data()
+                ->initializeModel(((SystemVariables*)selected->data()
                                    .value<quintptr>())->model());
         ui->panelList->list()->setCurrentIndex(ui->panelList->list()
                                                ->getModel()->index(0,0));
@@ -99,9 +92,9 @@ void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     if((QPushButton*)button == ui->buttonBox->button(QDialogButtonBox::Ok)){
         Wanok::writeJSON(Wanok::pathCombine(Wanok::get()->project()
                                             ->pathCurrentProject(),
-                                            Wanok::pathVariablesSwitches),
+                                            Wanok::pathVariables),
                          *(Wanok::get()->project()->gameDatas()
-                           ->variablesSwitchesDatas()));
+                           ->variablesDatas()));
     }
     else if ((QPushButton*)button == ui->buttonBox
              ->button(QDialogButtonBox::Cancel))

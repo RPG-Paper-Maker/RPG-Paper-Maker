@@ -186,7 +186,7 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetVariableSwitch" name="widgetVariableStock" native="true"/>
+        <widget class="WidgetVariable" name="widgetVariableStock" native="true"/>
        </item>
        <item>
         <spacer name="horizontalSpacer_6">
@@ -363,15 +363,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetVariableSwitch</class>
-   <extends>QWidget</extends>
-   <header>widgetvariableswitch.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetVariable</class>
+   <extends>QWidget</extends>
+   <header>widgetvariable.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

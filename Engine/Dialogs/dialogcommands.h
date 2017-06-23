@@ -66,7 +66,6 @@ private slots:
     void on_pushButtonShowText_clicked();
     void on_pushButtonEndGame_clicked();
     void on_pushButtonChangeVariables_clicked();
-    void on_pushButtonChangeSwitches_clicked();
     void on_pushButtonWhile_clicked();
     void on_pushButtonWhileBreak_clicked();
     void on_pushButtonInputNumber_clicked();

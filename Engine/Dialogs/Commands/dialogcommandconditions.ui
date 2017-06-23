@@ -37,150 +37,27 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="radioButtonSwitch">
-             <property name="text">
-              <string>Switch</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="WidgetVariableSwitch" name="widgetSwitch" native="true">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelSwitch">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="text">
-                <string>is</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="comboBoxSwitch">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>50</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <item>
-                <property name="text">
-                 <string>ON</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>OFF</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="radioButtonLocalSwitch">
-             <property name="text">
-              <string>Local switch</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="WidgetComboBoxLocalSwitches" name="widgetLocalSwitches" native="true">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelLocalSwitch">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>is</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="comboBoxLocalSwitch">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>50</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <item>
-                <property name="text">
-                 <string>ON</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>OFF</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="WidgetComboBoxOperation" name="widgetVariableOperation" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
            </item>
-           <item row="2" column="0">
+           <item row="1" column="2">
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0">
             <widget class="QRadioButton" name="radioButtonVariable">
              <property name="text">
               <string>Variable</string>
@@ -188,9 +65,29 @@
             </widget>
            </item>
            <item row="2" column="1">
+            <widget class="PanelPrimitiveValue" name="widgetVariableVariableConstant" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="WidgetVariableSwitch" name="widgetVariableVariable" native="true">
+              <widget class="WidgetVariable" name="widgetVariableVariable" native="true">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -220,53 +117,7 @@
              </item>
             </layout>
            </item>
-           <item row="2" column="2">
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="0">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>68</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="1">
-            <widget class="WidgetComboBoxOperation" name="widgetVariableOperation" native="true">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="4" column="0">
+           <item row="2" column="0">
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -279,14 +130,20 @@
              </property>
             </spacer>
            </item>
-           <item row="4" column="1">
-            <widget class="PanelPrimitiveValue" name="widgetVariableVariableConstant" native="true">
-             <property name="enabled">
-              <bool>false</bool>
+           <item row="1" column="0">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-            </widget>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>68</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
-           <item row="4" column="2">
+           <item row="2" column="2">
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -350,27 +207,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetVariableSwitch</class>
-   <extends>QWidget</extends>
-   <header>widgetvariableswitch.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetComboBoxOperation</class>
    <extends>QWidget</extends>
    <header>widgetcomboboxoperation.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetComboBoxLocalSwitches</class>
-   <extends>QWidget</extends>
-   <header>widgetcomboboxlocalswitches.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetVariable</class>
+   <extends>QWidget</extends>
+   <header>widgetvariable.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

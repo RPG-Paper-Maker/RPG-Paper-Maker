@@ -198,7 +198,6 @@ void MainWindow::enableAll(bool b){
     ui->actionDatas_manager->setEnabled(b);
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
-    ui->actionSwitches_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionPlay->setEnabled(b);
@@ -223,7 +222,6 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
-    ui->actionSwitches_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionPlay->setEnabled(true);
@@ -330,18 +328,7 @@ void MainWindow::on_actionSystems_manager_triggered(){
 
 void MainWindow::on_actionVariables_manager_triggered(){
     DialogVariables dialog;
-    dialog.initializeModel(project->gameDatas()->variablesSwitchesDatas()
-                           ->modelVariables());
-    openDialog(dialog);
-}
-
-// -------------------------------------------------------
-
-void MainWindow::on_actionSwitches_manager_triggered(){
-    DialogVariables dialog;
-    dialog.initializeModel(project->gameDatas()->variablesSwitchesDatas()
-                           ->modelSwitches());
-    dialog.applyAsSwitches();
+    dialog.initializeModel(project->gameDatas()->variablesDatas()->model());
     openDialog(dialog);
 }
 
@@ -374,16 +361,28 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionPlay_triggered(){
+    if (Wanok::mapsToSave.count() > 0){
+        QMessageBox::StandardButton box =
+                QMessageBox::question(this, "Save",
+                                      "You have some maps that are not saved. "
+                                      "Do you want to save all?",
+                                      QMessageBox::Yes | QMessageBox::No |
+                                      QMessageBox::Cancel);
+
+        if (box == QMessageBox::Yes)
+            saveAllMaps();
+        else if (box == QMessageBox::Cancel)
+            return;
+    }
+
+    // Play process
     connect(gameProcess,
             SIGNAL(finished(int, QProcess::ExitStatus)), this,
             SLOT(on_gameProcessExit(int, QProcess::ExitStatus )));
-    this->setEnabled(false);
     QString execName = "Game";
     #ifdef Q_OS_WIN
         execName += ".exe";
     #endif
-    QString s = "\"" + Wanok::pathCombine(project->pathCurrentProject(),
-                                          execName) + "\"";
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
 }
@@ -398,7 +397,6 @@ void MainWindow::on_gameProcessExit(int exitCode,
                               QString::number(exitCode) + " code exit. " +
                               exitStatus);
     }
-    this->setEnabled(true);
 }
 
 // -------------------------------------------------------

@@ -101,7 +101,7 @@ QString PrimitiveValue::toString() const{
         return QString::number(m_numberValue);
     case PrimitiveValueKind::Variable:
         return "Variable: " + Wanok::get()->project()->gameDatas()
-                ->variablesSwitchesDatas()->getVariableById(m_numberValue)
+                ->variablesDatas()->getVariableById(m_numberValue)
                 ->toString();
     case PrimitiveValueKind::Parameter:
         return "Parameter:";
@@ -141,7 +141,7 @@ void PrimitiveValue::labelTab(QString& str) const{
         break;
     case PrimitiveValueKind::Variable:
         str += "V>" + Wanok::get()->project()->gameDatas()
-                ->variablesSwitchesDatas()->getVariableById(m_numberValue)
+                ->variablesDatas()->getVariableById(m_numberValue)
                 ->name();
         break;
     case PrimitiveValueKind::Message:

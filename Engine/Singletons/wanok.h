@@ -58,7 +58,7 @@ public:
     const static QString pathMaps;
     const static QString pathScriptsDir;
     const static QString pathCommonEvents;
-    const static QString pathVariablesSwitches;
+    const static QString pathVariables;
     const static QString pathSystem;
     const static QString pathBattleSystem;
     const static QString pathItems;

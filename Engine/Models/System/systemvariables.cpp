@@ -17,10 +17,10 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemvariableswitch.h"
+#include "systemvariables.h"
 #include "wanok.h"
 
-int SystemVariableSwitch::variablesPerPage = 25;
+int SystemVariables::variablesPerPage = 25;
 
 // -------------------------------------------------------
 //
@@ -28,23 +28,21 @@ int SystemVariableSwitch::variablesPerPage = 25;
 //
 // -------------------------------------------------------
 
-SystemVariableSwitch::SystemVariableSwitch() : SuperListItem()
+SystemVariables::SystemVariables() : SuperListItem()
 {
     p_model = new QStandardItemModel();
 }
 
-SystemVariableSwitch::SystemVariableSwitch(int i, QString n,
+SystemVariables::SystemVariables(int i, QString n,
                                            QStandardItemModel *m) :
     SuperListItem(i,n), p_model(m) {}
 
-SystemVariableSwitch::~SystemVariableSwitch()
+SystemVariables::~SystemVariables()
 {
-    deleteModel(p_model->invisibleRootItem());
-    delete p_model;
-    p_model = nullptr;
+    SuperListItem::deleteModel(p_model);
 }
 
-QStandardItemModel* SystemVariableSwitch::model() const { return p_model; }
+QStandardItemModel* SystemVariables::model() const { return p_model; }
 
 // -------------------------------------------------------
 //
@@ -52,33 +50,11 @@ QStandardItemModel* SystemVariableSwitch::model() const { return p_model; }
 //
 // -------------------------------------------------------
 
-QString SystemVariableSwitch::idToString() const
+QString SystemVariables::idToString() const
 {
     return QString("[") + Wanok::getFormatNumber((p_id-1)*25 + 1)
             + QString(",") + Wanok::getFormatNumber((p_id)*25)
             + QString("]");
-}
-
-// -------------------------------------------------------
-
-SuperListItem* SystemVariableSwitch::getById(int id) const{
-    for (int i = 0; i < variablesPerPage; i++){
-        SuperListItem* s = (SuperListItem*)(p_model->invisibleRootItem()
-                                            ->child(i)->data()
-                                            .value<quintptr>());
-        if (id == s->id()) return s;
-    }
-
-    return nullptr;
-}
-
-// -------------------------------------------------------
-
-void SystemVariableSwitch::deleteModel(QStandardItem* item){
-    for (int i = 0; i < item->rowCount(); i++){
-        deleteModel(item->child(i));
-        delete (SuperListItem*) item->child(i)->data().value<quintptr>();
-    }
 }
 
 // -------------------------------------------------------
@@ -87,7 +63,7 @@ void SystemVariableSwitch::deleteModel(QStandardItem* item){
 //
 // -------------------------------------------------------
 
-void SystemVariableSwitch::read(const QJsonObject &json)
+void SystemVariables::read(const QJsonObject &json)
 {
     SuperListItem::read(json);
     readCommand(json["list"].toArray());
@@ -95,8 +71,8 @@ void SystemVariableSwitch::read(const QJsonObject &json)
 
 // -------------------------------------------------------
 
-void SystemVariableSwitch::readCommand(const QJsonArray &json){
-    for (int j = 0; j < SystemVariableSwitch::variablesPerPage; j++){
+void SystemVariables::readCommand(const QJsonArray &json){
+    for (int j = 0; j < SystemVariables::variablesPerPage; j++){
         QStandardItem* varItem = new QStandardItem();
         SuperListItem* var = new SuperListItem();
         var->read(json[j].toObject());
@@ -109,7 +85,7 @@ void SystemVariableSwitch::readCommand(const QJsonArray &json){
 
 // -------------------------------------------------------
 
-void SystemVariableSwitch::write(QJsonObject &json) const
+void SystemVariables::write(QJsonObject &json) const
 {
     SuperListItem::write(json);
     json["list"] = getArrayJSON();
@@ -117,7 +93,7 @@ void SystemVariableSwitch::write(QJsonObject &json) const
 
 // -------------------------------------------------------
 
-QJsonArray SystemVariableSwitch::getArrayJSON() const{
+QJsonArray SystemVariables::getArrayJSON() const{
     QJsonArray tab;
     for (int i = 0; i < variablesPerPage; i++){
         QJsonObject jsonObj;

@@ -71,9 +71,6 @@ private:
     QString strChangeVariables() const;
     QString strChangeVariablesSelection(int &i, QString& several) const;
     QString strChangeVariablesOperation(int &i) const;
-    QString strChangeSwitches() const;
-    QString strChangeSwitchesChooseSwitches(int &i, QString& several) const;
-    QString strChangeSwitchesOperation(int &i) const;
     QString strChangeVariablesValue(int &i) const;
     QString strInputNumber() const;
     QString strCondition() const;

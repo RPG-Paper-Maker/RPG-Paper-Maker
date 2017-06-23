@@ -53,17 +53,13 @@ HEADERS += \
     Models/GameDatas/gamedatas.h \
     Models/GameDatas/commoneventsdatas.h \
     Dialogs/dialogvariables.h \
-    Models/GameDatas/variablesswitchesdatas.h \
     Models/superlistitem.h \
     CustomWidgets/widgetsuperlist.h \
     CustomWidgets/panelsuperlist.h \
-    Models/System/systemvariableswitch.h \
     Dialogs/Commands/dialogcommandchangevariables.h \
-    CustomWidgets/widgetvariableswitch.h \
     Dialogs/Commands/dialogcommandinputnumber.h \
     Dialogs/Commands/dialogcommandconditions.h \
     CustomWidgets/widgetcomboboxoperation.h \
-    Dialogs/Commands/dialogcommandchangeswitches.h \
     CustomWidgets/widgettextlang.h \
     CustomWidgets/widgetmenubarmapeditor.h \
     Enums/mapeditorselectionkind.h \
@@ -76,7 +72,6 @@ HEADERS += \
     Models/GameDatas/systemdatas.h \
     Controls/controlmapeditor.h \
     Models/serializable.h \
-    CustomWidgets/widgetcomboboxlocalswitches.h \
     CustomWidgets/widgetconditionslist.h \
     CustomWidgets/contextmenulist.h \
     Models/GameDatas/itemsdatas.h \
@@ -187,7 +182,10 @@ HEADERS += \
     Models/GameDatas/picturesdatas.h \
     CustomWidgets/widgetpicturepreview.h \
     Enums/mapeditorsubselectionkind.h \
-    CustomWidgets/paneltextures.h
+    CustomWidgets/paneltextures.h \
+    CustomWidgets/widgetvariable.h \
+    Models/GameDatas/variablesdatas.h \
+    Models/System/systemvariables.h
 
 SOURCES += \
     main.cpp \
@@ -210,17 +208,13 @@ SOURCES += \
     Models/GameDatas/gamedatas.cpp \
     Models/GameDatas/commoneventsdatas.cpp \
     Dialogs/dialogvariables.cpp \
-    Models/GameDatas/variablesswitchesdatas.cpp \
     Models/superlistitem.cpp \
     CustomWidgets/widgetsuperlist.cpp \
     CustomWidgets/panelsuperlist.cpp \
-    Models/System/systemvariableswitch.cpp \
     Dialogs/Commands/dialogcommandchangevariables.cpp \
-    CustomWidgets/widgetvariableswitch.cpp \
     Dialogs/Commands/dialogcommandinputnumber.cpp \
     Dialogs/Commands/dialogcommandconditions.cpp \
     CustomWidgets/widgetcomboboxoperation.cpp \
-    Dialogs/Commands/dialogcommandchangeswitches.cpp \
     CustomWidgets/widgettextlang.cpp \
     CustomWidgets/widgetmenubarmapeditor.cpp \
     MapEditor/mapportion.cpp \
@@ -231,7 +225,6 @@ SOURCES += \
     MapEditor/position.cpp \
     Models/GameDatas/systemdatas.cpp \
     Controls/controlmapeditor.cpp \
-    CustomWidgets/widgetcomboboxlocalswitches.cpp \
     CustomWidgets/widgetconditionslist.cpp \
     CustomWidgets/contextmenulist.cpp \
     Models/GameDatas/itemsdatas.cpp \
@@ -333,7 +326,10 @@ SOURCES += \
     Models/System/systempicture.cpp \
     Models/GameDatas/picturesdatas.cpp \
     CustomWidgets/widgetpicturepreview.cpp \
-    CustomWidgets/paneltextures.cpp
+    CustomWidgets/paneltextures.cpp \
+    CustomWidgets/widgetvariable.cpp \
+    Models/GameDatas/variablesdatas.cpp \
+    Models/System/systemvariables.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -346,10 +342,8 @@ FORMS += \
     Dialogs/dialogvariables.ui \
     CustomWidgets/panelsuperlist.ui \
     Dialogs/Commands/dialogcommandchangevariables.ui \
-    CustomWidgets/widgetvariableswitch.ui \
     Dialogs/Commands/dialogcommandinputnumber.ui \
     Dialogs/Commands/dialogcommandconditions.ui \
-    Dialogs/Commands/dialogcommandchangeswitches.ui \
     CustomWidgets/widgettextlang.ui \
     CustomWidgets/widgetmenubarmapeditor.ui \
     Dialogs/Commands/dialogcommandmodifyinventory.ui \
@@ -387,7 +381,8 @@ FORMS += \
     Dialogs/Systems/dialogsystemkeyboardgeneral.ui \
     Dialogs/dialogpictures.ui \
     CustomWidgets/panelpicturepreview.ui \
-    CustomWidgets/paneltextures.ui
+    CustomWidgets/paneltextures.ui \
+    CustomWidgets/widgetvariable.ui
 
 OTHER_FILES += \
     style.qss

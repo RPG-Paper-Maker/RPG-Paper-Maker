@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VARIABLESSWITCHESDATAS_H
-#define VARIABLESSWITCHESDATAS_H
+#ifndef VARIABLESDATAS_H
+#define VARIABLESDATAS_H
 
 #include "serializable.h"
 #include <QStandardItemModel>
@@ -26,35 +26,30 @@
 
 // -------------------------------------------------------
 //
-//  CLASS VariablesSwitchesDatas
+//  CLASS VariablesDatas
 //
 //  Contains all the variables and switches. The variables are
 //  a simple array of int, and the switches an array of booleans.
 //
 // -------------------------------------------------------
 
-class VariablesSwitchesDatas : public Serializable
+class VariablesDatas : public Serializable
 {
 public:
-    VariablesSwitchesDatas();
-    virtual ~VariablesSwitchesDatas();
+    VariablesDatas();
+    virtual ~VariablesDatas();
     void read(QString path);
     void setDefault();
-    QStandardItemModel* modelVariables() const;
-    QStandardItemModel* modelSwitches() const;
+    QStandardItemModel* model() const;
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json, QStandardItemModel* l);
     virtual void write(QJsonObject &json) const;
     QJsonArray getArrayJSON(QStandardItemModel* l) const;
     SuperListItem* getVariableById(int id) const;
-    SuperListItem* getSwitchById(int id) const;
 
 private:
-    QStandardItemModel* p_modelVariables;
-    QStandardItemModel* p_modelSwitches;
+    QStandardItemModel* p_model;
     static QStandardItem* getDefaultItem(int i);
-    SuperListItem* getById(QStandardItemModel *l, int id) const;
-    void deleteModel(QStandardItem* item);
 };
 
-#endif // VARIABLESSWITCHESDATAS_H
+#endif // VARIABLESDATAS_H

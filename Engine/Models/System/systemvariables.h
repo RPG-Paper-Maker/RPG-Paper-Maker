@@ -17,47 +17,39 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETVARIABLESWITCH_H
-#define WIDGETVARIABLESWITCH_H
+#ifndef SYSTEMVARIABLES_H
+#define SYSTEMVARIABLES_H
 
-#include <QWidget>
-#include <QListWidget>
-#include "variablesswitchesdatas.h"
+#include<QStandardItemModel>
+#include <QMetaType>
+#include "superlistitem.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetVariableSwitch
+//  CLASS SystemVariables
 //
-//  Widget used for choosing a variable existing in the database.
+//  An object representing the variables and switches items.
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class WidgetVariableSwitch;
-}
-
-class WidgetVariableSwitch : public QWidget
+class SystemVariables : public SuperListItem
 {
-    Q_OBJECT
-
 public:
-    explicit WidgetVariableSwitch(QWidget *parent = 0);
-    ~WidgetVariableSwitch();
-    void setVariable(bool b);
-    int currentId() const;
-    void setCurrentId(int i);
-    QListWidget* list() const;
-    void initialize(int i = 1);
-    void openDialog();
+    SystemVariables();
+    SystemVariables(int i, QString n, QStandardItemModel* m);
+    virtual ~SystemVariables();
+    static int variablesPerPage;
+    QStandardItemModel* model() const;
+    virtual QString idToString() const;
+    virtual void read(const QJsonObject &json);
+    void readCommand(const QJsonArray &json);
+    virtual void write(QJsonObject &json) const;
+    QJsonArray getArrayJSON() const;
 
 private:
-    Ui::WidgetVariableSwitch *ui;
-    bool isVariable;
-    int p_currentId;
-
-private slots:
-    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
-    void on_pushButton_clicked();
+    QStandardItemModel* p_model;
 };
 
-#endif // WIDGETVARIABLESWITCH_H
+Q_DECLARE_METATYPE(SystemVariables)
+
+#endif // SYSTEMVARIABLES_H
