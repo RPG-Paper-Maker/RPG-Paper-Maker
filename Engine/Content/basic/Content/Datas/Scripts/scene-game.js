@@ -29,10 +29,14 @@
 *   interpreters for parallel reactions.
 *   @property {Node[]} parallelCommands Commands that are still running without
 *   blocking any other command.
+*   @property {function} [callBackAfterLoading=null] A function to call after
+*   loading completed. The function should be put to null after all the stuff
+*   done.
 */
 function SceneGame(){
     this.reactionInterpreters = new Array;
     this.parallelCommands = new Array;
+    this.callBackAfterLoading = null;
 }
 
 SceneGame.prototype = {

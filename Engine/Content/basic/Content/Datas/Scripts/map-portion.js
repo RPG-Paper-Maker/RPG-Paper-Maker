@@ -41,6 +41,8 @@
 *   @param {number} realX The real x portion.
 *   @param {number} realY The real y portion.
 *   @param {number} realZ The real z portion.
+*   @param {number} [spritesOffset=-0.005] In order to avoid flickerings on
+*   sprites with the same X / Z, we use an offset.
 */
 function MapPortion(realX, realY, realZ){
     var pixPortion = $PORTION_SIZE * $SQUARE_SIZE;
@@ -50,7 +52,24 @@ function MapPortion(realX, realY, realZ){
     this.staticFloorsList = new Array;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
+    this.spritesOffset = -0.005;
 }
+
+/** @static
+*   In order to avoid flickerings, we need to add this coef to floors scale.
+*   @default 0.1
+*   @constant
+*/
+MapPortion.SCALE_COEF = 0.1;
+
+/** @static
+*   In order to avoid flickerings on sprites with the same X / Z, we use an
+*   offset. This coef is the number to increment for the offset for each
+*   sprites.
+*   @default 0.0005
+*   @constant
+*/
+MapPortion.SPRITES_OFFSET_COEF = 0.0005;
 
 MapPortion.prototype = {
 
@@ -73,44 +92,49 @@ MapPortion.prototype = {
     readFloors: function(json){
 
         // Static floors
-        for (var i = 0, l = json.squares.length; i < l; i++){
-            var square = json.squares[i];
-            var height = square.k;
-            var rect = square.v;
-            var localPosition = new THREE.Vector3(
-                        rect[0] * $SQUARE_SIZE,
-                        (height[0] * $SQUARE_SIZE) +
-                        (height[1] * $SQUARE_SIZE / 100),
-                        rect[1] * $SQUARE_SIZE
-                        );
+        var jsonFloors = json.floors;
 
-            var x = 0.0;
-            var y = 0.0;
-            var w = 16.0 / 128.0;
-            var h = 16.0 / 128.0;
+        var material = $gameStack.top().textureTileset;
+        var width = material.map.image.width;
+        var height = material.map.image.height;
+
+        for (var i = 0, l = jsonFloors.length; i < l; i++){
+            var jsonFloor = jsonFloors[i];
+            var localPosition = Wanok.positionToVector3(jsonFloor.k);
+            var jsonFloorDatas = jsonFloor.v;
+            var texture = jsonFloorDatas.t;
+
+            // Getting geometry and UVs coords
+            var x = (texture[0] * $SQUARE_SIZE) / width;
+            var y = (texture[1] * $SQUARE_SIZE) / height;
+            var w = (texture[2] * $SQUARE_SIZE) / width;
+            var h = (texture[3] * $SQUARE_SIZE) / height;
 
             var geometry = new THREE.Geometry();
+            geometry.dynamic = false;
             geometry.vertices.push(new THREE.Vector3(0.0, 0.0, 0.0));
             geometry.vertices.push(new THREE.Vector3(1.0, 0.0, 0.0));
             geometry.vertices.push(new THREE.Vector3(1.0, 0.0, 1.0));
             geometry.vertices.push(new THREE.Vector3(0.0, 0.0, 1.0));
             geometry.faces.push(new THREE.Face3(0, 1, 2));
             geometry.faces.push(new THREE.Face3(0, 2, 3));
-            geometry.scale(rect[2] * $SQUARE_SIZE, 1.0, rect[3] * $SQUARE_SIZE);
+            geometry.scale($SQUARE_SIZE + MapPortion.SCALE_COEF,
+                           1.0,
+                           $SQUARE_SIZE + MapPortion.SCALE_COEF);
             geometry.faceVertexUvs[0] = [];
             geometry.faceVertexUvs[0].push([
-                new THREE.Vector2(x,y),
-                new THREE.Vector2(x+w,y),
-                new THREE.Vector2(x+w,y+h)
+                new THREE.Vector2(x, y),
+                new THREE.Vector2(x + w, y),
+                new THREE.Vector2(x + w, y + h)
             ]);
             geometry.faceVertexUvs[0].push([
-                new THREE.Vector2(x,y),
-                new THREE.Vector2(x+w,y+h),
-                new THREE.Vector2(x,y+h)
+                new THREE.Vector2(x, y),
+                new THREE.Vector2(x + w, y + h),
+                new THREE.Vector2(x, y + h)
             ]);
             geometry.uvsNeedUpdate = true;
 
-            var material = $gameStack.top().textureTileset;
+            // Creating the plane
             var plane = new THREE.Mesh(geometry, material);
             plane.position.set(this.positionOrigin.x + localPosition.x,
                                this.positionOrigin.y + localPosition.y,
@@ -139,16 +163,21 @@ MapPortion.prototype = {
             var s = json[i];
             var position = s.k;
             var ss = s.v;
+
+            var material = $gameStack.top().textureTileset;
+            var width = material.map.image.width;
+            var height = material.map.image.height;
+
             for (var j = 0, ll = ss.length; j < ll; j++){
                 var sprite = new Sprite();
                 sprite.read(ss[j]);
+                var texture = sprite.textureRect;
+                var x = (texture[0] * $SQUARE_SIZE) / width;
+                var y = (texture[1] * $SQUARE_SIZE) / height;
+                var w = (texture[2] * $SQUARE_SIZE) / width;
+                var h = (texture[3] * $SQUARE_SIZE) / height;
 
-                var x = 0.0;
-                var y = 16.0 / 128.0;
-                var w = 32.0 / 128.0;
-                var h = 32.0 / 128.0;
-                var plane = this.getSpriteMesh(position,
-                                               $gameStack.top().textureTileset,
+                var plane = this.getSpriteMesh(position, material, texture,
                                                x, y, w, h);
                 $gameStack.top().scene.add(plane);
                 this.staticSpritesList.push(plane);
@@ -194,6 +223,7 @@ MapPortion.prototype = {
                 var mesh = this.getSpriteMesh(position,
                                               $gameStack.top()
                                               .texturesCharacters[1],
+                                              [0, 0, 2, 2],
                                               x, y, w, h);
                 var mapObject = new MapObject(mesh, object);
 
@@ -214,15 +244,19 @@ MapPortion.prototype = {
     /** Get the THREE mesh for a sprite.
     *   @param {number[]} position The position of the mesh.
     *   @param {Three.material} material The material used for this mesh.
+    *   @param {number[]} texture The texture coords of the sprite.
     *   @param {number} x The x UV texture position.
     *   @param {number} y The y UV texture position.
     *   @param {number} w The w UV texture position.
     *   @param {number} h The h UV texture position.
     */
-    getSpriteMesh: function(position, material, x, y, w, h){
+    getSpriteMesh: function(position, material, texture, x, y, w, h){
         var localPosition = Wanok.positionToVector3(position);
-        localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
-        localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
+        localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                           + this.spritesOffset);
+        localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100)
+                           + this.spritesOffset);
+        this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
 
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(-0.5, 1.0, 0.0));
@@ -231,7 +265,8 @@ MapPortion.prototype = {
         geometry.vertices.push(new THREE.Vector3(-0.5, 0.0, 0.0));
         geometry.faces.push(new THREE.Face3(0, 1, 2));
         geometry.faces.push(new THREE.Face3(0, 2, 3));
-        geometry.scale(2 * $SQUARE_SIZE, 2 * $SQUARE_SIZE, 1.0);
+        geometry.scale(texture[2] * $SQUARE_SIZE, texture[3] * $SQUARE_SIZE,
+                       1.0);
         geometry.faceVertexUvs[0] = [];
         geometry.faceVertexUvs[0].push([
             new THREE.Vector2(x,y),
@@ -321,6 +356,7 @@ MapPortion.prototype = {
                     var mesh =
                             this.getSpriteMesh(position,
                                                new THREE.MeshBasicMaterial({}),
+                                               [0, 0, 2, 2],
                                                x, y, w, h);
                     var mapObject = new MapObject(mesh, object);
                     return mapObject;

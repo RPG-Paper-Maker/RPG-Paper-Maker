@@ -19,17 +19,7 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SceneMap : GameState
-//
-//  A local map.
-//
-//  @id                             -> The ID of the map.
-//  @mapName                        -> The map name.
-//  @scene                          -> The 3D scene of the map.
-//  @camera                         -> The camera of the state.
-//  @mapInfos                       -> General map informations (real name, name, width, height)
-//  @allObjects                     -> All the objects portions according to ID.
-//  @mapPortions                    -> All the portions in the visible ray of the map
+//  CLASS SceneMap : SceneGame
 //
 // -------------------------------------------------------
 
@@ -43,8 +33,8 @@
 *   @property {Object} mapInfos General map informations (real name, name,
 *   width, height).
 *   @property {number[][]} allObjects All the objects portions according to ID.
-*   @property {MapPortion[][][]} mapPortions All the portions in the visible ray of the
-*   map.
+*   @property {MapPortion[][][]} mapPortions All the portions in the visible ray
+*   of the map.
 *   @param {number} id The ID of the map.
 */
 function SceneMap(id){
@@ -55,9 +45,8 @@ function SceneMap(id){
     this.scene = new THREE.Scene();
     this.camera = new Camera(120, 75);
     this.readMapInfos();
-    this.initializePortions();
-    this.initializeObjects();
     this.loadTextures();
+    this.callBackAfterLoading = this.initializePortions;
 }
 
 /** Get the portion file name.
@@ -116,6 +105,12 @@ SceneMap.prototype = {
         }
 
         this.scene.add($game.hero.mesh);
+
+        // Initialize the objects list after loading portions
+        this.initializeObjects();
+
+        // End callback
+        this.callBackAfterLoading = null;
     },
 
     // -------------------------------------------------------
@@ -231,16 +226,23 @@ SceneMap.prototype = {
     *   @retuns {THREE.MeshBasicMaterial}
     */
     loadTexture: function(textureLoader, path){
-        var texture = textureLoader.load(path);
+        $filesToLoad++;
+        var texture = textureLoader.load(path, function(t){
+            $loadedFiles++;
+        });
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = false;
-        return new THREE.MeshBasicMaterial(
-                    {
-                        map: texture,
-                        transparent: true,
-                        side: THREE.DoubleSide
-                    });
+        var material = new THREE.MeshBasicMaterial(
+        {
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide,
+            shading: THREE.FlatShading, alphaTest: 0.5
+        });
+        material.overdraw = 0.5;
+
+        return material;
     },
 
     // -------------------------------------------------------

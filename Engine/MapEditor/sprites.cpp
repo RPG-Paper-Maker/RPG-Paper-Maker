@@ -71,7 +71,7 @@ Sprite::~Sprite()
 // -------------------------------------------------------
 
 SpriteDatas::SpriteDatas() :
-    SpriteDatas(0, 50, 0, new QRect)
+    SpriteDatas(0, 50, 0, new QRect(0, 0, 2, 2))
 {
 
 }

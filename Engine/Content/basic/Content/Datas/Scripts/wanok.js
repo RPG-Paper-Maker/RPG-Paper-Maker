@@ -111,6 +111,8 @@ Wanok.saveFile = function(url, obj){
 *   @returns {boolean}
 */
 Wanok.isLoading = function(){
+    var a = $filesToLoad;
+    var b = $loadedFiles;
     if ($filesToLoad === $loadedFiles){
         $filesToLoad = 0;
         $loadedFiles = 0;

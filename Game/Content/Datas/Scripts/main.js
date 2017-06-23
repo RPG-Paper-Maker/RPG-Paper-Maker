@@ -164,6 +164,7 @@ function initializeGL(canvas){
         $renderer = new THREE.WebGLRenderer();
         $renderer.autoClear = false;
     }
+    var lol = $renderer;
 
     $renderer.setSize($canvasWidth, $canvasHeight);
 }

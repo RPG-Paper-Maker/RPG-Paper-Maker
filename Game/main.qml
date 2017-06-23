@@ -84,9 +84,16 @@ Window {
         onPaintGL: {
             if (!Game.Wanok.isLoading()){
                 Game.update();
-                Game.draw3D(canvas3d);
-                Game.drawHUD(canvas);
-                canvas.requestPaint();
+                if (!Game.$gameStack.isEmpty()){
+                    var callback = Game.$gameStack.top().callBackAfterLoading;
+                    if (callback === null){
+                        Game.draw3D(canvas3d);
+                        Game.drawHUD(canvas);
+                        canvas.requestPaint();
+                    }
+                    else
+                        callback.call(Game.$gameStack.top());
+                }
             }
         }
 

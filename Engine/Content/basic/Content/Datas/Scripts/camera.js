@@ -37,7 +37,8 @@
 function Camera(d, h){
     this.threeCamera = new THREE.PerspectiveCamera(45,
                                                    $canvasWidth / $canvasHeight,
-                                                   0.1, 10000);
+                                                   50, 100000);
+
     this.distance = d;
     this.height = h;
     this.horizontalAngle = -90.0;
@@ -61,9 +62,11 @@ Camera.prototype = {
         this.target.z = position.z;
 
         // Update position
-        this.threeCamera.position.x = this.target.x;
+        this.threeCamera.position.x = this.target.x -
+             (this.distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
         this.threeCamera.position.y = this.target.y + this.height;
-        this.threeCamera.position.z = this.target.z + this.distance;
+        this.threeCamera.position.z = this.target.z -
+             (this.distance * Math.sin(this.horizontalAngle * Math.PI / 180.0));
 
         // Update view
         this.threeCamera.lookAt(this.target);
