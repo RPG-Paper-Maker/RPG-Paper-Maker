@@ -106,29 +106,25 @@ ContextMenuList* ContextMenuList::createContextMap(QWidget *parent){
 
     // Creating actions
     QAction* actionEdit = new QAction("Edit map properties", parent);
-    QAction* actionCopy = new QAction("Copy map", parent);
-    QAction* actionPaste = new QAction("Paste map", parent);
-    QAction* actionDelete = new QAction("Delete map", parent);
+    QAction* actionCopy = new QAction("Copy", parent);
+    QAction* actionDelete = new QAction("Delete", parent);
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
     actionEdit->setShortcut(QKeySequence(QKeySequence::Replace));
     actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
-    actionPaste->setShortcut(QKeySequence(QKeySequence::Paste));
     actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
 
     // Adding action to the menu
     menu->addAction(actionEdit);
     menu->addSeparator();
     menu->addAction(actionCopy);
-    menu->addAction(actionPaste);
     menu->addSeparator();
     menu->addAction(actionDelete);
 
     // Connexions
     connect(actionEdit, SIGNAL(triggered()), parent, SLOT(contextEditMap()));
     connect(actionCopy, SIGNAL(triggered()), parent, SLOT(contextCopyMap()));
-    connect(actionPaste, SIGNAL(triggered()), parent, SLOT(contextPasteMap()));
     connect(actionDelete, SIGNAL(triggered()), parent,
             SLOT(contextDeleteMap()));
 
@@ -143,10 +139,10 @@ ContextMenuList* ContextMenuList::createContextDirectory(QWidget *parent){
     // Creating actions
     QAction* actionNewMap = new QAction("New map", parent);
     QAction* actionNewDirectory = new QAction("New directory", parent);
-    QAction* actionEdit = new QAction("Edit directory", parent);
-    QAction* actionCopy = new QAction("Copy directory", parent);
-    QAction* actionPaste = new QAction("Paste directory", parent);
-    QAction* actionDelete = new QAction("Delete directory", parent);
+    QAction* actionEdit = new QAction("Edit name", parent);
+    QAction* actionCopy = new QAction("Copy", parent);
+    QAction* actionPaste = new QAction("Paste", parent);
+    QAction* actionDelete = new QAction("Delete", parent);
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
@@ -175,7 +171,7 @@ ContextMenuList* ContextMenuList::createContextDirectory(QWidget *parent){
     connect(actionCopy, SIGNAL(triggered()), parent,
             SLOT(contextCopyDirectory()));
     connect(actionPaste, SIGNAL(triggered()), parent,
-            SLOT(contextPasteDirectory()));
+            SLOT(contextPaste()));
     connect(actionDelete, SIGNAL(triggered()), parent,
             SLOT(contextDeleteDirectory()));
 

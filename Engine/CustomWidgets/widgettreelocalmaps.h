@@ -80,8 +80,7 @@ private slots:
     void contextEditDirectory();
     void contextCopyMap();
     void contextCopyDirectory();
-    void contextPasteMap();
-    void contextPasteDirectory();
+    void contextPaste();
     void contextDeleteMap();
     void contextDeleteDirectory();
 };

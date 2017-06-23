@@ -19,6 +19,7 @@
 
 #include "widgettreelocalmaps.h"
 #include "dialogmapproperties.h"
+#include "dialogsystemname.h"
 #include "wanok.h"
 #include "treemapdatas.h"
 #include <QDir>
@@ -292,7 +293,7 @@ void WidgetTreeLocalMaps::contextNewMap(){
         DialogMapProperties dialog(*properties);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createMap(properties->name(), id);
-            TreeMapDatas::addMap(selected, selected->row()+1, tag);
+            TreeMapDatas::addMap(selected, selected->rowCount(), tag);
             Map::writeNewMap(Wanok::get()->project()->pathCurrentProject(),
                              *properties);
             Wanok::get()->project()->writeTreeMapDatas();
@@ -305,7 +306,16 @@ void WidgetTreeLocalMaps::contextNewMap(){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextNewDirectory(){
-
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        SuperListItem super(-1, "Directory");
+        DialogSystemName dialog(super);
+        if (dialog.exec() == QDialog::Accepted){
+            TreeMapTag* tag = TreeMapTag::createDir(super.name());
+            TreeMapDatas::addDir(selected, selected->rowCount(), tag);
+            Wanok::get()->project()->writeTreeMapDatas();
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -343,7 +353,18 @@ void WidgetTreeLocalMaps::contextEditMap(){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextEditDirectory(){
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        SuperListItem super;
+        super.setName(tag->name());
 
+        DialogSystemName dialog(super);
+        if (dialog.exec() == QDialog::Accepted){
+            TreeMapDatas::setName(selected, super.name());
+            Wanok::get()->project()->writeTreeMapDatas();
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -359,13 +380,7 @@ void WidgetTreeLocalMaps::contextCopyDirectory(){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::contextPasteMap(){
-
-}
-
-// -------------------------------------------------------
-
-void WidgetTreeLocalMaps::contextPasteDirectory(){
+void WidgetTreeLocalMaps::contextPaste(){
 
 }
 
