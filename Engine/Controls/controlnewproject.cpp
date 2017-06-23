@@ -86,7 +86,7 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return "Error while creating game.rpm file";
     QTextStream out(&file);
-    out << "test";
+    out << Project::VERSION;
 
     // Copying a basic project content
     if (!Wanok::copyPath(Wanok::pathCombine(

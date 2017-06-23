@@ -42,6 +42,7 @@ class Project
 public:
     Project();
     virtual ~Project();
+    static const QString VERSION;
     void setDefault();
     QString pathCurrentProject() const;
     void setPathCurrentProject(QString s);
@@ -54,7 +55,8 @@ public:
     PicturesDatas* picturesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
 
-    void read(QString path);
+    bool read(QString path);
+    bool readVersion();
     void readGameDatas();
     void readLangsDatas();
     void readTreeMapDatas();
@@ -79,6 +81,7 @@ private:
     ScriptsDatas* m_scriptsDatas;
     PicturesDatas* m_picturesDatas;
     KeyBoardDatas* m_keyBoardDatas;
+    QString m_version;
 };
 
 #endif // PROJECT_H

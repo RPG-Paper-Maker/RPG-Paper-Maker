@@ -19,6 +19,9 @@
 
 #include "project.h"
 #include "wanok.h"
+#include <QMessageBox>
+
+const QString Project::VERSION = "0.0.0";
 
 // -------------------------------------------------------
 //
@@ -104,8 +107,12 @@ void Project::saveCurrentMap(){
 //
 // -------------------------------------------------------
 
-void Project::read(QString path){
+bool Project::read(QString path){
     setPathCurrentProject(path);
+
+    if (!readVersion())
+        return false;
+
     readLangsDatas();
     readKeyBoardDatas();
     readPicturesDatas();
@@ -113,6 +120,33 @@ void Project::read(QString path){
     readTreeMapDatas();
     readScriptsDatas();
     p_currentMap = nullptr;
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool Project::readVersion(){
+
+    QFile file(Wanok::pathCombine(p_pathCurrentProject, "game.rpm"));
+    if(!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::information(nullptr, "error", file.errorString());
+    }
+
+    QTextStream in(&file);
+    QString line = in.readLine();
+    file.close();
+
+    if (line != Project::VERSION){
+        QString information = "This project is under " + line + " version but"
+                              " your current RPG Paper Maker version is " +
+                              Project::VERSION + ".";
+        QString noConvert = "Unfortunately, this version cannot be converted.";
+        QMessageBox::critical(nullptr, "Error", information + "\n" + noConvert);
+        return false;
+    }
+
+    return true;
 }
 
 // -------------------------------------------------------

@@ -126,11 +126,18 @@ void MainWindow::openExistingProject(){
 
 void MainWindow::openProject(QString pathProject){
     if ((project != nullptr && closeProject()) || project == nullptr){
-        enableGame();
         project = new Project;
         Wanok::get()->setProject(project);
-        project->read(pathProject);
-        replaceMainPanel(new PanelProject(this, project));
+
+        if (project->read(pathProject)){
+            enableGame();
+            replaceMainPanel(new PanelProject(this, project));
+        }
+        else{
+            delete project;
+            project = nullptr;
+            Wanok::get()->setProject(nullptr);
+        }
     }
 }
 
