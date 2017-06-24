@@ -56,15 +56,17 @@ public:
     QVector3D* position() const;
     Portion getPortion() const;
     void loadTexture(QString path);
+    void updatePositionSquare();
     void initializeGL();
     void initializeVertices();
     void initializeSquareSize(int s);
     void initialize();
     void paintGL(QMatrix4x4& modelviewProjection);
-    void onKeyPressed(int key, double angle, int w, int h);
+    void onKeyPressed(int key, double angle, int w, int h, double speed);
 
 protected:
-    QVector3D* m_position;
+    QVector3D* m_positionSquare;
+    QVector3D m_positionReal;
     QPair<int,int> m_size;
     int m_squareSize;
 

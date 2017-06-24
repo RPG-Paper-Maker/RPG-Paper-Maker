@@ -111,7 +111,7 @@ public:
     void onMouseMove(QPoint point, Qt::MouseButton button);
     void onMousePressed(MapEditorSelectionKind selection, QRect& tileset,
                         QPoint point, Qt::MouseButton button);
-    void onKeyPressed(int k);
+    void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);
 

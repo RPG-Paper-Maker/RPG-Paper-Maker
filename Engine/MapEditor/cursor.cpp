@@ -31,7 +31,8 @@
 // -------------------------------------------------------
 
 Cursor::Cursor(QVector3D* position) :
-    m_position(position),
+    m_positionSquare(position),
+    m_positionReal(*position),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_frameDuration(250),
@@ -51,19 +52,19 @@ void Cursor::initializeSquareSize(int s){
 }
 
 int Cursor::getSquareX() const{
-    return (int)((m_position->x() + 1) / m_squareSize);
+    return (int)((m_positionSquare->x() + 1) / m_squareSize);
 }
 
 int Cursor::getSquareY() const{
-    return (int)((m_position->y() + 1) / m_squareSize);
+    return (int)((m_positionSquare->y() + 1) / m_squareSize);
 }
 
 int Cursor::getSquareZ() const{
-    return (int)((m_position->z() + 1) / m_squareSize);
+    return (int)((m_positionSquare->z() + 1) / m_squareSize);
 }
 
 void Cursor::setX(int x){
-    m_position->setX(x * m_squareSize);
+    m_positionSquare->setX(x * m_squareSize);
 }
 
 void Cursor::setY(int){
@@ -75,20 +76,20 @@ void Cursor::setYplus(int){
 }
 
 void Cursor::setZ(int z){
-    m_position->setZ(z * m_squareSize);
+    m_positionSquare->setZ(z * m_squareSize);
 }
 
-float Cursor::getX() const { return m_position->x(); }
+float Cursor::getX() const { return m_positionSquare->x(); }
 
-float Cursor::getY() const { return m_position->y(); }
+float Cursor::getY() const { return m_positionSquare->y(); }
 
-float Cursor::getZ() const { return m_position->z(); }
+float Cursor::getZ() const { return m_positionSquare->z(); }
 
 void Cursor::setFrameDuration(int i) { m_frameDuration = i; }
 
 void Cursor::setFrameNumber(int i) { m_frameNumber = i; }
 
-QVector3D* Cursor::position() const { return m_position; }
+QVector3D* Cursor::position() const { return m_positionSquare; }
 
 // -------------------------------------------------------
 //
@@ -112,47 +113,60 @@ void Cursor::loadTexture(QString path){
 
 // -------------------------------------------------------
 
-void Cursor::onKeyPressed(int key, double angle, int w, int h){
+void Cursor::updatePositionSquare(){
+    setX((int)((m_positionReal.x() + 1) / m_squareSize));
+    setY((int)((m_positionReal.y() + 1) / m_squareSize));
+    setZ((int)((m_positionReal.z() + 1) / m_squareSize));
+}
+
+// -------------------------------------------------------
+
+void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     int x = getSquareX(), z = getSquareZ(), xPlus, zPlus;
     KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
             ->keyBoardDatas();
 
+    if (speed == -1)
+        speed = m_squareSize;
+
     if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp)){
-        xPlus = (int)(m_squareSize * (qRound(qCos(angle * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize * (qRound(qSin(angle * M_PI / 180.0))));
+        xPlus = (int)(speed * (qRound(qCos(angle * M_PI / 180.0))));
+        zPlus = (int)(speed * (qRound(qSin(angle * M_PI / 180.0))));
         if ((z > 0 && zPlus < 0) || (z < h && zPlus > 0))
-            m_position->setZ(m_position->z() + zPlus);
+            m_positionReal.setZ(m_positionReal.z() + zPlus);
         if (zPlus == 0 && ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0)))
-            m_position->setX(m_position->x() + xPlus);
+            m_positionReal.setX(m_positionReal.x() + xPlus);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorDown)){
-        xPlus = (int)(m_squareSize * (qRound(qCos(angle * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize * (qRound(qSin(angle * M_PI / 180.0))));
+        xPlus = (int)(speed * (qRound(qCos(angle * M_PI / 180.0))));
+        zPlus = (int)(speed * (qRound(qSin(angle * M_PI / 180.0))));
         if ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0))
-            m_position->setZ(m_position->z() - zPlus);
+            m_positionReal.setZ(m_positionReal.z() - zPlus);
         if (zPlus == 0 && ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0)))
-            m_position->setX(m_position->x() - xPlus);
+            m_positionReal.setX(m_positionReal.x() - xPlus);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorLeft)){
-        xPlus = (int)(m_squareSize *
+        xPlus = (int)(speed *
                       (qRound(qCos((angle - 90) * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize *
+        zPlus = (int)(speed *
                       (qRound(qSin((angle - 90) * M_PI / 180.0))));
         if ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0))
-            m_position->setX(m_position->x() + xPlus);
+            m_positionReal.setX(m_positionReal.x() + xPlus);
         if (xPlus == 0 && ((z > 0 && zPlus < 0) || (z < h - 1 && zPlus > 0)))
-            m_position->setZ(m_position->z() + zPlus);
+            m_positionReal.setZ(m_positionReal.z() + zPlus);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorRight)){
-        xPlus = (int)(m_squareSize *
+        xPlus = (int)(speed *
                       (qRound(qCos((angle - 90) * M_PI / 180.0))));
-        zPlus = (int)(m_squareSize *
+        zPlus = (int)(speed *
                       (qRound(qSin((angle - 90) * M_PI / 180.0))));
         if ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0))
-            m_position->setX(m_position->x() - xPlus);
+            m_positionReal.setX(m_positionReal.x() - xPlus);
         if (xPlus == 0 && ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0)))
-            m_position->setZ(m_position->z() - zPlus);
+            m_positionReal.setZ(m_positionReal.z() - zPlus);
     }
+
+    updatePositionSquare();
 }
 
 // -------------------------------------------------------
@@ -251,7 +265,7 @@ void Cursor::paintGL(QMatrix4x4 &modelviewProjection){
 
     // Uniforms
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
-    m_program->setUniformValue(u_cursorPosition, *m_position);
+    m_program->setUniformValue(u_cursorPosition, *m_positionSquare);
     m_program->setUniformValue(u_frameTex, frame / (float)(m_frameNumber));
 
     // Draw

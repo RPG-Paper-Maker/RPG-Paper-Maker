@@ -56,7 +56,7 @@ public:
     void needUpdateMap(int idMap, QVector3D *position);
     void initializeMap();
     void save();
-    void onKeyPress(int k);
+    void onKeyPress(int k, double speed);
     void setCursorX(int x);
     void setCursorY(int y);
     void setCursorYplus(int yPlus);
@@ -76,16 +76,17 @@ private:
     int m_idMap;
     QSet<int> m_keysPressed;
     QSet<Qt::MouseButton> m_mousesPressed;
-    QTimer* m_timerPressure;
+    QTimer* m_timerFirstPressure;
     bool m_firstPressure;
     QSpinBox* m_spinBoxX;
     QSpinBox* m_spinBoxZ;
     QVector3D* m_position;
     ContextMenuList* m_contextMenu;
+    long m_elapsedTime;
 
 public slots:
     void update();
-    void onPressure();
+    void onFirstPressure();
 
 protected slots:
     void focusOutEvent(QFocusEvent*);

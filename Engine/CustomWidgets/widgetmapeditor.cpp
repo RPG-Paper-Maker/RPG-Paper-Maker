@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QHash>
 #include <QHashIterator>
+#include <QTime>
 #include "widgetmapeditor.h"
 #include "wanok.h"
 
@@ -35,22 +36,26 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_menuBar(nullptr),
     m_needUpdateMap(false),
     isGLInitialized(false),
-    m_timerPressure(new QTimer),
+    m_timerFirstPressure(new QTimer),
     m_firstPressure(false),
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
-    m_timerPressure->start(1);
-    connect(m_timerPressure, SIGNAL(timeout()), this, SLOT(onPressure()));
+
+    m_timerFirstPressure->setSingleShot(true);
+    connect(m_timerFirstPressure, SIGNAL(timeout()),
+            this, SLOT(onFirstPressure()));
 
     m_contextMenu = ContextMenuList::createContextObject(this);
     m_control.setContextMenu(m_contextMenu);
+
+    m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
 }
 
 WidgetMapEditor::~WidgetMapEditor()
 {
     makeCurrent();
-    delete m_timerPressure;
+    delete m_timerFirstPressure;
 }
 
 void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor* m){ m_menuBar = m; }
@@ -140,6 +145,19 @@ void WidgetMapEditor::paintGL(){
 
 void WidgetMapEditor::update(){
     QOpenGLWidget::update();
+
+    if (!m_firstPressure){
+        double speed = (QTime::currentTime().msecsSinceStartOfDay() - m_elapsedTime)
+                * 0.06666 * Wanok::get()->getSquareSize();
+
+        // Multi keys
+        QSet<int>::iterator i;
+        for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++){
+            onKeyPress(*i, speed);
+        }
+    }
+
+    m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
 }
 
 // -------------------------------------------------------
@@ -315,8 +333,9 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
     if (m_control.map() != nullptr){
         if (m_keysPressed.isEmpty()){
             m_firstPressure = true;
+            m_timerFirstPressure->start(25);
             m_control.onKeyPressedWithoutRepeat(event->key());
-            onKeyPress(event->key());
+            onKeyPress(event->key(), -1);
         }
 
         m_keysPressed += event->key();
@@ -327,10 +346,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
 
 void WidgetMapEditor::keyReleaseEvent(QKeyEvent* event){
     if (m_control.map() != nullptr){
-        if (event->isAutoRepeat()){
-            m_firstPressure = false;
-        }
-        else{
+        if (!event->isAutoRepeat()){
             m_keysPressed -= event->key();
             m_control.onKeyReleased(event->key());
         }
@@ -339,21 +355,14 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onPressure(){
-    if (!m_firstPressure){
-
-        // Multi keys
-        QSet<int>::iterator i;
-        for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++){
-            onKeyPress(*i);
-        }
-    }
+void WidgetMapEditor::onFirstPressure(){
+    m_firstPressure = false;
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onKeyPress(int k){
-    m_control.onKeyPressed(k);
+void WidgetMapEditor::onKeyPress(int k, double speed){
+    m_control.onKeyPressed(k, speed);
     updateSpinBoxes();
 }
 

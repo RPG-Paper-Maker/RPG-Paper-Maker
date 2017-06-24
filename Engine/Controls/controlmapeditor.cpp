@@ -798,10 +798,10 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onKeyPressed(int k){
+void ControlMapEditor::onKeyPressed(int k, double speed){
     m_cursor->onKeyPressed(
                 k, m_camera->horizontalAngle(), m_map->mapProperties()->width(),
-                m_map->mapProperties()->height());
+                m_map->mapProperties()->height(), speed);
 }
 
 // -------------------------------------------------------
