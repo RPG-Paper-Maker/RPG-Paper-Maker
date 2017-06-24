@@ -55,13 +55,6 @@ SceneSaveGame.prototype = {
                                      $datasGame.keyBoard.menuControls.Action))
         {
             slot = this.windowChoicesSlots.currentSelectedIndex + 1;
-
-            // If new save, set saves in settings
-            if ($datasGame.settings.saves.indexOf(slot) === -1){
-                $datasGame.settings.saves.unshift(slot);
-                $datasGame.saveSettings();
-            }
-
             $game.write(slot);
 
             // Pop to return in the precedent state

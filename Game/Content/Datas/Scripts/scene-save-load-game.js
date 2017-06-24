@@ -69,17 +69,24 @@ SceneSaveLoadGame.prototype = {
     /** Initialize all the games.
     */
     initializeGames: function(){
-        var i, l;
-        var list, game;
-
         this.gamesDatas = [null, null, null, null];
 
-        list = $datasGame.settings.saves;
-        for (i = 0, l = list.length; i < l; i++){
-            game = new Game();
-            game.read(list[i], SceneSaveLoadGame.prototype.initializeNonEmpty,
-                      this);
-        }
+        Wanok.openFile(this, Wanok.FILE_SAVE, true, function(res){
+            var jsonList = JSON.parse(res);
+            var game, j, ll;
+
+            for (j = 0, ll = jsonList.length; j < ll; j++){
+                var json = jsonList[j];
+
+                if (json !== null){
+                    game = new Game();
+                    game.read(j + 1, json);
+                    var l = this.initializeNonEmpty;
+                    SceneSaveLoadGame.prototype.initializeNonEmpty.call(this,
+                                                                        game);
+                }
+            }
+        });
     },
 
     // -------------------------------------------------------

@@ -58,9 +58,8 @@ SceneLoadGame.prototype = {
 
                 // Pop load and title screen from the stack
                 $gameStack.pop()
-                $gameStack.replace(
-                            new SceneMap(
-                                $datasGame.system.idMapStartHero.getValue()));
+                $gameStack.replace(new SceneMap(
+                                       $datasGame.system.idMapStartHero));
             }
         }
     },

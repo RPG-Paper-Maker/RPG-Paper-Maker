@@ -74,6 +74,7 @@ public:
     const static QString pathScripts;
     const static QString pathKeyBoard;
     const static QString pathPicturesDatas;
+    const static QString pathSaves;
     const static QString pathPictures;
     const static QString pathHUD;
     const static QString pathTextures2D;
@@ -101,6 +102,8 @@ public:
     static void readJSON(QString path, Serializable &obj);
     static void writeOtherJSON(QString path, const QJsonObject &obj);
     static void readOtherJSON(QString path, QJsonDocument& loadDoc);
+    static void writeArrayJSON(QString path, const QJsonArray &tab);
+    static void readArrayJSON(QString path, QJsonDocument& loadDoc);
     static bool copyPath(QString src, QString dst);
     static QString getDirectoryPath(QString& file);
     static bool isDirEmpty(QString path);

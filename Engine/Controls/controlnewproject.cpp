@@ -118,6 +118,14 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     project.setDefault();
     project.write(pathDir);
 
+    // Create saves
+    QJsonArray tab;
+    tab.append(QJsonValue());
+    tab.append(QJsonValue());
+    tab.append(QJsonValue());
+    tab.append(QJsonValue());
+    Wanok::writeArrayJSON(Wanok::pathCombine(pathDir, Wanok::pathSaves), tab);
+
     // Includes scripts
     project.scriptsDatas()->writeDesktop(pathDir);
 

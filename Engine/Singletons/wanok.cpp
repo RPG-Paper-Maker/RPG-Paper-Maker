@@ -53,6 +53,7 @@ const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");
 const QString Wanok::pathKeyBoard = pathCombine(pathDatas, "keyBoard.json");
 const QString Wanok::pathPicturesDatas =
         pathCombine(pathDatas, "pictures.json");
+const QString Wanok::pathSaves = pathCombine(pathDatas, "saves.json");
 
 // PATHS PICTURES
 const QString Wanok::pathPictures = pathCombine("Content", "Pictures");
@@ -164,12 +165,30 @@ void Wanok::writeOtherJSON(QString path, const QJsonObject &obj){
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) { return; }
     QJsonDocument saveDoc(obj);
-    saveFile.write(saveDoc.toJson());
+    saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
 }
 
 // -------------------------------------------------------
 
 void Wanok::readOtherJSON(QString path, QJsonDocument& loadDoc){
+    QFile loadFile(path);
+    loadFile.open(QIODevice::ReadOnly);
+    QByteArray saveData = loadFile.readAll();
+    loadDoc = QJsonDocument::fromJson(saveData);
+}
+
+// -------------------------------------------------------
+
+void Wanok::writeArrayJSON(QString path, const QJsonArray &tab){
+    QFile saveFile(path);
+    if (!saveFile.open(QIODevice::WriteOnly)) { return; }
+    QJsonDocument saveDoc(tab);
+    saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
+}
+
+// -------------------------------------------------------
+
+void Wanok::readArrayJSON(QString path, QJsonDocument& loadDoc){
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
     QByteArray saveData = loadFile.readAll();

@@ -110,78 +110,63 @@ Game.prototype = {
 
     /** Read a game file.
     *   @param {number} slot The number of the slot to load.
-    *   @param {callback} The function to apply after finishing loading.
-    *   @param {Object} base The base object which is calling this function.
+    *   @param {Object} json json Json object describing the object.
     */
-    read: function(slot, callback, base){
+    read: function(slot, json){
         this.currentSlot = slot;
-        Wanok.openFile(this, Wanok.fileSave(slot), true, function(res){
-            var json = JSON.parse(res);
-            this.playTime = json.t;
-            this.charactersInstances = json.inst;
-            this.variables = json.vars;
+        this.playTime = json.t;
+        this.charactersInstances = json.inst;
+        this.variables = json.vars;
 
-            // Items
-            var itemsJson = json.itm;
-            var i, l = itemsJson.length;
-            this.items = new Array(l);
-            for (i = 0; i < l; i++){
-                var itemJson = itemsJson[i];
-                this.items[i] = new Item(itemJson.k,
-                                         itemJson.id,
-                                         itemJson.nb);
-            }
+        // Items
+        var itemsJson = json.itm;
+        var i, l = itemsJson.length;
+        this.items = new Array(l);
+        for (i = 0; i < l; i++){
+            var itemJson = itemsJson[i];
+            this.items[i] = new Item(itemJson.k, itemJson.id, itemJson.nb);
+        }
 
-            // Heroes
-            var heroesJson = json.th;
-            l = heroesJson.length
-            this.teamHeroes = new Array(l);
-            var heroJson, character;
-            for (i = 0; i < l; i++){
-                heroJson = heroesJson[i];
-                character = new Player(heroJson.k,
-                                       heroJson.id,
-                                       heroJson.instid,
+        // Heroes
+        var heroesJson = json.th;
+        l = heroesJson.length
+        this.teamHeroes = new Array(l);
+        var heroJson, character;
+        for (i = 0; i < l; i++){
+            heroJson = heroesJson[i];
+            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-                character.readJSON(heroJson, this.items);
-                this.teamHeroes[i] = character;
-            }
-            heroesJson = json.sh;
-            l = heroesJson.length
-            this.reserveHeroes = new Array(l);
-            for (i = 0; i < l; i++){
-                heroJson = heroesJson[i];
-                character = new Player(heroJson.k,
-                                       heroJson.id,
-                                       heroJson.instid,
+            character.readJSON(heroJson, this.items);
+            this.teamHeroes[i] = character;
+        }
+        heroesJson = json.sh;
+        l = heroesJson.length
+        this.reserveHeroes = new Array(l);
+        for (i = 0; i < l; i++){
+            heroJson = heroesJson[i];
+            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-                character.readJSON(heroJson, this.items);
-                this.reserveHeroes[i] = character;
-            }
-            heroesJson = json.hh;
-            l = heroesJson.length
-            this.hiddenHeroes = new Array(l);
-            for (i = 0; i < l; i++){
-                heroJson = heroesJson[i];
-                character = new Player(heroJson.k,
-                                       heroJson.id,
-                                       heroJson.instid,
+            character.readJSON(heroJson, this.items);
+            this.reserveHeroes[i] = character;
+        }
+        heroesJson = json.hh;
+        l = heroesJson.length
+        this.hiddenHeroes = new Array(l);
+        for (i = 0; i < l; i++){
+            heroJson = heroesJson[i];
+            character = new GamePlayer(heroJson.k, heroJson.id, heroJson.instid,
                                        heroJson.sk);
-                character.readJSON(heroJson, this.items);
-                this.hiddenHeroes[i] = character;
-            }
+            character.readJSON(heroJson, this.items);
+            this.hiddenHeroes[i] = character;
+        }
 
-            // Map infos
-            this.currentMapId = json.currentMapId;
-            var positionHero = json.heroPosition;
-            this.hero.mesh.position.set(positionHero[0],
-                                        positionHero[1],
-                                        positionHero[2]);
-            this.heroStates = json.heroStates;
-            this.readMapsDatas(json.mapsDatas);
-
-            callback.call(base, this);
-        });
+        // Map infos
+        this.currentMapId = json.currentMapId;
+        var positionHero = json.heroPosition;
+        this.hero.mesh.position.set(positionHero[0], positionHero[1],
+                                    positionHero[2]);
+        this.heroStates = json.heroStates;
+        this.readMapsDatas(json.mapsDatas);
     },
 
     /** Read all the maps datas.
@@ -209,7 +194,9 @@ Game.prototype = {
         for (i = 0; i < l; i++)
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
 
-        Wanok.saveFile(Wanok.fileSave(slot),
+        Wanok.openFile(this, Wanok.FILE_SAVE, true, function(res){
+            var jsonList = JSON.parse(res);
+            jsonList[slot - 1] =
             {
                 t: this.playTime,
                 th: teamHeroes,
@@ -224,8 +211,9 @@ Game.prototype = {
                                this.hero.mesh.position.z],
                 heroStates: this.heroStates,
                 mapsDatas : this.getCompressedMapsDatas()
-            }
-        );
+            };
+            Wanok.saveFile(Wanok.FILE_SAVE, jsonList);
+        });
     },
 
     /** Get a compressed version of mapsDatas (don't retain meshs).

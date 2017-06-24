@@ -87,23 +87,5 @@ DatasGame.prototype = {
             this.variablesNumbers =
                  json.length * DatasGame.VARIABLES_PER_PAGE + 1;
         });
-
-        Wanok.openFile(this, Wanok.FILE_SETTINGS, true, function(res){
-            var json = JSON.parse(res);
-
-            this.settings.saves = json.saves;
-        });
-    },
-
-    // -------------------------------------------------------
-
-    /** Save the JSON file associated to the settings.
-    */
-    saveSettings: function(){
-        Wanok.saveFile(Wanok.FILE_SETTINGS,
-            {
-                saves: this.settings.saves
-            }
-        );
     }
 }
