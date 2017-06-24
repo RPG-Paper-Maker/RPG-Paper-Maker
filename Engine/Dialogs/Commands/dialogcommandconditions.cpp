@@ -57,16 +57,12 @@ void DialogCommandConditions::initialize(EventCommand* command){
     int i = 0;
     ui->checkBox->setChecked(command->valueCommandAt(i++) == "1");
     ui->tabWidget->setCurrentIndex(command->valueCommandAt(i++).toInt());
-    switch(command->valueCommandAt(i++).toInt()){
-    case 0:
-        ui->radioButtonVariable->setChecked(true);
-        ui->widgetVariableVariable->setCurrentId(command->valueCommandAt(i++)
+    ui->widgetVariableVariable->setCurrentId(command->valueCommandAt(i++)
+                                             .toInt());
+    ui->widgetVariableOperation->setCurrentIndex(command
+                                                 ->valueCommandAt(i++)
                                                  .toInt());
-        ui->widgetVariableOperation->setCurrentIndex(command
-                                                     ->valueCommandAt(i++)
-                                                     .toInt());
-        ui->widgetVariableVariableConstant->initializeCommand(command, i);
-    }
+    ui->widgetVariableVariableConstant->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
@@ -75,27 +71,10 @@ EventCommand* DialogCommandConditions::getCommand() const{
     QVector<QString> command;
     command.append(ui->checkBox->isChecked() ? "1" : "0");
     command.append("0"); // Page
-
-    if(ui->radioButtonVariable->isChecked()){
-        command.append("2"); // Type variable
-        command.append(QString::number(ui->widgetVariableVariable
-                                       ->currentId()));
-        command.append(ui->widgetVariableOperation->operation());
-        ui->widgetVariableVariableConstant->getCommand(command);
-    }
+    command.append(QString::number(ui->widgetVariableVariable
+                                   ->currentId()));
+    command.append(ui->widgetVariableOperation->operation());
+    ui->widgetVariableVariableConstant->getCommand(command);
 
     return new EventCommand(EventCommandKind::If, command);
-}
-
-// -------------------------------------------------------
-//
-//  SLOTS
-//
-// -------------------------------------------------------
-
-void DialogCommandConditions::on_radioButtonVariable_toggled(bool checked){
-    ui->widgetVariableVariable->setEnabled(checked);
-    ui->labelVariable->setEnabled(checked);
-    ui->widgetVariableOperation->setEnabled(checked);
-    ui->widgetVariableVariableConstant->setEnabled(checked);
 }

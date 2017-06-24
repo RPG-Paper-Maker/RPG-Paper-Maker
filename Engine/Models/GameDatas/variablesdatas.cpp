@@ -84,7 +84,20 @@ QStandardItem* VariablesDatas::getDefaultItem(int i){
 // -------------------------------------------------------
 
 SuperListItem* VariablesDatas::getVariableById(int id) const{
-    return SuperListItem::getById(p_model->invisibleRootItem(), id);
+    return getById(p_model, id);
+}
+
+// -------------------------------------------------------
+
+SuperListItem* VariablesDatas::getById(QStandardItemModel *l, int id) const{
+    for (int i = 0; i < l->invisibleRootItem()->rowCount(); i++){
+        SuperListItem* s = ((SystemVariables*)(l->invisibleRootItem()
+                                                    ->child(i)->data()
+                                                    .value<quintptr>()))
+                ->getById(id);
+        if (s != nullptr) return s;
+    }
+    return nullptr;
 }
 
 // -------------------------------------------------------

@@ -74,9 +74,7 @@ private:
     QString strChangeVariablesValue(int &i) const;
     QString strInputNumber() const;
     QString strCondition() const;
-    QString strConditionPageVariablesSwitches(int &i) const;
-    QString strConditionTypeVariable(int &i) const;
-    QString strConditionTypeSwitche(int &i) const;
+    QString strConditionPageVariables(int &i) const;
     QString strModifyInventory() const;
     QString strModifyInventorySelection(int &i) const;
     QString strModifyTeam() const;

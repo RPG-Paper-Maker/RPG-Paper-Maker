@@ -406,18 +406,13 @@ EventCommandIf.prototype = {
     initialize: function(){ return null; },
 
     getBool: function(){
+
         // Parsing
         var i = 0;
         var page = this.command[i++];
-        var type = this.command[i++];
         switch (page){
         case 0:
-            switch (type){
-            case 0:
-                return this.getBoolSwitch(i);
-            case 2:
-                return this.getBoolVariable(i);
-            }
+            return this.getBoolVariable(i);
         }
 
         return false;

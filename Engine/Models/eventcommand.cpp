@@ -314,7 +314,7 @@ QString EventCommand::strCondition() const{
     int page = p_listCommand.at(i++).toInt();
     switch (page){
     case 0:
-        condition = strConditionPageVariablesSwitches(i);
+        condition = strConditionPageVariables(i);
         break;
     }
     return "if (" + condition + ")";
@@ -322,22 +322,7 @@ QString EventCommand::strCondition() const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strConditionPageVariablesSwitches(int &i) const{
-    QString condition = "";
-    int type = p_listCommand.at(i++).toInt();
-
-    switch (type){
-    case 2:
-        condition = strConditionTypeVariable(i);
-        break;
-    }
-
-    return condition;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strConditionTypeVariable(int &i) const{
+QString EventCommand::strConditionPageVariables(int &i) const{
     QString condition = "";
     condition += "variable ";
     int variable = p_listCommand.at(i++).toInt();
@@ -347,6 +332,7 @@ QString EventCommand::strConditionTypeVariable(int &i) const{
             ->variablesDatas()->getVariableById(variable)->toString();
     condition += " " + operation + " ";
     condition += strNumberVariable(i);
+
 
     return condition;
 }

@@ -58,6 +58,19 @@ QString SystemVariables::idToString() const
 }
 
 // -------------------------------------------------------
+
+SuperListItem* SystemVariables::getById(int id) const{
+    for (int i = 0; i < variablesPerPage; i++){
+        SuperListItem* s = (SuperListItem*)(p_model->invisibleRootItem()
+                                            ->child(i)->data()
+                                            .value<quintptr>());
+        if (id == s->id()) return s;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

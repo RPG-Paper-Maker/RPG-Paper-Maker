@@ -46,6 +46,7 @@ public:
     virtual void write(QJsonObject &json) const;
     QJsonArray getArrayJSON(QStandardItemModel* l) const;
     SuperListItem* getVariableById(int id) const;
+    SuperListItem* getById(QStandardItemModel *l, int id) const;
 
 private:
     QStandardItemModel* p_model;

@@ -114,17 +114,19 @@ void Cursor::loadTexture(QString path){
 // -------------------------------------------------------
 
 void Cursor::updatePositionSquare(){
-    setX((int)((m_positionReal.x() + 1) / m_squareSize));
-    setY((int)((m_positionReal.y() + 1) / m_squareSize));
-    setZ((int)((m_positionReal.z() + 1) / m_squareSize));
+    setX((int)(m_positionReal.x() / m_squareSize));
+    setY((int)(m_positionReal.y() / m_squareSize));
+    setZ((int)(m_positionReal.z() / m_squareSize));
 }
 
 // -------------------------------------------------------
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
-    int x = getSquareX(), z = getSquareZ(), xPlus, zPlus;
+    int xPlus, zPlus, res;
     KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
             ->keyBoardDatas();
+    w *= m_squareSize;
+    h *= m_squareSize;
 
     if (speed == -1)
         speed = m_squareSize;
@@ -132,38 +134,46 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp)){
         xPlus = (int)(speed * (qRound(qCos(angle * M_PI / 180.0))));
         zPlus = (int)(speed * (qRound(qSin(angle * M_PI / 180.0))));
-        if ((z > 0 && zPlus < 0) || (z < h && zPlus > 0))
-            m_positionReal.setZ(m_positionReal.z() + zPlus);
-        if (zPlus == 0 && ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0)))
-            m_positionReal.setX(m_positionReal.x() + xPlus);
+        res = m_positionReal.z() + zPlus;
+        if (res >= 0 && res < h)
+            m_positionReal.setZ(res);
+        res = m_positionReal.x() + xPlus;
+        if (res >= 0 && res < w)
+            m_positionReal.setX(res);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorDown)){
         xPlus = (int)(speed * (qRound(qCos(angle * M_PI / 180.0))));
         zPlus = (int)(speed * (qRound(qSin(angle * M_PI / 180.0))));
-        if ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0))
-            m_positionReal.setZ(m_positionReal.z() - zPlus);
-        if (zPlus == 0 && ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0)))
-            m_positionReal.setX(m_positionReal.x() - xPlus);
+        res = m_positionReal.z() - zPlus;
+        if (res >= 0 && res < h)
+            m_positionReal.setZ(res);
+        res = m_positionReal.x() - xPlus;
+        if (res >= 0 && res < w)
+            m_positionReal.setX(res);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorLeft)){
         xPlus = (int)(speed *
                       (qRound(qCos((angle - 90) * M_PI / 180.0))));
         zPlus = (int)(speed *
                       (qRound(qSin((angle - 90) * M_PI / 180.0))));
-        if ((x > 0 && xPlus < 0) || (x < w - 1 && xPlus > 0))
-            m_positionReal.setX(m_positionReal.x() + xPlus);
-        if (xPlus == 0 && ((z > 0 && zPlus < 0) || (z < h - 1 && zPlus > 0)))
-            m_positionReal.setZ(m_positionReal.z() + zPlus);
+        res = m_positionReal.x() + xPlus;
+        if (res >= 0 && res < w)
+            m_positionReal.setX(res);
+        res = m_positionReal.z() + zPlus;
+        if (res >= 0 && res < h)
+            m_positionReal.setZ(res);
     }
     else if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorRight)){
         xPlus = (int)(speed *
                       (qRound(qCos((angle - 90) * M_PI / 180.0))));
         zPlus = (int)(speed *
                       (qRound(qSin((angle - 90) * M_PI / 180.0))));
-        if ((x < w - 1 && xPlus < 0) || (x > 0 && xPlus > 0))
-            m_positionReal.setX(m_positionReal.x() - xPlus);
-        if (xPlus == 0 && ((z < h - 1 && zPlus < 0) || (z > 0 && zPlus > 0)))
-            m_positionReal.setZ(m_positionReal.z() - zPlus);
+        res = m_positionReal.x() - xPlus;
+        if (res >= 0 && res < w)
+            m_positionReal.setX(res);
+        res = m_positionReal.z() - zPlus;
+        if (res >= 0 && res < h)
+            m_positionReal.setZ(res);
     }
 
     updatePositionSquare();

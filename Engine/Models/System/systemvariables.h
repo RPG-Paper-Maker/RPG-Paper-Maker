@@ -41,6 +41,7 @@ public:
     static int variablesPerPage;
     QStandardItemModel* model() const;
     virtual QString idToString() const;
+    SuperListItem* getById(int id) const;
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json);
     virtual void write(QJsonObject &json) const;

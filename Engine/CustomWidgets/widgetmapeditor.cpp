@@ -148,7 +148,7 @@ void WidgetMapEditor::update(){
 
     if (!m_firstPressure){
         double speed = (QTime::currentTime().msecsSinceStartOfDay() - m_elapsedTime)
-                * 0.06666 * Wanok::get()->getSquareSize();
+                * 0.05666 * Wanok::get()->getSquareSize();
 
         // Multi keys
         QSet<int>::iterator i;
@@ -333,7 +333,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
     if (m_control.map() != nullptr){
         if (m_keysPressed.isEmpty()){
             m_firstPressure = true;
-            m_timerFirstPressure->start(25);
+            m_timerFirstPressure->start(35);
             m_control.onKeyPressedWithoutRepeat(event->key());
             onKeyPress(event->key(), -1);
         }

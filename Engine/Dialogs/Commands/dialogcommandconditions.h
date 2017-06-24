@@ -51,9 +51,6 @@ protected:
 
 private:
     Ui::DialogCommandConditions *ui;
-
-private slots:
-    void on_radioButtonVariable_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H
