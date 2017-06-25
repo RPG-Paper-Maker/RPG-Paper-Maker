@@ -27,7 +27,7 @@
 *   A scene in the menu for describing players skills.
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "Skills" text.
-*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowTabs} windowChoicesTabs Window for each tabs.
 *   @property {WindowBox} windowInformations Window for skill informations.
 *   @property {WindowChoices} windowChoicesList Window for each skill.
 */
@@ -46,8 +46,8 @@ function SceneMenuSkills() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Skills"));
     this.windowChoicesTabs =
-         new WindowChoices(OrientationWindow.Horizontal, 50, 60, 110, 25, 4,
-                           listHeroes, null);
+         new WindowTabs(OrientationWindow.Horizontal, 50, 60, 110, 25, 4,
+                        listHeroes, null);
     this.windowChoicesList =
          new WindowChoices(OrientationWindow.Vertical, 20,100, 200, 25,
                            SceneMenu.nbItemsToDisplay,

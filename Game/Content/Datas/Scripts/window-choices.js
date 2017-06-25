@@ -17,37 +17,16 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different window choice orientations.
-*   @enum {number}
-*   @readonly
-*/
-var OrientationWindow = {
-    Vertical: 0,
-    Horizontal: 1
-};
-Object.freeze(OrientationWindow);
-
 // -------------------------------------------------------
 //
-//  CLASS WindowChoices
+//  CLASS WindowChoices : WindowTabs
 //
 // -------------------------------------------------------
 
 /** @class
 *   A class for window choices.
-*   @extends Bitmap
-*   @property {OrientationWindow} orientation The orientation of the window.
-*   (horizontal or vertical).
-*   @property {number[]} dimension The dimension of one choice box.
-*   @property {function[]} listCallbacks List of all the callback functions to
-*   excecute when pressed.
-*   @property {WindowBox[]} listWindows List of all the windows to display.
-*   @property {number} currentSelectedIndex The current selected index.
-*   @property {string} unselectedBackgroundColor The backgorund color of
-*   unselected item.
-*   @property {string} selectedBackgroundColor The backgorund color of selected
-*   item.
+*   @extends WindowTabs
+*   @property {WindowBox} windowMain The main window for the choices.
 *   @param {OrientationWindow} orientation The orientation of the window.
 *   @param {number} x The x coords.
 *   @param {number} y The y coords.
@@ -65,62 +44,17 @@ Object.freeze(OrientationWindow);
 function WindowChoices(orientation, x, y, w, h, nbItemsMax, listContents,
                        listCallBacks, padding, space, currentSelectedIndex)
 {
-    // Getting the main box size
-    var boxWidth, boxHeight;
-    var totalNb = listContents.length;
-    var size = totalNb < nbItemsMax ? totalNb : nbItemsMax;
-    if (orientation === OrientationWindow.Horizontal){
-        boxWidth = w * size;
-        boxHeight = h;
-    }
-    else{
-        boxWidth = w;
-        boxHeight = h * size;
-    }
-    Bitmap.call(this, x, y, boxWidth, boxHeight);
+    WindowTabs.call(this, orientation, x, y, w, h, nbItemsMax, listContents,
+                    listCallBacks, padding, space, currentSelectedIndex);
 
-    // Default values
-    if (typeof padding === 'undefined') padding = [0,0,0,0];
-    if (typeof space === 'undefined') space = 0;
-    if (typeof currentSelectedIndex === 'undefined') currentSelectedIndex = 0;
+    var i, l;
 
-    this.orientation = orientation;
-    this.choiceWidth = w;
-    this.choiceHeight = h;
-    this.currentSelectedIndex = currentSelectedIndex;
-    this.unselectedBackgroundColor = "grey";
-    this.selectedBackgroundColor = "silver";
-    this.space = space;
+    // Set all the windows borders opacity to 0
+    for (i = 0, l = this.listWindows.length; i < l; i++)
+        this.listWindows[i].bordersOpacity = 0;
 
-    // If no callBacks, adapt by creating a null content for each box
-    var i, l = listContents.length;
-    if (listCallBacks === null){
-        this.listCallBacks = new Array(l);
-        for (i = 0; i < l; i++)
-            this.listCallBacks[i] = null;
-    }
-    else
-         this.listCallBacks = listCallBacks;
-
-    // Create a new windowBox for each choice and according to the orientation
-    this.listWindows = new Array(l);
-    for (i = 0; i < l; i++){
-        if (orientation === OrientationWindow.Horizontal){
-            this.listWindows[i] =
-                 new WindowBox(x + (i * w) + (i * space), y, w, h,
-                               listContents[i], padding);
-        }
-        else{
-            this.listWindows[i] =
-                 new WindowBox(x, y + (i * h) + (i * space), w, h,
-                               listContents[i], padding);
-        }
-    }
-
-    if (currentSelectedIndex !== -1){
-        this.listWindows[currentSelectedIndex].backgroundColor
-             = this.selectedBackgroundColor;
-    }
+    // Create a main window containing all this sub-windows choices
+    this.windowMain = new WindowBox(this.x, this.y, this.w, this.h);
 }
 
 WindowChoices.prototype = {
@@ -149,150 +83,56 @@ WindowChoices.prototype = {
 
     // -------------------------------------------------------
 
-    /** Get the current selected content.
-    *   @returns {Object}
-    */
     getCurrentContent: function(){
-        return this.getContent(this.currentSelectedIndex);
+        return WindowTabs.prototype.getCurrentContent.call(this);
     },
 
     // -------------------------------------------------------
 
-    /** Get the content at a specific index.
-    *   @param {number} i The index.
-    *   @returns {Object}
-    */
     getContent: function(i){
-        return this.listWindows[i].content;
+        return WindowTabs.prototype.getContent.call(this, i);
     },
 
     // -------------------------------------------------------
 
-    /** Set the content at a specific index.
-    *   @param {number} i The index.
-    *   @param {Object} content The new content.
-    */
     setContent: function(i, content){
-         this.listWindows[i].content = content;
+        WindowTabs.prototype.setContent.call(this, i, content);
     },
 
     // -------------------------------------------------------
 
-    /** Set all the contents.
-    *   @param {Object[]} contents All the contents.
-    */
     setContents: function(contents){
-        for (var i = 0, l = this.listWindows.length; i < l; i++)
-            this.setContent(i, contents[i]);
+        WindowTabs.prototype.setContents.call(this, contents);
     },
 
     // -------------------------------------------------------
 
-    /** Unselect a choice.
-    */
     unselect: function(){
-        if (this.currentSelectedIndex !== -1){
-            this.listWindows[this.currentSelectedIndex].backgroundColor
-                 = this.unselectedBackgroundColor;
-            this.currentSelectedIndex = -1;
-        }
+        WindowTabs.prototype.unselect.call(this);
     },
 
     // -------------------------------------------------------
 
-    /** Select a choice.
-    *   @param {number} i The index of the choice.
-    */
     select: function(i){
-        this.currentSelectedIndex = i;
-        this.listWindows[this.currentSelectedIndex].backgroundColor
-             = this.selectedBackgroundColor;
+        WindowTabs.prototype.select.call(this, i);
     },
 
     // -------------------------------------------------------
 
-    /** Select the current choice.
-    */
     selectCurrent: function(){
-        this.select(this.currentSelectedIndex);
+        WindowTabs.prototype.selectCurrent.call(this);
     },
 
     // -------------------------------------------------------
 
-    /** When going up.
-    */
-    goUp: function(){
-        if (this.currentSelectedIndex > 0)
-            this.currentSelectedIndex--;
-        else if (this.currentSelectedIndex === 0)
-            this.currentSelectedIndex = this.listWindows.length - 1;
-    },
-
-    // -------------------------------------------------------
-
-    /** When going down.
-    */
-    goDown: function(){
-        if (this.currentSelectedIndex < this.listWindows.length - 1)
-            this.currentSelectedIndex++;
-        else if (this.currentSelectedIndex === this.listWindows.length - 1)
-            this.currentSelectedIndex = 0;
-    },
-
-    // -------------------------------------------------------
-
-    /** First key press handle.
-    *   @param {number} key The key ID pressed.
-    */
     onKeyPressed: function(key, base){
-        if (DatasKeyBoard.isKeyEqual(key,
-                                     $datasGame.keyBoard.menuControls.Action))
-        {
-            var callback = this.listCallBacks[this.currentSelectedIndex];
-            if (callback !== null) callback.call(base);
-        }
+        WindowTabs.prototype.onKeyPressed.call(this, key, base);
     },
 
     // -------------------------------------------------------
 
-    /** Key pressed repeat handle, but with
-    *   a small wait after the first pressure (generally used for menus).
-    *   @param {number} key The key ID pressed.
-    *   @returns {boolean} false if the other keys are blocked after it.
-    */
     onKeyPressedAndRepeat: function(key){
-        this.listWindows[this.currentSelectedIndex].backgroundColor
-             = this.unselectedBackgroundColor;
-
-        if (this.orientation === OrientationWindow.Vertical){
-            if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls.Down))
-            {
-                this.goDown();
-            }
-            else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
-                                              .Up))
-            {
-                this.goUp();
-            }
-        }
-        else{
-            if (DatasKeyBoard.isKeyEqual(key,
-                                         $datasGame.keyBoard.menuControls
-                                         .Right))
-            {
-                this.goDown();
-            }
-            else if (DatasKeyBoard.isKeyEqual(key,
-                                              $datasGame.keyBoard.menuControls
-                                              .Left))
-            {
-                this.goUp();
-            }
-        }
-
-        this.selectCurrent();
+        WindowTabs.prototype.onKeyPressedAndRepeat.call(this, key);
     },
 
     // -------------------------------------------------------
@@ -301,7 +141,8 @@ WindowChoices.prototype = {
     *   @param {Canvas.Context} context The canvas context.
     */
     draw: function(context){
-        for (var i = 0, l = this.listWindows.length; i < l; i++)
-            this.listWindows[i].draw(context, true);
+        this.windowMain.draw(context);
+
+        WindowTabs.prototype.draw.call(this, context);
     }
 }

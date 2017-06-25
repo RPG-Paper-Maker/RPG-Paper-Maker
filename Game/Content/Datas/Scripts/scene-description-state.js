@@ -27,7 +27,7 @@
 *   A scene in the menu for describing players statistics.
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "State" text.
-*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowTabs} windowChoicesTabs Window for each tabs.
 *   @property {WindowBox} windowInformations Window for skill informations.
 */
 function SceneDescriptionState() {
@@ -44,9 +44,8 @@ function SceneDescriptionState() {
 
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("State"));
-    this.windowChoicesTabs = new WindowChoices(OrientationWindow.Horizontal, 50,
-                                               60, 110, 25, 4, listHeroes,
-                                               null);
+    this.windowChoicesTabs = new WindowTabs(OrientationWindow.Horizontal, 50,
+                                            60, 110, 25, 4, listHeroes, null);
     this.windowInformations = new WindowBox(20, 100, 600, 340, null,
                                             [30,30,30,30]);
     this.synchronize();

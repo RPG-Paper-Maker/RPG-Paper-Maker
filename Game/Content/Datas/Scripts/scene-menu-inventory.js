@@ -27,7 +27,7 @@
 *   A scene in the menu for describing inventory.
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "Inventory" text.
-*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowTabs} windowChoicesTabs Window for each tabs.
 *   @property {WindowBox} windowInformations Window for item informations.
 *   @property {WindowChoices} windowChoicesList Window for each items.
 */
@@ -50,8 +50,8 @@ function SceneMenuInventory() {
     this.windowTop = new WindowBox(20, 20, 200, 30,
                                    new GraphicText("Inventory"));
     this.windowChoicesTabs =
-         new WindowChoices(OrientationWindow.Horizontal, 5, 60, 105, 25, 6,
-                           menuKind, null);
+         new WindowTabs(OrientationWindow.Horizontal, 5, 60, 105, 25, 6,
+                        menuKind, null);
     this.windowChoicesList =
          new WindowChoices(OrientationWindow.Vertical, 20, 100, 200, 25,
                            SceneMenu.nbItemsToDisplay,

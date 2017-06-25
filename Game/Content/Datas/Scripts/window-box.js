@@ -65,7 +65,7 @@ function WindowBox(x, y, w, h, content, padding) {
 
     this.padding = padding;
     this.content = content;
-    this.borderOpacity = 1;
+    this.bordersOpacity = 1;
     this.backgroundOpacity = 1;
     this.backgroundColor = "grey";
 }

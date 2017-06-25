@@ -27,7 +27,7 @@
 *   A scene in the menu for describing players equipments.
 *   @extends SceneGame
 *   @property {WindowBox} windowTop Window on top with "Equip" text.
-*   @property {WindowChoices} windowChoicesTabs Window for each tabs.
+*   @property {WindowTabs} windowChoicesTabs Window for each tabs.
 *   @property {WindowBox} windowInformations Window for equip stats
 *   informations.
 *   @property {WindowChoices} windowChoicesEquipment Window for each equipment
@@ -54,8 +54,8 @@ function SceneMenuEquip() {
     // All the windows
     this.windowTop = new WindowBox(20, 20, 200, 30, new GraphicText("Equip"));
     this.windowChoicesTabs =
-         new WindowChoices(OrientationWindow.Horizontal, 50, 60, 110, 25, 4,
-                           listHeroes, null);
+         new WindowTabs(OrientationWindow.Horizontal, 50, 60, 110, 25, 4,
+                        listHeroes, null);
     this.windowChoicesEquipment =
          new WindowChoices(OrientationWindow.Vertical, 20, 100, 290, 25,
                            nbEquipments, new Array(nbEquipments), null,

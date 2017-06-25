@@ -78,8 +78,8 @@ function SceneMenu() {
                            menuCommands.length, menuCommands,
                            menuCommandsActions);
     this.windowChoicesTeam =
-         new WindowChoices(OrientationWindow.Vertical, 190, 20, 430, 95, 4,
-                           graphicsHeroes, null, [5,5,5,5], 15, -1);
+         new WindowTabs(OrientationWindow.Vertical, 190, 20, 430, 95, 4,
+                        graphicsHeroes, null, [5,5,5,5], 15, -1);
 
 }
 
