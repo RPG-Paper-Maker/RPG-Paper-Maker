@@ -31,6 +31,8 @@
 *   beginning of a game.
 *   @property {number} idObjectStartHero Id of the object where the hero is in
 *   the beginning of a game.
+*   @property {SystemCurrency[]} currencies List of all the currencies of the
+*   game according to ID.
 */
 function DatasSystem(){
     this.read();
@@ -55,8 +57,19 @@ DatasSystem.prototype = {
             // Hero beginning
             this.idMapStartHero = json.idMapHero;
             this.idObjectStartHero = json.idObjHero;
-
             this.getModelHero();
+
+            // Currencies
+            var jsonCurrencies = json.currencies;
+            l = jsonCurrencies.length;
+            this.currencies = new Array(l + 1);
+            for (i = 0; i < l; i++){
+                var jsonCurrency = jsonCurrencies[i];
+                var id = jsonCurrency.id;
+                var currency = new SystemCurrency();
+                currency.readJSON(jsonCurrency);
+                this.currencies[id] = currency;
+            }
         });
     },
 
@@ -97,5 +110,20 @@ DatasSystem.prototype = {
                 $modelHero = mapPortion.getHeroModel(json);
             });
         });
+    },
+
+    // -------------------------------------------------------
+
+    /** Get the default array currencies for a default game.
+    *   @returns {number[]}
+    */
+    getDefaultCurrencies: function(){
+        var i, l = this.currencies.length;
+        var list = new Array(l);
+
+        for (i = 0; i < l; i++)
+            list[i] = 0;
+
+        return list;
     }
 }

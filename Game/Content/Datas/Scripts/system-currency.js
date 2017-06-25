@@ -19,33 +19,24 @@
 
 // -------------------------------------------------------
 //
-//  CLASS Battler
+//  CLASS SystemCurrency
 //
 // -------------------------------------------------------
 
 /** @class
-*   A battler in a battle (ally or ennemy).
-*   @property {WindowBox} rect (temporary)
-*   @property {Player} character The character properties.
-*   @property {boolean} active Indicate if the battler already attacked or not.
-*   @param {Player} character The character properties.
-*   @param {number} x Coords of battler.
-*   @param {number} y Coords of battler.
-*   @param {number} w Coords of battler.
-*   @param {number} h Coords of battler.
+*   A currency of the game.
+*   @property {string} name The name of the currency.
 */
-function Battler(character, x, y, w, h){
-    this.character = character;
-    this.rect = new WindowBox(x, y, w, h);
-    this.active = true;
+function SystemCurrency(){
+
 }
 
-Battler.prototype = {
+SystemCurrency.prototype = {
 
-    /** Draw the battler.
-    *   @param {Context} context The canvas context.
+    /** Read the JSON associated to the currency.
+    *   @param {Object} json Json object describing the object.
     */
-    draw: function(context){
-        this.rect.draw(context);
+    readJSON: function(json){
+        this.name = json.names[1];
     }
 }

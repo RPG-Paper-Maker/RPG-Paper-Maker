@@ -22,6 +22,7 @@
 #include "superlistitem.h"
 #include "systemitem.h"
 #include "systemstatistic.h"
+#include "systemcurrency.h"
 #include "wanok.h"
 #include "systemcreateparameter.h"
 
@@ -61,9 +62,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListParticules->showEditName(false);
 
     // Initializing all the models
-    ui->panelSuperListCurrencies->list()->initializeModel(gameDatas
-                                                          ->systemDatas()
-                                                          ->modelCurrencies());
+    ui->panelSuperListCurrencies->list()
+            ->initializeNewItemInstance(new SystemCurrency);
+    ui->panelSuperListCurrencies->list()
+            ->initializeModel(gameDatas->systemDatas()->modelCurrencies());
 }
 
 // -------------------------------------------------------

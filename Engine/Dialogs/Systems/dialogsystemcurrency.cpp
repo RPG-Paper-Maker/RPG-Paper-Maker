@@ -26,7 +26,7 @@
 //
 // -------------------------------------------------------
 
-DialogSystemCurrency::DialogSystemCurrency(SystemCurrency &currency,
+DialogSystemCurrency::DialogSystemCurrency(SystemCurrency* currency,
                                            QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystemCurrency),
@@ -43,7 +43,7 @@ DialogSystemCurrency::~DialogSystemCurrency()
     delete ui;
 }
 
-SystemCurrency& DialogSystemCurrency::currency() const { return m_currency; }
+SystemCurrency *DialogSystemCurrency::currency() const { return m_currency; }
 
 // -------------------------------------------------------
 //
@@ -52,5 +52,5 @@ SystemCurrency& DialogSystemCurrency::currency() const { return m_currency; }
 // -------------------------------------------------------
 
 void DialogSystemCurrency::initialize(){
-    ui->widgetName->lineEdit()->setText(m_currency.name());
+    ui->widgetName->initializeNames(m_currency);
 }

@@ -44,12 +44,30 @@ SystemCurrency::SystemCurrency(int i, LangsTranslation* names) :
 // -------------------------------------------------------
 
 bool SystemCurrency::openDialog(){
-    SystemCurrency currency;
-    currency.setCopy(*this);
+    SystemCurrency* currency = new SystemCurrency;
+    currency->setCopy(*this);
     DialogSystemCurrency dialog(currency);
+
+    bool res = false;
     if (dialog.exec() == QDialog::Accepted){
-        setCopy(currency);
-        return true;
+        setCopy(*currency);
+        res = true;
     }
-    return false;
+    delete currency;
+
+    return res;
+}
+
+// -------------------------------------------------------
+
+SuperListItem* SystemCurrency::createCopy() const{
+    SystemCurrency* super = new SystemCurrency;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemCurrency::setCopy(const SystemCurrency& super){
+    SystemIcon::setCopy(super);
 }

@@ -63,11 +63,12 @@ Object.freeze(GroupKind);
 *   All the global informations of a particular game.
 *   @property {number} playTime The current time played since the beginning of
 *   the game in seconds.
-*   @property {number} teamHeroes List of all the heroes in the team.
-*   @property {number} reserveHeroes List of all the heroes in the reserve.
-*   @property {number} hiddenHeroes List of all the hidden heroes.
-*   @property {number} items List of all the items, weapons, and armors in the
+*   @property {number[]} teamHeroes List of all the heroes in the team.
+*   @property {number[]} reserveHeroes List of all the heroes in the reserve.
+*   @property {number[]} hiddenHeroes List of all the hidden heroes.
+*   @property {number[]} items List of all the items, weapons, and armors in the
 *   inventory.
+*   @property {number[]} currencies List of all the currencies.
 *   @property {number} charactersInstances IDs of the last instance character.
 *   @property {number} hero Hero informations.
 *   @property {number} mapsDatas All the informations for each maps.
@@ -87,6 +88,7 @@ Game.prototype = {
         this.reserveHeroes = [];
         this.hiddenHeroes = [];
         this.items = [];
+        this.currencies = $datasGame.system.getDefaultCurrencies();
         this.charactersInstances = 0;
         this.initializeVariables();
         this.currentMapId = $datasGame.system.idMapStartHero;
@@ -126,6 +128,9 @@ Game.prototype = {
             var itemJson = itemsJson[i];
             this.items[i] = new Item(itemJson.k, itemJson.id, itemJson.nb);
         }
+
+        // Currencies
+        this.currencies = json.cur;
 
         // Heroes
         var heroesJson = json.th;
@@ -203,6 +208,7 @@ Game.prototype = {
                 sh: reserveHeroes,
                 hh: hiddenHeroes,
                 itm: this.items,
+                cur: this.currencies,
                 inst: this.charactersInstances,
                 vars: this.variables,
                 currentMapId: this.currentMapId,

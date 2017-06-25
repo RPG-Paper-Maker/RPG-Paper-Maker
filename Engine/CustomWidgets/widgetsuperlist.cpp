@@ -188,7 +188,8 @@ void WidgetSuperList::openDialog(QModelIndex){
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*)(selected->data()
                                                 .value<quintptr>());
-        super->openDialog();
+        if (super->openDialog())
+            selected->setText(super->toString());
     }
 }
 

@@ -394,6 +394,7 @@ RESOURCES += \
 # Copy Content directory in build folder
 #-------------------------------------------------
 
+FROM = \"$$shell_path($$PWD\\Content)\"
 DEST = \"$$shell_path($$OUT_PWD)\"
 win32{
     CONFIG(debug, debug|release) {
@@ -405,7 +406,13 @@ win32{
     DESTDIR = $$OUT_PWD\\$$VARIANT
 }
 
-copyBR.commands = $(COPY_DIR) \"$$shell_path($$PWD\\Content)\" $$DEST
+FROMS= \"$$shell_path($$PWD\\..\\Game\\Content\\Datas\\Scripts)\"
+DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
+win32{
+    DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas\\Scripts)\"
+}
+
+copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
 first.depends = $(first) copyBR
 export(first.depends)
 export(copyBR.commands)

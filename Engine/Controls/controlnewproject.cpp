@@ -126,9 +126,6 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     tab.append(QJsonValue());
     Wanok::writeArrayJSON(Wanok::pathCombine(pathDir, Wanok::pathSaves), tab);
 
-    // Includes scripts
-    project.scriptsDatas()->writeDesktop(pathDir);
-
     // Creating first empty map
     QDir(pathDir).mkdir(Wanok::pathMaps);
     Map::writeDefaultMap(pathDir);

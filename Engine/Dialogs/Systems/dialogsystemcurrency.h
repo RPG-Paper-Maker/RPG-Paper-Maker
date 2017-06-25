@@ -40,14 +40,14 @@ class DialogSystemCurrency : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSystemCurrency(SystemCurrency &currency,
+    explicit DialogSystemCurrency(SystemCurrency *currency,
                                   QWidget *parent = 0);
     ~DialogSystemCurrency();
-    SystemCurrency& currency() const;
+    SystemCurrency* currency() const;
 
 private:
     Ui::DialogSystemCurrency *ui;
-    SystemCurrency& m_currency;
+    SystemCurrency* m_currency;
     void initialize();
 };
 

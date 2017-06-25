@@ -37,6 +37,8 @@ public:
     SystemCurrency();
     SystemCurrency(int i, LangsTranslation *names);
     virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemCurrency& super);
 };
 
 Q_DECLARE_METATYPE(SystemCurrency)
