@@ -58,6 +58,8 @@ public:
     void showMap(QStandardItem* item, int idMap, QVector3D *position);
     void hideMap();
     void setMap(int id, QVector3D& position);
+    void deleteMap(QStandardItem* item);
+    void deleteDirectory(QStandardItem* item);
 
 private:
     QStandardItemModel* m_model;

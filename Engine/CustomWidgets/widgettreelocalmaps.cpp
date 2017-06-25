@@ -24,6 +24,7 @@
 #include "treemapdatas.h"
 #include <QDir>
 #include <QDirIterator>
+#include <QMessageBox>
 
 // -------------------------------------------------------
 //
@@ -245,6 +246,48 @@ QStandardItem* WidgetTreeLocalMaps::getMap(int id, QStandardItem* item){
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
+    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+    QString mapPath =
+            Wanok::pathCombine(Wanok::pathMaps,
+                               WidgetTreeLocalMaps::generateMapName(tag->id()));
+
+    QDir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
+                            mapPath)).removeRecursively();
+
+    // Remove from tree
+    item->parent()->removeRow(item->row());
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::deleteDirectory(QStandardItem* item){
+    TreeMapTag* tag;
+    QStandardItem* child;
+    QList<QStandardItem*> children;
+
+    // Get all the children
+    for (int i = 0; i < item->rowCount(); i++)
+        children.append(item->child(i));
+
+    // Recursively remove all the children
+    for (int i = 0; i < children.size(); i++){
+        child = children.at(i);
+        tag = (TreeMapTag*) child->data().value<quintptr>();
+
+        // Remove map or directory
+        if (tag->isDir())
+            deleteDirectory(child);
+        else
+            deleteMap(child);
+    }
+
+    // Remove from tree
+    item->parent()->removeRow(item->row());
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //
@@ -312,7 +355,10 @@ void WidgetTreeLocalMaps::contextNewDirectory(){
         DialogSystemName dialog(super);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createDir(super.name());
-            TreeMapDatas::addDir(selected, selected->rowCount(), tag);
+            QStandardItem* item = TreeMapDatas::addDir(selected,
+                                                       selected->rowCount(),
+                                                       tag);
+            this->expand(item->index());
             Wanok::get()->project()->writeTreeMapDatas();
         }
     }
@@ -387,11 +433,35 @@ void WidgetTreeLocalMaps::contextPaste(){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextDeleteMap(){
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        QMessageBox::StandardButton box =
+               QMessageBox::warning(this, "Warning",
+                                    "Are you sure you want to delete this map?",
+                                    QMessageBox::Yes | QMessageBox::No);
 
+        if (box == QMessageBox::Yes){
+            deleteMap(selected);
+            Wanok::get()->project()->writeTreeMapDatas();
+        }
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextDeleteDirectory(){
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        QMessageBox::StandardButton box =
+                QMessageBox::warning(this, "Warning",
+                                     "Are you sure you want to delete this "
+                                     "directory?\n This will delete all the "
+                                     "maps inside this folder.",
+                                      QMessageBox::Yes | QMessageBox::No);
 
+        if (box == QMessageBox::Yes){
+            deleteDirectory(selected);
+            Wanok::get()->project()->writeTreeMapDatas();
+        }
+    }
 }
