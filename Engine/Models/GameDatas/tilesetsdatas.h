@@ -17,47 +17,36 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSTATE_H
-#define SYSTEMSTATE_H
+#ifndef TILESETSDATAS_H
+#define TILESETSDATAS_H
 
-#include <QMetaType>
-#include "superlistitem.h"
-#include "systemcommonobject.h"
-#include "systemobjectevent.h"
+#include <QStandardItemModel>
+#include "serializable.h"
+#include "systemtileset.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemState
+//  CLASS TilesetsDatas
 //
-//  A particulary state (datas).
+//  Contains all tilesets datas. The data file is located in
+//  Content/Datas/tilesets.json.
 //
 // -------------------------------------------------------
 
-class SystemState : public SuperListItem
+class TilesetsDatas : public Serializable
 {
 public:
-    SystemState();
-    SystemState(int i, QString n);
-    virtual ~SystemState();
-    virtual void setId(int i);
-    virtual void setName(QString n);
-    SystemCommonObject* object() const;
+    TilesetsDatas();
+    virtual ~TilesetsDatas();
+    void read(QString path);
+    QStandardItemModel* model() const;
     void setDefault();
-    void setDefaultJson();
-    void updateName();
-    void setObject(SystemCommonObject* object);
-    QString getJsonName();
-    void updateModel();
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemState &state);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
-protected:
-    SystemCommonObject* m_object;
+private:
+    QStandardItemModel* m_model;
 };
 
-Q_DECLARE_METATYPE(SystemState)
-
-#endif // SYSTEMSTATE_H
+#endif // TILESETSDATAS_H

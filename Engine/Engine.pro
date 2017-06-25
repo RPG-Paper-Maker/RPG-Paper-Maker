@@ -185,7 +185,9 @@ HEADERS += \
     CustomWidgets/paneltextures.h \
     CustomWidgets/widgetvariable.h \
     Models/GameDatas/variablesdatas.h \
-    Models/System/systemvariables.h
+    Models/System/systemvariables.h \
+    Models/GameDatas/tilesetsdatas.h \
+    Models/System/systemtileset.h
 
 SOURCES += \
     main.cpp \
@@ -329,7 +331,9 @@ SOURCES += \
     CustomWidgets/paneltextures.cpp \
     CustomWidgets/widgetvariable.cpp \
     Models/GameDatas/variablesdatas.cpp \
-    Models/System/systemvariables.cpp
+    Models/System/systemvariables.cpp \
+    Models/GameDatas/tilesetsdatas.cpp \
+    Models/System/systemtileset.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

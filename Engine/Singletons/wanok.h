@@ -69,6 +69,7 @@ public:
     const static QString pathMonsters;
     const static QString pathTroops;
     const static QString pathClasses;
+    const static QString PATH_TILESETS;
     const static QString pathTreeMap;
     const static QString pathLangs;
     const static QString pathScripts;

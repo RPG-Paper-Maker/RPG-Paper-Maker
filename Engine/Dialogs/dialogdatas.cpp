@@ -48,6 +48,7 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     initializeHeroes(gameDatas);
     initializeMonsters(gameDatas);
     initializeTroops(gameDatas);
+    initializeTilesets(gameDatas);
 }
 
 DialogDatas::~DialogDatas()
@@ -267,6 +268,29 @@ void DialogDatas::updateClass(SystemClass* sysClass){
 }
 
 // -------------------------------------------------------
+
+void DialogDatas::initializeTilesets(GameDatas *gameDatas){
+    ui->panelSuperListTilesets->list()->initializeNewItemInstance(
+                new SystemTileset);
+    ui->panelSuperListTilesets->initializeModel(gameDatas->tilesetsDatas()
+                                                ->model());
+    connect(ui->panelSuperListTilesets->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_pageTilesetSelected(QModelIndex,QModelIndex)));
+
+    QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
+            ->index(0,0);
+    ui->panelSuperListTilesets->list()->setIndex(0);
+    on_pageTilesetSelected(index,index);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::updateTileset(SystemTileset *sysTileset){
+
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -362,6 +386,16 @@ void DialogDatas::on_pageTroopSelected(QModelIndex index, QModelIndex){
             ->itemFromIndex(index);
     if (selected != nullptr){
         updateTroop((SystemTroop*)selected->data().value<quintptr>());
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pageTilesetSelected(QModelIndex index, QModelIndex){
+    QStandardItem* selected = ui->panelSuperListTilesets->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr){
+        updateTileset((SystemTileset*)selected->data().value<quintptr>());
     }
 }
 

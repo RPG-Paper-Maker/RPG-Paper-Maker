@@ -17,47 +17,42 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSTATE_H
-#define SYSTEMSTATE_H
+#ifndef SYSTEMTILESET_H
+#define SYSTEMTILESET_H
 
 #include <QMetaType>
 #include "superlistitem.h"
-#include "systemcommonobject.h"
-#include "systemobjectevent.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemState
+//  CLASS SystemTileset
 //
-//  A particulary state (datas).
+//  A particulary tileset (datas).
 //
 // -------------------------------------------------------
 
-class SystemState : public SuperListItem
+
+class SystemTileset : public SuperListItem
 {
 public:
-    SystemState();
-    SystemState(int i, QString n);
-    virtual ~SystemState();
-    virtual void setId(int i);
-    virtual void setName(QString n);
-    SystemCommonObject* object() const;
-    void setDefault();
-    void setDefaultJson();
-    void updateName();
-    void setObject(SystemCommonObject* object);
-    QString getJsonName();
-    void updateModel();
+    SystemTileset();
+    SystemTileset(int i, QString n, int pictureId);
+    SystemTileset(int i, QString n, SystemPicture* picture);
+    virtual ~SystemTileset();
+    SystemPicture* picture() const;
+    void setPicture(SystemPicture* picture);
+    void setPictureFromId(int id);
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemState &state);
+    virtual void setCopy(const SystemTileset &super);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    SystemCommonObject* m_object;
+    SystemPicture* m_picture;
 };
 
-Q_DECLARE_METATYPE(SystemState)
+Q_DECLARE_METATYPE(SystemTileset)
 
-#endif // SYSTEMSTATE_H
+#endif // SYSTEMTILESET_H

@@ -38,7 +38,8 @@ GameDatas::GameDatas() :
     m_heroesDatas(nullptr),
     m_monstersDatas(nullptr),
     m_troopsDatas(nullptr),
-    m_classesDatas(nullptr)
+    m_classesDatas(nullptr),
+    m_tilesetsDatas(nullptr)
 {
 
 }
@@ -57,6 +58,7 @@ GameDatas::~GameDatas()
     delete m_monstersDatas;
     delete m_troopsDatas;
     delete m_classesDatas;
+    delete m_tilesetsDatas;
 }
 
 CommonEventsDatas* GameDatas::commonEventsDatas() const {
@@ -107,6 +109,10 @@ ClassesDatas* GameDatas::classesDatas() const {
     return m_classesDatas;
 }
 
+TilesetsDatas* GameDatas::tilesetsDatas() const {
+    return m_tilesetsDatas;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -126,6 +132,7 @@ void GameDatas::setDefault(){
     m_monstersDatas = new MonstersDatas;
     m_troopsDatas = new TroopsDatas;
     m_classesDatas = new ClassesDatas;
+    m_tilesetsDatas = new TilesetsDatas;
     m_commonEventsDatas->setDefault();
     m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
@@ -144,6 +151,7 @@ void GameDatas::setDefault(){
     m_classesDatas->setDefault(m_skillsDatas->model()->invisibleRootItem(),
                                m_battleSystemDatas->modelCommonStatistics()
                                ->invisibleRootItem());
+    m_tilesetsDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -165,6 +173,7 @@ void GameDatas::read(QString path){
     m_monstersDatas = new MonstersDatas();
     m_troopsDatas = new TroopsDatas();
     m_classesDatas = new ClassesDatas();
+    m_tilesetsDatas = new TilesetsDatas();
     m_commonEventsDatas->read(path);
     m_systemDatas->read(path);
     m_itemsDatas->read(path);
@@ -176,6 +185,7 @@ void GameDatas::read(QString path){
     m_monstersDatas->read(path);
     m_troopsDatas->read(path);
     m_classesDatas->read(path);
+    m_tilesetsDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -213,4 +223,6 @@ void GameDatas::write(QString path){
                      *m_troopsDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathClasses),
                      *m_classesDatas);
+    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_TILESETS),
+                     *m_tilesetsDatas);
 }

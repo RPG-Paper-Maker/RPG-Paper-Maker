@@ -47,6 +47,7 @@ const QString Wanok::pathHeroes = pathCombine(pathDatas, "heroes.json");
 const QString Wanok::pathMonsters = pathCombine(pathDatas, "monsters.json");
 const QString Wanok::pathTroops = pathCombine(pathDatas, "troops.json");
 const QString Wanok::pathClasses = pathCombine(pathDatas, "classes.json");
+const QString Wanok::PATH_TILESETS = pathCombine(pathDatas, "tilesets.json");
 const QString Wanok::pathTreeMap = pathCombine(pathDatas, "treeMap.json");
 const QString Wanok::pathLangs = pathCombine(pathDatas, "langs.json");
 const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");

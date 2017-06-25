@@ -31,6 +31,7 @@
 #include "systemmonster.h"
 #include "systemtroop.h"
 #include "systemskill.h"
+#include "systemtileset.h"
 
 // -------------------------------------------------------
 //
@@ -69,6 +70,8 @@ private:
     void updateTroop(SystemTroop *sysTroop);
     void initializeClasses(GameDatas *gameDatas);
     void updateClass(SystemClass *sysClass);
+    void initializeTilesets(GameDatas *gameDatas);
+    void updateTileset(SystemTileset *sysTileset);
 
 private slots:
     void on_comboBoxItemType_currentIndexChanged(int index);
@@ -80,6 +83,7 @@ private slots:
     void on_pageHeroSelected(QModelIndex index, QModelIndex);
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
+    void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pushButtonMonsterbattleRewards_clicked();
 };
 

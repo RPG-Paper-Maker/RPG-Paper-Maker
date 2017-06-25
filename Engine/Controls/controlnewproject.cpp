@@ -114,9 +114,13 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     }
 
     // Create the default datas
-    Project project;
-    project.setDefault();
-    project.write(pathDir);
+    Project* previousProject = Wanok::get()->project();
+    Project* project = new Project;
+    Wanok::get()->setProject(project);
+    project->setDefault();
+    project->write(pathDir);
+    Wanok::get()->setProject(previousProject);
+    delete project;
 
     // Create saves
     QJsonArray tab;

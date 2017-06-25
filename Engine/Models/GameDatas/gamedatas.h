@@ -32,6 +32,7 @@
 #include "monstersdatas.h"
 #include "troopsdatas.h"
 #include "classesdatas.h"
+#include "tilesetsdatas.h"
 
 // -------------------------------------------------------
 //
@@ -60,6 +61,7 @@ public:
     TroopsDatas* troopsDatas() const;
     MonstersDatas* monstersDatas() const;
     ClassesDatas* classesDatas() const;
+    TilesetsDatas* tilesetsDatas() const;
     void read(QString path);
     void readVariablesSwitches(QString path);
     void write(QString path);
@@ -77,6 +79,7 @@ private:
     MonstersDatas* m_monstersDatas;
     TroopsDatas* m_troopsDatas;
     ClassesDatas* m_classesDatas;
+    TilesetsDatas* m_tilesetsDatas;
 };
 
 #endif // GAMEDATAS_H
