@@ -121,10 +121,6 @@ Wanok.isLoading = function(){
         $loadedFiles = 0;
         return false;
     }
-    else{
-        console.log($filesToLoad + "    " + $loadedFiles);
-    }
-
 
     return true;
 }

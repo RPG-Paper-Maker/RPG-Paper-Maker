@@ -40,6 +40,7 @@
 function SceneMap(id){
     SceneGame.call(this);
 
+    $currentMap = this;
     this.id = id;
     this.mapName = Wanok.generateMapName(id);
     this.scene = new THREE.Scene();
@@ -270,6 +271,8 @@ SceneMap.prototype = {
                 }
             }
         }
+
+        $currentMap = null;
     },
 
     // -------------------------------------------------------

@@ -116,12 +116,6 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     m_events->clear();
 
     // Reaction to event keyPress Action
-    setDefaultHeroKeyPressEvent(modelEventsSystem, 5, false, false,
-                                EventCommandKind::SendEvent,
-                                QVector<QString>({"1", "1", "1", "1"}));
-    setDefaultHeroKeyPressEvent(modelEventsSystem, 7, false, false,
-                                EventCommandKind::OpenMainMenu,
-                                QVector<QString>({}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 1, true, true,
                                 EventCommandKind::MoveObject,
                                 QVector<QString>({"7", "-1", "0", "1", "1",
@@ -138,6 +132,13 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
                                 EventCommandKind::MoveObject,
                                 QVector<QString>({"7", "-1", "0", "1", "1",
                                                   "3", "1"}));
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 5, false, false,
+                                EventCommandKind::SendEvent,
+                                QVector<QString>({"1", "1", "1", "1"}));
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 7, false, false,
+                                EventCommandKind::OpenMainMenu,
+                                QVector<QString>({}));
+
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_events->appendRow(item);

@@ -305,8 +305,8 @@ EventCommandChangeState.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var portion = $gameStack.top().allObjects[object.system.id];
-        var portionDatas = $game.mapsDatas[$gameStack.top().id]
+        var portion = $currentMap.allObjects[object.system.id];
+        var portionDatas = $game.mapsDatas[$currentMap.id]
                 [portion[0]][portion[1]][portion[2]];
         var indexState = portionDatas.si.indexOf(object.system.id);
         if (indexState === -1){
@@ -421,7 +421,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                                            isSystem, idEvent, parameters)
 {
     var i, j, k, l, ll, portion, objects;
-    var group = $gameStack.top().mapPortions;
+    var group = $currentMap.mapPortions;
 
     switch (targetKind){
     case 0: // Send to all
@@ -453,7 +453,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                             // Get states
                             var states = [1];
                             var portionDatas =
-                                    $game.mapsDatas[$gameStack.top().id]
+                                    $game.mapsDatas[$currentMap.id]
                                     [x][y][z];
                             var indexState =
                                     portionDatas.si.indexOf(object.system.id);
@@ -589,8 +589,8 @@ EventCommandTeleportObject.prototype = {
         var objectID = this.objectID.getValue();
 
         // If needs teleport hero in another map
-        if (objectID === 0 && $gameStack.top().id !== id){
-            $gameStack.top().closeMap();
+        if (objectID === 0 && $currentMap.id !== id){
+            $currentMap.closeMap();
             $gameStack.replace(new SceneMap(id));
         }
 

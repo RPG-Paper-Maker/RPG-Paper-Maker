@@ -158,7 +158,7 @@ SceneMenuInventory.prototype = {
     // -------------------------------------------------------
 
     draw3D: function(canvas){
-        $gameStack.bot().draw3D(canvas);
+        $currentMap.draw3D(canvas);
     },
 
     // -------------------------------------------------------
@@ -166,7 +166,7 @@ SceneMenuInventory.prototype = {
     drawHUD: function(context){
 
         // Draw the local map behind
-        $gameStack.bot().drawHUD(context);
+        $currentMap.drawHUD(context);
 
         // Draw the menu
         this.windowTop.draw(context);

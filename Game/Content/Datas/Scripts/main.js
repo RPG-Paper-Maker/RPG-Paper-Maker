@@ -34,6 +34,10 @@
 *   @type {GameStack} */
 var $gameStack;
 
+/** The current map in the game.
+*   @type {SceneMap} */
+var $currentMap;
+
 /** All the game datas.
 *   @type {DatasGame} */
 var $datasGame;
@@ -164,7 +168,6 @@ function initializeGL(canvas){
         $renderer = new THREE.WebGLRenderer();
         $renderer.autoClear = false;
     }
-    var lol = $renderer;
 
     $renderer.setSize($canvasWidth, $canvasHeight);
 }

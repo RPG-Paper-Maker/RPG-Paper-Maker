@@ -65,12 +65,52 @@ Window {
     property double startTime: new Date().getTime()
 
     // -------------------------------------------------------
+    // Keys handling
+    // -------------------------------------------------------
+
+    Item {
+        focus: true
+
+        Keys.onPressed: {
+            var key = event.key;
+
+            if (key === Qt.Key_F12){
+                Game.quit();
+            }
+
+            if (!event.isAutoRepeat){
+                Game.$keysPressed.unshift(key);
+                if (!Game.Wanok.isLoading())
+                    Game.onKeyPressed(key);
+            }
+
+            // Wait 50 ms for a slower update
+            var t = new Date().getTime();
+            if (t - startTime >= 50){
+                startTime = t;
+                if (!Game.Wanok.isLoading())
+                    Game.onKeyPressedAndRepeat(key);
+            }
+
+        }
+
+        Keys.onReleased: {
+            if (event.isAutoRepeat) return;
+            var key = event.key;
+            Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
+
+            if (!Game.Wanok.isLoading())
+                Game.onKeyReleased(key);
+        }
+    }
+
+    // -------------------------------------------------------
     // 3D drawing
     // -------------------------------------------------------
+
     Canvas3D {
         id: canvas3d
         anchors.fill: parent
-        focus: true
 
         onInitializeGL: {
             Game.$canvasWidth = canvas3d.width;
@@ -102,46 +142,14 @@ Window {
             Game.$canvasHeight = canvas3d.height;
             Game.resizeGL(canvas3d);
         }
-
-        // Keys handling
-
-        Keys.onPressed: {
-            if (!Game.Wanok.isLoading()){
-                var key = event.key;
-
-                if (key === Qt.Key_F12){
-                    Game.quit();
-                }
-
-                if (!event.isAutoRepeat){
-                    Game.$keysPressed.unshift(key);
-                    Game.onKeyPressed(key);
-                }
-
-                // Wait 50 ms for a slower update
-                var t = new Date().getTime();
-                if (t - startTime >= 50){
-                    startTime = t;
-                    Game.onKeyPressedAndRepeat(key);
-                }
-            }
-        }
-
-        Keys.onReleased: {
-            if (!Game.Wanok.isLoading()){
-                if (event.isAutoRepeat) return;
-                var key = event.key;
-                Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
-                Game.onKeyReleased(key);
-            }
-        }
     }
 
     // -------------------------------------------------------
     // HUD drawing
     // -------------------------------------------------------
+
     Canvas {
-      id:canvas
+      id: canvas
       anchors.fill: parent
     }
 }
