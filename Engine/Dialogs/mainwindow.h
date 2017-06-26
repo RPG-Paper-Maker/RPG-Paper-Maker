@@ -68,6 +68,8 @@ private:
     QString p_appName;
     QString p_version;
 
+    void updateTextures();
+
 private slots:
     void on_actionNew_project_triggered();
     void on_actionBrowse_triggered();

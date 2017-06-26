@@ -22,6 +22,7 @@
 
 #include <QHash>
 #include "systemlang.h"
+#include "systemtileset.h"
 
 // -------------------------------------------------------
 //
@@ -36,17 +37,20 @@ class MapProperties : public SystemLang
 public:
     MapProperties();
     MapProperties(QString path);
-    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d);
+    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d, int idTileset);
+    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d, SystemTileset* tileset);
     virtual ~MapProperties();
     QString realName() const;
     int length() const;
     int width() const;
     int height() const;
     int depth() const;
+    SystemTileset* tileset() const;
     void setLength(int l);
     void setWidth(int w);
     void setHeight(int h);
     void setDepth(int d);
+    void setTileset(SystemTileset* tileset);
     virtual void setCopy(const MapProperties& super);
     void save(QString path);
 
@@ -58,6 +62,7 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
+    SystemTileset* m_tileset;
 };
 
 #endif // MAPPROPERTIES_H

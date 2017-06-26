@@ -17,44 +17,33 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
-
-#include <QDialog>
-#include "mapproperties.h"
+#include "widgettilesetsettings.h"
+#include "ui_widgettilesetsettings.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
-//
-//  A dialog used for configuring the properties of a map.
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class DialogMapProperties;
+WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::WidgetTilesetSettings)
+{
+    ui->setupUi(this);
 }
 
-class DialogMapProperties : public QDialog
+WidgetTilesetSettings::~WidgetTilesetSettings()
 {
-    Q_OBJECT
+    delete ui;
+}
 
-public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
 
-private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
-
-private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
-};
-
-#endif // DIALOGMAPPROPERTIES_H
+void WidgetTilesetSettings::updateImage(SystemPicture* picture){
+    ui->widgetTilesetPraticable->updateImage(picture);
+}

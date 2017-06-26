@@ -17,44 +17,34 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
-
-#include <QDialog>
-#include "mapproperties.h"
+#include "dialogpicturespreview.h"
+#include "ui_dialogpicturespreview.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
-//
-//  A dialog used for configuring the properties of a map.
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class DialogMapProperties;
+DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
+                                             PictureKind kind,
+                                             QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogPicturesPreview)
+{
+    ui->setupUi(this);
+    setFixedSize(geometry().width(), geometry().height());
+
+    ui->widget->setPictureKind(kind);
+    ui->widget->setPicture(picture);
+    ui->widget->showAvailableContent(false);
 }
 
-class DialogMapProperties : public QDialog
+DialogPicturesPreview::~DialogPicturesPreview()
 {
-    Q_OBJECT
+    delete ui;
+}
 
-public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
-
-private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
-
-private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
-};
-
-#endif // DIALOGMAPPROPERTIES_H
+SystemPicture* DialogPicturesPreview::picture() const {
+    return ui->widget->picture();
+}

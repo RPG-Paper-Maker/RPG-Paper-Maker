@@ -26,6 +26,7 @@
         <file>Ressources/sprite_face.png</file>
         <file>Ressources/sprite_quadra.png</file>
         <file>Ressources/water.png</file>
+        <file>Ressources/picture.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

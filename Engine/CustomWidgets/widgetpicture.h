@@ -17,44 +17,50 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
+#ifndef WIDGETPICTURE_H
+#define WIDGETPICTURE_H
 
-#include <QDialog>
-#include "mapproperties.h"
+#include <QWidget>
+#include <QListWidget>
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
+//  CLASS WidgetPicture
 //
-//  A dialog used for configuring the properties of a map.
+//  Widget used for choosing a picture existing in the database.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogMapProperties;
+class WidgetPicture;
 }
 
-class DialogMapProperties : public QDialog
+class WidgetPicture : public QWidget
 {
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+    explicit WidgetPicture(QWidget *parent = 0);
+    ~WidgetPicture();
+    QListWidget* list() const;
+    SystemPicture* picture() const;
+    void setKind(PictureKind kind);
+    void setPicture(SystemPicture* picture);
+    void initialize(int i = 1);
+    void openDialog();
 
 private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
+    Ui::WidgetPicture *ui;
+    PictureKind m_kind;
+    SystemPicture* m_picture;
 
 private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
+    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
+    void on_pushButton_clicked();
+
+signals:
+    void pictureChanged(SystemPicture* picture);
 };
 
-#endif // DIALOGMAPPROPERTIES_H
+#endif // WIDGETPICTURE_H

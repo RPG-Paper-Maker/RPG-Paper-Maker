@@ -41,7 +41,7 @@ PanelProject::PanelProject(QWidget *parent) :
     sizesHorizontal << 250 << 200;
     ui->splitter->setSizes(sizesHorizontal);
     ui->openGLWidget->setMenuBar(ui->widgetMenuBar);
-    ui->openGLWidget->setPanelTextures(ui->scrollAreaWidgetContents);
+    ui->openGLWidget->setPanelTextures(ui->panelTextures);
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :
@@ -50,6 +50,7 @@ PanelProject::PanelProject(QWidget *parent, Project* p) :
     m_project = p;
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->openGLWidget);
     ui->treeViewLocalMaps->initializeWidgetMenuBar(ui->widgetMenuBar);
+    ui->treeViewLocalMaps->initializePanelTextures(ui->panelTextures);
     ui->treeViewLocalMaps->initializeProject(m_project);
     ui->treeViewLocalMaps->initializeModel(m_project->treeMapDatas()->model());
 }

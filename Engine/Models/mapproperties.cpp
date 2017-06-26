@@ -30,7 +30,7 @@
 MapProperties::MapProperties() :
     MapProperties(1,
                   new LangsTranslation(WidgetTreeLocalMaps::generateMapName(1)),
-                  20, 20, 20, 20)
+                  20, 20, 20, 20, 1)
 {
 
 }
@@ -41,12 +41,23 @@ MapProperties::MapProperties(QString path)
 }
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
-                             int h, int d) :
+                             int h, int d, int idTileset) :
+    MapProperties(i, names, l, w, h, d,
+                  (SystemTileset*) SuperListItem::getById(
+                      Wanok::get()->project()->gameDatas()->tilesetsDatas()
+                      ->model()->invisibleRootItem(), idTileset))
+{
+
+}
+
+MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
+                             int h, int d, SystemTileset* tileset) :
     SystemLang(i, names),
     m_length(l),
     m_width(w),
     m_height(h),
-    m_depth(d)
+    m_depth(d),
+    m_tileset(tileset)
 {
 
 }
@@ -68,6 +79,8 @@ int MapProperties::height() const { return m_length; }
 
 int MapProperties::depth() const { return m_length; }
 
+SystemTileset* MapProperties::tileset() const { return m_tileset; }
+
 void MapProperties::setLength(int l) { m_length = l; }
 
 void MapProperties::setWidth(int w) { m_width = w; }
@@ -75,6 +88,8 @@ void MapProperties::setWidth(int w) { m_width = w; }
 void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
+
+void MapProperties::setTileset(SystemTileset* tileset) { m_tileset = tileset; }
 
 // -------------------------------------------------------
 //
@@ -110,6 +125,9 @@ void MapProperties::read(const QJsonObject &json){
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
+    m_tileset = (SystemTileset*) SuperListItem::getById(
+                Wanok::get()->project()->gameDatas()->tilesetsDatas()
+                ->model()->invisibleRootItem(), json["tileset"].toInt());
 }
 
 // -------------------------------------------------------
@@ -121,4 +139,5 @@ void MapProperties::write(QJsonObject &json) const{
     json["w"] = m_width;
     json["h"] = m_height;
     json["d"] = m_depth;
+    json["tileset"] = m_tileset->id();
 }

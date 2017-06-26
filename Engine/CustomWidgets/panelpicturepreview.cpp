@@ -33,7 +33,8 @@
 PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelPicturePreview),
-    m_pictureKind(PictureKind::None)
+    m_pictureKind(PictureKind::None),
+    m_picture(nullptr)
 {
     ui->setupUi(this);
 
@@ -67,6 +68,8 @@ PanelPicturePreview::~PanelPicturePreview()
     delete ui;
 }
 
+SystemPicture* PanelPicturePreview::picture() const { return m_picture; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -88,8 +91,9 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
                 SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(on_listIDsIndexChanged(QModelIndex,QModelIndex)));
 
-        QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0,0);
+        QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0, 0);
         ui->widgetPanelIDs->list()->setCurrentIndex(index);
+
 
         // Loading first available content
         loadAvailableContent(-2);
@@ -106,6 +110,19 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
 
 // -------------------------------------------------------
 
+void PanelPicturePreview::setPicture(SystemPicture* picture){
+    m_picture = picture;
+
+    int index = SuperListItem::getIndexById(ui->widgetPanelIDs->list()
+                                            ->getModel()->invisibleRootItem(),
+                                            picture->id());
+    QModelIndex indexModel = ui->widgetPanelIDs->list()->getModel()
+            ->index(index, 0);
+    ui->widgetPanelIDs->list()->setCurrentIndex(indexModel);
+}
+
+// -------------------------------------------------------
+
 void PanelPicturePreview::showPictures(bool b){
     this->setVisible(b);
 }
@@ -114,15 +131,13 @@ void PanelPicturePreview::showPictures(bool b){
 
 void PanelPicturePreview::updateImage(QStandardItem* item){
     if (item != nullptr){
-        SystemPicture* super;
-
-        super = (SystemPicture*) item->data().value<qintptr>();
-        if (super != nullptr){
-            if (super->id() == -1){
+        m_picture = (SystemPicture*) item->data().value<qintptr>();
+        if (m_picture != nullptr){
+            if (m_picture->id() == -1){
                 ui->widgetPreview->setNoneImage();
             }
             else{
-                ui->widgetPreview->setImage(super->getPath(m_pictureKind));
+                ui->widgetPreview->setImage(m_picture->getPath(m_pictureKind));
             }
             ui->widgetPreview->repaint();
         }
@@ -203,12 +218,20 @@ void PanelPicturePreview::moveContent(){
 }
 
 // -------------------------------------------------------
+
+void PanelPicturePreview::updatePicture(){
+    m_picture = (SystemPicture*) ui->widgetPanelIDs->list()->getSelected()
+            ->data().value<qintptr>();
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
 // -------------------------------------------------------
 
 void PanelPicturePreview::showAvailableContent(bool b){
+    ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);

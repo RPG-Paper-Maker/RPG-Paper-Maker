@@ -17,44 +17,37 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
+#ifndef DIALOGPICTURESPREVIEW_H
+#define DIALOGPICTURESPREVIEW_H
 
 #include <QDialog>
-#include "mapproperties.h"
+#include "picturekind.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
+//  CLASS DialogPicturesPreview
 //
-//  A dialog used for configuring the properties of a map.
+//  A dialog used for selecting a picture in the game.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogMapProperties;
+class DialogPicturesPreview;
 }
 
-class DialogMapProperties : public QDialog
+class DialogPicturesPreview : public QDialog
 {
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+    explicit DialogPicturesPreview(SystemPicture* picture, PictureKind kind,
+                                   QWidget *parent = 0);
+    ~DialogPicturesPreview();
+    SystemPicture* picture() const;
 
 private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
-
-private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
+    Ui::DialogPicturesPreview *ui;
 };
 
-#endif // DIALOGMAPPROPERTIES_H
+#endif // DIALOGPICTURESPREVIEW_H

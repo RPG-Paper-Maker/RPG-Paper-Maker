@@ -119,8 +119,6 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     Wanok::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
-    Wanok::get()->setProject(previousProject);
-    delete project;
 
     // Create saves
     QJsonArray tab;
@@ -133,6 +131,10 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     // Creating first empty map
     QDir(pathDir).mkdir(Wanok::pathMaps);
     Map::writeDefaultMap(pathDir);
+
+    // Restoring project
+    Wanok::get()->setProject(previousProject);
+    delete project;
 
     return NULL; // return NULL for no errors
 }

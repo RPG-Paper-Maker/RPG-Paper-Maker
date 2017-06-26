@@ -24,6 +24,14 @@
 #include <QStandardItemModel>
 #include "picturekind.h"
 
+// -------------------------------------------------------
+//
+//  CLASS DialogPictures
+//
+//  A dialog used for editing pictures in the game.
+//
+// -------------------------------------------------------
+
 namespace Ui {
 class DialogPictures;
 }

@@ -187,7 +187,11 @@ HEADERS += \
     Models/GameDatas/variablesdatas.h \
     Models/System/systemvariables.h \
     Models/GameDatas/tilesetsdatas.h \
-    Models/System/systemtileset.h
+    Models/System/systemtileset.h \
+    CustomWidgets/widgetpicture.h \
+    Dialogs/dialogpicturespreview.h \
+    CustomWidgets/widgettilesetsettings.h \
+    CustomWidgets/widgettilesetpraticable.h
 
 SOURCES += \
     main.cpp \
@@ -333,7 +337,11 @@ SOURCES += \
     Models/GameDatas/variablesdatas.cpp \
     Models/System/systemvariables.cpp \
     Models/GameDatas/tilesetsdatas.cpp \
-    Models/System/systemtileset.cpp
+    Models/System/systemtileset.cpp \
+    CustomWidgets/widgetpicture.cpp \
+    Dialogs/dialogpicturespreview.cpp \
+    CustomWidgets/widgettilesetsettings.cpp \
+    CustomWidgets/widgettilesetpraticable.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -386,7 +394,10 @@ FORMS += \
     Dialogs/dialogpictures.ui \
     CustomWidgets/panelpicturepreview.ui \
     CustomWidgets/paneltextures.ui \
-    CustomWidgets/widgetvariable.ui
+    CustomWidgets/widgetvariable.ui \
+    CustomWidgets/widgetpicture.ui \
+    Dialogs/dialogpicturespreview.ui \
+    CustomWidgets/widgettilesetsettings.ui
 
 OTHER_FILES += \
     style.qss

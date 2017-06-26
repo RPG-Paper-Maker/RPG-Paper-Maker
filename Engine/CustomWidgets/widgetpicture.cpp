@@ -17,11 +17,11 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "widgetvariable.h"
-#include "ui_widgetvariable.h"
-#include "superlistitem.h"
-#include "dialogvariables.h"
+#include "widgetpicture.h"
+#include "ui_widgetpicture.h"
+#include "picturesdatas.h"
 #include "wanok.h"
+#include "dialogpicturespreview.h"
 
 // -------------------------------------------------------
 //
@@ -29,9 +29,9 @@
 //
 // -------------------------------------------------------
 
-WidgetVariable::WidgetVariable(QWidget *parent) :
+WidgetPicture::WidgetPicture(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetVariable)
+    ui(new Ui::WidgetPicture)
 {
     ui->setupUi(this);
 
@@ -41,34 +41,42 @@ WidgetVariable::WidgetVariable(QWidget *parent) :
     ui->listWidget->addItem(item);
 }
 
-WidgetVariable::~WidgetVariable()
+WidgetPicture::~WidgetPicture()
 {
     delete ui;
 }
 
-int WidgetVariable::currentId() const { return p_currentId; }
+SystemPicture* WidgetPicture::picture() const { return m_picture; }
 
-void WidgetVariable::setCurrentId(int i) {
-    if (i < 1) i = 1;
-    p_currentId = i;
+QListWidget* WidgetPicture::list() const { return ui->listWidget; }
 
-    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
-                                    ->variablesDatas();
-
-    // Graphic update
-    SuperListItem* s = datas->getVariableById(p_currentId);
-
-    if (s == nullptr){
-        p_currentId = 1;
-        s = datas->getVariableById(p_currentId);
-    }
-    ui->listWidget->item(0)->setText(s->toString());
+void WidgetPicture::setKind(PictureKind kind){
+    m_kind = kind;
 }
 
-QListWidget* WidgetVariable::list() const { return ui->listWidget; }
+void WidgetPicture::setPicture(SystemPicture* picture) {
+    m_picture = picture;
 
-void WidgetVariable::initialize(int i){
-    setCurrentId(i);
+    ui->listWidget->item(0)->setText(m_picture->toString());
+}
+
+void WidgetPicture::initialize(int i){
+    if (i < 1) i = 1;
+
+    PicturesDatas* datas = Wanok::get()->project()->picturesDatas();
+
+    // Graphic update
+    m_picture = (SystemPicture*) SuperListItem::getById(datas->model(m_kind)
+                                                        ->invisibleRootItem(),
+                                                        i);
+
+    if (m_picture == nullptr){
+        m_picture = (SystemPicture*)
+                SuperListItem::getById(datas->model(m_kind)
+                                       ->invisibleRootItem(), 1);
+    }
+
+    setPicture(m_picture);
 }
 
 // -------------------------------------------------------
@@ -77,15 +85,15 @@ void WidgetVariable::initialize(int i){
 //
 // -------------------------------------------------------
 
-void WidgetVariable::openDialog(){
-    DialogVariables dialog;
-    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
-                                    ->variablesDatas();
-    QStandardItemModel* m = datas->model();
+void WidgetPicture::openDialog(){
+    DialogPicturesPreview dialog(m_picture, PictureKind::Tilesets);
+    SystemPicture* previousPicture = m_picture;
 
-    dialog.initializeModel(m);
     if (dialog.exec() == QDialog::Accepted){
-        setCurrentId(dialog.getSelectedId());
+        setPicture(dialog.picture());
+
+        if (previousPicture != m_picture)
+            emit pictureChanged(m_picture);
     }
 }
 
@@ -95,12 +103,12 @@ void WidgetVariable::openDialog(){
 //
 // -------------------------------------------------------
 
-void WidgetVariable::on_listWidget_itemDoubleClicked(QListWidgetItem*){
+void WidgetPicture::on_listWidget_itemDoubleClicked(QListWidgetItem*){
     openDialog();
 }
 
 // -------------------------------------------------------
 
-void WidgetVariable::on_pushButton_clicked(){
+void WidgetPicture::on_pushButton_clicked(){
     openDialog();
 }

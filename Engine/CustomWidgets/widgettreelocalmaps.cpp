@@ -37,6 +37,7 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     m_model(nullptr),
     m_widgetMapEditor(nullptr),
     m_widgetMenuMapEditor(nullptr),
+    m_panelTextures(nullptr),
     m_project(nullptr)
 {
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -60,6 +61,12 @@ void WidgetTreeLocalMaps::initializeWidgetMapEditor(WidgetMapEditor* w){
 
 void WidgetTreeLocalMaps::initializeWidgetMenuBar(WidgetMenuBarMapEditor* w){
     m_widgetMenuMapEditor = w;
+}
+
+void WidgetTreeLocalMaps::initializePanelTextures(
+        PanelTextures* w)
+{
+    m_panelTextures = w;
 }
 
 void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
@@ -288,12 +295,36 @@ void WidgetTreeLocalMaps::deleteDirectory(QStandardItem* item){
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeLocalMaps::updateTileset(){
+    if (m_panelTextures != nullptr){
+        TreeMapTag* tag = (TreeMapTag*)getSelected()->data().value<quintptr>();
+
+        if (tag->id() == -1)
+            m_panelTextures->setTilesetImageNone();
+        else{
+            QString path = Wanok::pathCombine(
+                            Wanok::pathCombine(Wanok::get()->project()
+                                               ->pathCurrentProject(),
+                                               Wanok::pathMaps),
+                            generateMapName(tag->id()));
+            MapProperties properties(path);
+            m_panelTextures->setTilesetImage(
+                        properties.tileset()->picture()
+                        ->getPath(PictureKind::Tilesets));
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
+
+    // Loading map
     if (m_widgetMapEditor != nullptr){
         QStandardItem* selected = getSelected();
         TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
@@ -302,7 +333,11 @@ void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
             hideMap();
         else
             showMap(selected, tag->id(), tag->position());
+
+        // Loading tileset texture
+        updateTileset();
     }
+
 }
 
 // -------------------------------------------------------
@@ -340,6 +375,9 @@ void WidgetTreeLocalMaps::contextNewMap(){
             Map::writeNewMap(Wanok::get()->project()->pathCurrentProject(),
                              *properties);
             Wanok::get()->project()->writeTreeMapDatas();
+
+            // Loading tileset texture
+            updateTileset();
         }
         else
             delete properties;
@@ -392,6 +430,9 @@ void WidgetTreeLocalMaps::contextEditMap(){
             TreeMapDatas::setName(selected, properties.name());
             Wanok::get()->project()->writeTreeMapDatas();
             showMap(selected, properties.id(), tag->position());
+
+            // Loading tileset texture
+            updateTileset();
         }
     }
 }
@@ -443,6 +484,9 @@ void WidgetTreeLocalMaps::contextDeleteMap(){
         if (box == QMessageBox::Yes){
             deleteMap(selected);
             Wanok::get()->project()->writeTreeMapDatas();
+
+            // Loading tileset texture
+            updateTileset();
         }
     }
 }
@@ -462,6 +506,9 @@ void WidgetTreeLocalMaps::contextDeleteDirectory(){
         if (box == QMessageBox::Yes){
             deleteDirectory(selected);
             Wanok::get()->project()->writeTreeMapDatas();
+
+            // Loading tileset texture
+            updateTileset();
         }
     }
 }

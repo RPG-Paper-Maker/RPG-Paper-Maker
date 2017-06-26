@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WidgetVariable</class>
- <widget class="QWidget" name="WidgetVariable">
+ <class>WidgetPicture</class>
+ <widget class="QWidget" name="WidgetPicture">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>175</width>
+    <width>227</width>
     <height>21</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>19</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>175</width>
-    <height>21</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -89,7 +77,11 @@
         </size>
        </property>
        <property name="text">
-        <string>...</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../ressources.qrc">
+         <normaloff>:/icons/Ressources/picture.png</normaloff>:/icons/Ressources/picture.png</iconset>
        </property>
       </widget>
      </item>
@@ -97,6 +89,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

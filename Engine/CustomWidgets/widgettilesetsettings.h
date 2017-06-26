@@ -17,44 +17,35 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
+#ifndef WIDGETTILESETSETTINGS_H
+#define WIDGETTILESETSETTINGS_H
 
-#include <QDialog>
-#include "mapproperties.h"
+#include <QWidget>
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
+//  CLASS WidgetTilesetSettings
 //
-//  A dialog used for configuring the properties of a map.
+//  Widget used for choosing a setting picture existing in the database.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogMapProperties;
+class WidgetTilesetSettings;
 }
 
-class DialogMapProperties : public QDialog
+class WidgetTilesetSettings : public QWidget
 {
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+    explicit WidgetTilesetSettings(QWidget *parent = 0);
+    ~WidgetTilesetSettings();
+    void updateImage(SystemPicture* picture);
 
 private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
-
-private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
+    Ui::WidgetTilesetSettings *ui;
 };
 
-#endif // DIALOGMAPPROPERTIES_H
+#endif // WIDGETTILESETSETTINGS_H

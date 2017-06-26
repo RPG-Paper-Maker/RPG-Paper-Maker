@@ -25,6 +25,7 @@
 #include "contextmenulist.h"
 #include "mapproperties.h"
 #include "panelproject.h"
+#include "widgettilesetselector.h"
 
 // -------------------------------------------------------
 //
@@ -45,6 +46,7 @@ public:
     ~WidgetTreeLocalMaps();
     void initializeWidgetMapEditor(WidgetMapEditor* w);
     void initializeWidgetMenuBar(WidgetMenuBarMapEditor* w);
+    void initializePanelTextures(PanelTextures* w);
     void initializeProject(Project* p);
     void initializeModel(QStandardItemModel* m);
     QStandardItem* getSelected() const;
@@ -60,6 +62,7 @@ public:
     void setMap(int id, QVector3D& position);
     void deleteMap(QStandardItem* item);
     void deleteDirectory(QStandardItem* item);
+    void updateTileset();
 
 private:
     QStandardItemModel* m_model;
@@ -67,6 +70,7 @@ private:
     ContextMenuList* m_contextMenuDirectory;
     WidgetMapEditor* m_widgetMapEditor;
     WidgetMenuBarMapEditor* m_widgetMenuMapEditor;
+    PanelTextures* m_panelTextures;
     Project* m_project;
 
     void updateNodesSaved(QStandardItem* item);

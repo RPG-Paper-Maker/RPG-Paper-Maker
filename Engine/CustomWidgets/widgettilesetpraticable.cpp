@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "paneltextures.h"
-#include "ui_paneltextures.h"
+#include "widgettilesetpraticable.h"
+#include <QPainter>
 
 // -------------------------------------------------------
 //
@@ -26,16 +26,10 @@
 //
 // -------------------------------------------------------
 
-PanelTextures::PanelTextures(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PanelTextures)
+WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
+    QWidget(parent)
 {
-    ui->setupUi(this);
-}
 
-PanelTextures::~PanelTextures()
-{
-    delete ui;
 }
 
 // -------------------------------------------------------
@@ -44,30 +38,22 @@ PanelTextures::~PanelTextures()
 //
 // -------------------------------------------------------
 
-QRect PanelTextures::getTilesetTexture() const{
-    return ui->widgetTilesetSelector->currentTexture();
+void WidgetTilesetPraticable::updateImage(SystemPicture* picture){
+    m_image = QImage(picture->getPath(PictureKind::Tilesets));
+    if (!m_image.isNull())
+        m_image = m_image.scaled(m_image.width() * 2, m_image.height() * 2);
+    this->setGeometry(0, 0, m_image.width(), m_image.height());
+    setFixedSize(m_image.width(), m_image.height());
 }
 
 // -------------------------------------------------------
-
-void PanelTextures::setTilesetImage(QString path){
-    ui->widgetTilesetSelector->setImage(path);
-    updateTilesetImage();
-}
-
+//
+//  EVENTS
+//
 // -------------------------------------------------------
 
-void PanelTextures::setTilesetImageNone(){
-    ui->widgetTilesetSelector->setImageNone();
-    updateTilesetImage();
-}
+void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
+    QPainter painter(this);
 
-// -------------------------------------------------------
-
-void PanelTextures::updateTilesetImage(){
-    this->setGeometry(0, 0,
-                      ui->widgetTilesetSelector->width(),
-                      ui->widgetTilesetSelector->height());
-    setFixedSize(ui->widgetTilesetSelector->width(),
-                 ui->widgetTilesetSelector->height());
+    painter.drawImage(0, 0, m_image);
 }

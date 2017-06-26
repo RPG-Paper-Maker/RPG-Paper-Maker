@@ -40,11 +40,14 @@ public:
     explicit WidgetTilesetSelector(QWidget *parent = 0);
     ~WidgetTilesetSelector();
     QRect currentTexture() const;
+    void setImage(QString path);
+    void setImageNone();
 
 protected:
     QImage m_textureTileset;
     WidgetSelectionRectangle* m_selectionRectangle;
 
+    void updateImage();
     void setRealCursorPosition();
     void makeFirstSelection(int x, int y, float zoom = 1.0f);
     void makeSelection(int x, int y, float zoom = 1.0f);

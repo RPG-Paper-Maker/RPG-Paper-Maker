@@ -25,6 +25,7 @@
 #include <QStandardItemModel>
 #include "picturekind.h"
 #include "superlistitem.h"
+#include "systempicture.h"
 
 namespace Ui {
 class PanelPicturePreview;
@@ -37,11 +38,14 @@ class PanelPicturePreview : public QWidget
 public:
     explicit PanelPicturePreview(QWidget *parent = 0);
     ~PanelPicturePreview();
+    SystemPicture* picture() const;
     void setPictureKind(PictureKind kind);
+    void setPicture(SystemPicture* picture);
 
 private:
     Ui::PanelPicturePreview *ui;
     PictureKind m_pictureKind;
+    SystemPicture* m_picture;
 
     void showPictures(bool b);
     void updateImage(QStandardItem* item);
@@ -49,9 +53,12 @@ private:
     void loadContentFromFolder(QString path, bool isBR);
     void deleteContent(QString path);
     void moveContent();
+    void updatePicture();
+
+public slots:
+    void showAvailableContent(bool b);
 
 private slots:
-    void showAvailableContent(bool b);
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
     void on_listIndexChanged(QModelIndex index, QModelIndex);
     void on_pushButtonMove_clicked();

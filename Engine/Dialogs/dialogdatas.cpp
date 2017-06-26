@@ -277,6 +277,9 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
     connect(ui->panelSuperListTilesets->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageTilesetSelected(QModelIndex,QModelIndex)));
+    ui->widgetPictureTileset->setKind(PictureKind::Tilesets);
+    connect(ui->widgetPictureTileset, SIGNAL(pictureChanged(SystemPicture*)),
+            this, SLOT(on_tilesetPictureChanged(SystemPicture*)));
 
     QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
             ->index(0,0);
@@ -287,7 +290,8 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateTileset(SystemTileset *sysTileset){
-
+    ui->widgetPictureTileset->setPicture(sysTileset->picture());
+    ui->widgetTilesetPictureSettings->updateImage(sysTileset->picture());
 }
 
 // -------------------------------------------------------
@@ -397,6 +401,16 @@ void DialogDatas::on_pageTilesetSelected(QModelIndex index, QModelIndex){
     if (selected != nullptr){
         updateTileset((SystemTileset*)selected->data().value<quintptr>());
     }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
+    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
+            ->getSelected()->data().value<quintptr>();
+
+    tileset->setPicture(picture);
+    ui->widgetTilesetPictureSettings->updateImage(picture);
 }
 
 // -------------------------------------------------------

@@ -26,7 +26,7 @@
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetVariableSwitch
+//  CLASS WidgetVariable
 //
 //  Widget used for choosing a variable existing in the database.
 //

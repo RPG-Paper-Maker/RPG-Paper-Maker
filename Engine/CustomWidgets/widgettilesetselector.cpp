@@ -30,17 +30,7 @@ WidgetTilesetSelector::WidgetTilesetSelector(QWidget *parent) :
     QWidget(parent),
     m_selectionRectangle(new WidgetSelectionRectangle)
 {
-    m_textureTileset = QImage(QString(
-                                  Wanok::pathCombine(Wanok::get()->project()
-                                                     ->pathCurrentProject(),
-                                  Wanok::pathCombine(Wanok::pathTilesets,
-                                                     "plains.png"))));
-    m_textureTileset = m_textureTileset.scaled(m_textureTileset.width() * 2,
-                                               m_textureTileset.height() * 2);
-    this->setGeometry(0, 0,
-                      m_textureTileset.width(),
-                      m_textureTileset.height());
-    setFixedSize(m_textureTileset.width(), m_textureTileset.height());
+
 }
 
 WidgetTilesetSelector::~WidgetTilesetSelector()
@@ -56,6 +46,32 @@ WidgetTilesetSelector::~WidgetTilesetSelector()
 
 QRect WidgetTilesetSelector::currentTexture() const{
     return m_selectionRectangle->getCoefRect();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::setImage(QString path){
+    m_textureTileset = QImage(path);
+    updateImage();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::setImageNone(){
+    m_textureTileset = QImage();
+    updateImage();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::updateImage(){
+    if (!m_textureTileset.isNull())
+        m_textureTileset = m_textureTileset.scaled(m_textureTileset.width() * 2,
+                                               m_textureTileset.height() * 2);
+    this->setGeometry(0, 0,
+                      m_textureTileset.width(),
+                      m_textureTileset.height());
+    setFixedSize(m_textureTileset.width(), m_textureTileset.height());
 }
 
 // -------------------------------------------------------

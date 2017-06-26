@@ -17,44 +17,31 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
+#ifndef WIDGETTILESETPRATICABLE_H
+#define WIDGETTILESETPRATICABLE_H
 
-#include <QDialog>
-#include "mapproperties.h"
+#include <QWidget>
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
+//  CLASS WidgetTilesetPraticable
 //
-//  A dialog used for configuring the properties of a map.
+//  Widget used for choosing a tileset praticable existing in the database.
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class DialogMapProperties;
-}
-
-class DialogMapProperties : public QDialog
+class WidgetTilesetPraticable : public QWidget
 {
     Q_OBJECT
-
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+    explicit WidgetTilesetPraticable(QWidget *parent = 0);
+    void updateImage(SystemPicture* picture);
 
-private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
+protected:
+    QImage m_image;
 
-    void initialize();
-
-private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
+    virtual void paintEvent(QPaintEvent *);
 };
 
-#endif // DIALOGMAPPROPERTIES_H
+#endif // WIDGETTILESETPRATICABLE_H

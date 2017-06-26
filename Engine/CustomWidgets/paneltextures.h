@@ -21,6 +21,7 @@
 #define PANELTEXTURES_H
 
 #include <QWidget>
+#include "widgettilesetselector.h"
 
 namespace Ui {
 class PanelTextures;
@@ -34,9 +35,13 @@ public:
     explicit PanelTextures(QWidget *parent = 0);
     ~PanelTextures();
     QRect getTilesetTexture() const;
+    void setTilesetImage(QString path);
+    void setTilesetImageNone();
 
 private:
     Ui::PanelTextures *ui;
+
+    void updateTilesetImage();
 };
 
 #endif // PANELTEXTURES_H

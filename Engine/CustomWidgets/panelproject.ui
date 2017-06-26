@@ -48,7 +48,7 @@
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
-       <widget class="PanelTextures" name="scrollAreaWidgetContents">
+       <widget class="PanelTextures" name="panelTextures">
         <property name="geometry">
          <rect>
           <x>0</x>

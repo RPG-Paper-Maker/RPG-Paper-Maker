@@ -84,6 +84,7 @@ private slots:
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
+    void on_tilesetPictureChanged(SystemPicture* picture);
     void on_pushButtonMonsterbattleRewards_clicked();
 };
 

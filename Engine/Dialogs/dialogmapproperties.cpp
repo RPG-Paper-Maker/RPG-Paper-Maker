@@ -19,6 +19,7 @@
 
 #include "dialogmapproperties.h"
 #include "ui_dialogmapproperties.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -29,11 +30,18 @@
 DialogMapProperties::DialogMapProperties(MapProperties &properties,
                                          QWidget *parent) :
     QDialog(parent),
-    m_mapProperties(properties),
-    ui(new Ui::DialogMapProperties)
+    ui(new Ui::DialogMapProperties),
+    m_mapProperties(properties)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
+
+    // Tileset
+    SuperListItem::fillComboBox(ui->comboBoxTileset,
+                                Wanok::get()->project()->gameDatas()
+                                ->tilesetsDatas()->model());
+    connect(ui->comboBoxTileset, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(on_comboBoxTilesetCurrentIndexChanged(int)));
 
     initialize();
 }
@@ -60,6 +68,13 @@ void DialogMapProperties::initialize(){
 
     ui->widgetConstantVariableSteps->initializeNumberVariable();
     ui->widgetConstantVariableStepsVariation->initializeNumberVariable();
+
+    // Tileset
+    ui->comboBoxTileset->setCurrentIndex(
+                SuperListItem::getIndexById(Wanok::get()->project()->gameDatas()
+                                            ->tilesetsDatas()->model()
+                                            ->invisibleRootItem(),
+                                            m_mapProperties.tileset()->id()));
 }
 
 // -------------------------------------------------------
@@ -88,4 +103,12 @@ void DialogMapProperties::on_spinBoxHeight_valueChanged(int i){
 
 void DialogMapProperties::on_spinBoxDepth_valueChanged(int i){
     m_mapProperties.setDepth(i);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
+    m_mapProperties.setTileset((SystemTileset*) Wanok::get()->project()
+                               ->gameDatas()->tilesetsDatas()->model()
+                               ->item(index)->data().value<qintptr>());
 }
