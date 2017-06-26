@@ -43,26 +43,30 @@
 /** @class
 *   All the global informations of the game.
 *   @property {Object} settings All the general settings.
+*   @property {DatasPictures} pictures Pictures datas.
 *   @property {DatasCommonEvents} commonEvents Common events datas.
-*   @property {DatasCommonEvents} items Items datas.
-*   @property {DatasCommonEvents} skills Skills datas.
-*   @property {DatasCommonEvents} weapons Weapons datas.
-*   @property {DatasCommonEvents} armors Armors datas.
-*   @property {DatasCommonEvents} classes Classes datas.
-*   @property {DatasCommonEvents} heroes Heroes datas.
-*   @property {DatasCommonEvents} monsters Monsters datas.
-*   @property {DatasCommonEvents} troops Troops datas.
-*   @property {DatasCommonEvents} system System datas.
-*   @property {DatasCommonEvents} battleSystem Battle System datas.
-*   @property {DatasCommonEvents} keyBoard KeyBoard datas.
+*   @property {DatasItems} items Items datas.
+*   @property {DatasSkills} skills Skills datas.
+*   @property {DatasWeapons} weapons Weapons datas.
+*   @property {DatasArmors} armors Armors datas.
+*   @property {DatasClasses} classes Classes datas.
+*   @property {DatasTilesets} tileset Tilesets datas.
+*   @property {DatasHeroes} heroes Heroes datas.
+*   @property {DatasMonsters} monsters Monsters datas.
+*   @property {DatasTroops} troops Troops datas.
+*   @property {DatasSystem} system System datas.
+*   @property {DatasBattleSystem} battleSystem Battle System datas.
+*   @property {DatasKeyBoard} keyBoard KeyBoard datas.
 */
 function DatasGame(){
+    this.pictures = new DatasPictures();
     this.commonEvents = new DatasCommonEvents();
     this.items = new DatasItems();
     this.skills = new DatasSkills();
     this.weapons = new DatasWeapons();
     this.armors = new DatasArmors();
     this.classes = new DatasClasses();
+    this.tilesets = new DatasTilesets();
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();
     this.troops = new DatasTroops();

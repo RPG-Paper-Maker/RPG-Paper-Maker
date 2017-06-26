@@ -19,6 +19,7 @@
 
 #include "dialogpicturespreview.h"
 #include "ui_dialogpicturespreview.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +39,10 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     ui->widget->setPictureKind(kind);
     ui->widget->setPicture(picture);
     ui->widget->showAvailableContent(false);
+
+    connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
+    connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
+    connect(this, SIGNAL(dialogIsClosing()), this, SLOT(on_rejected()));
 }
 
 DialogPicturesPreview::~DialogPicturesPreview()
@@ -47,4 +52,26 @@ DialogPicturesPreview::~DialogPicturesPreview()
 
 SystemPicture* DialogPicturesPreview::picture() const {
     return ui->widget->picture();
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogPicturesPreview::closeEvent(QCloseEvent *){
+    emit dialogIsClosing();
+}
+
+// -------------------------------------------------------
+
+void DialogPicturesPreview::on_accepted(){
+    Wanok::get()->project()->writePicturesDatas();
+}
+
+// -------------------------------------------------------
+
+void DialogPicturesPreview::on_rejected(){
+    Wanok::get()->project()->readPicturesDatas();
 }

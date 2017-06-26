@@ -19,37 +19,33 @@
 
 // -------------------------------------------------------
 //
-//  CLASS DatasClasses
+//  CLASS SystemTileset
 //
 // -------------------------------------------------------
 
 /** @class
-*   All the classes datas.
-*   @property {SystemClass[]} list List of all the classes of the game according
-*   to ID.
+*   A tileset of the game.
+*   @property {SystemPicture} picture The picture used for this tileset.
 */
-function DatasClasses(){
-    this.read();
+function SystemTileset(){
+
 }
 
-DatasClasses.prototype = {
+SystemTileset.prototype = {
 
-    /** Read the JSON file associated to classes.
+    /** Read the JSON associated to the tileset.
+    *   @param {Object} json Json object describing the object.
     */
-    read: function(){
-        Wanok.openFile(this, Wanok.FILE_CLASSES, true, function(res){
-            var json = JSON.parse(res).classes;
-            var i, l = json.length;
-            this.list = new Array(l+1);
+    readJSON: function(json){
+        this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
+    },
 
-            // Sorting all the classes according to the ID
-            for (i = 0; i < l; i++){
-                var jsonClass = json[i];
-                var id = jsonClass.id;
-                var c = new SystemClass();
-                c.readJSON(jsonClass);
-                this.list[id] = c;
-            }
-        });
+    // -------------------------------------------------------
+
+    /** Get the path to the picture tileset.
+    *   @returns {string}
+    */
+    getPath: function(){
+        return this.picture.getPath(PictureKind.Tilesets);
     }
 }

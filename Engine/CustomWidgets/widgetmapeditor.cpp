@@ -148,13 +148,12 @@ void WidgetMapEditor::update(){
 
     if (!m_firstPressure){
         double speed = (QTime::currentTime().msecsSinceStartOfDay() - m_elapsedTime)
-                * 0.05666 * Wanok::get()->getSquareSize();
+                * 0.04666 * Wanok::get()->getSquareSize();
 
         // Multi keys
         QSet<int>::iterator i;
-        for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++){
+        for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++)
             onKeyPress(*i, speed);
-        }
     }
 
     m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();

@@ -21,6 +21,7 @@
 #define DIALOGPICTURESPREVIEW_H
 
 #include <QDialog>
+#include <QCloseEvent>
 #include "picturekind.h"
 #include "systempicture.h"
 
@@ -46,8 +47,18 @@ public:
     ~DialogPicturesPreview();
     SystemPicture* picture() const;
 
+protected:
+    virtual void closeEvent(QCloseEvent *);
+
 private:
     Ui::DialogPicturesPreview *ui;
+
+private slots:
+    void on_accepted();
+    void on_rejected();
+
+signals:
+    void dialogIsClosing();
 };
 
 #endif // DIALOGPICTURESPREVIEW_H

@@ -67,13 +67,9 @@ Map::Map(int id) :
     m_squareSize = Wanok::get()->getSquareSize();
 
     // Loading textures
-    // (Temporaire)
     m_textureTileset = new QOpenGLTexture(
-                QImage(QString(
-                           Wanok::pathCombine(Wanok::get()->project()
-                                              ->pathCurrentProject(),
-                           Wanok::pathCombine(Wanok::pathTilesets,
-                                              "plains.png")))));
+                QImage(m_mapProperties->tileset()->picture()
+                       ->getPath(PictureKind::Tilesets)));
     m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 
@@ -265,7 +261,9 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
         Wanok::readJSON(path, *portion);
 
         // Static update
-        portion->initializeVertices(m_squareSize, 128, 128); // TODO
+        portion->initializeVertices(m_squareSize,
+                                    m_textureTileset->width(),
+                                    m_textureTileset->height());
         portion->initializeGL(m_programStatic);
         m_programStatic->bind();
         portion->updateGL();
@@ -331,7 +329,9 @@ void Map::updatePortion(Portion& p){
         m_mapPortions[p] = nullptr;
     }
     else{
-        mapPortion->initializeVertices(m_squareSize, 128, 128); // TODO
+        mapPortion->initializeVertices(m_squareSize,
+                                       m_textureTileset->width(),
+                                       m_textureTileset->height());
         mapPortion->initializeGL(m_programStatic);
         m_programStatic->bind();
         mapPortion->updateGL();

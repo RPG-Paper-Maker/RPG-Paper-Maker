@@ -45,8 +45,7 @@ function SceneMap(id){
     this.scene = new THREE.Scene();
     this.camera = new Camera(120, 75);
     this.readMapInfos();
-    this.loadTextures();
-    this.callBackAfterLoading = this.initializePortions;
+    this.callBackAfterLoading = this.loadTextures;
 }
 
 /** Get the portion file name.
@@ -71,12 +70,14 @@ SceneMap.prototype = {
                        Wanok.FILE_MAP_INFOS, true, function(res)
         {
             var json = JSON.parse(res);
+
             this.mapInfos = {
                 name: json.name,
                 length: json.l,
                 width: json.w,
                 height: json.h,
-                depth: json.d
+                depth: json.d,
+                tileset : $datasGame.tilesets.list[json.tileset]
             };
 
             // Now that we have map dimensions, we can initialize object portion
@@ -207,15 +208,18 @@ SceneMap.prototype = {
         // Load textures
         var textureLoader = new THREE.TextureLoader();
         this.textureTileset = this.loadTexture(textureLoader,
-                                               Wanok.PATH_TILESETS +
-                                               "/plains.png");
+                                               this.mapInfos.tileset.getPath());
+
         this.texturesCharacters = new Array(2);
         this.texturesCharacters[1] = this.loadTexture(textureLoader,
+                                                      $ROOT_DIRECTORY +
                                                       Wanok.PATH_CHARACTERS +
                                                       "/lucas.png");
 
         // Update hero material
         $game.hero.mesh.material = this.texturesCharacters[1];
+
+        this.callBackAfterLoading = this.initializePortions;
     },
 
     // -------------------------------------------------------

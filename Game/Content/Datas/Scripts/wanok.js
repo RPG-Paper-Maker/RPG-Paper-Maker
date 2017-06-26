@@ -34,10 +34,12 @@ function Wanok(){
 //  PATHS
 // -------------------------------------------------------
 
+Wanok.PATH_BR = "";
 Wanok.PATH_DATAS = $ROOT_DIRECTORY + "Content/Datas/";
 Wanok.FILE_MAPS = Wanok.PATH_DATAS + "Maps/";
 Wanok.FILE_MAP_INFOS = "/infos.json";
 Wanok.FILE_MAP_OBJECTS = "/objects.json";
+Wanok.FILE_PICTURES_DATAS = Wanok.PATH_DATAS + "pictures.json";
 Wanok.FILE_COMMON_EVENTS = Wanok.PATH_DATAS + "commonEvents.json";
 Wanok.FILE_ITEMS = Wanok.PATH_DATAS + "items.json";
 Wanok.FILE_SKILLS = Wanok.PATH_DATAS + "skills.json";
@@ -50,18 +52,19 @@ Wanok.FILE_BATTLE_SYSTEM = Wanok.PATH_DATAS + "battleSystem.json";
 Wanok.FILE_KEYBOARD = Wanok.PATH_DATAS + "keyBoard.json";
 Wanok.FILE_SYSTEM = Wanok.PATH_DATAS + "system.json";
 Wanok.FILE_CLASSES = Wanok.PATH_DATAS + "classes.json";
+Wanok.FILE_TILESETS_DATAS = Wanok.PATH_DATAS + "tilesets.json";
 Wanok.FILE_VARIABLES = Wanok.PATH_DATAS + "variables.json";
 Wanok.FILE_SETTINGS = Wanok.PATH_DATAS + "settings.json";
 Wanok.FILE_SAVE = Wanok.PATH_DATAS + "saves.json";
-Wanok.PATH_PICTURES = $ROOT_DIRECTORY + "Content/Pictures";
-Wanok.PATH_HUD = Wanok.PATH_PICTURES + "/HUD";
-Wanok.PATH_TEXTURES2D = Wanok.PATH_PICTURES + "/Textures2D";
-Wanok.PATH_BARS = Wanok.PATH_HUD + "/Bars";
-Wanok.PATH_ICONS = Wanok.PATH_HUD + "/Icons";
-Wanok.PATH_AUTOTILES = Wanok.PATH_TEXTURES2D + "/Autotiles";
-Wanok.PATH_CHARACTERS = Wanok.PATH_TEXTURES2D + "/Characters";
-Wanok.PATH_RELIEFS = Wanok.PATH_TEXTURES2D + "/Reliefs";
-Wanok.PATH_TILESETS = Wanok.PATH_TEXTURES2D + "/Tilesets";
+Wanok.PATH_PICTURES = "Content/Pictures";
+Wanok.PATH_HUD = Wanok.PATH_PICTURES + "/HUD/";
+Wanok.PATH_TEXTURES2D = Wanok.PATH_PICTURES + "/Textures2D/";
+Wanok.PATH_BARS = Wanok.PATH_HUD + "Bars";
+Wanok.PATH_ICONS = Wanok.PATH_HUD + "Icons";
+Wanok.PATH_AUTOTILES = Wanok.PATH_TEXTURES2D + "Autotiles";
+Wanok.PATH_CHARACTERS = Wanok.PATH_TEXTURES2D + "Characters";
+Wanok.PATH_RELIEFS = Wanok.PATH_TEXTURES2D + "Reliefs";
+Wanok.PATH_TILESETS = Wanok.PATH_TEXTURES2D + "Tilesets";
 
 // -------------------------------------------------------
 //  FUNCTIONS
@@ -118,6 +121,11 @@ Wanok.isLoading = function(){
         $loadedFiles = 0;
         return false;
     }
+    else{
+        console.log($filesToLoad + "    " + $loadedFiles);
+    }
+
+
     return true;
 }
 
@@ -291,3 +299,31 @@ Wanok.getDoubleScreenY = function(y){
 Wanok.getSquare = function(x){
     return Math.floor(x / $SQUARE_SIZE);
 };
+
+// -------------------------------------------------------
+
+/** Get the numberof fields of an object.
+*   @static
+*   @returns {number}
+*/
+Wanok.countFields = function count(obj){
+    if (obj.__count__ !== undefined) { // Old FF
+        return obj.__count__;
+    }
+
+    if (Object.keys) { // ES5
+        return Object.keys(obj).length;
+    }
+
+    // Everything else:
+
+    var c = 0, p;
+    for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            c += 1;
+        }
+    }
+
+    return c;
+
+}

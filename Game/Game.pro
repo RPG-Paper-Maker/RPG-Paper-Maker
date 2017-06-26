@@ -97,7 +97,11 @@ DISTFILES += \
     Content/Datas/Scripts/scene-battle-1.js \
     Content/Datas/Scripts/scene-battle-0.js \
     Content/Datas/Scripts/system-currency.js \
-    Content/Datas/Scripts/window-tabs.js
+    Content/Datas/Scripts/window-tabs.js \
+    Content/Datas/Scripts/datas-tilesets.js \
+    Content/Datas/Scripts/system-picture.js \
+    Content/Datas/Scripts/system-tileset.js \
+    Content/Datas/Scripts/datas-pictures.js
 
 RESOURCES += \
     qml.qrc

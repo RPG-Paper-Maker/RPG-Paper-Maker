@@ -317,12 +317,8 @@ void WidgetTreeLocalMaps::updateTileset(){
 }
 
 // -------------------------------------------------------
-//
-//  CONTEXT MENU SLOTS
-//
-// -------------------------------------------------------
 
-void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
+void WidgetTreeLocalMaps::reload(){
 
     // Loading map
     if (m_widgetMapEditor != nullptr){
@@ -337,7 +333,16 @@ void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
         // Loading tileset texture
         updateTileset();
     }
+}
 
+// -------------------------------------------------------
+//
+//  CONTEXT MENU SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
+    reload();
 }
 
 // -------------------------------------------------------

@@ -254,7 +254,10 @@ void MainWindow::deleteTempMaps(){
 // -------------------------------------------------------
 
 void MainWindow::updateTextures(){
-    ((PanelProject*)mainPanel)->widgetTreeLocalMaps()->updateTileset();
+    WidgetTreeLocalMaps* treeMap = ((PanelProject*) mainPanel)
+            ->widgetTreeLocalMaps();
+
+    treeMap->reload();
 }
 
 // -------------------------------------------------------
@@ -312,15 +315,12 @@ void MainWindow::on_actionQuit_triggered(){
 
 void MainWindow::on_actionDatas_manager_triggered(){
     DialogDatas dialog(project->gameDatas());
-    if (openDialog(dialog) == QDialog::Accepted){
+    if (openDialog(dialog) == QDialog::Accepted)
         project->writeGameDatas();
-        project->writePicturesDatas();
-        updateTextures();
-    }
-    else{
+    else
         project->readGameDatas();
-        project->readPicturesDatas();
-    }
+
+    updateTextures();
 }
 
 // -------------------------------------------------------
@@ -328,15 +328,12 @@ void MainWindow::on_actionDatas_manager_triggered(){
 void MainWindow::on_actionSystems_manager_triggered(){
     Wanok::isInConfig = true;
     DialogSystems dialog(project->gameDatas());
-    if (openDialog(dialog) == QDialog::Accepted){
+    if (openDialog(dialog) == QDialog::Accepted)
         project->writeGameDatas();
-        project->writePicturesDatas();
-        updateTextures();
-    }
-    else{
+    else
         project->readGameDatas();
-        project->readPicturesDatas();
-    }
+
+    updateTextures();
     Wanok::isInConfig = false;
 }
 
@@ -352,12 +349,12 @@ void MainWindow::on_actionVariables_manager_triggered(){
 
 void MainWindow::on_actionPictures_manager_triggered(){
     DialogPictures dialog;
-    if (openDialog(dialog) == QDialog::Accepted){
+    if (openDialog(dialog) == QDialog::Accepted)
         project->writePicturesDatas();
-        updateTextures();
-    }
     else
         project->readPicturesDatas();
+
+    updateTextures();
 }
 
 // -------------------------------------------------------

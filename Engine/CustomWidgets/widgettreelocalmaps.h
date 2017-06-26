@@ -62,7 +62,7 @@ public:
     void setMap(int id, QVector3D& position);
     void deleteMap(QStandardItem* item);
     void deleteDirectory(QStandardItem* item);
-    void updateTileset();
+    void reload();
 
 private:
     QStandardItemModel* m_model;
@@ -76,8 +76,9 @@ private:
     void updateNodesSaved(QStandardItem* item);
     void deleteMapTemp(QString &path, QStandardItem* item);
     QStandardItem* getMap(int id, QStandardItem* item);
+    void updateTileset();
 
-private slots:
+public slots:
     void on_selectionChanged(QModelIndex, QModelIndex);
     void showContextMenu(const QPoint & p);
     void contextNewMap();
