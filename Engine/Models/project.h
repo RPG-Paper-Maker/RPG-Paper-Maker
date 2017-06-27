@@ -63,6 +63,7 @@ public:
     void readScriptsDatas();
     void readKeyBoardDatas();
     void readPicturesDatas();
+    void readSystemDatas();
     void write(QString path);
     void writeGameDatas();
     void writeLangsDatas();
@@ -70,6 +71,7 @@ public:
     void writeScriptsDatas();
     void writeKeyBoardDatas();
     void writePicturesDatas();
+    void writeSystemDatas();
     void saveCurrentMap();
 
 private:

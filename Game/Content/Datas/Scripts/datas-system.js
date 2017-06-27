@@ -54,6 +54,9 @@ DatasSystem.prototype = {
             $SQUARE_SIZE = json.ss;
             $PORTIONS_RAY_NEAR = json.pr;
 
+            // Path BR
+            Wanok.PATH_BR = "file://" + json.pathBR + "/";
+
             // Hero beginning
             this.idMapStartHero = json.idMapHero;
             this.idObjectStartHero = json.idObjHero;

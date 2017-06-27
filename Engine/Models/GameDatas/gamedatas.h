@@ -64,7 +64,9 @@ public:
     TilesetsDatas* tilesetsDatas() const;
     void read(QString path);
     void readVariablesSwitches(QString path);
+    void readSystem(QString path);
     void write(QString path);
+    void writeSystem(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;

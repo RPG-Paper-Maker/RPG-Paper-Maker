@@ -20,6 +20,7 @@
 #include "systemdatas.h"
 #include "wanok.h"
 #include "systemcurrency.h"
+#include <QDir>
 
 // -------------------------------------------------------
 //
@@ -53,6 +54,10 @@ void SystemDatas::setIdMapHero(int i) { m_idMapHero = i; }
 
 void SystemDatas::setIdObjectHero(int i) { m_idObjectHero = i; }
 
+QString SystemDatas::pathBR() const { return m_pathBR; }
+
+void SystemDatas::setPathBR(QString p) { m_pathBR = p; }
+
 QStandardItemModel* SystemDatas::modelCurrencies() const {
     return m_modelCurrencies;
 }
@@ -73,6 +78,9 @@ void SystemDatas::setDefault(){
 
     m_portionsRay = 1;
     m_squareSize = 16;
+
+    // Path BR
+    m_pathBR = Wanok::pathCombine(QDir::currentPath(), Wanok::pathBR);
 
     // Currencies
     SystemCurrency* currency;
@@ -118,6 +126,7 @@ void SystemDatas::read(const QJsonObject &json){
     m_squareSize = json["ss"].toInt();
     m_idMapHero = json["idMapHero"].toInt();
     m_idObjectHero = json["idObjHero"].toInt();
+    m_pathBR = json["pathBR"].toString();
 
     // Currencies
     jsonList = json["currencies"].toArray();
@@ -155,6 +164,7 @@ void SystemDatas::write(QJsonObject &json) const{
     json["ss"] = m_squareSize;
     json["idMapHero"] = m_idMapHero;
     json["idObjHero"] = m_idObjectHero;
+    json["pathBR"] = m_pathBR;
 
     // Currencies
     jsonArray = QJsonArray();

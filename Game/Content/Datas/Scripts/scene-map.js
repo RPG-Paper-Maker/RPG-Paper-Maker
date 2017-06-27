@@ -231,9 +231,17 @@ SceneMap.prototype = {
     */
     loadTexture: function(textureLoader, path){
         $filesToLoad++;
-        var texture = textureLoader.load(path, function(t){
-            $loadedFiles++;
-        });
+        var texture = textureLoader.load(path,
+            function(t){
+                $loadedFiles++;
+            },
+            function (t) {
+
+            },
+            function (t) {
+                console.log("Could not load " + path);
+            }
+        );
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = false;

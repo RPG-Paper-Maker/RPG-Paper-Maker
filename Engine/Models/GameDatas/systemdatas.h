@@ -45,6 +45,8 @@ public:
     int squareSize() const;
     void setIdMapHero(int i);
     void setIdObjectHero(int i);
+    QString pathBR() const;
+    void setPathBR(QString p);
 
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelItemsTypes() const;
@@ -57,6 +59,7 @@ private:
     int m_squareSize;
     int m_idMapHero;
     int m_idObjectHero;
+    QString m_pathBR;
     QStandardItemModel* m_modelCurrencies;
     QStandardItemModel* m_modelItemsTypes;
 };

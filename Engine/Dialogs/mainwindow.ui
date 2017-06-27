@@ -83,8 +83,15 @@
     <addaction name="actionPictures_manager"/>
     <addaction name="actionKeyboard_controls"/>
    </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionSet_BR_path_folder"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuManagement"/>
+   <addaction name="menuOptions"/>
    <addaction name="menuTest"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -277,6 +284,11 @@
    </property>
    <property name="iconText">
     <string>Pictures</string>
+   </property>
+  </action>
+  <action name="actionSet_BR_path_folder">
+   <property name="text">
+    <string>Set BR path folder...</string>
    </property>
   </action>
  </widget>

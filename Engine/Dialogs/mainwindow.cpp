@@ -35,6 +35,7 @@
 #include "panelproject.h"
 #include "wanok.h"
 #include "widgettreelocalmaps.h"
+#include "dialoglocation.h"
 
 // -------------------------------------------------------
 //
@@ -372,6 +373,15 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
     }
 }
 
+// -------------------------------------------------------
+
+void MainWindow::on_actionSet_BR_path_folder_triggered(){
+    DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR());
+    if (openDialog(dialog) == QDialog::Accepted){
+        project->gameDatas()->systemDatas()->setPathBR(dialog.location());
+        project->writeSystemDatas();
+    }
+}
 
 // -------------------------------------------------------
 

@@ -205,6 +205,12 @@ void Project::readPicturesDatas(){
 
 // -------------------------------------------------------
 
+void Project::readSystemDatas(){
+    p_gameDatas->readSystem(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::write(QString path){
     setPathCurrentProject(path);
     writeLangsDatas();
@@ -255,4 +261,10 @@ void Project::writePicturesDatas(){
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writeSystemDatas(){
+    p_gameDatas->writeSystem(p_pathCurrentProject);
 }

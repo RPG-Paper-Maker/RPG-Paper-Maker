@@ -191,9 +191,19 @@ void GameDatas::read(QString path){
 // -------------------------------------------------------
 
 void GameDatas::readVariablesSwitches(QString path){
-    if (m_variablesDatas != nullptr) delete m_variablesDatas;
+    if (m_variablesDatas != nullptr)
+        delete m_variablesDatas;
     m_variablesDatas = new VariablesDatas();
     m_variablesDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readSystem(QString path){
+    if (m_systemDatas != nullptr)
+        delete m_systemDatas;
+    m_systemDatas = new SystemDatas();
+    m_systemDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -203,8 +213,7 @@ void GameDatas::write(QString path){
                      *m_commonEventsDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathVariables),
                      *m_variablesDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathSystem),
-                     *m_systemDatas);
+    writeSystem(path);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathBattleSystem),
                      *m_battleSystemDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathItems),
@@ -226,3 +235,11 @@ void GameDatas::write(QString path){
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_TILESETS),
                      *m_tilesetsDatas);
 }
+
+// -------------------------------------------------------
+
+void GameDatas::writeSystem(QString path){
+    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathSystem),
+                     *m_systemDatas);
+}
+
