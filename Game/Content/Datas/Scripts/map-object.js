@@ -45,10 +45,18 @@ Object.freeze(Orientation);
 *   @param {THREE.Mesh} mesh The current mesh used for this object.
 *   @param {SystemObject} system System infos.
 */
-function MapObject(mesh, system) {
+function MapObject(mesh, system, w, h) {
     this.mesh = mesh;
     this.system = system;
     this.speed = 1.0;
+    this.frame = 0;
+    this.orientationEye = Orientation.South;
+    this.width = w;
+    this.height = h;
+    this.frameDuration = 150;
+    this.frameNumber = 4;
+    this.moving = false;
+    this.frameTick = 0;
 }
 
 /** Normal speed coef.
@@ -78,8 +86,8 @@ MapObject.prototype = {
     move: function(orientation, w, h){
 
         // The speed depends on the time elapsed since the last update
-        var speed = this.speed * ((new Date().getTime() - $elapsedTime) *
-                                  MapObject.SPEED_NORMAL * $SQUARE_SIZE);
+        var speed = this.speed * ($elapsedTime * MapObject.SPEED_NORMAL *
+                                  $SQUARE_SIZE);
         var angle = -90;
         var x_plus, z_plus, x_s, z_s, x_f, z_f;
 
@@ -142,6 +150,14 @@ MapObject.prototype = {
         default:
             break;
         }
+
+        // Update orientation
+        if (this.orientationEye !== orientation){
+            this.orientationEye = orientation;
+            this.updateUVs();
+        }
+
+        this.moving = true;
     },
 
     // -------------------------------------------------------
@@ -169,7 +185,48 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the object graphics.
+    */
     update: function(){
+        var frame = this.frame;
 
+        // If moving, update frame
+        if (this.moving){
+            this.frameTick += $elapsedTime;
+            if (this.frameTick >= this.frameDuration){
+                this.frame = (this.frame + 1) % this.frameNumber;
+                this.frameTick = 0;
+            }
+            this.moving = false;
+        }
+        else{
+            this.frame = 0;
+        }
+
+        // Update mesh
+        if (frame !== this.frame)
+            this.updateUVs();
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the UVs coordinates according to frame and orientation.
+    */
+    updateUVs : function(){
+        var textureWidth = this.mesh.material.map.image.width;
+        var textureHeight = this.mesh.material.map.image.height;
+        var w = this.width * $SQUARE_SIZE / textureWidth;
+        var h = this.height * $SQUARE_SIZE / textureHeight;
+        var x = this.frame * w;
+        var y = this.orientationEye * h;
+
+        // Update geometry
+        this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
+        this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
+        this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
+        this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
+        this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
+        this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
+        this.mesh.geometry.uvsNeedUpdate = true;
     }
 }

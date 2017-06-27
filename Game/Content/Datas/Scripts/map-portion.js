@@ -34,8 +34,9 @@
 *   A portion of the map.
 *   @property {THREE.Vector3} positionOrigin The position of the origin of the
 *   portion.
-*   @property {THREE.Mesh} staticFloorsList List of all the floors in the scene.
-*   @property {THREE.Mesh} staticSpritesList List of all the sprites in the
+*   @property {THREE.Mesh} staticFloorsMesh The mesh used for drawing all the
+*   floors.
+*   @property {THREE.Mesh[]} staticSpritesList List of all the sprites in the
 *   scene.
 *   @property {MapObject} objectsList List of all the objects in the portion.
 *   @param {number} realX The real x portion.
@@ -49,6 +50,7 @@ function MapPortion(realX, realY, realZ){
     this.positionOrigin = new THREE.Vector3(realX * pixPortion,
                                             realY * pixPortion,
                                             realZ * pixPortion);
+    this.staticFloorsMesh = null;
     this.staticFloorsList = new Array;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
@@ -97,31 +99,34 @@ MapPortion.prototype = {
         var material = $gameStack.top().textureTileset;
         var width = material.map.image.width;
         var height = material.map.image.height;
+        var geometry = new THREE.Geometry();
+        geometry.faceVertexUvs[0] = [];
 
-        for (var i = 0, l = jsonFloors.length; i < l; i++){
+        for (var i = 0, length = jsonFloors.length; i < length; i++){
             var jsonFloor = jsonFloors[i];
             var localPosition = Wanok.positionToVector3(jsonFloor.k);
             var jsonFloorDatas = jsonFloor.v;
             var texture = jsonFloorDatas.t;
 
-            // Getting geometry and UVs coords
-            var x = (texture[0] * $SQUARE_SIZE) / width;
-            var y = (texture[1] * $SQUARE_SIZE) / height;
-            var w = (texture[2] * $SQUARE_SIZE) / width;
-            var h = (texture[3] * $SQUARE_SIZE) / height;
+            var x = this.positionOrigin.x + localPosition.x;
+            var y = this.positionOrigin.y + localPosition.y;
+            var z = this.positionOrigin.z + localPosition.z;
+            var l = $SQUARE_SIZE + MapPortion.SCALE_COEF;
+            var w = 1.0;
+            var h = $SQUARE_SIZE + MapPortion.SCALE_COEF;
 
-            var geometry = new THREE.Geometry();
-            geometry.dynamic = false;
-            geometry.vertices.push(new THREE.Vector3(0.0, 0.0, 0.0));
-            geometry.vertices.push(new THREE.Vector3(1.0, 0.0, 0.0));
-            geometry.vertices.push(new THREE.Vector3(1.0, 0.0, 1.0));
-            geometry.vertices.push(new THREE.Vector3(0.0, 0.0, 1.0));
-            geometry.faces.push(new THREE.Face3(0, 1, 2));
-            geometry.faces.push(new THREE.Face3(0, 2, 3));
-            geometry.scale($SQUARE_SIZE + MapPortion.SCALE_COEF,
-                           1.0,
-                           $SQUARE_SIZE + MapPortion.SCALE_COEF);
-            geometry.faceVertexUvs[0] = [];
+            geometry.vertices.push(new THREE.Vector3(x, y, z));
+            geometry.vertices.push(new THREE.Vector3(x + l, y, z));
+            geometry.vertices.push(new THREE.Vector3(x + l, y, z + h));
+            geometry.vertices.push(new THREE.Vector3(x, y, z + h));
+            var j = i * 4;
+            geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
+            geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
+
+            x = (texture[0] * $SQUARE_SIZE) / width;
+            y = (texture[1] * $SQUARE_SIZE) / height;
+            w = (texture[2] * $SQUARE_SIZE) / width;
+            h = (texture[3] * $SQUARE_SIZE) / height;
             geometry.faceVertexUvs[0].push([
                 new THREE.Vector2(x, y),
                 new THREE.Vector2(x + w, y),
@@ -132,16 +137,13 @@ MapPortion.prototype = {
                 new THREE.Vector2(x + w, y + h),
                 new THREE.Vector2(x, y + h)
             ]);
-            geometry.uvsNeedUpdate = true;
-
-            // Creating the plane
-            var plane = new THREE.Mesh(geometry, material);
-            plane.position.set(this.positionOrigin.x + localPosition.x,
-                               this.positionOrigin.y + localPosition.y,
-                               this.positionOrigin.z + localPosition.z);
-            $gameStack.top().scene.add(plane);
-            this.staticFloorsList.push(plane);
         }
+
+        geometry.uvsNeedUpdate = true;
+
+        // Creating the plane
+        this.staticFloorsMesh = new THREE.Mesh(geometry, material);
+        $currentMap.scene.add(this.staticFloorsMesh);
     },
 
     // -------------------------------------------------------
@@ -225,7 +227,7 @@ MapPortion.prototype = {
                                               .texturesCharacters[1],
                                               [0, 0, 2, 2],
                                               x, y, w, h);
-                var mapObject = new MapObject(mesh, object);
+                var mapObject = new MapObject(mesh, object, 2, 2);
 
                 /* If it is the hero, you should not add it to the list of
                 objects to display */
@@ -358,7 +360,7 @@ MapPortion.prototype = {
                                                new THREE.MeshBasicMaterial({}),
                                                [0, 0, 2, 2],
                                                x, y, w, h);
-                    var mapObject = new MapObject(mesh, object);
+                    var mapObject = new MapObject(mesh, object, 2, 2);
                     return mapObject;
                 }
             }

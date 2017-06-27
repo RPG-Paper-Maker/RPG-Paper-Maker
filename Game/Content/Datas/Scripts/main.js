@@ -72,6 +72,12 @@ var $PORTION_SIZE = 16;
 *   @type {number} */
 var $elapsedTime = new Date().getTime();
 
+/** A number representing the milliseconds elapsed between 1 January 1970
+*   00:00:00 UTC and the given date. It is updated at the end of each update in
+*   order to get the elapsed time between each update.
+*   @type {number} */
+var $lastUpdateTime = new Date().getTime();
+
 /** The list of all the keys that are currently pressed (for multi-key handling)
 *   .
 *   @type {number[]} */
@@ -191,6 +197,7 @@ function resizeGL(canvas){
 /** Update the current stack.
 */
 function update(){
+    $elapsedTime = new Date().getTime() - $lastUpdateTime;
 
     // Repeat keypress as long as not blocking
     var continuePressed = true;
@@ -203,7 +210,7 @@ function update(){
     // Update the top of the stack
     $gameStack.update();
 
-    $elapsedTime = new Date().getTime();
+    $lastUpdateTime = new Date().getTime();
 }
 
 // -------------------------------------------------------

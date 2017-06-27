@@ -247,6 +247,7 @@ SceneMap.prototype = {
         });
         material.overdraw = 0.5;
 
+
         return material;
     },
 
@@ -284,6 +285,9 @@ SceneMap.prototype = {
 
         // Update camera
         this.camera.update();
+
+        // Update objects
+        $game.hero.update();
     },
 
     // -------------------------------------------------------
