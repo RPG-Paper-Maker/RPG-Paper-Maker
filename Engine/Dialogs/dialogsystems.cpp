@@ -26,6 +26,12 @@
 #include "wanok.h"
 #include "systemcreateparameter.h"
 
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
 DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystems)
@@ -37,6 +43,7 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     initializeBattleSystem(gameDatas);
     initializeMainMenu(gameDatas);
     initializeEvents(gameDatas);
+    initializeStates(gameDatas);
     initializeCommonReactors(gameDatas);
     initializeCommonObjects(gameDatas);
 }
@@ -151,6 +158,18 @@ void DialogSystems::updateEvents(SystemEvent *sysEvent){
     ui->treeViewEventsParameters->initializeModel(sysEvent->modelParameters());
     ui->treeViewEventsParameters->setColumnWidth(0,400);
     ui->treeViewEventsParameters->setColumnWidth(1,50);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::initializeStates(GameDatas *gameDatas){
+    ui->panelSuperListStates->list()->initializeNewItemInstance(
+                new SuperListItem);
+    ui->panelSuperListStates->initializeModel(gameDatas->commonEventsDatas()
+                                              ->modelStates());
+    QModelIndex index = ui->panelSuperListStates->list()->getModel()
+            ->index(0,0);
+    ui->panelSuperListStates->list()->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------

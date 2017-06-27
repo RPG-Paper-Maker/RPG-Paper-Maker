@@ -72,6 +72,8 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 void SystemCommonObject::setDefault(QStandardItemModel *modelEventsUser){
     QList<QStandardItem*> row;
     QStandardItem* item;
+    SystemState* state;
+    SuperListItem* super;
 
     // Events
     m_events->clear();
@@ -89,8 +91,10 @@ void SystemCommonObject::setDefault(QStandardItemModel *modelEventsUser){
 
     // States
     m_states->clear();
-    SystemState* state = new SystemState;
-    state->setName("Normal");
+    super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
+                                   ->commonEventsDatas()->modelStates()
+                                   ->invisibleRootItem(), 1);
+    state = new SystemState(super, false, false, false, false, false, false);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -106,6 +110,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     QList<QStandardItem*> row;
     QStandardItem* item;
     SystemState* state;
+    SuperListItem* super;
 
     // Name
     setName("Hero");
@@ -143,8 +148,10 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
 
     // States
     m_states->clear();
-    state = new SystemState;
-    state->setName("Normal");
+    super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
+                                   ->commonEventsDatas()->modelStates()
+                                   ->invisibleRootItem(), 1);
+    state = new SystemState(super, true, true, false, false, true, true);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();

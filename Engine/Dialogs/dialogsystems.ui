@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -654,71 +654,136 @@
        </widget>
        <widget class="QWidget" name="tab_6">
         <attribute name="title">
-         <string>Events</string>
+         <string>Events / States</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_20">
+        <layout class="QGridLayout" name="gridLayout_24">
          <item row="0" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+          <layout class="QVBoxLayout" name="verticalLayout_19" stretch="1,0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_12">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Events</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_18">
-              <item row="0" column="0">
-               <widget class="PanelSuperList" name="panelSuperListEvents" native="true">
-                <property name="minimumSize">
-                 <size>
-                  <width>175</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>175</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_18" stretch="0,1">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
              <item>
-              <widget class="QGroupBox" name="groupBox_13">
-               <property name="title">
-                <string>Parameters</string>
+              <widget class="QGroupBox" name="groupBox_12">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
                </property>
-               <layout class="QGridLayout" name="gridLayout_19">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="title">
+                <string>Events</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_18">
                 <item row="0" column="0">
-                 <widget class="WidgetSuperTree" name="treeViewEventsParameters"/>
+                 <widget class="PanelSuperList" name="panelSuperListEvents" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>175</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>175</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer_5">
+              <layout class="QVBoxLayout" name="verticalLayout_18" stretch="0,1">
+               <item>
+                <widget class="QGroupBox" name="groupBox_13">
+                 <property name="title">
+                  <string>Parameters</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_19">
+                  <item row="0" column="0">
+                   <widget class="WidgetSuperTree" name="treeViewEventsParameters"/>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>598</width>
+                   <height>368</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+             <item>
+              <widget class="QGroupBox" name="groupBox_15">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="title">
+                <string>States</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_20">
+                <item row="0" column="0">
+                 <widget class="PanelSuperList" name="panelSuperListStates" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>175</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>175</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
                <property name="orientation">
-                <enum>Qt::Vertical</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>598</width>
-                 <height>368</height>
+                 <width>638</width>
+                 <height>268</height>
                 </size>
                </property>
               </spacer>

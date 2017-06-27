@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogsystemclassskill.h"
-#include "ui_dialogsystemclassskill.h"
+#include "dialogsystemstate.h"
+#include "ui_dialogsystemstate.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -27,11 +27,10 @@
 //
 // -------------------------------------------------------
 
-DialogSystemClassSkill::DialogSystemClassSkill(SystemClassSkill &skill,
-                                               QWidget *parent) :
+DialogSystemState::DialogSystemState(SystemState& state, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSystemClassSkill),
-    m_skill(skill)
+    ui(new Ui::DialogSystemState),
+    m_state(state)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
@@ -39,7 +38,7 @@ DialogSystemClassSkill::DialogSystemClassSkill(SystemClassSkill &skill,
     initialize();
 }
 
-DialogSystemClassSkill::~DialogSystemClassSkill()
+DialogSystemState::~DialogSystemState()
 {
     delete ui;
 }
@@ -50,19 +49,15 @@ DialogSystemClassSkill::~DialogSystemClassSkill()
 //
 // -------------------------------------------------------
 
-void DialogSystemClassSkill::initialize(){
-
-    // Skill
-    int skillIndex = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
-                ->invisibleRootItem(),
-                m_skill.id());
-    SuperListItem::fillComboBox(ui->comboBoxSkill, Wanok::get()->project()
-                                ->gameDatas()->skillsDatas()->model());
-    ui->comboBoxSkill->setCurrentIndex(skillIndex);
-
-    // Level
-    ui->spinBoxLevel->setValue(m_skill.level());
+void DialogSystemState::initialize(){
+    int stateIndex = SuperListItem::getIndexById(
+                Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                ->modelStates()->invisibleRootItem(),
+                m_state.id());
+    SuperListItem::fillComboBox(ui->comboBox, Wanok::get()->project()
+                                ->gameDatas()->commonEventsDatas()
+                                ->modelStates());
+    ui->comboBox->setCurrentIndex(stateIndex);
 }
 
 // -------------------------------------------------------
@@ -71,16 +66,9 @@ void DialogSystemClassSkill::initialize(){
 //
 // -------------------------------------------------------
 
-void DialogSystemClassSkill::on_comboBoxSkill_currentIndexChanged(int index){
-    SystemClassSkill* skill = (SystemClassSkill*)
-            Wanok::get()->project()->gameDatas()->skillsDatas()->model()
-            ->item(index)->data().value<qintptr>();
-    m_skill.setId(skill->id());
-    m_skill.setName(skill->name());
-}
-
-// -------------------------------------------------------
-
-void DialogSystemClassSkill::on_spinBoxLevel_valueChanged(int i){
-    m_skill.setLevel(i);
+void DialogSystemState::on_comboBox_currentIndexChanged(int index){
+    SuperListItem* state = (SystemState*)
+            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelStates()->item(index)->data().value<qintptr>();
+    m_state.setState(state);
 }

@@ -43,7 +43,7 @@ public:
     SuperListItem(int i, QString n);
     int id() const;
     virtual void setId(int i);
-    QString name() const;
+    virtual QString name() const;
     virtual void setName(QString n);
     virtual QString toString() const;
     virtual QString toStringName() const;

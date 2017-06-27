@@ -35,6 +35,7 @@ CommonEventsDatas::CommonEventsDatas()
 {
     m_modelEventsSystem = new QStandardItemModel;
     m_modelEventsUser = new QStandardItemModel;
+    m_modelStates = new QStandardItemModel;
     m_modelCommonReactors = new QStandardItemModel;
     m_modelCommonObjects = new QStandardItemModel;
 }
@@ -43,6 +44,7 @@ CommonEventsDatas::~CommonEventsDatas()
 {
     SuperListItem::deleteModel(m_modelEventsSystem);
     SuperListItem::deleteModel(m_modelEventsUser);
+    SuperListItem::deleteModel(m_modelStates);
     SuperListItem::deleteModel(m_modelCommonReactors);
     SuperListItem::deleteModel(m_modelCommonObjects);
 }
@@ -57,6 +59,10 @@ QStandardItemModel* CommonEventsDatas::modelEventsSystem() const {
 
 QStandardItemModel* CommonEventsDatas::modelEventsUser() const {
     return m_modelEventsUser;
+}
+
+QStandardItemModel* CommonEventsDatas::modelStates() const{
+    return m_modelStates;
 }
 
 QStandardItemModel* CommonEventsDatas::modelCommonReactors() const {
@@ -76,6 +82,7 @@ QStandardItemModel* CommonEventsDatas::modelCommonObjects() const {
 void CommonEventsDatas::setDefault(){
     SystemCommonReaction* react;
     SystemCommonObject* objectHero;
+    SuperListItem* super;
     QStandardItem* item;
 
     // Events system
@@ -102,6 +109,13 @@ void CommonEventsDatas::setDefault(){
     QList<QVector<SystemCreateParameter*>> parametersUser;
     parametersUser << QVector<SystemCreateParameter*>({});
     setDefaultEvent(m_modelEventsUser, namesEventsUser, parametersUser);
+
+    // States
+    super = new SuperListItem(1, "Normal");
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+    item->setText(super->toString());
+    m_modelStates->appendRow(item);
 
     // Common reactors
     react = new SystemCommonReaction;
@@ -158,6 +172,7 @@ void CommonEventsDatas::read(const QJsonObject &json){
     QStandardItem* item;
     QJsonArray jsonList;
     SystemEvent* ev;
+    SuperListItem* super;
     SystemCommonReaction* react;
     SystemCommonObject* object;
 
@@ -179,6 +194,17 @@ void CommonEventsDatas::read(const QJsonObject &json){
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(ev)));
         item->setText(ev->toString());
         m_modelEventsUser->appendRow(item);
+    }
+
+    // States
+    jsonList = json["states"].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        item = new QStandardItem;
+        super = new SuperListItem;
+        super->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+        item->setText(super->toString());
+        m_modelStates->appendRow(item);
     }
 
     // Common reactors
@@ -210,6 +236,7 @@ void CommonEventsDatas::write(QJsonObject &json) const{
     QJsonArray tab;
     QJsonObject obj;
     SystemEvent* ev;
+    SuperListItem* super;
     SystemCommonReaction* react;
     SystemCommonObject* object;
     int l;
@@ -235,6 +262,18 @@ void CommonEventsDatas::write(QJsonObject &json) const{
         tab.append(obj);
     }
     json["eventsUser"] = tab;
+
+    // States
+    tab = QJsonArray();
+    l = m_modelStates->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        obj = QJsonObject();
+        super = ((SuperListItem*) m_modelStates->item(i)->data()
+                 .value<quintptr>());
+        super->write(obj);
+        tab.append(obj);
+    }
+    json["states"] = tab;
 
     // Common reactors
     tab = QJsonArray();

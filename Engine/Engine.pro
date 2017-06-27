@@ -191,7 +191,8 @@ HEADERS += \
     CustomWidgets/widgetpicture.h \
     Dialogs/dialogpicturespreview.h \
     CustomWidgets/widgettilesetsettings.h \
-    CustomWidgets/widgettilesetpraticable.h
+    CustomWidgets/widgettilesetpraticable.h \
+    Dialogs/Systems/dialogsystemstate.h
 
 SOURCES += \
     main.cpp \
@@ -341,7 +342,8 @@ SOURCES += \
     CustomWidgets/widgetpicture.cpp \
     Dialogs/dialogpicturespreview.cpp \
     CustomWidgets/widgettilesetsettings.cpp \
-    CustomWidgets/widgettilesetpraticable.cpp
+    CustomWidgets/widgettilesetpraticable.cpp \
+    Dialogs/Systems/dialogsystemstate.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -397,7 +399,8 @@ FORMS += \
     CustomWidgets/widgetvariable.ui \
     CustomWidgets/widgetpicture.ui \
     Dialogs/dialogpicturespreview.ui \
-    CustomWidgets/widgettilesetsettings.ui
+    CustomWidgets/widgettilesetsettings.ui \
+    Dialogs/Systems/dialogsystemstate.ui
 
 OTHER_FILES += \
     style.qss

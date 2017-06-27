@@ -21,6 +21,8 @@
 #include "main.h"
 #include "systemobjectevent.h"
 #include "systemcommonreaction.h"
+#include "dialogsystemstate.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -29,14 +31,15 @@
 // -------------------------------------------------------
 
 SystemState::SystemState() :
-    SystemState(1, "", false, false, false, false, false, false)
+    SystemState(new SuperListItem, false, false, false, false, false, false)
 {
 
 }
 
-SystemState::SystemState(int i, QString n, bool m, bool s, bool d, bool t,
+SystemState::SystemState(SuperListItem *state, bool m, bool s, bool d, bool t,
                          bool c, bool p) :
-    SuperListItem(i, n),
+    SuperListItem(state->id(), state->name()),
+    m_state(state),
     m_moveAnimation(m),
     m_stopAnimation(s),
     m_directionFix(d),
@@ -49,6 +52,16 @@ SystemState::SystemState(int i, QString n, bool m, bool s, bool d, bool t,
 
 SystemState::~SystemState(){
 
+}
+
+QString SystemState::name() const { return m_state->name(); }
+
+SuperListItem* SystemState::state() const { return m_state; }
+
+void SystemState::setState(SuperListItem* s) {
+    m_state = s;
+    setId(m_state->id());
+    setName(m_state->name());
 }
 
 bool SystemState::moveAnimation() const { return m_moveAnimation; }
@@ -81,6 +94,19 @@ void SystemState::setPixelOffset(bool b) { m_pixelOffset = b; }
 //
 // -------------------------------------------------------
 
+bool SystemState::openDialog(){
+    SystemState super;
+    super.setCopy(*this);
+    DialogSystemState dialog(super);
+    if (dialog.exec() == QDialog::Accepted){
+        setCopy(super);
+        return true;
+    }
+    return false;
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemState::createCopy() const{
     SystemState* super = new SystemState;
     super->setCopy(*this);
@@ -92,6 +118,7 @@ SuperListItem* SystemState::createCopy() const{
 void SystemState::setCopy(const SystemState& state){
     SuperListItem::setCopy(state);
 
+    m_state = state.m_state;
     m_moveAnimation = state.m_moveAnimation;
     m_stopAnimation = state.m_stopAnimation;
     m_directionFix = state.m_directionFix;
@@ -109,6 +136,9 @@ void SystemState::setCopy(const SystemState& state){
 void SystemState::read(const QJsonObject &json){
     SuperListItem::read(json);
 
+    setState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
+                                    ->commonEventsDatas()->modelStates()
+                                    ->invisibleRootItem(), id()));
     m_moveAnimation = json["move"].toBool();
     m_stopAnimation = json["stop"].toBool();
     m_directionFix = json["dir"].toBool();

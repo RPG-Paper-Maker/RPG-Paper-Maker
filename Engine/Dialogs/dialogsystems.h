@@ -55,6 +55,7 @@ private:
     void initializeMainMenu(GameDatas *gameDatas);
     void initializeEvents(GameDatas *gameDatas);
     void updateEvents(SystemEvent *sysEvent);
+    void initializeStates(GameDatas *gameDatas);
     void initializeCommonReactors(GameDatas *gameDatas);
     void updateCommonReactors(SystemCommonReaction *sysCommonReactor);
     void initializeCommonObjects(GameDatas *gameDatas);

@@ -37,9 +37,12 @@ class SystemState : public SuperListItem
 {
 public:
     SystemState();
-    SystemState(int i, QString n, bool m, bool s, bool d, bool t, bool c,
+    SystemState(SuperListItem* state, bool m, bool s, bool d, bool t, bool c,
                 bool p);
     virtual ~SystemState();
+    virtual QString name() const;
+    SuperListItem* state() const;
+    void setState(SuperListItem* s);
     bool moveAnimation() const;
     bool stopAnimation() const;
     bool directionFix() const;
@@ -53,6 +56,7 @@ public:
     void setSetWithCamera(bool b);
     void setPixelOffset(bool b);
 
+    virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemState &state);
 
@@ -60,6 +64,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    SuperListItem* m_state;
     bool m_moveAnimation;
     bool m_stopAnimation;
     bool m_directionFix;

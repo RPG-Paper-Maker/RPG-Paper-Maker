@@ -210,7 +210,6 @@ SceneMap.prototype = {
         var textureLoader = new THREE.TextureLoader();
         this.textureTileset = this.loadTexture(textureLoader,
                                                this.mapInfos.tileset.getPath());
-
         this.texturesCharacters = new Array(2);
         this.texturesCharacters[1] = this.loadTexture(textureLoader,
                                                       $ROOT_DIRECTORY +

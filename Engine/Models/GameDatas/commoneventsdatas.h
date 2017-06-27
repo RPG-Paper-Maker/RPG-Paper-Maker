@@ -41,6 +41,7 @@ public:
     void read(QString path);
     QStandardItemModel* modelEventsSystem() const;
     QStandardItemModel* modelEventsUser() const;
+    QStandardItemModel* modelStates() const;
     QStandardItemModel* modelCommonReactors() const;
     QStandardItemModel* modelCommonObjects() const;
     void setDefault();
@@ -52,6 +53,7 @@ public:
 private:
     QStandardItemModel* m_modelEventsSystem;
     QStandardItemModel* m_modelEventsUser;
+    QStandardItemModel* m_modelStates;
     QStandardItemModel* m_modelCommonReactors;
     QStandardItemModel* m_modelCommonObjects;
 };
