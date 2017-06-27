@@ -31,7 +31,7 @@
 TreeMapDatas::TreeMapDatas()
 {
     m_model = new QStandardItemModel;
-    addDir(m_model->invisibleRootItem(), 0, TreeMapTag::createDir("Maps"));
+    addMapSelectorDir();
 }
 
 TreeMapDatas::~TreeMapDatas()
@@ -57,6 +57,12 @@ QStandardItem* TreeMapDatas::root() const { return m_model->item(0); }
 void TreeMapDatas::setDefault(){
     QStandardItem* item = addDir(root(), 0, TreeMapTag::createDir("Plains"));
     addMap(item, 0, TreeMapTag::createMap("MAP0001", 1));
+}
+
+// -------------------------------------------------------
+
+void TreeMapDatas::addMapSelectorDir(){
+    addDir(m_model->invisibleRootItem(), 0, TreeMapTag::createDir("Maps"));
 }
 
 // -------------------------------------------------------
@@ -104,6 +110,13 @@ void TreeMapDatas::setName(QStandardItem *item, QString name){
 // -------------------------------------------------------
 
 void TreeMapDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModelTree(m_model->invisibleRootItem());
+    m_model->clear();
+    addMapSelectorDir();
+
+    // Read
     readRoot(json["tree"].toArray(), root());
 }
 

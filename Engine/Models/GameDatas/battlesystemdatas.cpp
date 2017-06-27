@@ -400,6 +400,16 @@ void BattleSystemDatas::setDefaultCommonBattleCommand(){
 // -------------------------------------------------------
 
 void BattleSystemDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModel(m_modelCommonEquipment, false);
+    SuperListItem::deleteModel(m_modelWeaponsKind, false);
+    SuperListItem::deleteModel(m_modelArmorsKind, false);
+    SuperListItem::deleteModel(m_modelBattleMaps, false);
+    SuperListItem::deleteModel(m_modelElements, false);
+    SuperListItem::deleteModel(m_modelCommonStatistics, false);
+    SuperListItem::deleteModel(m_modelCommonBattleCommand, false);
+
     // Options
     m_idStatisticLevel = json["lv"].toInt();
     m_idStatisticExp = json["xp"].toInt();

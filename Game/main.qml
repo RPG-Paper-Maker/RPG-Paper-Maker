@@ -69,7 +69,12 @@ Window {
     // -------------------------------------------------------
 
     Item {
+        id: keyboard
         focus: true
+
+        onActiveFocusChanged: {
+            Game.$keysPressed = [];
+        }
 
         Keys.onPressed: {
             var key = event.key;

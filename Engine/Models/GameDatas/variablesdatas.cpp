@@ -106,8 +106,12 @@ SuperListItem* VariablesDatas::getById(QStandardItemModel *l, int id) const{
 //
 // -------------------------------------------------------
 
-void VariablesDatas::read(const QJsonObject &json)
-{
+void VariablesDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModel(p_model, false);
+
+    // Read
     readCommand(json["variables"].toArray(), p_model);
 }
 
@@ -129,8 +133,7 @@ void VariablesDatas::readCommand(const QJsonArray &json,
 
 // -------------------------------------------------------
 
-void VariablesDatas::write(QJsonObject &json) const
-{
+void VariablesDatas::write(QJsonObject &json) const{
     json["variables"] = getArrayJSON(p_model);
 }
 

@@ -43,6 +43,8 @@ public:
     SystemPicture* picture() const;
     void setPicture(SystemPicture* picture);
     void setPictureFromId(int id);
+    void updatePicture();
+
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemTileset &super);
 
@@ -51,6 +53,7 @@ public:
 
 protected:
     SystemPicture* m_picture;
+    int m_pictureID;
 };
 
 Q_DECLARE_METATYPE(SystemTileset)

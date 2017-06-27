@@ -156,6 +156,11 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
 // -------------------------------------------------------
 
 void ClassesDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
+    // Read
     QJsonArray jsonList = json["classes"].toArray();
     QStandardItem* item;
     SystemClass* sysClass;

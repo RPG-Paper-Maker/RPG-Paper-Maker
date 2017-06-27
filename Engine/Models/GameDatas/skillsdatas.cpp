@@ -83,6 +83,11 @@ void SkillsDatas::setDefault(){
 // -------------------------------------------------------
 
 void SkillsDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
+    // Read
     QJsonArray jsonList = json["skills"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;

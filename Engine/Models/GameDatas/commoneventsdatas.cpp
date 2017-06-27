@@ -176,6 +176,13 @@ void CommonEventsDatas::read(const QJsonObject &json){
     SystemCommonReaction* react;
     SystemCommonObject* object;
 
+    // Clear
+    SuperListItem::deleteModel(m_modelEventsSystem, false);
+    SuperListItem::deleteModel(m_modelEventsUser, false);
+    SuperListItem::deleteModel(m_modelStates, false);
+    SuperListItem::deleteModel(m_modelCommonReactors, false);
+    SuperListItem::deleteModel(m_modelCommonObjects, false);
+
     // Events
     jsonList = json["eventsSystem"].toArray();
     for (int i = 0; i < jsonList.size(); i++){

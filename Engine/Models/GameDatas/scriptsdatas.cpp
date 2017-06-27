@@ -148,6 +148,10 @@ void ScriptsDatas::setDefault(){
 void ScriptsDatas::read(const QJsonObject &json){
     QJsonArray tab = json["l"].toArray();
 
+    // Clear
+    m_model->clear();
+
+    // Read
     for (int i = 0; i < tab.size(); i++){
         QStandardItem* item = new QStandardItem;
         item->setText(tab.at(i).toString());

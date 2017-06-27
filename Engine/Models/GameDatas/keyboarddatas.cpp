@@ -199,6 +199,9 @@ void KeyBoardDatas::read(const QJsonObject &json){
     QList<QStandardItem*> row;
     QJsonArray tab = json["list"].toArray();
 
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
     // Controls
     for (int i = 0; i < tab.size(); i++){
         SystemKeyBoard* super = new SystemKeyBoard;

@@ -121,6 +121,10 @@ void SystemDatas::setDefault(){
 void SystemDatas::read(const QJsonObject &json){
     QJsonArray jsonList;
 
+    // Clear
+    SuperListItem::deleteModel(m_modelCurrencies, false);
+    SuperListItem::deleteModel(m_modelItemsTypes, false);
+
     // Other options
     m_portionsRay = json["pr"].toInt();
     m_squareSize = json["ss"].toInt();

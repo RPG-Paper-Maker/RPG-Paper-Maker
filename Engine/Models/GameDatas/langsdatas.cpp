@@ -77,6 +77,10 @@ void LangsDatas::read(const QJsonObject &json){
     SuperListItem* super;
     QJsonArray tab = json["langs"].toArray();
 
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
+    // Read
     for (int i = 0; i < tab.size(); i++){
         item = new QStandardItem;
         super = new SuperListItem;

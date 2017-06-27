@@ -125,6 +125,12 @@ void PicturesDatas::read(const QJsonObject &json){
     QStandardItemModel* model;
     QList<QStandardItem*> row;
 
+    // Clear
+    QHash<PictureKind, QStandardItemModel*>::iterator i;
+    for (i = m_models.begin(); i != m_models.end(); i++)
+        SuperListItem::deleteModel(i.value());
+
+    // Read
     for (int i = 0; i < jsonList.size(); i++){
         jsonObj = jsonList.at(i).toObject();
         jsonArray = jsonObj["v"].toArray();

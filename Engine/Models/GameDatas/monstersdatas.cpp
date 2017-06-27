@@ -150,6 +150,11 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
 // -------------------------------------------------------
 
 void MonstersDatas::read(const QJsonObject &json){
+
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
+    // Read
     QJsonArray jsonList = json["monsters"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;

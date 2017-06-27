@@ -27,19 +27,19 @@
 // -------------------------------------------------------
 
 GameDatas::GameDatas() :
-    m_commonEventsDatas(nullptr),
-    m_variablesDatas(nullptr),
-    m_systemDatas(nullptr),
-    m_battleSystemDatas(nullptr),
-    m_itemsDatas(nullptr),
-    m_skillsDatas(nullptr),
-    m_weaponsDatas(nullptr),
-    m_armorsDatas(nullptr),
-    m_heroesDatas(nullptr),
-    m_monstersDatas(nullptr),
-    m_troopsDatas(nullptr),
-    m_classesDatas(nullptr),
-    m_tilesetsDatas(nullptr)
+    m_commonEventsDatas(new CommonEventsDatas),
+    m_variablesDatas(new VariablesDatas),
+    m_systemDatas(new SystemDatas),
+    m_battleSystemDatas(new BattleSystemDatas),
+    m_itemsDatas(new ItemsDatas),
+    m_skillsDatas(new SkillsDatas),
+    m_weaponsDatas(new WeaponsDatas),
+    m_armorsDatas(new ArmorsDatas),
+    m_heroesDatas(new HeroesDatas),
+    m_monstersDatas(new MonstersDatas),
+    m_troopsDatas(new TroopsDatas),
+    m_classesDatas(new ClassesDatas),
+    m_tilesetsDatas(new TilesetsDatas)
 {
 
 }
@@ -120,19 +120,6 @@ TilesetsDatas* GameDatas::tilesetsDatas() const {
 // -------------------------------------------------------
 
 void GameDatas::setDefault(){
-    m_commonEventsDatas = new CommonEventsDatas;
-    m_variablesDatas = new VariablesDatas;
-    m_systemDatas = new SystemDatas;
-    m_battleSystemDatas = new BattleSystemDatas;
-    m_itemsDatas = new ItemsDatas;
-    m_skillsDatas = new SkillsDatas;
-    m_weaponsDatas = new WeaponsDatas;
-    m_armorsDatas = new ArmorsDatas;
-    m_heroesDatas = new HeroesDatas;
-    m_monstersDatas = new MonstersDatas;
-    m_troopsDatas = new TroopsDatas;
-    m_classesDatas = new ClassesDatas;
-    m_tilesetsDatas = new TilesetsDatas;
     m_commonEventsDatas->setDefault();
     m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
@@ -162,20 +149,8 @@ void GameDatas::setDefault(){
 
 void GameDatas::read(QString path){
     readVariablesSwitches(path);
-    m_commonEventsDatas = new CommonEventsDatas();
-    m_systemDatas = new SystemDatas();
-    m_itemsDatas = new ItemsDatas();
-    m_skillsDatas = new SkillsDatas();
-    m_battleSystemDatas = new BattleSystemDatas();
-    m_weaponsDatas = new WeaponsDatas();
-    m_armorsDatas = new ArmorsDatas();
-    m_heroesDatas = new HeroesDatas();
-    m_monstersDatas = new MonstersDatas();
-    m_troopsDatas = new TroopsDatas();
-    m_classesDatas = new ClassesDatas();
-    m_tilesetsDatas = new TilesetsDatas();
     m_commonEventsDatas->read(path);
-    m_systemDatas->read(path);
+    readSystem(path);
     m_itemsDatas->read(path);
     m_skillsDatas->read(path);
     m_battleSystemDatas->read(path);
@@ -191,18 +166,12 @@ void GameDatas::read(QString path){
 // -------------------------------------------------------
 
 void GameDatas::readVariablesSwitches(QString path){
-    if (m_variablesDatas != nullptr)
-        delete m_variablesDatas;
-    m_variablesDatas = new VariablesDatas();
     m_variablesDatas->read(path);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::readSystem(QString path){
-    if (m_systemDatas != nullptr)
-        delete m_systemDatas;
-    m_systemDatas = new SystemDatas();
     m_systemDatas->read(path);
 }
 

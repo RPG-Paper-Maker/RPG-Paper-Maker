@@ -110,6 +110,8 @@ void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel){
 
     if (deleteModel)
         delete model;
+    else
+        model->clear();
 }
 
 // -------------------------------------------------------

@@ -62,6 +62,17 @@ void TilesetsDatas::setDefault(){
 }
 
 // -------------------------------------------------------
+
+void TilesetsDatas::updatePictures(){
+    SystemTileset* tileset;
+
+    for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
+        tileset = (SystemTileset*) m_model->item(i)->data().value<qintptr>();
+        tileset->updatePicture();
+    }
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -71,6 +82,10 @@ void TilesetsDatas::read(const QJsonObject &json){
     QList<QStandardItem*> row;
     QJsonArray tab = json["list"].toArray();
 
+    // Clear
+    SuperListItem::deleteModel(m_model, false);
+
+    // Read
     for (int i = 0; i < tab.size(); i++){
         SystemTileset* super = new SystemTileset;
         super->read(tab[i].toObject());

@@ -31,12 +31,12 @@ const QString Project::VERSION = "0.0.0";
 
 Project::Project() :
     p_currentMap(nullptr),
-    p_gameDatas(nullptr),
-    m_treeMapDatas(nullptr),
-    m_langsDatas(nullptr),
-    m_scriptsDatas(nullptr),
-    m_picturesDatas(nullptr),
-    m_keyBoardDatas(nullptr)
+    p_gameDatas(new GameDatas),
+    m_treeMapDatas(new TreeMapDatas),
+    m_langsDatas(new LangsDatas),
+    m_scriptsDatas(new ScriptsDatas),
+    m_picturesDatas(new PicturesDatas),
+    m_keyBoardDatas(new KeyBoardDatas)
 {
 
 }
@@ -80,17 +80,11 @@ KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 // -------------------------------------------------------
 
 void Project::setDefault(){
-    m_langsDatas = new LangsDatas;
     m_langsDatas->setDefault();
-    m_keyBoardDatas = new KeyBoardDatas;
     m_keyBoardDatas->setDefaultGame();
-    m_picturesDatas = new PicturesDatas;
     m_picturesDatas->setDefault();
-    p_gameDatas = new GameDatas;
     p_gameDatas->setDefault();
-    m_treeMapDatas = new TreeMapDatas;
     m_treeMapDatas->setDefault();
-    m_scriptsDatas = new ScriptsDatas;
     m_scriptsDatas->setDefault();
 }
 
@@ -152,55 +146,38 @@ bool Project::readVersion(){
 // -------------------------------------------------------
 
 void Project::readGameDatas(){
-    if (p_gameDatas != nullptr)
-        delete p_gameDatas;
-    p_gameDatas = new GameDatas;
     p_gameDatas->read(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
 
 void Project::readLangsDatas(){
-    if (m_langsDatas != nullptr)
-        delete m_langsDatas;
-    m_langsDatas = new LangsDatas;
     m_langsDatas->read(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
 
 void Project::readTreeMapDatas(){
-    if (m_treeMapDatas != nullptr)
-        delete m_treeMapDatas;
-    m_treeMapDatas = new TreeMapDatas;
     m_treeMapDatas->read(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
 
 void Project::readScriptsDatas(){
-    if (m_scriptsDatas != nullptr)
-        delete m_scriptsDatas;
-    m_scriptsDatas = new ScriptsDatas;
     m_scriptsDatas->read(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
 
 void Project::readKeyBoardDatas(){
-    if (m_keyBoardDatas != nullptr)
-        delete m_keyBoardDatas;
-    m_keyBoardDatas = new KeyBoardDatas;
     m_keyBoardDatas->read(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
 
 void Project::readPicturesDatas(){
-    if (m_picturesDatas != nullptr)
-        delete m_picturesDatas;
-    m_picturesDatas = new PicturesDatas;
     m_picturesDatas->read(p_pathCurrentProject);
+    p_gameDatas->tilesetsDatas()->updatePictures();
 }
 
 // -------------------------------------------------------

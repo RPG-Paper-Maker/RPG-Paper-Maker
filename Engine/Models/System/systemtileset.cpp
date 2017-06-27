@@ -33,14 +33,16 @@ SystemTileset::SystemTileset() :
 }
 
 SystemTileset::SystemTileset(int i, QString n, int pictureId) :
-    SuperListItem(i, n)
+    SuperListItem(i, n),
+    m_pictureID(pictureId)
 {
     setPictureFromId(pictureId);
 }
 
 SystemTileset::SystemTileset(int i, QString n, SystemPicture *picture) :
     SuperListItem(i, n),
-    m_picture(picture)
+    m_picture(picture),
+    m_pictureID(picture->id())
 {
 
 }
@@ -51,7 +53,10 @@ SystemTileset::~SystemTileset(){
 
 SystemPicture* SystemTileset::picture() const { return m_picture; }
 
-void SystemTileset::setPicture(SystemPicture* picture) { m_picture = picture; }
+void SystemTileset::setPicture(SystemPicture* picture) {
+    m_picture = picture;
+    m_pictureID = picture->id();
+}
 
 // -------------------------------------------------------
 //
@@ -60,9 +65,15 @@ void SystemTileset::setPicture(SystemPicture* picture) { m_picture = picture; }
 // -------------------------------------------------------
 
 void SystemTileset::setPictureFromId(int id){
-    m_picture = (SystemPicture*) SuperListItem::getById(Wanok::get()->project()
-                ->picturesDatas()->model(PictureKind::Tilesets)
-                ->invisibleRootItem(), id);
+    setPicture((SystemPicture*) SuperListItem::getById(Wanok::get()->project()
+               ->picturesDatas()->model(PictureKind::Tilesets)
+               ->invisibleRootItem(), id));
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::updatePicture(){
+    setPictureFromId(m_pictureID);
 }
 
 // -------------------------------------------------------
