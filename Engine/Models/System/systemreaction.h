@@ -37,14 +37,11 @@ class SystemReaction : public SuperListItem
 {
 public:
     SystemReaction();
-    SystemReaction(int i, QString n, QStandardItemModel *commands, bool bHero,
-                   bool bObjects);
+    SystemReaction(int i, QString n, QStandardItemModel *commands, bool bHero);
     virtual ~SystemReaction();
     QStandardItemModel* modelCommands() const;
     bool blockingHero() const;
     void setBlockingHero(bool b);
-    bool blockingObjects() const;
-    void setBlockingObjects(bool b);
     void setCopy(const SystemReaction& copy);
     static void addEmptyCommand(QStandardItem *root);
     static void addCommand(QStandardItem *root, EventCommand* command);
@@ -61,7 +58,6 @@ public:
 protected:
     QStandardItemModel* m_modelCommands; // A tree with EventCommands data
     bool m_blockingHero;
-    bool m_blockingObjects;
 
 private:
     void readRoot(const QJsonArray &json, QStandardItem* root);

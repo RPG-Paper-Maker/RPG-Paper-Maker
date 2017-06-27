@@ -23,6 +23,7 @@
 #include <QCheckBox>
 #include "systemcommonobject.h"
 #include "widgettreecommands.h"
+#include "systemstate.h"
 
 // -------------------------------------------------------
 //
@@ -53,6 +54,8 @@ public:
     void showStateWidgets(bool b);
     void showName(bool b);
     void updateReactions();
+    SystemState* getSelectedState() const;
+    void updateStateOptions(SystemState* state);
 
 private:
     Ui::PanelObject *ui;
@@ -68,6 +71,12 @@ private slots:
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_blockingHeroChanged(bool c);
+    void on_checkBoxMoveAnimation_toggled(bool checked);
+    void on_checkBoxStopAnimation_toggled(bool checked);
+    void on_checkBoxDirectionFix_toggled(bool checked);
+    void on_checkBoxThrough_toggled(bool checked);
+    void on_checkBoxSetWithCamera_toggled(bool checked);
+    void on_checkBoxPixelOffset_toggled(bool checked);
 };
 
 #endif // PANELOBJECT_H

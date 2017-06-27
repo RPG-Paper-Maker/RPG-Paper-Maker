@@ -30,7 +30,7 @@
 
 SystemCommonReaction::SystemCommonReaction() :
     SystemCommonReaction(1, "", new QStandardItemModel, new QStandardItemModel,
-                         false, false)
+                         false)
 {
 
 }
@@ -38,8 +38,8 @@ SystemCommonReaction::SystemCommonReaction() :
 SystemCommonReaction::SystemCommonReaction(int i, QString n,
                                            QStandardItemModel* params,
                                            QStandardItemModel* commands,
-                                           bool bHero, bool bObjects) :
-    SystemReaction(i, n, commands, bHero, bObjects),
+                                           bool bHero) :
+    SystemReaction(i, n, commands, bHero),
     m_modelParameters(params)
 {
     m_modelParameters->setHorizontalHeaderLabels(

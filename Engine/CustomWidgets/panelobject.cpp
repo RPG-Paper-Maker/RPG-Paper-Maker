@@ -38,7 +38,6 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->setupUi(this);
 
     // Updating infos lists
-    ui->treeViewStates->setCanBeEmpty(false);
     ui->treeViewStates->setUpdateId(true);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
@@ -201,6 +200,24 @@ void PanelObject::updateReactions(){
 }
 
 // -------------------------------------------------------
+
+SystemState* PanelObject::getSelectedState() const{
+    return (SystemState*) ui->treeViewStates->getSelected()->data()
+            .value<qintptr>();
+}
+
+// -------------------------------------------------------
+
+void PanelObject::updateStateOptions(SystemState* state){
+    ui->checkBoxMoveAnimation->setChecked(state->moveAnimation());
+    ui->checkBoxStopAnimation->setChecked(state->stopAnimation());
+    ui->checkBoxDirectionFix->setChecked(state->directionFix());
+    ui->checkBoxThrough->setChecked(state->through());
+    ui->checkBoxSetWithCamera->setChecked(state->setWithCamera());
+    ui->checkBoxPixelOffset->setChecked(state->pixelOffset());
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -313,6 +330,10 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
                                        reinterpret_cast<quintptr>(reaction)));
                 check->setChecked(reaction->blockingHero());
             }
+
+            // Update options state
+            updateStateOptions(super);
+
             showStateWidgets(true);
         }
         else
@@ -335,4 +356,40 @@ void PanelObject::on_blockingHeroChanged(bool c){
     SystemReaction* reaction =
             (SystemReaction*) checkbox->property("reaction").value<quintptr>();
     reaction->setBlockingHero(c);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxMoveAnimation_toggled(bool checked){
+    getSelectedState()->setMoveAnimation(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxStopAnimation_toggled(bool checked){
+    getSelectedState()->setStopAnimation(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxDirectionFix_toggled(bool checked){
+    getSelectedState()->setDirectionFix(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxThrough_toggled(bool checked){
+    getSelectedState()->setThrough(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxSetWithCamera_toggled(bool checked){
+    getSelectedState()->setSetWithCamera(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxPixelOffset_toggled(bool checked){
+    getSelectedState()->setPixelOffset(checked);
 }

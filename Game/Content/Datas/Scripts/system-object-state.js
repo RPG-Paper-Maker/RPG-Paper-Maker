@@ -26,6 +26,17 @@
 /** @class
 *   A possible state of an object.
 *   @property {number} id ID.
+*   @property {boolean} moveAnimation Indicate if the abject is animated when
+*   moving.
+*   @property {boolean} stopAnimation Indicate if the abject is animated when
+*   not moving.
+*   @property {boolean} directionFix Indicate if the abject is looking the
+*   object sending reaction to him.
+*   @property {boolean} through Indicate if the abject can be passed through.
+*   @property {boolean} setWithAnimation Indicate if the abject orientation is
+*   updated according to the camera.
+*   @property {boolean} pixelOffset Indicate if there is a pixel offset for
+*   impair frames when moving.
 */
 function SystemObjectState(){
 
@@ -38,5 +49,11 @@ SystemObjectState.prototype = {
     */
     readJSON: function(json){
         this.id = json.id;
+        this.moveAnimation = json.move;
+        this.stopAnimation = json.stop;
+        this.directionFix = json.dir;
+        this.through = json.through;
+        this.setWithCamera = json.cam;
+        this.pixelOffset = json.pix;
     }
 }

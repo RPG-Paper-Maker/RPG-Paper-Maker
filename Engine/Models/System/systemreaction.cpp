@@ -28,17 +28,16 @@
 // -------------------------------------------------------
 
 SystemReaction::SystemReaction() :
-    SystemReaction(1, "", new QStandardItemModel, false, false)
+    SystemReaction(1, "", new QStandardItemModel, false)
 {
 
 }
 
 SystemReaction::SystemReaction(int i, QString n, QStandardItemModel* commands,
-                               bool bHero, bool bObjects) :
+                               bool bHero) :
     SuperListItem(i,n),
     m_modelCommands(commands),
-    m_blockingHero(bHero),
-    m_blockingObjects(bObjects)
+    m_blockingHero(bHero)
 {
     addEmptyCommand(m_modelCommands->invisibleRootItem());
 }
@@ -57,10 +56,6 @@ bool SystemReaction::blockingHero() const { return m_blockingHero; }
 
 void SystemReaction::setBlockingHero(bool b) { m_blockingHero = b; }
 
-bool SystemReaction::blockingObjects() const { return m_blockingObjects; }
-
-void SystemReaction::setBlockingObjects(bool b) { m_blockingObjects = b; }
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -70,7 +65,6 @@ void SystemReaction::setBlockingObjects(bool b) { m_blockingObjects = b; }
 void SystemReaction::setCopy(const SystemReaction& copy){
     copyCommands(copy.m_modelCommands, m_modelCommands);
     m_blockingHero = copy.m_blockingHero;
-    m_blockingObjects = copy.m_blockingObjects;
 }
 
 // -------------------------------------------------------
@@ -154,7 +148,6 @@ void SystemReaction::read(const QJsonObject &json){
 
     // Options
     m_blockingHero = json["bh"].toBool();
-    m_blockingObjects = json["bo"].toBool();
 }
 
 // -------------------------------------------------------
@@ -185,7 +178,6 @@ void SystemReaction::write(QJsonObject & json) const{
 
     // Options
     json["bh"] = m_blockingHero;
-    json["bo"] = m_blockingObjects;
 }
 
 // -------------------------------------------------------

@@ -36,8 +36,7 @@ class SystemCommonReaction : public SystemReaction
 public:
     SystemCommonReaction();
     SystemCommonReaction(int i, QString n, QStandardItemModel *params,
-                         QStandardItemModel *commands, bool bHero,
-                         bool bObjects);
+                         QStandardItemModel *commands, bool bHero);
     virtual ~SystemCommonReaction();
     QStandardItemModel* modelParameters() const;
     void setCopy(const SystemCommonReaction& copy);

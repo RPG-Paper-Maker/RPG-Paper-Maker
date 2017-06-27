@@ -57,6 +57,15 @@ function MapObject(mesh, system, w, h) {
     this.frameNumber = 4;
     this.moving = false;
     this.frameTick = 0;
+    this.position = new THREE.Vector3(this.mesh.position.x,
+                                      this.mesh.position.y,
+                                      this.mesh.position.z);
+
+    // Current state
+    if (Wanok.isEmpty(system.states))
+        this.currentState = null;
+    else
+        this.currentState = system.states[0];
 }
 
 /** Normal speed coef.
@@ -74,6 +83,7 @@ MapObject.prototype = {
     read: function(json){
         var jsonPosition = json.k;
         this.mesh.position = Wanok.positionToVector3(jsonPosition);
+        this.position = Wanok.positionToVector3(jsonPosition);
         this.system = new SystemObject;
         this.system.readJSON(json.v);
     },
@@ -89,63 +99,50 @@ MapObject.prototype = {
         var speed = this.speed * ($elapsedTime * MapObject.SPEED_NORMAL *
                                   $SQUARE_SIZE);
         var angle = -90;
-        var x_plus, z_plus, x_s, z_s, x_f, z_f;
-
-        x_s = Wanok.getSquare(this.mesh.position.x);
-        z_s = Wanok.getSquare(this.mesh.position.z);
+        var xPlus, zPlus, res;
+        w *= $SQUARE_SIZE;
+        h *= $SQUARE_SIZE;
 
         switch (orientation){
         case Orientation.South:
-            x_plus = speed * (Math.cos(angle * Math.PI / 180.0));
-            z_plus = speed * (Math.sin(angle * Math.PI / 180.0));
-            z_f = Math.floor(z_plus);
-
-            if ((z_s < (w - 1) && z_plus < 0) || (z_s >= 0 && z_plus > 0))
-                this.mesh.position.setZ(this.mesh.position.z - z_plus);
-            if (z_f === 0 && ((x_s < (w - 1) && x_plus < 0) ||
-                              (x_s >= 0 && x_plus > 0)))
-            {
-                this.mesh.position.setX(this.mesh.position.x - x_plus);
-            }
+            xPlus = speed * (Math.cos(angle * Math.PI / 180.0));
+            zPlus = speed * (Math.sin(angle * Math.PI / 180.0));
+            res = this.position.z - zPlus;
+            if (res >= 0 && res < h)
+                this.position.setZ(res);
+            res = this.position.x - xPlus;
+            if (res >= 0 && res < w)
+                this.position.setX(res);
             break;
         case Orientation.West:
-            x_plus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
-            z_plus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
-            x_f = Math.floor(x_plus);
-
-            if ((x_s >= 0 && x_plus < 0) || (x_s < (w - 1) && x_plus > 0))
-                this.mesh.position.setX(this.mesh.position.x + x_plus);
-            if (x_f === 0 && ((z_s >= 0 && z_plus < 0) ||
-                              (z_s < (h - 1) && z_plus > 0)))
-            {
-                this.mesh.position.setZ(this.mesh.position.z + z_plus);
-            }
+            xPlus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
+            zPlus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
+            res = this.position.x + xPlus;
+            if (res >= 0 && res < w)
+                this.position.setX(res);
+            res = this.position.z + zPlus;
+            if (res >= 0 && res < h)
+               this.position.setZ(res);
             break;
         case Orientation.North:
-            x_plus = speed * (Math.cos(angle * Math.PI / 180.0));
-            z_plus = speed * (Math.sin(angle * Math.PI / 180.0));
-            z_f = Math.floor(z_plus);
-
-            if ((z_s >= 0 && z_plus < 0) || (z_s < (w - 1) && z_plus > 0))
-                this.mesh.position.setZ(this.mesh.position.z + z_plus);
-            if (z_f === 0 && ((x_s >= 0 && x_plus < 0) ||
-                              (x_s < (w - 1) && x_plus > 0)))
-            {
-                this.mesh.position.setX(this.mesh.position.x + x_plus);
-            }
+            xPlus = speed * (Math.cos(angle * Math.PI / 180.0));
+            zPlus = speed * (Math.sin(angle * Math.PI / 180.0));
+            res = this.position.z + zPlus;
+            if (res >= 0 && res < h)
+                this.position.setZ(res);
+            res = this.position.x + xPlus;
+            if (res >= 0 && res < w)
+                this.position.setX(res);
             break;
         case Orientation.East:
-            x_plus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
-            z_plus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
-            x_f = Math.floor(x_plus);
-
-            if ((x_s < (w - 1) && x_plus < 0) || (x_s > 0 && x_plus >= 0))
-                this.mesh.position.setX(this.mesh.position.x - x_plus);
-            if (x_f === 0 && ((z_s < (h - 1) && z_plus < 0) ||
-                              (z_s > 0 && z_plus >= 0)))
-            {
-                this.mesh.position.setZ(this.mesh.position.z - z_plus);
-            }
+            xPlus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
+            zPlus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
+            res = this.position.x - xPlus;
+            if (res >= 0 && res < w)
+                this.position.setX(res);
+            res = this.position.z - zPlus;
+            if (res >= 0 && res < h)
+                this.position.setZ(res);
             break;
         default:
             break;
@@ -190,13 +187,23 @@ MapObject.prototype = {
     update: function(){
         var frame = this.frame;
 
-        // If moving, update frame
         if (this.moving){
-            this.frameTick += $elapsedTime;
-            if (this.frameTick >= this.frameDuration){
-                this.frame = (this.frame + 1) % this.frameNumber;
-                this.frameTick = 0;
+
+            // If moving, update frame
+            if (this.currentState.moveAnimation){
+                this.frameTick += $elapsedTime;
+                if (this.frameTick >= this.frameDuration){
+                    this.frame = (this.frame + 1) % this.frameNumber;
+                    this.frameTick = 0;
+                }
             }
+
+            // Update mesh position
+            var offset = (this.currentState.pixelOffset &&
+                          this.frame % 2 !== 0) ? 1 : 0;
+            this.mesh.position.set(this.position.x,
+                                   this.position.y + offset,
+                                   this.position.z);
             this.moving = false;
         }
         else{

@@ -56,7 +56,7 @@ Camera.prototype = {
             this.horizontalAngle = -90.0;
 
         // Update target
-        var position = $game.hero.mesh.position;
+        var position = $game.hero.position;
         this.target.x = position.x;
         this.target.y = position.y;
         this.target.z = position.z;

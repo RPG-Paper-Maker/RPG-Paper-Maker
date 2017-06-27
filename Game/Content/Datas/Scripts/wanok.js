@@ -321,5 +321,14 @@ Wanok.countFields = function count(obj){
     }
 
     return c;
+};
 
-}
+// -------------------------------------------------------
+
+/** Check if the array is empty.
+*   @static
+*   @returns {boolean}
+*/
+Wanok.isEmpty = function(array) {
+    return array[0] == null;
+};

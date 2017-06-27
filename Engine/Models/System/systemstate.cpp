@@ -29,14 +29,20 @@
 // -------------------------------------------------------
 
 SystemState::SystemState() :
-    SystemState(1,"")
+    SystemState(1, "", false, false, false, false, false, false)
 {
 
 }
 
-SystemState::SystemState(int i, QString n) :
-    SuperListItem(i,n),
-    m_object(nullptr)
+SystemState::SystemState(int i, QString n, bool m, bool s, bool d, bool t,
+                         bool c, bool p) :
+    SuperListItem(i, n),
+    m_moveAnimation(m),
+    m_stopAnimation(s),
+    m_directionFix(d),
+    m_through(t),
+    m_setWithCamera(c),
+    m_pixelOffset(p)
 {
 
 }
@@ -45,52 +51,34 @@ SystemState::~SystemState(){
 
 }
 
-void SystemState::setObject(SystemCommonObject* object) { m_object = object; }
+bool SystemState::moveAnimation() const { return m_moveAnimation; }
 
-void SystemState::setId(int i){
-    SuperListItem::setId(i);
-}
+bool SystemState::stopAnimation() const { return m_stopAnimation; }
 
-void SystemState::setName(QString n){
-    SuperListItem::setName(n);
-}
+bool SystemState::directionFix() const { return m_directionFix; }
 
-SystemCommonObject* SystemState::object() const { return m_object; }
+bool SystemState::through() const { return m_through; }
+
+bool SystemState::setWithCamera() const { return m_setWithCamera; }
+
+bool SystemState::pixelOffset() const { return m_pixelOffset; }
+
+void SystemState::setMoveAnimation(bool b) { m_moveAnimation = b; }
+
+void SystemState::setStopAnimation(bool b) { m_stopAnimation = b; }
+
+void SystemState::setDirectionFix(bool b) { m_directionFix = b; }
+
+void SystemState::setThrough(bool b) { m_through = b; }
+
+void SystemState::setSetWithCamera(bool b) { m_setWithCamera = b; }
+
+void SystemState::setPixelOffset(bool b) { m_pixelOffset = b; }
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-void SystemState::setDefault(){
-
-}
-
-// -------------------------------------------------------
-
-void SystemState::setDefaultJson(){
-
-}
-
-// -------------------------------------------------------
-
-void SystemState::updateName(){
-
-}
-
-// -------------------------------------------------------
-
-void SystemState::updateModel(){
-
-}
-
-// -------------------------------------------------------
-
-QString SystemState::getJsonName(){
-    return "";
-}
-
 // -------------------------------------------------------
 
 SuperListItem* SystemState::createCopy() const{
@@ -103,7 +91,13 @@ SuperListItem* SystemState::createCopy() const{
 
 void SystemState::setCopy(const SystemState& state){
     SuperListItem::setCopy(state);
-    m_object = state.m_object;
+
+    m_moveAnimation = state.m_moveAnimation;
+    m_stopAnimation = state.m_stopAnimation;
+    m_directionFix = state.m_directionFix;
+    m_through = state.m_through;
+    m_setWithCamera = state.m_setWithCamera;
+    m_pixelOffset = state.m_pixelOffset;
 }
 
 // -------------------------------------------------------
@@ -114,10 +108,24 @@ void SystemState::setCopy(const SystemState& state){
 
 void SystemState::read(const QJsonObject &json){
     SuperListItem::read(json);
+
+    m_moveAnimation = json["move"].toBool();
+    m_stopAnimation = json["stop"].toBool();
+    m_directionFix = json["dir"].toBool();
+    m_through = json["through"].toBool();
+    m_setWithCamera = json["cam"].toBool();
+    m_pixelOffset = json["pix"].toBool();
 }
 
 // -------------------------------------------------------
 
 void SystemState::write(QJsonObject &json) const{
     SuperListItem::write(json);
+
+    json["move"] = m_moveAnimation;
+    json["stop"] = m_stopAnimation;
+    json["dir"] = m_directionFix;
+    json["through"] = m_through;
+    json["cam"] = m_setWithCamera;
+    json["pix"] = m_pixelOffset;
 }

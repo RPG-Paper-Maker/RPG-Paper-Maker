@@ -37,17 +37,22 @@ class SystemState : public SuperListItem
 {
 public:
     SystemState();
-    SystemState(int i, QString n);
+    SystemState(int i, QString n, bool m, bool s, bool d, bool t, bool c,
+                bool p);
     virtual ~SystemState();
-    virtual void setId(int i);
-    virtual void setName(QString n);
-    SystemCommonObject* object() const;
-    void setDefault();
-    void setDefaultJson();
-    void updateName();
-    void setObject(SystemCommonObject* object);
-    QString getJsonName();
-    void updateModel();
+    bool moveAnimation() const;
+    bool stopAnimation() const;
+    bool directionFix() const;
+    bool through() const;
+    bool setWithCamera() const;
+    bool pixelOffset() const;
+    void setMoveAnimation(bool b);
+    void setStopAnimation(bool b);
+    void setDirectionFix(bool b);
+    void setThrough(bool b);
+    void setSetWithCamera(bool b);
+    void setPixelOffset(bool b);
+
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemState &state);
 
@@ -55,7 +60,12 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    SystemCommonObject* m_object;
+    bool m_moveAnimation;
+    bool m_stopAnimation;
+    bool m_directionFix;
+    bool m_through;
+    bool m_setWithCamera;
+    bool m_pixelOffset;
 };
 
 Q_DECLARE_METATYPE(SystemState)

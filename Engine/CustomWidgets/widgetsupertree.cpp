@@ -82,8 +82,8 @@ void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){
 void WidgetSuperTree::newItem(QStandardItem* selected){
     SuperListItem* super = m_newItemInstance->createCopy();
     if (super->openDialog()){
-        int index = getRootOfItem(selected)->row();
         QStandardItem* root = getRootOfItem(selected);
+        int index = selected->row();
         addNewItem(super, root, index);
     }
     else

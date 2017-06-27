@@ -90,8 +90,6 @@ void SystemCommonObject::setDefault(QStandardItemModel *modelEventsUser){
     // States
     m_states->clear();
     SystemState* state = new SystemState;
-    state->setObject(this);
-    state->setDefault();
     state->setName("Normal");
     row = state->getModelRow();
     m_states->appendRow(row);
@@ -146,8 +144,6 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     // States
     m_states->clear();
     state = new SystemState;
-    state->setObject(this);
-    state->setDefault();
     state->setName("Normal");
     row = state->getModelRow();
     m_states->appendRow(row);
@@ -274,7 +270,6 @@ void SystemCommonObject::read(const QJsonObject &json){
     // States
     tab = json[strStates].toArray();
     SystemState newInstanceState;
-    newInstanceState.setObject(this);
     WidgetSuperTree::read(m_states, newInstanceState, tab);
 }
 
