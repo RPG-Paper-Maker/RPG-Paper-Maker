@@ -37,12 +37,16 @@ class ControlExport
 {
 public:
     ControlExport(Project* project);
-    QString createDesktop(QString, OSKind, bool);
+    QString createDesktop(QString location, OSKind os, bool);
     QString createBrowser(QString location);
     QString copyAllProject(QString location, QString projectName, QString path,
                            QDir dirLocation);
     void removeWebNoNeed(QString path);
+    void removeDesktopNoNeed(QString path);
     QString generateWebStuff(QString path);
+    QString generateDesktopStuff(QString path, OSKind os);
+    void removeMapsTemp(QString pathDatas);
+    void copyBRPictures(QString path);
 
 protected:
     Project* m_project;

@@ -19,6 +19,7 @@
 
 #include "controlexport.h"
 #include "wanok.h"
+#include <QDirIterator>
 
 // -------------------------------------------------------
 //
@@ -38,8 +39,33 @@ ControlExport::ControlExport(Project *project) :
 //
 // -------------------------------------------------------
 
-QString ControlExport::createDesktop(QString , OSKind , bool){
-    return NULL;
+QString ControlExport::createDesktop(QString location, OSKind os, bool){
+    QString message;
+    QString osMessage;
+
+    switch(os){
+    case OSKind::Window:
+        osMessage = "WINDOWS"; break;
+    case OSKind::Linux:
+        osMessage = "LINUX"; break;
+    case OSKind::Mac:
+        osMessage = "MAC"; break;
+    }
+
+    QDir dirLocation(location);
+    QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
+                          osMessage;
+    QString path = Wanok::pathCombine(location, projectName);
+
+    // Copying all the project
+    message = copyAllProject(location, projectName, path, dirLocation);
+    if (message != NULL)
+        return message;
+
+    // Remove all the files that are no longer needed here
+    removeDesktopNoNeed(path);
+
+    return generateDesktopStuff(path, os);
 }
 
 // -------------------------------------------------------
@@ -72,7 +98,13 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
         return "The path location doesn't exists.";
     if (!dirLocation.mkdir(projectName))
         return "The directory " + projectName + " already exists.";
-    if (!Wanok::copyPath(m_project->pathCurrentProject(), path))
+
+    // Copy Content
+    QDir(m_project->pathCurrentProject()).mkdir("Content");
+    QString pathContentProject =
+            Wanok::pathCombine(m_project->pathCurrentProject(), "Content");
+    QString pathContent = Wanok::pathCombine(path, "Content");
+    if (!Wanok::copyPath(pathContentProject, pathContent))
         return "Error while copying Content directory. Please retry.";
 
     return NULL;
@@ -82,18 +114,24 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 
 void ControlExport::removeWebNoNeed(QString path){
 
-    // Remove executable
-    QFile(Wanok::pathCombine(path, "Game")).remove();
-    QFile(Wanok::pathCombine(path, "Game.exe")).remove();
-    QFile(Wanok::pathCombine(path, "game.rpm")).remove();
-
     // Remove useless datas
-    QString pathDatas = Wanok::pathCombine(path,
-                                           Wanok::pathCombine("Content",
-                                                              "Datas"));
+    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
     QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
+    QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
     QString pathScripts = Wanok::pathCombine(pathDatas, "Scripts");
     QDir(Wanok::pathCombine(pathScripts, "desktop")).removeRecursively();
+    removeMapsTemp(pathDatas);
+}
+
+// -------------------------------------------------------
+
+void ControlExport::removeDesktopNoNeed(QString path){
+
+    // Remove useless datas
+    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
+    QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
+    QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
+    removeMapsTemp(pathDatas);
 }
 
 // -------------------------------------------------------
@@ -120,6 +158,78 @@ QString ControlExport::generateWebStuff(QString path){
     QFile::copy(Wanok::pathCombine(pathWeb, "utilities.js"),
                 Wanok::pathCombine(pathJS, "utilities.js"));
 
+    // Pictures
+    copyBRPictures(path);
 
     return NULL;
+}
+
+// -------------------------------------------------------
+
+QString ControlExport::generateDesktopStuff(QString path, OSKind os){
+
+    // Copy excecutable folder
+    QString executableFolder;
+
+    switch(os){
+    case OSKind::Window:
+        executableFolder = "win32";
+        break;
+    case OSKind::Linux:
+        executableFolder = "linux";
+        break;
+    case OSKind::Mac:
+        executableFolder = "mac";
+        break;
+    }
+    QString pathExecutable = Wanok::pathCombine("Content", executableFolder);
+
+    if (!Wanok::copyPath(pathExecutable, path))
+        return "Could not copy in " + pathExecutable;
+
+    // Pictures
+    copyBRPictures(path);
+
+    return NULL;
+}
+
+// -------------------------------------------------------
+
+void ControlExport::removeMapsTemp(QString pathDatas){
+    QString pathMaps = Wanok::pathCombine(pathDatas, "Maps");
+
+    QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
+
+    while (directories.hasNext()){
+        directories.next();
+        QDir(Wanok::pathCombine(Wanok::pathCombine(pathMaps,
+                                                   directories.fileName()),
+                                "temp")).removeRecursively();
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlExport::copyBRPictures(QString path){
+    PictureKind kind;
+    QStandardItemModel* model;
+    SystemPicture* picture;
+
+    // Iterate all the pictures datas
+    for (int k = (int) PictureKind::Bars; k != (int) PictureKind::Last; k++)
+    {
+       kind = static_cast<PictureKind>(k);
+       model = m_project->picturesDatas()->model(kind);
+       for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+           picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+
+           // If the picture is from BR, we need to copy it in the project
+           if (picture->isBR()){
+                QString pathBR = picture->getPath(kind);
+                QString pathProject =
+                        Wanok::pathCombine(path, picture->getLocalPath(kind));
+                QFile::copy(pathBR, pathProject);
+           }
+       }
+    }
 }

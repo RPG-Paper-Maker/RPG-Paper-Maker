@@ -44,6 +44,7 @@ public:
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     QString getPath(PictureKind kind) const;
+    QString getLocalPath(PictureKind kind) const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);

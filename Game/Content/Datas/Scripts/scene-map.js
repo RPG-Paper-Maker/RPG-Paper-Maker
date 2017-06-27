@@ -208,13 +208,12 @@ SceneMap.prototype = {
 
         // Load textures
         var textureLoader = new THREE.TextureLoader();
-        this.textureTileset = this.loadTexture(textureLoader,
-                                               this.mapInfos.tileset.getPath());
+        var path = this.mapInfos.tileset.getPath();
+        this.textureTileset = this.loadTexture(textureLoader, path);
         this.texturesCharacters = new Array(2);
-        this.texturesCharacters[1] = this.loadTexture(textureLoader,
-                                                      $ROOT_DIRECTORY +
-                                                      Wanok.PATH_CHARACTERS +
-                                                      "/lucas.png");
+        path = $datasGame.pictures.list
+                [PictureKind.Characters][1].getPath(PictureKind.Characters);
+        this.texturesCharacters[1] = this.loadTexture(textureLoader, path);
 
         // Update hero material
         $game.hero.mesh.material = this.texturesCharacters[1];

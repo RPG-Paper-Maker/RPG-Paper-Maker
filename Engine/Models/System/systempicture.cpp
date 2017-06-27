@@ -92,6 +92,14 @@ QString SystemPicture::getPath(PictureKind kind) const{
 
 // -------------------------------------------------------
 
+QString SystemPicture::getLocalPath(PictureKind kind) const{
+    QString folder = getLocalFolder(kind);
+
+    return Wanok::pathCombine(folder, name());
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemPicture::createCopy() const{
     SystemPicture* super = new SystemPicture;
     super->setCopy(*this);

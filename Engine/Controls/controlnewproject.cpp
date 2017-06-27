@@ -97,6 +97,14 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
                "Please retry with a new project.";
     }
 
+    // Create folders
+    QDir(pathDir).mkpath(Wanok::pathBars);
+    QDir(pathDir).mkpath(Wanok::pathIcons);
+    QDir(pathDir).mkpath(Wanok::pathAutotiles);
+    QDir(pathDir).mkpath(Wanok::pathCharacters);
+    QDir(pathDir).mkpath(Wanok::pathReliefs);
+    QDir(pathDir).mkpath(Wanok::pathTilesets);
+
     // Copy excecutable and libraries according to current OS
     QString strOS = "";
     #ifdef Q_OS_WIN

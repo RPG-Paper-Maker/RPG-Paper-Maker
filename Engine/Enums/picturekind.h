@@ -37,7 +37,8 @@ enum class PictureKind {
     Autotiles,
     Characters,
     Reliefs,
-    Tilesets
+    Tilesets,
+    Last
 };
 
 inline uint qHash(PictureKind pos)

@@ -73,12 +73,11 @@ Map::Map(int id) :
     m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 
+    SystemPicture* picture = (SystemPicture*) SuperListItem::getById(
+                Wanok::get()->project()->picturesDatas()
+                ->model(PictureKind::Characters)->invisibleRootItem(), 1);
     QOpenGLTexture* texture = new QOpenGLTexture(
-                QImage(QString(
-                           Wanok::pathCombine(Wanok::get()->project()
-                                              ->pathCurrentProject(),
-                           Wanok::pathCombine(Wanok::pathCharacters,
-                                              "lucas.png")))));
+                QImage(picture->getPath(PictureKind::Characters)));
     texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
     m_texturesCharacters[1] = texture;

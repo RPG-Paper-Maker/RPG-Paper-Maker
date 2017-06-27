@@ -82,7 +82,7 @@ void DialogExport::accept(){
     }
 
     if (message != NULL)
-        QMessageBox::critical(this,"Error",message);
+        QMessageBox::critical(this, "Error", message);
     else
         QDialog::accept();
 }
@@ -92,5 +92,4 @@ void DialogExport::accept(){
 void DialogExport::on_radioButtonDesktop_toggled(bool checked){
     ui->labelDeployOS->setEnabled(checked);
     ui->comboBoxOSDeploy->setEnabled(checked);
-    ui->checkBoxProtect->setEnabled(checked);
 }
