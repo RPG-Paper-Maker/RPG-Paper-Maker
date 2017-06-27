@@ -31,7 +31,10 @@
 // -------------------------------------------------------
 
 SystemState::SystemState() :
-    SystemState(new SuperListItem, false, false, false, false, false, false)
+    SystemState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
+                                       ->commonEventsDatas()->modelStates()
+                                       ->invisibleRootItem(), 1),
+                false, false, false, false, false, false)
 {
 
 }

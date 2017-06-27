@@ -90,6 +90,7 @@ public slots:
     void contextPaste();
     void contextDeleteMap();
     void contextDeleteDirectory();
+    void removed(QModelIndex,int,int);
 };
 
 #endif // WIDGETTREELOCALMAPS_H

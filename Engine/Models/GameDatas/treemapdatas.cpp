@@ -83,7 +83,10 @@ QStandardItem* TreeMapDatas::addDir(QStandardItem* root, int i, TreeMapTag* tag)
 
 QStandardItem* TreeMapDatas::addMap(QStandardItem *root, int i, TreeMapTag *tag)
 {
-    return add(root, i, tag, "map");
+    QStandardItem* item = add(root, i, tag, "map");
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+
+    return item;
 }
 
 // -------------------------------------------------------

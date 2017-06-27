@@ -40,9 +40,16 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     m_panelTextures(nullptr),
     m_project(nullptr)
 {
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    // Drag & drop
+    this->setAcceptDrops(true);
+    this->setDragEnabled(true);
+    this->setDefaultDropAction(Qt::MoveAction);
+    this->setDragDropMode(QAbstractItemView::InternalMove);
+    this->setDefaultDropAction(Qt::TargetMoveAction);
+    this->showDropIndicator();
 
     // Context menu connections
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
     m_contextMenuMap = ContextMenuList::createContextMap(this);
     m_contextMenuDirectory = ContextMenuList::createContextDirectory(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -78,6 +85,9 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
             SLOT(on_selectionChanged(QModelIndex,QModelIndex)));
     QModelIndex modelIndex = m_model->index(0,0);
     setCurrentIndex(modelIndex);
+
+    connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(removed(QModelIndex,int,int)));
 }
 
 void WidgetTreeLocalMaps::initializeProject(Project* p){
@@ -516,4 +526,10 @@ void WidgetTreeLocalMaps::contextDeleteDirectory(){
             updateTileset();
         }
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::removed(QModelIndex,int,int){
+    Wanok::get()->project()->writeTreeMapDatas();
 }
