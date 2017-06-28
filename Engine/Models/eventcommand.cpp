@@ -156,6 +156,8 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strTeleportObject(object, parameters); break;
     case EventCommandKind::MoveObject:
         str += strMoveObject(parameters); break;
+    case EventCommandKind::Wait:
+        str += strWait(); break;
     default:
         break;
     }
@@ -701,6 +703,12 @@ QString EventCommand::strMoveObjectMoves(int& i) const{
 }
 
 // -------------------------------------------------------
+
+QString EventCommand::strWait() const{
+    return "Wait: " + p_listCommand.at(0) + " seconds";
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -716,8 +724,14 @@ void EventCommand::read(const QJsonObject &json){
 void EventCommand::readCommand(const QJsonArray &json){
     p_listCommand.clear();
     for (int i = 0; i < json.size(); i++){
-        if (json[i].isString()) p_listCommand.append(json[i].toString());
-        else p_listCommand.append(QString::number(json[i].toInt()));
+        QJsonValue val = json[i];
+
+        if (val.isString())
+            p_listCommand.append(json[i].toString());
+        else if (val.isDouble())
+            p_listCommand.append(QString::number(json[i].toDouble()));
+        else
+            p_listCommand.append(QString::number(val.toInt()));
     }
 }
 
@@ -737,10 +751,16 @@ QJsonArray EventCommand::getArrayJSON() const{
     QJsonArray tab;
     for (int i = 0; i < p_listCommand.length(); i++){
         QString s = p_listCommand.at(i);
-        bool conversionOk;
+        bool conversionOk, conversionDoubleOk;
         int integer = s.toInt(&conversionOk);
-        if (conversionOk) tab.append(integer);
-        else tab.append(s);
+        double d = s.toDouble(&conversionDoubleOk);
+
+        if (conversionOk)
+            tab.append(integer);
+        else if (conversionDoubleOk)
+            tab.append(d);
+        else
+            tab.append(s);
     }
 
     return tab;

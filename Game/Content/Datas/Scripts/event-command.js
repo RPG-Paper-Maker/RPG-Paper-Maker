@@ -44,7 +44,8 @@ var EventCommandKind = {
     ChangeState: 18,
     SendEvent: 19,
     TeleportObject: 20,
-    MoveObject: 21
+    MoveObject: 21,
+    Wait: 22
 };
 Object.freeze(EventCommandKind);
 

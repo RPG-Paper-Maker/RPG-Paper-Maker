@@ -30,6 +30,7 @@
 #include "dialogcommandsendevent.h"
 #include "dialogcommandteleportobject.h"
 #include "dialogcommandmoveobject.h"
+#include "dialogcommandwait.h"
 
 // -------------------------------------------------------
 //
@@ -46,7 +47,7 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    setFixedSize(510, 470);
 }
 
 DialogCommands::~DialogCommands()
@@ -90,6 +91,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandTeleportObject(command, object, parameters);
     case EventCommandKind::MoveObject:
         return new DialogCommandMoveObject(command, object, parameters);
+    case EventCommandKind::Wait:
+        return new DialogCommandWait(command);
     default:
         return nullptr;
     }
@@ -214,4 +217,10 @@ void DialogCommands::on_pushButtonTeleportObject_clicked(){
 
 void DialogCommands::on_pushButtonMoveObject_clicked(){
     openDialogCommand(EventCommandKind::MoveObject);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonWait_clicked(){
+    openDialogCommand(EventCommandKind::Wait);
 }

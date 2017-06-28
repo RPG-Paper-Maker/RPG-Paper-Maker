@@ -21,6 +21,12 @@
 #include "ui_dialogcommandchangestate.h"
 #include "main.h"
 
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
 DialogCommandChangeState::DialogCommandChangeState(
         EventCommand *command,
         SystemCommonObject* object,

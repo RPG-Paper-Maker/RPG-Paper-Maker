@@ -17,42 +17,38 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EVENTCOMMANDKIND_H
-#define EVENTCOMMANDKIND_H
+#ifndef DIALOGCOMMANDWAIT_H
+#define DIALOGCOMMANDWAIT_H
+
+#include "dialogcommand.h"
 
 // -------------------------------------------------------
 //
-//  ENUM EventCommandKind
+//  CLASS DialogCommandWait
 //
-//  All the types of possible commands. The same order should
-//  be respected in the interpreter.
+//  A dialog used for waiting.
 //
 // -------------------------------------------------------
 
-enum class EventCommandKind {
-    None,
-    ShowText,
-    ChangeVariables,
-    EndGame,
-    While,
-    EndWhile,
-    WhileBreak,
-    InputNumber,
-    If,
-    Else,
-    EndIf,
-    OpenMainMenu,
-    OpenSavesMenu,
-    ModifyInventory,
-    ModifyTeam,
-    StartBattle,
-    IfWin,
-    IfLose,
-    ChangeState,
-    SendEvent,
-    TeleportObject,
-    MoveObject,
-    Wait
+namespace Ui {
+class DialogCommandWait;
+}
+
+class DialogCommandWait : public DialogCommand
+{
+    Q_OBJECT
+
+public:
+    explicit DialogCommandWait(EventCommand *command = nullptr,
+                               QWidget *parent = 0);
+    virtual ~DialogCommandWait();
+    EventCommand* getCommand() const;
+
+protected:
+    virtual void initialize(EventCommand* command);
+
+private:
+    Ui::DialogCommandWait *ui;
 };
 
-#endif // EVENTCOMMANDKIND_H
+#endif // DIALOGCOMMANDWAIT_H

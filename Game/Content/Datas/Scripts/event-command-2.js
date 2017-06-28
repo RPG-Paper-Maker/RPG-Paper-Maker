@@ -846,3 +846,56 @@ EventCommandMoveObject.prototype = {
     onKeyPressedAndRepeat: function(currentState, key){},
     drawHUD: function(currentState, context){}
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandWait
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for displaying text.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {number} milliseconds The number of milliseconds to wait.
+*   @param {JSON} command Direct JSON command to parse.
+*/
+function EventCommandWait(command){
+    this.milliseconds = command[0] * 1000;
+
+    this.isDirectNode = false;
+    this.parallel = false;
+}
+
+EventCommandWait.prototype = {
+
+    /** Initialize the current state.
+    *   @returns {Object} The current state (clicked).
+    */
+    initialize: function(){
+        return {
+            currentTime: new Date().getTime()
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state){
+        return (currentState.currentTime + this.milliseconds <=
+                new Date().getTime()) ? 1 : 0;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}

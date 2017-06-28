@@ -96,6 +96,7 @@ private:
     QString strMoveObjectID(QStandardItemModel* parameters, int& i) const;
     QString strMoveObjectOptions(int& i) const;
     QString strMoveObjectMoves(int& i) const;
+    QString strWait() const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

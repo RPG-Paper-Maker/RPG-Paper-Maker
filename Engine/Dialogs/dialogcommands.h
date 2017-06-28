@@ -79,6 +79,7 @@ private slots:
     void on_pushButtonSendEvent_clicked();
     void on_pushButtonTeleportObject_clicked();
     void on_pushButtonMoveObject_clicked();
+    void on_pushButtonWait_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

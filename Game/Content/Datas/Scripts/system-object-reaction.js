@@ -114,6 +114,8 @@ SystemObjectReaction.prototype = {
                 return new EventCommandTeleportObject(command);
             case EventCommandKind.MoveObject:
                 return new EventCommandMoveObject(command);
+            case EventCommandKind.Wait:
+                return new EventCommandWait(command);
             default:
                 return null;
         }
