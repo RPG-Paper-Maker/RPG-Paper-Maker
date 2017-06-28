@@ -58,13 +58,6 @@ function MapPortion(realX, realY, realZ){
 }
 
 /** @static
-*   In order to avoid flickerings, we need to add this coef to floors scale.
-*   @default 0.1
-*   @constant
-*/
-MapPortion.SCALE_COEF = 0;
-
-/** @static
 *   In order to avoid flickerings on sprites with the same X / Z, we use an
 *   offset. This coef is the number to increment for the offset for each
 *   sprites.
@@ -111,9 +104,9 @@ MapPortion.prototype = {
             var x = this.positionOrigin.x + localPosition.x;
             var y = this.positionOrigin.y + localPosition.y;
             var z = this.positionOrigin.z + localPosition.z;
-            var l = $SQUARE_SIZE + MapPortion.SCALE_COEF;
+            var l = $SQUARE_SIZE;
             var w = 1.0;
-            var h = $SQUARE_SIZE + MapPortion.SCALE_COEF;
+            var h = $SQUARE_SIZE;
 
             geometry.vertices.push(new THREE.Vector3(x, y, z));
             geometry.vertices.push(new THREE.Vector3(x + l, y, z));
@@ -127,6 +120,12 @@ MapPortion.prototype = {
             y = (texture[1] * $SQUARE_SIZE) / height;
             w = (texture[2] * $SQUARE_SIZE) / width;
             h = (texture[3] * $SQUARE_SIZE) / height;
+            var coefX = 0.1 / width;
+            var coefY = 0.1 / height;
+            x += coefX;
+            y += coefY;
+            w -= (coefX * 2);
+            h -= (coefY * 2);
             geometry.faceVertexUvs[0].push([
                 new THREE.Vector2(x, y),
                 new THREE.Vector2(x + w, y),
@@ -178,6 +177,12 @@ MapPortion.prototype = {
                 var y = (texture[1] * $SQUARE_SIZE) / height;
                 var w = (texture[2] * $SQUARE_SIZE) / width;
                 var h = (texture[3] * $SQUARE_SIZE) / height;
+                var coefX = 0.1 / width;
+                var coefY = 0.1 / height;
+                x += coefX;
+                y += coefY;
+                w -= (coefX * 2);
+                h -= (coefY * 2);
 
                 var plane = this.getSpriteMesh(position, material, texture,
                                                x, y, w, h);
@@ -222,6 +227,12 @@ MapPortion.prototype = {
                 var y = 0.0;
                 var w = 32.0 / 128.0;
                 var h = 32.0 / 128.0;
+                var coefX = 0.1 / width;
+                var coefY = 0.1 / height;
+                x += coefX;
+                y += coefY;
+                w -= (coefX * 2);
+                h -= (coefY * 2);
                 var mesh = this.getSpriteMesh(position,
                                               $gameStack.top()
                                               .texturesCharacters[1],
@@ -358,6 +369,12 @@ MapPortion.prototype = {
                     var y = 0.0;
                     var w = 32.0 / 128.0;
                     var h = 32.0 / 128.0;
+                    var coefX = 0.1 / width;
+                    var coefY = 0.1 / height;
+                    x += coefX;
+                    y += coefY;
+                    w -= (coefX * 2);
+                    h -= (coefY * 2);
                     var mesh =
                             this.getSpriteMesh(position,
                                                new THREE.MeshBasicMaterial({}),
