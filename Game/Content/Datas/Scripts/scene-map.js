@@ -293,7 +293,12 @@ SceneMap.prototype = {
         this.camera.update();
 
         // Update objects
-        $game.hero.update();
+        var objects = $game.mapsDatas[this.id][0][0][0];
+        var movedObjects = objects.m;
+        var i, l;
+        for (i = 0, l = movedObjects.length; i < l; i++){
+            movedObjects[i].update();
+        }
     },
 
     // -------------------------------------------------------

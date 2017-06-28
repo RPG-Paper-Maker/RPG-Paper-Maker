@@ -90,23 +90,31 @@ MapObject.prototype = {
 
     /** Move the object (one step).
     *   @param {Orientation} orientation Where to move.
-    *   @param {number} w The width of the map.
-    *   @param {number} h The height of the map.
+    *   @param {number} limit Max distance to go.
+    *   @returns {number} Distance cross.
     */
-    move: function(orientation, w, h){
+    move: function(orientation, limit){
+        var objects = $game.mapsDatas[$currentMap.id][0][0][0];
+        var movedObjects = objects.m;
+
+        // Remove from move
+        var index = movedObjects.indexOf(this);
+        if (index !== -1)
+            movedObjects.splice(index, 1);
 
         // The speed depends on the time elapsed since the last update
         var speed = this.speed * ($elapsedTime * MapObject.SPEED_NORMAL *
                                   $SQUARE_SIZE);
         var angle = -90;
-        var xPlus, zPlus, res;
-        w *= $SQUARE_SIZE;
-        h *= $SQUARE_SIZE;
+        var xPlus, zPlus, xAbs, zAbs, res;
+        var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
+        var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
 
         switch (orientation){
         case Orientation.South:
             xPlus = speed * (Math.cos(angle * Math.PI / 180.0));
             zPlus = speed * (Math.sin(angle * Math.PI / 180.0));
+
             res = this.position.z - zPlus;
             if (res >= 0 && res < h)
                 this.position.setZ(res);
@@ -155,6 +163,11 @@ MapObject.prototype = {
         }
 
         this.moving = true;
+
+        // Add to moving objects
+        movedObjects.unshift(this);
+
+        return Math.abs(xPlus) + Math.abs(zPlus);
     },
 
     // -------------------------------------------------------

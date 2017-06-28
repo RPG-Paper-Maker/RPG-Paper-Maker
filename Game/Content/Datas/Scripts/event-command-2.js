@@ -662,7 +662,8 @@ Object.freeze(CommandMoveKind);
 *   (parallel command).
 *   @property {boolean} isCameraOrientation Take the orientation of the came in
 *   count.
-*   @property {function[]} All the moves callbacks.
+*   @property {function[]} moves All the moves callbacks.
+*   @property {Object[]} parameters Parameters for ach moves callbacks.
 *   @param {JSON} command Direct JSON command to parse.
 */
 function EventCommandMoveObject(command){
@@ -680,88 +681,107 @@ function EventCommandMoveObject(command){
 
     // List of move commands
     this.moves = [];
+    this.parameters = [];
     while(i < l){
         var kind = command[i++];
 
-        switch (kind){
-        case CommandMoveKind.MoveNorth:
-            this.moves.push(EventCommandMoveObject.moveNorth);
-            break;
-        case CommandMoveKind.MoveSouth:
-            this.moves.push(EventCommandMoveObject.moveSouth);
-            break;
-        case CommandMoveKind.MoveWest:
-            this.moves.push(EventCommandMoveObject.moveWest);
-            break;
-        case CommandMoveKind.MoveEast:
-            this.moves.push(EventCommandMoveObject.moveEast);
-            break;
+        if (kind >= CommandMoveKind.MoveNorth &&
+            kind <= CommandMoveKind.MoveEast)
+        {
+            this.parameters.push({ square: command[i++] === 0 });
+            switch (kind){
+            case CommandMoveKind.MoveNorth:
+                this.moves.push(this.moveNorth);
+                break;
+            case CommandMoveKind.MoveSouth:
+                this.moves.push(this.moveSouth);
+                break;
+            case CommandMoveKind.MoveWest:
+                this.moves.push(this.moveWest);
+                break;
+            case CommandMoveKind.MoveEast:
+                this.moves.push(this.moveEast);
+                break;
+            }
         }
     }
 
     this.isDirectNode = !this.isWaitEnd;
 }
 
-// -------------------------------------------------------
-
-/** Function to move north.
-*   @param {Object} currentState The current state of the event.
-*   @param {MapObject} object The object to move.
-*   @param {number} w The width of the map.
-*   @param {number} h The height of the map.
-*/
-EventCommandMoveObject.moveNorth = function(currentState, object, w, h){
-    object.move(Orientation.North, w, h);
-}
-
-// -------------------------------------------------------
-
-/** Function to move south.
-*   @param {Object} currentState The current state of the event.
-*   @param {MapObject} object The object to move.
-*   @param {number} w The width of the map.
-*   @param {number} h The height of the map.
-*/
-EventCommandMoveObject.moveSouth = function(currentState, object, w, h){
-    object.move(Orientation.South, w, h);
-}
-
-// -------------------------------------------------------
-
-/** Function to move west.
-*   @param {Object} currentState The current state of the event.
-*   @param {MapObject} object The object to move.
-*   @param {number} w The width of the map.
-*   @param {number} h The height of the map.
-*/
-EventCommandMoveObject.moveWest = function(currentState, object, w, h){
-    object.move(Orientation.West, w, h);
-}
-
-// -------------------------------------------------------
-
-/** Function to move east.
-*   @param {Object} currentState The current state of the event.
-*   @param {MapObject} object The object to move.
-*   @param {number} w The width of the map.
-*   @param {number} h The height of the map.
-*/
-EventCommandMoveObject.moveEast = function(currentState, object, w, h){
-    object.move(Orientation.East, w, h);
-}
-
-// -------------------------------------------------------
-
 EventCommandMoveObject.prototype = {
 
     /** Initialize the current state.
-    *   @returns {Object} The current state (position, left).
+    *   @returns {Object} The current state (position, distance).
     */
     initialize: function(){
         return {
             position: 0,
-            left: null
+            distance: 0
         }
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move north.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {bool} square Indicate if it is a square move.
+    *   @param {Orientation} orientation The orientation where to move.
+    */
+    move: function(currentState, object, square, orientation){
+        currentState.distance += object.move(orientation, $SQUARE_SIZE -
+                                             currentState.distance);
+
+        return (!square || (square && currentState.distance >= $SQUARE_SIZE));
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move north.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveNorth: function(currentState, object, parameters){
+        return this.move(currentState, object, parameters.square,
+                         Orientation.North);
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move south.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveSouth: function(currentState, object, parameters){
+        return this.move(currentState, object, parameters.square,
+                         Orientation.South);
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move west.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveWest: function(currentState, object, parameters){
+        return this.move(currentState, object, parameters.square,
+                         Orientation.West);
+    },
+
+    // -------------------------------------------------------
+
+    /** Function to move east.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The object to move.
+    *   @param {Object} parameters The parameters.
+    */
+    moveEast: function(currentState, object, parameters){
+        return this.move(currentState, object, parameters.square,
+                         Orientation.East);
     },
 
     // -------------------------------------------------------
@@ -773,11 +793,16 @@ EventCommandMoveObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        this.moves[0].call(null, currentState, object,
-                           $gameStack.bot().mapInfos.length,
-                           $gameStack.bot().mapInfos.width);
+        var finished = this.moves[currentState.position].call(
+                    this, currentState, object,
+                    this.parameters[currentState.position]);
 
-        return 1;
+        if (finished){
+            currentState.distance = 0;
+            currentState.position = currentState.position + 1;
+        }
+
+        return (this.moves[currentState.position] == null) ? 1 : 0;
     },
 
     // -------------------------------------------------------

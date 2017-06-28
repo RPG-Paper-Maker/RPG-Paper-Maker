@@ -234,8 +234,11 @@ MapPortion.prototype = {
                 if (!isMapHero ||
                     $datasGame.system.idObjectStartHero !== object.id)
                 {
-                    $gameStack.top().scene.add(mesh);
-                    this.objectsList.push(mapObject);
+                    $currentMap.scene.add(mesh);
+                    this.objectsList.unshift(mapObject);
+                    var objects = $game.mapsDatas[$currentMap.id][0][0][0];
+                    var movedObjects = objects.m;
+                    movedObjects.unshift(mapObject);
                 }
             }
         }
