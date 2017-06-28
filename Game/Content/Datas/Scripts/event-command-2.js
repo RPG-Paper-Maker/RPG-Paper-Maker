@@ -41,6 +41,7 @@ function EventCommandStartBattle(command){
     command.shift();
     this.command = command;
     this.isDirectNode = false;
+    this.parallel = false;
 }
 
 EventCommandStartBattle.prototype = {
@@ -130,6 +131,7 @@ EventCommandStartBattle.prototype = {
 */
 function EventCommandIfWin(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandIfWin.prototype = {
@@ -177,6 +179,7 @@ EventCommandIfWin.prototype = {
 */
 function EventCommandIfLose(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandIfLose.prototype = {
@@ -232,6 +235,7 @@ function EventCommandChangeState(command){
     this.operationKind = command[i++];
 
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 /** Add a state to an object.
@@ -406,6 +410,7 @@ function EventCommandSendEvent(command){
     }
 
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 /** Send an event.
@@ -572,6 +577,7 @@ function EventCommandTeleportObject(command){
     // TODO
 
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandTeleportObject.prototype = {
@@ -707,6 +713,7 @@ function EventCommandMoveObject(command){
     }
 
     this.isDirectNode = !this.isWaitEnd;
+    this.parallel = !this.isWaitEnd;
 }
 
 EventCommandMoveObject.prototype = {
@@ -716,8 +723,10 @@ EventCommandMoveObject.prototype = {
     */
     initialize: function(){
         return {
-            position: 0,
-            distance: 0
+            parallel: this.isWaitEnd,
+            index: 0,
+            distance: 0,
+            position: null
         }
     },
 
@@ -730,10 +739,28 @@ EventCommandMoveObject.prototype = {
     *   @param {Orientation} orientation The orientation where to move.
     */
     move: function(currentState, object, square, orientation){
-        currentState.distance += object.move(orientation, $SQUARE_SIZE -
-                                             currentState.distance);
 
-        return (!square || (square && currentState.distance >= $SQUARE_SIZE));
+        var angle = this.isCameraOrientation ?
+                    $currentMap.camera.horizontalAngle : -90.0;
+
+        if (currentState.position === null && square)
+        {
+            currentState.position = object.getFuturPosition(orientation,
+                                                            $SQUARE_SIZE,
+                                                            angle);
+        }
+
+        currentState.distance += object.move(orientation, $SQUARE_SIZE -
+                                             currentState.distance, angle);
+
+        if (!square || (square && currentState.distance >= $SQUARE_SIZE)){
+            if (square)
+                object.position = currentState.position;
+
+            return true;
+        }
+
+        return false;
     },
 
     // -------------------------------------------------------
@@ -793,16 +820,22 @@ EventCommandMoveObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var finished = this.moves[currentState.position].call(
-                    this, currentState, object,
-                    this.parameters[currentState.position]);
 
-        if (finished){
-            currentState.distance = 0;
-            currentState.position = currentState.position + 1;
+        if (currentState.parallel){
+            var finished = this.moves[currentState.index].call(
+                        this, currentState, object,
+                        this.parameters[currentState.index]);
+
+            if (finished){
+                currentState.distance = 0;
+                currentState.index = currentState.index + 1;
+                currentState.position = null;
+            }
+
+            return (this.moves[currentState.index] == null) ? 1 : 0;
         }
 
-        return (this.moves[currentState.position] == null) ? 1 : 0;
+        return 1;
     },
 
     // -------------------------------------------------------

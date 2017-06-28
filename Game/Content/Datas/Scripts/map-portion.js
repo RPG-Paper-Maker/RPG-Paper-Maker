@@ -62,7 +62,7 @@ function MapPortion(realX, realY, realZ){
 *   @default 0.1
 *   @constant
 */
-MapPortion.SCALE_COEF = 0.1;
+MapPortion.SCALE_COEF = 0;
 
 /** @static
 *   In order to avoid flickerings on sprites with the same X / Z, we use an

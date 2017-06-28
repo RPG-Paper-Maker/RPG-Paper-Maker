@@ -88,12 +88,76 @@ MapObject.prototype = {
         this.system.readJSON(json.v);
     },
 
+    /** Simulate moving object position.
+    *   @param {Orientation} orientation Where to move.
+    *   @param {number} distance The distance.
+    *   @returns {THREE.Vector3}
+    */
+    getFuturPosition: function(orientation, distance, angle){
+
+        var position = new THREE.Vector3(this.position.x,
+                                         this.position.y,
+                                         this.position.z);
+
+        // The speed depends on the time elapsed since the last update
+        var xPlus, zPlus, xAbs, zAbs, res;
+        var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
+        var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
+
+        switch (orientation){
+        case Orientation.South:
+            xPlus = distance * Wanok.cos(angle * Math.PI / 180.0);
+            zPlus = distance * Wanok.sin(angle * Math.PI / 180.0);
+            res = position.z - zPlus;
+            if (res >= 0 && res < h)
+                position.setZ(res);
+            res = position.x - xPlus;
+            if (res >= 0 && res < w)
+                position.setX(res);
+            break;
+        case Orientation.West:
+            xPlus = distance * Wanok.cos((angle - 90.0) * Math.PI / 180.0);
+            zPlus = distance * Wanok.sin((angle - 90.0) * Math.PI / 180.0);
+            res = position.x + xPlus;
+            if (res >= 0 && res < w)
+                position.setX(res);
+            res = position.z + zPlus;
+            if (res >= 0 && res < h)
+               position.setZ(res);
+            break;
+        case Orientation.North:
+            xPlus = distance * Wanok.cos(angle * Math.PI / 180.0);
+            zPlus = distance * Wanok.sin(angle * Math.PI / 180.0);
+            res = position.z + zPlus;
+            if (res >= 0 && res < h)
+                position.setZ(res);
+            res = position.x + xPlus;
+            if (res >= 0 && res < w)
+                position.setX(res);
+            break;
+        case Orientation.East:
+            xPlus = distance * Wanok.cos((angle - 90.0) * Math.PI / 180.0);
+            zPlus = distance * Wanok.sin((angle - 90.0) * Math.PI / 180.0);
+            res = position.x - xPlus;
+            if (res >= 0 && res < w)
+                position.setX(res);
+            res = position.z - zPlus;
+            if (res >= 0 && res < h)
+                position.setZ(res);
+            break;
+        default:
+            break;
+        }
+
+        return position;
+    },
+
     /** Move the object (one step).
     *   @param {Orientation} orientation Where to move.
     *   @param {number} limit Max distance to go.
     *   @returns {number} Distance cross.
     */
-    move: function(orientation, limit){
+    move: function(orientation, limit, angle){
         var objects = $game.mapsDatas[$currentMap.id][0][0][0];
         var movedObjects = objects.m;
 
@@ -102,59 +166,12 @@ MapObject.prototype = {
         if (index !== -1)
             movedObjects.splice(index, 1);
 
-        // The speed depends on the time elapsed since the last update
-        var speed = this.speed * ($elapsedTime * MapObject.SPEED_NORMAL *
-                                  $SQUARE_SIZE);
-        var angle = -90;
-        var xPlus, zPlus, xAbs, zAbs, res;
-        var w = $currentMap.mapInfos.length * $SQUARE_SIZE;
-        var h = $currentMap.mapInfos.width * $SQUARE_SIZE;
-
-        switch (orientation){
-        case Orientation.South:
-            xPlus = speed * (Math.cos(angle * Math.PI / 180.0));
-            zPlus = speed * (Math.sin(angle * Math.PI / 180.0));
-
-            res = this.position.z - zPlus;
-            if (res >= 0 && res < h)
-                this.position.setZ(res);
-            res = this.position.x - xPlus;
-            if (res >= 0 && res < w)
-                this.position.setX(res);
-            break;
-        case Orientation.West:
-            xPlus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
-            zPlus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
-            res = this.position.x + xPlus;
-            if (res >= 0 && res < w)
-                this.position.setX(res);
-            res = this.position.z + zPlus;
-            if (res >= 0 && res < h)
-               this.position.setZ(res);
-            break;
-        case Orientation.North:
-            xPlus = speed * (Math.cos(angle * Math.PI / 180.0));
-            zPlus = speed * (Math.sin(angle * Math.PI / 180.0));
-            res = this.position.z + zPlus;
-            if (res >= 0 && res < h)
-                this.position.setZ(res);
-            res = this.position.x + xPlus;
-            if (res >= 0 && res < w)
-                this.position.setX(res);
-            break;
-        case Orientation.East:
-            xPlus = speed * (Math.cos((angle - 90.0) * Math.PI / 180.0));
-            zPlus = speed * (Math.sin((angle - 90.0) * Math.PI / 180.0));
-            res = this.position.x - xPlus;
-            if (res >= 0 && res < w)
-                this.position.setX(res);
-            res = this.position.z - zPlus;
-            if (res >= 0 && res < h)
-                this.position.setZ(res);
-            break;
-        default:
-            break;
-        }
+        // Set position
+        var distance = Math.min(limit, this.speed * ($elapsedTime *
+                                       MapObject.SPEED_NORMAL *
+                                       $SQUARE_SIZE));
+        var position = this.getFuturPosition(orientation, distance, angle);
+        this.position.set(position.x, position.y, position.z);
 
         // Update orientation
         if (this.orientationEye !== orientation){
@@ -167,7 +184,7 @@ MapObject.prototype = {
         // Add to moving objects
         movedObjects.unshift(this);
 
-        return Math.abs(xPlus) + Math.abs(zPlus);
+        return distance;
     },
 
     // -------------------------------------------------------

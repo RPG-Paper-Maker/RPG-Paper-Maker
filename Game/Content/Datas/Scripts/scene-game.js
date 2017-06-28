@@ -27,7 +27,7 @@
 *   Abstract class for the game stack.
 *   @property {ReactionInterpreter[]} reactionInterpreters The reaction
 *   interpreters for parallel reactions.
-*   @property {Node[]} parallelCommands Commands that are still running without
+*   @property {EventCommand[]} parallelCommands Commands that are still running without
 *   blocking any other command.
 *   @property {function} [callBackAfterLoading=null] A function to call after
 *   loading completed. The function should be put to null after all the stuff
@@ -63,7 +63,7 @@ SceneGame.prototype = {
         // Index of all the finished parallel reactions
         var endingReactions = new Array;
 
-        // Blocking hero
+        // Updating blocking hero
         $blockingHero = false;
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
             if (this.reactionInterpreters[i].currentReaction.blockingHero){
@@ -72,7 +72,7 @@ SceneGame.prototype = {
             }
         }
 
-        // Updating all parallel events
+        // Updating all reactions
         for (i = 0, l = this.reactionInterpreters.length; i < l; i++){
             interpreter = this.reactionInterpreters[i];
             interpreter.update();
@@ -96,9 +96,13 @@ SceneGame.prototype = {
         var endingCommands = new Array; // Index of all the finished commands
 
         for (i = 0, l = this.parallelCommands.length; i < l; i++){
-            var resultCommand = this.parallelCommands[i].data.update();
-            if (resultCommand !== 0)
+            var previousCommand = this.parallelCommands[i].currentCommand;
+            var command = this.parallelCommands[i].updateCommand();
+            var a = 1;
+            a = 1;
+            if (previousCommand !== command){
                 endingCommands.unshift(i);
+            }
         }
 
         for (i = 0, l = endingCommands.length; i < l; i++){

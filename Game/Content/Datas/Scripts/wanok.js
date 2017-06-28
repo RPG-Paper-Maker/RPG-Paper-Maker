@@ -332,3 +332,11 @@ Wanok.countFields = function count(obj){
 Wanok.isEmpty = function(array) {
     return array[0] == null;
 };
+
+Wanok.cos = function(w){
+    return parseFloat(Math.cos(w).toFixed(10));
+};
+
+Wanok.sin = function(w){
+    return parseFloat(Math.sin(w).toFixed(10));
+};

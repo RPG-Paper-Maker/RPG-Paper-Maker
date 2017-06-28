@@ -37,7 +37,7 @@
 function Camera(d, h){
     this.threeCamera = new THREE.PerspectiveCamera(45,
                                                    $canvasWidth / $canvasHeight,
-                                                   50, 100000);
+                                                   1, 100000);
 
     this.distance = d;
     this.height = h;

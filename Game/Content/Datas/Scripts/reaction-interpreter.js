@@ -49,12 +49,16 @@
 *   @param {MapObject} object Current map object.
 *   @param {number} state Current state of map object reaction.
 */
-function ReactionInterpreter(sender, reaction, object, state){
+function ReactionInterpreter(sender, reaction, object, state, command){
+
+    // Default values
+    if (typeof command === 'undefined') command = reaction.getFirstCommand();
+
     this.currentSender = sender;
     this.currentReaction = reaction;
     this.currentMapObject = object;
     this.currentState = state;
-    this.currentCommand = reaction.getFirstCommand();
+    this.currentCommand = command;
     this.currentCommandState = this.currentCommand.data.initialize();
 }
 
@@ -79,6 +83,18 @@ ReactionInterpreter.prototype = {
         var directNode = true;
 
         while (directNode){
+
+            // Parallel command
+            if (this.currentCommand.data.parallel){
+                var interpreter = new ReactionInterpreter(this.currentSender,
+                                                          this.currentReaction,
+                                                          this.currentMapObject,
+                                                          this.currentState,
+                                                          this.currentCommand);
+                interpreter.currentCommandState.parallel = true;
+                $currentMap.parallelCommands.push(interpreter);
+            }
+
             var new_command = this.updateCommand();
             if (new_command !== this.currentCommand){
                 this.currentCommand = new_command;

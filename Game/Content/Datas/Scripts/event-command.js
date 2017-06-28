@@ -64,6 +64,7 @@ Object.freeze(EventCommandKind);
 function EventCommandShowText(command){
     this.message = command[0];
     this.isDirectNode = false;
+    this.parallel = false;
     this.window = new WindowBox(10, $SCREEN_Y - 10 - 150, $SCREEN_X - 20, 150,
                                 new GraphicText(this.message));
 }
@@ -139,6 +140,7 @@ EventCommandShowText.prototype = {
 function EventCommandChangeVariables(command){
     this.command = command;
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandChangeVariables.prototype = {
@@ -201,6 +203,7 @@ EventCommandChangeVariables.prototype = {
 */
 function EventCommandEndGame(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandEndGame.prototype = {
@@ -240,6 +243,7 @@ EventCommandEndGame.prototype = {
 */
 function EventCommandWhile(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandWhile.prototype = {
@@ -280,6 +284,7 @@ EventCommandWhile.prototype = {
 */
 function EventCommandWhileBreak(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandWhileBreak.prototype = {
@@ -319,6 +324,7 @@ EventCommandWhileBreak.prototype = {
 function EventCommandInputNumber(command){
     this.id = parseInt(command[0]);
     this.isDirectNode = false;
+    this.parallel = false;
 }
 
 EventCommandInputNumber.prototype = {
@@ -399,6 +405,7 @@ function EventCommandIf(command){
     command.shift();
     this.command = command;
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandIf.prototype = {
@@ -481,6 +488,7 @@ EventCommandIf.prototype = {
 */
 function EventCommandElse(command){
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandElse.prototype = {
@@ -529,6 +537,7 @@ EventCommandElse.prototype = {
 */
 function EventCommandOpenMainMenu(command){
     this.isDirectNode = false;
+    this.parallel = false;
 }
 
 EventCommandOpenMainMenu.prototype = {
@@ -582,6 +591,7 @@ EventCommandOpenMainMenu.prototype = {
 */
 function EventCommandOpenSavesMenu(command){
     this.isDirectNode = false;
+    this.parallel = false;
 }
 
 EventCommandOpenSavesMenu.prototype = {
@@ -637,6 +647,7 @@ EventCommandOpenSavesMenu.prototype = {
 function EventCommandModifyInventory(command){
     this.command = command;
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 EventCommandModifyInventory.prototype = {
@@ -809,6 +820,7 @@ EventCommandModifyInventory.prototype = {
 function EventCommandModifyTeam(command){
     this.command = command;
     this.isDirectNode = true;
+    this.parallel = false;
 }
 
 /** Instanciate a new character in a group.
