@@ -43,6 +43,7 @@ public:
     QString realName() const;
     QVector3D *position() const;
     static void copyItem(const QStandardItem* from, QStandardItem* to);
+    static void copyTree(const QStandardItem* from, QStandardItem* to);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

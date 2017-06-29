@@ -20,7 +20,7 @@
 #include "treemaptag.h"
 #include "widgettreelocalmaps.h"
 #include "wanok.h"
-#include <QDirIterator>
+#include <QDir>
 
 // -------------------------------------------------------
 //
@@ -87,25 +87,24 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             QString pathMaps = Wanok::pathCombine(
                         Wanok::get()->project()->pathCurrentProject(),
                         Wanok::pathMaps);
-            QString pathMap = Wanok::pathCombine(pathMaps, mapName);
-            QString pathTemp =
-                    Wanok::pathCombine(pathMap,
-                                       Wanok::TEMP_TREE_MAP_FOLDER_NAME);
+            QString pathMapsTemp = Wanok::pathCombine(
+                        pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
+            QString pathMapSource = Wanok::pathCombine(pathMaps, mapName);
+            QString pathMapTarget = Wanok::pathCombine(pathMapsTemp, mapName);
+            QDir(pathMapsTemp).mkdir(mapName);
 
-            // Remove temp files
-            QDirIterator files(pathTemp, QDir::Files);
-            while (files.hasNext()){
-                files.next();
-                QFile(files.filePath()).remove();
-            }
+            // Copy content
+            Wanok::copyPath(pathMapSource, pathMapTarget);
 
-            // Copy files
-            QDirIterator filesCopy(pathMap, QDir::Files);
-            while (filesCopy.hasNext()){
-                filesCopy.next();
-                QFile::copy(filesCopy.filePath(),
-                            Wanok::pathCombine(pathTemp, filesCopy.fileName()));
-            }
+            // Remove temp
+            QDir(Wanok::pathCombine(
+                     pathMapTarget,
+                     Wanok::TEMP_MAP_FOLDER_NAME)).removeRecursively();
+            QDir(Wanok::pathCombine(
+                     pathMapTarget,
+                     Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME)).removeRecursively();
+            QDir(pathMapTarget).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
+            QDir(pathMapTarget).mkdir(Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
         }
     }
 
@@ -113,6 +112,51 @@ void TreeMapTag::copyItem(const QStandardItem* from,
     for (int i = 0; i < from->rowCount(); i++){
         to->appendRow(new QStandardItem);
         copyItem(from->child(i), to->child(i));
+    }
+}
+
+void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
+
+    // Copy the current row
+    TreeMapTag* tag = (TreeMapTag*) from->data().value<quintptr>();
+    if (tag != nullptr){
+        TreeMapTag* copyTag = new TreeMapTag;
+        copyTag->setCopy(*tag);
+        to->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(copyTag)));
+        to->setText(from->text());
+        QString iconName = copyTag->isDir() ? "dir" : "map";
+        to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
+
+        // Paste content
+        if (!copyTag->isDir()){
+            QString pathMaps = Wanok::pathCombine(
+                        Wanok::get()->project()->pathCurrentProject(),
+                        Wanok::pathMaps);
+            QString pathMapsTemp =
+                    Wanok::pathCombine(pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
+            QString pathMap =
+                    Wanok::pathCombine(pathMapsTemp,
+                                       WidgetTreeLocalMaps::generateMapName(
+                                           copyTag->id()));
+            int newId = WidgetTreeLocalMaps::generateMapId();
+            QString newMapName = WidgetTreeLocalMaps::generateMapName(newId);
+            MapProperties properties(pathMap);
+            properties.setId(newId);
+            QDir(pathMaps).mkdir(newMapName);
+            copyTag->setId(newId);
+            QString newPathMap = Wanok::pathCombine(pathMaps, newMapName);
+            Wanok::copyPath(pathMap, newPathMap);
+            Wanok::writeJSON(Wanok::pathCombine(newPathMap,
+                                                Wanok::fileMapInfos),
+                             properties);
+        }
+    }
+
+    // Copy children
+    for (int i = 0; i < from->rowCount(); i++){
+        to->appendRow(new QStandardItem);
+        copyTree(from->child(i), to->child(i));
     }
 }
 

@@ -216,7 +216,6 @@ QString Map::writeMap(QString path, MapProperties& properties,
 
     QDir(dirMap).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
     QDir(dirMap).mkdir(Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
-    QDir(dirMap).mkdir(Wanok::TEMP_TREE_MAP_FOLDER_NAME);
 
     return dirMap;
 }

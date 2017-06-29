@@ -74,7 +74,6 @@ const QString Wanok::fileMapObjects = "objects.json";
 const QString Wanok::gamesFolderName = "RPG Paper Maker Games";
 const QString Wanok::TEMP_MAP_FOLDER_NAME = "temp";
 const QString Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME = "tempUndoRedo";
-const QString Wanok::TEMP_TREE_MAP_FOLDER_NAME = "tempTree";
 const QString Wanok::dirGames = Wanok::pathCombine(
             QStandardPaths::writableLocation(
                 QStandardPaths::StandardLocation::DocumentsLocation),

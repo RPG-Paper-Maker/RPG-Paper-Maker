@@ -138,6 +138,8 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
 
     // Creating first empty map
     QDir(pathDir).mkdir(Wanok::pathMaps);
+    QDir(pathDir).mkdir(Wanok::pathCombine(Wanok::pathMaps,
+                                           Wanok::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
 
     // Restoring project

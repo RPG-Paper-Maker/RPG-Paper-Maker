@@ -94,6 +94,7 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
 
 void WidgetTreeLocalMaps::initializeProject(Project* p){
     m_project = p;
+    m_pathProject = p->pathCurrentProject();
 }
 
 QStandardItem* WidgetTreeLocalMaps::getSelected() const{
@@ -366,13 +367,25 @@ void WidgetTreeLocalMaps::cleanCopy(){
         SuperListItem::deleteModelTree(m_copied);
         delete ((SuperListItem*) m_copied->data().value<qintptr>());
         delete m_copied;
+        m_copied = nullptr;
+
+        // Remove files temp
+        QString pathMaps = Wanok::pathCombine(m_pathProject, Wanok::pathMaps);
+        QDir(Wanok::pathCombine(
+                 pathMaps, Wanok::TEMP_MAP_FOLDER_NAME)).removeRecursively();
+        QDir(pathMaps).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
     }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::paste(QStandardItem* item){
+    QStandardItem* copy = new QStandardItem;
 
+    // Insert tree
+    TreeMapTag::copyTree(m_copied, copy);
+    item->insertRow(item->rowCount(), copy);
+    Wanok::get()->project()->writeTreeMapDatas();
 }
 
 // -------------------------------------------------------
@@ -393,6 +406,7 @@ void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
     if (selected != nullptr){
         TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
         if (tag->isDir()){
+            m_contextMenuDirectory->canPaste(m_copied != nullptr);
             m_contextMenuDirectory->canDelete(selected->parent() != nullptr);
             m_contextMenuDirectory->showContextMenu(p);
         }

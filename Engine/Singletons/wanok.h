@@ -91,7 +91,6 @@ public:
     const static QString gamesFolderName;
     const static QString TEMP_MAP_FOLDER_NAME;
     const static QString TEMP_UNDOREDO_MAP_FOLDER_NAME;
-    const static QString TEMP_TREE_MAP_FOLDER_NAME;
     const static QString dirGames;
     const static QString dirDesktop;
 

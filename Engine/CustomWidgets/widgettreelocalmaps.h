@@ -76,6 +76,7 @@ private:
     PanelTextures* m_panelTextures;
     Project* m_project;
     QStandardItem* m_copied;
+    QString m_pathProject;
 
     void updateNodesSaved(QStandardItem* item);
     void deleteMapTemp(QString &path, QStandardItem* item);
