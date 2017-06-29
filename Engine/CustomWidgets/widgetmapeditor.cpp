@@ -42,6 +42,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxZ(nullptr)
 {
 
+    // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()),
             this, SLOT(onFirstPressure()));

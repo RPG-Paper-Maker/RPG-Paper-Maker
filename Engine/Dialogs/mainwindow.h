@@ -24,6 +24,7 @@
 #include <QProcess>
 #include "controlmainwindow.h"
 #include "project.h"
+#include "widgetmapeditor.h"
 
 // -------------------------------------------------------
 //
@@ -47,6 +48,7 @@ public:
     ControlMainWindow control;
     QString appName() const;
     QString version() const;
+    WidgetMapEditor* mapEditor() const;
     static void showNotImplementedWindow(QWidget* parent);
     void newProject();
     void openExistingProject();

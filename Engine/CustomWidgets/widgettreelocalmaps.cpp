@@ -38,7 +38,8 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     m_widgetMapEditor(nullptr),
     m_widgetMenuMapEditor(nullptr),
     m_panelTextures(nullptr),
-    m_project(nullptr)
+    m_project(nullptr),
+    m_copied(nullptr)
 {
     // Drag & drop
     this->setAcceptDrops(true);
@@ -60,6 +61,7 @@ WidgetTreeLocalMaps::~WidgetTreeLocalMaps()
 {
     delete m_contextMenuMap;
     delete m_contextMenuDirectory;
+    cleanCopy();
 }
 
 void WidgetTreeLocalMaps::initializeWidgetMapEditor(WidgetMapEditor* w){
@@ -192,7 +194,7 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
                                    WidgetTreeLocalMaps::generateMapName(
                                        tag->id()));
         QString pathTemp = Wanok::pathCombine(pathMap,
-                                              Wanok::tempMapFolderName);
+                                              Wanok::TEMP_MAP_FOLDER_NAME);
         Wanok::deleteAllFiles(pathTemp);
     }
     else{
@@ -346,6 +348,34 @@ void WidgetTreeLocalMaps::reload(){
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeLocalMaps::copy(QStandardItem* item){
+
+    // Clean previous copy
+    cleanCopy();
+
+    // New copy
+    m_copied = new QStandardItem;
+    TreeMapTag::copyItem(item, m_copied);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::cleanCopy(){
+    if (m_copied != nullptr){
+        SuperListItem::deleteModelTree(m_copied);
+        delete ((SuperListItem*) m_copied->data().value<qintptr>());
+        delete m_copied;
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::paste(QStandardItem* item){
+
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //
@@ -434,7 +464,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Wanok::pathCombine(path,
-                                                  Wanok::tempMapFolderName);
+                                                  Wanok::TEMP_MAP_FOLDER_NAME);
             bool empty = Wanok::isDirEmpty(pathTemp);
             if (!empty){
                 Wanok::deleteAllFiles(path);
@@ -470,20 +500,27 @@ void WidgetTreeLocalMaps::contextEditDirectory(){
 }
 
 // -------------------------------------------------------
-void WidgetTreeLocalMaps::contextCopyMap(){
 
+void WidgetTreeLocalMaps::contextCopyMap(){
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        copy(selected);
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextCopyDirectory(){
-
+    contextCopyMap();
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::contextPaste(){
-
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        paste(selected);
+    }
 }
 
 // -------------------------------------------------------

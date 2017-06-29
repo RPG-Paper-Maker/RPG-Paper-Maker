@@ -91,6 +91,7 @@ void SystemReaction::addCommandWithoutText(QStandardItem *root,
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(command)));
     root->appendRow(item);
 }
+
 // -------------------------------------------------------
 
 void SystemReaction::copyCommands(const QStandardItemModel* from,

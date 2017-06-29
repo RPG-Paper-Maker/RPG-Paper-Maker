@@ -18,6 +18,7 @@
 */
 
 #include "widgetmenumapeditor.h"
+#include "mainwindow.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +43,8 @@ WidgetMenuMapEditor::~WidgetMenuMapEditor()
 //
 // -------------------------------------------------------
 
-void WidgetMenuMapEditor::leaveEvent(QEvent *){
+void WidgetMenuMapEditor::leaveEvent(QEvent*){
     this->hide();
+    WidgetMenuBarMapEditor* parent = (WidgetMenuBarMapEditor*) this->parent();
+    ((MainWindow*) parent->window())->mapEditor()->setFocus();
 }

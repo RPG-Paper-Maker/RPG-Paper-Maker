@@ -19,6 +19,8 @@
 
 #include "treemaptag.h"
 #include "widgettreelocalmaps.h"
+#include "wanok.h"
+#include <QDirIterator>
 
 // -------------------------------------------------------
 //
@@ -58,6 +60,61 @@ QString TreeMapTag::realName() const {
 }
 
 QVector3D* TreeMapTag::position() const { return m_position; }
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void TreeMapTag::copyItem(const QStandardItem* from,
+                                   QStandardItem* to)
+{
+    // Copy the current row
+    TreeMapTag* tag = (TreeMapTag*) from->data().value<quintptr>();
+    if (tag != nullptr){
+        TreeMapTag* copyTag = new TreeMapTag;
+        copyTag->setCopy(*tag);
+        to->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(copyTag)));
+        to->setText(from->text());
+        QString iconName = copyTag->isDir() ? "dir" : "map";
+        to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
+
+        if (!copyTag->isDir()){
+            QString mapName =
+                    WidgetTreeLocalMaps::generateMapName(copyTag->id());
+            QString pathMaps = Wanok::pathCombine(
+                        Wanok::get()->project()->pathCurrentProject(),
+                        Wanok::pathMaps);
+            QString pathMap = Wanok::pathCombine(pathMaps, mapName);
+            QString pathTemp =
+                    Wanok::pathCombine(pathMap,
+                                       Wanok::TEMP_TREE_MAP_FOLDER_NAME);
+
+            // Remove temp files
+            QDirIterator files(pathTemp, QDir::Files);
+            while (files.hasNext()){
+                files.next();
+                QFile(files.filePath()).remove();
+            }
+
+            // Copy files
+            QDirIterator filesCopy(pathMap, QDir::Files);
+            while (filesCopy.hasNext()){
+                filesCopy.next();
+                QFile::copy(filesCopy.filePath(),
+                            Wanok::pathCombine(pathTemp, filesCopy.fileName()));
+            }
+        }
+    }
+
+    // Copy children
+    for (int i = 0; i < from->rowCount(); i++){
+        to->appendRow(new QStandardItem);
+        copyItem(from->child(i), to->child(i));
+    }
+}
 
 // -------------------------------------------------------
 //

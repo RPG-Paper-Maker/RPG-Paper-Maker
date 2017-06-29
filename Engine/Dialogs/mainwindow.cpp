@@ -74,10 +74,13 @@ MainWindow::~MainWindow()
     Wanok::kill();
 }
 
-// Gets
-
 QString MainWindow::appName() const{ return p_appName; }
+
 QString MainWindow::version() const{ return p_version; }
+
+WidgetMapEditor* MainWindow::mapEditor() const{
+    return ((PanelProject*)mainPanel)->widgetMapEditor();
+}
 
 // -------------------------------------------------------
 //

@@ -27,7 +27,7 @@
     <string>Objects</string>
    </property>
   </widget>
-  <widget class="QMenu" name="menuFace_Sprite">
+  <widget class="WidgetMenuMapEditor" name="menuFace_Sprite">
    <property name="title">
     <string>Face Sprite</string>
    </property>

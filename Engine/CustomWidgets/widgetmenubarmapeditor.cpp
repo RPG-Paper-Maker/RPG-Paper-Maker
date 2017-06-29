@@ -38,7 +38,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent) :
     ui->setupUi(this);
 
     for (int i = 0; i < this->actions().size(); i++){
-        actions().at(i)->setProperty("selection",false);
+        QAction* action = actions().at(i);
+        action->setProperty("selection",false);
     }
     actions().at((int) m_selectionKind)->setProperty("selection",true);
 }

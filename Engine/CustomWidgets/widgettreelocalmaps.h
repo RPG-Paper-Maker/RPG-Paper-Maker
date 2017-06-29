@@ -63,6 +63,9 @@ public:
     void deleteMap(QStandardItem* item);
     void deleteDirectory(QStandardItem* item);
     void reload();
+    void copy(QStandardItem* item);
+    void cleanCopy();
+    void paste(QStandardItem* item);
 
 private:
     QStandardItemModel* m_model;
@@ -72,6 +75,7 @@ private:
     WidgetMenuBarMapEditor* m_widgetMenuMapEditor;
     PanelTextures* m_panelTextures;
     Project* m_project;
+    QStandardItem* m_copied;
 
     void updateNodesSaved(QStandardItem* item);
     void deleteMapTemp(QString &path, QStandardItem* item);

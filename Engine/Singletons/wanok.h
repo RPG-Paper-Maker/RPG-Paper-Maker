@@ -89,7 +89,9 @@ public:
     const static QString fileMapInfos;
     const static QString fileMapObjects;
     const static QString gamesFolderName;
-    const static QString tempMapFolderName;
+    const static QString TEMP_MAP_FOLDER_NAME;
+    const static QString TEMP_UNDOREDO_MAP_FOLDER_NAME;
+    const static QString TEMP_TREE_MAP_FOLDER_NAME;
     const static QString dirGames;
     const static QString dirDesktop;
 

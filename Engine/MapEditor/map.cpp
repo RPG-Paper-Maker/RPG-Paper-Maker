@@ -53,7 +53,8 @@ Map::Map(int id) :
                                           ->pathCurrentProject(),
                                           Wanok::pathMaps);
     m_pathMap = Wanok::pathCombine(pathMaps, realName);
-    QString pathTemp = Wanok::pathCombine(m_pathMap, Wanok::tempMapFolderName);
+    QString pathTemp = Wanok::pathCombine(m_pathMap,
+                                          Wanok::TEMP_MAP_FOLDER_NAME);
 
     // Reading map infos
     if (!Wanok::mapsToSave.contains(id)){
@@ -213,7 +214,9 @@ QString Map::writeMap(QString path, MapProperties& properties,
     Wanok::writeOtherJSON(Wanok::pathCombine(dirMap, Wanok::fileMapObjects),
                           json);
 
-    QDir(dirMap).mkdir(Wanok::tempMapFolderName);
+    QDir(dirMap).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
+    QDir(dirMap).mkdir(Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+    QDir(dirMap).mkdir(Wanok::TEMP_TREE_MAP_FOLDER_NAME);
 
     return dirMap;
 }
@@ -229,7 +232,7 @@ QString Map::getPortionPathMap(int i, int j, int k){
 
 QString Map::getPortionPath(int i, int j, int k){
     return Wanok::pathCombine(m_pathMap, Wanok::pathCombine(
-                                  Wanok::tempMapFolderName,
+                                  Wanok::TEMP_MAP_FOLDER_NAME,
                                   getPortionPathMap(i, j, k)));
 }
 
@@ -292,7 +295,7 @@ void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
 
 QString Map::getMapInfosPath() const{
     return Wanok::pathCombine(m_pathMap,
-                              Wanok::pathCombine(Wanok::tempMapFolderName,
+                              Wanok::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
                                                  Wanok::fileMapInfos));
 }
 
@@ -300,7 +303,7 @@ QString Map::getMapInfosPath() const{
 
 QString Map::getMapObjectsPath() const{
     return Wanok::pathCombine(m_pathMap,
-                              Wanok::pathCombine(Wanok::tempMapFolderName,
+                              Wanok::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
                                                  Wanok::fileMapObjects));
 }
 
@@ -426,7 +429,8 @@ bool Map::deleteObject(Position& p, MapPortion *mapPortion,
 // -------------------------------------------------------
 
 void Map::save(Map* currentMap){
-    QString pathTemp = Wanok::pathCombine(m_pathMap, Wanok::tempMapFolderName);
+    QString pathTemp = Wanok::pathCombine(m_pathMap,
+                                          Wanok::TEMP_MAP_FOLDER_NAME);
 
     Wanok::deleteAllFiles(m_pathMap);
     Wanok::copyAllFiles(pathTemp, m_pathMap);
@@ -574,7 +578,8 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
 // -------------------------------------------------------
 
 void Map::readObjects(){
-    QString pathTemp = Wanok::pathCombine(m_pathMap, Wanok::tempMapFolderName);
+    QString pathTemp = Wanok::pathCombine(m_pathMap,
+                                          Wanok::TEMP_MAP_FOLDER_NAME);
     QString path = Wanok::pathCombine(pathTemp, Wanok::fileMapObjects);
     QJsonDocument loadDoc;
     Wanok::readOtherJSON(path, loadDoc);
@@ -586,7 +591,7 @@ void Map::readObjects(){
 
 void Map::writeObjects(bool temp) const{
     QString pathTemp = temp ?
-                Wanok::pathCombine(m_pathMap, Wanok::tempMapFolderName)
+                Wanok::pathCombine(m_pathMap, Wanok::TEMP_MAP_FOLDER_NAME)
               : m_pathMap;
     QString path = Wanok::pathCombine(pathTemp, Wanok::fileMapObjects);
     QJsonObject json;
