@@ -65,7 +65,6 @@ HEADERS += \
     Enums/mapeditorselectionkind.h \
     MapEditor/mapportion.h \
     MapEditor/floors.h \
-    CustomWidgets/widgetmenumapeditor.h \
     MapEditor/camera.h \
     MapEditor/grid.h \
     MapEditor/position.h \
@@ -228,7 +227,6 @@ SOURCES += \
     CustomWidgets/widgetmenubarmapeditor.cpp \
     MapEditor/mapportion.cpp \
     MapEditor/floors.cpp \
-    CustomWidgets/widgetmenumapeditor.cpp \
     MapEditor/camera.cpp \
     MapEditor/grid.cpp \
     MapEditor/position.cpp \

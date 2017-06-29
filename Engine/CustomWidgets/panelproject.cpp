@@ -19,7 +19,6 @@
 
 #include "panelproject.h"
 #include "ui_panelproject.h"
-#include <QDebug>
 
 // -------------------------------------------------------
 //
@@ -29,7 +28,8 @@
 
 PanelProject::PanelProject(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelProject)
+    ui(new Ui::PanelProject),
+    m_timerUpdate(new QTimer)
 {
     ui->setupUi(this);
 
@@ -42,6 +42,10 @@ PanelProject::PanelProject(QWidget *parent) :
     ui->splitter->setSizes(sizesHorizontal);
     ui->openGLWidget->setMenuBar(ui->widgetMenuBar);
     ui->openGLWidget->setPanelTextures(ui->panelTextures);
+
+    // Timer
+    m_timerUpdate->start(0);
+    connect(m_timerUpdate, SIGNAL(timeout()), this, SLOT(updateMenu()));
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :
@@ -57,6 +61,7 @@ PanelProject::PanelProject(QWidget *parent, Project* p) :
 
 PanelProject::~PanelProject()
 {
+    delete m_timerUpdate;
     delete ui;
 }
 
@@ -68,4 +73,21 @@ WidgetMapEditor* PanelProject::widgetMapEditor() const{
 
 WidgetTreeLocalMaps* PanelProject::widgetTreeLocalMaps() const{
     return ui->treeViewLocalMaps;
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelProject::updateMenu(){
+
+    if (!ui->widgetMenuBar->rect().contains(
+                ui->widgetMenuBar->mapFromGlobal(QCursor::pos())) &&
+        !ui->widgetMenuBar->containsMenu())
+    {
+        if (ui->widgetMenuBar->activeAction() != nullptr)
+            ui->widgetMenuBar->activeAction()->menu()->hide();
+    }
 }

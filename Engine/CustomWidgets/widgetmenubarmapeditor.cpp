@@ -18,7 +18,6 @@
 */
 
 #include <QPainter>
-#include <QDebug>
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
 
@@ -55,6 +54,22 @@ MapEditorSelectionKind WidgetMenuBarMapEditor::selectionKind() const {
 
 MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
     return m_subSelectionKind;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+bool WidgetMenuBarMapEditor::containsMenu() const{
+    QAction* action = this->activeAction();
+    if (action != nullptr){
+        return action->menu()->rect().contains(
+                    action->menu()->mapFromGlobal(QCursor::pos()));
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------

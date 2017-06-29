@@ -54,6 +54,10 @@ public:
 private:
     Ui::PanelProject *ui;
     Project* m_project;
+    QTimer* m_timerUpdate;
+
+public slots:
+    void updateMenu();
 };
 
 #endif // PANELPROJECT_H

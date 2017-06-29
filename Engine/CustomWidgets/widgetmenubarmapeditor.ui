@@ -16,18 +16,18 @@
   <property name="nativeMenuBar">
    <bool>false</bool>
   </property>
-  <widget class="WidgetMenuMapEditor" name="menuFloors">
+  <widget class="QMenu" name="menuFloors">
    <property name="title">
     <string>Floors</string>
    </property>
    <addaction name="actionFloors"/>
   </widget>
-  <widget class="WidgetMenuMapEditor" name="menuEvents">
+  <widget class="QMenu" name="menuEvents">
    <property name="title">
     <string>Objects</string>
    </property>
   </widget>
-  <widget class="WidgetMenuMapEditor" name="menuFace_Sprite">
+  <widget class="QMenu" name="menuFace_Sprite">
    <property name="title">
     <string>Face Sprite</string>
    </property>
@@ -58,13 +58,6 @@
   <addaction name="menuFace_Sprite"/>
   <addaction name="menuEvents"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>WidgetMenuMapEditor</class>
-   <extends>QMenu</extends>
-   <header>widgetmenumapeditor.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

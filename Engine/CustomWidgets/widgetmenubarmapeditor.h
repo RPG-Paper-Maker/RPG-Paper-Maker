@@ -49,6 +49,7 @@ public:
     static QColor colorBackgroundSelected;
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind() const;
+    bool containsMenu() const;
 
 private:
     Ui::WidgetMenuBarMapEditor *ui;
