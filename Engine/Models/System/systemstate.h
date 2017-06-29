@@ -24,6 +24,7 @@
 #include "superlistitem.h"
 #include "systemcommonobject.h"
 #include "systemobjectevent.h"
+#include "mapeditorsubselectionkind.h"
 
 // -------------------------------------------------------
 //
@@ -37,12 +38,16 @@ class SystemState : public SuperListItem
 {
 public:
     SystemState();
-    SystemState(SuperListItem* state, bool m, bool s, bool d, bool t, bool c,
-                bool p);
+    SystemState(SuperListItem* state, MapEditorSubSelectionKind gk, int gid,
+                bool m, bool s, bool d, bool t, bool c, bool p);
     virtual ~SystemState();
     virtual QString name() const;
     SuperListItem* state() const;
     void setState(SuperListItem* s);
+    MapEditorSubSelectionKind graphicsKind() const;
+    void setGraphicsKind(MapEditorSubSelectionKind k);
+    int graphicsId() const;
+    void setGraphicsId(int i);
     bool moveAnimation() const;
     bool stopAnimation() const;
     bool directionFix() const;
@@ -65,6 +70,8 @@ public:
 
 protected:
     SuperListItem* m_state;
+    MapEditorSubSelectionKind m_graphicsKind;
+    int m_graphicsId;
     bool m_moveAnimation;
     bool m_stopAnimation;
     bool m_directionFix;

@@ -68,27 +68,7 @@ Map::Map(int id) :
     m_squareSize = Wanok::get()->getSquareSize();
 
     // Loading textures
-    m_textureTileset = new QOpenGLTexture(
-                QImage(m_mapProperties->tileset()->picture()
-                       ->getPath(PictureKind::Tilesets)));
-    m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-    m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
-
-    SystemPicture* picture = (SystemPicture*) SuperListItem::getById(
-                Wanok::get()->project()->picturesDatas()
-                ->model(PictureKind::Characters)->invisibleRootItem(), 1);
-    QOpenGLTexture* texture = new QOpenGLTexture(
-                QImage(picture->getPath(PictureKind::Characters)));
-    texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-    texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
-    m_texturesCharacters[1] = texture;
-
-    m_textureObjectSquare = new QOpenGLTexture(
-                QImage(":/textures/Ressources/object_square.png"));
-    m_textureObjectSquare->setMinificationFilter(
-                QOpenGLTexture::Filter::Nearest);
-    m_textureObjectSquare->setMagnificationFilter(
-                QOpenGLTexture::Filter::Nearest);
+    loadTextures();
 }
 
 Map::Map(MapProperties* properties) :
@@ -251,6 +231,48 @@ void Map::setModelObjects(QStandardItemModel* model){
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
+}
+
+// -------------------------------------------------------
+
+void Map::loadTextures(){
+    SystemPicture* picture;
+    QOpenGLTexture* texture;
+    QStandardItemModel* model;
+
+    // Tileset
+    m_textureTileset = new QOpenGLTexture(
+                QImage(m_mapProperties->tileset()->picture()
+                       ->getPath(PictureKind::Tilesets)));
+    m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+    m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+
+    // Characters
+    model = Wanok::get()->project()->picturesDatas()
+            ->model(PictureKind::Characters);
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+        QImage image(1, 1, QImage::Format_ARGB32);
+        QString path = picture->getPath(PictureKind::Characters);
+
+        if (path.isEmpty())
+            image.fill(QColor(0, 0, 0, 0));
+        else
+            image.load(path);
+
+        texture = new QOpenGLTexture(image);
+        texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+        texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+        m_texturesCharacters[picture->id()] = texture;
+    }
+
+    // Object square
+    m_textureObjectSquare = new QOpenGLTexture(
+                QImage(":/textures/Ressources/object_square.png"));
+    m_textureObjectSquare->setMinificationFilter(
+                QOpenGLTexture::Filter::Nearest);
+    m_textureObjectSquare->setMagnificationFilter(
+                QOpenGLTexture::Filter::Nearest);
 }
 
 // -------------------------------------------------------

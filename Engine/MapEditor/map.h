@@ -56,6 +56,7 @@ public:
                             QJsonArray &jsonObject);
     static QString getPortionPathMap(int i, int j, int k);
     static void setModelObjects(QStandardItemModel* model);
+    void loadTextures();
     MapPortion* mapPortion(Portion& p);
     MapPortion* mapPortion(int x, int y, int z);
     MapPortion* createMapPortion(Portion& p);

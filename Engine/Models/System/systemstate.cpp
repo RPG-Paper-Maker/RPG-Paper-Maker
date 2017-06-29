@@ -34,15 +34,19 @@ SystemState::SystemState() :
     SystemState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                        ->commonEventsDatas()->modelStates()
                                        ->invisibleRootItem(), 1),
-                false, false, false, false, false, false)
+                MapEditorSubSelectionKind::None, -1, false, false, false, false,
+                false, false)
 {
 
 }
 
-SystemState::SystemState(SuperListItem *state, bool m, bool s, bool d, bool t,
-                         bool c, bool p) :
+SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk,
+                         int gid, bool m, bool s, bool d, bool t, bool c,
+                         bool p) :
     SuperListItem(state->id(), state->name()),
     m_state(state),
+    m_graphicsKind(gk),
+    m_graphicsId(gid),
     m_moveAnimation(m),
     m_stopAnimation(s),
     m_directionFix(d),
@@ -66,6 +70,18 @@ void SystemState::setState(SuperListItem* s) {
     setId(m_state->id());
     setName(m_state->name());
 }
+
+MapEditorSubSelectionKind SystemState::graphicsKind() const {
+    return m_graphicsKind;
+}
+
+void SystemState::setGraphicsKind(MapEditorSubSelectionKind k) {
+    m_graphicsKind = k;
+}
+
+int SystemState::graphicsId() const { return m_graphicsId; }
+
+void SystemState::setGraphicsId(int i) { m_graphicsId = i; }
 
 bool SystemState::moveAnimation() const { return m_moveAnimation; }
 
@@ -142,6 +158,8 @@ void SystemState::read(const QJsonObject &json){
     setState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                     ->commonEventsDatas()->modelStates()
                                     ->invisibleRootItem(), id()));
+    m_graphicsKind = static_cast<MapEditorSubSelectionKind>(json["gk"].toInt());
+    m_graphicsId = json["gid"].toInt();
     m_moveAnimation = json["move"].toBool();
     m_stopAnimation = json["stop"].toBool();
     m_directionFix = json["dir"].toBool();
@@ -155,6 +173,8 @@ void SystemState::read(const QJsonObject &json){
 void SystemState::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
+    json["gk"] = (int) m_graphicsKind;
+    json["gid"] = m_graphicsId;
     json["move"] = m_moveAnimation;
     json["stop"] = m_stopAnimation;
     json["dir"] = m_directionFix;

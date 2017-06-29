@@ -47,9 +47,9 @@ PanelObject::PanelObject(QWidget *parent) :
     QList<QWidget*> widgetList = QList<QWidget*>({ui->tabWidgetCommands,
                                                   ui->groupBoxMoving,
                                                   ui->groupBoxOptions,
-                                                  ui->labelApparence,
-                                                  ui->frameApparence,
-                                                  ui->comboBoxApparence});
+                                                  ui->labelGraphics,
+                                                  ui->frameGraphics,
+                                                  ui->comboBoxGraphics});
     for (int i = 0; i < widgetList.size(); i++){
         sp_retain = widgetList[i]->sizePolicy();
         sp_retain.setRetainSizeWhenHidden(true);
@@ -162,9 +162,9 @@ void PanelObject::showStateWidgets(bool b){
     ui->tabWidgetCommands->setVisible(b);
     ui->groupBoxMoving->setVisible(b);
     ui->groupBoxOptions->setVisible(b);
-    ui->labelApparence->setVisible(b);
-    ui->frameApparence->setVisible(b);
-    ui->comboBoxApparence->setVisible(b);
+    ui->labelGraphics->setVisible(b);
+    ui->frameGraphics->setVisible(b);
+    ui->comboBoxGraphics->setVisible(b);
 }
 
 // -------------------------------------------------------
@@ -311,6 +311,11 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
 
         SystemState* super = (SystemState*) selected->data().value<quintptr>();
         if (super != nullptr){
+
+            // Graphics
+            ui->frameGraphics->setState(super);
+
+            // Events
             for (int i = 0; i < m_reactions.size(); i++){
                 SystemObjectEvent* event =
                         (SystemObjectEvent*) m_model->modelEvents()->item(i)
@@ -392,4 +397,24 @@ void PanelObject::on_checkBoxSetWithCamera_toggled(bool checked){
 
 void PanelObject::on_checkBoxPixelOffset_toggled(bool checked){
     getSelectedState()->setPixelOffset(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
+    QStandardItem* selected = ui->treeViewStates->getSelected();
+
+    if (selected != nullptr){
+        SystemState* super = (SystemState*) selected->data().value<quintptr>();
+        if (super != nullptr){
+            MapEditorSubSelectionKind kind;
+            switch (index){
+            case 0:
+                kind = MapEditorSubSelectionKind::None; break;
+            case 1:
+                kind = MapEditorSubSelectionKind::SpritesFix; break;
+            }
+            super->setGraphicsKind(kind);
+        }
+    }
 }

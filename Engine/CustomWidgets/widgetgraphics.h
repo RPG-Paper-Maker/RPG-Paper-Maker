@@ -17,28 +17,36 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAPEDITORSUBSELECTIONKIND_H
-#define MAPEDITORSUBSELECTIONKIND_H
+#ifndef WIDGETGRAPHICS_H
+#define WIDGETGRAPHICS_H
+
+#include <QFrame>
+#include <QPainter>
+#include "systemstate.h"
 
 // -------------------------------------------------------
 //
-//  ENUM MapEditorSubSelectionKind
+//  CLASS WidgetGraphics
 //
-//  All the types of selection for the map editor.
+//  A widget graphics of an object.
 //
 // -------------------------------------------------------
 
-enum class MapEditorSubSelectionKind {
-    None,
-    Floors,
-    Autotiles,
-    Water,
-    SpritesFace,
-    SpritesFix,
-    SpritesDouble,
-    SpritesQuadra,
-    SpritesWall,
-    Object
+class WidgetGraphics : public QFrame
+{
+    Q_OBJECT
+public:
+    explicit WidgetGraphics(QWidget *parent = 0);
+    void setState(SystemState* s);
+
+protected:
+    SystemState* m_state;
+    bool m_selected;
+    int m_borderOffset;
+
+    void mousePressEvent(QMouseEvent*);
+    void mouseDoubleClickEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*event);
 };
 
-#endif // MAPEDITORSUBSELECTIONKIND_H
+#endif // WIDGETGRAPHICS_H

@@ -77,6 +77,7 @@ private slots:
     void on_checkBoxThrough_toggled(bool checked);
     void on_checkBoxSetWithCamera_toggled(bool checked);
     void on_checkBoxPixelOffset_toggled(bool checked);
+    void on_comboBoxGraphics_currentIndexChanged(int index);
 };
 
 #endif // PANELOBJECT_H

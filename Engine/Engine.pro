@@ -193,7 +193,8 @@ HEADERS += \
     CustomWidgets/widgettilesetpraticable.h \
     Dialogs/Systems/dialogsystemstate.h \
     Dialogs/dialoglocation.h \
-    Dialogs/Commands/dialogcommandwait.h
+    Dialogs/Commands/dialogcommandwait.h \
+    CustomWidgets/widgetgraphics.h
 
 SOURCES += \
     main.cpp \
@@ -345,7 +346,8 @@ SOURCES += \
     CustomWidgets/widgettilesetpraticable.cpp \
     Dialogs/Systems/dialogsystemstate.cpp \
     Dialogs/dialoglocation.cpp \
-    Dialogs/Commands/dialogcommandwait.cpp
+    Dialogs/Commands/dialogcommandwait.cpp \
+    CustomWidgets/widgetgraphics.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

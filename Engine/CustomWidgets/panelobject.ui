@@ -163,6 +163,9 @@
            </property>
            <item>
             <widget class="QLabel" name="label_7">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -176,6 +179,9 @@
            </item>
            <item>
             <widget class="WidgetSuperTree" name="treeViewProperties">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -191,14 +197,14 @@
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
              <item>
-              <widget class="QLabel" name="labelApparence">
+              <widget class="QLabel" name="labelGraphics">
                <property name="text">
-                <string>Apparence:</string>
+                <string>Graphics:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="frameApparence">
+              <widget class="WidgetGraphics" name="frameGraphics">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -214,10 +220,15 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBoxApparence">
+              <widget class="QComboBox" name="comboBoxGraphics">
                <item>
                 <property name="text">
                  <string>None</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Sprite fix</string>
                 </property>
                </item>
               </widget>
@@ -240,10 +251,17 @@
                  </widget>
                 </item>
                 <item row="0" column="1" colspan="3">
-                 <widget class="QComboBox" name="comboBoxType"/>
+                 <widget class="QComboBox" name="comboBoxType">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
                 </item>
                 <item row="1" column="1" colspan="3">
                  <widget class="QPushButton" name="pushButtonEditRoute">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Edit route...</string>
                   </property>
@@ -251,6 +269,9 @@
                 </item>
                 <item row="2" column="0" colspan="2">
                  <widget class="QLabel" name="labelSpeed">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Speed:</string>
                   </property>
@@ -258,16 +279,29 @@
                 </item>
                 <item row="2" column="2">
                  <widget class="QLabel" name="label_3">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>x</string>
                   </property>
                  </widget>
                 </item>
                 <item row="2" column="3">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBoxSpeed"/>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBoxSpeed">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="value">
+                   <double>1.000000000000000</double>
+                  </property>
+                 </widget>
                 </item>
                 <item row="3" column="0" colspan="2">
                  <widget class="QLabel" name="labelFrequency">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Frequency:</string>
                   </property>
@@ -275,13 +309,23 @@
                 </item>
                 <item row="3" column="2">
                  <widget class="QLabel" name="label_4">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>x</string>
                   </property>
                  </widget>
                 </item>
                 <item row="3" column="3">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBoxFrequency"/>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBoxFrequency">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="value">
+                   <double>1.000000000000000</double>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -305,6 +349,9 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QCheckBox" name="checkBoxThrough">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Through</string>
                   </property>
@@ -312,6 +359,9 @@
                 </item>
                 <item row="1" column="0">
                  <widget class="QCheckBox" name="checkBoxStopAnimation">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Stop animation</string>
                   </property>
@@ -326,6 +376,9 @@
                 </item>
                 <item row="2" column="0">
                  <widget class="QCheckBox" name="checkBoxDirectionFix">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Direction fix</string>
                   </property>
@@ -358,6 +411,12 @@
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetGraphics</class>
+   <extends>QFrame</extends>
+   <header>widgetgraphics.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

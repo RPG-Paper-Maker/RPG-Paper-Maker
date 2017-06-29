@@ -85,6 +85,9 @@ QString SystemPicture::getLocalFolder(PictureKind kind){
 // -------------------------------------------------------
 
 QString SystemPicture::getPath(PictureKind kind) const{
+    if (id() == -1)
+        return "";
+
     QString folder = getFolder(kind, m_isBR);
 
     return Wanok::pathCombine(folder, name());
