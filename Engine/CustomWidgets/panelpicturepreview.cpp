@@ -37,6 +37,7 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     m_picture(nullptr)
 {
     ui->setupUi(this);
+    ui->groupBox->hide();
 
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
@@ -70,15 +71,40 @@ PanelPicturePreview::~PanelPicturePreview()
 
 SystemPicture* PanelPicturePreview::picture() const { return m_picture; }
 
+int PanelPicturePreview::indexX() const {
+    return ui->widgetPreview->indexX();
+}
+
+void PanelPicturePreview::setIndexX(int i) {
+    ui->widgetPreview->setIndexX(i);
+}
+
+int PanelPicturePreview::indexY() const {
+    return ui->widgetPreview->indexY();
+}
+
+void PanelPicturePreview::setIndexY(int i) {
+    ui->widgetPreview->setIndexY(i);
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
+void PanelPicturePreview::setChooseRect(bool b){
+    ui->widgetPreview->setChooseRect(b);
+    if (b)
+        ui->groupBox->show();
+}
+
+// -------------------------------------------------------
+
 void PanelPicturePreview::setPictureKind(PictureKind kind){
     bool isNone = kind == PictureKind::None;
     m_pictureKind = kind;
+    ui->widgetPreview->setKind(kind);
 
     showPictures(!isNone);
 

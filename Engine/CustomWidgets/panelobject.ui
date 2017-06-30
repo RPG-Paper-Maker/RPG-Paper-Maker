@@ -119,34 +119,7 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>70</height>
-              </size>
-             </property>
-             <attribute name="headerVisible">
-              <bool>false</bool>
-             </attribute>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Events:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="WidgetSuperTree" name="treeViewEvents">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>70</height>
+               <height>65</height>
               </size>
              </property>
              <attribute name="headerVisible">
@@ -185,9 +158,36 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>70</height>
+               <height>65</height>
               </size>
              </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Events:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="WidgetSuperTree" name="treeViewEvents">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>65</height>
+              </size>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
             </widget>
            </item>
           </layout>
@@ -340,13 +340,6 @@
              <layout class="QGridLayout" name="gridLayout_7">
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_6">
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="checkBoxMoveAnimation">
-                  <property name="text">
-                   <string>Move animation</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="1">
                  <widget class="QCheckBox" name="checkBoxThrough">
                   <property name="enabled">
@@ -354,6 +347,30 @@
                   </property>
                   <property name="text">
                    <string>Through</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="checkBoxDirectionFix">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Direction fix</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkBoxSetWithCamera">
+                  <property name="text">
+                   <string>Set with camera</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBoxMoveAnimation">
+                  <property name="text">
+                   <string>Move animation</string>
                   </property>
                  </widget>
                 </item>
@@ -367,20 +384,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkBoxSetWithCamera">
-                  <property name="text">
-                   <string>Set with camera</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="0">
-                 <widget class="QCheckBox" name="checkBoxDirectionFix">
+                 <widget class="QCheckBox" name="checkBoxClimbAnimation">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
                   <property name="text">
-                   <string>Direction fix</string>
+                   <string>Climb animation</string>
                   </property>
                  </widget>
                 </item>
@@ -388,6 +398,16 @@
                  <widget class="QCheckBox" name="checkBoxPixelOffset">
                   <property name="text">
                    <string>Pixel offset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QCheckBox" name="checkBoxKeepPosition">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Keep position</string>
                   </property>
                  </widget>
                 </item>

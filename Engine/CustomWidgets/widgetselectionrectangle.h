@@ -38,6 +38,8 @@ class WidgetSelectionRectangle  : public QWidget
     public:
         explicit WidgetSelectionRectangle(QWidget *parent = 0);
         ~WidgetSelectionRectangle();
+        void setSquareWidth(int s);
+        void setSquareHeight(int s);
         QRect getCoefRect() const;
         void setRectangle(int x, int y, int width, int height);
         void setRealPosition();

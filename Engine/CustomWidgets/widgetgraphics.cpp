@@ -20,6 +20,7 @@
 #include "widgetgraphics.h"
 #include "dialogpicturespreview.h"
 #include "wanok.h"
+#include "panelobject.h"
 
 // -------------------------------------------------------
 //
@@ -40,6 +41,31 @@ void WidgetGraphics::setState(SystemState* s) { m_state = s; }
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+SystemPicture* WidgetGraphics::getPicture(){
+    PictureKind kind = getPictureKind();
+
+    return (SystemPicture*) SuperListItem::getById(
+                Wanok::get()->project()->picturesDatas()->model(kind)
+                ->invisibleRootItem(), m_state->graphicsId());
+}
+
+// -------------------------------------------------------
+
+PictureKind WidgetGraphics::getPictureKind(){
+    switch (m_state->graphicsKind()){
+    case MapEditorSubSelectionKind::SpritesFix:
+        return PictureKind::Characters;
+    default:
+        return PictureKind::None;
+    }
+}
+
+// -------------------------------------------------------
+//
 //  EVENTS
 //
 // -------------------------------------------------------
@@ -52,26 +78,36 @@ void WidgetGraphics::mousePressEvent(QMouseEvent*){
 // -------------------------------------------------------
 
 void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent*){
-    if (m_state->graphicsKind() != MapEditorSubSelectionKind::None){
-        PictureKind kind;
-        SystemPicture* picture;
 
-        // Get picture
-        switch (m_state->graphicsKind()){
-        case MapEditorSubSelectionKind::SpritesFix:
-            kind = PictureKind::Characters; break;
-        default:
-            kind = PictureKind::None;
-        }
-        picture = (SystemPicture*) SuperListItem::getById(
-                    Wanok::get()->project()->picturesDatas()->model(kind)
-                    ->invisibleRootItem(), m_state->graphicsId());
-
-        // Open dialog preview
-        DialogPicturesPreview dialog(picture, kind);
-        if (dialog.exec() == QDialog::Accepted)
-            m_state->setGraphicsId(dialog.picture()->id());
+    bool wasNone = false;
+    if (m_state->graphicsKind() == MapEditorSubSelectionKind::None){
+        wasNone = true;
+        ((PanelObject*) this->parent())->passToSprite();
     }
+
+    PictureKind kind;
+    SystemPicture* picture;
+
+    // Get picture
+    kind = getPictureKind();
+    picture = getPicture();
+
+    // Open dialog preview
+    DialogPicturesPreview dialog(picture, kind);
+    dialog.setIndexX(m_state->indexX());
+    dialog.setIndexY(m_state->indexY());
+
+    if (dialog.exec() == QDialog::Accepted){
+        m_state->setGraphicsId(dialog.picture()->id());
+        m_state->setIndexX(dialog.indexX());
+        m_state->setIndexY(dialog.indexY());
+    }
+    else{
+        if (wasNone)
+            ((PanelObject*) this->parent())->passToNone();
+    }
+
+    repaint();
 }
 
 // -------------------------------------------------------
@@ -81,6 +117,36 @@ void WidgetGraphics::paintEvent(QPaintEvent* event){
 
     QPainter painter(this);
 
+    // Draw background
+    painter.fillRect(QRectF(rect().x() + 1, rect().y() + 1,
+                            rect().width() - 2, rect().height() - 2),
+                     QColor(255, 255, 255));
+
+    // Draw image
+    if (m_state->graphicsKind() != MapEditorSubSelectionKind::None){
+        if (m_state->graphicsId() != -1){
+            PictureKind kind = getPictureKind();
+            SystemPicture* picture = getPicture();
+            QImage image(picture->getPath(kind));
+            int coef = Wanok::BASIC_SQUARE_SIZE / Wanok::get()->getSquareSize();
+            int width = image.width() / Wanok::get()->project()->gameDatas()
+                    ->systemDatas()->framesAnimation();
+            int height = image.height() / Wanok::get()->project()->gameDatas()
+                    ->systemDatas()->framesAnimation();
+            int newWidth = width * coef, newHeight = height * coef;
+            int x = (this->rect().width() - newWidth) / 2;
+            int y = (this->rect().height() - newHeight) / 2;
+            painter.drawImage(QRect(x, y, newWidth, newHeight),
+                              image,
+                              QRect(m_state->indexX() * width,
+                                    m_state->indexY() * height,
+                                    width,
+                                    height)
+                              );
+        }
+    }
+
+    // Draw cursor
     if (m_selected){
         QPen pen(Qt::DashLine);
         pen.setWidth(2);

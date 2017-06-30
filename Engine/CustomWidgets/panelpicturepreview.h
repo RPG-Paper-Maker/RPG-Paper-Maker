@@ -39,8 +39,13 @@ public:
     explicit PanelPicturePreview(QWidget *parent = 0);
     ~PanelPicturePreview();
     SystemPicture* picture() const;
+    int indexX() const;
+    void setIndexX(int i);
+    int indexY() const;
+    void setIndexY(int i);
     void setPictureKind(PictureKind kind);
     void setPicture(SystemPicture* picture);
+    void setChooseRect(bool b);
 
 private:
     Ui::PanelPicturePreview *ui;

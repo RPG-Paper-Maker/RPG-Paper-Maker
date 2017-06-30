@@ -23,6 +23,7 @@
 #include <QFrame>
 #include <QPainter>
 #include "systemstate.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +39,8 @@ class WidgetGraphics : public QFrame
 public:
     explicit WidgetGraphics(QWidget *parent = 0);
     void setState(SystemState* s);
+    SystemPicture* getPicture();
+    PictureKind getPictureKind();
 
 protected:
     SystemState* m_state;

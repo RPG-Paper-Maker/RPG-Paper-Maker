@@ -46,6 +46,10 @@ public:
                                    QWidget *parent = 0);
     ~DialogPicturesPreview();
     SystemPicture* picture() const;
+    int indexX() const;
+    void setIndexX(int i);
+    int indexY() const;
+    void setIndexY(int i);
 
 protected:
     virtual void closeEvent(QCloseEvent *);

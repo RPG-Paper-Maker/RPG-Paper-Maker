@@ -56,6 +56,8 @@ public:
     void updateReactions();
     SystemState* getSelectedState() const;
     void updateStateOptions(SystemState* state);
+    void passToSprite();
+    void passToNone();
 
 private:
     Ui::PanelObject *ui;

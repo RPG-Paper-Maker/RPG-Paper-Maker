@@ -58,6 +58,10 @@ QString SystemDatas::pathBR() const { return m_pathBR; }
 
 void SystemDatas::setPathBR(QString p) { m_pathBR = p; }
 
+int SystemDatas::framesAnimation() const { return m_framesAnimation; }
+
+void SystemDatas::setFramesAnimation(int f) { m_framesAnimation = f; }
+
 QStandardItemModel* SystemDatas::modelCurrencies() const {
     return m_modelCurrencies;
 }
@@ -78,6 +82,7 @@ void SystemDatas::setDefault(){
 
     m_portionsRay = 1;
     m_squareSize = 16;
+    m_framesAnimation = 4;
 
     // Path BR
     m_pathBR = Wanok::pathCombine(QDir::currentPath(), Wanok::pathBR);
@@ -131,6 +136,7 @@ void SystemDatas::read(const QJsonObject &json){
     m_idMapHero = json["idMapHero"].toInt();
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
+    m_framesAnimation = json["frames"].toInt();
 
     // Currencies
     jsonList = json["currencies"].toArray();
@@ -169,6 +175,7 @@ void SystemDatas::write(QJsonObject &json) const{
     json["idMapHero"] = m_idMapHero;
     json["idObjHero"] = m_idObjectHero;
     json["pathBR"] = m_pathBR;
+    json["frames"] = m_framesAnimation;
 
     // Currencies
     jsonArray = QJsonArray();

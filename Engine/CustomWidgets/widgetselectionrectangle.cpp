@@ -46,6 +46,10 @@ WidgetSelectionRectangle::~WidgetSelectionRectangle()
 
 }
 
+void WidgetSelectionRectangle::setSquareWidth(int s) { m_squareWidth = s; }
+
+void WidgetSelectionRectangle::setSquareHeight(int s) { m_squareHeight = s; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -70,8 +74,8 @@ void WidgetSelectionRectangle::setRectangle(int x, int y,
                                             int width, int height)
 {
     if (m_squareWidth != 0 && m_squareHeight != 0){
-        m_rect.setX((x / m_squareWidth) * m_squareWidth);
-        m_rect.setY((y / m_squareHeight) * m_squareHeight);
+        m_rect.setX(x * m_squareWidth);
+        m_rect.setY(y  * m_squareHeight);
         m_rect.setWidth(width * m_squareWidth);
         m_rect.setHeight(height * m_squareHeight);
     }
@@ -88,6 +92,8 @@ void WidgetSelectionRectangle::setRealPosition(){
 
 void WidgetSelectionRectangle::makeFirstSelection(int x, int y, float zoom){
     if (m_squareWidth != 0 && m_squareHeight != 0){
+        x = x / m_squareWidth;
+        y = y / m_squareHeight;
         setRectangle((int)(x / zoom), (int)(y / zoom), 1, 1);
     }
 }

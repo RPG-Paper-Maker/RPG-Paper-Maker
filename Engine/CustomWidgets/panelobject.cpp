@@ -218,6 +218,18 @@ void PanelObject::updateStateOptions(SystemState* state){
 }
 
 // -------------------------------------------------------
+
+void PanelObject::passToSprite(){
+    ui->comboBoxGraphics->setCurrentIndex(1);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::passToNone(){
+    ui->comboBoxGraphics->setCurrentIndex(0);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -230,7 +242,9 @@ void PanelObject::on_lineEditName_textChanged(const QString &text){
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxInheritance_currentIndexChanged(int index){
-    if (m_model != nullptr && index != -1 && ui->comboBoxInheritance->count() > 1){
+    if (m_model != nullptr && index != -1 &&
+            ui->comboBoxInheritance->count() > 1)
+    {
         SystemCommonObject* object = nullptr;
         int id = -1;
         if (index != 0){
@@ -314,6 +328,16 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
 
             // Graphics
             ui->frameGraphics->setState(super);
+            int index;
+            switch (super->graphicsKind()){
+            case MapEditorSubSelectionKind::None:
+                index = 0; break;
+            case MapEditorSubSelectionKind::SpritesFix:
+                index = 1; break;
+            default:
+                break;
+            }
+            ui->comboBoxGraphics->setCurrentIndex(index);
 
             // Events
             for (int i = 0; i < m_reactions.size(); i++){

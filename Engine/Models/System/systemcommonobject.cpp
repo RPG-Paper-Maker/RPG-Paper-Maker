@@ -94,8 +94,9 @@ void SystemCommonObject::setDefault(QStandardItemModel *modelEventsUser){
     super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
-    state = new SystemState(super, MapEditorSubSelectionKind::None, -1, false,
-                            false, false, false, false, false);
+    state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
+                            false, false, false, false, false, false, false,
+                            false);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -152,8 +153,9 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
-    state = new SystemState(super, MapEditorSubSelectionKind::SpritesFix, 1,
-                            true, true, false, false, true, true);
+    state = new SystemState(super, MapEditorSubSelectionKind::SpritesFix, 1, 0,
+                            0, true, false, false, false, false, true, true,
+                            false);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();

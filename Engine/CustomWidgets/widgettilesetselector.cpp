@@ -65,9 +65,12 @@ void WidgetTilesetSelector::setImageNone(){
 // -------------------------------------------------------
 
 void WidgetTilesetSelector::updateImage(){
-    if (!m_textureTileset.isNull())
-        m_textureTileset = m_textureTileset.scaled(m_textureTileset.width() * 2,
-                                               m_textureTileset.height() * 2);
+    if (!m_textureTileset.isNull()){
+        int coef = Wanok::BASIC_SQUARE_SIZE / Wanok::get()->getSquareSize();
+        m_textureTileset = m_textureTileset.scaled(
+                    m_textureTileset.width() * coef,
+                    m_textureTileset.height() * coef);
+    }
     this->setGeometry(0, 0,
                       m_textureTileset.width(),
                       m_textureTileset.height());

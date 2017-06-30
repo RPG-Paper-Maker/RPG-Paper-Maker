@@ -36,6 +36,7 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
+    ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
     ui->widget->setPicture(picture);
     ui->widget->showAvailableContent(false);
@@ -52,6 +53,22 @@ DialogPicturesPreview::~DialogPicturesPreview()
 
 SystemPicture* DialogPicturesPreview::picture() const {
     return ui->widget->picture();
+}
+
+int DialogPicturesPreview::indexX() const {
+    return ui->widget->indexX();
+}
+
+void DialogPicturesPreview::setIndexX(int i) {
+    ui->widget->setIndexX(i);
+}
+
+int DialogPicturesPreview::indexY() const {
+    return ui->widget->indexY();
+}
+
+void DialogPicturesPreview::setIndexY(int i) {
+    ui->widget->setIndexY(i);
 }
 
 // -------------------------------------------------------

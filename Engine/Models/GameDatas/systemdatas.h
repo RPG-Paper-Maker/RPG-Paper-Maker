@@ -47,6 +47,8 @@ public:
     void setIdObjectHero(int i);
     QString pathBR() const;
     void setPathBR(QString p);
+    int framesAnimation() const;
+    void setFramesAnimation(int f);
 
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelItemsTypes() const;
@@ -60,6 +62,7 @@ private:
     int m_idMapHero;
     int m_idObjectHero;
     QString m_pathBR;
+    int m_framesAnimation;
     QStandardItemModel* m_modelCurrencies;
     QStandardItemModel* m_modelItemsTypes;
 };
