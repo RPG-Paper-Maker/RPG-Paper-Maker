@@ -75,10 +75,17 @@ Map* WidgetMapEditor::getMap() const { return m_control.map(); }
 //
 // -------------------------------------------------------
 
-Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position){
+Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position,
+                              QVector3D *positionObject, int cameraDistance,
+                              int cameraHeight)
+{
     m_idMap = idMap;
     m_position = position;
-    return m_control.loadMap(idMap, position);
+    m_positionObject = positionObject;
+    m_cameraDistance = cameraDistance;
+    m_cameraHeight = cameraHeight;
+    return m_control.loadMap(idMap, position, positionObject, cameraDistance,
+                             cameraHeight);
 }
 
 // -------------------------------------------------------
@@ -163,10 +170,16 @@ void WidgetMapEditor::update(){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position){
+void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
+                                    QVector3D *positionObject,
+                                    int cameraDistance, int cameraHeight)
+{
     m_needUpdateMap = true;
     m_idMap = idMap;
     m_position = position;
+    m_positionObject = positionObject;
+    m_cameraDistance = cameraDistance;
+    m_cameraHeight = cameraHeight;
 
     if (isGLInitialized)
         initializeMap();
@@ -176,7 +189,8 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position){
 
 void WidgetMapEditor::initializeMap(){
     makeCurrent();
-    Map* map = loadMap(m_idMap, m_position);
+    Map* map = loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
+                       m_cameraHeight);
     if (m_menuBar != nullptr){
         m_menuBar->show();
         Wanok::get()->project()->setCurrentMap(map);
@@ -241,8 +255,9 @@ void WidgetMapEditor::addObject(){
     setObjectPosition(p);
     m_control.addObject(p);
 
-    needUpdateMap(m_control.map()->mapProperties()->id(),
-                  m_control.cursor()->position());
+    deleteMap();
+    needUpdateMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
+                  m_cameraHeight);
 }
 
 // -------------------------------------------------------

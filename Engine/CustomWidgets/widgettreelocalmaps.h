@@ -57,7 +57,7 @@ public:
     static void updateNodeSaved(QStandardItem* item);
     void updateAllNodesSaved();
     void deleteAllMapTemp();
-    void showMap(QStandardItem* item, int idMap, QVector3D *position);
+    void showMap(QStandardItem* item);
     void hideMap();
     void setMap(int id, QVector3D& position);
     void deleteMap(QStandardItem* item);

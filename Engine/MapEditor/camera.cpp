@@ -57,6 +57,10 @@ float Camera::positionZ() const { return m_position.z(); }
 
 double Camera::horizontalAngle() const { return m_horizontalAngle; }
 
+int Camera::distance() const { return m_distance; }
+
+int Camera::height() const { return m_height; }
+
 void Camera::setDistance(int d){ m_distance = d; }
 
 void Camera::setHeight(int h){ m_height = h; }

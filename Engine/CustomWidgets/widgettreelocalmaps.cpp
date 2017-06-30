@@ -207,15 +207,18 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::showMap(QStandardItem *item, int idMap,
-                                  QVector3D* position)
+void WidgetTreeLocalMaps::showMap(QStandardItem *item)
 {
+    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
     m_widgetMapEditor->deleteMap();
 
     if (m_project != nullptr)
         m_project->setCurrentMap(nullptr);
 
-    m_widgetMapEditor->needUpdateMap(idMap, position);
+    m_widgetMapEditor->needUpdateMap(tag->id(), tag->position(),
+                                     tag->positionObject(),
+                                     tag->cameraDistance(),
+                                     tag->cameraHeight());
     m_widgetMapEditor->setTreeMapNode(item);
 }
 
@@ -341,7 +344,7 @@ void WidgetTreeLocalMaps::reload(){
         if (tag->id() == -1)
             hideMap();
         else
-            showMap(selected, tag->id(), tag->position());
+            showMap(selected);
 
         // Loading tileset texture
         updateTileset();
@@ -488,7 +491,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
             properties.save(path);
             TreeMapDatas::setName(selected, properties.name());
             Wanok::get()->project()->writeTreeMapDatas();
-            showMap(selected, properties.id(), tag->position());
+            showMap(selected);
 
             // Loading tileset texture
             updateTileset();

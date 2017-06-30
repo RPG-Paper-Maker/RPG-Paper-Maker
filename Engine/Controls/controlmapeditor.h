@@ -50,9 +50,11 @@ public:
     Camera* camera() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
+    void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();
-    Map* loadMap(int idMap, QVector3D *position);
+    Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
+                 int cameraDistance, int cameraHeight);
     void deleteMap();
     void onResize(int width, int height);
 

@@ -47,13 +47,16 @@ public:
     void setMenuBar(WidgetMenuBarMapEditor* m);
     void setPanelTextures(PanelTextures* m);
     void setTreeMapNode(QStandardItem* item);
-    Map* loadMap(int idMap, QVector3D *position);
+    Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
+                 int cameraDistance, int cameraHeight);
     void deleteMap();
     void initializeSpinBoxesCoords(QSpinBox* x, QSpinBox* z);
     void resizeGL(int width, int height);
     void initializeGL();
     void paintGL();
-    void needUpdateMap(int idMap, QVector3D *position);
+    void needUpdateMap(int idMap, QVector3D *position,
+                       QVector3D *positionObject, int cameraDistance,
+                       int cameraHeight);
     void initializeMap();
     void save();
     void onKeyPress(int k, double speed);
@@ -81,6 +84,9 @@ private:
     QSpinBox* m_spinBoxX;
     QSpinBox* m_spinBoxZ;
     QVector3D* m_position;
+    QVector3D* m_positionObject;
+    int m_cameraDistance;
+    int m_cameraHeight;
     ContextMenuList* m_contextMenu;
     long m_elapsedTime;
 

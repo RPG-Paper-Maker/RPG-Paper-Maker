@@ -75,8 +75,10 @@ void ControlMapEditor::reLoadTextures(){
 
 // -------------------------------------------------------
 
-Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
-
+Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
+                               QVector3D *positionObject, int cameraDistance,
+                               int cameraHeight)
+{
     // Map & cursor
     m_cursor = new Cursor(position);
     m_map = new Map(idMap);
@@ -94,18 +96,22 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
     m_grid->initializeGL();
 
     // Cursor object
-    m_cursorObject = new Cursor(new QVector3D);
-    Position pos;
+    m_cursorObject = new Cursor(positionObject);
+    m_cursorObject->initializeSquareSize(m_map->squareSize());
+    Position pos(m_cursorObject->getSquareX(),
+                 m_cursorObject->getSquareY(),
+                 0,
+                 m_cursorObject->getSquareZ(),
+                 0);
     setCursorObjectPosition(pos);
     m_cursorObject->setFrameNumber(1);
     m_cursorObject->loadTexture(
                 ":/textures/Ressources/object_square_cursor.png");
-    m_cursorObject->initializeSquareSize(m_map->squareSize());
     m_cursorObject->initialize();
 
     // Camera
-    m_camera->setDistance(Camera::defaultDistance);
-    m_camera->setHeight(Camera::defaultHeight);
+    m_camera->setDistance(cameraDistance);
+    m_camera->setHeight(cameraHeight);
     m_camera->update(m_cursor, m_map->squareSize());
 
     return m_map;
@@ -121,7 +127,6 @@ void ControlMapEditor::deleteMap(){
         m_cursor = nullptr;
     }
     if (m_cursorObject != nullptr){
-        delete m_cursorObject->position();
         delete m_cursorObject;
         m_cursorObject = nullptr;
     }
@@ -145,6 +150,14 @@ void ControlMapEditor::onResize(int width, int height){
     m_width = width;
     m_height = height;
     m_camera->setProjection(width, height);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateCameraTreeNode(){
+    TreeMapTag* tag = (TreeMapTag*) m_treeMapNode->data().value<quintptr>();
+    tag->setCameraDistance(m_camera->distance());
+    tag->setCameraHeight(m_camera->height());
 }
 
 // -------------------------------------------------------
@@ -772,6 +785,8 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent* event){
         m_camera->zoomPlus(0);
     else
         m_camera->zoomLess(0);
+
+    updateCameraTreeNode();
 }
 
 // -------------------------------------------------------
@@ -779,8 +794,10 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent* event){
 void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button){
     m_mouse = point;
 
-    if (button == Qt::MouseButton::MiddleButton)
+    if (button == Qt::MouseButton::MiddleButton){
         m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
+        updateCameraTreeNode();
+    }
 }
 
 // -------------------------------------------------------

@@ -46,6 +46,8 @@ public:
     float positionY() const;
     float positionZ() const;
     double horizontalAngle() const;
+    int distance() const;
+    int height() const;
     void setDistance(int d);
     void setHeight(int h);
     void addDistance(int d);

@@ -36,7 +36,10 @@ TreeMapTag::TreeMapTag() :
 
 TreeMapTag::TreeMapTag(int i, QString n) :
     SuperListItem(i,n),
-    m_position(new QVector3D)
+    m_position(new QVector3D),
+    m_positionObject(new QVector3D),
+    m_cameraDistance(Camera::defaultDistance),
+    m_cameraHeight(Camera::defaultHeight)
 {
 
 }
@@ -51,6 +54,7 @@ TreeMapTag* TreeMapTag::createMap(QString name, int id){
 
 TreeMapTag::~TreeMapTag(){
     delete m_position;
+    delete m_positionObject;
 }
 
 bool TreeMapTag::isDir() const { return p_id == -1; }
@@ -60,6 +64,16 @@ QString TreeMapTag::realName() const {
 }
 
 QVector3D* TreeMapTag::position() const { return m_position; }
+
+QVector3D* TreeMapTag::positionObject() const { return m_positionObject; }
+
+int TreeMapTag::cameraDistance() const { return m_cameraDistance; }
+
+int TreeMapTag::cameraHeight() const { return m_cameraHeight; }
+
+void TreeMapTag::setCameraDistance(int d) { m_cameraDistance = d; }
+
+void TreeMapTag::setCameraHeight(int h) { m_cameraHeight = h; }
 
 // -------------------------------------------------------
 //
@@ -114,6 +128,8 @@ void TreeMapTag::copyItem(const QStandardItem* from,
         copyItem(from->child(i), to->child(i));
     }
 }
+
+// -------------------------------------------------------
 
 void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
 

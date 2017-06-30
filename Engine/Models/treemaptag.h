@@ -41,7 +41,12 @@ public:
     static TreeMapTag* createMap(QString name, int id);
     bool isDir() const;
     QString realName() const;
-    QVector3D *position() const;
+    QVector3D* position() const;
+    QVector3D* positionObject() const;
+    int cameraDistance() const;
+    int cameraHeight() const;
+    void setCameraDistance(int d);
+    void setCameraHeight(int h);
     static void copyItem(const QStandardItem* from, QStandardItem* to);
     static void copyTree(const QStandardItem* from, QStandardItem* to);
 
@@ -50,6 +55,9 @@ public:
 
 protected:
     QVector3D* m_position;
+    QVector3D* m_positionObject;
+    int m_cameraDistance;
+    int m_cameraHeight;
 };
 
 Q_DECLARE_METATYPE(TreeMapTag)
