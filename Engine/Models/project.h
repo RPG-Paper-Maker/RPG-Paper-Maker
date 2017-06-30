@@ -73,6 +73,7 @@ public:
     void writePicturesDatas();
     void writeSystemDatas();
     void saveCurrentMap();
+    void updatePictures();
 
 private:
     QString p_pathCurrentProject;

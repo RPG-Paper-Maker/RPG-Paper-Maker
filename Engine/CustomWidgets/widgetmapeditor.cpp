@@ -148,8 +148,9 @@ void WidgetMapEditor::update(){
     QOpenGLWidget::update();
 
     if (!m_firstPressure){
-        double speed = (QTime::currentTime().msecsSinceStartOfDay() - m_elapsedTime)
-                * 0.04666 * Wanok::get()->getSquareSize();
+        double speed = (QTime::currentTime().msecsSinceStartOfDay() -
+                        m_elapsedTime) * 0.04666 *
+                Wanok::get()->getSquareSize();
 
         // Multi keys
         QSet<int>::iterator i;
@@ -239,6 +240,9 @@ void WidgetMapEditor::addObject(){
     Position p;
     setObjectPosition(p);
     m_control.addObject(p);
+
+    needUpdateMap(m_control.map()->mapProperties()->id(),
+                  m_control.cursor()->position());
 }
 
 // -------------------------------------------------------

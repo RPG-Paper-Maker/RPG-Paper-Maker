@@ -31,6 +31,7 @@
 #include "position.h"
 #include "systemcommonobject.h"
 #include "vertex.h"
+#include "sprites.h"
 
 // -------------------------------------------------------
 //
@@ -40,7 +41,7 @@
 //
 // -------------------------------------------------------
 
-class MapObjects : public Serializable, protected QOpenGLFunctions
+class MapObjects : public Serializable
 {
 public:
     MapObjects();
@@ -51,6 +52,7 @@ public:
     SystemCommonObject* removeObject(Position& p);
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
+    void clearSprites();
     void initializeVertices(int squareSize,
                             QHash<int, QOpenGLTexture *> &characters);
     void initializeGL(QOpenGLShaderProgram* programStatic);
@@ -62,14 +64,7 @@ public:
 
 private:
     QHash<int, QHash<Position, SystemCommonObject*>*> m_sprites;
-
-    // OpenGL informations
-    QOpenGLBuffer m_vertexBufferStatic;
-    QOpenGLBuffer m_indexBufferStatic;
-    QVector<Vertex> m_verticesStatic;
-    QVector<GLuint> m_indexesStatic;
-    QOpenGLVertexArrayObject m_vaoStatic;
-    QOpenGLShaderProgram* m_programStatic;
+    QList<SpriteObject*> m_spritesGL;
 };
 
 #endif // MAPOBJECTS_H

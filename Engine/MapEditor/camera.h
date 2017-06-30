@@ -36,6 +36,8 @@ class Camera
 {
 public:
     Camera();
+    static int defaultDistance;
+    static int defaultHeight;
 
     QMatrix4x4 view() const;
     void setProjection(int width, int height);

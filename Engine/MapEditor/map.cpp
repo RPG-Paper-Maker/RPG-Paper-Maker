@@ -38,7 +38,8 @@ Map::Map() :
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_programStatic(nullptr),
-    m_textureTileset(nullptr)
+    m_textureTileset(nullptr),
+    m_textureObjectSquare(nullptr)
 {
 
 }
@@ -46,7 +47,8 @@ Map::Map() :
 Map::Map(int id) :
     m_modelObjects(new QStandardItemModel),
     m_programStatic(nullptr),
-    m_textureTileset(nullptr)
+    m_textureTileset(nullptr),
+    m_textureObjectSquare(nullptr)
 {
     QString realName = WidgetTreeLocalMaps::generateMapName(id);
     QString pathMaps = Wanok::pathCombine(Wanok::get()->project()
@@ -81,27 +83,13 @@ Map::Map(MapProperties* properties) :
 
 Map::~Map() {
     delete m_mapProperties;
-
-    QHash<Portion, MapPortion*>::iterator i;
-    for (i = m_mapPortions.begin(); i != m_mapPortions.end(); i++){
-        MapPortion* portion = i.value();
-        if (portion != nullptr)
-            delete portion;
-    }
-
+    deletePortions();
     SuperListItem::deleteModel(m_modelObjects);
 
     if (m_programStatic != nullptr)
         delete m_programStatic;
 
-
-    delete m_textureTileset;
-
-    QHash<int, QOpenGLTexture*>::iterator j;
-    for (j = m_texturesCharacters.begin(); j != m_texturesCharacters.end(); j++)
-        delete j.value();
-
-    delete m_textureObjectSquare;
+    deleteTextures();
 }
 
 MapProperties* Map::mapProperties() const { return m_mapProperties; }
@@ -240,6 +228,8 @@ void Map::loadTextures(){
     QOpenGLTexture* texture;
     QStandardItemModel* model;
 
+    deleteTextures();
+
     // Tileset
     m_textureTileset = new QOpenGLTexture(
                 QImage(m_mapProperties->tileset()->picture()
@@ -273,6 +263,18 @@ void Map::loadTextures(){
                 QOpenGLTexture::Filter::Nearest);
     m_textureObjectSquare->setMagnificationFilter(
                 QOpenGLTexture::Filter::Nearest);
+}
+
+// -------------------------------------------------------
+
+void Map::deleteTextures(){
+    if (m_textureTileset != nullptr)
+        delete m_textureTileset;
+    QHash<int, QOpenGLTexture*>::iterator j;
+    for (j = m_texturesCharacters.begin(); j != m_texturesCharacters.end(); j++)
+        delete j.value();
+    if (m_textureObjectSquare != nullptr)
+        delete m_textureObjectSquare;
 }
 
 // -------------------------------------------------------
@@ -364,13 +366,27 @@ void Map::updatePortion(Portion& p){
 
 // -------------------------------------------------------
 
-void Map::loadPortions(){
+void Map::loadPortions(Portion portion){
+    deletePortions();
+
     for (int i = -m_portionsRay - 1; i <= m_portionsRay + 1; i++){
         for (int j = -m_portionsRay - 1; j <= m_portionsRay + 1; j++){
             for (int k = -m_portionsRay - 1; k <= m_portionsRay + 1; k++){
-                loadPortion(i, j, k, i, j, k);
+                loadPortion(i + portion.x(), j + portion.y(), k + portion.z(),
+                            i, j, k);
             }
         }
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::deletePortions(){
+    QHash<Portion, MapPortion*>::iterator i;
+    for (i = m_mapPortions.begin(); i != m_mapPortions.end(); i++){
+        MapPortion* portion = i.value();
+        if (portion != nullptr)
+            delete portion;
     }
 }
 

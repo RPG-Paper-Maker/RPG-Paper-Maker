@@ -183,6 +183,118 @@ void SpriteDatas::write(QJsonObject & json) const{
 // -------------------------------------------------------
 //
 //
+//  ---------- SPRITEOBJECT
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+SpriteObject::SpriteObject(SpriteDatas &datas, QOpenGLTexture* texture) :
+    m_datas(datas),
+    m_texture(texture),
+    m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
+    m_programStatic(nullptr)
+{
+
+}
+
+SpriteObject::~SpriteObject()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  GL
+//
+// -------------------------------------------------------
+
+void SpriteObject::initializeVertices(int squareSize, Position3D& position)
+{
+    m_verticesStatic.clear();
+    m_indexesStatic.clear();
+    int count = 0;
+    m_datas.initializeVertices(squareSize,
+                               m_texture->width(),
+                               m_texture->height(),
+                               m_verticesStatic, m_indexesStatic,
+                               position, count);
+}
+
+// -------------------------------------------------------
+
+void SpriteObject::initializeGL(QOpenGLShaderProgram* programStatic){
+    if (m_programStatic == nullptr){
+        initializeOpenGLFunctions();
+
+        // Programs
+        m_programStatic = programStatic;
+    }
+}
+
+// -------------------------------------------------------
+
+void SpriteObject::updateGL(){
+
+    // If existing VAO or VBO, destroy it
+    if (m_vaoStatic.isCreated())
+        m_vaoStatic.destroy();
+    if (m_vertexBufferStatic.isCreated())
+        m_vertexBufferStatic.destroy();
+    if (m_indexBufferStatic.isCreated())
+        m_indexBufferStatic.destroy();
+
+    // Create new VBO for vertex
+    m_vertexBufferStatic.create();
+    m_vertexBufferStatic.bind();
+    m_vertexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vertexBufferStatic.allocate(m_verticesStatic.constData(),
+                                  m_verticesStatic.size() * sizeof(Vertex));
+
+    // Create new VBO for indexes
+    m_indexBufferStatic.create();
+    m_indexBufferStatic.bind();
+    m_indexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_indexBufferStatic.allocate(m_indexesStatic.constData(),
+                                 m_indexesStatic.size() * sizeof(GLuint));
+
+    // Create new VAO
+    m_vaoStatic.create();
+    m_vaoStatic.bind();
+    m_programStatic->enableAttributeArray(0);
+    m_programStatic->enableAttributeArray(1);
+    m_programStatic->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
+                                        Vertex::positionTupleSize,
+                                        Vertex::stride());
+    m_programStatic->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
+                                        Vertex::texCoupleSize,
+                                        Vertex::stride());
+    m_indexBufferStatic.bind();
+
+    // Releases
+    m_vaoStatic.release();
+    m_indexBufferStatic.release();
+    m_vertexBufferStatic.release();
+}
+
+// -------------------------------------------------------
+
+void SpriteObject::paintGL(){
+    m_texture->bind();
+    m_vaoStatic.bind();
+    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
+    m_vaoStatic.bind();
+}
+
+// -------------------------------------------------------
+//
+//
 //  ---------- SPRITES
 //
 //

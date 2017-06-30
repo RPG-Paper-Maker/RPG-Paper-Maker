@@ -177,7 +177,7 @@ void Project::readKeyBoardDatas(){
 
 void Project::readPicturesDatas(){
     m_picturesDatas->read(p_pathCurrentProject);
-    p_gameDatas->tilesetsDatas()->updatePictures();
+    updatePictures();
 }
 
 // -------------------------------------------------------
@@ -244,4 +244,10 @@ void Project::writePicturesDatas(){
 
 void Project::writeSystemDatas(){
     p_gameDatas->writeSystem(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::updatePictures(){
+    p_gameDatas->tilesetsDatas()->updatePictures();
 }

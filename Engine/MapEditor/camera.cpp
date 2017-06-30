@@ -20,6 +20,10 @@
 #include "camera.h"
 #include <QtMath>
 
+int Camera::defaultDistance = 400;
+
+int Camera::defaultHeight = 250;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET

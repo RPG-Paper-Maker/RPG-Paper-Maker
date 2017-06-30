@@ -69,24 +69,29 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
+void ControlMapEditor::reLoadTextures(){
+    m_map->loadTextures();
+}
+
+// -------------------------------------------------------
+
 Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
 
-    // Map
+    // Map & cursor
+    m_cursor = new Cursor(position);
     m_map = new Map(idMap);
+    m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
+    m_cursor->initializeSquareSize(m_map->squareSize());
+    m_cursor->initialize();
     m_map->initializeGL();
-    m_map->loadPortions();
+    m_currentPortion = m_cursor->getPortion();
+    m_map->loadPortions(m_currentPortion);
 
     // Grid
     m_grid = new Grid;
     m_grid->initializeVertices(m_map->mapProperties()->length(),
                                m_map->mapProperties()->width(), 16);
     m_grid->initializeGL();
-
-    // Cursor
-    m_cursor = new Cursor(position);
-    m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
-    m_cursor->initializeSquareSize(m_map->squareSize());
-    m_cursor->initialize();
 
     // Cursor object
     m_cursorObject = new Cursor(new QVector3D);
@@ -99,8 +104,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position){
     m_cursorObject->initialize();
 
     // Camera
-    m_camera->setDistance(710);
-    m_camera->setHeight(350);
+    m_camera->setDistance(Camera::defaultDistance);
+    m_camera->setHeight(Camera::defaultHeight);
     m_camera->update(m_cursor, m_map->squareSize());
 
     return m_map;
@@ -663,10 +668,8 @@ void ControlMapEditor::addObject(Position& p){
             setToNotSaved();
         }
         m_selectedObject = object;
-
         m_map->writeObjects(true);
-        m_portionsToUpdate += portion;
-        m_portionsToSave += portion;
+        saveTempPortion(portion);
     }
     else
         delete object;

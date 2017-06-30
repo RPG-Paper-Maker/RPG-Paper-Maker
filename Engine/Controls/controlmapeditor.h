@@ -51,6 +51,7 @@ public:
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
     void initialize();
+    void reLoadTextures();
     Map* loadMap(int idMap, QVector3D *position);
     void deleteMap();
     void onResize(int width, int height);

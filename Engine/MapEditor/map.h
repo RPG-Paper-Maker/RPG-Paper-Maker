@@ -57,6 +57,7 @@ public:
     static QString getPortionPathMap(int i, int j, int k);
     static void setModelObjects(QStandardItemModel* model);
     void loadTextures();
+    void deleteTextures();
     MapPortion* mapPortion(Portion& p);
     MapPortion* mapPortion(int x, int y, int z);
     MapPortion* createMapPortion(Portion& p);
@@ -75,7 +76,8 @@ public:
     void loadPortion(int realX, int realY, int realZ, int x, int y, int z);
     void replacePortion(Portion& previousPortion, Portion& newPortion);
     void updatePortion(Portion& p);
-    void loadPortions();
+    void loadPortions(Portion portion);
+    void deletePortions();
     bool isInGrid(Position& position) const;
     bool isInPortion(Portion& portion, int offset = 0) const;
     void save(Map* currentMap);

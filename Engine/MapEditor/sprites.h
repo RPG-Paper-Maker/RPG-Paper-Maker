@@ -24,6 +24,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
+#include <QOpenGLTexture>
 #include <QHash>
 #include <QVector>
 #include "serializable.h"
@@ -79,6 +80,37 @@ protected:
     int m_widthPosition;
     int m_angle;
     QRect* m_textureRect;
+};
+
+// -------------------------------------------------------
+//
+//  CLASS SpriteObject
+//
+//  A sprite object in a portion of the map.
+//
+// -------------------------------------------------------
+
+class SpriteObject : protected QOpenGLFunctions
+{
+public:
+    SpriteObject(SpriteDatas& datas, QOpenGLTexture* texture);
+    virtual ~SpriteObject();
+    void initializeVertices(int squareSize, Position3D& position);
+    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void updateGL();
+    void paintGL();
+
+protected:
+    SpriteDatas& m_datas;
+    QOpenGLTexture* m_texture;
+
+    // OpenGL informations
+    QOpenGLBuffer m_vertexBufferStatic;
+    QOpenGLBuffer m_indexBufferStatic;
+    QVector<Vertex> m_verticesStatic;
+    QVector<GLuint> m_indexesStatic;
+    QOpenGLVertexArrayObject m_vaoStatic;
+    QOpenGLShaderProgram* m_programStatic;
 };
 
 // -------------------------------------------------------
