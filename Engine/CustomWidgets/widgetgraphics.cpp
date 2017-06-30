@@ -98,11 +98,13 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent*){
     dialog.setIndexY(m_state->indexY());
 
     if (dialog.exec() == QDialog::Accepted){
+        Wanok::get()->project()->writePicturesDatas();
         m_state->setGraphicsId(dialog.picture()->id());
         m_state->setIndexX(dialog.indexX());
         m_state->setIndexY(dialog.indexY());
     }
     else{
+        Wanok::get()->project()->readPicturesDatas();
         if (wasNone)
             ((PanelObject*) this->parent())->passToNone();
     }

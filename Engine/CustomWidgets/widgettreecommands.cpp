@@ -60,7 +60,7 @@ WidgetTreeCommands::~WidgetTreeCommands()
 
     for (int i = 0; i < m_copiedCommands.size(); i++){
         copiedCommand = m_copiedCommands.at(i);
-        SystemReaction::deleteCommands(copiedCommand);
+        SystemCommonReaction::deleteCommands(copiedCommand);
         delete copiedCommand;
     }
 }
@@ -252,7 +252,7 @@ void WidgetTreeCommands::copyCommand(){
     // Clear previous copy
     for (int i = 0; i < m_copiedCommands.size(); i++){
         copiedCommand = m_copiedCommands.at(i);
-        SystemReaction::deleteCommands(copiedCommand);
+        SystemCommonReaction::deleteCommands(copiedCommand);
         delete copiedCommand;
     }
     m_copiedCommands.clear();
@@ -264,7 +264,7 @@ void WidgetTreeCommands::copyCommand(){
 
         if (command != nullptr && command->kind() != EventCommandKind::None){
             copiedCommand = new QStandardItem;
-            SystemReaction::copyCommandsItem(selected, copiedCommand);
+            SystemCommonReaction::copyCommandsItem(selected, copiedCommand);
             m_copiedCommands.append(copiedCommand);
         }
     }
@@ -282,7 +282,7 @@ void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
     for (int i = 0; i < m_copiedCommands.size(); i++){
         copiedCommand = m_copiedCommands.at(i);
         copy = new QStandardItem;
-        SystemReaction::copyCommandsItem(copiedCommand, copy);
+        SystemCommonReaction::copyCommandsItem(copiedCommand, copy);
         root->insertRow(selected->row(), copy);
         expand(copy->index());
         updateAllNodesString(copy);
@@ -305,7 +305,7 @@ void WidgetTreeCommands::deleteCommand(){
             root = getRootOfCommand(selected);
 
             // Delete selected command
-            SystemReaction::deleteCommands(selected);
+            SystemCommonReaction::deleteCommands(selected);
             root->removeRow(selected->row());
         }
     }

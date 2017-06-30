@@ -26,6 +26,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
+#include <QOpenGLTexture>
 #include "serializable.h"
 #include "position.h"
 #include "systemcommonobject.h"
@@ -50,8 +51,8 @@ public:
     SystemCommonObject* removeObject(Position& p);
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
-
-    void initializeVertices(int squareSize, int width, int height);
+    void initializeVertices(int squareSize,
+                            QHash<int, QOpenGLTexture *> &characters);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();

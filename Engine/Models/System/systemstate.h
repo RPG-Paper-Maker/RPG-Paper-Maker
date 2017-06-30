@@ -22,7 +22,6 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
-#include "systemcommonobject.h"
 #include "systemobjectevent.h"
 #include "mapeditorsubselectionkind.h"
 

@@ -109,22 +109,13 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      int width, int height,
                                      QVector<Vertex>& vertices,
                                      QVector<GLuint>& indexes,
-                                     Position3D& position, int& count,
-                                     bool isTileset)
+                                     Position3D& position, int& count)
 {
     float x, y, w, h;
-    if (isTileset){
-        x = (float)(m_textureRect->x() * squareSize) / width;
-        y = (float)(m_textureRect->y() * squareSize) / height;
-        w = (float)(m_textureRect->width() * squareSize) / width;
-        h = (float)(m_textureRect->height() * squareSize) / height;
-    }
-    else{
-        x = 0.0f;
-        y = 0.0f;
-        w = 32.0f / 128.0f;
-        h = 32.0f / 128.0f;
-    }
+    x = (float)(m_textureRect->x() * squareSize) / width;
+    y = (float)(m_textureRect->y() * squareSize) / height;
+    w = (float)(m_textureRect->width() * squareSize) / width;
+    h = (float)(m_textureRect->height() * squareSize) / height;
 
     QVector3D pos((float) position.x() * squareSize -
                   ((textureRect()->width() - 1) * squareSize / 2),
@@ -317,7 +308,7 @@ void Sprites::initializeVertices(int squareSize, int width, int height){
             SpriteDatas* sprite = list->at(j);
             sprite->initializeVertices(squareSize, width, height,
                                        m_verticesStatic, m_indexesStatic,
-                                       position, count, true);
+                                       position, count);
         }
     }
 }

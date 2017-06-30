@@ -24,6 +24,7 @@
 #include "sprites.h"
 #include "mapobjects.h"
 #include "systemcommonobject.h"
+#include <QOpenGLTexture>
 
 // -------------------------------------------------------
 //
@@ -48,7 +49,8 @@ public:
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 
-    void initializeVertices(int squareSize, int width, int height);
+    void initializeVertices(int squareSize, QOpenGLTexture* tileset,
+                            QHash<int, QOpenGLTexture*>& characters);
     void initializeGL(QOpenGLShaderProgram *programStatic);
     void updateGL();
     void paintFloors();

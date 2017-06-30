@@ -69,7 +69,7 @@ public:
     QRect* textureRect() const;
     void initializeVertices(int squareSize, int width, int height,
                             QVector<Vertex>& vertices, QVector<GLuint>& indexes,
-                            Position3D& position, int& count, bool isTileset);
+                            Position3D& position, int& count);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

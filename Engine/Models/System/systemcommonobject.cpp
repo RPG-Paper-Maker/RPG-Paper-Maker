@@ -22,6 +22,7 @@
 #include "widgetsupertree.h"
 #include "systemobjectevent.h"
 #include "systemstate.h"
+#include "systemcommonreaction.h"
 
 QString SystemCommonObject::strInheritance = "hId";
 QString SystemCommonObject::strStates = "states";
@@ -187,7 +188,7 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(
     event->setDefaultHero();
     reaction = event->reactionAt(1);
     command = new EventCommand(kind, commandList);
-    SystemReaction::addCommandWithoutText(reaction->modelCommands()
+    SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
                                           ->invisibleRootItem(), command);
     item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
@@ -237,6 +238,28 @@ bool SystemCommonObject::canInherit(QStandardItemModel* model,
         return canInherit(model, (SystemCommonObject*) model->item(index+1)
                           ->data().value<quintptr>());
     }
+}
+
+// -------------------------------------------------------
+
+SystemState* SystemCommonObject::getFirstState() const{
+    SystemState* state = nullptr;
+
+    if (m_inheritanceId != -1){
+        SystemCommonObject* obj;
+        obj = (SystemCommonObject*) SuperListItem::getById(
+                    Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                    ->modelCommonObjects()->invisibleRootItem(),
+                    m_inheritanceId);
+        state = obj->getFirstState();
+        if (state != nullptr)
+            return state;
+    }
+
+    if (m_states->invisibleRootItem()->rowCount() > 0)
+        return (SystemState*) m_states->item(0)->data().value<qintptr>();
+
+    return nullptr;
 }
 
 // -------------------------------------------------------

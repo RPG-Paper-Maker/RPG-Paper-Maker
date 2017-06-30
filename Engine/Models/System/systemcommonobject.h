@@ -22,8 +22,10 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "superlistitem.h"
 #include "eventcommandkind.h"
+#include "superlistitem.h"
+
+class SystemState;
 
 // -------------------------------------------------------
 //
@@ -57,6 +59,7 @@ public:
     QStandardItemModel* modelStates() const;
     QStandardItemModel* modelEvents() const;
     void updateModelEvents();
+    SystemState* getFirstState() const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemCommonObject &item);

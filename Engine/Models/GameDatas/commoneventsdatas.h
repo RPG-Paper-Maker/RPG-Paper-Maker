@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "systemcreateparameter.h"
+#include "systemstate.h"
 
 // -------------------------------------------------------
 //

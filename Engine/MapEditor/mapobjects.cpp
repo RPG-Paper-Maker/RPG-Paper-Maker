@@ -19,6 +19,7 @@
 
 #include "mapobjects.h"
 #include "wanok.h"
+#include "systemstate.h"
 
 // -------------------------------------------------------
 //
@@ -133,7 +134,9 @@ bool MapObjects::deleteObject(Position& p){
 //
 // -------------------------------------------------------
 
-void MapObjects::initializeVertices(int squareSize, int width, int height){
+void MapObjects::initializeVertices(int squareSize,
+                                    QHash<int, QOpenGLTexture *> &characters)
+{
     m_verticesStatic.clear();
     m_indexesStatic.clear();
 
@@ -144,11 +147,26 @@ void MapObjects::initializeVertices(int squareSize, int width, int height){
         QHash<Position, SystemCommonObject*>::iterator j;
         for (j = h->begin(); j != h->end(); j++){
             Position position = j.key();
-            //SystemCommonObject* o = i.value();
-            SpriteDatas sprite;
-            sprite.initializeVertices(squareSize, width, height,
-                                      m_verticesStatic, m_indexesStatic,
-                                      position, count, false);
+            SystemCommonObject* o = j.value();
+            SystemState* state = o->getFirstState();
+
+            if (state != nullptr){
+                QOpenGLTexture* texture = characters[state->graphicsId()];
+                int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+                        ->framesAnimation();
+                int width = texture->width() / frames / squareSize;
+                int height = texture->height() / frames / squareSize;
+                SpriteDatas sprite(
+                            0, 50, 0,
+                            new QRect(state->indexX() * width,
+                                      state->indexY() * height,
+                                      width, height));
+                sprite.initializeVertices(squareSize,
+                                          texture->width(),
+                                          texture->height(),
+                                          m_verticesStatic, m_indexesStatic,
+                                          position, count);
+            }
         }
     }
 }
