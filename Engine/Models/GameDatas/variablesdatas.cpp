@@ -52,33 +52,15 @@ QStandardItemModel* VariablesDatas::model() const {
 // -------------------------------------------------------
 
 void VariablesDatas::setDefault(){
-    for (int i = 1; i <= 5; i++)
-        p_model->invisibleRootItem()->appendRow(getDefaultItem(i));
-}
-
-// -------------------------------------------------------
-
-QStandardItem* VariablesDatas::getDefaultItem(int i){
-    QStandardItem * item = new QStandardItem();
-    QStandardItemModel* list = new QStandardItemModel();
-    for (int j = 1; j <= SystemVariables::variablesPerPage; j++){
-        QStandardItem* varItem = new QStandardItem();
-        SuperListItem* var =
-                new SuperListItem(
-                    j + ((i-1) * SystemVariables::variablesPerPage),"");
-        varItem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(var)));
-        varItem->setFlags(varItem->flags() ^ (Qt::ItemIsDropEnabled));
-        varItem->setText(var->toString());
-        list->invisibleRootItem()->appendRow(varItem);
+    for (int i = 1; i <= 5; i++){
+        QStandardItem * item = new QStandardItem();
+        SystemVariables* page = new SystemVariables(i, "");
+        page->setDefault();
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(page)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(page->toString());
+        p_model->invisibleRootItem()->appendRow(item);
     }
-    SystemVariables* page = new SystemVariables(i, QString("Page ")
-                                                          + QString::number(i),
-                                                          list);
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(page)));
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(page->toString());
-
-    return item;
 }
 
 // -------------------------------------------------------

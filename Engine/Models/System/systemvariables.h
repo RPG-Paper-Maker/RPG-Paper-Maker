@@ -36,12 +36,15 @@ class SystemVariables : public SuperListItem
 {
 public:
     SystemVariables();
+    SystemVariables(int i, QString n);
     SystemVariables(int i, QString n, QStandardItemModel* m);
     virtual ~SystemVariables();
     static int variablesPerPage;
     QStandardItemModel* model() const;
     virtual QString idToString() const;
     SuperListItem* getById(int id) const;
+    virtual void setDefault();
+    virtual SuperListItem* createCopy() const;
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json);
     virtual void write(QJsonObject &json) const;

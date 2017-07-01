@@ -50,7 +50,7 @@ private:
     Ui::DialogVariables *ui;
 
 private slots:
-    void on_pageSelected(QModelIndex index);
+    void on_pageSelected(QModelIndex index, QModelIndex);
     void on_buttonBox_clicked(QAbstractButton *button);
 };
 

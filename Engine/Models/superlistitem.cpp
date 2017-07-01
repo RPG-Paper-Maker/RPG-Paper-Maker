@@ -77,7 +77,6 @@ SuperListItem* SuperListItem::createCopy() const{
 // -------------------------------------------------------
 
 void SuperListItem::setCopy(const SuperListItem& item){
-    p_id = item.id();
     p_name = item.name();
 }
 

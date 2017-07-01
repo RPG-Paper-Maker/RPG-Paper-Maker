@@ -50,9 +50,11 @@ public:
     QPushButton* buttonMaximum() const;
     void showEditName(bool b);
     void showButtonMax(bool b);
+    void setMaximumLimit(int max);
 
 private:
     Ui::PanelSuperList *ui;
+    int m_maximum;
 
 private slots:
     void on_lineEditName_textChanged(const QString & s);

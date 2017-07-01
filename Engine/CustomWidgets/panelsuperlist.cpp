@@ -29,7 +29,8 @@
 
 PanelSuperList::PanelSuperList(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelSuperList)
+    ui(new Ui::PanelSuperList),
+    m_maximum(9999)
 {
     ui->setupUi(this);
 }
@@ -60,9 +61,17 @@ void PanelSuperList::initializeModel(QStandardItemModel* m){
             SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
 }
 
+// -------------------------------------------------------
+
 void PanelSuperList::showButtonMax(bool b){
     if (b) ui->pushButtonMaximum->show();
     else ui->pushButtonMaximum->hide();
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::setMaximumLimit(int max){
+    m_maximum = max;
 }
 
 // -------------------------------------------------------
@@ -91,7 +100,8 @@ void PanelSuperList::on_lineEditName_textChanged(const QString & s){
 // -------------------------------------------------------
 
 void PanelSuperList::on_pushButtonMaximum_pressed(){
-    DialogSetMaximum dialog(list()->getModel());
+    QStandardItemModel* model = ui->widgetList->getModel();
+    DialogSetMaximum dialog(list()->getModel(), m_maximum);
     if (dialog.exec() == QDialog::Accepted){
         int newSize = dialog.maximum();
         list()->setMaximum(newSize);

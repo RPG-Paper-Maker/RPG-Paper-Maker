@@ -41,7 +41,8 @@ class DialogSetMaximum : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSetMaximum(QStandardItemModel* model, QWidget *parent = 0);
+    explicit DialogSetMaximum(QStandardItemModel* model, int max,
+                              QWidget *parent = 0);
     ~DialogSetMaximum();
     int maximum() const;
 

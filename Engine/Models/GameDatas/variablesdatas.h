@@ -50,7 +50,6 @@ public:
 
 private:
     QStandardItemModel* p_model;
-    static QStandardItem* getDefaultItem(int i);
 };
 
 #endif // VARIABLESDATAS_H

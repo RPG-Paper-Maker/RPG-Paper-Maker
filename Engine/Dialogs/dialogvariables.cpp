@@ -36,11 +36,8 @@ DialogVariables::DialogVariables(QWidget *parent) :
     setFixedSize(geometry().width(), geometry().height());
 
     ui->panelList->showButtonMax(false);
-
-    // Connection
-    connect(ui->panelListPages->list(),
-            SIGNAL(clicked(QModelIndex)), this,
-            SLOT(on_pageSelected(QModelIndex)));
+    ui->panelListPages->list()->initializeNewItemInstance(new SystemVariables);
+    ui->panelListPages->setMaximumLimit(400);
 }
 
 DialogVariables::~DialogVariables()
@@ -49,10 +46,16 @@ DialogVariables::~DialogVariables()
 }
 
 void DialogVariables::initializeModel(QStandardItemModel* m){
-    ui->panelListPages->list()->initializeModel(m);
+    ui->panelListPages->initializeModel(m);
+
+    // Connection
+    connect(ui->panelListPages->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_pageSelected(QModelIndex,QModelIndex)));
+
     QModelIndex index = ui->panelListPages->list()->getModel()->index(0,0);
     ui->panelListPages->list()->setCurrentIndex(index);
-    on_pageSelected(index);
+    on_pageSelected(index, index);
 }
 
 // -------------------------------------------------------
@@ -74,13 +77,12 @@ int DialogVariables::getSelectedId() const{
 //
 // -------------------------------------------------------
 
-void DialogVariables::on_pageSelected(QModelIndex index){
+void DialogVariables::on_pageSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelListPages->list()->getModel()
             ->itemFromIndex(index);
     if (selected != nullptr){
-        ui->panelList->list()
-                ->initializeModel(((SystemVariables*)selected->data()
-                                   .value<quintptr>())->model());
+        ui->panelList->initializeModel(((SystemVariables*)selected->data()
+                                        .value<quintptr>())->model());
         ui->panelList->list()->setCurrentIndex(ui->panelList->list()
                                                ->getModel()->index(0,0));
     }

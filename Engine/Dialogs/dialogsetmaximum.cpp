@@ -28,7 +28,8 @@
 //
 // -------------------------------------------------------
 
-DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, QWidget *parent) :
+DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, int max,
+                                   QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSetMaximum),
     m_model(model)
@@ -36,6 +37,7 @@ DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
+    ui->spinBoxMaximum->setMaximum(max);
     ui->spinBoxMaximum->setValue(model->invisibleRootItem()->rowCount());
 }
 

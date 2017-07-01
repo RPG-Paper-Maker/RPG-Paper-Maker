@@ -115,8 +115,8 @@ void WidgetSuperList::setMaximum(int newSize){
     if (newSize > previousSize){
         for (int i = previousSize; i < newSize; i++){
             SuperListItem* super = m_newItemInstance->createCopy();
-            super->setDefault();
             super->setId(i+1);
+            super->setDefault();
             QList<QStandardItem*> row = super->getModelRow();
             p_model->insertRow(i, row);
         }

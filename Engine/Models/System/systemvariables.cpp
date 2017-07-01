@@ -28,14 +28,24 @@ int SystemVariables::variablesPerPage = 25;
 //
 // -------------------------------------------------------
 
-SystemVariables::SystemVariables() : SuperListItem()
+SystemVariables::SystemVariables() :
+    SystemVariables(1, "")
 {
-    p_model = new QStandardItemModel();
+
 }
 
-SystemVariables::SystemVariables(int i, QString n,
-                                           QStandardItemModel *m) :
-    SuperListItem(i,n), p_model(m) {}
+SystemVariables::SystemVariables(int i, QString n) :
+    SystemVariables(i, n, new QStandardItemModel)
+{
+
+}
+
+SystemVariables::SystemVariables(int i, QString n, QStandardItemModel *m) :
+    SuperListItem(i, n),
+    p_model(m)
+{
+
+}
 
 SystemVariables::~SystemVariables()
 {
@@ -68,6 +78,30 @@ SuperListItem* SystemVariables::getById(int id) const{
     }
 
     return nullptr;
+}
+
+// -------------------------------------------------------
+
+void SystemVariables::setDefault(){
+    for (int j = 1; j <= SystemVariables::variablesPerPage; j++){
+        QStandardItem* varItem = new QStandardItem();
+        SuperListItem* var =
+                new SuperListItem(
+                    j + ((id()-1) * SystemVariables::variablesPerPage),"");
+        varItem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(var)));
+        varItem->setFlags(varItem->flags() ^ (Qt::ItemIsDropEnabled));
+        varItem->setText(var->toString());
+        p_model->invisibleRootItem()->appendRow(varItem);
+    }
+    setName(QString("Page ") + QString::number(id()));
+}
+
+// -------------------------------------------------------
+
+SuperListItem* SystemVariables::createCopy() const{
+    SystemVariables* super = new SystemVariables;
+    super->setCopy(*this);
+    return super;
 }
 
 // -------------------------------------------------------
