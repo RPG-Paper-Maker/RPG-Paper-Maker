@@ -433,7 +433,7 @@ win32{
 FROMS= \"$$shell_path($$PWD\\..\\Game\\Content\\Datas\\Scripts)\"
 DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
 win32{
-    DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas\\Scripts)\"
+    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas)\"
 }
 
 copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS

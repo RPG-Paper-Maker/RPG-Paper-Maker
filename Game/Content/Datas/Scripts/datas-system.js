@@ -56,7 +56,7 @@ DatasSystem.prototype = {
             $FRAMES = json.frames;
 
             // Path BR
-            Wanok.PATH_BR = "file://" + json.pathBR + "/";
+            Wanok.PATH_BR = "file:///" + json.pathBR + "/";
 
             // Hero beginning
             this.idMapStartHero = json.idMapHero;

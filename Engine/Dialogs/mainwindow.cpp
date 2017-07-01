@@ -48,14 +48,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     p_appName = "RPG Paper Maker";
-    p_version = "0.0.0";
     gameProcess = new QProcess(this);
     project = nullptr;
 
     ui->setupUi(this);
 
     // Setting window title
-    this->setWindowTitle(p_appName + " - v." + p_version);
+    this->setWindowTitle(p_appName + " v." + Project::VERSION + " (UNSTABLE)");
 
     // Update main panel
     mainPanel = new PanelMainMenu(this);
@@ -420,11 +419,7 @@ void MainWindow::on_actionPlay_triggered(){
 void MainWindow::on_gameProcessExit(int exitCode,
                                     QProcess::ExitStatus exitStatus)
 {
-    if (exitCode != 0){
-        QMessageBox::critical(this, "Error", "Process exited with " +
-                              QString::number(exitCode) + " code exit. " +
-                              exitStatus);
-    }
+
 }
 
 // -------------------------------------------------------

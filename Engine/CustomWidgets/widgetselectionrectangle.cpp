@@ -58,8 +58,8 @@ void WidgetSelectionRectangle::setSquareHeight(int s) { m_squareHeight = s; }
 
 QRect WidgetSelectionRectangle::getCoefRect() const{
     if (m_squareWidth != 0 && m_squareHeight != 0){
-        return QRect(m_rect.x() / m_squareWidth,
-                     m_rect.y() / m_squareHeight,
+        return QRect(m_realX / m_squareWidth,
+                     m_realY / m_squareHeight,
                      m_rect.width() / m_squareWidth,
                      m_rect.height() / m_squareHeight
                      );
