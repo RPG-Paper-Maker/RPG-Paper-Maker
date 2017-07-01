@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>582</width>
-    <height>431</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,16 +41,22 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QRadioButton" name="radioButtonAll">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>All</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QRadioButton" name="radioButtonObject">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Object</string>
             </property>
@@ -58,6 +64,9 @@
           </item>
           <item row="3" column="0">
            <widget class="QRadioButton" name="radioButtonSender">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Sender</string>
             </property>
@@ -67,6 +76,9 @@
            <widget class="QRadioButton" name="radioButtonDetection">
             <property name="text">
              <string>Detection</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -123,6 +135,9 @@
           </item>
           <item row="4" column="0">
            <widget class="QRadioButton" name="radioButtonHero">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="text">
              <string>The hero</string>
             </property>

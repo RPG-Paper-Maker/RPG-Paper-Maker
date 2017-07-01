@@ -174,7 +174,7 @@ EventCommandChangeVariables.prototype = {
 
         // Changing variable(s)
         for (i = 0; i < nbSelection; i++){
-            $datasGame.variables[selection + i] = value;
+            $game.variables[selection + i] = value;
         }
 
         // End of command
@@ -438,9 +438,9 @@ EventCommandIf.prototype = {
         var varConstType = this.command[i++];
         var compare = this.command[i++];
 
-        var value = (varConstType === 0) ? $datasGame.variables[compare]
+        var value = (varConstType === 0) ? $game.variables[compare]
                                          : compare;
-        return $operators_compare[operation]($datasGame.variables[idVar],
+        return $operators_compare[operation]($game.variables[idVar],
                                              value);
     },
 

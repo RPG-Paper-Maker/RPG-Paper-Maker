@@ -42,6 +42,7 @@ public:
     QStandardItemModel* modelCommands() const;
     bool blockingHero() const;
     void setBlockingHero(bool b);
+    virtual SuperListItem* createCopy() const;
     void setCopy(const SystemReaction& copy);
     static void addEmptyCommand(QStandardItem *root);
     static void addCommand(QStandardItem *root, EventCommand* command);

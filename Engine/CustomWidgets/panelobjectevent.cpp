@@ -104,10 +104,7 @@ void PanelObjectEvent::updateEvent(SystemEvent* ev){
 // -------------------------------------------------------
 
 void PanelObjectEvent::updateParameters(SystemEvent*){
-    m_event->updateParameters(Wanok::get()->project()->gameDatas()
-                              ->commonEventsDatas()->modelEventsSystem(),
-                              Wanok::get()->project()->gameDatas()
-                              ->commonEventsDatas()->modelEventsUser());
+    m_event->updateParameters();
     ui->treeViewParameters->initializeModel(m_event->modelParameters());
 }
 

@@ -234,7 +234,8 @@ MapPortion.prototype = {
                                                  localPosition.z);
                     var mapObject = new MapObject(object, position);
                     mapObject.changeState();
-                    $currentMap.scene.add(mapObject.mesh);
+                    if (mapObject.mesh !== null)
+                        $currentMap.scene.add(mapObject.mesh);
                     this.objectsList.unshift(mapObject);
                 }
             }

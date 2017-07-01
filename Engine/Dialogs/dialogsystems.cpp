@@ -25,6 +25,7 @@
 #include "systemcurrency.h"
 #include "wanok.h"
 #include "systemcreateparameter.h"
+#include "systemweaponarmorkind.h"
 
 // -------------------------------------------------------
 //
@@ -106,9 +107,11 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     }
 
     // Initialize models
-    ui->panelSuperListWeaponsKind->list()
+    ui->panelSuperListWeaponsKind
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelWeaponsKind());
+    ui->panelSuperListWeaponsKind->list()->initializeNewItemInstance(
+                new SystemWeaponArmorKind);
     ui->panelSuperListArmorsKind->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelArmorsKind());

@@ -21,6 +21,7 @@
 #include "widgettreecommands.h"
 #include "wanok.h"
 #include "systemcreateparameter.h"
+#include "widgetsupertree.h"
 
 // -------------------------------------------------------
 //
@@ -61,9 +62,20 @@ QStandardItemModel* SystemCommonReaction::modelParameters() const {
 //
 // -------------------------------------------------------
 
+SuperListItem* SystemCommonReaction::createCopy() const{
+    SystemCommonReaction* super = new SystemCommonReaction;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemCommonReaction::setCopy(const SystemCommonReaction& copy){
     SystemReaction::setCopy(copy);
-    copyCommands(copy.m_modelParameters, m_modelParameters);
+    p_id = copy.p_id;
+
+    // parameters
+    WidgetSuperTree::copy(m_modelParameters, copy.m_modelParameters);
 }
 
 // -------------------------------------------------------

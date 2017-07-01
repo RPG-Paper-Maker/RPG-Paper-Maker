@@ -78,6 +78,7 @@ Window {
 
         Keys.onPressed: {
             var key = event.key;
+            console.log(key);
 
             if (key === Qt.Key_F12){
                 Game.quit();

@@ -102,6 +102,8 @@ public:
     void defineAsHero();
     void addObject(Position& p);
     void removeObject(Position& p);
+    void traceLine(Position& previousCoords, Position& coords,
+                   QList<Position>& positions);
 
     Portion getGlobalPortion(Position& position) const;
     Portion getLocalPortion(Position& position) const;

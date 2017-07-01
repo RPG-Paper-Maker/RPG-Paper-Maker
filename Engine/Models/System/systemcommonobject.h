@@ -44,7 +44,7 @@ public:
     virtual ~SystemCommonObject();
     static QString strInheritance, strStates, strEvents;
 
-    void setDefault(QStandardItemModel* modelEventsUser);
+    void setDefault();
     void setDefaultHero(QStandardItemModel* modelEventsSystem,
                         QStandardItemModel *);
     void setDefaultHeroKeyPressEvent(QStandardItemModel *modelEventsSystem,

@@ -49,11 +49,13 @@ public:
     void updateList();
     void initializeModel(SystemCommonObject* object);
     void updateModel();
+    void clear();
     void setInheritanceName(int index, QString name);
     void initializeCommonInheritance();
     void showStateWidgets(bool b);
     void showName(bool b);
     void updateReactions();
+    void updateReactionsWidgets();
     SystemState* getSelectedState() const;
     void updateStateOptions(SystemState* state);
     void passToSprite();
@@ -69,7 +71,8 @@ private:
 private slots:
     void on_lineEditName_textChanged(const QString &text);
     void on_comboBoxInheritance_currentIndexChanged(int index);
-    void on_updateJsonEvents(SuperListItem*);
+    void on_updateJsonStates(SuperListItem*);
+    void on_updateJsonEvents(SuperListItem*item);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_blockingHeroChanged(bool c);

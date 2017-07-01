@@ -112,6 +112,9 @@
           </item>
           <item row="2" column="0" colspan="3">
            <widget class="QRadioButton" name="radioButtonRandom">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Random (in map property)</string>
             </property>

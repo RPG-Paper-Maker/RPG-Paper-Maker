@@ -70,11 +70,14 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 //
 // -------------------------------------------------------
 
-void SystemCommonObject::setDefault(QStandardItemModel *modelEventsUser){
+void SystemCommonObject::setDefault(){
     QList<QStandardItem*> row;
     QStandardItem* item;
     SystemState* state;
     SuperListItem* super;
+    QStandardItemModel* modelEventsUser =
+            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelEventsUser();
 
     // Events
     m_events->clear();
@@ -202,10 +205,7 @@ void SystemCommonObject::updateModelEvents(){
     for (int i = 0; i < m_events->invisibleRootItem()->rowCount()-1; i++){
         SystemObjectEvent* event = (SystemObjectEvent*) m_events->item(i)
                 ->data().value<quintptr>();
-        event->updateParameters(Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsSystem(),
-                                Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsUser());
+        event->updateParameters();
     }
 }
 
@@ -274,7 +274,7 @@ SuperListItem* SystemCommonObject::createCopy() const{
 
 void SystemCommonObject::setCopy(const SystemCommonObject& item){
     SuperListItem::setCopy(item);
-    QList<QStandardItem*> row;
+    p_id = item.p_id;
 
     m_inheritanceId = item.inheritanceId();
 

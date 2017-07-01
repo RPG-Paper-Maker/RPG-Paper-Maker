@@ -156,6 +156,7 @@ SuperListItem* SystemState::createCopy() const{
 
 void SystemState::setCopy(const SystemState& state){
     SuperListItem::setCopy(state);
+    p_id = state.p_id;
 
     m_state = state.m_state;
     m_graphicsId = state.m_graphicsId;

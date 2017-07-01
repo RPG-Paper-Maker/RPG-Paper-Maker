@@ -53,8 +53,7 @@ public:
     void clearReactions();
     void clearParameters();
     void updateReactions(QStandardItemModel *modelStates);
-    void updateParameters(QStandardItemModel *modelEventsSystem,
-                          QStandardItemModel *modelEventsUser);
+    void updateParameters();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemObjectEvent &event);

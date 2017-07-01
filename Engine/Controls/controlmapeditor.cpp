@@ -496,6 +496,17 @@ void ControlMapEditor::addFloor(Position& p, QRect &tileset){
     FloorDatas* floor;
     QRect* shortTexture;
 
+    if (tileset.width() == 1 && tileset.width() == 1){
+        QList<Position> positions;
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++){
+            stockFloor(positions[i],
+                       new FloorDatas(new QRect(tileset.x(),
+                                                tileset.y(),
+                                                tileset.width(),
+                                                tileset.height())));
+        }
+    }
     for (int i = 0; i < tileset.width(); i++){
         if (p.x() + i > m_map->mapProperties()->length())
             break;
@@ -505,11 +516,14 @@ void ControlMapEditor::addFloor(Position& p, QRect &tileset){
                 break;
 
             Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
-            shortTexture = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
+            shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
+                                     1, 1);
             floor = new FloorDatas(shortTexture);
             stockFloor(shortPosition, floor);
         }
     }
+
+    m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
@@ -532,7 +546,14 @@ void ControlMapEditor::stockFloor(Position& p, FloorDatas *floor){
 // -------------------------------------------------------
 
 void ControlMapEditor::removeFloor(Position& p){
+    QList<Position> positions;
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++)
+        eraseFloor(positions[i]);
+
     eraseFloor(p);
+
+    m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
@@ -561,8 +582,17 @@ void ControlMapEditor::eraseFloor(Position& p){
 void ControlMapEditor::addSprite(Position& p, QRect& tileset){
     SpriteDatas* sprite;
 
+    QList<Position> positions;
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++){
+        sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+        stockSprite(positions[i], sprite);
+    }
+
     sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
     stockSprite(p, sprite);
+
+    m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
@@ -585,7 +615,13 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
 // -------------------------------------------------------
 
 void ControlMapEditor::removeSprite(Position& p){
+    QList<Position> positions;
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++)
+        eraseSprite(positions[i]);
     eraseSprite(p);
+
+    m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
@@ -662,8 +698,7 @@ void ControlMapEditor::addObject(Position& p){
     if (m_selectedObject != nullptr)
         object->setCopy(*m_selectedObject);
     else{
-        object->setDefault(Wanok::get()->project()->gameDatas()
-                           ->commonEventsDatas()->modelEventsUser());
+        object->setDefault();
         int id = m_map->generateObjectId();
         object->setId(id);
         object->setName(Map::generateObjectName(id));
@@ -710,6 +745,196 @@ void ControlMapEditor::removeObject(Position& p){
                 m_map->writeObjects(true);
                 m_portionsToUpdate += portion;
                 m_portionsToSave += portion;
+            }
+        }
+    }
+}
+
+void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
+                                 QList<Position>& positions)
+{
+    int x1 = previousCoords.x(), x2 = coords.x();
+    int y = coords.y();
+    int yPlus = coords.yPlus();
+    int z1 = previousCoords.z(), z2 = coords.z();
+    int l = coords.layer();
+    int dx = x2 - x1, dz = z2 - z1;
+    bool test = true;
+
+    if (dx != 0){
+        if (dx > 0){
+            if (dz != 0){
+                if (dz > 0){
+                    if (dx >= dz){
+                        int e = dx;
+                        dx = 2 * e;
+                        dz = dz * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            x1++;
+                            if (x1 == x2) break;
+                            e -= dz;
+                            if (e < 0){
+                                z1++;
+                                e += dx;
+                            }
+                        }
+                    }
+                    else{
+                        int e = dz;
+                        dz = 2 * e;
+                        dx = dx * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            z1++;
+                            if (z1 == z2) break;
+                            e -= dx;
+                            if (e < 0){
+                                x1++;
+                                e += dz;
+                            }
+                        }
+                    }
+                }
+                else{
+                    if (dx >= -dz){
+                        int e = dx;
+                        dx = 2 * e;
+                        dz = dz * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            x1++;
+                            if (x1 == x2) break;
+                            e += dz;
+                            if (e < 0){
+                                z1--;
+                                e += dx;
+                            }
+                        }
+                    }
+                    else{
+                        int e = dz;
+                        dz = 2 * e;
+                        dx = dx * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            z1--;
+                            if (z1 == z2) break;
+                            e += dx;
+                            if (e > 0){
+                                x1++;
+                                e += dz;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                while (x1 != x2){
+                    positions.push_back(Position(x1, y, yPlus, z1, l));
+                    x1++;
+                }
+            }
+        }
+        else{
+            dz = z2 - z1;
+            if (dz != 0){
+                if (dz > 0){
+                    if (-dx >= dz){
+                        int e = dx;
+                        dx = 2 * e;
+                        dz = dz * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            x1--;
+                            if (x1 == x2) break;
+                            e += dz;
+                            if (e >= 0){
+                                z1++;
+                                e += dx;
+                            }
+                        }
+                    }
+                    else{
+                        int e = dz;
+                        dz = 2 * e;
+                        dx = dx * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            z1++;
+                            if (z1 == z2) break;
+                            e += dx;
+                            if (e <= 0)
+                            {
+                                x1--;
+                                e += dz;
+                            }
+                        }
+                    }
+                }
+                else{
+                    if (dx <= dz){
+                        int e = dx;
+                        dx = 2 * e;
+                        dz = dz * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            x1--;
+                            if (x1 == x2) break;
+                            e -= dz;
+                            if (e >= 0){
+                                z1--;
+                                e += dx;
+                            }
+                        }
+                    }
+                    else{
+                        int e = dz;
+                        dz = 2 * e;
+                        dx = dx * 2;
+
+                        while (test){
+                            positions.push_back(Position(x1, y, yPlus, z1, l));
+                            z1--;
+                            if (z1 == z2) break;
+                            e -= dx;
+                            if (e >= 0){
+                                x1--;
+                                e += dz;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                while (x1 != x2){
+                    positions.push_back(Position(x1, y, yPlus, z1, l));
+                    x1--;
+                }
+            }
+        }
+    }
+    else{
+        dz = z2 - z1;
+        if (dz != 0){
+            if (dz > 0){
+                while(z1 != z2){
+                    positions.push_back(Position(x1, y, yPlus, z1, l));
+                    z1++;
+                }
+            }
+            else{
+                while (z1 != z2){
+                    positions.push_back(Position(x1, y, yPlus, z1, l));
+                    z1--;
+                }
             }
         }
     }
@@ -813,6 +1038,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     update();
 
     // Add/Remove something
+    m_previousMouseCoords = getPositionSelected(selection);
     addRemove(selection, tileset, button);
 }
 

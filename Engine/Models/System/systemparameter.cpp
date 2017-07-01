@@ -82,6 +82,7 @@ SuperListItem* SystemParameter::createCopy() const{
 
 void SystemParameter::setCopy(const SystemParameter& param){
     SuperListItem::setCopy(param);
+    p_id = param.p_id;
 
     m_parameter = param.m_parameter;
     m_value->setCopy(*param.m_value);

@@ -433,44 +433,39 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
         break;
     case 1: // Send to detection
         var pos = $game.hero.mesh.position;
-        var length = 1;
-        var width = 1;
-        var height = 1;
+        var por = $currentMap.getLocalPortion(pos);
+        portion = group[por[0]][por[1]][por[2]];
+        por = Wanok.getPortion(pos);
+        var x = por[0];
+        var y = por[1];
+        var z = por[2];
+        objects = portion.objectsList;
+        ll = objects.length;
+        for (j = 0; j < ll; j++){
+            var object = objects[j];
+            var posObject = object.position;
+            if (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
+                posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
+                posObject.y >= pos.y &&
+                posObject.y <= pos.y + $SQUARE_SIZE &&
+                posObject.z >= pos.z - $SQUARE_SIZE  -
+                    ($SQUARE_SIZE / 2) &&
+                posObject.z <= pos.z + ($SQUARE_SIZE / 2)
+               )
+            {
+                // Get states
+                var states = [1];
+                var portionDatas =
+                        $game.mapsDatas[$currentMap.id]
+                        [x][y][z];
+                var indexState =
+                        portionDatas.si.indexOf(object.system.id);
+                if (indexState !== -1)
+                    states = portionDatas.s[indexState];
 
-        for (var x = 0; x < length; x++){
-            for (var y = 0; y < width; y++){
-                for (var z = 0; z < height; z++){
-                    portion = group[x][y][z];
-                    objects = portion.objectsList;
-                    ll = objects.length;
-                    for (j = 0; j < ll; j++){
-                        var object = objects[j];
-                        var posObject = object.mesh.position;
-                        if (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
-                            posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
-                            posObject.y >= pos.y &&
-                            posObject.y <= pos.y + $SQUARE_SIZE &&
-                            posObject.z >= pos.z - $SQUARE_SIZE  -
-                                ($SQUARE_SIZE / 2) &&
-                            posObject.z <= pos.z + ($SQUARE_SIZE / 2)
-                           )
-                        {
-                            // Get states
-                            var states = [1];
-                            var portionDatas =
-                                    $game.mapsDatas[$currentMap.id]
-                                    [x][y][z];
-                            var indexState =
-                                    portionDatas.si.indexOf(object.system.id);
-                            if (indexState !== -1)
-                                states = portionDatas.s[indexState];
-
-                            // Make the object receive the event
-                            object.receiveEvent(sender, isSystem, idEvent,
-                                                parameters, states);
-                        }
-                    }
-                }
+                // Make the object receive the event
+                object.receiveEvent(sender, isSystem, idEvent,
+                                    parameters, states);
             }
         }
         break;

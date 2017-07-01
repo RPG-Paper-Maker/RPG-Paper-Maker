@@ -36,7 +36,7 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
 
     bool test = command == nullptr;
     if (test){
-        QVector<QString> l({"0", "0", "1",
+        QVector<QString> l({"1", "1", "0", "1",
                             "1",
                             QString::number((int) PrimitiveValueKind::Default),
                             "2",

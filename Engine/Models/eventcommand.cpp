@@ -81,7 +81,9 @@ bool EventCommand::isEditable() const{
          p_kind != EventCommandKind::EndWhile &&
          p_kind != EventCommandKind::Else &&
          p_kind != EventCommandKind::EndIf &&
-         p_kind != EventCommandKind::EndGame;
+         p_kind != EventCommandKind::EndGame &&
+         p_kind != EventCommandKind::OpenMainMenu &&
+         p_kind != EventCommandKind::OpenSavesMenu;
 }
 
 // -------------------------------------------------------
@@ -512,10 +514,7 @@ QString EventCommand::strSendEvent() const{
                 ->modelEventsUser();
     e->setName(SuperListItem::getById(model->invisibleRootItem(),
                                       e->id())->name());
-    e->updateParameters(Wanok::get()->project()->gameDatas()
-                        ->commonEventsDatas()->modelEventsSystem(),
-                        Wanok::get()->project()->gameDatas()
-                        ->commonEventsDatas()->modelEventsUser());
+    e->updateParameters();
     QString event = e->getLabelTab();
     delete e;
 

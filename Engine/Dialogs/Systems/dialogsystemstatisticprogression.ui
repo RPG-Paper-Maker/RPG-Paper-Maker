@@ -162,6 +162,9 @@
        </item>
        <item row="1" column="0" colspan="2">
         <widget class="QRadioButton" name="radioButtonStatic">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Static</string>
          </property>
@@ -182,6 +185,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QGroupBox" name="groupBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="title">
           <string>Generation</string>
          </property>
@@ -217,6 +223,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
          <item>
           <widget class="QFrame" name="frame">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -237,6 +246,9 @@
              </property>
              <item>
               <widget class="QLabel" name="label_3">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>Level:</string>
                </property>
@@ -244,6 +256,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBoxLevel">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>60</width>
@@ -273,6 +288,9 @@
              </property>
              <item>
               <widget class="QLabel" name="label_4">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>Value:</string>
                </property>
@@ -280,6 +298,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="spinBoxValue">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>60</width>

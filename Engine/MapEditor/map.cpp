@@ -153,7 +153,7 @@ void Map::writeDefaultMap(QString path){
 
     // Portion
     MapPortion mapPortion;
-    Position position(8, 0, 0, 8, 0);
+    Position position(7, 0, 0, 7, 0);
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", 1,
                                                    new QStandardItemModel,
                                                    new QStandardItemModel);

@@ -30,9 +30,7 @@
 KeyBoardDatas::KeyBoardDatas()
 {
     m_model = new QStandardItemModel;
-    m_model->setHorizontalHeaderLabels(QStringList({"Abbreviation",
-                                                    "Description",
-                                                    "ShortCut"}));
+    updateHeader();
 }
 
 KeyBoardDatas::~KeyBoardDatas()
@@ -85,7 +83,7 @@ void KeyBoardDatas::setDefaultEngine(){
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor up"),
                                "CursorUp");
     super->appendShortCut(QVector<int>({16777235}));
-    super->appendShortCut(QVector<int>({90}));
+    super->appendShortCut(QVector<int>({87}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor down"),
                                "CursorDown");
@@ -95,7 +93,7 @@ void KeyBoardDatas::setDefaultEngine(){
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor left"),
                                "CursorLeft");
     super->appendShortCut(QVector<int>({16777234}));
-    super->appendShortCut(QVector<int>({81}));
+    super->appendShortCut(QVector<int>({65}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move cursor right"),
                                "CursorRight");
@@ -124,7 +122,7 @@ void KeyBoardDatas::setDefaultGame(){
     super = new SystemKeyBoard(i++, new LangsTranslation("Move up"),
                                "Up");
     super->appendShortCut(QVector<int>({16777235}));
-    super->appendShortCut(QVector<int>({90}));
+    super->appendShortCut(QVector<int>({87}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move down"),
                                "Down");
@@ -134,7 +132,7 @@ void KeyBoardDatas::setDefaultGame(){
     super = new SystemKeyBoard(i++, new LangsTranslation("Move left"),
                                "Left");
     super->appendShortCut(QVector<int>({16777234}));
-    super->appendShortCut(QVector<int>({81}));
+    super->appendShortCut(QVector<int>({65}));
     list.append(super);
     super = new SystemKeyBoard(i++, new LangsTranslation("Move right"),
                                "Right");
@@ -190,6 +188,14 @@ bool KeyBoardDatas::isEqual(int key, KeyBoardEngineKind kind) const{
 }
 
 // -------------------------------------------------------
+
+void KeyBoardDatas::updateHeader(){
+    m_model->setHorizontalHeaderLabels(QStringList({"Abbreviation",
+                                                    "Description",
+                                                    "ShortCut"}));
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -201,6 +207,7 @@ void KeyBoardDatas::read(const QJsonObject &json){
 
     // Clear
     SuperListItem::deleteModel(m_model, false);
+    updateHeader();
 
     // Controls
     for (int i = 0; i < tab.size(); i++){

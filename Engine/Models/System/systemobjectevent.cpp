@@ -20,6 +20,7 @@
 #include "systemobjectevent.h"
 #include "dialogsystemobjectevent.h"
 #include "systemstate.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -179,9 +180,15 @@ void SystemObjectEvent::updateReactions(QStandardItemModel* modelStates){
 
 // -------------------------------------------------------
 
-void SystemObjectEvent::updateParameters(QStandardItemModel *modelEventsSystem,
-                                         QStandardItemModel *modelEventsUser)
+void SystemObjectEvent::updateParameters()
 {
+    QStandardItemModel* modelEventsSystem =
+            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelEventsSystem();
+    QStandardItemModel* modelEventsUser =
+            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelEventsUser();
+
     QStandardItemModel* newModel = new QStandardItemModel;
     QStandardItemModel* model = m_isSystem ? modelEventsSystem
                                            : modelEventsUser;
@@ -268,6 +275,8 @@ SuperListItem* SystemObjectEvent::createCopy() const{
 
 void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
     SuperListItem::setCopy(event);
+    p_id = event.p_id;
+
     SystemParameter* param;
     QList<QStandardItem *> row;
     int l;
@@ -328,6 +337,7 @@ void SystemObjectEvent::read(const QJsonObject &json){
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(param)));
         m_modelParameters->appendRow(item);
     }
+    updateParameters();
 
     // Reactions
     QJsonObject::iterator i;

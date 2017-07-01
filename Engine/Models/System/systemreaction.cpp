@@ -62,7 +62,18 @@ void SystemReaction::setBlockingHero(bool b) { m_blockingHero = b; }
 //
 // -------------------------------------------------------
 
+SuperListItem* SystemReaction::createCopy() const{
+    SystemReaction* super = new SystemReaction;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemReaction::setCopy(const SystemReaction& copy){
+    SuperListItem::setCopy(copy);
+    p_id = copy.p_id;
+
     copyCommands(copy.m_modelCommands, m_modelCommands);
     m_blockingHero = copy.m_blockingHero;
 }

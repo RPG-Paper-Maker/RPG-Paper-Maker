@@ -162,7 +162,7 @@
                    </size>
                   </property>
                   <property name="maximum">
-                   <number>5000</number>
+                   <number>16</number>
                   </property>
                  </widget>
                 </item>
@@ -192,7 +192,7 @@
                    </size>
                   </property>
                   <property name="maximum">
-                   <number>5000</number>
+                   <number>16</number>
                   </property>
                  </widget>
                 </item>
@@ -235,7 +235,7 @@
                    </size>
                   </property>
                   <property name="maximum">
-                   <number>5000</number>
+                   <number>0</number>
                   </property>
                  </widget>
                 </item>
@@ -265,7 +265,7 @@
                    </size>
                   </property>
                   <property name="maximum">
-                   <number>5000</number>
+                   <number>0</number>
                   </property>
                  </widget>
                 </item>
@@ -280,6 +280,9 @@
           <layout class="QGridLayout" name="gridLayout_5">
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Music:</string>
              </property>
@@ -316,6 +319,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_8">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Background sound:</string>
              </property>
@@ -339,6 +345,9 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_10">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Camera properties:</string>
              </property>
@@ -346,6 +355,9 @@
            </item>
            <item row="2" column="1">
             <widget class="QComboBox" name="comboBoxCameraProperties">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>200</width>
@@ -364,6 +376,9 @@
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="title">
             <string>Sky</string>
            </property>
@@ -420,6 +435,9 @@
               </item>
               <item row="1" column="0">
                <widget class="QRadioButton" name="radioButtonSkybox">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Skybox</string>
                 </property>
@@ -457,6 +475,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
            <item>
             <widget class="QLabel" name="label_9">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Battle map:</string>
              </property>
@@ -464,6 +485,9 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxBattleMap">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>200</width>
@@ -495,6 +519,9 @@
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="title">
             <string>Random battles</string>
            </property>

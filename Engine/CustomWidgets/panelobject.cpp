@@ -38,7 +38,6 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->setupUi(this);
 
     // Updating infos lists
-    ui->treeViewStates->setUpdateId(true);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
 
@@ -91,6 +90,8 @@ void PanelObject::initializeModel(SystemCommonObject* object){
 
 void PanelObject::updateModel(){
     if (m_model != nullptr){
+        clear();
+
         QModelIndex index;
         ui->lineEditName->setText(m_model->name());
         initializeCommonInheritance();
@@ -100,6 +101,8 @@ void PanelObject::updateModel(){
         connect(ui->treeViewStates->selectionModel(),
                 SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
                 SLOT(on_stateChanged(QModelIndex,QModelIndex)));
+        connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem*)),
+                this, SLOT(on_updateJsonStates(SuperListItem*)));
         index = ui->treeViewStates->getModel()->index(0,0);
         ui->treeViewStates->setCurrentIndex(index);
 
@@ -114,6 +117,14 @@ void PanelObject::updateModel(){
         ui->treeViewEvents->setCurrentIndex(index);
         on_updateJsonEvents(nullptr);
     }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::clear(){
+    ui->tabWidgetCommands->clear();
+    m_reactions.clear();
+    m_checkBoxes.clear();
 }
 
 // -------------------------------------------------------
@@ -201,6 +212,58 @@ void PanelObject::updateReactions(){
 
 // -------------------------------------------------------
 
+void PanelObject::updateReactionsWidgets(){
+    QGridLayout* layout;
+    QWidget* widget;
+    QWidget* widgetCheckbox;
+    WidgetTreeCommands* tree;
+    SystemObjectEvent* event;
+    QCheckBox* checkbox;
+    QSpacerItem* spacer;
+    QHBoxLayout* hlayout;
+    int l;
+
+    // Update reactions (if new/delete)
+    updateReactions();
+    QStandardItem* selected = ui->treeViewStates->getSelected();
+    SystemState* super = (SystemState*) selected->data().value<quintptr>();
+
+    if (super != nullptr){
+        clear();
+
+        // Create all the corresponding tabs for all events
+        l = ui->treeViewEvents->getModel()->invisibleRootItem()->rowCount();
+        for (int i = 0; i < l - 1; i++){
+            event = (SystemObjectEvent*) ui->treeViewEvents->getModel()->item(i)
+                    ->data().value<quintptr>();
+            widget = new QWidget();
+            layout = new QGridLayout(widget);
+            tree = new WidgetTreeCommands();
+            m_reactions.append(tree);
+            layout->addWidget(tree,0,0);
+            widgetCheckbox = new QWidget();
+            hlayout = new QHBoxLayout(widgetCheckbox);
+            checkbox = new QCheckBox("Blocking hero");
+            checkbox->setProperty("reaction",
+                                  QVariant::fromValue(
+                                      reinterpret_cast<quintptr>(
+                                          event->reactionAt(super->id()))));
+            connect(checkbox, SIGNAL(toggled(bool)), this,
+                    SLOT(on_blockingHeroChanged(bool)));
+            m_checkBoxes.append(checkbox);
+            hlayout->addWidget(checkbox);
+            spacer = new QSpacerItem(50,1);
+            hlayout->addSpacerItem(spacer);
+            hlayout->setStretch(2,1);
+            layout->addWidget(widgetCheckbox,1,0);
+
+            ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 SystemState* PanelObject::getSelectedState() const{
     return (SystemState*) ui->treeViewStates->getSelected()->data()
             .value<qintptr>();
@@ -259,60 +322,18 @@ void PanelObject::on_comboBoxInheritance_currentIndexChanged(int index){
 
 // -------------------------------------------------------
 
-void PanelObject::on_updateJsonEvents(SuperListItem* ){
-    QGridLayout* layout;
-    QWidget* widget;
-    QWidget* widgetCheckbox;
-    WidgetTreeCommands* tree;
-    SystemObjectEvent* event;
-    QCheckBox* checkbox;
-    QSpacerItem* spacer;
-    QHBoxLayout* hlayout;
-    int l;
-
-    // Update reactions (if new/delete)
-    updateReactions();
-    QStandardItem* selected = ui->treeViewStates->getSelected();
-    SystemState* super = (SystemState*) selected->data().value<quintptr>();
-
-    // Clear
-    ui->tabWidgetCommands->clear();
-    m_reactions.clear();
-    m_checkBoxes.clear();
-
-    // Create all the corresponding tabs for all events
-    l = ui->treeViewEvents->getModel()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        event = (SystemObjectEvent*) ui->treeViewEvents->getModel()->item(i)
-                ->data().value<quintptr>();
-        widget = new QWidget();
-        layout = new QGridLayout(widget);
-        tree = new WidgetTreeCommands();
-        m_reactions.append(tree);
-        layout->addWidget(tree,0,0);
-        widgetCheckbox = new QWidget();
-        hlayout = new QHBoxLayout(widgetCheckbox);
-        checkbox = new QCheckBox("Blocking hero");
-        checkbox->setProperty("reaction",
-                              QVariant::fromValue(
-                                  reinterpret_cast<quintptr>(
-                                      event->reactionAt(super->id()))));
-        connect(checkbox, SIGNAL(toggled(bool)), this,
-                SLOT(on_blockingHeroChanged(bool)));
-        m_checkBoxes.append(checkbox);
-        hlayout->addWidget(checkbox);
-        spacer = new QSpacerItem(50,1);
-        hlayout->addSpacerItem(spacer);
-        hlayout->setStretch(2,1);
-        layout->addWidget(widgetCheckbox,1,0);
-
-        ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
-    }
-
+void PanelObject::on_updateJsonStates(SuperListItem*){
+    updateReactionsWidgets();
     on_stateChanged(ui->treeViewStates->currentIndex(),
                     ui->treeViewStates->currentIndex());
     on_eventChanged(ui->treeViewEvents->currentIndex(),
                     ui->treeViewEvents->currentIndex());
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_updateJsonEvents(SuperListItem* item){
+    on_updateJsonStates(item);
 }
 
 // -------------------------------------------------------
@@ -338,26 +359,31 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
                 break;
             }
             ui->comboBoxGraphics->setCurrentIndex(index);
+            ui->frameGraphics->repaint();
 
             // Events
             for (int i = 0; i < m_reactions.size(); i++){
                 SystemObjectEvent* event =
                         (SystemObjectEvent*) m_model->modelEvents()->item(i)
                         ->data().value<quintptr>();
-                SystemReaction* reaction = event->reactionAt(super->id());
 
-                // Commands
-                WidgetTreeCommands* widget = m_reactions.at(i);
-                widget->initializeLinkedObject(m_model);
-                widget->initializeParameters(event->modelParameters());
-                widget->initializeModel(reaction->modelCommands());
+                if (event != nullptr){
+                    SystemReaction* reaction = event->reactionAt(super->id());
 
-                // Blocking hero
-                QCheckBox* check = m_checkBoxes.at(i);
-                check->setProperty("reaction",
-                                   QVariant::fromValue(
-                                       reinterpret_cast<quintptr>(reaction)));
-                check->setChecked(reaction->blockingHero());
+                    // Commands
+                    WidgetTreeCommands* widget = m_reactions.at(i);
+                    widget->initializeLinkedObject(m_model);
+                    widget->initializeParameters(event->modelParameters());
+                    widget->initializeModel(reaction->modelCommands());
+
+                    // Blocking hero
+                    QCheckBox* check = m_checkBoxes.at(i);
+                    check->setProperty(
+                                "reaction",
+                                QVariant::fromValue(
+                                    reinterpret_cast<quintptr>(reaction)));
+                    check->setChecked(reaction->blockingHero());
+                }
             }
 
             // Update options state

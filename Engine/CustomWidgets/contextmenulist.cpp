@@ -78,6 +78,8 @@ ContextMenuList* ContextMenuList::createContextSuperList(QWidget *parent){
     QAction* actionCopy = new QAction("Copy", parent);
     QAction* actionPaste = new QAction("Paste", parent);
     QAction* actionDelete = new QAction("Delete", parent);
+    menu->setActionCopy(actionCopy);
+    menu->setActionPaste(actionPaste);
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut

@@ -37,6 +37,8 @@ class SystemClass : public SuperListItem
 public:
     SystemClass();
     SystemClass(int i, QString n, int initialLevel, int maxLevel, int expBase,
+                int expInflation);
+    SystemClass(int i, QString n, int initialLevel, int maxLevel, int expBase,
                 int expInflation,
                 QStandardItemModel *stat, QStandardItemModel *s);
     virtual ~SystemClass();
@@ -46,6 +48,7 @@ public:
     int expInflation() const;
     QStandardItemModel* statisticsProgression() const;
     QStandardItemModel* skills() const;
+    virtual SuperListItem* createCopy() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

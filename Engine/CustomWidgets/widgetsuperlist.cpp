@@ -203,6 +203,9 @@ void WidgetSuperList::showContextMenu(const QPoint & p){
     if (m_hasContextMenu){
         QStandardItem* selected = getSelected();
         if (selected != nullptr){
+            m_contextMenu->canCopy(false);
+            m_contextMenu->canPaste(false);
+            m_contextMenu->canDelete(m_canBrutRemove);
             m_contextMenu->showContextMenu(p);
         }
     }

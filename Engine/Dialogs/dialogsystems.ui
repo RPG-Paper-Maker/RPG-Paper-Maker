@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>4</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -55,18 +55,28 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_3">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="text">
                   <string>Game name:</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="WidgetTextLang" name="widgetGameName" native="true"/>
+                <widget class="WidgetTextLang" name="widgetGameName" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Game native resolution</string>
                </property>
@@ -147,6 +157,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Map properties</string>
                </property>
@@ -169,24 +182,11 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_3"/>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_16" stretch="0,1">
-                    <property name="spacing">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <widget class="QLabel" name="label_11">
-                      <property name="text">
-                       <string>Portion size (in squares):</string>
+                     <widget class="QSpinBox" name="spinBox_3">
+                      <property name="value">
+                       <number>16</number>
                       </property>
                      </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="spinBox_9"/>
                     </item>
                    </layout>
                   </item>
@@ -231,6 +231,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_3">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Other options</string>
                </property>
@@ -308,6 +311,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_12">
              <item>
               <widget class="QGroupBox" name="groupBox_4">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Colors</string>
                </property>
@@ -324,6 +330,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_7">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Particules</string>
                </property>
@@ -360,6 +369,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_8">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Detections</string>
                </property>
@@ -380,6 +392,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_14">
              <item>
               <widget class="QGroupBox" name="groupBox_6">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Camera propertie</string>
                </property>
@@ -396,6 +411,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_9">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Camera movements</string>
                </property>
@@ -457,6 +475,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_19">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Formulas</string>
                </property>
@@ -481,6 +502,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_31" stretch="1,1,1">
              <item>
               <widget class="QGroupBox" name="groupBox_22">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Elements</string>
                </property>
@@ -488,7 +512,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListElements" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -497,6 +521,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_28">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -519,6 +546,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_23">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Common battle commands</string>
                </property>
@@ -526,7 +556,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonBattleCommands" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -539,6 +569,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_32" stretch="1,1">
              <item>
               <widget class="QGroupBox" name="groupBox_24">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Common statistics</string>
                </property>
@@ -546,7 +579,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonStatistics" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -555,6 +588,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_25">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -568,7 +604,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonEquipments" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -581,6 +617,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_33">
              <item>
               <widget class="QGroupBox" name="groupBox_26">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Weapons kind</string>
                </property>
@@ -588,7 +627,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListWeaponsKind" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -597,6 +636,9 @@
              </item>
              <item>
               <widget class="QGroupBox" name="groupBox_27">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="title">
                 <string>Armors kind</string>
                </property>
@@ -604,7 +646,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListArmorsKind" native="true">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -628,7 +670,7 @@
         </attribute>
         <widget class="QGroupBox" name="groupBox_17">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -645,7 +687,7 @@
           <item row="0" column="0">
            <widget class="PanelSuperList" name="panelSuperListItemsTypes" native="true">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>

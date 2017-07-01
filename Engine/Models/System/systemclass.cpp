@@ -28,10 +28,24 @@
 //
 // -------------------------------------------------------
 
-SystemClass::SystemClass() : SuperListItem()
+SystemClass::SystemClass() :
+    SystemClass(1, "", 1, 99, 200, 2)
 {
-    m_statisticsProgression = new QStandardItemModel();
-    m_skills = new QStandardItemModel();
+
+}
+
+SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
+                         int expBase, int expInflation) :
+    SystemClass(i, n, initialLevel, maxLevel, expBase, expInflation,
+                new QStandardItemModel, new QStandardItemModel)
+{
+    QStandardItem* item;
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_statisticsProgression->appendRow(item);
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_skills->appendRow(item);
 }
 
 SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
@@ -45,6 +59,9 @@ SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
     m_statisticsProgression(stat),
     m_skills(s)
 {
+    m_statisticsProgression->setHorizontalHeaderLabels(
+                QStringList({"Statistic","Initial","Final"}));
+    m_skills->setHorizontalHeaderLabels(QStringList({"Skills","Levels"}));
 
 }
 
@@ -71,6 +88,18 @@ QStandardItemModel* SystemClass::skills() const {
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+SuperListItem* SystemClass::createCopy() const{
+    SystemClass* super = new SystemClass;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+//
 //  READ / WRITE
 //
 // -------------------------------------------------------
@@ -78,7 +107,6 @@ QStandardItemModel* SystemClass::skills() const {
 void SystemClass::read(const QJsonObject &json){
     SuperListItem::read(json);
     QJsonArray tab;
-    QStandardItem* item;
     QList<QStandardItem *> row;
     SystemStatisticProgression* statisticProgression;
     SystemClassSkill* classSkill;
@@ -91,31 +119,24 @@ void SystemClass::read(const QJsonObject &json){
 
 
     // Statistics
-    m_statisticsProgression->setHorizontalHeaderLabels(
-                QStringList({"Statistic","Initial","Final"}));
     tab = json["stats"].toArray();
     for (int i = 0; i < tab.size(); i++){
         statisticProgression = new SystemStatisticProgression;
         statisticProgression->read(tab[i].toObject());
         row = statisticProgression->getModelRow();
-        m_statisticsProgression->appendRow(row);
+        m_statisticsProgression->insertRow(
+                    m_statisticsProgression->invisibleRootItem()->rowCount()-1,
+                    row);
     }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_statisticsProgression->appendRow(item);
 
     // Skills
-    m_skills->setHorizontalHeaderLabels(QStringList({"Skills","Levels"}));
     tab = json["skills"].toArray();
     for (int i = 0; i < tab.size(); i++){
         classSkill = new SystemClassSkill;
         classSkill->read(tab[i].toObject());
         row = classSkill->getModelRow();
-        m_skills->appendRow(row);
+        m_skills->insertRow(m_skills->invisibleRootItem()->rowCount()-1, row);
     }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_skills->appendRow(item);
 }
 
 void SystemClass::write(QJsonObject &json) const{

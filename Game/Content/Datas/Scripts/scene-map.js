@@ -46,7 +46,7 @@ function SceneMap(id){
     this.scene = new THREE.Scene();
     this.camera = new Camera(120, 75);
     this.camera.update();
-    this.currentPortion = Wanok.getPortion(this.camera.threeCamera.position);
+    this.currentPortion = Wanok.getPortion($game.hero.position);
     this.readMapInfos();
     this.callBackAfterLoading = this.loadTextures;
 }
@@ -291,6 +291,19 @@ SceneMap.prototype = {
             alphaTest: 0.5,
             overdraw: 0.5
         });
+    },
+
+    // -------------------------------------------------------
+
+    getLocalPortion: function(position){
+        var halfRay = $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
+        var portion = Wanok.getPortion(position);
+
+        return [
+            portion[0] + halfRay,
+            portion[1] + halfRay,
+            portion[2] + halfRay
+        ];
     },
 
     // -------------------------------------------------------
