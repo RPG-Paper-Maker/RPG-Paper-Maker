@@ -177,12 +177,13 @@ QString Map::writeMap(QString path, MapProperties& properties,
                      properties);
 
     // Portions
-    int lx = properties.length() / Wanok::portionSize;
-    int ly = (properties.depth() + properties.height()) / Wanok::portionSize;;
-    int lz = properties.width() / Wanok::portionSize;
-    for (int i = 0; i < lx; i++){
-        for (int j = 0; j < ly; j++){
-            for (int k = 0; k < lz; k++){
+    int lx = (properties.length() - 1) / Wanok::portionSize;
+    int ly = (properties.depth() + properties.height() - 1) /
+            Wanok::portionSize;;
+    int lz = (properties.width() - 1) / Wanok::portionSize;
+    for (int i = 0; i <= lx; i++){
+        for (int j = 0; j <= ly; j++){
+            for (int k = 0; k <= lz; k++){
                 QJsonObject obj;
                 Wanok::writeOtherJSON(
                             Wanok::pathCombine(dirMap,
@@ -202,6 +203,27 @@ QString Map::writeMap(QString path, MapProperties& properties,
     QDir(dirMap).mkdir(Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
 
     return dirMap;
+}
+
+// -------------------------------------------------------
+
+void Map::correctMap(QString path, MapProperties& properties){
+    int lx = (properties.length() - 1) / Wanok::portionSize;
+    int ly = (properties.depth() + properties.height() - 1) /
+            Wanok::portionSize;;
+    int lz = (properties.width() - 1) / Wanok::portionSize;
+    for (int i = 0; i <= lx; i++){
+        for (int j = 0; j <= ly; j++){
+            for (int k = 0; k <= lz; k++){
+                QString pathPortion = Wanok::pathCombine(
+                            path, getPortionPathMap(i, j, k));
+                if (!QFile(pathPortion).exists()){
+                    QJsonObject obj;
+                    Wanok::writeOtherJSON(pathPortion, obj);
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -297,12 +319,12 @@ void Map::deleteTextures(){
 
 MapPortion* Map::loadPortionMap(int i, int j, int k){
 
-    int lx = m_mapProperties->length() / Wanok::portionSize;
-    int ly = (m_mapProperties->depth() + m_mapProperties->height()) /
+    int lx = (m_mapProperties->length() - 1) / Wanok::portionSize;
+    int ly = (m_mapProperties->depth() + m_mapProperties->height() - 1) /
             Wanok::portionSize;;
-    int lz = m_mapProperties->width() / Wanok::portionSize;
+    int lz = (m_mapProperties->width() - 1) / Wanok::portionSize;
 
-    if (i >= 0 && i < lx && j >= 0 && j < ly && k >= 0 && k < lz){
+    if (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz){
         QString path = getPortionPath(i, j, k);
         MapPortion* portion = new MapPortion;
         Wanok::readJSON(path, *portion);

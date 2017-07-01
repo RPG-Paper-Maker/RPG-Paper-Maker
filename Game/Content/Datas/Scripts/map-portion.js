@@ -45,13 +45,8 @@
 *   @param {number} [spritesOffset=-0.005] In order to avoid flickerings on
 *   sprites with the same X / Z, we use an offset.
 */
-function MapPortion(realX, realY, realZ){
-    var pixPortion = $PORTION_SIZE * $SQUARE_SIZE;
-    this.positionOrigin = new THREE.Vector3(realX * pixPortion,
-                                            realY * pixPortion,
-                                            realZ * pixPortion);
+function MapPortion(){
     this.staticFloorsMesh = null;
-    this.staticFloorsList = new Array;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
     this.spritesOffset = -0.005;
@@ -101,9 +96,9 @@ MapPortion.prototype = {
             var jsonFloorDatas = jsonFloor.v;
             var texture = jsonFloorDatas.t;
 
-            var x = this.positionOrigin.x + localPosition.x;
-            var y = this.positionOrigin.y + localPosition.y;
-            var z = this.positionOrigin.z + localPosition.z;
+            var x = localPosition.x;
+            var y = localPosition.y;
+            var z = localPosition.z;
             var l = $SQUARE_SIZE;
             var w = 1.0;
             var h = $SQUARE_SIZE;
@@ -234,10 +229,9 @@ MapPortion.prototype = {
                                                           100)
                                        + this.spritesOffset);
                     this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
-                    position = new THREE.Vector3(
-                                this.positionOrigin.x + localPosition.x,
-                                this.positionOrigin.y + localPosition.y,
-                                this.positionOrigin.z + localPosition.z);
+                    position = new THREE.Vector3(localPosition.x,
+                                                 localPosition.y,
+                                                 localPosition.z);
                     var mapObject = new MapObject(object, position);
                     mapObject.changeState();
                     $currentMap.scene.add(mapObject.mesh);
@@ -269,9 +263,9 @@ MapPortion.prototype = {
         var geometry = MapObject.getSpriteGeometry(texture[2], texture[3],
                                                    x, y, w, h);
         var plane = new THREE.Mesh(geometry, material);
-        plane.position.set(this.positionOrigin.x + localPosition.x,
-                           this.positionOrigin.y + localPosition.y,
-                           this.positionOrigin.z + localPosition.z);
+        plane.position.set(localPosition.x,
+                           localPosition.y,
+                           localPosition.z);
 
         return plane;
     },
@@ -342,10 +336,9 @@ MapPortion.prototype = {
                                                           / 100)
                                        + this.spritesOffset);
                     this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
-                    position = new THREE.Vector3(
-                                this.positionOrigin.x + localPosition.x,
-                                this.positionOrigin.y + localPosition.y,
-                                this.positionOrigin.z + localPosition.z);
+                    position = new THREE.Vector3(localPosition.x,
+                                                 localPosition.y,
+                                                 localPosition.z);
                     return new MapObject(object, position);
                 }
             }

@@ -45,6 +45,8 @@ function SceneMap(id){
     this.mapName = Wanok.generateMapName(id);
     this.scene = new THREE.Scene();
     this.camera = new Camera(120, 75);
+    this.camera.update();
+    this.currentPortion = Wanok.getPortion(this.camera.threeCamera.position);
     this.readMapInfos();
     this.callBackAfterLoading = this.loadTextures;
 }
@@ -92,15 +94,18 @@ SceneMap.prototype = {
     /** Initialize the map portions.
     */
     initializePortions: function(){
-        var ray = ($PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR) * 2 + 1;
+        var halfRay = $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
+        var ray = halfRay * 2 + 1;
         this.mapPortions = new Array(ray);
         for (var i = 0; i < ray; i++){
             this.mapPortions[i] = new Array(ray);
             for (var j = 0; j < ray; j++){
                 this.mapPortions[i][j] = new Array(ray);
                 for (var k = 0; k < ray; k++){
-                    this.mapPortions[i][j][k] = null;
-                    this.loadPortion(i, j, k, i, j, k);
+                    this.loadPortion(this.currentPortion[0] + i - halfRay,
+                                     this.currentPortion[1] + j - halfRay,
+                                     this.currentPortion[2] + k - halfRay,
+                                     i, j, k);
                 }
             }
         }
@@ -123,17 +128,27 @@ SceneMap.prototype = {
     *   @param {number} z The local z portion.
     */
     loadPortion: function(realX, realY, realZ, x, y, z){
-        var fileName = SceneMap.getPortionName(realX, realY, realZ);
 
-        if (realX === 0 && realY === 0 && realZ === 0){
+        var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
+        var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
+                $PORTION_SIZE);
+        var lz = Math.floor((this.mapInfos.width - 1) / $PORTION_SIZE);
+
+        if (realX >= 0 && realX <= lx && realY >= 0 && realY <= ly &&
+            realZ >= 0 && realZ <= lz)
+        {
+            var fileName = SceneMap.getPortionName(realX, realY, realZ);
             Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName + "/" +
                            fileName, false, function(res)
             {
                 var json = JSON.parse(res);
-                var mapPortion = new MapPortion(realX, realY, realZ);
-                mapPortion.read(json,
-                                this.id ===
-                                $datasGame.system.idMapStartHero);
+                var mapPortion = null;
+
+                if (json.hasOwnProperty("floors")){
+                    mapPortion = new MapPortion(realX, realY, realZ);
+                    mapPortion.read(
+                            json, this.id === $datasGame.system.idMapStartHero);
+                }
                 this.mapPortions[x][y][z] = mapPortion;
             });
         }

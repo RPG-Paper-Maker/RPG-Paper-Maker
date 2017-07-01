@@ -51,6 +51,7 @@ public:
     QStandardItemModel* modelObjects() const;
 
     static void writeNewMap(QString path, MapProperties& properties);
+    static void correctMap(QString path, MapProperties& properties);
     static void writeDefaultMap(QString path);
     static QString writeMap(QString path, MapProperties& properties,
                             QJsonArray &jsonObject);

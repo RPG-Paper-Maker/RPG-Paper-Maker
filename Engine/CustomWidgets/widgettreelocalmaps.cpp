@@ -487,6 +487,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
                 Wanok::deleteAllFiles(pathTemp);
             }
             properties.save(path);
+            Map::correctMap(path, properties);
             TreeMapDatas::setName(selected, properties.name());
             Wanok::get()->project()->writeTreeMapDatas();
             showMap(selected);
