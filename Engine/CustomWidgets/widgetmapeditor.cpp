@@ -114,6 +114,9 @@ void WidgetMapEditor::initializeGL(){
     //glCullFace(GL_FRONT_AND_BACK);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable( GL_BLEND );
+    glBlendEquation( GL_FUNC_ADD );
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     /*
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0);

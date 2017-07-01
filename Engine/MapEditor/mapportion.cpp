@@ -148,9 +148,11 @@ void MapPortion::paintObjects(){
 // -------------------------------------------------------
 
 void MapPortion::read(const QJsonObject & json){
-    m_floors->read(json["floors"].toObject());
-    m_sprites->read(json["sprites"].toObject());
-    m_mapObjects->read(json["objs"].toObject());
+    if (json.contains("floors")){
+        m_floors->read(json["floors"].toObject());
+        m_sprites->read(json["sprites"].toObject());
+        m_mapObjects->read(json["objs"].toObject());
+    }
 }
 
 // -------------------------------------------------------

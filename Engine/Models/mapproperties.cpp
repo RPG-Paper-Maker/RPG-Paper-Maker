@@ -30,7 +30,7 @@
 MapProperties::MapProperties() :
     MapProperties(1,
                   new LangsTranslation(WidgetTreeLocalMaps::generateMapName(1)),
-                  20, 20, 20, 20, 1)
+                  16, 16, 16, 0, 1)
 {
 
 }
@@ -73,11 +73,11 @@ QString MapProperties::realName() const {
 
 int MapProperties::length() const { return m_length; }
 
-int MapProperties::width() const { return m_length; }
+int MapProperties::width() const { return m_width; }
 
-int MapProperties::height() const { return m_length; }
+int MapProperties::height() const { return m_height; }
 
-int MapProperties::depth() const { return m_length; }
+int MapProperties::depth() const { return m_depth; }
 
 SystemTileset* MapProperties::tileset() const { return m_tileset; }
 

@@ -176,6 +176,22 @@ QString Map::writeMap(QString path, MapProperties& properties,
     Wanok::writeJSON(Wanok::pathCombine(dirMap, Wanok::fileMapInfos),
                      properties);
 
+    // Portions
+    int lx = properties.length() / Wanok::portionSize;
+    int ly = (properties.depth() + properties.height()) / Wanok::portionSize;;
+    int lz = properties.width() / Wanok::portionSize;
+    for (int i = 0; i < lx; i++){
+        for (int j = 0; j < ly; j++){
+            for (int k = 0; k < lz; k++){
+                QJsonObject obj;
+                Wanok::writeOtherJSON(
+                            Wanok::pathCombine(dirMap,
+                                               getPortionPathMap(i, j, k)),
+                            obj);
+            }
+        }
+    }
+
     // Objects
     QJsonObject json;
     json["objs"] = jsonObject;
@@ -280,21 +296,31 @@ void Map::deleteTextures(){
 // -------------------------------------------------------
 
 MapPortion* Map::loadPortionMap(int i, int j, int k){
-    QString path = getPortionPath(i, j, k);
-    if (QFile(path).exists()){
+
+    int lx = m_mapProperties->length() / Wanok::portionSize;
+    int ly = (m_mapProperties->depth() + m_mapProperties->height()) /
+            Wanok::portionSize;;
+    int lz = m_mapProperties->width() / Wanok::portionSize;
+
+    if (i >= 0 && i < lx && j >= 0 && j < ly && k >= 0 && k < lz){
+        QString path = getPortionPath(i, j, k);
         MapPortion* portion = new MapPortion;
         Wanok::readJSON(path, *portion);
+        if (!portion->isEmpty()){
 
-        // Static update
-        portion->initializeVertices(m_squareSize,
-                                    m_textureTileset,
-                                    m_texturesCharacters);
-        portion->initializeGL(m_programStatic);
-        m_programStatic->bind();
-        portion->updateGL();
-        m_programStatic->release();
+            // Static update
+            portion->initializeVertices(m_squareSize,
+                                        m_textureTileset,
+                                        m_texturesCharacters);
+            portion->initializeGL(m_programStatic);
+            m_programStatic->bind();
+            portion->updateGL();
+            m_programStatic->release();
 
-        return portion;
+            return portion;
+        }
+
+        delete portion;
     }
 
     return nullptr;
@@ -306,9 +332,8 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
 void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
     QString path = getPortionPath(portion.x(), portion.y(), portion.z());
     if (mapPortion == nullptr){
-        QFile file(path);
-        if (file.exists())
-            file.remove();
+        QJsonObject obj;
+        Wanok::writeOtherJSON(path, obj);
     }
     else
         Wanok::writeJSON(path, *mapPortion);

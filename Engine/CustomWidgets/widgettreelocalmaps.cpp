@@ -423,26 +423,24 @@ void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
 void WidgetTreeLocalMaps::contextNewMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        MapProperties* properties = new MapProperties;
-        properties->names()->updateNames();
+        MapProperties properties;
+        properties.names()->updateNames();
         int id = WidgetTreeLocalMaps::generateMapId();
-        properties->setId(id);
-        properties->names()->setAllNames(
+        properties.setId(id);
+        properties.names()->setAllNames(
                     WidgetTreeLocalMaps::generateMapName(id));
 
-        DialogMapProperties dialog(*properties);
+        DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
-            TreeMapTag* tag = TreeMapTag::createMap(properties->name(), id);
+            TreeMapTag* tag = TreeMapTag::createMap(properties.name(), id);
             TreeMapDatas::addMap(selected, selected->rowCount(), tag);
             Map::writeNewMap(Wanok::get()->project()->pathCurrentProject(),
-                             *properties);
+                             properties);
             Wanok::get()->project()->writeTreeMapDatas();
 
             // Loading tileset texture
             updateTileset();
         }
-        else
-            delete properties;
     }
 }
 
