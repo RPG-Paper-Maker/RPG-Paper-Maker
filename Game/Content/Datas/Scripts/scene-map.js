@@ -82,9 +82,8 @@ SceneMap.prototype = {
             };
 
             // Now that we have map dimensions, we can initialize object portion
-            if (!$game.mapsDatas.hasOwnProperty(this.id)){
+            if (!$game.mapsDatas.hasOwnProperty(this.id))
                 this.initializePortionsObjects();
-            }
         });
     },
 
@@ -106,10 +105,8 @@ SceneMap.prototype = {
             }
         }
 
-        this.scene.add($game.hero.mesh);
-
-        // Initialize the objects list after loading portions
-        this.initializeObjects();
+        // Hero initialize
+        $game.hero.changeState();
 
         // End callback
         this.callBackAfterLoading = null;
@@ -164,6 +161,8 @@ SceneMap.prototype = {
                 this.allObjects[jsonObject.id] = jsonObject.p;
             }
         });
+
+        this.callBackAfterLoading = this.initializePortions;
     },
 
     // -------------------------------------------------------
@@ -184,11 +183,9 @@ SceneMap.prototype = {
                 for (var k = 0; k < h; k++){
                     objectsPortions[i][j][k] =
                     {
-                        mr: [],  // Ids of all the moved objects that are out
+                        mids: [],// Ids of all the moved objects that are out
                                  // of the portion
-                        ma: [],  // All the moved objects that are from other
-                                 // portions
-                        m:  [],  // All the moved objects that are from this
+                        m: [],   // All the moved objects that are from this
                                  // portion
                         si: [],  // Ids of the objects that have modified states
                         s: []    // States of the objects according to id
@@ -208,17 +205,26 @@ SceneMap.prototype = {
 
         // Load textures
         var textureLoader = new THREE.TextureLoader();
-        var path = this.mapInfos.tileset.getPath();
+        var path;
+        var characters;
+        var i, l;
+
+        // Tileset
+        path = this.mapInfos.tileset.getPath();
         this.textureTileset = this.loadTexture(textureLoader, path);
-        this.texturesCharacters = new Array(2);
-        path = $datasGame.pictures.list
-                [PictureKind.Characters][1].getPath(PictureKind.Characters);
-        this.texturesCharacters[1] = this.loadTexture(textureLoader, path);
 
-        // Update hero material
-        $game.hero.mesh.material = this.texturesCharacters[1];
+        // Characters
+        characters = $datasGame.pictures.list[PictureKind.Characters];
+        l = characters.length;
+        this.texturesCharacters = new Array(l);
+        this.texturesCharacters[0] = this.loadTextureEmpty();
+        for (i = 1; i < l; i++){
+            path = $datasGame.pictures.list
+                    [PictureKind.Characters][i].getPath(PictureKind.Characters);
+            this.texturesCharacters[i] = this.loadTexture(textureLoader, path);
+        }
 
-        this.callBackAfterLoading = this.initializePortions;
+        this.callBackAfterLoading = this.initializeObjects;
     },
 
     // -------------------------------------------------------
@@ -244,17 +250,32 @@ SceneMap.prototype = {
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.flipY = false;
-        var material = new THREE.MeshBasicMaterial(
+
+        return new THREE.MeshBasicMaterial(
         {
             map: texture,
             transparent: true,
             side: THREE.DoubleSide,
-            shading: THREE.FlatShading, alphaTest: 0.5
+            shading: THREE.FlatShading,
+            alphaTest: 0.5,
+            overdraw: 0.5
         });
-        material.overdraw = 0.5;
+    },
 
+    // -------------------------------------------------------
 
-        return material;
+    /** Load a texture empty.
+    *   @retuns {THREE.MeshBasicMaterial}
+    */
+    loadTextureEmpty: function(){
+        return new THREE.MeshBasicMaterial(
+        {
+            transparent: true,
+            side: THREE.DoubleSide,
+            shading: THREE.FlatShading,
+            alphaTest: 0.5,
+            overdraw: 0.5
+        });
     },
 
     // -------------------------------------------------------
@@ -293,6 +314,7 @@ SceneMap.prototype = {
         this.camera.update();
 
         // Update objects
+        $game.hero.update();
         var objects = $game.mapsDatas[this.id][0][0][0];
         var movedObjects = objects.m;
         var i, l;

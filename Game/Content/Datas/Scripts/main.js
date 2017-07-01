@@ -66,6 +66,10 @@ var $PORTIONS_RAY_FAR = 1;
 *   @default 16 */
 var $PORTION_SIZE = 16;
 
+/** Defines the number of frames for an animation.
+*   @type {number} */
+var $FRAMES;
+
 /** A number representing the milliseconds elapsed between 1 January 1970
 *   00:00:00 UTC and the given date. It is updated at the end of each update in
 *   order to get the elapsed time between each update.
@@ -110,7 +114,7 @@ var $canvasHUD;
 var $blockingHero = false;
 
 /** The model of the hero.
-*   @type {MapObject} */
+*   @type {SystemObject} */
 var $modelHero;
 
 /** The width of the window.

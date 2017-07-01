@@ -45,27 +45,19 @@ Object.freeze(Orientation);
 *   @param {THREE.Mesh} mesh The current mesh used for this object.
 *   @param {SystemObject} system System infos.
 */
-function MapObject(mesh, system, w, h) {
-    this.mesh = mesh;
+function MapObject(system, position) {
     this.system = system;
+    this.position = position;
+    this.mesh = null;
     this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
-    this.width = w;
-    this.height = h;
+    this.width = 1;
+    this.height = 1;
     this.frameDuration = 150;
-    this.frameNumber = 4;
     this.moving = false;
     this.frameTick = 0;
-    this.position = new THREE.Vector3(this.mesh.position.x,
-                                      this.mesh.position.y,
-                                      this.mesh.position.z);
-
-    // Current state
-    if (Wanok.isEmpty(system.states))
-        this.currentState = null;
-    else
-        this.currentState = system.states[0];
+    this.isHero = false;
 }
 
 /** Normal speed coef.
@@ -75,14 +67,91 @@ function MapObject(mesh, system, w, h) {
 */
 MapObject.SPEED_NORMAL = 0.004666;
 
+MapObject.getSpriteGeometry = function(width, height, x, y, w, h){
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(-0.5, 1.0, 0.0));
+    geometry.vertices.push(new THREE.Vector3(0.5, 1.0, 0.0));
+    geometry.vertices.push(new THREE.Vector3(0.5, 0.0, 0.0));
+    geometry.vertices.push(new THREE.Vector3(-0.5, 0.0, 0.0));
+    geometry.faces.push(new THREE.Face3(0, 1, 2));
+    geometry.faces.push(new THREE.Face3(0, 2, 3));
+    geometry.scale(width * $SQUARE_SIZE, height * $SQUARE_SIZE, 1.0);
+    geometry.faceVertexUvs[0] = [];
+    geometry.faceVertexUvs[0].push([
+        new THREE.Vector2(x,y),
+        new THREE.Vector2(x+w,y),
+        new THREE.Vector2(x+w,y+h)
+    ]);
+    geometry.faceVertexUvs[0].push([
+        new THREE.Vector2(x,y),
+        new THREE.Vector2(x+w,y+h),
+        new THREE.Vector2(x,y+h)
+    ]);
+    geometry.uvsNeedUpdate = true;
+
+    return geometry;
+}
+
 MapObject.prototype = {
+
+    /** Update the current state (graphics to display). Also update the mesh.
+    */
+    changeState: function(){
+
+        // Remove previous mesh
+        if (this.mesh !== null)
+            $currentMap.scene.remove(this.mesh);
+
+        // Updating the current state
+        var states;
+        if (this.isHero)
+            states = $game.heroStates;
+        else{
+            var portion = $currentMap.allObjects[this.system.id];
+            var portionDatas = $game.mapsDatas[$currentMap.id]
+                    [portion[0]][portion[1]][portion[2]];
+            var indexState = portionDatas.si.indexOf(this.system.id);
+            states = (indexState === -1) ? [1] : portionDatas.s[indexState];
+        }
+        this.currentState = null;
+        for (var i = this.system.states.length - 1; i >= 0; i--){
+            var state = this.system.states[i];
+            if (states.indexOf(state.id) !== -1){
+                this.currentState = state;
+                break;
+            }
+        }
+
+        // Update mesh
+        var material =
+                $currentMap.texturesCharacters[this.currentState.graphicID];
+        if (this.currentState !== null &&
+            this.currentState.graphicKind !== MapEditorSubSelectionKind.None &&
+            typeof material.map !== 'undefined')
+        {
+            this.frame = this.currentState.indexX;
+            this.orientationEye = this.currentState.indexY;
+            this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
+            this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
+            var geometry = MapObject.getSpriteGeometry(this.width, this.height);
+            this.mesh = new THREE.Mesh(geometry, material);
+            this.mesh.position.set(this.position.x,
+                                   this.position.y,
+                                   this.position.z);
+            this.updateUVs();
+        }
+        else
+            this.mesh = null;
+
+        // Add to the scene
+        $currentMap.scene.add(this.mesh);
+    },
 
     /** Read the JSON associated to the object.
     *   @param {Object} json Json object describing the object.
     */
     read: function(json){
         var jsonPosition = json.k;
-        this.mesh.position = Wanok.positionToVector3(jsonPosition);
         this.position = Wanok.positionToVector3(jsonPosition);
         this.system = new SystemObject;
         this.system.readJSON(json.v);
@@ -158,13 +227,18 @@ MapObject.prototype = {
     *   @returns {number} Distance cross.
     */
     move: function(orientation, limit, angle){
-        var objects = $game.mapsDatas[$currentMap.id][0][0][0];
-        var movedObjects = objects.m;
+        var objects, movedObjects, index;
 
         // Remove from move
-        var index = movedObjects.indexOf(this);
-        if (index !== -1)
-            movedObjects.splice(index, 1);
+        if (!this.isHero){
+            var previousPortion = Wanok.getPortion(this.position);
+            objects = $game.mapsDatas[$currentMap.id]
+                   [previousPortion[0]][previousPortion[1]][previousPortion[2]];
+            movedObjects = objects.m;
+            index = movedObjects.indexOf(this);
+            if (index !== -1)
+                movedObjects.splice(index, 1);
+        }
 
         // Set position
         var distance = Math.min(limit, this.speed * ($elapsedTime *
@@ -182,7 +256,29 @@ MapObject.prototype = {
         this.moving = true;
 
         // Add to moving objects
-        movedObjects.unshift(this);
+        if (!this.isHero){
+            var afterPortion = Wanok.getPortion(this.position);
+            objects = $game.mapsDatas[$currentMap.id]
+                    [afterPortion[0]][afterPortion[1]][afterPortion[2]];
+            movedObjects = objects.m;
+            index = movedObjects.indexOf(this);
+            if (index === -1)
+                movedObjects.unshift(this);
+
+            var originalPortion = $currentMap.allObjects[this.system.id];
+            objects = $game.mapsDatas[$currentMap.id]
+                   [originalPortion[0]][originalPortion[1]][originalPortion[2]];
+            var movedObjectsIDs = objects.mids;
+            index = movedObjectsIDs.indexOf(this.system.id);
+            if (index !== -1)
+                movedObjects.splice(index, 1);
+            if (originalPortion[0] !== afterPortion[0] ||
+                originalPortion[1] !== afterPortion[1] ||
+                originalPortion[2] !== afterPortion[2])
+            {
+                movedObjectsIDs.unshift(this.system.id);
+            }
+        }
 
         return distance;
     },
@@ -215,55 +311,75 @@ MapObject.prototype = {
     /** Update the object graphics.
     */
     update: function(){
-        var frame = this.frame;
+        if (this.mesh !== null){
+            var frame = this.frame;
 
-        if (this.moving){
+            if (this.moving){
 
-            // If moving, update frame
-            if (this.currentState.moveAnimation){
-                this.frameTick += $elapsedTime;
-                if (this.frameTick >= this.frameDuration){
-                    this.frame = (this.frame + 1) % this.frameNumber;
-                    this.frameTick = 0;
+                // If moving, update frame
+                if (this.currentState.moveAnimation){
+                    this.frameTick += $elapsedTime;
+                    if (this.frameTick >= this.frameDuration){
+                        this.frame = (this.frame + 1) % $FRAMES;
+                        this.frameTick = 0;
+                    }
                 }
+
+                // Update mesh position
+                var offset = (this.currentState.pixelOffset &&
+                              this.frame % 2 !== 0) ? 1 : 0;
+                this.mesh.position.set(this.position.x,
+                                       this.position.y + offset,
+                                       this.position.z);
+                this.moving = false;
+            }
+            else{
+                this.frame = 0;
             }
 
-            // Update mesh position
-            var offset = (this.currentState.pixelOffset &&
-                          this.frame % 2 !== 0) ? 1 : 0;
-            this.mesh.position.set(this.position.x,
-                                   this.position.y + offset,
-                                   this.position.z);
-            this.moving = false;
+            // Update mesh
+            if (frame !== this.frame)
+                this.updateUVs();
         }
-        else{
-            this.frame = 0;
-        }
-
-        // Update mesh
-        if (frame !== this.frame)
-            this.updateUVs();
     },
 
     // -------------------------------------------------------
 
     /** Update the UVs coordinates according to frame and orientation.
     */
-    updateUVs : function(){
-        var textureWidth = this.mesh.material.map.image.width;
-        var textureHeight = this.mesh.material.map.image.height;
-        var w = this.width * $SQUARE_SIZE / textureWidth;
-        var h = this.height * $SQUARE_SIZE / textureHeight;
-        var x = this.frame * w;
-        var y = this.orientationEye * h;
+    updateUVs: function(){
+        if (this.mesh !== null &&
+            this.currentState.graphicKind !== MapEditorSubSelectionKind.None)
+        {
+            var textureWidth = this.mesh.material.map.image.width;
+            var textureHeight = this.mesh.material.map.image.height;
+            var w = this.width * $SQUARE_SIZE / textureWidth;
+            var h = this.height * $SQUARE_SIZE / textureHeight;
+            var x = this.frame * w;
+            var y = this.orientationEye * h;
 
-        // Update geometry
-        this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
-        this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
-        this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
-        this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
-        this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
-        this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
-        this.mesh.geometry.uvsNeedUpdate = true;
+            // Update geometry
+            this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
+            this.mesh.geometry.faceVertexUvs[0][0][1].set(x + w, y);
+            this.mesh.geometry.faceVertexUvs[0][0][2].set(x + w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][0].set(x, y);
+            this.mesh.geometry.faceVertexUvs[0][1][1].set(x + w, y + h);
+            this.mesh.geometry.faceVertexUvs[0][1][2].set(x, y + h);
+            this.mesh.geometry.uvsNeedUpdate = true;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the material.
+    */
+    updateMaterial: function(){
+        if (this.currentState.graphicKind !== MapEditorSubSelectionKind.None){
+            this.mesh.material =
+                 $currentMap.texturesCharacters[this.currentState.graphicID];
+        }
+        else{
+            this.mesh = null;
+        }
     }
 }

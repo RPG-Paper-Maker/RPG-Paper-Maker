@@ -222,34 +222,26 @@ MapPortion.prototype = {
                 var object = new SystemObject;
                 object.readJSON(jsonObjectValue);
 
-                // Get mesh
-                var x = 0.0;
-                var y = 0.0;
-                var w = 32.0 / 128.0;
-                var h = 32.0 / 128.0;
-                var coefX = 0.1 / width;
-                var coefY = 0.1 / height;
-                x += coefX;
-                y += coefY;
-                w -= (coefX * 2);
-                h -= (coefY * 2);
-                var mesh = this.getSpriteMesh(position,
-                                              $gameStack.top()
-                                              .texturesCharacters[1],
-                                              [0, 0, 2, 2],
-                                              x, y, w, h);
-                var mapObject = new MapObject(mesh, object, 2, 2);
-
                 /* If it is the hero, you should not add it to the list of
                 objects to display */
                 if (!isMapHero ||
                     $datasGame.system.idObjectStartHero !== object.id)
                 {
-                    $currentMap.scene.add(mesh);
+                    var localPosition = Wanok.positionToVector3(position);
+                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                                       + this.spritesOffset);
+                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
+                                                          100)
+                                       + this.spritesOffset);
+                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                    position = new THREE.Vector3(
+                                this.positionOrigin.x + localPosition.x,
+                                this.positionOrigin.y + localPosition.y,
+                                this.positionOrigin.z + localPosition.z);
+                    var mapObject = new MapObject(object, position);
+                    mapObject.changeState();
+                    $currentMap.scene.add(mapObject.mesh);
                     this.objectsList.unshift(mapObject);
-                    var objects = $game.mapsDatas[$currentMap.id][0][0][0];
-                    var movedObjects = objects.m;
-                    movedObjects.unshift(mapObject);
                 }
             }
         }
@@ -274,28 +266,8 @@ MapPortion.prototype = {
                            + this.spritesOffset);
         this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
 
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(-0.5, 1.0, 0.0));
-        geometry.vertices.push(new THREE.Vector3(0.5, 1.0, 0.0));
-        geometry.vertices.push(new THREE.Vector3(0.5, 0.0, 0.0));
-        geometry.vertices.push(new THREE.Vector3(-0.5, 0.0, 0.0));
-        geometry.faces.push(new THREE.Face3(0, 1, 2));
-        geometry.faces.push(new THREE.Face3(0, 2, 3));
-        geometry.scale(texture[2] * $SQUARE_SIZE, texture[3] * $SQUARE_SIZE,
-                       1.0);
-        geometry.faceVertexUvs[0] = [];
-        geometry.faceVertexUvs[0].push([
-            new THREE.Vector2(x,y),
-            new THREE.Vector2(x+w,y),
-            new THREE.Vector2(x+w,y+h)
-        ]);
-        geometry.faceVertexUvs[0].push([
-            new THREE.Vector2(x,y),
-            new THREE.Vector2(x+w,y+h),
-            new THREE.Vector2(x,y+h)
-        ]);
-        geometry.uvsNeedUpdate = true;
-
+        var geometry = MapObject.getSpriteGeometry(texture[2], texture[3],
+                                                   x, y, w, h);
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(this.positionOrigin.x + localPosition.x,
                            this.positionOrigin.y + localPosition.y,
@@ -363,25 +335,18 @@ MapPortion.prototype = {
                 if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
                     var object = new SystemObject;
                     object.readJSON(jsonObjectValue);
-
-                    // Get mesh
-                    var x = 0.0;
-                    var y = 0.0;
-                    var w = 32.0 / 128.0;
-                    var h = 32.0 / 128.0;
-                    var coefX = 0.1 / width;
-                    var coefY = 0.1 / height;
-                    x += coefX;
-                    y += coefY;
-                    w -= (coefX * 2);
-                    h -= (coefY * 2);
-                    var mesh =
-                            this.getSpriteMesh(position,
-                                               new THREE.MeshBasicMaterial({}),
-                                               [0, 0, 2, 2],
-                                               x, y, w, h);
-                    var mapObject = new MapObject(mesh, object, 2, 2);
-                    return mapObject;
+                    var localPosition = Wanok.positionToVector3(position);
+                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                                       + this.spritesOffset);
+                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE
+                                                          / 100)
+                                       + this.spritesOffset);
+                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                    position = new THREE.Vector3(
+                                this.positionOrigin.x + localPosition.x,
+                                this.positionOrigin.y + localPosition.y,
+                                this.positionOrigin.z + localPosition.z);
+                    return new MapObject(object, position);
                 }
             }
         }

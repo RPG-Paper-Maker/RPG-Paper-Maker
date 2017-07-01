@@ -53,6 +53,7 @@ DatasSystem.prototype = {
 
             $SQUARE_SIZE = json.ss;
             $PORTIONS_RAY_NEAR = json.pr;
+            $FRAMES = json.frames;
 
             // Path BR
             Wanok.PATH_BR = "file://" + json.pathBR + "/";
@@ -100,13 +101,15 @@ DatasSystem.prototype = {
                 }
             }
 
-            var fileName = SceneMap.getPortionName(portion[0], portion[1],
+            var fileName = SceneMap.getPortionName(portion[0],
+                                                   portion[1],
                                                    portion[2]);
 
             Wanok.openFile(null, Wanok.FILE_MAPS + mapName + "/" + fileName,
                            false, function(res){
                 var json = JSON.parse(res);
-                var mapPortion = new MapPortion(portion[0], portion[1],
+                var mapPortion = new MapPortion(portion[0],
+                                                portion[1],
                                                 portion[2]);
 
                 // Update the hero model

@@ -333,10 +333,24 @@ Wanok.isEmpty = function(array) {
     return array[0] == null;
 };
 
+// -------------------------------------------------------
+
 Wanok.cos = function(w){
     return parseFloat(Math.cos(w).toFixed(10));
 };
 
+// -------------------------------------------------------
+
 Wanok.sin = function(w){
     return parseFloat(Math.sin(w).toFixed(10));
 };
+
+// -------------------------------------------------------
+
+Wanok.getPortion = function(position){
+    return [
+        Math.floor(Math.floor((position.x + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
+        Math.floor(Math.floor((position.y + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
+        Math.floor(Math.floor((position.z + 1) / $SQUARE_SIZE) / $PORTION_SIZE)
+    ]
+}

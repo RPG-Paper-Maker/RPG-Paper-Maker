@@ -75,7 +75,11 @@ Object.freeze(GroupKind);
 */
 function Game(){
     this.currentSlot = -1;
-    this.hero = $modelHero;
+    this.hero = new MapObject($modelHero.system,
+                              new THREE.Vector3($modelHero.position.x,
+                                                $modelHero.position.y,
+                                                $modelHero.position.z));
+    this.hero.isHero = true;
 }
 
 Game.prototype = {

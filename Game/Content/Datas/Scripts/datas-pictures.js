@@ -77,5 +77,15 @@ DatasPictures.prototype = {
                 this.list[k] = list;
             }
         });
+    },
+
+    /** Get the corresponding picture.
+    */
+    get: function(kind, id){
+        if (kind === PictureKind.None){
+            return new SystemPicture();
+        }
+        else
+            return this.list[kind][id];
     }
 }
