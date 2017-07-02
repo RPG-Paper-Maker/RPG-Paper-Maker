@@ -39,6 +39,7 @@ public:
     virtual ~SystemBattleCommand();
     int idSkill() const;
     virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemBattleCommand& battleCommand);
 
     virtual void read(const QJsonObject &json);

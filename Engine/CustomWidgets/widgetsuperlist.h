@@ -70,6 +70,9 @@ private slots:
     void contextCopy();
     void contextPaste();
     void contextDelete();
+
+signals:
+    void updated();
 };
 
 #endif // WIDGETSUPERLIST_H

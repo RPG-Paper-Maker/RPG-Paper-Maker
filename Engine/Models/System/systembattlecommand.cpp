@@ -65,6 +65,14 @@ bool SystemBattleCommand::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemBattleCommand::createCopy() const{
+    SystemBattleCommand* super = new SystemBattleCommand;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemBattleCommand::setCopy(const SystemBattleCommand& battleCommand){
     SystemLang::setCopy(battleCommand);
     m_idSkill = battleCommand.idSkill();

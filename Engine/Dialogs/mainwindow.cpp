@@ -403,23 +403,12 @@ void MainWindow::on_actionPlay_triggered(){
     }
 
     // Play process
-    connect(gameProcess,
-            SIGNAL(finished(int, QProcess::ExitStatus)), this,
-            SLOT(on_gameProcessExit(int, QProcess::ExitStatus )));
     QString execName = "Game";
     #ifdef Q_OS_WIN
         execName += ".exe";
     #endif
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
-}
-
-// -------------------------------------------------------
-
-void MainWindow::on_gameProcessExit(int exitCode,
-                                    QProcess::ExitStatus exitStatus)
-{
-
 }
 
 // -------------------------------------------------------

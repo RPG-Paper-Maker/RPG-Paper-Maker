@@ -49,6 +49,10 @@ private:
     Ui::DialogSystemStatistic *ui;
     SystemStatistic& m_statistic;
     void initialize();
+
+public slots:
+    void on_lineEditAbbrevation_textChanged(const QString & text);
+    void on_radioButtonFix_toggled(bool check);
 };
 
 #endif // DIALOGSYSTEMSTATISTIC_H

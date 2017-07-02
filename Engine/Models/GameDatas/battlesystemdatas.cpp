@@ -61,6 +61,10 @@ int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }
 
 int BattleSystemDatas::idStatisticExp() const { return m_idStatisticExp; }
 
+void BattleSystemDatas::setIdStatisticLevel(int i) { m_idStatisticLevel = i; }
+
+void BattleSystemDatas::setIdStatisticExp(int i) { m_idStatisticExp = i; }
+
 QStandardItemModel* BattleSystemDatas::modelWeaponsKind() const {
     return m_modelWeaponsKind;
 }
@@ -95,36 +99,19 @@ QStandardItemModel* BattleSystemDatas::modelCommonBattleCommand() const {
 //
 // -------------------------------------------------------
 
-QVector<SystemStatistic*> BattleSystemDatas::getFixStatisticsList() const{
-    QVector<SystemStatistic*> list;
-    int l;
-
-    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
+void BattleSystemDatas::getSortedStatistics(QVector<SystemStatistic *> &fixes,
+                                            QVector<SystemStatistic *> &bars)const
+{
+    int l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         SystemStatistic* statistic =
                 (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
                 .value<quintptr>();
-        if (statistic->commands().at(0) == "0") list.append(statistic);
+        if (statistic->isFix())
+            fixes.append(statistic);
+        else
+            bars.append(statistic);
     }
-
-    return list;
-}
-
-// -------------------------------------------------------
-
-QVector<SystemStatistic*> BattleSystemDatas::getBarStatisticsList() const{
-    QVector<SystemStatistic*> list;
-    int l;
-
-    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l; i++){
-        SystemStatistic* statistic =
-                (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
-                .value<quintptr>();
-        if (statistic->commands().at(0) == "1") list.append(statistic);
-    }
-
-    return list;
 }
 
 // -------------------------------------------------------
@@ -328,32 +315,22 @@ void BattleSystemDatas::setDefaultCommonEquipment(){
 void BattleSystemDatas::setDefaultCommonStatistics(){
     int i = 1;
     SystemStatistic* items[] = {
-        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("HP"), "hp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("MP"), "mp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("TP"), "tp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Strength"), "str",
-        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv", true),
+        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp", false),
+        new SystemStatistic(i++, new LangsTranslation("HP"), "hp", false),
+        new SystemStatistic(i++, new LangsTranslation("MP"), "mp", false),
+        new SystemStatistic(i++, new LangsTranslation("TP"), "tp", false),
+        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk", true),
+        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag", true),
+        new SystemStatistic(i++, new LangsTranslation("Strength"), "str", true),
         new SystemStatistic(i++, new LangsTranslation("Intelligence"), "int",
-        QVector<QString>({"0"})),
+        true),
         new SystemStatistic(i++, new LangsTranslation("P. Defense"), "pdef",
-        QVector<QString>({"0"})),
+        true),
         new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("CC"), "cc",
-        QVector<QString>({"0"}))
+        true),
+        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true),
+        new SystemStatistic(i++, new LangsTranslation("CC"), "cc", true)
     };
 
     int length = (sizeof(items)/sizeof(*items));

@@ -67,13 +67,19 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Icon:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="WidgetTextLang" name="widgetTodo" native="true">
+          <widget class="QWidget" name="widgetTodo" native="true">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>150</width>
@@ -84,6 +90,9 @@
          </item>
          <item row="1" column="2">
           <widget class="QGraphicsView" name="graphicsViewIcon">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>24</width>

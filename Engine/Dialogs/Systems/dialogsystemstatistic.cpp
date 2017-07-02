@@ -54,18 +54,29 @@ SystemStatistic& DialogSystemStatistic::statistic() const {
 // -------------------------------------------------------
 
 void DialogSystemStatistic::initialize(){
-    ui->widgetName->lineEdit()->setText(m_statistic.name());
+    ui->widgetName->initializeNames(&m_statistic);
     ui->lineEditAbbrevation->setText(m_statistic.abbreviation());
 
-    QVector<QString> commands = m_statistic.commands();
-    int i = 0;
-
-    switch (commands.at(i++).toInt()){
-    case 0:
+    if (m_statistic.isFix())
         ui->radioButtonFix->setChecked(true);
-        break;
-    case 1:
+    else
         ui->radioButtonBar->setChecked(true);
-        break;
-    }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemStatistic::on_lineEditAbbrevation_textChanged(
+        const QString & text)
+{
+    m_statistic.setAbbreviation(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemStatistic::on_radioButtonFix_toggled(bool check){
+    m_statistic.setIsFix(check);
 }

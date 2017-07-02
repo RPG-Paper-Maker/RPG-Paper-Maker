@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -499,7 +499,7 @@
             </layout>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_31" stretch="1,1,1">
+            <layout class="QVBoxLayout" name="verticalLayout_31" stretch="1,1">
              <item>
               <widget class="QGroupBox" name="groupBox_22">
                <property name="enabled">
@@ -520,34 +520,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_28">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="title">
-                <string>Battle maps</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_36">
-                <item row="0" column="0">
-                 <widget class="PanelSuperList" name="panelSuperListBattleMaps" native="true">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
               <widget class="QGroupBox" name="groupBox_23">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Common battle commands</string>
@@ -556,7 +531,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonBattleCommands" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -570,7 +545,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_24">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Common statistics</string>
@@ -579,7 +554,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonStatistics" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -589,7 +564,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_25">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="minimumSize">
                 <size>
@@ -604,7 +579,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListCommonEquipments" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -618,7 +593,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_26">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Weapons kind</string>
@@ -627,7 +602,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListWeaponsKind" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -637,7 +612,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_27">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Armors kind</string>
@@ -646,7 +621,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListArmorsKind" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>

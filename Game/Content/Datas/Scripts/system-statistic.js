@@ -42,10 +42,6 @@ SystemStatistic.prototype = {
     readJSON: function(json){
         this.name = json.names[1];
         this.abbreviation = json.abr;
-        var jsonCommands = json.commands;
-
-        // Parsing commands
-        var i = 0;
-        this.isFix = jsonCommands[i++] === "0";
+        this.isFix = json.fix;
     }
 }

@@ -42,6 +42,7 @@ public:
     virtual ~SystemWeaponArmorKind();
     QStandardItemModel* equipment() const;
     virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemWeaponArmorKind& weaponArmorKind);
 
     virtual void read(const QJsonObject &json);

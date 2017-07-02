@@ -87,7 +87,6 @@ private slots:
     void on_actionKeyboard_controls_triggered();
     void on_actionSet_BR_path_folder_triggered();
     void on_actionPlay_triggered();
-    void on_gameProcessExit(int exitCode, QProcess::ExitStatus exitStatus);
     void closeEvent(QCloseEvent *event);
 };
 

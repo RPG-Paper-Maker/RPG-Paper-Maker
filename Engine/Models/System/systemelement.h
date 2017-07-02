@@ -41,6 +41,7 @@ public:
     virtual ~SystemElement();
     QStandardItemModel* efficiency() const;
     virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemElement& element);
 
     virtual void read(const QJsonObject &json);

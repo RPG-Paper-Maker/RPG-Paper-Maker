@@ -161,6 +161,8 @@ GamePlayer.prototype = {
         for (i = 1; i < l; i++){
             var statistic = $datasGame.battleSystem.statistics[i];
             this[statistic.abbreviation] = 0;
+            if (!statistic.isFix)
+                this["max" + statistic.abbreviation] = 0;
 
             if (i === $datasGame.battleSystem.idLevelStatistic)
                 this[statistic.abbreviation] = cl.initialLevel;

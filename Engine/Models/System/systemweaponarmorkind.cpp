@@ -66,6 +66,14 @@ bool SystemWeaponArmorKind::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemWeaponArmorKind::createCopy() const{
+    SystemWeaponArmorKind* super = new SystemWeaponArmorKind;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemWeaponArmorKind::setCopy(const SystemWeaponArmorKind&
                                     weaponArmorKind)
 {
