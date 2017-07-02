@@ -69,7 +69,7 @@ SystemParameter.readParametersWithDefault = function(json, list){
 
         // If default value
         if (parameter.value.kind === 2)
-            parameter = list[i];
+            parameter = list[i + 1];
 
         parameters[jsonParameter.id] = parameter;
     }

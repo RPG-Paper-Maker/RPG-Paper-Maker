@@ -125,23 +125,20 @@ SystemObject.prototype = {
         var events = this.events[idEvent];
         var event;
 
-        for (i = 0, l = events.length; i < l; i++){
-            test = true;
-            event = events[i];
-            for (j = 1, ll = parameters.length; j < ll; j++){
-                if (!event.parameters[j].value.isEqual(parameters[j])){
-                    test = false;
-                    break;
+        if (typeof events !== 'undefined'){
+            for (i = 0, l = events.length; i < l; i++){
+                test = true;
+                event = events[i];
+                for (j = 1, ll = parameters.length; j < ll; j++){
+                    if (!event.parameters[j].value.isEqual(parameters[j])){
+                        test = false;
+                        break;
+                    }
                 }
+
+                if (test)
+                    reactions.push(events[i].reactions[state]);
             }
-
-            if (test)
-                reactions.push(events[i].reactions[state]);
-        }
-
-        if (reactions.length >0){
-            var a = 0;
-            a = 1;
         }
 
         return reactions;

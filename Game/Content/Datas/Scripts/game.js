@@ -172,8 +172,9 @@ Game.prototype = {
         // Map infos
         this.currentMapId = json.currentMapId;
         var positionHero = json.heroPosition;
-        this.hero.mesh.position.set(positionHero[0], positionHero[1],
-                                    positionHero[2]);
+        this.hero.position.set(positionHero[0],
+                               positionHero[1],
+                               positionHero[2]);
         this.heroStates = json.heroStates;
         this.readMapsDatas(json.mapsDatas);
     },

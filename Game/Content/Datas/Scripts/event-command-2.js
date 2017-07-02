@@ -425,24 +425,63 @@ function EventCommandSendEvent(command){
 EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                                            isSystem, idEvent, parameters)
 {
-    var i, j, k, l, ll, portion, objects;
+    var i, j, k, l, ll, portion, objects, object, states, portionDatas;
+    var pos, por, x, y, z, indexState;
     var group = $currentMap.mapPortions;
+
+    if (typeof group === 'undefined')
+        return;
 
     switch (targetKind){
     case 0: // Send to all
-        break;
-    case 1: // Send to detection
-        var pos = $game.hero.mesh.position;
-        var por = $currentMap.getLocalPortion(pos);
+
+        // Check all the not moved objects in portions
+        pos = $game.hero.position;
+        por = $currentMap.getLocalPortion(pos);
         portion = group[por[0]][por[1]][por[2]];
         por = Wanok.getPortion(pos);
-        var x = por[0];
-        var y = por[1];
-        var z = por[2];
+        x = por[0];
+        y = por[1];
+        z = por[2];
         objects = portion.objectsList;
         ll = objects.length;
         for (j = 0; j < ll; j++){
-            var object = objects[j];
+            object = objects[j];
+
+            // Get states
+            states = [1];
+            portionDatas =
+                    $game.mapsDatas[$currentMap.id]
+                    [x][y][z];
+            indexState =
+                    portionDatas.si.indexOf(object.system.id);
+            if (indexState !== -1)
+                states = portionDatas.s[indexState];
+
+            // Make the object receive the event
+            object.receiveEvent(sender, isSystem, idEvent, parameters, states);
+        }
+
+        // Check all the moved objects in portions
+        // TODO
+
+        // And the hero!
+        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
+                                $game.heroStates);
+
+        break;
+    case 1: // Send to detection
+        pos = $game.hero.position;
+        por = $currentMap.getLocalPortion(pos);
+        portion = group[por[0]][por[1]][por[2]];
+        por = Wanok.getPortion(pos);
+        x = por[0];
+        y = por[1];
+        z = por[2];
+        objects = portion.objectsList;
+        ll = objects.length;
+        for (j = 0; j < ll; j++){
+            object = objects[j];
             var posObject = object.position;
             if (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
                 posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
@@ -454,11 +493,11 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                )
             {
                 // Get states
-                var states = [1];
-                var portionDatas =
+                states = [1];
+                portionDatas =
                         $game.mapsDatas[$currentMap.id]
                         [x][y][z];
-                var indexState =
+                indexState =
                         portionDatas.si.indexOf(object.system.id);
                 if (indexState !== -1)
                     states = portionDatas.s[indexState];

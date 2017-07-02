@@ -357,7 +357,7 @@ SceneMap.prototype = {
 
         // Send keyPressEvent to all the objects
         if (!$blockingHero){
-            EventCommandSendEvent.sendEvent(null, 4, 1, true, 3,
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(false),
@@ -377,7 +377,7 @@ SceneMap.prototype = {
 
     onKeyPressedRepeat: function(key){
         if (!$blockingHero){
-            EventCommandSendEvent.sendEvent(null, 4, 1, true, 3,
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
@@ -393,7 +393,7 @@ SceneMap.prototype = {
 
     onKeyPressedAndRepeat: function(key){
         if (!$blockingHero){
-            EventCommandSendEvent.sendEvent(null, 4, 1, true, 3,
+            EventCommandSendEvent.sendEvent(null, 0, 1, true, 3,
                                             [null,
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
