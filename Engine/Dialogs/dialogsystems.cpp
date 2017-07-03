@@ -112,7 +112,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelCommonEquipment());
     ui->panelSuperListCommonEquipments->list()->initializeNewItemInstance(
-                new SuperListItem);
+                new SystemLang);
     ui->panelSuperListCommonStatistics->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelCommonStatistics());

@@ -19,6 +19,7 @@
 
 #include "systemlang.h"
 #include "main.h"
+#include "dialogsystemlang.h"
 
 // -------------------------------------------------------
 //
@@ -27,8 +28,7 @@
 // -------------------------------------------------------
 
 SystemLang::SystemLang() :
-    SuperListItem(),
-    m_names(new LangsTranslation)
+    SystemLang(1, new LangsTranslation)
 {
 
 }
@@ -55,6 +55,33 @@ void SystemLang::setName(QString n){
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemLang::setDefault(){
+    setName(p_name);
+}
+
+// -------------------------------------------------------
+
+bool SystemLang::openDialog(){
+    SystemLang super;
+    super.setCopy(*this);
+    DialogSystemLang dialog(super);
+    if (dialog.exec() == QDialog::Accepted){
+        setCopy(super);
+        return true;
+    }
+    return false;
+}
+
+// -------------------------------------------------------
+
+SuperListItem* SystemLang::createCopy() const{
+    SystemLang* super = new SystemLang;
+    super->setCopy(*this);
+    return super;
+}
+
 // -------------------------------------------------------
 
 void SystemLang::setCopy(const SystemLang& item){

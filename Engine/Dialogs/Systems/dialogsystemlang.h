@@ -17,42 +17,36 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMLANG_H
-#define SYSTEMLANG_H
+#ifndef DIALOGSYSTEMLANG_H
+#define DIALOGSYSTEMLANG_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "superlistitem.h"
-#include "langstranslation.h"
+#include <QDialog>
+#include "systemlang.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemLang
+//  CLASS DialogSystemLang
 //
-//  A particulary lang (lang).
+//  A dialog used for editing the model of a system lang.
 //
 // -------------------------------------------------------
 
-class SystemLang : public SuperListItem
+namespace Ui {
+class DialogSystemLang;
+}
+
+class DialogSystemLang : public QDialog
 {
+    Q_OBJECT
+
 public:
-    SystemLang();
-    SystemLang(int i, LangsTranslation* names);
-    virtual ~SystemLang();
-    LangsTranslation* names() const;
-    virtual void setName(QString n);
-    void setDefault();
-    virtual bool openDialog();
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemLang& item);
+    explicit DialogSystemLang(SystemLang& model, QWidget *parent = 0);
+    ~DialogSystemLang();
 
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
-
-protected:
-    LangsTranslation* m_names;
+private:
+    Ui::DialogSystemLang *ui;
+    SystemLang& m_model;
+    void initialize();
 };
 
-Q_DECLARE_METATYPE(SystemLang)
-
-#endif // SYSTEMLANG_H
+#endif // DIALOGSYSTEMLANG_H

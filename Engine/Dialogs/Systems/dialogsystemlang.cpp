@@ -17,42 +17,37 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMLANG_H
-#define SYSTEMLANG_H
-
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "superlistitem.h"
-#include "langstranslation.h"
+#include "dialogsystemlang.h"
+#include "ui_dialogsystemlang.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemLang
-//
-//  A particulary lang (lang).
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-class SystemLang : public SuperListItem
+DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogSystemLang),
+    m_model(model)
 {
-public:
-    SystemLang();
-    SystemLang(int i, LangsTranslation* names);
-    virtual ~SystemLang();
-    LangsTranslation* names() const;
-    virtual void setName(QString n);
-    void setDefault();
-    virtual bool openDialog();
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemLang& item);
+    ui->setupUi(this);
+    setFixedSize(geometry().width(), geometry().height());
 
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+    initialize();
+}
 
-protected:
-    LangsTranslation* m_names;
-};
+DialogSystemLang::~DialogSystemLang()
+{
+    delete ui;
+}
 
-Q_DECLARE_METATYPE(SystemLang)
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
 
-#endif // SYSTEMLANG_H
+void DialogSystemLang::initialize(){
+    ui->widgetName->initializeNames(&m_model);
+}

@@ -85,7 +85,13 @@ Wanok.openFile = function(base, url, loading, callback){
     var doc = new XMLHttpRequest();
     doc.onreadystatechange = function() {
         if (doc.readyState === XMLHttpRequest.DONE) {
-            callback.call(base, doc.responseText);
+            try{
+                callback.call(base, doc.responseText);
+            }
+            catch (e){
+                Wanok.showError(e);
+            }
+
             if (loading)
                 $loadedFiles++;
         }
@@ -357,9 +363,18 @@ Wanok.getPortion = function(position){
 
 /** Show an error.
 *   @static
+*   @param {Error} error The error message.
+*/
+Wanok.showError = function(e){
+    var txt = e.fileName + " - line: " + e.lineNumber + " -> " + e.message;
+    Wanok.showErrorMessage(txt);
+}
+
+/** Show an error message.
+*   @static
 *   @param {string} error The error message.
 */
-Wanok.showError = function(error){
+Wanok.showErrorMessage = function(error){
     if ($DIALOG_ERROR !== null){
         $DIALOG_ERROR.text = error;
         $DIALOG_ERROR.open();

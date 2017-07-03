@@ -194,7 +194,8 @@ HEADERS += \
     Dialogs/Systems/dialogsystemstate.h \
     Dialogs/dialoglocation.h \
     Dialogs/Commands/dialogcommandwait.h \
-    CustomWidgets/widgetgraphics.h
+    CustomWidgets/widgetgraphics.h \
+    Dialogs/Systems/dialogsystemlang.h
 
 SOURCES += \
     main.cpp \
@@ -347,7 +348,8 @@ SOURCES += \
     Dialogs/Systems/dialogsystemstate.cpp \
     Dialogs/dialoglocation.cpp \
     Dialogs/Commands/dialogcommandwait.cpp \
-    CustomWidgets/widgetgraphics.cpp
+    CustomWidgets/widgetgraphics.cpp \
+    Dialogs/Systems/dialogsystemlang.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -406,7 +408,8 @@ FORMS += \
     CustomWidgets/widgettilesetsettings.ui \
     Dialogs/Systems/dialogsystemstate.ui \
     Dialogs/dialoglocation.ui \
-    Dialogs/Commands/dialogcommandwait.ui
+    Dialogs/Commands/dialogcommandwait.ui \
+    Dialogs/Systems/dialogsystemlang.ui
 
 OTHER_FILES += \
     style.qss

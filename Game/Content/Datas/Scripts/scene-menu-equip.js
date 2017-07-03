@@ -61,9 +61,10 @@ function SceneMenuEquip() {
                            nbEquipments, new Array(nbEquipments), null,
                            [5,5,5,5]);
     this.windowChoicesList =
-         new WindowChoices(OrientationWindow.Vertical, 20, 300, 290, 25,
+         new WindowChoices(OrientationWindow.Vertical, 20,
+                           100 + (nbEquipments + 1) * 25, 290, 25,
                            nbEquipChoice, new Array(nbEquipChoice), null,
-                           [5,5,5,5], 0, -1);
+                               [5,5,5,5], 0, -1);
     this.windowInformations = new WindowBox(330,100,285,350);
 
     // Updates
@@ -190,11 +191,11 @@ SceneMenuEquip.prototype = {
     /** Equip the selected equipment.
     */
     equip: function(){
-        var character =
-                $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+        var index = this.windowChoicesTabs.currentSelectedIndex;
+        var character = $game.teamHeroes[index];
         var item = this.windowChoicesList.getCurrentContent().base;
-        character.equip[this.windowChoicesEquipment.currentSelectedIndex + 1]
-                = item;
+        index = this.windowChoicesEquipment.currentSelectedIndex;
+        character.equip[index + 1] = item;
     },
 
     // -------------------------------------------------------
@@ -241,13 +242,15 @@ SceneMenuEquip.prototype = {
                                               $datasGame.keyBoard.menuControls
                                               .Action))
             {
-                if (this.windowChoicesList.currentSelectedIndex === 0)
-                    this.remove();
-                else
-                    this.equip();
-                this.selectedEquipment = -1;
-                this.windowChoicesList.unselect();
-                this.updateForTab();
+                if (this.windowChoicesList.getCurrentContent() !== null){
+                    if (this.windowChoicesList.currentSelectedIndex === 0)
+                        this.remove();
+                    else
+                        this.equip();
+                    this.selectedEquipment = -1;
+                    this.windowChoicesList.unselect();
+                    this.updateForTab();
+                }
             }
         }
     },

@@ -259,7 +259,7 @@ SceneMap.prototype = {
 
             },
             function (t) {
-                Wanok.showError("Could not load " + path);
+                Wanok.showErrorMessage("Could not load " + path);
             }
         );
         texture.magFilter = THREE.NearestFilter;
