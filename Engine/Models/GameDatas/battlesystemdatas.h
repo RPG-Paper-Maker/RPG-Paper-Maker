@@ -52,6 +52,7 @@ public:
     QStandardItemModel* modelCommonBattleCommand() const;
     void getSortedStatistics(QVector<SystemStatistic*>& fixes,
                              QVector<SystemStatistic*>& bars) const;
+    void updateEquipments();
     void setDefault();
     void setDefaultOptions();
     void setDefaultWeaponsKind();
@@ -75,6 +76,7 @@ private:
     QStandardItemModel* m_modelCommonEquipment;
     QStandardItemModel* m_modelCommonStatistics;
     QStandardItemModel* m_modelCommonBattleCommand;
+    void updateEquipmentsKind(QStandardItemModel* model);
 };
 
 #endif // BATTLESYSTEMDATAS_H

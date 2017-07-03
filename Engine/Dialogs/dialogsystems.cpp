@@ -92,6 +92,10 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     connect(ui->panelSuperListCommonStatistics->list(), SIGNAL(updated()),
             this, SLOT(on_statisticsUpdated()));
 
+    // Equipment change connection for weapon / armor kind
+    connect(ui->panelSuperListCommonEquipments->list(), SIGNAL(updated()),
+            this, SLOT(on_equipmentUpdated()));
+
     // Initialize models
     ui->panelSuperListWeaponsKind
             ->initializeModel(gameDatas->battleSystemDatas()
@@ -313,6 +317,13 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
 
 void DialogSystems::on_statisticsUpdated(){
     updateStatisticsBase();
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_equipmentUpdated(){
+    Wanok::get()->project()->gameDatas()->battleSystemDatas()
+            ->updateEquipments();
 }
 
 // -------------------------------------------------------

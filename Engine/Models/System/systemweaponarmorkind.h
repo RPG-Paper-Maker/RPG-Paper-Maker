@@ -37,20 +37,20 @@ class SystemWeaponArmorKind : public SystemLang
 public:
     SystemWeaponArmorKind();
     SystemWeaponArmorKind(int i, LangsTranslation *names,
-                          QStandardItemModel* equipment =
-                          new QStandardItemModel);
+                          QList<bool> equipment);
     virtual ~SystemWeaponArmorKind();
-    QStandardItemModel* equipment() const;
+    QStandardItemModel* getEquipmentModel() const;
+    void updateEquipment();
+    void setDefault();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemWeaponArmorKind& weaponArmorKind);
 
     virtual void read(const QJsonObject &json);
-    void readEquipments(QStandardItemModel* model, const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QStandardItemModel* m_equipment;
+    QList<bool> m_equipment;
 };
 
 Q_DECLARE_METATYPE(SystemWeaponArmorKind)

@@ -66,6 +66,7 @@ private slots:
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
     void on_statisticsUpdated();
+    void on_equipmentUpdated();
     void on_pageEventsSelected(QModelIndex index, QModelIndex);
     void on_pageCommonReactorsSelected(QModelIndex index, QModelIndex);
     void on_pageCommonObjectsSelected(QModelIndex index, QModelIndex);

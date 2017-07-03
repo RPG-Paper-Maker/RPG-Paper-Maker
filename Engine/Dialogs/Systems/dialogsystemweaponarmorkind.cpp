@@ -36,14 +36,22 @@ DialogSystemWeaponArmorKind::DialogSystemWeaponArmorKind(
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
-    ui->treeViewEquipment->setModel(weaponArmorKind.equipment());
+    initialize();
 }
 
 DialogSystemWeaponArmorKind::~DialogSystemWeaponArmorKind()
 {
+    delete ui->treeViewEquipment->model();
     delete ui;
 }
 
-SystemWeaponArmorKind& DialogSystemWeaponArmorKind::weaponArmorKind() const {
-    return m_weaponArmorKind;
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogSystemWeaponArmorKind::initialize(){
+    ui->widgetName->initializeNames(&m_weaponArmorKind);
+    ui->treeViewEquipment->setModel(m_weaponArmorKind.getEquipmentModel());
 }

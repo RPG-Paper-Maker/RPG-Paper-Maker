@@ -83,13 +83,14 @@ SceneMenuEquip.prototype = {
 
         // update equipment
         equipLength = GamePlayer.getEquipmentLength();
-        l = $datasGame.battleSystem.equipments.length - 1;
+        l = $datasGame.battleSystem.equipmentsOrder.length;
         list = new Array(l);
         for (i = 0; i < l; i++){
             list[i] =
                     new GraphicEquip(
                         $game.teamHeroes
-                        [this.windowChoicesTabs.currentSelectedIndex], i+1,
+                        [this.windowChoicesTabs.currentSelectedIndex],
+                        $datasGame.battleSystem.equipmentsOrder[i],
                         equipLength);
         }
         this.windowChoicesEquipment.setContents(list);
@@ -107,7 +108,8 @@ SceneMenuEquip.prototype = {
         var idEquipment, nb, i, j, l, c, ll, k, lll, nbItem;
         var list, type, systemItem, item, character;
 
-        idEquipment = this.windowChoicesEquipment.currentSelectedIndex + 1;
+        idEquipment = $datasGame.battleSystem.equipmentsOrder
+                [this.windowChoicesEquipment.currentSelectedIndex];
         nb = this.windowChoicesList.listWindows.length;
         list = new Array(nb);
 
@@ -182,8 +184,9 @@ SceneMenuEquip.prototype = {
     remove: function(){
         var character =
                 $game.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-        character.equip[this.windowChoicesEquipment.currentSelectedIndex + 1]
-                = null;
+        var id = $datasGame.battleSystem.equipmentsOrder
+                [this.windowChoicesEquipment.currentSelectedIndex];
+        character.equip[id] = null;
     },
 
     // -------------------------------------------------------
@@ -193,9 +196,10 @@ SceneMenuEquip.prototype = {
     equip: function(){
         var index = this.windowChoicesTabs.currentSelectedIndex;
         var character = $game.teamHeroes[index];
-        var item = this.windowChoicesList.getCurrentContent().base;
-        index = this.windowChoicesEquipment.currentSelectedIndex;
-        character.equip[index + 1] = item;
+        var item = this.windowChoicesList.getCurrentContent().content;
+        var id = $datasGame.battleSystem.equipmentsOrder
+                [this.windowChoicesEquipment.currentSelectedIndex];
+        character.equip[id] = item;
     },
 
     // -------------------------------------------------------

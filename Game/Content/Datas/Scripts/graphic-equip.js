@@ -33,16 +33,16 @@
 *   @param {number} index Index of the equiped item.
 *   @param {number} length Max length of equipment kind name.
 */
-function GraphicEquip(gamePlayer, index, length){
+function GraphicEquip(gamePlayer, id, length){
     var character, equiped;
 
     character = gamePlayer.getCharacterInformations();
-    equiped = gamePlayer.equip[index];
+    equiped = gamePlayer.equip[id];
     this.equipmentLength = length;
 
     // All the graphics
     this.graphicEquipmentName =
-         new GraphicText($datasGame.battleSystem.equipments[index], Align.Left);
+         new GraphicText($datasGame.battleSystem.equipments[id], Align.Left);
     if (equiped === null)
         this.graphicEquipment = new GraphicText("-", Align.Left);
     else{

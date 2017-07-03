@@ -32,6 +32,7 @@
 */
 function GraphicItem(gameItem, nbItem){
     var item;
+    this.content = gameItem;
 
     item = gameItem.getItemInformations();
 
