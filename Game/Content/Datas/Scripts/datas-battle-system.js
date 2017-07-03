@@ -118,7 +118,7 @@ DatasBattleSystem.prototype = {
                 var jsonBattleCommand = jsonBattleCommands[i];
                 id = jsonBattleCommand.id;
                 this.battleCommands[id] = jsonBattleCommand.s;
-                this.battleCommandsOrder[i] = id;
+                this.battleCommandsOrder[i] = jsonBattleCommand.s;
             }
 
             // Ids of specific statistics

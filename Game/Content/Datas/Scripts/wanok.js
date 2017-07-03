@@ -354,3 +354,16 @@ Wanok.getPortion = function(position){
         Math.floor(Math.floor((position.z + 1) / $SQUARE_SIZE) / $PORTION_SIZE)
     ]
 }
+
+/** Show an error.
+*   @static
+*   @param {string} error The error message.
+*/
+Wanok.showError = function(error){
+    if ($DIALOG_ERROR !== null){
+        $DIALOG_ERROR.text = error;
+        $DIALOG_ERROR.open();
+    }
+    else
+        console.log(error);
+}

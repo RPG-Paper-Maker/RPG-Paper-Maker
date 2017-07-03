@@ -56,12 +56,24 @@ SystemBattleCommand& DialogSystemBattleCommand::battleCommand() const {
 // -------------------------------------------------------
 
 void DialogSystemBattleCommand::initialize(){
-    // Fill ComboBoxes
+    int index = SuperListItem::getIndexById(
+                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+                ->invisibleRootItem(), m_battleCommand.idSkill());
     SuperListItem::fillComboBox(ui->comboBoxSkill, Wanok::get()->project()
                                 ->gameDatas()->skillsDatas()->model());
-    ui->comboBoxSkill->setCurrentIndex(
-                SuperListItem::getIndexById(Wanok::get()->project()
-                                            ->gameDatas()->skillsDatas()
-                                            ->model()->invisibleRootItem(),
-                                            m_battleCommand.idSkill()));
+    ui->comboBoxSkill->setCurrentIndex(index);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemBattleCommand::on_comboBoxSkill_currentIndexChanged(int index)
+{
+    m_battleCommand.setIdSkill(SuperListItem::getIdByIndex(
+                                   Wanok::get()->project()->gameDatas()
+                                   ->skillsDatas()->model(), index));
+    m_battleCommand.updateName();
 }

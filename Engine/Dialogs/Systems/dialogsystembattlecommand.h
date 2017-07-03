@@ -49,6 +49,9 @@ private:
     Ui::DialogSystemBattleCommand *ui;
     SystemBattleCommand& m_battleCommand;
     void initialize();
+
+public slots:
+    void on_comboBoxSkill_currentIndexChanged(int index);
 };
 
 #endif // DIALOGSYSTEMBATTLECOMMAND_H

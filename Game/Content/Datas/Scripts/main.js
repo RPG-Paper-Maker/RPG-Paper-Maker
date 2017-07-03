@@ -149,6 +149,10 @@ var $renderer;
 *   @type {Game} */
 var $game = null;
 
+/** The dialog for displaying errors.
+*   @type {MessageDialog} */
+var $DIALOG_ERROR = null;
+
 // -------------------------------------------------------
 //  GLOBAL FUNCTIONS
 // -------------------------------------------------------
@@ -223,7 +227,7 @@ function update(){
 *   @param {number} key The key ID pressed.
 */
 function onKeyPressed(key){
-    $gameStack.onKeyPressed(key)
+    $gameStack.onKeyPressed(key);
 }
 
 // -------------------------------------------------------
@@ -232,7 +236,7 @@ function onKeyPressed(key){
 *   @param {number} key The key ID released.
 */
 function onKeyReleased(key){
-    $gameStack.onKeyReleased(key)
+    $gameStack.onKeyReleased(key);
 }
 
 // -------------------------------------------------------
@@ -242,7 +246,7 @@ function onKeyReleased(key){
 *   @returns {boolean} false if the other keys are blocked after it.
 */
 function onKeyPressedRepeat(key){
-    return $gameStack.onKeyPressedRepeat(key)
+    return $gameStack.onKeyPressedRepeat(key);
 }
 
 // -------------------------------------------------------
@@ -253,7 +257,7 @@ function onKeyPressedRepeat(key){
 *   @returns {boolean} false if the other keys are blocked after it.
 */
 function onKeyPressedAndRepeat(key){
-    return $gameStack.onKeyPressedAndRepeat(key)
+    return $gameStack.onKeyPressedAndRepeat(key);
 }
 
 // -------------------------------------------------------

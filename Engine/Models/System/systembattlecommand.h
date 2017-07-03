@@ -38,6 +38,9 @@ public:
     SystemBattleCommand(int i, LangsTranslation *names, int idSkill);
     virtual ~SystemBattleCommand();
     int idSkill() const;
+    void setIdSkill(int i);
+    void updateName();
+    void setDefault();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemBattleCommand& battleCommand);
