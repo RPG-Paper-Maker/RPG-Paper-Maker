@@ -616,7 +616,15 @@ function EventCommandTeleportObject(command){
 
 EventCommandTeleportObject.prototype = {
 
-    initialize: function(){ return null; },
+    /** Initialize the current state.
+    *   @returns {Object} The current state (waitingFileRead, teleported).
+    */
+    initialize: function(){
+        return {
+            waitingFileRead: false,
+            teleported: false
+        }
+    },
 
     /** Teleport the object.
     *   @param {Object} currentState The current state of the event.
@@ -625,68 +633,50 @@ EventCommandTeleportObject.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var id = this.idMap.getValue();
-        var objectID = this.objectID.getValue();
-        var teleportingObject;
 
-        // If needs teleport hero in another map
-        if ($currentMap.id !== id){
+        if (!currentState.waitingFileRead){
+            var id = this.idMap.getValue();
+            var objectID = this.objectID.getValue();
 
-            // If hero set the current map
-            if (objectID === 0 ||
-                (objectID === -1 && object.isHero))
-            {
-                $currentMap.closeMap();
-                $gameStack.replace(new SceneMap(id));
+            // If needs teleport hero in another map
+            if ($currentMap.id !== id){
+
+                // If hero set the current map
+                if (objectID === 0 ||
+                    (objectID === -1 && object.isHero))
+                {
+                    $currentMap.closeMap();
+                    $gameStack.replace(new SceneMap(id));
+                }
             }
+
+            // Set object's position
+            var position = new THREE.Vector3();
+            if (this.objectIDPosition === null){
+                position = Wanok.positionToVector3(
+                    [
+                        this.x.getValue(),
+                        this.y.getValue(),
+                        this.yPlus.getValue(),
+                        this.z.getValue()
+                    ]
+                );
+
+                // Center
+                position.setX(position.x + ($SQUARE_SIZE / 2));
+                position.setZ(position.z + ($SQUARE_SIZE / 2));
+            }
+
+            // Teleport
+            MapObject.updateObjectWithID(object, objectID, this, function(moved){
+                moved.teleport(position);
+                currentState.teleported = true;
+            });
+
+            currentState.waitingFileRead = true;
         }
 
-        // Set object's position
-        var position = new THREE.Vector3();
-        if (this.objectIDPosition === null){
-            position = Wanok.positionToVector3(
-                [
-                    this.x.getValue(),
-                    this.y.getValue(),
-                    this.yPlus.getValue(),
-                    this.z.getValue()
-                ]
-            );
-
-            // Center
-            position.setX(position.x + ($SQUARE_SIZE / 2));
-            position.setZ(position.z + ($SQUARE_SIZE / 2));
-        }
-
-        switch (objectID){
-        case -1: // This object
-            if (object.isHero)
-                teleportingObject = object;
-            else
-                teleportingObject = this.getObject(objectID);
-            break;
-        case 0: // Hero
-            teleportingObject = $game.hero;
-            break;
-        default: // Particular object
-            teleportingObject = this.getObject(objectID);
-            break;
-        }
-
-        // Move
-        teleportingObject.position.set(position.x, position.y, position.z);
-
-        return 1;
-    },
-
-    // -------------------------------------------------------
-
-    getObject: function(objectID){
-        var globalPortion = $currentMap.allObjects[objectID];
-        var localPortion = $currentMap.getLocalPortion(globalPortion);
-        var rayPortion = $currentMap.getPoritonRay();
-
-
+        return currentState.teleported ? 1 : 0;
     },
 
     // -------------------------------------------------------

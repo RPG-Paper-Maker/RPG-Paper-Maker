@@ -297,14 +297,34 @@ MapPortion.prototype = {
     *   @param {number} id The ID of the object.
     *   @returns {MapObject}
     */
-    getObjFromID: function(id){
-        if (this.objectHero !== null && this.objectHero.id === id)
-            return this.objectHero;
+    getObjFromID: function(json, id){
+        for (var i = 0, l = json.length; i < l; i++){
+            var jsonTextures = json[i];
+            var texture = jsonTextures.k;
+            var jsonObjects = jsonTextures.v;
+            for (var j = 0, ll = jsonObjects.length; j < ll; j++){
+                var jsonObject = jsonObjects[j];
+                var position = jsonObject.k;
+                var jsonObjectValue = jsonObject.v;
+                var object = new SystemObject;
+                if (jsonObjectValue.id === id){
+                    object.readJSON(jsonObjectValue);
+                    var localPosition = Wanok.positionToVector3(position);
+                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                                       + this.spritesOffset);
+                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
+                                                          100)
+                                       + this.spritesOffset);
+                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                    position = new THREE.Vector3(localPosition.x,
+                                                 localPosition.y,
+                                                 localPosition.z);
+                    var mapObject = new MapObject(object, position);
+                    mapObject.changeState();
 
-        for (var i = 0, l = this.objectsList.length; i < l; i++){
-            var object = this.objectsList[i];
-            if (object.system.id === id)
-                return object;
+                    return mapObject;
+                }
+            }
         }
 
         return null;

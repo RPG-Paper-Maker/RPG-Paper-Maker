@@ -197,8 +197,10 @@ SceneMap.prototype = {
                 for (var k = 0; k < h; k++){
                     objectsPortions[i][j][k] =
                     {
-                        mids: [],// Ids of all the moved objects that are out
-                                 // of the portion
+                        min: [], // All the moved objects that are in this
+                                 // portion
+                        mout: [],// All the moved objects that are from another
+                                 // portion
                         m: [],   // All the moved objects that are from this
                                  // portion
                         si: [],  // Ids of the objects that have modified states
@@ -358,11 +360,13 @@ SceneMap.prototype = {
         // Update objects
         $game.hero.update();
         var objects = $game.mapsDatas[this.id][0][0][0];
-        var movedObjects = objects.m;
+        var movedObjects = objects.min;
         var i, l;
-        for (i = 0, l = movedObjects.length; i < l; i++){
+        for (i = 0, l = movedObjects.length; i < l; i++)
             movedObjects[i].update();
-        }
+        movedObjects = objects.mout;
+        for (i = 0, l = movedObjects.length; i < l; i++)
+            movedObjects[i].update();
     },
 
     // -------------------------------------------------------

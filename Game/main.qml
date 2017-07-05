@@ -66,6 +66,10 @@ Window {
         title: "Error"
         icon: StandardIcon.Critical
         visible: false
+
+        onButtonClicked: {
+            Game.quit();
+        }
     }
 
     Timer {

@@ -92,6 +92,68 @@ MapObject.getSpriteGeometry = function(width, height, x, y, w, h){
     return geometry;
 }
 
+/** Update the object with a particular ID.
+*   @static
+*   @param {MapObject} object This object.
+*   @param {number} objectID The object ID searched.
+*   @param {Object} base The base module for the callback.
+*   @param {function} callback The function to call after having found the
+*   object.
+*/
+MapObject.updateObjectWithID = function(object, objectID, base, callback){
+    switch (objectID){
+
+    case -1: // This object
+        callback.call(base, object);
+        break;
+
+    case 0: // Hero
+        callback.call(base, $game.hero);
+        break;
+
+    default: // Particular object
+        var globalPortion = $currentMap.allObjects[objectID];
+        var localPortion = $currentMap.getLocalPortion(globalPortion);
+        var i, l, moved, mapsDatas, movedObjects, mapPortion;
+
+        // First search in the moved objects
+        mapsDatas = $game.mapsDatas[$currentMap.id]
+                         [globalPortion[0]][globalPortion[1]][globalPortion[2]];
+        movedObjects = mapsDatas.m;
+        moved = null;
+        for (i = 0, l = movedObjects.length; i < l; i++){
+            if (movedObjects[i].system.id === objectID){
+                moved = movedObjects[i];
+                break;
+            }
+        }
+        if (moved !== null){
+            callback.call(base, moved);
+            break;
+        }
+
+        // If not moving, search directly in portion
+        if ($currentMap.isInPortionRay()){
+            mapPortion =
+                 $currentMap[localPortion[0]][localPortion[1]][localPortion[2]];
+        }
+        // Load the file if not already in temp
+        else{
+            var fileName = SceneMap.getPortionName(realX, realY, realZ);
+            Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName + "/" +
+                           fileName, false, function(res)
+            {
+                var json = JSON.parse(res);
+                mapPortion = new MapPortion(globalPortion[0],
+                                            globalPortion[1],
+                                            globalPortion[2]);
+                moved = mapPortion.getObjFromID(json.objs.sprites, objectID);
+                callback.call(base, moved);
+            });
+        }
+    }
+}
+
 MapObject.prototype = {
 
     /** Update the current state (graphics to display). Also update the mesh.
@@ -230,15 +292,7 @@ MapObject.prototype = {
         var objects, movedObjects, index;
 
         // Remove from move
-        if (!this.isHero){
-            var previousPortion = Wanok.getPortion(this.position);
-            objects = $game.mapsDatas[$currentMap.id]
-                   [previousPortion[0]][previousPortion[1]][previousPortion[2]];
-            movedObjects = objects.m;
-            index = movedObjects.indexOf(this);
-            if (index !== -1)
-                movedObjects.splice(index, 1);
-        }
+        this.removeMoveTemp();
 
         // Set position
         var distance = Math.min(limit, this.speed * ($elapsedTime *
@@ -256,31 +310,77 @@ MapObject.prototype = {
         this.moving = true;
 
         // Add to moving objects
-        if (!this.isHero){
-            var afterPortion = Wanok.getPortion(this.position);
-            objects = $game.mapsDatas[$currentMap.id]
-                    [afterPortion[0]][afterPortion[1]][afterPortion[2]];
-            movedObjects = objects.m;
-            index = movedObjects.indexOf(this);
-            if (index === -1)
-                movedObjects.unshift(this);
+        this.addMoveTemp();
 
-            var originalPortion = $currentMap.allObjects[this.system.id];
+
+        return distance;
+    },
+
+    // -------------------------------------------------------
+
+    /** Teleport the object.
+    *   @param {THREE.Vector3} position Position to teleport.
+    */
+    teleport: function(position){
+
+        // Remove from move
+        this.removeMoveTemp();
+
+        // Set position
+        this.position.set(position.x, position.y, position.z);
+        this.moving = true;
+
+        // Add to moving objects
+        this.addMoveTemp();
+    },
+
+    // -------------------------------------------------------
+
+    removeMoveTemp: function(){
+        var objects, previousPortion, movedObjects, index;
+
+        if (!this.isHero){
+            previousPortion = Wanok.getPortion(this.position);
             objects = $game.mapsDatas[$currentMap.id]
-                   [originalPortion[0]][originalPortion[1]][originalPortion[2]];
-            var movedObjectsIDs = objects.mids;
-            index = movedObjectsIDs.indexOf(this.system.id);
+                   [previousPortion[0]][previousPortion[1]][previousPortion[2]];
+
+            // Remove from the moved objects in or out of the portion
+            movedObjects = objects.mout;
+            index = movedObjects.indexOf(this);
             if (index !== -1)
                 movedObjects.splice(index, 1);
+            movedObjects = objects.min;
+            index = movedObjects.indexOf(this);
+            if (index !== -1)
+                movedObjects.splice(index, 1);
+
+            // Add to moved objects of the original portion if not done yet
+            movedObjects = objects.m;
+            if (movedObjects.indexOf(this) === -1)
+                movedObjects.unshift(this);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    addMoveTemp: function(){
+        var objects, afterPortion, originalPortion;
+
+        if (!this.isHero){
+            afterPortion = Wanok.getPortion(this.position);
+            objects = $game.mapsDatas[$currentMap.id]
+                    [afterPortion[0]][afterPortion[1]][afterPortion[2]];
+            originalPortion = $currentMap.allObjects[this.system.id];
+
             if (originalPortion[0] !== afterPortion[0] ||
                 originalPortion[1] !== afterPortion[1] ||
                 originalPortion[2] !== afterPortion[2])
             {
-                movedObjectsIDs.unshift(this.system.id);
+                objects.mout.unshift(this);
             }
+            else
+                objects.min.unshift(this);
         }
-
-        return distance;
     },
 
     // -------------------------------------------------------
