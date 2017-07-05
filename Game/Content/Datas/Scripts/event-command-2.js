@@ -575,6 +575,7 @@ function EventCommandTeleportObject(command){
 
     // Position
     this.objectIDPosition = null;
+    this.idMap = null;
     switch (command[i++]){
     case 0:
         this.idMap = SystemValue.createNumber(command[i++]);
@@ -621,7 +622,9 @@ EventCommandTeleportObject.prototype = {
     */
     initialize: function(){
         return {
-            waitingFileRead: false,
+            position: null,
+            waitingPosition: false,
+            waitingObject: false,
             teleported: false
         }
     },
@@ -634,46 +637,67 @@ EventCommandTeleportObject.prototype = {
     */
     update: function(currentState, object, state){
 
-        if (!currentState.waitingFileRead){
-            var id = this.idMap.getValue();
+        if (!currentState.waitingObject){
             var objectID = this.objectID.getValue();
 
-            // If needs teleport hero in another map
-            if ($currentMap.id !== id){
+            if (!currentState.waitingPosition){
 
-                // If hero set the current map
-                if (objectID === 0 ||
-                    (objectID === -1 && object.isHero))
-                {
-                    $currentMap.closeMap();
-                    $gameStack.replace(new SceneMap(id));
+                // If needs teleport hero in another map
+                if (this.idMap !== null){
+                    var id = this.idMap.getValue();
+                    if ($currentMap.id !== id){
+
+                        // If hero set the current map
+                        if (objectID === 0 ||
+                            (objectID === -1 && object.isHero))
+                        {
+                            $currentMap.closeMap();
+                            $gameStack.replace(new SceneMap(id));
+                        }
+                    }
                 }
+
+                // Set object's position
+                if (this.objectIDPosition === null){
+                    currentState.position = Wanok.positionToVector3(
+                        [
+                            this.x.getValue(),
+                            this.y.getValue(),
+                            this.yPlus.getValue(),
+                            this.z.getValue()
+                        ]
+                    );
+
+                    // Center
+                    currentState.position.setX(
+                                currentState.position.x + ($SQUARE_SIZE / 2));
+                    currentState.position.setZ(
+                                currentState.position.z + ($SQUARE_SIZE / 2));
+                }
+                else{
+                    var objectIDPosition = this.objectIDPosition.getValue();
+                    MapObject.updateObjectWithID(object, objectIDPosition,
+                                                 this, function(moved)
+                    {
+                        currentState.position = moved.position;
+                    });
+                }
+
+                currentState.waitingPosition = true;
             }
 
-            // Set object's position
-            var position = new THREE.Vector3();
-            if (this.objectIDPosition === null){
-                position = Wanok.positionToVector3(
-                    [
-                        this.x.getValue(),
-                        this.y.getValue(),
-                        this.yPlus.getValue(),
-                        this.z.getValue()
-                    ]
-                );
+            if (currentState.position !== null){
 
-                // Center
-                position.setX(position.x + ($SQUARE_SIZE / 2));
-                position.setZ(position.z + ($SQUARE_SIZE / 2));
+                // Teleport
+                MapObject.updateObjectWithID(object, objectID, this,
+                                             function(moved)
+                {
+                    moved.teleport(currentState.position);
+                    currentState.teleported = true;
+                });
+
+                currentState.waitingObject = true;
             }
-
-            // Teleport
-            MapObject.updateObjectWithID(object, objectID, this, function(moved){
-                moved.teleport(position);
-                currentState.teleported = true;
-            });
-
-            currentState.waitingFileRead = true;
         }
 
         return currentState.teleported ? 1 : 0;

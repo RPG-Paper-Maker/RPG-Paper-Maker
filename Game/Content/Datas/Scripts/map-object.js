@@ -114,7 +114,7 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
     default: // Particular object
         var globalPortion = $currentMap.allObjects[objectID];
         var localPortion = $currentMap.getLocalPortion(globalPortion);
-        var i, l, moved, mapsDatas, movedObjects, mapPortion;
+        var i, l, moved, mapsDatas, movedObjects, mapPortion, objects;
 
         // First search in the moved objects
         mapsDatas = $game.mapsDatas[$currentMap.id]
@@ -133,9 +133,19 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
         }
 
         // If not moving, search directly in portion
-        if ($currentMap.isInPortionRay()){
-            mapPortion =
-                 $currentMap[localPortion[0]][localPortion[1]][localPortion[2]];
+        if ($currentMap.isInPortionRay(localPortion)){
+            mapPortion = $currentMap.mapPortions[localPortion[0]]
+                                                [localPortion[1]]
+                                                [localPortion[2]];
+            objects = mapPortion.objectsList;
+            for (i = 0, l = objects.length; i < l; i++){
+                if (objects[i].system.id === objectID){
+                    moved = objects[i];
+                    break;
+                }
+            }
+
+            callback.call(base, moved);
         }
         // Load the file if not already in temp
         else{
@@ -151,6 +161,7 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
                 callback.call(base, moved);
             });
         }
+        break;
     }
 }
 
