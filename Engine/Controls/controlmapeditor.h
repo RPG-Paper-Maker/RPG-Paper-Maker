@@ -50,6 +50,7 @@ public:
     Camera* camera() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
+    void moveCursorToMousePosition(QPoint point);
     void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();

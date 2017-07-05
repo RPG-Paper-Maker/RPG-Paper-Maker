@@ -94,17 +94,16 @@ SceneMap.prototype = {
     /** Initialize the map portions.
     */
     initializePortions: function(){
-        var halfRay = $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
-        var ray = halfRay * 2 + 1;
+        var ray = this.getPortionRay();
         this.mapPortions = new Array(ray);
         for (var i = 0; i < ray; i++){
             this.mapPortions[i] = new Array(ray);
             for (var j = 0; j < ray; j++){
                 this.mapPortions[i][j] = new Array(ray);
                 for (var k = 0; k < ray; k++){
-                    this.loadPortion(this.currentPortion[0] + i - halfRay,
-                                     this.currentPortion[1] + j - halfRay,
-                                     this.currentPortion[2] + k - halfRay,
+                    this.loadPortion(this.currentPortion[0] + i - (ray / 2),
+                                     this.currentPortion[1] + j - (ray / 2),
+                                     this.currentPortion[2] + k - (ray / 2),
                                      i, j, k);
                 }
             }
@@ -295,15 +294,30 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    getLocalPortion: function(position){
-        var halfRay = $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
-        var portion = Wanok.getPortion(position);
+    getLocalPortion: function(portion){
+        var ray = this.getPortionRay();
 
         return [
-            portion[0] + halfRay,
-            portion[1] + halfRay,
-            portion[2] + halfRay
+            portion[0] - this.currentPortion[0] + (ray / 2),
+            portion[1] - this.currentPortion[1] + (ray / 2),
+            portion[2] - this.currentPortion[2] + (ray / 2)
         ];
+    },
+
+    // -------------------------------------------------------
+
+    getPortionRay: function(){
+        return ($PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR * 2) + 1;
+    },
+
+    // -------------------------------------------------------
+
+    isInPortionRay: function(portion){
+        var ray = this.getPortionRay();
+
+        return (portion[0] >= 0 && portion[0] < ray &&
+                portion[1] >= 0 && portion[1] < ray &&
+                portion[2] >= 0 && portion[2] < ray);
     },
 
     // -------------------------------------------------------

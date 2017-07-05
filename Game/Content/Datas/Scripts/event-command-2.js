@@ -437,7 +437,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
 
         // Check all the not moved objects in portions
         pos = $game.hero.position;
-        por = $currentMap.getLocalPortion(pos);
+        por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
         portion = group[por[0]][por[1]][por[2]];
         por = Wanok.getPortion(pos);
         x = por[0];
@@ -472,7 +472,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
         break;
     case 1: // Send to detection
         pos = $game.hero.position;
-        por = $currentMap.getLocalPortion(pos);
+        por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
         portion = group[por[0]][por[1]][por[2]];
         por = Wanok.getPortion(pos);
         x = por[0];
@@ -627,11 +627,18 @@ EventCommandTeleportObject.prototype = {
     update: function(currentState, object, state){
         var id = this.idMap.getValue();
         var objectID = this.objectID.getValue();
+        var teleportingObject;
 
         // If needs teleport hero in another map
-        if (objectID === 0 && $currentMap.id !== id){
-            $currentMap.closeMap();
-            $gameStack.replace(new SceneMap(id));
+        if ($currentMap.id !== id){
+
+            // If hero set the current map
+            if (objectID === 0 ||
+                (objectID === -1 && object.isHero))
+            {
+                $currentMap.closeMap();
+                $gameStack.replace(new SceneMap(id));
+            }
         }
 
         // Set object's position
@@ -642,24 +649,44 @@ EventCommandTeleportObject.prototype = {
                     this.x.getValue(),
                     this.y.getValue(),
                     this.yPlus.getValue(),
-                    this.z.getValue(),
+                    this.z.getValue()
                 ]
             );
+
+            // Center
+            position.setX(position.x + ($SQUARE_SIZE / 2));
+            position.setZ(position.z + ($SQUARE_SIZE / 2));
         }
 
         switch (objectID){
         case -1: // This object
-            object.mesh.position.set(position.x, position.y, position.z);
+            if (object.isHero)
+                teleportingObject = object;
+            else
+                teleportingObject = this.getObject(objectID);
             break;
         case 0: // Hero
-            $game.hero.mesh.position.set(position.x, position.y, position.z);
+            teleportingObject = $game.hero;
             break;
         default: // Particular object
-            // TODO
+            teleportingObject = this.getObject(objectID);
             break;
         }
 
+        // Move
+        teleportingObject.position.set(position.x, position.y, position.z);
+
         return 1;
+    },
+
+    // -------------------------------------------------------
+
+    getObject: function(objectID){
+        var globalPortion = $currentMap.allObjects[objectID];
+        var localPortion = $currentMap.getLocalPortion(globalPortion);
+        var rayPortion = $currentMap.getPoritonRay();
+
+
     },
 
     // -------------------------------------------------------

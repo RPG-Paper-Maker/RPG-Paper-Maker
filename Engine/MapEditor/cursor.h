@@ -48,6 +48,7 @@ public:
     void setY(int);
     void setYplus(int yPlus);
     void setZ(int z);
+    void setPositions(Position3D& position);
     float getX() const;
     float getY() const;
     float getZ() const;

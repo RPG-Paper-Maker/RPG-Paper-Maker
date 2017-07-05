@@ -148,7 +148,10 @@ void WidgetMapEditor::paintGL(){
         // Draw
         QMatrix4x4 modelviewProjection = m_control.camera()->projection() *
                                          m_control.camera()->view();
-        m_control.paintGL(modelviewProjection, m_menuBar->selectionKind());
+
+        MapEditorSelectionKind kind = (m_menuBar == nullptr)
+                ? MapEditorSelectionKind::Land : m_menuBar->selectionKind();
+        m_control.paintGL(modelviewProjection, kind);
     }
 }
 
@@ -324,6 +327,11 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                                      tileset,
                                      event->pos(),
                                      event->button());
+        }
+        // If in teleport command
+        else{
+            m_control.moveCursorToMousePosition(event->pos());
+            updateSpinBoxes();
         }
     }
 }

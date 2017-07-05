@@ -79,6 +79,15 @@ void Cursor::setZ(int z){
     m_positionSquare->setZ(z * m_squareSize);
 }
 
+void Cursor::setPositions(Position3D& position){
+    m_positionSquare->setX(position.x() * m_squareSize);
+    m_positionSquare->setY(position.y() * m_squareSize);
+    m_positionSquare->setZ(position.z() * m_squareSize);
+    m_positionReal.setX(position.x() * m_squareSize);
+    m_positionReal.setY(position.y() * m_squareSize);
+    m_positionReal.setZ(position.z() * m_squareSize);
+}
+
 float Cursor::getX() const { return m_positionSquare->x(); }
 
 float Cursor::getY() const { return m_positionSquare->y(); }

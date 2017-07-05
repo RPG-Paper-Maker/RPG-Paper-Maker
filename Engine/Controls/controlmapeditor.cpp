@@ -69,6 +69,15 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
+void ControlMapEditor::moveCursorToMousePosition(QPoint point){
+    m_mouse = point;
+    update();
+
+    m_cursor->setPositions(m_positionOnPlane);
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::reLoadTextures(){
     m_map->loadTextures();
 }
