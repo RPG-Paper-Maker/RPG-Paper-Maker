@@ -46,6 +46,9 @@ PanelProject::PanelProject(QWidget *parent) :
     // Timer
     m_timerUpdate->start(0);
     connect(m_timerUpdate, SIGNAL(timeout()), this, SLOT(updateMenu()));
+
+    // Menu bar
+    initializeRightMenu();
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :
@@ -77,17 +80,50 @@ WidgetTreeLocalMaps* PanelProject::widgetTreeLocalMaps() const{
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelProject::initializeRightMenu(){
+    WidgetMenuBarMapEditor *bar = new WidgetMenuBarMapEditor(ui->widgetMenuBar,
+                                                             false);
+    QMenu* menu;
+    QAction* action;
+    bar->clear();
+
+    menu = new QMenu("Pencil");
+    menu->setIcon(QIcon(":/icons/Ressources/pencil.png"));
+    action = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
+    menu->addAction(action);
+    action = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
+    menu->addAction(action);
+    bar->addMenu(menu);
+
+    ui->widgetMenuBar->setCornerWidget(bar);
+}
+
+// -------------------------------------------------------
+//
 //  SLOTS
 //
 // -------------------------------------------------------
 
 void PanelProject::updateMenu(){
 
-    if (!ui->widgetMenuBar->rect().contains(
-                ui->widgetMenuBar->mapFromGlobal(QCursor::pos())) &&
-        !ui->widgetMenuBar->containsMenu())
+    WidgetMenuBarMapEditor* bar;
+
+    bar = ui->widgetMenuBar;
+    if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
+        !bar->containsMenu())
     {
-        if (ui->widgetMenuBar->activeAction() != nullptr)
-            ui->widgetMenuBar->activeAction()->menu()->hide();
+        if (bar->activeAction() != nullptr)
+            bar->activeAction()->menu()->hide();
+    }
+    bar = (WidgetMenuBarMapEditor*) ui->widgetMenuBar->cornerWidget();
+    if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
+        !bar->containsMenu())
+    {
+        if (bar->activeAction() != nullptr)
+            bar->activeAction()->menu()->hide();
     }
 }

@@ -29,10 +29,6 @@
    <property name="title">
     <string>Floor</string>
    </property>
-   <property name="icon">
-    <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/floor.png</normaloff>:/icons/Ressources/floor.png</iconset>
-   </property>
    <property name="toolTipsVisible">
     <bool>false</bool>
    </property>
@@ -40,20 +36,12 @@
   </widget>
   <widget class="QMenu" name="menuEvents">
    <property name="title">
-    <string>Objects</string>
-   </property>
-   <property name="icon">
-    <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/ev.png</normaloff>:/icons/Ressources/ev.png</iconset>
+    <string>Object</string>
    </property>
   </widget>
   <widget class="QMenu" name="menuFace_Sprite">
    <property name="title">
     <string>Face Sprite</string>
-   </property>
-   <property name="icon">
-    <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/sprite_face.png</normaloff>:/icons/Ressources/sprite_face.png</iconset>
    </property>
    <addaction name="actionFace_Sprite"/>
    <addaction name="actionFix_Sprite"/>
@@ -88,6 +76,24 @@
    </property>
    <property name="text">
     <string>Fix Sprite</string>
+   </property>
+  </action>
+  <action name="actionPencil">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/pencil.png</normaloff>:/icons/Ressources/pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pencil</string>
+   </property>
+  </action>
+  <action name="actionTin_of_paint">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/pin.png</normaloff>:/icons/Ressources/pin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tin of paint</string>
    </property>
   </action>
   <addaction name="menuFloors"/>

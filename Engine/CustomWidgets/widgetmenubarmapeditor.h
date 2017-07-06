@@ -44,7 +44,7 @@ class WidgetMenuBarMapEditor : public QMenuBar
     Q_OBJECT
 
 public:
-    explicit WidgetMenuBarMapEditor(QWidget *parent = 0);
+    explicit WidgetMenuBarMapEditor(QWidget *parent = 0, bool selection = true);
     ~WidgetMenuBarMapEditor();
     static QColor colorBackgroundSelected;
     MapEditorSelectionKind selectionKind() const;
@@ -55,6 +55,7 @@ private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
     MapEditorSubSelectionKind m_subSelectionKind;
+    bool m_selection;
 
 protected:
     void mouseMoveEvent(QMouseEvent* event);

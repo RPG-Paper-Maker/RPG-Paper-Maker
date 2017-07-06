@@ -29,10 +29,12 @@ QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95,158,160);
 //
 // -------------------------------------------------------
 
-WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent) :
+WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
+                                               bool selection) :
     QMenuBar(parent),
     ui(new Ui::WidgetMenuBarMapEditor),
-    m_selectionKind(MapEditorSelectionKind::Land)
+    m_selectionKind(MapEditorSelectionKind::Land),
+    m_selection(selection)
 {
     ui->setupUi(this);
 
@@ -85,21 +87,25 @@ void WidgetMenuBarMapEditor::mouseMoveEvent(QMouseEvent* event){
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
-    QAction* action = this->actionAt(event->pos());
-    if (action != nullptr){
-        // Deselect previous selected action
-        actions().at((int) m_selectionKind)->setProperty("selection",false);
 
-        // Select the pressed action
-        m_selectionKind = static_cast<MapEditorSelectionKind>(actions()
-                                                              .indexOf(action));
+    if (m_selection){
+        QAction* action = this->actionAt(event->pos());
+        if (action != nullptr)
+        {
+            // Deselect previous selected action
+            actions().at((int) m_selectionKind)->setProperty("selection",false);
 
-        action->setProperty("selection",true);
+            // Select the pressed action
+            m_selectionKind =
+                 static_cast<MapEditorSelectionKind>(actions().indexOf(action));
+
+            action->setProperty("selection",true);
+        }
+
+        // Repaint
+        QMenuBar::mousePressEvent(event);
+        this->repaint();
     }
-
-    // Repaint
-    QMenuBar::mousePressEvent(event);
-    this->repaint();
 }
 
 // -------------------------------------------------------

@@ -55,6 +55,7 @@ private:
     Ui::PanelProject *ui;
     Project* m_project;
     QTimer* m_timerUpdate;
+    void initializeRightMenu();
 
 public slots:
     void updateMenu();
