@@ -123,9 +123,11 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
         if(!e->rect().intersects(adjustedActionRect))
             continue;
         emptyArea -= adjustedActionRect;
+
         QStyleOptionMenuItem opt;
         initStyleOption(&opt, action);
         opt.rect = adjustedActionRect;
+
         style()->drawControl(QStyle::CE_MenuBarItem, &opt, &p, this);
     }
 }

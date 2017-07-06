@@ -17,8 +17,24 @@
    <bool>false</bool>
   </property>
   <widget class="QMenu" name="menuFloors">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="tearOffEnabled">
+    <bool>false</bool>
+   </property>
    <property name="title">
-    <string>Floors</string>
+    <string>Floor</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/floor.png</normaloff>:/icons/Ressources/floor.png</iconset>
+   </property>
+   <property name="toolTipsVisible">
+    <bool>false</bool>
    </property>
    <addaction name="actionFloors"/>
   </widget>
@@ -26,15 +42,27 @@
    <property name="title">
     <string>Objects</string>
    </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/ev.png</normaloff>:/icons/Ressources/ev.png</iconset>
+   </property>
   </widget>
   <widget class="QMenu" name="menuFace_Sprite">
    <property name="title">
     <string>Face Sprite</string>
    </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_face.png</normaloff>:/icons/Ressources/sprite_face.png</iconset>
+   </property>
    <addaction name="actionFace_Sprite"/>
    <addaction name="actionFix_Sprite"/>
   </widget>
   <action name="actionFloors">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/floor.png</normaloff>:/icons/Ressources/floor.png</iconset>
+   </property>
    <property name="text">
     <string>Floors</string>
    </property>
@@ -45,11 +73,19 @@
    </property>
   </action>
   <action name="actionFace_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_face.png</normaloff>:/icons/Ressources/sprite_face.png</iconset>
+   </property>
    <property name="text">
     <string>Face Sprite</string>
    </property>
   </action>
   <action name="actionFix_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_fix.png</normaloff>:/icons/Ressources/sprite_fix.png</iconset>
+   </property>
    <property name="text">
     <string>Fix Sprite</string>
    </property>
@@ -58,6 +94,8 @@
   <addaction name="menuFace_Sprite"/>
   <addaction name="menuEvents"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

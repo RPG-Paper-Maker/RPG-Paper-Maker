@@ -14,7 +14,6 @@
         <file>Ressources/point_r.png</file>
         <file>Ressources/autotile.png</file>
         <file>Ressources/ev.png</file>
-        <file>Ressources/floor.png</file>
         <file>Ressources/height.png</file>
         <file>Ressources/montain.png</file>
         <file>Ressources/mousewheel.png</file>
@@ -27,6 +26,8 @@
         <file>Ressources/sprite_quadra.png</file>
         <file>Ressources/water.png</file>
         <file>Ressources/picture.png</file>
+        <file>Ressources/floor.png</file>
+        <file>Ressources/sprite_fix.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>
