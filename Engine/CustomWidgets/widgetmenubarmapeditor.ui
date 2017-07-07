@@ -52,7 +52,7 @@
      <normaloff>:/icons/Ressources/floor.png</normaloff>:/icons/Ressources/floor.png</iconset>
    </property>
    <property name="text">
-    <string>Floors</string>
+    <string>Floor</string>
    </property>
   </action>
   <action name="actionEvents">

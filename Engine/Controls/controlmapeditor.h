@@ -25,6 +25,8 @@
 #include "grid.h"
 #include "camera.h"
 #include "mapeditorselectionkind.h"
+#include "mapeditorsubselectionkind.h"
+#include "drawkind.h"
 #include "cursor.h"
 #include "contextmenulist.h"
 
@@ -85,18 +87,34 @@ public:
     void getCorrectPositionOnRay(Position& position, QVector3D &ray,
                                  int distance);
 
-    void addRemove(MapEditorSelectionKind selection, QRect& tileset,
+    void addRemove(MapEditorSelectionKind selection,
+                   MapEditorSubSelectionKind subSelection,
+                   DrawKind drawKind,
+                   QRect& tileset,
                    Qt::MouseButton button);
     Position getPositionSelected(MapEditorSelectionKind selection) const;
-    void add(MapEditorSelectionKind selection, QRect& tileset, Position& p);
-    void remove(MapEditorSelectionKind selection, Position& p);
-    void addFloor(Position& p, QRect& tileset);
+    void add(MapEditorSelectionKind selection,
+             MapEditorSubSelectionKind subSelection,
+             DrawKind drawKind,
+             QRect& tileset,
+             Position& p);
+    void remove(MapEditorSelectionKind selection,
+                MapEditorSubSelectionKind subSelection,
+                DrawKind drawKind,
+                Position& p);
+    void addFloor(Position& p, MapEditorSubSelectionKind,
+                  DrawKind drawKind,
+                  QRect& tileset);
     void stockFloor(Position& p, FloorDatas* floor);
-    void removeFloor(Position& p);
+    void removeFloor(Position& p, MapEditorSubSelectionKind,
+                     DrawKind drawKind);
     void eraseFloor(Position& p);
-    void addSprite(Position& p, QRect& tileset);
+    void addSprite(Position& p, MapEditorSubSelectionKind,
+                   DrawKind drawKind,
+                   QRect& tileset);
     void stockSprite(Position& p, SpriteDatas *sprite);
-    void removeSprite(Position& p);
+    void removeSprite(Position& p, MapEditorSubSelectionKind,
+                      DrawKind drawKind);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
@@ -115,8 +133,12 @@ public:
 
     void onMouseWheelMove(QWheelEvent *event);
     void onMouseMove(QPoint point, Qt::MouseButton button);
-    void onMousePressed(MapEditorSelectionKind selection, QRect& tileset,
-                        QPoint point, Qt::MouseButton button);
+    void onMousePressed(MapEditorSelectionKind selection,
+                        MapEditorSubSelectionKind subSelection,
+                        DrawKind drawKind,
+                        QRect& tileset,
+                        QPoint point,
+                        Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);

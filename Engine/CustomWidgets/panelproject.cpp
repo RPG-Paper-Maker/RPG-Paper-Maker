@@ -48,7 +48,7 @@ PanelProject::PanelProject(QWidget *parent) :
     connect(m_timerUpdate, SIGNAL(timeout()), this, SLOT(updateMenu()));
 
     // Menu bar
-    initializeRightMenu();
+    ui->widgetMenuBar->initializeRightMenu();
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :
@@ -76,30 +76,6 @@ WidgetMapEditor* PanelProject::widgetMapEditor() const{
 
 WidgetTreeLocalMaps* PanelProject::widgetTreeLocalMaps() const{
     return ui->treeViewLocalMaps;
-}
-
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
-
-void PanelProject::initializeRightMenu(){
-    WidgetMenuBarMapEditor *bar = new WidgetMenuBarMapEditor(ui->widgetMenuBar,
-                                                             false);
-    QMenu* menu;
-    QAction* action;
-    bar->clear();
-
-    menu = new QMenu("Pencil");
-    menu->setIcon(QIcon(":/icons/Ressources/pencil.png"));
-    action = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
-    menu->addAction(action);
-    action = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
-    menu->addAction(action);
-    bar->addMenu(menu);
-
-    ui->widgetMenuBar->setCornerWidget(bar);
 }
 
 // -------------------------------------------------------

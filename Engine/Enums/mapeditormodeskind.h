@@ -17,47 +17,19 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PANELPROJECT_H
-#define PANELPROJECT_H
-
-#include <QWidget>
-#include <widgetmapeditor.h>
-#include "project.h"
-#include "widgettreelocalmaps.h"
+#ifndef MAPEDITORMODESKIND_H
+#define MAPEDITORMODESKIND_H
 
 // -------------------------------------------------------
 //
-//  CLASS PanelProject
+//  ENUM MapEditorModesKind
 //
-//  The main menu panel when a project is opened.
+//  All the possible map editor modes.
 //
 // -------------------------------------------------------
 
-class WidgetTreeLocalMaps;
-
-namespace Ui {
-class PanelProject;
-}
-
-class PanelProject : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit PanelProject(QWidget *parent = 0);
-    PanelProject(QWidget *parent, Project* p);
-    ~PanelProject();
-    Project* project() const;
-    WidgetMapEditor* widgetMapEditor() const;
-    WidgetTreeLocalMaps* widgetTreeLocalMaps() const;
-
-private:
-    Ui::PanelProject *ui;
-    Project* m_project;
-    QTimer* m_timerUpdate;
-
-public slots:
-    void updateMenu();
+enum class MapEditorModesKind {
+    Draw
 };
 
-#endif // PANELPROJECT_H
+#endif // MAPEDITORMODESKIND_H

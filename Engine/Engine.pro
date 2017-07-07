@@ -195,7 +195,9 @@ HEADERS += \
     Dialogs/dialoglocation.h \
     Dialogs/Commands/dialogcommandwait.h \
     CustomWidgets/widgetgraphics.h \
-    Dialogs/Systems/dialogsystemlang.h
+    Dialogs/Systems/dialogsystemlang.h \
+    Enums/drawkind.h \
+    Enums/mapeditormodeskind.h
 
 SOURCES += \
     main.cpp \

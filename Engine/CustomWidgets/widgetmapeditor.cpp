@@ -308,7 +308,10 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
 
             if (m_menuBar != nullptr){
                 QRect tileset = m_panelTextures->getTilesetTexture();
-                m_control.addRemove(m_menuBar->selectionKind(), tileset,
+                m_control.addRemove(m_menuBar->selectionKind(),
+                                    m_menuBar->subSelectionKind(),
+                                    m_menuBar->drawKind(),
+                                    tileset,
                                     button);
             }
         }
@@ -324,6 +327,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
             m_mousesPressed += event->button();
             QRect tileset = m_panelTextures->getTilesetTexture();
             m_control.onMousePressed(m_menuBar->selectionKind(),
+                                     m_menuBar->subSelectionKind(),
+                                     m_menuBar->drawKind(),
                                      tileset,
                                      event->pos(),
                                      event->button());

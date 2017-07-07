@@ -432,14 +432,17 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 // -------------------------------------------------------
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
-                                 QRect& tileset, Qt::MouseButton button)
+                                 MapEditorSubSelectionKind subSelection,
+                                 DrawKind drawKind,
+                                 QRect& tileset,
+                                 Qt::MouseButton button)
 {
     Position p = getPositionSelected(selection);
     if (m_map->isInGrid(p)){
         if (button == Qt::MouseButton::LeftButton)
-            add(selection, tileset, p);
+            add(selection, subSelection, drawKind, tileset, p);
         else if (button == Qt::MouseButton::RightButton)
-            remove(selection, p);
+            remove(selection, subSelection, drawKind, p);
     }
 }
 
@@ -462,15 +465,18 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 
 // -------------------------------------------------------
 
-void ControlMapEditor::add(MapEditorSelectionKind selection, QRect& tileset,
+void ControlMapEditor::add(MapEditorSelectionKind selection,
+                           MapEditorSubSelectionKind subSelection,
+                           DrawKind drawKind,
+                           QRect& tileset,
                            Position& p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        addFloor(p, tileset);
+        addFloor(p, subSelection, drawKind, tileset);
         break;
     case MapEditorSelectionKind::Sprites:
-        addSprite(p, tileset);
+        addSprite(p, subSelection, drawKind, tileset);
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p); break;
@@ -479,14 +485,17 @@ void ControlMapEditor::add(MapEditorSelectionKind selection, QRect& tileset,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p)
+void ControlMapEditor::remove(MapEditorSelectionKind selection,
+                              MapEditorSubSelectionKind subSelection,
+                              DrawKind drawKind,
+                              Position& p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeFloor(p);
+        removeFloor(p, subSelection, drawKind);
         break;
     case MapEditorSelectionKind::Sprites:
-        removeSprite(p);
+        removeSprite(p, subSelection, drawKind);
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p);
@@ -501,34 +510,41 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p)
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addFloor(Position& p, QRect &tileset){
+void ControlMapEditor::addFloor(Position& p,
+                                MapEditorSubSelectionKind ,
+                                DrawKind drawKind,
+                                QRect &tileset)
+{
     FloorDatas* floor;
     QRect* shortTexture;
 
-    if (tileset.width() == 1 && tileset.width() == 1){
-        QList<Position> positions;
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++){
-            stockFloor(positions[i],
-                       new FloorDatas(new QRect(tileset.x(),
-                                                tileset.y(),
-                                                tileset.width(),
-                                                tileset.height())));
+    // Pencil
+    if (drawKind == DrawKind::Pencil){
+        if (tileset.width() == 1 && tileset.width() == 1){
+            QList<Position> positions;
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++){
+                stockFloor(positions[i],
+                           new FloorDatas(new QRect(tileset.x(),
+                                                    tileset.y(),
+                                                    tileset.width(),
+                                                    tileset.height())));
+            }
         }
-    }
-    for (int i = 0; i < tileset.width(); i++){
-        if (p.x() + i > m_map->mapProperties()->length())
-            break;
-
-        for (int j = 0; j < tileset.height(); j++){
-            if (p.z() + j > m_map->mapProperties()->width())
+        for (int i = 0; i < tileset.width(); i++){
+            if (p.x() + i > m_map->mapProperties()->length())
                 break;
 
-            Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
-            shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
-                                     1, 1);
-            floor = new FloorDatas(shortTexture);
-            stockFloor(shortPosition, floor);
+            for (int j = 0; j < tileset.height(); j++){
+                if (p.z() + j > m_map->mapProperties()->width())
+                    break;
+
+                Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
+                shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
+                                         1, 1);
+                floor = new FloorDatas(shortTexture);
+                stockFloor(shortPosition, floor);
+            }
         }
     }
 
@@ -554,13 +570,19 @@ void ControlMapEditor::stockFloor(Position& p, FloorDatas *floor){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeFloor(Position& p){
-    QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++)
-        eraseFloor(positions[i]);
+void ControlMapEditor::removeFloor(Position& p,
+                                   MapEditorSubSelectionKind ,
+                                   DrawKind drawKind)
+{
+    // Pencil
+    if (drawKind == DrawKind::Pencil){
+        QList<Position> positions;
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++)
+            eraseFloor(positions[i]);
 
-    eraseFloor(p);
+        eraseFloor(p);
+    }
 
     m_previousMouseCoords = p;
 }
@@ -588,18 +610,25 @@ void ControlMapEditor::eraseFloor(Position& p){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addSprite(Position& p, QRect& tileset){
+void ControlMapEditor::addSprite(Position& p,
+                                 MapEditorSubSelectionKind ,
+                                 DrawKind drawKind,
+                                 QRect& tileset)
+{
     SpriteDatas* sprite;
 
-    QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++){
-        sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
-        stockSprite(positions[i], sprite);
-    }
+    // Pencil
+    if (drawKind == DrawKind::Pencil){
+        QList<Position> positions;
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++){
+            sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+            stockSprite(positions[i], sprite);
+        }
 
-    sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
-    stockSprite(p, sprite);
+        sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+        stockSprite(p, sprite);
+    }
 
     m_previousMouseCoords = p;
 }
@@ -623,12 +652,18 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeSprite(Position& p){
-    QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++)
-        eraseSprite(positions[i]);
-    eraseSprite(p);
+void ControlMapEditor::removeSprite(Position& p,
+                                    MapEditorSubSelectionKind ,
+                                    DrawKind drawKind)
+{
+    // Pencil
+    if (drawKind == DrawKind::Pencil){
+        QList<Position> positions;
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++)
+            eraseSprite(positions[i]);
+        eraseSprite(p);
+    }
 
     m_previousMouseCoords = p;
 }
@@ -1037,7 +1072,10 @@ void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button){
 // -------------------------------------------------------
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
-                                      QRect &tileset, QPoint point,
+                                      MapEditorSubSelectionKind subSelection,
+                                      DrawKind drawKind,
+                                      QRect &tileset,
+                                      QPoint point,
                                       Qt::MouseButton button)
 {
     // Update mouse position
@@ -1048,7 +1086,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
     // Add/Remove something
     m_previousMouseCoords = getPositionSelected(selection);
-    addRemove(selection, tileset, button);
+    addRemove(selection, subSelection, drawKind, tileset, button);
 }
 
 // -------------------------------------------------------
