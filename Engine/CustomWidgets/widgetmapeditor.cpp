@@ -77,15 +77,16 @@ Map* WidgetMapEditor::getMap() const { return m_control.map(); }
 
 Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position,
                               QVector3D *positionObject, int cameraDistance,
-                              int cameraHeight)
+                              int cameraHeight, double cameraHorizontalAngle)
 {
     m_idMap = idMap;
     m_position = position;
     m_positionObject = positionObject;
     m_cameraDistance = cameraDistance;
     m_cameraHeight = cameraHeight;
+    m_cameraHorizontalAngle = cameraHorizontalAngle;
     return m_control.loadMap(idMap, position, positionObject, cameraDistance,
-                             cameraHeight);
+                             cameraHeight, cameraHorizontalAngle);
 }
 
 // -------------------------------------------------------
@@ -178,7 +179,8 @@ void WidgetMapEditor::update(){
 
 void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
                                     QVector3D *positionObject,
-                                    int cameraDistance, int cameraHeight)
+                                    int cameraDistance, int cameraHeight,
+                                    double cameraHorizontalAngle)
 {
     m_needUpdateMap = true;
     m_idMap = idMap;
@@ -186,6 +188,7 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
     m_positionObject = positionObject;
     m_cameraDistance = cameraDistance;
     m_cameraHeight = cameraHeight;
+    m_cameraHorizontalAngle = cameraHorizontalAngle;
 
     if (isGLInitialized)
         initializeMap();
@@ -196,7 +199,7 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
 void WidgetMapEditor::initializeMap(){
     makeCurrent();
     Map* map = loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
-                       m_cameraHeight);
+                       m_cameraHeight, m_cameraHorizontalAngle);
     if (m_menuBar != nullptr){
         m_menuBar->show();
         Wanok::get()->project()->setCurrentMap(map);
@@ -262,10 +265,11 @@ void WidgetMapEditor::addObject(){
     m_control.addObject(p);
     int cameraDistance = m_control.camera()->distance();
     int cameraHeight = m_control.camera()->height();
+    double cameraHorizontalAngle = m_control.camera()->horizontalAngle();
 
     deleteMap();
     needUpdateMap(m_idMap, m_position, m_positionObject, cameraDistance,
-                  cameraHeight);
+                  cameraHeight, cameraHorizontalAngle);
 }
 
 // -------------------------------------------------------
@@ -304,7 +308,7 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
         QSet<Qt::MouseButton>::iterator i;
         for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++){
             Qt::MouseButton button = *i;
-            m_control.onMouseMove(event->pos(), button);
+            m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
 
             if (m_menuBar != nullptr){
                 QRect tileset = m_panelTextures->getTilesetTexture();
@@ -323,20 +327,27 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
 void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
+        Qt::MouseButton button = event->button();
+        m_mousesPressed += button;
         if (m_menuBar != nullptr){
-            m_mousesPressed += event->button();
             QRect tileset = m_panelTextures->getTilesetTexture();
             m_control.onMousePressed(m_menuBar->selectionKind(),
                                      m_menuBar->subSelectionKind(),
                                      m_menuBar->drawKind(),
                                      tileset,
                                      event->pos(),
-                                     event->button());
+                                     button);
         }
         // If in teleport command
         else{
-            m_control.moveCursorToMousePosition(event->pos());
-            updateSpinBoxes();
+            if (button != Qt::MouseButton::MiddleButton){
+                m_control.moveCursorToMousePosition(event->pos());
+                updateSpinBoxes();
+            }
+            else{
+                m_control.updateMousePosition(event->pos());
+                m_control.update();
+            }
         }
     }
 }
@@ -346,8 +357,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
 void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
-        if (m_menuBar != nullptr)
-            m_mousesPressed -= event->button();
+        m_mousesPressed -= event->button();
     }
 }
 

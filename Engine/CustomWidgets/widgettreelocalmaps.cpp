@@ -218,7 +218,8 @@ void WidgetTreeLocalMaps::showMap(QStandardItem *item)
     m_widgetMapEditor->needUpdateMap(tag->id(), tag->position(),
                                      tag->positionObject(),
                                      tag->cameraDistance(),
-                                     tag->cameraHeight());
+                                     tag->cameraHeight(),
+                                     tag->cameraHorizontalAngle());
     m_widgetMapEditor->setTreeMapNode(item);
 }
 

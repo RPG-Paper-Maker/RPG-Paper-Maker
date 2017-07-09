@@ -70,10 +70,12 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 // -------------------------------------------------------
 
 void ControlMapEditor::moveCursorToMousePosition(QPoint point){
-    m_mouse = point;
+    updateMousePosition(point);
     update();
 
-    m_cursor->setPositions(m_positionOnPlane);
+    if (m_map->isInGrid(m_positionOnPlane)){
+        m_cursor->setPositions(m_positionOnPlane);
+    }
 }
 
 // -------------------------------------------------------
@@ -86,7 +88,7 @@ void ControlMapEditor::reLoadTextures(){
 
 Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                                QVector3D *positionObject, int cameraDistance,
-                               int cameraHeight)
+                               int cameraHeight, double cameraHorizontalAngle)
 {
     // Map & cursor
     m_cursor = new Cursor(position);
@@ -121,6 +123,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     // Camera
     m_camera->setDistance(cameraDistance);
     m_camera->setHeight(cameraHeight);
+    m_camera->setHorizontalAngle(cameraHorizontalAngle);
     m_camera->update(m_cursor, m_map->squareSize());
 
     return m_map;
@@ -167,6 +170,7 @@ void ControlMapEditor::updateCameraTreeNode(){
     TreeMapTag* tag = (TreeMapTag*) m_treeMapNode->data().value<quintptr>();
     tag->setCameraDistance(m_camera->distance());
     tag->setCameraHeight(m_camera->height());
+    tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
 }
 
 // -------------------------------------------------------
@@ -189,6 +193,12 @@ void ControlMapEditor::update(){
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouse;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateMousePosition(QPoint point){
+    m_mouse = point;
 }
 
 // -------------------------------------------------------
@@ -1049,23 +1059,27 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseWheelMove(QWheelEvent* event){
+void ControlMapEditor::onMouseWheelMove(QWheelEvent* event, bool updateTree){
     if (event->delta() > 0)
         m_camera->zoomPlus(0);
     else
         m_camera->zoomLess(0);
 
-    updateCameraTreeNode();
+    if (updateTree)
+        updateCameraTreeNode();
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button){
-    m_mouse = point;
+void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
+                                   bool updateTree)
+{
+    updateMousePosition(point);
 
     if (button == Qt::MouseButton::MiddleButton){
         m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
-        updateCameraTreeNode();
+        if (updateTree)
+            updateCameraTreeNode();
     }
 }
 
@@ -1078,8 +1092,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       QPoint point,
                                       Qt::MouseButton button)
 {
-    // Update mouse position
-    m_mouse = point;
+    updateMousePosition(point);
 
     // Update
     update();

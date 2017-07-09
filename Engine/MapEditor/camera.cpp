@@ -65,6 +65,8 @@ void Camera::setDistance(int d){ m_distance = d; }
 
 void Camera::setHeight(int h){ m_height = h; }
 
+void Camera::setHorizontalAngle(double a) { m_horizontalAngle = a; }
+
 void Camera::addDistance(int d){ m_distance += d; }
 
 void Camera::addHeight(int h){ m_height += h; }

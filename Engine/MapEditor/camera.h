@@ -50,6 +50,7 @@ public:
     int height() const;
     void setDistance(int d);
     void setHeight(int h);
+    void setHorizontalAngle(double a);
     void addDistance(int d);
     void addHeight(int h);
     void update(Cursor* cursor, int squareSize);

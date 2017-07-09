@@ -57,11 +57,13 @@ public:
     void initialize();
     void reLoadTextures();
     Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
-                 int cameraDistance, int cameraHeight);
+                 int cameraDistance, int cameraHeight,
+                 double cameraHorizontalAngle);
     void deleteMap();
     void onResize(int width, int height);
 
     void update();
+    void updateMousePosition(QPoint point);
     void updateRaycasting();
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
@@ -131,8 +133,9 @@ public:
     void paintGL(QMatrix4x4& modelviewProjection,
                  MapEditorSelectionKind selectionKind);
 
-    void onMouseWheelMove(QWheelEvent *event);
-    void onMouseMove(QPoint point, Qt::MouseButton button);
+    void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
+    void onMouseMove(QPoint point, Qt::MouseButton button,
+                     bool updateTree = true);
     void onMousePressed(MapEditorSelectionKind selection,
                         MapEditorSubSelectionKind subSelection,
                         DrawKind drawKind,
