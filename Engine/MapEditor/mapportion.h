@@ -42,6 +42,7 @@ public:
     virtual ~MapPortion();
     MapObjects* mapObjects() const;
     bool isEmpty() const;
+    LandDatas* getLand(Position& p);
     bool addFloor(Position& p, FloorDatas* floor);
     bool deleteFloor(Position& p);
     bool addSprite(Position& p, SpriteDatas* sprite);

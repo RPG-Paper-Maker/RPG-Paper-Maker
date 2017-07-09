@@ -107,6 +107,10 @@ public:
     void addFloor(Position& p, MapEditorSubSelectionKind,
                   DrawKind drawKind,
                   QRect& tileset);
+    void paintPinLand(Position& p, LandDatas* landAfter);
+    LandDatas* getLand(Portion& portion, Position& p);
+    void getFloorTextureReduced(QRect* rect, QRect& rectAfter,
+                                int localX, int localZ);
     void stockFloor(Position& p, FloorDatas* floor);
     void removeFloor(Position& p, MapEditorSubSelectionKind,
                      DrawKind drawKind);

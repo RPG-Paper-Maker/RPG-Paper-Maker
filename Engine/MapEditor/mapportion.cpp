@@ -53,6 +53,10 @@ bool MapPortion::isEmpty() const{
 //
 // -------------------------------------------------------
 
+LandDatas* MapPortion::getLand(Position& p){
+    return m_floors->getLand(p);
+}
+
 bool MapPortion::addFloor(Position& p, FloorDatas *floor){
     return m_floors->addFloor(p, floor);
 }

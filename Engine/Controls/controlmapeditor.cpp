@@ -529,7 +529,8 @@ void ControlMapEditor::addFloor(Position& p,
     QRect* shortTexture;
 
     // Pencil
-    if (drawKind == DrawKind::Pencil){
+    switch (drawKind) {
+    case DrawKind::Pencil:
         if (tileset.width() == 1 && tileset.width() == 1){
             QList<Position> positions;
             traceLine(m_previousMouseCoords, p, positions);
@@ -556,9 +557,46 @@ void ControlMapEditor::addFloor(Position& p,
                 stockFloor(shortPosition, floor);
             }
         }
+        break;
+    case DrawKind::Rectangle:
+        break; // TODO
+    case DrawKind::Pin:
+        break;
     }
 
     m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::paintPinLand(Position& p, LandDatas* landAfter){
+    if (m_map->isInGrid(p)){
+        Portion portion = getLocalPortion(p);
+        if (m_map->isInPortion(portion)){
+            LandDatas* landBefore = getLand(portion, p);
+
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+LandDatas* ControlMapEditor::getLand(Portion& portion, Position& p){
+    MapPortion* mapPortion = m_map->mapPortion(portion);
+    if (mapPortion == nullptr)
+        return nullptr;
+    return mapPortion->getLand(p);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getFloorTextureReduced(QRect* rect, QRect &rectAfter,
+                                              int localX, int localZ)
+{
+    rectAfter.setX(rect->x() + (localX % rect->width()));
+    rectAfter.setY(rect->y() + (localZ % rect->height()));
+    rectAfter.setWidth(1);
+    rectAfter.setHeight(1);
 }
 
 // -------------------------------------------------------

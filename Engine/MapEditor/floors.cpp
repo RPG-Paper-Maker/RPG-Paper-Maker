@@ -52,6 +52,10 @@ FloorDatas::~FloorDatas()
 
 QRect *FloorDatas::textureRect() const { return m_textureRect; }
 
+MapEditorSubSelectionKind FloorDatas::getKind() const{
+    return MapEditorSubSelectionKind::Floors;
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
@@ -267,6 +271,15 @@ Floors::~Floors()
 
 bool Floors::isEmpty() const{
     return m_floors.size() == 0;
+}
+
+// -------------------------------------------------------
+
+LandDatas* Floors::getLand(Position& p){
+    LandDatas* datas = m_floors.value(p);
+    // TODO : autotiles
+
+    return datas;
 }
 
 // -------------------------------------------------------

@@ -27,7 +27,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
-#include "serializable.h"
+#include "lands.h"
 #include "position.h"
 #include "height.h"
 #include "vertex.h"
@@ -40,13 +40,14 @@
 //
 // -------------------------------------------------------
 
-class FloorDatas : public Serializable
+class FloorDatas : public LandDatas
 {
 public:
     FloorDatas();
     FloorDatas(QRect *texture);
     virtual ~FloorDatas();
     QRect* textureRect() const;
+    virtual MapEditorSubSelectionKind getKind() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;
@@ -106,6 +107,7 @@ public:
     Floors();
     virtual ~Floors();
     bool isEmpty() const;
+    LandDatas* getLand(Position& p);
     void setFloor(Position& p, FloorDatas* floor);
     FloorDatas* removeFloor(Position& p);
     bool addFloor(Position& p, FloorDatas* floor);
