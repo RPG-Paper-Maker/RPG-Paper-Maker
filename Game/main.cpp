@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 
     // The application can now be used even if called from another directory
     QDir::setCurrent(qApp->applicationDirPath());
+    qDebug() << "debug on: " + QDir::currentPath();
 
     // Create QML engine
     QQmlApplicationEngine engine;

@@ -145,6 +145,7 @@ Window {
 
         onInitializeGL: {
             try{
+                console.log("root dir: " + Game.$ROOT_DIRECTORY);
                 Game.$DIALOG_ERROR = dialogError;
                 Game.$canvasWidth = canvas3d.width;
                 Game.$canvasHeight = canvas3d.height;

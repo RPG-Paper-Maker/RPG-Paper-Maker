@@ -89,12 +89,14 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     out << Project::VERSION;
 
     // Copying a basic project content
-    if (!Wanok::copyPath(Wanok::pathCombine(
-                             Wanok::pathCombine("Content", "basic"), "Content"),
+    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+    QString pathBasicContent = Wanok::pathCombine(
+                Wanok::pathCombine(pathContent, "basic"), "Content");
+    if (!Wanok::copyPath(pathBasicContent,
                          Wanok::pathCombine(pathDir, "Content")))
     {
-        return "Error while copying Content directory. "
-               "Please retry with a new project.";
+        return "Error while copying Content directory. Please verify if " +
+               pathBasicContent + " folder exists.";
     }
 
     // Create folders
@@ -112,11 +114,11 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     #elif __linux__
         strOS = "linux";
     #else
-        return "Error your current opperating system is not supported.";
+        strOS = "osx";
     #endif
 
     // Copying a basic project content
-    if (!Wanok::copyPath(Wanok::pathCombine("Content", strOS), pathDir)){
+    if (!Wanok::copyPath(Wanok::pathCombine(pathContent, strOS), pathDir)){
         return "Error while copying excecutable and libraries. "
                "Please retry with a new project.";
     }
