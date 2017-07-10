@@ -36,7 +36,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // The application can now be used even if called from another directory
-    QDir::setCurrent(qApp->applicationDirPath());
+    QDir bin(qApp->applicationFilePath());
+    #if defined(Q_WS_MAC)
+        bin.cdUp();
+        bin.cdUp();
+        bin.cdUp();
+    #endif
+    QDir::setCurrent(bin.absolutePath());
 
     // General stylesheet configuration
     QFile file(":/stylesheets/style.qss");
