@@ -1,8 +1,8 @@
 # RPG Paper Maker
 --------------
 
-![build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)
-![build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)
+[![Build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/Wano-k/RPG-Paper-Maker)
+[![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 
 RPG Paper Maker is a free game maker engine including a 3D universe with many 2D sprites and some simplified 3D objects. Pretty close to the RPG Maker series, RPG Paper Maker finally give a way to create RPGs in a totally 3D universe as easy as it is in 2D!
 
