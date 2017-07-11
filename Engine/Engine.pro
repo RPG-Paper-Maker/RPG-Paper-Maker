@@ -443,8 +443,10 @@ win32{
     DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas)\"
 }
 
-copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
-first.depends = $(first) copyBR
-export(first.depends)
-export(copyBR.commands)
-QMAKE_EXTRA_TARGETS += first copyBR
+!equals(PWD, $${OUT_PWD}) {
+    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
+    first.depends = $(first) copyBR
+    export(first.depends)
+    export(copyBR.commands)
+    QMAKE_EXTRA_TARGETS += first copyBR
+}

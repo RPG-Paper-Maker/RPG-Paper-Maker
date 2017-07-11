@@ -120,9 +120,11 @@ win32{
     DEST = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content)\"
 }
 
-copyBR.commands = $(COPY_DIR) \"$$shell_path($$PWD\\Content)\" $$DEST
-first.depends = $(first) copyBR
-export(first.depends)
-export(copyBR.commands)
-QMAKE_EXTRA_TARGETS += first copyBR
+!equals(PWD, $${OUT_PWD}) {
+    copyBR.commands = $(COPY_DIR) \"$$shell_path($$PWD\\Content)\" $$DEST
+    first.depends = $(first) copyBR
+    export(first.depends)
+    export(copyBR.commands)
+    QMAKE_EXTRA_TARGETS += first copyBR
+}
 
