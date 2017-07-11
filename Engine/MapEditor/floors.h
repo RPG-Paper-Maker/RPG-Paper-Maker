@@ -108,10 +108,10 @@ public:
     virtual ~Floors();
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
-    void setFloor(Position& p, FloorDatas* floor);
-    FloorDatas* removeFloor(Position& p);
-    bool addFloor(Position& p, FloorDatas* floor);
-    bool deleteFloor(Position& p);
+    void setLand(Position& p, LandDatas* floor);
+    LandDatas* removeLand(Position& p);
+    bool addLand(Position& p, LandDatas* land);
+    bool deleteLand(Position& p);
 
     void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
@@ -122,7 +122,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position, FloorDatas*> m_floors;
+    QHash<Position, LandDatas*> m_lands;
     Floor* m_floorsGL[2];
 
     QOpenGLShaderProgram* m_programStatic;

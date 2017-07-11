@@ -35,6 +35,7 @@ class LandDatas : public Serializable
 {
 public:
     LandDatas();
+    virtual ~LandDatas();
     virtual MapEditorSubSelectionKind getKind() const;
 
     virtual void read(const QJsonObject &);

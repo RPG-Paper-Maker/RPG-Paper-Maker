@@ -104,17 +104,23 @@ public:
                 MapEditorSubSelectionKind subSelection,
                 DrawKind drawKind,
                 Position& p);
-    void addFloor(Position& p, MapEditorSubSelectionKind,
+    void addFloor(Position& p, MapEditorSubSelectionKind kind,
                   DrawKind drawKind,
                   QRect& tileset);
-    void paintPinLand(Position& p, LandDatas* landAfter);
+    void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
+                      QRect &textureAfter);
     LandDatas* getLand(Portion& portion, Position& p);
-    void getFloorTextureReduced(QRect* rect, QRect& rectAfter,
+    void getFloorTextureReduced(QRect &rect, QRect& rectAfter,
                                 int localX, int localZ);
-    void stockFloor(Position& p, FloorDatas* floor);
-    void removeFloor(Position& p, MapEditorSubSelectionKind,
+    bool areLandsEquals(LandDatas* landBefore,
+                        QRect &textureAfter,
+                        MapEditorSubSelectionKind kindAfter);
+    LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter,
+                            QRect &textureAfter);
+    void stockLand(Position& p, LandDatas* landDatas);
+    void removeLand(Position& p, MapEditorSubSelectionKind,
                      DrawKind drawKind);
-    void eraseFloor(Position& p);
+    void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind,
                    DrawKind drawKind,
                    QRect& tileset);

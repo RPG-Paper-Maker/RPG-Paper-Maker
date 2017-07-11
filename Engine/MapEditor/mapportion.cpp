@@ -57,14 +57,14 @@ LandDatas* MapPortion::getLand(Position& p){
     return m_floors->getLand(p);
 }
 
-bool MapPortion::addFloor(Position& p, FloorDatas *floor){
-    return m_floors->addFloor(p, floor);
+bool MapPortion::addLand(Position& p, LandDatas *land){
+    return m_floors->addLand(p, land);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteFloor(Position& p){
-    return m_floors->deleteFloor(p);
+bool MapPortion::deleteLand(Position& p){
+    return m_floors->deleteLand(p);
 }
 
 // -------------------------------------------------------
