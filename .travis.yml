@@ -78,5 +78,5 @@ deploy:
   skip_cleanup: true
   overwrite: true
   on:
-    repo: afaur/RPG-Paper-Maker
+    repo: Wano-k/RPG-Paper-Maker
     tags: true
