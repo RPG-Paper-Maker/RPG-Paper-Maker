@@ -1,0 +1,38 @@
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      PROJECT: Engine
+      PROJECT_DETAILS: "RPG Paper Maker Engine"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      PROJECT: Game
+      PROJECT_DETAILS: "RPG Paper Maker Game Runner"
+
+install:
+  - set QTDIR=C:\Qt\5.9\mingw53_32
+  - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
+
+before_build:
+  - cd $(PROJECT)
+
+build_script:
+  - qmake
+
+after_build:
+  - mingw32-make
+  - 7z a $(PROJECT).zip $(APPVEYOR_BUILD_FOLDER)/release/$(PROJECT).exe
+
+artifacts:
+  - path: $(PROJECT).zip
+    name: $(PROJECT)
+
+deploy:
+  release: $(PROJECT)-v$(appveyor_build_version)
+  description: $(PROJECT_DETAILS)
+  provider: GitHub
+  auth_token:
+    secure: $(RELEASES_API_KEY)
+  artifact: $(PROJECT).zip            # upload all NuGet packages to release assets
+  draft: false
+  prerelease: false
+  on:
+    appveyor_repo_tag: true
