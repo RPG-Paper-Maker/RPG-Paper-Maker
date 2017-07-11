@@ -1,0 +1,82 @@
+language: cpp
+
+osx_image: xcode8.3
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler: gcc
+    env:
+    - QT_MAJOR=5
+    - QT_MINOR=9
+    - PROJECT=Engine
+    - BINARY=Engine
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler: gcc
+    env:
+    - QT_MAJOR=5
+    - QT_MINOR=9
+    - PROJECT=Game
+    - BINARY=Game
+  - os: osx
+    compiler: clang
+    env:
+    - QT_MAJOR=5
+    - QT_MINOR=9
+    - PROJECT=Engine
+    - BINARY=Engine.app
+  - os: osx
+    compiler: clang
+    env:
+    - QT_MAJOR=5
+    - QT_MINOR=9
+    - PROJECT=Game
+    - BINARY=Game.app
+
+before_install:
+- export QT_FULL="${QT_MAJOR}${QT_MINOR}"
+- |
+  if [ "$CXX" = "g++" ]; then
+    sudo add-apt-repository -y ppa:beineri/opt-qt${QT_FULL}-trusty
+    sudo apt-get update -qq
+    sudo apt-get install -qq qt${QT_FULL}base qt${QT_FULL}declarative
+  fi
+- |
+  if [ "$CXX" = "clang++" ]; then
+    brew update
+    brew install qt${QT_MAJOR} swift
+  fi
+
+install:
+- export QT_SELECT=qt${QT_MAJOR}
+- $CXX --version
+- |
+  if [ "$CXX" = "g++" ]; then
+    . /opt/qt${QT_FULL}/bin/qt${QT_FULL}-env.sh
+  fi
+- |
+  if [ "$CXX" = "clang++" ]; then
+    brew link --force qt${QT_MAJOR}
+  fi
+
+script:
+- qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" -v
+- cd "${PROJECT}"
+- qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
+- make
+- make -k check
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "${RELEASES_API_KEY}"
+  file: "${PROJECT}/${BINARY}"
+  skip_cleanup: true
+  overwrite: true
+  on:
+    repo: afaur/RPG-Paper-Maker
+    tags: true
