@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // The application can now be used even if called from another directory
-    QDir bin(qApp->applicationFilePath());
-    #if defined(Q_WS_MAC)
+    QDir bin(qApp->applicationDirPath());
+    #ifdef Q_OS_MAC
         bin.cdUp();
         bin.cdUp();
         bin.cdUp();
