@@ -319,3 +319,10 @@ QString Wanok::keyToString(int keyInt){
 
     return "?";
 }
+
+// -------------------------------------------------------
+
+int Wanok::mod(int x, int m){
+    int r = x % m;
+    return r < 0 ? r + m : r;
+}

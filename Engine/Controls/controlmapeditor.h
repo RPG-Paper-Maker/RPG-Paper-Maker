@@ -117,6 +117,7 @@ public:
                         MapEditorSubSelectionKind kindAfter);
     LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter,
                             QRect &textureAfter);
+    void getLandTexture(QRect& rect, LandDatas* land);
     void stockLand(Position& p, LandDatas* landDatas);
     void removeLand(Position& p, MapEditorSubSelectionKind,
                      DrawKind drawKind);

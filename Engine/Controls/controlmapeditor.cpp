@@ -578,13 +578,21 @@ void ControlMapEditor::paintPinLand(Position& p,
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             LandDatas* landBefore = getLand(portion, p);
-            QRect textureAfterReduced;
+            MapEditorSubSelectionKind kindBefore =
+                    MapEditorSubSelectionKind::None;
+            QRect textureBefore;
+            if (landBefore != nullptr){
+                kindBefore = landBefore->getKind();
+                getLandTexture(textureBefore, landBefore);
+            }
 
+            // If it's floor, we need to reduce to square * square size texture
+            QRect textureAfterReduced;
             if (kindAfter == MapEditorSubSelectionKind::Floors)
                 getFloorTextureReduced(textureAfter, textureAfterReduced, 0, 0);
 
+            // If the texture à different, start the algorithm
             if (!areLandsEquals(landBefore, textureAfterReduced, kindAfter)){
-                bool t = true;
                 QList<Position> tab;
                 tab.push_back(p);
                 if (kindAfter == MapEditorSubSelectionKind::None)
@@ -592,59 +600,52 @@ void ControlMapEditor::paintPinLand(Position& p,
                 else
                     stockLand(p, getLandAfter(kindAfter, textureAfterReduced));
 
-            }
-            /*
-            if (!AreTexturesEquals(textureBefore, textureAfterReduced))
-                            {
-                                Stopwatch sw = new Stopwatch();
-                                bool t = true;
-                                sw.Start();
+                while(!tab.isEmpty()){
+                    QList<Position> adjacent;
+                    Position firstPosition = tab.at(0);
+                    int x = firstPosition.x();
+                    int y = firstPosition.y();
+                    int yPlus = firstPosition.yPlus();
+                    int z = firstPosition.z();
+                    int layer = firstPosition.layer();
 
-                                List<int[]> tab = new List<int[]>();
-                                tab.Add(coords);
-                                if (textureAfter == null) EraseFloor(coords);
-                                else StockFloor(coords, textureAfterReduced);
-                                int[][] adjacent;
+                    // Getting all the adjacent squares
+                    adjacent << Position(x - 1, y, yPlus, z, layer);
+                    adjacent << Position(x + 1, y, yPlus, z, layer);
+                    adjacent << Position(x, y, yPlus, z + 1, layer);
+                    adjacent << Position(x, y, yPlus, z - 1, layer);
 
-                                while (tab.Count != 0)
+                    tab.removeAt(0);
+                    for (int i = 0; i < adjacent.size(); i++){
+                        Position adjacentPosition = adjacent.at(i);
+                        int localX = adjacentPosition.x() - p.x();
+                        int localZ = adjacentPosition.z() - p.z();
+                        getFloorTextureReduced(textureAfter,
+                                               textureAfterReduced,
+                                               localX, localZ);
+                        if (m_map->isInGrid(adjacentPosition)){
+                            portion = getLocalPortion(adjacentPosition);
+                            if (m_map->isInPortion(portion)){
+                                LandDatas* landHere = getLand(portion,
+                                                              adjacentPosition);
+                                if (areLandsEquals(landHere, textureBefore,
+                                                   kindBefore))
                                 {
-                                    if (sw.ElapsedMilliseconds > 50 && t)
-                                    {
-                                        WANOK.StartProgressBar("Calculating paint propagation...", 50);
-                                        t = false;
-                                    }
-
-                                    adjacent = new int[][]
-                                    {
-                                    new int[] { tab[0][0] - 1, tab[0][1], tab[0][2], tab[0][3] },
-                                    new int[] { tab[0][0] + 1, tab[0][1], tab[0][2], tab[0][3] },
-                                    new int[] { tab[0][0], tab[0][1], tab[0][2], tab[0][3] + 1 },
-                                    new int[] { tab[0][0], tab[0][1], tab[0][2], tab[0][3] - 1 }
-                                    };
-                                    tab.RemoveAt(0);
-                                    for (int i = 0; i < adjacent.Length; i++)
-                                    {
-                                        int localX = adjacent[i][0] - coords[0], localZ = adjacent[i][3] - coords[3];
-                                        textureAfterReduced = GetTextureAfterReduced(textureAfter, localX, localZ);
-                                        portion = GetPortion(adjacent[i][0], adjacent[i][3]);
-
-                                        if (WANOK.IsInPortions(portion) && IsInArea(adjacent[i]))
-                                        {
-                                            object textureHere = GetCurrentTexture(portion, adjacent[i]);
-
-                                            if (AreTexturesEquals(textureHere, textureBefore))
-                                            {
-                                                if (textureAfter == null) EraseFloor(adjacent[i]);
-                                                else StockFloor(adjacent[i], textureAfterReduced);
-                                                tab.Add(adjacent[i]);
-                                            }
-                                        }
-                                    }
+                                    if (kindAfter ==
+                                            MapEditorSubSelectionKind::None)
+                                        eraseLand(adjacentPosition);
+                                    else
+                                        stockLand(adjacentPosition,
+                                                  getLandAfter(
+                                                      kindAfter,
+                                                      textureAfterReduced));
+                                    tab.push_back(adjacentPosition);
                                 }
-                                sw.Stop();
                             }
+                        }
+                    }
+                }
             }
-            */
         }
     }
 }
@@ -663,8 +664,8 @@ LandDatas* ControlMapEditor::getLand(Portion& portion, Position& p){
 void ControlMapEditor::getFloorTextureReduced(QRect& rect, QRect &rectAfter,
                                               int localX, int localZ)
 {
-    rectAfter.setX(rect.x() + (localX % rect.width()));
-    rectAfter.setY(rect.y() + (localZ % rect.height()));
+    rectAfter.setX(rect.x() + Wanok::mod(localX, rect.width()));
+    rectAfter.setY(rect.y() + Wanok::mod(localZ, rect.height()));
     rectAfter.setWidth(1);
     rectAfter.setHeight(1);
 }
@@ -701,18 +702,41 @@ bool ControlMapEditor::areLandsEquals(LandDatas* landBefore,
 LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
                                           QRect &textureAfter)
 {
+    QRect* texture = new QRect(textureAfter.x(),
+                               textureAfter.y(),
+                               textureAfter.width(),
+                               textureAfter.height());
     switch (kindAfter) {
     case MapEditorSubSelectionKind::Floors:
-        return new FloorDatas(new QRect(textureAfter.x(),
-                                        textureAfter.y(),
-                                        textureAfter.width(),
-                                        textureAfter.height()));
+        return new FloorDatas(texture);
     case MapEditorSubSelectionKind::Autotiles:
         return nullptr;
     case MapEditorSubSelectionKind::Water:
         return nullptr;
     default:
         return nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
+    FloorDatas* floor;
+
+    switch (land->getKind()) {
+    case MapEditorSubSelectionKind::Floors:
+        floor = (FloorDatas*) land;
+        rect.setX(floor->textureRect()->x());
+        rect.setY(floor->textureRect()->y());
+        rect.setWidth(floor->textureRect()->width());
+        rect.setHeight(floor->textureRect()->height());
+        break;
+    case MapEditorSubSelectionKind::Autotiles:
+        break;
+    case MapEditorSubSelectionKind::Water:
+        break;
+    default:
+        break;
     }
 }
 
