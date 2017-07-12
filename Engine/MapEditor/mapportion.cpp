@@ -146,6 +146,12 @@ void MapPortion::paintObjects(){
 }
 
 // -------------------------------------------------------
+
+void MapPortion::paintObjectsSquares(){
+    m_mapObjects->paintSquares();
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

@@ -41,7 +41,7 @@
 //
 // -------------------------------------------------------
 
-class MapObjects : public Serializable
+class MapObjects : protected QOpenGLFunctions, public Serializable
 {
 public:
     MapObjects();
@@ -58,6 +58,7 @@ public:
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();
+    void paintSquares();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -65,6 +66,14 @@ public:
 private:
     QHash<int, QHash<Position, SystemCommonObject*>*> m_sprites;
     QList<SpriteObject*> m_spritesGL;
+
+    // OpenGL informations
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_programStatic;
 };
 
 #endif // MAPOBJECTS_H

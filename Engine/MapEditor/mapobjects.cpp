@@ -27,7 +27,10 @@
 //
 // -------------------------------------------------------
 
-MapObjects::MapObjects()
+MapObjects::MapObjects() :
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_programStatic(nullptr)
 {
 
 }
@@ -146,6 +149,11 @@ void MapObjects::initializeVertices(int squareSize,
                                     QHash<int, QOpenGLTexture *> &characters)
 {
     clearSprites();
+    m_vertices.clear();
+    m_indexes.clear();
+
+    // Objects and their squares
+    int count = 0;
     QHash<int, QHash<Position, SystemCommonObject*>*>::iterator i;
     for (i = m_sprites.begin(); i != m_sprites.end(); i++){
         QHash<Position, SystemCommonObject*>* h = i.value();
@@ -155,6 +163,7 @@ void MapObjects::initializeVertices(int squareSize,
             SystemCommonObject* o = j.value();
             SystemState* state = o->getFirstState();
 
+            // Draw the first state graphics of the object
             if (state != nullptr){
                 QOpenGLTexture* texture = characters[state->graphicsId()];
                 if (texture == nullptr)
@@ -172,6 +181,25 @@ void MapObjects::initializeVertices(int squareSize,
                 spriteObject->initializeVertices(squareSize, position);
                 m_spritesGL.append(spriteObject);
             }
+
+            // Draw the square of the object
+            QVector3D pos(position.x() * squareSize, 0.01f,
+                          position.z() * squareSize);
+            QVector3D size(squareSize, 0.0, squareSize);
+            float x = 0.0, y = 0.0, w = 1.0, h = 1.0;
+            m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+                              QVector2D(x, y)));
+            m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+                              QVector2D(x + w, y)));
+            m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+                              QVector2D(x + w, y + h)));
+            m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+                              QVector2D(x, y + h)));
+            int offset = count * Floor::nbVerticesQuad;
+            for (int i = 0; i < Floor::nbIndexesQuad; i++)
+                m_indexes.append(Floor::indexesQuad[i] + offset);
+
+            count++;
         }
     }
 }
@@ -179,22 +207,88 @@ void MapObjects::initializeVertices(int squareSize,
 // -------------------------------------------------------
 
 void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic){
+
+    // Objects
     for (int i = 0; i < m_spritesGL.size(); i++)
         m_spritesGL.at(i)->initializeGL(programStatic);
+
+    // Squares of objects
+    if (m_programStatic == nullptr){
+        initializeOpenGLFunctions();
+
+        // Programs
+        m_programStatic = programStatic;
+    }
 }
 
 // -------------------------------------------------------
 
 void MapObjects::updateGL(){
+
+    // Objects
     for (int i = 0; i < m_spritesGL.size(); i++)
         m_spritesGL.at(i)->updateGL();
+
+    // Squares of objects
+
+    // If existing VAO or VBO, destroy it
+    if (m_vao.isCreated())
+        m_vao.destroy();
+    if (m_vertexBuffer.isCreated())
+        m_vertexBuffer.destroy();
+    if (m_indexBuffer.isCreated())
+        m_indexBuffer.destroy();
+
+    // Create new VBO for vertex
+    m_vertexBuffer.create();
+    m_vertexBuffer.bind();
+    m_vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vertexBuffer.allocate(m_vertices.constData(), m_vertices.size() *
+                            sizeof(Vertex));
+
+    // Create new VBO for indexes
+    m_indexBuffer.create();
+    m_indexBuffer.bind();
+    m_indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_indexBuffer.allocate(m_indexes.constData(), m_indexes.size() *
+                           sizeof(GLuint));
+
+    // Create new VAO
+    m_vao.create();
+    m_vao.bind();
+    m_programStatic->enableAttributeArray(0);
+    m_programStatic->enableAttributeArray(1);
+    m_programStatic->setAttributeBuffer(0, GL_FLOAT,
+                                        Vertex::positionOffset(),
+                                        Vertex::positionTupleSize,
+                                        Vertex::stride());
+    m_programStatic->setAttributeBuffer(1, GL_FLOAT,
+                                        Vertex::texOffset(),
+                                        Vertex::texCoupleSize,
+                                        Vertex::stride());
+    m_indexBuffer.bind();
+
+    // Releases
+    m_vao.release();
+    m_indexBuffer.release();
+    m_vertexBuffer.release();
 }
 
 // -------------------------------------------------------
 
 void MapObjects::paintGL(){
+
+    // Objects
     for (int i = 0; i < m_spritesGL.size(); i++)
         m_spritesGL.at(i)->paintGL();
+}
+
+// -------------------------------------------------------
+
+void MapObjects::paintSquares(){
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    m_vao.bind();
 }
 
 // -------------------------------------------------------

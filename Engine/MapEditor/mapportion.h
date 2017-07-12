@@ -57,6 +57,7 @@ public:
     void paintFloors();
     void paintSprites();
     void paintObjects();
+    void paintObjectsSquares();
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
