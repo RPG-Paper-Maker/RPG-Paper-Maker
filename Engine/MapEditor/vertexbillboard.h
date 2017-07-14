@@ -17,38 +17,48 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VERTEX_H
-#define VERTEX_H
+#ifndef VERTEXBILLBOARD_H
+#define VERTEXBILLBOARD_H
 
-#include <QVector3D>
-#include <QVector2D>
+#include "vertex.h"
 
 // -------------------------------------------------------
 //
-//  CLASS Vertex
+//  CLASS VertexBillboard
 //
-//  A vertex used for drawing primitives.
+//  A vertex used for drawing billboard sprites.
 //
 // -------------------------------------------------------
 
-class Vertex
+class VertexBillboard
 {
 public:
-    Vertex();
-    Vertex(const QVector3D &position, const QVector2D &tex);
-    QVector3D position() const;
-    void setPosition(const QVector3D& position);
+    VertexBillboard();
+    VertexBillboard(const QVector3D &position, const QVector2D &tex,
+                    const QVector2D &size, const int index);
+    QVector3D centerPosition() const;
+    void setCenterPosition(const QVector3D& position);
     QVector2D tex() const;
     void setTex(const QVector2D& tex);
+    QVector2D size() const;
+    void setSize(const QVector2D& size);
+    int index() const;
+    void setIndex(int index);
     static const int positionTupleSize;
     static const int texCoupleSize;
+    static const int sizeCoupleSize;
+    static const int indexUnitSize;
     static int positionOffset();
     static int texOffset();
+    static int sizeOffset();
+    static int indexOffset();
     static int stride();
 
 protected:
-    QVector3D m_position;
+    QVector3D m_centerPosition;
     QVector2D m_tex;
+    QVector2D m_size;
+    int m_index;
 };
 
-#endif // VERTEX_H
+#endif // VERTEXBILLBOARD_H

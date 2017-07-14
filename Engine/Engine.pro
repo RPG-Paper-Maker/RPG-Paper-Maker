@@ -198,7 +198,8 @@ HEADERS += \
     Dialogs/Systems/dialogsystemlang.h \
     Enums/drawkind.h \
     Enums/mapeditormodeskind.h \
-    MapEditor/lands.h
+    MapEditor/lands.h \
+    MapEditor/vertexbillboard.h
 
 SOURCES += \
     main.cpp \
@@ -353,7 +354,8 @@ SOURCES += \
     Dialogs/Commands/dialogcommandwait.cpp \
     CustomWidgets/widgetgraphics.cpp \
     Dialogs/Systems/dialogsystemlang.cpp \
-    MapEditor/lands.cpp
+    MapEditor/lands.cpp \
+    MapEditor/vertexbillboard.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
