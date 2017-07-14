@@ -119,7 +119,7 @@ SceneGame.prototype = {
     *   @param {number} state The state ID.
     */
     addReaction: function(sender, reaction, object, state){
-        if (reaction.getFirstCommand().data !== null){
+        if (reaction.getFirstCommand() !== null){
             var reactionInterpreter;
 
             var excecuted = false;

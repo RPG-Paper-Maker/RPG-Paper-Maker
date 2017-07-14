@@ -286,7 +286,6 @@ void SpriteObject::updateGL(){
 // -------------------------------------------------------
 
 void SpriteObject::paintGL(){
-    m_texture->bind();
     m_vaoStatic.bind();
     glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
     m_vaoStatic.bind();

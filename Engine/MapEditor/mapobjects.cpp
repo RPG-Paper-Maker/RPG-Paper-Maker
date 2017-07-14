@@ -37,21 +37,15 @@ MapObjects::MapObjects() :
 
 MapObjects::~MapObjects()
 {
-    QHash<int, QHash<Position, SystemCommonObject*>*>::const_iterator i;
-    for (i = m_sprites.begin(); i != m_sprites.end(); i++){
-        QHash<Position, SystemCommonObject*>* l = i.value();
-        QHash<Position, SystemCommonObject*>::const_iterator j;
-        for (j = l->begin(); j != l->end(); j++){
-            delete j.value();
-        }
-        delete l;
-    }
+    QHash<Position, SystemCommonObject*>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
+        delete i.value();
 
     clearSprites();
 }
 
 bool MapObjects::isEmpty() const{
-    return m_sprites.empty();
+    return m_all.empty();
 }
 
 // -------------------------------------------------------
@@ -61,50 +55,24 @@ bool MapObjects::isEmpty() const{
 // -------------------------------------------------------
 
 SystemCommonObject* MapObjects::getObjectAt(Position& p) const{
-    QHash<int, QHash<Position, SystemCommonObject*>*>::const_iterator i;
-    for (i = m_sprites.begin(); i != m_sprites.end(); i++){
-        QHash<Position, SystemCommonObject*>* h = i.value();
-        SystemCommonObject* object = h->value(p);
-        if (object != nullptr)
-            return object;
-    }
-
-    return nullptr;
+    return m_all.value(p);
 }
 
 // -------------------------------------------------------
 
 void MapObjects::setObject(Position& p, SystemCommonObject* object){
-    QHash<Position, SystemCommonObject*>* sprites = m_sprites.value(-1);
-    if (sprites != nullptr)
-        sprites->insert(p, object);
-    else{
-        QHash<Position, SystemCommonObject*>* h =
-                new QHash<Position, SystemCommonObject*>;
-        h->insert(p, object);
-        m_sprites[-1] = h;
-    }
+    m_all.insert(p, object);
 }
 
 // -------------------------------------------------------
 
 SystemCommonObject* MapObjects::removeObject(Position& p){
-    QHash<Position, SystemCommonObject*>* sprites = m_sprites.value(-1);
-    if (sprites != nullptr){
-        QHash<Position, SystemCommonObject*>::const_iterator i;
-        for (i = sprites->begin(); i != sprites->end(); i++){
-            Position p2 = i.key();
-            SystemCommonObject* o = i.value();
-            if (p == p2){
-                sprites->remove(p);
-                if (sprites->isEmpty())
-                    m_sprites.remove(-1);
-                return o;
-            }
-        }
-    }
+    SystemCommonObject* o = m_all.value(p);
 
-    return nullptr;
+    if (o != nullptr)
+        m_all.remove(p);
+
+    return o;
 }
 
 // -------------------------------------------------------
@@ -138,9 +106,15 @@ bool MapObjects::deleteObject(Position& p){
 // -------------------------------------------------------
 
 void MapObjects::clearSprites(){
-    for (int i = 0; i < m_spritesGL.size(); i++)
-        delete m_spritesGL.at(i);
-    m_spritesGL.clear();
+    QHash<int, QList<SpriteObject*>*>::const_iterator i;
+    for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
+        QList<SpriteObject*>* list = i.value();
+        for (int j = 0; j < list->size(); j++)
+            delete list->at(j);
+        delete list;
+    }
+
+    m_spritesStaticGL.clear();
 }
 
 // -------------------------------------------------------
@@ -154,53 +128,60 @@ void MapObjects::initializeVertices(int squareSize,
 
     // Objects and their squares
     int count = 0;
-    QHash<int, QHash<Position, SystemCommonObject*>*>::iterator i;
-    for (i = m_sprites.begin(); i != m_sprites.end(); i++){
-        QHash<Position, SystemCommonObject*>* h = i.value();
-        QHash<Position, SystemCommonObject*>::iterator j;
-        for (j = h->begin(); j != h->end(); j++){
-            Position position = j.key();
-            SystemCommonObject* o = j.value();
-            SystemState* state = o->getFirstState();
+    QHash<Position, SystemCommonObject*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++){
+        Position position = i.key();
+        SystemCommonObject* o = i.value();
+        SystemState* state = o->getFirstState();
 
-            // Draw the first state graphics of the object
-            if (state != nullptr){
-                QOpenGLTexture* texture = characters[state->graphicsId()];
-                if (texture == nullptr)
-                    texture = characters[-1];
-                int frames = Wanok::get()->project()->gameDatas()->systemDatas()
-                        ->framesAnimation();
-                int width = texture->width() / frames / squareSize;
-                int height = texture->height() / frames / squareSize;
-                SpriteDatas sprite(
-                            0, 50, 0,
-                            new QRect(state->indexX() * width,
-                                      state->indexY() * height,
-                                      width, height));
-                SpriteObject* spriteObject = new SpriteObject(sprite, texture);
-                spriteObject->initializeVertices(squareSize, position);
-                m_spritesGL.append(spriteObject);
+        // Draw the first state graphics of the object
+        if (state != nullptr){
+            int graphicsId = state->graphicsId();
+            QOpenGLTexture* texture = characters[graphicsId];
+
+            // If texture ID doesn't exist, load empty texture
+            if (texture == nullptr){
+                graphicsId = -1;
+                texture = characters[graphicsId];
             }
 
-            // Draw the square of the object
-            QVector3D pos(position.x() * squareSize, 0.01f,
-                          position.z() * squareSize);
-            QVector3D size(squareSize, 0.0, squareSize);
-            float x = 0.0, y = 0.0, w = 1.0, h = 1.0;
-            m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
-                              QVector2D(x, y)));
-            m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
-                              QVector2D(x + w, y)));
-            m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
-                              QVector2D(x + w, y + h)));
-            m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
-                              QVector2D(x, y + h)));
-            int offset = count * Floor::nbVerticesQuad;
-            for (int i = 0; i < Floor::nbIndexesQuad; i++)
-                m_indexes.append(Floor::indexesQuad[i] + offset);
+            // Create the sprite geometry
+            int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+                    ->framesAnimation();
+            int width = texture->width() / frames / squareSize;
+            int height = texture->height() / frames / squareSize;
+            SpriteDatas sprite(
+                        0, 50, 0,
+                        new QRect(state->indexX() * width,
+                                  state->indexY() * height,
+                                  width, height));
+            SpriteObject* spriteObject = new SpriteObject(sprite, texture);
+            spriteObject->initializeVertices(squareSize, position);
 
-            count++;
+            // Adding the sprite to the GL list
+            if (m_spritesStaticGL.value(graphicsId) == nullptr)
+                m_spritesStaticGL[graphicsId] = new QList<SpriteObject*>;
+            m_spritesStaticGL[graphicsId]->append(spriteObject);
         }
+
+        // Draw the square of the object
+        QVector3D pos(position.x() * squareSize, 0.01f,
+                      position.z() * squareSize);
+        QVector3D size(squareSize, 0.0, squareSize);
+        float x = 0.0, y = 0.0, w = 1.0, h = 1.0;
+        m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+                          QVector2D(x, y)));
+        m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+                          QVector2D(x + w, y)));
+        m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+                          QVector2D(x + w, y + h)));
+        m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+                          QVector2D(x, y + h)));
+        int offset = count * Floor::nbVerticesQuad;
+        for (int i = 0; i < Floor::nbIndexesQuad; i++)
+            m_indexes.append(Floor::indexesQuad[i] + offset);
+
+        count++;
     }
 }
 
@@ -209,8 +190,12 @@ void MapObjects::initializeVertices(int squareSize,
 void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic){
 
     // Objects
-    for (int i = 0; i < m_spritesGL.size(); i++)
-        m_spritesGL.at(i)->initializeGL(programStatic);
+    QHash<int, QList<SpriteObject*>*>::const_iterator i;
+    for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
+        QList<SpriteObject*>* list = i.value();
+        for (int j = 0; j < list->size(); j++)
+            list->at(j)->initializeGL(programStatic);
+    }
 
     // Squares of objects
     if (m_programStatic == nullptr){
@@ -226,8 +211,12 @@ void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic){
 void MapObjects::updateGL(){
 
     // Objects
-    for (int i = 0; i < m_spritesGL.size(); i++)
-        m_spritesGL.at(i)->updateGL();
+    QHash<int, QList<SpriteObject*>*>::const_iterator i;
+    for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
+        QList<SpriteObject*>* list = i.value();
+        for (int j = 0; j < list->size(); j++)
+            list->at(j)->updateGL();
+    }
 
     // Squares of objects
 
@@ -276,11 +265,14 @@ void MapObjects::updateGL(){
 
 // -------------------------------------------------------
 
-void MapObjects::paintGL(){
+void MapObjects::paintStaticSprites(int textureID, QOpenGLTexture *texture){
+    QList<SpriteObject*>* list = m_spritesStaticGL.value(textureID);
 
-    // Objects
-    for (int i = 0; i < m_spritesGL.size(); i++)
-        m_spritesGL.at(i)->paintGL();
+    if (list != nullptr){
+        texture->bind();
+        for (int i = 0; i < list->size(); i++)
+            list->at(i)->paintGL();
+    }
 }
 
 // -------------------------------------------------------
@@ -298,55 +290,33 @@ void MapObjects::paintSquares(){
 // -------------------------------------------------------
 
 void MapObjects::read(const QJsonObject & json){
-    QJsonArray tab = json["sprites"].toArray();
+    QJsonArray tab = json["list"].toArray();
 
-    // Sprites
     for (int i = 0; i < tab.size(); i++){
-        QJsonObject obj = tab.at(i).toObject();
-        int k = obj["k"].toInt();
-        QJsonArray tabValue = obj["v"].toArray();
-        QHash<Position, SystemCommonObject*>* h =
-                new QHash<Position, SystemCommonObject*>;
-        for (int j = 0; j < tabValue.size(); j++){
-            QJsonObject objHash = tabValue.at(j).toObject();
-            Position p;
-            p.read(objHash["k"].toArray());
-            SystemCommonObject* o = new SystemCommonObject;
-            o->read(objHash["v"].toObject());
-            h->insert(p, o);
-        }
-        m_sprites[k] = h;
+        QJsonObject objHash = tab.at(i).toObject();
+        Position p;
+        p.read(objHash["k"].toArray());
+        SystemCommonObject* o = new SystemCommonObject;
+        o->read(objHash["v"].toObject());
+        m_all.insert(p, o);
     }
 }
 
 // -------------------------------------------------------
 
 void MapObjects::write(QJsonObject & json) const{
+    QJsonArray tab;
 
-    // Sprites
-    QJsonArray tabSprites;
-    QHash<int, QHash<Position, SystemCommonObject*>*>::const_iterator i;
-    for (i = m_sprites.begin(); i != m_sprites.end(); i++){
+    QHash<Position, SystemCommonObject*>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
-        QJsonValue vKey = i.key();
-        QJsonArray tabValue;
-        QHash<Position, SystemCommonObject*>* hashPosition = i.value();
-
-        QHash<Position, SystemCommonObject*>::const_iterator j;
-        for (j = hashPosition->begin(); j != hashPosition->end(); j++){
-            QJsonObject objHashPosition;
-            QJsonArray tabKeyPosition;
-            QJsonObject objValuePosition;
-            j.key().write(tabKeyPosition);
-            j.value()->write(objValuePosition);
-            objHashPosition["k"] = tabKeyPosition;
-            objHashPosition["v"] = objValuePosition;
-            tabValue.append(objHashPosition);
-        }
-
-        objHash["k"] = vKey;
-        objHash["v"] = tabValue;
-        tabSprites.append(objHash);
+        QJsonArray tabKeyPosition;
+        QJsonObject objValueObject;
+        i.key().write(tabKeyPosition);
+        i.value()->write(objValueObject);
+        objHash["k"] = tabKeyPosition;
+        objHash["v"] = objValueObject;
+        tab.append(objHash);
     }
-    json["sprites"] = tabSprites;
+    json["list"] = tab;
 }

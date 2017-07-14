@@ -57,15 +57,15 @@ public:
                             QHash<int, QOpenGLTexture *> &characters);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
-    void paintGL();
+    void paintStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintSquares();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 private:
-    QHash<int, QHash<Position, SystemCommonObject*>*> m_sprites;
-    QList<SpriteObject*> m_spritesGL;
+    QHash<Position, SystemCommonObject*> m_all;
+    QHash<int, QList<SpriteObject*>*> m_spritesStaticGL;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;

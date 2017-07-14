@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
         bin.cdUp();
     #endif
     QDir::setCurrent(bin.absolutePath());
-    qDebug() << "debug on: " + QDir::currentPath();
 
     // Create QML engine
     QQmlApplicationEngine engine;

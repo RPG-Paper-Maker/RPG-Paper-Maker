@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick
+greaterThan(QT_MAJOR_VERSION, 4): QT += qml quick
 
 CONFIG += c++11
 

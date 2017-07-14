@@ -141,8 +141,8 @@ void MapPortion::paintSprites(){
 
 // -------------------------------------------------------
 
-void MapPortion::paintObjects(){
-    m_mapObjects->paintGL();
+void MapPortion::paintObjectsSprites(int textureID, QOpenGLTexture* texture){
+    m_mapObjects->paintStaticSprites(textureID, texture);
 }
 
 // -------------------------------------------------------

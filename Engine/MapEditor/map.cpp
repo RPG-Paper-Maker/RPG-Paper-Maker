@@ -633,15 +633,20 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
     }
 
     // Objects
-    QOpenGLTexture* texture = m_texturesCharacters[1];
-    texture->bind();
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions.value(portion);
-                if (mapPortion != nullptr){
-                    mapPortion->paintObjects();
+    QHash<int, QOpenGLTexture*>::iterator it;
+    for (it = m_texturesCharacters.begin();
+         it != m_texturesCharacters.end(); it++)
+    {
+        int textureID = it.key();
+        QOpenGLTexture* texture = it.value();
+        for (int i = -m_portionsRay; i <= m_portionsRay; i++){
+            for (int j = -m_portionsRay; j <= m_portionsRay; j++){
+                for (int k = -m_portionsRay; k <= m_portionsRay; k++){
+                    Portion portion(i, j, k);
+                    MapPortion* mapPortion = m_mapPortions.value(portion);
+                    if (mapPortion != nullptr){
+                        mapPortion->paintObjectsSprites(textureID, texture);
+                    }
                 }
             }
         }

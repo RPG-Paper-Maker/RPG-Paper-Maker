@@ -195,7 +195,7 @@ MapPortion.prototype = {
     *   at the beginning of the game.
     */
     readObjects: function(json, isMapHero){
-        this.readObjectsSprites(json.sprites, isMapHero);
+        this.readObjectsSprites(json.list, isMapHero);
     },
 
     // -------------------------------------------------------
@@ -207,37 +207,32 @@ MapPortion.prototype = {
     */
     readObjectsSprites: function(json, isMapHero){
         for (var i = 0, l = json.length; i < l; i++){
-            var jsonTextures = json[i];
-            var texture = jsonTextures.k;
-            var jsonObjects = jsonTextures.v;
-            for (var j = 0, ll = jsonObjects.length; j < ll; j++){
-                var jsonObject = jsonObjects[j];
-                var position = jsonObject.k;
-                var jsonObjectValue = jsonObject.v;
-                var object = new SystemObject;
-                object.readJSON(jsonObjectValue);
+            var jsonObject = json[i];
+            var position = jsonObject.k;
+            var jsonObjectValue = jsonObject.v;
+            var object = new SystemObject;
+            object.readJSON(jsonObjectValue);
 
-                /* If it is the hero, you should not add it to the list of
-                objects to display */
-                if (!isMapHero ||
-                    $datasGame.system.idObjectStartHero !== object.id)
-                {
-                    var localPosition = Wanok.positionToVector3(position);
-                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                                       + this.spritesOffset);
-                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
-                                                          100)
-                                       + this.spritesOffset);
-                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
-                    position = new THREE.Vector3(localPosition.x,
-                                                 localPosition.y,
-                                                 localPosition.z);
-                    var mapObject = new MapObject(object, position);
-                    mapObject.changeState();
-                    if (mapObject.mesh !== null)
-                        $currentMap.scene.add(mapObject.mesh);
-                    this.objectsList.unshift(mapObject);
-                }
+            /* If it is the hero, you should not add it to the list of
+            objects to display */
+            if (!isMapHero ||
+                $datasGame.system.idObjectStartHero !== object.id)
+            {
+                var localPosition = Wanok.positionToVector3(position);
+                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                                   + this.spritesOffset);
+                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
+                                                      100)
+                                   + this.spritesOffset);
+                this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                position = new THREE.Vector3(localPosition.x,
+                                             localPosition.y,
+                                             localPosition.z);
+                var mapObject = new MapObject(object, position);
+                mapObject.changeState();
+                if (mapObject.mesh !== null)
+                    $currentMap.scene.add(mapObject.mesh);
+                this.objectsList.unshift(mapObject);
             }
         }
     },
@@ -337,31 +332,26 @@ MapPortion.prototype = {
     *   @returns {MapObject}
     */
     getHeroModel: function(json){
-        json = json.objs.sprites;
+        json = json.objs.list;
         for (var i = 0, l = json.length; i < l; i++){
-            var jsonTextures = json[i];
-            var texture = jsonTextures.k;
-            var jsonObjects = jsonTextures.v;
-            for (var j = 0, ll = jsonObjects.length; j < ll; j++){
-                var jsonObject = jsonObjects[j];
-                var position = jsonObject.k;
-                var jsonObjectValue = jsonObject.v;
+            var jsonObject = json[i];
+            var position = jsonObject.k;
+            var jsonObjectValue = jsonObject.v;
 
-                if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
-                    var object = new SystemObject;
-                    object.readJSON(jsonObjectValue);
-                    var localPosition = Wanok.positionToVector3(position);
-                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                                       + this.spritesOffset);
-                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE
-                                                          / 100)
-                                       + this.spritesOffset);
-                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
-                    position = new THREE.Vector3(localPosition.x,
-                                                 localPosition.y,
-                                                 localPosition.z);
-                    return new MapObject(object, position);
-                }
+            if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
+                var object = new SystemObject;
+                object.readJSON(jsonObjectValue);
+                var localPosition = Wanok.positionToVector3(position);
+                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
+                                   + this.spritesOffset);
+                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE
+                                                      / 100)
+                                   + this.spritesOffset);
+                this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                position = new THREE.Vector3(localPosition.x,
+                                             localPosition.y,
+                                             localPosition.z);
+                return new MapObject(object, position);
             }
         }
 
