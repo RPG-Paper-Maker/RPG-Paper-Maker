@@ -1,6 +1,8 @@
 # RPG Paper Maker
 --------------
 
+[![Join the chat at https://gitter.im/RPG-Paper-Maker/Lobby](https://badges.gitter.im/RPG-Paper-Maker/Lobby.svg)](https://gitter.im/RPG-Paper-Maker/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/Wano-k/RPG-Paper-Maker)
 [![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 
