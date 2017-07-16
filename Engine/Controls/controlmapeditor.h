@@ -122,7 +122,7 @@ public:
     void removeLand(Position& p, MapEditorSubSelectionKind,
                      DrawKind drawKind);
     void eraseLand(Position& p);
-    void addSprite(Position& p, MapEditorSubSelectionKind,
+    void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind,
                    QRect& tileset);
     void stockSprite(Position& p, SpriteDatas *sprite);

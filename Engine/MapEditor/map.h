@@ -57,6 +57,13 @@ public:
                             QJsonArray &jsonObject);
     static QString getPortionPathMap(int i, int j, int k);
     static void setModelObjects(QStandardItemModel* model);
+
+    static void updateGLStatic(QOpenGLBuffer& vertexBuffer,
+                               QOpenGLBuffer& indexBuffer,
+                               QVector<Vertex>& vertices,
+                               QVector<GLuint>& indexes,
+                               QOpenGLVertexArrayObject& vao,
+                               QOpenGLShaderProgram* program);
     void loadTextures();
     void deleteTextures();
     MapPortion* mapPortion(Portion& p);
@@ -104,8 +111,16 @@ private:
     int m_squareSize;
     bool m_saved;
 
+    // Static program
     QOpenGLShaderProgram* m_programStatic;
     int u_modelviewProjectionStatic;
+
+    // Face sprite program
+    QOpenGLShaderProgram* m_programFaceSprite;
+    int u_cameraRightWorldspace;
+    int u_cameraUpWorldspace;
+
+    // Textures
     QOpenGLTexture* m_textureTileset;
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
     QOpenGLTexture* m_textureObjectSquare;

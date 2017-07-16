@@ -39,6 +39,8 @@
         <file>Shaders/static.vert</file>
         <file>Shaders/grid.frag</file>
         <file>Shaders/grid.vert</file>
+        <file>Shaders/spriteFace.frag</file>
+        <file>Shaders/spriteFace.vert</file>
     </qresource>
     <qresource prefix="/textures">
         <file>Ressources/editor_cursor.png</file>

@@ -38,6 +38,7 @@ Map::Map() :
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_programStatic(nullptr),
+    m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr)
 {
@@ -47,6 +48,7 @@ Map::Map() :
 Map::Map(int id) :
     m_modelObjects(new QStandardItemModel),
     m_programStatic(nullptr),
+    m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr)
 {
@@ -76,7 +78,8 @@ Map::Map(int id) :
 Map::Map(MapProperties* properties) :
     m_mapProperties(properties),
     m_modelObjects(new QStandardItemModel),
-    m_programStatic(nullptr)
+    m_programStatic(nullptr),
+    m_programFaceSprite(nullptr)
 {
 
 }
@@ -88,6 +91,8 @@ Map::~Map() {
 
     if (m_programStatic != nullptr)
         delete m_programStatic;
+    if (m_programFaceSprite != nullptr)
+        delete m_programFaceSprite;
 
     deleteTextures();
 }
@@ -570,7 +575,7 @@ QString Map::generateObjectName(int id){
 void Map::initializeGL(){
     initializeOpenGLFunctions();
 
-    // Create Shader
+    // Create STATIC Shader
     m_programStatic = new QOpenGLShaderProgram();
     m_programStatic->addShaderFromSourceFile(QOpenGLShader::Vertex,
                                              ":/Shaders/static.vert");
@@ -585,6 +590,75 @@ void Map::initializeGL(){
 
     // Release
     m_programStatic->release();
+
+
+    // Create SPRITE FACE Shader
+    m_programFaceSprite = new QOpenGLShaderProgram();
+    m_programFaceSprite->addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                                 ":/Shaders/spriteFace.vert");
+    m_programFaceSprite->addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                                 ":/Shaders/spriteFace.frag");
+    m_programFaceSprite->link();
+    m_programFaceSprite->bind();
+
+    // Uniform location of camera
+    u_cameraRightWorldspace = m_programFaceSprite
+            ->uniformLocation("cameraRightWorldspace");
+    u_cameraUpWorldspace = m_programFaceSprite
+            ->uniformLocation("cameraUpWorldspace");
+
+    // Release
+    m_programFaceSprite->release();
+}
+
+// -------------------------------------------------------
+
+void Map::updateGLStatic(QOpenGLBuffer &vertexBuffer,
+                         QOpenGLBuffer &indexBuffer,
+                         QVector<Vertex> &vertices,
+                         QVector<GLuint> &indexes,
+                         QOpenGLVertexArrayObject &vao,
+                         QOpenGLShaderProgram* program)
+{
+    // If existing VAO or VBO, destroy it
+    if (vao.isCreated())
+        vao.destroy();
+    if (vertexBuffer.isCreated())
+        vertexBuffer.destroy();
+    if (indexBuffer.isCreated())
+        indexBuffer.destroy();
+
+    // Create new VBO for vertex
+    vertexBuffer.create();
+    vertexBuffer.bind();
+    vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vertexBuffer.allocate(vertices.constData(),
+                          vertices.size() * sizeof(Vertex));
+
+    // Create new VBO for indexes
+    indexBuffer.create();
+    indexBuffer.bind();
+    indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    indexBuffer.allocate(indexes.constData(),
+                         indexes.size() * sizeof(GLuint));
+
+    // Create new VAO
+    vao.create();
+    vao.bind();
+    program->enableAttributeArray(0);
+    program->enableAttributeArray(1);
+    program->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
+                                Vertex::positionTupleSize,
+                                Vertex::stride());
+    program->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
+                                Vertex::texCoupleSize,
+                                Vertex::stride());
+    indexBuffer.bind();
+
+    // Releases
+    vao.release();
+    indexBuffer.release();
+    vertexBuffer.release();
 }
 
 // -------------------------------------------------------

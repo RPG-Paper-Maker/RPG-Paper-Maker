@@ -800,7 +800,7 @@ void ControlMapEditor::eraseLand(Position& p){
 // -------------------------------------------------------
 
 void ControlMapEditor::addSprite(Position& p,
-                                 MapEditorSubSelectionKind ,
+                                 MapEditorSubSelectionKind kind,
                                  DrawKind drawKind,
                                  QRect& tileset)
 {
@@ -811,11 +811,11 @@ void ControlMapEditor::addSprite(Position& p,
         QList<Position> positions;
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++){
-            sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+            sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
             stockSprite(positions[i], sprite);
         }
 
-        sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
+        sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
         stockSprite(p, sprite);
     }
 

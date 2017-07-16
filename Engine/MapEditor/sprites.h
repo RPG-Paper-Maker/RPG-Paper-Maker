@@ -30,6 +30,8 @@
 #include "serializable.h"
 #include "position.h"
 #include "vertex.h"
+#include "vertexbillboard.h"
+#include "mapeditorsubselectionkind.h"
 
 // -------------------------------------------------------
 //
@@ -45,6 +47,7 @@ public:
     Sprite();
     virtual ~Sprite();
     static QVector3D verticesQuad[];
+    static QVector2D modelQuad[];
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
@@ -62,20 +65,25 @@ class SpriteDatas
 {
 public:
     SpriteDatas();
-    SpriteDatas(int layer, int widthPosition, int angle, QRect* textureRect);
+    SpriteDatas(MapEditorSubSelectionKind kind, int layer, int widthPosition,
+                int angle, QRect* textureRect);
     virtual ~SpriteDatas();
     int layer() const;
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
     void initializeVertices(int squareSize, int width, int height,
-                            QVector<Vertex>& vertices, QVector<GLuint>& indexes,
+                            QVector<Vertex>& verticesStatic,
+                            QVector<GLuint>& indexesStatic,
+                            QVector<VertexBillboard>& verticesFace,
+                            QVector<GLuint>& indexesFace,
                             Position3D& position, int& count);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
+    MapEditorSubSelectionKind m_kind;
     int m_layer;
     int m_widthPosition;
     int m_angle;
@@ -111,6 +119,9 @@ protected:
     QVector<GLuint> m_indexesStatic;
     QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
+
+    QVector<VertexBillboard> m_verticesFace;
+    QVector<GLuint> m_indexesFace;
 };
 
 // -------------------------------------------------------
@@ -150,6 +161,9 @@ protected:
     QVector<GLuint> m_indexesStatic;
     QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
+
+    QVector<VertexBillboard> m_verticesFace;
+    QVector<GLuint> m_indexesFace;
 };
 
 #endif // SPRITES_H

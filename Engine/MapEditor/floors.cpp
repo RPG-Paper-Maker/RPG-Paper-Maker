@@ -18,6 +18,7 @@
 */
 
 #include "floors.h"
+#include "map.h"
 
 // -------------------------------------------------------
 //
@@ -180,48 +181,8 @@ void Floor::initializeGL(QOpenGLShaderProgram *programStatic){
 // -------------------------------------------------------
 
 void Floor::updateGL(){
-
-    // If existing VAO or VBO, destroy it
-    if (m_vao.isCreated())
-        m_vao.destroy();
-    if (m_vertexBuffer.isCreated())
-        m_vertexBuffer.destroy();
-    if (m_indexBuffer.isCreated())
-        m_indexBuffer.destroy();
-
-    // Create new VBO for vertex
-    m_vertexBuffer.create();
-    m_vertexBuffer.bind();
-    m_vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vertexBuffer.allocate(m_vertices.constData(), m_vertices.size() *
-                            sizeof(Vertex));
-
-    // Create new VBO for indexes
-    m_indexBuffer.create();
-    m_indexBuffer.bind();
-    m_indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_indexBuffer.allocate(m_indexes.constData(), m_indexes.size() *
-                           sizeof(GLuint));
-
-    // Create new VAO
-    m_vao.create();
-    m_vao.bind();
-    m_programStatic->enableAttributeArray(0);
-    m_programStatic->enableAttributeArray(1);
-    m_programStatic->setAttributeBuffer(0, GL_FLOAT,
-                                        Vertex::positionOffset(),
-                                        Vertex::positionTupleSize,
-                                        Vertex::stride());
-    m_programStatic->setAttributeBuffer(1, GL_FLOAT,
-                                        Vertex::texOffset(),
-                                        Vertex::texCoupleSize,
-                                        Vertex::stride());
-    m_indexBuffer.bind();
-
-    // Releases
-    m_vao.release();
-    m_indexBuffer.release();
-    m_vertexBuffer.release();
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
+                        m_vao, m_programStatic);
 }
 
 // -------------------------------------------------------
