@@ -46,7 +46,7 @@ When your correction is done, push it (always in your branch). Finally, just pro
 ### How to contribute
 RPG Paper Maker has a `master` branch for stable releases and a `develop` branch for development where you should always try to submit your features.
 
-**If you want to add new features or correct a bug** for the next stable version, we are always using this [BACKLOG](https://docs.google.com/spreadsheets/d/1_gKiMl5pXQjj8QwfN6QEIDqjRJ4e77AgtEafzPKTzQs/edit?usp=sharing) which is listing all the tasks that needs to be done according to priority and difficulty. If you would like to do one of the task in the backlog, you should signal that you are on it by creating an issue in this git. Same thing if you want to do anything that is not already in the backlog.
+**If you want to add new features or correct a bug** for the next stable version, we are always using this [BACKLOG](https://docs.google.com/spreadsheets/d/1_gKiMl5pXQjj8QwfN6QEIDqjRJ4e77AgtEafzPKTzQs/edit?usp=sharing) which is listing all the tasks that needs to be done according to priority and difficulty. If you would like to do one of the task in the backlog, you should signal that you are on it by creating an issue in this git. Same thing if you want to do anything that is not already in the backlog. See also the [TODO list](https://github.com/Wano-k/RPG-Paper-Maker/projects/1) for accessible features addings.
 
 Try to respect the code style as much as possible. **We are much more strict on the game scripts' code** that is a code that can be edited by the user and particularly needs to be clear.
 
