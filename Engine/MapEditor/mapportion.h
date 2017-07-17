@@ -58,7 +58,8 @@ public:
     void paintFloors();
     void paintSprites();
     void paintFaceSprites();
-    void paintObjectsSprites(int textureID, QOpenGLTexture* texture);
+    void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
+    void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsSquares();
 
     void read(const QJsonObject &json);

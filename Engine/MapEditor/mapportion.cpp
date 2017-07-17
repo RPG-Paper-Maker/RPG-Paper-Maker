@@ -117,7 +117,7 @@ void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
                               QOpenGLShaderProgram *programFace){
     m_floors->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
-    m_mapObjects->initializeGL(programStatic);
+    m_mapObjects->initializeGL(programStatic, programFace);
 }
 
 // -------------------------------------------------------
@@ -148,8 +148,18 @@ void MapPortion::paintFaceSprites(){
 
 // -------------------------------------------------------
 
-void MapPortion::paintObjectsSprites(int textureID, QOpenGLTexture* texture){
+void MapPortion::paintObjectsStaticSprites(int textureID,
+                                           QOpenGLTexture* texture)
+{
     m_mapObjects->paintStaticSprites(textureID, texture);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintObjectsFaceSprites(int textureID,
+                                         QOpenGLTexture* texture)
+{
+    m_mapObjects->paintFaceSprites(textureID, texture);
 }
 
 // -------------------------------------------------------

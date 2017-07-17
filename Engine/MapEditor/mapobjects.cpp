@@ -113,8 +113,16 @@ void MapObjects::clearSprites(){
             delete list->at(j);
         delete list;
     }
+    QHash<int, QList<SpriteObject*>*>::const_iterator j;
+    for (j = m_spritesFaceGL.begin(); j != m_spritesFaceGL.end(); j++){
+        QList<SpriteObject*>* list = j.value();
+        for (int i = 0; i < list->size(); i++)
+            delete list->at(i);
+        delete list;
+    }
 
     m_spritesStaticGL.clear();
+    m_spritesFaceGL.clear();
 }
 
 // -------------------------------------------------------
@@ -135,7 +143,7 @@ void MapObjects::initializeVertices(int squareSize,
         SystemState* state = o->getFirstState();
 
         // Draw the first state graphics of the object
-        if (state != nullptr){
+        if (state != nullptr) {
             int graphicsId = state->graphicsId();
             QOpenGLTexture* texture = characters[graphicsId];
 
@@ -159,9 +167,13 @@ void MapObjects::initializeVertices(int squareSize,
             spriteObject->initializeVertices(squareSize, position);
 
             // Adding the sprite to the GL list
-            if (m_spritesStaticGL.value(graphicsId) == nullptr)
-                m_spritesStaticGL[graphicsId] = new QList<SpriteObject*>;
-            m_spritesStaticGL[graphicsId]->append(spriteObject);
+            QHash<int, QList<SpriteObject*>*>& hash =
+                    (state->graphicsKind() ==
+                    MapEditorSubSelectionKind::SpritesFace) ? m_spritesFaceGL
+                                                            : m_spritesStaticGL;
+            if (hash.value(graphicsId) == nullptr)
+               hash[graphicsId] = new QList<SpriteObject*>;
+            hash[graphicsId]->append(spriteObject);
         }
 
         // Draw the square of the object
@@ -187,17 +199,22 @@ void MapObjects::initializeVertices(int squareSize,
 
 // -------------------------------------------------------
 
-void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic){
-
-    // Objects
+void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic,
+                              QOpenGLShaderProgram *programFace)
+{
     QHash<int, QList<SpriteObject*>*>::const_iterator i;
     for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
         QList<SpriteObject*>* list = i.value();
         for (int j = 0; j < list->size(); j++)
-            list->at(j)->initializeGL(programStatic);
+            list->at(j)->initializeStaticGL(programStatic);
+    }
+    QHash<int, QList<SpriteObject*>*>::const_iterator j;
+    for (j = m_spritesFaceGL.begin(); j != m_spritesFaceGL.end(); j++){
+        QList<SpriteObject*>* list = j.value();
+        for (int i = 0; i < list->size(); i++)
+            list->at(i)->initializeFaceGL(programFace);
     }
 
-    // Squares of objects
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
 
@@ -215,7 +232,13 @@ void MapObjects::updateGL(){
     for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
         QList<SpriteObject*>* list = i.value();
         for (int j = 0; j < list->size(); j++)
-            list->at(j)->updateGL();
+            list->at(j)->updateStaticGL();
+    }
+    QHash<int, QList<SpriteObject*>*>::const_iterator j;
+    for (j = m_spritesFaceGL.begin(); j != m_spritesFaceGL.end(); j++){
+        QList<SpriteObject*>* list = j.value();
+        for (int i = 0; i < list->size(); i++)
+            list->at(i)->updateFaceGL();
     }
 
     // Squares of objects
@@ -227,6 +250,18 @@ void MapObjects::updateGL(){
 
 void MapObjects::paintStaticSprites(int textureID, QOpenGLTexture *texture){
     QList<SpriteObject*>* list = m_spritesStaticGL.value(textureID);
+
+    if (list != nullptr){
+        texture->bind();
+        for (int i = 0; i < list->size(); i++)
+            list->at(i)->paintGL();
+    }
+}
+
+// -------------------------------------------------------
+
+void MapObjects::paintFaceSprites(int textureID, QOpenGLTexture* texture){
+    QList<SpriteObject*>* list = m_spritesFaceGL.value(textureID);
 
     if (list != nullptr){
         texture->bind();

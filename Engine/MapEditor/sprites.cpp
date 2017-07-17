@@ -101,6 +101,8 @@ SpriteDatas::~SpriteDatas()
     delete m_textureRect;
 }
 
+MapEditorSubSelectionKind SpriteDatas::kind() const { return m_kind; }
+
 int SpriteDatas::layer() const { return m_layer; }
 
 int SpriteDatas::widthPosition() const { return m_widthPosition; }
@@ -240,9 +242,10 @@ void SpriteDatas::write(QJsonObject & json) const{
 SpriteObject::SpriteObject(SpriteDatas &datas, QOpenGLTexture* texture) :
     m_datas(datas),
     m_texture(texture),
-    m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
-    m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_programStatic(nullptr),
+    m_programFace(nullptr)
 {
 
 }
@@ -261,44 +264,54 @@ SpriteObject::~SpriteObject()
 void SpriteObject::initializeVertices(int squareSize, Position3D& position)
 {
     m_verticesStatic.clear();
-    m_indexesStatic.clear();
     m_verticesFace.clear();
-    m_indexesFace.clear();
-    int countStatic = 0;
-    int countFace = 0;
+    m_indexes.clear();
+    int count = 0;
     m_datas.initializeVertices(squareSize,
                                m_texture->width(),
                                m_texture->height(),
-                               m_verticesStatic, m_indexesStatic,
-                               m_verticesFace, m_indexesFace,
-                               position, countStatic, countFace);
+                               m_verticesStatic, m_indexes, m_verticesFace,
+                               m_indexes, position, count, count);
 }
 
 // -------------------------------------------------------
 
-void SpriteObject::initializeGL(QOpenGLShaderProgram* programStatic){
+void SpriteObject::initializeStaticGL(QOpenGLShaderProgram* programStatic){
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
-
-        // Programs
         m_programStatic = programStatic;
     }
 }
 
 // -------------------------------------------------------
 
-void SpriteObject::updateGL(){
-    Map::updateGLStatic(m_vertexBufferStatic, m_indexBufferStatic,
-                        m_verticesStatic, m_indexesStatic, m_vaoStatic,
-                        m_programStatic);
+void SpriteObject::initializeFaceGL(QOpenGLShaderProgram *programFace){
+    if (m_programFace == nullptr){
+        initializeOpenGLFunctions();
+        m_programFace = programFace;
+    }
+}
+
+// -------------------------------------------------------
+
+void SpriteObject::updateStaticGL(){
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_verticesStatic,
+                        m_indexes, m_vao, m_programStatic);
+}
+
+// -------------------------------------------------------
+
+void SpriteObject::updateFaceGL(){
+    Map::updateGLFace(m_vertexBuffer, m_indexBuffer, m_verticesFace,
+                      m_indexes, m_vao, m_programFace);
 }
 
 // -------------------------------------------------------
 
 void SpriteObject::paintGL(){
-    m_vaoStatic.bind();
-    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
-    m_vaoStatic.bind();
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    m_vao.bind();
 }
 
 // -------------------------------------------------------

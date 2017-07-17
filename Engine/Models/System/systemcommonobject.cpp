@@ -157,7 +157,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
-    state = new SystemState(super, MapEditorSubSelectionKind::SpritesFix, 1, 0,
+    state = new SystemState(super, MapEditorSubSelectionKind::SpritesFace, 1, 0,
                             0, true, false, false, false, false, true, true,
                             false);
     row = state->getModelRow();

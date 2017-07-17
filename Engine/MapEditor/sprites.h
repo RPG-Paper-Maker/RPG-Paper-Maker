@@ -68,6 +68,7 @@ public:
     SpriteDatas(MapEditorSubSelectionKind kind, int layer, int widthPosition,
                 int angle, QRect* textureRect);
     virtual ~SpriteDatas();
+    MapEditorSubSelectionKind kind() const;
     int layer() const;
     int widthPosition() const;
     int angle() const;
@@ -105,24 +106,25 @@ public:
     SpriteObject(SpriteDatas& datas, QOpenGLTexture* texture);
     virtual ~SpriteObject();
     void initializeVertices(int squareSize, Position3D& position);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
-    void updateGL();
+    void initializeStaticGL(QOpenGLShaderProgram* programStatic);
+    void initializeFaceGL(QOpenGLShaderProgram *programFace);
+    void updateStaticGL();
+    void updateFaceGL();
     void paintGL();
 
 protected:
     SpriteDatas& m_datas;
     QOpenGLTexture* m_texture;
 
-    // OpenGL informations
-    QOpenGLBuffer m_vertexBufferStatic;
-    QOpenGLBuffer m_indexBufferStatic;
+    // OpenGL static
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
     QVector<Vertex> m_verticesStatic;
-    QVector<GLuint> m_indexesStatic;
-    QOpenGLVertexArrayObject m_vaoStatic;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram* m_programStatic;
-
     QVector<VertexBillboard> m_verticesFace;
-    QVector<GLuint> m_indexesFace;
+    QOpenGLShaderProgram* m_programFace;
 };
 
 // -------------------------------------------------------

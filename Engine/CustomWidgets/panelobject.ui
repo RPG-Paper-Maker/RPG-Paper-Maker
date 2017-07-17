@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>719</width>
-    <height>627</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -229,6 +229,11 @@
                <item>
                 <property name="text">
                  <string>Sprite fix</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Sprite face</string>
                 </property>
                </item>
               </widget>

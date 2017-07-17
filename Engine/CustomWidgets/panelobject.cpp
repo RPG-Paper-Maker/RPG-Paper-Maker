@@ -283,7 +283,7 @@ void PanelObject::updateStateOptions(SystemState* state){
 // -------------------------------------------------------
 
 void PanelObject::passToSprite(){
-    ui->comboBoxGraphics->setCurrentIndex(1);
+    ui->comboBoxGraphics->setCurrentIndex(2);
 }
 
 // -------------------------------------------------------
@@ -355,6 +355,8 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
                 index = 0; break;
             case MapEditorSubSelectionKind::SpritesFix:
                 index = 1; break;
+            case MapEditorSubSelectionKind::SpritesFace:
+                index = 2; break;
             default:
                 break;
             }
@@ -463,6 +465,8 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
                 kind = MapEditorSubSelectionKind::None; break;
             case 1:
                 kind = MapEditorSubSelectionKind::SpritesFix; break;
+            case 2:
+                kind = MapEditorSubSelectionKind::SpritesFace; break;
             }
             super->setGraphicsKind(kind);
         }
