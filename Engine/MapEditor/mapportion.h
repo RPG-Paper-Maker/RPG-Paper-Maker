@@ -52,10 +52,12 @@ public:
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);
-    void initializeGL(QOpenGLShaderProgram *programStatic);
+    void initializeGL(QOpenGLShaderProgram *programStatic,
+                      QOpenGLShaderProgram *programFace);
     void updateGL();
     void paintFloors();
     void paintSprites();
+    void paintFaceSprites();
     void paintObjectsSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsSquares();
 

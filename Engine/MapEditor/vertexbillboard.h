@@ -20,7 +20,8 @@
 #ifndef VERTEXBILLBOARD_H
 #define VERTEXBILLBOARD_H
 
-#include "vertex.h"
+#include <QVector3D>
+#include <QVector2D>
 
 // -------------------------------------------------------
 //

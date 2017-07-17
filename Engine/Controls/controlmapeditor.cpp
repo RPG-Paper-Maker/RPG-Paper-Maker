@@ -1214,6 +1214,8 @@ Portion ControlMapEditor::getGlobalFromLocalPortion(Portion& portion) const{
 // -------------------------------------------------------
 
 void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
+                               QVector3D &cameraRightWorldSpace,
+                               QVector3D &cameraUpWorldSpace,
                                MapEditorSelectionKind selectionKind)
 {
     m_map->paintFloors(modelviewProjection);
@@ -1229,7 +1231,8 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
         glEnable(GL_DEPTH_TEST);
     }
 
-    m_map->paintOthers(modelviewProjection);
+    m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
+                       cameraUpWorldSpace);
 }
 
 // -------------------------------------------------------

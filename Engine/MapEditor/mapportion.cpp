@@ -113,9 +113,10 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
 
 // -------------------------------------------------------
 
-void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic){
+void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
+                              QOpenGLShaderProgram *programFace){
     m_floors->initializeGL(programStatic);
-    m_sprites->initializeGL(programStatic);
+    m_sprites->initializeGL(programStatic, programFace);
     m_mapObjects->initializeGL(programStatic);
 }
 
@@ -137,6 +138,12 @@ void MapPortion::paintFloors(){
 
 void MapPortion::paintSprites(){
     m_sprites->paintGL();
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintFaceSprites(){
+    m_sprites->paintFaceGL();
 }
 
 // -------------------------------------------------------

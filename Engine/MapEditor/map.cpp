@@ -339,10 +339,8 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
             portion->initializeVertices(m_squareSize,
                                         m_textureTileset,
                                         m_texturesCharacters);
-            portion->initializeGL(m_programStatic);
-            m_programStatic->bind();
+            portion->initializeGL(m_programStatic, m_programFaceSprite);
             portion->updateGL();
-            m_programStatic->release();
 
             return portion;
         }
@@ -409,10 +407,8 @@ void Map::updatePortion(Portion& p){
         mapPortion->initializeVertices(m_squareSize,
                                        m_textureTileset,
                                        m_texturesCharacters);
-        mapPortion->initializeGL(m_programStatic);
-        m_programStatic->bind();
+        mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
         mapPortion->updateGL();
-        m_programStatic->release();
     }
 }
 
@@ -606,6 +602,8 @@ void Map::initializeGL(){
             ->uniformLocation("cameraRightWorldspace");
     u_cameraUpWorldspace = m_programFaceSprite
             ->uniformLocation("cameraUpWorldspace");
+    u_modelViewProjection = m_programFaceSprite
+            ->uniformLocation("modelViewProjection");
 
     // Release
     m_programFaceSprite->release();
@@ -620,6 +618,8 @@ void Map::updateGLStatic(QOpenGLBuffer &vertexBuffer,
                          QOpenGLVertexArrayObject &vao,
                          QOpenGLShaderProgram* program)
 {
+    program->bind();
+
     // If existing VAO or VBO, destroy it
     if (vao.isCreated())
         vao.destroy();
@@ -659,6 +659,68 @@ void Map::updateGLStatic(QOpenGLBuffer &vertexBuffer,
     vao.release();
     indexBuffer.release();
     vertexBuffer.release();
+    program->release();
+}
+
+// -------------------------------------------------------
+
+void Map::updateGLFace(QOpenGLBuffer &vertexBuffer,
+                       QOpenGLBuffer &indexBuffer,
+                       QVector<VertexBillboard> &vertices,
+                       QVector<GLuint> &indexes,
+                       QOpenGLVertexArrayObject &vao,
+                       QOpenGLShaderProgram* program)
+{
+    program->bind();
+
+    // If existing VAO or VBO, destroy it
+    if (vao.isCreated())
+        vao.destroy();
+    if (vertexBuffer.isCreated())
+        vertexBuffer.destroy();
+    if (indexBuffer.isCreated())
+        indexBuffer.destroy();
+
+    // Create new VBO for vertex
+    vertexBuffer.create();
+    vertexBuffer.bind();
+    vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vertexBuffer.allocate(vertices.constData(),
+                          vertices.size() * sizeof(VertexBillboard));
+
+    // Create new VBO for indexes
+    indexBuffer.create();
+    indexBuffer.bind();
+    indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    indexBuffer.allocate(indexes.constData(),
+                         indexes.size() * sizeof(GLuint));
+
+    // Create new VAO
+    vao.create();
+    vao.bind();
+    program->enableAttributeArray(0);
+    program->enableAttributeArray(1);
+    program->enableAttributeArray(2);
+    program->enableAttributeArray(3);
+    program->setAttributeBuffer(0, GL_FLOAT, VertexBillboard::positionOffset(),
+                                VertexBillboard::positionTupleSize,
+                                VertexBillboard::stride());
+    program->setAttributeBuffer(1, GL_FLOAT, VertexBillboard::texOffset(),
+                                VertexBillboard::texCoupleSize,
+                                VertexBillboard::stride());
+    program->setAttributeBuffer(2, GL_FLOAT, VertexBillboard::sizeOffset(),
+                                VertexBillboard::sizeCoupleSize,
+                                VertexBillboard::stride());
+    program->setAttributeBuffer(3, GL_FLOAT, VertexBillboard::modelOffset(),
+                                VertexBillboard::modelCoupleSize,
+                                VertexBillboard::stride());
+    indexBuffer.bind();
+
+    // Releases
+    vao.release();
+    indexBuffer.release();
+    vertexBuffer.release();
+    program->release();
 }
 
 // -------------------------------------------------------
@@ -687,7 +749,10 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection){
 
 // -------------------------------------------------------
 
-void Map::paintOthers(QMatrix4x4 &modelviewProjection){
+void Map::paintOthers(QMatrix4x4 &modelviewProjection,
+                      QVector3D &cameraRightWorldSpace,
+                      QVector3D &cameraUpWorldSpace)
+{
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
@@ -726,7 +791,31 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection){
         }
     }
 
+    // Face sprites
+    m_programStatic->release();
+    m_programFaceSprite->bind();
+    m_programFaceSprite->setUniformValue(u_cameraRightWorldspace,
+                                         cameraRightWorldSpace);
+    m_programFaceSprite->setUniformValue(u_cameraUpWorldspace,
+                                         cameraUpWorldSpace);
+    m_programFaceSprite->setUniformValue(u_modelViewProjection,
+                                         modelviewProjection);
+    m_textureTileset->bind();
+    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
+        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
+            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
+                Portion portion(i, j, k);
+                MapPortion* mapPortion = m_mapPortions.value(portion);
+                if (mapPortion != nullptr){
+                    mapPortion->paintFaceSprites();
+                }
+            }
+        }
+    }
+    m_programFaceSprite->release();
+
     // Objects squares
+    m_programStatic->bind();
     m_textureObjectSquare->bind();
     for (int i = -m_portionsRay; i <= m_portionsRay; i++){
         for (int j = -m_portionsRay; j <= m_portionsRay; j++){

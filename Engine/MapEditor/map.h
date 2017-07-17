@@ -64,6 +64,12 @@ public:
                                QVector<GLuint>& indexes,
                                QOpenGLVertexArrayObject& vao,
                                QOpenGLShaderProgram* program);
+    static void updateGLFace(QOpenGLBuffer& vertexBuffer,
+                             QOpenGLBuffer& indexBuffer,
+                             QVector<VertexBillboard>& vertices,
+                             QVector<GLuint>& indexes,
+                             QOpenGLVertexArrayObject& vao,
+                             QOpenGLShaderProgram* program);
     void loadTextures();
     void deleteTextures();
     MapPortion* mapPortion(Portion& p);
@@ -100,7 +106,9 @@ public:
 
     void initializeGL();
     void paintFloors(QMatrix4x4 &modelviewProjection);
-    void paintOthers(QMatrix4x4 &modelviewProjection);
+    void paintOthers(QMatrix4x4 &modelviewProjection,
+                     QVector3D& cameraRightWorldSpace,
+                     QVector3D& cameraUpWorldSpace);
 
 private:
     MapProperties* m_mapProperties;
@@ -119,6 +127,7 @@ private:
     QOpenGLShaderProgram* m_programFaceSprite;
     int u_cameraRightWorldspace;
     int u_cameraUpWorldspace;
+    int u_modelViewProjection;
 
     // Textures
     QOpenGLTexture* m_textureTileset;

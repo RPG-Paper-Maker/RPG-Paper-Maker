@@ -77,7 +77,8 @@ public:
                             QVector<GLuint>& indexesStatic,
                             QVector<VertexBillboard>& verticesFace,
                             QVector<GLuint>& indexesFace,
-                            Position3D& position, int& count);
+                            Position3D& position, int& countStatic,
+                            int& countFace);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -144,9 +145,11 @@ public:
     bool deleteSprite(Position& p);
 
     void initializeVertices(int squareSize, int width, int height);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void initializeGL(QOpenGLShaderProgram* programStatic,
+                      QOpenGLShaderProgram* programFace);
     void updateGL();
     void paintGL();
+    void paintFaceGL();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -154,7 +157,7 @@ public:
 protected:
     QHash<Position3D, QVector<SpriteDatas*>*> m_allStatic;
 
-    // OpenGL informations
+    // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;
     QOpenGLBuffer m_indexBufferStatic;
     QVector<Vertex> m_verticesStatic;
@@ -162,8 +165,13 @@ protected:
     QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
 
+    // OpenGL face
+    QOpenGLBuffer m_vertexBufferFace;
+    QOpenGLBuffer m_indexBufferFace;
     QVector<VertexBillboard> m_verticesFace;
     QVector<GLuint> m_indexesFace;
+    QOpenGLVertexArrayObject m_vaoFace;
+    QOpenGLShaderProgram* m_programFace;
 };
 
 #endif // SPRITES_H

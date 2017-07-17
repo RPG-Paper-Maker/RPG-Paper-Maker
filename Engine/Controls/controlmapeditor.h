@@ -142,6 +142,8 @@ public:
     Portion getGlobalFromLocalPortion(Portion& portion) const;
 
     void paintGL(QMatrix4x4& modelviewProjection,
+                 QVector3D& cameraRightWorldSpace,
+                 QVector3D& cameraUpWorldSpace,
                  MapEditorSelectionKind selectionKind);
 
     void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);

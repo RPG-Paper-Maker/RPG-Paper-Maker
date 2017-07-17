@@ -121,7 +121,8 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      QVector<GLuint>& indexesStatic,
                                      QVector<VertexBillboard>& verticesFace,
                                      QVector<GLuint>& indexesFace,
-                                     Position3D& position, int& count)
+                                     Position3D& position, int& countStatic,
+                                     int& countFace)
 {
     float x, y, w, h;
     x = (float)(m_textureRect->x() * squareSize) / width;
@@ -153,10 +154,10 @@ void SpriteDatas::initializeVertices(int squareSize,
                         QVector2D(x, y + h)));
 
         // indexes
-        int offset = count * Sprite::nbVerticesQuad;
+        int offset = countStatic * Sprite::nbVerticesQuad;
         for (int i = 0; i < Sprite::nbIndexesQuad; i++)
             indexesStatic.append(Sprite::indexesQuad[i] + offset);
-        count++;
+        countStatic++;
     }
     else if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
         QVector3D center = Sprite::verticesQuad[0] * size + pos +
@@ -178,10 +179,10 @@ void SpriteDatas::initializeVertices(int squareSize,
                               Sprite::modelQuad[3]));
 
         // indexes
-        int offset = count * Sprite::nbVerticesQuad;
+        int offset = countFace * Sprite::nbVerticesQuad;
         for (int i = 0; i < Sprite::nbIndexesQuad; i++)
             indexesFace.append(Sprite::indexesQuad[i] + offset);
-        count++;
+        countFace++;
     }
 }
 
@@ -263,13 +264,14 @@ void SpriteObject::initializeVertices(int squareSize, Position3D& position)
     m_indexesStatic.clear();
     m_verticesFace.clear();
     m_indexesFace.clear();
-    int count = 0;
+    int countStatic = 0;
+    int countFace = 0;
     m_datas.initializeVertices(squareSize,
                                m_texture->width(),
                                m_texture->height(),
                                m_verticesStatic, m_indexesStatic,
                                m_verticesFace, m_indexesFace,
-                               position, count);
+                               position, countStatic, countFace);
 }
 
 // -------------------------------------------------------
@@ -316,7 +318,10 @@ void SpriteObject::paintGL(){
 Sprites::Sprites() :
     m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
     m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+    m_programStatic(nullptr),
+    m_vertexBufferFace(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferFace(QOpenGLBuffer::IndexBuffer),
+    m_programFace(nullptr)
 {
 
 }
@@ -420,7 +425,8 @@ void Sprites::initializeVertices(int squareSize, int width, int height){
     m_verticesFace.clear();
     m_indexesFace.clear();
 
-    int count = 0;
+    int countStatic = 0;
+    int countFace = 0;
     QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
     for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
         Position3D position = i.key();
@@ -430,19 +436,21 @@ void Sprites::initializeVertices(int squareSize, int width, int height){
             sprite->initializeVertices(squareSize, width, height,
                                        m_verticesStatic, m_indexesStatic,
                                        m_verticesFace, m_indexesFace,
-                                       position, count);
+                                       position, countStatic, countFace);
         }
     }
 }
 
 // -------------------------------------------------------
 
-void Sprites::initializeGL(QOpenGLShaderProgram* programStatic){
+void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
+                           QOpenGLShaderProgram *programFace){
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
 
         // Programs
         m_programStatic = programStatic;
+        m_programFace = programFace;
     }
 }
 
@@ -452,6 +460,9 @@ void Sprites::updateGL(){
     Map::updateGLStatic(m_vertexBufferStatic, m_indexBufferStatic,
                         m_verticesStatic, m_indexesStatic, m_vaoStatic,
                         m_programStatic);
+    Map::updateGLFace(m_vertexBufferFace, m_indexBufferFace,
+                      m_verticesFace, m_indexesFace, m_vaoFace,
+                      m_programFace);
 }
 
 // -------------------------------------------------------
@@ -460,6 +471,14 @@ void Sprites::paintGL(){
     m_vaoStatic.bind();
     glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
     m_vaoStatic.bind();
+}
+
+// -------------------------------------------------------
+
+void Sprites::paintFaceGL(){
+    m_vaoFace.bind();
+    glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, 0);
+    m_vaoFace.bind();
 }
 
 // -------------------------------------------------------

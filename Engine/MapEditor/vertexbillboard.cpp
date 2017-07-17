@@ -25,7 +25,7 @@ const int VertexBillboard::texCoupleSize = 2;
 
 const int VertexBillboard::sizeCoupleSize = 2;
 
-const int VertexBillboard::modelCoupleSize = 1;
+const int VertexBillboard::modelCoupleSize = 2;
 
 int VertexBillboard::positionOffset() {
     return offsetof(VertexBillboard, m_centerPosition);

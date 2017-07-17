@@ -146,13 +146,26 @@ void WidgetMapEditor::paintGL(){
         // Update control
         m_control.update();
 
-        // Draw
-        QMatrix4x4 modelviewProjection = m_control.camera()->projection() *
-                                         m_control.camera()->view();
+        // Model view / projection
+        QMatrix4x4 viewMatrix = m_control.camera()->view();
+        QMatrix4x4 projectionMatrix = m_control.camera()->projection();
+        QMatrix4x4 modelviewProjection = projectionMatrix * viewMatrix;
 
+        // Calculate camera worldSpace
+        QVector3D cameraRightWorldSpace(viewMatrix.row(0).x(),
+                                        viewMatrix.row(0).y(),
+                                        viewMatrix.row(0).z());
+        QVector3D cameraUpWorldSpace(viewMatrix.row(1).x(),
+                                     viewMatrix.row(1).y(),
+                                     viewMatrix.row(1).z());
+
+        // Config
         MapEditorSelectionKind kind = (m_menuBar == nullptr)
                 ? MapEditorSelectionKind::Land : m_menuBar->selectionKind();
-        m_control.paintGL(modelviewProjection, kind);
+
+        // Paint
+        m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
+                          cameraUpWorldSpace, kind);
     }
 }
 
