@@ -48,6 +48,8 @@ SystemPicture::~SystemPicture(){
 
 bool SystemPicture::isBR() const { return m_isBR; }
 
+void SystemPicture::setIsBR(bool b) { m_isBR = b; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

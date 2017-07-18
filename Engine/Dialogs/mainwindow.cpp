@@ -220,7 +220,7 @@ void MainWindow::enableGame(){ // When a project is opened
     enableNoGame();
     ui->actionSave->setEnabled(true);
     ui->actionSave_all->setEnabled(true);
-    //ui->actionExport_standalone->setEnabled(true);
+    ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);

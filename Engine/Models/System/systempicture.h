@@ -41,6 +41,7 @@ public:
     static QString pathIconRed;
     static QString pathIconBlue;
     bool isBR() const;
+    void setIsBR(bool b);
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     QString getPath(PictureKind kind) const;

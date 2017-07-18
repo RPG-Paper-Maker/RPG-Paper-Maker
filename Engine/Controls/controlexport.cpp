@@ -131,6 +131,7 @@ void ControlExport::removeDesktopNoNeed(QString path){
     QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
     QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
+    QFile(Wanok::pathCombine(pathDatas, "pictures.json")).remove();
     removeMapsTemp(pathDatas);
 }
 
@@ -212,24 +213,46 @@ void ControlExport::removeMapsTemp(QString pathDatas){
 
 void ControlExport::copyBRPictures(QString path){
     PictureKind kind;
-    QStandardItemModel* model;
-    SystemPicture* picture;
+    QStandardItemModel* model, *newModel;
+    SystemPicture* picture, *newPicture;
+    PicturesDatas newPicturesDatas;
 
-    // Iterate all the pictures datas
+    // Iterate all the pictures kind
     for (int k = (int) PictureKind::Bars; k != (int) PictureKind::Last; k++)
     {
        kind = static_cast<PictureKind>(k);
        model = m_project->picturesDatas()->model(kind);
-       for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+       newModel = new QStandardItemModel;
+       newPicturesDatas.setModel(kind, newModel);
+       for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
            picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+           newPicture = new SystemPicture;
+           newPicture->setCopy(*picture);
+           newPicture->setId(picture->id());
 
            // If the picture is from BR, we need to copy it in the project
            if (picture->isBR()){
                 QString pathBR = picture->getPath(kind);
                 QString pathProject =
                         Wanok::pathCombine(path, picture->getLocalPath(kind));
+                if (QFile(pathProject).exists()) {
+                    QFileInfo fileInfo(picture->name());
+                    QString extension = fileInfo.completeSuffix();
+                    QString baseName = fileInfo.baseName();
+                    newPicture->setName(baseName + "_br" + extension);
+                    pathProject =
+                       Wanok::pathCombine(path, newPicture->getLocalPath(kind));
+                }
+
                 QFile::copy(pathBR, pathProject);
+                newPicture->setIsBR(false);
            }
+           newPicturesDatas.model(kind)->appendRow(newPicture->getModelRow());
        }
     }
+
+    // Copy the new picutres datas without BR
+    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
+    Wanok::writeJSON(Wanok::pathCombine(pathDatas, "pictures.json"),
+                     newPicturesDatas);
 }
