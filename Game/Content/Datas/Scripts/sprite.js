@@ -40,6 +40,7 @@ Sprite.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json){
+        this.kind = json.k;
         this.angle = json.a;
         this.widthPosition = json.p;
         this.textureRect = json.t;

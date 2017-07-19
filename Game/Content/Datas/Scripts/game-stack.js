@@ -102,13 +102,22 @@ GameStack.prototype = {
 
     // -------------------------------------------------------
 
+    /** Push the title screen when empty.
+    *   @returns {SceneTitleScreen}
+    */
+    pushTitleScreen: function() {
+        var scene = new SceneTitleScreen();
+        this.push(scene);
+
+        return scene;
+    },
+
+    // -------------------------------------------------------
+
     /** Update the stack.
     */
     update: function() {
-        if (!this.isEmpty())
-            this.top().update();
-        else
-            this.push(new SceneTitleScreen());
+        this.top().update();
     },
 
     // -------------------------------------------------------

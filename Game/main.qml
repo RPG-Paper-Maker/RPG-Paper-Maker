@@ -161,20 +161,20 @@ Window {
         onPaintGL: {
             try{
                 if (!Game.Wanok.isLoading()){
-                    Game.update();
-                    if (!Game.Wanok.isLoading()){
-                        if (!Game.$gameStack.isEmpty()){
-                            var callback =
-                                    Game.$gameStack.top().callBackAfterLoading;
-                            if (callback === null){
-                                Game.draw3D(canvas3d);
-                                Game.drawHUD(canvas);
-                                canvas.requestPaint();
-                            }
-                            else
-                                callback.call(Game.$gameStack.top());
+                    if (!Game.$gameStack.isEmpty()) {
+                        var callback =
+                                Game.$gameStack.top().callBackAfterLoading;
+                        if (callback === null){
+                            Game.update();
+                            Game.draw3D(canvas3d);
+                            Game.drawHUD(canvas);
+                            canvas.requestPaint();
                         }
+                        else
+                            callback.call(Game.$gameStack.top());
                     }
+                    else
+                        Game.$gameStack.pushTitleScreen();
                 }
             }
             catch (e){

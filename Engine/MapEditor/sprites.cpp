@@ -342,7 +342,7 @@ Sprites::Sprites() :
 Sprites::~Sprites()
 {
     QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QVector<SpriteDatas*>* list = *i;
         for (int j = 0; j < list->size(); j++)
             delete list->at(j);
@@ -357,13 +357,13 @@ Sprites::~Sprites()
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_allStatic.size() == 0;
+    return m_all.size() == 0;
 }
 
 // -------------------------------------------------------
 
 void Sprites::setSprite(Position& p, SpriteDatas* sprite){
-    QVector<SpriteDatas*>* list = m_allStatic.value(p);
+    QVector<SpriteDatas*>* list = m_all.value(p);
     if (list != nullptr){
         for (int i = 0; i < list->size(); i++){
             SpriteDatas* sprite = list->at(i);
@@ -377,14 +377,14 @@ void Sprites::setSprite(Position& p, SpriteDatas* sprite){
     else{
         QVector<SpriteDatas*>* l = new QVector<SpriteDatas*>;
         l->append(sprite);
-        m_allStatic[p] = l;
+        m_all[p] = l;
     }
 }
 
 // -------------------------------------------------------
 
 SpriteDatas* Sprites::removeSprite(Position& p){
-    QVector<SpriteDatas*>* list = m_allStatic.value(p);
+    QVector<SpriteDatas*>* list = m_all.value(p);
     if (list != nullptr){
         for (int i = 0; i < list->size(); i++){
             SpriteDatas* sprite = list->at(i);
@@ -392,7 +392,7 @@ SpriteDatas* Sprites::removeSprite(Position& p){
                 list->removeAt(i);
                 if (list->size() == 0){
                     delete list;
-                    m_allStatic.remove(p);
+                    m_all.remove(p);
                 }
                 return sprite;
             }
@@ -441,7 +441,7 @@ void Sprites::initializeVertices(int squareSize, int width, int height){
     int countStatic = 0;
     int countFace = 0;
     QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         Position3D position = i.key();
         QVector<SpriteDatas*>* list = i.value();
         for (int j = 0; j < list->size(); j++){
@@ -501,9 +501,8 @@ void Sprites::paintFaceGL(){
 // -------------------------------------------------------
 
 void Sprites::read(const QJsonObject & json){
-    QJsonArray tab = json["statics"].toArray();
+    QJsonArray tab = json["list"].toArray();
 
-    // All statics
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
         Position3D p;
@@ -515,7 +514,7 @@ void Sprites::read(const QJsonObject & json){
             sprite->read(tabVal.at(j).toObject());
             l->append(sprite);
         }
-        m_allStatic[p] = l;
+        m_all[p] = l;
     }
 }
 
@@ -524,9 +523,8 @@ void Sprites::read(const QJsonObject & json){
 void Sprites::write(QJsonObject & json) const{
     QJsonArray tab;
 
-    // All statics
     QHash<Position3D, QVector<SpriteDatas*>*>::const_iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
         QJsonArray tabValue;
@@ -542,5 +540,5 @@ void Sprites::write(QJsonObject & json) const{
         objHash["v"] = tabValue;
         tab.append(objHash);
     }
-    json["statics"] = tab;
+    json["list"] = tab;
 }

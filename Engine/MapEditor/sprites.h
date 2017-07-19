@@ -157,7 +157,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position3D, QVector<SpriteDatas*>*> m_allStatic;
+    QHash<Position3D, QVector<SpriteDatas*>*> m_all;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;

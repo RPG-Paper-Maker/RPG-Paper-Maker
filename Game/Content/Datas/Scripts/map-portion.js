@@ -36,9 +36,11 @@
 *   portion.
 *   @property {THREE.Mesh} staticFloorsMesh The mesh used for drawing all the
 *   floors.
-*   @property {THREE.Mesh[]} staticSpritesList List of all the sprites in the
+*   @property {THREE.Mesh[]} staticSpritesList List of all the static sprites in
+*   the scene.
+*   @property {MapObject[]} objectsList List of all the objects in the portion.
+*   @property {THREE.Mesh[]} faceSpritesList List of all the face sprites in the
 *   scene.
-*   @property {MapObject} objectsList List of all the objects in the portion.
 *   @param {number} realX The real x portion.
 *   @param {number} realY The real y portion.
 *   @param {number} realZ The real z portion.
@@ -49,6 +51,7 @@ function MapPortion(){
     this.staticFloorsMesh = null;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
+    this.faceSpritesList = new Array;
     this.spritesOffset = -0.005;
 }
 
@@ -70,7 +73,7 @@ MapPortion.prototype = {
     */
     read: function(json, isMapHero){
         this.readFloors(json.floors);
-        this.readSprites(json.sprites);
+        this.readSprites(json.sprites.list);
         this.readObjects(json.objs, isMapHero);
     },
 
@@ -146,15 +149,6 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSprites: function(json){
-        this.readSpritesStatics(json.statics);
-    },
-
-    // -------------------------------------------------------
-
-    /** Read the JSON associated to the static sprites in the portion.
-    *   @param {Object} json Json object describing the object.
-    */
-    readSpritesStatics: function(json){
         for (var i = 0, l = json.length; i < l; i++){
             var s = json[i];
             var position = s.k;
@@ -181,8 +175,12 @@ MapPortion.prototype = {
 
                 var plane = this.getSpriteMesh(position, material, texture,
                                                x, y, w, h);
+                if (sprite.kind === ElementMapKind.SpritesFace)
+                    this.faceSpritesList.push(plane);
+                else
+                    this.staticSpritesList.push(plane);
+
                 $gameStack.top().scene.add(plane);
-                this.staticSpritesList.push(plane);
             }
         }
     },
@@ -356,5 +354,25 @@ MapPortion.prototype = {
         }
 
         return null;
+    },
+
+    // -------------------------------------------------------
+
+    /** Update the face sprites orientation.
+    *   @param {Camera} camera The map camera.
+    */
+    updateFaceSprites: function(camera){
+        var vector = new THREE.Vector3();
+        camera.threeCamera.getWorldDirection(vector);
+        var angle = Math.atan2(vector.x,vector.z);
+        var i, l;
+
+        for (i = 0, l = this.faceSpritesList.length; i < l; i++)
+            this.faceSpritesList[i].rotation.y = angle;
+
+
+        for (i = 0, l = this.objectsList.length; i < l; i++) {
+
+        }
     }
 }

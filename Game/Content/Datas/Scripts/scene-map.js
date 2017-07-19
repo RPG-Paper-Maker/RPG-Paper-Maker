@@ -367,6 +367,10 @@ SceneMap.prototype = {
         movedObjects = objects.mout;
         for (i = 0, l = movedObjects.length; i < l; i++)
             movedObjects[i].update();
+
+        // Update face sprites
+        var mapPortion = this.mapPortions[2][2][2];
+        mapPortion.updateFaceSprites(this.camera);
     },
 
     // -------------------------------------------------------
