@@ -119,32 +119,68 @@ void KeyBoardDatas::setDefaultGame(){
     int i = 1;
 
     // Keys assigns
-    super = new SystemKeyBoard(i++, new LangsTranslation("Move up"),
-                               "Up");
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move hero up"),
+                               "UpHero");
+    super->appendShortCut(QVector<int>({87}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move hero down"),
+                               "DownHero");
+    super->appendShortCut(QVector<int>({83}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move hero left"),
+                               "LeftHero");
+    super->appendShortCut(QVector<int>({65}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move hero right"),
+                               "RightHero");
+    super->appendShortCut(QVector<int>({68}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move menu up"),
+                               "UpMenu");
     super->appendShortCut(QVector<int>({16777235}));
     super->appendShortCut(QVector<int>({87}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation("Move down"),
-                               "Down");
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move menu down"),
+                               "DownMenu");
     super->appendShortCut(QVector<int>({16777237}));
     super->appendShortCut(QVector<int>({83}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation("Move left"),
-                               "Left");
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move menu left"),
+                               "LeftMenu");
     super->appendShortCut(QVector<int>({16777234}));
     super->appendShortCut(QVector<int>({65}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation("Move right"),
-                               "Right");
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move menu right"),
+                               "RightMenu");
     super->appendShortCut(QVector<int>({16777236}));
     super->appendShortCut(QVector<int>({68}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation("Action"),
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move camera left"),
+                               "LeftCamera");
+    super->appendShortCut(QVector<int>({16777234}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Move camera right"),
+                               "RightCamera");
+    super->appendShortCut(QVector<int>({16777236}));
+    list.append(super);
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Action"),
                                "Action");
     super->appendShortCut(QVector<int>({16777220}));
     super->appendShortCut(QVector<int>({16777221}));
     list.append(super);
-    super = new SystemKeyBoard(i++, new LangsTranslation("Cancel"),
+    super = new SystemKeyBoard(i++,
+                               new LangsTranslation("Cancel"),
                                "Cancel");
     super->appendShortCut(QVector<int>({88}));
     list.append(super);
@@ -156,12 +192,12 @@ void KeyBoardDatas::setDefaultGame(){
     setDefault(list);
 
     // Menu controls
-    m_keyAction = 5;
-    m_keyCancel = 6;
-    m_keyUp = 1;
-    m_keyDown = 2;
-    m_keyLeft = 3;
-    m_keyRight = 4;
+    m_keyAction = 11;
+    m_keyCancel = 12;
+    m_keyUp = 5;
+    m_keyDown = 6;
+    m_keyLeft = 7;
+    m_keyRight = 8;
 }
 
 // -------------------------------------------------------

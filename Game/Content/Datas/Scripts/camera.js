@@ -43,6 +43,9 @@ function Camera(d, h){
     this.height = h;
     this.horizontalAngle = -90.0;
     this.target = new THREE.Vector3();
+    this.rotateVelocity = 180;
+    this.rotateSteps = 90.0;
+    this.targetHorizontalAngle = this.horizontalAngle;
 }
 
 Camera.prototype = {
@@ -51,9 +54,26 @@ Camera.prototype = {
     */
     update: function(){
 
+        // Update angle
+        if (this.targetHorizontalAngle !== this.horizontalAngle) {
+            var speed = this.rotateVelocity * $elapsedTime / 1000;
+            if (this.targetHorizontalAngle > this.horizontalAngle) {
+                this.horizontalAngle += speed;
+                if (this.horizontalAngle > this.targetHorizontalAngle)
+                    this.horizontalAngle = this.targetHorizontalAngle;
+            }
+            else if (this.targetHorizontalAngle < this.horizontalAngle) {
+                this.horizontalAngle -= speed;
+                if (this.horizontalAngle < this.targetHorizontalAngle)
+                    this.horizontalAngle = this.targetHorizontalAngle;
+            }
+        }
+
         // Horizontal angle should stay in [-450;270] interval
-        if (this.horizontalAngle >= 270.0 || this.horizontalAngle <= -450.0)
+        if (this.horizontalAngle >= 270.0 || this.horizontalAngle <= -450.0) {
             this.horizontalAngle = -90.0;
+            this.targetHorizontalAngle = this.horizontalAngle;
+        }
 
         // Update target
         var position = $game.hero.position;
@@ -70,5 +90,14 @@ Camera.prototype = {
 
         // Update view
         this.threeCamera.lookAt(this.target);
+    },
+
+    /** Update the camera angle.
+    */
+    updateAngle: function(addingAngle){
+        if (this.targetHorizontalAngle === this.horizontalAngle) {
+            this.targetHorizontalAngle +=
+                 addingAngle ? this.rotateSteps : -this.rotateSteps;
+        }
     }
 }

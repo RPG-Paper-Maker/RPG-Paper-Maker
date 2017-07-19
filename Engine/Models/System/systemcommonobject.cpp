@@ -141,10 +141,10 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
                                 EventCommandKind::MoveObject,
                                 QVector<QString>({"7", "-1", "0", "1", "1",
                                                   "3", "1"}));
-    setDefaultHeroKeyPressEvent(modelEventsSystem, 5, false, false,
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 11, false, false,
                                 EventCommandKind::SendEvent,
                                 QVector<QString>({"1", "1", "1", "1"}));
-    setDefaultHeroKeyPressEvent(modelEventsSystem, 7, false, false,
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 13, false, false,
                                 EventCommandKind::OpenMainMenu,
                                 QVector<QString>({}));
 

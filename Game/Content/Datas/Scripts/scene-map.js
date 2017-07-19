@@ -416,6 +416,18 @@ SceneMap.prototype = {
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
                                             SystemValue.createSwitch(false)]);
+
+            // Temporary camera turn
+            if (DatasKeyBoard.isKeyEqual(
+                        key, $datasGame.keyBoard.LeftCamera))
+            {
+                this.camera.updateAngle(false);
+            }
+            else if (DatasKeyBoard.isKeyEqual(
+                         key, $datasGame.keyBoard.RightCamera))
+            {
+                this.camera.updateAngle(true);
+            }
         }
 
         SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);
