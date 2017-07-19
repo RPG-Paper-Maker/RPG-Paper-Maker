@@ -368,6 +368,6 @@ MapPortion.prototype = {
             this.faceSpritesList[i].rotation.y = angle;
 
         for (i = 0, l = this.objectsList.length; i < l; i++)
-            this.objectsList.updateAngle(angle);
+            this.objectsList[i].update(angle);
     }
 }

@@ -46,6 +46,7 @@ function SceneMap(id){
     this.scene = new THREE.Scene();
     this.camera = new Camera(120, 75);
     this.camera.update();
+    this.orientation = this.camera.getMapOrientation();
     this.currentPortion = Wanok.getPortion($game.hero.position);
     this.readMapInfos();
     this.callBackAfterLoading = this.loadTextures;
@@ -356,30 +357,24 @@ SceneMap.prototype = {
 
         // Update camera
         this.camera.update();
+        this.orientation = this.camera.getMapOrientation();
 
         // Getting the Y angle of the camera
         var vector = new THREE.Vector3();
         this.camera.threeCamera.getWorldDirection(vector);
-        var angle = Math.atan2(vector.x,vector.z);
+        var angle = Math.atan2(vector.x,vector.z) + (180 * Math.PI / 180.0);
 
         // Update the objects
-        $game.hero.update();
-        $game.hero.updateAngle(angle);
+        $game.hero.update(angle);
         var objects = $game.mapsDatas[this.id][0][0][0];
         var movedObjects = objects.min;
         var movedObject;
         var i, l;
-        for (i = 0, l = movedObjects.length; i < l; i++) {
-            movedObject = movedObjects[i];
-            movedObject.update();
-            movedObject.updateAngle(angle);
-        }
+        for (i = 0, l = movedObjects.length; i < l; i++)
+            movedObjects[i].update(angle);
         movedObjects = objects.mout;
-        for (i = 0, l = movedObjects.length; i < l; i++) {
-            movedObject = movedObjects[i];
-            movedObject.update();
-            movedObject.updateAngle(angle);
-        }
+        for (i = 0, l = movedObjects.length; i < l; i++)
+            movedObjects[i].update(angle);
 
         // Update face sprites
         var mapPortion = this.mapPortions[2][2][2];

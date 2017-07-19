@@ -382,3 +382,14 @@ Wanok.showErrorMessage = function(error){
     else
         console.log(error);
 }
+
+/** Give a modulo without negative value.
+*   @static
+*   @param {number} x
+*   @param {number} m
+*/
+Wanok.mod = function(x, m) {
+    var r = x % m;
+
+    return r < 0 ? r + m : r;
+}

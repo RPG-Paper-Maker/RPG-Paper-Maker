@@ -52,6 +52,7 @@ function MapObject(system, position) {
     this.speed = 1.0;
     this.frame = 0;
     this.orientationEye = Orientation.South;
+    this.orientation = this.orientationEye;
     this.width = 1;
     this.height = 1;
     this.frameDuration = 150;
@@ -421,7 +422,7 @@ MapObject.prototype = {
 
     /** Update the object graphics.
     */
-    update: function(){
+    update: function(angle){
         if (this.mesh !== null){
             var frame = this.frame;
 
@@ -448,8 +449,13 @@ MapObject.prototype = {
                 this.frame = 0;
             }
 
+            // Update angle
+            var orientation = this.orientation;
+            this.updateAngle(angle);
+            this.updateOrientation();
+
             // Update mesh
-            if (frame !== this.frame)
+            if (frame !== this.frame || orientation !== this.orientation)
                 this.updateUVs();
         }
     },
@@ -466,6 +472,17 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the orientation according to the camera position
+    */
+    updateOrientation: function(){
+        if (this.currentState.setWithCamera) {
+            this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
+                                         this.orientationEye, 4);
+        }
+    },
+
+    // -------------------------------------------------------
+
     /** Update the UVs coordinates according to frame and orientation.
     */
     updateUVs: function(){
@@ -477,7 +494,7 @@ MapObject.prototype = {
             var w = this.width * $SQUARE_SIZE / textureWidth;
             var h = this.height * $SQUARE_SIZE / textureHeight;
             var x = this.frame * w;
-            var y = this.orientationEye * h;
+            var y = this.orientation * h;
 
             // Update geometry
             this.mesh.geometry.faceVertexUvs[0][0][0].set(x, y);
