@@ -359,20 +359,15 @@ MapPortion.prototype = {
     // -------------------------------------------------------
 
     /** Update the face sprites orientation.
-    *   @param {Camera} camera The map camera.
+    *   @param {number} angle The angle on the Y axis.
     */
-    updateFaceSprites: function(camera){
-        var vector = new THREE.Vector3();
-        camera.threeCamera.getWorldDirection(vector);
-        var angle = Math.atan2(vector.x,vector.z);
+    updateFaceSprites: function(angle){
         var i, l;
 
         for (i = 0, l = this.faceSpritesList.length; i < l; i++)
             this.faceSpritesList[i].rotation.y = angle;
 
-
-        for (i = 0, l = this.objectsList.length; i < l; i++) {
-
-        }
+        for (i = 0, l = this.objectsList.length; i < l; i++)
+            this.objectsList.updateAngle(angle);
     }
 }

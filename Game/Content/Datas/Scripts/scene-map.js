@@ -357,20 +357,33 @@ SceneMap.prototype = {
         // Update camera
         this.camera.update();
 
-        // Update objects
+        // Getting the Y angle of the camera
+        var vector = new THREE.Vector3();
+        this.camera.threeCamera.getWorldDirection(vector);
+        var angle = Math.atan2(vector.x,vector.z);
+
+        // Update the objects
         $game.hero.update();
+        $game.hero.updateAngle(angle);
         var objects = $game.mapsDatas[this.id][0][0][0];
         var movedObjects = objects.min;
+        var movedObject;
         var i, l;
-        for (i = 0, l = movedObjects.length; i < l; i++)
-            movedObjects[i].update();
+        for (i = 0, l = movedObjects.length; i < l; i++) {
+            movedObject = movedObjects[i];
+            movedObject.update();
+            movedObject.updateAngle(angle);
+        }
         movedObjects = objects.mout;
-        for (i = 0, l = movedObjects.length; i < l; i++)
-            movedObjects[i].update();
+        for (i = 0, l = movedObjects.length; i < l; i++) {
+            movedObject = movedObjects[i];
+            movedObject.update();
+            movedObject.updateAngle(angle);
+        }
 
         // Update face sprites
         var mapPortion = this.mapPortions[2][2][2];
-        mapPortion.updateFaceSprites(this.camera);
+        mapPortion.updateFaceSprites(angle);
     },
 
     // -------------------------------------------------------

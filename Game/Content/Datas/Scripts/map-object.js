@@ -199,7 +199,7 @@ MapObject.prototype = {
         var material =
                 $currentMap.texturesCharacters[this.currentState.graphicID];
         if (this.currentState !== null &&
-            this.currentState.graphicKind !== MapEditorSubSelectionKind.None &&
+            this.currentState.graphicKind !== ElementMapKind.None &&
             typeof material.map !== 'undefined')
         {
             this.frame = this.currentState.indexX;
@@ -456,11 +456,21 @@ MapObject.prototype = {
 
     // -------------------------------------------------------
 
+    /** Update the Y angle (for face sprites).
+    *   @param {number} angle The angle on the Y axis.
+    */
+    updateAngle: function(angle){
+        if (this.currentState.graphicKind !== ElementMapKind.SpriteFace)
+            this.mesh.rotation.y = angle;
+    },
+
+    // -------------------------------------------------------
+
     /** Update the UVs coordinates according to frame and orientation.
     */
     updateUVs: function(){
         if (this.mesh !== null &&
-            this.currentState.graphicKind !== MapEditorSubSelectionKind.None)
+            this.currentState.graphicKind !== ElementMapKind.None)
         {
             var textureWidth = this.mesh.material.map.image.width;
             var textureHeight = this.mesh.material.map.image.height;
@@ -485,7 +495,7 @@ MapObject.prototype = {
     /** Update the material.
     */
     updateMaterial: function(){
-        if (this.currentState.graphicKind !== MapEditorSubSelectionKind.None){
+        if (this.currentState.graphicKind !== ElementMapKind.None){
             this.mesh.material =
                  $currentMap.texturesCharacters[this.currentState.graphicID];
         }

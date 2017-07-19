@@ -18,11 +18,11 @@
 */
 
 /**
-*   Enum for the different map editor selection kind.
+*   Enum for the different map elements kind.
 *   @enum {number}
 *   @readonly
 */
-var MapEditorSubSelectionKind = {
+var ElementMapKind = {
     None: 0,
     Floors: 1,
     Autotiles: 2,
@@ -34,7 +34,7 @@ var MapEditorSubSelectionKind = {
     SpritesWall: 8,
     Object: 9
 };
-Object.freeze(MapEditorSubSelectionKind);
+Object.freeze(ElementMapKind);
 
 // -------------------------------------------------------
 //
