@@ -72,8 +72,12 @@ public:
                              QOpenGLShaderProgram* program);
     void loadTextures();
     void deleteTextures();
-    MapPortion* mapPortion(Portion& p);
-    MapPortion* mapPortion(int x, int y, int z);
+    MapPortion* mapPortion(Portion& p) const;
+    MapPortion* mapPortion(int x, int y, int z) const;
+    MapPortion* mapPortionBrut(int index) const;
+    int portionIndex(int x, int y, int z) const;
+    void setMapPortion(int x, int y, int z, MapPortion *mapPortion);
+    void setMapPortion(Portion& p, MapPortion *mapPortion);
     MapPortion* createMapPortion(Portion& p);
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
@@ -105,14 +109,17 @@ public:
     void writeJSONArray(QJsonArray & tab) const;
 
     void initializeGL();
-    void paintFloors(QMatrix4x4 &modelviewProjection);
+    void paintFloors(QMatrix4x4 &modelviewProjection,
+                     QList<MapPortion*>& portions);
     void paintOthers(QMatrix4x4 &modelviewProjection,
                      QVector3D& cameraRightWorldSpace,
-                     QVector3D& cameraUpWorldSpace);
+                     QVector3D& cameraUpWorldSpace,
+                     QList<MapPortion*>& portions);
 
 private:
     MapProperties* m_mapProperties;
-    QHash<Portion, MapPortion*> m_mapPortions;
+    MapPortion** m_mapPortions;
+    //QHash<Portion, MapPortion*> m_mapPortions;
     QStandardItemModel* m_modelObjects;
     QString m_pathMap;
     int m_portionsRay;

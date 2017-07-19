@@ -17,6 +17,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QTime>
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "wanok.h"
@@ -242,24 +243,24 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
     int r = m_map->portionsRay();
     if (newPortion.x() > m_currentPortion.x()){
         int k = 0;
-        for (int j = -r - 1; j <= r + 1; j++){
-            int i = -r - 1;
+        for (int j = -r; j <= r; j++){
+            int i = -r;
             removePortion(i, k, j);
-            for (; i < r + 1; i++)
+            for (; i < r; i++)
                 setPortion(i, k, j, i + 1, k, j);
 
-            loadPortion(newPortion, r + 1, k, j);
+            loadPortion(newPortion, r, k, j);
         }
     }
     else if (newPortion.x() < m_currentPortion.x()){
         int k = 0;
-        for (int j = -r - 1; j <= r + 1; j++){
-            int i = r + 1;
+        for (int j = -r; j <= r; j++){
+            int i = r;
             removePortion(i, k, j);
-            for (; i > -r - 1; i--)
+            for (; i > -r; i--)
                 setPortion(i, k, j, i - 1, k, j);
 
-            loadPortion(newPortion, -r - 1, k, j);
+            loadPortion(newPortion, -r, k, j);
         }
     }
 }
@@ -270,24 +271,24 @@ void ControlMapEditor::updateMovingPortionsNorthSouth(Portion& newPortion){
     int r = m_map->portionsRay();
     if (newPortion.z() > m_currentPortion.z()){
         int k = 0;
-        for (int i = -r - 1; i <= r + 1; i++){
-            int j = -r - 1;
+        for (int i = -r; i <= r; i++){
+            int j = -r;
             removePortion(i, k, j);
-            for (; j < r + 1; j++)
+            for (; j < r; j++)
                 setPortion(i, k, j, i, k, j + 1);
 
-            loadPortion(newPortion, i, k, r + 1);
+            loadPortion(newPortion, i, k, r);
         }
     }
     else if (newPortion.z() < m_currentPortion.z()){
         int k = 0;
-        for (int i = -r - 1; i <= r + 1; i++){
-            int j = r + 1;
+        for (int i = -r; i <= r; i++){
+            int j = r;
             removePortion(i, k, j);
-            for (; j > -r - 1; j--)
+            for (; j > -r; j--)
                 setPortion(i, k, j, i, k, j - 1);
 
-            loadPortion(newPortion, i, k, -r - 1);
+            loadPortion(newPortion, i, k, -r);
         }
     }
 }
@@ -1218,7 +1219,11 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                QVector3D &cameraUpWorldSpace,
                                MapEditorSelectionKind selectionKind)
 {
-    m_map->paintFloors(modelviewProjection);
+    int a = QTime::currentTime().msecsSinceStartOfDay();
+
+    QList<MapPortion*> portions;
+
+    m_map->paintFloors(modelviewProjection, portions);
 
     if (selectionKind == MapEditorSelectionKind::Objects)
         m_cursorObject->paintGL(modelviewProjection);
@@ -1232,7 +1237,11 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
-                       cameraUpWorldSpace);
+                       cameraUpWorldSpace, portions);
+
+    int b = QTime::currentTime().msecsSinceStartOfDay();
+
+    qDebug() <<  b - a;
 }
 
 // -------------------------------------------------------

@@ -483,7 +483,7 @@ void Sprites::updateGL(){
 void Sprites::paintGL(){
     m_vaoStatic.bind();
     glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
-    m_vaoStatic.bind();
+    m_vaoStatic.release();
 }
 
 // -------------------------------------------------------
@@ -491,7 +491,7 @@ void Sprites::paintGL(){
 void Sprites::paintFaceGL(){
     m_vaoFace.bind();
     glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, 0);
-    m_vaoFace.bind();
+    m_vaoFace.release();
 }
 
 // -------------------------------------------------------
