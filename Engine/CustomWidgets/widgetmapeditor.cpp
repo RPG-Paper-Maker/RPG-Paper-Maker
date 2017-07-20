@@ -143,6 +143,19 @@ void WidgetMapEditor::paintGL(){
 
     if (m_control.map() != nullptr){
 
+        // Key press
+        if (!m_firstPressure) {
+            double speed = (QTime::currentTime().msecsSinceStartOfDay() -
+                            m_elapsedTime) * 0.04666 *
+                    Wanok::get()->getSquareSize();
+
+            // Multi keys
+            QSet<int>::iterator i;
+            for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++)
+                onKeyPress(*i, speed);
+            m_control.cursor()->updatePositionSquare();
+        }
+
         // Update control
         m_control.update();
 
@@ -166,6 +179,8 @@ void WidgetMapEditor::paintGL(){
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
                           cameraUpWorldSpace, kind);
+
+        m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }
 }
 
@@ -173,19 +188,6 @@ void WidgetMapEditor::paintGL(){
 
 void WidgetMapEditor::update(){
     QOpenGLWidget::update();
-
-    if (!m_firstPressure){
-        double speed = (QTime::currentTime().msecsSinceStartOfDay() -
-                        m_elapsedTime) * 0.04666 *
-                Wanok::get()->getSquareSize();
-
-        // Multi keys
-        QSet<int>::iterator i;
-        for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++)
-            onKeyPress(*i, speed);
-    }
-
-    m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
 }
 
 // -------------------------------------------------------
@@ -396,8 +398,53 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
             m_timerFirstPressure->start(35);
             m_control.onKeyPressedWithoutRepeat(event->key());
             onKeyPress(event->key(), -1);
+            m_control.cursor()->updatePositionSquare();
         }
 
+        int key = event->key();
+        if (!m_keysPressed.contains(key)) {
+            KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
+                    ->keyBoardDatas();
+            if ((keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorUp) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorLeft)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorLeft) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorUp)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorDown) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorRight)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorRight) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorDown)))
+            {
+                m_control.cursor()->centerInSquare(1);
+            }
+            else if ((
+                keyBoardDatas->isEqual(key,
+                                       KeyBoardEngineKind::MoveCursorUp) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorRight)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorRight) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorUp)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorDown) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorLeft)) ||
+                (keyBoardDatas->isEqual(key,
+                                        KeyBoardEngineKind::MoveCursorLeft) &&
+                keyBoardDatas->contains(m_keysPressed,
+                                        KeyBoardEngineKind::MoveCursorDown)))
+            {
+                m_control.cursor()->centerInSquare(0);
+            }
+        }
         m_keysPressed += event->key();
     }
 }

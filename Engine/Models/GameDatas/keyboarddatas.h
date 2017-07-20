@@ -58,6 +58,7 @@ public:
     void updateHeader();
 
     bool isEqual(int key, KeyBoardEngineKind kind) const;
+    bool contains(QSet<int> keysPressed, KeyBoardEngineKind kind) const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

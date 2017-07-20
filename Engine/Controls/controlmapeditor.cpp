@@ -17,7 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QTime>
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "wanok.h"
@@ -1219,11 +1218,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                QVector3D &cameraUpWorldSpace,
                                MapEditorSelectionKind selectionKind)
 {
-    int a = QTime::currentTime().msecsSinceStartOfDay();
-
-    QList<MapPortion*> portions;
-
-    m_map->paintFloors(modelviewProjection, portions);
+    m_map->paintFloors(modelviewProjection);
 
     if (selectionKind == MapEditorSelectionKind::Objects)
         m_cursorObject->paintGL(modelviewProjection);
@@ -1237,11 +1232,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
-                       cameraUpWorldSpace, portions);
-
-    int b = QTime::currentTime().msecsSinceStartOfDay();
-
-    qDebug() <<  b - a;
+                       cameraUpWorldSpace);
 }
 
 // -------------------------------------------------------

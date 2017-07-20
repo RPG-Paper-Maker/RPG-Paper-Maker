@@ -58,6 +58,7 @@ public:
     Portion getPortion() const;
     void loadTexture(QString path);
     void updatePositionSquare();
+    void centerInSquare(int offset);
     void initializeGL();
     void initializeVertices();
     void initializeSquareSize(int s);

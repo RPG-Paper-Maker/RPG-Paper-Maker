@@ -76,6 +76,8 @@ public:
     MapPortion* mapPortion(int x, int y, int z) const;
     MapPortion* mapPortionBrut(int index) const;
     int portionIndex(int x, int y, int z) const;
+    int getMapPortionSize() const;
+    int getMapPortionTotalSize() const;
     void setMapPortion(int x, int y, int z, MapPortion *mapPortion);
     void setMapPortion(Portion& p, MapPortion *mapPortion);
     MapPortion* createMapPortion(Portion& p);
@@ -109,17 +111,14 @@ public:
     void writeJSONArray(QJsonArray & tab) const;
 
     void initializeGL();
-    void paintFloors(QMatrix4x4 &modelviewProjection,
-                     QList<MapPortion*>& portions);
+    void paintFloors(QMatrix4x4 &modelviewProjection);
     void paintOthers(QMatrix4x4 &modelviewProjection,
                      QVector3D& cameraRightWorldSpace,
-                     QVector3D& cameraUpWorldSpace,
-                     QList<MapPortion*>& portions);
+                     QVector3D& cameraUpWorldSpace);
 
 private:
     MapProperties* m_mapProperties;
     MapPortion** m_mapPortions;
-    //QHash<Portion, MapPortion*> m_mapPortions;
     QStandardItemModel* m_modelObjects;
     QString m_pathMap;
     int m_portionsRay;

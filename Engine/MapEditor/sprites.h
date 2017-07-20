@@ -51,6 +51,7 @@ public:
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
+    static const int SPRITES_OFFSET_COEF = 0.0005;
 };
 
 // -------------------------------------------------------
@@ -79,7 +80,7 @@ public:
                             QVector<VertexBillboard>& verticesFace,
                             QVector<GLuint>& indexesFace,
                             Position3D& position, int& countStatic,
-                            int& countFace);
+                            int& countFace, int& spritesOffset);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -105,7 +106,7 @@ class SpriteObject : protected QOpenGLFunctions
 public:
     SpriteObject(SpriteDatas& datas, QOpenGLTexture* texture);
     virtual ~SpriteObject();
-    void initializeVertices(int squareSize, Position3D& position);
+    void initializeVertices(int squareSize, Position3D& position, int &spritesOffset);
     void initializeStaticGL(QOpenGLShaderProgram* programStatic);
     void initializeFaceGL(QOpenGLShaderProgram *programFace);
     void updateStaticGL();
@@ -146,7 +147,8 @@ public:
     bool addSprite(Position& p, SpriteDatas* sprite);
     bool deleteSprite(Position& p);
 
-    void initializeVertices(int squareSize, int width, int height);
+    void initializeVertices(int squareSize, int width, int height,
+                            int& spritesOffset);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram* programFace);
     void updateGL();

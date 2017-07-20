@@ -101,14 +101,15 @@ bool MapPortion::deleteObject(Position& p){
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &characters)
 {
+    int spritesOffset = -0.005;
     m_floors->initializeVertices(squareSize,
                                  tileset->width(),
                                  tileset->height());
     m_sprites->initializeVertices(squareSize,
                                   tileset->width(),
-                                  tileset->height());
-    m_mapObjects->initializeVertices(squareSize,
-                                     characters);
+                                  tileset->height(),
+                                  spritesOffset);
+    m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 
 // -------------------------------------------------------

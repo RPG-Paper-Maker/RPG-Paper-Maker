@@ -124,7 +124,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      QVector<VertexBillboard>& verticesFace,
                                      QVector<GLuint>& indexesFace,
                                      Position3D& position, int& countStatic,
-                                     int& countFace)
+                                     int& countFace, int &spritesOffset)
 {
     float x, y, w, h;
     x = (float)(m_textureRect->x() * squareSize) / width;
@@ -133,15 +133,15 @@ void SpriteDatas::initializeVertices(int squareSize,
     h = (float)(m_textureRect->height() * squareSize) / height;
 
     QVector3D pos((float) position.x() * squareSize -
-                  ((textureRect()->width() - 1) * squareSize / 2),
+                  ((textureRect()->width() - 1) * squareSize / 2) +
+                  spritesOffset,
                   (float) position.getY(squareSize),
                   (float) position.z() * squareSize +
-                  (widthPosition() * squareSize / 100)
-                  );
+                  (widthPosition() * squareSize / 100) + spritesOffset);
+    spritesOffset += Sprite::SPRITES_OFFSET_COEF;
     QVector3D size((float) textureRect()->width() * squareSize,
                    (float) textureRect()->height() * squareSize,
-                   0.0f
-                   );
+                   0.0f);
 
     if (m_kind == MapEditorSubSelectionKind::SpritesFix) {
 
@@ -261,7 +261,8 @@ SpriteObject::~SpriteObject()
 //
 // -------------------------------------------------------
 
-void SpriteObject::initializeVertices(int squareSize, Position3D& position)
+void SpriteObject::initializeVertices(int squareSize, Position3D& position,
+                                      int& spritesOffset)
 {
     m_verticesStatic.clear();
     m_verticesFace.clear();
@@ -271,7 +272,8 @@ void SpriteObject::initializeVertices(int squareSize, Position3D& position)
                                m_texture->width(),
                                m_texture->height(),
                                m_verticesStatic, m_indexes, m_verticesFace,
-                               m_indexes, position, count, count);
+                               m_indexes, position, count, count,
+                               spritesOffset);
 }
 
 // -------------------------------------------------------
@@ -432,7 +434,9 @@ bool Sprites::deleteSprite(Position& p){
 //
 // -------------------------------------------------------
 
-void Sprites::initializeVertices(int squareSize, int width, int height){
+void Sprites::initializeVertices(int squareSize, int width, int height,
+                                 int& spritesOffset)
+{
     m_verticesStatic.clear();
     m_indexesStatic.clear();
     m_verticesFace.clear();
@@ -449,7 +453,8 @@ void Sprites::initializeVertices(int squareSize, int width, int height){
             sprite->initializeVertices(squareSize, width, height,
                                        m_verticesStatic, m_indexesStatic,
                                        m_verticesFace, m_indexesFace,
-                                       position, countStatic, countFace);
+                                       position, countStatic, countFace,
+                                       spritesOffset);
         }
     }
 }

@@ -123,12 +123,21 @@ void Cursor::loadTexture(QString path){
 // -------------------------------------------------------
 
 void Cursor::updatePositionSquare(){
-    setX((int)(m_positionReal.x() / m_squareSize));
-    setY((int)(m_positionReal.y() / m_squareSize));
-    setZ((int)(m_positionReal.z() / m_squareSize));
+    setX((int)(m_positionReal.x()) / m_squareSize);
+    setY((int)(m_positionReal.y()) / m_squareSize);
+    setZ((int)(m_positionReal.z()) / m_squareSize);
 }
 
-// -------------------------------------------------------
+// ------------------------------------------------------
+
+void Cursor::centerInSquare(int offset) {
+    m_positionReal.setX(((int)((m_positionReal.x()) / m_squareSize) *
+                        m_squareSize) + (m_squareSize / 2) - offset);
+    m_positionReal.setZ(((int)((m_positionReal.z()) / m_squareSize) *
+                        m_squareSize) + (m_squareSize / 2) - 1);
+}
+
+// ------------------------------------------------------
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     int xPlus, zPlus, res;
@@ -184,8 +193,6 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
         if (res >= 0 && res < h)
             m_positionReal.setZ(res);
     }
-
-    updatePositionSquare();
 }
 
 // -------------------------------------------------------

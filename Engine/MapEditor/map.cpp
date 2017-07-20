@@ -132,11 +132,21 @@ MapPortion* Map::mapPortionBrut(int index) const {
 }
 
 int Map::portionIndex(int x, int y, int z) const {
-    int size = m_portionsRay * 2 + 1;
+    int size = getMapPortionSize();
 
     return ((x + m_portionsRay) * size * size) +
            ((y + m_portionsRay) * size) +
            (z + m_portionsRay);
+}
+
+int Map::getMapPortionSize() const {
+    return m_portionsRay * 2 + 1;
+}
+
+int Map::getMapPortionTotalSize() const {
+    int size = getMapPortionSize();
+
+    return size * size * size;
 }
 
 void Map::setMapPortion(int x, int y, int z, MapPortion* mapPortion) {
@@ -444,8 +454,7 @@ void Map::updatePortion(Portion& p){
 void Map::loadPortions(Portion portion){
     deletePortions();
 
-    int size = m_portionsRay * 2 + 1;
-    m_mapPortions = new MapPortion*[size * size * size];
+    m_mapPortions = new MapPortion*[getMapPortionTotalSize()];
     for (int i = -m_portionsRay; i <= m_portionsRay; i++){
         for (int j = -m_portionsRay; j <= m_portionsRay; j++){
             for (int k = -m_portionsRay; k <= m_portionsRay; k++){
@@ -460,8 +469,7 @@ void Map::loadPortions(Portion portion){
 
 void Map::deletePortions(){
     if (m_mapPortions != nullptr) {
-        int size = m_portionsRay * 2 + 1;
-        int totalSize = size * size * size;
+        int totalSize = getMapPortionTotalSize();
         for (int i = 0; i < totalSize; i++){
             MapPortion* mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr)
@@ -761,8 +769,7 @@ void Map::updateGLFace(QOpenGLBuffer &vertexBuffer,
 
 // -------------------------------------------------------
 
-void Map::paintFloors(QMatrix4x4& modelviewProjection,
-                      QList<MapPortion *> &portions)
+void Map::paintFloors(QMatrix4x4& modelviewProjection)
 {
 
     m_programStatic->bind();
@@ -770,17 +777,11 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection,
                                      modelviewProjection);
     m_textureTileset->bind();
 
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = this->mapPortion(portion);
-                if (mapPortion != nullptr){
-                    portions.push_back(mapPortion);
-                    mapPortion->paintFloors();
-                }
-            }
-        }
+    int totalSize = getMapPortionTotalSize();
+    for (int i = 0; i < totalSize; i++) {
+        MapPortion* mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr)
+            mapPortion->paintFloors();
     }
 
     m_programStatic->release();
@@ -790,26 +791,21 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection,
 
 void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                       QVector3D &cameraRightWorldSpace,
-                      QVector3D &cameraUpWorldSpace,
-                      QList<MapPortion*>& portions)
+                      QVector3D &cameraUpWorldSpace)
 {
-    /*
+    int totalSize = getMapPortionTotalSize();
+    MapPortion* mapPortion;
+
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
     m_textureTileset->bind();
 
     // Sprites
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions.value(portion);
-                if (mapPortion != nullptr){
-                    mapPortion->paintSprites();
-                }
-            }
-        }
+    for (int i = 0; i < totalSize; i++) {
+        mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr)
+            mapPortion->paintSprites();
     }
 
     // Objects
@@ -819,17 +815,10 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     {
         int textureID = it.key();
         QOpenGLTexture* texture = it.value();
-        for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-            for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-                for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                    Portion portion(i, j, k);
-                    MapPortion* mapPortion = m_mapPortions.value(portion);
-                    if (mapPortion != nullptr){
-                        mapPortion->paintObjectsStaticSprites(textureID,
-                                                              texture);
-                    }
-                }
-            }
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr)
+                mapPortion->paintObjectsStaticSprites(textureID, texture);
         }
     }
 
@@ -843,33 +832,22 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_programFaceSprite->setUniformValue(u_modelViewProjection,
                                          modelviewProjection);
     m_textureTileset->bind();
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions.value(portion);
-                if (mapPortion != nullptr){
-                    mapPortion->paintFaceSprites();
-                }
-            }
-        }
+    for (int i = 0; i < totalSize; i++) {
+        mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr)
+            mapPortion->paintFaceSprites();
     }
+
     // Objects face sprites
     for (it = m_texturesCharacters.begin();
          it != m_texturesCharacters.end(); it++)
     {
         int textureID = it.key();
         QOpenGLTexture* texture = it.value();
-        for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-            for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-                for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                    Portion portion(i, j, k);
-                    MapPortion* mapPortion = m_mapPortions.value(portion);
-                    if (mapPortion != nullptr){
-                        mapPortion->paintObjectsFaceSprites(textureID, texture);
-                    }
-                }
-            }
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr)
+                mapPortion->paintObjectsFaceSprites(textureID, texture);
         }
     }
     m_programFaceSprite->release();
@@ -877,85 +855,13 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     // Objects squares
     m_programStatic->bind();
     m_textureObjectSquare->bind();
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                Portion portion(i, j, k);
-                MapPortion* mapPortion = m_mapPortions.value(portion);
-                if (mapPortion != nullptr){
-                    mapPortion->paintObjectsSquares();
-                }
-            }
-        }
+    for (int i = 0; i < totalSize; i++) {
+        mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr)
+            mapPortion->paintObjectsSquares();
     }
 
     m_programStatic->release();
-    */
-    int c = 0;
-    m_programStatic->bind();
-    m_programStatic->setUniformValue(u_modelviewProjectionStatic,
-                                     modelviewProjection);
-    m_textureTileset->bind();
-
-    // Sprites
-    for (int i = 0; i < portions.size(); i++) {
-        portions.at(i)->paintSprites();
-    }
-    /*
-
-    // Objects
-    QHash<int, QOpenGLTexture*>::iterator it;
-    for (it = m_texturesCharacters.begin();
-         it != m_texturesCharacters.end(); it++)
-    {
-        int textureID = it.key();
-        QOpenGLTexture* texture = it.value();
-        for (int i = 0; i < l; i++) {
-            MapPortion* mapPortion = portions.at(i);
-
-        }
-    }
-
-    // Face sprites
-    m_programStatic->release();
-    m_programFaceSprite->bind();
-    m_programFaceSprite->setUniformValue(u_cameraRightWorldspace,
-                                         cameraRightWorldSpace);
-    m_programFaceSprite->setUniformValue(u_cameraUpWorldspace,
-                                         cameraUpWorldSpace);
-    m_programFaceSprite->setUniformValue(u_modelViewProjection,
-                                         modelviewProjection);
-    m_textureTileset->bind();
-    for (int i = -m_portionsRay; i <= m_portionsRay; i++){
-        for (int j = -m_portionsRay; j <= m_portionsRay; j++){
-            for (int k = -m_portionsRay; k <= m_portionsRay; k++){
-                c = 1;
-            }
-        }
-    }
-    // Objects face sprites
-    for (it = m_texturesCharacters.begin();
-         it != m_texturesCharacters.end(); it++)
-    {
-        int textureID = it.key();
-        QOpenGLTexture* texture = it.value();
-        for (int i = 0; i < l; i++) {
-            MapPortion* mapPortion = portions.at(i);
-
-        }
-    }
-    m_programFaceSprite->release();
-
-    // Objects squares
-    m_programStatic->bind();
-    m_textureObjectSquare->bind();
-    for (int i = 0; i < l; i++) {
-        MapPortion* mapPortion = portions.at(i);
-
-    }
-
-    m_programStatic->release();
-    */
 }
 
 // -------------------------------------------------------

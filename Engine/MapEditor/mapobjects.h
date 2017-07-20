@@ -54,7 +54,8 @@ public:
     bool deleteObject(Position& p);
     void clearSprites();
     void initializeVertices(int squareSize,
-                            QHash<int, QOpenGLTexture *> &characters);
+                            QHash<int, QOpenGLTexture *> &characters,
+                            int& spritesOffset);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram *programFace);
     void updateGL();

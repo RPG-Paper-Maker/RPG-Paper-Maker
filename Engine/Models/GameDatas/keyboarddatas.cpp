@@ -215,12 +215,26 @@ void KeyBoardDatas::setDefault(QVector<SystemKeyBoard *> &list){
 
 // -------------------------------------------------------
 
-bool KeyBoardDatas::isEqual(int key, KeyBoardEngineKind kind) const{
+bool KeyBoardDatas::isEqual(int key, KeyBoardEngineKind kind) const {
     int idKey = (int) kind;
     SystemKeyBoard* super = ((SystemKeyBoard*) m_model->item(idKey)->data()
                              .value<quintptr>());
 
     return super->isEqual(key);
+}
+
+// -------------------------------------------------------
+
+bool KeyBoardDatas::contains(QSet<int> keysPressed,
+                             KeyBoardEngineKind kind) const
+{
+    QSet<int>::iterator i;
+    for (i = keysPressed.begin(); i != keysPressed.end(); i++) {
+        if (isEqual(*i, kind))
+            return true;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------

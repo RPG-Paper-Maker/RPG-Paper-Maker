@@ -148,6 +148,12 @@ void Floor::initializeVertices(int squareSize, int width, int height,
     float y = (float)(floor->textureRect()->y() * squareSize) / height;
     float w = (float)(floor->textureRect()->width() * squareSize) / width;
     float h = (float)(floor->textureRect()->height() * squareSize) / height;
+    float coefX = 0.1 / width;
+    float coefY = 0.1 / height;
+    x += coefX;
+    y += coefY;
+    w -= (coefX * 2);
+    h -= (coefY * 2);
 
     // Vertices
     m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
