@@ -119,6 +119,7 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
     menu->addAction(action);
     action = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
                          "Rectangle");
+    action->setEnabled(false);
     menu->addAction(action);
     action = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
     menu->addAction(action);

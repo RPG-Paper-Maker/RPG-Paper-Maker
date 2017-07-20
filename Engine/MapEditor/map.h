@@ -51,7 +51,14 @@ public:
     QStandardItemModel* modelObjects() const;
 
     static void writeNewMap(QString path, MapProperties& properties);
-    static void correctMap(QString path, MapProperties& properties);
+    static void correctMap(QString path, MapProperties &previousProperties,
+                           MapProperties& properties);
+    static void writeEmptyMap(QString path, int i, int j, int k);
+    static void deleteCompleteMap(QString path, int i, int j, int k);
+    static void deleteObjects(QStandardItemModel* model, int minI, int maxI,
+                              int minJ, int maxJ, int minK, int maxK);
+    static void deleteMapElements(QString path, int i, int j, int k,
+                                  MapProperties& properties);
     static void writeDefaultMap(QString path);
     static QString writeMap(QString path, MapProperties& properties,
                             QJsonArray &jsonObject);
@@ -85,7 +92,8 @@ public:
     MapObjects* objectsPortion(int x, int y, int z);
     bool addObject(Position& p, MapPortion *mapPortion, Portion& globalPortion,
                    SystemCommonObject* object);
-    int removeObject(SystemCommonObject *object);
+    static int removeObject(QStandardItemModel* model,
+                            SystemCommonObject *object);
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       SystemCommonObject *object);
     QString getPortionPath(int i, int j, int k);
@@ -106,9 +114,15 @@ public:
     static QString generateObjectName(int id);
 
     void readObjects();
+    static void loadObjects(QStandardItemModel *model, QString pathMap,
+                            bool temp);
     void writeObjects(bool temp = false) const;
-    void readJSONArray(const QJsonArray & tab);
-    void writeJSONArray(QJsonArray & tab) const;
+    static void saveObjects(QStandardItemModel *model, QString pathMap,
+                            bool temp);
+    static void readJSONArray(QStandardItemModel* model,
+                              const QJsonArray & tab);
+    static void writeJSONArray(QStandardItemModel* model,
+                               QJsonArray & tab);
 
     void initializeGL();
     void paintFloors(QMatrix4x4 &modelviewProjection);

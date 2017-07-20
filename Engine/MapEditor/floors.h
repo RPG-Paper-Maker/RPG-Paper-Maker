@@ -31,6 +31,7 @@
 #include "position.h"
 #include "height.h"
 #include "vertex.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -112,6 +113,8 @@ public:
     LandDatas* removeLand(Position& p);
     bool addLand(Position& p, LandDatas* land);
     bool deleteLand(Position& p);
+
+    void removeLandOut(MapProperties& properties);
 
     void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);

@@ -293,6 +293,25 @@ bool Floors::deleteLand(Position& p){
 }
 
 // -------------------------------------------------------
+
+void Floors::removeLandOut(MapProperties& properties) {
+    QList<Position> list;
+    QHash<Position, LandDatas*>::iterator i;
+    for (i = m_lands.begin(); i != m_lands.end(); i++) {
+        Position position = i.key();
+
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
+        {
+            list.push_back(position);
+        }
+    }
+
+    for (int j = 0; j < list.size(); j++)
+        m_lands.remove(list.at(j));
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

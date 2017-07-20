@@ -49,6 +49,7 @@ public:
     void setCameraDistance(int d);
     void setCameraHeight(int h);
     void setCameraHorizontalAngle(double a);
+    void reset();
     static void copyItem(const QStandardItem* from, QStandardItem* to);
     static void copyTree(const QStandardItem* from, QStandardItem* to);
 

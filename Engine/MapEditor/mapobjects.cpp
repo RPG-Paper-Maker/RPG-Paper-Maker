@@ -100,6 +100,25 @@ bool MapObjects::deleteObject(Position& p){
 }
 
 // -------------------------------------------------------
+
+void MapObjects::removeObjectsOut(MapProperties& properties) {
+    QList<Position> list;
+    QHash<Position, SystemCommonObject*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        Position position = i.key();
+
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
+        {
+            list.push_back(position);
+        }
+    }
+
+    for (int j = 0; j < list.size(); j++)
+        m_all.remove(list.at(j));
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

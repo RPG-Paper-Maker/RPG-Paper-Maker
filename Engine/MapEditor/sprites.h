@@ -32,6 +32,7 @@
 #include "vertex.h"
 #include "vertexbillboard.h"
 #include "mapeditorsubselectionkind.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -146,6 +147,8 @@ public:
     SpriteDatas* removeSprite(Position& p);
     bool addSprite(Position& p, SpriteDatas* sprite);
     bool deleteSprite(Position& p);
+
+    void removeSpritesOut(MapProperties& properties);
 
     void initializeVertices(int squareSize, int width, int height,
                             int& spritesOffset);

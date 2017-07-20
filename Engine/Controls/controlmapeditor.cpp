@@ -452,7 +452,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
         if (button == Qt::MouseButton::LeftButton)
             add(selection, subSelection, drawKind, tileset, p);
         else if (button == Qt::MouseButton::RightButton)
-            remove(selection, subSelection, drawKind, p);
+            remove(selection, drawKind, p);
     }
 }
 
@@ -496,16 +496,15 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 
 void ControlMapEditor::remove(MapEditorSelectionKind selection,
-                              MapEditorSubSelectionKind subSelection,
                               DrawKind drawKind,
                               Position& p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeLand(p, subSelection, drawKind);
+        removeLand(p, drawKind);
         break;
     case MapEditorSelectionKind::Sprites:
-        removeSprite(p, subSelection, drawKind);
+        removeSprite(p, drawKind);
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p);
@@ -759,18 +758,22 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeLand(Position& p,
-                                   MapEditorSubSelectionKind ,
-                                   DrawKind drawKind)
-{
+void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
+    QList<Position> positions;
+
     // Pencil
-    if (drawKind == DrawKind::Pencil){
-        QList<Position> positions;
+    switch (drawKind) {
+    case DrawKind::Pencil:
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++)
             eraseLand(positions[i]);
-
         eraseLand(p);
+    case DrawKind::Rectangle:
+        break;
+    case DrawKind::Pin:
+        QRect tileset(0, 0, 1, 1);
+        paintPinLand(p, MapEditorSubSelectionKind::None, tileset);
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -805,10 +808,12 @@ void ControlMapEditor::addSprite(Position& p,
                                  QRect& tileset)
 {
     SpriteDatas* sprite;
+    QList<Position> positions;
 
     // Pencil
-    if (drawKind == DrawKind::Pencil){
-        QList<Position> positions;
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    case DrawKind::Pin:
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++){
             sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
@@ -817,6 +822,9 @@ void ControlMapEditor::addSprite(Position& p,
 
         sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
         stockSprite(p, sprite);
+        break;
+    case DrawKind::Rectangle:
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -841,17 +849,20 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeSprite(Position& p,
-                                    MapEditorSubSelectionKind ,
-                                    DrawKind drawKind)
-{
+void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
+    QList<Position> positions;
+
     // Pencil
-    if (drawKind == DrawKind::Pencil){
-        QList<Position> positions;
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    case DrawKind::Pin:
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++)
             eraseSprite(positions[i]);
         eraseSprite(p);
+        break;
+    case DrawKind::Rectangle:
+        break;
     }
 
     m_previousMouseCoords = p;

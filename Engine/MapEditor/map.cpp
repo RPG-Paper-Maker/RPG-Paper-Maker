@@ -250,23 +250,135 @@ QString Map::writeMap(QString path, MapProperties& properties,
 
 // -------------------------------------------------------
 
-void Map::correctMap(QString path, MapProperties& properties){
-    int lx = (properties.length() - 1) / Wanok::portionSize;
-    int ly = (properties.depth() + properties.height() - 1) /
-            Wanok::portionSize;;
-    int lz = (properties.width() - 1) / Wanok::portionSize;
-    for (int i = 0; i <= lx; i++){
-        for (int j = 0; j <= ly; j++){
-            for (int k = 0; k <= lz; k++){
-                QString pathPortion = Wanok::pathCombine(
-                            path, getPortionPathMap(i, j, k));
-                if (!QFile(pathPortion).exists()){
-                    QJsonObject obj;
-                    Wanok::writeOtherJSON(pathPortion, obj);
-                }
-            }
+void Map::correctMap(QString path, MapProperties& previousProperties,
+                     MapProperties& properties)
+{
+    int portionMaxX, portionMaxY, portionMaxZ;
+    int newPortionMaxX, newPortionMaxY, newPortionMaxZ;
+    previousProperties.getPortionsNumber(portionMaxX, portionMaxY, portionMaxZ);
+    properties.getPortionsNumber(newPortionMaxX,
+                                 newPortionMaxY,
+                                 newPortionMaxZ);
+
+    // Write empty portions
+    for (int i = portionMaxX + 1; i <= newPortionMaxX; i++) {
+        for (int j = 0; j <= newPortionMaxY; j++) {
+            for (int k = 0; k <= newPortionMaxZ; k++)
+                Map::writeEmptyMap(path, i, j, k);
         }
     }
+    for (int j = portionMaxY + 1; j <= newPortionMaxY;j++) {
+        for (int i = 0; i <= newPortionMaxX; i++) {
+            for (int k = 0; k <= newPortionMaxZ; k++)
+                Map::writeEmptyMap(path, i, j, k);
+        }
+    }
+    for (int k = portionMaxZ + 1; k <= newPortionMaxZ; k++) {
+        for (int i = 0; i <= newPortionMaxX; i++) {
+            for (int j = 0; j <= newPortionMaxY; j++)
+                Map::writeEmptyMap(path, i, j, k);
+        }
+    }
+
+    int difLength = previousProperties.length() - properties.length();
+    int difWidth = previousProperties.width() - properties.width();
+    int difHeight = previousProperties.height() - properties.height();
+
+    if (difLength > 0 || difWidth > 0 || difHeight > 0) {
+        QStandardItemModel* model = new QStandardItemModel;
+        Map::loadObjects(model, path, false);
+
+        // Complete delete
+        for (int i = newPortionMaxX + 1; i <= portionMaxX; i++) {
+            for (int j = 0; j <= portionMaxY; j++) {
+                for (int k = 0; k <= portionMaxZ; k++)
+                    deleteCompleteMap(path, i, j, k);
+            }
+        }
+        deleteObjects(model, newPortionMaxX + 1, portionMaxX, 0, portionMaxY, 0,
+                      portionMaxZ);
+        for (int k = newPortionMaxZ + 1; k <= portionMaxZ; k++) {
+            for (int i = 0; i <= portionMaxX; i++) {
+                for (int j = 0; j <= portionMaxY; j++)
+                    deleteCompleteMap(path, i, j, k);
+            }
+        }
+        deleteObjects(model, 0, portionMaxX, 0, portionMaxY, newPortionMaxZ + 1,
+                      portionMaxZ);
+
+        // Remove only cut items
+        for (int i = 0; i <= newPortionMaxX; i++) {
+            for (int j = 0; j <= newPortionMaxY; j++) {
+                deleteMapElements(path, i, j, newPortionMaxZ, properties);
+            }
+        }
+        for (int k = 0; k <= newPortionMaxZ; k++) {
+            for (int j = 0; j <= newPortionMaxY; j++) {
+                deleteMapElements(path, newPortionMaxX, j, k, properties);
+            }
+        }
+
+        // Save
+        Map::saveObjects(model, path, false);
+
+        delete model;
+    }           
+}
+
+// -------------------------------------------------------
+
+void Map::writeEmptyMap(QString path, int i, int j, int k) {
+    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    QJsonObject obj;
+    Wanok::writeOtherJSON(pathPortion, obj);
+}
+
+// -------------------------------------------------------
+
+void Map::deleteCompleteMap(QString path, int i, int j, int k) {
+    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    QFile file(pathPortion);
+    file.remove();
+}
+
+// -------------------------------------------------------
+
+void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
+                        int minJ, int maxJ, int minK, int maxK)
+{
+    SystemMapObject* super;
+    QList<int> list;
+
+    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++){
+        super = ((SystemMapObject*) model->item(i)->data().value<quintptr>());
+        Portion portion = super->portion();
+        int x = portion.x(), y = portion.y(), z = portion.z();
+        if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
+            z <= maxK)
+        {
+            list.push_back(i);
+        }
+    }
+
+    for (int i = 0; i < list.size(); i++)
+        model->removeRow(list.at(i));
+}
+
+// -------------------------------------------------------
+
+void Map::deleteMapElements(QString path, int i, int j, int k,
+                            MapProperties &properties)
+{
+    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    MapPortion* portion = new MapPortion;
+    Wanok::readJSON(pathPortion, *portion);
+
+    // Removing cut content
+    portion->removeLandOut(properties);
+    portion->removeSpritesOut(properties);
+    portion->removeObjectsOut(properties);
+
+    Wanok::writeJSON(pathPortion, *portion);
 }
 
 // -------------------------------------------------------
@@ -513,7 +625,7 @@ bool Map::addObject(Position& p, MapPortion* mapPortion, Portion &globalPortion,
 {
     bool b = mapPortion->addObject(p, object);
 
-    int row = removeObject(object);
+    int row = Map::removeObject(m_modelObjects, object);
     SystemMapObject* newObject = new SystemMapObject(object->id(),
                                                      object->name(),
                                                      globalPortion);
@@ -527,20 +639,20 @@ bool Map::addObject(Position& p, MapPortion* mapPortion, Portion &globalPortion,
 
 // -------------------------------------------------------
 
-int Map::removeObject(SystemCommonObject *object){
+int Map::removeObject(QStandardItemModel *model, SystemCommonObject *object) {
     SystemMapObject* super;
 
-    for (int i = 0; i < m_modelObjects->invisibleRootItem()->rowCount(); i++){
-        super = ((SystemMapObject*) m_modelObjects->item(i)->data()
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        super = ((SystemMapObject*) model->item(i)->data()
                  .value<quintptr>());
         if (object->id() == super->id()){
-            m_modelObjects->removeRow(i);
+            model->removeRow(i);
             delete super;
             return i;
         }
     }
 
-    return m_modelObjects->invisibleRootItem()->rowCount();
+    return model->invisibleRootItem()->rowCount();
 }
 
 // -------------------------------------------------------
@@ -548,7 +660,7 @@ int Map::removeObject(SystemCommonObject *object){
 bool Map::deleteObject(Position& p, MapPortion *mapPortion,
                        SystemCommonObject *object)
 {
-    removeObject(object);
+    Map::removeObject(m_modelObjects, object);
 
     bool b = mapPortion->deleteObject(p);
 
@@ -871,54 +983,66 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
 // -------------------------------------------------------
 
 void Map::readObjects(){
-    QString pathTemp = Wanok::pathCombine(m_pathMap,
-                                          Wanok::TEMP_MAP_FOLDER_NAME);
-    QString path = Wanok::pathCombine(pathTemp, Wanok::fileMapObjects);
+    Map::loadObjects(m_modelObjects, m_pathMap, true);
+}
+
+
+// -------------------------------------------------------
+
+void Map::loadObjects(QStandardItemModel* model, QString pathMap, bool temp) {
+    if (temp)
+        pathMap = Wanok::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
+    QString path = Wanok::pathCombine(pathMap, Wanok::fileMapObjects);
     QJsonDocument loadDoc;
     Wanok::readOtherJSON(path, loadDoc);
     QJsonObject json = loadDoc.object();
-    readJSONArray(json["objs"].toArray());
+    Map::readJSONArray(model, json["objs"].toArray());
 }
 
 // -------------------------------------------------------
 
-void Map::writeObjects(bool temp) const{
-    QString pathTemp = temp ?
-                Wanok::pathCombine(m_pathMap, Wanok::TEMP_MAP_FOLDER_NAME)
-              : m_pathMap;
-    QString path = Wanok::pathCombine(pathTemp, Wanok::fileMapObjects);
+void Map::writeObjects(bool temp) const {
+    Map::saveObjects(m_modelObjects, m_pathMap, temp);
+}
+
+// -------------------------------------------------------
+
+void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
+    if (temp)
+        pathMap = Wanok::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
+    QString path = Wanok::pathCombine(pathMap, Wanok::fileMapObjects);
     QJsonObject json;
     QJsonArray portions;
-    writeJSONArray(portions);
+    Map::writeJSONArray(model, portions);
     json["objs"] = portions;
     Wanok::writeOtherJSON(path, json);
 }
 
 // -------------------------------------------------------
 
-void Map::readJSONArray(const QJsonArray & tab){
+void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
     QStandardItem* item;
     SystemMapObject* super;
 
-    setModelObjects(m_modelObjects);
+    Map::setModelObjects(model);
     for (int i = 0; i < tab.size(); i++){
         item = new QStandardItem;
         super = new SystemMapObject;
         super->read(tab.at(i).toObject());
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setText(super->toString());
-        m_modelObjects->appendRow(item);
+        model->appendRow(item);
     }
 }
 
 // -------------------------------------------------------
 
-void Map::writeJSONArray(QJsonArray & tab) const{
+void Map::writeJSONArray(QStandardItemModel *model, QJsonArray & tab) {
     SystemMapObject* super;
 
-    for (int i = 2; i < m_modelObjects->invisibleRootItem()->rowCount(); i++){
+    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++){
         QJsonObject obj;
-        super = ((SystemMapObject*) m_modelObjects->item(i)->data()
+        super = ((SystemMapObject*) model->item(i)->data()
                  .value<quintptr>());
         super->write(obj);
         tab.append(obj);

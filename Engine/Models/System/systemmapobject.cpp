@@ -42,6 +42,8 @@ SystemMapObject::~SystemMapObject(){
 
 }
 
+Portion SystemMapObject::portion() const { return m_portion; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

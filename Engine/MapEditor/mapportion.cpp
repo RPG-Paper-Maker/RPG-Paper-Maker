@@ -92,6 +92,24 @@ bool MapPortion::deleteObject(Position& p){
 }
 
 // -------------------------------------------------------
+
+void MapPortion::removeLandOut(MapProperties& properties) {
+    m_floors->removeLandOut(properties);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeSpritesOut(MapProperties& properties) {
+    m_sprites->removeSpritesOut(properties);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeObjectsOut(MapProperties& properties) {
+    m_mapObjects->removeObjectsOut(properties);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

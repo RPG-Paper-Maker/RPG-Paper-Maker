@@ -37,6 +37,7 @@ public:
     SystemMapObject();
     SystemMapObject(int i, QString n, Portion portion);
     virtual ~SystemMapObject();
+    Portion portion() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

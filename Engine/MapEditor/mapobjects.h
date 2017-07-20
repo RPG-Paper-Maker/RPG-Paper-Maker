@@ -52,6 +52,9 @@ public:
     SystemCommonObject* removeObject(Position& p);
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
+
+    void removeObjectsOut(MapProperties& properties);
+
     void clearSprites();
     void initializeVertices(int squareSize,
                             QHash<int, QOpenGLTexture *> &characters,

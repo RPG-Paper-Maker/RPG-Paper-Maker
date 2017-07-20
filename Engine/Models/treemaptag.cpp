@@ -90,8 +90,19 @@ void TreeMapTag::setCameraHorizontalAngle(double a) {
 //
 // -------------------------------------------------------
 
+void TreeMapTag::reset() {
+    m_position->setX(0);
+    m_position->setY(0);
+    m_position->setZ(0);
+    m_positionObject->setX(0);
+    m_positionObject->setY(0);
+    m_positionObject->setZ(0);
+}
+
+// -------------------------------------------------------
+
 void TreeMapTag::copyItem(const QStandardItem* from,
-                                   QStandardItem* to)
+                          QStandardItem* to)
 {
     // Copy the current row
     TreeMapTag* tag = (TreeMapTag*) from->data().value<quintptr>();

@@ -50,6 +50,10 @@ public:
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 
+    void removeLandOut(MapProperties& properties);
+    void removeSpritesOut(MapProperties& properties);
+    void removeObjectsOut(MapProperties& properties);
+
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);
     void initializeGL(QOpenGLShaderProgram *programStatic,

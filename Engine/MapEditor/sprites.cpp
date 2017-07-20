@@ -429,6 +429,25 @@ bool Sprites::deleteSprite(Position& p){
 }
 
 // -------------------------------------------------------
+
+void Sprites::removeSpritesOut(MapProperties& properties) {
+    QList<Position3D> list;
+    QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        Position3D position = i.key();
+
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
+        {
+            list.push_back(position);
+        }
+    }
+
+    for (int j = 0; j < list.size(); j++)
+        m_all.remove(list.at(j));
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

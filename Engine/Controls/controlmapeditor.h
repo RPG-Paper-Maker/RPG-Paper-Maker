@@ -101,7 +101,6 @@ public:
              QRect& tileset,
              Position& p);
     void remove(MapEditorSelectionKind selection,
-                MapEditorSubSelectionKind subSelection,
                 DrawKind drawKind,
                 Position& p);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
@@ -119,15 +118,13 @@ public:
                             QRect &textureAfter);
     void getLandTexture(QRect& rect, LandDatas* land);
     void stockLand(Position& p, LandDatas* landDatas);
-    void removeLand(Position& p, MapEditorSubSelectionKind,
-                     DrawKind drawKind);
+    void removeLand(Position& p, DrawKind drawKind);
     void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind,
                    QRect& tileset);
     void stockSprite(Position& p, SpriteDatas *sprite);
-    void removeSprite(Position& p, MapEditorSubSelectionKind,
-                      DrawKind drawKind);
+    void removeSprite(Position& p, DrawKind drawKind);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();

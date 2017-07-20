@@ -476,19 +476,22 @@ void WidgetTreeLocalMaps::contextEditMap(){
                         generateMapName(tag->id()));
         MapProperties properties(path);
         properties.names()->updateNames();
+        MapProperties previousProperties;
+        previousProperties.setCopy(properties);
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Wanok::pathCombine(path,
                                                   Wanok::TEMP_MAP_FOLDER_NAME);
-            bool empty = Wanok::isDirEmpty(pathTemp);
-            if (!empty){
+            if (Wanok::mapsToSave.contains(properties.id())) {
                 Wanok::deleteAllFiles(path);
                 Wanok::copyAllFiles(pathTemp, path);
                 Wanok::deleteAllFiles(pathTemp);
+                Wanok::mapsToSave.remove(properties.id());
             }
             properties.save(path);
-            Map::correctMap(path, properties);
+            tag->reset();
+            Map::correctMap(path, previousProperties, properties);
             TreeMapDatas::setName(selected, properties.name());
             Wanok::get()->project()->writeTreeMapDatas();
             showMap(selected);
