@@ -53,7 +53,8 @@ public:
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
 
-    void removeObjectsOut(MapProperties& properties);
+    void removeObjectsOut(QList<int> &listDeletedObjectsIDs,
+                          MapProperties& properties);
 
     void clearSprites();
     void initializeVertices(int squareSize,

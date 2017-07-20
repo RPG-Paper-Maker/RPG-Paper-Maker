@@ -96,15 +96,16 @@ SceneMap.prototype = {
     */
     initializePortions: function(){
         var ray = this.getPortionRay();
+        var halfRay = Math.floor(ray / 2);
         this.mapPortions = new Array(ray);
         for (var i = 0; i < ray; i++){
             this.mapPortions[i] = new Array(ray);
             for (var j = 0; j < ray; j++){
                 this.mapPortions[i][j] = new Array(ray);
                 for (var k = 0; k < ray; k++){
-                    this.loadPortion(this.currentPortion[0] + i - (ray / 2),
-                                     this.currentPortion[1] + j - (ray / 2),
-                                     this.currentPortion[2] + k - (ray / 2),
+                    this.loadPortion(this.currentPortion[0] + i - halfRay,
+                                     this.currentPortion[1] + j - halfRay,
+                                     this.currentPortion[2] + k - halfRay,
                                      i, j, k);
                 }
             }
@@ -299,11 +300,12 @@ SceneMap.prototype = {
 
     getLocalPortion: function(portion){
         var ray = this.getPortionRay();
+        var halfRay = Math.floor(ray / 2);
 
         return [
-            portion[0] - this.currentPortion[0] + (ray / 2),
-            portion[1] - this.currentPortion[1] + (ray / 2),
-            portion[2] - this.currentPortion[2] + (ray / 2)
+            portion[0] - this.currentPortion[0] + halfRay,
+            portion[1] - this.currentPortion[1] + halfRay,
+            portion[2] - this.currentPortion[2] + halfRay
         ];
     },
 
@@ -377,7 +379,8 @@ SceneMap.prototype = {
             movedObjects[i].update(angle);
 
         // Update face sprites
-        var mapPortion = this.mapPortions[2][2][2];
+        var center = Math.floor(this.getPortionRay()/2);;
+        var mapPortion = this.mapPortions[center][center][center];
         mapPortion.updateFaceSprites(angle);
     },
 

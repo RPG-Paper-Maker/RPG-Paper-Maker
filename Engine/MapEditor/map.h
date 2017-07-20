@@ -57,7 +57,10 @@ public:
     static void deleteCompleteMap(QString path, int i, int j, int k);
     static void deleteObjects(QStandardItemModel* model, int minI, int maxI,
                               int minJ, int maxJ, int minK, int maxK);
-    static void deleteMapElements(QString path, int i, int j, int k,
+    static void deleteObjectsByID(QStandardItemModel* model,
+                                  QList<int> &listDeletedObjectsIDs);
+    static void deleteMapElements(QList<int> &listDeletedObjectsIDs,
+                                  QString path, int i, int j, int k,
                                   MapProperties& properties);
     static void writeDefaultMap(QString path);
     static QString writeMap(QString path, MapProperties& properties,

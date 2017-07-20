@@ -101,7 +101,9 @@ bool MapObjects::deleteObject(Position& p){
 
 // -------------------------------------------------------
 
-void MapObjects::removeObjectsOut(MapProperties& properties) {
+void MapObjects::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
+                                  MapProperties& properties)
+{
     QList<Position> list;
     QHash<Position, SystemCommonObject*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++) {
@@ -111,6 +113,7 @@ void MapObjects::removeObjectsOut(MapProperties& properties) {
             position.z() >= properties.width())
         {
             list.push_back(position);
+            listDeletedObjectsIDs.push_back(i.value()->id());
         }
     }
 

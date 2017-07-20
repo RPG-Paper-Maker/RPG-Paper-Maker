@@ -105,8 +105,10 @@ void MapPortion::removeSpritesOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
-void MapPortion::removeObjectsOut(MapProperties& properties) {
-    m_mapObjects->removeObjectsOut(properties);
+void MapPortion::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
+                                  MapProperties& properties)
+{
+    m_mapObjects->removeObjectsOut(listDeletedObjectsIDs, properties);
 }
 
 // -------------------------------------------------------

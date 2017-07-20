@@ -52,7 +52,8 @@ public:
 
     void removeLandOut(MapProperties& properties);
     void removeSpritesOut(MapProperties& properties);
-    void removeObjectsOut(MapProperties& properties);
+    void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
+                          MapProperties& properties);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);

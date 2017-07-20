@@ -286,6 +286,7 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
 
     if (difLength > 0 || difWidth > 0 || difHeight > 0) {
         QStandardItemModel* model = new QStandardItemModel;
+        QList<int> listDeletedObjectsIDs;
         Map::loadObjects(model, path, false);
 
         // Complete delete
@@ -309,14 +310,17 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
         // Remove only cut items
         for (int i = 0; i <= newPortionMaxX; i++) {
             for (int j = 0; j <= newPortionMaxY; j++) {
-                deleteMapElements(path, i, j, newPortionMaxZ, properties);
+                deleteMapElements(listDeletedObjectsIDs, path, i, j,
+                                  newPortionMaxZ, properties);
             }
         }
         for (int k = 0; k <= newPortionMaxZ; k++) {
             for (int j = 0; j <= newPortionMaxY; j++) {
-                deleteMapElements(path, newPortionMaxX, j, k, properties);
+                deleteMapElements(listDeletedObjectsIDs, path, newPortionMaxX,
+                                  j, k, properties);
             }
         }
+        deleteObjectsByID(model, listDeletedObjectsIDs);
 
         // Save
         Map::saveObjects(model, path, false);
@@ -366,8 +370,20 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
 
 // -------------------------------------------------------
 
-void Map::deleteMapElements(QString path, int i, int j, int k,
-                            MapProperties &properties)
+void Map::deleteObjectsByID(QStandardItemModel* model,
+                            QList<int> &listDeletedObjectsIDs)
+{
+    for (int i = 0; i < listDeletedObjectsIDs.size(); i++) {
+        int index = SuperListItem::getIndexById(model->invisibleRootItem(),
+                                                listDeletedObjectsIDs.at(i));
+        model->removeRow(index);
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
+                            int i, int j, int k, MapProperties &properties)
 {
     QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
     MapPortion* portion = new MapPortion;
@@ -376,7 +392,7 @@ void Map::deleteMapElements(QString path, int i, int j, int k,
     // Removing cut content
     portion->removeLandOut(properties);
     portion->removeSpritesOut(properties);
-    portion->removeObjectsOut(properties);
+    portion->removeObjectsOut(listDeletedObjectsIDs, properties);
 
     Wanok::writeJSON(pathPortion, *portion);
 }
