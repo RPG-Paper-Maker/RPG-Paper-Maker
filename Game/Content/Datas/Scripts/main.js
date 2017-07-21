@@ -58,7 +58,7 @@ var $PORTIONS_RAY_NEAR;
 *   doings.
 *   @constant
 *   @type {number} */
-var $PORTIONS_RAY_FAR = 1;
+var $PORTIONS_RAY_FAR = 0;
 
 /** Defines the size (in squares) of a portion in a map.
 *   @constant

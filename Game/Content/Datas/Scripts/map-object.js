@@ -303,7 +303,7 @@ MapObject.prototype = {
     *   @param {number} limit Max distance to go.
     *   @returns {number} Distance cross.
     */
-    move: function(orientation, limit, angle){
+    move: function(orientation, limit, angle, isCameraOrientation){
         var objects, movedObjects, index;
 
         // Remove from move
@@ -314,7 +314,10 @@ MapObject.prototype = {
                                        MapObject.SPEED_NORMAL *
                                        $SQUARE_SIZE));
         var position = this.getFuturPosition(orientation, distance, angle);
-        orientation = Wanok.mod(orientation + $currentMap.camera.getMapOrientation() - 2, 4);
+        if (isCameraOrientation) {
+            orientation = Wanok.mod(orientation +
+                                $currentMap.camera.getMapOrientation() - 2, 4);
+        }
         this.position.set(position.x, position.y, position.z);
 
         // Update orientation
@@ -483,9 +486,6 @@ MapObject.prototype = {
         if (this.currentState.setWithCamera) {
             this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
                                          this.orientationEye, 4);
-            if (this.orientation === 1){
-                var a= 1;
-            }
         }
     },
 

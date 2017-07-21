@@ -126,8 +126,7 @@ SceneMap.prototype = {
     *   @param {number} y The local y portion.
     *   @param {number} z The local z portion.
     */
-    loadPortion: function(realX, realY, realZ, x, y, z){
-
+    loadPortion: function(realX, realY, realZ, x, y, z) {
         var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
         var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
                 $PORTION_SIZE);
@@ -153,6 +152,28 @@ SceneMap.prototype = {
         }
         else
             this.setMapPortion(x, y, z, null);
+    },
+
+    // -------------------------------------------------------
+
+    loadPortionFromPortion: function(portion, x, y, z) {
+        this.loadPortion(portion[0] + x, portion[1] + y, portion[2] + z,
+                         x, y, z);
+    },
+
+    // -------------------------------------------------------
+
+    removePortion: function(i, j, k){
+        var mapPortion = this.getMapPortion(i, j, k);
+
+        if (mapPortion !== null)
+            mapPortion.cleanAll();
+    },
+
+    // -------------------------------------------------------
+
+    setPortion: function(i, j, k, m, n, o) {
+        this.setMapPortion(i, j, k, this.getMapPortion(m, n, o));
     },
 
     // -------------------------------------------------------
@@ -363,19 +384,104 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    isInPortionRay: function(portion){
-        var ray = this.getPortionRay();
+    isInPortion: function(portion) {
+        var limit = this.getMapPortionLimit();
 
-        return (portion[0] >= 0 && portion[0] < ray &&
-                portion[1] >= 0 && portion[1] < ray &&
-                portion[2] >= 0 && portion[2] < ray);
+        return (portion[0] >= -limit && portion[0] <= limit &&
+                portion[1] >= -limit && portion[1] <= limit &&
+                portion[2] >= -limit && portion[2] <= limit);
+    },
+
+    // -------------------------------------------------------
+
+    isInMap: function(position) {
+        return (position[0] >= 0 && position[0] < this.mapInfos.length &&
+                position[2] >= 0 && position[2] < this.mapInfos.width);
+    },
+
+    // -------------------------------------------------------
+
+    updateMovingPortions: function() {
+        var newPortion = Wanok.getPortion($game.hero.position);
+
+        if (!Wanok.arePortionEquals(newPortion, this.currentPortion)){
+            this.updateMovingPortionsEastWest(newPortion);
+            this.updateMovingPortionsNorthSouth(newPortion);
+            this.updateMovingPortionsUpDown(newPortion);
+        }
+
+        this.currentPortion = newPortion;
+    },
+
+    // -------------------------------------------------------
+
+    updateMovingPortionsEastWest: function(newPortion) {
+        var i, j, k;
+        var r = this.getMapPortionLimit();
+        if (newPortion[0] > this.currentPortion[0]) {
+            k = 0;
+            for (j = -r; j <= r; j++) {
+                i = -r;
+                this.removePortion(i, k, j);
+                for (; i < r; i++)
+                    this.setPortion(i, k, j, i + 1, k, j);
+
+                this.loadPortionFromPortion(newPortion, r, k, j);
+            }
+        }
+        else if (newPortion[0] < this.currentPortion[0]){
+            k = 0;
+            for (j = -r; j <= r; j++){
+                i = r;
+                this.removePortion(i, k, j);
+                for (; i > -r; i--)
+                    this.setPortion(i, k, j, i - 1, k, j);
+
+                this.loadPortionFromPortion(newPortion, -r, k, j);
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateMovingPortionsNorthSouth: function(newPortion) {
+        var i, j, k;
+        var r = this.getMapPortionLimit();
+        if (newPortion[2] > this.currentPortion[2]){
+            k = 0;
+            for (i = -r; i <= r; i++){
+                j = -r;
+                this.removePortion(i, k, j);
+                for (; j < r; j++)
+                    this.setPortion(i, k, j, i, k, j + 1);
+
+                this.loadPortionFromPortion(newPortion, i, k, r);
+            }
+        }
+        else if (newPortion[2] < this.currentPortion[2]){
+            k = 0;
+            for (i = -r; i <= r; i++){
+                j = r;
+                this.removePortion(i, k, j);
+                for (; j > -r; j--)
+                    this.setPortion(i, k, j, i, k, j - 1);
+
+                this.loadPortionFromPortion(newPortion, i, k, -r);
+            }
+        }
+    },
+
+    // -------------------------------------------------------
+
+    updateMovingPortionsUpDown: function(newPortion) {
+        // TODO
     },
 
     // -------------------------------------------------------
 
     /** Close the map.
     */
-    closeMap: function(){
+    closeMap: function() {
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
         var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE) +
@@ -402,6 +508,7 @@ SceneMap.prototype = {
 
         // Update
         SceneGame.prototype.update.call(this);
+        this.updateMovingPortions();
 
         // Update camera
         this.camera.update();

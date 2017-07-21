@@ -822,7 +822,8 @@ EventCommandMoveObject.prototype = {
         }
 
         currentState.distance += object.move(orientation, $SQUARE_SIZE -
-                                             currentState.distance, angle);
+                                             currentState.distance, angle,
+                                             this.isCameraOrientation);
 
         if (!square || (square && currentState.distance >= $SQUARE_SIZE)){
             if (square)

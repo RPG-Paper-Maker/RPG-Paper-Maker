@@ -353,12 +353,19 @@ Wanok.sin = function(w){
 
 // -------------------------------------------------------
 
-Wanok.getPortion = function(position){
+Wanok.getPortion = function(position ){
     return [
         Math.floor(Math.floor((position.x + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
         Math.floor(Math.floor((position.y + 1) / $SQUARE_SIZE) / $PORTION_SIZE),
         Math.floor(Math.floor((position.z + 1) / $SQUARE_SIZE) / $PORTION_SIZE)
     ]
+}
+
+// -------------------------------------------------------
+
+Wanok.arePortionEquals= function(portion1, portion2) {
+    return (portion1[0] === portion2[0] && portion1[1] === portion2[1] &&
+            portion1[2] === portion2[2]);
 }
 
 /** Show an error.
