@@ -312,6 +312,24 @@ void WidgetTreeCommands::deleteCommand(){
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeCommands::openCommand() {
+    QStandardItem* selected = getSelected();
+    if (selected != nullptr){
+        EventCommand* command = (EventCommand*)selected->data()
+                                .value<quintptr>();
+        // if empty, create a new command
+        if (command->kind() == EventCommandKind::None){
+            newCommand(selected);
+        }
+        // Else only edit the command
+        else{
+            editCommand(selected, command);
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
@@ -532,6 +550,7 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
     QKeySequence seq = Wanok::getKeySequence(event);
     QList<QAction*> actions = m_contextMenuCommonCommands->actions();
 
+    // Forcing shortcuts
     if (actions.at(0)->shortcut().matches(seq))
         contextNew();
     else if (actions.at(3)->shortcut().matches(seq))
@@ -540,6 +559,13 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
         contextPaste();
     else if (actions.at(6)->shortcut().matches(seq))
         contextDelete();
+
+    // Pressing space or enter open command
+    if (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
+        event->key() == Qt::Key_Return)
+    {
+        openCommand();
+    }
 }
 
 // -------------------------------------------------------
@@ -547,21 +573,8 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
 //  if not create a new one
 
 void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
-    if (event->button() == Qt::MouseButton::LeftButton){
-        QStandardItem* selected = getSelected();
-        if (selected != nullptr){
-            EventCommand* command = (EventCommand*)selected->data()
-                                    .value<quintptr>();
-            // if empty, create a new command
-            if (command->kind() == EventCommandKind::None){
-                newCommand(selected);
-            }
-            // Else only edit the command
-            else{
-                editCommand(selected, command);
-            }
-        }
-    }
+    if (event->button() == Qt::MouseButton::LeftButton)
+        openCommand();
 }
 
 // -------------------------------------------------------

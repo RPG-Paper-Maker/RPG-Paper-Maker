@@ -64,6 +64,7 @@ protected:
     void editCommand(QStandardItem *selected, EventCommand *command);
     void copyCommand();
     void pasteCommand(QStandardItem *selected);
+    void openCommand();
     QStandardItem* insertCommand(EventCommand* command, QStandardItem* root,
                                  int pos);
     void insertWhileBlock(QStandardItem *root, int pos);
