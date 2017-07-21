@@ -95,17 +95,15 @@ SceneMap.prototype = {
     /** Initialize the map portions.
     */
     initializePortions: function(){
-        var ray = this.getPortionRay();
-        var halfRay = Math.floor(ray / 2);
-        this.mapPortions = new Array(ray);
-        for (var i = 0; i < ray; i++){
-            this.mapPortions[i] = new Array(ray);
-            for (var j = 0; j < ray; j++){
-                this.mapPortions[i][j] = new Array(ray);
-                for (var k = 0; k < ray; k++){
-                    this.loadPortion(this.currentPortion[0] + i - halfRay,
-                                     this.currentPortion[1] + j - halfRay,
-                                     this.currentPortion[2] + k - halfRay,
+        var limit = this.getMapPortionLimit();
+
+        this.mapPortions = new Array(this.getMapPortionTotalSize());
+        for (var i = -limit; i <= limit; i++) {
+            for (var j = -limit; j <= limit; j++) {
+                for (var k = -limit; k <= limit; k++) {
+                    this.loadPortion(this.currentPortion[0] + i,
+                                     this.currentPortion[1] + j,
+                                     this.currentPortion[2] + k,
                                      i, j, k);
                 }
             }
@@ -150,12 +148,11 @@ SceneMap.prototype = {
                     mapPortion.read(
                             json, this.id === $datasGame.system.idMapStartHero);
                 }
-                this.mapPortions[x][y][z] = mapPortion;
+                this.setMapPortion(x, y, z, mapPortion);
             });
         }
-        else{
-            this.mapPortions[x][y][z] = null;
-        }
+        else
+            this.setMapPortion(x, y, z, null);
     },
 
     // -------------------------------------------------------
@@ -298,21 +295,70 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    getLocalPortion: function(portion){
-        var ray = this.getPortionRay();
-        var halfRay = Math.floor(ray / 2);
+    getMapPortion: function(x, y, z) {
+        var index = this.getPortionIndex(x, y, z);
 
-        return [
-            portion[0] - this.currentPortion[0] + halfRay,
-            portion[1] - this.currentPortion[1] + halfRay,
-            portion[2] - this.currentPortion[2] + halfRay
-        ];
+        return this.getBrutMapPortion(index);
     },
 
     // -------------------------------------------------------
 
-    getPortionRay: function(){
-        return ($PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR * 2) + 1;
+    getMapPortionByPortion: function(portion) {
+        return this.getMapPortion(portion[0], portion[1], portion[2]);
+    },
+
+    // -------------------------------------------------------
+
+    getBrutMapPortion: function(index) {
+        return this.mapPortions[index];
+    },
+
+    // -------------------------------------------------------
+
+    getPortionIndex: function(x, y, z) {
+        var size = this.getMapPortionSize();
+        var limit = this.getMapPortionLimit();
+
+        return ((x + limit) * size * size) + ((y + limit) * size) +
+                (z + limit);
+    },
+
+    // -------------------------------------------------------
+
+    setMapPortion: function(x, y, z, mapPortion) {
+        var index = this.getPortionIndex(x, y, z);
+        this.mapPortions[index] = mapPortion;
+    },
+
+    // -------------------------------------------------------
+
+    getLocalPortion: function(portion){
+        return [
+            portion[0] - this.currentPortion[0],
+            portion[1] - this.currentPortion[1],
+            portion[2] - this.currentPortion[2]
+        ];
+    },
+
+
+    // -------------------------------------------------------
+
+    getMapPortionLimit: function(){
+        return $PORTIONS_RAY_NEAR + $PORTIONS_RAY_FAR;
+    },
+
+    // -------------------------------------------------------
+
+    getMapPortionSize: function(){
+        return (this.getMapPortionLimit() * 2) + 1;
+    },
+
+    // -------------------------------------------------------
+
+    getMapPortionTotalSize: function(){
+        var size = this.getMapPortionSize();
+
+        return size * size * size;
     },
 
     // -------------------------------------------------------
@@ -368,20 +414,41 @@ SceneMap.prototype = {
 
         // Update the objects
         $game.hero.update(angle);
-        var objects = $game.mapsDatas[this.id][0][0][0];
-        var movedObjects = objects.min;
-        var movedObject;
-        var i, l;
-        for (i = 0, l = movedObjects.length; i < l; i++)
-            movedObjects[i].update(angle);
-        movedObjects = objects.mout;
-        for (i = 0, l = movedObjects.length; i < l; i++)
-            movedObjects[i].update(angle);
+        var limit = this.getMapPortionLimit();
+        var i, j, k, p, l, x, y, z;
+        var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
+        var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
+                $PORTION_SIZE);
+        var lz = Math.floor((this.mapInfos.width - 1) / $PORTION_SIZE);
+        for (i = -limit; i < limit; i++) {
+            for (j = -limit; j < limit; j++) {
+                for (k = -limit; k < limit; k++) {
+                    x = this.currentPortion[0] + i;
+                    y = this.currentPortion[1] + j;
+                    z = this.currentPortion[2] + z;
+                    if (x >= 0 && x <= lx && y >= 0 && y <= ly && z >= 0 &&
+                        z <= lz)
+                    {
+                        var objects = $game.mapsDatas[this.id][x][y][z];
+                        var movedObjects = objects.min;
+                        var movedObject;
+                        for (p = 0, l = movedObjects.length; p < l; p++)
+                            movedObjects[p].update(angle);
+                        movedObjects = objects.mout;
+                        for (p = 0, l = movedObjects.length; p < l; p++)
+                            movedObjects[p].update(angle);
+                    }
+                }
+            }
+        }
 
         // Update face sprites
-        var center = Math.floor(this.getPortionRay()/2);;
-        var mapPortion = this.mapPortions[center][center][center];
-        mapPortion.updateFaceSprites(angle);
+        for (i = 0, l = this.getMapPortionTotalSize(); i < l; i++) {
+            var mapPortion = this.getBrutMapPortion(i);
+
+            if (mapPortion !== null)
+                mapPortion.updateFaceSprites(angle);
+        }
     },
 
     // -------------------------------------------------------
@@ -415,6 +482,19 @@ SceneMap.prototype = {
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
                                             SystemValue.createSwitch(true)]);
+
+            // Temporary camera turn
+            if (DatasKeyBoard.isKeyEqual(
+                        key, $datasGame.keyBoard.LeftCamera))
+            {
+                this.camera.updateAngle(false);
+            }
+            else if (DatasKeyBoard.isKeyEqual(
+                         key, $datasGame.keyBoard.RightCamera))
+            {
+                this.camera.updateAngle(true);
+            }
+
         }
 
         var block = SceneGame.prototype.onKeyPressedRepeat.call(this, key);
@@ -431,18 +511,6 @@ SceneMap.prototype = {
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
                                             SystemValue.createSwitch(false)]);
-
-            // Temporary camera turn
-            if (DatasKeyBoard.isKeyEqual(
-                        key, $datasGame.keyBoard.LeftCamera))
-            {
-                this.camera.updateAngle(false);
-            }
-            else if (DatasKeyBoard.isKeyEqual(
-                         key, $datasGame.keyBoard.RightCamera))
-            {
-                this.camera.updateAngle(true);
-            }
         }
 
         SceneGame.prototype.onKeyPressedAndRepeat.call(this, key);

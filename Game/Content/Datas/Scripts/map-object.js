@@ -197,6 +197,8 @@ MapObject.prototype = {
         }
 
         // Update mesh
+        if (this.mesh !== null)
+            $currentMap.scene.remove(this.mesh);
         var material =
                 $currentMap.texturesCharacters[this.currentState.graphicID];
         if (this.currentState !== null &&
@@ -218,7 +220,8 @@ MapObject.prototype = {
             this.mesh = null;
 
         // Add to the scene
-        $currentMap.scene.add(this.mesh);
+        if (this.mesh !== null)
+            $currentMap.scene.add(this.mesh);
     },
 
     /** Read the JSON associated to the object.
@@ -311,19 +314,20 @@ MapObject.prototype = {
                                        MapObject.SPEED_NORMAL *
                                        $SQUARE_SIZE));
         var position = this.getFuturPosition(orientation, distance, angle);
+        orientation = Wanok.mod(orientation + $currentMap.camera.getMapOrientation() - 2, 4);
         this.position.set(position.x, position.y, position.z);
 
         // Update orientation
-        if (this.orientationEye !== orientation){
-            this.orientationEye = orientation;
+        this.orientationEye = orientation;
+        orientation = this.orientation;
+        this.updateOrientation();
+        if (this.orientation !== orientation)
             this.updateUVs();
-        }
 
         this.moving = true;
 
         // Add to moving objects
         this.addMoveTemp();
-
 
         return distance;
     },
@@ -425,6 +429,7 @@ MapObject.prototype = {
     update: function(angle){
         if (this.mesh !== null){
             var frame = this.frame;
+            var orientation = this.orientation;
 
             if (this.moving){
 
@@ -447,12 +452,12 @@ MapObject.prototype = {
             }
             else{
                 this.frame = 0;
+
+                // Update angle
+                this.updateOrientation();
             }
 
-            // Update angle
-            var orientation = this.orientation;
             this.updateAngle(angle);
-            this.updateOrientation();
 
             // Update mesh
             if (frame !== this.frame || orientation !== this.orientation)
@@ -478,6 +483,9 @@ MapObject.prototype = {
         if (this.currentState.setWithCamera) {
             this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
                                          this.orientationEye, 4);
+            if (this.orientation === 1){
+                var a= 1;
+            }
         }
     },
 

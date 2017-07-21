@@ -73,9 +73,6 @@ Map::Map(int id) :
     m_portionsRay = Wanok::get()->getPortionsRay();
     m_squareSize = Wanok::get()->getSquareSize();
 
-    // Initialize portions
-
-
     // Loading textures
     loadTextures();
 }

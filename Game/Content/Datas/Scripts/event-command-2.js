@@ -427,10 +427,6 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
 {
     var i, j, k, l, ll, portion, objects, object, states, portionDatas;
     var pos, por, x, y, z, indexState;
-    var group = $currentMap.mapPortions;
-
-    if (typeof group === 'undefined')
-        return;
 
     switch (targetKind){
     case 0: // Send to all
@@ -438,7 +434,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
         // Check all the not moved objects in portions
         pos = $game.hero.position;
         por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
-        portion = group[por[0]][por[1]][por[2]];
+        portion = $currentMap.getMapPortionByPortion(por);
         por = Wanok.getPortion(pos);
         x = por[0];
         y = por[1];
@@ -473,7 +469,7 @@ EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
     case 1: // Send to detection
         pos = $game.hero.position;
         por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
-        portion = group[por[0]][por[1]][por[2]];
+        portion = $currentMap.getMapPortionByPortion(por);
         por = Wanok.getPortion(pos);
         x = por[0];
         y = por[1];

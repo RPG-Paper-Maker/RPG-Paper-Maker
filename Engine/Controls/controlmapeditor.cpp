@@ -994,6 +994,8 @@ void ControlMapEditor::removeObject(Position& p){
     }
 }
 
+// -------------------------------------------------------
+
 void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
                                  QList<Position>& positions)
 {

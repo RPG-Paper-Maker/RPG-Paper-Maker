@@ -270,18 +270,17 @@ MapPortion.prototype = {
     */
     cleanAll: function(){
         var i, l;
-        // TODO
-        for (i = 0, l = this.staticFloorsList.length; i < l; i++){
 
-        }
+        $currentMap.scene.remove(this.staticFloorsMesh);
 
-        for (i = 0, l = this.staticSpritesList.length; i < l; i++){
+        for (i = 0, l = this.staticSpritesList.length; i < l; i++)
+            $currentMap.scene.remove(this.staticSpritesList[i]);
 
-        }
+        for (i = 0, l = this.objectsList.length; i < l; i++)
+            $currentMap.scene.remove(this.objectsList[i].mesh);
 
-        for (i = 0, l = this.objectsList.length; i < l; i++){
-
-        }
+        for (i = 0, l = this.faceSpritesList.length; i < l; i++)
+            $currentMap.scene.remove(this.faceSpritesList[i]);
     },
 
     // -------------------------------------------------------
