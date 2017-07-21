@@ -59,6 +59,7 @@ function MapObject(system, position) {
     this.moving = false;
     this.frameTick = 0;
     this.isHero = false;
+    this.isInScene = false;
 }
 
 /** Normal speed coef.
@@ -113,7 +114,8 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
         break;
 
     default: // Particular object
-        var globalPortion = $currentMap.allObjects[objectID];
+        var globalPortion = SceneMap.getGlobalPortion(
+                    $currentMap.allObjects[objectID]);
         var localPortion = $currentMap.getLocalPortion(globalPortion);
         var i, l, moved, mapsDatas, movedObjects, mapPortion, objects;
 
@@ -173,15 +175,15 @@ MapObject.prototype = {
     changeState: function(){
 
         // Remove previous mesh
-        if (this.mesh !== null)
-            $currentMap.scene.remove(this.mesh);
+        this.removeFromScene();
 
         // Updating the current state
         var states;
         if (this.isHero)
             states = $game.heroStates;
         else{
-            var portion = $currentMap.allObjects[this.system.id];
+            var portion = SceneMap.getGlobalPortion(
+                        $currentMap.allObjects[this.system.id]);
             var portionDatas = $game.mapsDatas[$currentMap.id]
                     [portion[0]][portion[1]][portion[2]];
             var indexState = portionDatas.si.indexOf(this.system.id);
@@ -197,8 +199,6 @@ MapObject.prototype = {
         }
 
         // Update mesh
-        if (this.mesh !== null)
-            $currentMap.scene.remove(this.mesh);
         var material =
                 $currentMap.texturesCharacters[this.currentState.graphicID];
         if (this.currentState !== null &&
@@ -207,6 +207,9 @@ MapObject.prototype = {
         {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
+            this.orientationEye = Wanok.mod(this.orientationEye +
+                                $currentMap.camera.getMapOrientation() - 2, 4);
+            this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
             var geometry = MapObject.getSpriteGeometry(this.width, this.height);
@@ -220,8 +223,7 @@ MapObject.prototype = {
             this.mesh = null;
 
         // Add to the scene
-        if (this.mesh !== null)
-            $currentMap.scene.add(this.mesh);
+        this.addToScene();
     },
 
     /** Read the JSON associated to the object.
@@ -323,7 +325,8 @@ MapObject.prototype = {
         // Update orientation
         this.orientationEye = orientation;
         orientation = this.orientation;
-        this.updateOrientation();
+        if (this.currentState.setWithCamera)
+            this.updateOrientation();
         if (this.orientation !== orientation)
             this.updateUVs();
 
@@ -356,7 +359,8 @@ MapObject.prototype = {
     // -------------------------------------------------------
 
     removeMoveTemp: function(){
-        var objects, previousPortion, movedObjects, index;
+        var objects, previousPortion, movedObjects, index, mapPortion,
+            originalPortion, localPortion;
 
         if (!this.isHero){
             previousPortion = Wanok.getPortion(this.position);
@@ -374,22 +378,34 @@ MapObject.prototype = {
                 movedObjects.splice(index, 1);
 
             // Add to moved objects of the original portion if not done yet
+            originalPortion = SceneMap.getGlobalPortion(
+                        $currentMap.allObjects[this.system.id]);
+            objects = $game.mapsDatas[$currentMap.id]
+                   [originalPortion[0]][originalPortion[1]][originalPortion[2]];
             movedObjects = objects.m;
-            if (movedObjects.indexOf(this) === -1)
+            if (movedObjects.indexOf(this) === -1) {
                 movedObjects.unshift(this);
+                localPortion = $currentMap.getLocalPortion(originalPortion);
+                mapPortion = $currentMap.getMapPortionByPortion(localPortion);
+                movedObjects = mapPortion.objectsList;
+                index = movedObjects.indexOf(this);
+                if (index !== -1)
+                    movedObjects.splice(index, 1);
+            }
         }
     },
 
     // -------------------------------------------------------
 
     addMoveTemp: function(){
-        var objects, afterPortion, originalPortion;
+        var objects, afterPortion, originalPortion, localPortion;
+        afterPortion = Wanok.getPortion(this.position);
 
         if (!this.isHero){
-            afterPortion = Wanok.getPortion(this.position);
             objects = $game.mapsDatas[$currentMap.id]
                     [afterPortion[0]][afterPortion[1]][afterPortion[2]];
-            originalPortion = $currentMap.allObjects[this.system.id];
+            originalPortion = SceneMap.getGlobalPortion(
+                        $currentMap.allObjects[this.system.id]);
 
             if (originalPortion[0] !== afterPortion[0] ||
                 originalPortion[1] !== afterPortion[1] ||
@@ -399,6 +415,31 @@ MapObject.prototype = {
             }
             else
                 objects.min.unshift(this);
+        }
+
+        // Add or remove from scene
+        localPortion = $currentMap.getLocalPortion(afterPortion);
+        if ($currentMap.isInPortion(localPortion))
+            this.addToScene();
+        else
+            this.removeFromScene();
+    },
+
+    // -------------------------------------------------------
+
+    addToScene: function(){
+        if (!this.isInScene && this.mesh !== null) {
+            $currentMap.scene.add(this.mesh);
+            this.isInScene = true;
+        }
+    },
+
+    // -------------------------------------------------------
+
+    removeFromScene: function(){
+        if (this.isInScene) {
+            $currentMap.scene.remove(this.mesh);
+            this.isInScene = false;
         }
     },
 
@@ -453,11 +494,12 @@ MapObject.prototype = {
                                        this.position.z);
                 this.moving = false;
             }
-            else{
+            else {
                 this.frame = 0;
 
                 // Update angle
-                this.updateOrientation();
+                if (this.currentState.setWithCamera)
+                    this.updateOrientation();
             }
 
             this.updateAngle(angle);
@@ -483,10 +525,8 @@ MapObject.prototype = {
     /** Update the orientation according to the camera position
     */
     updateOrientation: function(){
-        if (this.currentState.setWithCamera) {
-            this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
-                                         this.orientationEye, 4);
-        }
+        this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
+                                     this.orientationEye, 4);
     },
 
     // -------------------------------------------------------

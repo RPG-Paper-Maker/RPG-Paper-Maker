@@ -186,14 +186,14 @@ void Map::writeDefaultMap(QString path){
     QJsonArray jsonObject;
     QJsonObject json;
 
-    SystemMapObject super(1, "Hero", Portion(0, 0, 0));
+    Position position(7, 0, 0, 7, 0);
+    SystemMapObject super(1, "Hero", position);
     super.write(json);
     jsonObject.append(json);
     QString pathMap = writeMap(path, properties, jsonObject);
 
     // Portion
     MapPortion mapPortion;
-    Position position(7, 0, 0, 7, 0);
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", 1,
                                                    new QStandardItemModel,
                                                    new QStandardItemModel);
@@ -352,8 +352,10 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
 
     for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++){
         super = ((SystemMapObject*) model->item(i)->data().value<quintptr>());
-        Portion portion = super->portion();
-        int x = portion.x(), y = portion.y(), z = portion.z();
+        Position3D position = super->position();
+        int x = position.x() / Wanok::portionSize;
+        int y = position.y() / Wanok::portionSize;
+        int z = position.z() / Wanok::portionSize;
         if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
             z <= maxK)
         {
@@ -416,12 +418,13 @@ void Map::setModelObjects(QStandardItemModel* model){
     SystemMapObject* super;
 
     item = new QStandardItem;
-    super = new SystemMapObject(-1, "This object", Portion());
+    Position3D position;
+    super = new SystemMapObject(-1, "This object", position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
     item = new QStandardItem;
-    super = new SystemMapObject(0, "Hero", Portion());
+    super = new SystemMapObject(0, "Hero", position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
@@ -633,15 +636,14 @@ MapPortion* Map::createMapPortion(Portion &p){
 
 // -------------------------------------------------------
 
-bool Map::addObject(Position& p, MapPortion* mapPortion, Portion &globalPortion,
+bool Map::addObject(Position& p, MapPortion* mapPortion,
                     SystemCommonObject *object)
 {
     bool b = mapPortion->addObject(p, object);
 
     int row = Map::removeObject(m_modelObjects, object);
     SystemMapObject* newObject = new SystemMapObject(object->id(),
-                                                     object->name(),
-                                                     globalPortion);
+                                                     object->name(), p);
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(newObject)));
     item->setText(newObject->toString());

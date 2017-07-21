@@ -160,24 +160,28 @@ Window {
 
         onPaintGL: {
             try{
-                if (!Game.Wanok.isLoading()){
+                if (!Game.Wanok.isLoading()) {
                     if (!Game.$gameStack.isEmpty()) {
                         var callback =
                                 Game.$gameStack.top().callBackAfterLoading;
-                        if (callback === null){
+                        if (callback === null) {
                             Game.update();
                             Game.draw3D(canvas3d);
                             Game.drawHUD(canvas);
                             canvas.requestPaint();
                         }
-                        else
+                        else {
+                            Game.$renderer.render(
+                                        Game.$loadingScene,
+                                        Game.$currentMap.camera.threeCamera);
                             callback.call(Game.$gameStack.top());
+                        }
                     }
                     else
                         Game.$gameStack.pushTitleScreen();
                 }
             }
-            catch (e){
+            catch (e) {
                 showError(e);
             }
         }

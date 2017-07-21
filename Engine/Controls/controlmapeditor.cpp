@@ -936,7 +936,6 @@ void ControlMapEditor::defineAsHero(){
 
 void ControlMapEditor::addObject(Position& p){
     Portion portion = getLocalPortion(p);
-    Portion globalPortion = getGlobalPortion(p);
     SystemCommonObject* object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -954,7 +953,7 @@ void ControlMapEditor::addObject(Position& p){
         MapPortion* mapPortion = m_map->mapPortion(portion);
         if (mapPortion == nullptr)
             mapPortion = m_map->createMapPortion(portion);
-        if (m_map->addObject(p, mapPortion, globalPortion, object) &&
+        if (m_map->addObject(p, mapPortion, object) &&
             m_map->saved())
         {
             setToNotSaved();

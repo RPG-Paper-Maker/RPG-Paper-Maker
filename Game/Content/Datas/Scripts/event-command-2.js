@@ -351,14 +351,6 @@ EventCommandChangeState.prototype = {
 //
 //  CLASS EventCommandSendEvent
 //
-//  An event command for sending an event.
-//
-//  @targetKind  -> Kind of target
-//  @idTarget    -> ID of target
-//  @isSystem    -> Boolean indicating if it is an event system.
-//  @eventId     -> ID of the event
-//  @parameters  -> List of all the parameters
-//
 // -------------------------------------------------------
 
 /** @class
@@ -413,6 +405,8 @@ function EventCommandSendEvent(command){
     this.parallel = false;
 }
 
+// -------------------------------------------------------
+
 /** Send an event.
 *   @static
 *   @param {MapObject} sender The sender of this event.
@@ -425,93 +419,98 @@ function EventCommandSendEvent(command){
 EventCommandSendEvent.sendEvent = function(sender, targetKind, idTarget,
                                            isSystem, idEvent, parameters)
 {
-    var i, j, k, l, ll, portion, objects, object, states, portionDatas;
-    var pos, por, x, y, z, indexState;
-
     switch (targetKind){
+
     case 0: // Send to all
-
-        // Check all the not moved objects in portions
-        pos = $game.hero.position;
-        por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
-        portion = $currentMap.getMapPortionByPortion(por);
-        por = Wanok.getPortion(pos);
-        x = por[0];
-        y = por[1];
-        z = por[2];
-        objects = portion.objectsList;
-        ll = objects.length;
-        for (j = 0; j < ll; j++){
-            object = objects[j];
-
-            // Get states
-            states = [1];
-            portionDatas =
-                    $game.mapsDatas[$currentMap.id]
-                    [x][y][z];
-            indexState =
-                    portionDatas.si.indexOf(object.system.id);
-            if (indexState !== -1)
-                states = portionDatas.s[indexState];
-
-            // Make the object receive the event
-            object.receiveEvent(sender, isSystem, idEvent, parameters, states);
-        }
-
-        // Check all the moved objects in portions
-        // TODO
-
-        // And the hero!
-        $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
-                                $game.heroStates);
-
+        EventCommandSendEvent.sendEventDetection(
+            sender, -1, isSystem, idEvent, parameters);
         break;
+
     case 1: // Send to detection
-        pos = $game.hero.position;
-        por = $currentMap.getLocalPortion(Wanok.getPortion(pos));
-        portion = $currentMap.getMapPortionByPortion(por);
-        por = Wanok.getPortion(pos);
-        x = por[0];
-        y = por[1];
-        z = por[2];
-        objects = portion.objectsList;
-        ll = objects.length;
-        for (j = 0; j < ll; j++){
-            object = objects[j];
-            var posObject = object.position;
-            if (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
-                posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
-                posObject.y >= pos.y &&
-                posObject.y <= pos.y + $SQUARE_SIZE &&
-                posObject.z >= pos.z - $SQUARE_SIZE  -
-                    ($SQUARE_SIZE / 2) &&
-                posObject.z <= pos.z + ($SQUARE_SIZE / 2)
-               )
-            {
-                // Get states
-                states = [1];
-                portionDatas =
-                        $game.mapsDatas[$currentMap.id]
-                        [x][y][z];
-                indexState =
-                        portionDatas.si.indexOf(object.system.id);
-                if (indexState !== -1)
-                    states = portionDatas.s[indexState];
-
-                // Make the object receive the event
-                object.receiveEvent(sender, isSystem, idEvent,
-                                    parameters, states);
-            }
-        }
+        EventCommandSendEvent.sendEventDetection(
+            sender, 1, isSystem, idEvent, parameters);
         break;
+
     case 2: // Send to a particular object
         break;
+
     case 3: // Send to sender
         break;
+
     case 4: // Send to the hero
         $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
                                 $game.heroStates);
         break;
+    }
+}
+
+// -------------------------------------------------------
+
+EventCommandSendEvent.sendEventDetection = function(
+    sender, idTarget, isSystem, idEvent, parameters)
+{
+    var objects;
+
+    $currentMap.updatePortions(this, function(x, y, z, i, j, k) {
+        objects = $game.mapsDatas[$currentMap.id][x][y][z];
+
+        // Moved objects
+        EventCommandSendEvent.sendEventObjects(objects.min, objects,
+                                              sender, idTarget, isSystem,
+                                              idEvent, parameters);
+        EventCommandSendEvent.sendEventObjects(objects.mout, objects, sender,
+                                              idTarget, isSystem, idEvent,
+                                              parameters);
+
+        // Static
+        var mapPortion = $currentMap.getMapPortion(i, j, k);
+        if (mapPortion !== null) {
+            EventCommandSendEvent.sendEventObjects(mapPortion.objectsList,
+                                                  objects, sender, idTarget,
+                                                  isSystem, idEvent,
+                                                  parameters);
+        }
+    });
+
+    // And the hero!
+    $game.hero.receiveEvent(sender, isSystem, idEvent, parameters,
+                            $game.heroStates);
+}
+
+// -------------------------------------------------------
+
+EventCommandSendEvent.sendEventObjects = function(
+    objects, portionDatas, sender, idTarget, isSystem, idEvent, parameters)
+{
+    var i, l, object, states, indexState, posObject, detection, pos;
+    if (sender !== null)
+        pos = sender.position;
+
+    for (i = 0, l = objects.length; i < l; i++) {
+        object = objects[i];
+
+        if (idTarget !== -1) {
+            posObject = object.position;
+            detection = (posObject.x >= pos.x - ($SQUARE_SIZE / 2) &&
+                         posObject.x <= pos.x + ($SQUARE_SIZE / 2) &&
+                         posObject.y >= pos.y &&
+                         posObject.y <= pos.y + $SQUARE_SIZE &&
+                         posObject.z >= pos.z - $SQUARE_SIZE  -
+                                ($SQUARE_SIZE / 2) &&
+                         posObject.z <= pos.z + ($SQUARE_SIZE / 2));
+            if (!detection)
+                continue;
+        }
+
+        // Get states
+        states = [1];
+        indexState =
+                portionDatas.si.indexOf(object.system.id);
+        if (indexState !== -1)
+            states = portionDatas.s[indexState];
+
+        // Make the object receive the event
+        object.receiveEvent(sender, isSystem, idEvent, parameters, states);
     }
 }
 
@@ -638,21 +637,6 @@ EventCommandTeleportObject.prototype = {
 
             if (!currentState.waitingPosition){
 
-                // If needs teleport hero in another map
-                if (this.idMap !== null){
-                    var id = this.idMap.getValue();
-                    if ($currentMap.id !== id){
-
-                        // If hero set the current map
-                        if (objectID === 0 ||
-                            (objectID === -1 && object.isHero))
-                        {
-                            $currentMap.closeMap();
-                            $gameStack.replace(new SceneMap(id));
-                        }
-                    }
-                }
-
                 // Set object's position
                 if (this.objectIDPosition === null){
                     currentState.position = Wanok.positionToVector3(
@@ -670,7 +654,7 @@ EventCommandTeleportObject.prototype = {
                     currentState.position.setZ(
                                 currentState.position.z + ($SQUARE_SIZE / 2));
                 }
-                else{
+                else {
                     var objectIDPosition = this.objectIDPosition.getValue();
                     MapObject.updateObjectWithID(object, objectIDPosition,
                                                  this, function(moved)
@@ -683,6 +667,25 @@ EventCommandTeleportObject.prototype = {
             }
 
             if (currentState.position !== null){
+
+                // If needs teleport hero in another map
+                if (this.idMap !== null){
+                    var id = this.idMap.getValue();
+
+                    // If hero set the current map
+                    if (objectID === 0 ||
+                        (objectID === -1 && object.isHero))
+                    {
+                        $game.hero.position = currentState.position;
+                        if ($currentMap.id !== id) {
+                            $currentMap.closeMap();
+                            $gameStack.replace(new SceneMap(id));
+                        }
+                        else {
+                            $currentMap.loadPortions();
+                        }
+                    }
+                }
 
                 // Teleport
                 MapObject.updateObjectWithID(object, objectID, this,

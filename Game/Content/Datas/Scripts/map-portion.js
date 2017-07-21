@@ -47,7 +47,10 @@
 *   @param {number} [spritesOffset=-0.005] In order to avoid flickerings on
 *   sprites with the same X / Z, we use an offset.
 */
-function MapPortion(){
+function MapPortion(realX, realY, realZ){
+    this.realX = realX;
+    this.realY = realY;
+    this.realZ = realZ;
     this.staticFloorsMesh = null;
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
@@ -74,7 +77,7 @@ MapPortion.prototype = {
     read: function(json, isMapHero){
         this.readFloors(json.floors);
         this.readSprites(json.sprites.list);
-        this.readObjects(json.objs, isMapHero);
+        this.readObjects(json.objs.list, isMapHero);
     },
 
     // -------------------------------------------------------
@@ -87,7 +90,7 @@ MapPortion.prototype = {
         // Static floors
         var jsonFloors = json.floors;
 
-        var material = $gameStack.top().textureTileset;
+        var material = $currentMap.textureTileset;
         var width = material.map.image.width;
         var height = material.map.image.height;
         var geometry = new THREE.Geometry();
@@ -154,7 +157,7 @@ MapPortion.prototype = {
             var position = s.k;
             var ss = s.v;
 
-            var material = $gameStack.top().textureTileset;
+            var material = $currentMap.textureTileset;
             var width = material.map.image.width;
             var height = material.map.image.height;
 
@@ -193,28 +196,33 @@ MapPortion.prototype = {
     *   at the beginning of the game.
     */
     readObjects: function(json, isMapHero){
-        this.readObjectsSprites(json.list, isMapHero);
-    },
+        var datas, objects, index, i, l, j, ll;
+        datas = $game.mapsDatas
+                [$currentMap.id][this.realX][this.realY][this.realZ];
+        objects = datas.m;
+        ll = objects.length;
 
-    // -------------------------------------------------------
-
-    /** Read the JSON associated to the sprites objects in the portion.
-    *   @param {Object} json Json object describing the object.
-    *   @param {boolean} isMapHero Indicates if this map is where the hero is
-    *   at the beginning of the game.
-    */
-    readObjectsSprites: function(json, isMapHero){
-        for (var i = 0, l = json.length; i < l; i++){
+        for (i = 0, l = json.length; i < l; i++){
             var jsonObject = json[i];
             var position = jsonObject.k;
             var jsonObjectValue = jsonObject.v;
             var object = new SystemObject;
             object.readJSON(jsonObjectValue);
 
+            // Check if the object is moving (so no need to add it to the scene)
+            index = -1;
+            for (j = 0; j < ll; j++) {
+                if (objects[j].system.id === object.id) {
+                    index = j;
+                    break;
+                }
+            }
+
             /* If it is the hero, you should not add it to the list of
             objects to display */
-            if (!isMapHero ||
-                $datasGame.system.idObjectStartHero !== object.id)
+            if ((!isMapHero ||
+                $datasGame.system.idObjectStartHero !== object.id) &&
+                index === -1)
             {
                 var localPosition = Wanok.positionToVector3(position);
                 localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
@@ -228,11 +236,17 @@ MapPortion.prototype = {
                                              localPosition.z);
                 var mapObject = new MapObject(object, position);
                 mapObject.changeState();
-                if (mapObject.mesh !== null)
-                    $currentMap.scene.add(mapObject.mesh);
                 this.objectsList.unshift(mapObject);
             }
         }
+
+        // Add moved objects to the scene
+        objects = datas.min;
+        for (i = 0, l = objects.length; i < l; i++)
+            objects[i].addToScene();
+        objects = datas.mout;
+        for (i = 0, l = objects.length; i < l; i++)
+            objects[i].addToScene();
     },
 
     // -------------------------------------------------------
@@ -269,18 +283,28 @@ MapPortion.prototype = {
     /** Remove all the objects from the scene.
     */
     cleanAll: function(){
-        var i, l;
+        var i, l, datas, objects, object, index;
+        datas = $game.mapsDatas
+                [$currentMap.id][this.realX][this.realY][this.realZ];
 
+        // Static stuff
         $currentMap.scene.remove(this.staticFloorsMesh);
-
         for (i = 0, l = this.staticSpritesList.length; i < l; i++)
             $currentMap.scene.remove(this.staticSpritesList[i]);
+        for (i = 0, l = this.faceSpritesList.length; i < l; i++)
+            $currentMap.scene.remove(this.faceSpritesList[i]);
 
+        // Objects
         for (i = 0, l = this.objectsList.length; i < l; i++)
             $currentMap.scene.remove(this.objectsList[i].mesh);
 
-        for (i = 0, l = this.faceSpritesList.length; i < l; i++)
-            $currentMap.scene.remove(this.faceSpritesList[i]);
+        // Remove moved objects from the scene
+        objects = datas.min;
+        for (i = 0, l = objects.length; i < l; i++)
+            objects[i].removeFromScene();
+        objects = datas.mout;
+        for (i = 0, l = objects.length; i < l; i++)
+            objects[i].removeFromScene();
     },
 
     // -------------------------------------------------------

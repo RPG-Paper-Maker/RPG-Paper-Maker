@@ -149,6 +149,10 @@ var $renderer;
 *   @type {Game} */
 var $game = null;
 
+/** The 3D scene used for loading screen.
+*   @type {THREE.Scene} */
+var $loadingScene = new THREE.Scene();
+
 /** The dialog for displaying errors.
 *   @type {MessageDialog} */
 var $DIALOG_ERROR = null;

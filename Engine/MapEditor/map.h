@@ -93,7 +93,7 @@ public:
     MapPortion* createMapPortion(Portion& p);
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
-    bool addObject(Position& p, MapPortion *mapPortion, Portion& globalPortion,
+    bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object);
     static int removeObject(QStandardItemModel* model,
                             SystemCommonObject *object);

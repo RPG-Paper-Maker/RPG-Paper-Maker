@@ -47,8 +47,8 @@ function SceneMap(id){
     this.camera = new Camera(120, 75);
     this.camera.update();
     this.orientation = this.camera.getMapOrientation();
-    this.currentPortion = Wanok.getPortion($game.hero.position);
     this.readMapInfos();
+    this.currentPortion = Wanok.getPortion($game.hero.position);
     this.callBackAfterLoading = this.loadTextures;
 }
 
@@ -61,6 +61,16 @@ function SceneMap(id){
 */
 SceneMap.getPortionName = function(x, y, z){
     return (x + "_" + y + "_" + z + ".json");
+}
+
+// -------------------------------------------------------
+
+SceneMap.getGlobalPortion = function(position) {
+    return [
+        Math.floor(position[0] / $PORTION_SIZE),
+        Math.floor(position[1] / $PORTION_SIZE),
+        Math.floor(position[2] / $PORTION_SIZE)
+    ];
 }
 
 // -------------------------------------------------------
@@ -95,8 +105,21 @@ SceneMap.prototype = {
     /** Initialize the map portions.
     */
     initializePortions: function(){
-        var limit = this.getMapPortionLimit();
+        this.loadPortions();
 
+        // Hero initialize
+        $game.hero.changeState();
+
+        // End callback
+        this.callBackAfterLoading = null;
+    },
+
+    // -------------------------------------------------------
+
+    loadPortions: function(){
+        this.currentPortion = Wanok.getPortion($game.hero.position);
+
+        var limit = this.getMapPortionLimit();
         this.mapPortions = new Array(this.getMapPortionTotalSize());
         for (var i = -limit; i <= limit; i++) {
             for (var j = -limit; j <= limit; j++) {
@@ -104,16 +127,10 @@ SceneMap.prototype = {
                     this.loadPortion(this.currentPortion[0] + i,
                                      this.currentPortion[1] + j,
                                      this.currentPortion[2] + k,
-                                     i, j, k);
+                                     i, j, k, true);
                 }
             }
         }
-
-        // Hero initialize
-        $game.hero.changeState();
-
-        // End callback
-        this.callBackAfterLoading = null;
     },
 
     // -------------------------------------------------------
@@ -126,7 +143,7 @@ SceneMap.prototype = {
     *   @param {number} y The local y portion.
     *   @param {number} z The local z portion.
     */
-    loadPortion: function(realX, realY, realZ, x, y, z) {
+    loadPortion: function(realX, realY, realZ, x, y, z, wait) {
         var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
         var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
                 $PORTION_SIZE);
@@ -137,7 +154,7 @@ SceneMap.prototype = {
         {
             var fileName = SceneMap.getPortionName(realX, realY, realZ);
             Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName + "/" +
-                           fileName, false, function(res)
+                           fileName, wait, function(res)
             {
                 var json = JSON.parse(res);
                 var mapPortion = null;
@@ -158,7 +175,7 @@ SceneMap.prototype = {
 
     loadPortionFromPortion: function(portion, x, y, z) {
         this.loadPortion(portion[0] + x, portion[1] + y, portion[2] + z,
-                         x, y, z);
+                         x, y, z, false);
     },
 
     // -------------------------------------------------------
@@ -212,9 +229,9 @@ SceneMap.prototype = {
         var objectsPortions = new Array(l);
         for (var i = 0; i < l; i++){
             objectsPortions[i] = new Array(w);
-            for (var j = 0; j < w; j++){
+            for (var j = 0; j < h; j++){
                 objectsPortions[i][j] = new Array(h);
-                for (var k = 0; k < h; k++){
+                for (var k = 0; k < w; k++){
                     objectsPortions[i][j][k] =
                     {
                         min: [], // All the moved objects that are in this
@@ -361,7 +378,6 @@ SceneMap.prototype = {
         ];
     },
 
-
     // -------------------------------------------------------
 
     getMapPortionLimit: function(){
@@ -482,15 +498,16 @@ SceneMap.prototype = {
     /** Close the map.
     */
     closeMap: function() {
+        var i, j, k;
         var l = Math.ceil(this.mapInfos.length / $PORTION_SIZE);
         var w = Math.ceil(this.mapInfos.width / $PORTION_SIZE);
         var h = Math.ceil(this.mapInfos.height / $PORTION_SIZE) +
                 Math.ceil(this.mapInfos.depth / $PORTION_SIZE);
 
         var objectsPortions = $game.mapsDatas[this.id];
-        for (var i = 0; i < l; i++){
-            for (var j = 0; j < w; j++){
-                for (var k = 0; k < h; k++){
+        for (i = 0; i < l; i++){
+            for (j = 0; j < h; j++){
+                for (k = 0; k < w; k++){
                     var portion = objectsPortions[i][j][k];
                     portion.mr = [];
                     portion.ma = [];
@@ -499,15 +516,17 @@ SceneMap.prototype = {
             }
         }
 
+        // Clear scene
+        for (i = this.scene.children.length - 1; i >= 0; i--) {
+            this.scene.remove(this.scene.children[i]);
+        }
+
         $currentMap = null;
     },
 
     // -------------------------------------------------------
 
     update: function(){
-
-        // Update
-        SceneGame.prototype.update.call(this);
         this.updateMovingPortions();
 
         // Update camera
@@ -521,40 +540,49 @@ SceneMap.prototype = {
 
         // Update the objects
         $game.hero.update(angle);
+        this.updatePortions(this, function(x, y, z, i, j, k) {
+            var objects = $game.mapsDatas[this.id][x][y][z];
+            var movedObjects = objects.min;
+            var movedObject;
+            for (var p = 0, l = movedObjects.length; p < l; p++)
+                movedObjects[p].update(angle);
+            movedObjects = objects.mout;
+            for (var p = 0, l = movedObjects.length; p < l; p++)
+                movedObjects[p].update(angle);
+
+            // Update face sprites
+            var mapPortion = this.getMapPortion(i, j, k);
+
+            if (mapPortion !== null)
+                mapPortion.updateFaceSprites(angle);
+        });
+
+        // Update
+        SceneGame.prototype.update.call(this);
+    },
+
+    // -------------------------------------------------------
+
+    updatePortions: function(base, callback) {
         var limit = this.getMapPortionLimit();
         var i, j, k, p, l, x, y, z;
         var lx = Math.floor((this.mapInfos.length - 1) / $PORTION_SIZE);
         var ly = Math.floor((this.mapInfos.depth + this.mapInfos.height - 1) /
                 $PORTION_SIZE);
         var lz = Math.floor((this.mapInfos.width - 1) / $PORTION_SIZE);
-        for (i = -limit; i < limit; i++) {
-            for (j = -limit; j < limit; j++) {
-                for (k = -limit; k < limit; k++) {
+        for (i = -limit; i <= limit; i++) {
+            for (j = -limit; j <= limit; j++) {
+                for (k = -limit; k <= limit; k++) {
                     x = this.currentPortion[0] + i;
                     y = this.currentPortion[1] + j;
-                    z = this.currentPortion[2] + z;
+                    z = this.currentPortion[2] + k;
                     if (x >= 0 && x <= lx && y >= 0 && y <= ly && z >= 0 &&
                         z <= lz)
                     {
-                        var objects = $game.mapsDatas[this.id][x][y][z];
-                        var movedObjects = objects.min;
-                        var movedObject;
-                        for (p = 0, l = movedObjects.length; p < l; p++)
-                            movedObjects[p].update(angle);
-                        movedObjects = objects.mout;
-                        for (p = 0, l = movedObjects.length; p < l; p++)
-                            movedObjects[p].update(angle);
+                        callback.call(base, x, y, z, i, j, k);
                     }
                 }
             }
-        }
-
-        // Update face sprites
-        for (i = 0, l = this.getMapPortionTotalSize(); i < l; i++) {
-            var mapPortion = this.getBrutMapPortion(i);
-
-            if (mapPortion !== null)
-                mapPortion.updateFaceSprites(angle);
         }
     },
 

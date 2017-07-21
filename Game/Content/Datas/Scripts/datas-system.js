@@ -92,25 +92,26 @@ DatasSystem.prototype = {
             var jsonObject;
             l = json.length;
             var id = $datasGame.system.idObjectStartHero;
-            var portion;
+            var position;
             for (i = 0; i < l; i++){
                 jsonObject = json[i];
                 if (jsonObject.id === id){
-                    portion = jsonObject.p;
+                    position = jsonObject.p;
                     break;
                 }
             }
+            var globalPortion = SceneMap.getGlobalPortion(position);
 
-            var fileName = SceneMap.getPortionName(portion[0],
-                                                   portion[1],
-                                                   portion[2]);
+            var fileName = SceneMap.getPortionName(globalPortion[0],
+                                                   globalPortion[1],
+                                                   globalPortion[2]);
 
             Wanok.openFile(null, Wanok.FILE_MAPS + mapName + "/" + fileName,
                            false, function(res){
                 var json = JSON.parse(res);
-                var mapPortion = new MapPortion(portion[0],
-                                                portion[1],
-                                                portion[2]);
+                var mapPortion = new MapPortion(globalPortion[0],
+                                                globalPortion[1],
+                                                globalPortion[2]);
 
                 // Update the hero model
                 $modelHero = mapPortion.getHeroModel(json);
