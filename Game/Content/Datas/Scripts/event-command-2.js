@@ -309,7 +309,8 @@ EventCommandChangeState.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        var portion = $currentMap.allObjects[object.system.id];
+        var portion =
+            SceneMap.getGlobalPortion($currentMap.allObjects[object.system.id]);
         var portionDatas = $game.mapsDatas[$currentMap.id]
                 [portion[0]][portion[1]][portion[2]];
         var indexState = portionDatas.si.indexOf(object.system.id);
@@ -334,6 +335,8 @@ EventCommandChangeState.prototype = {
                                                 this.idState);
             break;
         }
+
+        object.changeState();
 
         return 1;
     },

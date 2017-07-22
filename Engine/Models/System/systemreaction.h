@@ -37,7 +37,6 @@ class SystemReaction : public SuperListItem
 {
 public:
     SystemReaction();
-    SystemReaction(int i);
     SystemReaction(int i, QString n, QStandardItemModel *commands, bool bHero);
     virtual ~SystemReaction();
     QStandardItemModel* modelCommands() const;

@@ -78,6 +78,7 @@ private slots:
     void on_updateJsonEvents(SuperListItem*);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
+    void on_tabWidgetCommands_currentChanged(int index);
     void on_blockingHeroChanged(bool c);
     void on_checkBoxMoveAnimation_toggled(bool checked);
     void on_checkBoxStopAnimation_toggled(bool checked);

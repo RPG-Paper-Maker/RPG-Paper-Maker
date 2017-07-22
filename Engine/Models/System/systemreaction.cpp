@@ -28,13 +28,7 @@
 // -------------------------------------------------------
 
 SystemReaction::SystemReaction() :
-    SystemReaction(1)
-{
-
-}
-
-SystemReaction::SystemReaction(int i) :
-    SystemReaction(i, "", new QStandardItemModel, true)
+    SystemReaction(1, "", new QStandardItemModel, false)
 {
 
 }
@@ -160,7 +154,6 @@ void SystemReaction::deleteCommands(QStandardItem* item){
 // -------------------------------------------------------
 
 void SystemReaction::read(const QJsonObject &json){
-    p_id = json["id"].toInt();
 
     // Commands
     readRoot(json["c"].toArray(), m_modelCommands->invisibleRootItem());
@@ -191,7 +184,6 @@ void SystemReaction::readRoot(const QJsonArray &json, QStandardItem* root){
 // -------------------------------------------------------
 
 void SystemReaction::write(QJsonObject & json) const{
-    json["id"] = p_id;
 
     // Commands
     json["c"] = getChildrenJSON(m_modelCommands->invisibleRootItem());

@@ -40,6 +40,7 @@ SystemObjectReaction.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
+        this.idEvent = json.id;
 
         // Options
         this.blockingHero = json.bh;

@@ -181,7 +181,7 @@ MapObject.prototype = {
         var states;
         if (this.isHero)
             states = $game.heroStates;
-        else{
+        else {
             var portion = SceneMap.getGlobalPortion(
                         $currentMap.allObjects[this.system.id]);
             var portionDatas = $game.mapsDatas[$currentMap.id]
@@ -190,6 +190,7 @@ MapObject.prototype = {
             states = (indexState === -1) ? [1] : portionDatas.s[indexState];
         }
         this.currentState = null;
+        var lol = this.system.states;
         for (var i = this.system.states.length - 1; i >= 0; i--){
             var state = this.system.states[i];
             if (states.indexOf(state.id) !== -1){
@@ -516,7 +517,7 @@ MapObject.prototype = {
     *   @param {number} angle The angle on the Y axis.
     */
     updateAngle: function(angle){
-        if (this.currentState.graphicKind !== ElementMapKind.SpriteFace)
+        if (this.currentState.graphicKind === ElementMapKind.SpritesFace)
             this.mesh.rotation.y = angle;
     },
 
