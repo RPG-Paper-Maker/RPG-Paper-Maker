@@ -59,6 +59,10 @@ private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
     bool m_selection;
+    QMenu* m_menuPencil;
+    QAction* m_actionPencil;
+    QAction* m_actionRectangle;
+    QAction* m_actionPin;
 
 protected:
     void mouseMoveEvent(QMouseEvent* event);

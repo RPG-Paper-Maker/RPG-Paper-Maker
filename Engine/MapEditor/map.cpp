@@ -322,7 +322,7 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
         // Save
         Map::saveObjects(model, path, false);
 
-        delete model;
+        SuperListItem::deleteModel(model);
     }           
 }
 
@@ -359,6 +359,7 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
         if (x >= minI && x <= maxI && y >= minJ && y <= maxJ && z >= minK &&
             z <= maxK)
         {
+            delete super;
             list.push_back(i);
         }
     }
@@ -385,15 +386,15 @@ void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
                             int i, int j, int k, MapProperties &properties)
 {
     QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
-    MapPortion* portion = new MapPortion;
-    Wanok::readJSON(pathPortion, *portion);
+    MapPortion portion;
+    Wanok::readJSON(pathPortion, portion);
 
     // Removing cut content
-    portion->removeLandOut(properties);
-    portion->removeSpritesOut(properties);
-    portion->removeObjectsOut(listDeletedObjectsIDs, properties);
+    portion.removeLandOut(properties);
+    portion.removeSpritesOut(properties);
+    portion.removeObjectsOut(listDeletedObjectsIDs, properties);
 
-    Wanok::writeJSON(pathPortion, *portion);
+    Wanok::writeJSON(pathPortion, portion);
 }
 
 // -------------------------------------------------------

@@ -72,7 +72,7 @@ void PanelObjectEvent::initialize(SystemObjectEvent* event){
         item = Wanok::get()->project()->gameDatas()->commonEventsDatas()
                ->modelEventsSystem()->invisibleRootItem();
         ui->comboBoxEventsSystem->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_event->id()));
+                    SuperListItem::getIndexById(item, m_event->idEvent()));
         ui->comboBoxEventsUser->setCurrentIndex(0);
         ui->radioButtonEventSystem->setChecked(true);
     }
@@ -80,7 +80,7 @@ void PanelObjectEvent::initialize(SystemObjectEvent* event){
         item = Wanok::get()->project()->gameDatas()->commonEventsDatas()
                ->modelEventsUser()->invisibleRootItem();
         ui->comboBoxEventsUser->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_event->id()));
+                    SuperListItem::getIndexById(item, m_event->idEvent()));
         ui->comboBoxEventsSystem->setCurrentIndex(0);
         ui->radioButtonEventUser->setChecked(true);
     }
@@ -94,7 +94,7 @@ void PanelObjectEvent::initialize(SystemObjectEvent* event){
 // -------------------------------------------------------
 
 void PanelObjectEvent::updateEvent(SystemEvent* ev){
-    if (m_event->id() != ev->id())
+    if (m_event->idEvent() != ev->id())
         m_event->clearParameters();
 
     m_event->setId(ev->id());

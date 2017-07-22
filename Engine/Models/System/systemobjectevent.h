@@ -22,7 +22,6 @@
 
 #include <QMetaType>
 #include "systemparameter.h"
-#include "systemreaction.h"
 
 // -------------------------------------------------------
 //
@@ -36,23 +35,19 @@ class SystemObjectEvent : public SuperListItem
 {
 public:
     SystemObjectEvent();
-    SystemObjectEvent(int i, QString n, QStandardItemModel* parameters,
-                      bool isSystem);
+    SystemObjectEvent(int i, int idEvent, QString n,
+                      QStandardItemModel* parameters, bool isSystem);
     virtual ~SystemObjectEvent();
+    int idEvent() const;
     QStandardItemModel* modelParameters() const;
-    SystemReaction* reactionAt(int id) const;
     bool isSystem() const;
     void setIsSystem(bool b);
     static SystemObjectEvent* getCommandEvent(const EventCommand *command,
                                               int& i);
     QString getLabelTab() const;
     virtual void setDefault();
-    void setDefaultHero();
-    void addReaction(int id, SystemReaction* reaction);
     void addParameter(SystemParameter* parameter);
-    void clearReactions();
     void clearParameters();
-    void updateReactions(QStandardItemModel *modelStates);
     void updateParameters();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
@@ -63,8 +58,8 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    int m_idEvent;
     QStandardItemModel* m_modelParameters;
-    QHash<int, SystemReaction*> m_reactions;
     bool m_isSystem;
 };
 

@@ -68,6 +68,7 @@ private:
     QStandardItemModel* p_model;
     ContextMenuList* m_contextMenuCommonCommands;
     SuperListItem* m_newItemInstance;
+    SuperListItem* m_copiedItem;
     bool m_canBeEmpty;
     bool m_updateId;
     bool m_hasContextMenu;
@@ -75,10 +76,11 @@ private:
     bool m_canMove;
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
+    void setItem(QStandardItem *selected, SuperListItem* super);
     virtual void newItem(QStandardItem *selected);
     virtual void editItem(QStandardItem *selected);
-    virtual void copyItem(QStandardItem *);
-    virtual void pasteItem(QStandardItem *);
+    virtual void copyItem(QStandardItem *selected);
+    virtual void pasteItem(QStandardItem *selected);
     virtual void deleteItem(QStandardItem *selected);
     virtual void updateAllNodesString(QStandardItem* item);
 

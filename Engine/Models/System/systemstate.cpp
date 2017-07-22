@@ -62,7 +62,7 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk,
 }
 
 SystemState::~SystemState(){
-
+    clearReactions();
 }
 
 QString SystemState::name() const { return m_state->name(); }
@@ -133,6 +133,77 @@ void SystemState::setKeepPosition(bool b) { m_keepPosition = b; }
 //
 // -------------------------------------------------------
 
+void SystemState::clearReactions() {
+    for (int i = 0; i < m_reactions.size(); i++)
+        delete m_reactions.at(i);
+}
+
+// -------------------------------------------------------
+
+SystemReaction* SystemState::reactionAt(int id) {
+    SystemReaction* reaction;
+
+    for (int i = 0; i < m_reactions.size(); i++) {
+        reaction = m_reactions.at(i);
+
+        if (reaction->id() == id)
+            return reaction;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+void SystemState::addReaction(SystemReaction* reaction) {
+    m_reactions.append(reaction);
+}
+
+// -------------------------------------------------------
+
+void SystemState::updateReactions(QStandardItemModel *modelEvents) {
+    SystemObjectEvent* event;
+    SystemReaction* reaction;
+    int l, test;
+    QList<int> indexesToDelete;
+
+    // Check if missing a reaction
+    l = modelEvents->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l - 1; i++){
+        event = (SystemObjectEvent*) modelEvents->item(i)->data()
+                .value<quintptr>();
+
+        // If missing a key, create a new one
+        if (reactionAt(event->id()) == nullptr)
+            addReaction(new SystemReaction(event->id()));
+    }
+
+    // Check if there is a reaction to a non existing event
+    for (int i = 0; i < m_reactions.size(); i++) {
+        reaction = m_reactions.at(i);
+
+        test = false;
+        for (int j = 0; j < l - 1; j++){
+            event = (SystemObjectEvent*) modelEvents->item(j)->data()
+                    .value<quintptr>();
+
+            if (event->id() == reaction->id()) {
+                test = true;
+                break;
+            }
+        }
+
+        if (!test) {
+            delete reaction;
+            indexesToDelete.push_back(i);
+        }
+    }
+    for (int i = 0; i < indexesToDelete.size(); i++)
+        m_reactions.removeAt(indexesToDelete.at(i));
+}
+
+// -------------------------------------------------------
+
 bool SystemState::openDialog(){
     SystemState super;
     super.setCopy(*this);
@@ -156,7 +227,18 @@ SuperListItem* SystemState::createCopy() const{
 
 void SystemState::setCopy(const SystemState& state){
     SuperListItem::setCopy(state);
+    SystemReaction* reaction;
     p_id = state.p_id;
+
+    // Reactions
+    m_reactions.clear();
+    for (int i = 0; i < state.m_reactions.size(); i++) {
+        reaction = state.m_reactions.at(i);
+        if (reaction == nullptr)
+            m_reactions.append(reaction);
+        else
+            m_reactions.append((SystemReaction*) reaction->createCopy());
+    }
 
     m_state = state.m_state;
     m_graphicsId = state.m_graphicsId;
@@ -181,6 +263,18 @@ void SystemState::setCopy(const SystemState& state){
 
 void SystemState::read(const QJsonObject &json){
     SuperListItem::read(json);
+    QJsonArray tabReactions = json["r"].toArray();
+    QJsonObject objReaction;
+    SystemReaction* reaction;
+
+    // Reactions
+    for (int i = 0; i < tabReactions.size(); i++) {
+        objReaction = tabReactions.at(i).toObject();
+        reaction = new SystemReaction;
+        reaction->read(objReaction);
+        m_reactions.append(reaction);
+    }
+    json["r"] = tabReactions;
 
     setState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
                                     ->commonEventsDatas()->modelStates()
@@ -203,6 +297,17 @@ void SystemState::read(const QJsonObject &json){
 
 void SystemState::write(QJsonObject &json) const{
     SuperListItem::write(json);
+    QJsonArray tabReactions;
+    SystemReaction* reaction;
+
+    // Reactions
+    for (int i = 0; i < m_reactions.size(); i++) {
+        QJsonObject objReaction;
+        reaction = m_reactions.at(i);
+        reaction->write(objReaction);
+        tabReactions.append(objReaction);
+    }
+    json["r"] = tabReactions;
 
     json["gk"] = (int) m_graphicsKind;
     json["gid"] = m_graphicsId;

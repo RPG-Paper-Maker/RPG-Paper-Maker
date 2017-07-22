@@ -439,6 +439,10 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
         if (position.x() >= properties.length() ||
             position.z() >= properties.width())
         {
+            QVector<SpriteDatas*>* l = *i;
+            for (int j = 0; j < l->size(); j++)
+                delete l->at(j);
+            delete l;
             list.push_back(position);
         }
     }

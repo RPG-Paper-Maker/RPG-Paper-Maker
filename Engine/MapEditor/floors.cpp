@@ -303,6 +303,7 @@ void Floors::removeLandOut(MapProperties& properties) {
         if (position.x() >= properties.length() ||
             position.z() >= properties.width())
         {
+            delete *i;
             list.push_back(position);
         }
     }

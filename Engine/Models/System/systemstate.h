@@ -24,6 +24,7 @@
 #include "superlistitem.h"
 #include "systemobjectevent.h"
 #include "mapeditorsubselectionkind.h"
+#include "systemreaction.h"
 
 // -------------------------------------------------------
 //
@@ -68,6 +69,10 @@ public:
     void setSetWithCamera(bool b);
     void setPixelOffset(bool b);
     void setKeepPosition(bool b);
+    void clearReactions();
+    SystemReaction* reactionAt(int id);
+    void addReaction(SystemReaction* reaction);
+    void updateReactions(QStandardItemModel* modelEvents);
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
@@ -77,6 +82,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    QList<SystemReaction*> m_reactions;
     SuperListItem* m_state;
     MapEditorSubSelectionKind m_graphicsKind;
     int m_graphicsId;

@@ -34,7 +34,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
     QMenuBar(parent),
     ui(new Ui::WidgetMenuBarMapEditor),
     m_selectionKind(MapEditorSelectionKind::Land),
-    m_selection(selection)
+    m_selection(selection),
+    m_menuPencil(nullptr)
 {
     ui->setupUi(this);
 
@@ -49,6 +50,15 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
 
 WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
 {
+    if (this->cornerWidget() != nullptr)
+        delete this->cornerWidget();
+    if (m_menuPencil != nullptr) {
+        delete m_menuPencil;
+        delete m_actionPencil;
+        delete m_actionRectangle;
+        delete m_actionPin;
+    }
+
     delete ui;
 }
 
@@ -108,24 +118,22 @@ bool WidgetMenuBarMapEditor::containsMenu() const{
 
 void WidgetMenuBarMapEditor::initializeRightMenu(){
     WidgetMenuBarMapEditor *bar = new WidgetMenuBarMapEditor(this, false);
-    QMenu* menu;
-    QAction* action;
     bar->clear();
 
     // Draw mode
-    menu = new QMenu("Pencil");
-    menu->setIcon(QIcon(":/icons/Ressources/pencil.png"));
-    action = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
-    menu->addAction(action);
-    action = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
+    m_menuPencil = new QMenu("Pencil");
+    m_menuPencil->setIcon(QIcon(":/icons/Ressources/pencil.png"));
+    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
+    m_menuPencil->addAction(m_actionPencil);
+    m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
                          "Rectangle");
-    action->setEnabled(false);
-    menu->addAction(action);
-    action = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
-    menu->addAction(action);
-    connect(menu, SIGNAL(triggered(QAction*)),
+    m_actionRectangle->setEnabled(false);
+    m_menuPencil->addAction(m_actionRectangle);
+    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
+    m_menuPencil->addAction(m_actionPin);
+    connect(m_menuPencil, SIGNAL(triggered(QAction*)),
             this, SLOT(on_menuDrawTriggered(QAction*)));
-    bar->addMenu(menu);
+    bar->addMenu(m_menuPencil);
 
     this->setCornerWidget(bar);
 }

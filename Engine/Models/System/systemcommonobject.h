@@ -45,9 +45,11 @@ public:
     static QString strInheritance, strStates, strEvents;
 
     void setDefault();
+    void setDefaultFirst();
     void setDefaultHero(QStandardItemModel* modelEventsSystem,
                         QStandardItemModel *);
-    void setDefaultHeroKeyPressEvent(QStandardItemModel *modelEventsSystem,
+    void setDefaultHeroKeyPressEvent(int &i, SystemState *state,
+                                     QStandardItemModel *modelEventsSystem,
                                      int k, bool r, bool ri,
                                      EventCommandKind kind,
                                      QVector<QString> commandList);

@@ -19,7 +19,6 @@
 
 #include "systemobjectevent.h"
 #include "dialogsystemobjectevent.h"
-#include "systemstate.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -29,15 +28,16 @@
 // -------------------------------------------------------
 
 SystemObjectEvent::SystemObjectEvent() :
-    SystemObjectEvent(1,"", new QStandardItemModel, true)
+    SystemObjectEvent(1, 1, "", new QStandardItemModel, true)
 {
 
 }
 
-SystemObjectEvent::SystemObjectEvent(int i, QString n,
+SystemObjectEvent::SystemObjectEvent(int i, int idEvent, QString n,
                                      QStandardItemModel* parameters,
                                      bool isSystem) :
     SuperListItem(i,n),
+    m_idEvent(idEvent),
     m_modelParameters(parameters),
     m_isSystem(isSystem)
 {
@@ -46,15 +46,14 @@ SystemObjectEvent::SystemObjectEvent(int i, QString n,
 
 SystemObjectEvent::~SystemObjectEvent(){
     SuperListItem::deleteModel(m_modelParameters);
-    clearReactions();
+}
+
+int SystemObjectEvent::idEvent() const {
+    return m_idEvent;
 }
 
 QStandardItemModel* SystemObjectEvent::modelParameters() const {
     return m_modelParameters;
-}
-
-SystemReaction* SystemObjectEvent::reactionAt(int id) const{
-    return m_reactions[id];
 }
 
 bool SystemObjectEvent::isSystem() const { return m_isSystem; }
@@ -73,7 +72,7 @@ SystemObjectEvent* SystemObjectEvent::getCommandEvent(
     PrimitiveValue* v;
     int type = command->valueCommandAt(i++).toInt();
     int idEvent = command->valueCommandAt(i++).toInt();
-    SystemObjectEvent* event = new SystemObjectEvent(idEvent, "",
+    SystemObjectEvent* event = new SystemObjectEvent(1, idEvent, "",
                                                      new QStandardItemModel,
                                                      type == 0);
 
@@ -123,12 +122,6 @@ QString SystemObjectEvent::getLabelTab() const{
 
 // -------------------------------------------------------
 
-void SystemObjectEvent::addReaction(int id, SystemReaction* reaction){
-    m_reactions[id] = reaction;
-}
-
-// -------------------------------------------------------
-
 void SystemObjectEvent::addParameter(SystemParameter* parameter){
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(parameter)));
@@ -138,44 +131,7 @@ void SystemObjectEvent::addParameter(SystemParameter* parameter){
 // -------------------------------------------------------
 
 void SystemObjectEvent::setDefault(){
-    SystemReaction* reaction = new SystemReaction;
-    m_reactions[1] = reaction;
-}
 
-// -------------------------------------------------------
-
-void SystemObjectEvent::setDefaultHero(){
-    SystemReaction* reaction = new SystemReaction;
-    m_reactions[1] = reaction;
-}
-
-// -------------------------------------------------------
-
-void SystemObjectEvent::updateReactions(QStandardItemModel* modelStates){
-    QList<int> keysToDelete;
-
-    QHash<int, SystemReaction*>::iterator i;
-    for (i = m_reactions.begin(); i != m_reactions.end(); i++){
-        bool test = false;
-        int l = modelStates->invisibleRootItem()->rowCount();
-        for (int j = 0; j < l - 1; j++){
-            SystemState* state = (SystemState*) modelStates->item(j)->data()
-                    .value<quintptr>();
-            if (i.key() == state->id()){
-                test = true;
-                break;
-            }
-        }
-
-        // If there is no state corresponding to the key, we need to delete it
-        if (!test){
-            keysToDelete.append(i.key());
-            delete i.value();
-        }
-    }
-
-    for (int j = 0; j < keysToDelete.size(); j++)
-        m_reactions.remove(keysToDelete.at(j));
 }
 
 // -------------------------------------------------------
@@ -194,7 +150,7 @@ void SystemObjectEvent::updateParameters()
                                            : modelEventsUser;
     SystemEvent* event =
             (SystemEvent*) SuperListItem::getById(model->invisibleRootItem(),
-                                                  id());
+                                                  idEvent());
     SystemCreateParameter* createParam;
     SystemParameter* param;
     SystemParameter* newParam;
@@ -235,16 +191,6 @@ void SystemObjectEvent::updateParameters()
 
 // -------------------------------------------------------
 
-void SystemObjectEvent::clearReactions(){
-    QHash<int, SystemReaction*>::iterator i;
-    for (i = m_reactions.begin(); i != m_reactions.end(); i++)
-        delete i.value();
-
-    m_reactions.clear();
-}
-
-// -------------------------------------------------------
-
 void SystemObjectEvent::clearParameters(){
     SuperListItem::deleteModel(m_modelParameters);
     m_modelParameters = new QStandardItemModel;
@@ -275,12 +221,12 @@ SuperListItem* SystemObjectEvent::createCopy() const{
 
 void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
     SuperListItem::setCopy(event);
-    p_id = event.p_id;
-
     SystemParameter* param;
     QList<QStandardItem *> row;
     int l;
 
+    p_id = event.p_id;
+    m_idEvent = event.m_idEvent;
     m_isSystem = event.m_isSystem;
 
     // Parameters
@@ -292,15 +238,6 @@ void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
                          ->data().value<quintptr>()));
         row = param->getModelRow();
         m_modelParameters->appendRow(row);
-    }
-
-    // Reactions
-    clearReactions();
-    QHash<int, SystemReaction*>::const_iterator i;
-    for (i = event.m_reactions.begin(); i != event.m_reactions.end(); i++){
-        SystemReaction* reaction = new SystemReaction;
-        reaction->setCopy(*i.value());
-        m_reactions[i.key()] = reaction;
     }
 }
 
@@ -323,10 +260,10 @@ QList<QStandardItem *> SystemObjectEvent::getModelRow() const{
 
 void SystemObjectEvent::read(const QJsonObject &json){
     SuperListItem::read(json);
-    QList<QStandardItem *> row;
     SystemParameter* param;
-    SystemReaction* reaction;
     QStandardItem* item;
+
+    m_idEvent = json["idEv"].toInt();
 
     // Parameters
     QJsonArray jsonParameters = json["p"].toArray();
@@ -339,16 +276,6 @@ void SystemObjectEvent::read(const QJsonObject &json){
     }
     updateParameters();
 
-    // Reactions
-    QJsonObject::iterator i;
-    QJsonObject jsonReactions = json["r"].toObject();
-    for (i = jsonReactions.begin(); i != jsonReactions.end(); i++){
-        reaction = new SystemReaction;
-        reaction->read(i.value().toObject());
-        m_reactions[i.key().toInt()] = reaction;
-    }
-    json["r"] = jsonReactions;
-
     // Is system
     m_isSystem = json["sys"].toBool();
 }
@@ -359,9 +286,10 @@ void SystemObjectEvent::write(QJsonObject &json) const{
     SuperListItem::write(json);
     SystemParameter* param;
     QJsonArray jsonParameters;
-    QJsonObject jsonReactions;
     QJsonObject obj;
     int l;
+
+    json["idEv"] = m_idEvent;
 
     // Parameters
     l = m_modelParameters->invisibleRootItem()->rowCount();
@@ -373,15 +301,6 @@ void SystemObjectEvent::write(QJsonObject &json) const{
         jsonParameters.append(obj);
     }
     json["p"] = jsonParameters;
-
-    // Reactions
-    QHash<int, SystemReaction*>::const_iterator i;
-    for (i = m_reactions.begin(); i != m_reactions.end(); i++){
-        obj = QJsonObject();
-        i.value()->write(obj);
-        jsonReactions[QString::number(i.key())] = obj;
-    }
-    json["r"] = jsonReactions;
 
     // Is system
     json["sys"] = m_isSystem;

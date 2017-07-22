@@ -31,6 +31,7 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     QTreeView(parent),
     p_model(nullptr),
     m_newItemInstance(nullptr),
+    m_copiedItem(nullptr),
     m_canBeEmpty(true),
     m_updateId(false),
     m_hasContextMenu(true),
@@ -49,7 +50,11 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
 WidgetSuperTree::~WidgetSuperTree()
 {
     delete m_contextMenuCommonCommands;
-    if (m_newItemInstance != nullptr) delete m_newItemInstance;
+    if (m_newItemInstance != nullptr)
+        delete m_newItemInstance;
+
+    if (m_copiedItem != nullptr)
+        delete m_copiedItem;
 }
 
 QStandardItemModel *WidgetSuperTree::getModel() const { return p_model; }
@@ -79,6 +84,23 @@ void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){
 //
 // -------------------------------------------------------
 
+void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
+    SuperListItem* previous =
+            (SuperListItem*)(selected->data().value<quintptr>());
+
+    QStandardItem* root = getRootOfItem(selected);
+    QList<QStandardItem*> row = super->getModelRow();
+    int index = selected->row();
+    if (previous != nullptr)
+        root->removeRow(index);
+    root->insertRow(index, row);
+    QModelIndex modelIndex = p_model->index(index,0);
+    setCurrentIndex(modelIndex);
+    emit needsUpdateJson(super);
+}
+
+// -------------------------------------------------------
+
 void WidgetSuperTree::newItem(QStandardItem* selected){
     SuperListItem* super = m_newItemInstance->createCopy();
     if (super->openDialog()){
@@ -94,28 +116,28 @@ void WidgetSuperTree::newItem(QStandardItem* selected){
 
 void WidgetSuperTree::editItem(QStandardItem *selected){
     SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
-    if (super->openDialog()){
-        QStandardItem* root = getRootOfItem(selected);
-        QList<QStandardItem*> row = super->getModelRow();
-        int index = selected->row();
-        root->removeRow(index);
-        root->insertRow(index, row);
-        QModelIndex modelIndex = p_model->index(index,0);
-        setCurrentIndex(modelIndex);
-        emit needsUpdateJson(super);
+    if (super->openDialog())
+        setItem(selected, super);
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperTree::copyItem(QStandardItem* selected){
+    SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+
+    if (m_copiedItem == nullptr)
+        m_copiedItem = super->createCopy();
+    else
+        m_copiedItem->setCopy(*super);
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperTree::pasteItem(QStandardItem* selected){
+    if (m_copiedItem != nullptr) {
+        SuperListItem* super = m_copiedItem->createCopy();
+        setItem(selected, super);
     }
-}
-
-// -------------------------------------------------------
-
-void WidgetSuperTree::copyItem(QStandardItem*){
-    // TODO
-}
-
-// -------------------------------------------------------
-
-void WidgetSuperTree::pasteItem(QStandardItem*){
-    // TODO
 }
 
 // -------------------------------------------------------
@@ -225,6 +247,10 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
         if (m_canBeControled){
             if (actions.at(0)->shortcut().matches(seq))
                 contextNew();
+            else if (actions.at(3)->shortcut().matches(seq))
+                contextCopy();
+            else if (actions.at(4)->shortcut().matches(seq))
+                contextPaste();
         }
     }
 

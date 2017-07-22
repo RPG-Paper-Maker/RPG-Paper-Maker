@@ -114,6 +114,7 @@ void MapObjects::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
         {
             list.push_back(position);
             listDeletedObjectsIDs.push_back(i.value()->id());
+            delete *i;
         }
     }
 

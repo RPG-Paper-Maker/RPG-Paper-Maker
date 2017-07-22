@@ -23,6 +23,7 @@
 #include "systemevent.h"
 #include "systemstate.h"
 #include "systemcommonreaction.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -33,12 +34,14 @@
 PanelObject::PanelObject(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelObject),
-    m_model(nullptr)
+    m_model(nullptr),
+    m_copiedReaction(nullptr)
 {
     ui->setupUi(this);
 
     // Updating infos lists
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
+    ui->treeViewEvents->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
 
     // Keep space when hiding widgets
@@ -58,6 +61,9 @@ PanelObject::PanelObject(QWidget *parent) :
 
 PanelObject::~PanelObject()
 {
+    if (m_copiedReaction != nullptr)
+        delete m_copiedReaction;
+
     delete ui;
 }
 
@@ -96,16 +102,6 @@ void PanelObject::updateModel(){
         ui->lineEditName->setText(m_model->name());
         initializeCommonInheritance();
 
-        // States
-        ui->treeViewStates->initializeModel(m_model->modelStates());
-        connect(ui->treeViewStates->selectionModel(),
-                SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-                SLOT(on_stateChanged(QModelIndex,QModelIndex)));
-        connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem*)),
-                this, SLOT(on_updateJsonStates(SuperListItem*)));
-        index = ui->treeViewStates->getModel()->index(0,0);
-        ui->treeViewStates->setCurrentIndex(index);
-
         // Events
         ui->treeViewEvents->initializeModel(m_model->modelEvents());
         connect(ui->treeViewEvents->selectionModel(),
@@ -115,7 +111,18 @@ void PanelObject::updateModel(){
                 this, SLOT(on_updateJsonEvents(SuperListItem*)));
         index = ui->treeViewEvents->getModel()->index(0,0);
         ui->treeViewEvents->setCurrentIndex(index);
-        on_updateJsonEvents(nullptr);
+
+        // States
+        ui->treeViewStates->initializeModel(m_model->modelStates());
+        connect(ui->treeViewStates->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+                SLOT(on_stateChanged(QModelIndex,QModelIndex)));
+        connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem*)),
+                this, SLOT(on_updateJsonStates(SuperListItem*)));
+        index = ui->treeViewStates->getModel()->index(0,0);
+        ui->treeViewStates->setCurrentIndex(index);
+        updateReactionsWidgets();
+        on_stateChanged(index, index);
     }
 }
 
@@ -125,6 +132,7 @@ void PanelObject::clear(){
     ui->tabWidgetCommands->clear();
     m_reactions.clear();
     m_checkBoxes.clear();
+    m_pushButtons.clear();
 }
 
 // -------------------------------------------------------
@@ -188,25 +196,13 @@ void PanelObject::showName(bool b){
 // -------------------------------------------------------
 
 void PanelObject::updateReactions(){
-    int l, ll;
+    int l = m_model->modelStates()->invisibleRootItem()->rowCount();
 
-    // For each events, there should be exactly the right keys ids
-    l = m_model->modelEvents()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l-1; i++){
-        SystemObjectEvent* event = (SystemObjectEvent*) m_model->modelEvents()
-                                   ->item(i)->data().value<quintptr>();
+    for (int i = 0; i < l - 1; i++){
+        SystemState* state = (SystemState*) m_model->modelStates()->item(i)
+                ->data().value<quintptr>();
 
-        ll = m_model->modelStates()->invisibleRootItem()->rowCount();
-        for (int j = 0; j < ll-1; j++){
-            SystemState* state = (SystemState*) m_model->modelStates()->item(j)
-                                 ->data().value<quintptr>();
-
-            // If missing a key, create a new one
-            if (event->reactionAt(state->id()) == nullptr)
-                event->addReaction(state->id(), new SystemReaction);
-        }
-
-        event->updateReactions(m_model->modelStates());
+        state->updateReactions(m_model->modelEvents());
     }
 }
 
@@ -219,8 +215,10 @@ void PanelObject::updateReactionsWidgets(){
     WidgetTreeCommands* tree;
     SystemObjectEvent* event;
     QCheckBox* checkbox;
+    QPushButton* pushButton;
     QSpacerItem* spacer;
     QHBoxLayout* hlayout;
+    QVariant variant;
     int l;
 
     // Update reactions (if new/delete)
@@ -228,7 +226,7 @@ void PanelObject::updateReactionsWidgets(){
     QStandardItem* selected = ui->treeViewStates->getSelected();
     SystemState* super = (SystemState*) selected->data().value<quintptr>();
 
-    if (super != nullptr){
+    if (super != nullptr) {
         clear();
 
         // Create all the corresponding tabs for all events
@@ -240,21 +238,36 @@ void PanelObject::updateReactionsWidgets(){
             layout = new QGridLayout(widget);
             tree = new WidgetTreeCommands();
             m_reactions.append(tree);
-            layout->addWidget(tree,0,0);
+            layout->addWidget(tree, 0, 0);
+
+            // Checkboxes and buttons
+            variant = QVariant::fromValue(reinterpret_cast<quintptr>(
+                                              super->reactionAt(event->id())));
             widgetCheckbox = new QWidget();
             hlayout = new QHBoxLayout(widgetCheckbox);
             checkbox = new QCheckBox("Blocking hero");
-            checkbox->setProperty("reaction",
-                                  QVariant::fromValue(
-                                      reinterpret_cast<quintptr>(
-                                          event->reactionAt(super->id()))));
+            checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this,
                     SLOT(on_blockingHeroChanged(bool)));
             m_checkBoxes.append(checkbox);
             hlayout->addWidget(checkbox);
             spacer = new QSpacerItem(50,1);
             hlayout->addSpacerItem(spacer);
-            hlayout->setStretch(2,1);
+            pushButton = new QPushButton("Copy reaction");
+            pushButton->setProperty("reaction", variant);
+            connect(pushButton, SIGNAL(clicked(bool)),
+                    this, SLOT(on_copyReaction()));
+            m_pushButtons.append(pushButton);
+            hlayout->addWidget(pushButton);
+            pushButton = new QPushButton("Paste reaction");
+            pushButton->setProperty("reaction", variant);
+            pushButton->setEnabled(m_copiedReaction != nullptr);
+            connect(pushButton, SIGNAL(clicked(bool)),
+                    this, SLOT(on_pasteReaction()));
+            m_pushButtons.append(pushButton);
+            hlayout->addWidget(pushButton);
+
+            hlayout->setStretch(1,1);
             layout->addWidget(widgetCheckbox,1,0);
 
             ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
@@ -332,8 +345,8 @@ void PanelObject::on_updateJsonStates(SuperListItem*){
 
 // -------------------------------------------------------
 
-void PanelObject::on_updateJsonEvents(SuperListItem* item){
-    on_updateJsonStates(item);
+void PanelObject::on_updateJsonEvents(SuperListItem*){
+    updateReactionsWidgets();
 }
 
 // -------------------------------------------------------
@@ -370,7 +383,7 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
                         ->data().value<quintptr>();
 
                 if (event != nullptr){
-                    SystemReaction* reaction = event->reactionAt(super->id());
+                    SystemReaction* reaction = super->reactionAt(event->id());
 
                     // Commands
                     WidgetTreeCommands* widget = m_reactions.at(i);
@@ -471,4 +484,32 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
             super->setGraphicsKind(kind);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_copyReaction() {
+    QPushButton* pushButton = (QPushButton*) sender();
+    SystemReaction* reaction =
+           (SystemReaction*) pushButton->property("reaction").value<quintptr>();
+
+    if (m_copiedReaction == nullptr) {
+        m_copiedReaction = (SystemReaction*) reaction->createCopy();
+
+        // Update paste button
+        for (int i = 0; i < m_pushButtons.size(); i++)
+            m_pushButtons.at(i)->setEnabled(true);
+    }
+    else
+        m_copiedReaction->setCopy(*reaction);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_pasteReaction() {
+    QPushButton* pushButton = (QPushButton*) sender();
+    SystemReaction* reaction =
+           (SystemReaction*) pushButton->property("reaction").value<quintptr>();
+
+    reaction->setCopy(*m_copiedReaction);
 }
