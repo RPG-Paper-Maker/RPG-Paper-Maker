@@ -28,7 +28,7 @@
 // -------------------------------------------------------
 
 SystemReaction::SystemReaction() :
-    SystemReaction(1, "", new QStandardItemModel, false)
+    SystemReaction(1, "", new QStandardItemModel, true)
 {
 
 }

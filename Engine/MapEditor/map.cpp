@@ -194,7 +194,7 @@ void Map::writeDefaultMap(QString path){
 
     // Portion
     MapPortion mapPortion;
-    SystemCommonObject* o = new SystemCommonObject(1, "Hero", 1,
+    SystemCommonObject* o = new SystemCommonObject(1, "Hero", 2,
                                                    new QStandardItemModel,
                                                    new QStandardItemModel);
     mapPortion.addObject(position, o);

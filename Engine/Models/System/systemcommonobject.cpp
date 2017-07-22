@@ -71,10 +71,27 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 // -------------------------------------------------------
 
 void SystemCommonObject::setDefault(){
+    QStandardItem* model = Wanok::get()->project()->gameDatas()
+            ->commonEventsDatas()->modelCommonObjects()->invisibleRootItem();
+
+    // Copy the object with ID 1
+    SystemCommonObject* object =
+            (SystemCommonObject*) SuperListItem::getById(model, 1);
+    setCopy(*object);
+}
+
+// -------------------------------------------------------
+
+void SystemCommonObject::setDefaultFirst() {
     QList<QStandardItem*> row;
     QStandardItem* item;
     SystemState* state;
     SuperListItem* super;
+
+    // ID and name
+    setId(1);
+    setName("Basic");
+
     QStandardItemModel* modelEventsUser =
             Wanok::get()->project()->gameDatas()->commonEventsDatas()
             ->modelEventsUser();
@@ -99,7 +116,7 @@ void SystemCommonObject::setDefault(){
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
-                            false, false, false, false, false, false, false,
+                            true, false, false, false, false, true, true,
                             false);
     row = state->getModelRow();
     m_states->appendRow(row);
@@ -118,7 +135,8 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     SystemState* state;
     SuperListItem* super;
 
-    // Name
+    // ID and name
+    setId(2);
     setName("Hero");
 
     // Events
@@ -273,9 +291,6 @@ SuperListItem* SystemCommonObject::createCopy() const{
 // -------------------------------------------------------
 
 void SystemCommonObject::setCopy(const SystemCommonObject& item){
-    SuperListItem::setCopy(item);
-    p_id = item.p_id;
-
     m_inheritanceId = item.inheritanceId();
 
     // Events
