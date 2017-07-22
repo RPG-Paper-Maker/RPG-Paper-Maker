@@ -142,5 +142,7 @@ void Camera::zoomLess(int gridHeight){
 
 void Camera::onMouseWheelPressed(QPoint& mouse, QPoint& mouseBeforeUpdate){
     m_height += (mouse.y() - mouseBeforeUpdate.y()) * 2;
+    if(m_height <= 40 && m_height >=0) m_height =-40;
+    else if(m_height >= -40 && m_height <=0) m_height =40;
     m_horizontalAngle += (mouse.x() - mouseBeforeUpdate.x()) / 2;
 }
