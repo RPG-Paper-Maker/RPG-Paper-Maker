@@ -28,6 +28,7 @@
         <file>Ressources/picture.png</file>
         <file>Ressources/floor.png</file>
         <file>Ressources/sprite_fix.png</file>
+        <file>Ressources/icon.ico</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

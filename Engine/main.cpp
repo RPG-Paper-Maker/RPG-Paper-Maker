@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
        QString styleSheet = QLatin1String(file.readAll());
        qApp->setStyleSheet(styleSheet);
     }
+    qApp->setWindowIcon(QIcon(":/icons/Ressources/icon.ico"));
 
     // Create document folder for games if not existing
     QString documentsPath =

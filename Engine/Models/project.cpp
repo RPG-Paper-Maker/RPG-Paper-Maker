@@ -21,7 +21,7 @@
 #include "wanok.h"
 #include <QMessageBox>
 
-const QString Project::VERSION = "0.1.0";
+const QString Project::VERSION = "0.2.0";
 
 // -------------------------------------------------------
 //

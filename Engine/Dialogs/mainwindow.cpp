@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Setting window title
-    this->setWindowTitle(p_appName + " v." + Project::VERSION + " (UNSTABLE)");
+    this->setWindowTitle(p_appName + " v." + Project::VERSION);
 
     // Update main panel
     mainPanel = new PanelMainMenu(this);
