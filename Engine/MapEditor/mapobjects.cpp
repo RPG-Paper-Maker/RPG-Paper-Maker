@@ -202,7 +202,7 @@ void MapObjects::initializeVertices(int squareSize,
         }
 
         // Draw the square of the object
-        QVector3D pos(position.x() * squareSize, 0.01f,
+        QVector3D pos(position.x() * squareSize, 0.1f,
                       position.z() * squareSize);
         QVector3D size(squareSize, 0.0, squareSize);
         float x = 0.0, y = 0.0, w = 1.0, h = 1.0;

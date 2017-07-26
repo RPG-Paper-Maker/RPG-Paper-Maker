@@ -39,8 +39,8 @@ function Camera(d, h){
                                                    $canvasWidth / $canvasHeight,
                                                    1, 100000);
 
-    this.distance = d;
-    this.height = h;
+    this.distance = d * ($SQUARE_SIZE / 32);
+    this.height = h * ($SQUARE_SIZE / 32);
     this.horizontalAngle = -90.0;
     this.target = new THREE.Vector3();
     this.rotateVelocity = 180;
@@ -56,7 +56,7 @@ Camera.prototype = {
 
         // Update angle
         if (this.targetHorizontalAngle !== this.horizontalAngle) {
-            var speed = this.rotateVelocity * $elapsedTime / 1000;
+            var speed = this.rotateVelocity * $averageElapsedTime / 1000;
             if (this.targetHorizontalAngle > this.horizontalAngle) {
                 this.horizontalAngle += speed;
                 if (this.horizontalAngle > this.targetHorizontalAngle)

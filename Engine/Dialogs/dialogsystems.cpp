@@ -293,8 +293,14 @@ void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject){
 //
 // -------------------------------------------------------
 
+void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
+    Wanok::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
+}
+
+// -------------------------------------------------------
+
 void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index){
-    if (index != -1){
+    if (index != -1) {
         SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleLevel
                 ->itemData(index).value<qintptr>();
         Wanok::get()->project()->gameDatas()->battleSystemDatas()
@@ -305,7 +311,7 @@ void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index){
 // -------------------------------------------------------
 
 void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
-    if (index != -1){
+    if (index != -1) {
         SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleExp
                 ->itemData(index).value<qintptr>();
         Wanok::get()->project()->gameDatas()->battleSystemDatas()

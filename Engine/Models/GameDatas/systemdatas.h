@@ -43,6 +43,7 @@ public:
     SystemDatas(QString path);
     int portionsRay() const;
     int squareSize() const;
+    void setSquareSize(int i);
     void setIdMapHero(int i);
     void setIdObjectHero(int i);
     QString pathBR() const;

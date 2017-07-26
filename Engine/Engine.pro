@@ -442,7 +442,7 @@ win32{
 FROMS= \"$$shell_path($$PWD\\..\\Game\\Content\\Datas\\Scripts)\"
 DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
 win32{
-    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas)\"
+    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
 }
 
 !equals(PWD, $${OUT_PWD}) {

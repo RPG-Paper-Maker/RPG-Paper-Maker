@@ -322,7 +322,14 @@ QString Wanok::keyToString(int keyInt){
 
 // -------------------------------------------------------
 
-int Wanok::mod(int x, int m){
+int Wanok::mod(int x, int m) {
     int r = x % m;
     return r < 0 ? r + m : r;
+}
+
+// -------------------------------------------------------
+
+float Wanok::coefSquareSize() {
+    return Wanok::get()->project()->gameDatas()->systemDatas()->squareSize() /
+           ((float) Wanok::BASIC_SQUARE_SIZE);
 }

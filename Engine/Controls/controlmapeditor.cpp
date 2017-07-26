@@ -33,13 +33,14 @@ ControlMapEditor::ControlMapEditor() :
     m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
-    m_displayGrid(true)
+    m_displayGrid(true),
+    m_treeMapNode(nullptr)
 {
 
 }
 
 ControlMapEditor::~ControlMapEditor(){
-    deleteMap();
+    deleteMap(false);
     delete m_camera;
     delete m_cursor;
     delete m_cursorObject;
@@ -103,7 +104,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     // Grid
     m_grid = new Grid;
     m_grid->initializeVertices(m_map->mapProperties()->length(),
-                               m_map->mapProperties()->width(), 16);
+                               m_map->mapProperties()->width(),
+                               m_map->squareSize());
     m_grid->initializeGL();
 
     // Cursor object
@@ -121,8 +123,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_cursorObject->initialize();
 
     // Camera
-    m_camera->setDistance(cameraDistance);
-    m_camera->setHeight(cameraHeight);
+    m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
+    m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
     m_camera->update(m_cursor, m_map->squareSize());
 
@@ -131,7 +133,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::deleteMap(){
+void ControlMapEditor::deleteMap(bool updateCamera){
 
     // Cursors
     if (m_cursor != nullptr){
@@ -153,6 +155,13 @@ void ControlMapEditor::deleteMap(){
     if (m_map != nullptr){
         delete m_map;
         m_map = nullptr;
+    }
+
+    // Update camera node
+    if (updateCamera && m_treeMapNode != nullptr) {
+        m_camera->setDistance(m_camera->distance() / Wanok::coefSquareSize());
+        m_camera->setHeight(m_camera->height() / Wanok::coefSquareSize());
+        updateCameraTreeNode();
     }
 }
 
@@ -481,15 +490,17 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
                            QRect& tileset,
                            Position& p)
 {
-    switch (selection){
-    case MapEditorSelectionKind::Land:
-        addFloor(p, subSelection, drawKind, tileset);
-        break;
-    case MapEditorSelectionKind::Sprites:
-        addSprite(p, subSelection, drawKind, tileset);
-        break;
-    case MapEditorSelectionKind::Objects:
-        setCursorObjectPosition(p); break;
+    if (tileset.width() != 0 && tileset.height() != 0) {
+        switch (selection){
+        case MapEditorSelectionKind::Land:
+            addFloor(p, subSelection, drawKind, tileset);
+            break;
+        case MapEditorSelectionKind::Sprites:
+            addSprite(p, subSelection, drawKind, tileset);
+            break;
+        case MapEditorSelectionKind::Objects:
+            setCursorObjectPosition(p); break;
+        }
     }
 }
 

@@ -76,6 +76,10 @@ var $FRAMES;
 *   @type {number} */
 var $elapsedTime = new Date().getTime();
 
+/** The average elapsed time.
+*   @type {number} */
+var $averageElapsedTime = 0;
+
 /** A number representing the milliseconds elapsed between 1 January 1970
 *   00:00:00 UTC and the given date. It is updated at the end of each update in
 *   order to get the elapsed time between each update.
@@ -210,6 +214,10 @@ function resizeGL(canvas){
 */
 function update(){
     $elapsedTime = new Date().getTime() - $lastUpdateTime;
+    if ($averageElapsedTime === 0)
+        $averageElapsedTime = $elapsedTime;
+    else
+        $averageElapsedTime = ($averageElapsedTime + $elapsedTime) / 2;
 
     // Repeat keypress as long as not blocking
     var continuePressed = true;

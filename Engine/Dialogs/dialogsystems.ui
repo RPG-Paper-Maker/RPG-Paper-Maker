@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -158,7 +158,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Map properties</string>
@@ -182,7 +182,16 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_3">
+                     <widget class="QSpinBox" name="spinBoxSquareSize">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>256</number>
+                      </property>
                       <property name="value">
                        <number>16</number>
                       </property>
@@ -197,13 +206,20 @@
                     </property>
                     <item>
                      <widget class="QLabel" name="label_6">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Ray portions to show:</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_5"/>
+                     <widget class="QSpinBox" name="spinBox_5">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -214,13 +230,20 @@
                     </property>
                     <item>
                      <widget class="QLabel" name="label_9">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Relief block height (in px):</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_7"/>
+                     <widget class="QSpinBox" name="spinBox_7">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>

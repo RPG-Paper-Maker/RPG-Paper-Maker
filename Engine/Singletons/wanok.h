@@ -116,6 +116,7 @@ public:
     static QKeySequence getKeySequence(QKeyEvent *event);
     static QString keyToString(int keyInt);
     static int mod(int x, int m);
+    static float coefSquareSize();
 
 protected:
     Project* p_project;

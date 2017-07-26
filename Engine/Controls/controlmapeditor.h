@@ -59,7 +59,7 @@ public:
     Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
                  int cameraDistance, int cameraHeight,
                  double cameraHorizontalAngle);
-    void deleteMap();
+    void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 
     void update();

@@ -18,6 +18,7 @@
 */
 
 #include "widgettilesetpraticable.h"
+#include "wanok.h"
 #include <QPainter>
 
 // -------------------------------------------------------
@@ -40,8 +41,10 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
 
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture){
     m_image = QImage(picture->getPath(PictureKind::Tilesets));
-    if (!m_image.isNull())
-        m_image = m_image.scaled(m_image.width() * 2, m_image.height() * 2);
+    if (!m_image.isNull()) {
+        m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
+                                 m_image.height() / Wanok::coefSquareSize());
+    }
     this->setGeometry(0, 0, m_image.width(), m_image.height());
     setFixedSize(m_image.width(), m_image.height());
 }

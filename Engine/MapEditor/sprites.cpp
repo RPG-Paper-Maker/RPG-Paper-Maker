@@ -131,6 +131,12 @@ void SpriteDatas::initializeVertices(int squareSize,
     y = (float)(m_textureRect->y() * squareSize) / height;
     w = (float)(m_textureRect->width() * squareSize) / width;
     h = (float)(m_textureRect->height() * squareSize) / height;
+    float coefX = 0.1 / width;
+    float coefY = 0.1 / height;
+    x += coefX;
+    y += coefY;
+    w -= (coefX * 2);
+    h -= (coefY * 2);
 
     QVector3D pos((float) position.x() * squareSize -
                   ((textureRect()->width() - 1) * squareSize / 2) +

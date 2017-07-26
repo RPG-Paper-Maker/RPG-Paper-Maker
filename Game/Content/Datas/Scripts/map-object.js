@@ -190,7 +190,6 @@ MapObject.prototype = {
             states = (indexState === -1) ? [1] : portionDatas.s[indexState];
         }
         this.currentState = null;
-        var lol = this.system.states;
         for (var i = this.system.states.length - 1; i >= 0; i--){
             var state = this.system.states[i];
             if (states.indexOf(state.id) !== -1){
@@ -313,9 +312,8 @@ MapObject.prototype = {
         this.removeMoveTemp();
 
         // Set position
-        var distance = Math.min(limit, this.speed * ($elapsedTime *
-                                       MapObject.SPEED_NORMAL *
-                                       $SQUARE_SIZE));
+        var distance = Math.min(limit, this.speed * MapObject.SPEED_NORMAL *
+                                $averageElapsedTime * $SQUARE_SIZE);
         var position = this.getFuturPosition(orientation, distance, angle);
         if (isCameraOrientation) {
             orientation = Wanok.mod(orientation +
