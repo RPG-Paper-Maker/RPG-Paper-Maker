@@ -236,11 +236,13 @@ bool Wanok::isDirEmpty(QString path){
 
 void Wanok::copyAllFiles(QString pathSource, QString pathTarget){
     QDirIterator files(pathSource, QDir::Files);
+    QString path;
 
     while (files.hasNext()){
         files.next();
-        QFile::copy(files.filePath(), Wanok::pathCombine(pathTarget,
-                                                         files.fileName()));
+        path = Wanok::pathCombine(pathTarget, files.fileName());
+        QFile::remove(path);
+        QFile::copy(files.filePath(), path);
     }
 }
 

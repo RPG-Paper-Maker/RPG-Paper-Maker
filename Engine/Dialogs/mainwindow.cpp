@@ -238,7 +238,7 @@ void MainWindow::saveAllMaps(){
     QSet<int>::iterator i;
     for (i = Wanok::mapsToSave.begin(); i != Wanok::mapsToSave.end(); i++){
         Map map(*i);
-        map.save(project->currentMap());
+        map.save();
     }
     if (project->currentMap() != nullptr)
         project->currentMap()->setSaved(true);

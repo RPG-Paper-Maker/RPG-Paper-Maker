@@ -234,6 +234,8 @@ void WidgetTreeLocalMaps::hideMap(){
 
     if (m_project != nullptr)
         m_project->setCurrentMap(nullptr);
+
+    m_widgetMapEditor->setTreeMapNode(nullptr);
 }
 
 // -------------------------------------------------------
@@ -484,7 +486,6 @@ void WidgetTreeLocalMaps::contextEditMap(){
             QString pathTemp = Wanok::pathCombine(path,
                                                   Wanok::TEMP_MAP_FOLDER_NAME);
             if (Wanok::mapsToSave.contains(properties.id())) {
-                Wanok::deleteAllFiles(path);
                 Wanok::copyAllFiles(pathTemp, path);
                 Wanok::deleteAllFiles(pathTemp);
                 Wanok::mapsToSave.remove(properties.id());

@@ -91,7 +91,7 @@ void Project::setDefault(){
 // -------------------------------------------------------
 
 void Project::saveCurrentMap(){
-    p_currentMap->save(p_currentMap);
+    p_currentMap->save();
     p_currentMap->setSaved(true);
 }
 

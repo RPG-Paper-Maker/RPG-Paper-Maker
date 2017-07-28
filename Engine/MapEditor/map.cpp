@@ -65,9 +65,11 @@ Map::Map(int id) :
     // Reading map infos
     if (!Wanok::mapsToSave.contains(id)){
         Wanok::deleteAllFiles(pathTemp);
-        Wanok::copyAllFiles(m_pathMap, pathTemp);
+        QFile(Wanok::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
+                    Wanok::pathCombine(pathTemp, Wanok::fileMapObjects));
     }
-    m_mapProperties = new MapProperties(pathTemp);
+
+    m_mapProperties = new MapProperties(m_pathMap);
     readObjects();
     m_saved = !Wanok::mapsToSave.contains(id);
     m_portionsRay = Wanok::get()->getPortionsRay();
@@ -406,7 +408,17 @@ QString Map::getPortionPathMap(int i, int j, int k){
 
 // -------------------------------------------------------
 
-QString Map::getPortionPath(int i, int j, int k){
+QString Map::getPortionPath(int i, int j, int k) {
+    QString tempPath = getPortionPathTemp(i, j, k);
+    if (QFile(tempPath).exists())
+        return tempPath;
+    else
+        return Wanok::pathCombine(m_pathMap, getPortionPathMap(i, j, k));
+}
+
+// -------------------------------------------------------
+
+QString Map::getPortionPathTemp(int i, int j, int k) {
     return Wanok::pathCombine(m_pathMap, Wanok::pathCombine(
                                   Wanok::TEMP_MAP_FOLDER_NAME,
                                   getPortionPathMap(i, j, k)));
@@ -522,8 +534,8 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
 // -------------------------------------------------------
 
 void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
-    QString path = getPortionPath(portion.x(), portion.y(), portion.z());
-    if (mapPortion == nullptr){
+    QString path = getPortionPathTemp(portion.x(), portion.y(), portion.z());
+    if (mapPortion == nullptr) {
         QJsonObject obj;
         Wanok::writeOtherJSON(path, obj);
     }
@@ -534,9 +546,7 @@ void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
 // -------------------------------------------------------
 
 QString Map::getMapInfosPath() const{
-    return Wanok::pathCombine(m_pathMap,
-                              Wanok::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
-                                                 Wanok::fileMapInfos));
+    return Wanok::pathCombine(m_pathMap, Wanok::fileMapInfos);
 }
 
 // -------------------------------------------------------
@@ -685,18 +695,11 @@ bool Map::deleteObject(Position& p, MapPortion *mapPortion,
 
 // -------------------------------------------------------
 
-void Map::save(Map* currentMap){
+void Map::save(){
     QString pathTemp = Wanok::pathCombine(m_pathMap,
                                           Wanok::TEMP_MAP_FOLDER_NAME);
-
-    Wanok::deleteAllFiles(m_pathMap);
     Wanok::copyAllFiles(pathTemp, m_pathMap);
-
-    if (currentMap != nullptr &&
-            currentMap->mapProperties()->id() != m_mapProperties->id())
-    {
-        Wanok::deleteAllFiles(pathTemp);
-    }
+    Wanok::deleteAllFiles(pathTemp);
 }
 
 // -------------------------------------------------------

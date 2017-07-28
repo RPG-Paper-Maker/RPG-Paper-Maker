@@ -100,6 +100,7 @@ public:
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       SystemCommonObject *object);
     QString getPortionPath(int i, int j, int k);
+    QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k);
     void savePortionMap(MapPortion* mapPortion, Portion &portion);
     QString getMapInfosPath() const;
@@ -111,7 +112,7 @@ public:
     void deletePortions();
     bool isInGrid(Position& position) const;
     bool isInPortion(Portion& portion, int offset = 0) const;
-    void save(Map* currentMap);
+    void save();
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;
     static QString generateObjectName(int id);
