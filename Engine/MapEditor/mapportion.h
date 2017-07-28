@@ -41,6 +41,10 @@ public:
     MapPortion();
     virtual ~MapPortion();
     MapObjects* mapObjects() const;
+    bool isVisible() const;
+    bool isLoaded() const;
+    void setIsVisible(bool b);
+    void setIsLoaded(bool b);
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land);
@@ -74,6 +78,8 @@ private:
     Floors* m_floors;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
+    bool m_isVisible;
+    bool m_isLoaded;
 };
 
 #endif // MAPPORTION_H

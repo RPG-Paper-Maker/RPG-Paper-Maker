@@ -42,7 +42,23 @@ MapPortion::~MapPortion()
 
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
 
-bool MapPortion::isEmpty() const{
+bool MapPortion::isVisible() const {
+   return m_isVisible;
+}
+
+bool MapPortion::isLoaded() const {
+    return m_isLoaded;
+}
+
+void MapPortion::setIsVisible(bool b) {
+    m_isVisible = b;
+}
+
+void MapPortion::setIsLoaded(bool b) {
+    m_isLoaded = b;
+}
+
+bool MapPortion::isEmpty() const {
     return m_floors->isEmpty() && m_sprites->isEmpty() &&
             m_mapObjects->isEmpty();
 }

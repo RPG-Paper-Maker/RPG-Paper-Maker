@@ -235,7 +235,7 @@ void ControlMapEditor::updatePortions(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMovingPortions(){
+void ControlMapEditor::updateMovingPortions() {
     Portion newPortion = m_cursor->getPortion();
 
     updateMovingPortionsEastWest(newPortion);
@@ -249,24 +249,30 @@ void ControlMapEditor::updateMovingPortions(){
 
 void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
     int r = m_map->portionsRay();
-    if (newPortion.x() > m_currentPortion.x()){
+    if (newPortion.x() > m_currentPortion.x()) {
         int k = 0;
-        for (int j = -r; j <= r; j++){
+        for (int j = -r; j <= r; j++) {
+            bool visible = j != -r && j != r;
             int i = -r;
             removePortion(i, k, j);
+            setPortion(i, k, j, i + 1, k, j, false);
+            i++;
             for (; i < r; i++)
-                setPortion(i, k, j, i + 1, k, j);
+                setPortion(i, k, j, i + 1, k, j, visible);
 
             loadPortion(newPortion, r, k, j);
         }
     }
-    else if (newPortion.x() < m_currentPortion.x()){
+    else if (newPortion.x() < m_currentPortion.x()) {
         int k = 0;
-        for (int j = -r; j <= r; j++){
+        for (int j = -r; j <= r; j++) {
+            bool visible = j != -r && j != r;
             int i = r;
             removePortion(i, k, j);
+            setPortion(i, k, j, i - 1, k, j, false);
+            i--;
             for (; i > -r; i--)
-                setPortion(i, k, j, i - 1, k, j);
+                setPortion(i, k, j, i - 1, k, j, visible);
 
             loadPortion(newPortion, -r, k, j);
         }
@@ -277,24 +283,30 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
 
 void ControlMapEditor::updateMovingPortionsNorthSouth(Portion& newPortion){
     int r = m_map->portionsRay();
-    if (newPortion.z() > m_currentPortion.z()){
+    if (newPortion.z() > m_currentPortion.z()) {
         int k = 0;
-        for (int i = -r; i <= r; i++){
+        for (int i = -r; i <= r; i++) {
+            bool visible = i != -r && i != r;
             int j = -r;
             removePortion(i, k, j);
+            setPortion(i, k, j, i, k, j + 1, false);
+            j++;
             for (; j < r; j++)
-                setPortion(i, k, j, i, k, j + 1);
+                setPortion(i, k, j, i, k, j + 1, visible);
 
             loadPortion(newPortion, i, k, r);
         }
     }
-    else if (newPortion.z() < m_currentPortion.z()){
+    else if (newPortion.z() < m_currentPortion.z()) {
         int k = 0;
-        for (int i = -r; i <= r; i++){
+        for (int i = -r; i <= r; i++) {
+            bool visible = i != -r && i != r;
             int j = r;
             removePortion(i, k, j);
+            setPortion(i, k, j, i, k, j - 1, false);
+            j--;
             for (; j > -r; j--)
-                setPortion(i, k, j, i, k, j - 1);
+                setPortion(i, k, j, i, k, j - 1, visible);
 
             loadPortion(newPortion, i, k, -r);
         }
@@ -317,11 +329,13 @@ void ControlMapEditor::removePortion(int i, int j, int k){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setPortion(int i, int j, int k, int m, int n, int o){
+void ControlMapEditor::setPortion(int i, int j, int k, int m, int n, int o,
+                                  bool visible)
+{
     Portion previousPortion(i, j, k);
     Portion newPortion(m, n, o);
 
-    m_map->replacePortion(previousPortion, newPortion);
+    m_map->replacePortion(previousPortion, newPortion, visible);
 }
 
 // -------------------------------------------------------
@@ -330,7 +344,7 @@ void ControlMapEditor::loadPortion(Portion& currentPortion, int i, int j,
                                    int k)
 {
     m_map->loadPortion(currentPortion.x() + i, currentPortion.y() + j,
-                       currentPortion.z() + k, i, j, k);
+                       currentPortion.z() + k, i, j, k, false);
 }
 
 // -------------------------------------------------------

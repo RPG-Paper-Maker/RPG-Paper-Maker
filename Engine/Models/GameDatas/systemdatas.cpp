@@ -82,7 +82,7 @@ void SystemDatas::setDefault(){
     int length;
     QStandardItem* item;
 
-    m_portionsRay = 10;
+    m_portionsRay = 1;
     m_squareSize = 16;
     m_framesAnimation = 4;
 

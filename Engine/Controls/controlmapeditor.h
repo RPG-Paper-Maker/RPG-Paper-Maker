@@ -70,7 +70,7 @@ public:
     void updateMovingPortionsNorthSouth(Portion& newPortion);
     void updateMovingPortionsUpDown(Portion&);
     void removePortion(int i, int j, int k);
-    void setPortion(int i, int j, int k, int m, int n, int o);
+    void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(Portion& currentPortion, int i, int j, int k);
     void updatePortions();
     void saveTempPortions();

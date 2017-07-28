@@ -105,13 +105,15 @@ public:
     void savePortionMap(MapPortion* mapPortion, Portion &portion);
     QString getMapInfosPath() const;
     QString getMapObjectsPath() const;
-    void loadPortion(int realX, int realY, int realZ, int x, int y, int z);
-    void replacePortion(Portion& previousPortion, Portion& newPortion);
+    void loadPortion(int realX, int realY, int realZ, int x, int y, int z,
+                     bool visible);
+    void replacePortion(Portion& previousPortion, Portion& newPortion,
+                        bool visible);
     void updatePortion(Portion& p);
     void loadPortions(Portion portion);
     void deletePortions();
     bool isInGrid(Position& position) const;
-    bool isInPortion(Portion& portion, int offset = 0) const;
+    bool isInPortion(Portion& portion, int offset = -1) const;
     void save();
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;
