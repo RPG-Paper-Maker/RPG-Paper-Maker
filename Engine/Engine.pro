@@ -199,7 +199,8 @@ HEADERS += \
     Enums/drawkind.h \
     Enums/mapeditormodeskind.h \
     MapEditor/lands.h \
-    MapEditor/vertexbillboard.h
+    MapEditor/vertexbillboard.h \
+    MapEditor/threadmapportionloader.h
 
 SOURCES += \
     main.cpp \
@@ -355,7 +356,8 @@ SOURCES += \
     CustomWidgets/widgetgraphics.cpp \
     Dialogs/Systems/dialogsystemlang.cpp \
     MapEditor/lands.cpp \
-    MapEditor/vertexbillboard.cpp
+    MapEditor/vertexbillboard.cpp \
+    MapEditor/threadmapportionloader.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

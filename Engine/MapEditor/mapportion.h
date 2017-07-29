@@ -41,6 +41,7 @@ public:
     MapPortion();
     virtual ~MapPortion();
     MapObjects* mapObjects() const;
+    bool isVisibleLoaded() const;
     bool isVisible() const;
     bool isLoaded() const;
     void setIsVisible(bool b);

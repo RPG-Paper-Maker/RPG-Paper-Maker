@@ -26,6 +26,7 @@
 #include "mapobjects.h"
 #include "mapproperties.h"
 #include "systemcommonobject.h"
+#include "threadmapportionloader.h"
 
 // -------------------------------------------------------
 //
@@ -107,6 +108,7 @@ public:
     QString getMapObjectsPath() const;
     void loadPortion(int realX, int realY, int realZ, int x, int y, int z,
                      bool visible);
+    void loadPortionThread(MapPortion *portion);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
     void updatePortion(Portion& p);
@@ -137,6 +139,7 @@ public:
                      QVector3D& cameraUpWorldSpace);
 
 private:
+    QList<ThreadMapPortionLoader> m_threadMapPortionLoaders;
     MapProperties* m_mapProperties;
     MapPortion** m_mapPortions;
     QStandardItemModel* m_modelObjects;

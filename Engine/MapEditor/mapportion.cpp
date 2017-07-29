@@ -42,6 +42,10 @@ MapPortion::~MapPortion()
 
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
 
+bool MapPortion::isVisibleLoaded() const {
+    return isVisible();
+}
+
 bool MapPortion::isVisible() const {
    return m_isVisible;
 }

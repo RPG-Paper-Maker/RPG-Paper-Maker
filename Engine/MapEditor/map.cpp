@@ -513,14 +513,13 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
         MapPortion* portion = new MapPortion;
         Wanok::readJSON(path, *portion);
         if (!portion->isEmpty()){
-
-            // Static update
-            portion->initializeVertices(m_squareSize,
-                                        m_textureTileset,
-                                        m_texturesCharacters);
-            portion->initializeGL(m_programStatic, m_programFaceSprite);
-            portion->updateGL();
-
+            portion->setIsLoaded(false);
+            /*
+            ThreadMapPortionLoader thread(this, portion);
+            thread.start();
+            */
+            loadPortionThread(portion);
+            portion->setIsLoaded(true);
             return portion;
         }
 
@@ -567,6 +566,17 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
         newMapPortion->setIsVisible(visible);
 
     setMapPortion(x, y, z, newMapPortion);
+}
+
+// -------------------------------------------------------
+
+void Map::loadPortionThread(MapPortion* portion)
+{
+    portion->initializeVertices(m_squareSize,
+                                m_textureTileset,
+                                m_texturesCharacters);
+    portion->initializeGL(m_programStatic, m_programFaceSprite);
+    portion->updateGL();
 }
 
 // -------------------------------------------------------
@@ -958,7 +968,7 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection)
     int totalSize = getMapPortionTotalSize();
     for (int i = 0; i < totalSize; i++) {
         MapPortion* mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisible())
+        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintFloors();
     }
 
@@ -982,7 +992,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     // Sprites
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisible())
+        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintSprites();
     }
 
@@ -995,7 +1005,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         QOpenGLTexture* texture = it.value();
         for (int i = 0; i < totalSize; i++) {
             mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisible())
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintObjectsStaticSprites(textureID, texture);
         }
     }
@@ -1024,7 +1034,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         QOpenGLTexture* texture = it.value();
         for (int i = 0; i < totalSize; i++) {
             mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisible())
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintObjectsFaceSprites(textureID, texture);
         }
     }
@@ -1035,7 +1045,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_textureObjectSquare->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisible())
+        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintObjectsSquares();
     }
 
