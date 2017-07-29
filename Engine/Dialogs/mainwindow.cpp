@@ -406,7 +406,12 @@ void MainWindow::on_actionPlay_triggered(){
     QString execName = "Game";
     #ifdef Q_OS_WIN
         execName += ".exe";
+    #elif __linux__
+        execName += ".sh";
+    #else
+        execName += ".app";
     #endif
+
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
 }
