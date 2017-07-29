@@ -65,7 +65,7 @@ function MapPortion(realX, realY, realZ){
 *   @default 0.0005
 *   @constant
 */
-MapPortion.SPRITES_OFFSET_COEF = 0.0005;
+MapPortion.SPRITES_OFFSET_COEF = 0.0015;
 
 MapPortion.prototype = {
 

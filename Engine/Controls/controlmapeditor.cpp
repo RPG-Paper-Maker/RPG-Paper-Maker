@@ -123,6 +123,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_cursorObject->initialize();
 
     // Camera
+
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
     m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
     m_camera->setHorizontalAngle(cameraHorizontalAngle);

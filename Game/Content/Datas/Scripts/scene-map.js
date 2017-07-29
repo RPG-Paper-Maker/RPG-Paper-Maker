@@ -69,7 +69,7 @@ SceneMap.getGlobalPortion = function(position) {
     return [
         Math.floor(position[0] / $PORTION_SIZE),
         Math.floor(position[1] / $PORTION_SIZE),
-        Math.floor(position[2] / $PORTION_SIZE)
+        Math.floor(position[3] / $PORTION_SIZE)
     ];
 }
 
