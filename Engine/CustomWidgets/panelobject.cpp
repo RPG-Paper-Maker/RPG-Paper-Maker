@@ -504,6 +504,7 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
                 kind = MapEditorSubSelectionKind::SpritesFace; break;
             }
             super->setGraphicsKind(kind);
+            ui->frameGraphics->repaint();
         }
     }
 }

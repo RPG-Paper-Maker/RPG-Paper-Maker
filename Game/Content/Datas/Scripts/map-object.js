@@ -67,7 +67,7 @@ function MapObject(system, position) {
 *   @static
 *   @default 0.004666
 */
-MapObject.SPEED_NORMAL = 0.004666;
+MapObject.SPEED_NORMAL = 0.0057666;
 
 MapObject.getSpriteGeometry = function(width, height, x, y, w, h){
     var geometry = new THREE.Geometry();

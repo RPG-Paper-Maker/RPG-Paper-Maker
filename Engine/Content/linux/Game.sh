@@ -1,6 +1,6 @@
 #!/bin/sh
 test="$0"
-SCRIPTPATH=${test%???????}
+SCRIPTPATH=${test%????????}
 export LD_LIBRARY_PATH="$SCRIPTPATH/libraries"
 export QML_IMPORT_PATH="$SCRIPTPATH/libraries/qml"
 export QML2_IMPORT_PATH="$SCRIPTPATH/libraries/qml"
