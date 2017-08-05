@@ -200,7 +200,8 @@ HEADERS += \
     Enums/mapeditormodeskind.h \
     MapEditor/lands.h \
     MapEditor/vertexbillboard.h \
-    MapEditor/threadmapportionloader.h
+    MapEditor/threadmapportionloader.h \
+    MapEditor/spritewall.h
 
 SOURCES += \
     main.cpp \
@@ -357,7 +358,8 @@ SOURCES += \
     Dialogs/Systems/dialogsystemlang.cpp \
     MapEditor/lands.cpp \
     MapEditor/vertexbillboard.cpp \
-    MapEditor/threadmapportionloader.cpp
+    MapEditor/threadmapportionloader.cpp \
+    MapEditor/spritewall.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

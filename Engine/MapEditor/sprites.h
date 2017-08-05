@@ -75,13 +75,13 @@ public:
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
-    void initializeVertices(int squareSize, int width, int height,
-                            QVector<Vertex>& verticesStatic,
-                            QVector<GLuint>& indexesStatic,
-                            QVector<VertexBillboard>& verticesFace,
-                            QVector<GLuint>& indexesFace,
-                            Position3D& position, int& countStatic,
-                            int& countFace, int& spritesOffset);
+    virtual void initializeVertices(int squareSize, int width, int height,
+                                    QVector<Vertex>& verticesStatic,
+                                    QVector<GLuint>& indexesStatic,
+                                    QVector<VertexBillboard>& verticesFace,
+                                    QVector<GLuint>& indexesFace,
+                                    Position3D& position, int& countStatic,
+                                    int& countFace, int& spritesOffset);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

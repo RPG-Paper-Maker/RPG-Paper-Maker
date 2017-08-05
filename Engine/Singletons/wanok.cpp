@@ -347,4 +347,6 @@ QString Wanok::osToString(OSKind os) {
     case OSKind::Mac:
         return "Mac";
     }
+
+    return "";
 }
