@@ -19,6 +19,8 @@
 
 #include "project.h"
 #include "wanok.h"
+#include "oskind.h"
+#include <QDirIterator>
 #include <QMessageBox>
 
 const QString Project::VERSION = "0.2.0";
@@ -107,6 +109,9 @@ bool Project::read(QString path){
     if (!readVersion())
         return false;
 
+    if (!readOS())
+        return false;
+
     readLangsDatas();
     readKeyBoardDatas();
     readPicturesDatas();
@@ -136,11 +141,101 @@ bool Project::readVersion(){
                               " your current RPG Paper Maker version is " +
                               Project::VERSION + ".";
         QString noConvert = "Unfortunately, this version cannot be converted.";
-        QMessageBox::critical(nullptr, "Error", information + "\n" + noConvert);
+        QMessageBox::critical(nullptr, "Error: incompatible versions",
+                              information + "\n" + noConvert);
         return false;
     }
 
     return true;
+}
+
+// -------------------------------------------------------
+
+bool Project::readOS() {
+
+    // Get the project OS
+    OSKind projectOS;
+    if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
+        projectOS = OSKind::Window;
+    else if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+        projectOS = OSKind::Linux;
+    else
+        projectOS = OSKind::Mac;
+
+    // Get the computer OS
+    OSKind computerOS;
+    #ifdef Q_OS_WIN
+        computerOS = OSKind::Window;
+    #elif __linux__
+        computerOS = OSKind::Linux;
+    #else
+        computerOS = OSKind::Mac;
+    #endif
+
+    // Compare
+    if (computerOS != projectOS) {
+        QString information = "This project is configured for " +
+                Wanok::osToString(projectOS) + " OS but you seems to be on " +
+                Wanok::osToString(computerOS) + " OS.";
+        QString question = "Would you like to convert the project for " +
+                Wanok::osToString(computerOS) + " OS? (This will only keep" +
+                " \"Content\" folder, and \"game.rpm\", all the other " +
+                " files will be removed in the root of the project)";
+        QMessageBox::StandardButton box =
+                QMessageBox::question(nullptr, "Error: incompatible OS",
+                             information + "\n" + question,
+                             QMessageBox::Yes | QMessageBox::No);
+        if (box == QMessageBox::Yes) {
+            removeOSFiles();
+            copyOSFiles();
+        }
+        else
+            return false;
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool Project::copyOSFiles() {
+    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+
+    // Copy excecutable and libraries according to current OS
+    QString strOS = "";
+    #ifdef Q_OS_WIN
+        strOS = "win32";
+    #elif __linux__
+        strOS = "linux";
+    #else
+        strOS = "osx";
+    #endif
+
+    // Copying a basic project content
+    return Wanok::copyPath(Wanok::pathCombine(pathContent, strOS),
+                           p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::removeOSFiles() {
+    QDirIterator directories(p_pathCurrentProject,
+                             QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator files(p_pathCurrentProject, QDir::Files);
+
+    // Remove directories exept Content
+    while (directories.hasNext()){
+        directories.next();
+        if (directories.fileName() != "Content")
+            QDir(directories.filePath()).removeRecursively();
+    }
+
+    // Remove files exept game.rpm
+    while (files.hasNext()){
+        files.next();
+        if (files.fileName() != "game.rpm")
+            QFile(files.filePath()).remove();
+    }
 }
 
 // -------------------------------------------------------

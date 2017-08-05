@@ -107,28 +107,18 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir(pathDir).mkpath(Wanok::pathReliefs);
     QDir(pathDir).mkpath(Wanok::pathTilesets);
 
-    // Copy excecutable and libraries according to current OS
-    QString strOS = "";
-    #ifdef Q_OS_WIN
-        strOS = "win32";
-    #elif __linux__
-        strOS = "linux";
-    #else
-        strOS = "osx";
-    #endif
-
-    // Copying a basic project content
-    if (!Wanok::copyPath(Wanok::pathCombine(pathContent, strOS), pathDir)){
-        return "Error while copying excecutable and libraries. "
-               "Please retry with a new project.";
-    }
-
     // Create the default datas
     Project* previousProject = Wanok::get()->project();
     Project* project = new Project;
     Wanok::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
+
+    // Copying a basic project content
+    if (!project->copyOSFiles()) {
+        return "Error while copying excecutable and libraries. "
+               "Please retry with a new project.";
+    }
 
     // Create saves
     QJsonArray tab;

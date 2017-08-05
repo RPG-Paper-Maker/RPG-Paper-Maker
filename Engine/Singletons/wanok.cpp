@@ -335,3 +335,16 @@ float Wanok::coefSquareSize() {
     return Wanok::get()->project()->gameDatas()->systemDatas()->squareSize() /
            ((float) Wanok::BASIC_SQUARE_SIZE);
 }
+
+// -------------------------------------------------------
+
+QString Wanok::osToString(OSKind os) {
+    switch (os) {
+    case OSKind::Window:
+        return "Window";
+    case OSKind::Linux:
+        return "Linux";
+    case OSKind::Mac:
+        return "Mac";
+    }
+}

@@ -57,6 +57,9 @@ public:
 
     bool read(QString path);
     bool readVersion();
+    bool readOS();
+    bool copyOSFiles();
+    void removeOSFiles();
     void readGameDatas();
     void readLangsDatas();
     void readTreeMapDatas();

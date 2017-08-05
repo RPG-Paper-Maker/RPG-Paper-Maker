@@ -26,6 +26,7 @@
 #include "project.h"
 #include "map.h"
 #include "enginesettings.h"
+#include "oskind.h"
 
 // -------------------------------------------------------
 //
@@ -117,6 +118,7 @@ public:
     static QString keyToString(int keyInt);
     static int mod(int x, int m);
     static float coefSquareSize();
+    static QString osToString(OSKind os);
 
 protected:
     Project* p_project;
