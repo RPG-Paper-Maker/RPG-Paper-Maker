@@ -151,6 +151,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                    0.0f);
     QVector3D center = Sprite::verticesQuad[0] * size + pos +
             QVector3D(size.x() / 2, - size.y() / 2, 0);
+    QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     // Adding to buffers according to the kind of sprite
     switch (m_kind) {
@@ -163,26 +164,40 @@ void SpriteDatas::initializeVertices(int squareSize,
                   vecC = Sprite::verticesQuad[2] * size + pos,
                   vecD = Sprite::verticesQuad[3] * size + pos;
 
-        // Vertices
-        verticesStatic.append(Vertex(vecA, QVector2D(x, y)));
-        verticesStatic.append(Vertex(vecB, QVector2D(x + w, y)));
-        verticesStatic.append(Vertex(vecC, QVector2D(x + w, y + h)));
-        verticesStatic.append(Vertex(vecD, QVector2D(x, y + h)));
-
-        // indexes
-        offset = countStatic * Sprite::nbVerticesQuad;
-        for (int i = 0; i < Sprite::nbIndexesQuad; i++)
-            indexesStatic.append(Sprite::indexesQuad[i] + offset);
-        countStatic++;
+        addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                vecA, vecB, vecC, vecD, texA, texB, texC, texD);
 
         // If double sprite, add one sprite more
-        if (m_kind == MapEditorSubSelectionKind::SpritesDouble) {
+        if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
+            m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
             QVector3D vecDoubleA(vecA), vecDoubleB(vecB),
                       vecDoubleC(vecC), vecDoubleD(vecD);
 
             rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
                          90);
+            addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                    vecDoubleA, vecDoubleB, vecDoubleC,
+                                    vecDoubleD, texA, texB, texC, texD);
 
+            if (m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
+                QVector3D vecQuadra1A(vecA), vecQuadra1B(vecB),
+                          vecQuadra1C(vecC), vecQuadra1D(vecD),
+                          vecQuadra2A(vecA), vecQuadra2B(vecB),
+                          vecQuadra2C(vecC), vecQuadra2D(vecD);
+
+                rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D,
+                             center, 45);
+                rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D,
+                             center, -45);
+                addStaticSpriteToBuffer(verticesStatic, indexesStatic,
+                                        countStatic, vecQuadra1A, vecQuadra1B,
+                                        vecQuadra1C, vecQuadra1D, texA, texB,
+                                        texC, texD);
+                addStaticSpriteToBuffer(verticesStatic, indexesStatic,
+                                        countStatic, vecQuadra2A, vecQuadra2B,
+                                        vecQuadra2C, vecQuadra2D, texA, texB,
+                                        texC, texD);
+            }
         }
 
         break;
@@ -193,17 +208,13 @@ void SpriteDatas::initializeVertices(int squareSize,
 
         // Vertices
         verticesFace.append(
-              VertexBillboard(center, QVector2D(x, y), s,
-                              Sprite::modelQuad[0]));
+              VertexBillboard(center, texA, s, Sprite::modelQuad[0]));
         verticesFace.append(
-              VertexBillboard(center, QVector2D(x + w, y), s,
-                              Sprite::modelQuad[1]));
+              VertexBillboard(center, texB, s, Sprite::modelQuad[1]));
         verticesFace.append(
-              VertexBillboard(center, QVector2D(x + w, y + h), s,
-                              Sprite::modelQuad[2]));
+              VertexBillboard(center, texC, s, Sprite::modelQuad[2]));
         verticesFace.append(
-              VertexBillboard(center, QVector2D(x, y + h), s,
-                              Sprite::modelQuad[3]));
+              VertexBillboard(center, texD, s, Sprite::modelQuad[3]));
 
         // indexes
         offset = countFace * Sprite::nbVerticesQuad;
@@ -232,6 +243,8 @@ void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
     vec.setZ(v.z());
 }
 
+// -------------------------------------------------------
+
 void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
                                QVector3D& vecC, QVector3D& vecD,
                                QVector3D& center, int angle)
@@ -240,6 +253,29 @@ void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
     rotateVertex(vecB, center, angle);
     rotateVertex(vecC, center, angle);
     rotateVertex(vecD, center, angle);
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
+                                          QVector<GLuint>& indexesStatic,
+                                          int& count,
+                                          QVector3D& vecA, QVector3D& vecB,
+                                          QVector3D& vecC, QVector3D& vecD,
+                                          QVector2D& texA, QVector2D& texB,
+                                          QVector2D& texC, QVector2D& texD)
+{
+    // Vertices
+    verticesStatic.append(Vertex(vecA, texA));
+    verticesStatic.append(Vertex(vecB, texB));
+    verticesStatic.append(Vertex(vecC, texC));
+    verticesStatic.append(Vertex(vecD, texD));
+
+    // indexes
+    int offset = count * Sprite::nbVerticesQuad;
+    for (int i = 0; i < Sprite::nbIndexesQuad; i++)
+        indexesStatic.append(Sprite::indexesQuad[i] + offset);
+    count++;
 }
 
 // -------------------------------------------------------
