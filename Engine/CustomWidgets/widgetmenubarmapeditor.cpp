@@ -75,6 +75,10 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
         return MapEditorSubSelectionKind::SpritesFace;
     else if (text == ui->actionFix_Sprite->text())
         return MapEditorSubSelectionKind::SpritesFix;
+    else if (text == ui->actionDouble_Sprite->text())
+        return MapEditorSubSelectionKind::SpritesDouble;
+    else if (text == ui->actionQuadra_Sprite->text())
+        return MapEditorSubSelectionKind::SpritesQuadra;
     else if (text == ui->actionEvents->text())
         return MapEditorSubSelectionKind::Object;
 
@@ -123,13 +127,15 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
     // Draw mode
     m_menuPencil = new QMenu("Pencil");
     m_menuPencil->setIcon(QIcon(":/icons/Ressources/pencil.png"));
-    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
+    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"),
+                                 "Pencil");
     m_menuPencil->addAction(m_actionPencil);
     m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
                          "Rectangle");
     m_actionRectangle->setEnabled(false);
     m_menuPencil->addAction(m_actionRectangle);
-    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
+    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"),
+                              "Pin of paint");
     m_menuPencil->addAction(m_actionPin);
     connect(m_menuPencil, SIGNAL(triggered(QAction*)),
             this, SLOT(on_menuDrawTriggered(QAction*)));

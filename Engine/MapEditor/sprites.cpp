@@ -127,6 +127,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      int& countFace, int &spritesOffset)
 {
     float x, y, w, h;
+    int offset;
     x = (float)(m_textureRect->x() * squareSize) / width;
     y = (float)(m_textureRect->y() * squareSize) / height;
     w = (float)(m_textureRect->width() * squareSize) / width;
@@ -148,28 +149,46 @@ void SpriteDatas::initializeVertices(int squareSize,
     QVector3D size((float) textureRect()->width() * squareSize,
                    (float) textureRect()->height() * squareSize,
                    0.0f);
+    QVector3D center = Sprite::verticesQuad[0] * size + pos +
+            QVector3D(size.x() / 2, - size.y() / 2, 0);
 
-    if (m_kind == MapEditorSubSelectionKind::SpritesFix) {
+    // Adding to buffers according to the kind of sprite
+    switch (m_kind) {
+    case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesDouble:
+    case MapEditorSubSelectionKind::SpritesQuadra:
+    {
+        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+                  vecB = Sprite::verticesQuad[1] * size + pos,
+                  vecC = Sprite::verticesQuad[2] * size + pos,
+                  vecD = Sprite::verticesQuad[3] * size + pos;
 
         // Vertices
-        verticesStatic.append(Vertex(Sprite::verticesQuad[0] * size + pos,
-                        QVector2D(x, y)));
-        verticesStatic.append(Vertex(Sprite::verticesQuad[1] * size + pos,
-                        QVector2D(x + w, y)));
-        verticesStatic.append(Vertex(Sprite::verticesQuad[2] * size + pos,
-                        QVector2D(x + w, y + h)));
-        verticesStatic.append(Vertex(Sprite::verticesQuad[3] * size + pos,
-                        QVector2D(x, y + h)));
+        verticesStatic.append(Vertex(vecA, QVector2D(x, y)));
+        verticesStatic.append(Vertex(vecB, QVector2D(x + w, y)));
+        verticesStatic.append(Vertex(vecC, QVector2D(x + w, y + h)));
+        verticesStatic.append(Vertex(vecD, QVector2D(x, y + h)));
 
         // indexes
-        int offset = countStatic * Sprite::nbVerticesQuad;
+        offset = countStatic * Sprite::nbVerticesQuad;
         for (int i = 0; i < Sprite::nbIndexesQuad; i++)
             indexesStatic.append(Sprite::indexesQuad[i] + offset);
         countStatic++;
+
+        // If double sprite, add one sprite more
+        if (m_kind == MapEditorSubSelectionKind::SpritesDouble) {
+            QVector3D vecDoubleA(vecA), vecDoubleB(vecB),
+                      vecDoubleC(vecC), vecDoubleD(vecD);
+
+            rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
+                         90);
+
+        }
+
+        break;
     }
-    else if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
-        QVector3D center = Sprite::verticesQuad[0] * size + pos +
-                QVector3D(size.x() / 2, - size.y() / 2, 0);
+    case MapEditorSubSelectionKind::SpritesFace:
+    {
         QVector2D s(size.x(), size.y());
 
         // Vertices
@@ -187,11 +206,40 @@ void SpriteDatas::initializeVertices(int squareSize,
                               Sprite::modelQuad[3]));
 
         // indexes
-        int offset = countFace * Sprite::nbVerticesQuad;
+        offset = countFace * Sprite::nbVerticesQuad;
         for (int i = 0; i < Sprite::nbIndexesQuad; i++)
             indexesFace.append(Sprite::indexesQuad[i] + offset);
         countFace++;
+        break;
     }
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
+    QMatrix4x4 m;
+    QVector3D v(vec);
+
+    v -= center;
+    m.rotate(angle, 0.0, 1.0, 0.0);
+    v = v * m + center;
+
+    vec.setX(v.x());
+    vec.setY(v.y());
+    vec.setZ(v.z());
+}
+
+void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
+                               QVector3D& vecC, QVector3D& vecD,
+                               QVector3D& center, int angle)
+{
+    rotateVertex(vecA, center, angle);
+    rotateVertex(vecB, center, angle);
+    rotateVertex(vecC, center, angle);
+    rotateVertex(vecD, center, angle);
 }
 
 // -------------------------------------------------------

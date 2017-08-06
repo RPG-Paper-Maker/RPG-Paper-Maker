@@ -45,6 +45,8 @@
    </property>
    <addaction name="actionFace_Sprite"/>
    <addaction name="actionFix_Sprite"/>
+   <addaction name="actionDouble_Sprite"/>
+   <addaction name="actionQuadra_Sprite"/>
   </widget>
   <action name="actionFloors">
    <property name="icon">
@@ -94,6 +96,24 @@
    </property>
    <property name="text">
     <string>Tin of paint</string>
+   </property>
+  </action>
+  <action name="actionDouble_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_double.png</normaloff>:/icons/Ressources/sprite_double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double Sprite</string>
+   </property>
+  </action>
+  <action name="actionQuadra_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_quadra.png</normaloff>:/icons/Ressources/sprite_quadra.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quadra Sprite</string>
    </property>
   </action>
   <addaction name="menuFloors"/>

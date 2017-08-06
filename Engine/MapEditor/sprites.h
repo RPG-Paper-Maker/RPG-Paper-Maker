@@ -82,7 +82,9 @@ public:
                                     QVector<GLuint>& indexesFace,
                                     Position3D& position, int& countStatic,
                                     int& countFace, int& spritesOffset);
-
+    void rotateVertex(QVector3D& vec, QVector3D& center, int angle);
+    void rotateSprite(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
+                      QVector3D& vecD, QVector3D& center, int angle);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
