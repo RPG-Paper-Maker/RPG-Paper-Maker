@@ -17,6 +17,25 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+*   Enum for the different map elements kind.
+*   @enum {number}
+*   @readonly
+*/
+var ElementMapKind = {
+    None: 0,
+    Floors: 1,
+    Autotiles: 2,
+    Water: 3,
+    SpritesFace: 4,
+    SpritesFix: 5,
+    SpritesDouble: 6,
+    SpritesQuadra: 7,
+    SpritesWall: 8,
+    Object: 9
+};
+Object.freeze(ElementMapKind);
+
 // -------------------------------------------------------
 //
 //  [CLASS MapPortion]
@@ -158,26 +177,11 @@ MapPortion.prototype = {
             var ss = s.v;
 
             var material = $currentMap.textureTileset;
-            var width = material.map.image.width;
-            var height = material.map.image.height;
 
             for (var j = 0, ll = ss.length; j < ll; j++){
                 var sprite = new Sprite();
                 sprite.read(ss[j]);
-                var texture = sprite.textureRect;
-                var x = (texture[0] * $SQUARE_SIZE) / width;
-                var y = (texture[1] * $SQUARE_SIZE) / height;
-                var w = (texture[2] * $SQUARE_SIZE) / width;
-                var h = (texture[3] * $SQUARE_SIZE) / height;
-                var coefX = 0.1 / width;
-                var coefY = 0.1 / height;
-                x += coefX;
-                y += coefY;
-                w -= (coefX * 2);
-                h -= (coefY * 2);
-
-                var plane = this.getSpriteMesh(position, material, texture,
-                                               x, y, w, h);
+                var plane = this.getSpriteMesh(position, material, sprite);
                 if (sprite.kind === ElementMapKind.SpritesFace)
                     this.faceSpritesList.push(plane);
                 else
@@ -254,13 +258,9 @@ MapPortion.prototype = {
     /** Get the THREE mesh for a sprite.
     *   @param {number[]} position The position of the mesh.
     *   @param {Three.material} material The material used for this mesh.
-    *   @param {number[]} texture The texture coords of the sprite.
-    *   @param {number} x The x UV texture position.
-    *   @param {number} y The y UV texture position.
-    *   @param {number} w The w UV texture position.
-    *   @param {number} h The h UV texture position.
+    *   @param {Sprite} sprite The sprite.
     */
-    getSpriteMesh: function(position, material, texture, x, y, w, h){
+    getSpriteMesh: function(position, material, sprite){
         var localPosition = Wanok.positionToVector3(position);
         localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
                            + this.spritesOffset);
@@ -268,8 +268,8 @@ MapPortion.prototype = {
                            + this.spritesOffset);
         this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
 
-        var geometry = MapObject.getSpriteGeometry(texture[2], texture[3],
-                                                   x, y, w, h);
+        var geometry = sprite.createGeometry(material.map.image.width,
+                                             material.map.image.height);
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(localPosition.x,
                            localPosition.y,

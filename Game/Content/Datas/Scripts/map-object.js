@@ -69,31 +69,6 @@ function MapObject(system, position) {
 */
 MapObject.SPEED_NORMAL = 0.0057666;
 
-MapObject.getSpriteGeometry = function(width, height, x, y, w, h){
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(-0.5, 1.0, 0.0));
-    geometry.vertices.push(new THREE.Vector3(0.5, 1.0, 0.0));
-    geometry.vertices.push(new THREE.Vector3(0.5, 0.0, 0.0));
-    geometry.vertices.push(new THREE.Vector3(-0.5, 0.0, 0.0));
-    geometry.faces.push(new THREE.Face3(0, 1, 2));
-    geometry.faces.push(new THREE.Face3(0, 2, 3));
-    geometry.scale(width * $SQUARE_SIZE, height * $SQUARE_SIZE, 1.0);
-    geometry.faceVertexUvs[0] = [];
-    geometry.faceVertexUvs[0].push([
-        new THREE.Vector2(x,y),
-        new THREE.Vector2(x+w,y),
-        new THREE.Vector2(x+w,y+h)
-    ]);
-    geometry.faceVertexUvs[0].push([
-        new THREE.Vector2(x,y),
-        new THREE.Vector2(x+w,y+h),
-        new THREE.Vector2(x,y+h)
-    ]);
-    geometry.uvsNeedUpdate = true;
-
-    return geometry;
-}
-
 /** Update the object with a particular ID.
 *   @static
 *   @param {MapObject} object This object.
@@ -212,7 +187,9 @@ MapObject.prototype = {
             this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
-            var geometry = MapObject.getSpriteGeometry(this.width, this.height);
+            var sprite = new Sprite(this.currentState.graphicKind, 0, 50,
+                                    [0, 0, this.width, this.height]);
+            var geometry = sprite.createGeometry(1, 1);
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x,
                                    this.position.y,

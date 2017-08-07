@@ -43,7 +43,7 @@ function Camera(d, h){
     this.height = h * ($SQUARE_SIZE / 32);
     this.horizontalAngle = -90.0;
     this.target = new THREE.Vector3();
-    this.rotateVelocity = 180;
+    this.rotateVelocity = 250;
     this.rotateSteps = 90.0;
     this.targetHorizontalAngle = this.horizontalAngle;
 }
