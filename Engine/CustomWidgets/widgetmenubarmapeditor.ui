@@ -47,6 +47,7 @@
    <addaction name="actionFix_Sprite"/>
    <addaction name="actionDouble_Sprite"/>
    <addaction name="actionQuadra_Sprite"/>
+   <addaction name="actionWall_Sprite"/>
   </widget>
   <action name="actionFloors">
    <property name="icon">
@@ -114,6 +115,11 @@
    </property>
    <property name="text">
     <string>Quadra Sprite</string>
+   </property>
+  </action>
+  <action name="actionWall_Sprite">
+   <property name="text">
+    <string>Wall Sprite</string>
    </property>
   </action>
   <addaction name="menuFloors"/>

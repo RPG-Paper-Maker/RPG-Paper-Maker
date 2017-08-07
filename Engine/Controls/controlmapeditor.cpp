@@ -833,7 +833,6 @@ void ControlMapEditor::addSprite(Position& p,
                                  DrawKind drawKind,
                                  QRect& tileset)
 {
-    SpriteDatas* sprite;
     QList<Position> positions;
 
     // Pencil
@@ -841,13 +840,9 @@ void ControlMapEditor::addSprite(Position& p,
     case DrawKind::Pencil:
     case DrawKind::Pin:
         traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++){
-            sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
-            stockSprite(positions[i], sprite);
-        }
-
-        sprite = new SpriteDatas(kind, 0, 50, 0, new QRect(tileset));
-        stockSprite(p, sprite);
+        for (int i = 0; i < positions.size(); i++)
+            stockSprite(positions[i], kind, 0, 50, 0, new QRect(tileset));
+        stockSprite(p, kind, 0, 50, 0, new QRect(tileset));
         break;
     case DrawKind::Rectangle:
         break;
@@ -858,15 +853,23 @@ void ControlMapEditor::addSprite(Position& p,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
+void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
+                                   int layer, int widthPosition, int angle,
+                                   QRect *textureRect)
+{
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion == nullptr)
                 mapPortion = m_map->createMapPortion(portion);
-            if (mapPortion->addSprite(p, sprite) && m_map->saved())
+            if (mapPortion->addSprite(p, kind, layer, widthPosition, angle,
+                                      textureRect) &&
+                m_map->saved())
+            {
                 setToNotSaved();
+            }
+
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
         }

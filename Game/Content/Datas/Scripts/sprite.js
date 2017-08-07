@@ -174,6 +174,8 @@ Sprite.prototype = {
                                                  vecDoubleB, vecDoubleC,
                                                  vecDoubleD, texFaceA, texFaceB,
                                                  c);
+
+            // Quadra sprite
             if (this.kind === ElementMapKind.SpritesQuadra) {
                 var vecQuadra1A = vecA.clone(),
                     vecQuadra1B = vecB.clone(),

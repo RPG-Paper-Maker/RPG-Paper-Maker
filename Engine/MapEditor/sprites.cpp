@@ -19,6 +19,7 @@
 
 #include "sprites.h"
 #include "map.h"
+#include "spritewall.h"
 
 // -------------------------------------------------------
 //
@@ -222,6 +223,16 @@ void SpriteDatas::initializeVertices(int squareSize,
             indexesFace.append(Sprite::indexesQuad[i] + offset);
         countFace++;
         break;
+    }
+    case MapEditorSubSelectionKind::SpritesWall:
+    {
+        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+                  vecB = Sprite::verticesQuad[1] * size + pos,
+                  vecC = Sprite::verticesQuad[2] * size + pos,
+                  vecD = Sprite::verticesQuad[3] * size + pos;
+
+        addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                vecA, vecB, vecC, vecD, texA, texB, texC, texD);
     }
     default:
         break;
@@ -496,8 +507,22 @@ SpriteDatas* Sprites::removeSprite(Position& p){
 
 // -------------------------------------------------------
 
-bool Sprites::addSprite(Position& p, SpriteDatas *sprite){
+bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                        int widthPosition, int angle, QRect *textureRect)
+{
     SpriteDatas* previousSprite = removeSprite(p);
+    SpriteDatas* sprite;
+
+    if (kind == MapEditorSubSelectionKind::SpritesWall) {
+        SpriteWallDatas* spriteWall =
+                new SpriteWallDatas(kind, layer, widthPosition, angle,
+                                    textureRect);
+        sprite = (SpriteDatas*) spriteWall;
+    }
+    else {
+        sprite = new SpriteDatas(kind, layer, widthPosition, angle,
+                                 textureRect);
+    }
 
     if (previousSprite != nullptr)
         delete previousSprite;

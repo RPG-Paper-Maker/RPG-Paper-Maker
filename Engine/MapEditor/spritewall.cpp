@@ -27,13 +27,12 @@ SpriteWallDatas::SpriteWallDatas() :
 
 SpriteWallDatas::SpriteWallDatas(MapEditorSubSelectionKind kind, int layer,
                                  int widthPosition, int angle,
-                                 QRect* textureRect,
-                                 bool l, bool r, bool t, bool b) :
+                                 QRect* textureRect) :
     SpriteDatas(kind, layer, widthPosition, angle, textureRect),
-    m_left(l),
-    m_right(r),
-    m_top(t),
-    m_bot(b)
+    m_left(false),
+    m_right(false),
+    m_top(false),
+    m_bot(false)
 {
 
 }

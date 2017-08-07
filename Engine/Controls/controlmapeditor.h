@@ -123,7 +123,8 @@ public:
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind,
                    QRect& tileset);
-    void stockSprite(Position& p, SpriteDatas *sprite);
+    void stockSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                     int widthPosition, int angle, QRect* textureRect);
     void removeSprite(Position& p, DrawKind drawKind);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);

@@ -153,7 +153,8 @@ public:
     bool isEmpty() const;
     void setSprite(Position& p, SpriteDatas* sprite);
     SpriteDatas* removeSprite(Position& p);
-    bool addSprite(Position& p, SpriteDatas* sprite);
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                   int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
 
     void removeSpritesOut(MapProperties& properties);

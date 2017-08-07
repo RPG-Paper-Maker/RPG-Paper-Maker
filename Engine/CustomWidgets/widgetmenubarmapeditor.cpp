@@ -40,10 +40,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
     ui->setupUi(this);
 
     if (m_selection){
-        for (int i = 0; i < this->actions().size(); i++){
-            QAction* action = actions().at(i);
-            action->setProperty("selection",false);
-        }
+        for (int i = 0; i < this->actions().size(); i++)
+            actions().at(i)->setProperty("selection",false);
         actions().at((int) m_selectionKind)->setProperty("selection",true);
     }
 }
@@ -79,6 +77,8 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
         return MapEditorSubSelectionKind::SpritesDouble;
     else if (text == ui->actionQuadra_Sprite->text())
         return MapEditorSubSelectionKind::SpritesQuadra;
+    else if (text == ui->actionWall_Sprite->text())
+        return MapEditorSubSelectionKind::SpritesWall;
     else if (text == ui->actionEvents->text())
         return MapEditorSubSelectionKind::Object;
 

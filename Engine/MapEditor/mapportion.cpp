@@ -89,8 +89,12 @@ bool MapPortion::deleteLand(Position& p){
 
 // -------------------------------------------------------
 
-bool MapPortion::addSprite(Position& p, SpriteDatas *sprite){
-    return m_sprites->addSprite(p, sprite);
+bool MapPortion::addSprite(Position& p, MapEditorSubSelectionKind kind,
+                           int layer, int widthPosition, int angle,
+                           QRect *textureRect)
+{
+    return m_sprites->addSprite(p, kind, layer, widthPosition, angle,
+                                textureRect);
 }
 
 // -------------------------------------------------------
