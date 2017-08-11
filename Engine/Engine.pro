@@ -201,7 +201,8 @@ HEADERS += \
     MapEditor/lands.h \
     MapEditor/vertexbillboard.h \
     MapEditor/threadmapportionloader.h \
-    MapEditor/spritewall.h
+    MapEditor/spritewall.h \
+    Dialogs/Commands/dialogcommandmovecamera.h
 
 SOURCES += \
     main.cpp \
@@ -359,7 +360,8 @@ SOURCES += \
     MapEditor/lands.cpp \
     MapEditor/vertexbillboard.cpp \
     MapEditor/threadmapportionloader.cpp \
-    MapEditor/spritewall.cpp
+    MapEditor/spritewall.cpp \
+    Dialogs/Commands/dialogcommandmovecamera.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -419,7 +421,8 @@ FORMS += \
     Dialogs/Systems/dialogsystemstate.ui \
     Dialogs/dialoglocation.ui \
     Dialogs/Commands/dialogcommandwait.ui \
-    Dialogs/Systems/dialogsystemlang.ui
+    Dialogs/Systems/dialogsystemlang.ui \
+    Dialogs/Commands/dialogcommandmovecamera.ui
 
 OTHER_FILES += \
     style.qss

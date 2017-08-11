@@ -31,6 +31,7 @@
 #include "dialogcommandteleportobject.h"
 #include "dialogcommandmoveobject.h"
 #include "dialogcommandwait.h"
+#include "dialogcommandmovecamera.h"
 
 // -------------------------------------------------------
 //
@@ -93,6 +94,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandMoveObject(command, object, parameters);
     case EventCommandKind::Wait:
         return new DialogCommandWait(command);
+    case EventCommandKind::MoveCamera:
+        return new DialogCommandMoveCamera(command);
     default:
         return nullptr;
     }
@@ -223,4 +226,10 @@ void DialogCommands::on_pushButtonMoveObject_clicked(){
 
 void DialogCommands::on_pushButtonWait_clicked(){
     openDialogCommand(EventCommandKind::Wait);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonMoveCamera_clicked() {
+    openDialogCommand(EventCommandKind::MoveCamera);
 }
