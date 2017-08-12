@@ -19,6 +19,7 @@
 
 #include "dialogcommandmovecamera.h"
 #include "ui_dialogcommandmovecamera.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -27,12 +28,26 @@
 // -------------------------------------------------------
 
 DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
+                                                 SystemCommonObject *object,
+                                                 QStandardItemModel *parameters,
                                                  QWidget *parent) :
     DialogCommand(parent),
-    ui(new Ui::DialogCommandMoveCamera)
+    ui(new Ui::DialogCommandMoveCamera),
+    m_modelObjects(nullptr)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
+
+    if (Wanok::isInConfig){
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    }
+    else{
+        m_modelObjects = Wanok::get()->project()->currentMap()->modelObjects();
+    }
+    ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
+                                                             parameters,
+                                                             nullptr);
 
     if (command != nullptr) initialize(command);
 }
@@ -40,6 +55,9 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
 DialogCommandMoveCamera::~DialogCommandMoveCamera()
 {
     delete ui;
+
+    if (Wanok::isInConfig)
+        SuperListItem::deleteModel(m_modelObjects);
 }
 
 // -------------------------------------------------------
@@ -58,4 +76,26 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
     QVector<QString> command;
 
     return new EventCommand(EventCommandKind::MoveCamera, command);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandMoveCamera::on_radioButtonTargetUnchanged_toggled(
+        bool checked)
+{
+    ui->spinBoxLevel->setEnabled(checked);
+    ui->labelInInstance->setEnabled(checked);
+    ui->comboBoxInstanceTeam->setEnabled(checked);
+    ui->labelOfInstance->setEnabled(checked);
+    ui->labelStockVariable->setEnabled(checked);
+    ui->widgetVariableStock->setEnabled(checked);
+    ui->radioButtonHero->setEnabled(checked);
+    ui->radioButtonMonster->setEnabled(checked);
+    ui->comboBoxHero->setEnabled(checked && ui->radioButtonHero->isChecked());
+    ui->comboBoxMonster->setEnabled(checked && ui->radioButtonMonster
+                                    ->isChecked());
 }

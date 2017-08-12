@@ -39,10 +39,6 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
-    if (object != nullptr){
-
-    }
-
     if (Wanok::isInConfig){
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);

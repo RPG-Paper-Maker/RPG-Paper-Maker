@@ -41,12 +41,15 @@ class DialogCommandMoveCamera : public DialogCommand
 
 public:
     DialogCommandMoveCamera(EventCommand *command = nullptr,
+                            SystemCommonObject *object = nullptr,
+                            QStandardItemModel* parameters = nullptr,
                             QWidget *parent = 0);
     virtual ~DialogCommandMoveCamera();
     EventCommand* getCommand() const;
 
 protected:
     virtual void initialize(EventCommand* command);
+    QStandardItemModel* m_modelObjects;
 
 private:
     Ui::DialogCommandMoveCamera *ui;

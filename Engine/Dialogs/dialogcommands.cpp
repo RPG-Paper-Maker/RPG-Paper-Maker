@@ -95,7 +95,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::Wait:
         return new DialogCommandWait(command);
     case EventCommandKind::MoveCamera:
-        return new DialogCommandMoveCamera(command);
+        return new DialogCommandMoveCamera(command, object, parameters);
     default:
         return nullptr;
     }
