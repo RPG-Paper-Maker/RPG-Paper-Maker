@@ -291,6 +291,8 @@ SuperListItem* SystemCommonObject::createCopy() const{
 // -------------------------------------------------------
 
 void SystemCommonObject::setCopy(const SystemCommonObject& item){
+    SuperListItem::setCopy(item);
+    p_id = item.p_id;
     m_inheritanceId = item.inheritanceId();
 
     // Events

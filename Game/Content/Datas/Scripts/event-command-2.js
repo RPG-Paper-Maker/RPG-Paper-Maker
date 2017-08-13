@@ -1068,10 +1068,16 @@ EventCommandMoveCamera.prototype = {
         var finalZ = operation($currentMap.camera.threeCamera.position.z,
                                this.z.getValue() *
                                (this.zSquare ? $SQUARE_SIZE : 1));
+        var finalH = operation($currentMap.camera.horizontalAngle,
+                               this.h.getValue());
+        var finalV = operation($currentMap.camera.verticalAngle,
+                               this.v.getValue());
 
         return {
             finalDifPosition: new THREE.Vector3(finalX, finalY, finalZ).sub(
                                   $currentMap.camera.threeCamera.position),
+            finalDifH: finalH - $currentMap.camera.horizontalAngle,
+            finalDifV: finalV - $currentMap.camera.verticalAngle,
             time: time,
             timeLeft: time
         }
@@ -1089,13 +1095,18 @@ EventCommandMoveCamera.prototype = {
 
         // Updating the time left
         var timeRate, dif;
-        dif = $elapsedTime;
-        currentState.timeLeft -= $elapsedTime;
-        if (currentState.timeLeft < 0) {
-            dif += currentState.timeLeft;
-            currentState.timeLeft = 0;
+
+        if (currentState.time === 0)
+            timeRate = 1;
+        else {
+            dif = $elapsedTime;
+            currentState.timeLeft -= $elapsedTime;
+            if (currentState.timeLeft < 0) {
+                dif += currentState.timeLeft;
+                currentState.timeLeft = 0;
+            }
+            timeRate = dif / currentState.time;
         }
-        timeRate = dif / currentState.time;
 
         // Move
         var positionOffset;
@@ -1108,8 +1119,24 @@ EventCommandMoveCamera.prototype = {
         if (this.moveTargetOffset)
             $currentMap.camera.targetOffset.add(positionOffset);
         else {
+            $currentMap.camera.updateAngles();
+            $currentMap.camera.updateDistanceHeight();
+        }
+
+        // Rotation
+        if (this.rotationTargetOffset) {
 
         }
+        else {
+            $currentMap.camera.horizontalAngle +=
+                    timeRate * currentState.finalDifH;
+            $currentMap.camera.verticalAngle +=
+                    timeRate * currentState.finalDifV;
+        }
+
+        // Zoom
+
+        // Update
         $currentMap.camera.update();
 
         // If time = 0, then this is the end of the command
