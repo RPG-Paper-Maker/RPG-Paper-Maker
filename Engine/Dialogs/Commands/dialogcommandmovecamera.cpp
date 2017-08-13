@@ -67,13 +67,98 @@ DialogCommandMoveCamera::~DialogCommandMoveCamera()
 // -------------------------------------------------------
 
 void DialogCommandMoveCamera::initialize(EventCommand* command) {
+    int i = 0;
 
+    // Target
+    int targetKind = command->valueCommandAt(i++).toInt();
+    switch (targetKind) {
+    case 0:
+        ui->radioButtonTargetUnchanged->setChecked(true);
+        break;
+    case 1:
+        ui->radioButtonTargetObjectID->setChecked(true);
+        ui->widgetPrimitiveObjectID->initializeCommand(command, i);
+        break;
+    }
+
+    // Operations
+    switch (command->valueCommandAt(i++).toInt()) {
+    case 0: ui->radioButtonEquals->setChecked(true); break;
+    case 1: ui->radioButtonPlus->setChecked(true); break;
+    case 2: ui->radioButtonMinus->setChecked(true); break;
+    case 3: ui->radioButtonTimes->setChecked(true); break;
+    case 4: ui->radioButtonDivided->setChecked(true); break;
+    case 5: ui->radioButtonModulo->setChecked(true); break;
+    }
+
+    // Move
+    ui->checkBoxtargetOffset->setChecked(command->valueCommandAt(i++) == "1");
+    ui->checkBoxCameraOrientation->setChecked(command->valueCommandAt(i++)
+                                              == "1");
+    ui->spinBoxX->setValue(command->valueCommandAt(i++).toInt());
+    ui->comboBoxX->setCurrentIndex(command->valueCommandAt(i++).toInt());
+    ui->spinBoxY->setValue(command->valueCommandAt(i++).toInt());
+    ui->comboBoxY->setCurrentIndex(command->valueCommandAt(i++).toInt());
+    ui->spinBoxZ->setValue(command->valueCommandAt(i++).toInt());
+    ui->comboBoxZ->setCurrentIndex(command->valueCommandAt(i++).toInt());
+
+    // Rotation
+    ui->doubleSpinBoxRotationH->setValue(command->valueCommandAt(i++)
+                                         .toDouble());
+    ui->doubleSpinBoxRotationV->setValue(command->valueCommandAt(i++)
+                                         .toDouble());
+
+    // Zoom
+    ui->spinBoxDistance->setValue(command->valueCommandAt(i++).toInt());
+    ui->spinBoxHeight->setValue(command->valueCommandAt(i++).toInt());
+
+    // Options
+    ui->checkBoxWaitEnd->setChecked(command->valueCommandAt(i++) == "1");
+    ui->doubleSpinBoxTime->setValue(command->valueCommandAt(i++).toDouble());
 }
 
 // -------------------------------------------------------
 
 EventCommand* DialogCommandMoveCamera::getCommand() const {
     QVector<QString> command;
+
+    // Target
+    if (ui->radioButtonTargetUnchanged->isChecked())
+        command.append("0");
+    else if (ui->radioButtonTargetObjectID->isChecked()) {
+        command.append("1");
+        ui->widgetPrimitiveObjectID->getCommand(command);
+    }
+
+    // Operations
+    if (ui->radioButtonEquals->isChecked()) command.append("0");
+    else if (ui->radioButtonPlus->isChecked()) command.append("1");
+    else if (ui->radioButtonMinus->isChecked()) command.append("2");
+    else if (ui->radioButtonTimes->isChecked()) command.append("3");
+    else if (ui->radioButtonDivided->isChecked()) command.append("4");
+    else if (ui->radioButtonModulo->isChecked()) command.append("5");
+
+    // Move
+    command.append(ui->checkBoxtargetOffset->isChecked() ? "1" : "0");
+    command.append(ui->checkBoxCameraOrientation->isChecked() ? "1" : "0");
+    command.append(ui->spinBoxX->text());
+    command.append(QString::number(ui->comboBoxX->currentIndex()));
+    command.append(ui->spinBoxY->text());
+    command.append(QString::number(ui->comboBoxY->currentIndex()));
+    command.append(ui->spinBoxZ->text());
+    command.append(QString::number(ui->comboBoxZ->currentIndex()));
+
+    // Rotation
+    command.append(QString::number(ui->doubleSpinBoxRotationH->value()));
+    command.append(QString::number(ui->doubleSpinBoxRotationV->value()));
+
+    // Zoom
+    command.append(ui->spinBoxDistance->text());
+    command.append(ui->spinBoxHeight->text());
+
+    // Options
+    command.append(ui->checkBoxWaitEnd->isChecked() ? "1" : "0");
+    command.append(QString::number(ui->doubleSpinBoxTime->value()));
 
     return new EventCommand(EventCommandKind::MoveCamera, command);
 }
@@ -84,18 +169,7 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
 //
 // -------------------------------------------------------
 
-void DialogCommandMoveCamera::on_radioButtonTargetUnchanged_toggled(
-        bool checked)
+void DialogCommandMoveCamera::on_radioButtonTargetObjectID_toggled(bool checked)
 {
-    ui->spinBoxLevel->setEnabled(checked);
-    ui->labelInInstance->setEnabled(checked);
-    ui->comboBoxInstanceTeam->setEnabled(checked);
-    ui->labelOfInstance->setEnabled(checked);
-    ui->labelStockVariable->setEnabled(checked);
-    ui->widgetVariableStock->setEnabled(checked);
-    ui->radioButtonHero->setEnabled(checked);
-    ui->radioButtonMonster->setEnabled(checked);
-    ui->comboBoxHero->setEnabled(checked && ui->radioButtonHero->isChecked());
-    ui->comboBoxMonster->setEnabled(checked && ui->radioButtonMonster
-                                    ->isChecked());
+    ui->widgetPrimitiveObjectID->setEnabled(checked);
 }

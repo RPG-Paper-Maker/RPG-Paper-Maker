@@ -68,7 +68,7 @@ void DialogCommandChangeVariables::initialize(EventCommand* command){
     }
 
     // Operation
-    switch(command->valueCommandAt(i++).toInt()){
+    switch (command->valueCommandAt(i++).toInt()) {
     case 0: ui->radioButtonEquals->setChecked(true); break;
     case 1: ui->radioButtonPlus->setChecked(true); break;
     case 2: ui->radioButtonMinus->setChecked(true); break;

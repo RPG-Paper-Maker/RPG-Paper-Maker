@@ -160,6 +160,8 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strMoveObject(parameters); break;
     case EventCommandKind::Wait:
         str += strWait(); break;
+    case EventCommandKind::MoveCamera:
+        str += strMoveCamera(parameters); break;
     default:
         break;
     }
@@ -552,7 +554,7 @@ QString EventCommand::strSendEventTarget(int& i) const{
 QString EventCommand::strTeleportObject(SystemCommonObject* object,
                                         QStandardItemModel* parameters) const
 {
-    int i = 0 ;
+    int i = 0;
 
     QString strObj = strMoveObjectID(parameters, i);
     QString strPosition = strTeleportObjectPosition(object, parameters, i);
@@ -705,6 +707,95 @@ QString EventCommand::strMoveObjectMoves(int& i) const{
 
 QString EventCommand::strWait() const{
     return "Wait: " + p_listCommand.at(0) + " seconds";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCamera(QStandardItemModel* parameters) const {
+    int i = 0;
+
+    QString target = strMoveCameraTarget(parameters, i);
+    QString operation = strChangeVariablesOperation(i);
+    QString move = strMoveCameraMove(i, operation);
+    QString rotation = strMoveCameraRotation(i, operation);
+    QString zoom = strMoveCameraZoom(i, operation);
+    QString options = strMoveCameraOptions(i);
+
+    return "Move camera:\nTarget: " + target + "\nMove: " + move +
+            "\nRotation: " + rotation + "\nZoom: " + zoom + "\n" +
+            options;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraTarget(QStandardItemModel* parameters,
+                                          int& i) const
+{
+    int targetKind = p_listCommand.at(i++).toInt();
+    switch (targetKind) {
+    case 0:
+        return "Unchanged";
+    case 1:
+        return "Object " + strMoveObjectID(parameters, i);
+    }
+
+    return "";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraMove(int& i, QString &operation) const {
+
+    // Options
+    QString strOptions = "[";
+    QStringList listOptions;
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Offset";
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Camera orientation";
+    strOptions += listOptions.join(";");
+    strOptions += "]";
+
+    // Moves
+    QString x = operation + p_listCommand.at(i++) + " ";
+    x += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    QString y = operation + p_listCommand.at(i++) + " ";
+    y += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    QString z = operation + p_listCommand.at(i++) + " ";
+    z += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+
+    return "X: " + x + "; Y: " + y + "; Z: " + z + " " + strOptions;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraRotation(int& i, QString &operation) const {
+    QString h = operation + p_listCommand.at(i++) + "°";
+    QString v = operation + p_listCommand.at(i++) + "°";
+
+    return "H: " + h + "; V: " + v;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraZoom(int& i, QString &operation) const {
+    QString d = operation + p_listCommand.at(i++);
+    QString h = operation + p_listCommand.at(i++);
+
+    return "Distance: " + d + "; Height: " + h;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraOptions(int& i) const {
+    QString str;
+
+    if (p_listCommand.at(i++) == "1")
+        str += "[Wait end] ";
+
+    str += "TIME: " + p_listCommand.at(i++) + " seconds";
+
+    return str;
 }
 
 // -------------------------------------------------------

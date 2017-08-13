@@ -47,12 +47,15 @@ public:
     virtual ~DialogCommandMoveCamera();
     EventCommand* getCommand() const;
 
+private:
+    Ui::DialogCommandMoveCamera *ui;
+
 protected:
     virtual void initialize(EventCommand* command);
     QStandardItemModel* m_modelObjects;
 
-private:
-    Ui::DialogCommandMoveCamera *ui;
+private slots:
+    void on_radioButtonTargetObjectID_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDMOVECAMERA_H
