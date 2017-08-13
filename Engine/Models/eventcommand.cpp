@@ -776,10 +776,19 @@ QString EventCommand::strMoveCameraMove(QStandardItemModel* parameters, int& i,
 QString EventCommand::strMoveCameraRotation(QStandardItemModel *parameters,
                                             int& i, QString &operation) const
 {
+    // Options
+    QString strOptions = "[";
+    QStringList listOptions;
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Offset";
+    strOptions += listOptions.join(";");
+    strOptions += "]";
+
+    // Rotation
     QString h = operation + strNumber(i, parameters) + "°";
     QString v = operation + strNumber(i, parameters) + "°";
 
-    return "H: " + h + "; V: " + v;
+    return "H: " + h + "; V: " + v + " " + strOptions;
 }
 
 // -------------------------------------------------------

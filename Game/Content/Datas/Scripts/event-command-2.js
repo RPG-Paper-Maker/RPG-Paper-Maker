@@ -1025,6 +1025,7 @@ function EventCommandMoveCamera(command){
     this.zSquare = command[i++] === 0;
 
     // Rotation
+    this.rotationTargetOffset = command[i++] === 1;
     k = command[i++];
     v = command[i++];
     this.h = SystemValue.createValue(k, v);

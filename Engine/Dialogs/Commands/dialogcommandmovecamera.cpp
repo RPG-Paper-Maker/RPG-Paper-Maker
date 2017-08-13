@@ -100,7 +100,8 @@ void DialogCommandMoveCamera::initialize(EventCommand* command) {
     }
 
     // Move
-    ui->checkBoxtargetOffset->setChecked(command->valueCommandAt(i++) == "1");
+    ui->checkBoxtargetOffsetMove->setChecked(
+                command->valueCommandAt(i++) == "1");
     ui->checkBoxCameraOrientation->setChecked(command->valueCommandAt(i++)
                                               == "1");
     ui->widgetNumberX->initializeCommand(command, i);
@@ -111,6 +112,8 @@ void DialogCommandMoveCamera::initialize(EventCommand* command) {
     ui->comboBoxZ->setCurrentIndex(command->valueCommandAt(i++).toInt());
 
     // Rotation
+    ui->checkBoxtargetOffsetRotation->setChecked(
+                command->valueCommandAt(i++) == "1");
     ui->widgetNumberH->initializeCommand(command, i);
     ui->widgetNumberV->initializeCommand(command, i);
 
@@ -145,7 +148,7 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
     else if (ui->radioButtonModulo->isChecked()) command.append("5");
 
     // Move
-    command.append(ui->checkBoxtargetOffset->isChecked() ? "1" : "0");
+    command.append(ui->checkBoxtargetOffsetMove->isChecked() ? "1" : "0");
     command.append(ui->checkBoxCameraOrientation->isChecked() ? "1" : "0");
     ui->widgetNumberX->getCommand(command);
     command.append(QString::number(ui->comboBoxX->currentIndex()));
@@ -155,6 +158,7 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
     command.append(QString::number(ui->comboBoxZ->currentIndex()));
 
     // Rotation
+    command.append(ui->checkBoxtargetOffsetRotation->isChecked() ? "1" : "0");
     ui->widgetNumberH->getCommand(command);
     ui->widgetNumberV->getCommand(command);
 
