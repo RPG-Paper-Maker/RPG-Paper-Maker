@@ -977,3 +977,108 @@ EventCommandWait.prototype = {
     onKeyPressedAndRepeat: function(currentState, key){},
     drawHUD: function(currentState, context){}
 }
+
+// -------------------------------------------------------
+//
+//  CLASS EventCommandMoveCamera
+//
+// -------------------------------------------------------
+
+/** @class
+*   An event command for displaying text.
+*   @property {boolean} isDirectNode Indicates if this node is directly
+*   going to the next node (takes only one frame).
+*   @property {SystemValue} targetID The ID of the camera target.
+*   @property {number} operation The operation used for the transformations.
+*   @property {SystemValue} time The time to wait.
+*   @param {JSON} command Direct JSON command to parse.
+*/
+function EventCommandMoveCamera(command){
+    var i = 0, k, v;
+
+    // Target
+    if (command[i++] === 0) // Unchanged
+        this.targetID = null;
+    else {
+        k = command[i++];
+        v = command[i++];
+        this.targetID = SystemValue.createValue(k, v);
+    }
+
+    // Operation
+    this.operation = command[i++];
+
+    // Move
+    this.targetOffset = command[i++] === 1;
+    this.cameraOrientation = command[i++] === 1;
+    k = command[i++];
+    v = command[i++];
+    this.x = SystemValue.createValue(k, v);
+    this.xSquare = command[i++] === 0;
+    k = command[i++];
+    v = command[i++];
+    this.y = SystemValue.createValue(k, v);
+    this.ySquare = command[i++] === 0;
+    k = command[i++];
+    v = command[i++];
+    this.z = SystemValue.createValue(k, v);
+    this.zSquare = command[i++] === 0;
+
+    // Rotation
+    k = command[i++];
+    v = command[i++];
+    this.h = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.v = SystemValue.createValue(k, v);
+
+    // Zoom
+    k = command[i++];
+    v = command[i++];
+    this.distance = SystemValue.createValue(k, v);
+    k = command[i++];
+    v = command[i++];
+    this.height = SystemValue.createValue(k, v);
+
+    // Options
+    this.waitEnd = command[i++] === 1;
+    k = command[i++];
+    v = command[i++];
+    this.time = SystemValue.createValue(k, v);
+
+    this.isDirectNode = false;
+    this.parallel = false;
+}
+
+EventCommandMoveCamera.prototype = {
+
+    /** Initialize the current state.
+    *   @returns {Object} The current state (clicked).
+    */
+    initialize: function(){
+        return {
+            currentTime: new Date().getTime()
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Update and check if the event is finished.
+    *   @param {Object} currentState The current state of the event.
+    *   @param {MapObject} object The current object reacting.
+    *   @param {number} state The state ID.
+    *   @returns {number} The number of node to pass.
+    */
+    update: function(currentState, object, state){
+        return (currentState.currentTime + this.milliseconds <=
+                new Date().getTime()) ? 1 : 0;
+    },
+
+    // -------------------------------------------------------
+
+    onKeyPressed: function(currentState, key){},
+    onKeyReleased: function(currentState, key){},
+    onKeyPressedRepeat: function(currentState, key){ return true; },
+    onKeyPressedAndRepeat: function(currentState, key){},
+    drawHUD: function(currentState, context){}
+}

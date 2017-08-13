@@ -23,14 +23,18 @@
 */
 var PrimitiveValueKind = {
     None: 0,
-    Number: 1,
-    Variable: 2,
-    Parameter: 3,
-    Property: 4,
-    DataBase: 5,
-    Message: 6,
-    Script: 7,
-    Switch: 8
+    Anything: 1,
+    Default: 2,
+    Number: 3,
+    Variable: 4,
+    Parameter: 5,
+    Property: 6,
+    DataBase: 7,
+    Message: 8,
+    Script: 9,
+    Switch: 10,
+    KeyBoard: 11,
+    NumberDouble: 12
 };
 Object.freeze(PrimitiveValueKind);
 
@@ -70,7 +74,7 @@ SystemValue.createValue = function(k, v){
 *   @returns {SystemValue}
 */
 SystemValue.createNumber = function(n){
-    return SystemValue.createValue(3, n);
+    return SystemValue.createValue(PrimitiveValueKind.Number, n);
 }
 
 // -------------------------------------------------------
@@ -81,7 +85,7 @@ SystemValue.createNumber = function(n){
 *   @returns {SystemValue}
 */
 SystemValue.createKeyBoard = function(k){
-    return SystemValue.createValue(11, k);
+    return SystemValue.createValue(PrimitiveValueKind.KeyBoard, k);
 }
 
 // -------------------------------------------------------
@@ -92,7 +96,7 @@ SystemValue.createKeyBoard = function(k){
 *   @returns {SystemValue}
 */
 SystemValue.createSwitch = function(b){
-    return SystemValue.createValue(10, b);
+    return SystemValue.createValue(PrimitiveValueKind.Switch, b);
 }
 
 // -------------------------------------------------------
@@ -113,6 +117,9 @@ SystemValue.prototype = {
     *   @returns {number}
     */
     getValue: function(){
+        if (this.kind === PrimitiveValueKind.Variable)
+            return $game.variables[this.value];
+
         return this.value;
     },
 
@@ -125,11 +132,15 @@ SystemValue.prototype = {
     isEqual: function(value){
 
         // If keyBoard
-        if (this.kind === 11 && value.kind !== 11){
+        if (this.kind === PrimitiveValueKind.KeyBoard &&
+            value.kind !== PrimitiveValueKind.KeyBoard)
+        {
             return DatasKeyBoard.isKeyEqual(
                         value.value, $datasGame.keyBoard.list[this.value]);
         }
-        else if (value.kind === 11 && this.kind !== 11){
+        else if (value.kind === PrimitiveValueKind.KeyBoard &&
+                 this.kind !== PrimitiveValueKind.KeyBoard)
+        {
             return DatasKeyBoard.isKeyEqual(
                         this.value, $datasGame.keyBoard.list[value.value]);
         }

@@ -45,7 +45,8 @@ var EventCommandKind = {
     SendEvent: 19,
     TeleportObject: 20,
     MoveObject: 21,
-    Wait: 22
+    Wait: 22,
+    MoveCamera: 23
 };
 Object.freeze(EventCommandKind);
 
@@ -174,7 +175,9 @@ EventCommandChangeVariables.prototype = {
 
         // Changing variable(s)
         for (i = 0; i < nbSelection; i++){
-            $game.variables[selection + i] = value;
+            $game.variables[selection + i] =
+                   $operators_numbers[operation]($game.variables[selection + i],
+                                                 value);
         }
 
         // End of command

@@ -26,7 +26,19 @@ var $operators_compare =
     function(a, b) { return a >= b },
     function(a, b) { return a <= b },
     function(a, b) { return a > b },
-    function(a, b) { return a < b },
+    function(a, b) { return a < b }
+];
+
+/** Arithmetic operations.
+*   @type {function[]} */
+var $operators_numbers =
+[
+    function(a, b) { return b },
+    function(a, b) { return a + b },
+    function(a, b) { return a - b },
+    function(a, b) { return a * b },
+    function(a, b) { return a / b },
+    function(a, b) { return a % b }
 ];
 
 // -------------------------------------------------------

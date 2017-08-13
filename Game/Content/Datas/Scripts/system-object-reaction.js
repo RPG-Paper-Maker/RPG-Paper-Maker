@@ -117,6 +117,8 @@ SystemObjectReaction.prototype = {
                 return new EventCommandMoveObject(command);
             case EventCommandKind.Wait:
                 return new EventCommandWait(command);
+            case EventCommandKind.MoveCamera:
+                return new EventCommandMoveCamera(command);
             default:
                 return null;
         }
