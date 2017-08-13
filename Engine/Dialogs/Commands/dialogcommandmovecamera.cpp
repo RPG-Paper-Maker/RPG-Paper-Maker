@@ -36,7 +36,7 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    setFixedSize(geometry().width(), geometry().height() - 75);
 
     if (Wanok::isInConfig){
         m_modelObjects = new QStandardItemModel;
@@ -48,6 +48,14 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
                                                              parameters,
                                                              nullptr);
+    ui->widgetNumberX->initializeNumber(parameters, nullptr);
+    ui->widgetNumberY->initializeNumber(parameters, nullptr);
+    ui->widgetNumberZ->initializeNumber(parameters, nullptr);
+    ui->widgetNumberH->initializeNumber(parameters, nullptr, false);
+    ui->widgetNumberV->initializeNumber(parameters, nullptr, false);
+    ui->widgetNumberDistance->initializeNumber(parameters, nullptr);
+    ui->widgetNumberHeight->initializeNumber(parameters, nullptr);
+    ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
 
     if (command != nullptr) initialize(command);
 }
@@ -95,26 +103,24 @@ void DialogCommandMoveCamera::initialize(EventCommand* command) {
     ui->checkBoxtargetOffset->setChecked(command->valueCommandAt(i++) == "1");
     ui->checkBoxCameraOrientation->setChecked(command->valueCommandAt(i++)
                                               == "1");
-    ui->spinBoxX->setValue(command->valueCommandAt(i++).toInt());
+    ui->widgetNumberX->initializeCommand(command, i);
     ui->comboBoxX->setCurrentIndex(command->valueCommandAt(i++).toInt());
-    ui->spinBoxY->setValue(command->valueCommandAt(i++).toInt());
+    ui->widgetNumberY->initializeCommand(command, i);
     ui->comboBoxY->setCurrentIndex(command->valueCommandAt(i++).toInt());
-    ui->spinBoxZ->setValue(command->valueCommandAt(i++).toInt());
+    ui->widgetNumberZ->initializeCommand(command, i);
     ui->comboBoxZ->setCurrentIndex(command->valueCommandAt(i++).toInt());
 
     // Rotation
-    ui->doubleSpinBoxRotationH->setValue(command->valueCommandAt(i++)
-                                         .toDouble());
-    ui->doubleSpinBoxRotationV->setValue(command->valueCommandAt(i++)
-                                         .toDouble());
+    ui->widgetNumberH->initializeCommand(command, i);
+    ui->widgetNumberV->initializeCommand(command, i);
 
     // Zoom
-    ui->spinBoxDistance->setValue(command->valueCommandAt(i++).toInt());
-    ui->spinBoxHeight->setValue(command->valueCommandAt(i++).toInt());
+    ui->widgetNumberDistance->initializeCommand(command, i);
+    ui->widgetNumberHeight->initializeCommand(command, i);
 
     // Options
     ui->checkBoxWaitEnd->setChecked(command->valueCommandAt(i++) == "1");
-    ui->doubleSpinBoxTime->setValue(command->valueCommandAt(i++).toDouble());
+    ui->widgetNumberTime->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
@@ -141,24 +147,24 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
     // Move
     command.append(ui->checkBoxtargetOffset->isChecked() ? "1" : "0");
     command.append(ui->checkBoxCameraOrientation->isChecked() ? "1" : "0");
-    command.append(ui->spinBoxX->text());
+    ui->widgetNumberX->getCommand(command);
     command.append(QString::number(ui->comboBoxX->currentIndex()));
-    command.append(ui->spinBoxY->text());
+    ui->widgetNumberY->getCommand(command);
     command.append(QString::number(ui->comboBoxY->currentIndex()));
-    command.append(ui->spinBoxZ->text());
+    ui->widgetNumberZ->getCommand(command);
     command.append(QString::number(ui->comboBoxZ->currentIndex()));
 
     // Rotation
-    command.append(QString::number(ui->doubleSpinBoxRotationH->value()));
-    command.append(QString::number(ui->doubleSpinBoxRotationV->value()));
+    ui->widgetNumberH->getCommand(command);
+    ui->widgetNumberV->getCommand(command);
 
     // Zoom
-    command.append(ui->spinBoxDistance->text());
-    command.append(ui->spinBoxHeight->text());
+    ui->widgetNumberDistance->getCommand(command);
+    ui->widgetNumberHeight->getCommand(command);
 
     // Options
     command.append(ui->checkBoxWaitEnd->isChecked() ? "1" : "0");
-    command.append(QString::number(ui->doubleSpinBoxTime->value()));
+    ui->widgetNumberTime->getCommand(command);
 
     return new EventCommand(EventCommandKind::MoveCamera, command);
 }

@@ -50,7 +50,8 @@ public:
     void initializeParameterEvent();
     void initializeNumberVariable();
     void initializeNumber(QStandardItemModel* parameters,
-                          QStandardItemModel* properties);
+                          QStandardItemModel* properties,
+                          bool isInteger = true);
     void initializeDataBaseCommandId(QStandardItemModel* dataBase,
                                      QStandardItemModel* parameters,
                                      QStandardItemModel* properties);
@@ -58,6 +59,7 @@ public:
     PrimitiveValue* model() const;
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
+    void setNumberDoubleValue(double n);
     void setMessageValue(QString m);
     void setSwitchValue(bool s);
     void updateValue();
@@ -66,6 +68,7 @@ public:
     void addAnything();
     void addNone();
     void addNumber();
+    void addNumberDouble();
     void addVariable();
     void addParameter(QStandardItemModel* model);
     void addProperty(QStandardItemModel* model);
@@ -78,6 +81,7 @@ public:
     void showAnything();
     void showNone();
     void showNumber();
+    void showNumberDouble();
     void showVariable();
     void showParameter();
     void showProperty();
@@ -101,6 +105,7 @@ private:
 private slots:
     void on_comboBoxChoiceCurrentIndexChanged(int index);
     void on_spinBoxNumber_valueChanged(int i);
+    void on_doubleSpinBoxNumber_valueChanged(double i);
     void on_variableChanged(QListWidgetItem*);
     void on_comboBoxParameterCurrentIndexChanged(int index);
     void on_comboBoxPropertyCurrentIndexChanged(int index);

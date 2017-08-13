@@ -40,7 +40,8 @@ enum class PrimitiveValueKind {
     Message,
     Script,
     Switch,
-    KeyBoard
+    KeyBoard,
+    NumberDouble
 };
 
 #endif // PRIMITIVEVALUEKIND_H

@@ -95,16 +95,27 @@ void PanelPrimitiveValue::initializeNumberVariable(){
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::initializeNumber(QStandardItemModel* parameters,
-                                           QStandardItemModel* properties)
+                                           QStandardItemModel* properties,
+                                           bool isInteger)
 {
     m_kind = PanelPrimitiveValueKind::Number;
     addParameter(parameters);
     addProperty(properties);
-    addNumber();
+    if (isInteger)
+        addNumber();
+    else
+        addNumberDouble();
     addVariable();
     initialize();
-    showNumber();
-    setNumberValue(m_model->numberValue());
+
+    if (isInteger) {
+        showNumber();
+        setNumberValue(m_model->numberValue());
+    }
+    else {
+        showNumberDouble();
+        setNumberDoubleValue(m_model->numberDoubleValue());
+    }
 }
 
 // -------------------------------------------------------
@@ -190,6 +201,13 @@ void PanelPrimitiveValue::setNumberValue(int n){
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::setNumberDoubleValue(double n) {
+    m_model->setNumberDoubleValue(n);
+    ui->doubleSpinBoxNumber->setValue(n);
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::setMessageValue(QString m){
     m_model->setMessageValue(m);
 
@@ -249,6 +267,8 @@ void PanelPrimitiveValue::updateValue(){
                            Wanok::get()->project()->keyBoardDatas()->model(),
                            ui->comboBoxKeyBoard->currentIndex()));
         break;
+    case PrimitiveValueKind::NumberDouble:
+        setNumberDoubleValue(ui->doubleSpinBoxNumber->value()); break;
     }
 }
 
@@ -264,6 +284,7 @@ void PanelPrimitiveValue::hideAll(){
     ui->lineEditScript->hide();
     ui->comboBoxSwitch->hide();
     ui->comboBoxKeyBoard->hide();
+    ui->doubleSpinBoxNumber->hide();
 }
 
 // -------------------------------------------------------
@@ -288,6 +309,13 @@ void PanelPrimitiveValue::addNone(){
 
 void PanelPrimitiveValue::addNumber(){
     ui->comboBoxChoice->addItem("Number", (int)PrimitiveValueKind::Number);
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::addNumberDouble() {
+    ui->comboBoxChoice->addItem("Number",
+                                (int)PrimitiveValueKind::NumberDouble);
 }
 
 // -------------------------------------------------------
@@ -397,6 +425,15 @@ void PanelPrimitiveValue::showNumber(){
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::showNumberDouble(){
+    setKind(PrimitiveValueKind::NumberDouble);
+    hideAll();
+    ui->doubleSpinBoxNumber->show();
+}
+
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::showVariable(){
     setKind(PrimitiveValueKind::Variable);
     hideAll();
@@ -482,7 +519,10 @@ void PanelPrimitiveValue::initializeCommand(EventCommand* command, int &i){
     case PanelPrimitiveValueKind::Number:
         setKind(static_cast<PrimitiveValueKind>(command
                                                 ->valueCommandAt(i++).toInt()));
-        setNumberValue(command->valueCommandAt(i++).toInt());
+        if (m_model->kind() == PrimitiveValueKind::NumberDouble)
+            setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
+        else
+            setNumberValue(command->valueCommandAt(i++).toInt());
         break;
     }
 }
@@ -498,7 +538,12 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command){
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
         command.append(QString::number((int)m_model->kind()));
-        command.append(QString::number(m_model->numberValue()));
+
+        if (m_model->kind() == PrimitiveValueKind::NumberDouble)
+            command.append(QString::number(m_model->numberDoubleValue()));
+        else
+            command.append(QString::number(m_model->numberValue()));
+
         break;
     }
 }
@@ -540,6 +585,8 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index){
         showSwitch(); break;
     case PrimitiveValueKind::KeyBoard:
         showKeyBoard(); break;
+    case PrimitiveValueKind::NumberDouble:
+        showNumberDouble(); break;
     }
 }
 
@@ -547,6 +594,10 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index){
 
 void PanelPrimitiveValue::on_spinBoxNumber_valueChanged(int i){
     setNumberValue(i);
+}
+
+void PanelPrimitiveValue::on_doubleSpinBoxNumber_valueChanged(double i) {
+    setNumberDoubleValue(i);
 }
 
 // -------------------------------------------------------

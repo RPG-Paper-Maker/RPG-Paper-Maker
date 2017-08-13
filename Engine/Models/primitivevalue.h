@@ -39,6 +39,7 @@ class PrimitiveValue
 public:
     PrimitiveValue();
     PrimitiveValue(int n);
+    PrimitiveValue(double n);
     PrimitiveValue(QString m);
     PrimitiveValue(bool s);
     PrimitiveValue(PrimitiveValueKind kind);
@@ -52,9 +53,11 @@ public:
     QString toString() const;
     void labelTab(QString& str) const;
     int numberValue() const;
+    double numberDoubleValue() const;
     QString messageValue() const;
     bool switchValue() const;
     void setNumberValue(int n);
+    void setNumberDoubleValue(double n);
     void setMessageValue(QString m);
     void setSwitchValue(bool s);
     PrimitiveValueKind kind() const;
@@ -69,6 +72,7 @@ public:
 protected:
     PrimitiveValueKind m_kind;
     int m_numberValue;
+    double m_numberDoubleValue;
     QString m_messageValue;
     bool m_switchValue;
     QStandardItemModel* m_modelParameter;

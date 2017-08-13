@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
-    <height>583</height>
+    <width>649</width>
+    <height>725</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -184,20 +184,8 @@
           <string>Move</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
           <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
@@ -230,109 +218,131 @@
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0,0,1">
+             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
+               <layout class="QVBoxLayout" name="verticalLayout">
                 <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>X:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBoxX">
-                  <property name="minimum">
-                   <number>-5000</number>
-                  </property>
-                  <property name="maximum">
-                   <number>5000</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBoxX">
+                 <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
                   <item>
-                   <property name="text">
-                    <string>Square(s)</string>
-                   </property>
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>X:</string>
+                    </property>
+                   </widget>
                   </item>
                   <item>
-                   <property name="text">
-                    <string>Pixel(s)</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1,0">
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Y:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBoxY">
-                  <property name="minimum">
-                   <number>-5000</number>
-                  </property>
-                  <property name="maximum">
-                   <number>5000</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBoxY">
-                  <item>
-                   <property name="text">
-                    <string>Square(s)</string>
-                   </property>
+                   <widget class="PanelPrimitiveValue" name="widgetNumberX" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
                   </item>
                   <item>
-                   <property name="text">
-                    <string>Pixel(s)</string>
-                   </property>
+                   <widget class="QComboBox" name="comboBoxX">
+                    <item>
+                     <property name="text">
+                      <string>Square(s)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Pixel(s)</string>
+                     </property>
+                    </item>
+                   </widget>
                   </item>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Z:</string>
-                  </property>
-                 </widget>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBoxZ">
-                  <property name="minimum">
-                   <number>-5000</number>
-                  </property>
-                  <property name="maximum">
-                   <number>5000</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBoxZ">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0">
                   <item>
-                   <property name="text">
-                    <string>Square(s)</string>
-                   </property>
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>Y:</string>
+                    </property>
+                   </widget>
                   </item>
                   <item>
-                   <property name="text">
-                    <string>Pixel(s)</string>
-                   </property>
+                   <widget class="PanelPrimitiveValue" name="widgetNumberY" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
                   </item>
-                 </widget>
+                  <item>
+                   <widget class="QComboBox" name="comboBoxY">
+                    <item>
+                     <property name="text">
+                      <string>Square(s)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Pixel(s)</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>Z:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PanelPrimitiveValue" name="widgetNumberZ" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>270</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBoxZ">
+                    <item>
+                     <property name="text">
+                      <string>Square(s)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Pixel(s)</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </item>
@@ -343,8 +353,8 @@
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
-                  <height>20</height>
+                  <width>178</width>
+                  <height>68</height>
                  </size>
                 </property>
                </spacer>
@@ -361,89 +371,81 @@
          <property name="title">
           <string>Rotation</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
+         <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,1">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1,0">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Horizontal:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationH">
-                <property name="minimum">
-                 <double>-9999.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>9999.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>°</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Horizontal:</string>
+              </property>
+             </widget>
             </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1,0">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Vertical:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBoxRotationV">
-                <property name="minimum">
-                 <double>-9999.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>9999.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>°</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+            <item row="0" column="1">
+             <widget class="PanelPrimitiveValue" name="widgetNumberH" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>270</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>270</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
             </item>
-            <item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>°</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" rowspan="2">
              <spacer name="horizontalSpacer_5">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>188</width>
+                <height>48</height>
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Vertical:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="PanelPrimitiveValue" name="widgetNumberV" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>270</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>270</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>°</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -455,23 +457,11 @@
          <property name="title">
           <string>Zoom</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
+         <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,1">
               <item>
                <widget class="QLabel" name="label_8">
                 <property name="text">
@@ -480,19 +470,38 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxDistance">
-                <property name="minimum">
-                 <number>-9999999</number>
+               <widget class="PanelPrimitiveValue" name="widgetNumberDistance" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>270</width>
+                  <height>27</height>
+                 </size>
                 </property>
-                <property name="maximum">
-                 <number>9999999</number>
+                <property name="maximumSize">
+                 <size>
+                  <width>270</width>
+                  <height>27</height>
+                 </size>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item row="0" column="1" rowspan="2">
+             <spacer name="horizontalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>128</width>
+                <height>38</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1">
               <item>
                <widget class="QLabel" name="label_9">
                 <property name="text">
@@ -501,33 +510,27 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxHeight">
-                <property name="minimum">
-                 <number>-9999999</number>
+               <widget class="PanelPrimitiveValue" name="widgetNumberHeight" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>270</width>
+                  <height>27</height>
+                 </size>
                 </property>
-                <property name="maximum">
-                 <number>9999999</number>
+                <property name="maximumSize">
+                 <size>
+                  <width>270</width>
+                  <height>27</height>
+                 </size>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
-            <item>
-             <spacer name="horizontalSpacer_7">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
           </item>
          </layout>
+         <zorder>widgetNumberDistance</zorder>
         </widget>
        </item>
        <item>
@@ -541,7 +544,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="1,0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,0,0,0">
          <item>
           <spacer name="horizontalSpacer_8">
            <property name="orientation">
@@ -549,7 +552,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>348</width>
+             <width>188</width>
              <height>20</height>
             </size>
            </property>
@@ -563,12 +566,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBoxTime">
-           <property name="decimals">
-            <number>3</number>
+          <widget class="PanelPrimitiveValue" name="widgetNumberTime" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>270</width>
+             <height>27</height>
+            </size>
            </property>
-           <property name="maximum">
-            <double>99999.000000000000000</double>
+           <property name="maximumSize">
+            <size>
+             <width>270</width>
+             <height>27</height>
+            </size>
            </property>
           </widget>
          </item>

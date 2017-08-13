@@ -99,10 +99,13 @@ private:
     QString strWait() const;
     QString strMoveCamera(QStandardItemModel* parameters) const;
     QString strMoveCameraTarget(QStandardItemModel* parameters, int& i) const;
-    QString strMoveCameraMove(int& i, QString& operation) const;
-    QString strMoveCameraRotation(int& i, QString &operation) const;
-    QString strMoveCameraZoom(int& i, QString &operation) const;
-    QString strMoveCameraOptions(int& i) const;
+    QString strMoveCameraMove(QStandardItemModel* parameters, int& i,
+                              QString& operation) const;
+    QString strMoveCameraRotation(QStandardItemModel* parameters, int& i,
+                                  QString &operation) const;
+    QString strMoveCameraZoom(QStandardItemModel *parameters, int& i,
+                              QString &operation) const;
+    QString strMoveCameraOptions(QStandardItemModel *parameters, int& i) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)
