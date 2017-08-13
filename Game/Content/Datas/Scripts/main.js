@@ -74,7 +74,7 @@ var $FRAMES;
 *   00:00:00 UTC and the given date. It is updated at the end of each update in
 *   order to get the elapsed time between each update.
 *   @type {number} */
-var $elapsedTime = new Date().getTime();
+var $elapsedTime = 0;
 
 /** The average elapsed time.
 *   @type {number} */
@@ -213,11 +213,6 @@ function resizeGL(canvas){
 /** Update the current stack.
 */
 function update(){
-    $elapsedTime = new Date().getTime() - $lastUpdateTime;
-    if ($averageElapsedTime === 0)
-        $averageElapsedTime = $elapsedTime;
-    else
-        $averageElapsedTime = ($averageElapsedTime + $elapsedTime) / 2;
 
     // Repeat keypress as long as not blocking
     var continuePressed = true;
@@ -230,6 +225,8 @@ function update(){
     // Update the top of the stack
     $gameStack.update();
 
+    $elapsedTime = new Date().getTime() - $lastUpdateTime;
+    $averageElapsedTime = ($averageElapsedTime + $elapsedTime) / 2;
     $lastUpdateTime = new Date().getTime();
 }
 

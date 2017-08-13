@@ -1009,7 +1009,7 @@ function EventCommandMoveCamera(command){
     this.operation = command[i++];
 
     // Move
-    this.targetOffset = command[i++] === 1;
+    this.moveTargetOffset = command[i++] === 1;
     this.cameraOrientation = command[i++] === 1;
     k = command[i++];
     v = command[i++];
@@ -1056,8 +1056,23 @@ EventCommandMoveCamera.prototype = {
     *   @returns {Object} The current state (clicked).
     */
     initialize: function(){
+        var time = this.time.getValue() * 1000;
+        var operation = $operators_numbers[this.operation];
+        var finalX = operation($currentMap.camera.threeCamera.position.x,
+                               this.x.getValue() *
+                               (this.xSquare ? $SQUARE_SIZE : 1));
+        var finalY = operation($currentMap.camera.threeCamera.position.y,
+                               this.y.getValue() *
+                               (this.ySquare ? $SQUARE_SIZE : 1));
+        var finalZ = operation($currentMap.camera.threeCamera.position.z,
+                               this.z.getValue() *
+                               (this.zSquare ? $SQUARE_SIZE : 1));
+
         return {
-            currentTime: new Date().getTime()
+            finalDifPosition: new THREE.Vector3(finalX, finalY, finalZ).sub(
+                                  $currentMap.camera.threeCamera.position),
+            time: time,
+            timeLeft: time
         }
     },
 
@@ -1070,8 +1085,37 @@ EventCommandMoveCamera.prototype = {
     *   @returns {number} The number of node to pass.
     */
     update: function(currentState, object, state){
-        return (currentState.currentTime + this.milliseconds <=
-                new Date().getTime()) ? 1 : 0;
+
+        // Updating the time left
+        var timeRate, dif;
+        dif = $elapsedTime;
+        currentState.timeLeft -= $elapsedTime;
+        if (currentState.timeLeft < 0) {
+            dif += currentState.timeLeft;
+            currentState.timeLeft = 0;
+        }
+        timeRate = dif / currentState.time;
+
+        // Move
+        var positionOffset;
+        positionOffset = new THREE.Vector3(
+            timeRate * currentState.finalDifPosition.x,
+            timeRate * currentState.finalDifPosition.y,
+            timeRate * currentState.finalDifPosition.z
+        );
+        $currentMap.camera.threeCamera.position.add(positionOffset);
+        if (this.moveTargetOffset)
+            $currentMap.camera.targetOffset.add(positionOffset);
+        else {
+
+        }
+        $currentMap.camera.update();
+
+        // If time = 0, then this is the end of the command
+        if (currentState.timeLeft === 0)
+            return 1;
+
+        return 0;
     },
 
     // -------------------------------------------------------

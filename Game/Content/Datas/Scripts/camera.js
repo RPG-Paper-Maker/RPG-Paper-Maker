@@ -42,13 +42,32 @@ function Camera(d, h){
     this.distance = d * ($SQUARE_SIZE / 32);
     this.height = h * ($SQUARE_SIZE / 32);
     this.horizontalAngle = -90.0;
+    this.verticalAngle = -90.0;
     this.target = new THREE.Vector3();
+    this.targetOffset = new THREE.Vector3();
+    this.cameraOffset = new THREE.Vector3();
     this.rotateVelocity = 250;
-    this.rotateSteps = 90.0;
     this.targetHorizontalAngle = this.horizontalAngle;
+    this.targetVerticallAngle = this.verticalAngle;
 }
 
 Camera.prototype = {
+
+    updateTargetPosition: function() {
+        var position = $game.hero.position.clone().add(this.targetOffset);
+        this.target.x = position.x;
+        this.target.y = position.y;
+        this.target.z = position.z;
+    },
+
+    updateCameraPosition: function() {
+        this.threeCamera.position.x = this.target.x + this.cameraOffset.x -
+             (this.distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
+        this.threeCamera.position.y = this.target.y + this.cameraOffset.y +
+             this.height;
+        this.threeCamera.position.z = this.target.z + this.cameraOffset.z -
+             (this.distance * Math.sin(this.horizontalAngle * Math.PI / 180.0));
+    },
 
     /** Update the camera position and target.
     */
@@ -76,29 +95,28 @@ Camera.prototype = {
         }
 
         // Update target
-        var position = $game.hero.position;
-        this.target.x = position.x;
-        this.target.y = position.y;
-        this.target.z = position.z;
+        this.updateTargetPosition();
 
         // Update position
-        this.threeCamera.position.x = this.target.x -
-             (this.distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
-        this.threeCamera.position.y = this.target.y + this.height;
-        this.threeCamera.position.z = this.target.z -
-             (this.distance * Math.sin(this.horizontalAngle * Math.PI / 180.0));
+        this.updateCameraPosition();
 
         // Update view
+        this.updateView();
+
+        // Update orientation
+        $currentMap.orientation = this.getMapOrientation();
+    },
+
+    updateView: function() {
         this.threeCamera.lookAt(this.target);
+        $currentMap.orientation = this.getMapOrientation();
     },
 
     /** Update the camera angle.
     */
-    updateAngle: function(addingAngle) {
-        if (this.targetHorizontalAngle === this.horizontalAngle) {
-            this.targetHorizontalAngle +=
-                 addingAngle ? this.rotateSteps : -this.rotateSteps;
-        }
+    updateHorizontalAngle: function(addingAngle) {
+        if (this.targetHorizontalAngle === this.horizontalAngle)
+            this.targetHorizontalAngle += addingAngle;
     },
 
     /** Update the camera angle.

@@ -67,7 +67,7 @@ function MapObject(system, position) {
 *   @static
 *   @default 0.004666
 */
-MapObject.SPEED_NORMAL = 0.0057666;
+MapObject.SPEED_NORMAL = 0.004666;
 
 /** Update the object with a particular ID.
 *   @static

@@ -531,7 +531,6 @@ SceneMap.prototype = {
 
         // Update camera
         this.camera.update();
-        this.orientation = this.camera.getMapOrientation();
 
         // Getting the Y angle of the camera
         var vector = new THREE.Vector3();
@@ -617,19 +616,6 @@ SceneMap.prototype = {
                                             SystemValue.createNumber(key),
                                             SystemValue.createSwitch(true),
                                             SystemValue.createSwitch(true)]);
-
-            // Temporary camera turn
-            if (DatasKeyBoard.isKeyEqual(
-                        key, $datasGame.keyBoard.LeftCamera))
-            {
-                this.camera.updateAngle(false);
-            }
-            else if (DatasKeyBoard.isKeyEqual(
-                         key, $datasGame.keyBoard.RightCamera))
-            {
-                this.camera.updateAngle(true);
-            }
-
         }
 
         var block = SceneGame.prototype.onKeyPressedRepeat.call(this, key);
