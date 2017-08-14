@@ -899,12 +899,12 @@ EventCommandMoveObject.prototype = {
     */
     update: function(currentState, object, state){
 
-        if (currentState.parallel){
+        if (currentState.parallel) {
             var finished = this.moves[currentState.index].call(
                         this, currentState, object,
                         this.parameters[currentState.index]);
 
-            if (finished){
+            if (finished) {
                 currentState.distance = 0;
                 currentState.index = currentState.index + 1;
                 currentState.position = null;
@@ -1042,13 +1042,13 @@ function EventCommandMoveCamera(command){
     this.height = SystemValue.createValue(k, v);
 
     // Options
-    this.waitEnd = command[i++] === 1;
+    this.isWaitEnd = command[i++] === 1;
     k = command[i++];
     v = command[i++];
     this.time = SystemValue.createValue(k, v);
 
     this.isDirectNode = false;
-    this.parallel = false;
+    this.parallel = !this.isWaitEnd;
 }
 
 EventCommandMoveCamera.prototype = {
@@ -1072,12 +1072,19 @@ EventCommandMoveCamera.prototype = {
                                this.h.getValue());
         var finalV = operation($currentMap.camera.verticalAngle,
                                this.v.getValue());
+        var finalDistance = operation($currentMap.camera.distance,
+                                      this.distance.getValue());
+        var finalHeight = operation($currentMap.camera.height,
+                                    this.height.getValue());
 
         return {
+            parallel: this.isWaitEnd,
             finalDifPosition: new THREE.Vector3(finalX, finalY, finalZ).sub(
                                   $currentMap.camera.threeCamera.position),
             finalDifH: finalH - $currentMap.camera.horizontalAngle,
             finalDifV: finalV - $currentMap.camera.verticalAngle,
+            finalDistance: finalDistance - $currentMap.camera.distance,
+            finalHeight: finalHeight - $currentMap.camera.height,
             time: time,
             timeLeft: time
         }
@@ -1093,57 +1100,62 @@ EventCommandMoveCamera.prototype = {
     */
     update: function(currentState, object, state){
 
-        // Updating the time left
-        var timeRate, dif;
+        if (currentState.parallel) {
 
-        if (currentState.time === 0)
-            timeRate = 1;
-        else {
-            dif = $elapsedTime;
-            currentState.timeLeft -= $elapsedTime;
-            if (currentState.timeLeft < 0) {
-                dif += currentState.timeLeft;
-                currentState.timeLeft = 0;
+            // Updating the time left
+            var timeRate, dif;
+
+            if (currentState.time === 0)
+                timeRate = 1;
+            else {
+                dif = $elapsedTime;
+                currentState.timeLeft -= $elapsedTime;
+                if (currentState.timeLeft < 0) {
+                    dif += currentState.timeLeft;
+                    currentState.timeLeft = 0;
+                }
+                timeRate = dif / currentState.time;
             }
-            timeRate = dif / currentState.time;
-        }
 
-        // Move
-        var positionOffset;
-        positionOffset = new THREE.Vector3(
-            timeRate * currentState.finalDifPosition.x,
-            timeRate * currentState.finalDifPosition.y,
-            timeRate * currentState.finalDifPosition.z
-        );
-        $currentMap.camera.threeCamera.position.add(positionOffset);
-        if (this.moveTargetOffset)
-            $currentMap.camera.targetOffset.add(positionOffset);
-        else {
-            $currentMap.camera.updateAngles();
-            $currentMap.camera.updateDistanceHeight();
-        }
+            // Move
+            var positionOffset;
+            positionOffset = new THREE.Vector3(
+                timeRate * currentState.finalDifPosition.x,
+                timeRate * currentState.finalDifPosition.y,
+                timeRate * currentState.finalDifPosition.z
+            );
+            $currentMap.camera.threeCamera.position.add(positionOffset);
+            if (this.moveTargetOffset)
+                $currentMap.camera.targetOffset.add(positionOffset);
+            else {
+                $currentMap.camera.updateAngles();
+                $currentMap.camera.updateDistanceHeight();
+            }
 
-        // Rotation
-        if (this.rotationTargetOffset) {
-
-        }
-        else {
+            // Rotation
             $currentMap.camera.horizontalAngle +=
                     timeRate * currentState.finalDifH;
             $currentMap.camera.verticalAngle +=
                     timeRate * currentState.finalDifV;
+            if (this.rotationTargetOffset)
+                $currentMap.camera.updateTargetOffset();
+
+            // Zoom
+            $currentMap.camera.distance += timeRate *
+                    currentState.finalDistance;
+            $currentMap.camera.height += timeRate * currentState.finalHeight;
+
+            // Update
+            $currentMap.camera.update();
+
+            // If time = 0, then this is the end of the command
+            if (currentState.timeLeft === 0)
+                return 1;
+
+            return 0;
         }
 
-        // Zoom
-
-        // Update
-        $currentMap.camera.update();
-
-        // If time = 0, then this is the end of the command
-        if (currentState.timeLeft === 0)
-            return 1;
-
-        return 0;
+        return 1;
     },
 
     // -------------------------------------------------------
