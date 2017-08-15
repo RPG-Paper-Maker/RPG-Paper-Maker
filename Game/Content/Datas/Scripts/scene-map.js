@@ -44,7 +44,7 @@ function SceneMap(id){
     this.id = id;
     this.mapName = Wanok.generateMapName(id);
     this.scene = new THREE.Scene();
-    this.camera = new Camera(240, 150);
+    this.camera = new Camera(250, -90, 55);
     this.camera.update();
     this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();

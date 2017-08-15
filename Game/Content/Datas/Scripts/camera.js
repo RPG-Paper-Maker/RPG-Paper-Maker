@@ -34,18 +34,17 @@
 *   @param {number} d The camera distance.
 *   @param {number} h The camera height.
 */
-function Camera(d, h){
+function Camera(d, h, v){
     this.threeCamera = new THREE.PerspectiveCamera(45,
                                                    $canvasWidth / $canvasHeight,
                                                    1, 100000);
 
     this.distance = d * ($SQUARE_SIZE / 32);
-    this.height = h * ($SQUARE_SIZE / 32);
-    this.horizontalAngle = -90.0;
-    this.verticalAngle = 0.0;
-    this.target = new THREE.Vector3();
+    this.horizontalAngle = h;
+    this.verticalAngle = v;
+    this.target = $game.hero;
+    this.targetPosition = new THREE.Vector3();
     this.targetOffset = new THREE.Vector3();
-    this.rotateVelocity = 250;
 }
 
 Camera.prototype = {
@@ -55,19 +54,21 @@ Camera.prototype = {
     },
 
     updateTargetPosition: function() {
-        var position = $game.hero.position.clone().add(this.targetOffset);
-        this.target.x = position.x;
-        this.target.y = position.y;
-        this.target.z = position.z;
+        this.targetPosition =
+             $game.hero.position.clone().add(this.targetOffset);
     },
 
     updateCameraPosition: function() {
-        this.threeCamera.position.x = this.target.x -
-             (this.distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
-        this.threeCamera.position.y = this.target.y + this.height -
-             (this.distance * Math.sin(this.verticalAngle * Math.PI / 180.0));
-        this.threeCamera.position.z = this.target.z -
-             (this.distance * Math.sin(this.horizontalAngle * Math.PI / 180.0));
+        var distance = this.distance *
+                Math.sin(this.verticalAngle * Math.PI / 180.0);
+        var height = this.distance *
+                Math.cos(this.verticalAngle * Math.PI / 180.0);
+
+        this.threeCamera.position.x = this.targetPosition.x -
+             (distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
+        this.threeCamera.position.y = this.targetPosition.y + height;
+        this.threeCamera.position.z = this.targetPosition.z -
+             (distance * Math.sin(this.horizontalAngle * Math.PI / 180.0));
     },
 
     updateTargetOffset: function() {
@@ -120,7 +121,7 @@ Camera.prototype = {
     },
 
     updateView: function() {
-        this.threeCamera.lookAt(this.target);
+        this.threeCamera.lookAt(this.targetPosition);
         $currentMap.orientation = this.getMapOrientation();
     },
 

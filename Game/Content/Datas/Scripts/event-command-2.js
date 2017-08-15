@@ -1037,9 +1037,6 @@ function EventCommandMoveCamera(command){
     k = command[i++];
     v = command[i++];
     this.distance = SystemValue.createValue(k, v);
-    k = command[i++];
-    v = command[i++];
-    this.height = SystemValue.createValue(k, v);
 
     // Options
     this.isWaitEnd = command[i++] === 1;
@@ -1074,8 +1071,6 @@ EventCommandMoveCamera.prototype = {
                                this.v.getValue());
         var finalDistance = operation($currentMap.camera.distance,
                                       this.distance.getValue());
-        var finalHeight = operation($currentMap.camera.height,
-                                    this.height.getValue());
 
         return {
             parallel: this.isWaitEnd,
@@ -1084,7 +1079,6 @@ EventCommandMoveCamera.prototype = {
             finalDifH: finalH - $currentMap.camera.horizontalAngle,
             finalDifV: finalV - $currentMap.camera.verticalAngle,
             finalDistance: finalDistance - $currentMap.camera.distance,
-            finalHeight: finalHeight - $currentMap.camera.height,
             time: time,
             timeLeft: time
         }
@@ -1143,7 +1137,6 @@ EventCommandMoveCamera.prototype = {
             // Zoom
             $currentMap.camera.distance += timeRate *
                     currentState.finalDistance;
-            $currentMap.camera.height += timeRate * currentState.finalHeight;
 
             // Update
             $currentMap.camera.update();

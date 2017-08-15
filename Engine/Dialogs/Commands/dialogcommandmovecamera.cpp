@@ -54,7 +54,6 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     ui->widgetNumberH->initializeNumber(parameters, nullptr, false);
     ui->widgetNumberV->initializeNumber(parameters, nullptr, false);
     ui->widgetNumberDistance->initializeNumber(parameters, nullptr);
-    ui->widgetNumberHeight->initializeNumber(parameters, nullptr);
     ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
 
     if (command != nullptr) initialize(command);
@@ -119,7 +118,6 @@ void DialogCommandMoveCamera::initialize(EventCommand* command) {
 
     // Zoom
     ui->widgetNumberDistance->initializeCommand(command, i);
-    ui->widgetNumberHeight->initializeCommand(command, i);
 
     // Options
     ui->checkBoxWaitEnd->setChecked(command->valueCommandAt(i++) == "1");
@@ -164,7 +162,6 @@ EventCommand* DialogCommandMoveCamera::getCommand() const {
 
     // Zoom
     ui->widgetNumberDistance->getCommand(command);
-    ui->widgetNumberHeight->getCommand(command);
 
     // Options
     command.append(ui->checkBoxWaitEnd->isChecked() ? "1" : "0");

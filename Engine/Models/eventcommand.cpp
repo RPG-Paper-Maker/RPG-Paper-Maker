@@ -797,9 +797,8 @@ QString EventCommand::strMoveCameraZoom(QStandardItemModel* parameters, int& i,
                                         QString &operation) const
 {
     QString d = operation + strNumber(i, parameters);
-    QString h = operation + strNumber(i, parameters);
 
-    return "Distance: " + d + "; Height: " + h;
+    return "Distance: " + d;
 }
 
 // -------------------------------------------------------
