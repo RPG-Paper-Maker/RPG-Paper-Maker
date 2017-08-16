@@ -49,8 +49,25 @@ function Camera(d, h, v){
 
 Camera.prototype = {
 
+    getDistance: function() {
+        return this.distance * Math.sin(this.verticalAngle * Math.PI / 180.0);
+    },
+
+    getHeight: function() {
+        return this.distance * Math.cos(this.verticalAngle * Math.PI / 180.0);
+    },
+
     getHorizontalAngle: function(p1, p2) {
         return Math.atan2(p2.z - p1.z, p2.x - p1.x) * 180 / Math.PI;
+    },
+
+    getVerticalAngle: function(p2, p1) {
+        var x = p1.x - p2.x;
+        var y = p1.y - p2.y;
+        var z = p1.z - p2.z;
+
+        console.log("y=" + Math.sqrt(x*x + z*z));
+        return 90 + (Math.atan2(y, Math.sqrt(x*x + z*z)) * 180 / Math.PI);
     },
 
     updateTargetPosition: function() {
@@ -59,10 +76,8 @@ Camera.prototype = {
     },
 
     updateCameraPosition: function() {
-        var distance = this.distance *
-                Math.sin(this.verticalAngle * Math.PI / 180.0);
-        var height = this.distance *
-                Math.cos(this.verticalAngle * Math.PI / 180.0);
+        var distance = this.getDistance();
+        var height = this.getHeight();
 
         this.threeCamera.position.x = this.targetPosition.x -
              (distance * Math.cos(this.horizontalAngle * Math.PI / 180.0));
@@ -72,32 +87,35 @@ Camera.prototype = {
     },
 
     updateTargetOffset: function() {
-        var x = this.threeCamera.position.x -
-                (this.distance * Math.cos((this.horizontalAngle + 180) *
-                                          Math.PI / 180.0));
-        var y = this.threeCamera.position.y + this.height -
-             (this.distance * Math.sin((this.verticalAngle + 180) *
-                                       Math.PI / 180.0));
-        var z = this.threeCamera.position.z -
-             (this.distance * Math.sin((this.horizontalAngle + 180) *
-                                       Math.PI / 180.0));
+        var distance = this.getDistance();
+        var height = this.getHeight();
 
-        this.targetOffset.x += x - this.target.x;
-        this.targetOffset.y = y - this.target.y;
-        this.targetOffset.z += z - this.target.z;
+        var x = this.threeCamera.position.x -
+                (distance * Math.cos((this.horizontalAngle + 180) *
+                                     Math.PI / 180.0));
+        var y = this.threeCamera.position.y + this.height;
+        var z = this.threeCamera.position.z -
+                (distance * Math.sin((this.horizontalAngle + 180) *
+                                     Math.PI / 180.0));
+
+        this.targetOffset.x += x - this.targetPosition.x;
+        this.targetOffset.y = y - this.targetPosition.y;
+        this.targetOffset.z += z - this.targetPosition.z;
     },
 
     updateAngles: function() {
         this.horizontalAngle =
-             this.getHorizontalAngle(this.threeCamera.position, this.target);
+             this.getHorizontalAngle(this.threeCamera.position,
+                                     this.targetPosition);
+        this.verticalAngle =
+             this.getVerticalAngle(this.threeCamera.position,
+                                   this.targetPosition);
+        console.log(this.verticalAngle);
     },
 
-    updateDistanceHeight: function() {
-        var a = new THREE.Vector2(this.threeCamera.position.x,
-                                  this.threeCamera.position.z);
-        var b = new THREE.Vector2(this.target.x, this.target.z);
-        this.distance = a.distanceTo(b);
-        this.height = this.threeCamera.position.y - this.target.y;
+    updateDistance: function() {
+        this.distance =
+             this.threeCamera.position.distanceTo(this.targetPosition);
     },
 
     /** Update the camera position and target.

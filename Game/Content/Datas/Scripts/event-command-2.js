@@ -1123,7 +1123,7 @@ EventCommandMoveCamera.prototype = {
                 $currentMap.camera.targetOffset.add(positionOffset);
             else {
                 $currentMap.camera.updateAngles();
-                $currentMap.camera.updateDistanceHeight();
+                $currentMap.camera.updateDistance();
             }
 
             // Rotation
