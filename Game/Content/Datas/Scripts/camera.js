@@ -42,6 +42,7 @@ function Camera(d, h, v){
     this.distance = d * ($SQUARE_SIZE / 32);
     this.horizontalAngle = h;
     this.verticalAngle = v;
+    this.verticalRight = true;
     this.target = $game.hero;
     this.targetPosition = new THREE.Vector3();
     this.targetOffset = new THREE.Vector3();
@@ -66,8 +67,20 @@ Camera.prototype = {
         var y = p1.y - p2.y;
         var z = p1.z - p2.z;
 
-        console.log("y=" + Math.sqrt(x*x + z*z));
         return 90 + (Math.atan2(y, Math.sqrt(x*x + z*z)) * 180 / Math.PI);
+    },
+
+    addVerticalAngle: function(a) {
+        if (this.verticalRight) {
+            this.verticalAngle += a;
+            if (this.verticalAngle >= 180 || this.verticalAngle <= 0)
+                this.verticalRight = false;
+        }
+        else {
+            this.verticalAngle -= a;
+            if (this.verticalAngle >= 180 || this.verticalAngle <= 0)
+                this.verticalRight = true;
+        }
     },
 
     updateTargetPosition: function() {
@@ -93,13 +106,13 @@ Camera.prototype = {
         var x = this.threeCamera.position.x -
                 (distance * Math.cos((this.horizontalAngle + 180) *
                                      Math.PI / 180.0));
-        var y = this.threeCamera.position.y + this.height;
+        var y = this.threeCamera.position.y - height;
         var z = this.threeCamera.position.z -
                 (distance * Math.sin((this.horizontalAngle + 180) *
                                      Math.PI / 180.0));
 
         this.targetOffset.x += x - this.targetPosition.x;
-        this.targetOffset.y = y - this.targetPosition.y;
+        this.targetOffset.y += y - this.targetPosition.y;
         this.targetOffset.z += z - this.targetPosition.z;
     },
 
@@ -110,7 +123,6 @@ Camera.prototype = {
         this.verticalAngle =
              this.getVerticalAngle(this.threeCamera.position,
                                    this.targetPosition);
-        console.log(this.verticalAngle);
     },
 
     updateDistance: function() {
@@ -121,12 +133,6 @@ Camera.prototype = {
     /** Update the camera position and target.
     */
     update: function(){
-
-        // Horizontal angle should stay in [-450;270] interval
-        if (this.horizontalAngle >= 270.0 || this.horizontalAngle <= -450.0)
-            this.horizontalAngle = -90.0;
-        if (this.verticalAngle >= 270.0 || this.verticalAngle <= -450.0)
-            this.verticalAngle = -90.0;
 
         // Update target
         this.updateTargetPosition();

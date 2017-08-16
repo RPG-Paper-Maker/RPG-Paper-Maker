@@ -1129,8 +1129,8 @@ EventCommandMoveCamera.prototype = {
             // Rotation
             $currentMap.camera.horizontalAngle +=
                     timeRate * currentState.finalDifH;
-            $currentMap.camera.verticalAngle +=
-                    timeRate * currentState.finalDifV;
+            $currentMap.camera.addVerticalAngle(
+                    timeRate * currentState.finalDifV);
             if (this.rotationTargetOffset)
                 $currentMap.camera.updateTargetOffset();
 
