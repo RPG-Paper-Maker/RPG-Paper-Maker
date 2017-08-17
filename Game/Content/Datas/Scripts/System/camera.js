@@ -40,6 +40,7 @@ function Camera(d, h, v){
                                                    1, 100000);
 
     this.distance = d * ($SQUARE_SIZE / 32);
+    console.log(this.distance);
     this.horizontalAngle = h;
     this.verticalAngle = v;
     this.verticalRight = true;
@@ -132,7 +133,8 @@ Camera.prototype = {
 
     /** Update the camera position and target.
     */
-    update: function(){
+    update: function() {
+        console.log(this.distance);
 
         // Update target
         this.updateTargetPosition();

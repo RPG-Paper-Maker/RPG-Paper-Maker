@@ -58,6 +58,8 @@ public:
     const static QString pathDatas;
     const static QString pathMaps;
     const static QString pathScriptsDir;
+    const static QString pathScriptsSystemDir;
+    const static QString pathScriptsPluginsDir;
     const static QString pathCommonEvents;
     const static QString pathVariables;
     const static QString pathSystem;

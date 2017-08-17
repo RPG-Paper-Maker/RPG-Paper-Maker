@@ -38,7 +38,8 @@ public:
     ScriptsDatas();
     virtual ~ScriptsDatas();
     void read(QString path);
-    QStandardItemModel* model() const;
+    QStandardItemModel* modelSystem() const;
+    QStandardItemModel* modelPlugins() const;
     void setDefault();
 
     virtual void read(const QJsonObject &json);
@@ -47,7 +48,8 @@ public:
     void writeBrowser(QString path) const;
 
 private:
-    QStandardItemModel* m_model;
+    QStandardItemModel* m_modelSystem;
+    QStandardItemModel* m_modelPlugins;
 };
 
 #endif // SCRIPTSDATAS_H

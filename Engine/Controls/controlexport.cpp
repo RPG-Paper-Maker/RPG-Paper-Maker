@@ -118,7 +118,7 @@ void ControlExport::removeWebNoNeed(QString path){
     QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
     QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Wanok::pathCombine(pathDatas, "Scripts");
+    QString pathScripts = Wanok::pathCombine(path, Wanok::pathScriptsSystemDir);
     QDir(Wanok::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }

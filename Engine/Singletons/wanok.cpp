@@ -32,6 +32,10 @@ const QString Wanok::pathBR = pathCombine("Content", "BR");
 const QString Wanok::pathDatas = pathCombine("Content", "Datas");
 const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
 const QString Wanok::pathScriptsDir = pathCombine(pathDatas, "Scripts");
+const QString Wanok::pathScriptsSystemDir =
+        pathCombine(pathScriptsDir, "System");
+const QString Wanok::pathScriptsPluginsDir =
+        pathCombine(pathScriptsDir, "Plugins");
 const QString Wanok::pathCommonEvents =
         pathCombine(pathDatas, "commonEvents.json");
 const QString Wanok::pathVariables =
