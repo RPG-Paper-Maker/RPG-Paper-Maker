@@ -36,6 +36,7 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     m_linkedObject(nullptr),
     m_parameters(nullptr)
 {
+    this->setWordWrap(true);
     this->setHeaderHidden(true);
     this->setIndentation(15);
     this->setContextMenuPolicy(Qt::CustomContextMenu);

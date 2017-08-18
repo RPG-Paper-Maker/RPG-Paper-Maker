@@ -159,6 +159,20 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
                                 EventCommandKind::MoveObject,
                                 QVector<QString>({"7", "-1", "0", "1", "1",
                                                   "3", "1"}));
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 9, true, true,
+                                EventCommandKind::MoveCamera,
+                                QVector<QString>({"0", "1", "0", "0", "3", "0",
+                                                  "0", "3", "0", "0", "3", "0",
+                                                  "0", "0", "12", "-90", "12",
+                                                  "0", "3", "0", "1", "12", "1"}
+                                                 ));
+    setDefaultHeroKeyPressEvent(modelEventsSystem, 10, true, true,
+                                EventCommandKind::MoveCamera,
+                                QVector<QString>({"0", "1", "0", "0", "3", "0",
+                                                  "0", "3", "0", "0", "3", "0",
+                                                  "0", "0", "12", "90", "12",
+                                                  "0", "3", "0", "1", "12", "1"}
+                                                 ));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 11, false, false,
                                 EventCommandKind::SendEvent,
                                 QVector<QString>({"1", "1", "1", "1"}));
