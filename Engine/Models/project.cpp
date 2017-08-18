@@ -20,10 +20,12 @@
 #include "project.h"
 #include "wanok.h"
 #include "oskind.h"
+#include "projectupdater.h"
+#include <QProgressBar>
 #include <QDirIterator>
 #include <QMessageBox>
 
-const QString Project::VERSION = "0.2.0";
+const QString Project::ENGINE_VERSION = "0.3.0";
 
 // -------------------------------------------------------
 //
@@ -74,6 +76,8 @@ ScriptsDatas* Project::scriptsDatas() const { return m_scriptsDatas; }
 PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
 
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
+
+QString Project::version() const { return m_version; }
 
 // -------------------------------------------------------
 //
@@ -133,16 +137,68 @@ bool Project::readVersion(){
     }
 
     QTextStream in(&file);
-    QString line = in.readLine();
+    QString version = in.readLine();
     file.close();
+    QString information = "This project is under " + version + " version but" +
+                          " your current RPG Paper Maker version is " +
+                          Project::ENGINE_VERSION;
 
-    if (line != Project::VERSION){
-        QString information = "This project is under " + line + " version but"
-                              " your current RPG Paper Maker version is " +
-                              Project::VERSION + ".";
-        QString noConvert = "Unfortunately, this version cannot be converted.";
-        QMessageBox::critical(nullptr, "Error: incompatible versions",
-                              information + "\n" + noConvert);
+    int dBefore = ProjectUpdater::versionDifferent(version, "0.3.0");
+
+    // If impossible to convert the version
+    if (dBefore == -2) {
+        QMessageBox::critical(nullptr, "Error: could not find project version",
+                              "Impossible to convert" + version + ".");
+        return false;
+    }
+
+    /*
+    // If version < 0.3.0, tell that the project updater didn't existed yet
+    if (dBefore == -1) {
+        QMessageBox::critical(nullptr, "Error: impossible conversion",
+                              information + " and the projects cannot be " +
+                              "updated if the project version is inferior to " +
+                              "0.3.0.");
+        return false;
+    }*/
+
+    int d = ProjectUpdater::versionDifferent(version);
+
+    // If the project if superior to the engine
+    if (d == 1) {
+        QMessageBox::critical(nullptr, "Error: impossible conversion",
+                              information + ". Please try to update a new " +
+                              "version of the engine and retry.");
+        return false;
+    }
+
+    // If the project is inferior
+    if (d == -1) {
+        QDir dirProject(p_pathCurrentProject);
+        QString currentPath = dirProject.path();
+        QString previousFolderName = dirProject.dirName() +
+                                     "-" + version;
+        QMessageBox::StandardButton box =
+            QMessageBox::question(nullptr, "Error: conversion needed",
+                                  information + ". Convert the project? (a " +
+                                  "copy of your current project will be " +
+                                  "created under the name " + previousFolderName
+                                  + ".",
+                                  QMessageBox::Yes | QMessageBox::No);
+        if (box == QMessageBox::Yes) {
+            QProgressBar* bar = new QProgressBar;
+            bar->show();
+
+            dirProject.cdUp();
+            QDir(dirProject.path()).mkdir(previousFolderName);
+            if (!Wanok::copyPath(currentPath,
+                     Wanok::pathCombine(dirProject.path(), previousFolderName)))
+            {
+                return "Error while copying project. Please retry.";
+            }
+            return true;
+        }
+
         return false;
     }
 

@@ -42,7 +42,7 @@ class Project
 public:
     Project();
     virtual ~Project();
-    static const QString VERSION;
+    static const QString ENGINE_VERSION;
     void setDefault();
     QString pathCurrentProject() const;
     void setPathCurrentProject(QString s);
@@ -54,6 +54,7 @@ public:
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
+    QString version() const;
 
     bool read(QString path);
     bool readVersion();

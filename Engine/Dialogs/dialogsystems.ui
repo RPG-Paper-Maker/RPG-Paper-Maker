@@ -1008,6 +1008,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelObject</class>
+   <extends>QWidget</extends>
+   <header>panelobject.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1028,12 +1034,6 @@
    <class>WidgetTreeCommands</class>
    <extends>QWidget</extends>
    <header>widgettreecommands.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelObject</class>
-   <extends>QWidget</extends>
-   <header>panelobject.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

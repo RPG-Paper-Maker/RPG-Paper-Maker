@@ -202,7 +202,8 @@ HEADERS += \
     MapEditor/vertexbillboard.h \
     MapEditor/threadmapportionloader.h \
     MapEditor/spritewall.h \
-    Dialogs/Commands/dialogcommandmovecamera.h
+    Dialogs/Commands/dialogcommandmovecamera.h \
+    Models/projectupdater.h
 
 SOURCES += \
     main.cpp \
@@ -361,7 +362,8 @@ SOURCES += \
     MapEditor/vertexbillboard.cpp \
     MapEditor/threadmapportionloader.cpp \
     MapEditor/spritewall.cpp \
-    Dialogs/Commands/dialogcommandmovecamera.cpp
+    Dialogs/Commands/dialogcommandmovecamera.cpp \
+    Models/projectupdater.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
