@@ -176,7 +176,6 @@ bool Project::readVersion(){
     // If the project is inferior
     if (d == -1) {
         QDir dirProject(p_pathCurrentProject);
-        QString currentPath = dirProject.path();
         QString previousFolderName = dirProject.dirName() +
                                      "-" + version;
         QMessageBox::StandardButton box =
@@ -188,10 +187,9 @@ bool Project::readVersion(){
                                   QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             DialogProgress dialog;
-
-
             QThread* thread = new QThread(qApp);
-            ProjectUpdater* worker = new ProjectUpdater(this);
+            ProjectUpdater* worker = new ProjectUpdater(this,
+                                                        previousFolderName);
             worker->moveToThread(thread);
 
             qApp->connect(worker, SIGNAL(finished()),
@@ -203,19 +201,8 @@ bool Project::readVersion(){
             qApp->connect(worker, SIGNAL(progress(int, QString)),
                           &dialog, SLOT(setValueLabel(int, QString)));
             thread->start();
-
             dialog.exec();
 
-            /*
-            dirProject.cdUp();
-            QDir(dirProject.path()).mkdir(previousFolderName);
-            if (!Wanok::copyPath(currentPath,
-                     Wanok::pathCombine(dirProject.path(), previousFolderName)))
-            {
-                return "Error while copying project. Please retry.";
-            }
-            dialog.close();
-            */
             return true;
         }
 

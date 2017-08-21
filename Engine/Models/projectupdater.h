@@ -35,7 +35,7 @@ class ProjectUpdater : public QObject
 {
     Q_OBJECT
 public:
-    ProjectUpdater(Project* project);
+    ProjectUpdater(Project* project, QString previous);
     virtual ~ProjectUpdater();
 
     static const int incompatibleVersionsCount;
@@ -43,10 +43,12 @@ public:
     static bool getSubVersions(QString& version, int& m, int& f, int& b);
     static int versionDifferent(QString projectVersion, QString otherVersion
                                 = Project::ENGINE_VERSION);
+    void copyPreviousProject();
     void updateVersion(QString& version);
 
 protected:
     Project* m_project;
+    QString m_previousFolderName;
 
 public slots:
     void check();

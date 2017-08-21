@@ -18,6 +18,8 @@
 */
 
 #include "projectupdater.h"
+#include "wanok.h"
+#include <QDir>
 
 const int ProjectUpdater::incompatibleVersionsCount = 0;
 
@@ -29,8 +31,9 @@ QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]{};
 //
 // -------------------------------------------------------
 
-ProjectUpdater::ProjectUpdater(Project* project) :
-    m_project(project)
+ProjectUpdater::ProjectUpdater(Project* project, QString previous) :
+    m_project(project),
+    m_previousFolderName(previous)
 {
 
 }
@@ -104,6 +107,17 @@ int ProjectUpdater::versionDifferent(QString projectVersion,
 
 // -------------------------------------------------------
 
+void ProjectUpdater::copyPreviousProject() {
+    QDir dirProject(m_project->pathCurrentProject());
+    QString currentPath = dirProject.path();
+    dirProject.cdUp();
+    QDir(dirProject.path()).mkdir(m_previousFolderName);
+    Wanok::copyPath(currentPath, Wanok::pathCombine(dirProject.path(),
+                                                    m_previousFolderName));
+}
+
+// -------------------------------------------------------
+
 void ProjectUpdater::updateVersion(QString& version) {
 
 }
@@ -115,7 +129,9 @@ void ProjectUpdater::updateVersion(QString& version) {
 // -------------------------------------------------------
 
 void ProjectUpdater::check() {
-    QThread::sleep(1);
+    emit progress(10, "Copying the previous project...");
+    copyPreviousProject();
+    emit progress(80, "Checking incompatible versions...");
 
     // Updating for incompatible versions
     int index = incompatibleVersionsCount;
@@ -127,8 +143,12 @@ void ProjectUpdater::check() {
         }
     }
 
-    for (int i = index; i < incompatibleVersionsCount; i++)
+    for (int i = index; i < incompatibleVersionsCount; i++) {
+        emit progress(80, "Checking version " + incompatibleVersions[i] +
+                      "...");
         updateVersion(incompatibleVersions[i]);
+    }
 
+    emit progress(100, "");
     emit finished();
 }
