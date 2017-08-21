@@ -25,6 +25,23 @@ QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]{};
 
 // -------------------------------------------------------
 //
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+ProjectUpdater::ProjectUpdater(Project* project) :
+    m_project(project)
+{
+
+}
+
+ProjectUpdater::~ProjectUpdater()
+{
+
+}
+
+// -------------------------------------------------------
+//
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
@@ -87,13 +104,24 @@ int ProjectUpdater::versionDifferent(QString projectVersion,
 
 // -------------------------------------------------------
 
-void ProjectUpdater::check(Project* project) {
+void ProjectUpdater::updateVersion(QString& version) {
+
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void ProjectUpdater::check() {
+    QThread::sleep(1);
 
     // Updating for incompatible versions
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (project->version() == incompatibleVersions[i]) {
+        if (m_project->version() == incompatibleVersions[i]) {
             index = i;
             break;
         }
@@ -102,11 +130,5 @@ void ProjectUpdater::check(Project* project) {
     for (int i = index; i < incompatibleVersionsCount; i++)
         updateVersion(incompatibleVersions[i]);
 
-
-}
-
-// -------------------------------------------------------
-
-void ProjectUpdater::updateVersion(QString& version) {
-
+    emit finished();
 }

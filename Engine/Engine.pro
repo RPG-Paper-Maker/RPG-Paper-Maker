@@ -203,7 +203,8 @@ HEADERS += \
     MapEditor/threadmapportionloader.h \
     MapEditor/spritewall.h \
     Dialogs/Commands/dialogcommandmovecamera.h \
-    Models/projectupdater.h
+    Models/projectupdater.h \
+    Dialogs/dialogprogress.h
 
 SOURCES += \
     main.cpp \
@@ -363,7 +364,8 @@ SOURCES += \
     MapEditor/threadmapportionloader.cpp \
     MapEditor/spritewall.cpp \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
-    Models/projectupdater.cpp
+    Models/projectupdater.cpp \
+    Dialogs/dialogprogress.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -424,7 +426,8 @@ FORMS += \
     Dialogs/dialoglocation.ui \
     Dialogs/Commands/dialogcommandwait.ui \
     Dialogs/Systems/dialogsystemlang.ui \
-    Dialogs/Commands/dialogcommandmovecamera.ui
+    Dialogs/Commands/dialogcommandmovecamera.ui \
+    Dialogs/dialogprogress.ui
 
 OTHER_FILES += \
     style.qss

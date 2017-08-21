@@ -21,9 +21,10 @@
 #include "wanok.h"
 #include "oskind.h"
 #include "projectupdater.h"
-#include <QProgressBar>
+#include "dialogprogress.h"
 #include <QDirIterator>
 #include <QMessageBox>
+#include <QApplication>
 
 const QString Project::ENGINE_VERSION = "0.3.0";
 
@@ -186,9 +187,26 @@ bool Project::readVersion(){
                                   + ".",
                                   QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
-            QProgressBar* bar = new QProgressBar;
-            bar->show();
+            DialogProgress dialog;
 
+
+            QThread* thread = new QThread(qApp);
+            ProjectUpdater* worker = new ProjectUpdater(this);
+            worker->moveToThread(thread);
+
+            qApp->connect(worker, SIGNAL(finished()),
+                          worker, SLOT(deleteLater()));
+            qApp->connect(worker, SIGNAL(finished()),
+                          &dialog, SLOT(accept()));
+            qApp->connect(thread, SIGNAL(started()),
+                          worker, SLOT(check()));
+            qApp->connect(worker, SIGNAL(progress(int, QString)),
+                          &dialog, SLOT(setValueLabel(int, QString)));
+            thread->start();
+
+            dialog.exec();
+
+            /*
             dirProject.cdUp();
             QDir(dirProject.path()).mkdir(previousFolderName);
             if (!Wanok::copyPath(currentPath,
@@ -196,6 +214,8 @@ bool Project::readVersion(){
             {
                 return "Error while copying project. Please retry.";
             }
+            dialog.close();
+            */
             return true;
         }
 

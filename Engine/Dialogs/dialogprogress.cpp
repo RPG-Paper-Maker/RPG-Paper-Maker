@@ -17,43 +17,38 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROJECTUPDATER_H
-#define PROJECTUPDATER_H
-
-#include "project.h"
+#include "dialogprogress.h"
+#include "ui_dialogprogress.h"
 
 // -------------------------------------------------------
 //
-//  CLASS ProjectUpdater
-//
-//  Module used for detecting if a project needs to be updated according to
-//  the engine version.
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-class ProjectUpdater : public QObject
+DialogProgress::DialogProgress(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogProgress)
 {
-    Q_OBJECT
-public:
-    ProjectUpdater(Project* project);
-    virtual ~ProjectUpdater();
+    ui->setupUi(this);
+    setFixedSize(geometry().width(), geometry().height());
 
-    static const int incompatibleVersionsCount;
-    static QString incompatibleVersions[];
-    static bool getSubVersions(QString& version, int& m, int& f, int& b);
-    static int versionDifferent(QString projectVersion, QString otherVersion
-                                = Project::ENGINE_VERSION);
-    void updateVersion(QString& version);
+    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::WindowTitleHint);
+}
 
-protected:
-    Project* m_project;
+DialogProgress::~DialogProgress()
+{
+    delete ui;
+}
 
-public slots:
-    void check();
+// -------------------------------------------------------
+//
+//  SIGNALS
+//
+// -------------------------------------------------------
 
-signals:
-    void progress(int, QString);
-    void finished();
-};
-
-#endif // PROJECTUPDATER_H
+void DialogProgress::setValueLabel(int v, QString s) {
+    ui->progressBar->setValue(v);
+    ui->label->setText(s);
+}

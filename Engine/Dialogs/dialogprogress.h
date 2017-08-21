@@ -17,43 +17,36 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROJECTUPDATER_H
-#define PROJECTUPDATER_H
+#ifndef DIALOGPROGRESS_H
+#define DIALOGPROGRESS_H
 
-#include "project.h"
+#include <QDialog>
 
 // -------------------------------------------------------
 //
-//  CLASS ProjectUpdater
+//  CLASS DialogProgress
 //
-//  Module used for detecting if a project needs to be updated according to
-//  the engine version.
+//  Dialog used for displaying progress.
 //
 // -------------------------------------------------------
 
-class ProjectUpdater : public QObject
+namespace Ui {
+class DialogProgress;
+}
+
+class DialogProgress : public QDialog
 {
     Q_OBJECT
+
 public:
-    ProjectUpdater(Project* project);
-    virtual ~ProjectUpdater();
+    explicit DialogProgress(QWidget *parent = 0);
+    ~DialogProgress();
 
-    static const int incompatibleVersionsCount;
-    static QString incompatibleVersions[];
-    static bool getSubVersions(QString& version, int& m, int& f, int& b);
-    static int versionDifferent(QString projectVersion, QString otherVersion
-                                = Project::ENGINE_VERSION);
-    void updateVersion(QString& version);
-
-protected:
-    Project* m_project;
+private:
+    Ui::DialogProgress *ui;
 
 public slots:
-    void check();
-
-signals:
-    void progress(int, QString);
-    void finished();
+    void setValueLabel(int v, QString s);
 };
 
-#endif // PROJECTUPDATER_H
+#endif // DIALOGPROGRESS_H
