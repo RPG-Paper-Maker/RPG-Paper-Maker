@@ -25,6 +25,7 @@
 #include "controlmainwindow.h"
 #include "project.h"
 #include "widgetmapeditor.h"
+#include "engineupdater.h"
 
 // -------------------------------------------------------
 //
@@ -60,12 +61,14 @@ public:
     void enableGame();
     void saveAllMaps();
     void deleteTempMaps();
+    void openEngineUpdater();
 
 private:
     Ui::MainWindow *ui;
     QWidget* mainPanel;
     QProcess* gameProcess;
     Project* project;
+    EngineUpdater* m_engineUpdater;
     int openDialog(QDialog& dialog);
     QString p_appName;
     QString p_version;
@@ -87,6 +90,7 @@ private slots:
     void on_actionKeyboard_controls_triggered();
     void on_actionSet_BR_path_folder_triggered();
     void on_actionPlay_triggered();
+    void on_updateCheckFinished(bool b);
     void closeEvent(QCloseEvent *event);
 };
 

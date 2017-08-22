@@ -6,7 +6,7 @@
 
 CONFIG += c++11
 
-QT       += core gui opengl
+QT       += core gui opengl network
 
 win32{
     LIBS += -lOpengl32
@@ -204,7 +204,8 @@ HEADERS += \
     MapEditor/spritewall.h \
     Dialogs/Commands/dialogcommandmovecamera.h \
     Models/projectupdater.h \
-    Dialogs/dialogprogress.h
+    Dialogs/dialogprogress.h \
+    Models/engineupdater.h
 
 SOURCES += \
     main.cpp \
@@ -365,7 +366,8 @@ SOURCES += \
     MapEditor/spritewall.cpp \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
     Models/projectupdater.cpp \
-    Dialogs/dialogprogress.cpp
+    Dialogs/dialogprogress.cpp \
+    Models/engineupdater.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

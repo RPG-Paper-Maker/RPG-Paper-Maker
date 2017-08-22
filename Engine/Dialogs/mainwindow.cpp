@@ -62,11 +62,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Menu bar enabled actions
     enableNoGame();
+
+    // Check update
+    QThread* thread = new QThread(parent);
+    m_engineUpdater = new EngineUpdater();
+    m_engineUpdater->moveToThread(thread);
+    connect(thread, SIGNAL(started()), m_engineUpdater, SLOT(check()));
+    connect(m_engineUpdater, SIGNAL(finishedCheck(bool)),
+            this, SLOT(on_updateCheckFinished(bool)));
+    thread->start();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete m_engineUpdater;
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
@@ -264,6 +274,12 @@ void MainWindow::updateTextures(){
 }
 
 // -------------------------------------------------------
+
+void MainWindow::openEngineUpdater() {
+
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -414,6 +430,13 @@ void MainWindow::on_actionPlay_triggered(){
 
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_updateCheckFinished(bool b) {
+    if (b)
+        openEngineUpdater();
 }
 
 // -------------------------------------------------------
