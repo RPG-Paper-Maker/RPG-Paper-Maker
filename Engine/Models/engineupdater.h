@@ -37,6 +37,7 @@ class EngineUpdater : public QObject
 public:
     EngineUpdater();
     virtual ~EngineUpdater();
+    void start();
 
 protected:
     QJsonObject m_document;
@@ -48,6 +49,7 @@ public slots:
 signals:
     void progress(int, QString);
     void finishedCheck(bool);
+    void needUpdate();
     void finished();
 };
 

@@ -91,6 +91,7 @@ private slots:
     void on_actionSet_BR_path_folder_triggered();
     void on_actionPlay_triggered();
     void on_updateCheckFinished(bool b);
+    void on_updateFinished();
     void closeEvent(QCloseEvent *event);
 };
 

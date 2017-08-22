@@ -36,6 +36,7 @@
 #include "wanok.h"
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
+#include "dialogprogress.h"
 
 // -------------------------------------------------------
 //
@@ -276,7 +277,25 @@ void MainWindow::updateTextures(){
 // -------------------------------------------------------
 
 void MainWindow::openEngineUpdater() {
+    QString message = "A new version of the engine is available. "
+                      "Would you like to apply it?";
+    QMessageBox::StandardButton box =
+            QMessageBox::question(this, "Update", message,
+                                  QMessageBox::Yes | QMessageBox::No);
 
+    if (box == QMessageBox::Yes) {
+        DialogProgress dialog;
+        connect(m_engineUpdater, SIGNAL(finished()),
+                this, SLOT(on_updateFinished()));
+        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
+                &dialog, SLOT(setValueLabel(int, QString)));
+        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
+                &dialog, SLOT(setValueLabel(int, QString)));
+        connect(m_engineUpdater, SIGNAL(needUpdate()),
+                m_engineUpdater, SLOT(update()));
+        m_engineUpdater->start();
+        dialog.exec();
+    }
 }
 
 // -------------------------------------------------------
@@ -437,6 +456,15 @@ void MainWindow::on_actionPlay_triggered(){
 void MainWindow::on_updateCheckFinished(bool b) {
     if (b)
         openEngineUpdater();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_updateFinished() {
+    QMessageBox::information(this, "Restart",
+                             "The engine is going to be restarted.");
+    qApp->quit();
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 // -------------------------------------------------------

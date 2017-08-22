@@ -42,6 +42,10 @@ EngineUpdater::~EngineUpdater()
 
 }
 
+void EngineUpdater::start() {
+    emit needUpdate();
+}
+
 // -------------------------------------------------------
 //
 //  SLOTS
@@ -57,7 +61,8 @@ void EngineUpdater::check() {
 
     // Get the JSON
     reply = manager.get(QNetworkRequest(
-                            QUrl("http://rpgpapermaker.gq/rpm/versions.json")));
+        QUrl("https://raw.githubusercontent.com/RPG-Paper-Maker/"
+             "RPG-Paper-Maker/master/versions.json")));
 
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
@@ -67,9 +72,12 @@ void EngineUpdater::check() {
     lastVersion = m_document["lastVersion"].toString();
     dif = ProjectUpdater:: versionDifferent(lastVersion);
 
-    emit finishedCheck(dif == 0);
+    emit finishedCheck(dif != 0);
 }
 
+// -------------------------------------------------------
+
 void EngineUpdater::update() {
+    QThread::sleep(3);
     emit finished();
 }
