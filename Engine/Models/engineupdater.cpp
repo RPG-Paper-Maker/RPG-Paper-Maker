@@ -19,12 +19,14 @@
 
 #include "engineupdater.h"
 #include "projectupdater.h"
+#include "wanok.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QUrl>
 #include <QJsonDocument>
+#include <QDirIterator>
 
 // -------------------------------------------------------
 //
@@ -41,6 +43,64 @@ EngineUpdater::~EngineUpdater()
 {
 
 }
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void EngineUpdater::writeBasicJSONFile() {
+    QJsonObject obj, objFile;
+    QJsonArray tabScripts;
+
+    // Last version
+    obj["lastVersion"] = Project::ENGINE_VERSION;
+
+    // Includes
+    getJSONFile(objFile,
+                "https://raw.githubusercontent.com/RPG-Paper-Maker/"
+                "RPG-Paper-Maker/develop/Game/Content/Datas/Scripts/System/"
+                "desktop/includes.js",
+                "Content/basic/Content/Datas/Scripts/System/desktop/"
+                "includes.js");
+    tabScripts.append(objFile);
+
+    // Scripts
+    QDirIterator files(Wanok::pathCombine(
+                           Wanok::pathCombine(QDir::currentPath(),
+                                              Wanok::pathBasic),
+                           Wanok::pathScriptsSystemDir),
+                       QDir::Files);
+    while (files.hasNext()){
+        files.next();
+        QString name = files.fileName();
+        objFile = QJsonObject();
+        getJSONFile(objFile,
+                    "https://raw.githubusercontent.com/RPG-Paper-Maker/"
+                    "RPG-Paper-Maker/develop/Game/Content/Datas/Scripts/System/"
+                    + name,
+                    "Content/basic/Content/Datas/Scripts/System/" + name);
+        tabScripts.append(objFile);
+    }
+    obj["scripts"] = tabScripts;
+
+    Wanok::writeOtherJSON(Wanok::pathCombine(
+                              Wanok::pathCombine(QDir::currentPath(),
+                                                 "Content"), "versions.json"),
+                          obj, QJsonDocument::Indented);
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
+                                QString target)
+{
+    obj["source"] = source;
+    obj["target"] = target;
+}
+
+// -------------------------------------------------------
 
 void EngineUpdater::start() {
     emit needUpdate();
@@ -78,6 +138,6 @@ void EngineUpdater::check() {
 // -------------------------------------------------------
 
 void EngineUpdater::update() {
-    QThread::sleep(3);
+
     emit finished();
 }

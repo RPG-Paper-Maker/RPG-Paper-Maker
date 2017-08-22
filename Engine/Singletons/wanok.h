@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QKeyEvent>
+#include <QJsonDocument>
 #include "singleton.h"
 #include "project.h"
 #include "map.h"
@@ -54,6 +55,7 @@ public:
     static bool isInConfig;
 
     // PATHS
+    const static QString pathBasic;
     const static QString pathBR;
     const static QString pathDatas;
     const static QString pathMaps;
@@ -105,7 +107,9 @@ public:
     static QString pathCombine(const QString& p1, const QString& p2);
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
-    static void writeOtherJSON(QString path, const QJsonObject &obj);
+    static void writeOtherJSON(QString path, const QJsonObject &obj,
+                               QJsonDocument::JsonFormat format
+                               = QJsonDocument::Compact);
     static void readOtherJSON(QString path, QJsonDocument& loadDoc);
     static void writeArrayJSON(QString path, const QJsonArray &tab);
     static void readArrayJSON(QString path, QJsonDocument& loadDoc);

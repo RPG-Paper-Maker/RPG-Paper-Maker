@@ -37,6 +37,8 @@ class EngineUpdater : public QObject
 public:
     EngineUpdater();
     virtual ~EngineUpdater();
+    static void writeBasicJSONFile();
+    static void getJSONFile(QJsonObject &obj, QString source, QString target);
     void start();
 
 protected:

@@ -28,6 +28,7 @@
 QSet<int> Wanok::mapsToSave;
 
 // PATHS DATAS
+const QString Wanok::pathBasic = pathCombine("Content", "basic");
 const QString Wanok::pathBR = pathCombine("Content", "BR");
 const QString Wanok::pathDatas = pathCombine("Content", "Datas");
 const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
@@ -167,11 +168,13 @@ void Wanok::readJSON(QString path, Serializable &obj){
 
 // -------------------------------------------------------
 
-void Wanok::writeOtherJSON(QString path, const QJsonObject &obj){
+void Wanok::writeOtherJSON(QString path, const QJsonObject &obj,
+                           QJsonDocument::JsonFormat format)
+{
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) { return; }
     QJsonDocument saveDoc(obj);
-    saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
+    saveFile.write(saveDoc.toJson(format));
 }
 
 // -------------------------------------------------------
