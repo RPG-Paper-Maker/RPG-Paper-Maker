@@ -153,7 +153,6 @@ bool Project::readVersion(){
         return false;
     }
 
-    /*
     // If version < 0.3.0, tell that the project updater didn't existed yet
     if (dBefore == -1) {
         QMessageBox::critical(nullptr, "Error: impossible conversion",
@@ -161,7 +160,7 @@ bool Project::readVersion(){
                               "updated if the project version is inferior to " +
                               "0.3.0.");
         return false;
-    }*/
+    }
 
     int d = ProjectUpdater::versionDifferent(version);
 
@@ -187,11 +186,10 @@ bool Project::readVersion(){
                                   QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             DialogProgress dialog;
-            QThread* thread = new QThread(qApp);
+            QThread* thread = new QThread(qApp->parent());
             ProjectUpdater* worker = new ProjectUpdater(this,
                                                         previousFolderName);
             worker->moveToThread(thread);
-
             qApp->connect(worker, SIGNAL(finished()),
                           worker, SLOT(deleteLater()));
             qApp->connect(worker, SIGNAL(finished()),
@@ -408,4 +406,16 @@ void Project::writeSystemDatas(){
 
 void Project::updatePictures(){
     p_gameDatas->tilesetsDatas()->updatePictures();
+}
+
+// -------------------------------------------------------
+
+QString Project::createRPMFile() {
+    QFile file(Wanok::pathCombine(p_pathCurrentProject, "game.rpm"));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return "Error while creating game.rpm file";
+    QTextStream out(&file);
+    out << Project::ENGINE_VERSION;
+
+    return NULL;
 }

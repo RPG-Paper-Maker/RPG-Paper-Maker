@@ -45,6 +45,8 @@ public:
                                 = Project::ENGINE_VERSION);
     void copyPreviousProject();
     void updateVersion(QString& version);
+    void copyExecutable();
+    void copySystemScripts();
 
 protected:
     Project* m_project;

@@ -78,6 +78,7 @@ public:
     void writeSystemDatas();
     void saveCurrentMap();
     void updatePictures();
+    QString createRPMFile();
 
 private:
     QString p_pathCurrentProject;

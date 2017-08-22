@@ -109,17 +109,46 @@ int ProjectUpdater::versionDifferent(QString projectVersion,
 
 void ProjectUpdater::copyPreviousProject() {
     QDir dirProject(m_project->pathCurrentProject());
-    QString currentPath = dirProject.path();
     dirProject.cdUp();
     QDir(dirProject.path()).mkdir(m_previousFolderName);
-    Wanok::copyPath(currentPath, Wanok::pathCombine(dirProject.path(),
-                                                    m_previousFolderName));
+    Wanok::copyPath(m_project->pathCurrentProject(),
+                    Wanok::pathCombine(dirProject.path(),
+                                       m_previousFolderName));
 }
 
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion(QString& version) {
 
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::copyExecutable() {
+
+    // RPM file
+    m_project->createRPMFile();
+
+    // Exe
+    m_project->removeOSFiles();
+    m_project->copyOSFiles();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::copySystemScripts() {
+    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+    QString pathBasic = Wanok::pathCombine(pathContent, "basic");
+    QString pathScripts = Wanok::pathCombine(pathBasic,
+                                             Wanok::pathScriptsSystemDir);
+    QString pathProjectScripts =
+            Wanok::pathCombine(m_project->pathCurrentProject(),
+                               Wanok::pathScriptsSystemDir);
+    QDir dir(pathProjectScripts);
+    dir.removeRecursively();
+    dir.cdUp();
+    dir.mkdir("System");
+    Wanok::copyPath(pathScripts, pathProjectScripts);
 }
 
 // -------------------------------------------------------
@@ -149,6 +178,10 @@ void ProjectUpdater::check() {
         updateVersion(incompatibleVersions[i]);
     }
 
+    emit progress(95, "Copying recent executable and scripts");
+    copyExecutable();
+    copySystemScripts();
     emit progress(100, "");
+
     emit finished();
 }

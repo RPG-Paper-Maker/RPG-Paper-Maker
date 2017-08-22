@@ -67,7 +67,7 @@ QString ControlNewproject::filterDirectoryName(const QString & s){
 
 QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir pathLocation(location);
-    QString pathDir(Wanok::pathCombine(location,dirName));
+    QString pathDir(Wanok::pathCombine(location, dirName));
 
     // Checking if the project can be created
     if (dirName.count() == 0)
@@ -80,13 +80,6 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
         return "The directory " + dirName + " already exists.";
 
     // If all is ok, then let's fill the project folder
-
-    // Creating file game.rpm
-    QFile file(Wanok::pathCombine(pathDir, "game.rpm"));
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return "Error while creating game.rpm file";
-    QTextStream out(&file);
-    out << Project::ENGINE_VERSION;
 
     // Copying a basic project content
     QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
@@ -113,6 +106,9 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     Wanok::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
+    QString error = project->createRPMFile();
+    if (error != NULL)
+        return error;
 
     // Copying a basic project content
     if (!project->copyOSFiles()) {
