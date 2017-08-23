@@ -39,6 +39,9 @@ public:
     virtual ~EngineUpdater();
     static void writeBasicJSONFile();
     static void getJSONFile(QJsonObject &obj, QString source, QString target);
+    static void getJSONDir(QJsonObject &obj, QJsonArray& files, QString target);
+    static void getJSONExeEngine(QJsonObject &obj, QString os);
+    static void getJSONExeGame(QJsonObject &obj, QString os);
     void start();
 
 protected:

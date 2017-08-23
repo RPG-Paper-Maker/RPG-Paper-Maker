@@ -51,7 +51,8 @@ EngineUpdater::~EngineUpdater()
 // -------------------------------------------------------
 
 void EngineUpdater::writeBasicJSONFile() {
-    QJsonObject obj, objFile;
+    QJsonObject obj, objFile, objExeEngine, objExeGame,
+            objWin32, objLinux, objOsx;
     QJsonArray tabScripts;
 
     // Last version
@@ -60,7 +61,7 @@ void EngineUpdater::writeBasicJSONFile() {
     // Includes
     getJSONFile(objFile,
                 "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                "RPG-Paper-Maker/develop/Game/Content/Datas/Scripts/System/"
+                "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                 "desktop/includes.js",
                 "Content/basic/Content/Datas/Scripts/System/desktop/"
                 "includes.js");
@@ -78,13 +79,32 @@ void EngineUpdater::writeBasicJSONFile() {
         objFile = QJsonObject();
         getJSONFile(objFile,
                     "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                    "RPG-Paper-Maker/develop/Game/Content/Datas/Scripts/System/"
+                    "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                     + name,
                     "Content/basic/Content/Datas/Scripts/System/" + name);
         tabScripts.append(objFile);
     }
     obj["scripts"] = tabScripts;
 
+    // Exe Engine
+    getJSONExeEngine(objWin32, "win32");
+    getJSONExeEngine(objLinux, "linux");
+    getJSONExeEngine(objOsx, "osx");
+    objExeEngine["win32"] = objWin32;
+    objExeEngine["linux"] = objLinux;
+    objExeEngine["osx"] = objOsx;
+    obj["exeEngine"] = objExeEngine;
+
+    // Exe Game
+    getJSONExeGame(objWin32, "win32");
+    getJSONExeGame(objLinux, "linux");
+    getJSONExeGame(objOsx, "osx");
+    objExeGame["win32"] = objWin32;
+    objExeGame["linux"] = objLinux;
+    objExeGame["osx"] = objOsx;
+    obj["exeGame"] = objExeGame;
+
+    // Write
     Wanok::writeOtherJSON(Wanok::pathCombine(
                               Wanok::pathCombine(QDir::currentPath(),
                                                  "Content"), "versions.json"),
@@ -98,6 +118,46 @@ void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
 {
     obj["source"] = source;
     obj["target"] = target;
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getJSONDir(QJsonObject &obj, QJsonArray& files,
+                               QString target)
+{
+    obj["files"] = files;
+    obj["target"] = target;
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getJSONExeEngine(QJsonObject& obj, QString os) {
+    QString exe;
+
+    if (os == "win32")
+        exe = "RPG Paper Maker.exe";
+    else if (os == "linux")
+        exe = "RPG-Paper-Maker";
+    else
+        exe = "RPG-Paper-Maker.app";
+
+    getJSONFile(obj, "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/"
+                     "master/Engine/Dependencies/" + os + "/" + exe, exe);
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getJSONExeGame(QJsonObject& obj, QString os) {
+    QString exe = "Game";
+
+    if (os == "win32")
+        exe += ".exe";
+    else if (os == "osx")
+        exe += ".app";
+
+    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
+                "RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
+                "Content/basic/" + os + "/" + exe);
 }
 
 // -------------------------------------------------------
