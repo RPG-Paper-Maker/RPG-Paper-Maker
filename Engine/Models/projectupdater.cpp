@@ -166,22 +166,27 @@ void ProjectUpdater::check() {
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (m_project->version() == incompatibleVersions[i]) {
+        if (ProjectUpdater::versionDifferent(m_project->version(),
+                                             incompatibleVersions[i]) == 1)
+        {
             index = i;
             break;
         }
     }
 
+    // Updating for each version
     for (int i = index; i < incompatibleVersionsCount; i++) {
         emit progress(80, "Checking version " + incompatibleVersions[i] +
                       "...");
         updateVersion(incompatibleVersions[i]);
     }
 
+    // Copy recent executable and scripts
     emit progress(95, "Copying recent executable and scripts");
     copyExecutable();
     copySystemScripts();
     emit progress(100, "");
+    QThread::sleep(1);
 
     emit finished();
 }

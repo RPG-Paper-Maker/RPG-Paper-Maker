@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(on_updateCheckFinished(bool)));
     thread->start();
 
-    EngineUpdater::writeBasicJSONFile();
+    //EngineUpdater::writeBasicJSONFile();
 }
 
 MainWindow::~MainWindow()

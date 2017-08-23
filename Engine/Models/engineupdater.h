@@ -22,6 +22,7 @@
 
 #include <QCoreApplication>
 #include <QJsonObject>
+#include "engineupdatefilekind.h"
 
 // -------------------------------------------------------
 //
@@ -43,6 +44,18 @@ public:
     static void getJSONExeEngine(QJsonObject &obj, QString os);
     static void getJSONExeGame(QJsonObject &obj, QString os);
     void start();
+    void updateVersion(QJsonObject& obj);
+    void download(EngineUpdateFileKind action, QJsonObject& obj);
+    void downloadFile(EngineUpdateFileKind action, QJsonObject& obj);
+    void addFile(QString& source, QString& target);
+    void removeFile(QString& target);
+    void replaceFile(QString& source, QString& target);
+    void downloadFolder(EngineUpdateFileKind action, QJsonObject& obj);
+    void addFolder(QString& target, QJsonArray& files);
+    void removeFolder(QString& target);
+    void replaceFolder(QString& target, QJsonArray& files);
+    void downloadExecutables();
+    void downloadScripts();
 
 protected:
     QJsonObject m_document;

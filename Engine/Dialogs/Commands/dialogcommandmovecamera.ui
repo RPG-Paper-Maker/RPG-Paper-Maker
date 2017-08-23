@@ -203,6 +203,9 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBoxCameraOrientation">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Take account of camera orientation</string>
                 </property>

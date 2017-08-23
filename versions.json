@@ -369,5 +369,8 @@
             "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/datas-keyboard.js",
             "target": "Content/basic/Content/Datas/Scripts/System/datas-keyboard.js"
         }
-    ]
+    ],
+	"versions": [
+		
+	]
 }
