@@ -6,7 +6,7 @@
 
 CONFIG += c++11
 
-QT       += core gui opengl
+QT       += core gui opengl network
 
 win32{
     LIBS += -lOpengl32
@@ -194,7 +194,18 @@ HEADERS += \
     Dialogs/Systems/dialogsystemstate.h \
     Dialogs/dialoglocation.h \
     Dialogs/Commands/dialogcommandwait.h \
-    CustomWidgets/widgetgraphics.h
+    CustomWidgets/widgetgraphics.h \
+    Dialogs/Systems/dialogsystemlang.h \
+    Enums/drawkind.h \
+    Enums/mapeditormodeskind.h \
+    MapEditor/lands.h \
+    MapEditor/vertexbillboard.h \
+    MapEditor/threadmapportionloader.h \
+    MapEditor/spritewall.h \
+    Dialogs/Commands/dialogcommandmovecamera.h \
+    Models/projectupdater.h \
+    Dialogs/dialogprogress.h \
+    Models/engineupdater.h
 
 SOURCES += \
     main.cpp \
@@ -347,7 +358,16 @@ SOURCES += \
     Dialogs/Systems/dialogsystemstate.cpp \
     Dialogs/dialoglocation.cpp \
     Dialogs/Commands/dialogcommandwait.cpp \
-    CustomWidgets/widgetgraphics.cpp
+    CustomWidgets/widgetgraphics.cpp \
+    Dialogs/Systems/dialogsystemlang.cpp \
+    MapEditor/lands.cpp \
+    MapEditor/vertexbillboard.cpp \
+    MapEditor/threadmapportionloader.cpp \
+    MapEditor/spritewall.cpp \
+    Dialogs/Commands/dialogcommandmovecamera.cpp \
+    Models/projectupdater.cpp \
+    Dialogs/dialogprogress.cpp \
+    Models/engineupdater.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -406,7 +426,10 @@ FORMS += \
     CustomWidgets/widgettilesetsettings.ui \
     Dialogs/Systems/dialogsystemstate.ui \
     Dialogs/dialoglocation.ui \
-    Dialogs/Commands/dialogcommandwait.ui
+    Dialogs/Commands/dialogcommandwait.ui \
+    Dialogs/Systems/dialogsystemlang.ui \
+    Dialogs/Commands/dialogcommandmovecamera.ui \
+    Dialogs/dialogprogress.ui
 
 OTHER_FILES += \
     style.qss
@@ -433,11 +456,13 @@ win32{
 FROMS= \"$$shell_path($$PWD\\..\\Game\\Content\\Datas\\Scripts)\"
 DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
 win32{
-    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas)\"
+    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
 }
 
-copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
-first.depends = $(first) copyBR
-export(first.depends)
-export(copyBR.commands)
-QMAKE_EXTRA_TARGETS += first copyBR
+!equals(PWD, $${OUT_PWD}) {
+    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
+    first.depends = $(first) copyBR
+    export(first.depends)
+    export(copyBR.commands)
+    QMAKE_EXTRA_TARGETS += first copyBR
+}

@@ -61,6 +61,10 @@ int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }
 
 int BattleSystemDatas::idStatisticExp() const { return m_idStatisticExp; }
 
+void BattleSystemDatas::setIdStatisticLevel(int i) { m_idStatisticLevel = i; }
+
+void BattleSystemDatas::setIdStatisticExp(int i) { m_idStatisticExp = i; }
+
 QStandardItemModel* BattleSystemDatas::modelWeaponsKind() const {
     return m_modelWeaponsKind;
 }
@@ -95,36 +99,38 @@ QStandardItemModel* BattleSystemDatas::modelCommonBattleCommand() const {
 //
 // -------------------------------------------------------
 
-QVector<SystemStatistic*> BattleSystemDatas::getFixStatisticsList() const{
-    QVector<SystemStatistic*> list;
-    int l;
-
-    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
+void BattleSystemDatas::getSortedStatistics(QVector<SystemStatistic*> &fixes,
+                                            QVector<SystemStatistic*> &bars)
+const
+{
+    int l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         SystemStatistic* statistic =
                 (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
                 .value<quintptr>();
-        if (statistic->commands().at(0) == "0") list.append(statistic);
+        if (statistic->isFix())
+            fixes.append(statistic);
+        else
+            bars.append(statistic);
     }
-
-    return list;
 }
 
 // -------------------------------------------------------
 
-QVector<SystemStatistic*> BattleSystemDatas::getBarStatisticsList() const{
-    QVector<SystemStatistic*> list;
-    int l;
+void BattleSystemDatas::updateEquipments(){
+    updateEquipmentsKind(m_modelWeaponsKind);
+    updateEquipmentsKind(m_modelArmorsKind);
+}
 
-    l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l; i++){
-        SystemStatistic* statistic =
-                (SystemStatistic*) m_modelCommonStatistics->item(i)->data()
+// -------------------------------------------------------
+
+void BattleSystemDatas::updateEquipmentsKind(QStandardItemModel* model){
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        SystemWeaponArmorKind* kind =
+                (SystemWeaponArmorKind*) model->item(i)->data()
                 .value<quintptr>();
-        if (statistic->commands().at(0) == "1") list.append(statistic);
+        kind->updateEquipment();
     }
-
-    return list;
 }
 
 // -------------------------------------------------------
@@ -152,38 +158,21 @@ void BattleSystemDatas::setDefaultOptions(){
 void BattleSystemDatas::setDefaultWeaponsKind(){
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    SuperListItem* equipment;
-    QStandardItemModel* equipments;
     QString names[] = {"Sword", "Axe", "Spear", "Tome", "Staff", "Bow",
                        "Firearm"};
-    QVector<bool> equipmentsAssigment =
-            QVector<bool>({true,true,false,false,false,false,false});
+    QList<bool> equipmentsAssigment =
+            QList<bool>({true,true,false,false,false,false,false});
     int length = (sizeof(names)/sizeof(*names));
 
     for (int i = 0; i < length; i++){
-        equipments = new QStandardItemModel;
-
-        for (int j = 0; j < equipmentsAssigment.size(); j++){
-            item = new QStandardItem;
-            equipment = SuperListItem::getById(m_modelCommonEquipment
-                                               ->invisibleRootItem(), j+1);
-            item->setData(QVariant::fromValue(
-                              reinterpret_cast<quintptr>(equipment)));
-            item->setCheckable(true);
-            if (equipmentsAssigment[j]) item->setCheckState(Qt::Checked);
-            item->setText(equipment->toString());
-            equipments->appendRow(item);
-        }
-
         sysWeaponArmorKind =
-                new SystemWeaponArmorKind(i+1,
+                new SystemWeaponArmorKind(i + 1,
                                           new LangsTranslation(names[i]),
-                                          equipments);
+                                          equipmentsAssigment);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysWeaponArmorKind)));
         item->setText(sysWeaponArmorKind->toString());
-
         m_modelWeaponsKind->appendRow(item);
     }
 }
@@ -193,49 +182,32 @@ void BattleSystemDatas::setDefaultWeaponsKind(){
 void BattleSystemDatas::setDefaultArmorsKind(){
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    SuperListItem* equipment;
-    QStandardItemModel* equipments;
     QString names[] = {"Helmet", "Cap", "Mail", "Vest", "Vambraces",
                        "Guards", "Greaves", "Leggings", "Ring", "Necklace"};
-    QVector<bool> equipmentsAssigment[] = {
-        QVector<bool>({false,false,true,false,false,false,false}),
-        QVector<bool>({false,false,true,false,false,false,false}),
-        QVector<bool>({false,false,false,true,false,false,false}),
-        QVector<bool>({false,false,false,true,false,false,false}),
-        QVector<bool>({false,false,false,false,true,false,false}),
-        QVector<bool>({false,false,false,false,true,false,false}),
-        QVector<bool>({false,false,false,false,false,true,false}),
-        QVector<bool>({false,false,false,false,false,true,false}),
-        QVector<bool>({false,false,false,false,false,false,true}),
-        QVector<bool>({false,false,false,false,false,false,true})
+    QList<bool> equipmentsAssigment[] = {
+        QList<bool>({false,false,true,false,false,false,false}),
+        QList<bool>({false,false,true,false,false,false,false}),
+        QList<bool>({false,false,false,true,false,false,false}),
+        QList<bool>({false,false,false,true,false,false,false}),
+        QList<bool>({false,false,false,false,true,false,false}),
+        QList<bool>({false,false,false,false,true,false,false}),
+        QList<bool>({false,false,false,false,false,true,false}),
+        QList<bool>({false,false,false,false,false,true,false}),
+        QList<bool>({false,false,false,false,false,false,true}),
+        QList<bool>({false,false,false,false,false,false,true})
     };
 
     int length = (sizeof(names)/sizeof(*names));
 
     for (int i = 0; i < length; i++){
-        equipments = new QStandardItemModel;
-
-        for (int j = 0; j < equipmentsAssigment[i].size(); j++){
-            item = new QStandardItem;
-            equipment = SuperListItem::getById(
-                        m_modelCommonEquipment->invisibleRootItem(), j+1);
-            item->setData(QVariant::fromValue(
-                              reinterpret_cast<quintptr>(equipment)));
-            item->setCheckable(true);
-            if (equipmentsAssigment[i][j]) item->setCheckState(Qt::Checked);
-            item->setText(equipment->toString());
-            equipments->appendRow(item);
-        }
-
         sysWeaponArmorKind =
                 new SystemWeaponArmorKind(i+1,
                                           new LangsTranslation(names[i]),
-                                          equipments);
+                                          equipmentsAssigment[i]);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysWeaponArmorKind)));
         item->setText(sysWeaponArmorKind->toString());
-
         m_modelArmorsKind->appendRow(item);
     }
 }
@@ -328,32 +300,22 @@ void BattleSystemDatas::setDefaultCommonEquipment(){
 void BattleSystemDatas::setDefaultCommonStatistics(){
     int i = 1;
     SystemStatistic* items[] = {
-        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("HP"), "hp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("MP"), "mp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("TP"), "tp",
-        QVector<QString>({"1"})),
-        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Strength"), "str",
-        QVector<QString>({"0"})),
+        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv", true),
+        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp", false),
+        new SystemStatistic(i++, new LangsTranslation("HP"), "hp", false),
+        new SystemStatistic(i++, new LangsTranslation("MP"), "mp", false),
+        new SystemStatistic(i++, new LangsTranslation("TP"), "tp", false),
+        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk", true),
+        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag", true),
+        new SystemStatistic(i++, new LangsTranslation("Strength"), "str", true),
         new SystemStatistic(i++, new LangsTranslation("Intelligence"), "int",
-        QVector<QString>({"0"})),
+        true),
         new SystemStatistic(i++, new LangsTranslation("P. Defense"), "pdef",
-        QVector<QString>({"0"})),
+        true),
         new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi",
-        QVector<QString>({"0"})),
-        new SystemStatistic(i++, new LangsTranslation("CC"), "cc",
-        QVector<QString>({"0"}))
+        true),
+        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true),
+        new SystemStatistic(i++, new LangsTranslation("CC"), "cc", true)
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -436,7 +398,6 @@ void BattleSystemDatas::read(const QJsonObject &json){
         SystemWeaponArmorKind* sysWeaponKind = new SystemWeaponArmorKind;
         QJsonObject jsonKind = jsonList[i].toObject();
         sysWeaponKind->read(jsonKind);
-        sysWeaponKind->readEquipments(m_modelCommonEquipment, jsonKind);
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysWeaponKind)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
@@ -451,7 +412,6 @@ void BattleSystemDatas::read(const QJsonObject &json){
         SystemWeaponArmorKind* sysArmorKind = new SystemWeaponArmorKind;
         QJsonObject jsonKind = jsonList[i].toObject();
         sysArmorKind->read(jsonKind);
-        sysArmorKind->readEquipments(m_modelCommonEquipment, jsonKind);
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(sysArmorKind)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

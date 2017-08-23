@@ -48,6 +48,7 @@ public:
     void setY(int);
     void setYplus(int yPlus);
     void setZ(int z);
+    void setPositions(Position3D& position);
     float getX() const;
     float getY() const;
     float getZ() const;
@@ -57,6 +58,7 @@ public:
     Portion getPortion() const;
     void loadTexture(QString path);
     void updatePositionSquare();
+    void centerInSquare(int offset);
     void initializeGL();
     void initializeVertices();
     void initializeSquareSize(int s);

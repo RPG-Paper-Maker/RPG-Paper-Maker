@@ -39,4 +39,5 @@ function quit(){
     Qt.quit();
 }
 
-Qt.include("file:Content/Datas/Scripts/desktop/includes.js")
+Qt.include("file:Content/Datas/Scripts/System/desktop/includes.js")
+Qt.include("file:Content/Datas/Scripts/Plugins/desktop/includes.js")

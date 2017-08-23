@@ -41,7 +41,7 @@
 //
 // -------------------------------------------------------
 
-class MapObjects : public Serializable
+class MapObjects : protected QOpenGLFunctions, public Serializable
 {
 public:
     MapObjects();
@@ -52,19 +52,36 @@ public:
     SystemCommonObject* removeObject(Position& p);
     bool addObject(Position& p, SystemCommonObject* object);
     bool deleteObject(Position& p);
+
+    void removeObjectsOut(QList<int> &listDeletedObjectsIDs,
+                          MapProperties& properties);
+
     void clearSprites();
     void initializeVertices(int squareSize,
-                            QHash<int, QOpenGLTexture *> &characters);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
+                            QHash<int, QOpenGLTexture *> &characters,
+                            int& spritesOffset);
+    void initializeGL(QOpenGLShaderProgram* programStatic,
+                      QOpenGLShaderProgram *programFace);
     void updateGL();
-    void paintGL();
+    void paintStaticSprites(int textureID, QOpenGLTexture* texture);
+    void paintFaceSprites(int textureID, QOpenGLTexture* texture);
+    void paintSquares();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 private:
-    QHash<int, QHash<Position, SystemCommonObject*>*> m_sprites;
-    QList<SpriteObject*> m_spritesGL;
+    QHash<Position, SystemCommonObject*> m_all;
+    QHash<int, QList<SpriteObject*>*> m_spritesStaticGL;
+    QHash<int, QList<SpriteObject*>*> m_spritesFaceGL;
+
+    // OpenGL informations
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_programStatic;
 };
 
 #endif // MAPOBJECTS_H

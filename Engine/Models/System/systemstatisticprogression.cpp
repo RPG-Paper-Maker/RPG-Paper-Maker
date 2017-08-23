@@ -88,6 +88,8 @@ void SystemStatisticProgression::setCopy(const SystemStatisticProgression&
                                          statisticProgression)
 {
     SuperListItem::setCopy(statisticProgression);
+    p_id = statisticProgression.p_id;
+
     m_initialValue = statisticProgression.initialValue();
     m_finalValue = statisticProgression.finalValue();
 

@@ -55,6 +55,23 @@ Window {
         Game.$canvasHUD = canvas;
     }
 
+    function showError(e){
+        dialogError.text = e.fileName + " - line: " + e.lineNumber + " -> " +
+                e.message;
+        dialogError.open();
+    }
+
+    MessageDialog {
+        id: dialogError
+        title: "Error"
+        icon: StandardIcon.Critical
+        visible: false
+
+        onButtonClicked: {
+            Game.quit();
+        }
+    }
+
     Timer {
         interval: 1000; running: true; repeat: true
         onTriggered: {
@@ -77,35 +94,44 @@ Window {
         }
 
         Keys.onPressed: {
-            var key = event.key;
+            try{
+                var key = event.key;
 
-            if (key === Qt.Key_F12){
-                Game.quit();
+                if (key === Qt.Key_F12){
+                    Game.quit();
+                }
+
+                if (!event.isAutoRepeat){
+                    Game.$keysPressed.unshift(key);
+                    if (!Game.Wanok.isLoading())
+                        Game.onKeyPressed(key);
+                }
+
+                // Wait 50 ms for a slower update
+                var t = new Date().getTime();
+                if (t - startTime >= 50){
+                    startTime = t;
+                    if (!Game.Wanok.isLoading())
+                        Game.onKeyPressedAndRepeat(key);
+                }
             }
-
-            if (!event.isAutoRepeat){
-                Game.$keysPressed.unshift(key);
-                if (!Game.Wanok.isLoading())
-                    Game.onKeyPressed(key);
+            catch (e){
+                showError(e);
             }
-
-            // Wait 50 ms for a slower update
-            var t = new Date().getTime();
-            if (t - startTime >= 50){
-                startTime = t;
-                if (!Game.Wanok.isLoading())
-                    Game.onKeyPressedAndRepeat(key);
-            }
-
         }
 
         Keys.onReleased: {
-            if (event.isAutoRepeat) return;
-            var key = event.key;
-            Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
+            try{
+                if (event.isAutoRepeat) return;
+                var key = event.key;
+                Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
 
-            if (!Game.Wanok.isLoading())
-                Game.onKeyReleased(key);
+                if (!Game.Wanok.isLoading())
+                    Game.onKeyReleased(key);
+            }
+            catch (e){
+                showError(e);
+            }
         }
     }
 
@@ -118,34 +144,57 @@ Window {
         anchors.fill: parent
 
         onInitializeGL: {
-            Game.$canvasWidth = canvas3d.width;
-            Game.$canvasHeight = canvas3d.height;
-            Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
-            Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
-            Game.initialize();
-            Game.initializeGL(canvas3d);
+            try{
+                Game.$DIALOG_ERROR = dialogError;
+                Game.$canvasWidth = canvas3d.width;
+                Game.$canvasHeight = canvas3d.height;
+                Game.$windowX = Game.$canvasWidth / Game.$SCREEN_X;
+                Game.$windowY = Game.$canvasHeight / Game.$SCREEN_Y;
+                Game.initialize();
+                Game.initializeGL(canvas3d);
+            }
+            catch (e){
+                showError(e);
+            }
         }
 
         onPaintGL: {
-            if (!Game.Wanok.isLoading()){
-                Game.update();
-                if (!Game.$gameStack.isEmpty()){
-                    var callback = Game.$gameStack.top().callBackAfterLoading;
-                    if (callback === null){
-                        Game.draw3D(canvas3d);
-                        Game.drawHUD(canvas);
-                        canvas.requestPaint();
+            try{
+                if (!Game.Wanok.isLoading()) {
+                    if (!Game.$gameStack.isEmpty()) {
+                        var callback =
+                                Game.$gameStack.top().callBackAfterLoading;
+                        if (callback === null) {
+                            Game.update();
+                            Game.draw3D(canvas3d);
+                            Game.drawHUD(canvas);
+                            canvas.requestPaint();
+                        }
+                        else {
+                            Game.$renderer.render(
+                                        Game.$loadingScene,
+                                        Game.$currentMap.camera.threeCamera);
+                            callback.call(Game.$gameStack.top());
+                        }
                     }
                     else
-                        callback.call(Game.$gameStack.top());
+                        Game.$gameStack.pushTitleScreen();
                 }
+            }
+            catch (e) {
+                showError(e);
             }
         }
 
         onResizeGL: {
-            Game.$canvasWidth = canvas3d.width;
-            Game.$canvasHeight = canvas3d.height;
-            Game.resizeGL(canvas3d);
+            try{
+                Game.$canvasWidth = canvas3d.width;
+                Game.$canvasHeight = canvas3d.height;
+                Game.resizeGL(canvas3d);
+            }
+            catch (e){
+                showError(e);
+            }
         }
     }
 

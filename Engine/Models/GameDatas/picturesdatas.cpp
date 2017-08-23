@@ -46,6 +46,10 @@ QStandardItemModel* PicturesDatas::model(PictureKind kind) const {
     return m_models[kind];
 }
 
+void PicturesDatas::setModel(PictureKind kind, QStandardItemModel *model) {
+    m_models[kind] = model;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

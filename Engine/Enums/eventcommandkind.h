@@ -52,7 +52,8 @@ enum class EventCommandKind {
     SendEvent,
     TeleportObject,
     MoveObject,
-    Wait
+    Wait,
+    MoveCamera
 };
 
 #endif // EVENTCOMMANDKIND_H

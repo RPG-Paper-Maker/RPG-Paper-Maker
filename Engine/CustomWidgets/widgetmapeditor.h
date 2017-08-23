@@ -48,7 +48,8 @@ public:
     void setPanelTextures(PanelTextures* m);
     void setTreeMapNode(QStandardItem* item);
     Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
-                 int cameraDistance, int cameraHeight);
+                 int cameraDistance, int cameraHeight,
+                 double cameraHorizontalAngle);
     void deleteMap();
     void initializeSpinBoxesCoords(QSpinBox* x, QSpinBox* z);
     void resizeGL(int width, int height);
@@ -56,7 +57,7 @@ public:
     void paintGL();
     void needUpdateMap(int idMap, QVector3D *position,
                        QVector3D *positionObject, int cameraDistance,
-                       int cameraHeight);
+                       int cameraHeight, double cameraHorizontalAngle);
     void initializeMap();
     void save();
     void onKeyPress(int k, double speed);
@@ -87,6 +88,7 @@ private:
     QVector3D* m_positionObject;
     int m_cameraDistance;
     int m_cameraHeight;
+    double m_cameraHorizontalAngle;
     ContextMenuList* m_contextMenu;
     long m_elapsedTime;
 

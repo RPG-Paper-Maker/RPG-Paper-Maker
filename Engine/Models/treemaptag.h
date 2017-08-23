@@ -45,8 +45,11 @@ public:
     QVector3D* positionObject() const;
     int cameraDistance() const;
     int cameraHeight() const;
+    double cameraHorizontalAngle() const;
     void setCameraDistance(int d);
     void setCameraHeight(int h);
+    void setCameraHorizontalAngle(double a);
+    void reset();
     static void copyItem(const QStandardItem* from, QStandardItem* to);
     static void copyTree(const QStandardItem* from, QStandardItem* to);
 
@@ -58,6 +61,7 @@ protected:
     QVector3D* m_positionObject;
     int m_cameraDistance;
     int m_cameraHeight;
+    double m_cameraHorizontalAngle;
 };
 
 Q_DECLARE_METATYPE(TreeMapTag)

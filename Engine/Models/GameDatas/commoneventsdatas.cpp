@@ -81,7 +81,7 @@ QStandardItemModel* CommonEventsDatas::modelCommonObjects() const {
 
 void CommonEventsDatas::setDefault(){
     SystemCommonReaction* react;
-    SystemCommonObject* objectHero;
+    SystemCommonObject* object;
     SuperListItem* super;
     QStandardItem* item;
 
@@ -125,11 +125,17 @@ void CommonEventsDatas::setDefault(){
     m_modelCommonReactors->appendRow(item);
 
     // Common objects
-    objectHero = new SystemCommonObject;
-    objectHero->setDefaultHero(m_modelEventsSystem, m_modelEventsUser);
+    object = new SystemCommonObject;
+    object->setDefaultFirst();
     item = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(objectHero)));
-    item->setText(objectHero->toString());
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(object)));
+    item->setText(object->toString());
+    m_modelCommonObjects->appendRow(item);
+    object = new SystemCommonObject;
+    object->setDefaultHero(m_modelEventsSystem, m_modelEventsUser);
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(object)));
+    item->setText(object->toString());
     m_modelCommonObjects->appendRow(item);
 }
 

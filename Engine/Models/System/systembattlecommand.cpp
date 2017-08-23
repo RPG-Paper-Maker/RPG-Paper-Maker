@@ -27,7 +27,8 @@
 //
 // -------------------------------------------------------
 
-SystemBattleCommand::SystemBattleCommand() : SystemLang()
+SystemBattleCommand::SystemBattleCommand() :
+    SystemBattleCommand(1, new LangsTranslation, 1)
 {
 
 }
@@ -46,10 +47,27 @@ SystemBattleCommand::~SystemBattleCommand(){
 
 int SystemBattleCommand::idSkill() const { return m_idSkill; }
 
+void SystemBattleCommand::setIdSkill(int i) { m_idSkill = i; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemBattleCommand::updateName(){
+    p_name = SuperListItem::getById(
+                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+                ->invisibleRootItem(),
+                m_idSkill)->name();
+}
+
+// -------------------------------------------------------
+
+void SystemBattleCommand::setDefault(){
+    updateName();
+}
+
 // -------------------------------------------------------
 
 bool SystemBattleCommand::openDialog(){
@@ -65,9 +83,18 @@ bool SystemBattleCommand::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemBattleCommand::createCopy() const{
+    SystemBattleCommand* super = new SystemBattleCommand;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemBattleCommand::setCopy(const SystemBattleCommand& battleCommand){
     SystemLang::setCopy(battleCommand);
-    m_idSkill = battleCommand.idSkill();
+
+    m_idSkill = battleCommand.m_idSkill;
 }
 
 // -------------------------------------------------------
@@ -79,10 +106,7 @@ void SystemBattleCommand::setCopy(const SystemBattleCommand& battleCommand){
 void SystemBattleCommand::read(const QJsonObject &json){
     p_id = json["id"].toInt();
     m_idSkill = json["s"].toInt();
-    p_name = SuperListItem::getById(
-                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
-                ->invisibleRootItem(),
-                m_idSkill)->name();
+    updateName();
 }
 
 // -------------------------------------------------------

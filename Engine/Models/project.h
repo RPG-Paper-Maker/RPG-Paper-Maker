@@ -42,7 +42,7 @@ class Project
 public:
     Project();
     virtual ~Project();
-    static const QString VERSION;
+    static const QString ENGINE_VERSION;
     void setDefault();
     QString pathCurrentProject() const;
     void setPathCurrentProject(QString s);
@@ -54,9 +54,13 @@ public:
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
+    QString version() const;
 
     bool read(QString path);
     bool readVersion();
+    bool readOS();
+    bool copyOSFiles();
+    void removeOSFiles();
     void readGameDatas();
     void readLangsDatas();
     void readTreeMapDatas();
@@ -74,6 +78,7 @@ public:
     void writeSystemDatas();
     void saveCurrentMap();
     void updatePictures();
+    QString createRPMFile();
 
 private:
     QString p_pathCurrentProject;

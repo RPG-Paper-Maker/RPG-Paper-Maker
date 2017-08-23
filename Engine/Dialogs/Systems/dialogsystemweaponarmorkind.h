@@ -43,11 +43,11 @@ public:
     explicit DialogSystemWeaponArmorKind(SystemWeaponArmorKind& weaponArmorKind,
                                          QWidget *parent = 0);
     ~DialogSystemWeaponArmorKind();
-    SystemWeaponArmorKind& weaponArmorKind() const;
 
 private:
     Ui::DialogSystemWeaponArmorKind *ui;
     SystemWeaponArmorKind& m_weaponArmorKind;
+    void initialize();
 };
 
 #endif // DIALOGSYSTEMWEAPONARMORKIND_H

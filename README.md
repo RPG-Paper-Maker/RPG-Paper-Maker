@@ -1,6 +1,10 @@
 # RPG Paper Maker
 --------------
 
+[![Join the chat at https://gitter.im/RPG-Paper-Maker/Lobby](https://badges.gitter.im/RPG-Paper-Maker/Lobby.svg)](https://gitter.im/RPG-Paper-Maker/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/Wano-k/RPG-Paper-Maker)
+[![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
+
 RPG Paper Maker is a free game maker engine including a 3D universe with many 2D sprites and some simplified 3D objects. Pretty close to the RPG Maker series, RPG Paper Maker finally give a way to create RPGs in a totally 3D universe as easy as it is in 2D!
 
 ## How to build the project
@@ -43,7 +47,7 @@ When your correction is done, push it (always in your branch). Finally, just pro
 ### How to contribute
 RPG Paper Maker has a `master` branch for stable releases and a `develop` branch for development where you should always try to submit your features.
 
-**If you want to add new features or correct a bug** for the next stable version, we are always using this [BACKLOG](https://docs.google.com/spreadsheets/d/1_gKiMl5pXQjj8QwfN6QEIDqjRJ4e77AgtEafzPKTzQs/edit?usp=sharing) which is listing all the tasks that needs to be done according to priority and difficulty. If you would like to do one of the task in the backlog, you should signal that you are on it by creating an issue in this git. Same thing if you want to do anything that is not already in the backlog.
+**If you want to add new features or correct a bug** for the next stable version, we are always using this [BACKLOG](https://docs.google.com/spreadsheets/d/1_gKiMl5pXQjj8QwfN6QEIDqjRJ4e77AgtEafzPKTzQs/edit?usp=sharing) which is listing all the tasks that needs to be done according to priority and difficulty. If you would like to do one of the task in the backlog, you should signal that you are on it by creating an issue in this git. Same thing if you want to do anything that is not already in the backlog. See also the [TODO list](https://github.com/Wano-k/RPG-Paper-Maker/projects/1) for accessible features addings.
 
 Try to respect the code style as much as possible. **We are much more strict on the game scripts' code** that is a code that can be edited by the user and particularly needs to be clear.
 

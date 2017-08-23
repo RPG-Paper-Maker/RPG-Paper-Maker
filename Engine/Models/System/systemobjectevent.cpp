@@ -147,6 +147,7 @@ void SystemObjectEvent::setDefault(){
 void SystemObjectEvent::setDefaultHero(){
     SystemReaction* reaction = new SystemReaction;
     m_reactions[1] = reaction;
+    reaction->setBlockingHero(false);
 }
 
 // -------------------------------------------------------
@@ -328,6 +329,9 @@ void SystemObjectEvent::read(const QJsonObject &json){
     SystemReaction* reaction;
     QStandardItem* item;
 
+    // Is system
+    m_isSystem = json["sys"].toBool();
+
     // Parameters
     QJsonArray jsonParameters = json["p"].toArray();
     for (int i = 0; i < jsonParameters.size(); i++){
@@ -348,9 +352,6 @@ void SystemObjectEvent::read(const QJsonObject &json){
         m_reactions[i.key().toInt()] = reaction;
     }
     json["r"] = jsonReactions;
-
-    // Is system
-    m_isSystem = json["sys"].toBool();
 }
 
 // -------------------------------------------------------
@@ -362,6 +363,9 @@ void SystemObjectEvent::write(QJsonObject &json) const{
     QJsonObject jsonReactions;
     QJsonObject obj;
     int l;
+
+    // Is system
+    json["sys"] = m_isSystem;
 
     // Parameters
     l = m_modelParameters->invisibleRootItem()->rowCount();
@@ -382,7 +386,4 @@ void SystemObjectEvent::write(QJsonObject &json) const{
         jsonReactions[QString::number(i.key())] = obj;
     }
     json["r"] = jsonReactions;
-
-    // Is system
-    json["sys"] = m_isSystem;
 }

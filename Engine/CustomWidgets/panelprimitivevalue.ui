@@ -71,13 +71,13 @@
         <widget class="QSpinBox" name="spinBoxNumber">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>180</width>
            <height>23</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
+           <width>180</width>
            <height>23</height>
           </size>
          </property>
@@ -141,10 +141,41 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetVariable" name="widgetVariable" native="true">
+        <widget class="QDoubleSpinBox" name="doubleSpinBoxNumber">
+         <property name="minimumSize">
+          <size>
+           <width>180</width>
+           <height>23</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>160</width>
+           <width>180</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="decimals">
+          <number>3</number>
+         </property>
+         <property name="minimum">
+          <double>-99999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>99999.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="WidgetVariable" name="widgetVariable" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>180</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>180</width>
            <height>23</height>
           </size>
          </property>

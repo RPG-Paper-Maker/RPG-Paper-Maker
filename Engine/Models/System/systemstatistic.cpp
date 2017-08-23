@@ -33,10 +33,10 @@ SystemStatistic::SystemStatistic() : SystemLang()
 
 SystemStatistic::SystemStatistic(int i, LangsTranslation* names,
                                  QString abbreviation,
-                                 QVector<QString> commands) :
+                                 bool isFix) :
     SystemLang(i,names),
     m_abbreviation(abbreviation),
-    m_commands(commands)
+    m_isFix(isFix)
 {
 
 }
@@ -47,7 +47,11 @@ SystemStatistic::~SystemStatistic(){
 
 QString SystemStatistic::abbreviation() const { return m_abbreviation; }
 
-QVector<QString> SystemStatistic::commands() const {return m_commands; }
+void SystemStatistic::setAbbreviation(QString s) { m_abbreviation = s; }
+
+bool SystemStatistic::isFix() const { return m_isFix; }
+
+void SystemStatistic::setIsFix(bool b) { m_isFix = b; }
 
 // -------------------------------------------------------
 //
@@ -68,10 +72,18 @@ bool SystemStatistic::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemStatistic::createCopy() const{
+    SystemStatistic* super = new SystemStatistic;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemStatistic::setCopy(const SystemStatistic& statistic){
     SystemLang::setCopy(statistic);
     m_abbreviation = statistic.abbreviation();
-    m_commands = statistic.commands();
+    m_isFix = statistic.m_isFix;
 }
 
 // -------------------------------------------------------
@@ -83,11 +95,7 @@ void SystemStatistic::setCopy(const SystemStatistic& statistic){
 void SystemStatistic::read(const QJsonObject &json){
     SystemLang::read(json);
     m_abbreviation = json["abr"].toString();
-
-    m_commands.clear();
-    QJsonArray jsonCommands = json["commands"].toArray();
-    for (int i = 0; i < jsonCommands.size(); i++)
-        m_commands.append(jsonCommands.at(i).toString());
+    m_isFix = json["fix"].toBool();
 }
 
 // -------------------------------------------------------
@@ -95,9 +103,5 @@ void SystemStatistic::read(const QJsonObject &json){
 void SystemStatistic::write(QJsonObject &json) const{
     SystemLang::write(json);
     json["abr"] = m_abbreviation;
-
-    QJsonArray jsonCommands;
-    for (int i = 0; i < m_commands.size(); i++)
-        jsonCommands.append(m_commands.at(i));
-    json["commands"] = jsonCommands;
+    json["fix"] = m_isFix;
 }

@@ -161,8 +161,11 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
                   <property name="maximum">
-                   <number>16</number>
+                   <number>2000</number>
                   </property>
                  </widget>
                 </item>
@@ -191,8 +194,11 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
                   <property name="maximum">
-                   <number>16</number>
+                   <number>2000</number>
                   </property>
                  </widget>
                 </item>
@@ -233,6 +239,9 @@
                     <width>75</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
                   </property>
                   <property name="maximum">
                    <number>0</number>

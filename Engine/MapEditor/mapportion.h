@@ -41,21 +41,37 @@ public:
     MapPortion();
     virtual ~MapPortion();
     MapObjects* mapObjects() const;
+    bool isVisibleLoaded() const;
+    bool isVisible() const;
+    bool isLoaded() const;
+    void setIsVisible(bool b);
+    void setIsLoaded(bool b);
     bool isEmpty() const;
-    bool addFloor(Position& p, FloorDatas* floor);
-    bool deleteFloor(Position& p);
-    bool addSprite(Position& p, SpriteDatas* sprite);
+    LandDatas* getLand(Position& p);
+    bool addLand(Position& p, LandDatas* land);
+    bool deleteLand(Position& p);
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                   int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 
+    void removeLandOut(MapProperties& properties);
+    void removeSpritesOut(MapProperties& properties);
+    void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
+                          MapProperties& properties);
+
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);
-    void initializeGL(QOpenGLShaderProgram *programStatic);
+    void initializeGL(QOpenGLShaderProgram *programStatic,
+                      QOpenGLShaderProgram *programFace);
     void updateGL();
     void paintFloors();
     void paintSprites();
-    void paintObjects();
+    void paintFaceSprites();
+    void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
+    void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);
+    void paintObjectsSquares();
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
@@ -64,6 +80,8 @@ private:
     Floors* m_floors;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
+    bool m_isVisible;
+    bool m_isLoaded;
 };
 
 #endif // MAPPORTION_H

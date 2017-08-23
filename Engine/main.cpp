@@ -35,12 +35,22 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    // The application can now be used even if called from another directory
+    QDir bin(qApp->applicationDirPath());
+    #ifdef Q_OS_MAC
+        bin.cdUp();
+        bin.cdUp();
+        bin.cdUp();
+    #endif
+    QDir::setCurrent(bin.absolutePath());
+
     // General stylesheet configuration
     QFile file(":/stylesheets/style.qss");
     if (file.open(QFile::ReadOnly)) {
        QString styleSheet = QLatin1String(file.readAll());
        qApp->setStyleSheet(styleSheet);
     }
+    qApp->setWindowIcon(QIcon(":/icons/Ressources/icon.ico"));
 
     // Create document folder for games if not existing
     QString documentsPath =

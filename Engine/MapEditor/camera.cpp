@@ -20,9 +20,9 @@
 #include "camera.h"
 #include <QtMath>
 
-int Camera::defaultDistance = 400;
+int Camera::defaultDistance = 800;
 
-int Camera::defaultHeight = 250;
+int Camera::defaultHeight = 500;
 
 // -------------------------------------------------------
 //
@@ -64,6 +64,8 @@ int Camera::height() const { return m_height; }
 void Camera::setDistance(int d){ m_distance = d; }
 
 void Camera::setHeight(int h){ m_height = h; }
+
+void Camera::setHorizontalAngle(double a) { m_horizontalAngle = a; }
 
 void Camera::addDistance(int d){ m_distance += d; }
 
@@ -140,5 +142,7 @@ void Camera::zoomLess(int gridHeight){
 
 void Camera::onMouseWheelPressed(QPoint& mouse, QPoint& mouseBeforeUpdate){
     m_height += (mouse.y() - mouseBeforeUpdate.y()) * 2;
+    if(m_height <= 40 && m_height >=0) m_height =-40;
+    else if(m_height >= -40 && m_height <=0) m_height =40;
     m_horizontalAngle += (mouse.x() - mouseBeforeUpdate.x()) / 2;
 }

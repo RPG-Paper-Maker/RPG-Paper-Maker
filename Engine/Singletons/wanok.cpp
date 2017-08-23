@@ -28,10 +28,15 @@
 QSet<int> Wanok::mapsToSave;
 
 // PATHS DATAS
+const QString Wanok::pathBasic = pathCombine("Content", "basic");
 const QString Wanok::pathBR = pathCombine("Content", "BR");
 const QString Wanok::pathDatas = pathCombine("Content", "Datas");
 const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
 const QString Wanok::pathScriptsDir = pathCombine(pathDatas, "Scripts");
+const QString Wanok::pathScriptsSystemDir =
+        pathCombine(pathScriptsDir, "System");
+const QString Wanok::pathScriptsPluginsDir =
+        pathCombine(pathScriptsDir, "Plugins");
 const QString Wanok::pathCommonEvents =
         pathCombine(pathDatas, "commonEvents.json");
 const QString Wanok::pathVariables =
@@ -163,11 +168,13 @@ void Wanok::readJSON(QString path, Serializable &obj){
 
 // -------------------------------------------------------
 
-void Wanok::writeOtherJSON(QString path, const QJsonObject &obj){
+void Wanok::writeOtherJSON(QString path, const QJsonObject &obj,
+                           QJsonDocument::JsonFormat format)
+{
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) { return; }
     QJsonDocument saveDoc(obj);
-    saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
+    saveFile.write(saveDoc.toJson(format));
 }
 
 // -------------------------------------------------------
@@ -236,11 +243,13 @@ bool Wanok::isDirEmpty(QString path){
 
 void Wanok::copyAllFiles(QString pathSource, QString pathTarget){
     QDirIterator files(pathSource, QDir::Files);
+    QString path;
 
     while (files.hasNext()){
         files.next();
-        QFile::copy(files.filePath(), Wanok::pathCombine(pathTarget,
-                                                         files.fileName()));
+        path = Wanok::pathCombine(pathTarget, files.fileName());
+        QFile::remove(path);
+        QFile::copy(files.filePath(), path);
     }
 }
 
@@ -318,4 +327,33 @@ QString Wanok::keyToString(int keyInt){
     }
 
     return "?";
+}
+
+// -------------------------------------------------------
+
+int Wanok::mod(int x, int m) {
+    int r = x % m;
+    return r < 0 ? r + m : r;
+}
+
+// -------------------------------------------------------
+
+float Wanok::coefSquareSize() {
+    return Wanok::get()->project()->gameDatas()->systemDatas()->squareSize() /
+           ((float) Wanok::BASIC_SQUARE_SIZE);
+}
+
+// -------------------------------------------------------
+
+QString Wanok::osToString(OSKind os) {
+    switch (os) {
+    case OSKind::Window:
+        return "Window";
+    case OSKind::Linux:
+        return "Linux";
+    case OSKind::Mac:
+        return "Mac";
+    }
+
+    return "";
 }

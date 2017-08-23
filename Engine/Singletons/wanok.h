@@ -22,10 +22,12 @@
 
 #include <QString>
 #include <QKeyEvent>
+#include <QJsonDocument>
 #include "singleton.h"
 #include "project.h"
 #include "map.h"
 #include "enginesettings.h"
+#include "oskind.h"
 
 // -------------------------------------------------------
 //
@@ -53,10 +55,13 @@ public:
     static bool isInConfig;
 
     // PATHS
+    const static QString pathBasic;
     const static QString pathBR;
     const static QString pathDatas;
     const static QString pathMaps;
     const static QString pathScriptsDir;
+    const static QString pathScriptsSystemDir;
+    const static QString pathScriptsPluginsDir;
     const static QString pathCommonEvents;
     const static QString pathVariables;
     const static QString pathSystem;
@@ -102,7 +107,9 @@ public:
     static QString pathCombine(const QString& p1, const QString& p2);
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
-    static void writeOtherJSON(QString path, const QJsonObject &obj);
+    static void writeOtherJSON(QString path, const QJsonObject &obj,
+                               QJsonDocument::JsonFormat format
+                               = QJsonDocument::Compact);
     static void readOtherJSON(QString path, QJsonDocument& loadDoc);
     static void writeArrayJSON(QString path, const QJsonArray &tab);
     static void readArrayJSON(QString path, QJsonDocument& loadDoc);
@@ -115,6 +122,9 @@ public:
     static QString getFormatNumber(int number, int format = 4, int type = 10);
     static QKeySequence getKeySequence(QKeyEvent *event);
     static QString keyToString(int keyInt);
+    static int mod(int x, int m);
+    static float coefSquareSize();
+    static QString osToString(OSKind os);
 
 protected:
     Project* p_project;

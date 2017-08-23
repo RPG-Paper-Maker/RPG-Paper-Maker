@@ -41,6 +41,9 @@ public:
     virtual ~SystemLang();
     LangsTranslation* names() const;
     virtual void setName(QString n);
+    void setDefault();
+    virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemLang& item);
 
     virtual void read(const QJsonObject &json);

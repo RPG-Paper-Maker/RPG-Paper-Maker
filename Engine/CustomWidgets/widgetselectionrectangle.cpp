@@ -95,6 +95,8 @@ void WidgetSelectionRectangle::makeFirstSelection(int x, int y, float zoom){
         x = x / m_squareWidth;
         y = y / m_squareHeight;
         setRectangle((int)(x / zoom), (int)(y / zoom), 1, 1);
+        m_realX = m_rect.x();
+        m_realY = m_rect.y();
     }
 }
 

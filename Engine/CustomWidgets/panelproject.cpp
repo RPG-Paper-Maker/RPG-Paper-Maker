@@ -46,6 +46,9 @@ PanelProject::PanelProject(QWidget *parent) :
     // Timer
     m_timerUpdate->start(0);
     connect(m_timerUpdate, SIGNAL(timeout()), this, SLOT(updateMenu()));
+
+    // Menu bar
+    ui->widgetMenuBar->initializeRightMenu();
 }
 
 PanelProject::PanelProject(QWidget *parent, Project* p) :
@@ -83,11 +86,20 @@ WidgetTreeLocalMaps* PanelProject::widgetTreeLocalMaps() const{
 
 void PanelProject::updateMenu(){
 
-    if (!ui->widgetMenuBar->rect().contains(
-                ui->widgetMenuBar->mapFromGlobal(QCursor::pos())) &&
-        !ui->widgetMenuBar->containsMenu())
+    WidgetMenuBarMapEditor* bar;
+
+    bar = ui->widgetMenuBar;
+    if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
+        !bar->containsMenu())
     {
-        if (ui->widgetMenuBar->activeAction() != nullptr)
-            ui->widgetMenuBar->activeAction()->menu()->hide();
+        if (bar->activeAction() != nullptr)
+            bar->activeAction()->menu()->hide();
+    }
+    bar = (WidgetMenuBarMapEditor*) ui->widgetMenuBar->cornerWidget();
+    if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
+        !bar->containsMenu())
+    {
+        if (bar->activeAction() != nullptr)
+            bar->activeAction()->menu()->hide();
     }
 }

@@ -47,8 +47,8 @@ public:
     static int stride();
 
 protected:
-  QVector3D m_position;
-  QVector2D m_tex;
+    QVector3D m_position;
+    QVector2D m_tex;
 };
 
 #endif // VERTEX_H

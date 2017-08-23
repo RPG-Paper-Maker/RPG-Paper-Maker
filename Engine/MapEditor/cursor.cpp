@@ -79,6 +79,15 @@ void Cursor::setZ(int z){
     m_positionSquare->setZ(z * m_squareSize);
 }
 
+void Cursor::setPositions(Position3D& position){
+    m_positionSquare->setX(position.x() * m_squareSize);
+    m_positionSquare->setY(position.y() * m_squareSize);
+    m_positionSquare->setZ(position.z() * m_squareSize);
+    m_positionReal.setX(position.x() * m_squareSize);
+    m_positionReal.setY(position.y() * m_squareSize);
+    m_positionReal.setZ(position.z() * m_squareSize);
+}
+
 float Cursor::getX() const { return m_positionSquare->x(); }
 
 float Cursor::getY() const { return m_positionSquare->y(); }
@@ -114,12 +123,21 @@ void Cursor::loadTexture(QString path){
 // -------------------------------------------------------
 
 void Cursor::updatePositionSquare(){
-    setX((int)(m_positionReal.x() / m_squareSize));
-    setY((int)(m_positionReal.y() / m_squareSize));
-    setZ((int)(m_positionReal.z() / m_squareSize));
+    setX((int)(m_positionReal.x()) / m_squareSize);
+    setY((int)(m_positionReal.y()) / m_squareSize);
+    setZ((int)(m_positionReal.z()) / m_squareSize);
 }
 
-// -------------------------------------------------------
+// ------------------------------------------------------
+
+void Cursor::centerInSquare(int offset) {
+    m_positionReal.setX(((int)((m_positionReal.x()) / m_squareSize) *
+                        m_squareSize) + (m_squareSize / 2) - offset);
+    m_positionReal.setZ(((int)((m_positionReal.z()) / m_squareSize) *
+                        m_squareSize) + (m_squareSize / 2) - 1);
+}
+
+// ------------------------------------------------------
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     int xPlus, zPlus, res;
@@ -175,8 +193,6 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
         if (res >= 0 && res < h)
             m_positionReal.setZ(res);
     }
-
-    updatePositionSquare();
 }
 
 // -------------------------------------------------------

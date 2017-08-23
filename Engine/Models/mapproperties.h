@@ -37,8 +37,10 @@ class MapProperties : public SystemLang
 public:
     MapProperties();
     MapProperties(QString path);
-    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d, int idTileset);
-    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d, SystemTileset* tileset);
+    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
+                  int idTileset);
+    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
+                  SystemTileset* tileset);
     virtual ~MapProperties();
     QString realName() const;
     int length() const;
@@ -51,6 +53,7 @@ public:
     void setHeight(int h);
     void setDepth(int d);
     void setTileset(SystemTileset* tileset);
+    void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path);
 

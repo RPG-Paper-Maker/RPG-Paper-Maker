@@ -41,6 +41,8 @@ public:
     void read(QString path);
     int idStatisticLevel() const;
     int idStatisticExp() const;
+    void setIdStatisticLevel(int i);
+    void setIdStatisticExp(int i);
     QStandardItemModel* modelWeaponsKind() const;
     QStandardItemModel* modelArmorsKind() const;
     QStandardItemModel* modelBattleMaps() const;
@@ -48,8 +50,9 @@ public:
     QStandardItemModel* modelCommonEquipment() const;
     QStandardItemModel* modelCommonStatistics() const;
     QStandardItemModel* modelCommonBattleCommand() const;
-    QVector<SystemStatistic*> getFixStatisticsList() const;
-    QVector<SystemStatistic*> getBarStatisticsList() const;
+    void getSortedStatistics(QVector<SystemStatistic*>& fixes,
+                             QVector<SystemStatistic*>& bars) const;
+    void updateEquipments();
     void setDefault();
     void setDefaultOptions();
     void setDefaultWeaponsKind();
@@ -73,6 +76,7 @@ private:
     QStandardItemModel* m_modelCommonEquipment;
     QStandardItemModel* m_modelCommonStatistics;
     QStandardItemModel* m_modelCommonBattleCommand;
+    void updateEquipmentsKind(QStandardItemModel* model);
 };
 
 #endif // BATTLESYSTEMDATAS_H

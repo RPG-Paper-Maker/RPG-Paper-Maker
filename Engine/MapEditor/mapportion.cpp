@@ -42,7 +42,27 @@ MapPortion::~MapPortion()
 
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
 
-bool MapPortion::isEmpty() const{
+bool MapPortion::isVisibleLoaded() const {
+    return isVisible();
+}
+
+bool MapPortion::isVisible() const {
+   return m_isVisible;
+}
+
+bool MapPortion::isLoaded() const {
+    return m_isLoaded;
+}
+
+void MapPortion::setIsVisible(bool b) {
+    m_isVisible = b;
+}
+
+void MapPortion::setIsLoaded(bool b) {
+    m_isLoaded = b;
+}
+
+bool MapPortion::isEmpty() const {
     return m_floors->isEmpty() && m_sprites->isEmpty() &&
             m_mapObjects->isEmpty();
 }
@@ -53,20 +73,28 @@ bool MapPortion::isEmpty() const{
 //
 // -------------------------------------------------------
 
-bool MapPortion::addFloor(Position& p, FloorDatas *floor){
-    return m_floors->addFloor(p, floor);
+LandDatas* MapPortion::getLand(Position& p){
+    return m_floors->getLand(p);
+}
+
+bool MapPortion::addLand(Position& p, LandDatas *land){
+    return m_floors->addLand(p, land);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteFloor(Position& p){
-    return m_floors->deleteFloor(p);
+bool MapPortion::deleteLand(Position& p){
+    return m_floors->deleteLand(p);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::addSprite(Position& p, SpriteDatas *sprite){
-    return m_sprites->addSprite(p, sprite);
+bool MapPortion::addSprite(Position& p, MapEditorSubSelectionKind kind,
+                           int layer, int widthPosition, int angle,
+                           QRect *textureRect)
+{
+    return m_sprites->addSprite(p, kind, layer, widthPosition, angle,
+                                textureRect);
 }
 
 // -------------------------------------------------------
@@ -88,6 +116,26 @@ bool MapPortion::deleteObject(Position& p){
 }
 
 // -------------------------------------------------------
+
+void MapPortion::removeLandOut(MapProperties& properties) {
+    m_floors->removeLandOut(properties);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeSpritesOut(MapProperties& properties) {
+    m_sprites->removeSpritesOut(properties);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
+                                  MapProperties& properties)
+{
+    m_mapObjects->removeObjectsOut(listDeletedObjectsIDs, properties);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //
@@ -97,22 +145,24 @@ bool MapPortion::deleteObject(Position& p){
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &characters)
 {
+    int spritesOffset = -0.005;
     m_floors->initializeVertices(squareSize,
                                  tileset->width(),
                                  tileset->height());
     m_sprites->initializeVertices(squareSize,
                                   tileset->width(),
-                                  tileset->height());
-    m_mapObjects->initializeVertices(squareSize,
-                                     characters);
+                                  tileset->height(),
+                                  spritesOffset);
+    m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 
 // -------------------------------------------------------
 
-void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic){
+void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
+                              QOpenGLShaderProgram *programFace){
     m_floors->initializeGL(programStatic);
-    m_sprites->initializeGL(programStatic);
-    m_mapObjects->initializeGL(programStatic);
+    m_sprites->initializeGL(programStatic, programFace);
+    m_mapObjects->initializeGL(programStatic, programFace);
 }
 
 // -------------------------------------------------------
@@ -137,8 +187,30 @@ void MapPortion::paintSprites(){
 
 // -------------------------------------------------------
 
-void MapPortion::paintObjects(){
-    m_mapObjects->paintGL();
+void MapPortion::paintFaceSprites(){
+    m_sprites->paintFaceGL();
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintObjectsStaticSprites(int textureID,
+                                           QOpenGLTexture* texture)
+{
+    m_mapObjects->paintStaticSprites(textureID, texture);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintObjectsFaceSprites(int textureID,
+                                         QOpenGLTexture* texture)
+{
+    m_mapObjects->paintFaceSprites(textureID, texture);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintObjectsSquares(){
+    m_mapObjects->paintSquares();
 }
 
 // -------------------------------------------------------

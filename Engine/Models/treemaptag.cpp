@@ -39,7 +39,8 @@ TreeMapTag::TreeMapTag(int i, QString n) :
     m_position(new QVector3D),
     m_positionObject(new QVector3D),
     m_cameraDistance(Camera::defaultDistance),
-    m_cameraHeight(Camera::defaultHeight)
+    m_cameraHeight(Camera::defaultHeight),
+    m_cameraHorizontalAngle(-90.0)
 {
 
 }
@@ -71,9 +72,17 @@ int TreeMapTag::cameraDistance() const { return m_cameraDistance; }
 
 int TreeMapTag::cameraHeight() const { return m_cameraHeight; }
 
+double TreeMapTag::cameraHorizontalAngle() const {
+    return m_cameraHorizontalAngle;
+}
+
 void TreeMapTag::setCameraDistance(int d) { m_cameraDistance = d; }
 
 void TreeMapTag::setCameraHeight(int h) { m_cameraHeight = h; }
+
+void TreeMapTag::setCameraHorizontalAngle(double a) {
+    m_cameraHorizontalAngle = a;
+}
 
 // -------------------------------------------------------
 //
@@ -81,8 +90,19 @@ void TreeMapTag::setCameraHeight(int h) { m_cameraHeight = h; }
 //
 // -------------------------------------------------------
 
+void TreeMapTag::reset() {
+    m_position->setX(0);
+    m_position->setY(0);
+    m_position->setZ(0);
+    m_positionObject->setX(0);
+    m_positionObject->setY(0);
+    m_positionObject->setZ(0);
+}
+
+// -------------------------------------------------------
+
 void TreeMapTag::copyItem(const QStandardItem* from,
-                                   QStandardItem* to)
+                          QStandardItem* to)
 {
     // Copy the current row
     TreeMapTag* tag = (TreeMapTag*) from->data().value<quintptr>();

@@ -42,6 +42,7 @@ public:
     virtual ~PicturesDatas();
     void read(QString path);
     QStandardItemModel* model(PictureKind kind) const;
+    void setModel(PictureKind kind, QStandardItemModel* model);
     void setDefault();
     void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
     void setDefaultPictures(QList<QString>& names, PictureKind kind);

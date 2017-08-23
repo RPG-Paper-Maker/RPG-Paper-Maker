@@ -67,7 +67,7 @@ QString ControlNewproject::filterDirectoryName(const QString & s){
 
 QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir pathLocation(location);
-    QString pathDir(Wanok::pathCombine(location,dirName));
+    QString pathDir(Wanok::pathCombine(location, dirName));
 
     // Checking if the project can be created
     if (dirName.count() == 0)
@@ -81,20 +81,15 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
 
     // If all is ok, then let's fill the project folder
 
-    // Creating file game.rpm
-    QFile file(Wanok::pathCombine(pathDir, "game.rpm"));
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return "Error while creating game.rpm file";
-    QTextStream out(&file);
-    out << Project::VERSION;
-
     // Copying a basic project content
-    if (!Wanok::copyPath(Wanok::pathCombine(
-                             Wanok::pathCombine("Content", "basic"), "Content"),
+    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+    QString pathBasicContent = Wanok::pathCombine(
+                Wanok::pathCombine(pathContent, "basic"), "Content");
+    if (!Wanok::copyPath(pathBasicContent,
                          Wanok::pathCombine(pathDir, "Content")))
     {
-        return "Error while copying Content directory. "
-               "Please retry with a new project.";
+        return "Error while copying Content directory. Please verify if " +
+               pathBasicContent + " folder exists.";
     }
 
     // Create folders
@@ -105,28 +100,21 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir(pathDir).mkpath(Wanok::pathReliefs);
     QDir(pathDir).mkpath(Wanok::pathTilesets);
 
-    // Copy excecutable and libraries according to current OS
-    QString strOS = "";
-    #ifdef Q_OS_WIN
-        strOS = "win32";
-    #elif __linux__
-        strOS = "linux";
-    #else
-        return "Error your current opperating system is not supported.";
-    #endif
-
-    // Copying a basic project content
-    if (!Wanok::copyPath(Wanok::pathCombine("Content", strOS), pathDir)){
-        return "Error while copying excecutable and libraries. "
-               "Please retry with a new project.";
-    }
-
     // Create the default datas
     Project* previousProject = Wanok::get()->project();
     Project* project = new Project;
     Wanok::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
+    QString error = project->createRPMFile();
+    if (error != NULL)
+        return error;
+
+    // Copying a basic project content
+    if (!project->copyOSFiles()) {
+        return "Error while copying excecutable and libraries. "
+               "Please retry with a new project.";
+    }
 
     // Create saves
     QJsonArray tab;

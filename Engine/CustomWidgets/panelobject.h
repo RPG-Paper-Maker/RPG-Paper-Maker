@@ -21,6 +21,7 @@
 #define PANELOBJECT_H
 
 #include <QCheckBox>
+#include <QPushButton>
 #include "systemcommonobject.h"
 #include "widgettreecommands.h"
 #include "systemstate.h"
@@ -67,14 +68,17 @@ private:
     QStandardItemModel* m_list;
     QVector<WidgetTreeCommands*> m_reactions;
     QVector<QCheckBox*> m_checkBoxes;
+    QVector<QPushButton*> m_pushButtons;
+    SystemReaction* m_copiedReaction;
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);
     void on_comboBoxInheritance_currentIndexChanged(int index);
     void on_updateJsonStates(SuperListItem*);
-    void on_updateJsonEvents(SuperListItem*item);
+    void on_updateJsonEvents(SuperListItem*);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
+    void on_tabWidgetCommands_currentChanged(int index);
     void on_blockingHeroChanged(bool c);
     void on_checkBoxMoveAnimation_toggled(bool checked);
     void on_checkBoxStopAnimation_toggled(bool checked);
@@ -83,6 +87,8 @@ private slots:
     void on_checkBoxSetWithCamera_toggled(bool checked);
     void on_checkBoxPixelOffset_toggled(bool checked);
     void on_comboBoxGraphics_currentIndexChanged(int index);
+    void on_copyReaction();
+    void on_pasteReaction();
 };
 
 #endif // PANELOBJECT_H

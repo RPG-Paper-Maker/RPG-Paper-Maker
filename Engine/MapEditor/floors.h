@@ -27,10 +27,11 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
-#include "serializable.h"
+#include "lands.h"
 #include "position.h"
 #include "height.h"
 #include "vertex.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -40,13 +41,14 @@
 //
 // -------------------------------------------------------
 
-class FloorDatas : public Serializable
+class FloorDatas : public LandDatas
 {
 public:
     FloorDatas();
     FloorDatas(QRect *texture);
     virtual ~FloorDatas();
     QRect* textureRect() const;
+    virtual MapEditorSubSelectionKind getKind() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;
@@ -106,10 +108,13 @@ public:
     Floors();
     virtual ~Floors();
     bool isEmpty() const;
-    void setFloor(Position& p, FloorDatas* floor);
-    FloorDatas* removeFloor(Position& p);
-    bool addFloor(Position& p, FloorDatas* floor);
-    bool deleteFloor(Position& p);
+    LandDatas* getLand(Position& p);
+    void setLand(Position& p, LandDatas* floor);
+    LandDatas* removeLand(Position& p);
+    bool addLand(Position& p, LandDatas* land);
+    bool deleteLand(Position& p);
+
+    void removeLandOut(MapProperties& properties);
 
     void initializeVertices(int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
@@ -120,7 +125,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position, FloorDatas*> m_floors;
+    QHash<Position, LandDatas*> m_lands;
     Floor* m_floorsGL[2];
 
     QOpenGLShaderProgram* m_programStatic;

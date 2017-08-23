@@ -25,15 +25,14 @@
 //
 // -------------------------------------------------------
 
-SystemMapObject::SystemMapObject() :
-    SystemMapObject(1, "", Portion(0, 0, 0))
+SystemMapObject::SystemMapObject()
 {
 
 }
 
-SystemMapObject::SystemMapObject(int i, QString n, Portion portion) :
+SystemMapObject::SystemMapObject(int i, QString n, Position3D& position) :
     SuperListItem(i,n),
-    m_portion(portion)
+    m_position(position)
 {
 
 }
@@ -41,6 +40,8 @@ SystemMapObject::SystemMapObject(int i, QString n, Portion portion) :
 SystemMapObject::~SystemMapObject(){
 
 }
+
+Position3D SystemMapObject::position() const { return m_position; }
 
 // -------------------------------------------------------
 //
@@ -57,7 +58,7 @@ SystemMapObject::~SystemMapObject(){
 void SystemMapObject::read(const QJsonObject &json){
     SuperListItem::read(json);
 
-    m_portion.read(json["p"].toArray());
+    m_position.read(json["p"].toArray());
 }
 
 // -------------------------------------------------------
@@ -66,6 +67,6 @@ void SystemMapObject::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
     QJsonArray tab;
-    m_portion.write(tab);
+    m_position.write(tab);
     json["p"] = tab;
 }

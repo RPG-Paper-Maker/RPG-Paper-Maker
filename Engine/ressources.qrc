@@ -14,7 +14,6 @@
         <file>Ressources/point_r.png</file>
         <file>Ressources/autotile.png</file>
         <file>Ressources/ev.png</file>
-        <file>Ressources/floor.png</file>
         <file>Ressources/height.png</file>
         <file>Ressources/montain.png</file>
         <file>Ressources/mousewheel.png</file>
@@ -27,6 +26,9 @@
         <file>Ressources/sprite_quadra.png</file>
         <file>Ressources/water.png</file>
         <file>Ressources/picture.png</file>
+        <file>Ressources/floor.png</file>
+        <file>Ressources/sprite_fix.png</file>
+        <file>Ressources/icon.ico</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>
@@ -38,6 +40,8 @@
         <file>Shaders/static.vert</file>
         <file>Shaders/grid.frag</file>
         <file>Shaders/grid.vert</file>
+        <file>Shaders/spriteFace.frag</file>
+        <file>Shaders/spriteFace.vert</file>
     </qresource>
     <qresource prefix="/textures">
         <file>Ressources/editor_cursor.png</file>

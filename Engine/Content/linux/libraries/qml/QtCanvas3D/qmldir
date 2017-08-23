@@ -1,0 +1,5 @@
+module QtCanvas3D
+plugin qtcanvas3d
+classname QtCanvas3DPlugin
+typeinfo plugins.qmltypes
+

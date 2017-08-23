@@ -218,7 +218,8 @@ void WidgetTreeLocalMaps::showMap(QStandardItem *item)
     m_widgetMapEditor->needUpdateMap(tag->id(), tag->position(),
                                      tag->positionObject(),
                                      tag->cameraDistance(),
-                                     tag->cameraHeight());
+                                     tag->cameraHeight(),
+                                     tag->cameraHorizontalAngle());
     m_widgetMapEditor->setTreeMapNode(item);
 }
 
@@ -233,6 +234,8 @@ void WidgetTreeLocalMaps::hideMap(){
 
     if (m_project != nullptr)
         m_project->setCurrentMap(nullptr);
+
+    m_widgetMapEditor->setTreeMapNode(nullptr);
 }
 
 // -------------------------------------------------------
@@ -475,19 +478,21 @@ void WidgetTreeLocalMaps::contextEditMap(){
                         generateMapName(tag->id()));
         MapProperties properties(path);
         properties.names()->updateNames();
+        MapProperties previousProperties;
+        previousProperties.setCopy(properties);
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Wanok::pathCombine(path,
                                                   Wanok::TEMP_MAP_FOLDER_NAME);
-            bool empty = Wanok::isDirEmpty(pathTemp);
-            if (!empty){
-                Wanok::deleteAllFiles(path);
+            if (Wanok::mapsToSave.contains(properties.id())) {
                 Wanok::copyAllFiles(pathTemp, path);
                 Wanok::deleteAllFiles(pathTemp);
+                Wanok::mapsToSave.remove(properties.id());
             }
             properties.save(path);
-            Map::correctMap(path, properties);
+            tag->reset();
+            Map::correctMap(path, previousProperties, properties);
             TreeMapDatas::setName(selected, properties.name());
             Wanok::get()->project()->writeTreeMapDatas();
             showMap(selected);

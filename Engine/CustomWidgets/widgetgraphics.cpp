@@ -58,6 +58,7 @@ SystemPicture* WidgetGraphics::getPicture(){
 PictureKind WidgetGraphics::getPictureKind(){
     switch (m_state->graphicsKind()){
     case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesFace:
         return PictureKind::Characters;
     default:
         return PictureKind::None;

@@ -26,6 +26,8 @@
 #include "wanok.h"
 #include "systemcreateparameter.h"
 #include "systemweaponarmorkind.h"
+#include "systemelement.h"
+#include "systembattlecommand.h"
 
 // -------------------------------------------------------
 //
@@ -79,7 +81,6 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
-    ui->panelSuperListBattleMaps->showEditName(false);
     ui->panelSuperListCommonBattleCommands->showEditName(false);
     ui->panelSuperListCommonStatistics->showEditName(false);
     ui->panelSuperListElements->showEditName(false);
@@ -87,24 +88,13 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelSuperListArmorsKind->showEditName(false);
 
     // Fill combo boxes
-    QVector<SystemStatistic*> level = gameDatas->battleSystemDatas()
-            ->getFixStatisticsList();
-    QVector<SystemStatistic*> exp = gameDatas->battleSystemDatas()
-            ->getBarStatisticsList();
-    for (int i = 0; i < level.size(); i++){
-        SystemStatistic* statistic = level.at(i);
-        ui->comboBoxBattleLevel->addItem(statistic->toString());
-        if (statistic->id() == gameDatas->battleSystemDatas()
-                ->idStatisticLevel())
-            ui->comboBoxBattleLevel->setCurrentIndex(i);
-    }
-    for (int i = 0; i < exp.size(); i++){
-        SystemStatistic* statistic = exp.at(i);
-        ui->comboBoxBattleExp->addItem(statistic->toString());
-        if (statistic->id() == gameDatas->battleSystemDatas()
-                ->idStatisticExp())
-            ui->comboBoxBattleExp->setCurrentIndex(i);
-    }
+    updateStatisticsBase();
+    connect(ui->panelSuperListCommonStatistics->list(), SIGNAL(updated()),
+            this, SLOT(on_statisticsUpdated()));
+
+    // Equipment change connection for weapon / armor kind
+    connect(ui->panelSuperListCommonEquipments->list(), SIGNAL(updated()),
+            this, SLOT(on_equipmentUpdated()));
 
     // Initialize models
     ui->panelSuperListWeaponsKind
@@ -115,18 +105,65 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelSuperListArmorsKind->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelArmorsKind());
+    ui->panelSuperListArmorsKind->list()->initializeNewItemInstance(
+                new SystemWeaponArmorKind);
     ui->panelSuperListElements->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelElements());
+    ui->panelSuperListElements->list()->initializeNewItemInstance(
+                new SystemElement);
     ui->panelSuperListCommonEquipments->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelCommonEquipment());
+    ui->panelSuperListCommonEquipments->list()->initializeNewItemInstance(
+                new SystemLang);
     ui->panelSuperListCommonStatistics->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelCommonStatistics());
+    ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
+                new SystemStatistic);
     ui->panelSuperListCommonBattleCommands->list()
             ->initializeModel(gameDatas->battleSystemDatas()
                               ->modelCommonBattleCommand());
+    ui->panelSuperListCommonBattleCommands->list()->initializeNewItemInstance(
+                new SystemBattleCommand);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::updateStatisticsBase(){
+
+    // Clear before adding
+    ui->comboBoxBattleLevel->clear();
+    ui->comboBoxBattleExp->clear();
+
+    // Update
+    GameDatas* gameDatas = Wanok::get()->project()->gameDatas();
+    QVector<SystemStatistic*> level, exp;
+    int index, id;
+    gameDatas->battleSystemDatas()->getSortedStatistics(level, exp);
+    index = 0;
+    id =  gameDatas->battleSystemDatas()->idStatisticLevel();
+    for (int i = 0; i < level.size(); i++){
+        SystemStatistic* statistic = level.at(i);
+        ui->comboBoxBattleLevel->addItem(
+                    statistic->toString(),
+                    QVariant::fromValue(reinterpret_cast<quintptr>(statistic)));
+        if (statistic->id() == id)
+            index = i;
+    }
+    ui->comboBoxBattleLevel->setCurrentIndex(index);
+    index = 0;
+    id = gameDatas->battleSystemDatas()->idStatisticExp();
+    for (int i = 0; i < exp.size(); i++){
+        SystemStatistic* statistic = exp.at(i);
+        ui->comboBoxBattleExp->addItem(
+                    statistic->toString(),
+                    QVariant::fromValue(reinterpret_cast<quintptr>(statistic)));
+        if (statistic->id() == id)
+            index = i;
+    }
+    ui->comboBoxBattleExp->setCurrentIndex(index);
 }
 
 // -------------------------------------------------------
@@ -254,6 +291,47 @@ void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject){
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
+    Wanok::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index){
+    if (index != -1) {
+        SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleLevel
+                ->itemData(index).value<qintptr>();
+        Wanok::get()->project()->gameDatas()->battleSystemDatas()
+                ->setIdStatisticLevel(statistic->id());
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
+    if (index != -1) {
+        SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleExp
+                ->itemData(index).value<qintptr>();
+        Wanok::get()->project()->gameDatas()->battleSystemDatas()
+                ->setIdStatisticExp(statistic->id());
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_statisticsUpdated(){
+    updateStatisticsBase();
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_equipmentUpdated(){
+    Wanok::get()->project()->gameDatas()->battleSystemDatas()
+            ->updateEquipments();
+}
+
 // -------------------------------------------------------
 
 void DialogSystems::on_pageEventsSelected(QModelIndex index, QModelIndex){

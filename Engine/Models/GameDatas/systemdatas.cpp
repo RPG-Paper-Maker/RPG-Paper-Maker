@@ -50,6 +50,8 @@ int SystemDatas::portionsRay() const { return m_portionsRay; }
 
 int SystemDatas::squareSize() const { return m_squareSize; }
 
+void SystemDatas::setSquareSize(int i) { m_squareSize = i; }
+
 void SystemDatas::setIdMapHero(int i) { m_idMapHero = i; }
 
 void SystemDatas::setIdObjectHero(int i) { m_idObjectHero = i; }
@@ -80,7 +82,7 @@ void SystemDatas::setDefault(){
     int length;
     QStandardItem* item;
 
-    m_portionsRay = 1;
+    m_portionsRay = 10;
     m_squareSize = 16;
     m_framesAnimation = 4;
 

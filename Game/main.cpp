@@ -29,7 +29,13 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     // The application can now be used even if called from another directory
-    QDir::setCurrent(qApp->applicationDirPath());
+    QDir bin(qApp->applicationDirPath());
+    #ifdef Q_OS_MAC
+        bin.cdUp();
+        bin.cdUp();
+        bin.cdUp();
+    #endif
+    QDir::setCurrent(bin.absolutePath());
 
     // Create QML engine
     QQmlApplicationEngine engine;

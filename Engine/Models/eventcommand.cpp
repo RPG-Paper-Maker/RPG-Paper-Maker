@@ -160,6 +160,8 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strMoveObject(parameters); break;
     case EventCommandKind::Wait:
         str += strWait(); break;
+    case EventCommandKind::MoveCamera:
+        str += strMoveCamera(parameters); break;
     default:
         break;
     }
@@ -215,16 +217,19 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel* dataBase,
 QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const{
     PrimitiveValueKind kind =
             static_cast<PrimitiveValueKind>(p_listCommand.at(i++).toInt());
-    int value = p_listCommand.at(i++).toInt();
+    QString value = p_listCommand.at(i++);
 
     switch (kind){
     case PrimitiveValueKind::Number:
-        return QString::number(value);
+        return value;
+    case PrimitiveValueKind::NumberDouble:
+        return QString::number(value.toDouble());
     case PrimitiveValueKind::Variable:
         return "Variable " + Wanok::get()->project()->gameDatas()
-                ->variablesDatas()->getVariableById(value)->toString();
+                ->variablesDatas()->getVariableById(value.toInt())->toString();
     case PrimitiveValueKind::Parameter:
-        return SuperListItem::getById(parameters->invisibleRootItem(), value)
+        return SuperListItem::getById(parameters->invisibleRootItem(),
+                                      value.toInt())
                 ->toString();
     default:
         return "";
@@ -552,7 +557,7 @@ QString EventCommand::strSendEventTarget(int& i) const{
 QString EventCommand::strTeleportObject(SystemCommonObject* object,
                                         QStandardItemModel* parameters) const
 {
-    int i = 0 ;
+    int i = 0;
 
     QString strObj = strMoveObjectID(parameters, i);
     QString strPosition = strTeleportObjectPosition(object, parameters, i);
@@ -705,6 +710,110 @@ QString EventCommand::strMoveObjectMoves(int& i) const{
 
 QString EventCommand::strWait() const{
     return "Wait: " + p_listCommand.at(0) + " seconds";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCamera(QStandardItemModel* parameters) const {
+    int i = 0;
+
+    QString target = strMoveCameraTarget(parameters, i);
+    QString operation = strChangeVariablesOperation(i);
+    QString move = strMoveCameraMove(parameters, i, operation);
+    QString rotation = strMoveCameraRotation(parameters, i, operation);
+    QString zoom = strMoveCameraZoom(parameters, i, operation);
+    QString options = strMoveCameraOptions(parameters, i);
+
+    return "Move camera:\nTarget: " + target + "\nMove: " + move +
+            "\nRotation: " + rotation + "\nZoom: " + zoom + "\n" +
+            options;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraTarget(QStandardItemModel* parameters,
+                                          int& i) const
+{
+    int targetKind = p_listCommand.at(i++).toInt();
+    switch (targetKind) {
+    case 0:
+        return "Unchanged";
+    case 1:
+        return "Object " + strMoveObjectID(parameters, i);
+    }
+
+    return "";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraMove(QStandardItemModel* parameters, int& i,
+                                        QString &operation) const
+{
+    // Options
+    QString strOptions = "[";
+    QStringList listOptions;
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Offset";
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Camera orientation";
+    strOptions += listOptions.join(";");
+    strOptions += "]";
+
+    // Moves
+    QString x = operation + strNumber(i, parameters) + " ";
+    x += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    QString y = operation + strNumber(i, parameters) + " ";
+    y += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    QString z = operation + strNumber(i, parameters) + " ";
+    z += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+
+    return "X: " + x + "; Y: " + y + "; Z: " + z + " " + strOptions;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraRotation(QStandardItemModel *parameters,
+                                            int& i, QString &operation) const
+{
+    // Options
+    QString strOptions = "[";
+    QStringList listOptions;
+    if (p_listCommand.at(i++) == "1")
+        listOptions << "Offset";
+    strOptions += listOptions.join(";");
+    strOptions += "]";
+
+    // Rotation
+    QString h = operation + strNumber(i, parameters) + "°";
+    QString v = operation + strNumber(i, parameters) + "°";
+
+    return "H: " + h + "; V: " + v + " " + strOptions;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraZoom(QStandardItemModel* parameters, int& i,
+                                        QString &operation) const
+{
+    QString d = operation + strNumber(i, parameters);
+
+    return "Distance: " + d;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strMoveCameraOptions(QStandardItemModel* parameters,
+                                           int& i) const
+{
+    QString str;
+
+    if (p_listCommand.at(i++) == "1")
+        str += "[Wait end] ";
+
+    str += "TIME: " + strNumber(i, parameters) + " seconds";
+
+    return str;
 }
 
 // -------------------------------------------------------

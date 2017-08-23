@@ -97,6 +97,14 @@ void MapProperties::setTileset(SystemTileset* tileset) { m_tileset = tileset; }
 //
 // -------------------------------------------------------
 
+void MapProperties::getPortionsNumber(int& lx, int& ly, int& lz) {
+    lx = (length() - 1) / Wanok::portionSize;
+    ly = (depth() + height() - 1) / Wanok::portionSize;;
+    lz = (width() - 1) / Wanok::portionSize;
+}
+
+// -------------------------------------------------------
+
 void MapProperties::setCopy(const MapProperties& super){
     SystemLang::setCopy(super);
 

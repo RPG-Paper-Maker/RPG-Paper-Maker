@@ -36,11 +36,14 @@ class SystemStatistic : public SystemLang
 public:
     SystemStatistic();
     SystemStatistic(int i, LangsTranslation *names, QString abbreviation,
-                    QVector<QString> commands);
+                    bool isFix);
     virtual ~SystemStatistic();
     QString abbreviation() const;
-    QVector<QString> commands() const;
+    void setAbbreviation(QString s);
+    bool isFix() const;
+    void setIsFix(bool b);
     virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemStatistic& statistic);
 
     virtual void read(const QJsonObject &json);
@@ -48,7 +51,7 @@ public:
 
 protected:
     QString m_abbreviation;
-    QVector<QString> m_commands;
+    bool m_isFix;
 };
 
 Q_DECLARE_METATYPE(SystemStatistic)

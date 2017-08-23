@@ -23,6 +23,7 @@
 #include "systemevent.h"
 #include "systemstate.h"
 #include "systemcommonreaction.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -33,12 +34,14 @@
 PanelObject::PanelObject(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelObject),
-    m_model(nullptr)
+    m_model(nullptr),
+    m_copiedReaction(nullptr)
 {
     ui->setupUi(this);
 
     // Updating infos lists
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
+    ui->treeViewEvents->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
 
     // Keep space when hiding widgets
@@ -58,6 +61,9 @@ PanelObject::PanelObject(QWidget *parent) :
 
 PanelObject::~PanelObject()
 {
+    if (m_copiedReaction != nullptr)
+        delete m_copiedReaction;
+
     delete ui;
 }
 
@@ -96,16 +102,6 @@ void PanelObject::updateModel(){
         ui->lineEditName->setText(m_model->name());
         initializeCommonInheritance();
 
-        // States
-        ui->treeViewStates->initializeModel(m_model->modelStates());
-        connect(ui->treeViewStates->selectionModel(),
-                SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-                SLOT(on_stateChanged(QModelIndex,QModelIndex)));
-        connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem*)),
-                this, SLOT(on_updateJsonStates(SuperListItem*)));
-        index = ui->treeViewStates->getModel()->index(0,0);
-        ui->treeViewStates->setCurrentIndex(index);
-
         // Events
         ui->treeViewEvents->initializeModel(m_model->modelEvents());
         connect(ui->treeViewEvents->selectionModel(),
@@ -115,7 +111,18 @@ void PanelObject::updateModel(){
                 this, SLOT(on_updateJsonEvents(SuperListItem*)));
         index = ui->treeViewEvents->getModel()->index(0,0);
         ui->treeViewEvents->setCurrentIndex(index);
-        on_updateJsonEvents(nullptr);
+
+        // States
+        ui->treeViewStates->initializeModel(m_model->modelStates());
+        connect(ui->treeViewStates->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+                SLOT(on_stateChanged(QModelIndex,QModelIndex)));
+        connect(ui->treeViewStates, SIGNAL(needsUpdateJson(SuperListItem*)),
+                this, SLOT(on_updateJsonStates(SuperListItem*)));
+        index = ui->treeViewStates->getModel()->index(0,0);
+        ui->treeViewStates->setCurrentIndex(index);
+        updateReactionsWidgets();
+        on_stateChanged(index, index);
     }
 }
 
@@ -125,6 +132,7 @@ void PanelObject::clear(){
     ui->tabWidgetCommands->clear();
     m_reactions.clear();
     m_checkBoxes.clear();
+    m_pushButtons.clear();
 }
 
 // -------------------------------------------------------
@@ -219,8 +227,10 @@ void PanelObject::updateReactionsWidgets(){
     WidgetTreeCommands* tree;
     SystemObjectEvent* event;
     QCheckBox* checkbox;
+    QPushButton* pushButton;
     QSpacerItem* spacer;
     QHBoxLayout* hlayout;
+    QVariant variant;
     int l;
 
     // Update reactions (if new/delete)
@@ -228,7 +238,7 @@ void PanelObject::updateReactionsWidgets(){
     QStandardItem* selected = ui->treeViewStates->getSelected();
     SystemState* super = (SystemState*) selected->data().value<quintptr>();
 
-    if (super != nullptr){
+    if (super != nullptr) {
         clear();
 
         // Create all the corresponding tabs for all events
@@ -240,21 +250,36 @@ void PanelObject::updateReactionsWidgets(){
             layout = new QGridLayout(widget);
             tree = new WidgetTreeCommands();
             m_reactions.append(tree);
-            layout->addWidget(tree,0,0);
+            layout->addWidget(tree, 0, 0);
+
+            // Checkboxes and buttons
+            variant = QVariant::fromValue(reinterpret_cast<quintptr>(
+                                              event->reactionAt(super->id())));
             widgetCheckbox = new QWidget();
             hlayout = new QHBoxLayout(widgetCheckbox);
             checkbox = new QCheckBox("Blocking hero");
-            checkbox->setProperty("reaction",
-                                  QVariant::fromValue(
-                                      reinterpret_cast<quintptr>(
-                                          event->reactionAt(super->id()))));
+            checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this,
                     SLOT(on_blockingHeroChanged(bool)));
             m_checkBoxes.append(checkbox);
             hlayout->addWidget(checkbox);
-            spacer = new QSpacerItem(50,1);
+            spacer = new QSpacerItem(1,1);
             hlayout->addSpacerItem(spacer);
-            hlayout->setStretch(2,1);
+            pushButton = new QPushButton("Copy reaction");
+            pushButton->setProperty("reaction", variant);
+            connect(pushButton, SIGNAL(clicked(bool)),
+                    this, SLOT(on_copyReaction()));
+            m_pushButtons.append(pushButton);
+            hlayout->addWidget(pushButton);
+            pushButton = new QPushButton("Paste reaction");
+            pushButton->setProperty("reaction", variant);
+            pushButton->setEnabled(m_copiedReaction != nullptr);
+            connect(pushButton, SIGNAL(clicked(bool)),
+                    this, SLOT(on_pasteReaction()));
+            m_pushButtons.append(pushButton);
+            hlayout->addWidget(pushButton);
+
+            hlayout->setStretch(1,1);
             layout->addWidget(widgetCheckbox,1,0);
 
             ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
@@ -283,7 +308,7 @@ void PanelObject::updateStateOptions(SystemState* state){
 // -------------------------------------------------------
 
 void PanelObject::passToSprite(){
-    ui->comboBoxGraphics->setCurrentIndex(1);
+    ui->comboBoxGraphics->setCurrentIndex(2);
 }
 
 // -------------------------------------------------------
@@ -323,42 +348,43 @@ void PanelObject::on_comboBoxInheritance_currentIndexChanged(int index){
 // -------------------------------------------------------
 
 void PanelObject::on_updateJsonStates(SuperListItem*){
-    updateReactionsWidgets();
     on_stateChanged(ui->treeViewStates->currentIndex(),
                     ui->treeViewStates->currentIndex());
-    on_eventChanged(ui->treeViewEvents->currentIndex(),
-                    ui->treeViewEvents->currentIndex());
 }
 
 // -------------------------------------------------------
 
-void PanelObject::on_updateJsonEvents(SuperListItem* item){
-    on_updateJsonStates(item);
+void PanelObject::on_updateJsonEvents(SuperListItem*){
+    updateReactionsWidgets();
+    on_updateJsonStates(nullptr);
 }
 
 // -------------------------------------------------------
 
-void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
+void PanelObject::on_stateChanged(QModelIndex index, QModelIndex){
+    QModelIndex eventIndex = ui->treeViewEvents->currentIndex();
     QStandardItem* selected = ui->treeViewStates->getModel()
                               ->itemFromIndex(index);
     if (selected != nullptr){
-        updateReactions();
+        updateReactionsWidgets();
 
         SystemState* super = (SystemState*) selected->data().value<quintptr>();
         if (super != nullptr){
 
             // Graphics
             ui->frameGraphics->setState(super);
-            int index;
+            int i;
             switch (super->graphicsKind()){
             case MapEditorSubSelectionKind::None:
-                index = 0; break;
+                i = 0; break;
             case MapEditorSubSelectionKind::SpritesFix:
-                index = 1; break;
+                i = 1; break;
+            case MapEditorSubSelectionKind::SpritesFace:
+                i = 2; break;
             default:
                 break;
             }
-            ui->comboBoxGraphics->setCurrentIndex(index);
+            ui->comboBoxGraphics->setCurrentIndex(i);
             ui->frameGraphics->repaint();
 
             // Events
@@ -394,6 +420,8 @@ void PanelObject::on_stateChanged(QModelIndex index,QModelIndex){
         else
             showStateWidgets(false);
     }
+
+    on_eventChanged(eventIndex, eventIndex);
 }
 
 // -------------------------------------------------------
@@ -402,6 +430,15 @@ void PanelObject::on_eventChanged(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->treeViewEvents->getModel()
                               ->itemFromIndex(index);
     ui->tabWidgetCommands->setCurrentIndex(selected->row());
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_tabWidgetCommands_currentChanged(int index) {
+    if (index != -1) {
+        QModelIndex modelIndex = ui->treeViewEvents->getModel()->index(index,0);
+        ui->treeViewEvents->setCurrentIndex(modelIndex);
+    }
 }
 
 // -------------------------------------------------------
@@ -463,8 +500,40 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
                 kind = MapEditorSubSelectionKind::None; break;
             case 1:
                 kind = MapEditorSubSelectionKind::SpritesFix; break;
+            case 2:
+                kind = MapEditorSubSelectionKind::SpritesFace; break;
             }
             super->setGraphicsKind(kind);
+            ui->frameGraphics->repaint();
         }
     }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_copyReaction() {
+    QPushButton* pushButton = (QPushButton*) sender();
+    SystemReaction* reaction =
+           (SystemReaction*) pushButton->property("reaction").value<quintptr>();
+
+    if (m_copiedReaction == nullptr) {
+        m_copiedReaction = (SystemReaction*) reaction->createCopy();
+
+        // Update paste button
+        for (int i = 0; i < m_pushButtons.size(); i++)
+            m_pushButtons.at(i)->setEnabled(true);
+    }
+    else
+        m_copiedReaction->setCopy(*reaction);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_pasteReaction() {
+    QPushButton* pushButton = (QPushButton*) sender();
+    SystemReaction* reaction =
+           (SystemReaction*) pushButton->property("reaction").value<quintptr>();
+
+    SystemReaction::copyCommands(m_copiedReaction->modelCommands(),
+                                 reaction->modelCommands());
 }

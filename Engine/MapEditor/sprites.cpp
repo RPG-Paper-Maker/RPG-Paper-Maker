@@ -18,6 +18,8 @@
 */
 
 #include "sprites.h"
+#include "map.h"
+#include "spritewall.h"
 
 // -------------------------------------------------------
 //
@@ -33,6 +35,13 @@ QVector3D Sprite::verticesQuad[4]{
                                   QVector3D(1.0f, 0.0f, 0.0f),
                                   QVector3D(0.0f, 0.0f, 0.0f)
                                 };
+
+QVector2D Sprite::modelQuad[4]{
+    QVector2D(-0.5f, 0.5f),
+    QVector2D(0.5f, 0.5f),
+    QVector2D(0.5f, -0.5f),
+    QVector2D(-0.5f, -0.5f)
+};
 
 GLuint Sprite::indexesQuad[6]{0, 1, 2, 0, 2, 3};
 
@@ -71,13 +80,15 @@ Sprite::~Sprite()
 // -------------------------------------------------------
 
 SpriteDatas::SpriteDatas() :
-    SpriteDatas(0, 50, 0, new QRect(0, 0, 2, 2))
+    SpriteDatas(MapEditorSubSelectionKind::SpritesFace, 0, 50, 0,
+                new QRect(0, 0, 2, 2))
 {
 
 }
 
-SpriteDatas::SpriteDatas(int layer, int widthPosition, int angle,
-                         QRect *textureRect) :
+SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, int layer,
+                         int widthPosition, int angle, QRect *textureRect) :
+    m_kind(kind),
     m_layer(layer),
     m_widthPosition(widthPosition),
     m_angle(angle),
@@ -90,6 +101,8 @@ SpriteDatas::~SpriteDatas()
 {
     delete m_textureRect;
 }
+
+MapEditorSubSelectionKind SpriteDatas::kind() const { return m_kind; }
 
 int SpriteDatas::layer() const { return m_layer; }
 
@@ -107,41 +120,172 @@ QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 
 void SpriteDatas::initializeVertices(int squareSize,
                                      int width, int height,
-                                     QVector<Vertex>& vertices,
-                                     QVector<GLuint>& indexes,
-                                     Position3D& position, int& count)
+                                     QVector<Vertex>& verticesStatic,
+                                     QVector<GLuint>& indexesStatic,
+                                     QVector<VertexBillboard>& verticesFace,
+                                     QVector<GLuint>& indexesFace,
+                                     Position3D& position, int& countStatic,
+                                     int& countFace, int &spritesOffset)
 {
     float x, y, w, h;
+    int offset;
     x = (float)(m_textureRect->x() * squareSize) / width;
     y = (float)(m_textureRect->y() * squareSize) / height;
     w = (float)(m_textureRect->width() * squareSize) / width;
     h = (float)(m_textureRect->height() * squareSize) / height;
+    float coefX = 0.1 / width;
+    float coefY = 0.1 / height;
+    x += coefX;
+    y += coefY;
+    w -= (coefX * 2);
+    h -= (coefY * 2);
 
     QVector3D pos((float) position.x() * squareSize -
-                  ((textureRect()->width() - 1) * squareSize / 2),
+                  ((textureRect()->width() - 1) * squareSize / 2) +
+                  spritesOffset,
                   (float) position.getY(squareSize),
                   (float) position.z() * squareSize +
-                  (widthPosition() * squareSize / 100)
-                  );
+                  (widthPosition() * squareSize / 100) + spritesOffset);
+    spritesOffset += Sprite::SPRITES_OFFSET_COEF;
     QVector3D size((float) textureRect()->width() * squareSize,
                    (float) textureRect()->height() * squareSize,
-                   0.0f
-                   );
+                   0.0f);
+    QVector3D center = Sprite::verticesQuad[0] * size + pos +
+            QVector3D(size.x() / 2, - size.y() / 2, 0);
+    QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
+    // Adding to buffers according to the kind of sprite
+    switch (m_kind) {
+    case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesDouble:
+    case MapEditorSubSelectionKind::SpritesQuadra:
+    {
+        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+                  vecB = Sprite::verticesQuad[1] * size + pos,
+                  vecC = Sprite::verticesQuad[2] * size + pos,
+                  vecD = Sprite::verticesQuad[3] * size + pos;
+
+        addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                vecA, vecB, vecC, vecD, texA, texB, texC, texD);
+
+        // If double sprite, add one sprite more
+        if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
+            m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
+            QVector3D vecDoubleA(vecA), vecDoubleB(vecB),
+                      vecDoubleC(vecC), vecDoubleD(vecD);
+
+            rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
+                         90);
+            addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                    vecDoubleA, vecDoubleB, vecDoubleC,
+                                    vecDoubleD, texA, texB, texC, texD);
+
+            if (m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
+                QVector3D vecQuadra1A(vecA), vecQuadra1B(vecB),
+                          vecQuadra1C(vecC), vecQuadra1D(vecD),
+                          vecQuadra2A(vecA), vecQuadra2B(vecB),
+                          vecQuadra2C(vecC), vecQuadra2D(vecD);
+
+                rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D,
+                             center, 45);
+                rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D,
+                             center, -45);
+                addStaticSpriteToBuffer(verticesStatic, indexesStatic,
+                                        countStatic, vecQuadra1A, vecQuadra1B,
+                                        vecQuadra1C, vecQuadra1D, texA, texB,
+                                        texC, texD);
+                addStaticSpriteToBuffer(verticesStatic, indexesStatic,
+                                        countStatic, vecQuadra2A, vecQuadra2B,
+                                        vecQuadra2C, vecQuadra2D, texA, texB,
+                                        texC, texD);
+            }
+        }
+
+        break;
+    }
+    case MapEditorSubSelectionKind::SpritesFace:
+    {
+        QVector2D s(size.x(), size.y());
+
+        // Vertices
+        verticesFace.append(
+              VertexBillboard(center, texA, s, Sprite::modelQuad[0]));
+        verticesFace.append(
+              VertexBillboard(center, texB, s, Sprite::modelQuad[1]));
+        verticesFace.append(
+              VertexBillboard(center, texC, s, Sprite::modelQuad[2]));
+        verticesFace.append(
+              VertexBillboard(center, texD, s, Sprite::modelQuad[3]));
+
+        // indexes
+        offset = countFace * Sprite::nbVerticesQuad;
+        for (int i = 0; i < Sprite::nbIndexesQuad; i++)
+            indexesFace.append(Sprite::indexesQuad[i] + offset);
+        countFace++;
+        break;
+    }
+    case MapEditorSubSelectionKind::SpritesWall:
+    {
+        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+                  vecB = Sprite::verticesQuad[1] * size + pos,
+                  vecC = Sprite::verticesQuad[2] * size + pos,
+                  vecD = Sprite::verticesQuad[3] * size + pos;
+
+        addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
+                                vecA, vecB, vecC, vecD, texA, texB, texC, texD);
+    }
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
+    QMatrix4x4 m;
+    QVector3D v(vec);
+
+    v -= center;
+    m.rotate(angle, 0.0, 1.0, 0.0);
+    v = v * m + center;
+
+    vec.setX(v.x());
+    vec.setY(v.y());
+    vec.setZ(v.z());
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
+                               QVector3D& vecC, QVector3D& vecD,
+                               QVector3D& center, int angle)
+{
+    rotateVertex(vecA, center, angle);
+    rotateVertex(vecB, center, angle);
+    rotateVertex(vecC, center, angle);
+    rotateVertex(vecD, center, angle);
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
+                                          QVector<GLuint>& indexesStatic,
+                                          int& count,
+                                          QVector3D& vecA, QVector3D& vecB,
+                                          QVector3D& vecC, QVector3D& vecD,
+                                          QVector2D& texA, QVector2D& texB,
+                                          QVector2D& texC, QVector2D& texD)
+{
     // Vertices
-    vertices.append(Vertex(Sprite::verticesQuad[0] * size + pos,
-                    QVector2D(x, y)));
-    vertices.append(Vertex(Sprite::verticesQuad[1] * size + pos,
-                    QVector2D(x + w, y)));
-    vertices.append(Vertex(Sprite::verticesQuad[2] * size + pos,
-                    QVector2D(x + w, y + h)));
-    vertices.append(Vertex(Sprite::verticesQuad[3] * size + pos,
-                    QVector2D(x, y + h)));
+    verticesStatic.append(Vertex(vecA, texA));
+    verticesStatic.append(Vertex(vecB, texB));
+    verticesStatic.append(Vertex(vecC, texC));
+    verticesStatic.append(Vertex(vecD, texD));
 
     // indexes
     int offset = count * Sprite::nbVerticesQuad;
     for (int i = 0; i < Sprite::nbIndexesQuad; i++)
-        indexes.append(Sprite::indexesQuad[i] + offset);
+        indexesStatic.append(Sprite::indexesQuad[i] + offset);
     count++;
 }
 
@@ -152,6 +296,7 @@ void SpriteDatas::initializeVertices(int squareSize,
 // -------------------------------------------------------
 
 void SpriteDatas::read(const QJsonObject & json){
+    m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
     m_layer = json["l"].toInt();
     m_widthPosition = json["p"].toInt();
     m_angle = json["a"].toInt();
@@ -168,6 +313,7 @@ void SpriteDatas::read(const QJsonObject & json){
 void SpriteDatas::write(QJsonObject & json) const{
     QJsonArray tab;
 
+    json["k"] = (int) m_kind;
     json["l"] = m_layer;
     json["p"] = m_widthPosition;
     json["a"] = m_angle;
@@ -197,9 +343,10 @@ void SpriteDatas::write(QJsonObject & json) const{
 SpriteObject::SpriteObject(SpriteDatas &datas, QOpenGLTexture* texture) :
     m_datas(datas),
     m_texture(texture),
-    m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
-    m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_programStatic(nullptr),
+    m_programFace(nullptr)
 {
 
 }
@@ -215,81 +362,59 @@ SpriteObject::~SpriteObject()
 //
 // -------------------------------------------------------
 
-void SpriteObject::initializeVertices(int squareSize, Position3D& position)
+void SpriteObject::initializeVertices(int squareSize, Position3D& position,
+                                      int& spritesOffset)
 {
     m_verticesStatic.clear();
-    m_indexesStatic.clear();
+    m_verticesFace.clear();
+    m_indexes.clear();
     int count = 0;
     m_datas.initializeVertices(squareSize,
                                m_texture->width(),
                                m_texture->height(),
-                               m_verticesStatic, m_indexesStatic,
-                               position, count);
+                               m_verticesStatic, m_indexes, m_verticesFace,
+                               m_indexes, position, count, count,
+                               spritesOffset);
 }
 
 // -------------------------------------------------------
 
-void SpriteObject::initializeGL(QOpenGLShaderProgram* programStatic){
+void SpriteObject::initializeStaticGL(QOpenGLShaderProgram* programStatic){
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
-
-        // Programs
         m_programStatic = programStatic;
     }
 }
 
 // -------------------------------------------------------
 
-void SpriteObject::updateGL(){
+void SpriteObject::initializeFaceGL(QOpenGLShaderProgram *programFace){
+    if (m_programFace == nullptr){
+        initializeOpenGLFunctions();
+        m_programFace = programFace;
+    }
+}
 
-    // If existing VAO or VBO, destroy it
-    if (m_vaoStatic.isCreated())
-        m_vaoStatic.destroy();
-    if (m_vertexBufferStatic.isCreated())
-        m_vertexBufferStatic.destroy();
-    if (m_indexBufferStatic.isCreated())
-        m_indexBufferStatic.destroy();
+// -------------------------------------------------------
 
-    // Create new VBO for vertex
-    m_vertexBufferStatic.create();
-    m_vertexBufferStatic.bind();
-    m_vertexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vertexBufferStatic.allocate(m_verticesStatic.constData(),
-                                  m_verticesStatic.size() * sizeof(Vertex));
+void SpriteObject::updateStaticGL(){
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_verticesStatic,
+                        m_indexes, m_vao, m_programStatic);
+}
 
-    // Create new VBO for indexes
-    m_indexBufferStatic.create();
-    m_indexBufferStatic.bind();
-    m_indexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_indexBufferStatic.allocate(m_indexesStatic.constData(),
-                                 m_indexesStatic.size() * sizeof(GLuint));
+// -------------------------------------------------------
 
-    // Create new VAO
-    m_vaoStatic.create();
-    m_vaoStatic.bind();
-    m_programStatic->enableAttributeArray(0);
-    m_programStatic->enableAttributeArray(1);
-    m_programStatic->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
-                                        Vertex::positionTupleSize,
-                                        Vertex::stride());
-    m_programStatic->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
-                                        Vertex::texCoupleSize,
-                                        Vertex::stride());
-    m_indexBufferStatic.bind();
-
-    // Releases
-    m_vaoStatic.release();
-    m_indexBufferStatic.release();
-    m_vertexBufferStatic.release();
+void SpriteObject::updateFaceGL(){
+    Map::updateGLFace(m_vertexBuffer, m_indexBuffer, m_verticesFace,
+                      m_indexes, m_vao, m_programFace);
 }
 
 // -------------------------------------------------------
 
 void SpriteObject::paintGL(){
-    m_texture->bind();
-    m_vaoStatic.bind();
-    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
-    m_vaoStatic.bind();
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    m_vao.bind();
 }
 
 // -------------------------------------------------------
@@ -309,7 +434,10 @@ void SpriteObject::paintGL(){
 Sprites::Sprites() :
     m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
     m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+    m_programStatic(nullptr),
+    m_vertexBufferFace(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferFace(QOpenGLBuffer::IndexBuffer),
+    m_programFace(nullptr)
 {
 
 }
@@ -317,7 +445,7 @@ Sprites::Sprites() :
 Sprites::~Sprites()
 {
     QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QVector<SpriteDatas*>* list = *i;
         for (int j = 0; j < list->size(); j++)
             delete list->at(j);
@@ -332,13 +460,13 @@ Sprites::~Sprites()
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_allStatic.size() == 0;
+    return m_all.size() == 0;
 }
 
 // -------------------------------------------------------
 
 void Sprites::setSprite(Position& p, SpriteDatas* sprite){
-    QVector<SpriteDatas*>* list = m_allStatic.value(p);
+    QVector<SpriteDatas*>* list = m_all.value(p);
     if (list != nullptr){
         for (int i = 0; i < list->size(); i++){
             SpriteDatas* sprite = list->at(i);
@@ -352,14 +480,14 @@ void Sprites::setSprite(Position& p, SpriteDatas* sprite){
     else{
         QVector<SpriteDatas*>* l = new QVector<SpriteDatas*>;
         l->append(sprite);
-        m_allStatic[p] = l;
+        m_all[p] = l;
     }
 }
 
 // -------------------------------------------------------
 
 SpriteDatas* Sprites::removeSprite(Position& p){
-    QVector<SpriteDatas*>* list = m_allStatic.value(p);
+    QVector<SpriteDatas*>* list = m_all.value(p);
     if (list != nullptr){
         for (int i = 0; i < list->size(); i++){
             SpriteDatas* sprite = list->at(i);
@@ -367,7 +495,7 @@ SpriteDatas* Sprites::removeSprite(Position& p){
                 list->removeAt(i);
                 if (list->size() == 0){
                     delete list;
-                    m_allStatic.remove(p);
+                    m_all.remove(p);
                 }
                 return sprite;
             }
@@ -379,8 +507,22 @@ SpriteDatas* Sprites::removeSprite(Position& p){
 
 // -------------------------------------------------------
 
-bool Sprites::addSprite(Position& p, SpriteDatas *sprite){
+bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                        int widthPosition, int angle, QRect *textureRect)
+{
     SpriteDatas* previousSprite = removeSprite(p);
+    SpriteDatas* sprite;
+
+    if (kind == MapEditorSubSelectionKind::SpritesWall) {
+        SpriteWallDatas* spriteWall =
+                new SpriteWallDatas(kind, layer, widthPosition, angle,
+                                    textureRect);
+        sprite = (SpriteDatas*) spriteWall;
+    }
+    else {
+        sprite = new SpriteDatas(kind, layer, widthPosition, angle,
+                                 textureRect);
+    }
 
     if (previousSprite != nullptr)
         delete previousSprite;
@@ -402,83 +544,81 @@ bool Sprites::deleteSprite(Position& p){
 }
 
 // -------------------------------------------------------
+
+void Sprites::removeSpritesOut(MapProperties& properties) {
+    QList<Position3D> list;
+    QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        Position3D position = i.key();
+
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
+        {
+            QVector<SpriteDatas*>* l = *i;
+            for (int j = 0; j < l->size(); j++)
+                delete l->at(j);
+            delete l;
+            list.push_back(position);
+        }
+    }
+
+    for (int j = 0; j < list.size(); j++)
+        m_all.remove(list.at(j));
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //
 // -------------------------------------------------------
 
-void Sprites::initializeVertices(int squareSize, int width, int height){
+void Sprites::initializeVertices(int squareSize, int width, int height,
+                                 int& spritesOffset)
+{
     m_verticesStatic.clear();
     m_indexesStatic.clear();
+    m_verticesFace.clear();
+    m_indexesFace.clear();
 
-    int count = 0;
+    int countStatic = 0;
+    int countFace = 0;
     QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         Position3D position = i.key();
         QVector<SpriteDatas*>* list = i.value();
         for (int j = 0; j < list->size(); j++){
             SpriteDatas* sprite = list->at(j);
             sprite->initializeVertices(squareSize, width, height,
                                        m_verticesStatic, m_indexesStatic,
-                                       position, count);
+                                       m_verticesFace, m_indexesFace,
+                                       position, countStatic, countFace,
+                                       spritesOffset);
         }
     }
 }
 
 // -------------------------------------------------------
 
-void Sprites::initializeGL(QOpenGLShaderProgram* programStatic){
+void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
+                           QOpenGLShaderProgram *programFace){
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
 
         // Programs
         m_programStatic = programStatic;
+        m_programFace = programFace;
     }
 }
 
 // -------------------------------------------------------
 
 void Sprites::updateGL(){
-
-    // If existing VAO or VBO, destroy it
-    if (m_vaoStatic.isCreated())
-        m_vaoStatic.destroy();
-    if (m_vertexBufferStatic.isCreated())
-        m_vertexBufferStatic.destroy();
-    if (m_indexBufferStatic.isCreated())
-        m_indexBufferStatic.destroy();
-
-    // Create new VBO for vertex
-    m_vertexBufferStatic.create();
-    m_vertexBufferStatic.bind();
-    m_vertexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vertexBufferStatic.allocate(m_verticesStatic.constData(),
-                                  m_verticesStatic.size() * sizeof(Vertex));
-
-    // Create new VBO for indexes
-    m_indexBufferStatic.create();
-    m_indexBufferStatic.bind();
-    m_indexBufferStatic.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_indexBufferStatic.allocate(m_indexesStatic.constData(),
-                                 m_indexesStatic.size() * sizeof(GLuint));
-
-    // Create new VAO
-    m_vaoStatic.create();
-    m_vaoStatic.bind();
-    m_programStatic->enableAttributeArray(0);
-    m_programStatic->enableAttributeArray(1);
-    m_programStatic->setAttributeBuffer(0, GL_FLOAT, Vertex::positionOffset(),
-                                        Vertex::positionTupleSize,
-                                        Vertex::stride());
-    m_programStatic->setAttributeBuffer(1, GL_FLOAT, Vertex::texOffset(),
-                                        Vertex::texCoupleSize,
-                                        Vertex::stride());
-    m_indexBufferStatic.bind();
-
-    // Releases
-    m_vaoStatic.release();
-    m_indexBufferStatic.release();
-    m_vertexBufferStatic.release();
+    Map::updateGLStatic(m_vertexBufferStatic, m_indexBufferStatic,
+                        m_verticesStatic, m_indexesStatic, m_vaoStatic,
+                        m_programStatic);
+    Map::updateGLFace(m_vertexBufferFace, m_indexBufferFace,
+                      m_verticesFace, m_indexesFace, m_vaoFace,
+                      m_programFace);
 }
 
 // -------------------------------------------------------
@@ -486,7 +626,15 @@ void Sprites::updateGL(){
 void Sprites::paintGL(){
     m_vaoStatic.bind();
     glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
-    m_vaoStatic.bind();
+    m_vaoStatic.release();
+}
+
+// -------------------------------------------------------
+
+void Sprites::paintFaceGL(){
+    m_vaoFace.bind();
+    glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, 0);
+    m_vaoFace.release();
 }
 
 // -------------------------------------------------------
@@ -496,9 +644,8 @@ void Sprites::paintGL(){
 // -------------------------------------------------------
 
 void Sprites::read(const QJsonObject & json){
-    QJsonArray tab = json["statics"].toArray();
+    QJsonArray tab = json["list"].toArray();
 
-    // All statics
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
         Position3D p;
@@ -510,7 +657,7 @@ void Sprites::read(const QJsonObject & json){
             sprite->read(tabVal.at(j).toObject());
             l->append(sprite);
         }
-        m_allStatic[p] = l;
+        m_all[p] = l;
     }
 }
 
@@ -519,9 +666,8 @@ void Sprites::read(const QJsonObject & json){
 void Sprites::write(QJsonObject & json) const{
     QJsonArray tab;
 
-    // All statics
     QHash<Position3D, QVector<SpriteDatas*>*>::const_iterator i;
-    for (i = m_allStatic.begin(); i != m_allStatic.end(); i++){
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
         QJsonArray tabValue;
@@ -537,5 +683,5 @@ void Sprites::write(QJsonObject & json) const{
         objHash["v"] = tabValue;
         tab.append(objHash);
     }
-    json["statics"] = tab;
+    json["list"] = tab;
 }

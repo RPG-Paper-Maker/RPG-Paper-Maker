@@ -45,6 +45,13 @@ PrimitiveValue::PrimitiveValue(int n) :
     m_numberValue = n;
 }
 
+PrimitiveValue::PrimitiveValue(double n) :
+    PrimitiveValue()
+{
+    m_kind = PrimitiveValueKind::NumberDouble;
+    m_numberDoubleValue = n;
+}
+
 PrimitiveValue::PrimitiveValue(QString m) :
     PrimitiveValue()
 {
@@ -99,6 +106,8 @@ QString PrimitiveValue::toString() const{
         return "None";
     case PrimitiveValueKind::Number:
         return QString::number(m_numberValue);
+    case PrimitiveValueKind::NumberDouble:
+        return QString::number(m_numberDoubleValue);
     case PrimitiveValueKind::Variable:
         return "Variable: " + Wanok::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(m_numberValue)
@@ -139,6 +148,9 @@ void PrimitiveValue::labelTab(QString& str) const{
     case PrimitiveValueKind::Number:
         str += QString::number(m_numberValue);
         break;
+    case PrimitiveValueKind::NumberDouble:
+        str += QString::number(m_numberDoubleValue);
+        break;
     case PrimitiveValueKind::Variable:
         str += "V>" + Wanok::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(m_numberValue)
@@ -165,11 +177,15 @@ void PrimitiveValue::labelTab(QString& str) const{
 
 int PrimitiveValue::numberValue() const { return m_numberValue; }
 
+double PrimitiveValue::numberDoubleValue() const { return m_numberDoubleValue; }
+
 QString PrimitiveValue::messageValue() const { return m_messageValue; }
 
 bool PrimitiveValue::switchValue() const { return m_switchValue; }
 
 void PrimitiveValue::setNumberValue(int n) { m_numberValue = n; }
+
+void PrimitiveValue::setNumberDoubleValue(double n) { m_numberDoubleValue = n; }
 
 void PrimitiveValue::setMessageValue(QString m) { m_messageValue = m; }
 
@@ -214,6 +230,8 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim){
         m_messageValue = prim.m_messageValue; break;
     case PrimitiveValueKind::Switch:
         m_switchValue = prim.m_switchValue; break;
+    case PrimitiveValueKind::NumberDouble:
+        m_numberDoubleValue = prim.m_numberDoubleValue; break;
     }
 
     m_modelParameter = prim.m_modelParameter;
@@ -245,6 +263,8 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand* command,
         m_messageValue = command->valueCommandAt(i++);
     case PrimitiveValueKind::Switch:
         m_switchValue = command->valueCommandAt(i++) == "1";
+    case PrimitiveValueKind::NumberDouble:
+        m_numberDoubleValue = command->valueCommandAt(i++).toDouble();
     }
 }
 
@@ -268,8 +288,12 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command){
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
         command.append(m_messageValue);
+        break;
     case PrimitiveValueKind::Switch:
         command.append(m_switchValue ? "1" : "0");
+        break;
+    case PrimitiveValueKind::NumberDouble:
+        command.append(QString::number(m_numberDoubleValue));
     }
 }
 
@@ -295,12 +319,14 @@ void PrimitiveValue::read(const QJsonObject &json){
     case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::KeyBoard:
-        m_numberValue = v.toInt(); break;
+        m_numberValue = v.toInt(); break;    
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
         m_messageValue = v.toString(); break;
     case PrimitiveValueKind::Switch:
         m_switchValue = v.toBool(); break;
+    case PrimitiveValueKind::NumberDouble:
+        m_numberDoubleValue = v.toDouble(); break;
     }
 }
 
@@ -329,6 +355,8 @@ void PrimitiveValue::write(QJsonObject &json) const{
         v = m_messageValue; break;
     case PrimitiveValueKind::Switch:
         v = m_switchValue; break;
+    case PrimitiveValueKind::NumberDouble:
+        v = m_numberDoubleValue; break;
     }
     json["v"] = v;
 }

@@ -25,6 +25,8 @@
 #include "grid.h"
 #include "camera.h"
 #include "mapeditorselectionkind.h"
+#include "mapeditorsubselectionkind.h"
+#include "drawkind.h"
 #include "cursor.h"
 #include "contextmenulist.h"
 
@@ -50,22 +52,25 @@ public:
     Camera* camera() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
+    void moveCursorToMousePosition(QPoint point);
     void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();
     Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
-                 int cameraDistance, int cameraHeight);
-    void deleteMap();
+                 int cameraDistance, int cameraHeight,
+                 double cameraHorizontalAngle);
+    void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 
     void update();
+    void updateMousePosition(QPoint point);
     void updateRaycasting();
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
     void updateMovingPortionsNorthSouth(Portion& newPortion);
     void updateMovingPortionsUpDown(Portion&);
     void removePortion(int i, int j, int k);
-    void setPortion(int i, int j, int k, int m, int n, int o);
+    void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(Portion& currentPortion, int i, int j, int k);
     void updatePortions();
     void saveTempPortions();
@@ -84,18 +89,43 @@ public:
     void getCorrectPositionOnRay(Position& position, QVector3D &ray,
                                  int distance);
 
-    void addRemove(MapEditorSelectionKind selection, QRect& tileset,
+    void addRemove(MapEditorSelectionKind selection,
+                   MapEditorSubSelectionKind subSelection,
+                   DrawKind drawKind,
+                   QRect& tileset,
                    Qt::MouseButton button);
     Position getPositionSelected(MapEditorSelectionKind selection) const;
-    void add(MapEditorSelectionKind selection, QRect& tileset, Position& p);
-    void remove(MapEditorSelectionKind selection, Position& p);
-    void addFloor(Position& p, QRect& tileset);
-    void stockFloor(Position& p, FloorDatas* floor);
-    void removeFloor(Position& p);
-    void eraseFloor(Position& p);
-    void addSprite(Position& p, QRect& tileset);
-    void stockSprite(Position& p, SpriteDatas *sprite);
-    void removeSprite(Position& p);
+    void add(MapEditorSelectionKind selection,
+             MapEditorSubSelectionKind subSelection,
+             DrawKind drawKind,
+             QRect& tileset,
+             Position& p);
+    void remove(MapEditorSelectionKind selection,
+                DrawKind drawKind,
+                Position& p);
+    void addFloor(Position& p, MapEditorSubSelectionKind kind,
+                  DrawKind drawKind,
+                  QRect& tileset);
+    void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
+                      QRect &textureAfter);
+    LandDatas* getLand(Portion& portion, Position& p);
+    void getFloorTextureReduced(QRect &rect, QRect& rectAfter,
+                                int localX, int localZ);
+    bool areLandsEquals(LandDatas* landBefore,
+                        QRect &textureAfter,
+                        MapEditorSubSelectionKind kindAfter);
+    LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter,
+                            QRect &textureAfter);
+    void getLandTexture(QRect& rect, LandDatas* land);
+    void stockLand(Position& p, LandDatas* landDatas);
+    void removeLand(Position& p, DrawKind drawKind);
+    void eraseLand(Position& p);
+    void addSprite(Position& p, MapEditorSubSelectionKind kind,
+                   DrawKind drawKind,
+                   QRect& tileset);
+    void stockSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                     int widthPosition, int angle, QRect* textureRect);
+    void removeSprite(Position& p, DrawKind drawKind);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
@@ -110,12 +140,19 @@ public:
     Portion getGlobalFromLocalPortion(Portion& portion) const;
 
     void paintGL(QMatrix4x4& modelviewProjection,
+                 QVector3D& cameraRightWorldSpace,
+                 QVector3D& cameraUpWorldSpace,
                  MapEditorSelectionKind selectionKind);
 
-    void onMouseWheelMove(QWheelEvent *event);
-    void onMouseMove(QPoint point, Qt::MouseButton button);
-    void onMousePressed(MapEditorSelectionKind selection, QRect& tileset,
-                        QPoint point, Qt::MouseButton button);
+    void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
+    void onMouseMove(QPoint point, Qt::MouseButton button,
+                     bool updateTree = true);
+    void onMousePressed(MapEditorSelectionKind selection,
+                        MapEditorSubSelectionKind subSelection,
+                        DrawKind drawKind,
+                        QRect& tileset,
+                        QPoint point,
+                        Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);

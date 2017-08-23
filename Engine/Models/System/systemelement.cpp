@@ -65,6 +65,14 @@ bool SystemElement::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemElement::createCopy() const{
+    SystemElement* super = new SystemElement;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemElement::setCopy(const SystemElement& element){
     SystemLang::setCopy(element);
     m_efficiency->setHorizontalHeaderLabels(QStringList({"Elements",

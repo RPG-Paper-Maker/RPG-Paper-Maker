@@ -30,6 +30,9 @@
 #include "serializable.h"
 #include "position.h"
 #include "vertex.h"
+#include "vertexbillboard.h"
+#include "mapeditorsubselectionkind.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -45,9 +48,11 @@ public:
     Sprite();
     virtual ~Sprite();
     static QVector3D verticesQuad[];
+    static QVector2D modelQuad[];
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
+    static const int SPRITES_OFFSET_COEF = 0.0005;
 };
 
 // -------------------------------------------------------
@@ -62,20 +67,35 @@ class SpriteDatas
 {
 public:
     SpriteDatas();
-    SpriteDatas(int layer, int widthPosition, int angle, QRect* textureRect);
+    SpriteDatas(MapEditorSubSelectionKind kind, int layer, int widthPosition,
+                int angle, QRect* textureRect);
     virtual ~SpriteDatas();
+    MapEditorSubSelectionKind kind() const;
     int layer() const;
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
-    void initializeVertices(int squareSize, int width, int height,
-                            QVector<Vertex>& vertices, QVector<GLuint>& indexes,
-                            Position3D& position, int& count);
-
+    virtual void initializeVertices(int squareSize, int width, int height,
+                                    QVector<Vertex>& verticesStatic,
+                                    QVector<GLuint>& indexesStatic,
+                                    QVector<VertexBillboard>& verticesFace,
+                                    QVector<GLuint>& indexesFace,
+                                    Position3D& position, int& countStatic,
+                                    int& countFace, int& spritesOffset);
+    void rotateVertex(QVector3D& vec, QVector3D& center, int angle);
+    void rotateSprite(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
+                      QVector3D& vecD, QVector3D& center, int angle);
+    void addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
+                                 QVector<GLuint>& indexesStatic, int& count,
+                                 QVector3D& vecA, QVector3D& vecB,
+                                 QVector3D& vecC, QVector3D& vecD,
+                                 QVector2D& texA, QVector2D& texB,
+                                 QVector2D& texC, QVector2D& texD);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
+    MapEditorSubSelectionKind m_kind;
     int m_layer;
     int m_widthPosition;
     int m_angle;
@@ -95,22 +115,26 @@ class SpriteObject : protected QOpenGLFunctions
 public:
     SpriteObject(SpriteDatas& datas, QOpenGLTexture* texture);
     virtual ~SpriteObject();
-    void initializeVertices(int squareSize, Position3D& position);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
-    void updateGL();
+    void initializeVertices(int squareSize, Position3D& position, int &spritesOffset);
+    void initializeStaticGL(QOpenGLShaderProgram* programStatic);
+    void initializeFaceGL(QOpenGLShaderProgram *programFace);
+    void updateStaticGL();
+    void updateFaceGL();
     void paintGL();
 
 protected:
     SpriteDatas& m_datas;
     QOpenGLTexture* m_texture;
 
-    // OpenGL informations
-    QOpenGLBuffer m_vertexBufferStatic;
-    QOpenGLBuffer m_indexBufferStatic;
+    // OpenGL static
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
     QVector<Vertex> m_verticesStatic;
-    QVector<GLuint> m_indexesStatic;
-    QOpenGLVertexArrayObject m_vaoStatic;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram* m_programStatic;
+    QVector<VertexBillboard> m_verticesFace;
+    QOpenGLShaderProgram* m_programFace;
 };
 
 // -------------------------------------------------------
@@ -129,27 +153,41 @@ public:
     bool isEmpty() const;
     void setSprite(Position& p, SpriteDatas* sprite);
     SpriteDatas* removeSprite(Position& p);
-    bool addSprite(Position& p, SpriteDatas* sprite);
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+                   int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
 
-    void initializeVertices(int squareSize, int width, int height);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void removeSpritesOut(MapProperties& properties);
+
+    void initializeVertices(int squareSize, int width, int height,
+                            int& spritesOffset);
+    void initializeGL(QOpenGLShaderProgram* programStatic,
+                      QOpenGLShaderProgram* programFace);
     void updateGL();
     void paintGL();
+    void paintFaceGL();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position3D, QVector<SpriteDatas*>*> m_allStatic;
+    QHash<Position3D, QVector<SpriteDatas*>*> m_all;
 
-    // OpenGL informations
+    // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;
     QOpenGLBuffer m_indexBufferStatic;
     QVector<Vertex> m_verticesStatic;
     QVector<GLuint> m_indexesStatic;
     QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
+
+    // OpenGL face
+    QOpenGLBuffer m_vertexBufferFace;
+    QOpenGLBuffer m_indexBufferFace;
+    QVector<VertexBillboard> m_verticesFace;
+    QVector<GLuint> m_indexesFace;
+    QOpenGLVertexArrayObject m_vaoFace;
+    QOpenGLShaderProgram* m_programFace;
 };
 
 #endif // SPRITES_H

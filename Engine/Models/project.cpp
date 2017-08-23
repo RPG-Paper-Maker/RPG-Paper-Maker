@@ -19,9 +19,14 @@
 
 #include "project.h"
 #include "wanok.h"
+#include "oskind.h"
+#include "projectupdater.h"
+#include "dialogprogress.h"
+#include <QDirIterator>
 #include <QMessageBox>
+#include <QApplication>
 
-const QString Project::VERSION = "0.1.0";
+const QString Project::ENGINE_VERSION = "0.3.0";
 
 // -------------------------------------------------------
 //
@@ -73,6 +78,8 @@ PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
 
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 
+QString Project::version() const { return m_version; }
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -91,7 +98,7 @@ void Project::setDefault(){
 // -------------------------------------------------------
 
 void Project::saveCurrentMap(){
-    p_currentMap->save(p_currentMap);
+    p_currentMap->save();
     p_currentMap->setSaved(true);
 }
 
@@ -105,6 +112,9 @@ bool Project::read(QString path){
     setPathCurrentProject(path);
 
     if (!readVersion())
+        return false;
+
+    if (!readOS())
         return false;
 
     readLangsDatas();
@@ -128,19 +138,165 @@ bool Project::readVersion(){
     }
 
     QTextStream in(&file);
-    QString line = in.readLine();
+    QString version = in.readLine();
     file.close();
+    QString information = "This project is under " + version + " version but" +
+                          " your current RPG Paper Maker version is " +
+                          Project::ENGINE_VERSION;
 
-    if (line != Project::VERSION){
-        QString information = "This project is under " + line + " version but"
-                              " your current RPG Paper Maker version is " +
-                              Project::VERSION + ".";
-        QString noConvert = "Unfortunately, this version cannot be converted.";
-        QMessageBox::critical(nullptr, "Error", information + "\n" + noConvert);
+    int dBefore = ProjectUpdater::versionDifferent(version, "0.3.0");
+
+    // If impossible to convert the version
+    if (dBefore == -2) {
+        QMessageBox::critical(nullptr, "Error: could not find project version",
+                              "Impossible to convert" + version + ".");
+        return false;
+    }
+
+    // If version < 0.3.0, tell that the project updater didn't existed yet
+    if (dBefore == -1) {
+        QMessageBox::critical(nullptr, "Error: impossible conversion",
+                              information + " and the projects cannot be " +
+                              "updated if the project version is inferior to " +
+                              "0.3.0.");
+        return false;
+    }
+
+    int d = ProjectUpdater::versionDifferent(version);
+
+    // If the project if superior to the engine
+    if (d == 1) {
+        QMessageBox::critical(nullptr, "Error: impossible conversion",
+                              information + ". Please try to update a new " +
+                              "version of the engine and retry.");
+        return false;
+    }
+
+    // If the project is inferior
+    if (d == -1) {
+        QDir dirProject(p_pathCurrentProject);
+        QString previousFolderName = dirProject.dirName() +
+                                     "-" + version;
+        QMessageBox::StandardButton box =
+            QMessageBox::question(nullptr, "Error: conversion needed",
+                                  information + ". Convert the project? (a " +
+                                  "copy of your current project will be " +
+                                  "created under the name " + previousFolderName
+                                  + ".",
+                                  QMessageBox::Yes | QMessageBox::No);
+        if (box == QMessageBox::Yes) {
+            DialogProgress dialog;
+            QThread* thread = new QThread(qApp->parent());
+            ProjectUpdater* worker = new ProjectUpdater(this,
+                                                        previousFolderName);
+            worker->moveToThread(thread);
+            qApp->connect(worker, SIGNAL(finished()),
+                          worker, SLOT(deleteLater()));
+            qApp->connect(worker, SIGNAL(finished()),
+                          &dialog, SLOT(accept()));
+            qApp->connect(thread, SIGNAL(started()),
+                          worker, SLOT(check()));
+            qApp->connect(worker, SIGNAL(progress(int, QString)),
+                          &dialog, SLOT(setValueLabel(int, QString)));
+            thread->start();
+            dialog.exec();
+
+            return true;
+        }
+
         return false;
     }
 
     return true;
+}
+
+// -------------------------------------------------------
+
+bool Project::readOS() {
+
+    // Get the project OS
+    OSKind projectOS;
+    if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
+        projectOS = OSKind::Window;
+    else if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+        projectOS = OSKind::Linux;
+    else
+        projectOS = OSKind::Mac;
+
+    // Get the computer OS
+    OSKind computerOS;
+    #ifdef Q_OS_WIN
+        computerOS = OSKind::Window;
+    #elif __linux__
+        computerOS = OSKind::Linux;
+    #else
+        computerOS = OSKind::Mac;
+    #endif
+
+    // Compare
+    if (computerOS != projectOS) {
+        QString information = "This project is configured for " +
+                Wanok::osToString(projectOS) + " OS but you seems to be on " +
+                Wanok::osToString(computerOS) + " OS.";
+        QString question = "Would you like to convert the project for " +
+                Wanok::osToString(computerOS) + " OS? (This will only keep" +
+                " \"Content\" folder, and \"game.rpm\", all the other " +
+                " files will be removed in the root of the project)";
+        QMessageBox::StandardButton box =
+                QMessageBox::question(nullptr, "Error: incompatible OS",
+                             information + "\n" + question,
+                             QMessageBox::Yes | QMessageBox::No);
+        if (box == QMessageBox::Yes) {
+            removeOSFiles();
+            copyOSFiles();
+        }
+        else
+            return false;
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool Project::copyOSFiles() {
+    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+
+    // Copy excecutable and libraries according to current OS
+    QString strOS = "";
+    #ifdef Q_OS_WIN
+        strOS = "win32";
+    #elif __linux__
+        strOS = "linux";
+    #else
+        strOS = "osx";
+    #endif
+
+    // Copying a basic project content
+    return Wanok::copyPath(Wanok::pathCombine(pathContent, strOS),
+                           p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::removeOSFiles() {
+    QDirIterator directories(p_pathCurrentProject,
+                             QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator files(p_pathCurrentProject, QDir::Files);
+
+    // Remove directories exept Content
+    while (directories.hasNext()){
+        directories.next();
+        if (directories.fileName() != "Content")
+            QDir(directories.filePath()).removeRecursively();
+    }
+
+    // Remove files exept game.rpm
+    while (files.hasNext()){
+        files.next();
+        if (files.fileName() != "game.rpm")
+            QFile(files.filePath()).remove();
+    }
 }
 
 // -------------------------------------------------------
@@ -250,4 +406,16 @@ void Project::writeSystemDatas(){
 
 void Project::updatePictures(){
     p_gameDatas->tilesetsDatas()->updatePictures();
+}
+
+// -------------------------------------------------------
+
+QString Project::createRPMFile() {
+    QFile file(Wanok::pathCombine(p_pathCurrentProject, "game.rpm"));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return "Error while creating game.rpm file";
+    QTextStream out(&file);
+    out << Project::ENGINE_VERSION;
+
+    return NULL;
 }

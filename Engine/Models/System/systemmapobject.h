@@ -21,7 +21,7 @@
 #define SYSTEMMAPOBJECT_H
 
 #include "superlistitem.h"
-#include "portion.h"
+#include "position3d.h"
 
 // -------------------------------------------------------
 //
@@ -35,14 +35,15 @@ class SystemMapObject : public SuperListItem
 {
 public:
     SystemMapObject();
-    SystemMapObject(int i, QString n, Portion portion);
+    SystemMapObject(int i, QString n, Position3D& position);
     virtual ~SystemMapObject();
+    Position3D position() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    Portion m_portion;
+    Position3D m_position;
 };
 
 #endif // SYSTEMMAPOBJECT_H

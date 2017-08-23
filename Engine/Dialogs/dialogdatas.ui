@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>10</number>
+        <number>0</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -1035,7 +1035,7 @@
                     <bool>false</bool>
                    </property>
                    <property name="title">
-                    <string>Waters</string>
+                    <string>Sprite walls</string>
                    </property>
                   </widget>
                  </item>

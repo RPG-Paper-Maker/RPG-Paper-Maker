@@ -129,6 +129,8 @@ void WidgetSuperList::setMaximum(int newSize){
             delete super;
         }
     }
+
+    emit updated();
 }
 
 // -------------------------------------------------------
@@ -142,6 +144,8 @@ void WidgetSuperList::addNewItem(SuperListItem* super){
     QModelIndex modelIndex = p_model->index(
                 p_model->invisibleRootItem()->rowCount() - 1, 0);
     setCurrentIndex(modelIndex);
+
+    emit updated();
 }
 
 // -------------------------------------------------------
@@ -152,6 +156,8 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
     if (super->id() != -1){
         delete ((SuperListItem*) item->data().value<qintptr>());
         p_model->removeRow(item->row());
+
+        emit updated();
     }
 }
 
@@ -188,8 +194,11 @@ void WidgetSuperList::openDialog(QModelIndex){
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*)(selected->data()
                                                 .value<quintptr>());
-        if (super->openDialog())
+        if (super->openDialog()){
             selected->setText(super->toString());
+
+            emit updated();
+        }
     }
 }
 

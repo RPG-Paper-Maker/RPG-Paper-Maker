@@ -17,14 +17,26 @@
    <bool>false</bool>
   </property>
   <widget class="QMenu" name="menuFloors">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="tearOffEnabled">
+    <bool>false</bool>
+   </property>
    <property name="title">
-    <string>Floors</string>
+    <string>Floor</string>
+   </property>
+   <property name="toolTipsVisible">
+    <bool>false</bool>
    </property>
    <addaction name="actionFloors"/>
   </widget>
   <widget class="QMenu" name="menuEvents">
    <property name="title">
-    <string>Objects</string>
+    <string>Object</string>
    </property>
   </widget>
   <widget class="QMenu" name="menuFace_Sprite">
@@ -33,10 +45,17 @@
    </property>
    <addaction name="actionFace_Sprite"/>
    <addaction name="actionFix_Sprite"/>
+   <addaction name="actionDouble_Sprite"/>
+   <addaction name="actionQuadra_Sprite"/>
+   <addaction name="actionWall_Sprite"/>
   </widget>
   <action name="actionFloors">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/floor.png</normaloff>:/icons/Ressources/floor.png</iconset>
+   </property>
    <property name="text">
-    <string>Floors</string>
+    <string>Floor</string>
    </property>
   </action>
   <action name="actionEvents">
@@ -45,19 +64,70 @@
    </property>
   </action>
   <action name="actionFace_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_face.png</normaloff>:/icons/Ressources/sprite_face.png</iconset>
+   </property>
    <property name="text">
     <string>Face Sprite</string>
    </property>
   </action>
   <action name="actionFix_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_fix.png</normaloff>:/icons/Ressources/sprite_fix.png</iconset>
+   </property>
    <property name="text">
     <string>Fix Sprite</string>
+   </property>
+  </action>
+  <action name="actionPencil">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/pencil.png</normaloff>:/icons/Ressources/pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pencil</string>
+   </property>
+  </action>
+  <action name="actionTin_of_paint">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/pin.png</normaloff>:/icons/Ressources/pin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tin of paint</string>
+   </property>
+  </action>
+  <action name="actionDouble_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_double.png</normaloff>:/icons/Ressources/sprite_double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double Sprite</string>
+   </property>
+  </action>
+  <action name="actionQuadra_Sprite">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_quadra.png</normaloff>:/icons/Ressources/sprite_quadra.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quadra Sprite</string>
+   </property>
+  </action>
+  <action name="actionWall_Sprite">
+   <property name="text">
+    <string>Wall Sprite</string>
    </property>
   </action>
   <addaction name="menuFloors"/>
   <addaction name="menuFace_Sprite"/>
   <addaction name="menuEvents"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

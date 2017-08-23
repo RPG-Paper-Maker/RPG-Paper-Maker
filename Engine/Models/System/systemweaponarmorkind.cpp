@@ -19,6 +19,7 @@
 
 #include "systemweaponarmorkind.h"
 #include "dialogsystemweaponarmorkind.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -26,13 +27,14 @@
 //
 // -------------------------------------------------------
 
-SystemWeaponArmorKind::SystemWeaponArmorKind() : SystemLang()
+SystemWeaponArmorKind::SystemWeaponArmorKind() :
+    SystemWeaponArmorKind(1, new LangsTranslation, QList<bool>())
 {
-    m_equipment = new QStandardItemModel();
+
 }
 
 SystemWeaponArmorKind::SystemWeaponArmorKind(int i, LangsTranslation* names,
-                                             QStandardItemModel* equipment) :
+                                             QList<bool> equipment) :
     SystemLang(i,names),
     m_equipment(equipment)
 {
@@ -40,17 +42,65 @@ SystemWeaponArmorKind::SystemWeaponArmorKind(int i, LangsTranslation* names,
 }
 
 SystemWeaponArmorKind::~SystemWeaponArmorKind(){
-    delete m_equipment;
-}
 
-QStandardItemModel* SystemWeaponArmorKind::equipment() const {
-    return m_equipment;
 }
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+QStandardItemModel* SystemWeaponArmorKind::getEquipmentModel() const{
+    QStandardItemModel* model = new QStandardItemModel;
+    QStandardItemModel* equipmentModel = Wanok::get()->project()->gameDatas()
+            ->battleSystemDatas()->modelCommonEquipment();
+    SystemLang* equipment;
+    QStandardItem* item;
+
+    for (int i = 0; i < equipmentModel->invisibleRootItem()->rowCount(); i++){
+        equipment = (SystemLang*) equipmentModel->item(i)->data()
+                .value<qintptr>();
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(equipment)));
+        item->setCheckable(true);
+        if (m_equipment.at(equipment->id() - 1))
+            item->setCheckState(Qt::Checked);
+        item->setText(equipment->toString());
+        model->appendRow(item);
+    }
+
+    return model;
+}
+
+// -------------------------------------------------------
+
+void SystemWeaponArmorKind::updateEquipment(){
+    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
+            ->battleSystemDatas()->modelCommonEquipment();
+    QList<bool> previousEquipment = m_equipment;
+    SystemLang* equipment;
+    int index;
+
+    m_equipment.clear();
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        equipment = (SystemLang*) model->item(i)->data().value<qintptr>();
+        index = equipment->id() - 1;
+
+        if (index < previousEquipment.size())
+            m_equipment.append(previousEquipment.at(index));
+        else
+            m_equipment.append(false);
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemWeaponArmorKind::setDefault(){
+    updateEquipment();
+}
+
 // -------------------------------------------------------
 
 bool SystemWeaponArmorKind::openDialog(){
@@ -66,26 +116,20 @@ bool SystemWeaponArmorKind::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemWeaponArmorKind::createCopy() const{
+    SystemWeaponArmorKind* super = new SystemWeaponArmorKind;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemWeaponArmorKind::setCopy(const SystemWeaponArmorKind&
                                     weaponArmorKind)
 {
     SystemLang::setCopy(weaponArmorKind);
 
-    QStandardItem* item;
-    SuperListItem* equipment;
-    for (int j = 0; j < weaponArmorKind.equipment()->invisibleRootItem()
-         ->rowCount(); j++){
-        equipment = SuperListItem::getById(weaponArmorKind.equipment()
-                                           ->invisibleRootItem(), j+1);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(equipment)));
-        item->setCheckable(true);
-        if (weaponArmorKind.equipment()->item(j)->checkState() == Qt::Checked)
-            item->setCheckState(Qt::Checked);
-        item->setText(equipment->toString());
-        m_equipment->appendRow(item);
-    }
+    m_equipment = weaponArmorKind.m_equipment;
 }
 
 // -------------------------------------------------------
@@ -96,30 +140,10 @@ void SystemWeaponArmorKind::setCopy(const SystemWeaponArmorKind&
 
 void SystemWeaponArmorKind::read(const QJsonObject &json){
     SystemLang::read(json);
-}
-
-// -------------------------------------------------------
-
-void SystemWeaponArmorKind::readEquipments(QStandardItemModel* model,
-                                           const QJsonObject &json)
-{
     QJsonArray jsonEquipment = json["equipment"].toArray();
 
-    QStandardItem* item;
-    SuperListItem* equipment;
-    bool checked;
-
-    for (int j = 0; j < jsonEquipment.size(); j++){
-        checked = jsonEquipment[j].toBool();
-        equipment = SuperListItem::getById(model->invisibleRootItem(), j+1);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(equipment)));
-        item->setCheckable(true);
-        if (checked) item->setCheckState(Qt::Checked);
-        item->setText(equipment->toString());
-        m_equipment->appendRow(item);
-    }
+    for (int i = 0; i < jsonEquipment.size(); i++)
+        m_equipment.append(jsonEquipment.at(i).toBool());
 }
 
 // -------------------------------------------------------
@@ -127,8 +151,8 @@ void SystemWeaponArmorKind::readEquipments(QStandardItemModel* model,
 void SystemWeaponArmorKind::write(QJsonObject &json) const{
     SystemLang::write(json);
     QJsonArray tab;
-    for (int i = 0; i < m_equipment->invisibleRootItem()->rowCount(); i++){
-        tab.append(m_equipment->item(i)->checkState() == Qt::Checked);
-    }
+
+    for (int i = 0; i < m_equipment.size(); i++)
+        tab.append(m_equipment.at(i));
     json["equipment"] = tab;
 }

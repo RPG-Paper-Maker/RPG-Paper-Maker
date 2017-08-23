@@ -33,13 +33,14 @@ ControlMapEditor::ControlMapEditor() :
     m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
-    m_displayGrid(true)
+    m_displayGrid(true),
+    m_treeMapNode(nullptr)
 {
 
 }
 
 ControlMapEditor::~ControlMapEditor(){
-    deleteMap();
+    deleteMap(false);
     delete m_camera;
     delete m_cursor;
     delete m_cursorObject;
@@ -69,6 +70,17 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
+void ControlMapEditor::moveCursorToMousePosition(QPoint point){
+    updateMousePosition(point);
+    update();
+
+    if (m_map->isInGrid(m_positionOnPlane)){
+        m_cursor->setPositions(m_positionOnPlane);
+    }
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::reLoadTextures(){
     m_map->loadTextures();
 }
@@ -77,7 +89,7 @@ void ControlMapEditor::reLoadTextures(){
 
 Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                                QVector3D *positionObject, int cameraDistance,
-                               int cameraHeight)
+                               int cameraHeight, double cameraHorizontalAngle)
 {
     // Map & cursor
     m_cursor = new Cursor(position);
@@ -92,7 +104,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     // Grid
     m_grid = new Grid;
     m_grid->initializeVertices(m_map->mapProperties()->length(),
-                               m_map->mapProperties()->width(), 16);
+                               m_map->mapProperties()->width(),
+                               m_map->squareSize());
     m_grid->initializeGL();
 
     // Cursor object
@@ -110,8 +123,10 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_cursorObject->initialize();
 
     // Camera
-    m_camera->setDistance(cameraDistance);
-    m_camera->setHeight(cameraHeight);
+
+    m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
+    m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
+    m_camera->setHorizontalAngle(cameraHorizontalAngle);
     m_camera->update(m_cursor, m_map->squareSize());
 
     return m_map;
@@ -119,7 +134,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::deleteMap(){
+void ControlMapEditor::deleteMap(bool updateCamera){
 
     // Cursors
     if (m_cursor != nullptr){
@@ -142,6 +157,13 @@ void ControlMapEditor::deleteMap(){
         delete m_map;
         m_map = nullptr;
     }
+
+    // Update camera node
+    if (updateCamera && m_treeMapNode != nullptr) {
+        m_camera->setDistance(m_camera->distance() / Wanok::coefSquareSize());
+        m_camera->setHeight(m_camera->height() / Wanok::coefSquareSize());
+        updateCameraTreeNode();
+    }
 }
 
 // -------------------------------------------------------
@@ -158,6 +180,7 @@ void ControlMapEditor::updateCameraTreeNode(){
     TreeMapTag* tag = (TreeMapTag*) m_treeMapNode->data().value<quintptr>();
     tag->setCameraDistance(m_camera->distance());
     tag->setCameraHeight(m_camera->height());
+    tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
 }
 
 // -------------------------------------------------------
@@ -180,6 +203,12 @@ void ControlMapEditor::update(){
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouse;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateMousePosition(QPoint point){
+    m_mouse = point;
 }
 
 // -------------------------------------------------------
@@ -207,7 +236,7 @@ void ControlMapEditor::updatePortions(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMovingPortions(){
+void ControlMapEditor::updateMovingPortions() {
     Portion newPortion = m_cursor->getPortion();
 
     updateMovingPortionsEastWest(newPortion);
@@ -221,26 +250,32 @@ void ControlMapEditor::updateMovingPortions(){
 
 void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
     int r = m_map->portionsRay();
-    if (newPortion.x() > m_currentPortion.x()){
+    if (newPortion.x() > m_currentPortion.x()) {
         int k = 0;
-        for (int j = -r - 1; j <= r + 1; j++){
-            int i = -r - 1;
+        for (int j = -r; j <= r; j++) {
+            bool visible = j != -r && j != r;
+            int i = -r;
             removePortion(i, k, j);
-            for (; i < r + 1; i++)
-                setPortion(i, k, j, i + 1, k, j);
+            setPortion(i, k, j, i + 1, k, j, false);
+            i++;
+            for (; i < r; i++)
+                setPortion(i, k, j, i + 1, k, j, visible);
 
-            loadPortion(newPortion, r + 1, k, j);
+            loadPortion(newPortion, r, k, j);
         }
     }
-    else if (newPortion.x() < m_currentPortion.x()){
+    else if (newPortion.x() < m_currentPortion.x()) {
         int k = 0;
-        for (int j = -r - 1; j <= r + 1; j++){
-            int i = r + 1;
+        for (int j = -r; j <= r; j++) {
+            bool visible = j != -r && j != r;
+            int i = r;
             removePortion(i, k, j);
-            for (; i > -r - 1; i--)
-                setPortion(i, k, j, i - 1, k, j);
+            setPortion(i, k, j, i - 1, k, j, false);
+            i--;
+            for (; i > -r; i--)
+                setPortion(i, k, j, i - 1, k, j, visible);
 
-            loadPortion(newPortion, -r - 1, k, j);
+            loadPortion(newPortion, -r, k, j);
         }
     }
 }
@@ -249,26 +284,32 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
 
 void ControlMapEditor::updateMovingPortionsNorthSouth(Portion& newPortion){
     int r = m_map->portionsRay();
-    if (newPortion.z() > m_currentPortion.z()){
+    if (newPortion.z() > m_currentPortion.z()) {
         int k = 0;
-        for (int i = -r - 1; i <= r + 1; i++){
-            int j = -r - 1;
+        for (int i = -r; i <= r; i++) {
+            bool visible = i != -r && i != r;
+            int j = -r;
             removePortion(i, k, j);
-            for (; j < r + 1; j++)
-                setPortion(i, k, j, i, k, j + 1);
+            setPortion(i, k, j, i, k, j + 1, false);
+            j++;
+            for (; j < r; j++)
+                setPortion(i, k, j, i, k, j + 1, visible);
 
-            loadPortion(newPortion, i, k, r + 1);
+            loadPortion(newPortion, i, k, r);
         }
     }
-    else if (newPortion.z() < m_currentPortion.z()){
+    else if (newPortion.z() < m_currentPortion.z()) {
         int k = 0;
-        for (int i = -r - 1; i <= r + 1; i++){
-            int j = r + 1;
+        for (int i = -r; i <= r; i++) {
+            bool visible = i != -r && i != r;
+            int j = r;
             removePortion(i, k, j);
-            for (; j > -r - 1; j--)
-                setPortion(i, k, j, i, k, j - 1);
+            setPortion(i, k, j, i, k, j - 1, false);
+            j--;
+            for (; j > -r; j--)
+                setPortion(i, k, j, i, k, j - 1, visible);
 
-            loadPortion(newPortion, i, k, -r - 1);
+            loadPortion(newPortion, i, k, -r);
         }
     }
 }
@@ -289,11 +330,13 @@ void ControlMapEditor::removePortion(int i, int j, int k){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setPortion(int i, int j, int k, int m, int n, int o){
+void ControlMapEditor::setPortion(int i, int j, int k, int m, int n, int o,
+                                  bool visible)
+{
     Portion previousPortion(i, j, k);
     Portion newPortion(m, n, o);
 
-    m_map->replacePortion(previousPortion, newPortion);
+    m_map->replacePortion(previousPortion, newPortion, visible);
 }
 
 // -------------------------------------------------------
@@ -302,7 +345,7 @@ void ControlMapEditor::loadPortion(Portion& currentPortion, int i, int j,
                                    int k)
 {
     m_map->loadPortion(currentPortion.x() + i, currentPortion.y() + j,
-                       currentPortion.z() + k, i, j, k);
+                       currentPortion.z() + k, i, j, k, false);
 }
 
 // -------------------------------------------------------
@@ -423,14 +466,17 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 // -------------------------------------------------------
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
-                                 QRect& tileset, Qt::MouseButton button)
+                                 MapEditorSubSelectionKind subSelection,
+                                 DrawKind drawKind,
+                                 QRect& tileset,
+                                 Qt::MouseButton button)
 {
     Position p = getPositionSelected(selection);
     if (m_map->isInGrid(p)){
         if (button == Qt::MouseButton::LeftButton)
-            add(selection, tileset, p);
+            add(selection, subSelection, drawKind, tileset, p);
         else if (button == Qt::MouseButton::RightButton)
-            remove(selection, p);
+            remove(selection, drawKind, p);
     }
 }
 
@@ -453,31 +499,38 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 
 // -------------------------------------------------------
 
-void ControlMapEditor::add(MapEditorSelectionKind selection, QRect& tileset,
+void ControlMapEditor::add(MapEditorSelectionKind selection,
+                           MapEditorSubSelectionKind subSelection,
+                           DrawKind drawKind,
+                           QRect& tileset,
                            Position& p)
 {
-    switch (selection){
-    case MapEditorSelectionKind::Land:
-        addFloor(p, tileset);
-        break;
-    case MapEditorSelectionKind::Sprites:
-        addSprite(p, tileset);
-        break;
-    case MapEditorSelectionKind::Objects:
-        setCursorObjectPosition(p); break;
+    if (tileset.width() != 0 && tileset.height() != 0) {
+        switch (selection){
+        case MapEditorSelectionKind::Land:
+            addFloor(p, subSelection, drawKind, tileset);
+            break;
+        case MapEditorSelectionKind::Sprites:
+            addSprite(p, subSelection, drawKind, tileset);
+            break;
+        case MapEditorSelectionKind::Objects:
+            setCursorObjectPosition(p); break;
+        }
     }
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p)
+void ControlMapEditor::remove(MapEditorSelectionKind selection,
+                              DrawKind drawKind,
+                              Position& p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeFloor(p);
+        removeLand(p, drawKind);
         break;
     case MapEditorSelectionKind::Sprites:
-        removeSprite(p);
+        removeSprite(p, drawKind);
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p);
@@ -492,35 +545,49 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection, Position& p)
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addFloor(Position& p, QRect &tileset){
+void ControlMapEditor::addFloor(Position& p,
+                                MapEditorSubSelectionKind kind,
+                                DrawKind drawKind,
+                                QRect &tileset)
+{
     FloorDatas* floor;
     QRect* shortTexture;
 
-    if (tileset.width() == 1 && tileset.width() == 1){
-        QList<Position> positions;
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++){
-            stockFloor(positions[i],
-                       new FloorDatas(new QRect(tileset.x(),
-                                                tileset.y(),
-                                                tileset.width(),
-                                                tileset.height())));
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+        if (tileset.width() == 1 && tileset.width() == 1){
+            QList<Position> positions;
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++){
+                stockLand(positions[i],
+                          new FloorDatas(new QRect(tileset.x(),
+                                                   tileset.y(),
+                                                   tileset.width(),
+                                                   tileset.height())));
+            }
         }
-    }
-    for (int i = 0; i < tileset.width(); i++){
-        if (p.x() + i > m_map->mapProperties()->length())
-            break;
-
-        for (int j = 0; j < tileset.height(); j++){
-            if (p.z() + j > m_map->mapProperties()->width())
+        for (int i = 0; i < tileset.width(); i++){
+            if (p.x() + i > m_map->mapProperties()->length())
                 break;
 
-            Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
-            shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
-                                     1, 1);
-            floor = new FloorDatas(shortTexture);
-            stockFloor(shortPosition, floor);
+            for (int j = 0; j < tileset.height(); j++){
+                if (p.z() + j > m_map->mapProperties()->width())
+                    break;
+
+                Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
+                shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
+                                         1, 1);
+                floor = new FloorDatas(shortTexture);
+                stockLand(shortPosition, floor);
+            }
         }
+        break;
+    case DrawKind::Rectangle:
+        break; // TODO
+    case DrawKind::Pin:
+        paintPinLand(p, kind, tileset);
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -528,14 +595,186 @@ void ControlMapEditor::addFloor(Position& p, QRect &tileset){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockFloor(Position& p, FloorDatas *floor){
+void ControlMapEditor::paintPinLand(Position& p,
+                                    MapEditorSubSelectionKind kindAfter,
+                                    QRect& textureAfter)
+{
+    if (m_map->isInGrid(p)){
+        Portion portion = getLocalPortion(p);
+        if (m_map->isInPortion(portion)){
+            LandDatas* landBefore = getLand(portion, p);
+            MapEditorSubSelectionKind kindBefore =
+                    MapEditorSubSelectionKind::None;
+            QRect textureBefore;
+            if (landBefore != nullptr){
+                kindBefore = landBefore->getKind();
+                getLandTexture(textureBefore, landBefore);
+            }
+
+            // If it's floor, we need to reduce to square * square size texture
+            QRect textureAfterReduced;
+            if (kindAfter == MapEditorSubSelectionKind::Floors)
+                getFloorTextureReduced(textureAfter, textureAfterReduced, 0, 0);
+
+            // If the texture à different, start the algorithm
+            if (!areLandsEquals(landBefore, textureAfterReduced, kindAfter)){
+                QList<Position> tab;
+                tab.push_back(p);
+                if (kindAfter == MapEditorSubSelectionKind::None)
+                    eraseLand(p);
+                else
+                    stockLand(p, getLandAfter(kindAfter, textureAfterReduced));
+
+                while(!tab.isEmpty()){
+                    QList<Position> adjacent;
+                    Position firstPosition = tab.at(0);
+                    int x = firstPosition.x();
+                    int y = firstPosition.y();
+                    int yPlus = firstPosition.yPlus();
+                    int z = firstPosition.z();
+                    int layer = firstPosition.layer();
+
+                    // Getting all the adjacent squares
+                    adjacent << Position(x - 1, y, yPlus, z, layer);
+                    adjacent << Position(x + 1, y, yPlus, z, layer);
+                    adjacent << Position(x, y, yPlus, z + 1, layer);
+                    adjacent << Position(x, y, yPlus, z - 1, layer);
+
+                    tab.removeAt(0);
+                    for (int i = 0; i < adjacent.size(); i++){
+                        Position adjacentPosition = adjacent.at(i);
+                        int localX = adjacentPosition.x() - p.x();
+                        int localZ = adjacentPosition.z() - p.z();
+                        getFloorTextureReduced(textureAfter,
+                                               textureAfterReduced,
+                                               localX, localZ);
+                        if (m_map->isInGrid(adjacentPosition)){
+                            portion = getLocalPortion(adjacentPosition);
+                            if (m_map->isInPortion(portion)){
+                                LandDatas* landHere = getLand(portion,
+                                                              adjacentPosition);
+                                if (areLandsEquals(landHere, textureBefore,
+                                                   kindBefore))
+                                {
+                                    if (kindAfter ==
+                                            MapEditorSubSelectionKind::None)
+                                        eraseLand(adjacentPosition);
+                                    else
+                                        stockLand(adjacentPosition,
+                                                  getLandAfter(
+                                                      kindAfter,
+                                                      textureAfterReduced));
+                                    tab.push_back(adjacentPosition);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+LandDatas* ControlMapEditor::getLand(Portion& portion, Position& p){
+    MapPortion* mapPortion = m_map->mapPortion(portion);
+    if (mapPortion == nullptr)
+        return nullptr;
+    return mapPortion->getLand(p);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getFloorTextureReduced(QRect& rect, QRect &rectAfter,
+                                              int localX, int localZ)
+{
+    rectAfter.setX(rect.x() + Wanok::mod(localX, rect.width()));
+    rectAfter.setY(rect.y() + Wanok::mod(localZ, rect.height()));
+    rectAfter.setWidth(1);
+    rectAfter.setHeight(1);
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::areLandsEquals(LandDatas* landBefore,
+                                      QRect& textureAfter,
+                                      MapEditorSubSelectionKind kindAfter)
+{
+    if (landBefore == nullptr)
+        return kindAfter == MapEditorSubSelectionKind::None;
+    else{
+        if (landBefore->getKind() == kindAfter){
+            switch (kindAfter){
+            case MapEditorSubSelectionKind::Floors:
+                return (*(((FloorDatas*) landBefore)->textureRect())) ==
+                        textureAfter;
+            case MapEditorSubSelectionKind::Autotiles:
+                return false; // TODO
+            case MapEditorSubSelectionKind::Water:
+                return false; // TODO
+            default:
+                return false;
+            }
+        }
+        else
+            return false;
+    }
+}
+
+// -------------------------------------------------------
+
+LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
+                                          QRect &textureAfter)
+{
+    QRect* texture = new QRect(textureAfter.x(),
+                               textureAfter.y(),
+                               textureAfter.width(),
+                               textureAfter.height());
+    switch (kindAfter) {
+    case MapEditorSubSelectionKind::Floors:
+        return new FloorDatas(texture);
+    case MapEditorSubSelectionKind::Autotiles:
+        return nullptr;
+    case MapEditorSubSelectionKind::Water:
+        return nullptr;
+    default:
+        return nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
+    FloorDatas* floor;
+
+    switch (land->getKind()) {
+    case MapEditorSubSelectionKind::Floors:
+        floor = (FloorDatas*) land;
+        rect.setX(floor->textureRect()->x());
+        rect.setY(floor->textureRect()->y());
+        rect.setWidth(floor->textureRect()->width());
+        rect.setHeight(floor->textureRect()->height());
+        break;
+    case MapEditorSubSelectionKind::Autotiles:
+        break;
+    case MapEditorSubSelectionKind::Water:
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion == nullptr)
                 mapPortion = m_map->createMapPortion(portion);
-            if (mapPortion->addFloor(p, floor) && m_map->saved())
+            if (mapPortion->addLand(p, landDatas) && m_map->saved())
                 setToNotSaved();
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
@@ -545,26 +784,36 @@ void ControlMapEditor::stockFloor(Position& p, FloorDatas *floor){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeFloor(Position& p){
+void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
     QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++)
-        eraseFloor(positions[i]);
 
-    eraseFloor(p);
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++)
+            eraseLand(positions[i]);
+        eraseLand(p);
+    case DrawKind::Rectangle:
+        break;
+    case DrawKind::Pin:
+        QRect tileset(0, 0, 1, 1);
+        paintPinLand(p, MapEditorSubSelectionKind::None, tileset);
+        break;
+    }
 
     m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseFloor(Position& p){
+void ControlMapEditor::eraseLand(Position& p){
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion != nullptr){
-                if (mapPortion->deleteFloor(p) && m_map->saved())
+                if (mapPortion->deleteLand(p) && m_map->saved())
                     setToNotSaved();
                 m_portionsToUpdate += portion;
                 m_portionsToSave += portion;
@@ -579,33 +828,48 @@ void ControlMapEditor::eraseFloor(Position& p){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addSprite(Position& p, QRect& tileset){
-    SpriteDatas* sprite;
-
+void ControlMapEditor::addSprite(Position& p,
+                                 MapEditorSubSelectionKind kind,
+                                 DrawKind drawKind,
+                                 QRect& tileset)
+{
     QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++){
-        sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
-        stockSprite(positions[i], sprite);
-    }
 
-    sprite = new SpriteDatas(0, 50, 0, new QRect(tileset));
-    stockSprite(p, sprite);
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    case DrawKind::Pin:
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++)
+            stockSprite(positions[i], kind, 0, 50, 0, new QRect(tileset));
+        stockSprite(p, kind, 0, 50, 0, new QRect(tileset));
+        break;
+    case DrawKind::Rectangle:
+        break;
+    }
 
     m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
+void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
+                                   int layer, int widthPosition, int angle,
+                                   QRect *textureRect)
+{
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion == nullptr)
                 mapPortion = m_map->createMapPortion(portion);
-            if (mapPortion->addSprite(p, sprite) && m_map->saved())
+            if (mapPortion->addSprite(p, kind, layer, widthPosition, angle,
+                                      textureRect) &&
+                m_map->saved())
+            {
                 setToNotSaved();
+            }
+
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
         }
@@ -614,12 +878,21 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeSprite(Position& p){
+void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
     QList<Position> positions;
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++)
-        eraseSprite(positions[i]);
-    eraseSprite(p);
+
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+    case DrawKind::Pin:
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++)
+            eraseSprite(positions[i]);
+        eraseSprite(p);
+        break;
+    case DrawKind::Rectangle:
+        break;
+    }
 
     m_previousMouseCoords = p;
 }
@@ -692,7 +965,6 @@ void ControlMapEditor::defineAsHero(){
 
 void ControlMapEditor::addObject(Position& p){
     Portion portion = getLocalPortion(p);
-    Portion globalPortion = getGlobalPortion(p);
     SystemCommonObject* object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -710,7 +982,7 @@ void ControlMapEditor::addObject(Position& p){
         MapPortion* mapPortion = m_map->mapPortion(portion);
         if (mapPortion == nullptr)
             mapPortion = m_map->createMapPortion(portion);
-        if (m_map->addObject(p, mapPortion, globalPortion, object) &&
+        if (m_map->addObject(p, mapPortion, object) &&
             m_map->saved())
         {
             setToNotSaved();
@@ -749,6 +1021,8 @@ void ControlMapEditor::removeObject(Position& p){
         }
     }
 }
+
+// -------------------------------------------------------
 
 void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
                                  QList<Position>& positions)
@@ -981,6 +1255,8 @@ Portion ControlMapEditor::getGlobalFromLocalPortion(Portion& portion) const{
 // -------------------------------------------------------
 
 void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
+                               QVector3D &cameraRightWorldSpace,
+                               QVector3D &cameraUpWorldSpace,
                                MapEditorSelectionKind selectionKind)
 {
     m_map->paintFloors(modelviewProjection);
@@ -996,7 +1272,8 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
         glEnable(GL_DEPTH_TEST);
     }
 
-    m_map->paintOthers(modelviewProjection);
+    m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
+                       cameraUpWorldSpace);
 }
 
 // -------------------------------------------------------
@@ -1005,41 +1282,47 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseWheelMove(QWheelEvent* event){
+void ControlMapEditor::onMouseWheelMove(QWheelEvent* event, bool updateTree){
     if (event->delta() > 0)
         m_camera->zoomPlus(0);
     else
         m_camera->zoomLess(0);
 
-    updateCameraTreeNode();
+    if (updateTree)
+        updateCameraTreeNode();
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button){
-    m_mouse = point;
+void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
+                                   bool updateTree)
+{
+    updateMousePosition(point);
 
     if (button == Qt::MouseButton::MiddleButton){
         m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
-        updateCameraTreeNode();
+        if (updateTree)
+            updateCameraTreeNode();
     }
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
-                                      QRect &tileset, QPoint point,
+                                      MapEditorSubSelectionKind subSelection,
+                                      DrawKind drawKind,
+                                      QRect &tileset,
+                                      QPoint point,
                                       Qt::MouseButton button)
 {
-    // Update mouse position
-    m_mouse = point;
+    updateMousePosition(point);
 
     // Update
     update();
 
     // Add/Remove something
     m_previousMouseCoords = getPositionSelected(selection);
-    addRemove(selection, tileset, button);
+    addRemove(selection, subSelection, drawKind, tileset, button);
 }
 
 // -------------------------------------------------------

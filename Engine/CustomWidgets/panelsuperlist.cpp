@@ -100,7 +100,6 @@ void PanelSuperList::on_lineEditName_textChanged(const QString & s){
 // -------------------------------------------------------
 
 void PanelSuperList::on_pushButtonMaximum_pressed(){
-    QStandardItemModel* model = ui->widgetList->getModel();
     DialogSetMaximum dialog(list()->getModel(), m_maximum);
     if (dialog.exec() == QDialog::Accepted){
         int newSize = dialog.maximum();

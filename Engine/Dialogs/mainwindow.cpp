@@ -36,6 +36,7 @@
 #include "wanok.h"
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
+#include "dialogprogress.h"
 
 // -------------------------------------------------------
 //
@@ -54,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Setting window title
-    this->setWindowTitle(p_appName + " v." + Project::VERSION + " (UNSTABLE)");
+    this->setWindowTitle(p_appName + " v." + Project::ENGINE_VERSION);
 
     // Update main panel
     mainPanel = new PanelMainMenu(this);
@@ -62,11 +63,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Menu bar enabled actions
     enableNoGame();
+
+    // Check update
+    QThread* thread = new QThread(parent);
+    m_engineUpdater = new EngineUpdater();
+    m_engineUpdater->moveToThread(thread);
+    connect(thread, SIGNAL(started()), m_engineUpdater, SLOT(check()));
+    connect(m_engineUpdater, SIGNAL(finishedCheck(bool)),
+            this, SLOT(on_updateCheckFinished(bool)));
+    thread->start();
+
+    EngineUpdater::writeBasicJSONFile();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete m_engineUpdater;
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
@@ -127,16 +140,16 @@ void MainWindow::openExistingProject(){
 
 // -------------------------------------------------------
 
-void MainWindow::openProject(QString pathProject){
+void MainWindow::openProject(QString pathProject) {
     if ((project != nullptr && closeProject()) || project == nullptr){
         project = new Project;
         Wanok::get()->setProject(project);
 
-        if (project->read(pathProject)){
+        if (project->read(pathProject)) {
             enableGame();
             replaceMainPanel(new PanelProject(this, project));
         }
-        else{
+        else {
             delete project;
             project = nullptr;
             Wanok::get()->setProject(nullptr);
@@ -220,7 +233,7 @@ void MainWindow::enableGame(){ // When a project is opened
     enableNoGame();
     ui->actionSave->setEnabled(true);
     ui->actionSave_all->setEnabled(true);
-    //ui->actionExport_standalone->setEnabled(true);
+    ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
@@ -238,7 +251,7 @@ void MainWindow::saveAllMaps(){
     QSet<int>::iterator i;
     for (i = Wanok::mapsToSave.begin(); i != Wanok::mapsToSave.end(); i++){
         Map map(*i);
-        map.save(project->currentMap());
+        map.save();
     }
     if (project->currentMap() != nullptr)
         project->currentMap()->setSaved(true);
@@ -261,6 +274,30 @@ void MainWindow::updateTextures(){
             ->widgetTreeLocalMaps();
 
     treeMap->reload();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::openEngineUpdater() {
+    QString message = "A new version of the engine is available. "
+                      "Would you like to apply it?";
+    QMessageBox::StandardButton box =
+            QMessageBox::question(this, "Update", message,
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (box == QMessageBox::Yes) {
+        DialogProgress dialog;
+        connect(m_engineUpdater, SIGNAL(finished()),
+                this, SLOT(on_updateFinished()));
+        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
+                &dialog, SLOT(setValueLabel(int, QString)));
+        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
+                &dialog, SLOT(setValueLabel(int, QString)));
+        connect(m_engineUpdater, SIGNAL(needUpdate()),
+                m_engineUpdater, SLOT(update()));
+        m_engineUpdater->start();
+        dialog.exec();
+    }
 }
 
 // -------------------------------------------------------
@@ -403,23 +440,33 @@ void MainWindow::on_actionPlay_triggered(){
     }
 
     // Play process
-    connect(gameProcess,
-            SIGNAL(finished(int, QProcess::ExitStatus)), this,
-            SLOT(on_gameProcessExit(int, QProcess::ExitStatus )));
     QString execName = "Game";
     #ifdef Q_OS_WIN
         execName += ".exe";
+    #elif __linux__
+        execName += ".sh";
+    #else
+        execName += ".app";
     #endif
+
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
 }
 
 // -------------------------------------------------------
 
-void MainWindow::on_gameProcessExit(int exitCode,
-                                    QProcess::ExitStatus exitStatus)
-{
+void MainWindow::on_updateCheckFinished(bool b) {
+    if (b)
+        openEngineUpdater();
+}
 
+// -------------------------------------------------------
+
+void MainWindow::on_updateFinished() {
+    QMessageBox::information(this, "Restart",
+                             "The engine is going to be restarted.");
+    qApp->quit();
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 // -------------------------------------------------------

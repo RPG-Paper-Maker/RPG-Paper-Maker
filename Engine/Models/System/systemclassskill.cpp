@@ -76,6 +76,8 @@ SuperListItem* SystemClassSkill::createCopy() const{
 
 void SystemClassSkill::setCopy(const SystemClassSkill& skill){
     SuperListItem::setCopy(skill);
+    p_id = skill.p_id;
+
     m_level = skill.level();
 }
 
