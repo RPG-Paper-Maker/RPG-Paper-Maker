@@ -57,7 +57,7 @@ public:
     void replaceFolder(QString& target, QJsonArray& files);
     void downloadExecutables();
     void downloadScripts();
-    void getScripts(QJsonArray& scripts) const;
+    void getVersions(QJsonArray& versions) const;
 
 protected:
     QJsonObject m_document;

@@ -32,6 +32,7 @@ DialogEngineUpdate::DialogEngineUpdate(QJsonArray &array, QWidget *parent) :
     ui(new Ui::DialogEngineUpdate)
 {
     ui->setupUi(this);
+    ui->widgetReleaseNotes->updateText(array);
 }
 
 DialogEngineUpdate::~DialogEngineUpdate()

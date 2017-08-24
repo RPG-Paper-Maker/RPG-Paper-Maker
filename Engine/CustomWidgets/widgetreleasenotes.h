@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QStaticText>
+#include <QJsonArray>
 
 class WidgetReleaseNotes : public QWidget
 {
@@ -30,6 +31,8 @@ class WidgetReleaseNotes : public QWidget
 public:
     explicit WidgetReleaseNotes(QWidget *parent = 0);
     ~WidgetReleaseNotes();
+    void updateText(QJsonArray& versions);
+    void addItems(QJsonArray& list, QString& text);
 
 protected:
     QStaticText m_staticText;

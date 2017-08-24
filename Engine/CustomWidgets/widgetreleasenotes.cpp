@@ -19,6 +19,7 @@
 
 #include "widgetreleasenotes.h"
 #include <QPainter>
+#include <QJsonObject>
 
 // -------------------------------------------------------
 //
@@ -29,15 +30,51 @@
 WidgetReleaseNotes::WidgetReleaseNotes(QWidget *parent) :
     QWidget(parent)
 {
-    QString text;
-    text += "<h1>Release notes</h1><p>dddd sdjfhskjdfhskjfhsdkjfhkjfsdf</p>";
-
-    m_staticText.setText(text);
+    m_staticText.setTextFormat(Qt::RichText);
 }
 
 WidgetReleaseNotes::~WidgetReleaseNotes()
 {
 
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void WidgetReleaseNotes::updateText(QJsonArray& versions) {
+    QString text;
+    text += "<h1>Releases notes</h1>";
+
+    QJsonObject objVersion;
+    QJsonArray tabFeatures, tabBugs;
+    for (int i = versions.size() - 1; i >= 0; i--) {
+        objVersion = versions.at(i).toObject();
+        text += "<h2>" + objVersion["v"].toString() + "</h2>";
+        tabFeatures = objVersion["features"].toArray();
+        text += "<h3>New features:</h3>";
+        addItems(tabFeatures, text);
+        text += "<h3>Bugs corrections:</h3>";
+        tabBugs = objVersion["bugs"].toArray();
+        addItems(tabBugs, text);
+    }
+
+    text += "<p></p>";
+
+    m_staticText.setText(text);
+    QSizeF size = m_staticText.size();
+    setFixedSize(size.width() + 10, size.height() + 10);
+}
+
+// -------------------------------------------------------
+
+void WidgetReleaseNotes::addItems(QJsonArray& list, QString& text) {
+    text += "<ul>";
+    for (int i = 0; i < list.size(); i++)
+        text += "<li>+ " + list.at(i).toString() + "</li>";
+    text += "</ul>";
 }
 
 // -------------------------------------------------------

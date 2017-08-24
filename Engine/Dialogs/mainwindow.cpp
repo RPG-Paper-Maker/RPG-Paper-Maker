@@ -281,7 +281,7 @@ void MainWindow::updateTextures(){
 
 void MainWindow::openEngineUpdater() {
     QJsonArray tab;
-    m_engineUpdater->getScripts(tab);
+    m_engineUpdater->getVersions(tab);
 
     DialogEngineUpdate dialog(tab);
     if (openDialog(dialog) == QDialog::Accepted) {

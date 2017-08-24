@@ -363,8 +363,10 @@ void EngineUpdater::downloadScripts() {
 
 // -------------------------------------------------------
 
-void EngineUpdater::getScripts(QJsonArray& scripts) const {
-
+void EngineUpdater::getVersions(QJsonArray& versions) const {
+    QJsonArray tab = m_document["versions"].toArray();
+    for (int i = m_index; i < tab.size(); i++)
+        versions.append(tab.at(i));
 }
 
 
@@ -402,6 +404,22 @@ void EngineUpdater::check() {
     lastVersion = m_document["lastVersion"].toString();
     dif = ProjectUpdater:: versionDifferent(lastVersion);
 
+    // Checking versions index
+    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonObject obj;
+    m_index = tabVersions.size();
+    if (m_index != 0) {
+        for (int i = 0; i < tabVersions.size(); i++) {
+            obj = tabVersions.at(i).toObject();
+            if (ProjectUpdater::versionDifferent(obj["v"].toString(),
+                                                 Project::ENGINE_VERSION) == 1)
+            {
+                m_index = i;
+                break;
+            }
+        }
+    }
+
     emit finishedCheck(dif != 0);
 }
 
@@ -411,27 +429,15 @@ void EngineUpdater::update() {
     QJsonArray tabVersions = m_document["versions"].toArray();
     QJsonObject obj;
 
-    // Checking versions index
-    emit progress(5, "Checking versions...");
-    int index = tabVersions.size();
-    if (index != 0) {
-        for (int i = 0; i < tabVersions.size(); i++) {
+    // Updating for each versions
+    if (m_index != tabVersions.size()) {
+        int progressVersion = 80 / (tabVersions.size() - m_index);
+        for (int i = m_index; i < tabVersions.size(); i++) {
             obj = tabVersions.at(i).toObject();
-            if (ProjectUpdater::versionDifferent(obj["v"].toString(),
-                                                 Project::ENGINE_VERSION) == 1)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        // Updating for each versions
-        int progressVersion = 70 / (tabVersions.size() - index);
-        for (int i = index; i < tabVersions.size(); i++) {
-            obj = tabVersions.at(i).toObject();
-            emit progress(10 + ((i - index) * progressVersion),
+            emit progress(((i - m_index) * progressVersion),
                           "Downloading version " + obj["v"].toString() + "...");
             updateVersion(obj);
+            QThread::sleep(1);
         }
     }
 

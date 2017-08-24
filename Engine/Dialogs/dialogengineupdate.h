@@ -21,6 +21,7 @@
 #define DIALOGENGINEUPDATE_H
 
 #include <QDialog>
+#include <QJsonArray>
 
 // -------------------------------------------------------
 //
