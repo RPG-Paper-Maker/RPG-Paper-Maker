@@ -27,6 +27,7 @@
 #include <QUrl>
 #include <QJsonDocument>
 #include <QDirIterator>
+#include <QMessageBox>
 
 // -------------------------------------------------------
 //
@@ -51,23 +52,24 @@ EngineUpdater::~EngineUpdater()
 // -------------------------------------------------------
 
 void EngineUpdater::writeBasicJSONFile() {
-    QJsonObject obj, objFile, objExeEngine, objExeGame,
-            objWin32, objLinux, objOsx;
-    QJsonArray tabScripts;
+    QJsonObject obj, objFile, objDirSystem, objDirSystemDesktop, objExeEngine,
+            objExeGame, objWin32, objLinux, objOsx;
+    QJsonArray tabScripts, tabSystemDesktop;
 
     // Last version
     obj["lastVersion"] = Project::ENGINE_VERSION;
 
-    // Includes
+    // Scripts
     getJSONFile(objFile,
                 "https://raw.githubusercontent.com/RPG-Paper-Maker/"
                 "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                 "desktop/includes.js",
                 "Content/basic/Content/Datas/Scripts/System/desktop/"
                 "includes.js");
-    tabScripts.append(objFile);
-
-    // Scripts
+    tabSystemDesktop.append(objFile);
+    getJSONDir(objDirSystemDesktop, tabSystemDesktop,
+               "Content/basic/Content/Datas/Scripts/System/desktop");
+    tabScripts.append(objDirSystemDesktop);
     QDirIterator files(Wanok::pathCombine(
                            Wanok::pathCombine(QDir::currentPath(),
                                               Wanok::pathBasic),
@@ -84,7 +86,9 @@ void EngineUpdater::writeBasicJSONFile() {
                     "Content/basic/Content/Datas/Scripts/System/" + name);
         tabScripts.append(objFile);
     }
-    obj["scripts"] = tabScripts;
+    getJSONDir(objDirSystem, tabScripts,
+               "Content/basic/Content/Datas/Scripts/System");
+    obj["scripts"] = objDirSystem;
 
     // Exe Engine
     getJSONExeEngine(objWin32, "win32");
@@ -103,6 +107,9 @@ void EngineUpdater::writeBasicJSONFile() {
     objExeGame["linux"] = objLinux;
     objExeGame["osx"] = objOsx;
     obj["exeGame"] = objExeGame;
+
+    // versions
+    obj["versions"] = QJsonArray();
 
     // Write
     Wanok::writeOtherJSON(Wanok::pathCombine(
@@ -157,7 +164,7 @@ void EngineUpdater::getJSONExeGame(QJsonObject& obj, QString os) {
 
     getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
                 "RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
-                "Content/basic/" + os + "/" + exe);
+                "Content/" + os + "/" + exe);
 }
 
 // -------------------------------------------------------
@@ -223,6 +230,11 @@ void EngineUpdater::addFile(QString& source, QString& target) {
     reply = manager.get(QNetworkRequest(QUrl(source)));
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
+    if (reply->error() != QNetworkReply::NetworkError::NoError) {
+        QMessageBox::critical(nullptr, "Error",
+                              "A network error occured: " +
+                              reply->errorString());
+    }
     path = Wanok::pathCombine(QDir::currentPath(), target);
 
     QFile file(path);
@@ -301,12 +313,45 @@ void EngineUpdater::replaceFolder(QString& target, QJsonArray &files) {
 
 void EngineUpdater::downloadExecutables() {
 
+    // Games
+    QJsonObject objGame = m_document["exeGame"].toObject();
+    QJsonObject objGameWin32 = objGame["win32"].toObject();
+    QJsonObject objGameLinux = objGame["linux"].toObject();
+    QJsonObject objGameOsx = objGame["osx"].toObject();
+    downloadFile(EngineUpdateFileKind::Replace, objGameWin32);
+    downloadFile(EngineUpdateFileKind::Replace, objGameLinux);
+    downloadFile(EngineUpdateFileKind::Replace, objGameOsx);
+
+    // Engine
+    QJsonObject objEngine = m_document["exeEngine"].toObject();
+    QJsonObject objEngineExe;
+    QString strOS = "";
+    #ifdef Q_OS_WIN
+        strOS = "win32";
+    #elif __linux__
+        strOS = "linux";
+    #else
+        strOS = "osx";
+    #endif
+    objEngineExe = objEngine[strOS].toObject();
+    downloadFile(EngineUpdateFileKind::Replace, objEngineExe);
 }
 
 // -------------------------------------------------------
 
 void EngineUpdater::downloadScripts() {
+    QJsonArray tabScripts = m_document["scripts"].toArray();
+    QJsonObject objFile;
 
+    // Delete all system scripts
+    QDir(Wanok::pathCombine(QDir::currentPath(), Wanok::pathScriptsSystemDir))
+            .removeRecursively();
+
+    // Scripts
+    for (int i = 0; i < tabScripts.size(); i++) {
+        objFile = tabScripts.at(i).toObject();
+        download(EngineUpdateFileKind::Add, objFile);
+    }
 }
 
 // -------------------------------------------------------
@@ -355,32 +400,34 @@ void EngineUpdater::update() {
     // Checking versions index
     emit progress(5, "Checking versions...");
     int index = tabVersions.size();
-    for (int i = 0; i < tabVersions.size(); i++) {
-        obj = tabVersions.at(i).toObject();
-        if (ProjectUpdater::versionDifferent(obj["v"].toString(),
-                                             Project::ENGINE_VERSION) == 1)
-        {
-            index = i;
-            break;
+    if (index != 0) {
+        for (int i = 0; i < tabVersions.size(); i++) {
+            obj = tabVersions.at(i).toObject();
+            if (ProjectUpdater::versionDifferent(obj["v"].toString(),
+                                                 Project::ENGINE_VERSION) == 1)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        // Updating for each versions
+        int progressVersion = 70 / (tabVersions.size() - index);
+        for (int i = index; i < tabVersions.size(); i++) {
+            obj = tabVersions.at(i).toObject();
+            emit progress(10 + ((i - index) * progressVersion),
+                          "Downloading version " + obj["v"].toString() + "...");
+            updateVersion(obj);
         }
     }
 
-    // Updating for each versions
-    int progressVersion = 70 / (tabVersions.size() - index);
-    for (int i = index; i < tabVersions.size(); i++) {
-        obj = tabVersions.at(i).toObject();
-        emit progress(10 + ((i - index) * progressVersion),
-                      "Downloading version " + obj["v"].toString() + "...");
-        updateVersion(obj);
-    }
-
     // Executables
-    emit progress(80, "Downloading executables for games and engine...");
-    downloadExecutables();
+    emit progress(80, "Downloading all the system scripts...");
+    downloadScripts();
 
     // System scripts
-    emit progress(90, "Downloading all the system scripts");
-    downloadScripts();
+    emit progress(90, "Downloading executables for games and engine...");
+    downloadExecutables();
     emit progress(100, "Finished!");
     QThread::sleep(1);
 
