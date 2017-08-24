@@ -205,7 +205,8 @@ HEADERS += \
     Dialogs/Commands/dialogcommandmovecamera.h \
     Models/projectupdater.h \
     Dialogs/dialogprogress.h \
-    Models/engineupdater.h
+    Models/engineupdater.h \
+    Enums/engineupdatefilekind.h
 
 SOURCES += \
     main.cpp \
