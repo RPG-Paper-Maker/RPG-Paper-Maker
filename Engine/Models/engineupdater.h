@@ -46,19 +46,22 @@ public:
     void start();
     void updateVersion(QJsonObject& obj);
     void download(EngineUpdateFileKind action, QJsonObject& obj);
-    void downloadFile(EngineUpdateFileKind action, QJsonObject& obj);
-    void addFile(QString& source, QString& target);
+    void downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
+                      bool exe = false);
+    void addFile(QString& source, QString& target, bool exe);
     void removeFile(QString& target);
-    void replaceFile(QString& source, QString& target);
+    void replaceFile(QString& source, QString& target, bool exe);
     void downloadFolder(EngineUpdateFileKind action, QJsonObject& obj);
     void addFolder(QString& target, QJsonArray& files);
     void removeFolder(QString& target);
     void replaceFolder(QString& target, QJsonArray& files);
     void downloadExecutables();
     void downloadScripts();
+    void getScripts(QJsonArray& scripts) const;
 
 protected:
     QJsonObject m_document;
+    int m_index;
 
 public slots:
     void check();

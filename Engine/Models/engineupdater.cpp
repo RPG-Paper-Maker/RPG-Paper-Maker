@@ -148,8 +148,9 @@ void EngineUpdater::getJSONExeEngine(QJsonObject& obj, QString os) {
     else
         exe = "RPG-Paper-Maker.app";
 
-    getJSONFile(obj, "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/"
-                     "master/Engine/Dependencies/" + os + "/" + exe, exe);
+    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
+                     "RPG-Paper-Maker/master/Engine/Dependencies/" +
+                os + "/" + exe, exe);
 }
 
 // -------------------------------------------------------
@@ -206,22 +207,23 @@ void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj)
+void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
+                                 bool exe)
 {
     QString source = obj["source"].toString();
     QString target = obj["target"].toString();
 
     if (action == EngineUpdateFileKind::Add)
-        addFile(source, target);
+        addFile(source, target, exe);
     else if (action == EngineUpdateFileKind::Remove)
         removeFile(target);
     else if (action == EngineUpdateFileKind::Replace)
-        replaceFile(source, target);
+        replaceFile(source, target, exe);
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFile(QString& source, QString& target) {
+void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
     QNetworkAccessManager manager;
     QNetworkReply *reply;
     QEventLoop loop;
@@ -240,6 +242,11 @@ void EngineUpdater::addFile(QString& source, QString& target) {
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     file.write(reply->readAll());
+
+    // If exe, change permissions
+    if (exe)
+        file.setPermissions(QFileDevice::ExeUser);
+
     file.close();
 }
 
@@ -253,9 +260,9 @@ void EngineUpdater::removeFile(QString& target) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::replaceFile(QString& source, QString& target) {
+void EngineUpdater::replaceFile(QString& source, QString& target, bool exe) {
     removeFile(target);
-    addFile(source, target);
+    addFile(source, target, exe);
 }
 
 // -------------------------------------------------------
@@ -318,9 +325,9 @@ void EngineUpdater::downloadExecutables() {
     QJsonObject objGameWin32 = objGame["win32"].toObject();
     QJsonObject objGameLinux = objGame["linux"].toObject();
     QJsonObject objGameOsx = objGame["osx"].toObject();
-    downloadFile(EngineUpdateFileKind::Replace, objGameWin32);
-    downloadFile(EngineUpdateFileKind::Replace, objGameLinux);
-    downloadFile(EngineUpdateFileKind::Replace, objGameOsx);
+    downloadFile(EngineUpdateFileKind::Replace, objGameWin32, true);
+    downloadFile(EngineUpdateFileKind::Replace, objGameLinux, true);
+    downloadFile(EngineUpdateFileKind::Replace, objGameOsx, true);
 
     // Engine
     QJsonObject objEngine = m_document["exeEngine"].toObject();
@@ -334,7 +341,7 @@ void EngineUpdater::downloadExecutables() {
         strOS = "osx";
     #endif
     objEngineExe = objEngine[strOS].toObject();
-    downloadFile(EngineUpdateFileKind::Replace, objEngineExe);
+    downloadFile(EngineUpdateFileKind::Replace, objEngineExe, true);
 }
 
 // -------------------------------------------------------
@@ -353,6 +360,13 @@ void EngineUpdater::downloadScripts() {
         download(EngineUpdateFileKind::Add, objFile);
     }
 }
+
+// -------------------------------------------------------
+
+void EngineUpdater::getScripts(QJsonArray& scripts) const {
+
+}
+
 
 // -------------------------------------------------------
 //

@@ -37,6 +37,7 @@
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
 #include "dialogprogress.h"
+#include "dialogengineupdate.h"
 
 // -------------------------------------------------------
 //
@@ -73,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(on_updateCheckFinished(bool)));
     thread->start();
 
-    EngineUpdater::writeBasicJSONFile();
+    //EngineUpdater::writeBasicJSONFile();
 }
 
 MainWindow::~MainWindow()
@@ -279,13 +280,11 @@ void MainWindow::updateTextures(){
 // -------------------------------------------------------
 
 void MainWindow::openEngineUpdater() {
-    QString message = "A new version of the engine is available. "
-                      "Would you like to apply it?";
-    QMessageBox::StandardButton box =
-            QMessageBox::question(this, "Update", message,
-                                  QMessageBox::Yes | QMessageBox::No);
+    QJsonArray tab;
+    m_engineUpdater->getScripts(tab);
 
-    if (box == QMessageBox::Yes) {
+    DialogEngineUpdate dialog(tab);
+    if (openDialog(dialog) == QDialog::Accepted) {
         DialogProgress dialog;
         connect(m_engineUpdater, SIGNAL(finished()),
                 this, SLOT(on_updateFinished()));
