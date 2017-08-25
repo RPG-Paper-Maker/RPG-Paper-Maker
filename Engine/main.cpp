@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     #endif
     QDir::setCurrent(bin.absolutePath());
 
-    // Detect if name need to be changed
+    // Detect if applciation name need to be changed
     QString realApplicationName;
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker.exe";
@@ -53,10 +53,15 @@ int main(int argc, char *argv[])
     #else
         realApplicationName = "RPG-Paper-Maker.app";
     #endif
-    QString currentApplicationName = QFileInfo(QString(argv[0])).fileName();
+    QString currentApplicationName = QFileInfo(qApp->arguments()[0]).fileName();
+
     if (currentApplicationName != realApplicationName) {
-        QFile(Wanok::pathCombine(QDir::currentPath(), realApplicationName))
-                .remove();
+        QString pathReal = Wanok::pathCombine(QDir::currentPath(),
+                                              realApplicationName);
+        QFile fileReal(pathReal);
+        if (fileReal.exists()) {
+            while (!fileReal.remove()) {}
+        }
         QFile(Wanok::pathCombine(QDir::currentPath(), currentApplicationName))
                 .rename(realApplicationName);
     }
