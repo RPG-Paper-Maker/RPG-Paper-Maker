@@ -1,16 +1,16 @@
 {
     "exeEngine": {
         "linux": {
-            "source": "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/Engine/Dependencies/linux/RPG-Paper-Maker",
-            "target": "RPG-Paper-Maker"
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Dependencies/linux/RPG-Paper-Maker",
+            "target": "RPG-Paper-Maker-temp"
         },
         "osx": {
-            "source": "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/Engine/Dependencies/osx/RPG-Paper-Maker.app",
-            "target": "RPG-Paper-Maker.app"
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Dependencies/osx/RPG-Paper-Maker.app",
+            "target": "RPG-Paper-Maker-temp.app"
         },
         "win32": {
-            "source": "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/master/Engine/Dependencies/win32/RPG Paper Maker.exe",
-            "target": "RPG Paper Maker.exe"
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Dependencies/win32/RPG Paper Maker.exe",
+            "target": "RPG Paper Maker temp.exe"
         }
     },
     "exeGame": {
@@ -27,7 +27,7 @@
             "target": "Content/win32/Game.exe"
         }
     },
-    "lastVersion": "0.2.0",
+    "lastVersion": "0.3.0",
     "scripts": {
         "files": [
             {

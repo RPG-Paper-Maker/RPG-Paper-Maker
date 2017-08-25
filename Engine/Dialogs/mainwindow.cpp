@@ -37,6 +37,7 @@
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
 #include "dialogprogress.h"
+#include "dialogengineupdate.h"
 
 // -------------------------------------------------------
 //
@@ -73,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(on_updateCheckFinished(bool)));
     thread->start();
 
-    EngineUpdater::writeBasicJSONFile();
+    //EngineUpdater::writeBasicJSONFile();
 }
 
 MainWindow::~MainWindow()
@@ -279,13 +280,11 @@ void MainWindow::updateTextures(){
 // -------------------------------------------------------
 
 void MainWindow::openEngineUpdater() {
-    QString message = "A new version of the engine is available. "
-                      "Would you like to apply it?";
-    QMessageBox::StandardButton box =
-            QMessageBox::question(this, "Update", message,
-                                  QMessageBox::Yes | QMessageBox::No);
+    QJsonArray tab;
+    m_engineUpdater->getVersions(tab);
 
-    if (box == QMessageBox::Yes) {
+    DialogEngineUpdate dialog(tab);
+    if (openDialog(dialog) == QDialog::Accepted) {
         DialogProgress dialog;
         connect(m_engineUpdater, SIGNAL(finished()),
                 this, SLOT(on_updateFinished()));
@@ -466,7 +465,20 @@ void MainWindow::on_updateFinished() {
     QMessageBox::information(this, "Restart",
                              "The engine is going to be restarted.");
     qApp->quit();
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+
+    QString realApplicationName;
+    #ifdef Q_OS_WIN
+        realApplicationName = "RPG Paper Maker temp.exe";
+    #elif __linux__
+        realApplicationName = "RPG-Paper-Maker-temp";
+    #else
+        realApplicationName = "RPG-Paper-Maker-temp.app";
+    #endif
+    QString path = Wanok::pathCombine(QDir::currentPath(), realApplicationName);
+    QStringList arguments = qApp->arguments();
+    arguments[0] = path;
+
+    QProcess::startDetached(path, arguments);
 }
 
 // -------------------------------------------------------

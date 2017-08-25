@@ -148,8 +148,9 @@ void EngineUpdater::getJSONExeEngine(QJsonObject& obj, QString os) {
     else
         exe = "RPG-Paper-Maker.app";
 
-    getJSONFile(obj, "https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/tree/"
-                     "master/Engine/Dependencies/" + os + "/" + exe, exe);
+    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
+                     "RPG-Paper-Maker/master/Engine/Dependencies/" +
+                os + "/" + exe, exe);
 }
 
 // -------------------------------------------------------
@@ -206,22 +207,23 @@ void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj)
+void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
+                                 bool exe)
 {
     QString source = obj["source"].toString();
     QString target = obj["target"].toString();
 
     if (action == EngineUpdateFileKind::Add)
-        addFile(source, target);
+        addFile(source, target, exe);
     else if (action == EngineUpdateFileKind::Remove)
         removeFile(target);
     else if (action == EngineUpdateFileKind::Replace)
-        replaceFile(source, target);
+        replaceFile(source, target, exe);
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFile(QString& source, QString& target) {
+void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
     QNetworkAccessManager manager;
     QNetworkReply *reply;
     QEventLoop loop;
@@ -240,6 +242,11 @@ void EngineUpdater::addFile(QString& source, QString& target) {
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     file.write(reply->readAll());
+
+    // If exe, change permissions
+    if (exe)
+        file.setPermissions(QFileDevice::ExeUser);
+
     file.close();
 }
 
@@ -253,9 +260,9 @@ void EngineUpdater::removeFile(QString& target) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::replaceFile(QString& source, QString& target) {
+void EngineUpdater::replaceFile(QString& source, QString& target, bool exe) {
     removeFile(target);
-    addFile(source, target);
+    addFile(source, target, exe);
 }
 
 // -------------------------------------------------------
@@ -318,9 +325,9 @@ void EngineUpdater::downloadExecutables() {
     QJsonObject objGameWin32 = objGame["win32"].toObject();
     QJsonObject objGameLinux = objGame["linux"].toObject();
     QJsonObject objGameOsx = objGame["osx"].toObject();
-    downloadFile(EngineUpdateFileKind::Replace, objGameWin32);
-    downloadFile(EngineUpdateFileKind::Replace, objGameLinux);
-    downloadFile(EngineUpdateFileKind::Replace, objGameOsx);
+    downloadFile(EngineUpdateFileKind::Replace, objGameWin32, true);
+    downloadFile(EngineUpdateFileKind::Replace, objGameLinux, true);
+    downloadFile(EngineUpdateFileKind::Replace, objGameOsx, true);
 
     // Engine
     QJsonObject objEngine = m_document["exeEngine"].toObject();
@@ -334,7 +341,7 @@ void EngineUpdater::downloadExecutables() {
         strOS = "osx";
     #endif
     objEngineExe = objEngine[strOS].toObject();
-    downloadFile(EngineUpdateFileKind::Replace, objEngineExe);
+    downloadFile(EngineUpdateFileKind::Replace, objEngineExe, true);
 }
 
 // -------------------------------------------------------
@@ -355,6 +362,15 @@ void EngineUpdater::downloadScripts() {
 }
 
 // -------------------------------------------------------
+
+void EngineUpdater::getVersions(QJsonArray& versions) const {
+    QJsonArray tab = m_document["versions"].toArray();
+    for (int i = m_index; i < tab.size(); i++)
+        versions.append(tab.at(i));
+}
+
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -368,7 +384,6 @@ void EngineUpdater::check() {
     int dif;
 
     // Get the JSON
-    /*
     reply = manager.get(QNetworkRequest(
         QUrl("https://raw.githubusercontent.com/RPG-Paper-Maker/"
              "RPG-Paper-Maker/master/versions.json")));
@@ -376,17 +391,35 @@ void EngineUpdater::check() {
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
     m_document = QJsonDocument::fromJson(reply->readAll()).object();
-    */
+    // For develop
+    /*
     QJsonDocument json;
     Wanok::readOtherJSON(Wanok::pathCombine(
                              QDir::currentPath(),
                              Wanok::pathCombine("Content", "versions.json")),
                          json);
     m_document = json.object();
+    */
 
     // Check last version
     lastVersion = m_document["lastVersion"].toString();
     dif = ProjectUpdater:: versionDifferent(lastVersion);
+
+    // Checking versions index
+    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonObject obj;
+    m_index = tabVersions.size();
+    if (m_index != 0) {
+        for (int i = 0; i < tabVersions.size(); i++) {
+            obj = tabVersions.at(i).toObject();
+            if (ProjectUpdater::versionDifferent(obj["v"].toString(),
+                                                 Project::ENGINE_VERSION) == 1)
+            {
+                m_index = i;
+                break;
+            }
+        }
+    }
 
     emit finishedCheck(dif != 0);
 }
@@ -397,27 +430,15 @@ void EngineUpdater::update() {
     QJsonArray tabVersions = m_document["versions"].toArray();
     QJsonObject obj;
 
-    // Checking versions index
-    emit progress(5, "Checking versions...");
-    int index = tabVersions.size();
-    if (index != 0) {
-        for (int i = 0; i < tabVersions.size(); i++) {
+    // Updating for each versions
+    if (m_index != tabVersions.size()) {
+        int progressVersion = 80 / (tabVersions.size() - m_index);
+        for (int i = m_index; i < tabVersions.size(); i++) {
             obj = tabVersions.at(i).toObject();
-            if (ProjectUpdater::versionDifferent(obj["v"].toString(),
-                                                 Project::ENGINE_VERSION) == 1)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        // Updating for each versions
-        int progressVersion = 70 / (tabVersions.size() - index);
-        for (int i = index; i < tabVersions.size(); i++) {
-            obj = tabVersions.at(i).toObject();
-            emit progress(10 + ((i - index) * progressVersion),
+            emit progress(((i - m_index) * progressVersion),
                           "Downloading version " + obj["v"].toString() + "...");
             updateVersion(obj);
+            QThread::sleep(1);
         }
     }
 

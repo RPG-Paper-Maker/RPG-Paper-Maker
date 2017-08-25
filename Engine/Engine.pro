@@ -14,7 +14,11 @@ win32{
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Engine
+TARGET = RPG-Paper-Maker
+win32{
+    TARGET = "RPG Paper Maker"
+}
+
 TEMPLATE = app
 
 INCLUDEPATH += \
@@ -206,7 +210,9 @@ HEADERS += \
     Models/projectupdater.h \
     Dialogs/dialogprogress.h \
     Models/engineupdater.h \
-    Enums/engineupdatefilekind.h
+    Enums/engineupdatefilekind.h \
+    Dialogs/dialogengineupdate.h \
+    CustomWidgets/widgetreleasenotes.h
 
 SOURCES += \
     main.cpp \
@@ -368,7 +374,9 @@ SOURCES += \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
     Models/projectupdater.cpp \
     Dialogs/dialogprogress.cpp \
-    Models/engineupdater.cpp
+    Models/engineupdater.cpp \
+    Dialogs/dialogengineupdate.cpp \
+    CustomWidgets/widgetreleasenotes.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -430,7 +438,8 @@ FORMS += \
     Dialogs/Commands/dialogcommandwait.ui \
     Dialogs/Systems/dialogsystemlang.ui \
     Dialogs/Commands/dialogcommandmovecamera.ui \
-    Dialogs/dialogprogress.ui
+    Dialogs/dialogprogress.ui \
+    Dialogs/dialogengineupdate.ui
 
 OTHER_FILES += \
     style.qss
