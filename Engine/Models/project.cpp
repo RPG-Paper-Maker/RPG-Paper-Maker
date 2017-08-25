@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "0.2.0";
+const QString Project::ENGINE_VERSION = "0.3.0";
 
 // -------------------------------------------------------
 //
@@ -394,6 +394,7 @@ void Project::writePicturesDatas(){
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
+    updatePictures();
 }
 
 // -------------------------------------------------------
