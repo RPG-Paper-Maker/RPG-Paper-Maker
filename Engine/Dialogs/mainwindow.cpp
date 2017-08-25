@@ -462,9 +462,9 @@ void MainWindow::on_updateCheckFinished(bool b) {
 // -------------------------------------------------------
 
 void MainWindow::on_updateFinished() {
+
     QMessageBox::information(this, "Restart",
                              "The engine is going to be restarted.");
-    qApp->quit();
 
     QString realApplicationName;
     #ifdef Q_OS_WIN
@@ -478,6 +478,7 @@ void MainWindow::on_updateFinished() {
     QStringList arguments = qApp->arguments();
     arguments[0] = path;
 
+    qApp->quit();
     QProcess::startDetached(path, arguments);
 }
 
