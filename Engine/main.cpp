@@ -44,6 +44,23 @@ int main(int argc, char *argv[])
     #endif
     QDir::setCurrent(bin.absolutePath());
 
+    // Detect if name need to be changed
+    QString realApplicationName;
+    #ifdef Q_OS_WIN
+        realApplicationName = "RPG Paper Maker.exe";
+    #elif __linux__
+        realApplicationName = "RPG-Paper-Maker";
+    #else
+        realApplicationName = "RPG-Paper-Maker.app";
+    #endif
+    QString currentApplicationName = QFileInfo(QString(argv[0])).fileName();
+    if (currentApplicationName != realApplicationName) {
+        QFile(Wanok::pathCombine(QDir::currentPath(), realApplicationName))
+                .remove();
+        QFile(Wanok::pathCombine(QDir::currentPath(), currentApplicationName))
+                .rename(realApplicationName);
+    }
+
     // General stylesheet configuration
     QFile file(":/stylesheets/style.qss");
     if (file.open(QFile::ReadOnly)) {

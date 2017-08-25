@@ -465,7 +465,20 @@ void MainWindow::on_updateFinished() {
     QMessageBox::information(this, "Restart",
                              "The engine is going to be restarted.");
     qApp->quit();
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+
+    QString realApplicationName;
+    #ifdef Q_OS_WIN
+        realApplicationName = "RPG Paper Maker temp.exe";
+    #elif __linux__
+        realApplicationName = "RPG-Paper-Maker-temp";
+    #else
+        realApplicationName = "RPG-Paper-Maker-temp.app";
+    #endif
+    QString path = Wanok::pathCombine(QDir::currentPath(), realApplicationName);
+    QStringList arguments = qApp->arguments();
+    arguments[0] = path;
+
+    QProcess::startDetached(path, arguments);
 }
 
 // -------------------------------------------------------

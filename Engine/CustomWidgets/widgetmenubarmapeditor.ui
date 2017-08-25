@@ -118,6 +118,9 @@
    </property>
   </action>
   <action name="actionWall_Sprite">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Wall Sprite</string>
    </property>

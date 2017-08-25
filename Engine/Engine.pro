@@ -14,7 +14,11 @@ win32{
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Engine
+TARGET = RPG-Paper-Maker
+win32{
+    TARGET = "RPG Paper Maker"
+}
+
 TEMPLATE = app
 
 INCLUDEPATH += \
