@@ -394,6 +394,7 @@ void Project::writePicturesDatas(){
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
+    updatePictures();
 }
 
 // -------------------------------------------------------

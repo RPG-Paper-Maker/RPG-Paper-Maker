@@ -347,18 +347,8 @@ void EngineUpdater::downloadExecutables() {
 // -------------------------------------------------------
 
 void EngineUpdater::downloadScripts() {
-    QJsonArray tabScripts = m_document["scripts"].toArray();
-    QJsonObject objFile;
-
-    // Delete all system scripts
-    QDir(Wanok::pathCombine(QDir::currentPath(), Wanok::pathScriptsSystemDir))
-            .removeRecursively();
-
-    // Scripts
-    for (int i = 0; i < tabScripts.size(); i++) {
-        objFile = tabScripts.at(i).toObject();
-        download(EngineUpdateFileKind::Add, objFile);
-    }
+    QJsonObject objScripts = m_document["scripts"].toObject();
+    download(EngineUpdateFileKind::Replace, objScripts);
 }
 
 // -------------------------------------------------------
