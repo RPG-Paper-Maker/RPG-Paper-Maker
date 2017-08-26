@@ -244,8 +244,12 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
     file.write(reply->readAll());
 
     // If exe, change permissions
-    if (exe)
-        file.setPermissions(QFileDevice::ExeUser);
+    if (exe) {
+        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser |
+                            QFileDevice::ExeUser | QFileDevice::ReadGroup |
+                            QFileDevice::ExeGroup | QFileDevice::ReadOther |
+                            QFileDevice::ExeOther);
+    }
 
     file.close();
 }
