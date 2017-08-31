@@ -17,40 +17,29 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LANDS_H
-#define LANDS_H
+#ifndef MAPELEMENT_H
+#define MAPELEMENT_H
 
-#include "mapelement.h"
+#include "mapeditorsubselectionkind.h"
+#include "serializable.h"
 
 // -------------------------------------------------------
 //
-//  CLASS LandDatas
+//  CLASS MapElement
 //
-//  A square floor datas.
+//  A square element in the map.
 //
 // -------------------------------------------------------
 
-class LandDatas : public MapElement
+class MapElement : public Serializable
 {
 public:
-    LandDatas();
-    virtual ~LandDatas();
+    MapElement();
+    virtual ~MapElement();
     virtual MapEditorSubSelectionKind getKind() const;
 
     virtual void read(const QJsonObject &);
     virtual void write(QJsonObject &) const;
 };
 
-// -------------------------------------------------------
-//
-//  CLASS Lands
-//
-// -------------------------------------------------------
-
-class Lands
-{
-public:
-    Lands();
-};
-
-#endif // LANDS_H
+#endif // MAPELEMENT_H

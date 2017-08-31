@@ -182,6 +182,7 @@ private:
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;
+    QHash<Position, MapElement*> m_previewSquares;
 };
 
 #endif // CONTROLMAPEDITOR_H

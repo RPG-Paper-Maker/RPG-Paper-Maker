@@ -1299,6 +1299,8 @@ void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
 {
     updateMousePosition(point);
 
+    updateRaycasting();
+
     if (button == Qt::MouseButton::MiddleButton){
         m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
         if (updateTree)
