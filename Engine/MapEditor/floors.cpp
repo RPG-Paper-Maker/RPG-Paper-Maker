@@ -318,12 +318,25 @@ void Floors::removeLandOut(MapProperties& properties) {
 //
 // -------------------------------------------------------
 
-void Floors::initializeVertices(int squareSize, int width, int height){
+void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+                                int squareSize, int width, int height){
+
+    // Clear all the floors
     for (int j = 0; j < Position::LAYERS_NUMBER; j++)
         m_floorsGL[j]->clearGL();
 
+    // Create temp hash for preview
+    QHash<Position, LandDatas*> landsWithPreview(m_lands);
+    QHash<Position, MapElement*>::iterator it;
+    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
+        MapElement* element = it.value();
+        if (element->getKind() == MapEditorSubSelectionKind::Floors)
+            landsWithPreview[it.key()] = (LandDatas*) element;
+    }
+
+    // Initialize vertices
     QHash<Position, LandDatas*>::iterator i;
-    for (i = m_lands.begin(); i != m_lands.end(); i++){
+    for (i = landsWithPreview.begin(); i != landsWithPreview.end(); i++) {
         LandDatas* land = i.value();
         Position p = i.key();
 

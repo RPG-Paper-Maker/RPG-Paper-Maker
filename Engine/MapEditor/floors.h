@@ -116,7 +116,8 @@ public:
 
     void removeLandOut(MapProperties& properties);
 
-    void initializeVertices(int squareSize, int width, int height);
+    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+                            int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();

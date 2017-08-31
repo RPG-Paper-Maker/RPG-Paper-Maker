@@ -33,6 +33,7 @@ ControlMapEditor::ControlMapEditor() :
     m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
+    m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_displayGrid(true),
     m_treeMapNode(nullptr)
 {
@@ -189,7 +190,8 @@ void ControlMapEditor::updateCameraTreeNode(){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update(){
+void ControlMapEditor::update()
+{
     updateRaycasting();
 
     // Update portions
@@ -202,12 +204,12 @@ void ControlMapEditor::update(){
     m_camera->update(m_cursor, m_map->squareSize());
 
     // Mouse update
-    m_mouseBeforeUpdate = m_mouse;
+    m_mouseBeforeUpdate = m_mouseMove;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMousePosition(QPoint point){
+void ControlMapEditor::updateMousePosition(QPoint point) {
     m_mouse = point;
 }
 
@@ -226,7 +228,51 @@ void ControlMapEditor::updateRaycasting(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePortions(){
+void ControlMapEditor::updatePreviewElements(
+        MapEditorSelectionKind selection,
+        MapEditorSubSelectionKind subSelection,
+        QRect& tileset)
+{
+
+    // Remove previous
+    Portion portionPrevious = getLocalPortion(m_positionPreviousPreview);
+    if (m_map->isInGrid(m_positionPreviousPreview) &&
+        m_map->isInPortion(portionPrevious))
+    {
+        m_portionsToUpdate += portionPrevious;
+        m_map->mapPortion(portionPrevious)->clearPreview();
+    }
+
+    // Add new previous
+    m_positionPreviousPreview = getPositionSelected(selection);
+    Portion portion = getLocalPortion(m_positionPreviousPreview);
+    if (m_map->isInGrid(m_positionPreviousPreview) &&
+        m_map->isInPortion(portion))
+    {
+        MapElement* element = nullptr;
+
+        switch (subSelection) {
+        case MapEditorSubSelectionKind::Floors:
+            element = new FloorDatas(new QRect(tileset.x(),
+                                               tileset.y(),
+                                               tileset.width(),
+                                               tileset.height()));
+            break;
+        default:
+            break;
+        }
+
+        if (element != nullptr) {
+            MapPortion* mapPortion = m_map->mapPortion(portion);
+            mapPortion->addPreview(m_positionPreviousPreview, element);
+            m_portionsToUpdate += portion;
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updatePortions() {
     QSet<Portion>::iterator i;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++){
         Portion p = *i;
@@ -772,8 +818,6 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion == nullptr)
-                mapPortion = m_map->createMapPortion(portion);
             if (mapPortion->addLand(p, landDatas) && m_map->saved())
                 setToNotSaved();
             m_portionsToUpdate += portion;
@@ -812,12 +856,10 @@ void ControlMapEditor::eraseLand(Position& p){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion != nullptr){
-                if (mapPortion->deleteLand(p) && m_map->saved())
-                    setToNotSaved();
-                m_portionsToUpdate += portion;
-                m_portionsToSave += portion;
-            }
+            if (mapPortion->deleteLand(p) && m_map->saved())
+                setToNotSaved();
+            m_portionsToUpdate += portion;
+            m_portionsToSave += portion;
         }
     }
 }
@@ -861,8 +903,6 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion == nullptr)
-                mapPortion = m_map->createMapPortion(portion);
             if (mapPortion->addSprite(p, kind, layer, widthPosition, angle,
                                       textureRect) &&
                 m_map->saved())
@@ -904,12 +944,10 @@ void ControlMapEditor::eraseSprite(Position& p){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion != nullptr){
-                if (mapPortion->deleteSprite(p) && m_map->saved())
-                    setToNotSaved();
-                m_portionsToUpdate += portion;
-                m_portionsToSave += portion;
-            }
+            if (mapPortion->deleteSprite(p) && m_map->saved())
+                setToNotSaved();
+            m_portionsToUpdate += portion;
+            m_portionsToSave += portion;
         }
     }
 }
@@ -980,8 +1018,6 @@ void ControlMapEditor::addObject(Position& p){
     DialogObject dialog(object);
     if (dialog.exec() == QDialog::Accepted){
         MapPortion* mapPortion = m_map->mapPortion(portion);
-        if (mapPortion == nullptr)
-            mapPortion = m_map->createMapPortion(portion);
         if (m_map->addObject(p, mapPortion, object) &&
             m_map->saved())
         {
@@ -1294,15 +1330,14 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent* event, bool updateTree){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
-                                   bool updateTree)
+void ControlMapEditor::onMouseMove(QPoint point,
+                                   Qt::MouseButton button, bool updateTree)
 {
     updateMousePosition(point);
-
-    updateRaycasting();
+    m_mouseMove = point;
 
     if (button == Qt::MouseButton::MiddleButton){
-        m_camera->onMouseWheelPressed(m_mouse, m_mouseBeforeUpdate);
+        m_camera->onMouseWheelPressed(m_mouseMove, m_mouseBeforeUpdate);
         if (updateTree)
             updateCameraTreeNode();
     }
@@ -1318,6 +1353,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       Qt::MouseButton button)
 {
     updateMousePosition(point);
+    m_mouseMove = point;
 
     // Update
     update();

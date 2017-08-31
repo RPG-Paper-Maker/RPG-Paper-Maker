@@ -60,6 +60,8 @@ public:
     void removeSpritesOut(MapProperties& properties);
     void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
                           MapProperties& properties);
+    void clearPreview();
+    void addPreview(Position& p, MapElement* element);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);
@@ -80,6 +82,7 @@ private:
     Floors* m_floors;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
+    QHash<Position, MapElement*> m_previewSquares;
     bool m_isVisible;
     bool m_isLoaded;
 };

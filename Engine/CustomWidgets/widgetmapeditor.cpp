@@ -142,6 +142,7 @@ void WidgetMapEditor::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_control.map() != nullptr){
+        QRect tileset = m_panelTextures->getTilesetTexture();
 
         // Key press
         if (!m_firstPressure) {
@@ -157,7 +158,11 @@ void WidgetMapEditor::paintGL(){
         }
 
         // Update control
+        m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
         m_control.update();
+        m_control.updatePreviewElements(m_menuBar->selectionKind(),
+                                        m_menuBar->subSelectionKind(),
+                                        tileset);
 
         // Model view / projection
         QMatrix4x4 viewMatrix = m_control.camera()->view();
@@ -323,7 +328,8 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
         QSet<Qt::MouseButton>::iterator i;
         for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++){
             Qt::MouseButton button = *i;
-            m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
+            m_control.onMouseMove(event->pos(), button,
+                                  m_menuBar != nullptr);
 
             if (m_menuBar != nullptr){
                 QRect tileset = m_panelTextures->getTilesetTexture();

@@ -65,6 +65,9 @@ public:
     void update();
     void updateMousePosition(QPoint point);
     void updateRaycasting();
+    void updatePreviewElements(MapEditorSelectionKind selection,
+                               MapEditorSubSelectionKind subSelection,
+                               QRect &tileset);
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
     void updateMovingPortionsNorthSouth(Portion& newPortion);
@@ -170,8 +173,10 @@ private:
     int m_width;
     int m_height;
     QPoint m_mouse;
+    QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
+    Position m_positionPreviousPreview;
     float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;
@@ -182,7 +187,6 @@ private:
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;
-    QHash<Position, MapElement*> m_previewSquares;
 };
 
 #endif // CONTROLMAPEDITOR_H
