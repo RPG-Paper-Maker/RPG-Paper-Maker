@@ -68,6 +68,8 @@ public:
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
                                QRect &tileset);
+    void updatePreviewElement(Position& p, Portion &portion,
+                              MapElement* element);
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
     void updateMovingPortionsNorthSouth(Portion& newPortion);
@@ -177,6 +179,7 @@ private:
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
     Position m_positionPreviousPreview;
+    QList<Position> m_positionsPreviousPreview;
     float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;

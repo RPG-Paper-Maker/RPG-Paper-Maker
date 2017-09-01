@@ -233,41 +233,82 @@ void ControlMapEditor::updatePreviewElements(
         MapEditorSubSelectionKind subSelection,
         QRect& tileset)
 {
+    Position position = getPositionSelected(selection);
+    if (position == m_positionPreviousPreview)
+        return;
+    m_positionPreviousPreview = position;
 
     // Remove previous
-    Portion portionPrevious = getLocalPortion(m_positionPreviousPreview);
-    if (m_map->isInGrid(m_positionPreviousPreview) &&
-        m_map->isInPortion(portionPrevious))
-    {
-        m_portionsToUpdate += portionPrevious;
-        m_map->mapPortion(portionPrevious)->clearPreview();
+    for (int i = 0; i < m_positionsPreviousPreview.size(); i++) {
+        Position positionPrevious = m_positionsPreviousPreview.at(i);
+        Portion portionPrevious = getLocalPortion(positionPrevious);
+        if (m_map->isInGrid(positionPrevious) &&
+            m_map->isInPortion(portionPrevious))
+        {
+            m_portionsToUpdate += portionPrevious;
+            m_map->mapPortion(portionPrevious)->clearPreview();
+        }
     }
 
     // Add new previous
-    m_positionPreviousPreview = getPositionSelected(selection);
-    Portion portion = getLocalPortion(m_positionPreviousPreview);
-    if (m_map->isInGrid(m_positionPreviousPreview) &&
-        m_map->isInPortion(portion))
-    {
+    MapElement* element = nullptr;
+    if (subSelection == MapEditorSubSelectionKind::Floors) {
         MapElement* element = nullptr;
+        for (int i = 0; i < tileset.width(); i++){
+            if (position.x() + i > m_map->mapProperties()->length())
+                break;
 
-        switch (subSelection) {
-        case MapEditorSubSelectionKind::Floors:
-            element = new FloorDatas(new QRect(tileset.x(),
-                                               tileset.y(),
-                                               tileset.width(),
-                                               tileset.height()));
-            break;
-        default:
-            break;
-        }
+            for (int j = 0; j < tileset.height(); j++){
+                if (position.z() + j > m_map->mapProperties()->width())
+                    break;
 
-        if (element != nullptr) {
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            mapPortion->addPreview(m_positionPreviousPreview, element);
-            m_portionsToUpdate += portion;
+                Position shortPosition(position.x() + i, 0, 0, position.z() + j,
+                                       position.layer());
+                Portion shortPortion = getLocalPortion(shortPosition);
+                element = new FloorDatas(new QRect(tileset.x() + i,
+                                                   tileset.y() + j, 1, 1));
+                if (m_map->isInGrid(shortPosition) &&
+                    m_map->isInPortion(shortPortion))
+                {
+                    updatePreviewElement(shortPosition, shortPortion, element);
+                }
+            }
         }
     }
+    else {
+        Portion portion = getLocalPortion(m_positionPreviousPreview);
+        if (m_map->isInGrid(m_positionPreviousPreview) &&
+            m_map->isInPortion(portion))
+        {
+            switch (subSelection) {
+            case MapEditorSubSelectionKind::Floors:
+                element = new FloorDatas(new QRect(tileset.x(),
+                                                   tileset.y(),
+                                                   tileset.width(),
+                                                   tileset.height()));
+                break;
+            default:
+                break;
+            }
+
+            if (element != nullptr) {
+                updatePreviewElement(m_positionPreviousPreview, portion,
+                                     element);
+            }
+        }
+    }
+
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updatePreviewElement(Position &p, Portion& portion,
+                                            MapElement* element)
+{
+    MapPortion* mapPortion = m_map->mapPortion(portion);
+    mapPortion->addPreview(p, element);
+    m_portionsToUpdate += portion;
+    m_positionsPreviousPreview.append(p);
 }
 
 // -------------------------------------------------------
