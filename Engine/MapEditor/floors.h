@@ -48,7 +48,7 @@ public:
     FloorDatas(QRect *texture);
     virtual ~FloorDatas();
     QRect* textureRect() const;
-    virtual MapEditorSubSelectionKind getKind() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;

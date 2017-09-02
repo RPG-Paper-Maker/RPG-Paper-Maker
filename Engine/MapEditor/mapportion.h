@@ -50,7 +50,7 @@ public:
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land);
     bool deleteLand(Position& p);
-    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
     bool addObject(Position& p, SystemCommonObject* o);

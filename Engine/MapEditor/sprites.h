@@ -33,6 +33,7 @@
 #include "vertexbillboard.h"
 #include "mapeditorsubselectionkind.h"
 #include "mapproperties.h"
+#include "mapelement.h"
 
 // -------------------------------------------------------
 //
@@ -63,15 +64,14 @@ public:
 //
 // -------------------------------------------------------
 
-class SpriteDatas
+class SpriteDatas : public MapElement
 {
 public:
     SpriteDatas();
-    SpriteDatas(MapEditorSubSelectionKind kind, int layer, int widthPosition,
+    SpriteDatas(MapEditorSubSelectionKind kind, int widthPosition,
                 int angle, QRect* textureRect);
     virtual ~SpriteDatas();
-    MapEditorSubSelectionKind kind() const;
-    int layer() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
@@ -96,7 +96,6 @@ public:
 
 protected:
     MapEditorSubSelectionKind m_kind;
-    int m_layer;
     int m_widthPosition;
     int m_angle;
     QRect* m_textureRect;
@@ -153,13 +152,14 @@ public:
     bool isEmpty() const;
     void setSprite(Position& p, SpriteDatas* sprite);
     SpriteDatas* removeSprite(Position& p);
-    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
 
     void removeSpritesOut(MapProperties& properties);
 
-    void initializeVertices(int squareSize, int width, int height,
+    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+                            int squareSize, int width, int height,
                             int& spritesOffset);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram* programFace);
@@ -171,7 +171,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position3D, QVector<SpriteDatas*>*> m_all;
+    QHash<Position, SpriteDatas*> m_all;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;

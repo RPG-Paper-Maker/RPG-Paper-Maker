@@ -290,6 +290,17 @@ void ControlMapEditor::updatePreviewElements(
             default:
                 break;
             }
+            switch (selection) {
+            case MapEditorSelectionKind::Sprites:
+                element = new SpriteDatas(subSelection, 50, 0,
+                                          new QRect(tileset.x(),
+                                                    tileset.y(),
+                                                    tileset.width(),
+                                                    tileset.height()));
+                break;
+            default:
+                break;
+            }
 
             if (element != nullptr) {
                 updatePreviewElement(m_positionPreviousPreview, portion,
@@ -694,7 +705,7 @@ void ControlMapEditor::paintPinLand(Position& p,
                     MapEditorSubSelectionKind::None;
             QRect textureBefore;
             if (landBefore != nullptr){
-                kindBefore = landBefore->getKind();
+                kindBefore = landBefore->getSubKind();
                 getLandTexture(textureBefore, landBefore);
             }
 
@@ -791,7 +802,7 @@ bool ControlMapEditor::areLandsEquals(LandDatas* landBefore,
     if (landBefore == nullptr)
         return kindAfter == MapEditorSubSelectionKind::None;
     else{
-        if (landBefore->getKind() == kindAfter){
+        if (landBefore->getSubKind() == kindAfter){
             switch (kindAfter){
             case MapEditorSubSelectionKind::Floors:
                 return (*(((FloorDatas*) landBefore)->textureRect())) ==
@@ -835,7 +846,7 @@ LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
 void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
     FloorDatas* floor;
 
-    switch (land->getKind()) {
+    switch (land->getSubKind()) {
     case MapEditorSubSelectionKind::Floors:
         floor = (FloorDatas*) land;
         rect.setX(floor->textureRect()->x());
@@ -924,8 +935,8 @@ void ControlMapEditor::addSprite(Position& p,
     case DrawKind::Pin:
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++)
-            stockSprite(positions[i], kind, 0, 50, 0, new QRect(tileset));
-        stockSprite(p, kind, 0, 50, 0, new QRect(tileset));
+            stockSprite(positions[i], kind, 50, 0, new QRect(tileset));
+        stockSprite(p, kind, 50, 0, new QRect(tileset));
         break;
     case DrawKind::Rectangle:
         break;
@@ -937,14 +948,14 @@ void ControlMapEditor::addSprite(Position& p,
 // -------------------------------------------------------
 
 void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
-                                   int layer, int widthPosition, int angle,
+                                   int widthPosition, int angle,
                                    QRect *textureRect)
 {
     if (m_map->isInGrid(p)){
         Portion portion = getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->addSprite(p, kind, layer, widthPosition, angle,
+            if (mapPortion->addSprite(p, kind, widthPosition, angle,
                                       textureRect) &&
                 m_map->saved())
             {

@@ -26,7 +26,7 @@ class SpriteWallDatas : SpriteDatas
 {
 public:
     SpriteWallDatas();
-    SpriteWallDatas(MapEditorSubSelectionKind kind, int layer,
+    SpriteWallDatas(MapEditorSubSelectionKind kind,
                     int widthPosition, int angle, QRect* textureRect);
     bool left() const;
     bool right() const;

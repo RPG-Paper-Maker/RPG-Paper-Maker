@@ -43,7 +43,7 @@ LandDatas::~LandDatas()
 
 }
 
-MapEditorSubSelectionKind LandDatas::getKind() const{
+MapEditorSubSelectionKind LandDatas::getSubKind() const{
     return MapEditorSubSelectionKind::None;
 }
 

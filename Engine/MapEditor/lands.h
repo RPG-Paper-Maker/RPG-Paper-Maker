@@ -35,7 +35,7 @@ class LandDatas : public MapElement
 public:
     LandDatas();
     virtual ~LandDatas();
-    virtual MapEditorSubSelectionKind getKind() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void read(const QJsonObject &);
     virtual void write(QJsonObject &) const;

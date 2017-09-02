@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "0.3.1";
+const QString Project::ENGINE_VERSION = "0.3.0";
 
 // -------------------------------------------------------
 //
@@ -138,18 +138,18 @@ bool Project::readVersion(){
     }
 
     QTextStream in(&file);
-    QString version = in.readLine();
+    m_version = in.readLine();
     file.close();
-    QString information = "This project is under " + version + " version but" +
-                          " your current RPG Paper Maker version is " +
+    QString information = "This project is under " + m_version + " version but"
+                          + " your current RPG Paper Maker version is " +
                           Project::ENGINE_VERSION;
 
-    int dBefore = ProjectUpdater::versionDifferent(version, "0.3.0");
+    int dBefore = ProjectUpdater::versionDifferent(m_version, "0.3.0");
 
     // If impossible to convert the version
     if (dBefore == -2) {
         QMessageBox::critical(nullptr, "Error: could not find project version",
-                              "Impossible to convert" + version + ".");
+                              "Impossible to convert" + m_version + ".");
         return false;
     }
 
@@ -162,7 +162,7 @@ bool Project::readVersion(){
         return false;
     }
 
-    int d = ProjectUpdater::versionDifferent(version);
+    int d = ProjectUpdater::versionDifferent(m_version);
 
     // If the project if superior to the engine
     if (d == 1) {
@@ -176,7 +176,7 @@ bool Project::readVersion(){
     if (d == -1) {
         QDir dirProject(p_pathCurrentProject);
         QString previousFolderName = dirProject.dirName() +
-                                     "-" + version;
+                                     "-" + m_version;
         QMessageBox::StandardButton box =
             QMessageBox::question(nullptr, "Error: conversion needed",
                                   information + ". Convert the project? (a " +

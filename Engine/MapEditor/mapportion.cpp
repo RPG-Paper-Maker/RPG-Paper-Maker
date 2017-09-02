@@ -92,11 +92,9 @@ bool MapPortion::deleteLand(Position& p){
 // -------------------------------------------------------
 
 bool MapPortion::addSprite(Position& p, MapEditorSubSelectionKind kind,
-                           int layer, int widthPosition, int angle,
-                           QRect *textureRect)
+                           int widthPosition, int angle, QRect *textureRect)
 {
-    return m_sprites->addSprite(p, kind, layer, widthPosition, angle,
-                                textureRect);
+    return m_sprites->addSprite(p, kind, widthPosition, angle, textureRect);
 }
 
 // -------------------------------------------------------
@@ -168,7 +166,8 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                  squareSize,
                                  tileset->width(),
                                  tileset->height());
-    m_sprites->initializeVertices(squareSize,
+    m_sprites->initializeVertices(m_previewSquares,
+                                  squareSize,
                                   tileset->width(),
                                   tileset->height(),
                                   spritesOffset);

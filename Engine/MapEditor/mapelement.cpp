@@ -35,7 +35,11 @@ MapElement::~MapElement()
 
 }
 
-MapEditorSubSelectionKind MapElement::getKind() const{
+MapEditorSelectionKind MapElement::getKind() const{
+    return MapEditorSelectionKind::Land;
+}
+
+MapEditorSubSelectionKind MapElement::getSubKind() const{
     return MapEditorSubSelectionKind::None;
 }
 

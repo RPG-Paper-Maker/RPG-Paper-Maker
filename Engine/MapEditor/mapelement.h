@@ -21,6 +21,7 @@
 #define MAPELEMENT_H
 
 #include "mapeditorsubselectionkind.h"
+#include "mapeditorselectionkind.h"
 #include "serializable.h"
 
 // -------------------------------------------------------
@@ -36,7 +37,8 @@ class MapElement : public Serializable
 public:
     MapElement();
     virtual ~MapElement();
-    virtual MapEditorSubSelectionKind getKind() const;
+    virtual MapEditorSelectionKind getKind() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void read(const QJsonObject &);
     virtual void write(QJsonObject &) const;
