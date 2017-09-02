@@ -239,16 +239,7 @@ void ControlMapEditor::updatePreviewElements(
     m_positionPreviousPreview = position;
 
     // Remove previous
-    for (int i = 0; i < m_positionsPreviousPreview.size(); i++) {
-        Position positionPrevious = m_positionsPreviousPreview.at(i);
-        Portion portionPrevious = getLocalPortion(positionPrevious);
-        if (m_map->isInGrid(positionPrevious) &&
-            m_map->isInPortion(portionPrevious))
-        {
-            m_portionsToUpdate += portionPrevious;
-            m_map->mapPortion(portionPrevious)->clearPreview();
-        }
-    }
+    removePreviewElements();
 
     // Add new previous
     MapElement* element = nullptr;
@@ -265,11 +256,11 @@ void ControlMapEditor::updatePreviewElements(
                 Position shortPosition(position.x() + i, 0, 0, position.z() + j,
                                        position.layer());
                 Portion shortPortion = getLocalPortion(shortPosition);
-                element = new FloorDatas(new QRect(tileset.x() + i,
-                                                   tileset.y() + j, 1, 1));
                 if (m_map->isInGrid(shortPosition) &&
                     m_map->isInPortion(shortPortion))
                 {
+                    element = new FloorDatas(new QRect(tileset.x() + i,
+                                                       tileset.y() + j, 1, 1));
                     updatePreviewElement(shortPosition, shortPortion, element);
                 }
             }
@@ -308,7 +299,21 @@ void ControlMapEditor::updatePreviewElements(
             }
         }
     }
+}
 
+// -------------------------------------------------------
+
+void ControlMapEditor::removePreviewElements() {
+    for (int i = 0; i < m_positionsPreviousPreview.size(); i++) {
+        Position positionPrevious = m_positionsPreviousPreview.at(i);
+        Portion portionPrevious = getLocalPortion(positionPrevious);
+        if (m_map->isInGrid(positionPrevious) &&
+            m_map->isInPortion(portionPrevious))
+        {
+            m_portionsToUpdate += portionPrevious;
+            m_map->mapPortion(portionPrevious)->clearPreview();
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -874,8 +879,12 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
                 setToNotSaved();
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
+
+            return;
         }
     }
+
+    delete landDatas;
 }
 
 // -------------------------------------------------------

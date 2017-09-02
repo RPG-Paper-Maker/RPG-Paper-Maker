@@ -101,6 +101,10 @@ SpriteDatas::~SpriteDatas()
     delete m_textureRect;
 }
 
+MapEditorSelectionKind SpriteDatas::getKind() const {
+    return MapEditorSelectionKind::Sprites;
+}
+
 MapEditorSubSelectionKind SpriteDatas::getSubKind() const { return m_kind; }
 
 int SpriteDatas::widthPosition() const { return m_widthPosition; }
@@ -547,37 +551,22 @@ void Sprites::initializeVertices(QHash<Position, MapElement *> &previewSquares,
     m_indexesFace.clear();
 
     // Create temp hash for preview
-    /*
-    QHash<Position3D, SpriteDatas*> spritesWithPreview(m_all);
+    QHash<Position, SpriteDatas*> spritesWithPreview(m_all);
     QHash<Position, MapElement*>::iterator it;
     for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
         MapElement* element = it.value();
-        if (element->getKind() == MapEditorSubSelectionKind::Floors)
-            landsWithPreview[it.key()] = (LandDatas*) element;
+        if (element->getKind() == MapEditorSelectionKind::Sprites)
+            spritesWithPreview[it.key()] = (SpriteDatas*) element;
     }
 
     // Initialize vertices
-    QHash<Position, LandDatas*>::iterator i;
-    for (i = landsWithPreview.begin(); i != landsWithPreview.end(); i++) {
-        LandDatas* land = i.value();
-        Position p = i.key();
-
-        switch (land->getKind()){
-        case MapEditorSubSelectionKind::Floors:
-            m_floorsGL[p.layer()]->initializeVertices(squareSize, width, height,
-                                                      p, (FloorDatas*) land);
-            break;
-        default:
-            break;
-        }
-    }*/
-
     int countStatic = 0;
     int countFace = 0;
     QHash<Position, SpriteDatas*>::iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
-        Position3D position = i.key();
+    for (i = spritesWithPreview.begin(); i != spritesWithPreview.end(); i++) {
+        Position position = i.key();
         SpriteDatas* sprite = i.value();
+
         sprite->initializeVertices(squareSize, width, height,
                                    m_verticesStatic, m_indexesStatic,
                                    m_verticesFace, m_indexesFace,

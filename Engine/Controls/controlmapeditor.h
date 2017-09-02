@@ -68,6 +68,7 @@ public:
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
                                QRect &tileset);
+    void removePreviewElements();
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
     void updateMovingPortions();

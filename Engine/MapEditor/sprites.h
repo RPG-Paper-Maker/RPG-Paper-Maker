@@ -71,6 +71,7 @@ public:
     SpriteDatas(MapEditorSubSelectionKind kind, int widthPosition,
                 int angle, QRect* textureRect);
     virtual ~SpriteDatas();
+    virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     int widthPosition() const;
     int angle() const;
