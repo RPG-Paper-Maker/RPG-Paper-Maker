@@ -171,24 +171,21 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSprites: function(json){
+        var material = $currentMap.textureTileset;
+
         for (var i = 0, l = json.length; i < l; i++){
             var s = json[i];
             var position = s.k;
             var ss = s.v;
+            var sprite = new Sprite();
+            sprite.read(ss);
+            var plane = this.getSpriteMesh(position, material, sprite);
+            if (sprite.kind === ElementMapKind.SpritesFace)
+                this.faceSpritesList.push(plane);
+            else
+                this.staticSpritesList.push(plane);
 
-            var material = $currentMap.textureTileset;
-
-            for (var j = 0, ll = ss.length; j < ll; j++){
-                var sprite = new Sprite();
-                sprite.read(ss[j]);
-                var plane = this.getSpriteMesh(position, material, sprite);
-                if (sprite.kind === ElementMapKind.SpritesFace)
-                    this.faceSpritesList.push(plane);
-                else
-                    this.staticSpritesList.push(plane);
-
-                $gameStack.top().scene.add(plane);
-            }
+            $gameStack.top().scene.add(plane);
         }
     },
 
