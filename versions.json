@@ -384,7 +384,7 @@
     		"add": [],
     		"remove": [],
     		"replace": [],
-    		"features": [],
+    		"features": ["Preview of floors and sprites when moving mouse in the map editor grid"],
     		"bugs": ["Engine updater was displayed even without connexion"]
     	}
     ]

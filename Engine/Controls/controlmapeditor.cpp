@@ -973,8 +973,12 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
 
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
+
+            return;
         }
     }
+
+    delete textureRect;
 }
 
 // -------------------------------------------------------

@@ -378,7 +378,6 @@ void EngineUpdater::check() {
     int dif;
 
     // Get the JSON
-    /*
     reply = manager.get(QNetworkRequest(
         QUrl("https://raw.githubusercontent.com/RPG-Paper-Maker/"
              "RPG-Paper-Maker/master/versions.json")));
@@ -390,16 +389,16 @@ void EngineUpdater::check() {
         return;
     }
     m_document = QJsonDocument::fromJson(reply->readAll()).object();
-    */
-    // For develop
 
+    // For develop
+    /*
     QJsonDocument json;
     Wanok::readOtherJSON(Wanok::pathCombine(
                              QDir::currentPath(),
                              Wanok::pathCombine("Content", "versions.json")),
                          json);
     m_document = json.object();
-
+    */
 
     // Check last version
     lastVersion = m_document["lastVersion"].toString();
