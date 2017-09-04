@@ -65,6 +65,12 @@ public:
     void update();
     void updateMousePosition(QPoint point);
     void updateRaycasting();
+    void updatePreviewElements(MapEditorSelectionKind selection,
+                               MapEditorSubSelectionKind subSelection,
+                               QRect &tileset);
+    void removePreviewElements();
+    void updatePreviewElement(Position& p, Portion &portion,
+                              MapElement* element);
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
     void updateMovingPortionsNorthSouth(Portion& newPortion);
@@ -123,7 +129,7 @@ public:
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind,
                    QRect& tileset);
-    void stockSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+    void stockSprite(Position& p, MapEditorSubSelectionKind kind,
                      int widthPosition, int angle, QRect* textureRect);
     void removeSprite(Position& p, DrawKind drawKind);
     void eraseSprite(Position& p);
@@ -170,8 +176,11 @@ private:
     int m_width;
     int m_height;
     QPoint m_mouse;
+    QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
+    Position m_positionPreviousPreview;
+    QList<Position> m_positionsPreviousPreview;
     float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;

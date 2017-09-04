@@ -80,16 +80,15 @@ Sprite::~Sprite()
 // -------------------------------------------------------
 
 SpriteDatas::SpriteDatas() :
-    SpriteDatas(MapEditorSubSelectionKind::SpritesFace, 0, 50, 0,
+    SpriteDatas(MapEditorSubSelectionKind::SpritesFace, 50, 0,
                 new QRect(0, 0, 2, 2))
 {
 
 }
 
-SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, int layer,
+SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind,
                          int widthPosition, int angle, QRect *textureRect) :
     m_kind(kind),
-    m_layer(layer),
     m_widthPosition(widthPosition),
     m_angle(angle),
     m_textureRect(textureRect)
@@ -102,9 +101,11 @@ SpriteDatas::~SpriteDatas()
     delete m_textureRect;
 }
 
-MapEditorSubSelectionKind SpriteDatas::kind() const { return m_kind; }
+MapEditorSelectionKind SpriteDatas::getKind() const {
+    return MapEditorSelectionKind::Sprites;
+}
 
-int SpriteDatas::layer() const { return m_layer; }
+MapEditorSubSelectionKind SpriteDatas::getSubKind() const { return m_kind; }
 
 int SpriteDatas::widthPosition() const { return m_widthPosition; }
 
@@ -297,7 +298,6 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
 
 void SpriteDatas::read(const QJsonObject & json){
     m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
-    m_layer = json["l"].toInt();
     m_widthPosition = json["p"].toInt();
     m_angle = json["a"].toInt();
 
@@ -314,7 +314,6 @@ void SpriteDatas::write(QJsonObject & json) const{
     QJsonArray tab;
 
     json["k"] = (int) m_kind;
-    json["l"] = m_layer;
     json["p"] = m_widthPosition;
     json["a"] = m_angle;
 
@@ -444,13 +443,9 @@ Sprites::Sprites() :
 
 Sprites::~Sprites()
 {
-    QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
-        QVector<SpriteDatas*>* list = *i;
-        for (int j = 0; j < list->size(); j++)
-            delete list->at(j);
-        delete list;
-    }
+    QHash<Position, SpriteDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
+        delete *i;
 }
 
 // -------------------------------------------------------
@@ -466,40 +461,16 @@ bool Sprites::isEmpty() const{
 // -------------------------------------------------------
 
 void Sprites::setSprite(Position& p, SpriteDatas* sprite){
-    QVector<SpriteDatas*>* list = m_all.value(p);
-    if (list != nullptr){
-        for (int i = 0; i < list->size(); i++){
-            SpriteDatas* sprite = list->at(i);
-            if (p.layer() < sprite->layer()){
-                list->insert(i, sprite);
-                return;
-            }
-        }
-        list->append(sprite);
-    }
-    else{
-        QVector<SpriteDatas*>* l = new QVector<SpriteDatas*>;
-        l->append(sprite);
-        m_all[p] = l;
-    }
+    m_all[p] = sprite;
 }
 
 // -------------------------------------------------------
 
 SpriteDatas* Sprites::removeSprite(Position& p){
-    QVector<SpriteDatas*>* list = m_all.value(p);
-    if (list != nullptr){
-        for (int i = 0; i < list->size(); i++){
-            SpriteDatas* sprite = list->at(i);
-            if (p.layer() == sprite->layer()){
-                list->removeAt(i);
-                if (list->size() == 0){
-                    delete list;
-                    m_all.remove(p);
-                }
-                return sprite;
-            }
-        }
+    SpriteDatas* sprite = m_all.value(p);
+    if (sprite != nullptr){
+        m_all.remove(p);
+        return sprite;
     }
 
     return nullptr;
@@ -507,7 +478,7 @@ SpriteDatas* Sprites::removeSprite(Position& p){
 
 // -------------------------------------------------------
 
-bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind,
                         int widthPosition, int angle, QRect *textureRect)
 {
     SpriteDatas* previousSprite = removeSprite(p);
@@ -515,12 +486,12 @@ bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
 
     if (kind == MapEditorSubSelectionKind::SpritesWall) {
         SpriteWallDatas* spriteWall =
-                new SpriteWallDatas(kind, layer, widthPosition, angle,
+                new SpriteWallDatas(kind, widthPosition, angle,
                                     textureRect);
         sprite = (SpriteDatas*) spriteWall;
     }
     else {
-        sprite = new SpriteDatas(kind, layer, widthPosition, angle,
+        sprite = new SpriteDatas(kind, widthPosition, angle,
                                  textureRect);
     }
 
@@ -546,18 +517,15 @@ bool Sprites::deleteSprite(Position& p){
 // -------------------------------------------------------
 
 void Sprites::removeSpritesOut(MapProperties& properties) {
-    QList<Position3D> list;
-    QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
+    QList<Position> list;
+    QHash<Position, SpriteDatas*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++) {
-        Position3D position = i.key();
+        Position position = i.key();
 
         if (position.x() >= properties.length() ||
             position.z() >= properties.width())
         {
-            QVector<SpriteDatas*>* l = *i;
-            for (int j = 0; j < l->size(); j++)
-                delete l->at(j);
-            delete l;
+            delete i.value();
             list.push_back(position);
         }
     }
@@ -572,28 +540,38 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 //
 // -------------------------------------------------------
 
-void Sprites::initializeVertices(int squareSize, int width, int height,
+void Sprites::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+                                 int squareSize, int width, int height,
                                  int& spritesOffset)
 {
+    // Clear
     m_verticesStatic.clear();
     m_indexesStatic.clear();
     m_verticesFace.clear();
     m_indexesFace.clear();
 
+    // Create temp hash for preview
+    QHash<Position, SpriteDatas*> spritesWithPreview(m_all);
+    QHash<Position, MapElement*>::iterator it;
+    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
+        MapElement* element = it.value();
+        if (element->getKind() == MapEditorSelectionKind::Sprites)
+            spritesWithPreview[it.key()] = (SpriteDatas*) element;
+    }
+
+    // Initialize vertices
     int countStatic = 0;
     int countFace = 0;
-    QHash<Position3D, QVector<SpriteDatas*>*>::iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
-        Position3D position = i.key();
-        QVector<SpriteDatas*>* list = i.value();
-        for (int j = 0; j < list->size(); j++){
-            SpriteDatas* sprite = list->at(j);
-            sprite->initializeVertices(squareSize, width, height,
-                                       m_verticesStatic, m_indexesStatic,
-                                       m_verticesFace, m_indexesFace,
-                                       position, countStatic, countFace,
-                                       spritesOffset);
-        }
+    QHash<Position, SpriteDatas*>::iterator i;
+    for (i = spritesWithPreview.begin(); i != spritesWithPreview.end(); i++) {
+        Position position = i.key();
+        SpriteDatas* sprite = i.value();
+
+        sprite->initializeVertices(squareSize, width, height,
+                                   m_verticesStatic, m_indexesStatic,
+                                   m_verticesFace, m_indexesFace,
+                                   position, countStatic, countFace,
+                                   spritesOffset);
     }
 }
 
@@ -648,16 +626,12 @@ void Sprites::read(const QJsonObject & json){
 
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
-        Position3D p;
+        Position p;
         p.read(obj["k"].toArray());
-        QJsonArray tabVal = obj["v"].toArray();
-        QVector<SpriteDatas*>* l = new QVector<SpriteDatas*>;
-        for (int j = 0; j < tabVal.size(); j++){
-            SpriteDatas* sprite = new SpriteDatas;
-            sprite->read(tabVal.at(j).toObject());
-            l->append(sprite);
-        }
-        m_all[p] = l;
+        QJsonObject objVal = obj["v"].toObject();
+        SpriteDatas* sprite = new SpriteDatas;
+        sprite->read(objVal);
+        m_all[p] = sprite;
     }
 }
 
@@ -666,21 +640,16 @@ void Sprites::read(const QJsonObject & json){
 void Sprites::write(QJsonObject & json) const{
     QJsonArray tab;
 
-    QHash<Position3D, QVector<SpriteDatas*>*>::const_iterator i;
+    QHash<Position, SpriteDatas*>::const_iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
-        QJsonArray tabValue;
         i.key().write(tabKey);
-        QVector<SpriteDatas*>* list = i.value();
-        for (int j = 0; j < list->size(); j++){
-            QJsonObject objSprite;
-            list->at(j)->write(objSprite);
-            tabValue.append(objSprite);
-        }
+        QJsonObject objSprite;
+        i.value()->write(objSprite);
 
         objHash["k"] = tabKey;
-        objHash["v"] = tabValue;
+        objHash["v"] = objSprite;
         tab.append(objHash);
     }
     json["list"] = tab;

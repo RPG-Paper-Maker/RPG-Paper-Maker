@@ -44,6 +44,8 @@ public:
     static int versionDifferent(QString projectVersion, QString otherVersion
                                 = Project::ENGINE_VERSION);
     void copyPreviousProject();
+    void getAllPathsMapsPortions(QList<QString> &listPaths,
+                                 QList<QJsonObject> &listObjects);
     void updateVersion(QString& version);
     void copyExecutable();
     void copySystemScripts();
@@ -54,6 +56,7 @@ protected:
 
 public slots:
     void check();
+    void updateVersion_0_3_1();
 
 signals:
     void progress(int, QString);

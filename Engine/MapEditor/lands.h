@@ -20,23 +20,22 @@
 #ifndef LANDS_H
 #define LANDS_H
 
-#include "serializable.h"
-#include "mapeditorsubselectionkind.h"
+#include "mapelement.h"
 
 // -------------------------------------------------------
 //
-//  CLASS landDatas
+//  CLASS LandDatas
 //
 //  A square floor datas.
 //
 // -------------------------------------------------------
 
-class LandDatas : public Serializable
+class LandDatas : public MapElement
 {
 public:
     LandDatas();
     virtual ~LandDatas();
-    virtual MapEditorSubSelectionKind getKind() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void read(const QJsonObject &);
     virtual void write(QJsonObject &) const;

@@ -212,7 +212,8 @@ HEADERS += \
     Models/engineupdater.h \
     Enums/engineupdatefilekind.h \
     Dialogs/dialogengineupdate.h \
-    CustomWidgets/widgetreleasenotes.h
+    CustomWidgets/widgetreleasenotes.h \
+    MapEditor/mapelement.h
 
 SOURCES += \
     main.cpp \
@@ -376,7 +377,8 @@ SOURCES += \
     Dialogs/dialogprogress.cpp \
     Models/engineupdater.cpp \
     Dialogs/dialogengineupdate.cpp \
-    CustomWidgets/widgetreleasenotes.cpp
+    CustomWidgets/widgetreleasenotes.cpp \
+    MapEditor/mapelement.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

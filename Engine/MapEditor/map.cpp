@@ -512,18 +512,14 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
         QString path = getPortionPath(i, j, k);
         MapPortion* portion = new MapPortion;
         Wanok::readJSON(path, *portion);
-        if (!portion->isEmpty()){
-            portion->setIsLoaded(false);
-            /*
-            ThreadMapPortionLoader thread(this, portion);
-            thread.start();
-            */
-            loadPortionThread(portion);
-            portion->setIsLoaded(true);
-            return portion;
-        }
-
-        delete portion;
+        portion->setIsLoaded(false);
+        /*
+        ThreadMapPortionLoader thread(this, portion);
+        thread.start();
+        */
+        loadPortionThread(portion);
+        portion->setIsLoaded(true);
+        return portion;
     }
 
     return nullptr;
@@ -534,7 +530,7 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
 
 void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
     QString path = getPortionPathTemp(portion.x(), portion.y(), portion.z());
-    if (mapPortion == nullptr) {
+    if (mapPortion->isEmpty()) {
         QJsonObject obj;
         Wanok::writeOtherJSON(path, obj);
     }
@@ -595,18 +591,12 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 
 void Map::updatePortion(Portion& p){
     MapPortion* mapPortion = this->mapPortion(p);
-    if (mapPortion->isEmpty()) {
-        delete mapPortion;
-        setMapPortion(p, nullptr);
-    }
-    else {
-        mapPortion->setIsVisible(true);
-        mapPortion->initializeVertices(m_squareSize,
-                                       m_textureTileset,
-                                       m_texturesCharacters);
-        mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
-        mapPortion->updateGL();
-    }
+    mapPortion->setIsVisible(true);
+    mapPortion->initializeVertices(m_squareSize,
+                                   m_textureTileset,
+                                   m_texturesCharacters);
+    mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
+    mapPortion->updateGL();
 }
 
 // -------------------------------------------------------
@@ -666,11 +656,8 @@ void Map::loadPortions(Portion portion){
 void Map::deletePortions(){
     if (m_mapPortions != nullptr) {
         int totalSize = getMapPortionTotalSize();
-        for (int i = 0; i < totalSize; i++){
-            MapPortion* mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr)
-                delete mapPortion;
-        }
+        for (int i = 0; i < totalSize; i++)
+            delete this->mapPortionBrut(i);
         delete[] m_mapPortions;
     }
 }

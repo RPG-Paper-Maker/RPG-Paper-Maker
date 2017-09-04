@@ -470,7 +470,7 @@ void MainWindow::on_updateFinished() {
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker temp.exe";
     #elif __linux__
-        realApplicationName = "RPG-Paper-Maker-temp";
+        realApplicationName = "run-temp.sh";
     #else
         realApplicationName = "RPG-Paper-Maker-temp.app";
     #endif

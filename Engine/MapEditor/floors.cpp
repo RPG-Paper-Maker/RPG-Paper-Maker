@@ -53,7 +53,7 @@ FloorDatas::~FloorDatas()
 
 QRect *FloorDatas::textureRect() const { return m_textureRect; }
 
-MapEditorSubSelectionKind FloorDatas::getKind() const{
+MapEditorSubSelectionKind FloorDatas::getSubKind() const{
     return MapEditorSubSelectionKind::Floors;
 }
 
@@ -269,7 +269,7 @@ LandDatas *Floors::removeLand(Position& p){
 // -------------------------------------------------------
 
 bool Floors::addLand(Position& p, LandDatas *land){
-    if (land->getKind() == MapEditorSubSelectionKind::Floors){
+    if (land->getSubKind() == MapEditorSubSelectionKind::Floors){
         LandDatas* previousLand = removeLand(p);
 
         if (previousLand != nullptr)
@@ -318,16 +318,29 @@ void Floors::removeLandOut(MapProperties& properties) {
 //
 // -------------------------------------------------------
 
-void Floors::initializeVertices(int squareSize, int width, int height){
+void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+                                int squareSize, int width, int height){
+
+    // Clear all the floors
     for (int j = 0; j < Position::LAYERS_NUMBER; j++)
         m_floorsGL[j]->clearGL();
 
+    // Create temp hash for preview
+    QHash<Position, LandDatas*> landsWithPreview(m_lands);
+    QHash<Position, MapElement*>::iterator it;
+    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
+        MapElement* element = it.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Floors)
+            landsWithPreview[it.key()] = (LandDatas*) element;
+    }
+
+    // Initialize vertices
     QHash<Position, LandDatas*>::iterator i;
-    for (i = m_lands.begin(); i != m_lands.end(); i++){
+    for (i = landsWithPreview.begin(); i != landsWithPreview.end(); i++) {
         LandDatas* land = i.value();
         Position p = i.key();
 
-        switch (land->getKind()){
+        switch (land->getSubKind()){
         case MapEditorSubSelectionKind::Floors:
             m_floorsGL[p.layer()]->initializeVertices(squareSize, width, height,
                                                       p, (FloorDatas*) land);
@@ -407,7 +420,7 @@ void Floors::write(QJsonObject & json) const{
         objHash["k"] = tabKey;
         objHash["v"] = objLand;
 
-        switch (land->getKind()){
+        switch (land->getSubKind()){
         case MapEditorSubSelectionKind::Floors:
             tabFloors.append(objHash);
             break;

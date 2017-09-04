@@ -48,7 +48,7 @@ public:
     FloorDatas(QRect *texture);
     virtual ~FloorDatas();
     QRect* textureRect() const;
-    virtual MapEditorSubSelectionKind getKind() const;
+    virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;
@@ -116,7 +116,8 @@ public:
 
     void removeLandOut(MapProperties& properties);
 
-    void initializeVertices(int squareSize, int width, int height);
+    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+                            int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();

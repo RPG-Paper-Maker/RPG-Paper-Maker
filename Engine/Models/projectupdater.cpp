@@ -19,11 +19,12 @@
 
 #include "projectupdater.h"
 #include "wanok.h"
-#include <QDir>
+#include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 0;
+const int ProjectUpdater::incompatibleVersionsCount = 1;
 
-QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]{};
+QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
+    {"0.3.1"};
 
 // -------------------------------------------------------
 //
@@ -118,8 +119,41 @@ void ProjectUpdater::copyPreviousProject() {
 
 // -------------------------------------------------------
 
-void ProjectUpdater::updateVersion(QString& version) {
+void ProjectUpdater::getAllPathsMapsPortions(QList<QString>& listPaths,
+                                             QList<QJsonObject>& listObjects)
+{
+    QString pathMaps = Wanok::pathCombine(m_project->pathCurrentProject(),
+                                          Wanok::pathMaps);
+    QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
+    while (directories.hasNext()) {
+        directories.next();
+        QString mapName = directories.fileName();
+        if (mapName != "temp") {
+            QDirIterator files(Wanok::pathCombine(pathMaps, mapName),
+                               QDir::Files);
+            while (files.hasNext()) {
+                files.next();
+                QString fileName = files.fileName();
+                if (fileName != "infos.json" && fileName != "objects.json") {
+                    QJsonDocument document;
+                    QString path = files.filePath();
+                    Wanok::readOtherJSON(path, document);
+                    listPaths.append(path);
+                    listObjects.append(document.object());
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion(QString& version) {
+    QString str = "updateVersion_" + version.replace(".", "_");
+    QByteArray ba = str.toLatin1();
+    const char *c_str = ba.data();
+    QMetaObject::invokeMethod(this, c_str, Qt::DirectConnection);
 }
 
 // -------------------------------------------------------
@@ -166,8 +200,8 @@ void ProjectUpdater::check() {
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (ProjectUpdater::versionDifferent(m_project->version(),
-                                             incompatibleVersions[i]) == 1)
+        if (ProjectUpdater::versionDifferent(incompatibleVersions[i],
+                                             m_project->version()) == 1)
         {
             index = i;
             break;
@@ -189,4 +223,38 @@ void ProjectUpdater::check() {
     QThread::sleep(1);
 
     emit finished();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_0_3_1() {
+    QList<QString> listPaths;
+    QList<QJsonObject> listMapPortions;
+    getAllPathsMapsPortions(listPaths, listMapPortions);
+
+    for (int i = 0; i < listMapPortions.size(); i++) {
+        QJsonObject obj = listMapPortions.at(i);
+        QJsonObject objSprites = obj["sprites"].toObject();
+        QJsonArray tabSprites = objSprites["list"].toArray();
+
+        for (int j = 0; j < tabSprites.size(); j++) {
+            QJsonObject objSprite = tabSprites.at(j).toObject();
+
+            // Replace Position3D by Position
+            QJsonArray tabKey = objSprite["k"].toArray();
+            tabKey.append(0);
+            objSprite["k"] = tabKey;
+
+            // Remove key layer from sprites objects
+            QJsonObject objVal = objSprite["v"].toArray()[0].toObject();
+            objVal.remove("l");
+            objSprite["v"] = objVal;
+
+            tabSprites[j] = objSprite;
+        }
+
+        objSprites["list"] = tabSprites;
+        obj["sprites"] = objSprites;
+        Wanok::writeOtherJSON(listPaths.at(i), obj);
+    }
 }

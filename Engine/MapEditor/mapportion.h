@@ -50,7 +50,7 @@ public:
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land);
     bool deleteLand(Position& p);
-    bool addSprite(Position& p, MapEditorSubSelectionKind kind, int layer,
+    bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
     bool addObject(Position& p, SystemCommonObject* o);
@@ -60,6 +60,8 @@ public:
     void removeSpritesOut(MapProperties& properties);
     void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
                           MapProperties& properties);
+    void clearPreview();
+    void addPreview(Position& p, MapElement* element);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters);
@@ -80,6 +82,7 @@ private:
     Floors* m_floors;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
+    QHash<Position, MapElement*> m_previewSquares;
     bool m_isVisible;
     bool m_isLoaded;
 };

@@ -38,6 +38,8 @@ MapPortion::~MapPortion()
     delete m_floors;
     delete m_sprites;
     delete m_mapObjects;
+
+    clearPreview();
 }
 
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
@@ -90,11 +92,9 @@ bool MapPortion::deleteLand(Position& p){
 // -------------------------------------------------------
 
 bool MapPortion::addSprite(Position& p, MapEditorSubSelectionKind kind,
-                           int layer, int widthPosition, int angle,
-                           QRect *textureRect)
+                           int widthPosition, int angle, QRect *textureRect)
 {
-    return m_sprites->addSprite(p, kind, layer, widthPosition, angle,
-                                textureRect);
+    return m_sprites->addSprite(p, kind, widthPosition, angle, textureRect);
 }
 
 // -------------------------------------------------------
@@ -136,6 +136,22 @@ void MapPortion::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
 }
 
 // -------------------------------------------------------
+
+void MapPortion::clearPreview() {
+    QHash<Position, MapElement*>::iterator i;
+    for (i = m_previewSquares.begin(); i != m_previewSquares.end(); i++)
+        delete i.value();
+
+    m_previewSquares.clear();
+}
+
+// -------------------------------------------------------
+
+void MapPortion::addPreview(Position& p, MapElement* element) {
+    m_previewSquares.insert(p, element);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //
@@ -146,10 +162,12 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &characters)
 {
     int spritesOffset = -0.005;
-    m_floors->initializeVertices(squareSize,
+    m_floors->initializeVertices(m_previewSquares,
+                                 squareSize,
                                  tileset->width(),
                                  tileset->height());
-    m_sprites->initializeVertices(squareSize,
+    m_sprites->initializeVertices(m_previewSquares,
+                                  squareSize,
                                   tileset->width(),
                                   tileset->height(),
                                   spritesOffset);

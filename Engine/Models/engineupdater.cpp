@@ -244,8 +244,12 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
     file.write(reply->readAll());
 
     // If exe, change permissions
-    if (exe)
-        file.setPermissions(QFileDevice::ExeUser);
+    if (exe) {
+        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser |
+                            QFileDevice::ExeUser | QFileDevice::ReadGroup |
+                            QFileDevice::ExeGroup | QFileDevice::ReadOther |
+                            QFileDevice::ExeOther);
+    }
 
     file.close();
 }
@@ -380,7 +384,12 @@ void EngineUpdater::check() {
 
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
+    if (reply->error() != QNetworkReply::NetworkError::NoError) {
+        emit finishedCheck(false);
+        return;
+    }
     m_document = QJsonDocument::fromJson(reply->readAll()).object();
+
     // For develop
     /*
     QJsonDocument json;
