@@ -1,0 +1,86 @@
+/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "gridposition.h"
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+GridPosition::GridPosition() : GridPosition(0, 0, 0, 0, 0) {}
+
+GridPosition::GridPosition(int x1, int z1, int x2, int z2, int y) :
+    m_x1(x1), m_z1(z1), m_x2(x2), m_z2(z2), m_y(y)
+{
+
+}
+
+bool GridPosition::operator==(const GridPosition& other) const{
+    return m_x1 == other.x1() && m_z1 == other.z1() && m_x2 == other.x2() &&
+           m_z2 == other.z2() && m_y == other.y();
+}
+bool GridPosition::operator!=(const GridPosition& other) const{
+    return !operator==(other);
+}
+
+int GridPosition::x1() const {
+    return m_x1;
+}
+
+int GridPosition::z1() const {
+    return m_z1;
+}
+
+int GridPosition::x2() const {
+    return m_x2;
+}
+
+int GridPosition::z2() const {
+    return m_z2;
+}
+
+int GridPosition::y() const {
+    return m_y;
+}
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void GridPosition::read(const QJsonArray & json){
+    m_x1 = json[0].toInt();
+    m_z1 = json[1].toInt();
+    m_x2 = json[3].toInt();
+    m_z2 = json[4].toInt();
+    m_y = json[5].toInt();
+}
+
+// -------------------------------------------------------
+
+void GridPosition::write(QJsonArray &json) const{
+    json.append(m_x1);
+    json.append(m_z1);
+    json.append(m_x2);
+    json.append(m_z2);
+    json.append(m_y);
+}

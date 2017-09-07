@@ -214,7 +214,8 @@ HEADERS += \
     Dialogs/dialogengineupdate.h \
     CustomWidgets/widgetreleasenotes.h \
     MapEditor/mapelement.h \
-    MapEditor/wallindicator.h
+    MapEditor/wallindicator.h \
+    MapEditor/gridposition.h
 
 SOURCES += \
     main.cpp \
@@ -380,7 +381,8 @@ SOURCES += \
     Dialogs/dialogengineupdate.cpp \
     CustomWidgets/widgetreleasenotes.cpp \
     MapEditor/mapelement.cpp \
-    MapEditor/wallindicator.cpp
+    MapEditor/wallindicator.cpp \
+    MapEditor/gridposition.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

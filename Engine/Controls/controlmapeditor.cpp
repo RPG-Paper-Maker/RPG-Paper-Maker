@@ -74,9 +74,8 @@ void ControlMapEditor::moveCursorToMousePosition(QPoint point){
     updateMousePosition(point);
     update();
 
-    if (m_map->isInGrid(m_positionOnPlane)){
+    if (m_map->isInGrid(m_positionOnPlane))
         m_cursor->setPositions(m_positionOnPlane);
-    }
 }
 
 // -------------------------------------------------------
