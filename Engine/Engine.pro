@@ -213,7 +213,8 @@ HEADERS += \
     Enums/engineupdatefilekind.h \
     Dialogs/dialogengineupdate.h \
     CustomWidgets/widgetreleasenotes.h \
-    MapEditor/mapelement.h
+    MapEditor/mapelement.h \
+    MapEditor/wallindicator.h
 
 SOURCES += \
     main.cpp \
@@ -378,7 +379,8 @@ SOURCES += \
     Models/engineupdater.cpp \
     Dialogs/dialogengineupdate.cpp \
     CustomWidgets/widgetreleasenotes.cpp \
-    MapEditor/mapelement.cpp
+    MapEditor/mapelement.cpp \
+    MapEditor/wallindicator.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

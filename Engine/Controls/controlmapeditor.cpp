@@ -30,6 +30,7 @@
 ControlMapEditor::ControlMapEditor() :
     m_map(nullptr),
     m_grid(nullptr),
+    m_wallIndicator(nullptr),
     m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
@@ -43,8 +44,6 @@ ControlMapEditor::ControlMapEditor() :
 ControlMapEditor::~ControlMapEditor(){
     deleteMap(false);
     delete m_camera;
-    delete m_cursor;
-    delete m_cursorObject;
 }
 
 Map* ControlMapEditor::map() const { return m_map; }
@@ -123,8 +122,10 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                 ":/textures/Ressources/object_square_cursor.png");
     m_cursorObject->initialize();
 
-    // Camera
+    // Wall indicator
 
+
+    // Camera
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
     m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
@@ -145,6 +146,9 @@ void ControlMapEditor::deleteMap(bool updateCamera){
     if (m_cursorObject != nullptr){
         delete m_cursorObject;
         m_cursorObject = nullptr;
+    }
+    if (m_wallIndicator != nullptr){
+        delete m_wallIndicator;
     }
 
     // Grid

@@ -29,6 +29,7 @@
 #include "drawkind.h"
 #include "cursor.h"
 #include "contextmenulist.h"
+#include "wallindicator.h"
 
 // -------------------------------------------------------
 //
@@ -168,6 +169,7 @@ private:
     // Widgets
     Map* m_map;
     Grid* m_grid;
+    WallIndicator* m_wallIndicator;
     Cursor* m_cursor;
     Cursor* m_cursorObject;
     Camera* m_camera;
