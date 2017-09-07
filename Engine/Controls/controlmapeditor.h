@@ -66,6 +66,7 @@ public:
     void update();
     void updateMousePosition(QPoint point);
     void updateRaycasting();
+    void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
                                QRect &tileset);
@@ -149,7 +150,8 @@ public:
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
                  QVector3D& cameraUpWorldSpace,
-                 MapEditorSelectionKind selectionKind);
+                 MapEditorSelectionKind selectionKind,
+                 MapEditorSubSelectionKind subSelectionKind);
 
     void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
     void onMouseMove(QPoint point, Qt::MouseButton button,

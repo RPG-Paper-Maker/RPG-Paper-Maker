@@ -24,6 +24,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLFunctions>
+#include "gridposition.h"
+#include "position.h"
 
 // -------------------------------------------------------
 //
@@ -38,17 +40,25 @@ class WallIndicator
 public:
     WallIndicator();
     ~WallIndicator();
-    void initializeVertices(int squareSize);
+    void initializeSquareSize(int s);
+    void setGridPosition(Position& pos, int w, int h);
+    void get3DPosition(QVector3D& vector);
+
+    void initializeVertices();
     void initializeGL();
     void paintGL(QMatrix4x4 &modelviewProjection);
 
 private:
+    QVector3D m_gridPosition;
+    int m_squareSize;
+
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;
     QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram *m_program;
     QVector<QVector3D> m_vertices;
     int u_modelviewProjection;
+    int u_gridPosition;
 };
 
 #endif // WALLINDICATOR_H

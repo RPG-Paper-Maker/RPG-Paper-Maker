@@ -164,6 +164,7 @@ void WidgetMapEditor::paintGL(){
             m_control.updatePreviewElements(m_menuBar->selectionKind(),
                                             m_menuBar->subSelectionKind(),
                                             tileset);
+            m_control.updateWallIndicator();
         }
 
         // Model view / projection
@@ -182,10 +183,13 @@ void WidgetMapEditor::paintGL(){
         // Config
         MapEditorSelectionKind kind = (m_menuBar == nullptr)
                 ? MapEditorSelectionKind::Land : m_menuBar->selectionKind();
+        MapEditorSubSelectionKind subKind = (m_menuBar == nullptr)
+                ? MapEditorSubSelectionKind::None
+                : m_menuBar->subSelectionKind();
 
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
-                          cameraUpWorldSpace, kind);
+                          cameraUpWorldSpace, kind, subKind);
 
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }

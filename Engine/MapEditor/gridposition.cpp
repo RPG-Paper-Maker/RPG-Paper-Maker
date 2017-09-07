@@ -37,6 +37,7 @@ bool GridPosition::operator==(const GridPosition& other) const{
     return m_x1 == other.x1() && m_z1 == other.z1() && m_x2 == other.x2() &&
            m_z2 == other.z2() && m_y == other.y();
 }
+
 bool GridPosition::operator!=(const GridPosition& other) const{
     return !operator==(other);
 }

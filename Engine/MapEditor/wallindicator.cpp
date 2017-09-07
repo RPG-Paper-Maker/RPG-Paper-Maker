@@ -36,19 +36,53 @@ WallIndicator::~WallIndicator()
     m_program = nullptr;
 }
 
+void WallIndicator::initializeSquareSize(int s){
+    m_squareSize = s;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-void WallIndicator::initializeVertices(int squareSize) {
+void WallIndicator::setGridPosition(Position& pos, int w, int h) {
+    int x = pos.x(), z = pos.z();
+    if (x < 0)
+        x = 0;
+    else if (x > w)
+        x = w;
+    if (z < 0)
+        z = 0;
+    else if (z > h)
+        z = h;
+
+    m_gridPosition.setX(x);
+    m_gridPosition.setY(pos.y());
+    m_gridPosition.setZ(z);
+}
+
+// -------------------------------------------------------
+
+void WallIndicator::get3DPosition(QVector3D& vector) {
+    vector.setX(m_gridPosition.x() * m_squareSize);
+    vector.setY(m_gridPosition.y());
+    vector.setZ(m_gridPosition.z() * m_squareSize);
+}
+
+// -------------------------------------------------------
+
+void WallIndicator::initializeVertices() {
     m_vertices.clear();
 
     m_vertices.push_back(QVector3D(0.0f, 0.0f, 0.0f));
-    m_vertices.push_back(QVector3D(0.0f, (3 * (float) squareSize), 0.0f));
+    m_vertices.push_back(QVector3D(0.0f, (3 * (float) m_squareSize), 0.0f));
 }
 
+// -------------------------------------------------------
+//
+//  GL
+//
 // -------------------------------------------------------
 
 void WallIndicator::initializeGL() {
@@ -56,14 +90,15 @@ void WallIndicator::initializeGL() {
     // Create Shader
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                       ":/Shaders/grid.vert");
+                                       ":/Shaders/wallIndicator.vert");
     m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                       ":/Shaders/grid.frag");
+                                       ":/Shaders/wallIndicator.frag");
     m_program->link();
     m_program->bind();
 
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");
+    u_gridPosition = m_program->uniformLocation("gridPosition");
 
     // Create Buffer (Do not release until VAO is created)
     m_vertexBuffer.create();
@@ -76,7 +111,7 @@ void WallIndicator::initializeGL() {
     m_vao.create();
     m_vao.bind();
     m_program->enableAttributeArray(0);
-    m_program->setAttributeBuffer(0, GL_FLOAT, 0,3,0);
+    m_program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
     // Release
     m_vao.release();
@@ -87,8 +122,12 @@ void WallIndicator::initializeGL() {
 // -------------------------------------------------------
 
 void WallIndicator::paintGL(QMatrix4x4& modelviewProjection) {
+    QVector3D gridPosition;
+    get3DPosition(gridPosition);
+
     m_program->bind();
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
+    m_program->setUniformValue(u_gridPosition, gridPosition);
     {
       m_vao.bind();
       glDrawArrays(GL_LINES, 0, m_vertices.size());

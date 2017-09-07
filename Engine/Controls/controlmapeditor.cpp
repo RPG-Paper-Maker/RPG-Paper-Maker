@@ -122,7 +122,11 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_cursorObject->initialize();
 
     // Wall indicator
-
+    m_wallIndicator = new WallIndicator;
+    updateWallIndicator();
+    m_wallIndicator->initializeSquareSize(m_map->squareSize());
+    m_wallIndicator->initializeVertices();
+    m_wallIndicator->initializeGL();
 
     // Camera
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
@@ -148,6 +152,7 @@ void ControlMapEditor::deleteMap(bool updateCamera){
     }
     if (m_wallIndicator != nullptr){
         delete m_wallIndicator;
+        m_wallIndicator = nullptr;
     }
 
     // Grid
@@ -193,8 +198,7 @@ void ControlMapEditor::updateCameraTreeNode(){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update()
-{
+void ControlMapEditor::update() {
     updateRaycasting();
 
     // Update portions
@@ -227,6 +231,14 @@ void ControlMapEditor::updateRaycasting(){
     int height = 0;
     m_distancePlane = (height - m_camera->positionY()) / ray.y();
     getCorrectPositionOnRay(m_positionOnPlane, ray, m_distancePlane);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateWallIndicator() {
+    m_wallIndicator->setGridPosition(m_positionOnPlane,
+                                     m_map->mapProperties()->width(),
+                                     m_map->mapProperties()->height());
 }
 
 // -------------------------------------------------------
@@ -1361,7 +1373,8 @@ Portion ControlMapEditor::getGlobalFromLocalPortion(Portion& portion) const{
 void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                QVector3D &cameraRightWorldSpace,
                                QVector3D &cameraUpWorldSpace,
-                               MapEditorSelectionKind selectionKind)
+                               MapEditorSelectionKind selectionKind,
+                               MapEditorSubSelectionKind subSelectionKind)
 {
     m_map->paintFloors(modelviewProjection);
 
@@ -1378,6 +1391,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
                        cameraUpWorldSpace);
+
+    if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall)
+        m_wallIndicator->paintGL(modelviewProjection);
 }
 
 // -------------------------------------------------------
