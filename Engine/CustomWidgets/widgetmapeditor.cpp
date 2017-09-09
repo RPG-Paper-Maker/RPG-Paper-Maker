@@ -161,10 +161,10 @@ void WidgetMapEditor::paintGL(){
         m_control.update();
         if (m_menuBar != nullptr) {
             QRect tileset = m_panelTextures->getTilesetTexture();
+            m_control.updateWallIndicator();
             m_control.updatePreviewElements(m_menuBar->selectionKind(),
                                             m_menuBar->subSelectionKind(),
                                             tileset);
-            m_control.updateWallIndicator();
         }
 
         // Model view / projection
@@ -384,7 +384,9 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
 void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
-        m_mousesPressed -= event->button();
+        Qt::MouseButton button = event->button();
+        m_mousesPressed -= button;
+        m_control.onMouseReleased(button);
     }
 }
 

@@ -25,17 +25,33 @@
 //
 // -------------------------------------------------------
 
-GridPosition::GridPosition() : GridPosition(0, 0, 0, 0, 0) {}
+GridPosition::GridPosition() : GridPosition(0, 0, 0, 0, 0, 0) {}
 
-GridPosition::GridPosition(int x1, int z1, int x2, int z2, int y) :
+GridPosition::GridPosition(int x1, int z1, int x2, int z2, int y, int yPlus) :
     m_x1(x1), m_z1(z1), m_x2(x2), m_z2(z2), m_y(y)
 {
 
 }
 
+GridPosition::GridPosition(Position3D& position, bool horizontal) :
+    m_y(position.y()), m_yPlus(position.yPlus())
+{
+    m_x1 = position.x();
+    m_z1 = position.z();
+
+    if (horizontal) {
+        m_x2 = m_x1 + 1;
+        m_z2 = m_z1;
+    }
+    else {
+        m_x2 = m_x1;
+        m_z2 = m_z1 + 1;
+    }
+}
+
 bool GridPosition::operator==(const GridPosition& other) const{
     return m_x1 == other.x1() && m_z1 == other.z1() && m_x2 == other.x2() &&
-           m_z2 == other.z2() && m_y == other.y();
+           m_z2 == other.z2() && m_y == other.y() && m_yPlus == other.yPlus();
 }
 
 bool GridPosition::operator!=(const GridPosition& other) const{
@@ -62,6 +78,10 @@ int GridPosition::y() const {
     return m_y;
 }
 
+int GridPosition::yPlus() const {
+    return m_yPlus;
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
@@ -74,6 +94,7 @@ void GridPosition::read(const QJsonArray & json){
     m_x2 = json[3].toInt();
     m_z2 = json[4].toInt();
     m_y = json[5].toInt();
+    m_yPlus = json[6].toInt();
 }
 
 // -------------------------------------------------------
@@ -84,4 +105,5 @@ void GridPosition::write(QJsonArray &json) const{
     json.append(m_x2);
     json.append(m_z2);
     json.append(m_y);
+    json.append(m_yPlus);
 }

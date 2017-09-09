@@ -20,29 +20,16 @@
 #ifndef SPRITEWALL_H
 #define SPRITEWALL_H
 
-#include "sprites.h"
+#include "mapelement.h"
 
-class SpriteWallDatas : SpriteDatas
+class SpriteWallDatas : public MapElement
 {
 public:
     SpriteWallDatas();
-    SpriteWallDatas(MapEditorSubSelectionKind kind,
-                    int widthPosition, int angle, QRect* textureRect);
-    bool left() const;
-    bool right() const;
-    bool top() const;
-    bool bot() const;
-    void setLeft(bool b);
-    void setRight(bool b);
-    void setTop(bool b);
-    void setBot(bool b);
-    bool isPipe() const;
+    SpriteWallDatas(int wallID);
 
 protected:
-    bool m_left;
-    bool m_right;
-    bool m_top;
-    bool m_bot;
+    int m_wallID;
 };
 
 #endif // SPRITEWALL_H

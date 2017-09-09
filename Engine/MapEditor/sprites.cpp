@@ -225,6 +225,7 @@ void SpriteDatas::initializeVertices(int squareSize,
         countFace++;
         break;
     }
+        /*
     case MapEditorSubSelectionKind::SpritesWall:
     {
         QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
@@ -234,7 +235,7 @@ void SpriteDatas::initializeVertices(int squareSize,
 
         addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                 vecA, vecB, vecC, vecD, texA, texB, texC, texD);
-    }
+    }*/
     default:
         break;
     }
@@ -482,18 +483,8 @@ bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind,
                         int widthPosition, int angle, QRect *textureRect)
 {
     SpriteDatas* previousSprite = removeSprite(p);
-    SpriteDatas* sprite;
-
-    if (kind == MapEditorSubSelectionKind::SpritesWall) {
-        SpriteWallDatas* spriteWall =
-                new SpriteWallDatas(kind, widthPosition, angle,
-                                    textureRect);
-        sprite = (SpriteDatas*) spriteWall;
-    }
-    else {
-        sprite = new SpriteDatas(kind, widthPosition, angle,
-                                 textureRect);
-    }
+    SpriteDatas* sprite = new SpriteDatas(kind, widthPosition, angle,
+                                          textureRect);
 
     if (previousSprite != nullptr)
         delete previousSprite;

@@ -142,13 +142,24 @@ void MapPortion::clearPreview() {
     for (i = m_previewSquares.begin(); i != m_previewSquares.end(); i++)
         delete i.value();
 
+    QHash<GridPosition, MapElement*>::iterator j;
+    for (j = m_previewGrid.begin(); j != m_previewGrid.end(); j++)
+        delete j.value();
+
     m_previewSquares.clear();
+    m_previewGrid.clear();
 }
 
 // -------------------------------------------------------
 
 void MapPortion::addPreview(Position& p, MapElement* element) {
     m_previewSquares.insert(p, element);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::addPreviewGrid(GridPosition& p, MapElement* element) {
+    m_previewGrid.insert(p, element);
 }
 
 // -------------------------------------------------------

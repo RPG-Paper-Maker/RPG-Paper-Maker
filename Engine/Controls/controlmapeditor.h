@@ -71,8 +71,16 @@ public:
                                MapEditorSubSelectionKind subSelection,
                                QRect &tileset);
     void removePreviewElements();
+    void updatePreviewFloors(QRect& tileset, Position& position);
+    void updatePreviewWallSprites();
+    void updatePreviewWallSprite(Position& shortPosition, bool horizontal);
+    void updatePreviewOthers(MapEditorSelectionKind selection,
+                             MapEditorSubSelectionKind subSelection,
+                             QRect& tileset);
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
+    void updatePreviewElementGrid(GridPosition &p, Portion &portion,
+                                  MapElement* element);
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
     void updateMovingPortionsNorthSouth(Portion& newPortion);
@@ -162,6 +170,7 @@ public:
                         QRect& tileset,
                         QPoint point,
                         Qt::MouseButton button);
+    void onMouseReleased(Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);
@@ -184,7 +193,7 @@ private:
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
     Position m_positionPreviousPreview;
-    QList<Position> m_positionsPreviousPreview;
+    QSet<Portion> m_portionsPreviousPreview;
     float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;
@@ -195,6 +204,9 @@ private:
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;
+    Position m_beginWallPosition;
+    Position m_endWallPosition;
+    bool m_isDrawingWall;
 };
 
 #endif // CONTROLMAPEDITOR_H

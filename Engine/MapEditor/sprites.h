@@ -34,6 +34,8 @@
 #include "mapeditorsubselectionkind.h"
 #include "mapproperties.h"
 #include "mapelement.h"
+#include "gridposition.h"
+#include "spritewall.h"
 
 // -------------------------------------------------------
 //
@@ -173,6 +175,7 @@ public:
 
 protected:
     QHash<Position, SpriteDatas*> m_all;
+    QHash<GridPosition, SpriteWallDatas*> m_walls;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;

@@ -20,8 +20,7 @@
 #ifndef GRIDPOSITION_H
 #define GRIDPOSITION_H
 
-#include <QtGlobal>
-#include <QJsonArray>
+#include "position3d.h"
 
 // -------------------------------------------------------
 //
@@ -35,7 +34,8 @@ class GridPosition
 {
 public:
     GridPosition();
-    GridPosition(int x1, int z1, int x2, int z2, int y);
+    GridPosition(int x1, int z1, int x2, int z2, int y, int yPlus);
+    GridPosition(Position3D& position, bool horizontal);
 
     bool operator==(const GridPosition& other) const;
     bool operator!=(const GridPosition& other) const;
@@ -44,6 +44,7 @@ public:
     int x2() const;
     int z2() const;
     int y() const;
+    int yPlus() const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;
@@ -54,11 +55,12 @@ protected:
     int m_x2;
     int m_z2;
     int m_y;
+    int m_yPlus;
 };
 
 inline uint qHash(const GridPosition& pos)
 {
-   return (pos.x1() + pos.z1() + pos.x2() + pos.z2() + pos.y());
+   return (pos.x1() + pos.z1() + pos.x2() + pos.z2() + pos.y() + pos.yPlus());
 }
 
 #endif // GRIDPOSITION_H
