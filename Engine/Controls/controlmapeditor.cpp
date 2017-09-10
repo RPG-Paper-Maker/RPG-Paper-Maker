@@ -20,7 +20,6 @@
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "wanok.h"
-#include "spritewall.h"
 
 // -------------------------------------------------------
 //

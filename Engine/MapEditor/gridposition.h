@@ -45,6 +45,7 @@ public:
     int z2() const;
     int y() const;
     int yPlus() const;
+    bool isHorizontal() const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

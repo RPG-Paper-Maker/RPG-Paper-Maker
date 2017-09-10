@@ -82,6 +82,10 @@ int GridPosition::yPlus() const {
     return m_yPlus;
 }
 
+bool GridPosition::isHorizontal() const {
+    return m_z1 == m_z2;
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

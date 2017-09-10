@@ -178,6 +178,7 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                  tileset->width(),
                                  tileset->height());
     m_sprites->initializeVertices(m_previewSquares,
+                                  m_previewGrid,
                                   squareSize,
                                   tileset->width(),
                                   tileset->height(),

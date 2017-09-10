@@ -205,7 +205,6 @@ HEADERS += \
     MapEditor/lands.h \
     MapEditor/vertexbillboard.h \
     MapEditor/threadmapportionloader.h \
-    MapEditor/spritewall.h \
     Dialogs/Commands/dialogcommandmovecamera.h \
     Models/projectupdater.h \
     Dialogs/dialogprogress.h \
@@ -215,7 +214,8 @@ HEADERS += \
     CustomWidgets/widgetreleasenotes.h \
     MapEditor/mapelement.h \
     MapEditor/wallindicator.h \
-    MapEditor/gridposition.h
+    MapEditor/gridposition.h \
+    MapEditor/sprite.h
 
 SOURCES += \
     main.cpp \
@@ -373,7 +373,6 @@ SOURCES += \
     MapEditor/lands.cpp \
     MapEditor/vertexbillboard.cpp \
     MapEditor/threadmapportionloader.cpp \
-    MapEditor/spritewall.cpp \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
     Models/projectupdater.cpp \
     Dialogs/dialogprogress.cpp \
@@ -382,7 +381,8 @@ SOURCES += \
     CustomWidgets/widgetreleasenotes.cpp \
     MapEditor/mapelement.cpp \
     MapEditor/wallindicator.cpp \
-    MapEditor/gridposition.cpp
+    MapEditor/gridposition.cpp \
+    MapEditor/sprite.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
