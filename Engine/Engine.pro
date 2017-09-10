@@ -25,6 +25,7 @@ INCLUDEPATH += \
     Dialogs \
     Dialogs/Commands \
     Dialogs/Systems \
+    Dialogs/SpecialElements \
     CustomWidgets \
     Controls \
     MapEditor \
@@ -215,7 +216,9 @@ HEADERS += \
     MapEditor/mapelement.h \
     MapEditor/wallindicator.h \
     MapEditor/gridposition.h \
-    MapEditor/sprite.h
+    MapEditor/sprite.h \
+    Dialogs/SpecialElements/dialogspritewalls.h \
+    Dialogs/SpecialElements/panelspritewalls.h
 
 SOURCES += \
     main.cpp \
@@ -382,7 +385,9 @@ SOURCES += \
     MapEditor/mapelement.cpp \
     MapEditor/wallindicator.cpp \
     MapEditor/gridposition.cpp \
-    MapEditor/sprite.cpp
+    MapEditor/sprite.cpp \
+    Dialogs/SpecialElements/dialogspritewalls.cpp \
+    Dialogs/SpecialElements/panelspritewalls.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -445,7 +450,9 @@ FORMS += \
     Dialogs/Systems/dialogsystemlang.ui \
     Dialogs/Commands/dialogcommandmovecamera.ui \
     Dialogs/dialogprogress.ui \
-    Dialogs/dialogengineupdate.ui
+    Dialogs/dialogengineupdate.ui \
+    Dialogs/SpecialElements/dialogspritewalls.ui \
+    Dialogs/SpecialElements/panelspritewalls.ui
 
 OTHER_FILES += \
     style.qss

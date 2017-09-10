@@ -88,6 +88,7 @@ private slots:
     void on_actionVariables_manager_triggered();
     void on_actionPictures_manager_triggered();
     void on_actionKeyboard_controls_triggered();
+    void on_actionSprite_walls_triggered();
     void on_actionSet_BR_path_folder_triggered();
     void on_actionPlay_triggered();
     void on_updateCheckFinished(bool b);

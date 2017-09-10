@@ -38,6 +38,7 @@
 #include "dialoglocation.h"
 #include "dialogprogress.h"
 #include "dialogengineupdate.h"
+#include "dialogspritewalls.h"
 
 // -------------------------------------------------------
 //
@@ -217,6 +218,7 @@ void MainWindow::enableAll(bool b){
     ui->actionVariables_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
+    ui->actionSprite_walls->setEnabled(b);
     ui->actionPlay->setEnabled(b);
 }
 
@@ -241,6 +243,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionVariables_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
+    ui->actionSprite_walls->setEnabled(true);
     ui->actionPlay->setEnabled(true);
 }
 
@@ -409,6 +412,18 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
         Wanok::get()->loadEngineSettings();
         project->readKeyBoardDatas();
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionSprite_walls_triggered() {
+    DialogSpriteWalls dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeGameDatas();
+    else
+        project->readGameDatas();
+
+    updateTextures();
 }
 
 // -------------------------------------------------------

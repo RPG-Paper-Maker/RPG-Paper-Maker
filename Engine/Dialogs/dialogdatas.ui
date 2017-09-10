@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>

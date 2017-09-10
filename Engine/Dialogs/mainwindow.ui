@@ -89,8 +89,18 @@
     </property>
     <addaction name="actionSet_BR_path_folder"/>
    </widget>
+   <widget class="QMenu" name="menuSpecials">
+    <property name="title">
+     <string>Special elements</string>
+    </property>
+    <addaction name="actionAutotiles"/>
+    <addaction name="actionSprite_walls"/>
+    <addaction name="action3D_objects"/>
+    <addaction name="actionReliefs"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuManagement"/>
+   <addaction name="menuSpecials"/>
    <addaction name="menuOptions"/>
    <addaction name="menuTest"/>
   </widget>
@@ -120,6 +130,11 @@
    <addaction name="actionVariables_manager"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionKeyboard_controls"/>
+   <addaction name="separator"/>
+   <addaction name="actionAutotiles"/>
+   <addaction name="actionSprite_walls"/>
+   <addaction name="action3D_objects"/>
+   <addaction name="actionReliefs"/>
    <addaction name="separator"/>
    <addaction name="actionPlay"/>
   </widget>
@@ -289,6 +304,60 @@
   <action name="actionSet_BR_path_folder">
    <property name="text">
     <string>Set BR path folder...</string>
+   </property>
+  </action>
+  <action name="actionAutotiles">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Autotiles</string>
+   </property>
+  </action>
+  <action name="actionSprite_walls">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sprite walls</string>
+   </property>
+   <property name="iconText">
+    <string>Walls</string>
+   </property>
+  </action>
+  <action name="action3D_objects">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>3D objects</string>
+   </property>
+   <property name="iconText">
+    <string>3D objects</string>
+   </property>
+  </action>
+  <action name="actionReliefs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reliefs</string>
    </property>
   </action>
  </widget>
