@@ -64,7 +64,7 @@ void SystemTileset::setPicture(SystemPicture* picture) {
 //
 // -------------------------------------------------------
 
-void SystemTileset::setPictureFromId(int id){
+void SystemTileset::setPictureFromId(int id) {
     setPicture((SystemPicture*) SuperListItem::getById(Wanok::get()->project()
                ->picturesDatas()->model(PictureKind::Tilesets)
                ->invisibleRootItem(), id));
@@ -89,7 +89,8 @@ SuperListItem* SystemTileset::createCopy() const{
 void SystemTileset::setCopy(const SystemTileset& super){
     SuperListItem::setCopy(super);
 
-    m_picture = super.m_picture;
+    m_pictureID = super.m_pictureID;
+    updatePicture();
 }
 
 // -------------------------------------------------------
