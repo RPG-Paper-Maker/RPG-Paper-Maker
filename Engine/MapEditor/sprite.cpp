@@ -490,6 +490,8 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
               vecC = Sprite::verticesQuad[2] * size + pos,
               vecD = Sprite::verticesQuad[3] * size + pos;
 
+    if (!position.isHorizontal())
+        SpriteDatas::rotateSprite(vecA, vecB, vecC, vecD, vecD, 90);
     SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, vecA, vecB,
                                          vecC, vecD, texA, texB, texC, texD);
 }
