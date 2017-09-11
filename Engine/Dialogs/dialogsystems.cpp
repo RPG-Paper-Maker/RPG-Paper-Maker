@@ -63,6 +63,7 @@ DialogSystems::~DialogSystems()
 // -------------------------------------------------------
 
 void DialogSystems::initializeSystem(GameDatas *gameDatas){
+
     // Don't show edit name
     ui->panelSuperListCameraMovements->showEditName(false);
     ui->panelSuperListCameraProperties->showEditName(false);
@@ -70,6 +71,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListDetections->showEditName(false);
     ui->panelSuperListCurrencies->showEditName(false);
     ui->panelSuperListParticules->showEditName(false);
+
+    // Integers
+    ui->spinBoxSquareSize->setValue(Wanok::get()->project()->gameDatas()
+                                    ->systemDatas()->squareSize());
 
     // Initializing all the models
     ui->panelSuperListCurrencies->list()
