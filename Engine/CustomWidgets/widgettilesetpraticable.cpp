@@ -39,8 +39,10 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
 //
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::updateImage(SystemPicture* picture){
-    m_image = QImage(picture->getPath(PictureKind::Tilesets));
+void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
+                                          PictureKind kind)
+{
+    m_image = QImage(picture->getPath(kind));
     if (!m_image.isNull()) {
         m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
                                  m_image.height() / Wanok::coefSquareSize());

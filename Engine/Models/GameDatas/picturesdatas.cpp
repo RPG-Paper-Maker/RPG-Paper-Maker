@@ -82,6 +82,10 @@ void PicturesDatas::setDefault(){
     // Tilesets
     names << "plains";
     setDefaultPictures(names, PictureKind::Tilesets);
+
+    // Walls
+    names << "inside1";
+    setDefaultPictures(names, PictureKind::Walls);
 }
 
 // -------------------------------------------------------

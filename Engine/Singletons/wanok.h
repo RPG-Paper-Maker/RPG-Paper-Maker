@@ -75,6 +75,7 @@ public:
     const static QString pathTroops;
     const static QString pathClasses;
     const static QString PATH_TILESETS;
+    const static QString PATH_SPECIAL_ELEMENTS;
     const static QString pathTreeMap;
     const static QString pathLangs;
     const static QString pathScripts;
@@ -90,6 +91,9 @@ public:
     const static QString pathCharacters;
     const static QString pathReliefs;
     const static QString pathTilesets;
+    const static QString PATH_SPRITE_WALLS;
+    const static QString PATH_3D_OBJECT;
+    const static QString PATH_RELIEFS;
     const static QString pathEngineSettings;
     const static QString fileMapInfos;
     const static QString fileMapObjects;

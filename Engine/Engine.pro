@@ -218,7 +218,9 @@ HEADERS += \
     MapEditor/gridposition.h \
     MapEditor/sprite.h \
     Dialogs/SpecialElements/dialogspritewalls.h \
-    Dialogs/SpecialElements/panelspritewalls.h
+    Dialogs/SpecialElements/panelspritewalls.h \
+    Models/System/systemspritewall.h \
+    Models/GameDatas/specialelementsdatas.h
 
 SOURCES += \
     main.cpp \
@@ -387,7 +389,9 @@ SOURCES += \
     MapEditor/gridposition.cpp \
     MapEditor/sprite.cpp \
     Dialogs/SpecialElements/dialogspritewalls.cpp \
-    Dialogs/SpecialElements/panelspritewalls.cpp
+    Dialogs/SpecialElements/panelspritewalls.cpp \
+    Models/System/systemspritewall.cpp \
+    Models/GameDatas/specialelementsdatas.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

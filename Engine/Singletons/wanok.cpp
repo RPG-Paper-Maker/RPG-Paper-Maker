@@ -53,6 +53,8 @@ const QString Wanok::pathMonsters = pathCombine(pathDatas, "monsters.json");
 const QString Wanok::pathTroops = pathCombine(pathDatas, "troops.json");
 const QString Wanok::pathClasses = pathCombine(pathDatas, "classes.json");
 const QString Wanok::PATH_TILESETS = pathCombine(pathDatas, "tilesets.json");
+const QString Wanok::PATH_SPECIAL_ELEMENTS =
+        pathCombine(pathDatas, "specialElements.json");
 const QString Wanok::pathTreeMap = pathCombine(pathDatas, "treeMap.json");
 const QString Wanok::pathLangs = pathCombine(pathDatas, "langs.json");
 const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");
@@ -71,6 +73,9 @@ const QString Wanok::pathAutotiles = pathCombine(pathTextures2D, "Autotiles");
 const QString Wanok::pathCharacters = pathCombine(pathTextures2D, "Characters");
 const QString Wanok::pathReliefs = pathCombine(pathTextures2D, "Reliefs");
 const QString Wanok::pathTilesets = pathCombine(pathTextures2D, "Tilesets");
+const QString Wanok::PATH_SPRITE_WALLS = pathCombine(pathTextures2D, "Walls");
+const QString Wanok::PATH_3D_OBJECT = pathCombine(pathTextures2D, "3DObjects");
+const QString Wanok::PATH_RELIEFS = pathCombine(pathTextures2D, "Reliefs");
 
 const QString Wanok::pathEngineSettings =
         pathCombine("Content", "engineSettings.json");

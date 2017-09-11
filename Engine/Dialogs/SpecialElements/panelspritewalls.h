@@ -21,6 +21,7 @@
 #define PANELSPRITEWALLS_H
 
 #include <QWidget>
+#include "systemspritewall.h"
 
 // -------------------------------------------------------
 //
@@ -41,9 +42,15 @@ class PanelSpriteWalls : public QWidget
 public:
     explicit PanelSpriteWalls(QWidget *parent = 0);
     ~PanelSpriteWalls();
+    void initialize();
+    void update(SystemSpriteWall* sys);
 
 private:
     Ui::PanelSpriteWalls *ui;
+
+private slots:
+    void on_pageSelected(QModelIndex index, QModelIndex);
+    void on_pictureChanged(SystemPicture* picture);
 };
 
 #endif // PANELSPRITEWALLS_H

@@ -86,7 +86,7 @@ void WidgetPicture::initialize(int i){
 // -------------------------------------------------------
 
 void WidgetPicture::openDialog(){
-    DialogPicturesPreview dialog(m_picture, PictureKind::Tilesets);
+    DialogPicturesPreview dialog(m_picture, m_kind);
     SystemPicture* previousPicture = m_picture;
 
     if (dialog.exec() == QDialog::Accepted){

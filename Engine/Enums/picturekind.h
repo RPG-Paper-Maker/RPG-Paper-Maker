@@ -38,6 +38,7 @@ enum class PictureKind {
     Characters,
     Reliefs,
     Tilesets,
+    Walls,
     Last
 };
 

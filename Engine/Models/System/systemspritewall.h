@@ -17,41 +17,40 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "widgettilesetsettings.h"
-#include "ui_widgettilesetsettings.h"
+#ifndef SYSTEMSPRITEWALL_H
+#define SYSTEMSPRITEWALL_H
+
+#include <QMetaType>
+#include "superlistitem.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//  CLASS SystemSpriteWall
+//
+//  A particulary sprite wall (special element).
 //
 // -------------------------------------------------------
 
-WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::WidgetTilesetSettings)
+class SystemSpriteWall : public SuperListItem
 {
-    ui->setupUi(this);
-}
+public:
+    SystemSpriteWall();
+    SystemSpriteWall(int i, QString n, int pictureId);
+    virtual ~SystemSpriteWall();
+    SystemPicture* picture() const;
+    void setPictureID(int id);
 
-WidgetTilesetSettings::~WidgetTilesetSettings()
-{
-    delete ui;
-}
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemSpriteWall &super);
 
-PictureKind WidgetTilesetSettings::kind() const {
-    return m_kind;
-}
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
-void WidgetTilesetSettings::setKind(PictureKind kind) {
-    m_kind = kind;
-}
+protected:
+    int m_pictureID;
+};
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
+Q_DECLARE_METATYPE(SystemSpriteWall)
 
-void WidgetTilesetSettings::updateImage(SystemPicture* picture){
-    ui->widgetTilesetPraticable->updateImage(picture, m_kind);
-}
+#endif // SYSTEMSPRITEWALL_H

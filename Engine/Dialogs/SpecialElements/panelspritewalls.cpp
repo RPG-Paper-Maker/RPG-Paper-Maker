@@ -19,6 +19,13 @@
 
 #include "panelspritewalls.h"
 #include "ui_panelspritewalls.h"
+#include "wanok.h"
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
 
 PanelSpriteWalls::PanelSpriteWalls(QWidget *parent) :
     QWidget(parent),
@@ -26,9 +33,64 @@ PanelSpriteWalls::PanelSpriteWalls(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initialize();
 }
 
 PanelSpriteWalls::~PanelSpriteWalls()
 {
     delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelSpriteWalls::initialize() {
+    GameDatas* gameDatas = Wanok::get()->project()->gameDatas();
+    ui->panelSuperList->list()->initializeNewItemInstance(new SystemSpriteWall);
+    ui->panelSuperList->initializeModel(
+                gameDatas->specialElementsDatas()->modelSpriteWalls());
+    connect(ui->panelSuperList->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_pageSelected(QModelIndex,QModelIndex)));
+    ui->widgetPicture->setKind(PictureKind::Walls);
+    ui->widgetTilesetSettings->setKind(PictureKind::Walls);
+    connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture*)),
+            this, SLOT(on_pictureChanged(SystemPicture*)));
+    QModelIndex index = ui->panelSuperList->list()->getModel()->index(0,0);
+    ui->panelSuperList->list()->setIndex(0);
+    on_pageSelected(index,index);
+}
+
+// -------------------------------------------------------
+
+void PanelSpriteWalls::update(SystemSpriteWall* sys) {
+    SystemPicture* picture = sys->picture();
+
+    ui->widgetPicture->setPicture(picture);
+    ui->widgetTilesetSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelSpriteWalls::on_pageSelected(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = ui->panelSuperList->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr)
+        update((SystemSpriteWall*) selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void PanelSpriteWalls::on_pictureChanged(SystemPicture* picture) {
+    SystemSpriteWall* wall = (SystemSpriteWall*) ui->panelSuperList->list()
+            ->getSelected()->data().value<quintptr>();
+    wall->setPictureID(picture->id());
+    ui->widgetTilesetSettings->updateImage(picture);
 }

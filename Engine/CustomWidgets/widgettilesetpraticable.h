@@ -36,7 +36,7 @@ class WidgetTilesetPraticable : public QWidget
     Q_OBJECT
 public:
     explicit WidgetTilesetPraticable(QWidget *parent = 0);
-    void updateImage(SystemPicture* picture);
+    void updateImage(SystemPicture* picture, PictureKind kind);
 
 protected:
     QImage m_image;

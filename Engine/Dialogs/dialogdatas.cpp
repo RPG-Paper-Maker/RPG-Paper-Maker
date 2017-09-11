@@ -278,6 +278,7 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageTilesetSelected(QModelIndex,QModelIndex)));
     ui->widgetPictureTileset->setKind(PictureKind::Tilesets);
+    ui->widgetTilesetPictureSettings->setKind(PictureKind::Tilesets);
     connect(ui->widgetPictureTileset, SIGNAL(pictureChanged(SystemPicture*)),
             this, SLOT(on_tilesetPictureChanged(SystemPicture*)));
 

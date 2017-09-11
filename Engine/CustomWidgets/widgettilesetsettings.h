@@ -43,9 +43,12 @@ public:
     explicit WidgetTilesetSettings(QWidget *parent = 0);
     ~WidgetTilesetSettings();
     void updateImage(SystemPicture* picture);
+    PictureKind kind() const;
+    void setKind(PictureKind kind);
 
 private:
     Ui::WidgetTilesetSettings *ui;
+    PictureKind m_kind;
 };
 
 #endif // WIDGETTILESETSETTINGS_H

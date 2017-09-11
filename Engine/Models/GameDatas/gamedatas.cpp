@@ -39,7 +39,8 @@ GameDatas::GameDatas() :
     m_monstersDatas(new MonstersDatas),
     m_troopsDatas(new TroopsDatas),
     m_classesDatas(new ClassesDatas),
-    m_tilesetsDatas(new TilesetsDatas)
+    m_tilesetsDatas(new TilesetsDatas),
+    m_specialElementsDatas(new SpecialElementsDatas)
 {
 
 }
@@ -113,6 +114,10 @@ TilesetsDatas* GameDatas::tilesetsDatas() const {
     return m_tilesetsDatas;
 }
 
+SpecialElementsDatas* GameDatas::specialElementsDatas() const {
+    return m_specialElementsDatas;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -139,6 +144,7 @@ void GameDatas::setDefault(){
                                m_battleSystemDatas->modelCommonStatistics()
                                ->invisibleRootItem());
     m_tilesetsDatas->setDefault();
+    m_specialElementsDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -161,6 +167,7 @@ void GameDatas::read(QString path){
     m_troopsDatas->read(path);
     m_classesDatas->read(path);
     m_tilesetsDatas->read(path);
+    m_specialElementsDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -203,6 +210,8 @@ void GameDatas::write(QString path){
                      *m_classesDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_TILESETS),
                      *m_tilesetsDatas);
+    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_SPECIAL_ELEMENTS),
+                     *m_specialElementsDatas);
 }
 
 // -------------------------------------------------------
