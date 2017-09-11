@@ -419,9 +419,9 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 void MainWindow::on_actionSprite_walls_triggered() {
     DialogSpriteWalls dialog;
     if (openDialog(dialog) == QDialog::Accepted)
-        project->writeGameDatas();
+        project->writeSpecialsDatas();
     else
-        project->readGameDatas();
+        project->readSpecialsDatas();
 
     updateTextures();
 }

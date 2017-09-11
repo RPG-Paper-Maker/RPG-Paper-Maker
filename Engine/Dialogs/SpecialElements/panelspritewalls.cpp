@@ -41,6 +41,14 @@ PanelSpriteWalls::~PanelSpriteWalls()
     delete ui;
 }
 
+int PanelSpriteWalls::currentIndex() const {
+    return superList()->list()->getIndex();
+}
+
+PanelSuperList *PanelSpriteWalls::superList() const {
+    return ui->panelSuperList;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -48,10 +56,10 @@ PanelSpriteWalls::~PanelSpriteWalls()
 // -------------------------------------------------------
 
 void PanelSpriteWalls::initialize() {
-    GameDatas* gameDatas = Wanok::get()->project()->gameDatas();
     ui->panelSuperList->list()->initializeNewItemInstance(new SystemSpriteWall);
-    ui->panelSuperList->initializeModel(
-                gameDatas->specialElementsDatas()->modelSpriteWalls());
+    ui->panelSuperList->initializeModel(Wanok::get()->project()
+                                        ->specialElementsDatas()
+                                        ->modelSpriteWalls());
     connect(ui->panelSuperList->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageSelected(QModelIndex,QModelIndex)));

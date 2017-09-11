@@ -109,7 +109,7 @@ void WidgetSuperList::setMaximum(int newSize){
     int previousSize = p_model->invisibleRootItem()->rowCount();
 
     // Add new empty items
-    if (newSize > previousSize){
+    if (newSize > previousSize) {
         for (int i = previousSize; i < newSize; i++){
             SuperListItem* super = m_newItemInstance->createCopy();
             super->setId(i+1);
@@ -118,13 +118,14 @@ void WidgetSuperList::setMaximum(int newSize){
             p_model->insertRow(i, row);
         }
     }
-    else{
+    else {
         for (int i = previousSize - 1; i >= newSize; i--){
             SuperListItem* super = (SuperListItem*) p_model->item(i)->data()
                                    .value<quintptr>();
             p_model->removeRow(i);
             delete super;
         }
+        emit deleteIDs();
     }
 
     emit updated();

@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include "systemspritewall.h"
+#include "panelsuperlist.h"
 
 // -------------------------------------------------------
 //
@@ -44,6 +45,8 @@ public:
     ~PanelSpriteWalls();
     void initialize();
     void update(SystemSpriteWall* sys);
+    int currentIndex() const;
+    PanelSuperList* superList() const;
 
 private:
     Ui::PanelSpriteWalls *ui;

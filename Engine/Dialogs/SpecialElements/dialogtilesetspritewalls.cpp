@@ -19,6 +19,7 @@
 
 #include "dialogtilesetspritewalls.h"
 #include "ui_dialogtilesetspritewalls.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -26,9 +27,11 @@
 //
 // -------------------------------------------------------
 
-DialogTilesetSpriteWalls::DialogTilesetSpriteWalls(QWidget *parent) :
+DialogTilesetSpriteWalls::DialogTilesetSpriteWalls(SystemTileset *tileset,
+                                                   QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogTilesetSpriteWalls)
+    ui(new Ui::DialogTilesetSpriteWalls),
+    m_tileset(tileset)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
@@ -38,7 +41,12 @@ DialogTilesetSpriteWalls::DialogTilesetSpriteWalls(QWidget *parent) :
 
 DialogTilesetSpriteWalls::~DialogTilesetSpriteWalls()
 {
+    SuperListItem::deleteModel(model());
     delete ui;
+}
+
+QStandardItemModel* DialogTilesetSpriteWalls::model() const {
+    return ui->panelSuperList->list()->getModel();
 }
 
 // -------------------------------------------------------
@@ -48,6 +56,103 @@ DialogTilesetSpriteWalls::~DialogTilesetSpriteWalls()
 // -------------------------------------------------------
 
 void DialogTilesetSpriteWalls::initialize() {
+    QStandardItemModel* model = new QStandardItemModel;
+    SuperListItem::copyModel(model, m_tileset->modelSpriteWalls());
+
+    ui->panelSuperList->list()->setCanBrutRemove(true);
     ui->panelSuperList->showButtonMax(false);
     ui->panelSuperList->showEditName(false);
+    ui->panelSuperList->initializeModel(model);
+    if (ui->panelSuperList->list()->getModel()->invisibleRootItem()->rowCount()
+        > 0)
+    {
+        ui->panelSuperList->list()->setIndex(0);
+    }
+
+    // Connexions
+    connect(ui->widget->superList()->list(), SIGNAL(deleteIDs()),
+            this, SLOT(on_deletingIDs()));
+    connect(ui->widget->superList(), SIGNAL(nameChanged(QStandardItem*)),
+            this, SLOT(on_nameChanged(QStandardItem*)));
+    connect(ui->widget->superList()->list(), SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(on_pushButtonMove_clicked()));
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::move() {
+    int index = ui->widget->currentIndex();
+    QStandardItemModel* model = ui->panelSuperList->list()->getModel();
+
+    SystemTileset::moveModel(
+                model, Wanok::get()->project()->specialElementsDatas()
+                ->modelSpriteWalls(), index);
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::remove() {
+    int index = ui->panelSuperList->list()->getIndex();
+    if (index >= 0) {
+        QStandardItemModel* model = ui->panelSuperList->list()->getModel();
+        model->removeRow(index);
+    }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::on_pushButtonMove_clicked() {
+    move();
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::on_pushButtonDelete_clicked() {
+    remove();
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::on_deletingIDs() {
+
+    // When deleting IDs, we need to update the list and also delete these
+    // removed IDs in the tileset list
+    SystemTileset::updateModel(ui->panelSuperList->list()->getModel(),
+                               Wanok::get()->project()->specialElementsDatas()
+                               ->modelSpriteWalls());
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::on_nameChanged(QStandardItem* item)
+{
+    QStandardItemModel* model = ui->panelSuperList->list()->getModel();
+    SuperListItem* super = (SuperListItem*) item->data().value<quintptr>();
+    int index = SuperListItem::getIndexById(model->invisibleRootItem(),
+                                            super->id());
+    if (index >= 0) {
+        QStandardItem* item = model->item(index);
+        SuperListItem* superTileset =
+                (SuperListItem*) item->data().value<quintptr>();
+        superTileset->setName(super->name());
+        item->setText(superTileset->toString());
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogTilesetSpriteWalls::accept() {
+    QStandardItemModel* model = m_tileset->modelSpriteWalls();
+
+    // Clear
+    SuperListItem::deleteModel(model, false);
+
+    // Copy
+    SuperListItem::copyModel(model, this->model());
+
+    QDialog::accept();
 }

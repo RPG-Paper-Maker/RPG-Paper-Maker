@@ -27,6 +27,7 @@
 #include "scriptsdatas.h"
 #include "picturesdatas.h"
 #include "keyboarddatas.h"
+#include "specialelementsdatas.h"
 
 // -------------------------------------------------------
 //
@@ -54,6 +55,7 @@ public:
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
+    SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
 
     bool read(QString path);
@@ -67,6 +69,7 @@ public:
     void readScriptsDatas();
     void readKeyBoardDatas();
     void readPicturesDatas();
+    void readSpecialsDatas();
     void readSystemDatas();
     void write(QString path);
     void writeGameDatas();
@@ -75,6 +78,7 @@ public:
     void writeScriptsDatas();
     void writeKeyBoardDatas();
     void writePicturesDatas();
+    void writeSpecialsDatas();
     void writeSystemDatas();
     void saveCurrentMap();
     void updatePictures();
@@ -89,6 +93,7 @@ private:
     ScriptsDatas* m_scriptsDatas;
     PicturesDatas* m_picturesDatas;
     KeyBoardDatas* m_keyBoardDatas;
+    SpecialElementsDatas* m_specialElementsDatas;
     QString m_version;
 };
 

@@ -21,6 +21,8 @@
 #define DIALOGTILESETSPRITEWALLS_H
 
 #include <QDialog>
+#include <QStandardItemModel>
+#include "systemtileset.h"
 
 // -------------------------------------------------------
 //
@@ -39,12 +41,24 @@ class DialogTilesetSpriteWalls : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogTilesetSpriteWalls(QWidget *parent = 0);
-    ~DialogTilesetSpriteWalls();
+    explicit DialogTilesetSpriteWalls(SystemTileset* tileset,
+                                      QWidget *parent = 0);
+    virtual ~DialogTilesetSpriteWalls();
+    QStandardItemModel* model() const;
     void initialize();
+    void move();
+    void remove();
 
 private:
     Ui::DialogTilesetSpriteWalls *ui;
+    SystemTileset* m_tileset;
+
+public slots:
+    void on_pushButtonMove_clicked();
+    void on_pushButtonDelete_clicked();
+    void on_deletingIDs();
+    void on_nameChanged(QStandardItem* item);
+    virtual void accept();
 };
 
 #endif // DIALOGTILESETSPRITEWALLS_H

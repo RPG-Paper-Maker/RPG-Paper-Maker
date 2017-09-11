@@ -107,6 +107,89 @@ void SystemTileset::updatePicture(){
 
 // -------------------------------------------------------
 
+void SystemTileset::updateModelAutotiles() {
+    updateModel(m_modelAutotiles, Wanok::get()->project()
+                ->specialElementsDatas()->modelAutotiles());
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::updateModelSpriteWalls() {
+    updateModel(m_modelSpriteWalls, Wanok::get()->project()
+                ->specialElementsDatas()->modelSpriteWalls());
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::updateModel3DObjects() {
+    updateModel(m_model3DObjects, Wanok::get()->project()
+                ->specialElementsDatas()->model3DObjects());
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::updateModelReliefs() {
+    updateModel(m_modelReliefs, Wanok::get()->project()
+                ->specialElementsDatas()->modelReliefs());
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::updateModel(QStandardItemModel* model,
+                                QStandardItemModel* completeModel)
+{
+    SuperListItem* super, *superComplete;
+    QStandardItem* item;
+    QList<int> indexes;
+
+    // Check if the model contains removed IDs
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        item = model->item(i);
+        super = (SuperListItem*) item->data().value<quintptr>();
+        superComplete = (SuperListItem*) SuperListItem::getById(
+                    completeModel->invisibleRootItem(), super->id());
+        if (superComplete == nullptr)
+            indexes.append(i);
+        else {
+            super->setName(superComplete->name());
+            item->setText(super->toString());
+        }
+    }
+
+    // Remove the IDs not existing
+    for (int i = 0; i < indexes.size(); i++)
+        model->removeRow(indexes.at(i));
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::moveModel(QStandardItemModel* model,
+                                     QStandardItemModel* completeModel,
+                                     int index)
+{
+    SuperListItem* super, *superComplete;
+    superComplete = (SuperListItem*) completeModel->item(index)->data()
+            .value<quintptr>();
+    super = SuperListItem::getById(model->invisibleRootItem(),
+                                   superComplete->id());
+
+    // If the item is not already in the model
+    if (super == nullptr) {
+        QStandardItem* item;
+        SuperListItem* superNew = new SuperListItem;
+        superNew->setCopy(*superComplete);
+        superNew->setId(superComplete->id());
+        item = new QStandardItem;
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(superNew)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(superNew->toString());
+        model->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemTileset::createCopy() const{
     SystemTileset* super = new SystemTileset;
     super->setCopy(*this);

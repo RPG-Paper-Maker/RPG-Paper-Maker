@@ -307,6 +307,8 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 void DialogDatas::updateTileset(SystemTileset *sysTileset){
     ui->widgetPictureTileset->setPicture(sysTileset->picture());
     ui->widgetTilesetPictureSettings->updateImage(sysTileset->picture());
+
+    // Initialize special models
     ui->panelSuperListTilesetAutotiles->initializeModel(
                 sysTileset->modelAutotiles());
     ui->panelSuperListTilesetSpriteWalls->initializeModel(
@@ -315,6 +317,12 @@ void DialogDatas::updateTileset(SystemTileset *sysTileset){
                 sysTileset->model3DObjects());
     ui->panelSuperListTilesetReliefs->initializeModel(
                 sysTileset->modelReliefs());
+
+    // Update special models
+    sysTileset->updateModelAutotiles();
+    sysTileset->updateModelSpriteWalls();
+    sysTileset->updateModel3DObjects();
+    sysTileset->updateModelReliefs();
 }
 
 // -------------------------------------------------------
@@ -431,11 +439,14 @@ void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
 // -------------------------------------------------------
 
 void DialogDatas::on_pushButtonSpriteWalls_clicked() {
-    DialogTilesetSpriteWalls dialog;
+    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
+            ->getSelected()->data().value<quintptr>();
 
-    if (dialog.exec() == QDialog::Accepted){
-
-    }
+    DialogTilesetSpriteWalls dialog(tileset);
+    if (dialog.exec() == QDialog::Accepted)
+        Wanok::get()->project()->writeSpecialsDatas();
+    else
+        Wanok::get()->project()->readSpecialsDatas();
 }
 
 // -------------------------------------------------------

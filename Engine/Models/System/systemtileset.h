@@ -49,6 +49,15 @@ public:
     void setPictureFromId(int id);
     void initializeModels();
     void updatePicture();
+    void updateModelAutotiles();
+    void updateModelSpriteWalls();
+    void updateModel3DObjects();
+    void updateModelReliefs();
+    static void updateModel(QStandardItemModel* model,
+                            QStandardItemModel* completeModel);
+    static void moveModel(QStandardItemModel* model,
+                          QStandardItemModel* completeModel,
+                          int index);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemTileset &super);

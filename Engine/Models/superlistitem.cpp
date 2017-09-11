@@ -128,18 +128,20 @@ int SuperListItem::getIndexById(QStandardItem* item, int id){
     int l = item->rowCount()-1;
     SuperListItem* s;
 
-    for (int i = 0; i < l; i++){
-        s = (SuperListItem*) item->child(i)->data().value<quintptr>();
-        if (id == s->id()) return i;
-    }
+    if (l > -1) {
+        for (int i = 0; i < l; i++){
+            s = (SuperListItem*) item->child(i)->data().value<quintptr>();
+            if (id == s->id()) return i;
+        }
 
-    s = (SuperListItem*) item->child(l)->data().value<quintptr>();
-    if (s != nullptr && id == s->id())
-        return l;
-    else{
-        s = (SuperListItem*) item->child(0)->data().value<quintptr>();
-        if (s != nullptr)
-            return 0;
+        s = (SuperListItem*) item->child(l)->data().value<quintptr>();
+        if (s != nullptr && id == s->id())
+            return l;
+        else{
+            s = (SuperListItem*) item->child(0)->data().value<quintptr>();
+            if (s != nullptr && id == s->id())
+                return 0;
+        }
     }
 
     return -1;
@@ -172,7 +174,7 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id){
             return s;
         else{
             s = (SuperListItem*)(item->child(0)->data().value<quintptr>());
-            if (s != nullptr)
+            if (s != nullptr && id == s->id())
                 return s;
         }
     }
@@ -199,6 +201,24 @@ void SuperListItem::fillComboBox(QComboBox* comboBox,
     sys = ((SuperListItem*) item->data().value<quintptr>());
     if (sys != nullptr)
         comboBox->addItem(item->text());
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::copyModel(QStandardItemModel* model,
+                                             QStandardItemModel* baseModel)
+{
+    SuperListItem* super, *superBase;
+    QList<QStandardItem*> row;
+
+    for (int i = 0; i < baseModel->invisibleRootItem()->rowCount(); i++) {
+        superBase = (SuperListItem*) baseModel->item(i)->data()
+                .value<quintptr>();
+        super = superBase->createCopy();
+        super->setId(superBase->id());
+        row = super->getModelRow();
+        model->appendRow(row);
+    }
 }
 
 // -------------------------------------------------------

@@ -63,6 +63,7 @@ private slots:
 
 signals:
     void maximumChanged();
+    void nameChanged(QStandardItem*);
 };
 
 #endif // PANELSUPERLIST_H
