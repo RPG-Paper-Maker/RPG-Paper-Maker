@@ -26,6 +26,7 @@
 #include "dialogdatasmonsterrewards.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "dialogtilesetspritewalls.h"
 
 // -------------------------------------------------------
 //
@@ -270,6 +271,8 @@ void DialogDatas::updateClass(SystemClass* sysClass){
 // -------------------------------------------------------
 
 void DialogDatas::initializeTilesets(GameDatas *gameDatas){
+
+    // Initialize name & pictures
     ui->panelSuperListTilesets->list()->initializeNewItemInstance(
                 new SystemTileset);
     ui->panelSuperListTilesets->initializeModel(gameDatas->tilesetsDatas()
@@ -282,6 +285,17 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
     connect(ui->widgetPictureTileset, SIGNAL(pictureChanged(SystemPicture*)),
             this, SLOT(on_tilesetPictureChanged(SystemPicture*)));
 
+    // Initialize special elements
+    ui->panelSuperListTilesetAutotiles->showButtonMax(false);
+    ui->panelSuperListTilesetAutotiles->showEditName(false);
+    ui->panelSuperListTilesetSpriteWalls->showButtonMax(false);
+    ui->panelSuperListTilesetSpriteWalls->showEditName(false);
+    ui->panelSuperListTileset3DObjects->showButtonMax(false);
+    ui->panelSuperListTileset3DObjects->showEditName(false);
+    ui->panelSuperListTilesetReliefs->showButtonMax(false);
+    ui->panelSuperListTilesetReliefs->showEditName(false);
+
+    // Select the first tileset
     QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
             ->index(0,0);
     ui->panelSuperListTilesets->list()->setIndex(0);
@@ -293,6 +307,14 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 void DialogDatas::updateTileset(SystemTileset *sysTileset){
     ui->widgetPictureTileset->setPicture(sysTileset->picture());
     ui->widgetTilesetPictureSettings->updateImage(sysTileset->picture());
+    ui->panelSuperListTilesetAutotiles->initializeModel(
+                sysTileset->modelAutotiles());
+    ui->panelSuperListTilesetSpriteWalls->initializeModel(
+                sysTileset->modelSpriteWalls());
+    ui->panelSuperListTileset3DObjects->initializeModel(
+                sysTileset->model3DObjects());
+    ui->panelSuperListTilesetReliefs->initializeModel(
+                sysTileset->modelReliefs());
 }
 
 // -------------------------------------------------------
@@ -329,9 +351,8 @@ void DialogDatas::on_checkBoxItemConsumable_toggled(bool checked){
 void DialogDatas::on_pageItemsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListItems->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateItem((SystemItem*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -339,9 +360,8 @@ void DialogDatas::on_pageItemsSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageWeaponsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListWeapons->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateWeapon((SystemWeapon*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -349,9 +369,8 @@ void DialogDatas::on_pageWeaponsSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageArmorsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListArmors->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateArmor((SystemArmor*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -359,9 +378,8 @@ void DialogDatas::on_pageArmorsSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageClassesSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListClasses->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateClass((SystemClass*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -369,9 +387,8 @@ void DialogDatas::on_pageClassesSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageHeroSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListHeroes->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateHero((SystemHero*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -379,9 +396,8 @@ void DialogDatas::on_pageHeroSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageMonsterSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListMonsters->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateMonster((SystemMonster*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -389,9 +405,8 @@ void DialogDatas::on_pageMonsterSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageTroopSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListTroops->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateTroop((SystemTroop*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -399,9 +414,8 @@ void DialogDatas::on_pageTroopSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageTilesetSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListTilesets->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr)
         updateTileset((SystemTileset*)selected->data().value<quintptr>());
-    }
 }
 
 // -------------------------------------------------------
@@ -412,6 +426,16 @@ void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
 
     tileset->setPicture(picture);
     ui->widgetTilesetPictureSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonSpriteWalls_clicked() {
+    DialogTilesetSpriteWalls dialog;
+
+    if (dialog.exec() == QDialog::Accepted){
+
+    }
 }
 
 // -------------------------------------------------------

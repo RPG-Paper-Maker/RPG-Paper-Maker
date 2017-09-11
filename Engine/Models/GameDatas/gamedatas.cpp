@@ -60,6 +60,7 @@ GameDatas::~GameDatas()
     delete m_troopsDatas;
     delete m_classesDatas;
     delete m_tilesetsDatas;
+    delete m_specialElementsDatas;
 }
 
 CommonEventsDatas* GameDatas::commonEventsDatas() const {

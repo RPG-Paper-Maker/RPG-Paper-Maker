@@ -41,19 +41,32 @@ public:
     SystemTileset(int i, QString n, SystemPicture* picture);
     virtual ~SystemTileset();
     SystemPicture* picture() const;
+    QStandardItemModel* modelAutotiles() const;
+    QStandardItemModel* modelSpriteWalls() const;
+    QStandardItemModel* model3DObjects() const;
+    QStandardItemModel* modelReliefs() const;
     void setPicture(SystemPicture* picture);
     void setPictureFromId(int id);
+    void initializeModels();
     void updatePicture();
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemTileset &super);
 
     virtual void read(const QJsonObject &json);
+    static void readModel(const QJsonObject &json, QString key,
+                          QStandardItemModel* model);
     virtual void write(QJsonObject &json) const;
+    static void writeModel(QJsonObject &json, QString key,
+                           QStandardItemModel* model);
 
 protected:
     SystemPicture* m_picture;
     int m_pictureID;
+    QStandardItemModel* m_modelAutotiles;
+    QStandardItemModel* m_modelSpriteWalls;
+    QStandardItemModel* m_model3DObjects;
+    QStandardItemModel* m_modelReliefs;
 };
 
 Q_DECLARE_METATYPE(SystemTileset)

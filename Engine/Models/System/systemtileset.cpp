@@ -37,6 +37,7 @@ SystemTileset::SystemTileset(int i, QString n, int pictureId) :
     m_pictureID(pictureId)
 {
     setPictureFromId(pictureId);
+    initializeModels();
 }
 
 SystemTileset::SystemTileset(int i, QString n, SystemPicture *picture) :
@@ -44,11 +45,14 @@ SystemTileset::SystemTileset(int i, QString n, SystemPicture *picture) :
     m_picture(picture),
     m_pictureID(picture->id())
 {
-
+    initializeModels();
 }
 
 SystemTileset::~SystemTileset(){
-
+    SuperListItem::deleteModel(m_modelAutotiles);
+    SuperListItem::deleteModel(m_modelSpriteWalls);
+    SuperListItem::deleteModel(m_model3DObjects);
+    SuperListItem::deleteModel(m_modelReliefs);
 }
 
 SystemPicture* SystemTileset::picture() const { return m_picture; }
@@ -56,6 +60,22 @@ SystemPicture* SystemTileset::picture() const { return m_picture; }
 void SystemTileset::setPicture(SystemPicture* picture) {
     m_picture = picture;
     m_pictureID = picture->id();
+}
+
+QStandardItemModel* SystemTileset::modelAutotiles() const {
+    return m_modelAutotiles;
+}
+
+QStandardItemModel* SystemTileset::modelSpriteWalls() const {
+    return m_modelSpriteWalls;
+}
+
+QStandardItemModel* SystemTileset::model3DObjects() const {
+    return m_model3DObjects;
+}
+
+QStandardItemModel* SystemTileset::modelReliefs() const {
+    return m_modelReliefs;
 }
 
 // -------------------------------------------------------
@@ -68,6 +88,15 @@ void SystemTileset::setPictureFromId(int id) {
     setPicture((SystemPicture*) SuperListItem::getById(Wanok::get()->project()
                ->picturesDatas()->model(PictureKind::Tilesets)
                ->invisibleRootItem(), id));
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::initializeModels() {
+    m_modelAutotiles = new QStandardItemModel;
+    m_modelSpriteWalls = new QStandardItemModel;
+    m_model3DObjects = new QStandardItemModel;
+    m_modelReliefs = new QStandardItemModel;
 }
 
 // -------------------------------------------------------
@@ -103,6 +132,35 @@ void SystemTileset::read(const QJsonObject &json){
     SuperListItem::read(json);
 
     setPictureFromId(json["pic"].toInt());
+
+    // Special elements
+    readModel(json, "auto", m_modelAutotiles);
+    readModel(json, "walls", m_modelSpriteWalls);
+    readModel(json, "3D", m_model3DObjects);
+    readModel(json, "relief", m_modelReliefs);
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::readModel(const QJsonObject &json, QString key,
+                              QStandardItemModel* model)
+{
+    // Clear
+    SuperListItem::deleteModel(model, false);
+
+    // Read
+    QJsonArray jsonList = json[key].toArray();
+    QStandardItem* item;
+    SuperListItem* sys;
+    for (int i = 0; i < jsonList.size(); i++) {
+        item = new QStandardItem;
+        sys = new SuperListItem;
+        sys->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sys->toString());
+        model->appendRow(item);
+    }
 }
 
 // -------------------------------------------------------
@@ -111,4 +169,27 @@ void SystemTileset::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
     json["pic"] = m_picture->id();
+
+    // Special elements
+    writeModel(json, "auto", m_modelAutotiles);
+    writeModel(json, "walls", m_modelSpriteWalls);
+    writeModel(json, "3D", m_model3DObjects);
+    writeModel(json, "relief", m_modelReliefs);
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::writeModel(QJsonObject &json, QString key,
+                               QStandardItemModel* model)
+{
+    SuperListItem* sys;
+    QJsonArray jsonArray;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        QJsonObject json;
+        sys = ((SuperListItem*) model->item(i)->data().value<quintptr>());
+        sys->write(json);
+        jsonArray.append(json);
+    }
+    json[key] = jsonArray;
 }

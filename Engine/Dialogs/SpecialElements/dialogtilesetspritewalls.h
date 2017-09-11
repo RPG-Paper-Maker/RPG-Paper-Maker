@@ -17,18 +17,34 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogspritewalls.h"
-#include "ui_dialogspritewalls.h"
+#ifndef DIALOGTILESETSPRITEWALLS_H
+#define DIALOGTILESETSPRITEWALLS_H
 
-DialogSpriteWalls::DialogSpriteWalls(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogSpriteWalls)
-{
-    ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+#include <QDialog>
+
+// -------------------------------------------------------
+//
+//  CLASS DialogTilesetSpriteWalls
+//
+//  A dialog used for setting sprite walls for a particular tileset.
+//
+// -------------------------------------------------------
+
+namespace Ui {
+class DialogTilesetSpriteWalls;
 }
 
-DialogSpriteWalls::~DialogSpriteWalls()
+class DialogTilesetSpriteWalls : public QDialog
 {
-    delete ui;
-}
+    Q_OBJECT
+
+public:
+    explicit DialogTilesetSpriteWalls(QWidget *parent = 0);
+    ~DialogTilesetSpriteWalls();
+    void initialize();
+
+private:
+    Ui::DialogTilesetSpriteWalls *ui;
+};
+
+#endif // DIALOGTILESETSPRITEWALLS_H

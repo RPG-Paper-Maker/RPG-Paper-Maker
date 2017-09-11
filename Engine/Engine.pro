@@ -220,7 +220,8 @@ HEADERS += \
     Dialogs/SpecialElements/dialogspritewalls.h \
     Dialogs/SpecialElements/panelspritewalls.h \
     Models/System/systemspritewall.h \
-    Models/GameDatas/specialelementsdatas.h
+    Models/GameDatas/specialelementsdatas.h \
+    Dialogs/SpecialElements/dialogtilesetspritewalls.h
 
 SOURCES += \
     main.cpp \
@@ -391,7 +392,8 @@ SOURCES += \
     Dialogs/SpecialElements/dialogspritewalls.cpp \
     Dialogs/SpecialElements/panelspritewalls.cpp \
     Models/System/systemspritewall.cpp \
-    Models/GameDatas/specialelementsdatas.cpp
+    Models/GameDatas/specialelementsdatas.cpp \
+    Dialogs/SpecialElements/dialogtilesetspritewalls.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -456,7 +458,8 @@ FORMS += \
     Dialogs/dialogprogress.ui \
     Dialogs/dialogengineupdate.ui \
     Dialogs/SpecialElements/dialogspritewalls.ui \
-    Dialogs/SpecialElements/panelspritewalls.ui
+    Dialogs/SpecialElements/panelspritewalls.ui \
+    Dialogs/SpecialElements/dialogtilesetspritewalls.ui
 
 OTHER_FILES += \
     style.qss

@@ -993,7 +993,7 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
                <item>
@@ -1013,12 +1013,18 @@
                      <height>27</height>
                     </size>
                    </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>200</width>
+                     <height>27</height>
+                    </size>
+                   </property>
                   </widget>
                  </item>
                 </layout>
                </item>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout_6">
+                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1,1,1">
                  <item>
                   <widget class="QGroupBox" name="groupBox_4">
                    <property name="enabled">
@@ -1027,16 +1033,74 @@
                    <property name="title">
                     <string>Autotiles</string>
                    </property>
+                   <layout class="QGridLayout" name="gridLayout_11">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,0">
+                      <item>
+                       <widget class="PanelSuperList" name="panelSuperListTilesetAutotiles" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>230</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>230</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonAutotiles">
+                        <property name="text">
+                         <string>Choose...</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item>
                   <widget class="QGroupBox" name="groupBox">
                    <property name="enabled">
-                    <bool>false</bool>
+                    <bool>true</bool>
                    </property>
                    <property name="title">
                     <string>Sprite walls</string>
                    </property>
+                   <layout class="QGridLayout" name="gridLayout_10">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,0">
+                      <item>
+                       <widget class="PanelSuperList" name="panelSuperListTilesetSpriteWalls" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>230</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>230</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonSpriteWalls">
+                        <property name="text">
+                         <string>Choose...</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item>
@@ -1047,6 +1111,35 @@
                    <property name="title">
                     <string>3D objects</string>
                    </property>
+                   <layout class="QGridLayout" name="gridLayout_12">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,0">
+                      <item>
+                       <widget class="PanelSuperList" name="panelSuperListTileset3DObjects" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>230</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>230</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton3DObjects">
+                        <property name="text">
+                         <string>Choose...</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                  <item>
@@ -1057,6 +1150,35 @@
                    <property name="title">
                     <string>Reliefs</string>
                    </property>
+                   <layout class="QGridLayout" name="gridLayout_13">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,0">
+                      <item>
+                       <widget class="PanelSuperList" name="panelSuperListTilesetReliefs" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>230</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>230</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonReliefs">
+                        <property name="text">
+                         <string>Choose...</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>

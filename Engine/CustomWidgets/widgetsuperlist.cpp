@@ -41,9 +41,6 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     this->setDefaultDropAction(Qt::TargetMoveAction);
     this->showDropIndicator();
 
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), this,
-            SLOT(openDialog(QModelIndex)));
-
     // Context
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     m_contextMenu = ContextMenuList::createContextSuperList(this);
