@@ -69,11 +69,12 @@ public:
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
-                               QRect &tileset);
+                               QRect &tileset, int specialID);
     void removePreviewElements();
     void updatePreviewFloors(QRect& tileset, Position& position);
-    void updatePreviewWallSprites();
-    void updatePreviewWallSprite(Position& shortPosition, bool horizontal);
+    void updatePreviewWallSprites(int specialID);
+    void updatePreviewWallSprite(Position& shortPosition, bool horizontal,
+                                 int specialID);
     void updatePreviewOthers(MapEditorSelectionKind selection,
                              MapEditorSubSelectionKind subSelection,
                              QRect& tileset);
@@ -108,13 +109,13 @@ public:
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection,
                    DrawKind drawKind,
-                   QRect& tileset,
+                   QRect& tileset, int specialID,
                    Qt::MouseButton button);
     Position getPositionSelected(MapEditorSelectionKind selection) const;
     void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection,
              DrawKind drawKind,
-             QRect& tileset,
+             QRect& tileset, int specialID,
              Position& p);
     void remove(MapEditorSelectionKind selection,
                 DrawKind drawKind,
@@ -137,8 +138,7 @@ public:
     void removeLand(Position& p, DrawKind drawKind);
     void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   DrawKind drawKind,
-                   QRect& tileset);
+                   DrawKind drawKind, QRect& tileset, int specialID);
     void stockSprite(Position& p, MapEditorSubSelectionKind kind,
                      int widthPosition, int angle, QRect* textureRect);
     void removeSprite(Position& p, DrawKind drawKind);
@@ -168,6 +168,7 @@ public:
                         MapEditorSubSelectionKind subSelection,
                         DrawKind drawKind,
                         QRect& tileset,
+                        int specialID,
                         QPoint point,
                         Qt::MouseButton button);
     void onMouseReleased(Qt::MouseButton button);

@@ -205,8 +205,10 @@ void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
 
     if (m_selection){
         QAction* action = this->actionAt(event->pos());
-        if (action != nullptr)
+        if (action != nullptr) {
             updateSelection(action);
+            emit selectionChanged();
+        }
 
         QMenuBar::mousePressEvent(event);
     }

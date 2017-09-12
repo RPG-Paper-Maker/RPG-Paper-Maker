@@ -27,10 +27,13 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
      <property name="spacing">
       <number>0</number>
      </property>
+     <item>
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
        <property name="spacing">

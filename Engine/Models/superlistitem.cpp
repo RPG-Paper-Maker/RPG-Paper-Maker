@@ -158,7 +158,7 @@ int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
 
 // -------------------------------------------------------
 
-SuperListItem* SuperListItem::getById(QStandardItem* item, int id){
+SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
     int l = item->rowCount()-1;
 
     if (l > -1){
@@ -174,8 +174,10 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id){
             return s;
         else{
             s = (SuperListItem*)(item->child(0)->data().value<quintptr>());
-            if (s != nullptr && id == s->id())
-                return s;
+            if (s != nullptr) {
+                if (first || id == s->id())
+                    return s;
+            }
         }
     }
 
@@ -191,16 +193,18 @@ void SuperListItem::fillComboBox(QComboBox* comboBox,
     SuperListItem* sys;
     QStandardItem* item;
 
-    for (int i = 0; i < l; i++){
-        item = model->item(i);
-        sys = ((SuperListItem*) item->data().value<quintptr>());
-        comboBox->addItem(item->text());
-    }
+    if (l > -1) {
+        for (int i = 0; i < l; i++){
+            item = model->item(i);
+            sys = ((SuperListItem*) item->data().value<quintptr>());
+            comboBox->addItem(item->text());
+        }
 
-    item = model->item(l);
-    sys = ((SuperListItem*) item->data().value<quintptr>());
-    if (sys != nullptr)
-        comboBox->addItem(item->text());
+        item = model->item(l);
+        sys = ((SuperListItem*) item->data().value<quintptr>());
+        if (sys != nullptr)
+            comboBox->addItem(item->text());
+    }
 }
 
 // -------------------------------------------------------

@@ -21,7 +21,9 @@
 #define PANELTEXTURES_H
 
 #include <QWidget>
+#include "systemtileset.h"
 #include "widgettilesetselector.h"
+#include "mapeditorsubselectionkind.h"
 
 namespace Ui {
 class PanelTextures;
@@ -37,6 +39,10 @@ public:
     QRect getTilesetTexture() const;
     void setTilesetImage(QString path);
     void setTilesetImageNone();
+    void showTileset();
+    int getID(MapEditorSubSelectionKind subSelection) const;
+    void showComboBox();
+    void showSpriteWalls(SystemTileset* tileset);
 
 private:
     Ui::PanelTextures *ui;

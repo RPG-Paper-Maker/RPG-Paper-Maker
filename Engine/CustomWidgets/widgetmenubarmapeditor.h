@@ -78,6 +78,9 @@ private slots:
     void on_menuFloors_triggered(QAction* action);
     void on_menuFace_Sprite_triggered(QAction* action);
     void on_menuDrawTriggered(QAction* action);
+
+signals:
+    void selectionChanged();
 };
 
 #endif // WIDGETMENUBARMAPEDITOR_H

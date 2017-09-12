@@ -321,16 +321,25 @@ void WidgetTreeLocalMaps::updateTileset(){
 
         if (tag->id() == -1)
             m_panelTextures->setTilesetImageNone();
-        else{
+        else {
             QString path = Wanok::pathCombine(
                             Wanok::pathCombine(Wanok::get()->project()
                                                ->pathCurrentProject(),
                                                Wanok::pathMaps),
                             generateMapName(tag->id()));
             MapProperties properties(path);
-            m_panelTextures->setTilesetImage(
-                        properties.tileset()->picture()
-                        ->getPath(PictureKind::Tilesets));
+            SystemTileset* tileset = properties.tileset();
+            switch (m_widgetMenuMapEditor->subSelectionKind()) {
+            case MapEditorSubSelectionKind::SpritesWall:
+                m_panelTextures->showSpriteWalls(tileset);
+                break;
+            default:
+                m_panelTextures->showTileset();
+                m_panelTextures->setTilesetImage(tileset->picture()
+                                                 ->getPath(
+                                                     PictureKind::Tilesets));
+                break;
+            }
         }
     }
 }

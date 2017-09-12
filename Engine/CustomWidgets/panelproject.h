@@ -58,6 +58,7 @@ private:
 
 public slots:
     void updateMenu();
+    void on_menuBarPressed();
 };
 
 #endif // PANELPROJECT_H

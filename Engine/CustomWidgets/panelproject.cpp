@@ -60,6 +60,11 @@ PanelProject::PanelProject(QWidget *parent, Project* p) :
     ui->treeViewLocalMaps->initializePanelTextures(ui->panelTextures);
     ui->treeViewLocalMaps->initializeProject(m_project);
     ui->treeViewLocalMaps->initializeModel(m_project->treeMapDatas()->model());
+
+    connect(ui->widgetMenuBar, SIGNAL(selectionChanged()),
+            this, SLOT(on_menuBarPressed()));
+    connect(ui->widgetMenuBar, SIGNAL(triggered(QAction*)),
+            this, SLOT(on_menuBarPressed()));
 }
 
 PanelProject::~PanelProject()
@@ -101,5 +106,23 @@ void PanelProject::updateMenu(){
     {
         if (bar->activeAction() != nullptr)
             bar->activeAction()->menu()->hide();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelProject::on_menuBarPressed() {
+    SystemTileset* tileset = m_project->currentMap()->mapProperties()
+            ->tileset();
+
+    switch (ui->widgetMenuBar->subSelectionKind()) {
+    case MapEditorSubSelectionKind::SpritesWall:
+        ui->panelTextures->showSpriteWalls(tileset);
+        break;
+    default:
+        ui->panelTextures->showTileset();
+        ui->panelTextures->setTilesetImage(tileset->picture()
+                                           ->getPath(PictureKind::Tilesets));
+        break;
     }
 }

@@ -58,7 +58,8 @@ public:
     static void deleteModelTree(QStandardItem* item);
     static int getIndexById(QStandardItem* item, int id);
     static int getIdByIndex(QStandardItemModel* model, int index);
-    static SuperListItem* getById(QStandardItem* item, int id);
+    static SuperListItem* getById(QStandardItem* item, int id,
+                                  bool first = true);
     static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);

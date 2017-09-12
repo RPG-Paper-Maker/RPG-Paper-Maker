@@ -248,7 +248,7 @@ void ControlMapEditor::updateWallIndicator() {
 void ControlMapEditor::updatePreviewElements(
         MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection,
-        QRect& tileset)
+        QRect& tileset, int specialID)
 {
     Position position = getPositionSelected(selection);
     if (position == m_positionPreviousPreview)
@@ -263,7 +263,7 @@ void ControlMapEditor::updatePreviewElements(
         updatePreviewFloors(tileset, position);
     else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (m_isDrawingWall)
-            updatePreviewWallSprites();
+            updatePreviewWallSprites(specialID);
     }
     else
         updatePreviewOthers(selection, subSelection, tileset);
@@ -311,7 +311,7 @@ void ControlMapEditor::updatePreviewFloors(QRect &tileset, Position &position) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewWallSprites() {
+void ControlMapEditor::updatePreviewWallSprites(int specialID) {
     int x, y, yPlus, z;
 
     if (m_beginWallPosition.y() != m_endWallPosition.y())
@@ -324,7 +324,7 @@ void ControlMapEditor::updatePreviewWallSprites() {
 
         for (int i = upZ; i < downZ; i++) {
             Position shortPosition(x, y, yPlus, i, 0);
-            updatePreviewWallSprite(shortPosition, false);
+            updatePreviewWallSprite(shortPosition, false, specialID);
         }
     }
     else if (m_beginWallPosition.z() == m_endWallPosition.z()) {
@@ -334,7 +334,7 @@ void ControlMapEditor::updatePreviewWallSprites() {
 
         for (int i = leftX; i < rightX; i++) {
             Position shortPosition(i, y, yPlus, z, 0);
-            updatePreviewWallSprite(shortPosition, true);
+            updatePreviewWallSprite(shortPosition, true, specialID);
         }
     }
 }
@@ -342,7 +342,7 @@ void ControlMapEditor::updatePreviewWallSprites() {
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePreviewWallSprite(Position& shortPosition,
-                                               bool horizontal)
+                                               bool horizontal, int specialID)
 {
     Portion shortPortion = getLocalPortion(shortPosition);
     if (m_map->isInGrid(shortPosition) &&
@@ -661,7 +661,7 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
                                  DrawKind drawKind,
-                                 QRect& tileset,
+                                 QRect& tileset, int specialID,
                                  Qt::MouseButton button)
 {
     Position p = getPositionSelected(selection);
@@ -672,7 +672,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     else {
         if (m_map->isInGrid(p)){
             if (button == Qt::MouseButton::LeftButton)
-                add(selection, subSelection, drawKind, tileset, p);
+                add(selection, subSelection, drawKind, tileset, specialID, p);
             else if (button == Qt::MouseButton::RightButton)
                 remove(selection, drawKind, p);
         }
@@ -701,7 +701,7 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 void ControlMapEditor::add(MapEditorSelectionKind selection,
                            MapEditorSubSelectionKind subSelection,
                            DrawKind drawKind,
-                           QRect& tileset,
+                           QRect& tileset, int specialID,
                            Position& p)
 {
     if (tileset.width() != 0 && tileset.height() != 0) {
@@ -710,7 +710,7 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             addFloor(p, subSelection, drawKind, tileset);
             break;
         case MapEditorSelectionKind::Sprites:
-            addSprite(p, subSelection, drawKind, tileset);
+            addSprite(p, subSelection, drawKind, tileset, specialID);
             break;
         case MapEditorSelectionKind::Objects:
             setCursorObjectPosition(p); break;
@@ -1030,7 +1030,7 @@ void ControlMapEditor::eraseLand(Position& p){
 void ControlMapEditor::addSprite(Position& p,
                                  MapEditorSubSelectionKind kind,
                                  DrawKind drawKind,
-                                 QRect& tileset)
+                                 QRect& tileset, int specialID)
 {
     QList<Position> positions;
 
@@ -1513,7 +1513,7 @@ void ControlMapEditor::onMouseMove(QPoint point,
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       MapEditorSubSelectionKind subSelection,
                                       DrawKind drawKind,
-                                      QRect &tileset,
+                                      QRect &tileset, int specialID,
                                       QPoint point,
                                       Qt::MouseButton button)
 {
@@ -1525,7 +1525,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
     // Add/Remove something
     m_previousMouseCoords = getPositionSelected(selection);
-    addRemove(selection, subSelection, drawKind, tileset, button);
+    addRemove(selection, subSelection, drawKind, tileset, specialID, button);
 
     // Wall sprite
     if (subSelection == MapEditorSubSelectionKind::SpritesWall &&

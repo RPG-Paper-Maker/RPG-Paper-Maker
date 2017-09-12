@@ -147,7 +147,7 @@ void SystemTileset::updateModel(QStandardItemModel* model,
         item = model->item(i);
         super = (SuperListItem*) item->data().value<quintptr>();
         superComplete = (SuperListItem*) SuperListItem::getById(
-                    completeModel->invisibleRootItem(), super->id());
+                    completeModel->invisibleRootItem(), super->id(), false);
         if (superComplete == nullptr)
             indexes.append(i);
         else {
@@ -171,7 +171,7 @@ void SystemTileset::moveModel(QStandardItemModel* model,
     superComplete = (SuperListItem*) completeModel->item(index)->data()
             .value<quintptr>();
     super = SuperListItem::getById(model->invisibleRootItem(),
-                                   superComplete->id());
+                                   superComplete->id(), false);
 
     // If the item is not already in the model
     if (super == nullptr) {

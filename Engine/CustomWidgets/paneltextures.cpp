@@ -19,6 +19,8 @@
 
 #include "paneltextures.h"
 #include "ui_paneltextures.h"
+#include "systemspritewall.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -70,4 +72,65 @@ void PanelTextures::updateTilesetImage(){
                       ui->widgetTilesetSelector->height());
     setFixedSize(ui->widgetTilesetSelector->width(),
                  ui->widgetTilesetSelector->height());
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showTileset() {
+    ui->comboBox->hide();
+    ui->widgetTilesetSelector->show();
+}
+
+// -------------------------------------------------------
+
+int PanelTextures::getID(MapEditorSubSelectionKind subSelection) const {
+    Map* map = Wanok::get()->project()->currentMap();
+
+    if (map != nullptr) {
+        SystemTileset* tileset = map->mapProperties()->tileset();
+        int index = ui->comboBox->currentIndex();
+
+        switch(subSelection) {
+        case MapEditorSubSelectionKind::SpritesWall:
+            return SuperListItem::getIdByIndex(tileset->modelSpriteWalls(),
+                                               index);
+        default:
+            break;
+        }
+    }
+
+    return -1;
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showComboBox() {
+    ui->comboBox->show();
+    ui->widgetTilesetSelector->hide();
+    this->setGeometry(0, 0, 210, 27);
+    setFixedSize(210, 27);
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showSpriteWalls(SystemTileset* tileset) {
+    showComboBox();
+
+    tileset->updateModelSpriteWalls();
+    QStandardItemModel* model = tileset->modelSpriteWalls();
+    QStandardItemModel* modelComplete = Wanok::get()->project()
+            ->specialElementsDatas()->modelSpriteWalls();
+
+    // ComboBox filling
+    ui->comboBox->clear();
+    SuperListItem::fillComboBox(ui->comboBox, model);
+    for (int i = 0; i < ui->comboBox->count(); i++) {
+        SuperListItem* super = (SuperListItem*) model->item(i)->data()
+                .value<quintptr>();
+        SystemSpriteWall* wall = (SystemSpriteWall*) SuperListItem::getById(
+                    modelComplete->invisibleRootItem(), super->id());
+
+        ui->comboBox->setItemIcon(i, QIcon(wall->picture()
+                                           ->getPath(PictureKind::Walls)));
+    }
 }

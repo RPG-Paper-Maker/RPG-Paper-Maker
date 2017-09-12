@@ -161,10 +161,12 @@ void WidgetMapEditor::paintGL(){
         m_control.update();
         if (m_menuBar != nullptr) {
             QRect tileset = m_panelTextures->getTilesetTexture();
+            MapEditorSubSelectionKind subSelection =
+                    m_menuBar->subSelectionKind();
+            int specialID = m_panelTextures->getID(subSelection);
             m_control.updateWallIndicator();
             m_control.updatePreviewElements(m_menuBar->selectionKind(),
-                                            m_menuBar->subSelectionKind(),
-                                            tileset);
+                                            subSelection, tileset, specialID);
         }
 
         // Model view / projection
@@ -339,11 +341,12 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
 
             if (m_menuBar != nullptr){
                 QRect tileset = m_panelTextures->getTilesetTexture();
+                MapEditorSubSelectionKind subSelection =
+                        m_menuBar->subSelectionKind();
+                int specialID = m_panelTextures->getID(subSelection);
                 m_control.addRemove(m_menuBar->selectionKind(),
-                                    m_menuBar->subSelectionKind(),
-                                    m_menuBar->drawKind(),
-                                    tileset,
-                                    button);
+                                    subSelection, m_menuBar->drawKind(),
+                                    tileset, specialID, button);
             }
         }
     }
@@ -358,12 +361,13 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
         m_mousesPressed += button;
         if (m_menuBar != nullptr){
             QRect tileset = m_panelTextures->getTilesetTexture();
+            MapEditorSubSelectionKind subSelection =
+                    m_menuBar->subSelectionKind();
+            int specialID = m_panelTextures->getID(subSelection);
             m_control.onMousePressed(m_menuBar->selectionKind(),
-                                     m_menuBar->subSelectionKind(),
+                                     subSelection,
                                      m_menuBar->drawKind(),
-                                     tileset,
-                                     event->pos(),
-                                     button);
+                                     tileset, specialID, event->pos(), button);
         }
         // If in teleport command
         else{
