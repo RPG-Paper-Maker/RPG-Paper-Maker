@@ -44,8 +44,31 @@ bool Position3D::operator!=(const Position3D& other) const{
 
 int Position3D::yPlus() const { return m_y_plus; }
 
-int Position3D::getY(int squareSize) const{
+void Position3D::setYPlus(int yPlus) { m_y_plus = yPlus; }
+
+int Position3D::getY(int squareSize) const {
     return (m_y * squareSize) + (m_y_plus * squareSize / 100);
+}
+
+void Position3D::setCoords(int x, int y, int yPlus, int z) {
+    m_x = x;
+    m_y = y;
+    m_y_plus = yPlus;
+    m_z = z;
+}
+
+void Position3D::setInGrid(Position3D& p, int w, int h) {
+    int x = p.x(), z = p.z();
+    if (x < 0)
+        x = 0;
+    else if (x > w)
+        x = w;
+    if (z < 0)
+        z = 0;
+    else if (z > h)
+        z = h;
+
+    setCoords(x, p.y(), p.yPlus(), z);
 }
 
 // -------------------------------------------------------

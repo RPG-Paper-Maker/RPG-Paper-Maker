@@ -46,6 +46,7 @@ public:
     int y() const;
     int yPlus() const;
     bool isHorizontal() const;
+    void getSquares(Position3D& p1, Position3D& p2) const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

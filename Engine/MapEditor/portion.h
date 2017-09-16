@@ -42,6 +42,9 @@ public:
     int x() const;
     int y() const;
     int z() const;
+    void setX(int x);
+    void setY(int y);
+    void setZ(int z);
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

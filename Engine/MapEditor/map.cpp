@@ -664,7 +664,7 @@ void Map::deletePortions(){
 
 // -------------------------------------------------------
 
-bool Map::isInGrid(Position& position) const{
+bool Map::isInGrid(Position3D &position) const{
     return (position.x() >= 0 && position.x() < m_mapProperties->length() &&
             position.z() >= 0 && position.z() < m_mapProperties->width());
 }

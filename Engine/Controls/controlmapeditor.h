@@ -151,8 +151,9 @@ public:
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
 
-    Portion getGlobalPortion(Position& position) const;
-    Portion getLocalPortion(Position& position) const;
+    Portion getGlobalPortion(Position3D &position) const;
+    Portion getLocalPortion(Position3D &position) const;
+    bool isVisibleGridPosition(GridPosition& position) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
 
     void paintGL(QMatrix4x4& modelviewProjection,
@@ -181,7 +182,8 @@ private:
     // Widgets
     Map* m_map;
     Grid* m_grid;
-    WallIndicator* m_wallIndicator;
+    WallIndicator* m_beginWallIndicator;
+    WallIndicator* m_endWallIndicator;
     Cursor* m_cursor;
     Cursor* m_cursorObject;
     Camera* m_camera;
@@ -205,8 +207,6 @@ private:
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;
-    Position m_beginWallPosition;
-    Position m_endWallPosition;
     bool m_isDrawingWall;
 };
 

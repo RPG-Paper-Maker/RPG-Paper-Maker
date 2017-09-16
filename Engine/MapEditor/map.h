@@ -114,7 +114,7 @@ public:
     void updatePortion(Portion& p);
     void loadPortions(Portion portion);
     void deletePortions();
-    bool isInGrid(Position& position) const;
+    bool isInGrid(Position3D& position) const;
     bool isInPortion(Portion& portion, int offset = -1) const;
     void save();
     bool isObjectIdExisting(int id) const;

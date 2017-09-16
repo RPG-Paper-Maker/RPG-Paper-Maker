@@ -40,26 +40,21 @@ void WallIndicator::initializeSquareSize(int s){
     m_squareSize = s;
 }
 
+void WallIndicator::getGridPosition(Position3D& position) {
+    position.setX(m_gridPosition.x());
+    position.setY(m_gridPosition.y());
+    position.setYPlus(m_gridPosition.yPlus());
+    position.setZ(m_gridPosition.z());
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-void WallIndicator::setGridPosition(Position& pos, int w, int h) {
-    int x = pos.x(), z = pos.z();
-    if (x < 0)
-        x = 0;
-    else if (x > w)
-        x = w;
-    if (z < 0)
-        z = 0;
-    else if (z > h)
-        z = h;
-
-    m_gridPosition.setX(x);
-    m_gridPosition.setY(pos.y());
-    m_gridPosition.setZ(z);
+void WallIndicator::setGridPosition(Position3D& pos, int w, int h) {
+    m_gridPosition.setInGrid(pos, w, h);
 }
 
 // -------------------------------------------------------

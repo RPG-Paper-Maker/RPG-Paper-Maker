@@ -86,6 +86,17 @@ bool GridPosition::isHorizontal() const {
     return m_z1 == m_z2;
 }
 
+void GridPosition::getSquares(Position3D& p1, Position3D& p2) const {
+    if (isHorizontal()) {
+        p1.setCoords(m_x1, m_y, m_yPlus, m_z1 - 1);
+        p2.setCoords(m_x1, m_y, m_yPlus, m_z1);
+    }
+    else {
+        p1.setCoords(m_x1 - 1, m_y, m_yPlus, m_z1);
+        p2.setCoords(m_x1, m_y, m_yPlus, m_z1);
+    }
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

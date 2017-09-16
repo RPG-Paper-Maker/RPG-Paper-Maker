@@ -39,7 +39,10 @@ public:
     bool operator==(const Position3D& other) const;
     bool operator!=(const Position3D& other) const;
     int yPlus() const;
+    void setYPlus(int yPlus);
     int getY(int squareSize) const;
+    void setCoords(int x, int y, int yPlus, int z);
+    void setInGrid(Position3D &p, int w, int h);
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

@@ -150,8 +150,10 @@ int SuperListItem::getIndexById(QStandardItem* item, int id){
 // -------------------------------------------------------
 
 int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
-    SuperListItem* s =
-            (SuperListItem*) model->item(index)->data().value<qintptr>();
+    SuperListItem* s = nullptr;
+
+    if (index >= 0 && index < model->invisibleRootItem()->rowCount())
+        s = (SuperListItem*) model->item(index)->data().value<qintptr>();
 
     return (s != nullptr) ? s->id() : -1;
 }

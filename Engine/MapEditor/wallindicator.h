@@ -41,7 +41,8 @@ public:
     WallIndicator();
     ~WallIndicator();
     void initializeSquareSize(int s);
-    void setGridPosition(Position& pos, int w, int h);
+    void getGridPosition(Position3D& position);
+    void setGridPosition(Position3D& pos, int w, int h);
     void get3DPosition(QVector3D& vector);
 
     void initializeVertices();
@@ -49,7 +50,7 @@ public:
     void paintGL(QMatrix4x4 &modelviewProjection);
 
 private:
-    QVector3D m_gridPosition;
+    Position3D m_gridPosition;
     int m_squareSize;
 
     // OpenGL informations

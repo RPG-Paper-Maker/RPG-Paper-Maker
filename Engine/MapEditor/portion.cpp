@@ -46,6 +46,12 @@ int Portion::y() const { return m_y; }
 
 int Portion::z() const { return m_z; }
 
+void Portion::setX(int x) { m_x = x; }
+
+void Portion::setY(int y) { m_y = y; }
+
+void Portion::setZ(int z) { m_z = z; }
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

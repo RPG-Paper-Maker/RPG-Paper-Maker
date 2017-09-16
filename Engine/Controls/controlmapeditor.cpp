@@ -30,7 +30,8 @@
 ControlMapEditor::ControlMapEditor() :
     m_map(nullptr),
     m_grid(nullptr),
-    m_wallIndicator(nullptr),
+    m_beginWallIndicator(nullptr),
+    m_endWallIndicator(nullptr),
     m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
@@ -123,11 +124,15 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_cursorObject->initialize();
 
     // Wall indicator
-    m_wallIndicator = new WallIndicator;
+    m_beginWallIndicator = new WallIndicator;
+    m_endWallIndicator = new WallIndicator;
     updateWallIndicator();
-    m_wallIndicator->initializeSquareSize(m_map->squareSize());
-    m_wallIndicator->initializeVertices();
-    m_wallIndicator->initializeGL();
+    m_beginWallIndicator->initializeSquareSize(m_map->squareSize());
+    m_beginWallIndicator->initializeVertices();
+    m_beginWallIndicator->initializeGL();
+    m_endWallIndicator->initializeSquareSize(m_map->squareSize());
+    m_endWallIndicator->initializeVertices();
+    m_endWallIndicator->initializeGL();
 
     // Camera
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
@@ -151,9 +156,13 @@ void ControlMapEditor::deleteMap(bool updateCamera){
         delete m_cursorObject;
         m_cursorObject = nullptr;
     }
-    if (m_wallIndicator != nullptr){
-        delete m_wallIndicator;
-        m_wallIndicator = nullptr;
+    if (m_beginWallIndicator != nullptr){
+        delete m_beginWallIndicator;
+        m_beginWallIndicator = nullptr;
+    }
+    if (m_endWallIndicator != nullptr){
+        delete m_endWallIndicator;
+        m_endWallIndicator = nullptr;
     }
 
     // Grid
@@ -237,10 +246,14 @@ void ControlMapEditor::updateRaycasting(){
 // -------------------------------------------------------
 
 void ControlMapEditor::updateWallIndicator() {
-    m_endWallPosition = m_positionOnPlane;
-    m_wallIndicator->setGridPosition(m_positionOnPlane,
-                                     m_map->mapProperties()->length(),
-                                     m_map->mapProperties()->width());
+    if (!m_isDrawingWall) {
+        m_beginWallIndicator->setGridPosition(m_positionOnPlane,
+                                              m_map->mapProperties()->length(),
+                                              m_map->mapProperties()->width());
+    }
+    m_endWallIndicator->setGridPosition(m_positionOnPlane,
+                                        m_map->mapProperties()->length(),
+                                        m_map->mapProperties()->width());
 }
 
 // -------------------------------------------------------
@@ -313,24 +326,32 @@ void ControlMapEditor::updatePreviewFloors(QRect &tileset, Position &position) {
 
 void ControlMapEditor::updatePreviewWallSprites(int specialID) {
     int x, y, yPlus, z;
+    Position3D begin, end;
+    m_beginWallIndicator->getGridPosition(begin);
+    m_endWallIndicator->getGridPosition(end);
 
-    if (m_beginWallPosition.y() != m_endWallPosition.y())
+    // Can't build a wall if not in the same height
+    if (begin.y() != end.y())
         return;
-    y = m_beginWallPosition.y(), yPlus = m_beginWallPosition.yPlus();
-    if (m_beginWallPosition.x() == m_endWallPosition.x()) {
-        x = m_beginWallPosition.x();
-        int upZ = qMin(m_beginWallPosition.z(), m_endWallPosition.z());
-        int downZ = qMax(m_beginWallPosition.z(), m_endWallPosition.z());
+    y = begin.y(), yPlus = begin.yPlus();
+
+    // Vertical
+    if (begin.x() == end.x()) {
+        x = begin.x();
+        int upZ = qMin(begin.z(), end.z());
+        int downZ = qMax(begin.z(), end.z());
 
         for (int i = upZ; i < downZ; i++) {
             Position shortPosition(x, y, yPlus, i, 0);
             updatePreviewWallSprite(shortPosition, false, specialID);
         }
     }
-    else if (m_beginWallPosition.z() == m_endWallPosition.z()) {
-        z = m_beginWallPosition.z();
-        int leftX = qMin(m_beginWallPosition.x(), m_endWallPosition.x());
-        int rightX = qMax(m_beginWallPosition.x(), m_endWallPosition.x());
+
+    // Horizontal
+    else if (begin.z() == end.z()) {
+        z = begin.z();
+        int leftX = qMin(begin.x(), end.x());
+        int rightX = qMax(begin.x(), end.x());
 
         for (int i = leftX; i < rightX; i++) {
             Position shortPosition(i, y, yPlus, z, 0);
@@ -344,13 +365,18 @@ void ControlMapEditor::updatePreviewWallSprites(int specialID) {
 void ControlMapEditor::updatePreviewWallSprite(Position& shortPosition,
                                                bool horizontal, int specialID)
 {
-    Portion shortPortion = getLocalPortion(shortPosition);
-    if (m_map->isInGrid(shortPosition) &&
-        m_map->isInPortion(shortPortion))
-    {
-        MapElement* element = new SpriteWallDatas(1);
-        GridPosition gridPosition(shortPosition, horizontal);
-        updatePreviewElementGrid(gridPosition, shortPortion, element);
+    GridPosition gridPosition(shortPosition, horizontal);
+    Position3D p1, p2;
+    gridPosition.getSquares(p1, p2);
+    Portion portion1 = getLocalPortion(p1);
+    Portion portion2 = getLocalPortion(p2);
+    bool isP1 = m_map->isInGrid(p1) && m_map->isInPortion(portion1);
+    bool isP2 = m_map->isInGrid(p2) && m_map->isInPortion(portion2);
+
+    if (isP1 || isP2) {
+        MapElement* element = new SpriteWallDatas(specialID);
+        updatePreviewElementGrid(gridPosition, isP1 ? portion1 : portion2,
+                                 element);
     }
 }
 
@@ -666,11 +692,14 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 {
     Position p = getPositionSelected(selection);
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
-        if (!m_isDrawingWall)
-            m_beginWallPosition = p;
+        if (!m_isDrawingWall) {
+            m_beginWallIndicator->setGridPosition(
+                        p, m_map->mapProperties()->length(),
+                        m_map->mapProperties()->width());
+        }
     }
     else {
-        if (m_map->isInGrid(p)){
+        if (m_map->isInGrid(p)) {
             if (button == Qt::MouseButton::LeftButton)
                 add(selection, subSelection, drawKind, tileset, specialID, p);
             else if (button == Qt::MouseButton::RightButton)
@@ -1417,7 +1446,7 @@ void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
 //
 // -------------------------------------------------------
 
-Portion ControlMapEditor::getGlobalPortion(Position& position) const{
+Portion ControlMapEditor::getGlobalPortion(Position3D& position) const{
     return Portion(
                 position.x() / Wanok::portionSize,
                 position.y() / Wanok::portionSize,
@@ -1426,7 +1455,7 @@ Portion ControlMapEditor::getGlobalPortion(Position& position) const{
 
 // -------------------------------------------------------
 
-Portion ControlMapEditor::getLocalPortion(Position& position) const{
+Portion ControlMapEditor::getLocalPortion(Position3D& position) const{
     return Portion(
                 (position.x() / Wanok::portionSize) -
                 (m_cursor->getSquareX() / Wanok::portionSize),
@@ -1434,6 +1463,18 @@ Portion ControlMapEditor::getLocalPortion(Position& position) const{
                 (m_cursor->getSquareY() / Wanok::portionSize),
                 (position.z() / Wanok::portionSize) -
                 (m_cursor->getSquareZ() / Wanok::portionSize));
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::isVisibleGridPosition(GridPosition& position) const {
+    Position3D p1, p2;
+    position.getSquares(p1, p2);
+    Portion portion1 = getLocalPortion(p1);
+    Portion portion2 = getLocalPortion(p2);
+
+    return ((m_map->isInGrid(p1) && m_map->isInPortion(portion1)) ||
+            (m_map->isInGrid(p2) && m_map->isInPortion(portion2)));
 }
 
 // -------------------------------------------------------
@@ -1473,8 +1514,10 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
                        cameraUpWorldSpace);
 
-    if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall)
-        m_wallIndicator->paintGL(modelviewProjection);
+    if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall) {
+        m_beginWallIndicator->paintGL(modelviewProjection);
+        m_endWallIndicator->paintGL(modelviewProjection);
+    }
 }
 
 // -------------------------------------------------------
