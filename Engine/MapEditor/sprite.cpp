@@ -224,17 +224,6 @@ void SpriteDatas::initializeVertices(int squareSize,
         countFace++;
         break;
     }
-        /*
-    case MapEditorSubSelectionKind::SpritesWall:
-    {
-        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
-                  vecB = Sprite::verticesQuad[1] * size + pos,
-                  vecC = Sprite::verticesQuad[2] * size + pos,
-                  vecD = Sprite::verticesQuad[3] * size + pos;
-
-        addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
-                                vecA, vecB, vecC, vecD, texA, texB, texC, texD);
-    }*/
     default:
         break;
     }
@@ -494,4 +483,20 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
         SpriteDatas::rotateSprite(vecA, vecB, vecC, vecD, vecD, 90);
     SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, vecA, vecB,
                                          vecC, vecD, texA, texB, texC, texD);
+}
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void SpriteWallDatas::read(const QJsonObject & json){
+    m_wallID = json["w"].toInt();
+}
+
+// -------------------------------------------------------
+
+void SpriteWallDatas::write(QJsonObject & json) const{
+    json["w"] = m_wallID;
 }

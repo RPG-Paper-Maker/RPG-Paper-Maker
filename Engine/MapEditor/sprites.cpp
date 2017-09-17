@@ -102,8 +102,54 @@ bool Sprites::deleteSprite(Position& p){
 
 // -------------------------------------------------------
 
+void Sprites::setSpriteWall(GridPosition& p, SpriteWallDatas* sprite) {
+    m_walls[p] = sprite;
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* Sprites::removeSpriteWall(GridPosition &p) {
+    SpriteWallDatas* sprite = m_walls.value(p);
+    if (sprite != nullptr){
+        m_walls.remove(p);
+        return sprite;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Sprites::addSpriteWall(GridPosition& p, int specialID) {
+    SpriteWallDatas* previousSprite = removeSpriteWall(p);
+    SpriteWallDatas* sprite = new SpriteWallDatas(specialID);
+
+    if (previousSprite != nullptr)
+        delete previousSprite;
+
+    setSpriteWall(p, sprite);
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool Sprites::deleteSpriteWall(GridPosition& p) {
+    SpriteWallDatas* previousSprite = removeSpriteWall(p);
+
+    if (previousSprite != nullptr)
+        delete previousSprite;
+
+    return true;
+}
+
+// -------------------------------------------------------
+
 void Sprites::removeSpritesOut(MapProperties& properties) {
-    QList<Position> list;
+    QList<Position> listGlobal;
+    QList<GridPosition> listWalls;
+
+    // Global sprites
     QHash<Position, SpriteDatas*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
@@ -112,12 +158,26 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
             position.z() >= properties.width())
         {
             delete i.value();
-            list.push_back(position);
+            listGlobal.push_back(position);
         }
     }
+    for (int k = 0; k < listGlobal.size(); k++)
+        m_all.remove(listGlobal.at(k));
 
-    for (int j = 0; j < list.size(); j++)
-        m_all.remove(list.at(j));
+    // Walls sprites
+    QHash<GridPosition, SpriteWallDatas*>::iterator j;
+    for (j = m_walls.begin(); j != m_walls.end(); j++) {
+        GridPosition gridPosition = j.key();
+
+        if (gridPosition.x1() >= properties.length() ||
+            gridPosition.z1() >= properties.width())
+        {
+            delete j.value();
+            listWalls.push_back(gridPosition);
+        }
+    }
+    for (int k = 0; k < listWalls.size(); k++)
+        m_walls.remove(listWalls.at(k));
 }
 
 // -------------------------------------------------------
@@ -231,6 +291,7 @@ void Sprites::paintFaceGL(){
 void Sprites::read(const QJsonObject & json){
     QJsonArray tab = json["list"].toArray();
 
+    // Globals
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
         Position p;
@@ -240,13 +301,26 @@ void Sprites::read(const QJsonObject & json){
         sprite->read(objVal);
         m_all[p] = sprite;
     }
+
+    // Walls
+    tab = json["walls"].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        QJsonObject obj = tab.at(i).toObject();
+        GridPosition p;
+        p.read(obj["k"].toArray());
+        QJsonObject objVal = obj["v"].toObject();
+        SpriteWallDatas* sprite = new SpriteWallDatas;
+        sprite->read(objVal);
+        m_walls[p] = sprite;
+    }
 }
 
 // -------------------------------------------------------
 
 void Sprites::write(QJsonObject & json) const{
-    QJsonArray tab;
+    QJsonArray tabGlobals, tabWalls;
 
+    // Globals
     QHash<Position, SpriteDatas*>::const_iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
@@ -257,7 +331,22 @@ void Sprites::write(QJsonObject & json) const{
 
         objHash["k"] = tabKey;
         objHash["v"] = objSprite;
-        tab.append(objHash);
+        tabGlobals.append(objHash);
     }
-    json["list"] = tab;
+    json["list"] = tabGlobals;
+
+    // Walls
+    QHash<GridPosition, SpriteWallDatas*>::const_iterator j;
+    for (j = m_walls.begin(); j != m_walls.end(); j++){
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        j.key().write(tabKey);
+        QJsonObject objSprite;
+        j.value()->write(objSprite);
+
+        objHash["k"] = tabKey;
+        objHash["v"] = objSprite;
+        tabWalls.append(objHash);
+    }
+    json["walls"] = tabWalls;
 }

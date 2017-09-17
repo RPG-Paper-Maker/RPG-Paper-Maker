@@ -105,6 +105,18 @@ bool MapPortion::deleteSprite(Position& p){
 
 // -------------------------------------------------------
 
+bool MapPortion::addSpriteWall(GridPosition& gridPosition, int specialID) {
+    return m_sprites->addSpriteWall(gridPosition, specialID);
+}
+
+// -------------------------------------------------------
+
+bool MapPortion::deleteSpriteWall(GridPosition& gridPosition) {
+    return m_sprites->deleteSpriteWall(gridPosition);
+}
+
+// -------------------------------------------------------
+
 bool MapPortion::addObject(Position& p, SystemCommonObject* o){
     return m_mapObjects->addObject(p, o);
 }

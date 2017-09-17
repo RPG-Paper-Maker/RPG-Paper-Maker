@@ -53,6 +53,8 @@ public:
     bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
+    bool addSpriteWall(GridPosition& gridPosition, int specialID);
+    bool deleteSpriteWall(GridPosition& gridPosition);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 

@@ -64,16 +64,19 @@ public:
     void onResize(int width, int height);
 
     void update();
+    void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
     void updateRaycasting();
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
-                               QRect &tileset, int specialID);
+                               DrawKind drawKind, QRect &tileset,
+                               int specialID);
     void removePreviewElements();
     void updatePreviewFloors(QRect& tileset, Position& position);
+    void getWallSpritesPositions(QList<GridPosition> &positions);
     void updatePreviewWallSprites(int specialID);
-    void updatePreviewWallSprite(Position& shortPosition, bool horizontal,
+    void updatePreviewWallSprite(GridPosition &gridPosition,
                                  int specialID);
     void updatePreviewOthers(MapEditorSelectionKind selection,
                              MapEditorSubSelectionKind subSelection,
@@ -121,8 +124,7 @@ public:
                 DrawKind drawKind,
                 Position& p);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
-                  DrawKind drawKind,
-                  QRect& tileset);
+                  DrawKind drawKind, QRect& tileset, int specialID);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
                       QRect &textureAfter);
     LandDatas* getLand(Portion& portion, Position& p);
@@ -138,9 +140,11 @@ public:
     void removeLand(Position& p, DrawKind drawKind);
     void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   DrawKind drawKind, QRect& tileset, int specialID);
+                   DrawKind drawKind, QRect& tileset);
+    void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, MapEditorSubSelectionKind kind,
                      int widthPosition, int angle, QRect* textureRect);
+    void stockSpriteWall(GridPosition& gridPosition, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
     void eraseSprite(Position& p);
     void setCursorObjectPosition(Position& p);
@@ -153,6 +157,7 @@ public:
 
     Portion getGlobalPortion(Position3D &position) const;
     Portion getLocalPortion(Position3D &position) const;
+    Portion getPortionGrid(GridPosition& gridPosition) const;
     bool isVisibleGridPosition(GridPosition& position) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
 
@@ -172,7 +177,12 @@ public:
                         int specialID,
                         QPoint point,
                         Qt::MouseButton button);
-    void onMouseReleased(Qt::MouseButton button);
+    void onMouseReleased(MapEditorSelectionKind selection,
+                         MapEditorSubSelectionKind subSelection,
+                         DrawKind drawKind,
+                         QRect &tileset, int specialID,
+                         QPoint point,
+                         Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);

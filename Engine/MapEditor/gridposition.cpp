@@ -106,10 +106,10 @@ void GridPosition::getSquares(Position3D& p1, Position3D& p2) const {
 void GridPosition::read(const QJsonArray & json){
     m_x1 = json[0].toInt();
     m_z1 = json[1].toInt();
-    m_x2 = json[3].toInt();
-    m_z2 = json[4].toInt();
-    m_y = json[5].toInt();
-    m_yPlus = json[6].toInt();
+    m_x2 = json[2].toInt();
+    m_z2 = json[3].toInt();
+    m_y = json[4].toInt();
+    m_yPlus = json[5].toInt();
 }
 
 // -------------------------------------------------------

@@ -41,7 +41,10 @@ public:
     bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
     bool deleteSprite(Position& p);
-
+    void setSpriteWall(GridPosition& p, SpriteWallDatas* sprite);
+    SpriteWallDatas* removeSpriteWall(GridPosition& p);
+    bool addSpriteWall(GridPosition& p, int specialID);
+    bool deleteSpriteWall(GridPosition& p);
     void removeSpritesOut(MapProperties& properties);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,

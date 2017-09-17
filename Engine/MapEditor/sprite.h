@@ -159,6 +159,8 @@ public:
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
                                     GridPosition& position, int& count);
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
 protected:
     int m_wallID;
