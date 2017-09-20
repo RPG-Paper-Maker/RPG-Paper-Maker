@@ -36,6 +36,7 @@
 Map::Map() :
     m_mapProperties(new MapProperties),
     m_mapPortions(nullptr),
+    m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
     m_programStatic(nullptr),
@@ -48,6 +49,7 @@ Map::Map() :
 
 Map::Map(int id) :
     m_mapPortions(nullptr),
+    m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
@@ -82,6 +84,7 @@ Map::Map(int id) :
 Map::Map(MapProperties* properties) :
     m_mapProperties(properties),
     m_mapPortions(nullptr),
+    m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr)
@@ -90,6 +93,7 @@ Map::Map(MapProperties* properties) :
 }
 
 Map::~Map() {
+    delete m_cursor;
     delete m_mapProperties;
     deletePortions();
     SuperListItem::deleteModel(m_modelObjects);
@@ -105,6 +109,8 @@ Map::~Map() {
 MapProperties* Map::mapProperties() const { return m_mapProperties; }
 
 void Map::setMapProperties(MapProperties* p) { m_mapProperties = p; }
+
+Cursor* Map::cursor() const { return m_cursor; }
 
 int Map::squareSize() const { return m_squareSize; }
 
@@ -174,6 +180,15 @@ MapObjects* Map::objectsPortion(int x, int y, int z){
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void Map::initializeCursor(QVector3D *position) {
+    m_cursor = new Cursor(position);
+    m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
+    m_cursor->initializeSquareSize(m_squareSize);
+    m_cursor->initialize();
+}
+
 // -------------------------------------------------------
 
 void Map::writeNewMap(QString path, MapProperties& properties){
@@ -678,6 +693,60 @@ bool Map::isInPortion(Portion& portion, int offset) const{
             portion.y() >= -(m_portionsRay + offset) &&
             portion.z() <= (m_portionsRay + offset) &&
             portion.z() >= -(m_portionsRay + offset));
+}
+
+// -------------------------------------------------------
+
+Portion Map::getGlobalPortion(Position3D& position) const{
+    return Portion(
+                position.x() / Wanok::portionSize,
+                position.y() / Wanok::portionSize,
+                position.z() / Wanok::portionSize);
+}
+
+// -------------------------------------------------------
+
+Portion Map::getLocalPortion(Position3D& position) const{
+    return Portion(
+                (position.x() / Wanok::portionSize) -
+                (m_cursor->getSquareX() / Wanok::portionSize),
+                (position.y() / Wanok::portionSize) -
+                (m_cursor->getSquareY() / Wanok::portionSize),
+                (position.z() / Wanok::portionSize) -
+                (m_cursor->getSquareZ() / Wanok::portionSize));
+}
+
+// -------------------------------------------------------
+
+Portion Map::getPortionGrid(GridPosition& gridPosition) const {
+    Position3D p1, p2;
+    gridPosition.getSquares(p1, p2);
+    Portion portion1 = getLocalPortion(p1);
+    Portion portion2 = getLocalPortion(p2);
+    bool isP1 = isInGrid(p1) && isInPortion(portion1);
+
+    return isP1 ? portion1 : portion2;
+}
+
+// -------------------------------------------------------
+
+bool Map::isVisibleGridPosition(GridPosition& position) const {
+    Position3D p1, p2;
+    position.getSquares(p1, p2);
+    Portion portion1 = getLocalPortion(p1);
+    Portion portion2 = getLocalPortion(p2);
+
+    return ((isInGrid(p1) && isInPortion(portion1)) ||
+            (isInGrid(p2) && isInPortion(portion2)));
+}
+
+// -------------------------------------------------------
+
+Portion Map::getGlobalFromLocalPortion(Portion& portion) const{
+    return Portion(
+                portion.x() + (cursor()->getSquareX() / Wanok::portionSize),
+                portion.y() + (cursor()->getSquareY() / Wanok::portionSize),
+                portion.z() + (cursor()->getSquareZ() / Wanok::portionSize));
 }
 
 // -------------------------------------------------------

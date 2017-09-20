@@ -27,7 +27,6 @@
 #include "mapeditorselectionkind.h"
 #include "mapeditorsubselectionkind.h"
 #include "drawkind.h"
-#include "cursor.h"
 #include "contextmenulist.h"
 #include "wallindicator.h"
 
@@ -124,7 +123,7 @@ public:
                 DrawKind drawKind,
                 Position& p);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
-                  DrawKind drawKind, QRect& tileset, int specialID);
+                  DrawKind drawKind, QRect& tileset, int);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
                       QRect &textureAfter);
     LandDatas* getLand(Portion& portion, Position& p);
@@ -155,12 +154,6 @@ public:
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
 
-    Portion getGlobalPortion(Position3D &position) const;
-    Portion getLocalPortion(Position3D &position) const;
-    Portion getPortionGrid(GridPosition& gridPosition) const;
-    bool isVisibleGridPosition(GridPosition& position) const;
-    Portion getGlobalFromLocalPortion(Portion& portion) const;
-
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
                  QVector3D& cameraUpWorldSpace,
@@ -177,11 +170,8 @@ public:
                         int specialID,
                         QPoint point,
                         Qt::MouseButton button);
-    void onMouseReleased(MapEditorSelectionKind selection,
-                         MapEditorSubSelectionKind subSelection,
-                         DrawKind drawKind,
-                         QRect &tileset, int specialID,
-                         QPoint point,
+    void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
+                         DrawKind drawKind, QRect &, int specialID, QPoint,
                          Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
@@ -194,7 +184,6 @@ private:
     Grid* m_grid;
     WallIndicator* m_beginWallIndicator;
     WallIndicator* m_endWallIndicator;
-    Cursor* m_cursor;
     Cursor* m_cursorObject;
     Camera* m_camera;
 

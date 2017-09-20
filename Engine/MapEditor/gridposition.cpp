@@ -28,7 +28,7 @@
 GridPosition::GridPosition() : GridPosition(0, 0, 0, 0, 0, 0) {}
 
 GridPosition::GridPosition(int x1, int z1, int x2, int z2, int y, int yPlus) :
-    m_x1(x1), m_z1(z1), m_x2(x2), m_z2(z2), m_y(y)
+    m_x1(x1), m_z1(z1), m_x2(x2), m_z2(z2), m_y(y), m_yPlus(yPlus)
 {
 
 }

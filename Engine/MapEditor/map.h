@@ -27,6 +27,7 @@
 #include "mapproperties.h"
 #include "systemcommonobject.h"
 #include "threadmapportionloader.h"
+#include "cursor.h"
 
 // -------------------------------------------------------
 //
@@ -45,12 +46,14 @@ public:
     virtual ~Map();
     MapProperties* mapProperties() const;
     void setMapProperties(MapProperties* p);
+    Cursor* cursor() const;
     int squareSize() const;
     int portionsRay() const;
     bool saved() const;
     void setSaved(bool b);
     QStandardItemModel* modelObjects() const;
 
+    void initializeCursor(QVector3D *position);
     static void writeNewMap(QString path, MapProperties& properties);
     static void correctMap(QString path, MapProperties &previousProperties,
                            MapProperties& properties);
@@ -116,6 +119,11 @@ public:
     void deletePortions();
     bool isInGrid(Position3D& position) const;
     bool isInPortion(Portion& portion, int offset = -1) const;
+    Portion getGlobalPortion(Position3D &position) const;
+    Portion getLocalPortion(Position3D &position) const;
+    Portion getPortionGrid(GridPosition& gridPosition) const;
+    bool isVisibleGridPosition(GridPosition& position) const;
+    Portion getGlobalFromLocalPortion(Portion& portion) const;
     void save();
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;
@@ -142,6 +150,7 @@ private:
     QList<ThreadMapPortionLoader> m_threadMapPortionLoaders;
     MapProperties* m_mapProperties;
     MapPortion** m_mapPortions;
+    Cursor* m_cursor;
     QStandardItemModel* m_modelObjects;
     QString m_pathMap;
     int m_portionsRay;

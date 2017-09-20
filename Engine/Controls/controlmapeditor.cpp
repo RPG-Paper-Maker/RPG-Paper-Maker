@@ -32,7 +32,6 @@ ControlMapEditor::ControlMapEditor() :
     m_grid(nullptr),
     m_beginWallIndicator(nullptr),
     m_endWallIndicator(nullptr),
-    m_cursor(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
@@ -52,7 +51,7 @@ Map* ControlMapEditor::map() const { return m_map; }
 
 Grid* ControlMapEditor::grid() const { return m_grid; }
 
-Cursor* ControlMapEditor::cursor() const { return m_cursor; }
+Cursor* ControlMapEditor::cursor() const { return m_map->cursor(); }
 
 Cursor* ControlMapEditor::cursorObject() const { return m_cursorObject; }
 
@@ -77,7 +76,7 @@ void ControlMapEditor::moveCursorToMousePosition(QPoint point){
     update();
 
     if (m_map->isInGrid(m_positionOnPlane))
-        m_cursor->setPositions(m_positionOnPlane);
+        cursor()->setPositions(m_positionOnPlane);
 }
 
 // -------------------------------------------------------
@@ -93,13 +92,11 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                                int cameraHeight, double cameraHorizontalAngle)
 {
     // Map & cursor
-    m_cursor = new Cursor(position);
     m_map = new Map(idMap);
-    m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
-    m_cursor->initializeSquareSize(m_map->squareSize());
-    m_cursor->initialize();
+    m_map->initializeCursor(position);
     m_map->initializeGL();
-    m_currentPortion = m_cursor->getPortion();
+    // Update current portion and load all the local portions
+    m_currentPortion = cursor()->getPortion();
     m_map->loadPortions(m_currentPortion);
 
     // Grid
@@ -138,7 +135,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
     m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
-    m_camera->update(m_cursor, m_map->squareSize());
+    m_camera->update(cursor(), m_map->squareSize());
 
     return m_map;
 }
@@ -148,10 +145,6 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 void ControlMapEditor::deleteMap(bool updateCamera){
 
     // Cursors
-    if (m_cursor != nullptr){
-        delete m_cursor;
-        m_cursor = nullptr;
-    }
     if (m_cursorObject != nullptr){
         delete m_cursorObject;
         m_cursorObject = nullptr;
@@ -218,7 +211,7 @@ void ControlMapEditor::update() {
     updateMovingPortions();
 
     // Camera
-    m_camera->update(m_cursor, m_map->squareSize());
+    m_camera->update(cursor(), m_map->squareSize());
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -322,7 +315,7 @@ void ControlMapEditor::updatePreviewFloors(QRect &tileset, Position &position) {
 
             Position shortPosition(position.x() + i, 0, 0, position.z() + j,
                                    position.layer());
-            Portion shortPortion = getLocalPortion(shortPosition);
+            Portion shortPortion = m_map->getLocalPortion(shortPosition);
             if (m_map->isInGrid(shortPosition) &&
                 m_map->isInPortion(shortPortion))
             {
@@ -391,8 +384,8 @@ void ControlMapEditor::updatePreviewWallSprite(GridPosition& gridPosition,
 {
     Position3D p1, p2;
     gridPosition.getSquares(p1, p2);
-    Portion portion1 = getLocalPortion(p1);
-    Portion portion2 = getLocalPortion(p2);
+    Portion portion1 = m_map->getLocalPortion(p1);
+    Portion portion2 = m_map->getLocalPortion(p2);
     bool isP1 = m_map->isInGrid(p1) && m_map->isInPortion(portion1);
     bool isP2 = m_map->isInGrid(p2) && m_map->isInPortion(portion2);
 
@@ -410,7 +403,7 @@ void ControlMapEditor::updatePreviewOthers(
         MapEditorSubSelectionKind subSelection, QRect& tileset)
 {
     MapElement* element = nullptr;
-    Portion portion = getLocalPortion(m_positionPreviousPreview);
+    Portion portion = m_map->getLocalPortion(m_positionPreviousPreview);
     if (m_map->isInGrid(m_positionPreviousPreview) &&
         m_map->isInPortion(portion))
     {
@@ -479,7 +472,7 @@ void ControlMapEditor::updatePortions() {
 // -------------------------------------------------------
 
 void ControlMapEditor::updateMovingPortions() {
-    Portion newPortion = m_cursor->getPortion();
+    Portion newPortion = cursor()->getPortion();
 
     updateMovingPortionsEastWest(newPortion);
     updateMovingPortionsNorthSouth(newPortion);
@@ -601,7 +594,7 @@ void ControlMapEditor::saveTempPortions(){
 // -------------------------------------------------------
 
 void ControlMapEditor::saveTempPortion(Portion portion){
-    Portion globalPortion = getGlobalFromLocalPortion(portion);
+    Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
     m_map->savePortionMap(m_map->mapPortion(portion), globalPortion);
 }
 
@@ -799,7 +792,7 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
 void ControlMapEditor::addFloor(Position& p,
                                 MapEditorSubSelectionKind kind,
                                 DrawKind drawKind,
-                                QRect &tileset, int specialID)
+                                QRect &tileset, int)
 {
     FloorDatas* floor;
     QRect* shortTexture;
@@ -851,7 +844,7 @@ void ControlMapEditor::paintPinLand(Position& p,
                                     QRect& textureAfter)
 {
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             LandDatas* landBefore = getLand(portion, p);
             MapEditorSubSelectionKind kindBefore =
@@ -900,7 +893,7 @@ void ControlMapEditor::paintPinLand(Position& p,
                                                textureAfterReduced,
                                                localX, localZ);
                         if (m_map->isInGrid(adjacentPosition)){
-                            portion = getLocalPortion(adjacentPosition);
+                            portion = m_map->getLocalPortion(adjacentPosition);
                             if (m_map->isInPortion(portion)){
                                 LandDatas* landHere = getLand(portion,
                                                               adjacentPosition);
@@ -1020,7 +1013,7 @@ void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
 
 void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->addLand(p, landDatas) && m_map->saved())
@@ -1062,7 +1055,7 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
 
 void ControlMapEditor::eraseLand(Position& p){
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteLand(p) && m_map->saved())
@@ -1129,7 +1122,7 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
                                    QRect *textureRect)
 {
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->addSprite(p, kind, widthPosition, angle,
@@ -1154,8 +1147,8 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
 void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
                                        int specialID)
 {
-    if (isVisibleGridPosition(gridPosition)) {
-        Portion portion = getPortionGrid(gridPosition);
+    if (m_map->isVisibleGridPosition(gridPosition)) {
+        Portion portion = m_map->getPortionGrid(gridPosition);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->addSpriteWall(gridPosition, specialID) &&
@@ -1195,7 +1188,7 @@ void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
 
 void ControlMapEditor::eraseSprite(Position& p){
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteSprite(p) && m_map->saved())
@@ -1216,7 +1209,7 @@ void ControlMapEditor::setCursorObjectPosition(Position& p){
     m_cursorObject->setX(p.x());
     m_cursorObject->setZ(p.z());
 
-    Portion portion = getLocalPortion(p);
+    Portion portion = m_map->getLocalPortion(p);
     if (m_map->isInPortion(portion)){
         m_selectedObject = nullptr;
         MapObjects* mapObjects = m_map->objectsPortion(portion);
@@ -1256,7 +1249,7 @@ void ControlMapEditor::defineAsHero(){
 // -------------------------------------------------------
 
 void ControlMapEditor::addObject(Position& p){
-    Portion portion = getLocalPortion(p);
+    Portion portion = m_map->getLocalPortion(p);
     SystemCommonObject* object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -1289,7 +1282,7 @@ void ControlMapEditor::addObject(Position& p){
 
 void ControlMapEditor::removeObject(Position& p){
     if (m_map->isInGrid(p)){
-        Portion portion = getLocalPortion(p);
+        Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             MapObjects* mapObjects = m_map->objectsPortion(portion);
@@ -1506,64 +1499,6 @@ void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
 
 // -------------------------------------------------------
 //
-//  OTHERS
-//
-// -------------------------------------------------------
-
-Portion ControlMapEditor::getGlobalPortion(Position3D& position) const{
-    return Portion(
-                position.x() / Wanok::portionSize,
-                position.y() / Wanok::portionSize,
-                position.z() / Wanok::portionSize);
-}
-
-// -------------------------------------------------------
-
-Portion ControlMapEditor::getLocalPortion(Position3D& position) const{
-    return Portion(
-                (position.x() / Wanok::portionSize) -
-                (m_cursor->getSquareX() / Wanok::portionSize),
-                (position.y() / Wanok::portionSize) -
-                (m_cursor->getSquareY() / Wanok::portionSize),
-                (position.z() / Wanok::portionSize) -
-                (m_cursor->getSquareZ() / Wanok::portionSize));
-}
-
-// -------------------------------------------------------
-
-Portion ControlMapEditor::getPortionGrid(GridPosition& gridPosition) const {
-    Position3D p1, p2;
-    gridPosition.getSquares(p1, p2);
-    Portion portion1 = getLocalPortion(p1);
-    Portion portion2 = getLocalPortion(p2);
-    bool isP1 = m_map->isInGrid(p1) && m_map->isInPortion(portion1);
-
-    return isP1 ? portion1 : portion2;
-}
-
-// -------------------------------------------------------
-
-bool ControlMapEditor::isVisibleGridPosition(GridPosition& position) const {
-    Position3D p1, p2;
-    position.getSquares(p1, p2);
-    Portion portion1 = getLocalPortion(p1);
-    Portion portion2 = getLocalPortion(p2);
-
-    return ((m_map->isInGrid(p1) && m_map->isInPortion(portion1)) ||
-            (m_map->isInGrid(p2) && m_map->isInPortion(portion2)));
-}
-
-// -------------------------------------------------------
-
-Portion ControlMapEditor::getGlobalFromLocalPortion(Portion& portion) const{
-    return Portion(
-                portion.x() + (m_cursor->getSquareX() / Wanok::portionSize),
-                portion.y() + (m_cursor->getSquareY() / Wanok::portionSize),
-                portion.z() + (m_cursor->getSquareZ() / Wanok::portionSize));
-}
-
-// -------------------------------------------------------
-//
 //  GL
 //
 // -------------------------------------------------------
@@ -1579,7 +1514,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     if (selectionKind == MapEditorSelectionKind::Objects)
         m_cursorObject->paintGL(modelviewProjection);
 
-    m_cursor->paintGL(modelviewProjection);
+    m_map->cursor()->paintGL(modelviewProjection);
 
     if (m_displayGrid){
         glDisable(GL_DEPTH_TEST);
@@ -1653,11 +1588,11 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onMouseReleased(MapEditorSelectionKind selection,
-                                       MapEditorSubSelectionKind subSelection,
+void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
+                                       MapEditorSubSelectionKind,
                                        DrawKind drawKind,
-                                       QRect &tileset, int specialID,
-                                       QPoint point,
+                                       QRect &, int specialID,
+                                       QPoint,
                                        Qt::MouseButton button)
 {
     if (button == Qt::MouseButton::LeftButton) {
@@ -1671,7 +1606,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 
 void ControlMapEditor::onKeyPressed(int k, double speed){
-    m_cursor->onKeyPressed(k, m_camera->horizontalAngle(),
+    cursor()->onKeyPressed(k, m_camera->horizontalAngle(),
                            m_map->mapProperties()->length(),
                            m_map->mapProperties()->width(), speed);
 }
