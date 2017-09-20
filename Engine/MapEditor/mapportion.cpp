@@ -117,6 +117,12 @@ bool MapPortion::deleteSpriteWall(GridPosition& gridPosition) {
 
 // -------------------------------------------------------
 
+void MapPortion::updateSpriteWalls() {
+    m_sprites->updateSpriteWall();
+}
+
+// -------------------------------------------------------
+
 bool MapPortion::addObject(Position& p, SystemCommonObject* o){
     return m_mapObjects->addObject(p, o);
 }

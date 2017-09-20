@@ -145,6 +145,18 @@ bool Sprites::deleteSpriteWall(GridPosition& p) {
 
 // -------------------------------------------------------
 
+void Sprites::updateSpriteWall() {
+    QHash<GridPosition, SpriteWallDatas*>::iterator i;
+    for (i = m_walls.begin(); i != m_walls.end(); i++) {
+        GridPosition gridPosition = i.key();
+        SpriteWallDatas* sprite = i.value();
+
+        sprite->update(gridPosition);
+    }
+}
+
+// -------------------------------------------------------
+
 void Sprites::removeSpritesOut(MapProperties& properties) {
     QList<Position> listGlobal;
     QList<GridPosition> listWalls;

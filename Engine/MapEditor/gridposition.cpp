@@ -86,6 +86,21 @@ bool GridPosition::isHorizontal() const {
     return m_z1 == m_z2;
 }
 
+void GridPosition::setCoords(int x1, int z1, int x2, int z2, int y, int yPlus) {
+    m_x1 = x1;
+    m_x2 = x2;
+    m_y = y;
+    m_yPlus = yPlus;
+    m_z1 = z1;
+    m_z2 = z2;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
 void GridPosition::getSquares(Position3D& p1, Position3D& p2) const {
     if (isHorizontal()) {
         p1.setCoords(m_x1, m_y, m_yPlus, m_z1 - 1);
@@ -95,6 +110,68 @@ void GridPosition::getSquares(Position3D& p1, Position3D& p2) const {
         p1.setCoords(m_x1 - 1, m_y, m_yPlus, m_z1);
         p2.setCoords(m_x1, m_y, m_yPlus, m_z1);
     }
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getLeft(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 - 1, m_x2 - 1, m_y, m_yPlus, m_z1, m_z2);
+    else
+        gridPosition.setCoords(m_x1, m_x2, m_y, m_yPlus, m_z1 - 1, m_z2 - 1);
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getRight(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 + 1, m_x2 + 1, m_y, m_yPlus, m_z1, m_z2);
+    else
+        gridPosition.setCoords(m_x1, m_x2, m_y, m_yPlus, m_z1 + 1, m_z2 + 1);
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getTopLeft(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 - 1, m_x2 - 1, m_y, m_yPlus, m_z1 + 1,
+                               m_z2 + 1);
+    else
+        gridPosition.setCoords(m_x1 - 1, m_x2 - 1, m_y, m_yPlus, m_z1 - 1,
+                               m_z2 - 1);
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getTopRight(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 + 1, m_x2 + 1, m_y, m_yPlus, m_z1 + 1,
+                               m_z2 + 1);
+    else
+        gridPosition.setCoords(m_x1 - 1, m_x2 - 1, m_y, m_yPlus, m_z1 + 1,
+                               m_z2 + 1);
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getBotLeft(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 - 1, m_x2 - 1, m_y, m_yPlus, m_z1 - 1,
+                               m_z2 - 1);
+    else
+        gridPosition.setCoords(m_x1 + 1, m_x2 + 1, m_y, m_yPlus, m_z1 - 1,
+                               m_z2 - 1);
+}
+
+// -------------------------------------------------------
+
+void GridPosition::getBotRight(GridPosition& gridPosition) const {
+    if (isHorizontal())
+        gridPosition.setCoords(m_x1 + 1, m_x2 + 1, m_y, m_yPlus, m_z1 - 1,
+                               m_z2 - 1);
+    else
+        gridPosition.setCoords(m_x1 + 1, m_x2 + 1, m_y, m_yPlus, m_z1 + 1,
+                               m_z2 + 1);
 }
 
 // -------------------------------------------------------

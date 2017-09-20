@@ -45,6 +45,7 @@ public:
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
     bool addSpriteWall(GridPosition& p, int specialID);
     bool deleteSpriteWall(GridPosition& p);
+    void updateSpriteWall();
     void removeSpritesOut(MapProperties& properties);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,

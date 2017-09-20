@@ -35,6 +35,7 @@
 #include "mapproperties.h"
 #include "mapelement.h"
 #include "gridposition.h"
+#include "spritewallkind.h"
 
 // -------------------------------------------------------
 //
@@ -155,6 +156,13 @@ public:
     SpriteWallDatas(int wallID);
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
+    void update(GridPosition& gridPosition);
+    static SpriteWallDatas* getLeft(GridPosition& gridPosition);
+    static SpriteWallDatas* getRight(GridPosition& gridPosition);
+    static SpriteWallDatas* getTopLeft(GridPosition& gridPosition);
+    static SpriteWallDatas* getTopRight(GridPosition& gridPosition);
+    static SpriteWallDatas* getBotLeft(GridPosition& gridPosition);
+    static SpriteWallDatas* getBotRight(GridPosition& gridPosition);
     virtual void initializeVertices(int squareSize, int width, int height,
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
@@ -164,6 +172,7 @@ public:
 
 protected:
     int m_wallID;
+    SpriteWallKind m_wallKind;
 };
 
 #endif // SPRITE_H

@@ -19,6 +19,7 @@
 
 #include "sprite.h"
 #include "map.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -447,6 +448,49 @@ MapEditorSubSelectionKind SpriteWallDatas::getSubKind() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SpriteWallDatas::update(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getLeft(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getRight(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getTopLeft(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getTopRight(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getBotLeft(GridPosition& gridPosition) {
+
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getBotRight(GridPosition& gridPosition)
+{
+
+}
+
 // -------------------------------------------------------
 
 void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,

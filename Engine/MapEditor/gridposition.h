@@ -46,7 +46,14 @@ public:
     int y() const;
     int yPlus() const;
     bool isHorizontal() const;
+    void setCoords(int x1, int z1, int x2, int z2, int y, int yPlus);
     void getSquares(Position3D& p1, Position3D& p2) const;
+    void getLeft(GridPosition& gridPosition) const;
+    void getRight(GridPosition& gridPosition) const;
+    void getTopLeft(GridPosition& gridPosition) const;
+    void getTopRight(GridPosition& gridPosition) const;
+    void getBotLeft(GridPosition& gridPosition) const;
+    void getBotRight(GridPosition& gridPosition) const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;
