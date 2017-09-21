@@ -123,6 +123,12 @@ void MapPortion::updateSpriteWalls() {
 
 // -------------------------------------------------------
 
+SpriteWallDatas* MapPortion::getWallAt(GridPosition& gridPosition) const {
+    return m_sprites->getWallAt(gridPosition);
+}
+
+// -------------------------------------------------------
+
 bool MapPortion::addObject(Position& p, SystemCommonObject* o){
     return m_mapObjects->addObject(p, o);
 }

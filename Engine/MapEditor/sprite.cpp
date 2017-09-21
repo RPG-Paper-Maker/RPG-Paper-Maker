@@ -456,39 +456,68 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getLeft(GridPosition& gridPosition) {
+SpriteWallDatas* SpriteWallDatas::getWall(GridPosition& gridPosition) {
+    Map* map = Wanok::get()->project()->currentMap();
+    Portion portion = map->getPortionGrid(gridPosition);
+    MapPortion* mapPortion =
+            Wanok::get()->project()->currentMap()->mapPortion(portion);
 
+    return mapPortion->getWallAt(gridPosition);
+}
+
+// -------------------------------------------------------
+
+SpriteWallDatas* SpriteWallDatas::getLeft(GridPosition& gridPosition) {
+    GridPosition newGridPosition;
+    gridPosition.getLeft(newGridPosition);
+
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getRight(GridPosition& gridPosition) {
+    GridPosition newGridPosition;
+    gridPosition.getRight(newGridPosition);
 
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getTopLeft(GridPosition& gridPosition) {
+    GridPosition newGridPosition;
+    gridPosition.getTopLeft(newGridPosition);
 
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getTopRight(GridPosition& gridPosition) {
+    GridPosition newGridPosition;
+    gridPosition.getTopRight(newGridPosition);
 
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getBotLeft(GridPosition& gridPosition) {
+    GridPosition newGridPosition;
+    gridPosition.getBotLeft(newGridPosition);
 
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getBotRight(GridPosition& gridPosition)
 {
+    GridPosition newGridPosition;
+    gridPosition.getBotRight(newGridPosition);
 
+    return getWall(newGridPosition);
 }
 
 // -------------------------------------------------------

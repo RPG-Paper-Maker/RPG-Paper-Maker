@@ -56,6 +56,7 @@ public:
     bool addSpriteWall(GridPosition& gridPosition, int specialID);
     bool deleteSpriteWall(GridPosition& gridPosition);
     void updateSpriteWalls();
+    SpriteWallDatas* getWallAt(GridPosition& gridPosition) const;
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 

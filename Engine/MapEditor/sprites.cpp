@@ -157,6 +157,12 @@ void Sprites::updateSpriteWall() {
 
 // -------------------------------------------------------
 
+SpriteWallDatas* Sprites::getWallAt(GridPosition& gridPosition) const {
+    return m_walls.value(gridPosition);
+}
+
+// -------------------------------------------------------
+
 void Sprites::removeSpritesOut(MapProperties& properties) {
     QList<Position> listGlobal;
     QList<GridPosition> listWalls;

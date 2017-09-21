@@ -157,6 +157,7 @@ public:
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     void update(GridPosition& gridPosition);
+    static SpriteWallDatas* getWall(GridPosition& gridPosition);
     static SpriteWallDatas* getLeft(GridPosition& gridPosition);
     static SpriteWallDatas* getRight(GridPosition& gridPosition);
     static SpriteWallDatas* getTopLeft(GridPosition& gridPosition);
