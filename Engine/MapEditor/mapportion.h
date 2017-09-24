@@ -69,12 +69,14 @@ public:
     void addPreviewGrid(GridPosition& p, MapElement* element);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
-                            QHash<int, QOpenGLTexture*>& characters);
+                            QHash<int, QOpenGLTexture*>& characters,
+                            QHash<int, QOpenGLTexture *> &walls);
     void initializeGL(QOpenGLShaderProgram *programStatic,
                       QOpenGLShaderProgram *programFace);
     void updateGL();
     void paintFloors();
     void paintSprites();
+    void paintSpritesWalls(int textureID);
     void paintFaceSprites();
     void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);

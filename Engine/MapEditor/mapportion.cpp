@@ -118,7 +118,7 @@ bool MapPortion::deleteSpriteWall(GridPosition& gridPosition) {
 // -------------------------------------------------------
 
 void MapPortion::updateSpriteWalls() {
-    m_sprites->updateSpriteWall();
+    m_sprites->updateSpriteWalls(m_previewGrid);
 }
 
 // -------------------------------------------------------
@@ -194,19 +194,15 @@ void MapPortion::addPreviewGrid(GridPosition& p, MapElement* element) {
 
 
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
-                                    QHash<int, QOpenGLTexture *> &characters)
+                                    QHash<int, QOpenGLTexture *> &characters,
+                                    QHash<int, QOpenGLTexture *> &walls)
 {
     int spritesOffset = -0.005;
-    m_floors->initializeVertices(m_previewSquares,
-                                 squareSize,
-                                 tileset->width(),
+    m_floors->initializeVertices(m_previewSquares, squareSize, tileset->width(),
                                  tileset->height());
-    m_sprites->initializeVertices(m_previewSquares,
-                                  m_previewGrid,
-                                  squareSize,
-                                  tileset->width(),
-                                  tileset->height(),
-                                  spritesOffset);
+    m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
+                                  squareSize, tileset->width(),
+                                  tileset->height(), spritesOffset);
     m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 
@@ -237,6 +233,12 @@ void MapPortion::paintFloors(){
 
 void MapPortion::paintSprites(){
     m_sprites->paintGL();
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintSpritesWalls(int textureID) {
+    m_sprites->paintSpritesWalls(textureID);
 }
 
 // -------------------------------------------------------

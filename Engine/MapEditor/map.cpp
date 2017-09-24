@@ -461,10 +461,6 @@ void Map::setModelObjects(QStandardItemModel* model){
 // -------------------------------------------------------
 
 void Map::loadTextures(){
-    SystemPicture* picture;
-    QOpenGLTexture* texture;
-    QStandardItemModel* model;
-
     deleteTextures();
 
     // Tileset
@@ -474,24 +470,9 @@ void Map::loadTextures(){
     m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 
-    // Characters
-    model = Wanok::get()->project()->picturesDatas()
-            ->model(PictureKind::Characters);
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
-        picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
-        QImage image(1, 1, QImage::Format_ARGB32);
-        QString path = picture->getPath(PictureKind::Characters);
-
-        if (path.isEmpty())
-            image.fill(QColor(0, 0, 0, 0));
-        else
-            image.load(path);
-
-        texture = new QOpenGLTexture(image);
-        texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-        texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
-        m_texturesCharacters[picture->id()] = texture;
-    }
+    // Characters && walls
+    loadSpecialPictures(PictureKind::Characters, m_texturesCharacters);
+    loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
 
     // Object square
     m_textureObjectSquare = new QOpenGLTexture(
@@ -512,6 +493,32 @@ void Map::deleteTextures(){
         delete j.value();
     if (m_textureObjectSquare != nullptr)
         delete m_textureObjectSquare;
+}
+
+// -------------------------------------------------------
+
+void Map::loadSpecialPictures(PictureKind kind,
+                              QHash<int, QOpenGLTexture*>& textures)
+{
+    SystemPicture* picture;
+    QOpenGLTexture* texture;
+    QStandardItemModel* model = Wanok::get()->project()->picturesDatas()
+            ->model(kind);
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+        picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+        QImage image(1, 1, QImage::Format_ARGB32);
+        QString path = picture->getPath(kind);
+
+        if (path.isEmpty())
+            image.fill(QColor(0, 0, 0, 0));
+        else
+            image.load(path);
+
+        texture = new QOpenGLTexture(image);
+        texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+        texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+        textures[picture->id()] = texture;
+    }
 }
 
 // -------------------------------------------------------
@@ -585,7 +592,8 @@ void Map::loadPortionThread(MapPortion* portion)
 {
     portion->initializeVertices(m_squareSize,
                                 m_textureTileset,
-                                m_texturesCharacters);
+                                m_texturesCharacters,
+                                m_texturesSpriteWalls);
     portion->initializeGL(m_programStatic, m_programFaceSprite);
     portion->updateGL();
 }
@@ -609,7 +617,8 @@ void Map::updatePortion(Portion& p){
     mapPortion->setIsVisible(true);
     mapPortion->initializeVertices(m_squareSize,
                                    m_textureTileset,
-                                   m_texturesCharacters);
+                                   m_texturesCharacters,
+                                   m_texturesSpriteWalls);
     mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
     mapPortion->updateGL();
 }
@@ -1063,6 +1072,21 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintObjectsStaticSprites(textureID, texture);
+        }
+    }
+
+    // Walls
+    QHash<int, QOpenGLTexture*>::iterator itWalls;
+    for (itWalls = m_texturesSpriteWalls.begin();
+         itWalls != m_texturesSpriteWalls.end(); itWalls++)
+    {
+        int textureID = itWalls.key();
+        QOpenGLTexture* texture = itWalls.value();
+        texture->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                mapPortion->paintSpritesWalls(textureID);
         }
     }
 

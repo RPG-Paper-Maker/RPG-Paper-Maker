@@ -154,6 +154,7 @@ class SpriteWallDatas : public MapElement
 public:
     SpriteWallDatas();
     SpriteWallDatas(int wallID);
+    int wallID() const;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     void update(GridPosition& gridPosition);

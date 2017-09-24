@@ -431,9 +431,14 @@ SpriteWallDatas::SpriteWallDatas() :
 }
 
 SpriteWallDatas::SpriteWallDatas(int wallID) :
-    m_wallID(wallID)
+    m_wallID(wallID),
+    m_wallKind(SpriteWallKind::Middle)
 {
 
+}
+
+int SpriteWallDatas::wallID() const {
+    return m_wallID;
 }
 
 MapEditorSelectionKind SpriteWallDatas::getKind() const {
@@ -451,7 +456,21 @@ MapEditorSubSelectionKind SpriteWallDatas::getSubKind() const {
 // -------------------------------------------------------
 
 void SpriteWallDatas::update(GridPosition& gridPosition) {
+    GridPosition leftGridPosition, rightGridPosition, topLeftGridPosition,
+            botLeftGridPosition, topRightGridPosition, botRightGridPosition;
+    SpriteWallDatas *leftSprite, *rightSprite, *topLeftSprite, *botLeftSprite,
+            *topRightSprite, *botRightSprite;
 
+    // Middle only
+    gridPosition.getLeft(leftGridPosition);
+    gridPosition.getRight(rightGridPosition);
+    leftSprite = getWall(leftGridPosition);
+    rightSprite = getWall(rightGridPosition);
+    if (leftSprite == nullptr && rightSprite == nullptr)
+        m_wallKind = SpriteWallKind::Middle;
+    m_wallKind = SpriteWallKind::Middle;
+
+    //else if ()
 }
 
 // -------------------------------------------------------
@@ -523,28 +542,25 @@ SpriteWallDatas* SpriteWallDatas::getBotRight(GridPosition& gridPosition)
 // -------------------------------------------------------
 
 void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
-                                    QVector<Vertex>& vertices,
-                                    QVector<GLuint>& indexes,
-                                    GridPosition& position, int& count)
+                                         QVector<Vertex>& vertices,
+                                         QVector<GLuint>& indexes,
+                                         GridPosition& position, int& count)
 {
+    QVector3D pos((float) position.x1() * squareSize,
+                  (float) position.y() * squareSize,
+                  (float) position.z1() * squareSize);
+    QVector3D size(squareSize, height, 0.0f);
     float x, y, w, h;
-    x = (float)(0 * squareSize) / width;
+    x = (float)((int) m_wallKind * squareSize) / width;
     y = (float)(0 * squareSize) / height;
     w = (float)(1 * squareSize) / width;
-    h = (float)(1 * squareSize) / height;
+    h = 1.0;
     float coefX = 0.1 / width;
     float coefY = 0.1 / height;
     x += coefX;
     y += coefY;
     w -= (coefX * 2);
     h -= (coefY * 2);
-
-    QVector3D pos((float) position.x1() * squareSize,
-                  (float) position.y() * squareSize,
-                  (float) position.z1() * squareSize);
-    QVector3D size(squareSize,
-                   squareSize,
-                   0.0f);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
@@ -566,10 +582,12 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
 
 void SpriteWallDatas::read(const QJsonObject & json){
     m_wallID = json["w"].toInt();
+    m_wallKind = static_cast<SpriteWallKind>(json["k"].toInt());
 }
 
 // -------------------------------------------------------
 
 void SpriteWallDatas::write(QJsonObject & json) const{
     json["w"] = m_wallID;
+    json["k"] = (int) m_wallKind;
 }

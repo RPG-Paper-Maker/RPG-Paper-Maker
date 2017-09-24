@@ -22,6 +22,94 @@
 
 // -------------------------------------------------------
 //
+//
+//  ---------- SPRITESWALLS
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+SpritesWalls::SpritesWalls() :
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_program(nullptr)
+{
+
+}
+
+SpritesWalls::~SpritesWalls()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  GL
+//
+// -------------------------------------------------------
+
+void SpritesWalls::initializeVertices(QHash<GridPosition, SpriteWallDatas*>
+                                      walls, int squareSize, int width,
+                                      int height)
+{
+    int count = 0;
+
+    // Clear
+    m_vertices.clear();
+    m_indexes.clear();
+
+    // Initialize vertices for walls
+    QHash<GridPosition, SpriteWallDatas*>::iterator i;
+    for (i = walls.begin(); i != walls.end(); i++)
+    {
+        GridPosition position = i.key();
+        SpriteWallDatas* sprite = i.value();
+        sprite->initializeVertices(squareSize, width, height, m_vertices,
+                                   m_indexes, position, count);
+    }
+}
+
+// -------------------------------------------------------
+
+void SpritesWalls::initializeGL(QOpenGLShaderProgram* program) {
+    if (m_program == nullptr){
+        initializeOpenGLFunctions();
+
+        // Programs
+        m_program = program;
+    }
+}
+
+// -------------------------------------------------------
+
+void SpritesWalls::updateGL(){
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
+                        m_vao, m_program);
+}
+
+// -------------------------------------------------------
+
+void SpritesWalls::paintGL(){
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    m_vao.release();
+}
+
+// -------------------------------------------------------
+//
+//
+//  ---------- SPRITES
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
@@ -42,6 +130,14 @@ Sprites::~Sprites()
     QHash<Position, SpriteDatas*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++)
         delete *i;
+
+    QHash<GridPosition, SpriteWallDatas*>::iterator j;
+    for (j = m_walls.begin(); j != m_walls.end(); j++)
+        delete *j;
+
+    QHash<int, SpritesWalls*>::iterator k;
+    for (k = m_wallsGL.begin(); k != m_wallsGL.end(); k++)
+        delete *k;
 }
 
 // -------------------------------------------------------
@@ -51,7 +147,7 @@ Sprites::~Sprites()
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_all.size() == 0;
+    return m_all.size() == 0 && m_walls.size() == 0;
 }
 
 // -------------------------------------------------------
@@ -145,9 +241,14 @@ bool Sprites::deleteSpriteWall(GridPosition& p) {
 
 // -------------------------------------------------------
 
-void Sprites::updateSpriteWall() {
+void Sprites::updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid) {
+    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, previewGrid);
+
     QHash<GridPosition, SpriteWallDatas*>::iterator i;
-    for (i = m_walls.begin(); i != m_walls.end(); i++) {
+    for (i = spritesWallWithPreview.begin(); i != spritesWallWithPreview.end();
+         i++)
+    {
         GridPosition gridPosition = i.key();
         SpriteWallDatas* sprite = i.value();
 
@@ -159,6 +260,22 @@ void Sprites::updateSpriteWall() {
 
 SpriteWallDatas* Sprites::getWallAt(GridPosition& gridPosition) const {
     return m_walls.value(gridPosition);
+}
+
+// -------------------------------------------------------
+
+void Sprites::getWallsWithPreview(QHash<GridPosition, SpriteWallDatas *> &
+                                  spritesWallWithPreview,
+                                  QHash<GridPosition, MapElement *>&
+                                  previewGrid)
+{
+    spritesWallWithPreview = m_walls;
+    QHash<GridPosition, MapElement*>::iterator itw;
+    for (itw = previewGrid.begin(); itw != previewGrid.end(); itw++) {
+        MapElement* element = itw.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall)
+            spritesWallWithPreview[itw.key()] = (SpriteWallDatas*) element;
+    }
 }
 
 // -------------------------------------------------------
@@ -204,7 +321,8 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 //
 // -------------------------------------------------------
 
-void Sprites::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
+                                 QHash<Position, MapElement *> &previewSquares,
                                  QHash<GridPosition, MapElement *> &previewGrid,
                                  int squareSize, int width, int height,
                                  int& spritesOffset)
@@ -217,26 +335,29 @@ void Sprites::initializeVertices(QHash<Position, MapElement *> &previewSquares,
     m_indexesStatic.clear();
     m_verticesFace.clear();
     m_indexesFace.clear();
+    for (QHash<int, SpritesWalls*>::iterator i = m_wallsGL.begin();
+         i != m_wallsGL.end(); i++)
+    {
+        delete *i;
+    }
+    m_wallsGL.clear();
 
     // Create temp hash for preview
     QHash<Position, SpriteDatas*> spritesWithPreview(m_all);
-    QHash<Position, MapElement*>::iterator it;
-    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
-        MapElement* element = it.value();
+    for (QHash<Position, MapElement*>::iterator i = previewSquares.begin();
+         i != previewSquares.end(); i++)
+    {
+        MapElement* element = i.value();
         if (element->getKind() == MapEditorSelectionKind::Sprites)
-            spritesWithPreview[it.key()] = (SpriteDatas*) element;
+            spritesWithPreview[i.key()] = (SpriteDatas*) element;
     }
-    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview(m_walls);
-    QHash<GridPosition, MapElement*>::iterator itw;
-    for (itw = previewGrid.begin(); itw != previewGrid.end(); itw++) {
-        MapElement* element = itw.value();
-        if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall)
-            spritesWallWithPreview[itw.key()] = (SpriteWallDatas*) element;
-    }
+    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, previewGrid);
 
     // Initialize vertices in squares
-    QHash<Position, SpriteDatas*>::iterator i;
-    for (i = spritesWithPreview.begin(); i != spritesWithPreview.end(); i++) {
+    for (QHash<Position, SpriteDatas*>::iterator i = spritesWithPreview.begin();
+         i != spritesWithPreview.end(); i++)
+    {
         Position position = i.key();
         SpriteDatas* sprite = i.value();
 
@@ -248,15 +369,28 @@ void Sprites::initializeVertices(QHash<Position, MapElement *> &previewSquares,
     }
 
     // Initialize vertices for walls
-    QHash<GridPosition, SpriteWallDatas*>::iterator j;
-    for (j = spritesWallWithPreview.begin();
-         j != spritesWallWithPreview.end(); j++)
+    for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
+         spritesWallWithPreview.begin(); i != spritesWallWithPreview.end(); i++)
     {
-        GridPosition position = j.key();
-        SpriteWallDatas* sprite = j.value();
-        sprite->initializeVertices(squareSize, width, height,
-                                   m_verticesStatic, m_indexesStatic,
-                                   position, countStatic);
+        SpriteWallDatas* sprite = i.value();
+        int id = sprite->wallID();
+        SpritesWalls* sprites = m_wallsGL.value(id);
+        if (sprites == nullptr) {
+            sprites = new SpritesWalls;
+            m_wallsGL[id] = sprites;
+        }
+    }
+    for (QHash<int, SpritesWalls*>::iterator i =
+        m_wallsGL.begin(); i != m_wallsGL.end(); i++)
+    {
+        int id = i.key();
+        SpritesWalls* sprites = i.value();
+        QOpenGLTexture* texture = texturesWalls.value(id);
+        if (texture == nullptr)
+            texture = texturesWalls.value(-1);
+
+        sprites->initializeVertices(spritesWallWithPreview, squareSize,
+                                    texture->width(), texture->height());
     }
 }
 
@@ -271,6 +405,10 @@ void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
         m_programStatic = programStatic;
         m_programFace = programFace;
     }
+
+    QHash<int, SpritesWalls*>::iterator i;
+    for (i = m_wallsGL.begin(); i != m_wallsGL.end(); i++)
+        i.value()->initializeGL(programStatic);
 }
 
 // -------------------------------------------------------
@@ -282,6 +420,9 @@ void Sprites::updateGL(){
     Map::updateGLFace(m_vertexBufferFace, m_indexBufferFace,
                       m_verticesFace, m_indexesFace, m_vaoFace,
                       m_programFace);
+    QHash<int, SpritesWalls*>::iterator i;
+    for (i = m_wallsGL.begin(); i != m_wallsGL.end(); i++)
+        i.value()->updateGL();
 }
 
 // -------------------------------------------------------
@@ -298,6 +439,14 @@ void Sprites::paintFaceGL(){
     m_vaoFace.bind();
     glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, 0);
     m_vaoFace.release();
+}
+
+// -------------------------------------------------------
+
+void Sprites::paintSpritesWalls(int textureID) {
+    SpritesWalls* sprites = m_wallsGL.value(textureID);
+    if (sprites != nullptr)
+        sprites->paintGL();
 }
 
 // -------------------------------------------------------

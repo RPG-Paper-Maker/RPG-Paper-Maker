@@ -24,6 +24,36 @@
 
 // -------------------------------------------------------
 //
+//  CLASS SpritesWalls
+//
+//  A set of sprites walls in a portion of the map.
+//
+// -------------------------------------------------------
+
+class SpritesWalls : protected QOpenGLFunctions
+{
+public:
+    SpritesWalls();
+    virtual ~SpritesWalls();
+    void initializeVertices(QHash<GridPosition, SpriteWallDatas*> walls,
+                            int squareSize, int width, int height);
+    void initializeGL(QOpenGLShaderProgram* program);
+    void updateGL();
+    void paintGL();
+
+protected:
+
+    // OpenGL
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_program;
+};
+
+// -------------------------------------------------------
+//
 //  CLASS Sprites
 //
 //  A set of sprites in a portion of the map.
@@ -45,11 +75,16 @@ public:
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
     bool addSpriteWall(GridPosition& p, int specialID);
     bool deleteSpriteWall(GridPosition& p);
-    void updateSpriteWall();
+    void updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid);
     SpriteWallDatas* getWallAt(GridPosition& gridPosition) const;
+    void getWallsWithPreview(QHash<GridPosition, SpriteWallDatas*>&
+                             spritesWallWithPreview,
+                             QHash<GridPosition, MapElement *>&
+                             previewGrid);
     void removeSpritesOut(MapProperties& properties);
 
-    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+    void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
+                            QHash<Position, MapElement*>& previewSquares,
                             QHash<GridPosition, MapElement*>& previewGrid,
                             int squareSize, int width, int height,
                             int& spritesOffset);
@@ -58,6 +93,7 @@ public:
     void updateGL();
     void paintGL();
     void paintFaceGL();
+    void paintSpritesWalls(int textureID);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -65,6 +101,7 @@ public:
 protected:
     QHash<Position, SpriteDatas*> m_all;
     QHash<GridPosition, SpriteWallDatas*> m_walls;
+    QHash<int, SpritesWalls*> m_wallsGL;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;
