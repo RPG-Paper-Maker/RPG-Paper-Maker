@@ -488,9 +488,16 @@ void Map::loadTextures(){
 void Map::deleteTextures(){
     if (m_textureTileset != nullptr)
         delete m_textureTileset;
-    QHash<int, QOpenGLTexture*>::iterator j;
-    for (j = m_texturesCharacters.begin(); j != m_texturesCharacters.end(); j++)
-        delete j.value();
+    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesCharacters.begin();
+         i != m_texturesCharacters.end(); i++)
+    {
+        delete *i;
+    }
+    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesSpriteWalls.begin()
+         ; i != m_texturesSpriteWalls.end(); i++)
+    {
+        delete *i;
+    }
     if (m_textureObjectSquare != nullptr)
         delete m_textureObjectSquare;
 }

@@ -37,7 +37,8 @@ ControlMapEditor::ControlMapEditor() :
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_displayGrid(true),
     m_treeMapNode(nullptr),
-    m_isDrawingWall(false)
+    m_isDrawingWall(false),
+    m_isDeletingWall(false)
 {
 
 }
@@ -248,7 +249,7 @@ void ControlMapEditor::updateRaycasting(){
 // -------------------------------------------------------
 
 void ControlMapEditor::updateWallIndicator() {
-    if (!m_isDrawingWall) {
+    if (!m_isDrawingWall && !m_isDeletingWall) {
         m_beginWallIndicator->setGridPosition(m_positionOnPlane,
                                               m_map->mapProperties()->length(),
                                               m_map->mapProperties()->width());
@@ -708,7 +709,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 {
     Position p = getPositionSelected(selection);
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
-        if (!m_isDrawingWall) {
+        if (!m_isDrawingWall && !m_isDeletingWall) {
             m_beginWallIndicator->setGridPosition(
                         p, m_map->mapProperties()->length(),
                         m_map->mapProperties()->width());
@@ -1186,6 +1187,25 @@ void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
+    QList<GridPosition> positions;
+
+    // Pencil
+    switch (drawKind) {
+    case DrawKind::Pencil:
+        getWallSpritesPositions(positions);
+        for (int i = 0; i < positions.size(); i++)
+            eraseSpriteWall(positions[i]);
+        break;
+    case DrawKind::Pin:
+        break;
+    case DrawKind::Rectangle:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::eraseSprite(Position& p){
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
@@ -1193,6 +1213,24 @@ void ControlMapEditor::eraseSprite(Position& p){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteSprite(p) && m_map->saved())
                 setToNotSaved();
+            m_portionsToUpdate += portion;
+            m_portionsToSave += portion;
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::eraseSpriteWall(GridPosition& gridPosition) {
+    if (m_map->isVisibleGridPosition(gridPosition)) {
+        Portion portion = m_map->getPortionGrid(gridPosition);
+        if (m_map->isInPortion(portion)){
+            MapPortion* mapPortion = m_map->mapPortion(portion);
+            if (mapPortion->deleteSpriteWall(gridPosition) && m_map->saved())
+            {
+                setToNotSaved();
+            }
+
             m_portionsToUpdate += portion;
             m_portionsToSave += portion;
         }
@@ -1579,10 +1617,12 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     addRemove(selection, subSelection, drawKind, tileset, specialID, button);
 
     // Wall sprite
-    if (subSelection == MapEditorSubSelectionKind::SpritesWall &&
-        button == Qt::MouseButton::LeftButton)
+    if (subSelection == MapEditorSubSelectionKind::SpritesWall)
     {
-        m_isDrawingWall = true;
+        if (button == Qt::MouseButton::LeftButton)
+            m_isDrawingWall = true;
+        else if (button == Qt::MouseButton::RightButton)
+            m_isDeletingWall = true;
     }
 }
 
@@ -1599,6 +1639,12 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
             addSpriteWall(drawKind, specialID);
+        }
+    }
+    else if (button == Qt::MouseButton::RightButton) {
+        if (m_isDeletingWall) {
+            m_isDeletingWall = false;
+            removeSpriteWall(drawKind);
         }
     }
 }

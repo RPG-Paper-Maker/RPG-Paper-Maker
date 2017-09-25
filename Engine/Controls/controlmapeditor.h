@@ -145,7 +145,9 @@ public:
                      int widthPosition, int angle, QRect* textureRect);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
+    void removeSpriteWall(DrawKind drawKind);
     void eraseSprite(Position& p);
+    void eraseSpriteWall(GridPosition& gridPosition);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
     void defineAsHero();
@@ -207,6 +209,7 @@ private:
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;
     bool m_isDrawingWall;
+    bool m_isDeletingWall;
 };
 
 #endif // CONTROLMAPEDITOR_H
