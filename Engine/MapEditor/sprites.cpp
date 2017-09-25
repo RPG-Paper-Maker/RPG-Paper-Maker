@@ -241,9 +241,10 @@ bool Sprites::deleteSpriteWall(GridPosition& p) {
 
 // -------------------------------------------------------
 
-void Sprites::updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid) {
+void Sprites::updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
+                                QList<GridPosition> &previewDeleteGrid) {
     QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
-    getWallsWithPreview(spritesWallWithPreview, previewGrid);
+    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
 
     QHash<GridPosition, SpriteWallDatas*>::iterator i;
     for (i = spritesWallWithPreview.begin(); i != spritesWallWithPreview.end();
@@ -267,7 +268,8 @@ SpriteWallDatas* Sprites::getWallAt(GridPosition& gridPosition) const {
 void Sprites::getWallsWithPreview(QHash<GridPosition, SpriteWallDatas *> &
                                   spritesWallWithPreview,
                                   QHash<GridPosition, MapElement *>&
-                                  previewGrid)
+                                  previewGrid,
+                                  QList<GridPosition> &previewDeleteGrid)
 {
     spritesWallWithPreview = m_walls;
     QHash<GridPosition, MapElement*>::iterator itw;
@@ -275,6 +277,9 @@ void Sprites::getWallsWithPreview(QHash<GridPosition, SpriteWallDatas *> &
         MapElement* element = itw.value();
         if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall)
             spritesWallWithPreview[itw.key()] = (SpriteWallDatas*) element;
+    }
+    for (int i = 0; i < previewDeleteGrid.size(); i++) {
+        spritesWallWithPreview.remove(previewDeleteGrid.at(i));
     }
 }
 
@@ -324,6 +329,7 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
                                  QHash<Position, MapElement *> &previewSquares,
                                  QHash<GridPosition, MapElement *> &previewGrid,
+                                 QList<GridPosition> &previewDeleteGrid,
                                  int squareSize, int width, int height,
                                  int& spritesOffset)
 {
@@ -352,7 +358,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
             spritesWithPreview[i.key()] = (SpriteDatas*) element;
     }
     QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
-    getWallsWithPreview(spritesWallWithPreview, previewGrid);
+    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
 
     // Initialize vertices in squares
     for (QHash<Position, SpriteDatas*>::iterator i = spritesWithPreview.begin();

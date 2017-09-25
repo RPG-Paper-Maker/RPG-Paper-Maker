@@ -281,7 +281,7 @@ void ControlMapEditor::updatePreviewElements(
     if (subSelection == MapEditorSubSelectionKind::Floors)
         updatePreviewFloors(tileset, position);
     else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
-        if (m_isDrawingWall)
+        if (m_isDrawingWall || m_isDeletingWall)
             updatePreviewWallSprites(specialID);
     }
     else
@@ -391,7 +391,8 @@ void ControlMapEditor::updatePreviewWallSprite(GridPosition& gridPosition,
     bool isP2 = m_map->isInGrid(p2) && m_map->isInPortion(portion2);
 
     if (isP1 || isP2) {
-        MapElement* element = new SpriteWallDatas(specialID);
+        MapElement* element = m_isDeletingWall ? nullptr
+                                               : new SpriteWallDatas(specialID);
         updatePreviewElementGrid(gridPosition, isP1 ? portion1 : portion2,
                                  element);
     }
@@ -455,7 +456,10 @@ void ControlMapEditor::updatePreviewElementGrid(GridPosition& p,
                                                 MapElement* element)
 {
     MapPortion* mapPortion = m_map->mapPortion(portion);
-    mapPortion->addPreviewGrid(p, element);
+    if (element == nullptr)
+        mapPortion->addPreviewDeleteGrid(p);
+    else
+        mapPortion->addPreviewGrid(p, element);
     m_portionsToUpdate += portion;
     m_portionsPreviousPreview += portion;
 }

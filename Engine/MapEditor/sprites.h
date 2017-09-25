@@ -75,17 +75,20 @@ public:
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
     bool addSpriteWall(GridPosition& p, int specialID);
     bool deleteSpriteWall(GridPosition& p);
-    void updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid);
+    void updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
+                           QList<GridPosition> &previewDeleteGrid);
     SpriteWallDatas* getWallAt(GridPosition& gridPosition) const;
     void getWallsWithPreview(QHash<GridPosition, SpriteWallDatas*>&
                              spritesWallWithPreview,
                              QHash<GridPosition, MapElement *>&
-                             previewGrid);
+                             previewGrid,
+                             QList<GridPosition>& previewDeleteGrid);
     void removeSpritesOut(MapProperties& properties);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,
                             QHash<GridPosition, MapElement*>& previewGrid,
+                            QList<GridPosition>& previewDeleteGrid,
                             int squareSize, int width, int height,
                             int& spritesOffset);
     void initializeGL(QOpenGLShaderProgram* programStatic,

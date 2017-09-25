@@ -118,7 +118,7 @@ bool MapPortion::deleteSpriteWall(GridPosition& gridPosition) {
 // -------------------------------------------------------
 
 void MapPortion::updateSpriteWalls() {
-    m_sprites->updateSpriteWalls(m_previewGrid);
+    m_sprites->updateSpriteWalls(m_previewGrid, m_previewDeleteGrid);
 }
 
 // -------------------------------------------------------
@@ -172,6 +172,7 @@ void MapPortion::clearPreview() {
 
     m_previewSquares.clear();
     m_previewGrid.clear();
+    m_previewDeleteGrid.clear();
 }
 
 // -------------------------------------------------------
@@ -184,6 +185,12 @@ void MapPortion::addPreview(Position& p, MapElement* element) {
 
 void MapPortion::addPreviewGrid(GridPosition& p, MapElement* element) {
     m_previewGrid.insert(p, element);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
+    m_previewDeleteGrid.append(p);
 }
 
 // -------------------------------------------------------
@@ -201,8 +208,9 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
     m_floors->initializeVertices(m_previewSquares, squareSize, tileset->width(),
                                  tileset->height());
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
-                                  squareSize, tileset->width(),
-                                  tileset->height(), spritesOffset);
+                                  m_previewDeleteGrid, squareSize,
+                                  tileset->width(), tileset->height(),
+                                  spritesOffset);
     m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 

@@ -67,6 +67,7 @@ public:
     void clearPreview();
     void addPreview(Position& p, MapElement* element);
     void addPreviewGrid(GridPosition& p, MapElement* element);
+    void addPreviewDeleteGrid(GridPosition& p);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,
@@ -91,6 +92,7 @@ private:
     MapObjects* m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;
     QHash<GridPosition, MapElement*> m_previewGrid;
+    QList<GridPosition> m_previewDeleteGrid;
     bool m_isVisible;
     bool m_isLoaded;
 };
