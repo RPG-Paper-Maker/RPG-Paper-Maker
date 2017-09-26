@@ -157,18 +157,18 @@ void WidgetMapEditor::paintGL(){
         }
 
         // Update control
+        MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
         m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
-        m_control.update();
+        m_control.update(subSelection);
         if (m_menuBar != nullptr) {
             QRect tileset = m_panelTextures->getTilesetTexture();
-            MapEditorSubSelectionKind subSelection =
-                    m_menuBar->subSelectionKind();
             int specialID = m_panelTextures->getID(subSelection);
             m_control.updateWallIndicator();
             m_control.updatePreviewElements(m_menuBar->selectionKind(),
                                             subSelection, m_menuBar->drawKind(),
                                             tileset, specialID);
         }
+        m_control.update(subSelection);
 
         // Model view / projection
         QMatrix4x4 viewMatrix = m_control.camera()->view();
@@ -227,12 +227,11 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
 
 void WidgetMapEditor::initializeMap(){
     makeCurrent();
-    Map* map = loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
-                       m_cameraHeight, m_cameraHorizontalAngle);
-    if (m_menuBar != nullptr){
+    loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
+            m_cameraHeight, m_cameraHorizontalAngle);
+    if (m_menuBar != nullptr)
         m_menuBar->show();
-        Wanok::get()->project()->setCurrentMap(map);
-    }
+
     m_needUpdateMap = false;
     this->setFocus();
     updateSpinBoxes();
@@ -378,7 +377,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
             }
             else{
                 m_control.updateMousePosition(event->pos());
-                m_control.update();
+                m_control.update(MapEditorSubSelectionKind::None);
             }
         }
     }

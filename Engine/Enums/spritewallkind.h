@@ -31,7 +31,8 @@
 enum class SpriteWallKind {
     Left,
     Middle,
-    Right
+    Right,
+    LeftRight
 };
 
 #endif // SPRITEWALLKIND_H

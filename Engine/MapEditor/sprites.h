@@ -77,7 +77,9 @@ public:
     bool deleteSpriteWall(GridPosition& p);
     void updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
                            QList<GridPosition> &previewDeleteGrid);
-    SpriteWallDatas* getWallAt(GridPosition& gridPosition) const;
+    SpriteWallDatas* getWallAt(QHash<GridPosition, MapElement*>& previewGrid,
+                               QList<GridPosition> &previewDeleteGrid,
+                               GridPosition& gridPosition);
     void getWallsWithPreview(QHash<GridPosition, SpriteWallDatas*>&
                              spritesWallWithPreview,
                              QHash<GridPosition, MapElement *>&

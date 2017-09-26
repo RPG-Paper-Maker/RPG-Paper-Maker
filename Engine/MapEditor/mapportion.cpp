@@ -123,8 +123,9 @@ void MapPortion::updateSpriteWalls() {
 
 // -------------------------------------------------------
 
-SpriteWallDatas* MapPortion::getWallAt(GridPosition& gridPosition) const {
-    return m_sprites->getWallAt(gridPosition);
+SpriteWallDatas* MapPortion::getWallAt(GridPosition& gridPosition) {
+    return m_sprites->getWallAt(m_previewGrid, m_previewDeleteGrid,
+                                gridPosition);
 }
 
 // -------------------------------------------------------
@@ -200,17 +201,41 @@ void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
 // -------------------------------------------------------
 
 
-void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
+void MapPortion::initializeVertices(MapEditorSubSelectionKind subSelection,
+                                    int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &characters,
                                     QHash<int, QOpenGLTexture *> &walls)
 {
     int spritesOffset = -0.005;
-    m_floors->initializeVertices(m_previewSquares, squareSize, tileset->width(),
-                                 tileset->height());
-    m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
-                                  m_previewDeleteGrid, squareSize,
-                                  tileset->width(), tileset->height(),
-                                  spritesOffset);
+
+    switch (subSelection) {
+    case MapEditorSubSelectionKind::None:
+    case MapEditorSubSelectionKind::Floors:
+        m_floors->initializeVertices(m_previewSquares, squareSize,
+                                     tileset->width(), tileset->height());
+        break;
+    default:
+        break;
+    }
+    switch (subSelection) {
+    case MapEditorSubSelectionKind::None:
+    case MapEditorSubSelectionKind::SpritesDouble:
+    case MapEditorSubSelectionKind::SpritesFace:
+    case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesQuadra:
+    case MapEditorSubSelectionKind::SpritesWall:
+        m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
+                                      m_previewDeleteGrid, squareSize,
+                                      tileset->width(), tileset->height(),
+                                      spritesOffset);
+        break;
+    default:
+        break;
+    }
+
+    if (subSelection == MapEditorSubSelectionKind::SpritesWall)
+        m_sprites->updateSpriteWalls(m_previewGrid, m_previewDeleteGrid);
+
     m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 

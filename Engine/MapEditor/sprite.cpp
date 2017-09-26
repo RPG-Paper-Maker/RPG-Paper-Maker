@@ -460,17 +460,64 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
             botLeftGridPosition, topRightGridPosition, botRightGridPosition;
     SpriteWallDatas *leftSprite, *rightSprite, *topLeftSprite, *botLeftSprite,
             *topRightSprite, *botRightSprite;
+    SpriteWallKind kA, kB;
 
-    // Middle only
+    // Getting all sprites
     gridPosition.getLeft(leftGridPosition);
     gridPosition.getRight(rightGridPosition);
+    gridPosition.getTopLeft(topLeftGridPosition);
+    gridPosition.getTopRight(topRightGridPosition);
+    gridPosition.getBotLeft(botLeftGridPosition);
+    gridPosition.getBotRight(botRightGridPosition);
     leftSprite = getWall(leftGridPosition);
     rightSprite = getWall(rightGridPosition);
-    if (leftSprite == nullptr && rightSprite == nullptr)
-        m_wallKind = SpriteWallKind::Middle;
-    m_wallKind = SpriteWallKind::Middle;
+    topLeftSprite = getWall(topLeftGridPosition);
+    topRightSprite = getWall(topRightGridPosition);
+    botLeftSprite = getWall(botLeftGridPosition);
+    botRightSprite = getWall(botRightGridPosition);
 
-    //else if ()
+    // Borders
+    if (!isWallWithSameID(leftSprite) && !isWallWithSameID(rightSprite))
+        kA = SpriteWallKind::LeftRight;
+    else if (!isWallWithSameID(leftSprite))
+        kA = SpriteWallKind::Left;
+    else if (!isWallWithSameID(rightSprite))
+        kA = SpriteWallKind::Right;
+    else
+        kA = SpriteWallKind::Middle;
+
+    // Diagonals
+    bool diagLeft = isWallWithSameID(topLeftSprite) ||
+            isWallWithSameID(botLeftSprite);
+    bool diagRight = isWallWithSameID(topRightSprite) ||
+            isWallWithSameID(botRightSprite);
+    if (diagLeft && diagRight)
+        kB = SpriteWallKind::LeftRight;
+    else if (diagLeft)
+        kB = SpriteWallKind::Left;
+    else if (diagRight)
+        kB = SpriteWallKind::Right;
+    else
+        kB = SpriteWallKind::Middle;
+
+    m_wallKind = addKind(kA, kB);
+}
+
+// -------------------------------------------------------
+
+bool SpriteWallDatas::isWallWithSameID(SpriteWallDatas* sprite) {
+    return (sprite != nullptr && sprite->wallID() == m_wallID);
+}
+
+// -------------------------------------------------------
+
+SpriteWallKind SpriteWallDatas::addKind(SpriteWallKind kA, SpriteWallKind kB) {
+    if (kA == SpriteWallKind::Middle)
+        return kB;
+    if (kB == SpriteWallKind::Middle)
+        return kA;
+
+    return kA == kB ? kA : SpriteWallKind::LeftRight;
 }
 
 // -------------------------------------------------------
@@ -478,10 +525,10 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
 SpriteWallDatas* SpriteWallDatas::getWall(GridPosition& gridPosition) {
     Map* map = Wanok::get()->project()->currentMap();
     Portion portion = map->getPortionGrid(gridPosition);
-    MapPortion* mapPortion =
-            Wanok::get()->project()->currentMap()->mapPortion(portion);
+    MapPortion* mapPortion = map->mapPortion(portion);
 
-    return mapPortion->getWallAt(gridPosition);
+    return mapPortion != nullptr ? mapPortion->getWallAt(gridPosition)
+                                 : nullptr;
 }
 
 // -------------------------------------------------------

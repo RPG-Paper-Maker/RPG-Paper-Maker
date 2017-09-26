@@ -116,7 +116,7 @@ public:
     void loadPortionThread(MapPortion *portion);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
-    void updatePortion(Portion& p);
+    void updatePortion(Portion& p, MapEditorSubSelectionKind subSelection);
     void loadPortions(Portion portion);
     void deletePortions();
     bool isInGrid(Position3D& position) const;

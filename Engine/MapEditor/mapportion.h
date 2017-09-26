@@ -56,7 +56,7 @@ public:
     bool addSpriteWall(GridPosition& gridPosition, int specialID);
     bool deleteSpriteWall(GridPosition& gridPosition);
     void updateSpriteWalls();
-    SpriteWallDatas* getWallAt(GridPosition& gridPosition) const;
+    SpriteWallDatas* getWallAt(GridPosition& gridPosition);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
 
@@ -69,7 +69,8 @@ public:
     void addPreviewGrid(GridPosition& p, MapElement* element);
     void addPreviewDeleteGrid(GridPosition& p);
 
-    void initializeVertices(int squareSize, QOpenGLTexture* tileset,
+    void initializeVertices(MapEditorSubSelectionKind subSelection,
+                            int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,
                             QHash<int, QOpenGLTexture *> &walls);
     void initializeGL(QOpenGLShaderProgram *programStatic,

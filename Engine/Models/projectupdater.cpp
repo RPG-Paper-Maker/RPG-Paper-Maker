@@ -258,3 +258,14 @@ void ProjectUpdater::updateVersion_0_3_1() {
         Wanok::writeOtherJSON(listPaths.at(i), obj);
     }
 }
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_0_4_0() {
+    QList<QString> listPaths;
+    QList<QJsonObject> listMapPortions;
+    getAllPathsMapsPortions(listPaths, listMapPortions);
+
+    // Create walls directory
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SPRITE_WALLS);
+}

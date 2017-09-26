@@ -259,8 +259,15 @@ void Sprites::updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
 
 // -------------------------------------------------------
 
-SpriteWallDatas* Sprites::getWallAt(GridPosition& gridPosition) const {
-    return m_walls.value(gridPosition);
+SpriteWallDatas* Sprites::getWallAt(QHash<GridPosition, MapElement*>&
+                                    previewGrid,
+                                    QList<GridPosition> &previewDeleteGrid,
+                                    GridPosition& gridPosition)
+{
+    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
+
+    return spritesWallWithPreview.value(gridPosition);
 }
 
 // -------------------------------------------------------

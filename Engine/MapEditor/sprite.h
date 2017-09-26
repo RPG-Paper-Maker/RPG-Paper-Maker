@@ -158,6 +158,8 @@ public:
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     void update(GridPosition& gridPosition);
+    bool isWallWithSameID(SpriteWallDatas* sprite);
+    static SpriteWallKind addKind(SpriteWallKind kA, SpriteWallKind kB);
     static SpriteWallDatas* getWall(GridPosition& gridPosition);
     static SpriteWallDatas* getLeft(GridPosition& gridPosition);
     static SpriteWallDatas* getRight(GridPosition& gridPosition);

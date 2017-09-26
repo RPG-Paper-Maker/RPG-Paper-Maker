@@ -57,6 +57,7 @@ protected:
 public slots:
     void check();
     void updateVersion_0_3_1();
+    void updateVersion_0_4_0();
 
 signals:
     void progress(int, QString);

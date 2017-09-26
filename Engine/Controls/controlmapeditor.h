@@ -62,7 +62,7 @@ public:
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 
-    void update();
+    void update(MapEditorSubSelectionKind subSelection);
     void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
     void updateRaycasting();
@@ -91,7 +91,7 @@ public:
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(Portion& currentPortion, int i, int j, int k);
-    void updatePortions();
+    void updatePortions(MapEditorSubSelectionKind subSelection);
     void saveTempPortions();
     void saveTempPortion(Portion portion);
     void clearPortionsToUpdate();

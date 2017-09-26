@@ -72,9 +72,10 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::moveCursorToMousePosition(QPoint point){
+void ControlMapEditor::moveCursorToMousePosition(QPoint point)
+{
     updateMousePosition(point);
-    update();
+    update(MapEditorSubSelectionKind::None);
 
     if (m_map->isInGrid(m_positionOnPlane))
         cursor()->setPositions(m_positionOnPlane);
@@ -94,6 +95,7 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 {
     // Map & cursor
     m_map = new Map(idMap);
+    Wanok::get()->project()->setCurrentMap(m_map);
     m_map->initializeCursor(position);
     m_map->initializeGL();
     // Update current portion and load all the local portions
@@ -202,11 +204,11 @@ void ControlMapEditor::updateCameraTreeNode(){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update() {
+void ControlMapEditor::update(MapEditorSubSelectionKind subSelection) {
     updateRaycasting();
 
     // Update portions
-    updatePortions();
+    updatePortions(subSelection);
     saveTempPortions();
     clearPortionsToUpdate();
     updateMovingPortions();
@@ -466,11 +468,11 @@ void ControlMapEditor::updatePreviewElementGrid(GridPosition& p,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePortions() {
+void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
     QSet<Portion>::iterator i;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++){
         Portion p = *i;
-        m_map->updatePortion(p);
+        m_map->updatePortion(p, subSelection);
     }
 }
 

@@ -87,6 +87,7 @@ public:
 private:
     QString p_pathCurrentProject;
     Map* p_currentMap;
+    Map* p_currentMapConfig;
     GameDatas* p_gameDatas;
     TreeMapDatas* m_treeMapDatas;
     LangsDatas* m_langsDatas;

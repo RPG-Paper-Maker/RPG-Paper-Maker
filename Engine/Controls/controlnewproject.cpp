@@ -99,6 +99,7 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir(pathDir).mkpath(Wanok::pathCharacters);
     QDir(pathDir).mkpath(Wanok::pathReliefs);
     QDir(pathDir).mkpath(Wanok::pathTilesets);
+    QDir(pathDir).mkpath(Wanok::PATH_SPRITE_WALLS);
 
     // Create the default datas
     Project* previousProject = Wanok::get()->project();

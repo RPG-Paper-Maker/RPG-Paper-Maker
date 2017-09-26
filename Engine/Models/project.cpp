@@ -36,6 +36,7 @@ const QString Project::ENGINE_VERSION = "0.3.1";
 
 Project::Project() :
     p_currentMap(nullptr),
+    p_currentMapConfig(nullptr),
     p_gameDatas(new GameDatas),
     m_treeMapDatas(new TreeMapDatas),
     m_langsDatas(new LangsDatas),
@@ -64,9 +65,16 @@ QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
 
 void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
 
-Map* Project::currentMap() const{ return p_currentMap; }
+Map* Project::currentMap() const {
+    return Wanok::isInConfig ? p_currentMapConfig : p_currentMap;
+}
 
-void Project::setCurrentMap(Map* m) { p_currentMap = m; }
+void Project::setCurrentMap(Map* m) {
+    if (Wanok::isInConfig)
+        p_currentMapConfig = m;
+    else
+        p_currentMap = m;
+}
 
 GameDatas* Project::gameDatas() const { return p_gameDatas; }
 
