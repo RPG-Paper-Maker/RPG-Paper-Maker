@@ -65,6 +65,7 @@ Wanok.PATH_AUTOTILES = Wanok.PATH_TEXTURES2D + "Autotiles";
 Wanok.PATH_CHARACTERS = Wanok.PATH_TEXTURES2D + "Characters";
 Wanok.PATH_RELIEFS = Wanok.PATH_TEXTURES2D + "Reliefs";
 Wanok.PATH_TILESETS = Wanok.PATH_TEXTURES2D + "Tilesets";
+Wanok.PATH_WALLS = Wanok.PATH_TEXTURES2D + "Walls";
 
 // -------------------------------------------------------
 //  FUNCTIONS

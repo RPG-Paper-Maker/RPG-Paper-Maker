@@ -48,6 +48,19 @@ void SpecialElementsDatas::read(QString path){
                     *this);
 }
 
+QStandardItemModel* SpecialElementsDatas::model(PictureKind kind) const {
+    switch (kind) {
+    case PictureKind::Autotiles:
+        return modelAutotiles();
+    case PictureKind::Walls:
+        return modelSpriteWalls();
+    case PictureKind::Reliefs:
+        return modelReliefs();
+    default:
+        return nullptr;
+    }
+}
+
 QStandardItemModel* SpecialElementsDatas::modelAutotiles() const {
     return m_modelAutotiles;
 }

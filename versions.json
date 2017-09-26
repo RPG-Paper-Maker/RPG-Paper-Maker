@@ -96,6 +96,10 @@
                 "target": "Content/basic/Content/Datas/Scripts/System/scene-description-state.js"
             },
             {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/sprite-wall.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/sprite-wall.js"
+            },
+            {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/sprite.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/sprite.js"
             },

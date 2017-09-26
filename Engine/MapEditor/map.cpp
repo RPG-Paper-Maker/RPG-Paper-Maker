@@ -26,6 +26,7 @@
 #include "wanok.h"
 #include "widgettreelocalmaps.h"
 #include "systemmapobject.h"
+#include "systemspecialelement.h"
 
 // -------------------------------------------------------
 //
@@ -471,7 +472,7 @@ void Map::loadTextures(){
     m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 
     // Characters && walls
-    loadSpecialPictures(PictureKind::Characters, m_texturesCharacters);
+    loadCharacters(PictureKind::Characters, m_texturesCharacters);
     loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
 
     // Object square
@@ -504,28 +505,51 @@ void Map::deleteTextures(){
 
 // -------------------------------------------------------
 
-void Map::loadSpecialPictures(PictureKind kind,
-                              QHash<int, QOpenGLTexture*>& textures)
+void Map::loadCharacters(PictureKind kind,
+                         QHash<int, QOpenGLTexture*>& textures)
 {
     SystemPicture* picture;
-    QOpenGLTexture* texture;
     QStandardItemModel* model = Wanok::get()->project()->picturesDatas()
             ->model(kind);
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
         picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
-        QImage image(1, 1, QImage::Format_ARGB32);
-        QString path = picture->getPath(kind);
-
-        if (path.isEmpty())
-            image.fill(QColor(0, 0, 0, 0));
-        else
-            image.load(path);
-
-        texture = new QOpenGLTexture(image);
-        texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-        texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
-        textures[picture->id()] = texture;
+        loadPicture(picture, kind, textures, picture->id());
     }
+}
+
+// -------------------------------------------------------
+
+void Map::loadSpecialPictures(PictureKind kind,
+                              QHash<int, QOpenGLTexture*>& textures)
+{
+    SystemSpecialElement* special;
+    QStandardItemModel* model = Wanok::get()->project()->specialElementsDatas()
+            ->model(kind);
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        special = (SystemSpecialElement*) model->item(i)->data()
+                .value<qintptr>();
+        loadPicture(special->picture(), kind, textures, special->id());
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::loadPicture(SystemPicture* picture, PictureKind kind,
+                      QHash<int, QOpenGLTexture*>& textures, int id)
+{
+    QOpenGLTexture* texture;
+    QImage image(1, 1, QImage::Format_ARGB32);
+    QString path = picture->getPath(kind);
+
+    if (path.isEmpty())
+        image.fill(QColor(0, 0, 0, 0));
+    else
+        image.load(path);
+
+    texture = new QOpenGLTexture(image);
+    texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+    texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+    textures[id] = texture;
 }
 
 // -------------------------------------------------------

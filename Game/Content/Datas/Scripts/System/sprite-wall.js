@@ -17,38 +17,41 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSPRITEWALL_H
-#define SYSTEMSPRITEWALL_H
-
-#include <QMetaType>
-#include "systemspecialelement.h"
-
-// -------------------------------------------------------
-//
-//  CLASS SystemSpriteWall
-//
-//  A particulary sprite wall (special element).
-//
-// -------------------------------------------------------
-
-class SystemSpriteWall : public SystemSpecialElement
-{
-public:
-    SystemSpriteWall();
-    SystemSpriteWall(int i, QString n, int pictureId);
-    virtual ~SystemSpriteWall();
-    virtual SystemPicture* picture() const;
-
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemSpriteWall &super);
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
-
-protected:
-    int m_pictureID;
+/**
+*   Enum for the different sprite walls kind.
+*   @enum {number}
+*   @readonly
+*/
+var SpriteWallKind = {
+    Left: 0,
+    Middle: 1,
+    Right: 2,
+    LeftRight: 3
 };
+Object.freeze(SpriteWallKind);
 
-Q_DECLARE_METATYPE(SystemSpriteWall)
+// -------------------------------------------------------
+//
+//  CLASS SpriteWall
+//
+// -------------------------------------------------------
 
-#endif // SYSTEMSPRITEWALL_H
+/** @class
+*   A sprite in the map.
+*   @property {number} id The picture ID of the sprite.
+*   @property {SpriteWallKind} kind The kind of wall (border or not).
+*/
+function SpriteWall() {
+
+}
+
+SpriteWall.prototype = {
+
+    /** Read the JSON associated to the sprite wall.
+    *   @param {Object} json Json object describing the object.
+    */
+    read: function(json) {
+        this.id = json.w;
+        this.kind = json.k;
+    }
+}

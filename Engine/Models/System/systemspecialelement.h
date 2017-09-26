@@ -17,43 +17,41 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SPECIALELEMENTSDATAS_H
-#define SPECIALELEMENTSDATAS_H
+#ifndef SYSTEMSPECIALELEMENT_H
+#define SYSTEMSPECIALELEMENT_H
 
-#include <QStandardItemModel>
-#include "serializable.h"
-#include "picturekind.h"
+#include "superlistitem.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SpecialElementsDatas
+//  CLASS SystemSpecialElement
 //
-//  Contains all the possible special elements of a game. The data file is
-//  located in Content/Datas/specialElements.json.
+//  A particulary special element.
 //
 // -------------------------------------------------------
 
-class SpecialElementsDatas : public Serializable
+class SystemSpecialElement : public SuperListItem
 {
 public:
-    SpecialElementsDatas();
-    virtual ~SpecialElementsDatas();
-    void read(QString path);
-    QStandardItemModel* model(PictureKind kind) const;
-    QStandardItemModel* modelAutotiles() const;
-    QStandardItemModel* modelSpriteWalls() const;
-    QStandardItemModel* model3DObjects() const;
-    QStandardItemModel* modelReliefs() const;
-    void setDefault();
+    SystemSpecialElement();
+    SystemSpecialElement(int i, QString n, int pictureId);
+    virtual ~SystemSpecialElement();
+    virtual SystemPicture* picture() const;
+    void setPictureID(int id);
+
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemSpecialElement &super);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
-private:
-    QStandardItemModel* m_modelAutotiles;
-    QStandardItemModel* m_modelSpriteWalls;
-    QStandardItemModel* m_model3DObjects;
-    QStandardItemModel* m_modelReliefs;
+protected:
+    SystemPicture* pictureByKind(PictureKind kind) const;
+
+    int m_pictureID;
 };
 
-#endif // SPECIALELEMENTSDATAS_H
+Q_DECLARE_METATYPE(SystemSpecialElement)
+
+#endif // SYSTEMSPECIALELEMENT_H

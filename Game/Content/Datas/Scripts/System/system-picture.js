@@ -29,7 +29,8 @@ var PictureKind = {
     Autotiles: 3,
     Characters: 4,
     Reliefs: 5,
-    Tilesets: 6
+    Tilesets: 6,
+    Walls: 7
 };
 Object.freeze(PictureKind);
 
@@ -80,6 +81,8 @@ SystemPicture.getLocalFolder = function(kind){
         return Wanok.PATH_RELIEFS;
     case PictureKind.Tilesets:
         return Wanok.PATH_TILESETS;
+    case PictureKind.Walls:
+        return Wanok.PATH_WALLS;
     }
 
     return "";

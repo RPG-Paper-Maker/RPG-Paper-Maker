@@ -258,33 +258,51 @@ SceneMap.prototype = {
 
         // Load textures
         var textureLoader = new THREE.TextureLoader();
-        var path;
-        var characters;
-        var i, l;
 
         // Tileset
-        path = this.mapInfos.tileset.getPath();
-        this.textureTileset = this.loadTexture(textureLoader, path);
+        this.textureTileset = this.loadTexture(textureLoader,
+                                               this.mapInfos.tileset.getPath());
 
         // Characters
-        characters = $datasGame.pictures.list[PictureKind.Characters];
-        l = characters.length;
-        this.texturesCharacters = new Array(l);
-        this.texturesCharacters[0] = this.loadTextureEmpty();
-        for (i = 1; i < l; i++){
-            path = $datasGame.pictures.list
-                    [PictureKind.Characters][i].getPath(PictureKind.Characters);
-            this.texturesCharacters[i] = this.loadTexture(textureLoader, path);
-        }
+        this.loadSpecialTextures(PictureKind.Characters, "texturesCharacters",
+                                 textureLoader);
+
+        // Walls
+        this.loadSpecialTextures(PictureKind.Walls, "texturesWalls",
+                                 textureLoader);
 
         this.callBackAfterLoading = this.initializeObjects;
     },
 
     // -------------------------------------------------------
 
+    /** Load a special texture
+    *   @param {PictureKind} pictureKind The picure kind of the special
+    *   textures.
+    *   @param {string} texturesName The field name textures.
+    *   @param {THREE.TextureLoader} textureLoader The texture loader.
+    */
+    loadSpecialTextures: function(pictureKind, texturesName, textureLoader){
+        var pictures =  $datasGame.pictures.list[pictureKind];
+        var l = pictures.length;
+        var textures = new Array(l);
+        var path;
+
+        textures[0] = this.loadTextureEmpty();
+        for (var i = 1; i < l; i++){
+            path = $datasGame.pictures.list[pictureKind][i]
+                .getPath(pictureKind);
+            textures[i] = this.loadTexture(textureLoader, path);
+        }
+
+        this[texturesName] = textures;
+    },
+
+    // -------------------------------------------------------
+
     /** Load a texture.
-    *   @param {THREE.TextureLoader} The texture loader.
-    *   @param {string} The path of the texture.
+    *   @param {THREE.TextureLoader} textureLoader The texture loader.
+    *   @param {string} path The path of the texture.
     *   @retuns {THREE.MeshBasicMaterial}
     */
     loadTexture: function(textureLoader, path){

@@ -222,7 +222,8 @@ HEADERS += \
     Models/System/systemspritewall.h \
     Models/GameDatas/specialelementsdatas.h \
     Dialogs/SpecialElements/dialogtilesetspritewalls.h \
-    Enums/spritewallkind.h
+    Enums/spritewallkind.h \
+    Models/System/systemspecialelement.h
 
 SOURCES += \
     main.cpp \
@@ -394,7 +395,8 @@ SOURCES += \
     Dialogs/SpecialElements/panelspritewalls.cpp \
     Models/System/systemspritewall.cpp \
     Models/GameDatas/specialelementsdatas.cpp \
-    Dialogs/SpecialElements/dialogtilesetspritewalls.cpp
+    Dialogs/SpecialElements/dialogtilesetspritewalls.cpp \
+    Models/System/systemspecialelement.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

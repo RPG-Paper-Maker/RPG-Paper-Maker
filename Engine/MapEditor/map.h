@@ -86,8 +86,12 @@ public:
                              QOpenGLShaderProgram* program);
     void loadTextures();
     void deleteTextures();
+    void loadCharacters(PictureKind kind,
+                        QHash<int, QOpenGLTexture*>& textures);
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
+    void loadPicture(SystemPicture* picture, PictureKind kind,
+                     QHash<int, QOpenGLTexture*>& textures, int id);
     MapPortion* mapPortion(Portion& p) const;
     MapPortion* mapPortion(int x, int y, int z) const;
     MapPortion* mapPortionBrut(int index) const;

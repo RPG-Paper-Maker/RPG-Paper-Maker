@@ -17,7 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemspritewall.h"
+#include "systemspecialelement.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -25,25 +26,30 @@
 //
 // -------------------------------------------------------
 
-SystemSpriteWall::SystemSpriteWall() :
-    SystemSpecialElement()
+SystemSpecialElement::SystemSpecialElement() :
+    SystemSpecialElement(1, "", 1)
 {
 
 }
 
-SystemSpriteWall::SystemSpriteWall(int i, QString n, int pictureId) :
-    SystemSpecialElement(i, n, pictureId)
+SystemSpecialElement::SystemSpecialElement(int i, QString n, int pictureId) :
+    SuperListItem(i, n),
+    m_pictureID(pictureId)
 {
 
 }
 
-SystemSpriteWall::~SystemSpriteWall()
+SystemSpecialElement::~SystemSpecialElement()
 {
 
 }
 
-SystemPicture* SystemSpriteWall::picture() const {
-    return pictureByKind(PictureKind::Walls);
+SystemPicture* SystemSpecialElement::picture() const {
+    return nullptr;
+}
+
+void SystemSpecialElement::setPictureID(int id) {
+    m_pictureID = id;
 }
 
 // -------------------------------------------------------
@@ -52,16 +58,26 @@ SystemPicture* SystemSpriteWall::picture() const {
 //
 // -------------------------------------------------------
 
-SuperListItem* SystemSpriteWall::createCopy() const{
-    SystemSpriteWall* super = new SystemSpriteWall;
+SuperListItem* SystemSpecialElement::createCopy() const{
+    SystemSpecialElement* super = new SystemSpecialElement;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemSpriteWall::setCopy(const SystemSpriteWall& super){
-    SystemSpecialElement::setCopy(super);
+void SystemSpecialElement::setCopy(const SystemSpecialElement& super){
+    SuperListItem::setCopy(super);
+
+    m_pictureID = super.m_pictureID;
+}
+
+// -------------------------------------------------------
+
+SystemPicture* SystemSpecialElement::pictureByKind(PictureKind kind) const {
+    return (SystemPicture*) SuperListItem::getById(
+                Wanok::get()->project()->picturesDatas()->model(kind)
+                ->invisibleRootItem(), m_pictureID);
 }
 
 // -------------------------------------------------------
@@ -70,12 +86,16 @@ void SystemSpriteWall::setCopy(const SystemSpriteWall& super){
 //
 // -------------------------------------------------------
 
-void SystemSpriteWall::read(const QJsonObject &json){
-    SystemSpecialElement::read(json);
+void SystemSpecialElement::read(const QJsonObject &json){
+    SuperListItem::read(json);
+
+    m_pictureID = json["pic"].toInt();
 }
 
 // -------------------------------------------------------
 
-void SystemSpriteWall::write(QJsonObject &json) const{
-    SystemSpecialElement::write(json);
+void SystemSpecialElement::write(QJsonObject &json) const{
+    SuperListItem::write(json);
+
+    json["pic"] = m_pictureID;
 }

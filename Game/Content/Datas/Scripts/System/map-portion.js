@@ -95,7 +95,7 @@ MapPortion.prototype = {
     */
     read: function(json, isMapHero){
         this.readFloors(json.floors);
-        this.readSprites(json.sprites.list);
+        this.readSprites(json.sprites);
         this.readObjects(json.objs.list, isMapHero);
     },
 
@@ -171,6 +171,16 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSprites: function(json){
+        this.readSpritesGlobals(json.list);
+        this.readSpritesWalls(json.walls);
+    },
+
+    // -------------------------------------------------------
+
+    /** Read the JSON associated to the sprites in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readSpritesGlobals: function(json){
         var material = $currentMap.textureTileset;
 
         for (var i = 0, l = json.length; i < l; i++){
@@ -186,6 +196,43 @@ MapPortion.prototype = {
                 this.staticSpritesList.push(plane);
 
             $gameStack.top().scene.add(plane);
+        }
+    },
+
+    // -------------------------------------------------------
+
+    /** Read the JSON associated to the sprites in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readSpritesWalls: function(json) {
+        var i, l, wallsIds;
+        var hash, geometry, obj;
+        wallsIds = $currentMap.texturesWalls.length;
+        hash = new Array(wallsIds);
+        for (i = 0; i < wallsIds; i++)
+            hash[i] = null;
+
+        for (i = 0, l = json.length; i < l; i++) {
+
+            // Getting sprite
+            var s = json[i];
+            var gridPosition = s.k;
+            var ss = s.v;
+            var sprite = new SpriteWall();
+            sprite.read(ss);
+
+            // Constructing the geometry
+
+            obj = hash[sprite.id];
+            if (obj === null) {
+                obj = {};
+                geometry = new THREE.Geometry();
+                geometry.faceVertexUvs[0] = [];
+                obj.geometry = geometry;
+                hash[sprite.id] = obj;
+            }
+            else
+                geometry = obj.geometry;
         }
     },
 
