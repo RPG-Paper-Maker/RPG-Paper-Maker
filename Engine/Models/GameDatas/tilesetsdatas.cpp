@@ -54,6 +54,7 @@ void TilesetsDatas::setDefault(){
 
     item = new QStandardItem;
     tileset = new SystemTileset(1, "Plains", 1);
+    tileset->addSpriteWall(new SystemSpriteWall(1, "Inside1.png", 1));
     item->setData(QVariant::fromValue(
                       reinterpret_cast<quintptr>(tileset)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

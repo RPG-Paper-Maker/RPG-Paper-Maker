@@ -17,7 +17,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemtileset.h"
+#include "systemspecialelement.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -97,6 +97,25 @@ void SystemTileset::initializeModels() {
     m_modelSpriteWalls = new QStandardItemModel;
     m_model3DObjects = new QStandardItemModel;
     m_modelReliefs = new QStandardItemModel;
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::addSpecial(SystemSpecialElement* special,
+                               QStandardItemModel* model)
+{
+    QStandardItem* item;
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(special)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(special->toString());
+    model->appendRow(item);
+}
+
+// -------------------------------------------------------
+
+void SystemTileset::addSpriteWall(SystemSpriteWall* wall) {
+    addSpecial(wall, modelSpriteWalls());
 }
 
 // -------------------------------------------------------

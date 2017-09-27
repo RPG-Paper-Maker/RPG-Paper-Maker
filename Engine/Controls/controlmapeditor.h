@@ -160,7 +160,7 @@ public:
                  QVector3D& cameraRightWorldSpace,
                  QVector3D& cameraUpWorldSpace,
                  MapEditorSelectionKind selectionKind,
-                 MapEditorSubSelectionKind subSelectionKind);
+                 MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind);
 
     void onMouseWheelMove(QWheelEvent *event, bool updateTree = true);
     void onMouseMove(QPoint point, Qt::MouseButton button,

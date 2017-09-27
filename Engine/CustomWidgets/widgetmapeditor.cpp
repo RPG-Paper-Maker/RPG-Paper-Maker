@@ -143,6 +143,22 @@ void WidgetMapEditor::paintGL(){
 
     if (m_control.map() != nullptr){
 
+        // Config
+        MapEditorSelectionKind kind;
+        MapEditorSubSelectionKind subKind;
+        DrawKind drawKind;
+
+        if (m_menuBar == nullptr) {
+            kind = MapEditorSelectionKind::Land;
+            subKind = MapEditorSubSelectionKind::None;
+            drawKind = DrawKind::Pencil;
+        }
+        else {
+            kind = m_menuBar->selectionKind();
+            subKind = m_menuBar->subSelectionKind();
+            drawKind = m_menuBar->drawKind();
+        }
+
         // Key press
         if (!m_firstPressure) {
             double speed = (QTime::currentTime().msecsSinceStartOfDay() -
@@ -157,18 +173,15 @@ void WidgetMapEditor::paintGL(){
         }
 
         // Update control
-        MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
         m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
-        m_control.update(subSelection);
+        m_control.update(subKind);
         if (m_menuBar != nullptr) {
             QRect tileset = m_panelTextures->getTilesetTexture();
-            int specialID = m_panelTextures->getID(subSelection);
+            int specialID = m_panelTextures->getID(subKind);
             m_control.updateWallIndicator();
-            m_control.updatePreviewElements(m_menuBar->selectionKind(),
-                                            subSelection, m_menuBar->drawKind(),
-                                            tileset, specialID);
+            m_control.updatePreviewElements(kind, subKind, drawKind, tileset,
+                                            specialID);
         }
-        m_control.update(subSelection);
 
         // Model view / projection
         QMatrix4x4 viewMatrix = m_control.camera()->view();
@@ -183,16 +196,9 @@ void WidgetMapEditor::paintGL(){
                                      viewMatrix.row(1).y(),
                                      viewMatrix.row(1).z());
 
-        // Config
-        MapEditorSelectionKind kind = (m_menuBar == nullptr)
-                ? MapEditorSelectionKind::Land : m_menuBar->selectionKind();
-        MapEditorSubSelectionKind subKind = (m_menuBar == nullptr)
-                ? MapEditorSubSelectionKind::None
-                : m_menuBar->subSelectionKind();
-
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
-                          cameraUpWorldSpace, kind, subKind);
+                          cameraUpWorldSpace, kind, subKind, drawKind);
 
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }

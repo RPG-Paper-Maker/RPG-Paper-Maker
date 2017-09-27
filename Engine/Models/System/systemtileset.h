@@ -22,7 +22,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
-#include "systempicture.h"
+#include "systemspritewall.h"
 
 // -------------------------------------------------------
 //
@@ -48,6 +48,8 @@ public:
     void setPicture(SystemPicture* picture);
     void setPictureFromId(int id);
     void initializeModels();
+    void addSpecial(SystemSpecialElement* special, QStandardItemModel* model);
+    void addSpriteWall(SystemSpriteWall* wall);
     void updatePicture();
     void updateModelAutotiles();
     void updateModelSpriteWalls();

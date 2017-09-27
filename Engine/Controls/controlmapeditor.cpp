@@ -1551,7 +1551,8 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                QVector3D &cameraRightWorldSpace,
                                QVector3D &cameraUpWorldSpace,
                                MapEditorSelectionKind selectionKind,
-                               MapEditorSubSelectionKind subSelectionKind)
+                               MapEditorSubSelectionKind subSelectionKind,
+                               DrawKind drawKind)
 {
     m_map->paintFloors(modelviewProjection);
 
@@ -1569,7 +1570,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
                        cameraUpWorldSpace);
 
-    if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall) {
+    if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall &&
+        drawKind != DrawKind::Pin)
+    {
         m_beginWallIndicator->paintGL(modelviewProjection);
         m_endWallIndicator->paintGL(modelviewProjection);
     }
@@ -1658,9 +1661,11 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 // -------------------------------------------------------
 
 void ControlMapEditor::onKeyPressed(int k, double speed){
-    cursor()->onKeyPressed(k, m_camera->horizontalAngle(),
-                           m_map->mapProperties()->length(),
-                           m_map->mapProperties()->width(), speed);
+    if (!m_isDrawingWall && !m_isDeletingWall) {
+        cursor()->onKeyPressed(k, m_camera->horizontalAngle(),
+                               m_map->mapProperties()->length(),
+                               m_map->mapProperties()->width(), speed);
+    }
 }
 
 // -------------------------------------------------------
