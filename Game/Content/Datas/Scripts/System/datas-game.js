@@ -21,23 +21,6 @@
 //
 //  CLASS GameDatas
 //
-//  All the global informations of the game.
-//
-//  @settings             -> Settings of the game
-//  @commonEventsDatas    -> Common events datas
-//  @itemsDatas           -> Items datas
-//  @skillsDatas          -> Skills datas
-//  @weaponsDatas         -> Weapons datas
-//  @armorsDatas          -> Armors datas
-//  @classesDatas         -> Classes datas
-//  @heroesDatas          -> Heroes datas
-//  @monstersDatas        -> Monsters datas
-//  @troopsDatas          -> Troops datas
-//  @systemDatas          -> System datas
-//  @battleSystemDatas    -> Battle System datas
-//  @keyBoardDatas        -> KeyBoard datas
-//  @settings             -> All the general settings.
-//
 // -------------------------------------------------------
 
 /** @class
@@ -50,6 +33,7 @@
 *   @property {DatasWeapons} weapons Weapons datas.
 *   @property {DatasArmors} armors Armors datas.
 *   @property {DatasClasses} classes Classes datas.
+*   @property {DatasSpecialElements} specialElements Special elements datas.
 *   @property {DatasTilesets} tileset Tilesets datas.
 *   @property {DatasHeroes} heroes Heroes datas.
 *   @property {DatasMonsters} monsters Monsters datas.
@@ -66,6 +50,7 @@ function DatasGame(){
     this.weapons = new DatasWeapons();
     this.armors = new DatasArmors();
     this.classes = new DatasClasses();
+    this.specialElements = new DatasSpecialElements();
     this.tilesets = new DatasTilesets();
     this.heroes = new DatasHeroes();
     this.monsters = new DatasMonsters();

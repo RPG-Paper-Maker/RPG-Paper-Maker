@@ -205,8 +205,8 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readSpritesWalls: function(json) {
-        var i, l, wallsIds;
-        var hash, geometry, obj;
+        var i, l, wallsIds, c;
+        var hash, geometry, material, obj, mesh;
         wallsIds = $currentMap.texturesWalls.length;
         hash = new Array(wallsIds);
         for (i = 0; i < wallsIds; i++)
@@ -228,11 +228,33 @@ MapPortion.prototype = {
                 obj = {};
                 geometry = new THREE.Geometry();
                 geometry.faceVertexUvs[0] = [];
+                material = $currentMap.texturesWalls[sprite.id];
+                c = 0;
                 obj.geometry = geometry;
+                obj.material = material;
+                obj.c = c;
                 hash[sprite.id] = obj;
             }
-            else
+            else {
                 geometry = obj.geometry;
+                material = obj.material;
+                c = obj.c;
+            }
+
+            obj.c = sprite.updateGeometry(geometry, gridPosition,
+                                          material.map.image.width,
+                                          material.map.image.height, c);
+        }
+
+        for (i = 0; i < wallsIds; i++) {
+            obj = hash[i];
+            if (obj !== null) {
+                geometry = obj.geometry;
+                geometry.uvsNeedUpdate = true;
+                mesh = new THREE.Mesh(geometry, obj.material);
+                this.staticSpritesList.push(mesh);
+                $gameStack.top().scene.add(mesh);
+            }
         }
     },
 

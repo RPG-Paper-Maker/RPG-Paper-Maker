@@ -35,13 +35,14 @@ class SpritesWalls : protected QOpenGLFunctions
 public:
     SpritesWalls();
     virtual ~SpritesWalls();
-    void initializeVertices(QHash<GridPosition, SpriteWallDatas*> walls,
+    void initializeVertices(GridPosition& position, SpriteWallDatas* sprite,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* program);
     void updateGL();
     void paintGL();
 
 protected:
+    int m_count;
 
     // OpenGL
     QOpenGLBuffer m_vertexBuffer;

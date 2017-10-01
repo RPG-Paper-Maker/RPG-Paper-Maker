@@ -35,6 +35,7 @@
 // -------------------------------------------------------
 
 SpritesWalls::SpritesWalls() :
+    m_count(0),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_program(nullptr)
@@ -53,25 +54,12 @@ SpritesWalls::~SpritesWalls()
 //
 // -------------------------------------------------------
 
-void SpritesWalls::initializeVertices(QHash<GridPosition, SpriteWallDatas*>
-                                      walls, int squareSize, int width,
-                                      int height)
+void SpritesWalls::initializeVertices(GridPosition& position,
+                                      SpriteWallDatas* sprite,
+                                      int squareSize, int width, int height)
 {
-    int count = 0;
-
-    // Clear
-    m_vertices.clear();
-    m_indexes.clear();
-
-    // Initialize vertices for walls
-    QHash<GridPosition, SpriteWallDatas*>::iterator i;
-    for (i = walls.begin(); i != walls.end(); i++)
-    {
-        GridPosition position = i.key();
-        SpriteWallDatas* sprite = i.value();
-        sprite->initializeVertices(squareSize, width, height, m_vertices,
-                                   m_indexes, position, count);
-    }
+    sprite->initializeVertices(squareSize, width, height, m_vertices,
+                                   m_indexes, position, m_count);
 }
 
 // -------------------------------------------------------
@@ -385,6 +373,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
     for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
          spritesWallWithPreview.begin(); i != spritesWallWithPreview.end(); i++)
     {
+        GridPosition gridPosition = i.key();
         SpriteWallDatas* sprite = i.value();
         int id = sprite->wallID();
         SpritesWalls* sprites = m_wallsGL.value(id);
@@ -392,17 +381,11 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
             sprites = new SpritesWalls;
             m_wallsGL[id] = sprites;
         }
-    }
-    for (QHash<int, SpritesWalls*>::iterator i =
-        m_wallsGL.begin(); i != m_wallsGL.end(); i++)
-    {
-        int id = i.key();
-        SpritesWalls* sprites = i.value();
         QOpenGLTexture* texture = texturesWalls.value(id);
         if (texture == nullptr)
             texture = texturesWalls.value(-1);
 
-        sprites->initializeVertices(spritesWallWithPreview, squareSize,
+        sprites->initializeVertices(gridPosition, sprite, squareSize,
                                     texture->width(), texture->height());
     }
 }

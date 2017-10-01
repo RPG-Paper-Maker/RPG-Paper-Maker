@@ -356,11 +356,13 @@ void MainWindow::on_actionQuit_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionDatas_manager_triggered(){
+    Wanok::isInConfig = true;
     DialogDatas dialog(project->gameDatas());
     if (openDialog(dialog) == QDialog::Accepted)
         project->writeGameDatas();
     else
         project->readGameDatas();
+    Wanok::isInConfig = false;
 
     updateTextures();
 }
@@ -374,9 +376,9 @@ void MainWindow::on_actionSystems_manager_triggered(){
         project->writeGameDatas();
     else
         project->readGameDatas();
+    Wanok::isInConfig = false;
 
     updateTextures();
-    Wanok::isInConfig = false;
 }
 
 // -------------------------------------------------------

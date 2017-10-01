@@ -41,7 +41,6 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
-
     // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()),
@@ -141,7 +140,7 @@ void WidgetMapEditor::paintGL(){
     // Clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_control.map() != nullptr){
+    if (m_control.map() != nullptr) {
 
         // Config
         MapEditorSelectionKind kind;
@@ -159,28 +158,31 @@ void WidgetMapEditor::paintGL(){
             drawKind = m_menuBar->drawKind();
         }
 
-        // Key press
-        if (!m_firstPressure) {
-            double speed = (QTime::currentTime().msecsSinceStartOfDay() -
-                            m_elapsedTime) * 0.04666 *
-                    Wanok::get()->getSquareSize();
+        if (!Wanok::isInConfig || m_menuBar == nullptr) {
 
-            // Multi keys
-            QSet<int>::iterator i;
-            for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++)
-                onKeyPress(*i, speed);
-            m_control.cursor()->updatePositionSquare();
-        }
+            // Key press
+            if (!m_firstPressure) {
+                double speed = (QTime::currentTime().msecsSinceStartOfDay() -
+                                m_elapsedTime) * 0.04666 *
+                        Wanok::get()->getSquareSize();
 
-        // Update control
-        m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
-        m_control.update(subKind);
-        if (m_menuBar != nullptr) {
-            QRect tileset = m_panelTextures->getTilesetTexture();
-            int specialID = m_panelTextures->getID(subKind);
-            m_control.updateWallIndicator();
-            m_control.updatePreviewElements(kind, subKind, drawKind, tileset,
-                                            specialID);
+                // Multi keys
+                QSet<int>::iterator i;
+                for (i = m_keysPressed.begin(); i != m_keysPressed.end(); i++)
+                    onKeyPress(*i, speed);
+                m_control.cursor()->updatePositionSquare();
+            }
+
+            // Update control
+            m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
+            m_control.update(subKind);
+            if (m_menuBar != nullptr) {
+                QRect tileset = m_panelTextures->getTilesetTexture();
+                int specialID = m_panelTextures->getID(subKind);
+                m_control.updateWallIndicator();
+                m_control.updatePreviewElements(kind, subKind, drawKind,
+                                                tileset, specialID);
+            }
         }
 
         // Model view / projection

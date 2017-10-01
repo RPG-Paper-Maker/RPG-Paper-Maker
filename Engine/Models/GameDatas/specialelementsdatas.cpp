@@ -113,7 +113,7 @@ void SpecialElementsDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelReliefs, false);
 
     // Sprite wall
-    QJsonArray jsonList = json["spriteWall"].toArray();
+    QJsonArray jsonList = json["walls"].toArray();
     QStandardItem* item;
     SystemSpriteWall* sysWall;
     for (int i = 0; i < jsonList.size(); i++) {
@@ -144,5 +144,5 @@ void SpecialElementsDatas::write(QJsonObject &json) const{
         sysWall->write(json);
         jsonArray.append(json);
     }
-    json["spriteWall"] = jsonArray;
+    json["walls"] = jsonArray;
 }

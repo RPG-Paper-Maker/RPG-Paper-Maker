@@ -100,7 +100,6 @@ public:
     int getMapPortionTotalSize() const;
     void setMapPortion(int x, int y, int z, MapPortion *mapPortion);
     void setMapPortion(Portion& p, MapPortion *mapPortion);
-    MapPortion* createMapPortion(Portion& p);
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
     bool addObject(Position& p, MapPortion *mapPortion,
@@ -112,7 +111,7 @@ public:
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k);
-    void savePortionMap(MapPortion* mapPortion, Portion &portion);
+    void savePortionMap(MapPortion* mapPortion);
     QString getMapInfosPath() const;
     QString getMapObjectsPath() const;
     void loadPortion(int realX, int realY, int realZ, int x, int y, int z,
@@ -120,7 +119,9 @@ public:
     void loadPortionThread(MapPortion *portion);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
-    void updatePortion(Portion& p, MapEditorSubSelectionKind subSelection);
+    void updatePortion(MapPortion *mapPortion,
+                       MapEditorSubSelectionKind subSelection);
+    void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
     void loadPortions(Portion portion);
     void deletePortions();
     bool isInGrid(Position3D& position) const;
@@ -130,6 +131,7 @@ public:
     Portion getPortionGrid(GridPosition& gridPosition) const;
     bool isVisibleGridPosition(GridPosition& position) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
+    Portion getLocalFromGlobalPortion(Portion& portion) const;
     void save();
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;

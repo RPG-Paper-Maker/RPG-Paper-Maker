@@ -19,42 +19,24 @@
 
 // -------------------------------------------------------
 //
-//  CLASS SystemTileset
+//  CLASS SystemWall
 //
 // -------------------------------------------------------
 
 /** @class
 *   A tileset of the game.
-*   @property {SystemPicture} picture The picture used for this tileset.
-*   @property {number[]} walls All the IDs of used walls for this tileset.
+*   @property {number} picutreID The picture ID of the wall.
 */
-function SystemTileset(){
+function SystemWall(){
 
 }
 
-SystemTileset.prototype = {
+SystemWall.prototype = {
 
-    /** Read the JSON associated to the tileset.
+    /** Read the JSON associated to the wall.
     *   @param {Object} json Json object describing the object.
     */
     readJSON: function(json){
-        var i, l;
-        var jsonWalls = json.walls;
-
-        this.picture = $datasGame.pictures.list[PictureKind.Tilesets][json.pic];
-
-        l = jsonWalls.length;
-        this.walls = new Array(l);
-        for (i = 0; i < l; i++)
-            this.walls[i] = jsonWalls[i].id;
-    },
-
-    // -------------------------------------------------------
-
-    /** Get the path to the picture tileset.
-    *   @returns {string}
-    */
-    getPath: function(){
-        return this.picture.getPath(PictureKind.Tilesets);
+        this.pictureID = json.pic;
     }
 }

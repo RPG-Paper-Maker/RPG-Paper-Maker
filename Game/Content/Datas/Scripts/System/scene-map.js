@@ -264,11 +264,11 @@ SceneMap.prototype = {
                                                this.mapInfos.tileset.getPath());
 
         // Characters
-        this.loadSpecialTextures(PictureKind.Characters, "texturesCharacters",
+        this.loadPictures(PictureKind.Characters, "texturesCharacters",
                                  textureLoader);
 
         // Walls
-        this.loadSpecialTextures(PictureKind.Walls, "texturesWalls",
+        this.loadSpecialTextures(PictureKind.Walls, "texturesWalls", "walls",
                                  textureLoader);
 
         this.callBackAfterLoading = this.initializeObjects;
@@ -276,14 +276,13 @@ SceneMap.prototype = {
 
     // -------------------------------------------------------
 
-    /** Load a special texture
-    *   @param {PictureKind} pictureKind The picure kind of the special
-    *   textures.
+    /** Load pictures.
+    *   @param {PictureKind} pictureKind The picure kind.
     *   @param {string} texturesName The field name textures.
     *   @param {THREE.TextureLoader} textureLoader The texture loader.
     */
-    loadSpecialTextures: function(pictureKind, texturesName, textureLoader){
-        var pictures =  $datasGame.pictures.list[pictureKind];
+    loadPictures: function(pictureKind, texturesName, textureLoader){
+        var pictures = $datasGame.pictures.list[pictureKind];
         var l = pictures.length;
         var textures = new Array(l);
         var path;
@@ -293,6 +292,35 @@ SceneMap.prototype = {
             path = $datasGame.pictures.list[pictureKind][i]
                 .getPath(pictureKind);
             textures[i] = this.loadTexture(textureLoader, path);
+        }
+
+        this[texturesName] = textures;
+    },
+
+    // -------------------------------------------------------
+
+    /** Load a special texture
+    *   @param {PictureKind} pictureKind The picure kind of the special
+    *   textures.
+    *   @param {string} texturesName The field name textures.
+    *   @param {string} specialField The field name for special.
+    *   @param {THREE.TextureLoader} textureLoader The texture loader.
+    */
+    loadSpecialTextures: function(pictureKind, texturesName, specialField,
+                                  textureLoader)
+    {
+        var specials = $datasGame.specialElements[specialField];
+        var specialsIDs = this.mapInfos.tileset[specialField];
+        var id, i, l = specials.length;
+        var textures = new Array(l);
+        var path, special;
+
+        for (i = 0, l = specialsIDs.length; i < l; i++){
+            id = specialsIDs[i];
+            special = specials[id];
+            path = $datasGame.pictures.list[pictureKind][special.pictureID]
+                .getPath(pictureKind);
+            textures[id] = this.loadTexture(textureLoader, path);
         }
 
         this[texturesName] = textures;

@@ -19,36 +19,43 @@
 
 // -------------------------------------------------------
 //
-//  CLASS WeaponsDatas
+//  CLASS DatasSpecialElements
 //
 // -------------------------------------------------------
 
 /** @class
-*   All the weapons datas.
-*   @property {SystemWeapon[]} list List of all the weapons of the game
+*   All the special elements datas.
+*   @property {SystemWall[]} walls List of all the walls of the game
 *   according to ID.
 */
-function DatasWeapons(){
+function DatasSpecialElements(){
     this.read();
 }
 
-DatasWeapons.prototype = {
+DatasSpecialElements.prototype = {
 
-    /** Read the JSON file associated to weapons.
+    /** Read the JSON file associated to pictures.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_WEAPONS, true, function(res){
-            var json = JSON.parse(res).weapons;
-            var i, l = json.length;
-            this.list = new Array(l+1);
+        Wanok.openFile(this, Wanok.FILE_SPECIAL_ELEMENTS, true, function(res){
+            var json, jsonWalls, jsonWall;
+            var wall;
+            var i, l, id;
+
+            json = JSON.parse(res);
+
+            // Walls
+            jsonWalls = json.walls;
+            l = jsonWalls.length;
+            this.walls = new Array(l+1);
 
             // Sorting all the weapons according to the ID
-            for (var i = 0; i < l; i++){
-                var jsonWeapon = json[i];
-                var id = jsonWeapon["id"];
-                var weapon = new SystemWeapon();
-                weapon.readJSON(jsonWeapon);
-                this.list[id] = weapon;
+            for (i = 0; i < l; i++){
+                jsonWall = jsonWalls[i];
+                id = jsonWall.id;
+                wall = new SystemWall();
+                wall.readJSON(jsonWall);
+                this.walls[id] = wall;
             }
         });
     }

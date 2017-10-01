@@ -477,20 +477,20 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
     botRightSprite = getWall(botRightGridPosition);
 
     // Borders
-    if (!isWallWithSameID(leftSprite) && !isWallWithSameID(rightSprite))
+    if (!isWallHere(leftSprite) && !isWallHere(rightSprite))
         kA = SpriteWallKind::LeftRight;
-    else if (!isWallWithSameID(leftSprite))
+    else if (!isWallHere(leftSprite))
         kA = SpriteWallKind::Left;
-    else if (!isWallWithSameID(rightSprite))
+    else if (!isWallHere(rightSprite))
         kA = SpriteWallKind::Right;
     else
         kA = SpriteWallKind::Middle;
 
     // Diagonals
-    bool diagLeft = isWallWithSameID(topLeftSprite) ||
-            isWallWithSameID(botLeftSprite);
-    bool diagRight = isWallWithSameID(topRightSprite) ||
-            isWallWithSameID(botRightSprite);
+    bool diagLeft = isWallHere(topLeftSprite) ||
+            isWallHere(botLeftSprite);
+    bool diagRight = isWallHere(topRightSprite) ||
+            isWallHere(botRightSprite);
     if (diagLeft && diagRight)
         kB = SpriteWallKind::LeftRight;
     else if (diagLeft)
@@ -499,14 +499,15 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
         kB = SpriteWallKind::Right;
     else
         kB = SpriteWallKind::Middle;
+    SpriteWallKind k = addKind(kA, kB);
 
     m_wallKind = addKind(kA, kB);
 }
 
 // -------------------------------------------------------
 
-bool SpriteWallDatas::isWallWithSameID(SpriteWallDatas* sprite) {
-    return (sprite != nullptr && sprite->wallID() == m_wallID);
+bool SpriteWallDatas::isWallHere(SpriteWallDatas* sprite) {
+    return (sprite != nullptr);
 }
 
 // -------------------------------------------------------

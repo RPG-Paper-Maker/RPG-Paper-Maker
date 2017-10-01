@@ -25,7 +25,8 @@
 //
 // -------------------------------------------------------
 
-MapPortion::MapPortion() :
+MapPortion::MapPortion(Portion &globalPortion) :
+    m_globalPortion(globalPortion),
     m_floors(new Floors),
     m_sprites(new Sprites),
     m_mapObjects(new MapObjects)
@@ -40,6 +41,10 @@ MapPortion::~MapPortion()
     delete m_mapObjects;
 
     clearPreview();
+}
+
+void MapPortion::getGlobalPortion(Portion& portion) {
+    portion = m_globalPortion;
 }
 
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
@@ -208,6 +213,7 @@ void MapPortion::initializeVertices(MapEditorSubSelectionKind subSelection,
 {
     int spritesOffset = -0.005;
 
+    // Floors
     switch (subSelection) {
     case MapEditorSubSelectionKind::None:
     case MapEditorSubSelectionKind::Floors:
@@ -217,6 +223,8 @@ void MapPortion::initializeVertices(MapEditorSubSelectionKind subSelection,
     default:
         break;
     }
+
+    // Sprites
     switch (subSelection) {
     case MapEditorSubSelectionKind::None:
     case MapEditorSubSelectionKind::SpritesDouble:
@@ -233,16 +241,15 @@ void MapPortion::initializeVertices(MapEditorSubSelectionKind subSelection,
         break;
     }
 
-    if (subSelection == MapEditorSubSelectionKind::SpritesWall)
-        m_sprites->updateSpriteWalls(m_previewGrid, m_previewDeleteGrid);
-
+    // Objects
     m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
 }
 
 // -------------------------------------------------------
 
 void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
-                              QOpenGLShaderProgram *programFace){
+                              QOpenGLShaderProgram *programFace)
+{
     m_floors->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
     m_mapObjects->initializeGL(programStatic, programFace);

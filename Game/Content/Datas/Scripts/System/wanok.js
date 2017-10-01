@@ -53,6 +53,7 @@ Wanok.FILE_KEYBOARD = Wanok.PATH_DATAS + "keyBoard.json";
 Wanok.FILE_SYSTEM = Wanok.PATH_DATAS + "system.json";
 Wanok.FILE_CLASSES = Wanok.PATH_DATAS + "classes.json";
 Wanok.FILE_TILESETS_DATAS = Wanok.PATH_DATAS + "tilesets.json";
+Wanok.FILE_SPECIAL_ELEMENTS = Wanok.PATH_DATAS + "specialElements.json";
 Wanok.FILE_VARIABLES = Wanok.PATH_DATAS + "variables.json";
 Wanok.FILE_SETTINGS = Wanok.PATH_DATAS + "settings.json";
 Wanok.FILE_SAVE = Wanok.PATH_DATAS + "saves.json";

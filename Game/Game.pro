@@ -102,7 +102,9 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-picture.js \
     Content/Datas/Scripts/System/system-tileset.js \
     Content/Datas/Scripts/System/datas-pictures.js \
-    Content/Datas/Scripts/System/sprite-wall.js
+    Content/Datas/Scripts/System/sprite-wall.js \
+    Content/Datas/Scripts/System/system-wall.js \
+    Content/Datas/Scripts/System/datas-special-elements.js
 
 RESOURCES += \
     qml.qrc

@@ -75,7 +75,7 @@ Map::Map(int id) :
     m_mapProperties = new MapProperties(m_pathMap);
     readObjects();
     m_saved = !Wanok::mapsToSave.contains(id);
-    m_portionsRay = Wanok::get()->getPortionsRay() + 1;
+    m_portionsRay = 4 + 1;
     m_squareSize = Wanok::get()->getSquareSize();
 
     // Loading textures
@@ -211,7 +211,8 @@ void Map::writeDefaultMap(QString path){
     QString pathMap = writeMap(path, properties, jsonObject);
 
     // Portion
-    MapPortion mapPortion;
+    Portion globalPortion(0, 0, 0);
+    MapPortion mapPortion(globalPortion);
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", 2,
                                                    new QStandardItemModel,
                                                    new QStandardItemModel);
@@ -403,16 +404,17 @@ void Map::deleteObjectsByID(QStandardItemModel* model,
 void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
                             int i, int j, int k, MapProperties &properties)
 {
+    Portion portion(i, j, k);
     QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
-    MapPortion portion;
-    Wanok::readJSON(pathPortion, portion);
+    MapPortion mapPortion(portion);
+    Wanok::readJSON(pathPortion, mapPortion);
 
     // Removing cut content
-    portion.removeLandOut(properties);
-    portion.removeSpritesOut(properties);
-    portion.removeObjectsOut(listDeletedObjectsIDs, properties);
+    mapPortion.removeLandOut(properties);
+    mapPortion.removeSpritesOut(properties);
+    mapPortion.removeObjectsOut(listDeletedObjectsIDs, properties);
 
-    Wanok::writeJSON(pathPortion, portion);
+    Wanok::writeJSON(pathPortion, mapPortion);
 }
 
 // -------------------------------------------------------
@@ -562,17 +564,18 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
     int lz = (m_mapProperties->width() - 1) / Wanok::portionSize;
 
     if (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz){
+        Portion portion(i, j, k);
         QString path = getPortionPath(i, j, k);
-        MapPortion* portion = new MapPortion;
-        Wanok::readJSON(path, *portion);
-        portion->setIsLoaded(false);
+        MapPortion* mapPortion = new MapPortion(portion);
+        Wanok::readJSON(path, *mapPortion);
+        mapPortion->setIsLoaded(false);
         /*
         ThreadMapPortionLoader thread(this, portion);
         thread.start();
         */
-        loadPortionThread(portion);
-        portion->setIsLoaded(true);
-        return portion;
+        loadPortionThread(mapPortion);
+        mapPortion->setIsLoaded(true);
+        return mapPortion;
     }
 
     return nullptr;
@@ -581,7 +584,9 @@ MapPortion* Map::loadPortionMap(int i, int j, int k){
 
 // -------------------------------------------------------
 
-void Map::savePortionMap(MapPortion* mapPortion, Portion& portion){
+void Map::savePortionMap(MapPortion* mapPortion){
+    Portion portion;
+    mapPortion->getGlobalPortion(portion);
     QString path = getPortionPathTemp(portion.x(), portion.y(), portion.z());
     if (mapPortion->isEmpty()) {
         QJsonObject obj;
@@ -644,11 +649,10 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 
 // -------------------------------------------------------
 
-void Map::updatePortion(Portion& p, MapEditorSubSelectionKind subSelection){
-    MapPortion* mapPortion = this->mapPortion(p);
+void Map::updatePortion(MapPortion* mapPortion,
+                        MapEditorSubSelectionKind subSelection)
+{
     mapPortion->setIsVisible(true);
-    if (subSelection == MapEditorSubSelectionKind::SpritesWall)
-        mapPortion->updateSpriteWalls();
     mapPortion->initializeVertices(subSelection,
                                    m_squareSize,
                                    m_textureTileset,
@@ -795,11 +799,11 @@ Portion Map::getGlobalFromLocalPortion(Portion& portion) const{
 
 // -------------------------------------------------------
 
-MapPortion* Map::createMapPortion(Portion &p){
-    MapPortion* portion = new MapPortion;
-    setMapPortion(p, portion);
-
-    return portion;
+Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
+    return Portion(
+                portion.x() - (cursor()->getSquareX() / Wanok::portionSize),
+                portion.y() - (cursor()->getSquareY() / Wanok::portionSize),
+                portion.z() - (cursor()->getSquareZ() / Wanok::portionSize));
 }
 
 // -------------------------------------------------------

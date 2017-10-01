@@ -93,7 +93,6 @@ public:
     void loadPortion(Portion& currentPortion, int i, int j, int k);
     void updatePortions(MapEditorSubSelectionKind subSelection);
     void saveTempPortions();
-    void saveTempPortion(Portion portion);
     void clearPortionsToUpdate();
     void setToNotSaved();
     void save();
@@ -197,13 +196,13 @@ private:
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
     Position m_positionPreviousPreview;
-    QSet<Portion> m_portionsPreviousPreview;
+    QSet<MapPortion*> m_portionsPreviousPreview;
     float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;
     Portion m_currentPortion;
-    QSet<Portion> m_portionsToUpdate;
-    QSet<Portion> m_portionsToSave;
+    QSet<MapPortion*> m_portionsToUpdate;
+    QSet<MapPortion*> m_portionsToSave;
     bool m_displayGrid;
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;

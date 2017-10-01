@@ -20,6 +20,7 @@
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "wanok.h"
+#include <QTime>
 
 // -------------------------------------------------------
 //
@@ -293,16 +294,16 @@ void ControlMapEditor::updatePreviewElements(
 // -------------------------------------------------------
 
 void ControlMapEditor::removePreviewElements() {
-    QSet<Portion>::iterator i;
+    QSet<MapPortion*>::iterator i;
     for (i = m_portionsPreviousPreview.begin();
          i != m_portionsPreviousPreview.end(); i++)
     {
-        Portion portionPrevious = *i;
-        if (m_map->isInPortion(portionPrevious)) {
-            m_portionsToUpdate += portionPrevious;
-            m_map->mapPortion(portionPrevious)->clearPreview();
-        }
+        MapPortion* mapPortion = *i;
+        m_portionsToUpdate += mapPortion;
+        mapPortion->clearPreview();
     }
+
+    m_portionsPreviousPreview.clear();
 }
 
 // -------------------------------------------------------
@@ -447,8 +448,8 @@ void ControlMapEditor::updatePreviewElement(Position &p, Portion& portion,
 {
     MapPortion* mapPortion = m_map->mapPortion(portion);
     mapPortion->addPreview(p, element);
-    m_portionsToUpdate += portion;
-    m_portionsPreviousPreview += portion;
+    m_portionsToUpdate += mapPortion;
+    m_portionsPreviousPreview += mapPortion;
 }
 
 // -------------------------------------------------------
@@ -462,17 +463,18 @@ void ControlMapEditor::updatePreviewElementGrid(GridPosition& p,
         mapPortion->addPreviewDeleteGrid(p);
     else
         mapPortion->addPreviewGrid(p, element);
-    m_portionsToUpdate += portion;
-    m_portionsPreviousPreview += portion;
+    m_portionsToUpdate += mapPortion;
+    m_portionsPreviousPreview += mapPortion;
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
-    QSet<Portion>::iterator i;
-    for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++){
-        Portion p = *i;
-        m_map->updatePortion(p, subSelection);
+    QSet<MapPortion*>::iterator i;
+    for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
+        MapPortion* mapPortion = *i;
+        mapPortion->updateSpriteWalls();
+        m_map->updatePortion(mapPortion, subSelection);
     }
 }
 
@@ -593,16 +595,9 @@ void ControlMapEditor::loadPortion(Portion& currentPortion, int i, int j,
 // -------------------------------------------------------
 
 void ControlMapEditor::saveTempPortions(){
-    QSet<Portion>::iterator i;
+    QSet<MapPortion*>::iterator i;
     for (i = m_portionsToSave.begin(); i != m_portionsToSave.end(); i++)
-        saveTempPortion(*i);
-}
-
-// -------------------------------------------------------
-
-void ControlMapEditor::saveTempPortion(Portion portion){
-    Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
-    m_map->savePortionMap(m_map->mapPortion(portion), globalPortion);
+        m_map->savePortionMap(*i);
 }
 
 // -------------------------------------------------------
@@ -1025,8 +1020,8 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->addLand(p, landDatas) && m_map->saved())
                 setToNotSaved();
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
 
             return;
         }
@@ -1067,8 +1062,8 @@ void ControlMapEditor::eraseLand(Position& p){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteLand(p) && m_map->saved())
                 setToNotSaved();
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
         }
     }
 }
@@ -1139,8 +1134,8 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
                 setToNotSaved();
             }
 
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
 
             return;
         }
@@ -1164,8 +1159,8 @@ void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
                 setToNotSaved();
             }
 
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
         }
     }
 }
@@ -1219,8 +1214,8 @@ void ControlMapEditor::eraseSprite(Position& p){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteSprite(p) && m_map->saved())
                 setToNotSaved();
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
         }
     }
 }
@@ -1237,8 +1232,8 @@ void ControlMapEditor::eraseSpriteWall(GridPosition& gridPosition) {
                 setToNotSaved();
             }
 
-            m_portionsToUpdate += portion;
-            m_portionsToSave += portion;
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
         }
     }
 }
@@ -1316,7 +1311,7 @@ void ControlMapEditor::addObject(Position& p){
         }
         m_selectedObject = object;
         m_map->writeObjects(true);
-        saveTempPortion(portion);
+        m_map->savePortionMap(mapPortion);
     }
     else
         delete object;
@@ -1342,8 +1337,8 @@ void ControlMapEditor::removeObject(Position& p){
                 }
 
                 m_map->writeObjects(true);
-                m_portionsToUpdate += portion;
-                m_portionsToSave += portion;
+                m_portionsToUpdate += mapPortion;
+                m_portionsToSave += mapPortion;
             }
         }
     }

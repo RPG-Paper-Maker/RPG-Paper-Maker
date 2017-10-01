@@ -38,8 +38,9 @@
 class MapPortion : public Serializable
 {
 public:
-    MapPortion();
+    MapPortion(Portion& globalPortion);
     virtual ~MapPortion();
+    void getGlobalPortion(Portion& portion);
     MapObjects* mapObjects() const;
     bool isVisibleLoaded() const;
     bool isVisible() const;
@@ -88,6 +89,7 @@ public:
     void write(QJsonObject &json) const;
 
 private:
+    Portion m_globalPortion;
     Floors* m_floors;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;

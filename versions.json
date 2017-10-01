@@ -48,6 +48,10 @@
                 "target": "Content/basic/Content/Datas/Scripts/System/datas-system.js"
             },
             {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/system-wall.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/system-wall.js"
+            },
+            {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/system-tileset.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/system-tileset.js"
             },
@@ -190,6 +194,10 @@
             {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/game-item.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/game-item.js"
+            },
+            {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/datas-special-elements.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/datas-special-elements.js"
             },
             {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/datas-tilesets.js",
