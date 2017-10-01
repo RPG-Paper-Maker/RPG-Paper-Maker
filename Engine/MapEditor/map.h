@@ -119,8 +119,7 @@ public:
     void loadPortionThread(MapPortion *portion);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
-    void updatePortion(MapPortion *mapPortion,
-                       MapEditorSubSelectionKind subSelection);
+    void updatePortion(MapPortion *mapPortion);
     void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
     void loadPortions(Portion portion);
     void deletePortions();

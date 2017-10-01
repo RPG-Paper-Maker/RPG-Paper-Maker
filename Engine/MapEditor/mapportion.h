@@ -70,8 +70,7 @@ public:
     void addPreviewGrid(GridPosition& p, MapElement* element);
     void addPreviewDeleteGrid(GridPosition& p);
 
-    void initializeVertices(MapEditorSubSelectionKind subSelection,
-                            int squareSize, QOpenGLTexture* tileset,
+    void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,
                             QHash<int, QOpenGLTexture *> &walls);
     void initializeGL(QOpenGLShaderProgram *programStatic,

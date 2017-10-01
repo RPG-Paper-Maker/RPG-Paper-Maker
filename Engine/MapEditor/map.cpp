@@ -626,8 +626,7 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 
 void Map::loadPortionThread(MapPortion* portion)
 {
-    portion->initializeVertices(MapEditorSubSelectionKind::None,
-                                m_squareSize,
+    portion->initializeVertices(m_squareSize,
                                 m_textureTileset,
                                 m_texturesCharacters,
                                 m_texturesSpriteWalls);
@@ -649,12 +648,10 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 
 // -------------------------------------------------------
 
-void Map::updatePortion(MapPortion* mapPortion,
-                        MapEditorSubSelectionKind subSelection)
+void Map::updatePortion(MapPortion* mapPortion)
 {
     mapPortion->setIsVisible(true);
-    mapPortion->initializeVertices(subSelection,
-                                   m_squareSize,
+    mapPortion->initializeVertices(m_squareSize,
                                    m_textureTileset,
                                    m_texturesCharacters,
                                    m_texturesSpriteWalls);

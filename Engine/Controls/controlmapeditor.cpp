@@ -147,6 +147,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 // -------------------------------------------------------
 
 void ControlMapEditor::deleteMap(bool updateCamera){
+    clearPortionsToUpdate();
+    removePreviewElements();
 
     // Cursors
     if (m_cursorObject != nullptr){
@@ -473,8 +475,9 @@ void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
     QSet<MapPortion*>::iterator i;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion* mapPortion = *i;
-        mapPortion->updateSpriteWalls();
-        m_map->updatePortion(mapPortion, subSelection);
+        if (subSelection == MapEditorSubSelectionKind::SpritesWall)
+            mapPortion->updateSpriteWalls();
+        m_map->updatePortion(mapPortion);
     }
 }
 
