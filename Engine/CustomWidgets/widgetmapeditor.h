@@ -70,6 +70,7 @@ public:
     void setObjectPosition(Position& position);
     void addObject();
     void deleteObject();
+    void removePreviewElements();
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;

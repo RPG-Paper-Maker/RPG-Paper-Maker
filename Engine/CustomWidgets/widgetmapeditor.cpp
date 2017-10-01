@@ -317,6 +317,12 @@ void WidgetMapEditor::deleteObject(){
 }
 
 // -------------------------------------------------------
+
+void WidgetMapEditor::removePreviewElements() {
+    m_control.removePreviewElements();
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //

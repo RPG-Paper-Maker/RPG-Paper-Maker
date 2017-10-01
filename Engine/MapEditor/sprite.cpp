@@ -499,7 +499,6 @@ void SpriteWallDatas::update(GridPosition& gridPosition) {
         kB = SpriteWallKind::Right;
     else
         kB = SpriteWallKind::Middle;
-    SpriteWallKind k = addKind(kA, kB);
 
     m_wallKind = addKind(kA, kB);
 }

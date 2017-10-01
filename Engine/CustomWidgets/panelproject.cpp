@@ -115,6 +115,10 @@ void PanelProject::on_menuBarPressed() {
     SystemTileset* tileset = m_project->currentMap()->mapProperties()
             ->tileset();
 
+    // Remove preview elements stuff
+    ui->openGLWidget->removePreviewElements();
+
+    // Update panel textures
     switch (ui->widgetMenuBar->subSelectionKind()) {
     case MapEditorSubSelectionKind::SpritesWall:
         ui->panelTextures->showSpriteWalls(tileset);
