@@ -44,10 +44,10 @@ public:
     int getSquareX() const;
     int getSquareY() const;
     int getSquareZ() const;
-    void setX(int);
-    void setY(int);
+    void setX(int x, bool withReal = true);
+    void setY(int y);
     void setYplus(int yPlus);
-    void setZ(int z);
+    void setZ(int z, bool withReal = true);
     void setPositions(Position3D& position);
     float getX() const;
     float getY() const;

@@ -401,7 +401,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
 
 void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
-    if (m_control.map() != nullptr){
+    if (m_control.map() != nullptr && m_menuBar != nullptr){
         Qt::MouseButton button = event->button();
         m_mousesPressed -= button;
         QRect tileset = m_panelTextures->getTilesetTexture();

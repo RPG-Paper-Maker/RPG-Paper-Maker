@@ -42,22 +42,12 @@ MapProperties::MapProperties(QString path)
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
                              int h, int d, int idTileset) :
-    MapProperties(i, names, l, w, h, d,
-                  (SystemTileset*) SuperListItem::getById(
-                      Wanok::get()->project()->gameDatas()->tilesetsDatas()
-                      ->model()->invisibleRootItem(), idTileset))
-{
-
-}
-
-MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
-                             int h, int d, SystemTileset* tileset) :
     SystemLang(i, names),
+    m_tilesetID(idTileset),
     m_length(l),
     m_width(w),
     m_height(h),
-    m_depth(d),
-    m_tileset(tileset)
+    m_depth(d)
 {
 
 }
@@ -79,7 +69,15 @@ int MapProperties::height() const { return m_height; }
 
 int MapProperties::depth() const { return m_depth; }
 
-SystemTileset* MapProperties::tileset() const { return m_tileset; }
+SystemTileset* MapProperties::tileset() const {
+    return (SystemTileset*) SuperListItem::getById(
+                Wanok::get()->project()->gameDatas()->tilesetsDatas()
+                ->model()->invisibleRootItem(), m_tilesetID);
+}
+
+void MapProperties::setTilesetID(int id) {
+    m_tilesetID = id;
+}
 
 void MapProperties::setLength(int l) { m_length = l; }
 
@@ -88,8 +86,6 @@ void MapProperties::setWidth(int w) { m_width = w; }
 void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
-
-void MapProperties::setTileset(SystemTileset* tileset) { m_tileset = tileset; }
 
 // -------------------------------------------------------
 //
@@ -129,13 +125,11 @@ void MapProperties::save(QString path){
 void MapProperties::read(const QJsonObject &json){
     SystemLang::read(json);
 
+    setTilesetID(json["tileset"].toInt());
     m_length = json["l"].toInt();
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
-    m_tileset = (SystemTileset*) SuperListItem::getById(
-                Wanok::get()->project()->gameDatas()->tilesetsDatas()
-                ->model()->invisibleRootItem(), json["tileset"].toInt());
 }
 
 // -------------------------------------------------------
@@ -147,5 +141,5 @@ void MapProperties::write(QJsonObject &json) const{
     json["w"] = m_width;
     json["h"] = m_height;
     json["d"] = m_depth;
-    json["tileset"] = m_tileset->id();
+    json["tileset"] = m_tilesetID;
 }

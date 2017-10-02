@@ -94,6 +94,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                                QVector3D *positionObject, int cameraDistance,
                                int cameraHeight, double cameraHorizontalAngle)
 {
+    clearPortionsToUpdate();
+
     // Map & cursor
     m_map = new Map(idMap);
     Wanok::get()->project()->setCurrentMap(m_map);
@@ -1304,8 +1306,11 @@ void ControlMapEditor::addObject(Position& p){
     }
 
     // Open the dialog box
+    Wanok::isInConfig = true;
     DialogObject dialog(object);
-    if (dialog.exec() == QDialog::Accepted){
+    int result = dialog.exec();
+    Wanok::isInConfig = false;
+    if (result == QDialog::Accepted){
         MapPortion* mapPortion = m_map->mapPortion(portion);
         if (m_map->addObject(p, mapPortion, object) &&
             m_map->saved())

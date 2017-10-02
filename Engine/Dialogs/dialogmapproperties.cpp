@@ -108,7 +108,7 @@ void DialogMapProperties::on_spinBoxDepth_valueChanged(int i){
 // -------------------------------------------------------
 
 void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
-    m_mapProperties.setTileset((SystemTileset*) Wanok::get()->project()
-                               ->gameDatas()->tilesetsDatas()->model()
-                               ->item(index)->data().value<qintptr>());
+    m_mapProperties.setTilesetID(((SystemTileset*) Wanok::get()->project()
+                                ->gameDatas()->tilesetsDatas()->model()
+                                ->item(index)->data().value<qintptr>())->id());
 }

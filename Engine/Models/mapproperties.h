@@ -39,8 +39,6 @@ public:
     MapProperties(QString path);
     MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
                   int idTileset);
-    MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
-                  SystemTileset* tileset);
     virtual ~MapProperties();
     QString realName() const;
     int length() const;
@@ -48,11 +46,11 @@ public:
     int height() const;
     int depth() const;
     SystemTileset* tileset() const;
+    void setTilesetID(int id);
     void setLength(int l);
     void setWidth(int w);
     void setHeight(int h);
     void setDepth(int d);
-    void setTileset(SystemTileset* tileset);
     void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path);
@@ -61,11 +59,11 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
+    int m_tilesetID;
     int m_length;
     int m_width;
     int m_height;
     int m_depth;
-    SystemTileset* m_tileset;
 };
 
 #endif // MAPPROPERTIES_H

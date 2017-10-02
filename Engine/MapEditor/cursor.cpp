@@ -63,8 +63,10 @@ int Cursor::getSquareZ() const{
     return (int)((m_positionSquare->z() + 1) / m_squareSize);
 }
 
-void Cursor::setX(int x){
+void Cursor::setX(int x, bool withReal){
     m_positionSquare->setX(x * m_squareSize);
+    if (withReal)
+        m_positionReal.setX(x * m_squareSize);
 }
 
 void Cursor::setY(int){
@@ -75,17 +77,17 @@ void Cursor::setYplus(int){
 
 }
 
-void Cursor::setZ(int z){
+void Cursor::setZ(int z, bool withReal){
     m_positionSquare->setZ(z * m_squareSize);
+    if (withReal)
+        m_positionReal.setZ(z * m_squareSize);
 }
 
 void Cursor::setPositions(Position3D& position){
-    m_positionSquare->setX(position.x() * m_squareSize);
-    m_positionSquare->setY(position.y() * m_squareSize);
-    m_positionSquare->setZ(position.z() * m_squareSize);
-    m_positionReal.setX(position.x() * m_squareSize);
-    m_positionReal.setY(position.y() * m_squareSize);
-    m_positionReal.setZ(position.z() * m_squareSize);
+    setX(position.x());
+    setY(position.y());
+    setYplus(position.yPlus());
+    setZ(position.z());
 }
 
 float Cursor::getX() const { return m_positionSquare->x(); }
@@ -123,9 +125,9 @@ void Cursor::loadTexture(QString path){
 // -------------------------------------------------------
 
 void Cursor::updatePositionSquare(){
-    setX((int)(m_positionReal.x()) / m_squareSize);
+    setX((int)(m_positionReal.x()) / m_squareSize, false);
     setY((int)(m_positionReal.y()) / m_squareSize);
-    setZ((int)(m_positionReal.z()) / m_squareSize);
+    setZ((int)(m_positionReal.z()) / m_squareSize, false);
 }
 
 // ------------------------------------------------------
