@@ -331,6 +331,7 @@ void WidgetMapEditor::removePreviewElements() {
 void WidgetMapEditor::focusOutEvent(QFocusEvent*){
     m_keysPressed.clear();
     m_mousesPressed.clear();
+    this->setFocus();
 }
 
 // -------------------------------------------------------
