@@ -121,6 +121,10 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/sprite_walls.png</normaloff>:/icons/Ressources/sprite_walls.png</iconset>
+   </property>
    <property name="text">
     <string>Wall Sprite</string>
    </property>

@@ -29,7 +29,8 @@
 // -------------------------------------------------------
 
 enum class MapEditorModesKind {
-    Draw
+    Draw,
+    Layer
 };
 
 #endif // MAPEDITORMODESKIND_H

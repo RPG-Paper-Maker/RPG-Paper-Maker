@@ -30,6 +30,9 @@
         <file>Ressources/sprite_fix.png</file>
         <file>Ressources/icon.ico</file>
         <file>Ressources/delete.png</file>
+        <file>Ressources/layer_none.png</file>
+        <file>Ressources/layer_on.png</file>
+        <file>Ressources/sprite_walls.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

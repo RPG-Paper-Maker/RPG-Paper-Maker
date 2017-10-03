@@ -63,6 +63,9 @@ private:
     QAction* m_actionPencil;
     QAction* m_actionRectangle;
     QAction* m_actionPin;
+    QMenu* m_menuLayer;
+    QAction* m_actionLayerNone;
+    QAction* m_actionLayerOn;
 
 protected:
     void mouseMoveEvent(QMouseEvent* event);
@@ -78,6 +81,7 @@ private slots:
     void on_menuFloors_triggered(QAction* action);
     void on_menuFace_Sprite_triggered(QAction* action);
     void on_menuDrawTriggered(QAction* action);
+    void on_menuLayerTriggered(QAction* action);
 
 signals:
     void selectionChanged();

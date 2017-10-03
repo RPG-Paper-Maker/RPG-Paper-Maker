@@ -141,6 +141,19 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
             this, SLOT(on_menuDrawTriggered(QAction*)));
     bar->addMenu(m_menuPencil);
 
+    // Layer
+    m_menuLayer = new QMenu("Normal");
+    m_menuLayer->setIcon(QIcon(":/icons/Ressources/layer_none.png"));
+    m_actionLayerNone = new QAction(QIcon(":/icons/Ressources/layer_none.png"),
+                                    "Normal");
+    m_menuLayer->addAction(m_actionLayerNone);
+    m_actionLayerOn = new QAction(QIcon(":/icons/Ressources/layer_on.png"),
+                         "On top");
+    m_menuLayer->addAction(m_actionLayerOn);
+    connect(m_menuLayer, SIGNAL(triggered(QAction*)),
+            this, SLOT(on_menuLayerTriggered(QAction*)));
+    bar->addMenu(m_menuLayer);
+
     this->setCornerWidget(bar);
 }
 
@@ -268,4 +281,10 @@ void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction* action){
 
 void WidgetMenuBarMapEditor::on_menuDrawTriggered(QAction* action){
     updateMode(MapEditorModesKind::Draw, action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menuLayerTriggered(QAction* action){
+    updateMode(MapEditorModesKind::Layer, action);
 }
