@@ -1114,6 +1114,7 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID) {
         getWallSpritesPositions(positions);
         for (int i = 0; i < positions.size(); i++)
             stockSpriteWall(positions[i], specialID);
+        removePreviewElements();
         break;
     case DrawKind::Pin:
         break;
