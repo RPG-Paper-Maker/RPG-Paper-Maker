@@ -21,10 +21,10 @@
 #include "wanok.h"
 #include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 1;
+const int ProjectUpdater::incompatibleVersionsCount = 2;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1"};
+    {"0.3.1", "0.4.0"};
 
 // -------------------------------------------------------
 //
@@ -119,13 +119,17 @@ void ProjectUpdater::copyPreviousProject() {
 
 // -------------------------------------------------------
 
-void ProjectUpdater::getAllPathsMapsPortions(QList<QString>& listPaths,
-                                             QList<QJsonObject>& listObjects)
+void ProjectUpdater::getAllPathsMapsPortions()
 {
     QString pathMaps = Wanok::pathCombine(m_project->pathCurrentProject(),
                                           Wanok::pathMaps);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
+    // Clear
+    m_listPaths.clear();
+    m_listMapPortions.clear();
+
+    // Fill
     while (directories.hasNext()) {
         directories.next();
         QString mapName = directories.fileName();
@@ -139,8 +143,8 @@ void ProjectUpdater::getAllPathsMapsPortions(QList<QString>& listPaths,
                     QJsonDocument document;
                     QString path = files.filePath();
                     Wanok::readOtherJSON(path, document);
-                    listPaths.append(path);
-                    listObjects.append(document.object());
+                    m_listPaths.append(path);
+                    m_listMapPortions.append(document.object());
                 }
             }
         }
@@ -150,6 +154,8 @@ void ProjectUpdater::getAllPathsMapsPortions(QList<QString>& listPaths,
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion(QString& version) {
+    getAllPathsMapsPortions();
+
     QString str = "updateVersion_" + version.replace(".", "_");
     QByteArray ba = str.toLatin1();
     const char *c_str = ba.data();
@@ -228,12 +234,9 @@ void ProjectUpdater::check() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_3_1() {
-    QList<QString> listPaths;
-    QList<QJsonObject> listMapPortions;
-    getAllPathsMapsPortions(listPaths, listMapPortions);
 
-    for (int i = 0; i < listMapPortions.size(); i++) {
-        QJsonObject obj = listMapPortions.at(i);
+    for (int i = 0; i < m_listMapPortions.size(); i++) {
+        QJsonObject obj = m_listMapPortions.at(i);
         QJsonObject objSprites = obj["sprites"].toObject();
         QJsonArray tabSprites = objSprites["list"].toArray();
 
@@ -255,17 +258,24 @@ void ProjectUpdater::updateVersion_0_3_1() {
 
         objSprites["list"] = tabSprites;
         obj["sprites"] = objSprites;
-        Wanok::writeOtherJSON(listPaths.at(i), obj);
+        Wanok::writeOtherJSON(m_listPaths.at(i), obj);
     }
 }
 
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_4_0() {
-    QList<QString> listPaths;
-    QList<QJsonObject> listMapPortions;
-    getAllPathsMapsPortions(listPaths, listMapPortions);
 
     // Create walls directory
     QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SPRITE_WALLS);
+
+    // Add walls empty tab for sprites
+    for (int i = 0; i < m_listMapPortions.size(); i++) {
+        QJsonObject obj = m_listMapPortions.at(i);
+        QJsonObject objSprites = obj["sprites"].toObject();
+        objSprites["walls"] = QJsonArray();
+        obj["sprites"] = objSprites;
+
+        Wanok::writeOtherJSON(m_listPaths.at(i), obj);
+    }
 }

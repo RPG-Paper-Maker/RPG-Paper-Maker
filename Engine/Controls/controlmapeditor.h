@@ -29,6 +29,7 @@
 #include "drawkind.h"
 #include "contextmenulist.h"
 #include "wallindicator.h"
+#include "
 
 // -------------------------------------------------------
 //
@@ -65,6 +66,7 @@ public:
     void update(MapEditorSubSelectionKind subSelection);
     void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
+    void getPortionsInRay(QList<Portion>& portions, Orient);
     void updateRaycasting();
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,

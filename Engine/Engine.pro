@@ -223,7 +223,8 @@ HEADERS += \
     Models/GameDatas/specialelementsdatas.h \
     Dialogs/SpecialElements/dialogtilesetspritewalls.h \
     Enums/spritewallkind.h \
-    Models/System/systemspecialelement.h
+    Models/System/systemspecialelement.h \
+    Enums/orientationkind.h
 
 SOURCES += \
     main.cpp \
