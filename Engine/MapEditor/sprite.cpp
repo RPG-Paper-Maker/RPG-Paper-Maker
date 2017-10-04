@@ -20,6 +20,7 @@
 #include "sprite.h"
 #include "map.h"
 #include "wanok.h"
+#include "qbox3d.h"
 
 // -------------------------------------------------------
 //
@@ -119,6 +120,29 @@ QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 //
 // -------------------------------------------------------
 
+void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
+                                   QVector3D& center, int squareSize,
+                                   Position3D& position, int &spritesOffset)
+{
+    // Position
+    pos.setX((float) position.x() * squareSize -
+             ((textureRect()->width() - 1) * squareSize / 2) + spritesOffset);
+    pos.setY((float) position.getY(squareSize));
+    pos.setZ((float) position.z() * squareSize +
+             (widthPosition() * squareSize / 100) + spritesOffset);
+
+    // Size
+    size.setX((float) textureRect()->width() * squareSize);
+    size.setY((float) textureRect()->height() * squareSize);
+    size.setZ(1.0f);
+
+    // Center
+    center = Sprite::verticesQuad[0] * size + pos +
+            QVector3D(size.x() / 2, - size.y() / 2, 0);
+}
+
+// -------------------------------------------------------
+
 void SpriteDatas::initializeVertices(int squareSize,
                                      int width, int height,
                                      QVector<Vertex>& verticesStatic,
@@ -128,6 +152,8 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      Position3D& position, int& countStatic,
                                      int& countFace, int &spritesOffset)
 {
+    QVector3D pos, size, center;
+
     float x, y, w, h;
     int offset;
     x = (float)(m_textureRect->x() * squareSize) / width;
@@ -141,18 +167,7 @@ void SpriteDatas::initializeVertices(int squareSize,
     w -= (coefX * 2);
     h -= (coefY * 2);
 
-    QVector3D pos((float) position.x() * squareSize -
-                  ((textureRect()->width() - 1) * squareSize / 2) +
-                  spritesOffset,
-                  (float) position.getY(squareSize),
-                  (float) position.z() * squareSize +
-                  (widthPosition() * squareSize / 100) + spritesOffset);
-    spritesOffset += Sprite::SPRITES_OFFSET_COEF;
-    QVector3D size((float) textureRect()->width() * squareSize,
-                   (float) textureRect()->height() * squareSize,
-                   0.0f);
-    QVector3D center = Sprite::verticesQuad[0] * size + pos +
-            QVector3D(size.x() / 2, - size.y() / 2, 0);
+    getPosSizeCenter(pos, size, center, squareSize, position, spritesOffset);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     // Adding to buffers according to the kind of sprite
@@ -278,6 +293,68 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
     for (int i = 0; i < Sprite::nbIndexesQuad; i++)
         indexesStatic.append(Sprite::indexesQuad[i] + offset);
     count++;
+}
+
+// -------------------------------------------------------
+
+float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
+                                int cameraHAngle, int &spritesOffset)
+{
+    QVector3D pos, size, center;
+    float minDistance = 0, distance = 0;
+    QBox3D box;
+
+    getPosSizeCenter(pos, size, center, squareSize, position, spritesOffset);
+
+    QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+              vecB = Sprite::verticesQuad[1] * size + pos,
+              vecC = Sprite::verticesQuad[2] * size + pos,
+              vecD = Sprite::verticesQuad[3] * size + pos;
+
+    if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
+        rotateSprite(vecA, vecB, vecC, vecD, center, 90 + cameraHAngle);
+        box = QBox3D(vecA, vecC);
+        minDistance = box.intersection(ray);
+    }
+    else {
+        box = QBox3D(vecA, vecC);
+        minDistance = box.intersection(ray);
+        Wanok::getMinDistance(minDistance, 0);
+
+        // If double sprite, add one sprite more
+        if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
+            m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
+            QVector3D vecDoubleA(vecA), vecDoubleB(vecB),
+                      vecDoubleC(vecC), vecDoubleD(vecD);
+
+            rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
+                         90);
+            box = QBox3D(vecDoubleA, vecDoubleC);
+            distance = box.intersection(ray);
+            Wanok::getMinDistance(minDistance, distance);
+
+            if (m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
+                QVector3D vecQuadra1A(vecA), vecQuadra1B(vecB),
+                          vecQuadra1C(vecC), vecQuadra1D(vecD),
+                          vecQuadra2A(vecA), vecQuadra2B(vecB),
+                          vecQuadra2C(vecC), vecQuadra2D(vecD);
+
+                rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D,
+                             center, 45);
+                rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D,
+                             center, -45);
+
+                box = QBox3D(vecQuadra1A, vecQuadra1C);
+                distance = box.intersection(ray);
+                Wanok::getMinDistance(minDistance, distance);
+                box = QBox3D(vecQuadra2A, vecQuadra2C);
+                distance = box.intersection(ray);
+                Wanok::getMinDistance(minDistance, distance);
+            }
+        }
+    }
+
+    return minDistance;
 }
 
 // -------------------------------------------------------

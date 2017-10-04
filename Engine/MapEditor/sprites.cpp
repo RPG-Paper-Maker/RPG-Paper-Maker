@@ -19,6 +19,7 @@
 
 #include "sprites.h"
 #include "map.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -317,10 +318,18 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
-void Sprites::updateRaycasting(float &finalDistance, QRay3D &ray) {
+void Sprites::updateRaycasting(int squareSize, float &finalDistance,
+                               Position& finalPosition,  QRay3D &ray,
+                               double cameraHAngle, int& spritesOffset)
+{
     QHash<Position, SpriteDatas*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++) {
-        //float newDistance = i.value()->get
+        Position position = i .key();
+        float newDistance = i.value()->intersection(squareSize, ray, position,
+                                                    cameraHAngle,
+                                                    spritesOffset);
+        if (Wanok::getMinDistance(finalDistance, newDistance))
+            finalPosition = position;
     }
 }
 

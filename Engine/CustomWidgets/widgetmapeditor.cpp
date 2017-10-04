@@ -354,14 +354,16 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
             m_control.onMouseMove(event->pos(), button,
                                   m_menuBar != nullptr);
 
-            if (m_menuBar != nullptr){
+            if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton)
+            {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 MapEditorSubSelectionKind subSelection =
                         m_menuBar->subSelectionKind();
                 int specialID = m_panelTextures->getID(subSelection);
                 m_control.addRemove(m_menuBar->selectionKind(),
                                     subSelection, m_menuBar->drawKind(),
-                                    tileset, specialID, button);
+                                    tileset, specialID,
+                                    button == Qt::MouseButton::LeftButton);
             }
         }
     }

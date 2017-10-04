@@ -111,11 +111,11 @@ public:
                                  int distance);
 
     void addRemove(MapEditorSelectionKind selection,
-                   MapEditorSubSelectionKind subSelection,
-                   DrawKind drawKind,
-                   QRect& tileset, int specialID,
-                   Qt::MouseButton button);
-    Position getPositionSelected(MapEditorSelectionKind selection) const;
+                   MapEditorSubSelectionKind subSelection, DrawKind drawKind,
+                   QRect& tileset, int specialID, bool adding);
+    Position getPositionSelected(MapEditorSelectionKind selection,
+                                 MapEditorSubSelectionKind subSelection,
+                                 bool adding) const;
     void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection,
              DrawKind drawKind,

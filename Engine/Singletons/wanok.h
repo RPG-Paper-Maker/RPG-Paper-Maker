@@ -129,6 +129,7 @@ public:
     static int mod(int x, int m);
     static float coefSquareSize();
     static QString osToString(OSKind os);
+    static bool getMinDistance(float &finalDistance, float newDistance);
 
 protected:
     Project* p_project;

@@ -79,6 +79,9 @@ public:
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;
+    void getPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D& center,
+                          int squareSize, Position3D &position,
+                          int& spritesOffset);
     virtual void initializeVertices(int squareSize, int width, int height,
                                     QVector<Vertex>& verticesStatic,
                                     QVector<GLuint>& indexesStatic,
@@ -96,6 +99,9 @@ public:
                                         QVector3D& vecC, QVector3D& vecD,
                                         QVector2D& texA, QVector2D& texB,
                                         QVector2D& texC, QVector2D& texD);
+    float intersection(int squareSize, QRay3D& ray, Position& position,
+                       int cameraHAngle, int& spritesOffset);
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

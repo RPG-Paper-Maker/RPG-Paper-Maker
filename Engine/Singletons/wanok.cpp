@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <math.h>
 #include "wanok.h"
 
 QSet<int> Wanok::mapsToSave;
@@ -361,4 +362,30 @@ QString Wanok::osToString(OSKind os) {
     }
 
     return "";
+}
+
+// -------------------------------------------------------
+
+bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
+    if (isnan(finalDistance))
+        finalDistance = 0;
+    if (isnan(newDistance))
+        newDistance = 0;
+
+    if (finalDistance == 0) {
+        if (newDistance > 0) {
+            finalDistance = newDistance;
+            return true;
+        }
+    }
+    else {
+        if (newDistance > 0) {
+            if (newDistance < finalDistance) {
+                finalDistance = newDistance;
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
