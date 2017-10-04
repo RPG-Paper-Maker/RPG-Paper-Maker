@@ -33,7 +33,8 @@ INCLUDEPATH += \
     Models \
     Models/GameDatas \
     Models/System \
-    Enums
+    Enums \
+    MathUtils
 
 HEADERS += \
     main.h \
@@ -224,7 +225,11 @@ HEADERS += \
     Dialogs/SpecialElements/dialogtilesetspritewalls.h \
     Enums/spritewallkind.h \
     Models/System/systemspecialelement.h \
-    Enums/orientationkind.h
+    Enums/orientationkind.h \
+    MathUtils/qplane3d.h \
+    MathUtils/qray3d.h \
+    MathUtils/smallqt3d_global.h \
+    MathUtils/qbox3d.h
 
 SOURCES += \
     main.cpp \
@@ -397,7 +402,10 @@ SOURCES += \
     Models/System/systemspritewall.cpp \
     Models/GameDatas/specialelementsdatas.cpp \
     Dialogs/SpecialElements/dialogtilesetspritewalls.cpp \
-    Models/System/systemspecialelement.cpp
+    Models/System/systemspecialelement.cpp \
+    MathUtils/qplane3d.cpp \
+    MathUtils/qray3d.cpp \
+    MathUtils/qbox3d.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

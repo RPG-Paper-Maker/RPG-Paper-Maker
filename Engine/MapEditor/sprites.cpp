@@ -316,6 +316,15 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 }
 
 // -------------------------------------------------------
+
+void Sprites::updateRaycasting(float &finalDistance, QRay3D &ray) {
+    QHash<Position, SpriteDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        //float newDistance = i.value()->get
+    }
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

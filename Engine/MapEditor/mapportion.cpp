@@ -200,6 +200,12 @@ void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
 }
 
 // -------------------------------------------------------
+
+void MapPortion::updateRaycastingSprites(float& finalDistance, QRay3D &ray) {
+    m_sprites->updateRaycasting(finalDistance, ray);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

@@ -36,6 +36,7 @@
 #include "mapelement.h"
 #include "gridposition.h"
 #include "spritewallkind.h"
+#include "qray3d.h"
 
 // -------------------------------------------------------
 //

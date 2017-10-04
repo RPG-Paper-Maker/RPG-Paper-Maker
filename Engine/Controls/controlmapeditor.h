@@ -29,7 +29,6 @@
 #include "drawkind.h"
 #include "contextmenulist.h"
 #include "wallindicator.h"
-#include "
 
 // -------------------------------------------------------
 //
@@ -66,8 +65,10 @@ public:
     void update(MapEditorSubSelectionKind subSelection);
     void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
-    void getPortionsInRay(QList<Portion>& portions, Orient);
     void updateRaycasting();
+    void getPortionsInRay(QList<Portion>& portions);
+    void updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray);
+    void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
@@ -197,9 +198,13 @@ private:
     QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
+    Position m_positionOnLand;
+    Position m_positionOnSprite;
+    float m_distancePlane;
+    float m_distanceLand;
+    float m_distanceSprite;
     Position m_positionPreviousPreview;
     QSet<MapPortion*> m_portionsPreviousPreview;
-    float m_distancePlane;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;
     Portion m_currentPortion;

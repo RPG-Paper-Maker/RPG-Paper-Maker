@@ -13,7 +13,6 @@ out vec2 coordTexture;
 
 void main()
 {
-
     vec3 vertexPositionWorldspace =
         centerPosition
         + cameraRightWorldspace * model.x * size.x

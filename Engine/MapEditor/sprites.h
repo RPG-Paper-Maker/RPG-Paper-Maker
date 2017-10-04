@@ -87,6 +87,7 @@ public:
                              previewGrid,
                              QList<GridPosition>& previewDeleteGrid);
     void removeSpritesOut(MapProperties& properties);
+    void updateRaycasting(float& finalDistance, QRay3D &ray);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,

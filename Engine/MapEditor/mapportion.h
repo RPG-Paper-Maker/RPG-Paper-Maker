@@ -69,6 +69,7 @@ public:
     void addPreview(Position& p, MapElement* element);
     void addPreviewGrid(GridPosition& p, MapElement* element);
     void addPreviewDeleteGrid(GridPosition& p);
+    void updateRaycastingSprites(float& finalDistance, QRay3D& ray);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,

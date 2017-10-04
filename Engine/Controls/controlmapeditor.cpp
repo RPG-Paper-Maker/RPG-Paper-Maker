@@ -243,14 +243,51 @@ void ControlMapEditor::updateMousePosition(QPoint point) {
 // -------------------------------------------------------
 
 void ControlMapEditor::updateRaycasting(){
+    QList<Portion> portions;
+    getPortionsInRay(portions);
 
     // Raycasting plane
     QMatrix4x4 projection = m_camera->projection();
     QMatrix4x4 view = m_camera->view();
-    QVector3D ray = getRayWorld(m_mouse, projection, view);
+    QVector3D rayDirection = getRayWorld(m_mouse, projection, view);
     int height = 0;
-    m_distancePlane = (height - m_camera->positionY()) / ray.y();
-    getCorrectPositionOnRay(m_positionOnPlane, ray, m_distancePlane);
+    m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
+    getCorrectPositionOnRay(m_positionOnPlane, rayDirection, m_distancePlane);
+    QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
+                            m_camera->positionZ());
+    QRay3D ray(cameraPosition, rayDirection);
+
+    // Others
+    m_distanceLand = 0;
+    m_distanceSprite = 0;
+    for (int i = 0; i < portions.size(); i++) {
+        Portion portion = portions.at(i);
+        MapPortion* mapPortion = m_map->mapPortion(portion);
+        updateRaycastingLand(mapPortion, ray);
+        updateRaycastingSprites(mapPortion, ray);
+    }
+    qDebug() << QString::number(m_distanceSprite);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
+    portions.append(Portion(0, 0, 0));
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
+{
+
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
+                                               QRay3D& ray)
+{
+    mapPortion->updateRaycastingSprites(m_distanceSprite, ray);
 }
 
 // -------------------------------------------------------
