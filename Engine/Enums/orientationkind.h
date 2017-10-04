@@ -32,7 +32,11 @@ enum class OrientationKind {
     South,
     West,
     North,
-    East
+    East,
+    SouthWest,
+    SouthEast,
+    NorthWest,
+    NorthEast
 };
 
 #endif // ORIENTATIONKIND_H

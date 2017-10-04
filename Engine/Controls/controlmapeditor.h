@@ -67,7 +67,7 @@ public:
     void updateMousePosition(QPoint point);
     void updateRaycasting();
     void getPortionsInRay(QList<Portion>& portions);
-    void updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray);
+    void updateRaycastingLand(MapPortion*, QRay3D&);
     void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,

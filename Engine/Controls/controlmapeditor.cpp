@@ -280,7 +280,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
+void ControlMapEditor::updateRaycastingLand(MapPortion*, QRay3D&)
 {
 
 }

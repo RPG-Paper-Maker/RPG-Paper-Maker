@@ -77,11 +77,29 @@ void Camera::addHeight(int h){ m_height += h; }
 //
 // -------------------------------------------------------
 
+OrientationKind Camera::orientationKind() const {
+    float val = fmod(-(m_horizontalAngle * M_PI / 180.0), 2 * M_PI);
+    float cos = qCos(val);
+    float sin = qSin(val);
+
+    if (cos >= 0.0f) {
+        return (sin >= 0.0f) ? OrientationKind::NorthEast
+                             : OrientationKind::SouthEast;
+    }
+    else {
+        return (sin >= 0.0f) ? OrientationKind::NorthWest
+                             : OrientationKind::SouthWest;
+    }
+
+}
+
+// -------------------------------------------------------
+
 void Camera::update(Cursor *cursor, int squareSize){
 
     // Horizontal angle should stay in [-450;270] interval
-    if (m_horizontalAngle >= 270.0 || m_horizontalAngle <= -450.0)
-        m_horizontalAngle = -90.0;
+    m_horizontalAngle = fmod(m_horizontalAngle * M_PI / 180.0, 2 * M_PI)
+            * 180.0 / M_PI;
 
     // Update target
     m_target.setX(cursor->getX() + (squareSize / 2));

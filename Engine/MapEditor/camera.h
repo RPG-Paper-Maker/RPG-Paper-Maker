@@ -23,6 +23,7 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 #include "cursor.h"
+#include "orientationkind.h"
 
 // -------------------------------------------------------
 //
@@ -53,6 +54,7 @@ public:
     void setHorizontalAngle(double a);
     void addDistance(int d);
     void addHeight(int h);
+    OrientationKind orientationKind() const;
     void update(Cursor* cursor, int squareSize);
     void zoomPlus(int gridHeight);
     void zoomLess(int gridHeight);
