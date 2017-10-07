@@ -55,6 +55,12 @@ float Camera::positionY() const { return m_position.y(); }
 
 float Camera::positionZ() const { return m_position.z(); }
 
+void Camera::getPosition(QVector3D& position) const {
+    position.setX(positionX());
+    position.setY(positionY());
+    position.setZ(positionZ());
+}
+
 double Camera::horizontalAngle() const { return m_horizontalAngle; }
 
 int Camera::distance() const { return m_distance; }

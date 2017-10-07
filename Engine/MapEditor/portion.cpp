@@ -40,6 +40,14 @@ bool Portion::operator!=(const Portion& other) const{
     return !operator==(other);
 }
 
+Portion& Portion::operator+=(const Portion& other) {
+    addX(other.x());
+    addY(other.y());
+    addZ(other.z());
+
+    return *this;
+}
+
 int Portion::x() const { return m_x; }
 
 int Portion::y() const { return m_y; }
@@ -51,6 +59,18 @@ void Portion::setX(int x) { m_x = x; }
 void Portion::setY(int y) { m_y = y; }
 
 void Portion::setZ(int z) { m_z = z; }
+
+void Portion::addX(int x) { m_x += x; }
+
+void Portion::addY(int y) { m_y += y; }
+
+void Portion::addZ(int z) { m_z += z; }
+
+void Portion::addAll(int a) {
+    addX(a);
+    addY(a);
+    addZ(a);
+}
 
 // -------------------------------------------------------
 //

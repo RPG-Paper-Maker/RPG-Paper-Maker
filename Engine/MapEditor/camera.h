@@ -46,6 +46,7 @@ public:
     float positionX() const;
     float positionY() const;
     float positionZ() const;
+    void getPosition(QVector3D& position) const;
     double horizontalAngle() const;
     int distance() const;
     int height() const;

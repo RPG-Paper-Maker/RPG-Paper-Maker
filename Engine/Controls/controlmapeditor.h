@@ -66,9 +66,20 @@ public:
     void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
     void updateRaycasting();
-    void getPortionsInRay(QList<Portion>& portions);
+    void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
+    void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray);
     void updateRaycastingLand(MapPortion*, QRay3D&);
     void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
+    QVector3D transformToNormalizedCoords(const QPoint& mouse);
+    QVector4D transformToHomogeneousClip(QVector3D& normalized);
+    QVector4D transformToEyeCoords(QVector4D& rayClip, QMatrix4x4& projection);
+    QVector3D transformToWorldCoords(QVector4D& rayEye, QMatrix4x4& view);
+    QVector3D getRayWorld(const QPoint& mouse, QMatrix4x4& projection,
+                          QMatrix4x4& view);
+    QVector3D getPositionOnRay(QVector3D& ray, int distance);
+    void getCorrectPositionOnRay(Position& position, QVector3D &ray,
+                                 int distance);
+
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
@@ -99,16 +110,6 @@ public:
     void clearPortionsToUpdate();
     void setToNotSaved();
     void save();
-
-    QVector3D transformToNormalizedCoords(const QPoint& mouse);
-    QVector4D transformToHomogeneousClip(QVector3D& normalized);
-    QVector4D transformToEyeCoords(QVector4D& rayClip, QMatrix4x4& projection);
-    QVector3D transformToWorldCoords(QVector4D& rayEye, QMatrix4x4& view);
-    QVector3D getRayWorld(const QPoint& mouse, QMatrix4x4& projection,
-                          QMatrix4x4& view);
-    QVector3D getPositionOnRay(QVector3D& ray, int distance);
-    void getCorrectPositionOnRay(Position& position, QVector3D &ray,
-                                 int distance);
 
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection, DrawKind drawKind,

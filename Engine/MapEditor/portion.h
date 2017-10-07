@@ -39,12 +39,17 @@ public:
 
     bool operator==(const Portion& other) const;
     bool operator!=(const Portion& other) const;
+    Portion& operator+=(const Portion& other);
     int x() const;
     int y() const;
     int z() const;
     void setX(int x);
     void setY(int y);
     void setZ(int z);
+    void addX(int x);
+    void addY(int y);
+    void addZ(int z);
+    void addAll(int a);
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

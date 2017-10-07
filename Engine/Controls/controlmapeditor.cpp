@@ -20,7 +20,9 @@
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "wanok.h"
+#include "qbox3d.h"
 #include <QTime>
+#include <math.h>
 
 // -------------------------------------------------------
 //
@@ -244,7 +246,6 @@ void ControlMapEditor::updateMousePosition(QPoint point) {
 
 void ControlMapEditor::updateRaycasting(){
     QList<Portion> portions;
-    getPortionsInRay(portions);
 
     // Raycasting plane
     QMatrix4x4 projection = m_camera->projection();
@@ -256,11 +257,14 @@ void ControlMapEditor::updateRaycasting(){
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
                             m_camera->positionZ());
     QRay3D ray(cameraPosition, rayDirection);
+    getPortionsInRay(portions, ray);
+
+    qDebug() << QString::number(portions.size());
 
     // Others
     m_distanceLand = 0;
     m_distanceSprite = 0;
-    for (int i = 0; i < portions.size(); i++) {
+    for (int i = portions.size() - 1; i >= 0; i--) {
         Portion portion = portions.at(i);
         MapPortion* mapPortion = m_map->mapPortion(portion);
         updateRaycastingLand(mapPortion, ray);
@@ -274,8 +278,99 @@ void ControlMapEditor::updateRaycasting(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
-    portions.append(Portion(0, 0, 0));
+void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
+    QVector3D direction = ray.direction();
+
+    // Getting here the portion were is positioned the camera first
+    Position positionCamera;
+    getCorrectPositionOnRay(positionCamera, direction, 0);
+    Portion portionCamera;
+    portionCamera = m_map->getLocalPortion(positionCamera);
+
+    // If camera is inside the portions, ok !
+    if (m_map->isInSomething(positionCamera, portionCamera))
+        portions.append(portionCamera);
+    // Else, we need to find te nearest portion the camera is looking at
+    else {
+
+        // Getting the box including all the drawable portions
+        Portion leftBotPortion = m_currentPortion;
+        Portion rightTopPortion = m_currentPortion;
+        leftBotPortion.addAll(m_map->portionsRay() - 1);
+        rightTopPortion.addAll(m_map->portionsRay());
+        QVector3D leftBotCorner(leftBotPortion.x(), leftBotPortion.y(),
+                                leftBotPortion.z());
+        QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
+                                 rightTopPortion.z());
+        leftBotCorner *= Wanok::portionSize * m_map->squareSize();
+        rightTopCorner *= Wanok::portionSize * m_map->squareSize();
+        rightTopCorner.setX(rightTopCorner.x() - 1);
+        rightTopCorner.setY(rightTopCorner.y() - 1);
+        rightTopCorner.setZ(rightTopCorner.z() - 1);
+        QBox3D box(leftBotCorner, rightTopCorner);
+
+        // Testing intersection
+        float distance = box.intersection(ray);
+        if (isnan(distance))
+            return;
+        else {
+            getCorrectPositionOnRay(positionCamera, direction, distance);
+            portionCamera = m_map->getLocalPortion(positionCamera);
+
+            if (m_map->isInSomething(positionCamera, portionCamera))
+                portions.append(portionCamera);
+            else
+                return;
+        }
+    }
+
+    updatePortionsInRay(portions, ray);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
+                                           QRay3D &ray)
+{
+    Portion portion = portions.first();
+    QList<Portion> adjacents;
+    adjacents << Portion(-1, 0, 0) << Portion(1, 0, 0) << Portion(0, 0, -1)
+              << Portion(0, 0, 1) << Portion(0, -1, 0) << Portion(0, 1, 0);
+
+    // For each adjacent portion... test if the camera ray is crossing
+    for (int i = 0; i < adjacents.size(); i++) {
+        Portion adjacent = adjacents.at(i);
+        adjacent += portion;
+
+        if (m_map->isInPortion(adjacent)) {
+            Portion leftBotPortion = m_currentPortion;
+            Portion rightTopPortion = m_currentPortion;
+            leftBotPortion += adjacent;
+            rightTopPortion += adjacent;
+            rightTopPortion.addAll(1);
+            QVector3D leftBotCorner(leftBotPortion.x(), leftBotPortion.y(),
+                                    leftBotPortion.z());
+            QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
+                                     rightTopPortion.z());
+            leftBotCorner *= Wanok::portionSize * m_map->squareSize();
+            rightTopCorner *= Wanok::portionSize * m_map->squareSize();
+            rightTopCorner.setX(rightTopCorner.x() - 1);
+            rightTopCorner.setY(rightTopCorner.y() - 1);
+            rightTopCorner.setZ(rightTopCorner.z() - 1);
+            QBox3D box(leftBotCorner, rightTopCorner);
+
+            // Testing intersection
+            float distance = box.intersection(ray);
+            if (!isnan(distance)) {
+                if (m_map->isPortionInGrid(leftBotPortion)) {
+                    portions.insert(0, adjacent);
+                    updatePortionsInRay(portions, ray);
+
+                    return;
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -295,6 +390,90 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
                                         m_camera->horizontalAngle());
 }
 
+// -------------------------------------------------------
+//
+//  MOUSE RAYCASTING
+//
+// -------------------------------------------------------
+
+QVector3D ControlMapEditor::transformToNormalizedCoords(const QPoint& mouse){
+    float x = (2.0f * mouse.x()) / m_width - 1.0f;
+    float y = 1.0f - (2.0f * mouse.y()) / m_height;
+    float z = 1.0f;
+
+    return QVector3D(x, y, z);
+}
+
+// -------------------------------------------------------
+
+QVector4D ControlMapEditor::transformToHomogeneousClip(QVector3D& normalized){
+    return QVector4D(normalized.x(), normalized.y(), -1.0, 1.0);
+}
+
+// -------------------------------------------------------
+
+QVector4D ControlMapEditor::transformToEyeCoords(QVector4D& rayClip,
+                                                 QMatrix4x4& projection){
+    QVector4D rayEye = projection.inverted() * rayClip;
+
+    return QVector4D(rayEye.x(), rayEye.y(), -1.0, 0.0);
+}
+
+// -------------------------------------------------------
+
+QVector3D ControlMapEditor::transformToWorldCoords(QVector4D& rayEye,
+                                                   QMatrix4x4& view){
+    QVector4D rayWorld = view.inverted() * rayEye;
+
+    return QVector3D(rayWorld.x(), rayWorld.y(), rayWorld.z()).normalized();
+}
+
+// -------------------------------------------------------
+
+QVector3D ControlMapEditor::getRayWorld(const QPoint& mouse,
+                                        QMatrix4x4& projection,
+                                        QMatrix4x4& view)
+{
+    QVector3D normalized = transformToNormalizedCoords(mouse);
+    QVector4D homogeneous = transformToHomogeneousClip(normalized);
+    QVector4D eye = transformToEyeCoords(homogeneous, projection);
+
+    return transformToWorldCoords(eye, view);
+}
+
+// -------------------------------------------------------
+
+QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance){
+    return QVector3D(
+                    ray.x() * distance + m_camera->positionX(),
+                    ray.y() * distance + m_camera->positionY(),
+                    ray.z() * distance + m_camera->positionZ()
+                );
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getCorrectPositionOnRay(Position &position,
+                                               QVector3D &ray, int distance){
+    QVector3D point = getPositionOnRay(ray, distance);
+    int x = ((int) point.x()) / m_map->squareSize();
+    int y = ((int) point.y()) / m_map->squareSize();
+    int yPlus = (((int) point.y()) % m_map->squareSize() / m_map->squareSize())
+            * 100;
+    int z = ((int) point.z()) / m_map->squareSize();
+    if (point.x() < 0) x--;
+    if (point.z() < 0) z--;
+
+    position.setX(x);
+    position.setY(y);
+    position.setYPlus(yPlus);
+    position.setZ(z);
+}
+
+// -------------------------------------------------------
+//
+//  UPDATES
+//
 // -------------------------------------------------------
 
 void ControlMapEditor::updateWallIndicator() {
@@ -666,81 +845,6 @@ void ControlMapEditor::setToNotSaved(){
 
 void ControlMapEditor::save(){
     m_treeMapNode->setText(m_map->mapProperties()->name());
-}
-
-// -------------------------------------------------------
-//
-//  MOUSE RAYCASTING
-//
-// -------------------------------------------------------
-
-QVector3D ControlMapEditor::transformToNormalizedCoords(const QPoint& mouse){
-    float x = (2.0f * mouse.x()) / m_width - 1.0f;
-    float y = 1.0f - (2.0f * mouse.y()) / m_height;
-    float z = 1.0f;
-
-    return QVector3D(x, y, z);
-}
-
-// -------------------------------------------------------
-
-QVector4D ControlMapEditor::transformToHomogeneousClip(QVector3D& normalized){
-    return QVector4D(normalized.x(), normalized.y(), -1.0, 1.0);
-}
-
-// -------------------------------------------------------
-
-QVector4D ControlMapEditor::transformToEyeCoords(QVector4D& rayClip,
-                                                 QMatrix4x4& projection){
-    QVector4D rayEye = projection.inverted() * rayClip;
-
-    return QVector4D(rayEye.x(), rayEye.y(), -1.0, 0.0);
-}
-
-// -------------------------------------------------------
-
-QVector3D ControlMapEditor::transformToWorldCoords(QVector4D& rayEye,
-                                                   QMatrix4x4& view){
-    QVector4D rayWorld = view.inverted() * rayEye;
-
-    return QVector3D(rayWorld.x(), rayWorld.y(), rayWorld.z()).normalized();
-}
-
-// -------------------------------------------------------
-
-QVector3D ControlMapEditor::getRayWorld(const QPoint& mouse,
-                                        QMatrix4x4& projection,
-                                        QMatrix4x4& view)
-{
-    QVector3D normalized = transformToNormalizedCoords(mouse);
-    QVector4D homogeneous = transformToHomogeneousClip(normalized);
-    QVector4D eye = transformToEyeCoords(homogeneous, projection);
-
-    return transformToWorldCoords(eye, view);
-}
-
-// -------------------------------------------------------
-
-QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance){
-    return QVector3D(
-                    ray.x() * distance + m_camera->positionX(),
-                    ray.y() * distance + m_camera->positionY(),
-                    ray.z() * distance + m_camera->positionZ()
-                );
-}
-
-// -------------------------------------------------------
-
-void ControlMapEditor::getCorrectPositionOnRay(Position &position,
-                                               QVector3D &ray, int distance){
-    QVector3D point = getPositionOnRay(ray, distance);
-    int x = ((int) point.x()) / m_map->squareSize();
-    int z = ((int) point.z()) / m_map->squareSize();
-    if (point.x() < 0) x--;
-    if (point.z() < 0) z--;
-
-    position.setX(x);
-    position.setZ(z);
 }
 
 // -------------------------------------------------------

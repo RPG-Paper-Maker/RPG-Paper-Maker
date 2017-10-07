@@ -75,7 +75,7 @@ Map::Map(int id) :
     m_mapProperties = new MapProperties(m_pathMap);
     readObjects();
     m_saved = !Wanok::mapsToSave.contains(id);
-    m_portionsRay = 4 + 1;
+    m_portionsRay = Wanok::get()->getPortionsRay() + 1;
     m_squareSize = Wanok::get()->getSquareSize();
 
     // Loading textures
@@ -724,9 +724,26 @@ void Map::deletePortions(){
 
 // -------------------------------------------------------
 
-bool Map::isInGrid(Position3D &position) const{
+bool Map::isInGrid(Position3D &position) const {
+    int y = position.getY(m_squareSize);
+    int d = m_mapProperties->depth() * m_squareSize;
+    int h = m_mapProperties->height() * m_squareSize;
+
     return (position.x() >= 0 && position.x() < m_mapProperties->length() &&
+            y >= -d && y < h &&
             position.z() >= 0 && position.z() < m_mapProperties->width());
+}
+
+// -------------------------------------------------------
+
+bool Map::isPortionInGrid(Portion& portion) const {
+    int l = m_mapProperties->length() / Wanok::portionSize;
+    int w = m_mapProperties->width() / Wanok::portionSize;
+    int d = m_mapProperties->depth() / Wanok::portionSize;
+    int h = m_mapProperties->height() / Wanok::portionSize;
+
+    return (portion.x() >= 0 && portion.x() < l && portion.y() >= -d &&
+            portion.y() < h && portion.z() >= 0 && portion.z() < w);
 }
 
 // -------------------------------------------------------
@@ -738,6 +755,14 @@ bool Map::isInPortion(Portion& portion, int offset) const{
             portion.y() >= -(m_portionsRay + offset) &&
             portion.z() <= (m_portionsRay + offset) &&
             portion.z() >= -(m_portionsRay + offset));
+}
+
+// -------------------------------------------------------
+
+bool Map::isInSomething(Position3D& position, Portion& portion,
+                        int offset) const
+{
+    return isInGrid(position) && isInPortion(portion, offset);
 }
 
 // -------------------------------------------------------

@@ -124,7 +124,10 @@ public:
     void loadPortions(Portion portion);
     void deletePortions();
     bool isInGrid(Position3D& position) const;
+    bool isPortionInGrid(Portion& portion) const;
     bool isInPortion(Portion& portion, int offset = -1) const;
+    bool isInSomething(Position3D& position, Portion& portion,
+                       int offset = -1) const;
     Portion getGlobalPortion(Position3D &position) const;
     Portion getLocalPortion(Position3D &position) const;
     Portion getPortionGrid(GridPosition& gridPosition) const;
