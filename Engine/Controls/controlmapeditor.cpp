@@ -243,6 +243,10 @@ void ControlMapEditor::updateMousePosition(QPoint point) {
 }
 
 // -------------------------------------------------------
+//
+//  MOUSE RAYCASTING
+//
+// -------------------------------------------------------
 
 void ControlMapEditor::updateRaycasting(){
     QList<Portion> portions;
@@ -257,8 +261,8 @@ void ControlMapEditor::updateRaycasting(){
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
                             m_camera->positionZ());
     QRay3D ray(cameraPosition, rayDirection);
+    qDebug() << "----";
     getPortionsInRay(portions, ray);
-
     qDebug() << QString::number(portions.size());
 
     // Others
@@ -296,7 +300,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         // Getting the box including all the drawable portions
         Portion leftBotPortion = m_currentPortion;
         Portion rightTopPortion = m_currentPortion;
-        leftBotPortion.addAll(m_map->portionsRay() - 1);
+        leftBotPortion.addAll(-m_map->portionsRay() + 1);
         rightTopPortion.addAll(m_map->portionsRay());
         QVector3D leftBotCorner(leftBotPortion.x(), leftBotPortion.y(),
                                 leftBotPortion.z());
@@ -307,6 +311,26 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         rightTopCorner.setX(rightTopCorner.x() - 1);
         rightTopCorner.setY(rightTopCorner.y() - 1);
         rightTopCorner.setZ(rightTopCorner.z() - 1);
+
+        // Adjusting according to the grid limit
+        int yBot = -m_map->mapProperties()->depth() * m_map->squareSize();
+        int xRight = m_map->mapProperties()->length() * m_map->squareSize() - 1;
+        int yTop = m_map->mapProperties()->height() * m_map->squareSize() - 1;
+        int zRight = m_map->mapProperties()->width() * m_map->squareSize() - 1;
+        if (leftBotCorner.x() < 0)
+            leftBotCorner.setX(0);
+        if (leftBotCorner.y() < yBot)
+            leftBotCorner.setY(yBot);
+        if (leftBotCorner.z() < 0)
+            leftBotCorner.setZ(0);
+        if (rightTopCorner.x() > xRight)
+            rightTopCorner.setX(xRight);
+        if (rightTopCorner.y() > yTop)
+            rightTopCorner.setY(yTop);
+        if (rightTopCorner.z() > zRight)
+            rightTopCorner.setZ(zRight);
+
+        // creating the box
         QBox3D box(leftBotCorner, rightTopCorner);
 
         // Testing intersection
@@ -324,18 +348,32 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         }
     }
 
-    updatePortionsInRay(portions, ray);
+    // Getting adjacent portions to check according to ray
+    QList<Portion> adjacents;
+    if (direction.x() > 0)
+        adjacents << Portion(1, 0, 0);
+    else
+        adjacents << Portion(-1, 0, 0);
+    if (direction.y() > 0)
+        adjacents << Portion(0, 1, 0);
+    else
+        adjacents << Portion(0, -1, 0);
+    if (direction.z() > 0)
+        adjacents << Portion(0, 0, 1);
+    else
+        adjacents << Portion(0, 0, -1);
+
+    // Update the portions ray with adjacent portions
+    updatePortionsInRay(portions, ray, adjacents);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
-                                           QRay3D &ray)
+                                           QRay3D &ray,
+                                           QList<Portion>& adjacents)
 {
     Portion portion = portions.first();
-    QList<Portion> adjacents;
-    adjacents << Portion(-1, 0, 0) << Portion(1, 0, 0) << Portion(0, 0, -1)
-              << Portion(0, 0, 1) << Portion(0, -1, 0) << Portion(0, 1, 0);
 
     // For each adjacent portion... test if the camera ray is crossing
     for (int i = 0; i < adjacents.size(); i++) {
@@ -364,8 +402,7 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
             if (!isnan(distance)) {
                 if (m_map->isPortionInGrid(leftBotPortion)) {
                     portions.insert(0, adjacent);
-                    updatePortionsInRay(portions, ray);
-
+                    updatePortionsInRay(portions, ray, adjacents);
                     return;
                 }
             }
@@ -390,10 +427,6 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
                                         m_camera->horizontalAngle());
 }
 
-// -------------------------------------------------------
-//
-//  MOUSE RAYCASTING
-//
 // -------------------------------------------------------
 
 QVector3D ControlMapEditor::transformToNormalizedCoords(const QPoint& mouse){

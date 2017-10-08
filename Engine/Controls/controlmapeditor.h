@@ -67,7 +67,8 @@ public:
     void updateMousePosition(QPoint point);
     void updateRaycasting();
     void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
-    void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray);
+    void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray,
+                             QList<Portion> &adjacents);
     void updateRaycastingLand(MapPortion*, QRay3D&);
     void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
     QVector3D transformToNormalizedCoords(const QPoint& mouse);
