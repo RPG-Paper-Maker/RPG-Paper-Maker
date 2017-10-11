@@ -225,6 +225,22 @@ void MapPortion::updateRaycastingSprites(int squareSize, float& finalDistance,
 }
 
 // -------------------------------------------------------
+
+void MapPortion::updateRaycastingOverflowSprite(int squareSize,
+                                                Position& position,
+                                                float &finalDistance,
+                                                Position &finalPosition,
+                                                QRay3D& ray,
+                                                double cameraHAngle)
+{
+    int spritesOffset = -0.005;
+    SpriteDatas* sprite = m_sprites->spriteAt(position);
+    m_sprites->updateRaycastingAt(position, sprite, squareSize,
+                                  finalDistance, finalPosition, ray,
+                                  cameraHAngle, spritesOffset);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

@@ -149,6 +149,18 @@ bool Sprites::isEmpty() const{
 
 // -------------------------------------------------------
 
+bool Sprites::contains(Position& position) const {
+    return m_all.contains(position);
+}
+
+// -------------------------------------------------------
+
+SpriteDatas* Sprites::spriteAt(Position& position) const {
+    return m_all.value(position);
+}
+
+// -------------------------------------------------------
+
 void Sprites::setSprite(QSet<Portion>& portionsOverflow, Position& p,
                         SpriteDatas* sprite){
     m_all[p] = sprite;
@@ -408,18 +420,42 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 // -------------------------------------------------------
 
 void Sprites::updateRaycasting(int squareSize, float &finalDistance,
-                               Position& finalPosition,  QRay3D &ray,
+                               Position& finalPosition, QRay3D &ray,
                                double cameraHAngle, int& spritesOffset)
 {
-    QHash<Position, SpriteDatas*>::iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++) {
-        Position position = i .key();
-        float newDistance = i.value()->intersection(squareSize, ray, position,
-                                                    cameraHAngle,
-                                                    spritesOffset);
-        if (Wanok::getMinDistance(finalDistance, newDistance))
-            finalPosition = position;
+    for (QHash<Position, SpriteDatas*>::iterator i = m_all.begin();
+         i != m_all.end(); i++)
+    {
+        Position position = i.key();
+        updateRaycastingAt(position, i.value(), squareSize, finalDistance,
+                           finalPosition, ray, cameraHAngle, spritesOffset);
     }
+
+    // Overflow
+    Map* map = Wanok::get()->project()->currentMap();
+    for (QSet<Position>::iterator i = m_overflow.begin();
+         i != m_overflow.end(); i++)
+    {
+        Position position = *i;
+        Portion portion = map->getLocalPortion(position);
+        MapPortion* mapPortion = map->mapPortion(portion);
+        mapPortion->updateRaycastingOverflowSprite(squareSize, position,
+                                                   finalDistance, finalPosition,
+                                                   ray, cameraHAngle);
+    }
+}
+
+// -------------------------------------------------------
+
+void Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
+                                 int squareSize, float &finalDistance,
+                                 Position &finalPosition, QRay3D& ray,
+                                 double cameraHAngle, int& spritesOffset)
+{
+    float newDistance = sprite->intersection(squareSize, ray, position,
+                                             cameraHAngle, spritesOffset);
+    if (Wanok::getMinDistance(finalDistance, newDistance))
+        finalPosition = position;
 }
 
 // -------------------------------------------------------

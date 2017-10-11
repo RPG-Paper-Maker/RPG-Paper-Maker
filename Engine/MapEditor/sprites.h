@@ -69,6 +69,8 @@ public:
     void addOverflow(Position& p);
     void removeOverflow(Position& p);
     bool isEmpty() const;
+    bool contains(Position& position) const;
+    SpriteDatas* spriteAt(Position& position) const;
     void setSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas* sprite);
     void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
@@ -98,6 +100,10 @@ public:
     void updateRaycasting(int squareSize, float& finalDistance,
                           Position &finalPosition, QRay3D &ray,
                           double cameraHAngle, int& spritesOffset);
+    void updateRaycastingAt(Position &position, SpriteDatas* sprite,
+                            int squareSize, float &finalDistance,
+                            Position &finalPosition, QRay3D& ray,
+                            double cameraHAngle, int& spritesOffset);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,

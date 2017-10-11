@@ -74,6 +74,10 @@ public:
     void updateRaycastingSprites(int squareSize, float& finalDistance,
                                  Position &finalPosition, QRay3D& ray,
                                  double cameraHAngle);
+    void updateRaycastingOverflowSprite(int squareSize, Position& position,
+                                        float &finalDistance,
+                                        Position &finalPosition, QRay3D& ray,
+                                        double cameraHAngle);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,

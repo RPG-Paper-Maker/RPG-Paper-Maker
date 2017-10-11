@@ -24,6 +24,7 @@
 #include "systemlang.h"
 #include "systemtileset.h"
 #include "position.h"
+#include "qray3d.h"
 
 // -------------------------------------------------------
 //
@@ -57,6 +58,9 @@ public:
     void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path, bool temp = false);
+    void updateRaycastingOverflowSprites(Portion& portion, float &finalDistance,
+                                         Position &finalPosition, QRay3D& ray,
+                                         double cameraHAngle);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -67,7 +71,7 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
-    QHash<Portion, QSet<Position>*> m_outOverflow;
+    QHash<Portion, QSet<Position>*> m_outOverflowSprites;
 };
 
 #endif // MAPPROPERTIES_H

@@ -55,7 +55,7 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
 MapProperties::~MapProperties()
 {
     QHash<Portion, QSet<Position>*>::iterator i;
-    for (i = m_outOverflow.begin(); i != m_outOverflow.end(); i++)
+    for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
         delete *i;
 }
 
@@ -90,23 +90,23 @@ void MapProperties::setHeight(int h) { m_height = h; }
 void MapProperties::setDepth(int d) { m_depth = d; }
 
 void MapProperties::addOverflow(Position& p, Portion& portion) {
-    QSet<Position>* portions = m_outOverflow.value(portion);
+    QSet<Position>* portions = m_outOverflowSprites.value(portion);
 
     if (portions == nullptr) {
         portions = new QSet<Position>;
-        m_outOverflow.insert(portion, portions);
+        m_outOverflowSprites.insert(portion, portions);
     }
 
     portions->insert(p);
 }
 
 void MapProperties::removeOverflow(Position& p, Portion& portion) {
-    QSet<Position>* portions = m_outOverflow.value(portion);
+    QSet<Position>* portions = m_outOverflowSprites.value(portion);
 
     if (portions != nullptr) {
         portions->remove(p);
         if (portions->isEmpty()) {
-            m_outOverflow.remove(portion);
+            m_outOverflowSprites.remove(portion);
             delete portions;
         }
     }
@@ -144,6 +144,33 @@ void MapProperties::save(QString path, bool temp){
 }
 
 // -------------------------------------------------------
+
+void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
+                                                    float &finalDistance,
+                                                    Position &finalPosition,
+                                                    QRay3D& ray,
+                                                    double cameraHAngle)
+{
+    Map* map = Wanok::get()->project()->currentMap();
+    QSet<Position>* positions = m_outOverflowSprites.value(portion);
+    if (positions != nullptr) {
+        QSet<Position>::iterator i;
+        for (i = positions->begin(); i != positions->end(); i++) {
+            Position position = *i;
+            Portion portion = map->getLocalPortion(position);
+            MapPortion* mapPortion = map->mapPortion(portion);
+            if (mapPortion != nullptr) {
+                mapPortion->updateRaycastingOverflowSprite(map->squareSize(),
+                                                           position,
+                                                           finalDistance,
+                                                           finalPosition, ray,
+                                                           cameraHAngle);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -159,7 +186,7 @@ void MapProperties::read(const QJsonObject &json){
     m_depth = json["d"].toInt();
 
     // Overflow
-    QJsonArray tabOverflow = json["overflow"].toArray();
+    QJsonArray tabOverflow = json["ofsprites"].toArray();
     for (int i = 0; i < tabOverflow.size(); i++) {
         QJsonObject objHash = tabOverflow.at(i).toObject();
         QJsonArray tabKey = objHash["k"].toArray();
@@ -174,7 +201,7 @@ void MapProperties::read(const QJsonObject &json){
             position.read(tabPosition);
             positions->insert(position);
         }
-        m_outOverflow.insert(portion, positions);
+        m_outOverflowSprites.insert(portion, positions);
     }
 }
 
@@ -192,7 +219,8 @@ void MapProperties::write(QJsonObject &json) const{
     // Overflow
     QHash<Portion, QSet<Position>*>::const_iterator i;
     QJsonArray tabOverflow;
-    for (i = m_outOverflow.begin(); i != m_outOverflow.end(); i++) {
+    for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
+    {
         Portion portion = i.key();
         QSet<Position>* positions = i.value();
         QJsonObject objHash;
@@ -212,5 +240,5 @@ void MapProperties::write(QJsonObject &json) const{
         objHash["v"] = tabValue;
         tabOverflow.append(objHash);
     }
-    json["overflow"] = tabOverflow;
+    json["ofsprites"] = tabOverflow;
 }

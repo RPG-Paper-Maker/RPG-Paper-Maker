@@ -270,9 +270,18 @@ void ControlMapEditor::updateRaycasting(){
     for (int i = portions.size() - 1; i >= 0; i--) {
         Portion portion = portions.at(i);
         MapPortion* mapPortion = m_map->mapPortion(portion);
-        updateRaycastingLand(mapPortion, ray);
-        updateRaycastingSprites(mapPortion, ray);
+        if (mapPortion == nullptr) {
+            Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
+            m_map->mapProperties()->updateRaycastingOverflowSprites(
+                        globalPortion, m_distanceSprite, m_positionOnSprite,
+                        ray, m_camera->horizontalAngle());
+        }
+        else {
+            updateRaycastingLand(mapPortion, ray);
+            updateRaycastingSprites(mapPortion, ray);
+        }
     }
+
     if (m_distanceLand == 0)
         m_positionOnLand = m_positionOnPlane;
     if (m_distanceSprite == 0)
@@ -291,7 +300,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
     portionCamera = m_map->getLocalPortion(positionCamera);
 
     // If camera is inside the portions, ok !
-    if (m_map->isInSomething(positionCamera, portionCamera))
+    if (m_map->isInPortion(portionCamera))
         portions.append(portionCamera);
     // Else, we need to find te nearest portion the camera is looking at
     else {
@@ -312,6 +321,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         rightTopCorner.setZ(rightTopCorner.z() - 1);
 
         // Adjusting according to the grid limit
+        /*
         int yBot = -m_map->mapProperties()->depth() * m_map->squareSize();
         int xRight = m_map->mapProperties()->length() * m_map->squareSize() - 1;
         int yTop = m_map->mapProperties()->height() * m_map->squareSize() - 1;
@@ -327,7 +337,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         if (rightTopCorner.y() > yTop)
             rightTopCorner.setY(yTop);
         if (rightTopCorner.z() > zRight)
-            rightTopCorner.setZ(zRight);
+            rightTopCorner.setZ(zRight);*/
 
         // creating the box
         QBox3D box(leftBotCorner, rightTopCorner);
@@ -339,11 +349,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         else {
             getCorrectPositionOnRay(positionCamera, direction, distance);
             portionCamera = m_map->getLocalPortion(positionCamera);
-
-            if (m_map->isInSomething(positionCamera, portionCamera))
-                portions.append(portionCamera);
-            else
-                return;
+            portions.append(portionCamera);
         }
     }
 
@@ -399,11 +405,9 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
             // Testing intersection
             float distance = box.intersection(ray);
             if (!isnan(distance)) {
-                if (m_map->isPortionInGrid(leftBotPortion)) {
-                    portions.insert(0, adjacent);
-                    updatePortionsInRay(portions, ray, adjacents);
-                    return;
-                }
+                portions.insert(0, adjacent);
+                updatePortionsInRay(portions, ray, adjacents);
+                return;
             }
         }
     }
