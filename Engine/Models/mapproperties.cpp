@@ -54,7 +54,9 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
 
 MapProperties::~MapProperties()
 {
-
+    QHash<Portion, QSet<Position>*>::iterator i;
+    for (i = m_outOverflow.begin(); i != m_outOverflow.end(); i++)
+        delete *i;
 }
 
 QString MapProperties::realName() const {
@@ -86,6 +88,29 @@ void MapProperties::setWidth(int w) { m_width = w; }
 void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
+
+void MapProperties::addOverflow(Position& p, Portion& portion) {
+    QSet<Position>* portions = m_outOverflow.value(portion);
+
+    if (portions == nullptr) {
+        portions = new QSet<Position>;
+        m_outOverflow.insert(portion, portions);
+    }
+
+    portions->insert(p);
+}
+
+void MapProperties::removeOverflow(Position& p, Portion& portion) {
+    QSet<Position>* portions = m_outOverflow.value(portion);
+
+    if (portions != nullptr) {
+        portions->remove(p);
+        if (portions->isEmpty()) {
+            m_outOverflow.remove(p);
+            delete portions;
+        }
+    }
+}
 
 // -------------------------------------------------------
 //
@@ -130,6 +155,25 @@ void MapProperties::read(const QJsonObject &json){
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
+
+    // Overflow
+    QJsonArray tabOverflow = json["overflow"].toArray();
+    for (int i = 0; i < tabOverflow.size(); i++) {
+        QJsonObject objHash = tabOverflow.at(i).toObject();
+        QJsonArray tabKey = objHash["k"].toArray();
+        QJsonArray tabValue = objHash["v"].toArray();
+        Portion portion;
+        portion.read(tabKey);
+        QSet<Position>* positions = new QSet<Position>;
+
+        for (int j = 0; j < tabValue.size(); j++) {
+            QJsonArray tabPosition = tabValue.at(i).toArray();
+            Position position;
+            position.read(tabPosition);
+            positions->insert(position);
+        }
+        m_outOverflow.insert(portion, positions);
+    }
 }
 
 // -------------------------------------------------------
@@ -142,4 +186,29 @@ void MapProperties::write(QJsonObject &json) const{
     json["h"] = m_height;
     json["d"] = m_depth;
     json["tileset"] = m_tilesetID;
+
+    // Overflow
+    QHash<Portion, QSet<Position>*>::const_iterator i;
+    QJsonArray tabOverflow;
+    for (i = m_outOverflow.begin(); i != m_outOverflow.end(); i++) {
+        Portion portion = i.key();
+        QSet<Position>* positions = i.value();
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        QJsonArray tabValue;
+
+        portion.write(tabKey);
+        QSet<Position>::iterator j;
+        for (j = positions->begin(); j != positions->end(); j++) {
+            Position position = *j;
+            QJsonArray tabPosition;
+            position.write(tabPosition);
+            tabValue.append(tabPosition);
+        }
+
+        objHash["k"] = tabKey;
+        objHash["v"] = tabValue;
+        tabOverflow.append(objHash);
+    }
+    json["overflow"] = tabOverflow;
 }

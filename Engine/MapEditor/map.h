@@ -21,7 +21,6 @@
 #define MAP_H
 
 #include <QOpenGLTexture>
-#include "portion.h"
 #include "mapportion.h"
 #include "mapobjects.h"
 #include "mapproperties.h"
@@ -52,6 +51,25 @@ public:
     bool saved() const;
     void setSaved(bool b);
     QStandardItemModel* modelObjects() const;
+    MapPortion* mapPortion(Portion& p) const;
+    MapPortion* mapPortionFromGlobal(Portion& p) const;
+    MapPortion* mapPortion(int x, int y, int z) const;
+    MapPortion* mapPortionBrut(int index) const;
+    int portionIndex(int x, int y, int z) const;
+    int getMapPortionSize() const;
+    int getMapPortionTotalSize() const;
+    void setMapPortion(int x, int y, int z, MapPortion *mapPortion);
+    void setMapPortion(Portion& p, MapPortion *mapPortion);
+    MapObjects* objectsPortion(Portion& p);
+    MapObjects* objectsPortion(int x, int y, int z);
+    bool addObject(Position& p, MapPortion *mapPortion,
+                   SystemCommonObject* object);
+    static int removeObject(QStandardItemModel* model,
+                            SystemCommonObject *object);
+    bool deleteObject(Position& p, MapPortion *mapPortion,
+                      SystemCommonObject *object);
+    void addOverflow(Position& p, Portion& portion);
+    void removeOverflow(Position& p, Portion& portion);
 
     void initializeCursor(QVector3D *position);
     static void writeNewMap(QString path, MapProperties& properties);
@@ -92,22 +110,6 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind,
                      QHash<int, QOpenGLTexture*>& textures, int id);
-    MapPortion* mapPortion(Portion& p) const;
-    MapPortion* mapPortion(int x, int y, int z) const;
-    MapPortion* mapPortionBrut(int index) const;
-    int portionIndex(int x, int y, int z) const;
-    int getMapPortionSize() const;
-    int getMapPortionTotalSize() const;
-    void setMapPortion(int x, int y, int z, MapPortion *mapPortion);
-    void setMapPortion(Portion& p, MapPortion *mapPortion);
-    MapObjects* objectsPortion(Portion& p);
-    MapObjects* objectsPortion(int x, int y, int z);
-    bool addObject(Position& p, MapPortion *mapPortion,
-                   SystemCommonObject* object);
-    static int removeObject(QStandardItemModel* model,
-                            SystemCommonObject *object);
-    bool deleteObject(Position& p, MapPortion *mapPortion,
-                      SystemCommonObject *object);
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k);
@@ -128,7 +130,7 @@ public:
     bool isInPortion(Portion& portion, int offset = -1) const;
     bool isInSomething(Position3D& position, Portion& portion,
                        int offset = -1) const;
-    Portion getGlobalPortion(Position3D &position) const;
+    static Portion getGlobalPortion(Position3D &position);
     Portion getLocalPortion(Position3D &position) const;
     Portion getPortionGrid(GridPosition& gridPosition) const;
     bool isVisibleGridPosition(GridPosition& position) const;

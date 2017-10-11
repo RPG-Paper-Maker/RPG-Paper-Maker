@@ -133,6 +133,12 @@ MapPortion* Map::mapPortion(int x, int y, int z) const {
     return mapPortionBrut(index);
 }
 
+MapPortion* Map::mapPortionFromGlobal(Portion& p) const {
+    Portion portion = getLocalFromGlobalPortion(p);
+
+    return mapPortion(portion);
+}
+
 MapPortion* Map::mapPortionBrut(int index) const {
     return m_mapPortions[index];
 }
@@ -175,6 +181,14 @@ MapObjects* Map::objectsPortion(int x, int y, int z){
         return mapPortion->mapObjects();
 
     return nullptr;
+}
+
+void Map::addOverflow(Position& p, Portion &portion) {
+    m_mapProperties->addOverflow(p, portion);
+}
+
+void Map::removeOverflow(Position& p, Portion &portion) {
+    m_mapProperties->removeOverflow(p, portion);
 }
 
 // -------------------------------------------------------
@@ -767,7 +781,7 @@ bool Map::isInSomething(Position3D& position, Portion& portion,
 
 // -------------------------------------------------------
 
-Portion Map::getGlobalPortion(Position3D& position) const{
+Portion Map::getGlobalPortion(Position3D& position){
     return Portion(
                 position.x() / Wanok::portionSize,
                 position.y() / Wanok::portionSize,

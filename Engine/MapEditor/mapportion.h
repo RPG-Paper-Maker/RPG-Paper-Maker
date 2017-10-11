@@ -60,7 +60,8 @@ public:
     SpriteWallDatas* getWallAt(GridPosition& gridPosition);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
-
+    void addOverflow(Position& p);
+    void removeOverflow(Position& p);
     void removeLandOut(MapProperties& properties);
     void removeSpritesOut(MapProperties& properties);
     void removeObjectsOut(QList<int>& listDeletedObjectsIDs,

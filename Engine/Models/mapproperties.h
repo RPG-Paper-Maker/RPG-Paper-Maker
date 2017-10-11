@@ -23,6 +23,7 @@
 #include <QHash>
 #include "systemlang.h"
 #include "systemtileset.h"
+#include "position.h"
 
 // -------------------------------------------------------
 //
@@ -51,6 +52,8 @@ public:
     void setWidth(int w);
     void setHeight(int h);
     void setDepth(int d);
+    void addOverflow(Position& p, Portion& portion);
+    void removeOverflow(Position& p, Portion& portion);
     void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path);
@@ -64,6 +67,7 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
+    QHash<Portion, QSet<Position>*> m_outOverflow;
 };
 
 #endif // MAPPROPERTIES_H

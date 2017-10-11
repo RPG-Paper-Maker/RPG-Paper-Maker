@@ -129,6 +129,14 @@ Sprites::~Sprites()
         delete *k;
 }
 
+void Sprites::addOverflow(Position& p) {
+    m_overflow += p;
+}
+
+void Sprites::removeOverflow(Position& p) {
+    m_overflow -= p;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -143,6 +151,73 @@ bool Sprites::isEmpty() const{
 
 void Sprites::setSprite(Position& p, SpriteDatas* sprite){
     m_all[p] = sprite;
+
+    // Getting overflowing portions
+    QSet<Portion> portionsOverflow;
+    getSetPortionsOverflow(portionsOverflow, p, sprite);
+
+    // Adding to overflowing
+    addRemoveOverflow(portionsOverflow, p, true);
+}
+
+// -------------------------------------------------------
+
+void Sprites::getSetPortionsOverflow(QSet<Portion>& portionsOverflow,
+                                     Position& p, SpriteDatas* sprite)
+{
+    Portion currentPortion = Map::getGlobalPortion(p);
+    int r = sprite->textureRect()->width() / 2;
+    int h = sprite->textureRect()->height();
+
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < h; j++) {
+            for (int k = 0; k < r; k++) {
+                Position newPosition = p;
+                newPosition.addX(i);
+                newPosition.addY(j);
+                newPosition.addZ(k);
+                Portion newPortion = Map::getGlobalPortion(newPosition);
+                if (newPortion != currentPortion)
+                    portionsOverflow += newPortion;
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Sprites::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
+                                bool add)
+{
+    Map* map = Wanok::get()->project()->currentMap();
+    for (QSet<Portion>::iterator i = portionsOverflow.begin();
+         i != portionsOverflow.end(); i++)
+    {
+        Portion portion = *i;
+        if (map->isPortionInGrid(portion)) {
+            MapPortion* mapPortion = map->mapPortionFromGlobal(portion);
+            bool write = false;
+            if (mapPortion == nullptr) {
+                write = true;
+                mapPortion = map->loadPortionMap(portion.x(), portion.y(),
+                                                 portion.z());
+            }
+            if (add)
+                mapPortion->addOverflow(p);
+            else
+                mapPortion->removeOverflow(p);
+            if (write) {
+                map->savePortionMap(mapPortion);
+                delete mapPortion;
+            }
+        }
+        else {
+            if (add)
+                map->addOverflow(p, portion);
+            else
+                map->removeOverflow(p, portion);
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -151,6 +226,14 @@ SpriteDatas* Sprites::removeSprite(Position& p){
     SpriteDatas* sprite = m_all.value(p);
     if (sprite != nullptr){
         m_all.remove(p);
+
+        // Getting overflowing portions
+        QSet<Portion> portionsOverflow;
+        getSetPortionsOverflow(portionsOverflow, p, sprite);
+
+        // Adding to overflowing
+        addRemoveOverflow(portionsOverflow, p, false);
+
         return sprite;
     }
 

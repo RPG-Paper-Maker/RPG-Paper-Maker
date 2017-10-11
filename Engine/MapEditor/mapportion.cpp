@@ -147,6 +147,18 @@ bool MapPortion::deleteObject(Position& p){
 
 // -------------------------------------------------------
 
+void MapPortion::addOverflow(Position& p) {
+    m_sprites->addOverflow(p);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeOverflow(Position& p) {
+    m_sprites->removeOverflow(p);
+}
+
+// -------------------------------------------------------
+
 void MapPortion::removeLandOut(MapProperties& properties) {
     m_floors->removeLandOut(properties);
 }

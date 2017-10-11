@@ -66,8 +66,14 @@ class Sprites : public Serializable, protected QOpenGLFunctions
 public:
     Sprites();
     virtual ~Sprites();
+    void addOverflow(Position& p);
+    void removeOverflow(Position& p);
     bool isEmpty() const;
     void setSprite(Position& p, SpriteDatas* sprite);
+    void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
+                                SpriteDatas* sprite);
+    void addRemoveOverflow(QSet<Portion>& portionsOverflow, Position &p,
+                           bool add);
     SpriteDatas* removeSprite(Position& p);
     bool addSprite(Position& p, MapEditorSubSelectionKind kind,
                    int widthPosition, int angle, QRect *textureRect);
@@ -111,6 +117,7 @@ protected:
     QHash<Position, SpriteDatas*> m_all;
     QHash<GridPosition, SpriteWallDatas*> m_walls;
     QHash<int, SpritesWalls*> m_wallsGL;
+    QSet<Position> m_overflow;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;
