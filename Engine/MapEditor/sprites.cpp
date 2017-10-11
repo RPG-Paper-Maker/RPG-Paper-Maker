@@ -144,16 +144,16 @@ void Sprites::removeOverflow(Position& p) {
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_all.size() == 0 && m_walls.size() == 0;
+    return m_all.size() == 0 && m_walls.size() == 0 && m_overflow.size() == 0;
 }
 
 // -------------------------------------------------------
 
-void Sprites::setSprite(Position& p, SpriteDatas* sprite){
+void Sprites::setSprite(QSet<Portion>& portionsOverflow, Position& p,
+                        SpriteDatas* sprite){
     m_all[p] = sprite;
 
     // Getting overflowing portions
-    QSet<Portion> portionsOverflow;
     getSetPortionsOverflow(portionsOverflow, p, sprite);
 
     // Adding to overflowing
@@ -169,9 +169,9 @@ void Sprites::getSetPortionsOverflow(QSet<Portion>& portionsOverflow,
     int r = sprite->textureRect()->width() / 2;
     int h = sprite->textureRect()->height();
 
-    for (int i = 0; i < r; i++) {
+    for (int i = -r; i < r; i++) {
         for (int j = 0; j < h; j++) {
-            for (int k = 0; k < r; k++) {
+            for (int k = -r; k < r; k++) {
                 Position newPosition = p;
                 newPosition.addX(i);
                 newPosition.addY(j);
@@ -222,13 +222,13 @@ void Sprites::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
 
 // -------------------------------------------------------
 
-SpriteDatas* Sprites::removeSprite(Position& p){
+SpriteDatas* Sprites::removeSprite(QSet<Portion>& portionsOverflow, Position& p)
+{
     SpriteDatas* sprite = m_all.value(p);
     if (sprite != nullptr){
         m_all.remove(p);
 
         // Getting overflowing portions
-        QSet<Portion> portionsOverflow;
         getSetPortionsOverflow(portionsOverflow, p, sprite);
 
         // Adding to overflowing
@@ -242,25 +242,31 @@ SpriteDatas* Sprites::removeSprite(Position& p){
 
 // -------------------------------------------------------
 
-bool Sprites::addSprite(Position& p, MapEditorSubSelectionKind kind,
-                        int widthPosition, int angle, QRect *textureRect)
+bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
+                        MapEditorSubSelectionKind kind, int widthPosition,
+                        int angle, QRect *textureRect)
 {
-    SpriteDatas* previousSprite = removeSprite(p);
+    QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
+    SpriteDatas* previousSprite = removeSprite(portionsOverflowRemove, p);
     SpriteDatas* sprite = new SpriteDatas(kind, widthPosition, angle,
                                           textureRect);
 
     if (previousSprite != nullptr)
         delete previousSprite;
 
-    setSprite(p, sprite);
+    setSprite(portionsOverflowSet, p, sprite);
+
+    // Fusion of sets
+    portionsOverflow.unite(portionsOverflowRemove);
+    portionsOverflow.unite(portionsOverflowSet);
 
     return true;
 }
 
 // -------------------------------------------------------
 
-bool Sprites::deleteSprite(Position& p){
-    SpriteDatas* previousSprite = removeSprite(p);
+bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
+    SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
 
     if (previousSprite != nullptr)
         delete previousSprite;
@@ -577,16 +583,26 @@ void Sprites::read(const QJsonObject & json){
         sprite->read(objVal);
         m_walls[p] = sprite;
     }
+
+    // Overflow
+    tab = json["overflow"].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        QJsonArray tabPosition = tab.at(i).toArray();
+        Position position;
+        position.read(tabPosition);
+        m_overflow += position;
+    }
 }
 
 // -------------------------------------------------------
 
 void Sprites::write(QJsonObject & json) const{
-    QJsonArray tabGlobals, tabWalls;
+    QJsonArray tabGlobals, tabWalls, tabOverflow;
 
     // Globals
-    QHash<Position, SpriteDatas*>::const_iterator i;
-    for (i = m_all.begin(); i != m_all.end(); i++){
+    for (QHash<Position, SpriteDatas*>::const_iterator i = m_all.begin();
+         i != m_all.end(); i++)
+    {
         QJsonObject objHash;
         QJsonArray tabKey;
         i.key().write(tabKey);
@@ -600,17 +616,29 @@ void Sprites::write(QJsonObject & json) const{
     json["list"] = tabGlobals;
 
     // Walls
-    QHash<GridPosition, SpriteWallDatas*>::const_iterator j;
-    for (j = m_walls.begin(); j != m_walls.end(); j++){
+    for (QHash<GridPosition, SpriteWallDatas*>::const_iterator i =
+         m_walls.begin(); i != m_walls.end(); i++)
+    {
         QJsonObject objHash;
         QJsonArray tabKey;
-        j.key().write(tabKey);
+        i.key().write(tabKey);
         QJsonObject objSprite;
-        j.value()->write(objSprite);
+        i.value()->write(objSprite);
 
         objHash["k"] = tabKey;
         objHash["v"] = objSprite;
         tabWalls.append(objHash);
     }
     json["walls"] = tabWalls;
+
+    // Overflow
+    for (QSet<Position>::const_iterator i = m_overflow.begin();
+         i != m_overflow.end(); i++)
+    {
+        Position position = *i;
+        QJsonArray tabPosition;
+        position.write(tabPosition);
+        tabOverflow.append(tabPosition);
+    }
+    json["overflow"] = tabOverflow;
 }

@@ -106,7 +106,7 @@ void MapProperties::removeOverflow(Position& p, Portion& portion) {
     if (portions != nullptr) {
         portions->remove(p);
         if (portions->isEmpty()) {
-            m_outOverflow.remove(p);
+            m_outOverflow.remove(portion);
             delete portions;
         }
     }
@@ -137,7 +137,9 @@ void MapProperties::setCopy(const MapProperties& super){
 
 // -------------------------------------------------------
 
-void MapProperties::save(QString path){
+void MapProperties::save(QString path, bool temp){
+    if (temp)
+        path = Wanok::pathCombine(path, Wanok::TEMP_MAP_FOLDER_NAME);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::fileMapInfos), *this);
 }
 

@@ -96,16 +96,18 @@ bool MapPortion::deleteLand(Position& p){
 
 // -------------------------------------------------------
 
-bool MapPortion::addSprite(Position& p, MapEditorSubSelectionKind kind,
-                           int widthPosition, int angle, QRect *textureRect)
+bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
+                           MapEditorSubSelectionKind kind, int widthPosition,
+                           int angle, QRect *textureRect)
 {
-    return m_sprites->addSprite(p, kind, widthPosition, angle, textureRect);
+    return m_sprites->addSprite(portionsOverflow, p, kind, widthPosition, angle,
+                                textureRect);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteSprite(Position& p){
-    return m_sprites->deleteSprite(p);
+bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p){
+    return m_sprites->deleteSprite(portionsOverflow, p);
 }
 
 // -------------------------------------------------------

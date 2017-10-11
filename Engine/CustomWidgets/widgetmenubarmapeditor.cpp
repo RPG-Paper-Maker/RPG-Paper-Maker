@@ -56,6 +56,11 @@ WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
         delete m_actionRectangle;
         delete m_actionPin;
     }
+    if (m_menuLayer != nullptr) {
+        delete m_menuLayer;
+        delete m_actionLayerNone;
+        delete m_actionLayerOn;
+    }
 
     delete ui;
 }

@@ -56,7 +56,7 @@ public:
     void removeOverflow(Position& p, Portion& portion);
     void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
-    void save(QString path);
+    void save(QString path, bool temp = false);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

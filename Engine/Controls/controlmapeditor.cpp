@@ -38,6 +38,7 @@ ControlMapEditor::ControlMapEditor() :
     m_cursorObject(nullptr),
     m_camera(new Camera),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
+    m_needMapInfosToSave(false),
     m_displayGrid(true),
     m_treeMapNode(nullptr),
     m_isDrawingWall(false),
@@ -261,9 +262,7 @@ void ControlMapEditor::updateRaycasting(){
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
                             m_camera->positionZ());
     QRay3D ray(cameraPosition, rayDirection);
-    qDebug() << "----";
     getPortionsInRay(portions, ray);
-    qDebug() << QString::number(portions.size());
 
     // Others
     m_distanceLand = 0;
@@ -857,6 +856,12 @@ void ControlMapEditor::saveTempPortions(){
     QSet<MapPortion*>::iterator i;
     for (i = m_portionsToSave.begin(); i != m_portionsToSave.end(); i++)
         m_map->savePortionMap(*i);
+
+    // Save file infos
+    if (m_needMapInfosToSave) {
+        m_map->saveMapProperties();
+        m_needMapInfosToSave = false;
+    }
 }
 
 // -------------------------------------------------------
@@ -1316,8 +1321,9 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
         Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->addSprite(p, kind, widthPosition, angle,
-                                      textureRect) &&
+            QSet<Portion> portionsOverflow;
+            if (mapPortion->addSprite(portionsOverflow, p, kind, widthPosition,
+                                      angle, textureRect) &&
                 m_map->saved())
             {
                 setToNotSaved();
@@ -1325,6 +1331,8 @@ void ControlMapEditor::stockSprite(Position& p, MapEditorSubSelectionKind kind,
 
             m_portionsToUpdate += mapPortion;
             m_portionsToSave += mapPortion;
+            m_needMapInfosToSave = true;
+            updatePortionsToSaveOverflow(portionsOverflow);
 
             return;
         }
@@ -1401,10 +1409,14 @@ void ControlMapEditor::eraseSprite(Position& p){
         Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->deleteSprite(p) && m_map->saved())
+            QSet<Portion> portionsOverflow;
+            if (mapPortion->deleteSprite(portionsOverflow, p) && m_map->saved())
                 setToNotSaved();
+
             m_portionsToUpdate += mapPortion;
             m_portionsToSave += mapPortion;
+            m_needMapInfosToSave = true;
+            updatePortionsToSaveOverflow(portionsOverflow);
         }
     }
 }
@@ -1534,6 +1546,23 @@ void ControlMapEditor::removeObject(Position& p){
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updatePortionsToSaveOverflow(
+        QSet<Portion>& portionsOverflow)
+{
+    for (QSet<Portion>::const_iterator i = portionsOverflow.begin();
+         i != portionsOverflow.end(); i++)
+    {
+        Portion portion = *i;
+        MapPortion* newMapPortion = m_map->mapPortionFromGlobal(portion);
+
+        if (newMapPortion != nullptr)
+        m_portionsToSave += newMapPortion;
+    }
+
 }
 
 // -------------------------------------------------------

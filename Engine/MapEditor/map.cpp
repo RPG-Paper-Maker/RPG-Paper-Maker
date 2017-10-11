@@ -612,6 +612,12 @@ void Map::savePortionMap(MapPortion* mapPortion){
 
 // -------------------------------------------------------
 
+void Map::saveMapProperties() {
+    m_mapProperties->save(m_pathMap, true);
+}
+
+// -------------------------------------------------------
+
 QString Map::getMapInfosPath() const{
     return Wanok::pathCombine(m_pathMap, Wanok::fileMapInfos);
 }
@@ -782,10 +788,18 @@ bool Map::isInSomething(Position3D& position, Portion& portion,
 // -------------------------------------------------------
 
 Portion Map::getGlobalPortion(Position3D& position){
-    return Portion(
-                position.x() / Wanok::portionSize,
-                position.y() / Wanok::portionSize,
-                position.z() / Wanok::portionSize);
+    Portion portion(position.x() / Wanok::portionSize,
+                    position.y() / Wanok::portionSize,
+                    position.z() / Wanok::portionSize);
+
+    if (position.x() < 0)
+        portion.addX(-1);
+    if (position.y() < 0)
+        portion.addY(-1);
+    if (position.z() < 0)
+        portion.addZ(-1);
+
+    return portion;
 }
 
 // -------------------------------------------------------

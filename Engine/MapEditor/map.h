@@ -114,6 +114,7 @@ public:
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k);
     void savePortionMap(MapPortion* mapPortion);
+    void saveMapProperties();
     QString getMapInfosPath() const;
     QString getMapObjectsPath() const;
     void loadPortion(int realX, int realY, int realZ, int x, int y, int z,

@@ -51,9 +51,10 @@ public:
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land);
     bool deleteLand(Position& p);
-    bool addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   int widthPosition, int angle, QRect *textureRect);
-    bool deleteSprite(Position& p);
+    bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
+                   MapEditorSubSelectionKind kind, int widthPosition, int angle,
+                   QRect *textureRect);
+    bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p);
     bool addSpriteWall(GridPosition& gridPosition, int specialID);
     bool deleteSpriteWall(GridPosition& gridPosition);
     void updateSpriteWalls();

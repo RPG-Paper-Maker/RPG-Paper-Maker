@@ -69,15 +69,17 @@ public:
     void addOverflow(Position& p);
     void removeOverflow(Position& p);
     bool isEmpty() const;
-    void setSprite(Position& p, SpriteDatas* sprite);
+    void setSprite(QSet<Portion>& portionsOverflow, Position& p,
+                   SpriteDatas* sprite);
     void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
                                 SpriteDatas* sprite);
     void addRemoveOverflow(QSet<Portion>& portionsOverflow, Position &p,
                            bool add);
-    SpriteDatas* removeSprite(Position& p);
-    bool addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   int widthPosition, int angle, QRect *textureRect);
-    bool deleteSprite(Position& p);
+    SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
+    bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
+                   MapEditorSubSelectionKind kind, int widthPosition, int angle,
+                   QRect *textureRect);
+    bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p);
     void setSpriteWall(GridPosition& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
     bool addSpriteWall(GridPosition& p, int specialID);
