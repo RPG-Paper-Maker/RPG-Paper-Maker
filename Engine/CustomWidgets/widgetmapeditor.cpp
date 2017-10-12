@@ -76,16 +76,18 @@ Map* WidgetMapEditor::getMap() const { return m_control.map(); }
 
 Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position,
                               QVector3D *positionObject, int cameraDistance,
-                              int cameraHeight, double cameraHorizontalAngle)
+                              double cameraHorizontalAngle,
+                              double cameraVerticalAngle)
 {
     m_idMap = idMap;
     m_position = position;
     m_positionObject = positionObject;
     m_cameraDistance = cameraDistance;
-    m_cameraHeight = cameraHeight;
     m_cameraHorizontalAngle = cameraHorizontalAngle;
+    m_cameraVerticalAngle = cameraVerticalAngle;
+
     return m_control.loadMap(idMap, position, positionObject, cameraDistance,
-                             cameraHeight, cameraHorizontalAngle);
+                             cameraHorizontalAngle, cameraVerticalAngle);
 }
 
 // -------------------------------------------------------
@@ -216,16 +218,17 @@ void WidgetMapEditor::update(){
 
 void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
                                     QVector3D *positionObject,
-                                    int cameraDistance, int cameraHeight,
-                                    double cameraHorizontalAngle)
+                                    int cameraDistance,
+                                    double cameraHorizontalAngle,
+                                    double cameraVerticalAngle)
 {
     m_needUpdateMap = true;
     m_idMap = idMap;
     m_position = position;
     m_positionObject = positionObject;
     m_cameraDistance = cameraDistance;
-    m_cameraHeight = cameraHeight;
     m_cameraHorizontalAngle = cameraHorizontalAngle;
+    m_cameraVerticalAngle = cameraVerticalAngle;
 
     if (isGLInitialized)
         initializeMap();
@@ -236,7 +239,7 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
 void WidgetMapEditor::initializeMap(){
     makeCurrent();
     loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
-            m_cameraHeight, m_cameraHorizontalAngle);
+            m_cameraHorizontalAngle, m_cameraVerticalAngle);
     if (m_menuBar != nullptr)
         m_menuBar->show();
 
@@ -301,11 +304,11 @@ void WidgetMapEditor::addObject(){
     m_control.addObject(p);
     deleteMap();
     int cameraDistance = m_control.camera()->distance();
-    int cameraHeight = m_control.camera()->height();
     double cameraHorizontalAngle = m_control.camera()->horizontalAngle();
+    double cameraVerticalAngle = m_control.camera()->verticalAngle();
 
     needUpdateMap(m_idMap, m_position, m_positionObject, cameraDistance,
-                  cameraHeight, cameraHorizontalAngle);
+                  cameraHorizontalAngle, cameraVerticalAngle);
 }
 
 // -------------------------------------------------------

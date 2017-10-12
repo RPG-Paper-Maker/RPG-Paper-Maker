@@ -39,8 +39,8 @@ TreeMapTag::TreeMapTag(int i, QString n) :
     m_position(new QVector3D),
     m_positionObject(new QVector3D),
     m_cameraDistance(Camera::defaultDistance),
-    m_cameraHeight(Camera::defaultHeight),
-    m_cameraHorizontalAngle(-90.0)
+    m_cameraHorizontalAngle(Camera::defaultHAngle),
+    m_cameraVerticalAngle(Camera::defaultVAngle)
 {
 
 }
@@ -70,18 +70,21 @@ QVector3D* TreeMapTag::positionObject() const { return m_positionObject; }
 
 int TreeMapTag::cameraDistance() const { return m_cameraDistance; }
 
-int TreeMapTag::cameraHeight() const { return m_cameraHeight; }
-
 double TreeMapTag::cameraHorizontalAngle() const {
     return m_cameraHorizontalAngle;
 }
 
+double TreeMapTag::cameraVerticalAngle() const {
+    return m_cameraVerticalAngle;
+}
 void TreeMapTag::setCameraDistance(int d) { m_cameraDistance = d; }
-
-void TreeMapTag::setCameraHeight(int h) { m_cameraHeight = h; }
 
 void TreeMapTag::setCameraHorizontalAngle(double a) {
     m_cameraHorizontalAngle = a;
+}
+
+void TreeMapTag::setCameraVerticalAngle(double a) {
+    m_cameraVerticalAngle = a;
 }
 
 // -------------------------------------------------------

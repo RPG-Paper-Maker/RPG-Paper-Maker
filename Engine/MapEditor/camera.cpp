@@ -21,8 +21,8 @@
 #include <QtMath>
 
 int Camera::defaultDistance = 800;
-
-int Camera::defaultHeight = 500;
+double Camera::defaultHAngle = -90.0;
+double Camera::defaultVAngle = 55.0;
 
 // -------------------------------------------------------
 //
@@ -31,7 +31,8 @@ int Camera::defaultHeight = 500;
 // -------------------------------------------------------
 
 Camera::Camera() :
-    m_horizontalAngle(-90.0),
+    m_horizontalAngle(Camera::defaultHAngle),
+    m_verticalAngle(Camera::defaultVAngle),
     m_up(QVector3D(0.0,1.0,0.0))
 {}
 
@@ -63,19 +64,17 @@ void Camera::getPosition(QVector3D& position) const {
 
 double Camera::horizontalAngle() const { return m_horizontalAngle; }
 
-int Camera::distance() const { return m_distance; }
+double Camera::verticalAngle() const { return m_verticalAngle; }
 
-int Camera::height() const { return m_height; }
+int Camera::distance() const { return m_distance; }
 
 void Camera::setDistance(int d){ m_distance = d; }
 
-void Camera::setHeight(int h){ m_height = h; }
-
 void Camera::setHorizontalAngle(double a) { m_horizontalAngle = a; }
 
-void Camera::addDistance(int d){ m_distance += d; }
+void Camera::setVerticalAngle(double a) { m_verticalAngle = a; }
 
-void Camera::addHeight(int h){ m_height += h; }
+void Camera::addDistance(int d){ m_distance += d; }
 
 // -------------------------------------------------------
 //
@@ -113,60 +112,56 @@ void Camera::update(Cursor *cursor, int squareSize){
     m_target.setZ(cursor->getZ() + (squareSize / 2));
 
     // Update position
-    m_position.setX(m_target.x() - (float)(m_distance * qCos(m_horizontalAngle *
-                                                             M_PI / 180.0)));
-    m_position.setY(m_target.y() + (float)(m_height));
-    m_position.setZ(m_target.z() - (float)(m_distance * qSin(m_horizontalAngle *
-                                                             M_PI / 180.0)));
+    double distance = getDistance();
+    double height = getHeight();
+
+    m_position.setX(m_target.x() - (float)(distance * qCos(m_horizontalAngle *
+                                                           M_PI / 180.0)));
+    m_position.setY(m_target.y() + (float)(height));
+    m_position.setZ(m_target.z() - (float)(distance * qSin(m_horizontalAngle *
+                                                           M_PI / 180.0)));
 }
 
 // -------------------------------------------------------
 
-void Camera::zoomPlus(int gridHeight){
-    if (m_height != 0){
-        if (positionY() >= gridHeight){
-            double dist = m_distance / m_height;
-            m_distance -= dist * 20;
-            if (m_distance < dist * 20)
-                m_distance = dist * 20;
-            m_height -= 20;
-            if (m_height < 20)
-                m_height = 20;
-        }
-        else{
-            double dist = m_distance / -m_height;
-            m_distance -= dist * 20;
-            if (m_distance < dist * 20)
-                m_distance = dist * 20;
-            m_height += 20;
-            if (m_height >= -20)
-                m_height = -20;
-        }
-    }
+void Camera::zoomPlus() {
+    m_distance -= getZoom();
+
+    if (m_distance < 10)
+        m_distance = 10;
 }
 
 // -------------------------------------------------------
 
-void Camera::zoomLess(int gridHeight){
-    if (m_height != 0){
-        if (positionY() >= gridHeight){
-            double dist = m_distance / m_height;
-            m_distance += dist * 20;
-            m_height += 20;
-        }
-        else{
-            double dist = m_distance / -m_height;
-            m_distance += dist * 20;
-            m_height -= 20;
-        }
-    }
+void Camera::zoomLess() {
+    m_distance += getZoom();
+}
+
+// -------------------------------------------------------
+
+int Camera::getZoom() const {
+    return 10 + (m_distance / 10);
 }
 
 // -------------------------------------------------------
 
 void Camera::onMouseWheelPressed(QPoint& mouse, QPoint& mouseBeforeUpdate){
-    m_height += (mouse.y() - mouseBeforeUpdate.y()) * 2;
-    if(m_height <= 40 && m_height >=0) m_height =-40;
-    else if(m_height >= -40 && m_height <=0) m_height =40;
     m_horizontalAngle += (mouse.x() - mouseBeforeUpdate.x()) / 2;
+    m_verticalAngle -= (mouse.y() - mouseBeforeUpdate.y()) / 2;
+    if (m_verticalAngle < 1)
+        m_verticalAngle = 1;
+    if (m_verticalAngle > 179)
+        m_verticalAngle = 179;
+}
+
+// -------------------------------------------------------
+
+double Camera::getDistance() const {
+    return m_distance * qSin(m_verticalAngle * M_PI / 180.0);
+}
+
+// -------------------------------------------------------
+
+double Camera::getHeight() const {
+    return m_distance * qCos(m_verticalAngle * M_PI / 180.0);
 }

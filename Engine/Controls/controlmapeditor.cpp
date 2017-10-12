@@ -95,7 +95,8 @@ void ControlMapEditor::reLoadTextures(){
 
 Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
                                QVector3D *positionObject, int cameraDistance,
-                               int cameraHeight, double cameraHorizontalAngle)
+                               double cameraHorizontalAngle,
+                               double cameraVerticalAngle)
 {
     clearPortionsToUpdate();
 
@@ -142,8 +143,8 @@ Map* ControlMapEditor::loadMap(int idMap, QVector3D* position,
 
     // Camera
     m_camera->setDistance(cameraDistance * Wanok::coefSquareSize());
-    m_camera->setHeight(cameraHeight * Wanok::coefSquareSize());
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
+    m_camera->setVerticalAngle(cameraVerticalAngle);
     m_camera->update(cursor(), m_map->squareSize());
 
     return m_map;
@@ -184,7 +185,6 @@ void ControlMapEditor::deleteMap(bool updateCamera){
     // Update camera node
     if (updateCamera && m_treeMapNode != nullptr) {
         m_camera->setDistance(m_camera->distance() / Wanok::coefSquareSize());
-        m_camera->setHeight(m_camera->height() / Wanok::coefSquareSize());
         updateCameraTreeNode();
     }
 }
@@ -202,8 +202,8 @@ void ControlMapEditor::onResize(int width, int height){
 void ControlMapEditor::updateCameraTreeNode(){
     TreeMapTag* tag = (TreeMapTag*) m_treeMapNode->data().value<quintptr>();
     tag->setCameraDistance(m_camera->distance());
-    tag->setCameraHeight(m_camera->height());
     tag->setCameraHorizontalAngle(m_camera->horizontalAngle());
+    tag->setCameraVerticalAngle(m_camera->verticalAngle());
 }
 
 // -------------------------------------------------------
@@ -319,25 +319,6 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         rightTopCorner.setX(rightTopCorner.x() - 1);
         rightTopCorner.setY(rightTopCorner.y() - 1);
         rightTopCorner.setZ(rightTopCorner.z() - 1);
-
-        // Adjusting according to the grid limit
-        /*
-        int yBot = -m_map->mapProperties()->depth() * m_map->squareSize();
-        int xRight = m_map->mapProperties()->length() * m_map->squareSize() - 1;
-        int yTop = m_map->mapProperties()->height() * m_map->squareSize() - 1;
-        int zRight = m_map->mapProperties()->width() * m_map->squareSize() - 1;
-        if (leftBotCorner.x() < 0)
-            leftBotCorner.setX(0);
-        if (leftBotCorner.y() < yBot)
-            leftBotCorner.setY(yBot);
-        if (leftBotCorner.z() < 0)
-            leftBotCorner.setZ(0);
-        if (rightTopCorner.x() > xRight)
-            rightTopCorner.setX(xRight);
-        if (rightTopCorner.y() > yTop)
-            rightTopCorner.setY(yTop);
-        if (rightTopCorner.z() > zRight)
-            rightTopCorner.setZ(zRight);*/
 
         // creating the box
         QBox3D box(leftBotCorner, rightTopCorner);
@@ -1806,9 +1787,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
 void ControlMapEditor::onMouseWheelMove(QWheelEvent* event, bool updateTree){
     if (event->delta() > 0)
-        m_camera->zoomPlus(0);
+        m_camera->zoomPlus();
     else
-        m_camera->zoomLess(0);
+        m_camera->zoomLess();
 
     if (updateTree)
         updateCameraTreeNode();

@@ -35,7 +35,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
     ui(new Ui::WidgetMenuBarMapEditor),
     m_selectionKind(MapEditorSelectionKind::Land),
     m_selection(selection),
-    m_menuPencil(nullptr)
+    m_menuPencil(nullptr),
+    m_menuLayer(nullptr)
 {
     ui->setupUi(this);
 

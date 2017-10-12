@@ -57,8 +57,8 @@ public:
     void initialize();
     void reLoadTextures();
     Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
-                 int cameraDistance, int cameraHeight,
-                 double cameraHorizontalAngle);
+                 int cameraDistance, double cameraHorizontalAngle,
+                 double cameraVerticalAngle);
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 

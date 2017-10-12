@@ -38,7 +38,8 @@ class Camera
 public:
     Camera();
     static int defaultDistance;
-    static int defaultHeight;
+    static double defaultHAngle;
+    static double defaultVAngle;
 
     QMatrix4x4 view() const;
     void setProjection(int width, int height);
@@ -48,28 +49,31 @@ public:
     float positionZ() const;
     void getPosition(QVector3D& position) const;
     double horizontalAngle() const;
+    double verticalAngle() const;
     int distance() const;
-    int height() const;
     void setDistance(int d);
-    void setHeight(int h);
     void setHorizontalAngle(double a);
+    void setVerticalAngle(double a);
     void addDistance(int d);
-    void addHeight(int h);
     OrientationKind orientationKind() const;
     void update(Cursor* cursor, int squareSize);
-    void zoomPlus(int gridHeight);
-    void zoomLess(int gridHeight);
+    void zoomPlus();
+    void zoomLess();
+    int getZoom() const;
     void onMouseWheelPressed(QPoint& mouse, QPoint& mouseBeforeUpdate);
 
 private:
     int m_distance;
-    int m_height;
     double m_horizontalAngle;
+    double m_verticalAngle;
     QVector3D m_position;
     QVector3D m_target;
     QVector3D m_up;
     QMatrix4x4 m_projection;
     QMatrix4x4 m_world;
+
+    double getDistance() const;
+    double getHeight() const;
 };
 
 #endif // CAMERA_H
