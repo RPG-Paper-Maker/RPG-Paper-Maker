@@ -54,23 +54,11 @@ void TilesetsDatas::setDefault(){
 
     item = new QStandardItem;
     tileset = new SystemTileset(1, "Plains", 1);
-    tileset->addSpriteWall(new SystemSpriteWall(1, "Inside1.png", 1));
     item->setData(QVariant::fromValue(
                       reinterpret_cast<quintptr>(tileset)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(tileset->toString());
     m_model->appendRow(item);
-}
-
-// -------------------------------------------------------
-
-void TilesetsDatas::updatePictures(){
-    SystemTileset* tileset;
-
-    for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
-        tileset = (SystemTileset*) m_model->item(i)->data().value<qintptr>();
-        tileset->updatePicture();
-    }
 }
 
 // -------------------------------------------------------

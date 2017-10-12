@@ -118,6 +118,17 @@ void MapProperties::removeOverflow(Position& p, Portion& portion) {
 //
 // -------------------------------------------------------
 
+bool MapProperties::isInGrid(Position3D& position, int squareSize) const {
+    int y = position.getY(squareSize);
+    int d = m_depth * squareSize;
+    int h = m_height * squareSize;
+
+    return (position.x() >= 0 && position.x() < m_length &&
+            y >= -d && y < h && position.z() >= 0 && position.z() < m_width);
+}
+
+// -------------------------------------------------------
+
 void MapProperties::getPortionsNumber(int& lx, int& ly, int& lz) {
     lx = (length() - 1) / Wanok::portionSize;
     ly = (depth() + height() - 1) / Wanok::portionSize;;

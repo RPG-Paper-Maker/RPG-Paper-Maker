@@ -43,6 +43,8 @@ public:
     static bool getSubVersions(QString& version, int& m, int& f, int& b);
     static int versionDifferent(QString projectVersion, QString otherVersion
                                 = Project::ENGINE_VERSION);
+    void clearListMapPaths();
+    void clearListMapPortions();
     void copyPreviousProject();
     void getAllPathsMapsPortions();
     void updateVersion(QString& version);
@@ -52,8 +54,10 @@ public:
 protected:
     Project* m_project;
     QString m_previousFolderName;
-    QList<QString> m_listPaths;
-    QList<QJsonObject> m_listMapPortions;
+    QList<QJsonObject> m_listMapProperties;
+    QList<QString> m_listMapPropertiesPaths;
+    QList<QList<QJsonObject>*> m_listMapPortions;
+    QList<QList<QString>*> m_listMapPortionsPaths;
 
 public slots:
     void check();

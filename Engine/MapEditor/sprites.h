@@ -73,7 +73,7 @@ public:
     SpriteDatas* spriteAt(Position& position) const;
     void setSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas* sprite);
-    void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
+    static void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
                                 SpriteDatas* sprite);
     void addRemoveOverflow(QSet<Portion>& portionsOverflow, Position &p,
                            bool add);

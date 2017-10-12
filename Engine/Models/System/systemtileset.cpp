@@ -32,18 +32,9 @@ SystemTileset::SystemTileset() :
 
 }
 
-SystemTileset::SystemTileset(int i, QString n, int pictureId) :
+SystemTileset::SystemTileset(int i, QString n, int pictureID) :
     SuperListItem(i, n),
-    m_pictureID(pictureId)
-{
-    setPictureFromId(pictureId);
-    initializeModels();
-}
-
-SystemTileset::SystemTileset(int i, QString n, SystemPicture *picture) :
-    SuperListItem(i, n),
-    m_picture(picture),
-    m_pictureID(picture->id())
+    m_pictureID(pictureID)
 {
     initializeModels();
 }
@@ -55,11 +46,15 @@ SystemTileset::~SystemTileset(){
     SuperListItem::deleteModel(m_modelReliefs);
 }
 
-SystemPicture* SystemTileset::picture() const { return m_picture; }
+SystemPicture* SystemTileset::picture() const {
+    return (SystemPicture*) SuperListItem::getById(
+                Wanok::get()->project()->picturesDatas()
+                ->model(PictureKind::Tilesets)->invisibleRootItem(),
+                m_pictureID);
+}
 
-void SystemTileset::setPicture(SystemPicture* picture) {
-    m_picture = picture;
-    m_pictureID = picture->id();
+void SystemTileset::setPictureID(int id) {
+    m_pictureID = id;
 }
 
 QStandardItemModel* SystemTileset::modelAutotiles() const {
@@ -82,14 +77,6 @@ QStandardItemModel* SystemTileset::modelReliefs() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-void SystemTileset::setPictureFromId(int id) {
-    setPicture((SystemPicture*) SuperListItem::getById(Wanok::get()->project()
-               ->picturesDatas()->model(PictureKind::Tilesets)
-               ->invisibleRootItem(), id));
-}
-
 // -------------------------------------------------------
 
 void SystemTileset::initializeModels() {
@@ -116,12 +103,6 @@ void SystemTileset::addSpecial(SystemSpecialElement* special,
 
 void SystemTileset::addSpriteWall(SystemSpriteWall* wall) {
     addSpecial(wall, modelSpriteWalls());
-}
-
-// -------------------------------------------------------
-
-void SystemTileset::updatePicture(){
-    setPictureFromId(m_pictureID);
 }
 
 // -------------------------------------------------------
@@ -221,7 +202,6 @@ void SystemTileset::setCopy(const SystemTileset& super){
     SuperListItem::setCopy(super);
 
     m_pictureID = super.m_pictureID;
-    updatePicture();
 }
 
 // -------------------------------------------------------
@@ -233,7 +213,7 @@ void SystemTileset::setCopy(const SystemTileset& super){
 void SystemTileset::read(const QJsonObject &json){
     SuperListItem::read(json);
 
-    setPictureFromId(json["pic"].toInt());
+    m_pictureID = json["pic"].toInt();
 
     // Special elements
     readModel(json, "auto", m_modelAutotiles);
@@ -270,7 +250,7 @@ void SystemTileset::readModel(const QJsonObject &json, QString key,
 void SystemTileset::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
-    json["pic"] = m_picture->id();
+    json["pic"] = m_pictureID;
 
     // Special elements
     writeModel(json, "auto", m_modelAutotiles);

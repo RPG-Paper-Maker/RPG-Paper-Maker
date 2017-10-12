@@ -71,6 +71,7 @@ public:
     void readPicturesDatas();
     void readSpecialsDatas();
     void readSystemDatas();
+    void readTilesetsDatas();
     void write(QString path);
     void writeGameDatas();
     void writeLangsDatas();
@@ -80,8 +81,8 @@ public:
     void writePicturesDatas();
     void writeSpecialsDatas();
     void writeSystemDatas();
+    void writeTilesetsDatas();
     void saveCurrentMap();
-    void updatePictures();
     QString createRPMFile();
 
 private:

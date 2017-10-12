@@ -90,11 +90,14 @@ void WidgetPicture::openDialog(){
     SystemPicture* previousPicture = m_picture;
 
     if (dialog.exec() == QDialog::Accepted){
+        Wanok::get()->project()->writePicturesDatas();
         setPicture(dialog.picture());
 
         if (previousPicture != m_picture)
             emit pictureChanged(m_picture);
     }
+    else
+        Wanok::get()->project()->readPicturesDatas();
 }
 
 // -------------------------------------------------------

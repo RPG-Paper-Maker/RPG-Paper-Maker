@@ -41,7 +41,6 @@ public:
     void read(QString path);
     QStandardItemModel* model() const;
     void setDefault();
-    void updatePictures();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

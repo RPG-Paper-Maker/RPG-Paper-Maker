@@ -37,20 +37,17 @@ class SystemTileset : public SuperListItem
 {
 public:
     SystemTileset();
-    SystemTileset(int i, QString n, int pictureId);
-    SystemTileset(int i, QString n, SystemPicture* picture);
+    SystemTileset(int i, QString n, int pictureID);
     virtual ~SystemTileset();
     SystemPicture* picture() const;
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* model3DObjects() const;
     QStandardItemModel* modelReliefs() const;
-    void setPicture(SystemPicture* picture);
-    void setPictureFromId(int id);
+    void setPictureID(int id);
     void initializeModels();
     void addSpecial(SystemSpecialElement* special, QStandardItemModel* model);
     void addSpriteWall(SystemSpriteWall* wall);
-    void updatePicture();
     void updateModelAutotiles();
     void updateModelSpriteWalls();
     void updateModel3DObjects();
@@ -72,7 +69,6 @@ public:
                            QStandardItemModel* model);
 
 protected:
-    SystemPicture* m_picture;
     int m_pictureID;
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;

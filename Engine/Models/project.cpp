@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "0.3.1";
+const QString Project::ENGINE_VERSION = "0.4.0";
 
 // -------------------------------------------------------
 //
@@ -349,20 +349,24 @@ void Project::readKeyBoardDatas(){
 
 void Project::readPicturesDatas(){
     m_picturesDatas->read(p_pathCurrentProject);
-    updatePictures();
 }
 
 // -------------------------------------------------------
 
 void Project::readSpecialsDatas() {
     m_specialElementsDatas->read(p_pathCurrentProject);
-    updatePictures();
 }
 
 // -------------------------------------------------------
 
 void Project::readSystemDatas(){
     p_gameDatas->readSystem(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::readTilesetsDatas() {
+    p_gameDatas->readTilesets(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------
@@ -418,7 +422,6 @@ void Project::writePicturesDatas(){
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
-    updatePictures();
 }
 
 // -------------------------------------------------------
@@ -427,7 +430,6 @@ void Project::writeSpecialsDatas() {
     Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
                                         Wanok::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
-    updatePictures();
 }
 
 // -------------------------------------------------------
@@ -438,8 +440,8 @@ void Project::writeSystemDatas(){
 
 // -------------------------------------------------------
 
-void Project::updatePictures(){
-    p_gameDatas->tilesetsDatas()->updatePictures();
+void Project::writeTilesetsDatas() {
+    p_gameDatas->writeTilesets(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------

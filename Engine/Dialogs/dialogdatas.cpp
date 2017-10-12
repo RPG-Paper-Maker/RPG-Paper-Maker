@@ -305,8 +305,9 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateTileset(SystemTileset *sysTileset){
-    ui->widgetPictureTileset->setPicture(sysTileset->picture());
-    ui->widgetTilesetPictureSettings->updateImage(sysTileset->picture());
+    SystemPicture* picture = sysTileset->picture();
+    ui->widgetPictureTileset->setPicture(picture);
+    ui->widgetTilesetPictureSettings->updateImage(picture);
 
     // Initialize special models
     ui->panelSuperListTilesetAutotiles->initializeModel(
@@ -432,7 +433,7 @@ void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
     SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
             ->getSelected()->data().value<quintptr>();
 
-    tileset->setPicture(picture);
+    tileset->setPictureID(picture->id());
     ui->widgetTilesetPictureSettings->updateImage(picture);
 }
 

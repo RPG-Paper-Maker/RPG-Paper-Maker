@@ -160,13 +160,19 @@ void GameDatas::read(QString path){
     m_monstersDatas->read(path);
     m_troopsDatas->read(path);
     m_classesDatas->read(path);
-    m_tilesetsDatas->read(path);
+    readTilesets(path);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::readVariablesSwitches(QString path){
     m_variablesDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readTilesets(QString path) {
+    m_tilesetsDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -201,6 +207,12 @@ void GameDatas::write(QString path){
                      *m_troopsDatas);
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathClasses),
                      *m_classesDatas);
+    writeTilesets(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeTilesets(QString path) {
     Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_TILESETS),
                      *m_tilesetsDatas);
 }

@@ -59,31 +59,60 @@ void PicturesDatas::setModel(PictureKind kind, QStandardItemModel *model) {
 void PicturesDatas::setDefault(){
     QList<QString> names;
 
-    // Bars
+    setDefaultBars(names);
+    setDefaultIcons(names);
+    setDefaultAutotiles(names);
+    setDefaultCharacters(names);
+    setDefaultReliefs(names);
+    setDefaultTilesets(names);
+    setDefaultWalls(names);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultBars(QList<QString>& names) {
     names << "hpBar" << "mpBar" << "spBar";
     setDefaultPictures(names, PictureKind::Bars);
+}
 
-    // Icons
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultIcons(QList<QString>& names) {
     names << "darkness" << "fire" << "grass" << "light" << "water" << "wind";
     setDefaultPictures(names, PictureKind::Icons);
+}
 
-    // Autotiles
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
     names << "grass";
     setDefaultPictures(names, PictureKind::Autotiles);
+}
 
-    // Characters
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
     names << "lucas";
     setDefaultPictures(names, PictureKind::Characters);
+}
 
-    // Reliefs
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultReliefs(QList<QString>& names) {
     names << "grass";
     setDefaultPictures(names, PictureKind::Reliefs);
+}
 
-    // Tilesets
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultTilesets(QList<QString>& names) {
     names << "plains";
     setDefaultPictures(names, PictureKind::Tilesets);
+}
 
-    // Walls
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultWalls(QList<QString>& names) {
     names << "inside1";
     setDefaultPictures(names, PictureKind::Walls);
 }

@@ -49,6 +49,7 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
     }
     this->setGeometry(0, 0, m_image.width(), m_image.height());
     setFixedSize(m_image.width(), m_image.height());
+    this->repaint();
 }
 
 // -------------------------------------------------------

@@ -41,7 +41,8 @@ ProjectUpdater::ProjectUpdater(Project* project, QString previous) :
 
 ProjectUpdater::~ProjectUpdater()
 {
-
+    clearListMapPaths();
+    clearListMapPortions();
 }
 
 // -------------------------------------------------------
@@ -108,6 +109,22 @@ int ProjectUpdater::versionDifferent(QString projectVersion,
 
 // -------------------------------------------------------
 
+void ProjectUpdater::clearListMapPaths() {
+    for (int i = 0; i < m_listMapPortionsPaths.size(); i++)
+        delete m_listMapPortionsPaths.at(i);
+    m_listMapPortionsPaths.clear();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::clearListMapPortions() {
+    for (int i = 0; i < m_listMapPortions.size(); i++)
+        delete m_listMapPortions.at(i);
+    m_listMapPortions.clear();
+}
+
+// -------------------------------------------------------
+
 void ProjectUpdater::copyPreviousProject() {
     QDir dirProject(m_project->pathCurrentProject());
     dirProject.cdUp();
@@ -126,8 +143,10 @@ void ProjectUpdater::getAllPathsMapsPortions()
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Clear
-    m_listPaths.clear();
-    m_listMapPortions.clear();
+    m_listMapProperties.clear();
+    m_listMapPropertiesPaths.clear();
+    clearListMapPaths();
+    clearListMapPortions();
 
     // Fill
     while (directories.hasNext()) {
@@ -136,15 +155,25 @@ void ProjectUpdater::getAllPathsMapsPortions()
         if (mapName != "temp") {
             QDirIterator files(Wanok::pathCombine(pathMaps, mapName),
                                QDir::Files);
+            QList<QJsonObject>* mapPortions = new QList<QJsonObject>;
+            QList<QString>* paths = new QList<QString>;
+            m_listMapPortions.append(mapPortions);
+            m_listMapPortionsPaths.append(paths);
+
             while (files.hasNext()) {
                 files.next();
                 QString fileName = files.fileName();
-                if (fileName != "infos.json" && fileName != "objects.json") {
-                    QJsonDocument document;
-                    QString path = files.filePath();
+                QString path = files.filePath();
+                QJsonDocument document;
+                if (fileName == "infos.json") {
                     Wanok::readOtherJSON(path, document);
-                    m_listPaths.append(path);
-                    m_listMapPortions.append(document.object());
+                    m_listMapProperties.append(document.object());
+                    m_listMapPropertiesPaths.append(path);
+                }
+                else if (fileName != "objects.json") {
+                    Wanok::readOtherJSON(path, document);
+                    paths->append(path);
+                    mapPortions->append(document.object());
                 }
             }
         }
@@ -236,29 +265,34 @@ void ProjectUpdater::check() {
 void ProjectUpdater::updateVersion_0_3_1() {
 
     for (int i = 0; i < m_listMapPortions.size(); i++) {
-        QJsonObject obj = m_listMapPortions.at(i);
-        QJsonObject objSprites = obj["sprites"].toObject();
-        QJsonArray tabSprites = objSprites["list"].toArray();
+        QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
+        QList<QString>* paths = m_listMapPortionsPaths.at(i);
 
-        for (int j = 0; j < tabSprites.size(); j++) {
-            QJsonObject objSprite = tabSprites.at(j).toObject();
+        for (int j = 0; j < mapPortions->size(); j++) {
+            QJsonObject obj = mapPortions->at(j);
+            QJsonObject objSprites = obj["sprites"].toObject();
+            QJsonArray tabSprites = objSprites["list"].toArray();
 
-            // Replace Position3D by Position
-            QJsonArray tabKey = objSprite["k"].toArray();
-            tabKey.append(0);
-            objSprite["k"] = tabKey;
+            for (int k = 0; k < tabSprites.size(); k++) {
+                QJsonObject objSprite = tabSprites.at(k).toObject();
 
-            // Remove key layer from sprites objects
-            QJsonObject objVal = objSprite["v"].toArray()[0].toObject();
-            objVal.remove("l");
-            objSprite["v"] = objVal;
+                // Replace Position3D by Position
+                QJsonArray tabKey = objSprite["k"].toArray();
+                tabKey.append(0);
+                objSprite["k"] = tabKey;
 
-            tabSprites[j] = objSprite;
+                // Remove key layer from sprites objects
+                QJsonObject objVal = objSprite["v"].toArray()[0].toObject();
+                objVal.remove("l");
+                objSprite["v"] = objVal;
+
+                tabSprites[j] = objSprite;
+            }
+
+            objSprites["list"] = tabSprites;
+            obj["sprites"] = objSprites;
+            Wanok::writeOtherJSON(paths->at(j), obj);
         }
-
-        objSprites["list"] = tabSprites;
-        obj["sprites"] = objSprites;
-        Wanok::writeOtherJSON(m_listPaths.at(i), obj);
     }
 }
 
@@ -269,13 +303,39 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Create walls directory
     QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SPRITE_WALLS);
 
-    // Add walls empty tab for sprites
     for (int i = 0; i < m_listMapPortions.size(); i++) {
-        QJsonObject obj = m_listMapPortions.at(i);
-        QJsonObject objSprites = obj["sprites"].toObject();
-        objSprites["walls"] = QJsonArray();
-        obj["sprites"] = objSprites;
+        QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
+        QList<QString>* paths = m_listMapPortionsPaths.at(i);
+        QJsonObject objMapProperties = m_listMapProperties.at(i);
+        objMapProperties["ofsprites"] = QJsonArray();
+        Wanok::writeOtherJSON(m_listMapPropertiesPaths.at(i), objMapProperties);
 
-        Wanok::writeOtherJSON(m_listPaths.at(i), obj);
+        // Add walls and overflow empty tab for sprites
+        for (int j = 0; j < mapPortions->size(); j++) {
+            QJsonObject obj = mapPortions->at(j);
+            QJsonObject objSprites = obj["sprites"].toObject();
+            objSprites["walls"] = QJsonArray();
+            objSprites["overflow"] = QJsonArray();
+            obj["sprites"] = objSprites;
+
+            Wanok::writeOtherJSON(paths->at(j), obj);
+        }
     }
+
+    // Adding a default special elements datas to the project
+    SpecialElementsDatas specialElementsDatas;
+    specialElementsDatas.setDefault();
+    Wanok::writeJSON(Wanok::pathCombine(
+                         m_project->pathCurrentProject(),
+                         Wanok::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
+
+    // Adding walls into pictures.json
+    m_project->readPicturesDatas();
+    QList<QString> names;
+    m_project->picturesDatas()->setDefaultWalls(names);
+    m_project->writePicturesDatas();
+
+    // Updating special elements (empty) in each tileset
+    m_project->readTilesetsDatas();
+    m_project->writeTilesetsDatas();
 }

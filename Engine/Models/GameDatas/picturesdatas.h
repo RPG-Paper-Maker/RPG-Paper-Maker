@@ -46,6 +46,13 @@ public:
     void setDefault();
     void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
     void setDefaultPictures(QList<QString>& names, PictureKind kind);
+    void setDefaultBars(QList<QString>& names);
+    void setDefaultIcons(QList<QString>& names);
+    void setDefaultAutotiles(QList<QString>& names);
+    void setDefaultCharacters(QList<QString>& names);
+    void setDefaultReliefs(QList<QString>& names);
+    void setDefaultTilesets(QList<QString>& names);
+    void setDefaultWalls(QList<QString>& names);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
