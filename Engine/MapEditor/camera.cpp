@@ -124,8 +124,8 @@ void Camera::update(Cursor *cursor, int squareSize){
 
 // -------------------------------------------------------
 
-void Camera::zoomPlus() {
-    m_distance -= getZoom();
+void Camera::zoomPlus(int squareSize) {
+    m_distance -= getZoom(squareSize);
 
     if (m_distance < 10)
         m_distance = 10;
@@ -133,14 +133,14 @@ void Camera::zoomPlus() {
 
 // -------------------------------------------------------
 
-void Camera::zoomLess() {
-    m_distance += getZoom();
+void Camera::zoomLess(int squareSize) {
+    m_distance += getZoom(squareSize);
 }
 
 // -------------------------------------------------------
 
-int Camera::getZoom() const {
-    return 10 + (m_distance / 10);
+int Camera::getZoom(int squareSize) const {
+    return 10 + (m_distance / squareSize);
 }
 
 // -------------------------------------------------------

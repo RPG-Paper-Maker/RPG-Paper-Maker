@@ -57,9 +57,9 @@ public:
     void addDistance(int d);
     OrientationKind orientationKind() const;
     void update(Cursor* cursor, int squareSize);
-    void zoomPlus();
-    void zoomLess();
-    int getZoom() const;
+    void zoomPlus(int squareSize);
+    void zoomLess(int squareSize);
+    int getZoom(int squareSize) const;
     void onMouseWheelPressed(QPoint& mouse, QPoint& mouseBeforeUpdate);
 
 private:

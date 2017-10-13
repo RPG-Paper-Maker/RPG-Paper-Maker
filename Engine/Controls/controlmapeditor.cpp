@@ -1800,9 +1800,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
 void ControlMapEditor::onMouseWheelMove(QWheelEvent* event, bool updateTree){
     if (event->delta() > 0)
-        m_camera->zoomPlus();
+        m_camera->zoomPlus(m_map->squareSize());
     else
-        m_camera->zoomLess();
+        m_camera->zoomLess(m_map->squareSize());
 
     if (updateTree)
         updateCameraTreeNode();
