@@ -488,7 +488,7 @@ void Map::loadTextures(){
     m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
 
     // Characters && walls
-    loadCharacters(PictureKind::Characters, m_texturesCharacters);
+    loadCharactersTextures();
     loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
 
     // Object square
@@ -505,11 +505,7 @@ void Map::loadTextures(){
 void Map::deleteTextures(){
     if (m_textureTileset != nullptr)
         delete m_textureTileset;
-    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesCharacters.begin();
-         i != m_texturesCharacters.end(); i++)
-    {
-        delete *i;
-    }
+    deleteCharactersTextures();
     for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesSpriteWalls.begin()
          ; i != m_texturesSpriteWalls.end(); i++)
     {
@@ -521,8 +517,18 @@ void Map::deleteTextures(){
 
 // -------------------------------------------------------
 
-void Map::loadCharacters(PictureKind kind,
-                         QHash<int, QOpenGLTexture*>& textures)
+void Map::deleteCharactersTextures() {
+    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesCharacters.begin();
+         i != m_texturesCharacters.end(); i++)
+    {
+        delete *i;
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::loadPictures(PictureKind kind,
+                                 QHash<int, QOpenGLTexture*>& textures)
 {
     SystemPicture* picture;
     QStandardItemModel* model = Wanok::get()->project()->picturesDatas()
@@ -531,6 +537,13 @@ void Map::loadCharacters(PictureKind kind,
         picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
         loadPicture(picture, kind, textures, picture->id());
     }
+}
+
+// -------------------------------------------------------
+
+void Map::loadCharactersTextures()
+{
+    loadPictures(PictureKind::Characters, m_texturesCharacters);
 }
 
 // -------------------------------------------------------
@@ -677,6 +690,30 @@ void Map::updatePortion(MapPortion* mapPortion)
                                    m_texturesSpriteWalls);
     mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
     mapPortion->updateGL();
+}
+
+// -------------------------------------------------------
+
+void Map::updateMapObjects() {
+
+    // First, we need to reload only the characters textures
+    deleteCharactersTextures();
+    loadCharactersTextures();
+
+    // And for each portion, update vertices of only map objects
+    int totalSize = getMapPortionTotalSize();
+    MapPortion* mapPortion;
+
+    for (int i = 0; i < totalSize; i++) {
+        mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr) {
+            mapPortion->initializeVerticesObjects(m_squareSize,
+                                                  m_texturesCharacters);
+            mapPortion->initializeGLObjects(m_programStatic,
+                                            m_programFaceSprite);
+            mapPortion->updateGLObjects();
+        }
+    }
 }
 
 // -------------------------------------------------------

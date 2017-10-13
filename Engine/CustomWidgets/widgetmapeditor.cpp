@@ -302,13 +302,6 @@ void WidgetMapEditor::addObject(){
     Position p;
     setObjectPosition(p);
     m_control.addObject(p);
-    deleteMap();
-    int cameraDistance = m_control.camera()->distance();
-    double cameraHorizontalAngle = m_control.camera()->horizontalAngle();
-    double cameraVerticalAngle = m_control.camera()->verticalAngle();
-
-    needUpdateMap(m_idMap, m_position, m_positionObject, cameraDistance,
-                  cameraHorizontalAngle, cameraVerticalAngle);
 }
 
 // -------------------------------------------------------

@@ -39,6 +39,7 @@ ControlMapEditor::ControlMapEditor() :
     m_camera(new Camera),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_needMapInfosToSave(false),
+    m_needMapObjectsUpdate(false),
     m_displayGrid(true),
     m_treeMapNode(nullptr),
     m_isDrawingWall(false),
@@ -712,6 +713,11 @@ void ControlMapEditor::updatePreviewElementGrid(GridPosition& p,
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
+    if (m_needMapObjectsUpdate) {
+        m_needMapObjectsUpdate = false;
+        m_map->updateMapObjects();
+    }
+
     QSet<MapPortion*>::iterator i;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion* mapPortion = *i;
@@ -1501,6 +1507,7 @@ void ControlMapEditor::addObject(Position& p){
         m_selectedObject = object;
         m_map->writeObjects(true);
         m_map->savePortionMap(mapPortion);
+        m_needMapObjectsUpdate = true;
     }
     else
         delete object;
@@ -1531,6 +1538,12 @@ void ControlMapEditor::removeObject(Position& p){
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateMapObjects() {
+    m_map->updateMapObjects();
 }
 
 // -------------------------------------------------------

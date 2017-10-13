@@ -156,6 +156,7 @@ public:
     void showObjectMenuContext();
     void defineAsHero();
     void addObject(Position& p);
+    void updateMapObjects();
     void removeObject(Position& p);
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     void traceLine(Position& previousCoords, Position& coords,
@@ -214,6 +215,7 @@ private:
     QSet<MapPortion*> m_portionsToUpdate;
     QSet<MapPortion*> m_portionsToSave;
     bool m_needMapInfosToSave;
+    bool m_needMapObjectsUpdate;
     bool m_displayGrid;
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;

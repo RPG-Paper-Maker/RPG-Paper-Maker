@@ -263,11 +263,29 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
 
 // -------------------------------------------------------
 
+void MapPortion::initializeVerticesObjects(int squareSize,
+                                           QHash<int, QOpenGLTexture*>&
+                                           characters)
+{
+    int spritesOffset = -0.05;
+    m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
+}
+
+// -------------------------------------------------------
+
 void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
                               QOpenGLShaderProgram *programFace)
 {
     m_floors->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
+    initializeGLObjects(programStatic, programFace);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::initializeGLObjects(QOpenGLShaderProgram *programStatic,
+                                     QOpenGLShaderProgram *programFace)
+{
     m_mapObjects->initializeGL(programStatic, programFace);
 }
 
@@ -276,6 +294,13 @@ void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
 void MapPortion::updateGL(){
     m_floors->updateGL();
     m_sprites->updateGL();
+    updateGLObjects();
+}
+
+
+// -------------------------------------------------------
+
+void MapPortion::updateGLObjects() {
     m_mapObjects->updateGL();
 }
 

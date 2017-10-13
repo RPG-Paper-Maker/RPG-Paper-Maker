@@ -104,8 +104,9 @@ public:
                              QOpenGLShaderProgram* program);
     void loadTextures();
     void deleteTextures();
-    void loadCharacters(PictureKind kind,
-                        QHash<int, QOpenGLTexture*>& textures);
+    void loadCharactersTextures();
+    void loadPictures(PictureKind kind, QHash<int, QOpenGLTexture*>& textures);
+    void deleteCharactersTextures();
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind,
@@ -124,6 +125,7 @@ public:
                         bool visible);
     void updatePortion(MapPortion *mapPortion);
     void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
+    void updateMapObjects();
     void loadPortions(Portion portion);
     void deletePortions();
     bool isInGrid(Position3D& position) const;
