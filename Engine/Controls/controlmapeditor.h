@@ -204,6 +204,7 @@ private:
     Position m_positionOnPlane;
     Position m_positionOnLand;
     Position m_positionOnSprite;
+    Position m_positionRealOnSprite;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;

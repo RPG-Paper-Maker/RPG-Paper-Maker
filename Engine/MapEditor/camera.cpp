@@ -87,15 +87,14 @@ OrientationKind Camera::orientationKind() const {
     float cos = qCos(val);
     float sin = qSin(val);
 
-    if (cos >= 0.0f) {
-        return (sin >= 0.0f) ? OrientationKind::NorthEast
-                             : OrientationKind::SouthEast;
+    if (sin >= qSin(-M_PI / 4.0f) && sin <= qSin(M_PI / 4.0f)) {
+        return (cos >= 0.0f) ? OrientationKind::East
+                             : OrientationKind::West;
     }
     else {
-        return (sin >= 0.0f) ? OrientationKind::NorthWest
-                             : OrientationKind::SouthWest;
+        return (sin >= 0.0f) ? OrientationKind::North
+                             : OrientationKind::South;
     }
-
 }
 
 // -------------------------------------------------------

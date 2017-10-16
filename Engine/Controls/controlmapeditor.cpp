@@ -285,8 +285,16 @@ void ControlMapEditor::updateRaycasting(){
 
     if (m_distanceLand == 0)
         m_positionOnLand = m_positionOnPlane;
-    if (m_distanceSprite == 0)
+
+    if (m_distanceSprite == 0) {
         m_positionOnSprite = m_positionOnPlane;
+        m_positionRealOnSprite = m_positionOnPlane;
+    }
+
+    else {
+        getCorrectPositionOnRay(m_positionRealOnSprite, rayDirection,
+                                m_distanceSprite);
+    }
 }
 
 // -------------------------------------------------------
