@@ -40,6 +40,7 @@ public:
     SystemTileset(int i, QString n, int pictureID);
     virtual ~SystemTileset();
     SystemPicture* picture() const;
+    QStandardItemModel* model(PictureKind kind) const;
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* model3DObjects() const;

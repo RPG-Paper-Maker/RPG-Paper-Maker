@@ -552,13 +552,18 @@ void Map::loadSpecialPictures(PictureKind kind,
                               QHash<int, QOpenGLTexture*>& textures)
 {
     SystemSpecialElement* special;
-    QStandardItemModel* model = Wanok::get()->project()->specialElementsDatas()
-            ->model(kind);
+    SystemTileset* tileset = m_mapProperties->tileset();
+    QStandardItemModel* model = tileset->model(kind);
+    QStandardItemModel* modelSpecials = Wanok::get()->project()
+            ->specialElementsDatas()->model(kind);
+    int id;
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-        special = (SystemSpecialElement*) model->item(i)->data()
-                .value<qintptr>();
+        id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
+        special = (SystemSpecialElement*) SuperListItem::getById(
+                    modelSpecials->invisibleRootItem(), id);
         loadPicture(special->picture(), kind, textures, special->id());
     }
+    addEmptyPicture(textures);
 }
 
 // -------------------------------------------------------
@@ -579,6 +584,14 @@ void Map::loadPicture(SystemPicture* picture, PictureKind kind,
     texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
     textures[id] = texture;
+}
+
+// -------------------------------------------------------
+
+void Map::addEmptyPicture(QHash<int, QOpenGLTexture*>& textures) {
+    QImage image(1, 1, QImage::Format_ARGB32);
+    image.fill(QColor(0, 0, 0, 0));
+    textures[-1] = new QOpenGLTexture(image);
 }
 
 // -------------------------------------------------------

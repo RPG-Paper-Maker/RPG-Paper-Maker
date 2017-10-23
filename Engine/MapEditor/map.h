@@ -111,6 +111,7 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind,
                      QHash<int, QOpenGLTexture*>& textures, int id);
+    void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k);

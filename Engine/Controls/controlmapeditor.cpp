@@ -1299,6 +1299,9 @@ void ControlMapEditor::addSprite(Position& p,
 void ControlMapEditor::addSpriteWall(DrawKind drawKind, bool layerOn,
                                      int specialID)
 {
+    if (specialID == -1)
+        return;
+
     QList<GridPosition> positions;
 
     // Pencil

@@ -57,6 +57,19 @@ void SystemTileset::setPictureID(int id) {
     m_pictureID = id;
 }
 
+QStandardItemModel* SystemTileset::model(PictureKind kind) const {
+    switch (kind) {
+    case PictureKind::Autotiles:
+        return modelAutotiles();
+    case PictureKind::Walls:
+        return modelSpriteWalls();
+    case PictureKind::Reliefs:
+        return modelReliefs();
+    default:
+        return nullptr;
+    }
+}
+
 QStandardItemModel* SystemTileset::modelAutotiles() const {
     return m_modelAutotiles;
 }
