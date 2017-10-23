@@ -1764,6 +1764,26 @@ void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
 }
 
 // -------------------------------------------------------
+
+bool ControlMapEditor::isTinPaintPossible(MapEditorSelectionKind selection,
+                                          DrawKind drawKind,
+                                          QString &messageError) const
+{
+    switch (drawKind) {
+    case DrawKind::Pin:
+        if (selection == MapEditorSelectionKind::Sprites) {
+            messageError =
+                    "A sprite cannot be applied with tin of paint option";
+            return false;
+        }
+    default:
+        break;
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

@@ -161,6 +161,8 @@ public:
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
+    bool isTinPaintPossible(MapEditorSelectionKind selection,
+                            DrawKind drawKind, QString& messageError) const;
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,

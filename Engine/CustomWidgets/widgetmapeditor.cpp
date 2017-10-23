@@ -24,6 +24,7 @@
 #include <QTime>
 #include "widgetmapeditor.h"
 #include "wanok.h"
+#include <QMessageBox>
 
 // -------------------------------------------------------
 //
@@ -373,14 +374,21 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
         Qt::MouseButton button = event->button();
         m_mousesPressed += button;
         if (m_menuBar != nullptr){
-            QRect tileset = m_panelTextures->getTilesetTexture();
-            MapEditorSubSelectionKind subSelection =
-                    m_menuBar->subSelectionKind();
-            int specialID = m_panelTextures->getID(subSelection);
-            m_control.onMousePressed(m_menuBar->selectionKind(),
-                                     subSelection,
-                                     m_menuBar->drawKind(),
-                                     tileset, specialID, event->pos(), button);
+            MapEditorSelectionKind selection = m_menuBar->selectionKind();
+            DrawKind drawKind = m_menuBar->drawKind();
+            QString messageError;
+            if (m_control.isTinPaintPossible(selection, drawKind, messageError))
+            {
+                QRect tileset = m_panelTextures->getTilesetTexture();
+                MapEditorSubSelectionKind subSelection =
+                        m_menuBar->subSelectionKind();
+                int specialID = m_panelTextures->getID(subSelection);
+                m_control.onMousePressed(selection, subSelection, drawKind,
+                                         tileset, specialID, event->pos(),
+                                         button);
+            }
+            else
+                QMessageBox::information(nullptr, "Warning", messageError);
         }
         // If in teleport command
         else{
