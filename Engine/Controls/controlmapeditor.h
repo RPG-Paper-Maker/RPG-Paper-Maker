@@ -69,7 +69,7 @@ public:
     void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
     void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray,
                              QList<Portion> &adjacents);
-    void updateRaycastingLand(MapPortion*, QRay3D&);
+    void updateRaycastingLand(MapPortion*mapPortion, QRay3D& ray);
     void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
     QVector3D transformToNormalizedCoords(const QPoint& mouse);
     QVector4D transformToHomogeneousClip(QVector3D& normalized);
@@ -114,20 +114,18 @@ public:
 
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection, DrawKind drawKind,
-                   QRect& tileset, int specialID, bool adding);
+                   bool layerOn, QRect& tileset, int specialID, bool adding);
     Position getPositionSelected(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
                                  bool adding) const;
     void add(MapEditorSelectionKind selection,
-             MapEditorSubSelectionKind subSelection,
-             DrawKind drawKind,
-             QRect& tileset, int specialID,
-             Position& p);
+             MapEditorSubSelectionKind subSelection, DrawKind drawKind,
+             bool layerOn, QRect& tileset, int specialID, Position& p);
     void remove(MapEditorSelectionKind selection,
                 DrawKind drawKind,
                 Position& p);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
-                  DrawKind drawKind, QRect& tileset, int);
+                  DrawKind drawKind, bool layerOn, QRect& tileset, int);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
                       QRect &textureAfter);
     LandDatas* getLand(Portion& portion, Position& p);
@@ -143,8 +141,8 @@ public:
     void removeLand(Position& p, DrawKind drawKind);
     void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   DrawKind drawKind, QRect& tileset);
-    void addSpriteWall(DrawKind drawKind, int specialID);
+                   DrawKind drawKind, bool layerOn, QRect& tileset);
+    void addSpriteWall(DrawKind drawKind, bool layerOn, int specialID);
     void stockSprite(Position& p, MapEditorSubSelectionKind kind,
                      int widthPosition, int angle, QRect* textureRect);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
@@ -163,6 +161,7 @@ public:
                    QList<Position>& positions);
     bool isTinPaintPossible(MapEditorSelectionKind selection,
                             DrawKind drawKind, QString& messageError) const;
+    void updatePositionLayer(Position& p, bool layerOn);
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
@@ -175,14 +174,11 @@ public:
                      bool updateTree = true);
     void onMousePressed(MapEditorSelectionKind selection,
                         MapEditorSubSelectionKind subSelection,
-                        DrawKind drawKind,
-                        QRect& tileset,
-                        int specialID,
-                        QPoint point,
-                        Qt::MouseButton button);
+                        DrawKind drawKind, bool layerOn, QRect& tileset,
+                        int specialID, QPoint point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
-                         DrawKind drawKind, QRect &, int specialID, QPoint,
-                         Qt::MouseButton button);
+                         DrawKind drawKind, bool layerOn, QRect &,
+                         int specialID,  QPoint, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);

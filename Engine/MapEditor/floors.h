@@ -115,6 +115,11 @@ public:
     bool deleteLand(Position& p);
 
     void removeLandOut(MapProperties& properties);
+    void updateRaycasting(int squareSize, float& finalDistance,
+                          Position &finalPosition, QRay3D &ray);
+    void updateRaycastingAt(Position &position, LandDatas *floor,
+                            int squareSize, float &finalDistance,
+                            Position &finalPosition, QRay3D& ray);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);

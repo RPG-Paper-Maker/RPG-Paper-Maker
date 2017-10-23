@@ -357,9 +357,10 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
                 MapEditorSubSelectionKind subSelection =
                         m_menuBar->subSelectionKind();
                 int specialID = m_panelTextures->getID(subSelection);
+                bool layerOn = m_menuBar->layerOn();
                 m_control.addRemove(m_menuBar->selectionKind(),
                                     subSelection, m_menuBar->drawKind(),
-                                    tileset, specialID,
+                                    layerOn, tileset, specialID,
                                     button == Qt::MouseButton::LeftButton);
             }
         }
@@ -383,9 +384,10 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                 MapEditorSubSelectionKind subSelection =
                         m_menuBar->subSelectionKind();
                 int specialID = m_panelTextures->getID(subSelection);
+                bool layerOn = m_menuBar->layerOn();
                 m_control.onMousePressed(selection, subSelection, drawKind,
-                                         tileset, specialID, event->pos(),
-                                         button);
+                                         layerOn, tileset, specialID,
+                                         event->pos(), button);
             }
             else
                 QMessageBox::information(nullptr, "Warning", messageError);
@@ -415,8 +417,9 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
         MapEditorSubSelectionKind subSelection =
                 m_menuBar->subSelectionKind();
         int specialID = m_panelTextures->getID(subSelection);
+        bool layerOn = m_menuBar->layerOn();
         m_control.onMouseReleased(m_menuBar->selectionKind(),
-                                  subSelection, m_menuBar->drawKind(),
+                                  subSelection, m_menuBar->drawKind(), layerOn,
                                   tileset, specialID, event->pos(), button);
     }
 }

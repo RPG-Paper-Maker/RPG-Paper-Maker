@@ -18,7 +18,7 @@
 */
 
 #include "floors.h"
-#include "map.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -310,6 +310,33 @@ void Floors::removeLandOut(MapProperties& properties) {
 
     for (int j = 0; j < list.size(); j++)
         m_lands.remove(list.at(j));
+}
+
+// -------------------------------------------------------
+
+void Floors::updateRaycasting(int squareSize, float& finalDistance,
+                              Position &finalPosition, QRay3D &ray)
+{
+    for (QHash<Position, LandDatas*>::iterator i = m_lands.begin();
+         i != m_lands.end(); i++)
+    {
+        Position position = i.key();
+        updateRaycastingAt(position, i.value(), squareSize, finalDistance,
+                           finalPosition, ray);
+    }
+}
+
+// -------------------------------------------------------
+
+void Floors::updateRaycastingAt(Position &position, LandDatas* floor,
+                                int squareSize, float &finalDistance,
+                                Position &finalPosition, QRay3D& ray)
+{
+    /*
+    float newDistance = floor->intersection(squareSize, ray, position);
+    if (Wanok::getMinDistance(finalDistance, newDistance))
+        finalPosition = position;
+        */
 }
 
 // -------------------------------------------------------

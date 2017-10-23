@@ -59,6 +59,8 @@ void Position::setCoords(int x, int y, int y_plus, int z){
 
 int Position::layer() const { return m_layer; }
 
+void Position::setLayer(int l) { m_layer = l; }
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

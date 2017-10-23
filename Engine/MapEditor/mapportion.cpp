@@ -215,6 +215,14 @@ void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
 
 // -------------------------------------------------------
 
+void MapPortion::updateRaycastingLand(int squareSize, float& finalDistance,
+                          Position &finalPosition, QRay3D& ray)
+{
+    m_floors->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+}
+
+// -------------------------------------------------------
+
 void MapPortion::updateRaycastingSprites(int squareSize, float& finalDistance,
                                          Position& finalPosition, QRay3D &ray,
                                          double cameraHAngle)

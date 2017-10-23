@@ -52,6 +52,7 @@ public:
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind() const;
     DrawKind drawKind() const;
+    bool layerOn() const;
     bool containsMenu() const;
     void initializeRightMenu();
 

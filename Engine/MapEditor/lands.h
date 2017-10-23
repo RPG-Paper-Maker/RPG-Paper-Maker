@@ -21,6 +21,8 @@
 #define LANDS_H
 
 #include "mapelement.h"
+#include "qray3d.h"
+#include "position.h"
 
 // -------------------------------------------------------
 //
@@ -36,6 +38,8 @@ public:
     LandDatas();
     virtual ~LandDatas();
     virtual MapEditorSubSelectionKind getSubKind() const;
+
+    float intersection(int squareSize, QRay3D& ray, Position& position);
 
     virtual void read(const QJsonObject &);
     virtual void write(QJsonObject &) const;

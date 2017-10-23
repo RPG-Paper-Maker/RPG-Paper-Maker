@@ -108,6 +108,16 @@ DrawKind WidgetMenuBarMapEditor::drawKind() const{
     return DrawKind::Pencil;
 }
 
+bool WidgetMenuBarMapEditor::layerOn() const {
+    WidgetMenuBarMapEditor* bar =
+            (WidgetMenuBarMapEditor*) this->cornerWidget();
+    QAction* action = bar->actions().at((int) MapEditorModesKind::Layer);
+    QString text = action->text();
+    QList<QAction*> list = action->menu()->actions();
+
+    return text == list.at(1)->text();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

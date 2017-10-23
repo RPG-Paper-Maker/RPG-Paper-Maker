@@ -405,9 +405,10 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycastingLand(MapPortion*, QRay3D&)
+void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
 {
-
+    mapPortion->updateRaycastingLand(m_map->squareSize(), m_distanceLand,
+                                        m_positionOnLand, ray);
 }
 
 // -------------------------------------------------------
@@ -892,7 +893,7 @@ void ControlMapEditor::save(){
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
-                                 DrawKind drawKind, QRect& tileset,
+                                 DrawKind drawKind, bool layerOn, QRect& tileset,
                                  int specialID, bool adding)
 {
     Position p = getPositionSelected(selection, subSelection, adding);
@@ -905,8 +906,10 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     }
     else {
         if (m_map->isInGrid(p)) {
-            if (adding)
-                add(selection, subSelection, drawKind, tileset, specialID, p);
+            if (adding) {
+                add(selection, subSelection, drawKind, layerOn, tileset,
+                    specialID, p);
+            }
             else
                 remove(selection, drawKind, p);
         }
@@ -939,17 +942,17 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 
 void ControlMapEditor::add(MapEditorSelectionKind selection,
                            MapEditorSubSelectionKind subSelection,
-                           DrawKind drawKind,
+                           DrawKind drawKind, bool layerOn,
                            QRect& tileset, int specialID,
                            Position& p)
 {
     if (tileset.width() != 0 && tileset.height() != 0) {
         switch (selection){
         case MapEditorSelectionKind::Land:
-            addFloor(p, subSelection, drawKind, tileset, specialID);
+            addFloor(p, subSelection, drawKind, layerOn, tileset, specialID);
             break;
         case MapEditorSelectionKind::Sprites:
-            addSprite(p, subSelection, drawKind, tileset);
+            addSprite(p, subSelection, drawKind, layerOn, tileset);
             break;
         case MapEditorSelectionKind::Objects:
             setCursorObjectPosition(p); break;
@@ -983,13 +986,13 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addFloor(Position& p,
-                                MapEditorSubSelectionKind kind,
-                                DrawKind drawKind,
-                                QRect &tileset, int)
+void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
+                                DrawKind drawKind, bool layerOn, QRect &tileset,
+                                int)
 {
     FloorDatas* floor;
     QRect* shortTexture;
+    updatePositionLayer(p, layerOn);
 
     // Pencil
     switch (drawKind) {
@@ -1226,6 +1229,7 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
 
 void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
     QList<Position> positions;
+    qDebug() << QString::number(p.layer());
 
     // Pencil
     switch (drawKind) {
@@ -1268,7 +1272,7 @@ void ControlMapEditor::eraseLand(Position& p){
 
 void ControlMapEditor::addSprite(Position& p,
                                  MapEditorSubSelectionKind kind,
-                                 DrawKind drawKind,
+                                 DrawKind drawKind, bool layerOn,
                                  QRect& tileset)
 {
     QList<Position> positions;
@@ -1292,7 +1296,9 @@ void ControlMapEditor::addSprite(Position& p,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID) {
+void ControlMapEditor::addSpriteWall(DrawKind drawKind, bool layerOn,
+                                     int specialID)
+{
     QList<GridPosition> positions;
 
     // Pencil
@@ -1784,6 +1790,13 @@ bool ControlMapEditor::isTinPaintPossible(MapEditorSelectionKind selection,
 }
 
 // -------------------------------------------------------
+
+void ControlMapEditor::updatePositionLayer(Position& p, bool layerOn) {
+    if (layerOn)
+        p.setLayer(p.layer() + 1);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //
@@ -1855,10 +1868,9 @@ void ControlMapEditor::onMouseMove(QPoint point,
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       MapEditorSubSelectionKind subSelection,
-                                      DrawKind drawKind,
+                                      DrawKind drawKind, bool layerOn,
                                       QRect &tileset, int specialID,
-                                      QPoint point,
-                                      Qt::MouseButton button)
+                                      QPoint point, Qt::MouseButton button)
 {
     // Update mouse
     updateMouse(point);
@@ -1868,8 +1880,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         bool adding = button == Qt::MouseButton::LeftButton;
         m_previousMouseCoords = getPositionSelected(selection, subSelection,
                                                     adding);
-        addRemove(selection, subSelection, drawKind, tileset, specialID,
-                  adding);
+        addRemove(selection, subSelection, drawKind, layerOn, tileset,
+                  specialID, adding);
 
         // Wall sprite
         if (subSelection == MapEditorSubSelectionKind::SpritesWall)
@@ -1886,7 +1898,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
 void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
                                        MapEditorSubSelectionKind,
-                                       DrawKind drawKind,
+                                       DrawKind drawKind, bool layerOn,
                                        QRect &, int specialID,
                                        QPoint,
                                        Qt::MouseButton button)
@@ -1894,7 +1906,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
     if (button == Qt::MouseButton::LeftButton) {
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
-            addSpriteWall(drawKind, specialID);
+            addSpriteWall(drawKind, layerOn, specialID);
         }
     }
     else if (button == Qt::MouseButton::RightButton) {

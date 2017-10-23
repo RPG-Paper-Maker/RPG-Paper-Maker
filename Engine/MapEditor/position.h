@@ -44,6 +44,7 @@ public:
     void setZ(int z);
     void setCoords(int x, int y, int y_plus, int z);
     int layer() const;
+    void setLayer(int l);
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;
