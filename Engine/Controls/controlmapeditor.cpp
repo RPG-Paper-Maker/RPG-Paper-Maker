@@ -408,7 +408,7 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
 void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
 {
     mapPortion->updateRaycastingLand(m_map->squareSize(), m_distanceLand,
-                                        m_positionOnLand, ray);
+                                     m_positionOnLand, ray);
 }
 
 // -------------------------------------------------------
@@ -925,7 +925,7 @@ Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        return m_positionOnPlane;
+        return m_positionOnLand;
     case MapEditorSelectionKind::Sprites:
         if (!adding && subSelection != MapEditorSubSelectionKind::SpritesWall)
             return m_positionOnSprite;
@@ -993,6 +993,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
     FloorDatas* floor;
     QRect* shortTexture;
     updatePositionLayer(p, layerOn);
+    qDebug() << QString::number(p.layer());
 
     // Pencil
     switch (drawKind) {
@@ -1881,18 +1882,22 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     if (button != Qt::MouseButton::MiddleButton){
         // Add/Remove something
         bool adding = button == Qt::MouseButton::LeftButton;
-        m_previousMouseCoords = getPositionSelected(selection, subSelection,
-                                                    adding);
-        addRemove(selection, subSelection, drawKind, layerOn, tileset,
-                  specialID, adding);
-
-        // Wall sprite
-        if (subSelection == MapEditorSubSelectionKind::SpritesWall)
+        Position newPosition = getPositionSelected(selection, subSelection,
+                                                   adding);
+        if (((Position3D) m_previousMouseCoords) != ((Position3D) newPosition))
         {
-            if (button == Qt::MouseButton::LeftButton)
-                m_isDrawingWall = true;
-            else if (button == Qt::MouseButton::RightButton)
-                m_isDeletingWall = true;
+            m_previousMouseCoords = newPosition;
+            addRemove(selection, subSelection, drawKind, layerOn, tileset,
+                      specialID, adding);
+
+            // Wall sprite
+            if (subSelection == MapEditorSubSelectionKind::SpritesWall)
+            {
+                if (button == Qt::MouseButton::LeftButton)
+                    m_isDrawingWall = true;
+                else if (button == Qt::MouseButton::RightButton)
+                    m_isDeletingWall = true;
+            }
         }
     }
 }
@@ -1918,6 +1923,9 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
             removeSpriteWall(drawKind);
         }
     }
+
+    // Force previous mouse coords to be different
+    m_previousMouseCoords.setCoords(-1, 0, 0, -1);
 }
 
 // -------------------------------------------------------

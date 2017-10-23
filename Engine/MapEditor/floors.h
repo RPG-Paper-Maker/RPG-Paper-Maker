@@ -21,65 +21,8 @@
 #define FLOORS_H
 
 #include <QHash>
-#include <QRect>
-#include <QVector>
-#include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLBuffer>
-#include <QOpenGLVertexArrayObject>
-#include "land.h"
-#include "position.h"
-#include "height.h"
-#include "vertex.h"
 #include "mapproperties.h"
-
-// -------------------------------------------------------
-//
-//  CLASS FloorDatas
-//
-//  A square floor datas.
-//
-// -------------------------------------------------------
-
-class FloorDatas : public LandDatas
-{
-public:
-    FloorDatas();
-    FloorDatas(QRect *texture);
-    virtual ~FloorDatas();
-    QRect* textureRect() const;
-    virtual MapEditorSubSelectionKind getSubKind() const;
-
-    virtual void initializeVertices(int squareSize, int width, int height,
-                                    QVector<Vertex>& vertices,
-                                    QVector<GLuint>& indexes,
-                                    Position& position, int& count);
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject & json) const;
-
-protected:
-    QRect* m_textureRect;
-};
-
-// -------------------------------------------------------
-//
-//  CLASS Floor
-//
-//  A square floor.
-//
-// -------------------------------------------------------
-
-class Floor : protected QOpenGLFunctions
-{
-public:
-    Floor();
-    virtual ~Floor();
-    static QVector3D verticesQuad[];
-    static GLuint indexesQuad[];
-    static int nbVerticesQuad;
-    static int nbIndexesQuad;
-};
+#include "floor.h"
 
 // -------------------------------------------------------
 //

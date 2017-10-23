@@ -230,7 +230,8 @@ HEADERS += \
     MathUtils/qray3d.h \
     MathUtils/smallqt3d_global.h \
     MathUtils/qbox3d.h \
-    MapEditor/land.h
+    MapEditor/land.h \
+    MapEditor/floor.h
 
 SOURCES += \
     main.cpp \
@@ -407,7 +408,8 @@ SOURCES += \
     MathUtils/qplane3d.cpp \
     MathUtils/qray3d.cpp \
     MathUtils/qbox3d.cpp \
-    MapEditor/land.cpp
+    MapEditor/land.cpp \
+    MapEditor/floor.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

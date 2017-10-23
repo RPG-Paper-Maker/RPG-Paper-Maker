@@ -35,6 +35,8 @@ public:
 
     virtual void initializeVertices(int, int, int, QVector<Vertex>&,
                                     QVector<GLuint>&, Position&, int&);
+    void getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
+                    Position3D &position);
     float intersection(int squareSize, QRay3D& ray, Position& position);
 
     virtual void read(const QJsonObject &);
