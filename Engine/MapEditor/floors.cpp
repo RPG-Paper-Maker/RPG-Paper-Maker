@@ -59,6 +59,49 @@ MapEditorSubSelectionKind FloorDatas::getSubKind() const{
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void FloorDatas::initializeVertices(int squareSize, int width, int height,
+                                   QVector<Vertex>& vertices,
+                                   QVector<GLuint>& indexes, Position& position,
+                                   int& count)
+{
+    QVector3D pos(position.x() * squareSize, 0.0f, position.z() * squareSize);
+    QVector3D size(squareSize, 0.0, squareSize);
+
+    float x = (float)(textureRect()->x() * squareSize) / width;
+    float y = (float)(textureRect()->y() * squareSize) / height;
+    float w = (float)(textureRect()->width() * squareSize) / width;
+    float h = (float)(textureRect()->height() * squareSize) / height;
+    float coefX = 0.1 / width;
+    float coefY = 0.1 / height;
+    x += coefX;
+    y += coefY;
+    w -= (coefX * 2);
+    h -= (coefY * 2);
+
+    // Vertices
+    vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+                    QVector2D(x, y)));
+    vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+                    QVector2D(x + w, y)));
+    vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+                    QVector2D(x + w, y + h)));
+    vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+                    QVector2D(x, y + h)));
+
+    // indexes
+    int offset = count * Floor::nbVerticesQuad;
+    for (int i = 0; i < Floor::nbIndexesQuad; i++)
+        indexes.append(Floor::indexesQuad[i] + offset);
+
+    count++;
+}
+
+// -------------------------------------------------------
+//
 //  READ / WRITE
 //
 // -------------------------------------------------------
@@ -111,10 +154,7 @@ int Floor::nbIndexesQuad(6);
 //
 // -------------------------------------------------------
 
-Floor::Floor() :
-    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
-    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
-    m_programStatic(nullptr)
+Floor::Floor()
 {
 
 }
@@ -122,81 +162,6 @@ Floor::Floor() :
 Floor::~Floor()
 {
 
-}
-
-// -------------------------------------------------------
-//
-//  GL
-//
-// -------------------------------------------------------
-
-void Floor::clearGL(){
-    m_vertices.clear();
-    m_indexes.clear();
-    m_count = 0;
-}
-
-// -------------------------------------------------------
-
-void Floor::initializeVertices(int squareSize, int width, int height,
-                               Position3D &p, FloorDatas *floor)
-{
-    QVector3D pos(p.x() * squareSize, 0.0f, p.z() * squareSize);
-    QVector3D size(squareSize, 0.0, squareSize);
-
-    float x = (float)(floor->textureRect()->x() * squareSize) / width;
-    float y = (float)(floor->textureRect()->y() * squareSize) / height;
-    float w = (float)(floor->textureRect()->width() * squareSize) / width;
-    float h = (float)(floor->textureRect()->height() * squareSize) / height;
-    float coefX = 0.1 / width;
-    float coefY = 0.1 / height;
-    x += coefX;
-    y += coefY;
-    w -= (coefX * 2);
-    h -= (coefY * 2);
-
-    // Vertices
-    m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
-                      QVector2D(x, y)));
-    m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
-                      QVector2D(x + w, y)));
-    m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
-                      QVector2D(x + w, y + h)));
-    m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
-                      QVector2D(x, y + h)));
-
-    // indexes
-    int offset = m_count * Floor::nbVerticesQuad;
-    for (int i = 0; i < Floor::nbIndexesQuad; i++)
-        m_indexes.append(Floor::indexesQuad[i] + offset);
-
-    m_count++;
-}
-
-// -------------------------------------------------------
-
-void Floor::initializeGL(QOpenGLShaderProgram *programStatic){
-    if (m_programStatic == nullptr){
-        initializeOpenGLFunctions();
-
-        // Programs
-        m_programStatic = programStatic;
-    }
-}
-
-// -------------------------------------------------------
-
-void Floor::updateGL(){
-    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
-                        m_vao, m_programStatic);
-}
-
-// -------------------------------------------------------
-
-void Floor::paintGL(){
-    m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
-    m_vao.bind();
 }
 
 // -------------------------------------------------------
@@ -214,20 +179,18 @@ void Floor::paintGL(){
 // -------------------------------------------------------
 
 Floors::Floors() :
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr)
 {
-    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
-        m_floorsGL[i] = new Floor;
+
 }
 
 Floors::~Floors()
 {
-    QHash<Position, LandDatas*>::iterator i;
-    for (i = m_lands.begin(); i != m_lands.end(); i++)
+    QHash<Position, FloorDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
         delete i.value();
-
-    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
-        delete m_floorsGL[i];
 }
 
 // -------------------------------------------------------
@@ -237,67 +200,62 @@ Floors::~Floors()
 // -------------------------------------------------------
 
 bool Floors::isEmpty() const{
-    return m_lands.size() == 0;
+    return m_all.size() == 0;
 }
 
 // -------------------------------------------------------
 
-LandDatas* Floors::getLand(Position& p){
-    LandDatas* datas = m_lands.value(p);
-    // TODO : autotiles
-
-    return datas;
+FloorDatas *Floors::getFloor(Position& p){
+    return m_all.value(p);
 }
 
 // -------------------------------------------------------
 
-void Floors::setLand(Position& p, LandDatas *land){
-    m_lands.insert(p, land);
+void Floors::setFloor(Position& p, FloorDatas *floor){
+    m_all.insert(p, floor);
 }
 
 // -------------------------------------------------------
 
-LandDatas *Floors::removeLand(Position& p){
-    LandDatas* land = m_lands.value(p);
+FloorDatas *Floors::removeFloor(Position& p){
+    FloorDatas* floor = m_all.value(p);
 
-    if (land != nullptr)
-        m_lands.remove(p);
+    if (floor != nullptr)
+        m_all.remove(p);
 
-    return land;
+    return floor;
 }
 
 // -------------------------------------------------------
 
-bool Floors::addLand(Position& p, LandDatas *land){
-    if (land->getSubKind() == MapEditorSubSelectionKind::Floors){
-        LandDatas* previousLand = removeLand(p);
+bool Floors::addFloor(Position& p, FloorDatas *floor){
+    FloorDatas* previousFloor = removeFloor(p);
 
-        if (previousLand != nullptr)
-            delete previousLand;
+    if (previousFloor != nullptr)
+        delete previousFloor;
 
-        setLand(p, land);
-    }
+    setFloor(p, floor);
 
     return true;
 }
 
 // -------------------------------------------------------
 
-bool Floors::deleteLand(Position& p){
-    LandDatas* previousLand = removeLand(p);
+bool Floors::deleteFloor(Position& p){
+    FloorDatas* previousFloor = removeFloor(p);
 
-    if (previousLand != nullptr)
-        delete previousLand;
+    if (previousFloor != nullptr)
+        delete previousFloor;
 
     return true;
 }
 
 // -------------------------------------------------------
 
-void Floors::removeLandOut(MapProperties& properties) {
+void Floors::removeFloorOut(MapProperties& properties) {
     QList<Position> list;
-    QHash<Position, LandDatas*>::iterator i;
-    for (i = m_lands.begin(); i != m_lands.end(); i++) {
+    QHash<Position, FloorDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
 
         if (position.x() >= properties.length() ||
@@ -309,7 +267,7 @@ void Floors::removeLandOut(MapProperties& properties) {
     }
 
     for (int j = 0; j < list.size(); j++)
-        m_lands.remove(list.at(j));
+        m_all.remove(list.at(j));
 }
 
 // -------------------------------------------------------
@@ -317,8 +275,8 @@ void Floors::removeLandOut(MapProperties& properties) {
 void Floors::updateRaycasting(int squareSize, float& finalDistance,
                               Position &finalPosition, QRay3D &ray)
 {
-    for (QHash<Position, LandDatas*>::iterator i = m_lands.begin();
-         i != m_lands.end(); i++)
+    for (QHash<Position, FloorDatas*>::iterator i = m_all.begin();
+         i != m_all.end(); i++)
     {
         Position position = i.key();
         updateRaycastingAt(position, i.value(), squareSize, finalDistance,
@@ -328,7 +286,7 @@ void Floors::updateRaycasting(int squareSize, float& finalDistance,
 
 // -------------------------------------------------------
 
-void Floors::updateRaycastingAt(Position &position, LandDatas* floor,
+void Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
                                 int squareSize, float &finalDistance,
                                 Position &finalPosition, QRay3D& ray)
 {
@@ -346,35 +304,28 @@ void Floors::updateRaycastingAt(Position &position, LandDatas* floor,
 // -------------------------------------------------------
 
 void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
-                                int squareSize, int width, int height){
-
-    // Clear all the floors
-    for (int j = 0; j < Position::LAYERS_NUMBER; j++)
-        m_floorsGL[j]->clearGL();
+                                int squareSize, int width, int height)
+{
+    m_vertices.clear();
+    m_indexes.clear();
+    int count = 0;
 
     // Create temp hash for preview
-    QHash<Position, LandDatas*> landsWithPreview(m_lands);
+    QHash<Position, FloorDatas*> floorsWithPreview(m_all);
     QHash<Position, MapElement*>::iterator it;
     for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
         MapElement* element = it.value();
         if (element->getSubKind() == MapEditorSubSelectionKind::Floors)
-            landsWithPreview[it.key()] = (LandDatas*) element;
+            floorsWithPreview[it.key()] = (FloorDatas*) element;
     }
 
     // Initialize vertices
-    QHash<Position, LandDatas*>::iterator i;
-    for (i = landsWithPreview.begin(); i != landsWithPreview.end(); i++) {
-        LandDatas* land = i.value();
+    QHash<Position, FloorDatas*>::iterator i;
+    for (i = floorsWithPreview.begin(); i != floorsWithPreview.end(); i++) {
+        FloorDatas* floor = i.value();
         Position p = i.key();
-
-        switch (land->getSubKind()){
-        case MapEditorSubSelectionKind::Floors:
-            m_floorsGL[p.layer()]->initializeVertices(squareSize, width, height,
-                                                      p, (FloorDatas*) land);
-            break;
-        default:
-            break;
-        }
+        floor->initializeVertices(squareSize, width, height, m_vertices,
+                                  m_indexes, p, count);
     }
 }
 
@@ -386,28 +337,21 @@ void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
 
         m_programStatic = programStatic;
     }
-
-    // Floors
-    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
-        m_floorsGL[i]->initializeGL(programStatic);
 }
 
 // -------------------------------------------------------
 
 void Floors::updateGL(){
-
-    // Floors
-    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
-        m_floorsGL[i]->updateGL();
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
+                        m_vao, m_programStatic);
 }
 
 // -------------------------------------------------------
 
 void Floors::paintGL(){
-
-    // Floors
-    for (int i = 0; i < Position::LAYERS_NUMBER; i++)
-        m_floorsGL[i]->paintGL();
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    m_vao.bind();
 }
 
 // -------------------------------------------------------
@@ -419,7 +363,6 @@ void Floors::paintGL(){
 void Floors::read(const QJsonObject & json){
     QJsonArray tabFloors = json["floors"].toArray();
 
-    // Floors
     for (int i = 0; i < tabFloors.size(); i++){
         QJsonObject obj = tabFloors.at(i).toObject();
         Position p;
@@ -427,7 +370,7 @@ void Floors::read(const QJsonObject & json){
         QJsonObject objLand = obj["v"].toObject();
         FloorDatas* floor = new FloorDatas;
         floor->read(objLand);
-        m_lands[p] = floor;
+        m_all[p] = floor;
     }
 }
 
@@ -436,28 +379,17 @@ void Floors::read(const QJsonObject & json){
 void Floors::write(QJsonObject & json) const{
     QJsonArray tabFloors;
 
-    QHash<Position, LandDatas*>::const_iterator i;
-    for (i = m_lands.begin(); i != m_lands.end(); i++){
+    QHash<Position, FloorDatas*>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
         i.key().write(tabKey);
-        LandDatas* land = i.value();
-        QJsonObject objLand;
-        land->write(objLand);
+        FloorDatas* floor = i.value();
+        QJsonObject objFloor;
+        floor->write(objFloor);
         objHash["k"] = tabKey;
-        objHash["v"] = objLand;
-
-        switch (land->getSubKind()){
-        case MapEditorSubSelectionKind::Floors:
-            tabFloors.append(objHash);
-            break;
-        case MapEditorSubSelectionKind::Autotiles:
-            break;
-        case MapEditorSubSelectionKind::Water:
-            break;
-        default:
-            break;
-        }
+        objHash["v"] = objFloor;
+        tabFloors.append(objHash);
     }
     json["floors"] = tabFloors;
 }

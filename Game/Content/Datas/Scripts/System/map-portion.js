@@ -94,9 +94,18 @@ MapPortion.prototype = {
     *   at the beginning of the game.
     */
     read: function(json, isMapHero){
-        this.readFloors(json.floors);
+        this.readLands(json.lands);
         this.readSprites(json.sprites);
         this.readObjects(json.objs.list, isMapHero);
+    },
+
+    // -------------------------------------------------------
+
+    /** Read the JSON associated to the lands in the portion.
+    *   @param {Object} json Json object describing the object.
+    */
+    readLands: function(json){
+        this.readFloors(json.floors);
     },
 
     // -------------------------------------------------------
@@ -105,18 +114,14 @@ MapPortion.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     readFloors: function(json){
-
-        // Static floors
-        var jsonFloors = json.floors;
-
         var material = $currentMap.textureTileset;
         var width = material.map.image.width;
         var height = material.map.image.height;
         var geometry = new THREE.Geometry();
         geometry.faceVertexUvs[0] = [];
 
-        for (var i = 0, length = jsonFloors.length; i < length; i++){
-            var jsonFloor = jsonFloors[i];
+        for (var i = 0, length = json.length; i < length; i++){
+            var jsonFloor = json[i];
             var localPosition = Wanok.positionToVector3(jsonFloor.k);
             var jsonFloorDatas = jsonFloor.v;
             var texture = jsonFloorDatas.t;

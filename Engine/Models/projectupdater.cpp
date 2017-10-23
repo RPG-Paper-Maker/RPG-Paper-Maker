@@ -172,8 +172,11 @@ void ProjectUpdater::getAllPathsMapsPortions()
                 }
                 else if (fileName != "objects.json") {
                     Wanok::readOtherJSON(path, document);
-                    paths->append(path);
-                    mapPortions->append(document.object());
+                    QJsonObject object = document.object();
+                    if (!object.isEmpty()) {
+                        paths->append(path);
+                        mapPortions->append(object);
+                    }
                 }
             }
         }
@@ -310,13 +313,21 @@ void ProjectUpdater::updateVersion_0_4_0() {
         objMapProperties["ofsprites"] = QJsonArray();
         Wanok::writeOtherJSON(m_listMapPropertiesPaths.at(i), objMapProperties);
 
-        // Add walls and overflow empty tab for sprites
         for (int j = 0; j < mapPortions->size(); j++) {
             QJsonObject obj = mapPortions->at(j);
+
+            // Add lands and floors inside
             QJsonObject objSprites = obj["sprites"].toObject();
             objSprites["walls"] = QJsonArray();
             objSprites["overflow"] = QJsonArray();
             obj["sprites"] = objSprites;
+
+            // Add lands and floors inside
+            QJsonObject objFloors = obj["floors"].toObject();
+            QJsonObject objLands;
+            objLands["floors"] = objFloors;
+            obj["lands"] = objLands;
+            obj.remove("floors");
 
             Wanok::writeOtherJSON(paths->at(j), obj);
         }

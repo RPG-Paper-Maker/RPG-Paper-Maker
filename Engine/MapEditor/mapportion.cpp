@@ -27,7 +27,7 @@
 
 MapPortion::MapPortion(Portion &globalPortion) :
     m_globalPortion(globalPortion),
-    m_floors(new Floors),
+    m_lands(new Lands),
     m_sprites(new Sprites),
     m_mapObjects(new MapObjects)
 {
@@ -36,7 +36,7 @@ MapPortion::MapPortion(Portion &globalPortion) :
 
 MapPortion::~MapPortion()
 {
-    delete m_floors;
+    delete m_lands;
     delete m_sprites;
     delete m_mapObjects;
 
@@ -70,8 +70,8 @@ void MapPortion::setIsLoaded(bool b) {
 }
 
 bool MapPortion::isEmpty() const {
-    return m_floors->isEmpty() && m_sprites->isEmpty() &&
-            m_mapObjects->isEmpty();
+    return m_lands->isEmpty() && m_sprites->isEmpty() &&
+           m_mapObjects->isEmpty();
 }
 
 // -------------------------------------------------------
@@ -81,17 +81,17 @@ bool MapPortion::isEmpty() const {
 // -------------------------------------------------------
 
 LandDatas* MapPortion::getLand(Position& p){
-    return m_floors->getLand(p);
+    return m_lands->getLand(p);
 }
 
 bool MapPortion::addLand(Position& p, LandDatas *land){
-    return m_floors->addLand(p, land);
+    return m_lands->addLand(p, land);
 }
 
 // -------------------------------------------------------
 
 bool MapPortion::deleteLand(Position& p){
-    return m_floors->deleteLand(p);
+    return m_lands->deleteLand(p);
 }
 
 // -------------------------------------------------------
@@ -162,7 +162,7 @@ void MapPortion::removeOverflow(Position& p) {
 // -------------------------------------------------------
 
 void MapPortion::removeLandOut(MapProperties& properties) {
-    m_floors->removeLandOut(properties);
+    m_lands->removeLandOut(properties);
 }
 
 // -------------------------------------------------------
@@ -218,7 +218,7 @@ void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
 void MapPortion::updateRaycastingLand(int squareSize, float& finalDistance,
                           Position &finalPosition, QRay3D& ray)
 {
-    m_floors->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+    m_lands->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
 }
 
 // -------------------------------------------------------
@@ -260,7 +260,7 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &walls)
 {
     int spritesOffset = -0.005;
-    m_floors->initializeVertices(m_previewSquares, squareSize,
+    m_lands->initializeVertices(m_previewSquares, squareSize,
                                  tileset->width(), tileset->height());
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
                                   m_previewDeleteGrid, squareSize,
@@ -284,7 +284,7 @@ void MapPortion::initializeVerticesObjects(int squareSize,
 void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
                               QOpenGLShaderProgram *programFace)
 {
-    m_floors->initializeGL(programStatic);
+    m_lands->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
     initializeGLObjects(programStatic, programFace);
 }
@@ -300,7 +300,7 @@ void MapPortion::initializeGLObjects(QOpenGLShaderProgram *programStatic,
 // -------------------------------------------------------
 
 void MapPortion::updateGL(){
-    m_floors->updateGL();
+    m_lands->updateGL();
     m_sprites->updateGL();
     updateGLObjects();
 }
@@ -315,7 +315,7 @@ void MapPortion::updateGLObjects() {
 // -------------------------------------------------------
 
 void MapPortion::paintFloors(){
-    m_floors->paintGL();
+    m_lands->paintGL();
 }
 
 // -------------------------------------------------------
@@ -365,8 +365,8 @@ void MapPortion::paintObjectsSquares(){
 // -------------------------------------------------------
 
 void MapPortion::read(const QJsonObject & json){
-    if (json.contains("floors")){
-        m_floors->read(json["floors"].toObject());
+    if (json.contains("lands")){
+        m_lands->read(json["lands"].toObject());
         m_sprites->read(json["sprites"].toObject());
         m_mapObjects->read(json["objs"].toObject());
     }
@@ -378,8 +378,8 @@ void MapPortion::write(QJsonObject & json) const{
     QJsonObject obj;
 
     // Floors
-    m_floors->write(obj);
-    json["floors"] = obj;
+    m_lands->write(obj);
+    json["lands"] = obj;
 
     // Sprites
     obj = QJsonObject();

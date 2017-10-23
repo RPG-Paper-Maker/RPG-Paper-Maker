@@ -20,7 +20,7 @@
 #ifndef MAPPORTION_H
 #define MAPPORTION_H
 
-#include "floors.h"
+#include "lands.h"
 #include "sprites.h"
 #include "mapobjects.h"
 #include "systemcommonobject.h"
@@ -105,7 +105,7 @@ public:
 
 private:
     Portion m_globalPortion;
-    Floors* m_floors;
+    Lands* m_lands;
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;

@@ -159,7 +159,7 @@ SceneMap.prototype = {
                 var json = JSON.parse(res);
                 var mapPortion = null;
 
-                if (json.hasOwnProperty("floors")){
+                if (json.hasOwnProperty("lands")){
                     mapPortion = new MapPortion(realX, realY, realZ);
                     mapPortion.read(
                             json, this.id === $datasGame.system.idMapStartHero);

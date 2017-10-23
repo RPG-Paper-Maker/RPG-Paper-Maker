@@ -22,46 +22,91 @@
 
 // -------------------------------------------------------
 //
-//
-//  ---------- LANDDATAS
-//
-//
-// -------------------------------------------------------
-
-// -------------------------------------------------------
-//
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-LandDatas::LandDatas()
+Lands::Lands() :
+    m_floors(new Floors)
 {
 
 }
 
-LandDatas::~LandDatas()
+Lands::~Lands()
 {
-
+    delete m_floors;
 }
 
-MapEditorSubSelectionKind LandDatas::getSubKind() const{
-    return MapEditorSubSelectionKind::None;
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+bool Lands::isEmpty() const {
+    return m_floors->isEmpty();
 }
 
-float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
-    /*
-    QVector3D pos, size, center;
-    float minDistance = 0, distance = 0;
-    QBox3D box;
+// -------------------------------------------------------
 
-    QVector3D vecA = Floor::verticesQuad[0] * size + pos,
-              vecB = Floor::verticesQuad[1] * size + pos,
-              vecC = Floor::verticesQuad[2] * size + pos,
-              vecD = Floor::verticesQuad[3] * size + pos;
-        box = QBox3D(vecA, vecC);
-        minDistance = box.intersection(ray);*/
+LandDatas* Lands::getLand(Position& p) {
+    m_floors->getFloor(p);
+}
 
-    return 0.0f;
+// -------------------------------------------------------
+
+bool Lands::addLand(Position& p, LandDatas* land) {
+    m_floors->addFloor(p, (FloorDatas*) land);
+}
+
+// -------------------------------------------------------
+
+bool Lands::deleteLand(Position& p) {
+    m_floors->deleteFloor(p);
+}
+
+// -------------------------------------------------------
+
+void Lands::removeLandOut(MapProperties& properties) {
+    m_floors->removeFloorOut(properties);
+}
+
+// -------------------------------------------------------
+
+void Lands::updateRaycasting(int squareSize, float& finalDistance,
+                             Position &finalPosition, QRay3D &ray)
+{
+    m_floors->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+}
+
+// -------------------------------------------------------
+//
+//  GL
+//
+// -------------------------------------------------------
+
+void Lands::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+                               int squareSize, int width, int height)
+{
+    m_floors->initializeVertices(previewSquares, squareSize, width, height);
+}
+
+// -------------------------------------------------------
+
+void Lands::initializeGL(QOpenGLShaderProgram *programStatic){
+    m_floors->initializeGL(programStatic);
+}
+
+// -------------------------------------------------------
+
+void Lands::updateGL(){
+    m_floors->updateGL();
+}
+
+// -------------------------------------------------------
+
+void Lands::paintGL(){
+    m_floors->paintGL();
 }
 
 // -------------------------------------------------------
@@ -70,31 +115,12 @@ float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
 //
 // -------------------------------------------------------
 
-void LandDatas::read(const QJsonObject &){
-
+void Lands::read(const QJsonObject & json){
+    m_floors->read(json);
 }
 
 // -------------------------------------------------------
 
-void LandDatas::write(QJsonObject &) const{
-
-}
-
-// -------------------------------------------------------
-//
-//
-//  ---------- LANDS
-//
-//
-// -------------------------------------------------------
-
-// -------------------------------------------------------
-//
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
-//
-// -------------------------------------------------------
-
-Lands::Lands()
-{
-
+void Lands::write(QJsonObject & json) const{
+    m_floors->write(json);
 }

@@ -20,41 +20,34 @@
 #ifndef LANDS_H
 #define LANDS_H
 
-#include "mapelement.h"
-#include "qray3d.h"
-#include "position.h"
+#include "land.h"
+#include "floors.h"
 
-// -------------------------------------------------------
-//
-//  CLASS LandDatas
-//
-//  A square floor datas.
-//
-// -------------------------------------------------------
-
-class LandDatas : public MapElement
-{
-public:
-    LandDatas();
-    virtual ~LandDatas();
-    virtual MapEditorSubSelectionKind getSubKind() const;
-
-    float intersection(int squareSize, QRay3D& ray, Position& position);
-
-    virtual void read(const QJsonObject &);
-    virtual void write(QJsonObject &) const;
-};
-
-// -------------------------------------------------------
-//
-//  CLASS Lands
-//
-// -------------------------------------------------------
-
-class Lands
+class Lands : public Serializable
 {
 public:
     Lands();
+    virtual ~Lands();
+
+    bool isEmpty() const;
+    LandDatas* getLand(Position& p);
+    bool addLand(Position& p, LandDatas* land);
+    bool deleteLand(Position& p);
+    void removeLandOut(MapProperties& properties);
+    void updateRaycasting(int squareSize, float& finalDistance,
+                          Position &finalPosition, QRay3D &ray);
+
+    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+                            int squareSize, int width, int height);
+    void initializeGL(QOpenGLShaderProgram* programStatic);
+    void updateGL();
+    void paintGL();
+
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
+
+protected:
+    Floors* m_floors;
 };
 
 #endif // LANDS_H

@@ -27,7 +27,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
-#include "lands.h"
+#include "land.h"
 #include "position.h"
 #include "height.h"
 #include "vertex.h"
@@ -49,6 +49,11 @@ public:
     virtual ~FloorDatas();
     QRect* textureRect() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
+
+    virtual void initializeVertices(int squareSize, int width, int height,
+                                    QVector<Vertex>& vertices,
+                                    QVector<GLuint>& indexes,
+                                    Position& position, int& count);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;
@@ -74,24 +79,6 @@ public:
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
-
-    void clearGL();
-    void initializeVertices(int squareSize, int width, int height,
-                            Position3D& p, FloorDatas* floor);
-    void initializeGL(QOpenGLShaderProgram* programStatic);
-    void updateGL();
-    void paintGL();
-
-protected:
-    int m_count;
-
-    // OpenGL informations
-    QOpenGLBuffer m_vertexBuffer;
-    QOpenGLBuffer m_indexBuffer;
-    QVector<Vertex> m_vertices;
-    QVector<GLuint> m_indexes;
-    QOpenGLVertexArrayObject m_vao;
-    QOpenGLShaderProgram* m_programStatic;
 };
 
 // -------------------------------------------------------
@@ -108,16 +95,16 @@ public:
     Floors();
     virtual ~Floors();
     bool isEmpty() const;
-    LandDatas* getLand(Position& p);
-    void setLand(Position& p, LandDatas* floor);
-    LandDatas* removeLand(Position& p);
-    bool addLand(Position& p, LandDatas* land);
-    bool deleteLand(Position& p);
+    FloorDatas* getFloor(Position& p);
+    void setFloor(Position& p, FloorDatas* floor);
+    FloorDatas* removeFloor(Position& p);
+    bool addFloor(Position& p, FloorDatas* floor);
+    bool deleteFloor(Position& p);
 
-    void removeLandOut(MapProperties& properties);
+    void removeFloorOut(MapProperties& properties);
     void updateRaycasting(int squareSize, float& finalDistance,
                           Position &finalPosition, QRay3D &ray);
-    void updateRaycastingAt(Position &position, LandDatas *floor,
+    void updateRaycastingAt(Position &position, FloorDatas *floor,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
 
@@ -131,9 +118,14 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QHash<Position, LandDatas*> m_lands;
-    Floor* m_floorsGL[2];
+    QHash<Position, FloorDatas*> m_all;
 
+    // OpenGL informations
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram* m_programStatic;
 };
 
