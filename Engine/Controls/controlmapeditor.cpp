@@ -1794,11 +1794,31 @@ bool ControlMapEditor::isTinPaintPossible(MapEditorSelectionKind selection,
     case DrawKind::Pin:
         if (selection == MapEditorSelectionKind::Sprites) {
             messageError =
-                    "A sprite cannot be applied with tin of paint option";
+                    "A sprite cannot be applied with tin of paint option.";
             return false;
         }
     default:
         break;
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::isPutLayerPossible(
+        MapEditorSubSelectionKind subSelection, DrawKind drawKind,
+        QString& messageError) const
+{
+    if (drawKind == DrawKind::Pin) {
+        messageError =
+                "A top layer cannot be applied with tin of paint option.";
+        return false;
+    }
+    else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
+        messageError =
+                "A top layer cannot be applied with sprite walls.";
+        return false;
     }
 
     return true;

@@ -57,6 +57,7 @@ public:
     void setVerticalAngle(double a);
     void addDistance(int d);
     OrientationKind orientationKind() const;
+    OrientationKind orientationFromTargetKind() const;
     CameraUpDownKind cameraUpDownKind() const;
     void update(Cursor* cursor, int squareSize);
     void zoomPlus(int squareSize);

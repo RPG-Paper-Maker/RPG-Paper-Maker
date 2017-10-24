@@ -163,6 +163,8 @@ public:
     bool isTinPaintPossible(MapEditorSelectionKind selection,
                             DrawKind drawKind, QString& messageError) const;
     void updatePositionLayer(Position& p, bool layerOn);
+    bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
+                            DrawKind drawKind, QString& messageError) const;
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,

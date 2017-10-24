@@ -99,6 +99,14 @@ OrientationKind Camera::orientationKind() const {
 
 // -------------------------------------------------------
 
+OrientationKind Camera::orientationFromTargetKind() const {
+    int basic = ((int) orientationKind()) - 1;
+
+    return (OrientationKind) (((basic + 2) % 4) + 1);
+}
+
+// -------------------------------------------------------
+
 CameraUpDownKind Camera::cameraUpDownKind() const {
     return m_verticalAngle < 90 ? CameraUpDownKind::Up : CameraUpDownKind::Down;
 }

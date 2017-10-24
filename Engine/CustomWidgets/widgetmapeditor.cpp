@@ -377,13 +377,15 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
         m_mousesPressed += button;
         if (m_menuBar != nullptr){
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
+            MapEditorSubSelectionKind subSelection =
+                    m_menuBar->subSelectionKind();
             DrawKind drawKind = m_menuBar->drawKind();
             QString messageError;
-            if (m_control.isTinPaintPossible(selection, drawKind, messageError))
+            if (m_control.isTinPaintPossible(selection, drawKind, messageError)
+                && m_control.isPutLayerPossible(subSelection, drawKind,
+                                                messageError))
             {
                 QRect tileset = m_panelTextures->getTilesetTexture();
-                MapEditorSubSelectionKind subSelection =
-                        m_menuBar->subSelectionKind();
                 int specialID = m_panelTextures->getID(subSelection);
                 bool layerOn = m_menuBar->layerOn();
                 m_control.onMousePressed(selection, subSelection, drawKind,
