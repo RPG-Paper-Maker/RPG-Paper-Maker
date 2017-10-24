@@ -80,15 +80,14 @@ public:
     int angle() const;
     QRect* textureRect() const;
     void getPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D& center,
-                          int squareSize, Position3D &position,
-                          int& spritesOffset);
+                          int squareSize, Position &position);
     virtual void initializeVertices(int squareSize, int width, int height,
                                     QVector<Vertex>& verticesStatic,
                                     QVector<GLuint>& indexesStatic,
                                     QVector<VertexBillboard>& verticesFace,
                                     QVector<GLuint>& indexesFace,
-                                    Position3D& position, int& countStatic,
-                                    int& countFace, int& spritesOffset);
+                                    Position &position, int& countStatic,
+                                    int& countFace);
     static void rotateVertex(QVector3D& vec, QVector3D& center, int angle);
     static void rotateSprite(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
                              QVector3D& vecD, QVector3D& center, int angle);
@@ -100,7 +99,7 @@ public:
                                         QVector2D& texA, QVector2D& texB,
                                         QVector2D& texC, QVector2D& texD);
     float intersection(int squareSize, QRay3D& ray, Position& position,
-                       int cameraHAngle, int& spritesOffset);
+                       int cameraHAngle);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -125,8 +124,7 @@ class SpriteObject : protected QOpenGLFunctions
 public:
     SpriteObject(SpriteDatas& datas, QOpenGLTexture* texture);
     virtual ~SpriteObject();
-    void initializeVertices(int squareSize, Position3D& position,
-                            int &spritesOffset);
+    void initializeVertices(int squareSize, Position &position);
     void initializeStaticGL(QOpenGLShaderProgram* programStatic);
     void initializeFaceGL(QOpenGLShaderProgram *programFace);
     void updateStaticGL();

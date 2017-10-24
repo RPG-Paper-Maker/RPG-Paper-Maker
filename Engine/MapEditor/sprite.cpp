@@ -122,14 +122,26 @@ QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 
 void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                    QVector3D& center, int squareSize,
-                                   Position3D& position, int &spritesOffset)
+                                   Position& position)
 {
     // Position
+    float xPlus = 0, zPlus = 0, offset = position.layer() * 0.05f;
+    if (m_orientation == OrientationKind::West)
+        xPlus -= offset;
+    if (m_orientation == OrientationKind::East)
+        xPlus += offset;
+    if (m_orientation == OrientationKind::North)
+        zPlus -= offset;
+    if (m_orientation == OrientationKind::South)
+        zPlus += offset;
     pos.setX((float) position.x() * squareSize -
-             ((textureRect()->width() - 1) * squareSize / 2) + spritesOffset);
+             ((textureRect()->width() - 1) * squareSize / 2));
     pos.setY((float) position.getY(squareSize));
     pos.setZ((float) position.z() * squareSize +
-             (widthPosition() * squareSize / 100) + spritesOffset);
+             (widthPosition() * squareSize / 100));
+    QVector3D p(pos);
+    pos.setX(p.x() + (xPlus * 2));
+    pos.setZ(p.z() + (zPlus * 2));
 
     // Size
     size.setX((float) textureRect()->width() * squareSize);
@@ -137,7 +149,7 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
     size.setZ(1.0f);
 
     // Center
-    center = Sprite::verticesQuad[0] * size + pos +
+    center = Sprite::verticesQuad[0] * size + p +
             QVector3D(size.x() / 2, - size.y() / 2, 0);
 }
 
@@ -149,8 +161,8 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      QVector<GLuint>& indexesStatic,
                                      QVector<VertexBillboard>& verticesFace,
                                      QVector<GLuint>& indexesFace,
-                                     Position3D& position, int& countStatic,
-                                     int& countFace, int &spritesOffset)
+                                     Position& position, int& countStatic,
+                                     int& countFace)
 {
     QVector3D pos, size, center;
 
@@ -167,7 +179,7 @@ void SpriteDatas::initializeVertices(int squareSize,
     w -= (coefX * 2);
     h -= (coefY * 2);
 
-    getPosSizeCenter(pos, size, center, squareSize, position, spritesOffset);
+    getPosSizeCenter(pos, size, center, squareSize, position);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     // Adding to buffers according to the kind of sprite
@@ -298,13 +310,13 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
 // -------------------------------------------------------
 
 float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
-                                int cameraHAngle, int &spritesOffset)
+                                int cameraHAngle)
 {
     QVector3D pos, size, center;
     float minDistance = 0, distance = 0;
     QBox3D box;
 
-    getPosSizeCenter(pos, size, center, squareSize, position, spritesOffset);
+    getPosSizeCenter(pos, size, center, squareSize, position);
 
     QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
               vecB = Sprite::verticesQuad[1] * size + pos,
@@ -428,8 +440,7 @@ SpriteObject::~SpriteObject()
 //
 // -------------------------------------------------------
 
-void SpriteObject::initializeVertices(int squareSize, Position3D& position,
-                                      int& spritesOffset)
+void SpriteObject::initializeVertices(int squareSize, Position& position)
 {
     m_verticesStatic.clear();
     m_verticesFace.clear();
@@ -439,8 +450,7 @@ void SpriteObject::initializeVertices(int squareSize, Position3D& position,
                                m_texture->width(),
                                m_texture->height(),
                                m_verticesStatic, m_indexes, m_verticesFace,
-                               m_indexes, position, count, count,
-                               spritesOffset);
+                               m_indexes, position, count, count);
 }
 
 // -------------------------------------------------------

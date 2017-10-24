@@ -255,13 +255,10 @@ SpriteDatas* Sprites::removeSprite(QSet<Portion>& portionsOverflow, Position& p)
 // -------------------------------------------------------
 
 bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
-                        MapEditorSubSelectionKind kind, int widthPosition,
-                        int angle, QRect *textureRect)
+                        SpriteDatas* sprite)
 {
     QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
     SpriteDatas* previousSprite = removeSprite(portionsOverflowRemove, p);
-    SpriteDatas* sprite = new SpriteDatas(kind, widthPosition, angle,
-                                          textureRect);
 
     if (previousSprite != nullptr)
         delete previousSprite;
@@ -421,14 +418,14 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 
 void Sprites::updateRaycasting(int squareSize, float &finalDistance,
                                Position& finalPosition, QRay3D &ray,
-                               double cameraHAngle, int& spritesOffset)
+                               double cameraHAngle)
 {
     for (QHash<Position, SpriteDatas*>::iterator i = m_all.begin();
          i != m_all.end(); i++)
     {
         Position position = i.key();
         updateRaycastingAt(position, i.value(), squareSize, finalDistance,
-                           finalPosition, ray, cameraHAngle, spritesOffset);
+                           finalPosition, ray, cameraHAngle);
     }
 
     // Overflow
@@ -450,10 +447,10 @@ void Sprites::updateRaycasting(int squareSize, float &finalDistance,
 void Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
                                  int squareSize, float &finalDistance,
                                  Position &finalPosition, QRay3D& ray,
-                                 double cameraHAngle, int& spritesOffset)
+                                 double cameraHAngle)
 {
     float newDistance = sprite->intersection(squareSize, ray, position,
-                                             cameraHAngle, spritesOffset);
+                                             cameraHAngle);
     if (Wanok::getMinDistance(finalDistance, newDistance))
         finalPosition = position;
 }
@@ -468,8 +465,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
                                  QHash<Position, MapElement *> &previewSquares,
                                  QHash<GridPosition, MapElement *> &previewGrid,
                                  QList<GridPosition> &previewDeleteGrid,
-                                 int squareSize, int width, int height,
-                                 int& spritesOffset)
+                                 int squareSize, int width, int height)
 {
     int countStatic = 0;
     int countFace = 0;
@@ -508,8 +504,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
         sprite->initializeVertices(squareSize, width, height,
                                    m_verticesStatic, m_indexesStatic,
                                    m_verticesFace, m_indexesFace,
-                                   position, countStatic, countFace,
-                                   spritesOffset);
+                                   position, countStatic, countFace);
     }
 
     // Initialize vertices for walls

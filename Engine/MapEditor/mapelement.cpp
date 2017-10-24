@@ -46,6 +46,10 @@ MapElement::~MapElement()
 
 }
 
+void MapElement::setOrientation(OrientationKind o) {
+    m_orientation = o;
+}
+
 void MapElement::setUpDown(CameraUpDownKind upDown) {
     m_up = upDown;
 }

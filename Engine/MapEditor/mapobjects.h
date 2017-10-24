@@ -58,8 +58,7 @@ public:
 
     void clearSprites();
     void initializeVertices(int squareSize,
-                            QHash<int, QOpenGLTexture *> &characters,
-                            int& spritesOffset);
+                            QHash<int, QOpenGLTexture *> &characters);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram *programFace);
     void updateGL();

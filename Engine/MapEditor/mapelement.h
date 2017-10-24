@@ -39,6 +39,7 @@ class MapElement : public Serializable
 public:
     MapElement();
     virtual ~MapElement();
+    void setOrientation(OrientationKind o);
     void setUpDown(CameraUpDownKind upDown);
 
     static QString jsonOrientation;

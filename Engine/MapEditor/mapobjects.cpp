@@ -151,8 +151,7 @@ void MapObjects::clearSprites(){
 // -------------------------------------------------------
 
 void MapObjects::initializeVertices(int squareSize,
-                                    QHash<int, QOpenGLTexture *> &characters,
-                                    int &spritesOffset)
+                                    QHash<int, QOpenGLTexture *> &characters)
 {
     clearSprites();
     m_vertices.clear();
@@ -188,8 +187,7 @@ void MapObjects::initializeVertices(int squareSize,
                                   state->indexY() * height,
                                   width, height));
             SpriteObject* spriteObject = new SpriteObject(sprite, texture);
-            spriteObject->initializeVertices(squareSize, position,
-                                             spritesOffset);
+            spriteObject->initializeVertices(squareSize, position);
 
             // Adding the sprite to the GL list
             QHash<int, QList<SpriteObject*>*>& hash =

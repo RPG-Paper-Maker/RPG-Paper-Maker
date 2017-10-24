@@ -95,6 +95,7 @@ public:
                                  int specialID);
     void updatePreviewOthers(MapEditorSelectionKind selection,
                              MapEditorSubSelectionKind subSelection,
+                             OrientationKind orientation, bool layerOn,
                              QRect& tileset);
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
@@ -118,7 +119,7 @@ public:
                    bool layerOn, QRect& tileset, int specialID, bool adding);
     Position getPositionSelected(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
-                                 bool adding) const;
+                                 bool adding, bool layerOn) const;
     void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
@@ -144,8 +145,7 @@ public:
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind, bool layerOn, QRect& tileset);
     void addSpriteWall(DrawKind drawKind, bool layerOn, int specialID);
-    void stockSprite(Position& p, MapEditorSubSelectionKind kind,
-                     int widthPosition, int angle, QRect* textureRect);
+    void stockSprite(Position& p, SpriteDatas *sprite);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
@@ -209,6 +209,7 @@ private:
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
+    bool m_isOnSprite;
     Position m_positionPreviousPreview;
     QSet<MapPortion*> m_portionsPreviousPreview;
     bool m_isGridOnTop;

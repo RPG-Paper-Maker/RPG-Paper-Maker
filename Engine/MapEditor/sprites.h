@@ -79,8 +79,7 @@ public:
                            bool add);
     SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
     bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
-                   MapEditorSubSelectionKind kind, int widthPosition, int angle,
-                   QRect *textureRect);
+                   SpriteDatas *sprite);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p);
     void setSpriteWall(GridPosition& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
@@ -99,18 +98,17 @@ public:
     void removeSpritesOut(MapProperties& properties);
     void updateRaycasting(int squareSize, float& finalDistance,
                           Position &finalPosition, QRay3D &ray,
-                          double cameraHAngle, int& spritesOffset);
+                          double cameraHAngle);
     void updateRaycastingAt(Position &position, SpriteDatas* sprite,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray,
-                            double cameraHAngle, int& spritesOffset);
+                            double cameraHAngle);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,
                             QHash<GridPosition, MapElement*>& previewGrid,
                             QList<GridPosition>& previewDeleteGrid,
-                            int squareSize, int width, int height,
-                            int& spritesOffset);
+                            int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram* programFace);
     void updateGL();

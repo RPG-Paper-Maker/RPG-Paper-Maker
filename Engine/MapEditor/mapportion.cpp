@@ -97,11 +97,9 @@ bool MapPortion::deleteLand(Position& p){
 // -------------------------------------------------------
 
 bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
-                           MapEditorSubSelectionKind kind, int widthPosition,
-                           int angle, QRect *textureRect)
+                           SpriteDatas* sprite)
 {
-    return m_sprites->addSprite(portionsOverflow, p, kind, widthPosition, angle,
-                                textureRect);
+    return m_sprites->addSprite(portionsOverflow, p, sprite);
 }
 
 // -------------------------------------------------------
@@ -227,9 +225,8 @@ void MapPortion::updateRaycastingSprites(int squareSize, float& finalDistance,
                                          Position& finalPosition, QRay3D &ray,
                                          double cameraHAngle)
 {
-    int spritesOffset = -0.005;
     m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition, ray,
-                                cameraHAngle, spritesOffset);
+                                cameraHAngle);
 }
 
 // -------------------------------------------------------
@@ -241,11 +238,10 @@ void MapPortion::updateRaycastingOverflowSprite(int squareSize,
                                                 QRay3D& ray,
                                                 double cameraHAngle)
 {
-    int spritesOffset = -0.005;
     SpriteDatas* sprite = m_sprites->spriteAt(position);
     m_sprites->updateRaycastingAt(position, sprite, squareSize,
                                   finalDistance, finalPosition, ray,
-                                  cameraHAngle, spritesOffset);
+                                  cameraHAngle);
 }
 
 // -------------------------------------------------------
@@ -259,14 +255,12 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QHash<int, QOpenGLTexture *> &characters,
                                     QHash<int, QOpenGLTexture *> &walls)
 {
-    int spritesOffset = -0.005;
     m_lands->initializeVertices(m_previewSquares, squareSize,
                                  tileset->width(), tileset->height());
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
                                   m_previewDeleteGrid, squareSize,
-                                  tileset->width(), tileset->height(),
-                                  spritesOffset);
-    m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
+                                  tileset->width(), tileset->height());
+    m_mapObjects->initializeVertices(squareSize, characters);
 }
 
 // -------------------------------------------------------
@@ -275,8 +269,7 @@ void MapPortion::initializeVerticesObjects(int squareSize,
                                            QHash<int, QOpenGLTexture*>&
                                            characters)
 {
-    int spritesOffset = -0.05;
-    m_mapObjects->initializeVertices(squareSize, characters, spritesOffset);
+    m_mapObjects->initializeVertices(squareSize, characters);
 }
 
 // -------------------------------------------------------
