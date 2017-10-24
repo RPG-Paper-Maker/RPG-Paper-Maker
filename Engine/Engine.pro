@@ -231,7 +231,8 @@ HEADERS += \
     MathUtils/smallqt3d_global.h \
     MathUtils/qbox3d.h \
     MapEditor/land.h \
-    MapEditor/floor.h
+    MapEditor/floor.h \
+    Enums/cameraupdownkind.h
 
 SOURCES += \
     main.cpp \

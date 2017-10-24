@@ -19,13 +19,24 @@
 
 #include "mapelement.h"
 
+QString MapElement::jsonOrientation = "o";
+QString MapElement::jsonUp = "up";
+QString MapElement::jsonX = "xOff";
+QString MapElement::jsonY = "yOff";
+QString MapElement::jsonZ = "zOff";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-MapElement::MapElement()
+MapElement::MapElement() :
+    m_orientation(OrientationKind::None),
+    m_up(CameraUpDownKind::None),
+    m_xOffset(0),
+    m_yOffset(0),
+    m_zOffset(0)
 {
 
 }
@@ -33,6 +44,10 @@ MapElement::MapElement()
 MapElement::~MapElement()
 {
 
+}
+
+void MapElement::setUpDown(CameraUpDownKind upDown) {
+    m_up = upDown;
 }
 
 MapEditorSelectionKind MapElement::getKind() const{
@@ -49,12 +64,32 @@ MapEditorSubSelectionKind MapElement::getSubKind() const{
 //
 // -------------------------------------------------------
 
-void MapElement::read(const QJsonObject &){
-
+void MapElement::read(const QJsonObject & json){
+    if (json.contains(MapElement::jsonOrientation)) {
+        m_orientation = static_cast<OrientationKind>(
+                    json[MapElement::jsonOrientation].toInt());
+    }
+    if (json.contains(MapElement::jsonUp))
+        m_up = static_cast<CameraUpDownKind>(json[MapElement::jsonUp].toInt());
+    if (json.contains(MapElement::jsonX))
+        m_xOffset = json[MapElement::jsonX].toInt();
+    if (json.contains(MapElement::jsonY))
+        m_yOffset = json[MapElement::jsonY].toInt();
+    if (json.contains(MapElement::jsonZ))
+        m_zOffset = json[MapElement::jsonZ].toInt();
 }
 
 // -------------------------------------------------------
 
-void MapElement::write(QJsonObject &) const{
-
+void MapElement::write(QJsonObject &json) const{
+    if (m_orientation != OrientationKind::None)
+        json[MapElement::jsonOrientation] = (int) m_orientation;
+    if (m_up != CameraUpDownKind::None)
+        json[MapElement::jsonUp] = (int) m_up;
+    if (m_xOffset != 0)
+        json[MapElement::jsonX] = m_xOffset;
+    if (m_yOffset != 0)
+        json[MapElement::jsonY] = m_yOffset;
+    if (m_zOffset != 0)
+        json[MapElement::jsonZ] = m_zOffset;
 }

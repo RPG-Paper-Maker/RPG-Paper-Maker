@@ -108,6 +108,14 @@
                 "target": "Content/basic/Content/Datas/Scripts/System/sprite.js"
             },
             {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/floor.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/floor.js"
+            },
+            {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/map-element.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/map-element.js"
+            },
+            {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/game-stack.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/game-stack.js"
             },

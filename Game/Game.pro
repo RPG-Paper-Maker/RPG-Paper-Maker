@@ -104,7 +104,9 @@ DISTFILES += \
     Content/Datas/Scripts/System/datas-pictures.js \
     Content/Datas/Scripts/System/sprite-wall.js \
     Content/Datas/Scripts/System/system-wall.js \
-    Content/Datas/Scripts/System/datas-special-elements.js
+    Content/Datas/Scripts/System/datas-special-elements.js \
+    Content/Datas/Scripts/System/map-element.js \
+    Content/Datas/Scripts/System/floor.js
 
 RESOURCES += \
     qml.qrc

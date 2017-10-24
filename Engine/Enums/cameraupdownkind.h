@@ -17,30 +17,22 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LAND_H
-#define LAND_H
+#ifndef CAMERAUPDOWNKIND_H
+#define CAMERAUPDOWNKIND_H
 
-#include "mapelement.h"
-#include "qray3d.h"
-#include "position.h"
-#include "vertex.h"
-#include <QGLContext>
+// -------------------------------------------------------
+//
+//  ENUM CameraUpDownKind
+//
+//  All the possible camera orientation up down.
+//
+// -------------------------------------------------------
 
-class LandDatas : public MapElement
-{
-public:
-    LandDatas();
-    virtual ~LandDatas();
-    virtual MapEditorSubSelectionKind getSubKind() const;
-
-    virtual void initializeVertices(int, int, int, QVector<Vertex>&,
-                                    QVector<GLuint>&, Position&, int&);
-    void getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-                    Position &position);
-    float intersection(int squareSize, QRay3D& ray, Position& position);
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+enum class CameraUpDownKind {
+    None,
+    Up,
+    Down
 };
 
-#endif // LAND_H
+
+#endif // CAMERAUPDOWNKIND_H

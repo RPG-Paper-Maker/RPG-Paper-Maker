@@ -518,7 +518,7 @@ void ControlMapEditor::updateWallIndicator() {
 
 void ControlMapEditor::updatePreviewElements(
         MapEditorSelectionKind selection,
-        MapEditorSubSelectionKind subSelection, DrawKind drawKind,
+        MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
         QRect& tileset, int specialID)
 {
     if (drawKind == DrawKind::Pin)
@@ -527,6 +527,8 @@ void ControlMapEditor::updatePreviewElements(
     Position position = getPositionSelected(selection, subSelection, true);
     if (position == m_positionPreviousPreview)
         return;
+    updatePositionLayer(position, layerOn);
+    CameraUpDownKind upDown = m_camera->cameraUpDownKind();
     m_positionPreviousPreview = position;
 
     // Remove previous
@@ -534,7 +536,7 @@ void ControlMapEditor::updatePreviewElements(
 
     // Add new previous
     if (subSelection == MapEditorSubSelectionKind::Floors)
-        updatePreviewFloors(tileset, position);
+        updatePreviewFloors(upDown, layerOn, tileset, position);
     else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (m_isDrawingWall || m_isDeletingWall)
             updatePreviewWallSprites(specialID);
@@ -560,7 +562,10 @@ void ControlMapEditor::removePreviewElements() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewFloors(QRect &tileset, Position &position) {
+void ControlMapEditor::updatePreviewFloors(CameraUpDownKind upDown,
+                                           bool layerOn, QRect &tileset,
+                                           Position &position)
+{
     for (int i = 0; i < tileset.width(); i++){
         if (position.x() + i > m_map->mapProperties()->length())
             break;
@@ -577,6 +582,8 @@ void ControlMapEditor::updatePreviewFloors(QRect &tileset, Position &position) {
             {
                 MapElement* element = new FloorDatas(
                             new QRect(tileset.x() + i, tileset.y() + j, 1, 1));
+                if (layerOn)
+                    element->setUpDown(upDown);
                 updatePreviewElement(shortPosition, shortPortion, element);
             }
         }
@@ -993,7 +1000,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
     FloorDatas* floor;
     QRect* shortTexture;
     updatePositionLayer(p, layerOn);
-    qDebug() << QString::number(p.layer());
+    CameraUpDownKind upDown = m_camera->cameraUpDownKind();
 
     // Pencil
     switch (drawKind) {
@@ -1002,11 +1009,14 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
             QList<Position> positions;
             traceLine(m_previousMouseCoords, p, positions);
             for (int i = 0; i < positions.size(); i++){
-                stockLand(positions[i],
-                          new FloorDatas(new QRect(tileset.x(),
-                                                   tileset.y(),
-                                                   tileset.width(),
-                                                   tileset.height())));
+                QRect* rect = new QRect(tileset.x(),
+                                        tileset.y(),
+                                        tileset.width(),
+                                        tileset.height());
+                floor = new FloorDatas(rect);
+                if (layerOn)
+                    floor->setUpDown(upDown);
+                stockLand(positions[i], new FloorDatas(rect));
             }
         }
         for (int i = 0; i < tileset.width(); i++){
@@ -1021,6 +1031,8 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                 shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
                                          1, 1);
                 floor = new FloorDatas(shortTexture);
+                if (layerOn)
+                    floor->setUpDown(upDown);
                 stockLand(shortPosition, floor);
             }
         }
@@ -1230,7 +1242,6 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
 
 void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
     QList<Position> positions;
-    qDebug() << QString::number(p.layer());
 
     // Pencil
     switch (drawKind) {

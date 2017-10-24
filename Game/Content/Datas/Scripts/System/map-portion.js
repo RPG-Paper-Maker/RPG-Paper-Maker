@@ -122,45 +122,9 @@ MapPortion.prototype = {
 
         for (var i = 0, length = json.length; i < length; i++){
             var jsonFloor = json[i];
-            var localPosition = Wanok.positionToVector3(jsonFloor.k);
-            var jsonFloorDatas = jsonFloor.v;
-            var texture = jsonFloorDatas.t;
-
-            var x = localPosition.x;
-            var y = localPosition.y;
-            var z = localPosition.z;
-            var l = $SQUARE_SIZE;
-            var w = 1.0;
-            var h = $SQUARE_SIZE;
-
-            geometry.vertices.push(new THREE.Vector3(x, y, z));
-            geometry.vertices.push(new THREE.Vector3(x + l, y, z));
-            geometry.vertices.push(new THREE.Vector3(x + l, y, z + h));
-            geometry.vertices.push(new THREE.Vector3(x, y, z + h));
-            var j = i * 4;
-            geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
-            geometry.faces.push(new THREE.Face3(j, j + 2, j + 3));
-
-            x = (texture[0] * $SQUARE_SIZE) / width;
-            y = (texture[1] * $SQUARE_SIZE) / height;
-            w = (texture[2] * $SQUARE_SIZE) / width;
-            h = (texture[3] * $SQUARE_SIZE) / height;
-            var coefX = 0.1 / width;
-            var coefY = 0.1 / height;
-            x += coefX;
-            y += coefY;
-            w -= (coefX * 2);
-            h -= (coefY * 2);
-            geometry.faceVertexUvs[0].push([
-                new THREE.Vector2(x, y),
-                new THREE.Vector2(x + w, y),
-                new THREE.Vector2(x + w, y + h)
-            ]);
-            geometry.faceVertexUvs[0].push([
-                new THREE.Vector2(x, y),
-                new THREE.Vector2(x + w, y + h),
-                new THREE.Vector2(x, y + h)
-            ]);
+            var floor = new Floor();
+            floor.read(jsonFloor.v);
+            floor.updateGeometry(geometry, jsonFloor.k, width, height, i);
         }
 
         geometry.uvsNeedUpdate = true;

@@ -84,10 +84,11 @@ public:
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind selection,
                                MapEditorSubSelectionKind subSelection,
-                               DrawKind drawKind, QRect &tileset,
+                               DrawKind drawKind, bool layerOn, QRect &tileset,
                                int specialID);
     void removePreviewElements();
-    void updatePreviewFloors(QRect& tileset, Position& position);
+    void updatePreviewFloors(CameraUpDownKind upDown, bool layerOn,
+                             QRect& tileset, Position& position);
     void getWallSpritesPositions(QList<GridPosition> &positions);
     void updatePreviewWallSprites(int specialID);
     void updatePreviewWallSprite(GridPosition &gridPosition,

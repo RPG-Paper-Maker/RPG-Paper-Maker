@@ -40,6 +40,7 @@ FloorDatas::FloorDatas() :
 }
 
 FloorDatas::FloorDatas(QRect* texture) :
+    LandDatas(),
     m_textureRect(texture)
 {
 
@@ -67,8 +68,8 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
                                    QVector<GLuint>& indexes, Position& position,
                                    int& count)
 {
-    QVector3D pos(position.x() * squareSize, 0.0f, position.z() * squareSize);
-    QVector3D size(squareSize, 0.0, squareSize);
+    QVector3D pos, size;
+    getPosSize(pos, size, squareSize, position);
 
     float x = (float)(textureRect()->x() * squareSize) / width;
     float y = (float)(textureRect()->y() * squareSize) / height;

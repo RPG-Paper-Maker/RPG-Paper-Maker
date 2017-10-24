@@ -23,6 +23,8 @@
 #include "mapeditorsubselectionkind.h"
 #include "mapeditorselectionkind.h"
 #include "serializable.h"
+#include "orientationkind.h"
+#include "cameraupdownkind.h"
 
 // -------------------------------------------------------
 //
@@ -37,11 +39,26 @@ class MapElement : public Serializable
 public:
     MapElement();
     virtual ~MapElement();
+    void setUpDown(CameraUpDownKind upDown);
+
+    static QString jsonOrientation;
+    static QString jsonUp;
+    static QString jsonX;
+    static QString jsonY;
+    static QString jsonZ;
+
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
 
-    virtual void read(const QJsonObject &);
-    virtual void write(QJsonObject &) const;
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
+
+protected:
+    OrientationKind m_orientation;
+    CameraUpDownKind m_up;
+    int m_xOffset;
+    int m_yOffset;
+    int m_zOffset;
 };
 
 #endif // MAPELEMENT_H

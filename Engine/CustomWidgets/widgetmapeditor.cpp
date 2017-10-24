@@ -182,9 +182,10 @@ void WidgetMapEditor::paintGL(){
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
+                bool layerOn = m_menuBar->layerOn();
                 m_control.updateWallIndicator();
                 m_control.updatePreviewElements(kind, subKind, drawKind,
-                                                tileset, specialID);
+                                                layerOn, tileset, specialID);
             }
         }
 

@@ -99,6 +99,12 @@ OrientationKind Camera::orientationKind() const {
 
 // -------------------------------------------------------
 
+CameraUpDownKind Camera::cameraUpDownKind() const {
+    return m_verticalAngle < 90 ? CameraUpDownKind::Up : CameraUpDownKind::Down;
+}
+
+// -------------------------------------------------------
+
 void Camera::update(Cursor *cursor, int squareSize){
 
     // Horizontal angle should stay in [-450;270] interval

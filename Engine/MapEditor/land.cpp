@@ -27,7 +27,8 @@
 //
 // -------------------------------------------------------
 
-LandDatas::LandDatas()
+LandDatas::LandDatas() :
+    MapElement()
 {
 
 }
@@ -69,11 +70,15 @@ float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
 // -------------------------------------------------------
 
 void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-                           Position3D &position)
+                           Position &position)
 {
     // Position
+    float yLayerOffset = position.layer() * 0.05f;
+    if (m_up == CameraUpDownKind::Down)
+        yLayerOffset *= -1;
+    float yPosition = position.getY(squareSize) + yLayerOffset;
     pos.setX(position.x() * squareSize);
-    pos.setY(0.0f);
+    pos.setY(yPosition);
     pos.setZ(position.z() * squareSize);
 
     // Size
@@ -88,12 +93,12 @@ void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
 //
 // -------------------------------------------------------
 
-void LandDatas::read(const QJsonObject &){
-
+void LandDatas::read(const QJsonObject &json){
+    MapElement::read(json);
 }
 
 // -------------------------------------------------------
 
-void LandDatas::write(QJsonObject &) const{
-
+void LandDatas::write(QJsonObject &json) const{
+    MapElement::write(json);
 }
