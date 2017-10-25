@@ -163,6 +163,7 @@ public:
                    QList<Position>& positions);
     bool isTinPaintPossible(MapEditorSelectionKind selection,
                             DrawKind drawKind, QString& messageError) const;
+    int getLayer(float d, Position& p, bool layerOn);
     void updatePositionLayer(Position& p, bool layerOn);
     bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
                             DrawKind drawKind, QString& messageError) const;
@@ -211,7 +212,6 @@ private:
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
-    bool m_isOnSprite;
     Position m_positionPreviousPreview;
     QSet<MapPortion*> m_portionsPreviousPreview;
     bool m_isGridOnTop;
@@ -227,6 +227,7 @@ private:
     ContextMenuList* m_contextMenu;
     bool m_isDrawingWall;
     bool m_isDeletingWall;
+    int m_currentLayer = -1;
 };
 
 #endif // CONTROLMAPEDITOR_H

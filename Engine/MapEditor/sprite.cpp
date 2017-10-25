@@ -125,21 +125,24 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                    int squareSize, Position& position)
 {
     // Offset
-    float xPlus = 0, zPlus = 0, off = position.layer() * 0.005f;
+    float zPlus = 0, off = position.layer() * 0.005f;
     if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
         zPlus += off;
     }
     else {
-        if (m_orientation == OrientationKind::West)
-            xPlus -= off;
-        if (m_orientation == OrientationKind::East)
-            xPlus += off;
-        if (m_orientation == OrientationKind::North)
+        switch (m_orientation) {
+        case OrientationKind::West:
+        case OrientationKind::North:
             zPlus -= off;
-        if (m_orientation == OrientationKind::South)
+            break;
+        case OrientationKind::East:
+        case OrientationKind::South:
             zPlus += off;
+            break;
+        default:
+            break;
+        }
     }
-    offset.setX(xPlus);
     offset.setZ(zPlus);
 
     // Position

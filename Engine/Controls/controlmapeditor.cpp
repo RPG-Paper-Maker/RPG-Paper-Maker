@@ -37,7 +37,6 @@ ControlMapEditor::ControlMapEditor() :
     m_endWallIndicator(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
-    m_isOnSprite(false),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_needMapInfosToSave(false),
     m_needMapObjectsUpdate(false),
@@ -294,12 +293,10 @@ void ControlMapEditor::updateRaycasting(){
         m_positionOnLand = m_positionOnPlane;
 
     if (m_distanceSprite == 0) {
-        m_isOnSprite = false;
         m_positionOnSprite = m_positionOnPlane;
         m_positionRealOnSprite = m_positionOnPlane;
     }
     else {
-        m_isOnSprite = true;
         getCorrectPositionOnRay(m_positionRealOnSprite, rayDirection,
                                 m_distanceSprite);
     }
@@ -534,9 +531,12 @@ void ControlMapEditor::updatePreviewElements(
 
     Position position = getPositionSelected(selection, subSelection, true,
                                             layerOn);
-    if (selection != MapEditorSelectionKind::Sprites || m_isOnSprite)
-        updatePositionLayer(position, layerOn);
-    qDebug() <<QString::number(position.layer());
+    int layer = 0;
+    if (selection == MapEditorSelectionKind::Land)
+        layer = getLayer(m_distanceLand, position, layerOn);
+    else if (selection == MapEditorSelectionKind::Sprites)
+        layer = getLayer(m_distanceSprite, position, layerOn);
+    position.setLayer(layer);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
     m_positionPreviousPreview = position;
@@ -1007,7 +1007,7 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 //
 //  Floors
-//openGL x axis rotation
+//
 // -------------------------------------------------------
 
 void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
@@ -1016,7 +1016,9 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
 {
     FloorDatas* floor;
     QRect* shortTexture;
-    updatePositionLayer(p, layerOn);
+    m_currentLayer = getLayer(m_distanceLand, p, layerOn);
+    p.setLayer(m_currentLayer);
+    qDebug() << QString::number(p.layer());
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
 
     // Pencil
@@ -1305,10 +1307,8 @@ void ControlMapEditor::addSprite(Position& p,
                                  QRect& tileset)
 {
     QList<Position> positions;
-    if (m_isOnSprite)
-        updatePositionLayer(p, layerOn);
-    else
-        p.setLayer(0);
+    m_currentLayer = getLayer(m_distanceSprite, p, layerOn);
+    p.setLayer(m_currentLayer);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     SpriteDatas* sprite;
 
@@ -1414,20 +1414,24 @@ void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
 void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
     QList<Position> positions;
 
-    // Pencil
-    switch (drawKind) {
-    case DrawKind::Pencil:
-    case DrawKind::Pin:
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++)
-            eraseSprite(positions[i]);
-        eraseSprite(p);
-        break;
-    case DrawKind::Rectangle:
-        break;
-    }
+    if (m_currentLayer == -1) {
+        m_currentLayer = p.layer();
 
-    m_previousMouseCoords = p;
+        // Pencil
+        switch (drawKind) {
+        case DrawKind::Pencil:
+        case DrawKind::Pin:
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++)
+                eraseSprite(positions[i]);
+            eraseSprite(p);
+            break;
+        case DrawKind::Rectangle:
+            break;
+        }
+
+        m_previousMouseCoords = p;
+    }
 }
 
 // -------------------------------------------------------
@@ -1853,9 +1857,17 @@ bool ControlMapEditor::isPutLayerPossible(
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePositionLayer(Position& p, bool layerOn) {
-    if (layerOn)
-        p.setLayer(p.layer() + 1);
+int ControlMapEditor::getLayer(float d, Position& p, bool layerOn) {
+    if (m_currentLayer == -1) {
+        if (d != 0) {
+            if (layerOn)
+                return p.layer() + 1;
+            return p.layer();
+        }
+        return 0;
+    }
+
+    return m_currentLayer;
 }
 
 // -------------------------------------------------------
@@ -1985,6 +1997,9 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 
     // Force previous mouse coords to be different
     m_previousMouseCoords.setCoords(-1, 0, 0, -1);
+
+    // Update current layer to undefined
+    m_currentLayer = -1;
 }
 
 // -------------------------------------------------------
