@@ -65,6 +65,7 @@ public:
     void update(MapEditorSubSelectionKind subSelection);
     void updateMouse(QPoint point);
     void updateMousePosition(QPoint point);
+    bool mousePositionChanged(QPoint point);
     void updateRaycasting();
     void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
     void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray,
@@ -169,6 +170,7 @@ public:
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
                  QVector3D& cameraUpWorldSpace,
+                 QVector3D& cameraDeepWorldSpace,
                  MapEditorSelectionKind selectionKind,
                  MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind);
 

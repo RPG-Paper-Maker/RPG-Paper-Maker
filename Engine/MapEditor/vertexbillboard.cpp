@@ -25,7 +25,7 @@ const int VertexBillboard::texCoupleSize = 2;
 
 const int VertexBillboard::sizeCoupleSize = 2;
 
-const int VertexBillboard::modelCoupleSize = 2;
+const int VertexBillboard::modelTupleSize = 3;
 
 int VertexBillboard::positionOffset() {
     return offsetof(VertexBillboard, m_centerPosition);
@@ -60,7 +60,7 @@ VertexBillboard::VertexBillboard()
 
 VertexBillboard::VertexBillboard(const QVector3D &position,
                                  const QVector2D &tex, const QVector2D &size,
-                                 const QVector2D &model) :
+                                 const QVector3D &model) :
     m_centerPosition(position),
     m_tex(tex),
     m_size(size),
@@ -83,7 +83,7 @@ QVector2D VertexBillboard::size() const { return m_size; }
 
 void VertexBillboard::setSize(const QVector2D& size) { m_size = size; }
 
-QVector2D VertexBillboard::model() const { return m_model; }
+QVector3D VertexBillboard::model() const { return m_model; }
 
-void VertexBillboard::setModel(QVector2D &model) { m_model = model; }
+void VertexBillboard::setModel(QVector3D &model) { m_model = model; }
 

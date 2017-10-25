@@ -36,19 +36,19 @@ class VertexBillboard
 public:
     VertexBillboard();
     VertexBillboard(const QVector3D &position, const QVector2D &tex,
-                    const QVector2D &size, const QVector2D &model);
+                    const QVector2D &size, const QVector3D &model);
     QVector3D centerPosition() const;
     void setCenterPosition(const QVector3D& position);
     QVector2D tex() const;
     void setTex(const QVector2D& tex);
     QVector2D size() const;
     void setSize(const QVector2D& size);
-    QVector2D model() const;
-    void setModel(QVector2D& model);
+    QVector3D model() const;
+    void setModel(QVector3D& model);
     static const int positionTupleSize;
     static const int texCoupleSize;
     static const int sizeCoupleSize;
-    static const int modelCoupleSize;
+    static const int modelTupleSize;
     static int positionOffset();
     static int texOffset();
     static int sizeOffset();
@@ -59,7 +59,7 @@ protected:
     QVector3D m_centerPosition;
     QVector2D m_tex;
     QVector2D m_size;
-    QVector2D m_model;
+    QVector3D m_model;
 };
 
 #endif // VERTEXBILLBOARD_H

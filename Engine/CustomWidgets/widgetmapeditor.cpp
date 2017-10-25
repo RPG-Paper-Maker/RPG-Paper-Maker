@@ -177,15 +177,20 @@ void WidgetMapEditor::paintGL(){
             }
 
             // Update control
-            m_control.updateMousePosition(mapFromGlobal(QCursor::pos()));
+            QPoint point = mapFromGlobal(QCursor::pos());
+            bool mousePosChanged = m_control.mousePositionChanged(point);
+            m_control.updateMousePosition(point);
             m_control.update(subKind);
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
                 bool layerOn = m_menuBar->layerOn();
                 m_control.updateWallIndicator();
-                m_control.updatePreviewElements(kind, subKind, drawKind,
-                                                layerOn, tileset, specialID);
+                if (mousePosChanged) {
+                    m_control.updatePreviewElements(kind, subKind, drawKind,
+                                                    layerOn, tileset,
+                                                    specialID);
+                }
             }
         }
 
@@ -201,10 +206,14 @@ void WidgetMapEditor::paintGL(){
         QVector3D cameraUpWorldSpace(viewMatrix.row(1).x(),
                                      viewMatrix.row(1).y(),
                                      viewMatrix.row(1).z());
+        QVector3D cameraDeepWorldSpace(viewMatrix.row(2).x(),
+                                       viewMatrix.row(2).y(),
+                                       viewMatrix.row(2).z());
 
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
-                          cameraUpWorldSpace, kind, subKind, drawKind);
+                          cameraUpWorldSpace, cameraDeepWorldSpace, kind,
+                          subKind, drawKind);
 
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }

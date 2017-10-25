@@ -37,11 +37,11 @@ QVector3D Sprite::verticesQuad[4]{
                                   QVector3D(0.0f, 0.0f, 0.0f)
                                 };
 
-QVector2D Sprite::modelQuad[4]{
-    QVector2D(-0.5f, 0.5f),
-    QVector2D(0.5f, 0.5f),
-    QVector2D(0.5f, -0.5f),
-    QVector2D(-0.5f, -0.5f)
+QVector3D Sprite::modelQuad[4]{
+    QVector3D(-0.5f, 0.5f, 0.0f),
+    QVector3D(0.5f, 0.5f, 0.0f),
+    QVector3D(0.5f, -0.5f, 0.0f),
+    QVector3D(-0.5f, -0.5f, 0.0f)
 };
 
 GLuint Sprite::indexesQuad[6]{0, 1, 2, 0, 2, 3};
@@ -121,27 +121,35 @@ QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 // -------------------------------------------------------
 
 void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
-                                   QVector3D& center, int squareSize,
-                                   Position& position)
+                                   QVector3D& center, QVector3D& offset,
+                                   int squareSize, Position& position)
 {
+    // Offset
+    float xPlus = 0, zPlus = 0, off = position.layer() * 0.005f;
+    if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
+        zPlus += off;
+    }
+    else {
+        if (m_orientation == OrientationKind::West)
+            xPlus -= off;
+        if (m_orientation == OrientationKind::East)
+            xPlus += off;
+        if (m_orientation == OrientationKind::North)
+            zPlus -= off;
+        if (m_orientation == OrientationKind::South)
+            zPlus += off;
+    }
+    offset.setX(xPlus);
+    offset.setZ(zPlus);
+
     // Position
-    float xPlus = 0, zPlus = 0, offset = position.layer() * 0.05f;
-    if (m_orientation == OrientationKind::West)
-        xPlus -= offset;
-    if (m_orientation == OrientationKind::East)
-        xPlus += offset;
-    if (m_orientation == OrientationKind::North)
-        zPlus -= offset;
-    if (m_orientation == OrientationKind::South)
-        zPlus += offset;
     pos.setX((float) position.x() * squareSize -
              ((textureRect()->width() - 1) * squareSize / 2));
     pos.setY((float) position.getY(squareSize));
     pos.setZ((float) position.z() * squareSize +
              (widthPosition() * squareSize / 100));
     QVector3D p(pos);
-    pos.setX(p.x() + (xPlus * 2));
-    pos.setZ(p.z() + (zPlus * 2));
+    pos += offset;
 
     // Size
     size.setX((float) textureRect()->width() * squareSize);
@@ -164,7 +172,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                                      Position& position, int& countStatic,
                                      int& countFace)
 {
-    QVector3D pos, size, center;
+    QVector3D pos, size, center, off;
 
     float x, y, w, h;
     int offset;
@@ -179,7 +187,7 @@ void SpriteDatas::initializeVertices(int squareSize,
     w -= (coefX * 2);
     h -= (coefY * 2);
 
-    getPosSizeCenter(pos, size, center, squareSize, position);
+    getPosSizeCenter(pos, size, center, off, squareSize, position);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     // Adding to buffers according to the kind of sprite
@@ -237,13 +245,13 @@ void SpriteDatas::initializeVertices(int squareSize,
 
         // Vertices
         verticesFace.append(
-              VertexBillboard(center, texA, s, Sprite::modelQuad[0]));
+              VertexBillboard(center, texA, s, Sprite::modelQuad[0] + off));
         verticesFace.append(
-              VertexBillboard(center, texB, s, Sprite::modelQuad[1]));
+              VertexBillboard(center, texB, s, Sprite::modelQuad[1] + off));
         verticesFace.append(
-              VertexBillboard(center, texC, s, Sprite::modelQuad[2]));
+              VertexBillboard(center, texC, s, Sprite::modelQuad[2] + off));
         verticesFace.append(
-              VertexBillboard(center, texD, s, Sprite::modelQuad[3]));
+              VertexBillboard(center, texD, s, Sprite::modelQuad[3] + off));
 
         // indexes
         offset = countFace * Sprite::nbVerticesQuad;
@@ -312,11 +320,11 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
 float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
                                 int cameraHAngle)
 {
-    QVector3D pos, size, center;
+    QVector3D pos, size, center, off;
     float minDistance = 0, distance = 0;
     QBox3D box;
 
-    getPosSizeCenter(pos, size, center, squareSize, position);
+    getPosSizeCenter(pos, size, center, off, squareSize, position);
 
     QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
               vecB = Sprite::verticesQuad[1] * size + pos,
@@ -324,7 +332,7 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
               vecD = Sprite::verticesQuad[3] * size + pos;
 
     if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
-        rotateSprite(vecA, vecB, vecC, vecD, center, 90 + cameraHAngle);
+        rotateSprite(vecA, vecB, vecC, vecD, center, cameraHAngle + 90);
         box = QBox3D(vecA, vecC);
         minDistance = box.intersection(ray);
     }

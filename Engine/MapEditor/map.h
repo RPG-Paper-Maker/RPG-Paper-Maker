@@ -160,7 +160,8 @@ public:
     void paintFloors(QMatrix4x4 &modelviewProjection);
     void paintOthers(QMatrix4x4 &modelviewProjection,
                      QVector3D& cameraRightWorldSpace,
-                     QVector3D& cameraUpWorldSpace);
+                     QVector3D& cameraUpWorldSpace,
+                     QVector3D &cameraDeepWorldSpace);
 
 private:
     QList<ThreadMapPortionLoader> m_threadMapPortionLoaders;
@@ -181,6 +182,7 @@ private:
     QOpenGLShaderProgram* m_programFaceSprite;
     int u_cameraRightWorldspace;
     int u_cameraUpWorldspace;
+    int u_cameraDeepWorldspace;
     int u_modelViewProjection;
 
     // Textures

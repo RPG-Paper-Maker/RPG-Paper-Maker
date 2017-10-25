@@ -1032,6 +1032,8 @@ void Map::initializeGL(){
             ->uniformLocation("cameraRightWorldspace");
     u_cameraUpWorldspace = m_programFaceSprite
             ->uniformLocation("cameraUpWorldspace");
+    u_cameraDeepWorldspace = m_programFaceSprite
+            ->uniformLocation("cameraDeepWorldspace");
     u_modelViewProjection = m_programFaceSprite
             ->uniformLocation("modelViewProjection");
 
@@ -1142,7 +1144,7 @@ void Map::updateGLFace(QOpenGLBuffer &vertexBuffer,
                                 VertexBillboard::sizeCoupleSize,
                                 VertexBillboard::stride());
     program->setAttributeBuffer(3, GL_FLOAT, VertexBillboard::modelOffset(),
-                                VertexBillboard::modelCoupleSize,
+                                VertexBillboard::modelTupleSize,
                                 VertexBillboard::stride());
     indexBuffer.bind();
 
@@ -1177,7 +1179,8 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection)
 
 void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                       QVector3D &cameraRightWorldSpace,
-                      QVector3D &cameraUpWorldSpace)
+                      QVector3D &cameraUpWorldSpace,
+                      QVector3D &cameraDeepWorldSpace)
 {
     int totalSize = getMapPortionTotalSize();
     MapPortion* mapPortion;
@@ -1230,6 +1233,8 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                                          cameraRightWorldSpace);
     m_programFaceSprite->setUniformValue(u_cameraUpWorldspace,
                                          cameraUpWorldSpace);
+    m_programFaceSprite->setUniformValue(u_cameraDeepWorldspace,
+                                         cameraDeepWorldSpace);
     m_programFaceSprite->setUniformValue(u_modelViewProjection,
                                          modelviewProjection);
     m_textureTileset->bind();

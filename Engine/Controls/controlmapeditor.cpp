@@ -246,6 +246,12 @@ void ControlMapEditor::updateMousePosition(QPoint point) {
 }
 
 // -------------------------------------------------------
+
+bool ControlMapEditor::mousePositionChanged(QPoint point) {
+    return m_mouse != point;
+}
+
+// -------------------------------------------------------
 //
 //  MOUSE RAYCASTING
 //
@@ -528,10 +534,9 @@ void ControlMapEditor::updatePreviewElements(
 
     Position position = getPositionSelected(selection, subSelection, true,
                                             layerOn);
-    if (position == m_positionPreviousPreview)
-        return;
     if (selection != MapEditorSelectionKind::Sprites || m_isOnSprite)
         updatePositionLayer(position, layerOn);
+    qDebug() <<QString::number(position.layer());
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
     m_positionPreviousPreview = position;
@@ -1002,7 +1007,7 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 //
 //  Floors
-//
+//openGL x axis rotation
 // -------------------------------------------------------
 
 void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
@@ -1304,7 +1309,6 @@ void ControlMapEditor::addSprite(Position& p,
         updatePositionLayer(p, layerOn);
     else
         p.setLayer(0);
-    qDebug() << QString::number(p.layer());
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     SpriteDatas* sprite;
 
@@ -1863,6 +1867,7 @@ void ControlMapEditor::updatePositionLayer(Position& p, bool layerOn) {
 void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                QVector3D &cameraRightWorldSpace,
                                QVector3D &cameraUpWorldSpace,
+                               QVector3D &cameraDeepWorldSpace,
                                MapEditorSelectionKind selectionKind,
                                MapEditorSubSelectionKind subSelectionKind,
                                DrawKind drawKind)
@@ -1881,7 +1886,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
-                       cameraUpWorldSpace);
+                       cameraUpWorldSpace, cameraDeepWorldSpace);
 
     if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall &&
         drawKind != DrawKind::Pin)
