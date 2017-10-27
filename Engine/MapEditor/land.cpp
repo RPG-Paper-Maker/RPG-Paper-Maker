@@ -73,7 +73,7 @@ void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
                            Position &position)
 {
     // Position
-    float yLayerOffset = position.layer() * 0.05f;
+    float yLayerOffset = position.layer() * 0.01f;
     if (m_up == CameraUpDownKind::Down)
         yLayerOffset *= -1;
     float yPosition = position.getY(squareSize) + yLayerOffset;

@@ -155,6 +155,14 @@ bool Sprites::contains(Position& position) const {
 
 // -------------------------------------------------------
 
+void Sprites::changePosition(Position& position, Position& newPosition) {
+    SpriteDatas* sprite = m_all.value(position);
+    m_all.remove(position);
+    m_all.insert(newPosition, sprite);
+}
+
+// -------------------------------------------------------
+
 SpriteDatas* Sprites::spriteAt(Position& position) const {
     return m_all.value(position);
 }
@@ -453,6 +461,51 @@ void Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
                                              cameraHAngle);
     if (Wanok::getMinDistance(finalDistance, newDistance))
         finalPosition = position;
+}
+
+// -------------------------------------------------------
+
+MapElement* Sprites::getMapElementAt(Position& position,
+                                     MapEditorSubSelectionKind subKind)
+{
+    return (subKind == MapEditorSubSelectionKind::SpritesWall)
+            ? nullptr : spriteAt(position);
+}
+
+// -------------------------------------------------------
+
+int Sprites::getLastLayerAt(Position& position) const {
+    int count = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(), position.z(),
+               count);
+    SpriteDatas* sprite = spriteAt(p);
+
+    while (sprite != nullptr) {
+        count++;
+        p.setLayer(count);
+        sprite = spriteAt(p);
+    }
+
+    return count - 1;
+}
+
+// -------------------------------------------------------
+
+void Sprites::updateRemoveLayer(Position& position) {
+    int i = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(),
+               position.z(), i);
+    Position newP(position.x(), position.y(), position.yPlus(),
+                  position.z(), i - 1);
+    SpriteDatas* sprite = spriteAt(p);
+
+    while (sprite != nullptr) {
+        changePosition(p, newP);
+        i++,
+        p.setLayer(i);
+        newP.setLayer(i - 1);
+        sprite = spriteAt(p);
+    }
 }
 
 // -------------------------------------------------------

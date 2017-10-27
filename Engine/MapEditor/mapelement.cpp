@@ -54,6 +54,18 @@ void MapElement::setUpDown(CameraUpDownKind upDown) {
     m_up = upDown;
 }
 
+void MapElement::setXOffset(int x) {
+    m_xOffset = x;
+}
+
+void MapElement::setYOffset(int y) {
+    m_yOffset = y;
+}
+
+void MapElement::setZOffset(int z) {
+    m_zOffset = z;
+}
+
 MapEditorSelectionKind MapElement::getKind() const{
     return MapEditorSelectionKind::Land;
 }

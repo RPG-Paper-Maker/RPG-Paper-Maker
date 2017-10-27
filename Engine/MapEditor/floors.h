@@ -38,7 +38,7 @@ public:
     Floors();
     virtual ~Floors();
     bool isEmpty() const;
-    FloorDatas* getFloor(Position& p);
+    FloorDatas* getFloor(Position& p) const;
     void setFloor(Position& p, FloorDatas* floor);
     FloorDatas* removeFloor(Position& p);
     bool addFloor(Position& p, FloorDatas* floor);
@@ -50,6 +50,7 @@ public:
     void updateRaycastingAt(Position &position, FloorDatas *floor,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
+    int getLastLayerAt(Position& position) const;
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);

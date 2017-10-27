@@ -83,21 +83,24 @@ public:
                                  int distance);
 
     void updateWallIndicator();
-    void updatePreviewElements(MapEditorSelectionKind selection,
-                               MapEditorSubSelectionKind subSelection,
+    void updatePreviewElements(MapEditorSelectionKind kind,
+                               MapEditorSubSelectionKind subKind,
                                DrawKind drawKind, bool layerOn, QRect &tileset,
                                int specialID);
     void removePreviewElements();
-    void updatePreviewFloors(CameraUpDownKind upDown, bool layerOn,
+    void updatePreviewFloors(MapEditorSelectionKind kind,
+                             MapEditorSubSelectionKind subKind,
+                             CameraUpDownKind upDown, bool layerOn,
                              QRect& tileset, Position& position);
     void getWallSpritesPositions(QList<GridPosition> &positions);
     void updatePreviewWallSprites(int specialID);
     void updatePreviewWallSprite(GridPosition &gridPosition,
                                  int specialID);
-    void updatePreviewOthers(MapEditorSelectionKind selection,
-                             MapEditorSubSelectionKind subSelection,
+    void updatePreviewOthers(MapEditorSelectionKind kind,
+                             MapEditorSubSelectionKind subKind,
                              OrientationKind orientation, bool layerOn,
-                             QRect& tileset);
+                             QRect& tileset, int xOffset, int yOffset,
+                             int zOffset);
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
     void updatePreviewElementGrid(GridPosition &p, Portion &portion,
@@ -126,11 +129,11 @@ public:
              bool layerOn, QRect& tileset, int specialID, Position& p);
     void remove(MapEditorSelectionKind selection,
                 DrawKind drawKind,
-                Position& p);
+                Position& p, bool layerOn);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
                   DrawKind drawKind, bool layerOn, QRect& tileset, int);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
-                      QRect &textureAfter);
+                      QRect &textureAfter, bool layerOn);
     LandDatas* getLand(Portion& portion, Position& p);
     void getFloorTextureReduced(QRect &rect, QRect& rectAfter,
                                 int localX, int localZ);
@@ -140,13 +143,19 @@ public:
     LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter,
                             QRect &textureAfter);
     void getLandTexture(QRect& rect, LandDatas* land);
-    void stockLand(Position& p, LandDatas* landDatas);
-    void removeLand(Position& p, DrawKind drawKind);
+    void stockLand(Position& p, LandDatas* landDatas,
+                   MapEditorSubSelectionKind kind, bool layerOn);
+    void removeLand(Position& p, DrawKind drawKind, bool layerOn);
     void eraseLand(Position& p);
     void addSprite(Position& p, MapEditorSubSelectionKind kind,
                    DrawKind drawKind, bool layerOn, QRect& tileset);
+    SpriteDatas *getCompleteSprite(OrientationKind orientation,
+                                   MapEditorSubSelectionKind kind, int xOffset,
+                                   int yOffset, int zOffset, QRect& tileset,
+                                   bool layerOn) const;
     void addSpriteWall(DrawKind drawKind, bool layerOn, int specialID);
-    void stockSprite(Position& p, SpriteDatas *sprite);
+    void stockSprite(Position& p, SpriteDatas *sprite,
+                     MapEditorSubSelectionKind kind, bool layerOn);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
@@ -163,7 +172,9 @@ public:
                    QList<Position>& positions);
     bool isTinPaintPossible(MapEditorSelectionKind selection,
                             DrawKind drawKind, QString& messageError) const;
-    int getLayer(float d, Position& p, bool layerOn);
+    int getLayer(MapPortion* mapPortion, float d, Position& p, bool layerOn,
+                 MapEditorSelectionKind kind,
+                 MapEditorSubSelectionKind subKind);
     void updatePositionLayer(Position& p, bool layerOn);
     bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
                             DrawKind drawKind, QString& messageError) const;

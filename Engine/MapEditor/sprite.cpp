@@ -125,7 +125,7 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                    int squareSize, Position& position)
 {
     // Offset
-    float zPlus = 0, off = position.layer() * 0.005f;
+    float zPlus = 0, off = position.layer() * 0.01f;
     if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
         zPlus += off;
     }
@@ -146,10 +146,10 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
     offset.setZ(zPlus);
 
     // Position
-    pos.setX((float) position.x() * squareSize -
+    pos.setX(((float) position.x() + m_xOffset) * squareSize -
              ((textureRect()->width() - 1) * squareSize / 2));
-    pos.setY((float) position.getY(squareSize));
-    pos.setZ((float) position.z() * squareSize +
+    pos.setY((float) position.getY(squareSize) + (m_yOffset * squareSize));
+    pos.setZ(((float) position.z() + m_zOffset) * squareSize +
              (widthPosition() * squareSize / 100));
     QVector3D p(pos);
     pos += offset;
@@ -387,6 +387,8 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
 // -------------------------------------------------------
 
 void SpriteDatas::read(const QJsonObject & json){
+    MapElement::read(json);
+
     m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
     m_widthPosition = json["p"].toInt();
     m_angle = json["a"].toInt();
@@ -401,6 +403,7 @@ void SpriteDatas::read(const QJsonObject & json){
 // -------------------------------------------------------
 
 void SpriteDatas::write(QJsonObject & json) const{
+    MapElement::write(json);
     QJsonArray tab;
 
     json["k"] = (int) m_kind;

@@ -41,6 +41,9 @@ public:
     virtual ~MapElement();
     void setOrientation(OrientationKind o);
     void setUpDown(CameraUpDownKind upDown);
+    void setXOffset(int x);
+    void setYOffset(int y);
+    void setZOffset(int z);
 
     static QString jsonOrientation;
     static QString jsonUp;

@@ -53,7 +53,7 @@ bool Floors::isEmpty() const{
 
 // -------------------------------------------------------
 
-FloorDatas *Floors::getFloor(Position& p){
+FloorDatas *Floors::getFloor(Position& p) const{
     return m_all.value(p);
 }
 
@@ -141,6 +141,23 @@ void Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
     float newDistance = floor->intersection(squareSize, ray, position);
     if (Wanok::getMinDistance(finalDistance, newDistance))
         finalPosition = position;
+}
+
+// -------------------------------------------------------
+
+int Floors::getLastLayerAt(Position& position) const {
+    int count = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(), position.z(),
+               count);
+    FloorDatas* floor = getFloor(p);
+
+    while (floor != nullptr) {
+        count++;
+        p.setLayer(count);
+        floor = getFloor(p);
+    }
+
+    return count - 1;
 }
 
 // -------------------------------------------------------

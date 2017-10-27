@@ -70,6 +70,7 @@ public:
     void removeOverflow(Position& p);
     bool isEmpty() const;
     bool contains(Position& position) const;
+    void changePosition(Position& position, Position& newPosition);
     SpriteDatas* spriteAt(Position& position) const;
     void setSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas* sprite);
@@ -103,6 +104,10 @@ public:
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray,
                             double cameraHAngle);
+    MapElement* getMapElementAt(Position& position,
+                                MapEditorSubSelectionKind subKind);
+    int getLastLayerAt(Position& position) const;
+    void updateRemoveLayer(Position& position);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,

@@ -79,6 +79,12 @@ public:
                                         float &finalDistance,
                                         Position &finalPosition, QRay3D& ray,
                                         double cameraHAngle);
+    MapElement* getMapElementAt(Position& position,
+                                MapEditorSelectionKind kind,
+                                MapEditorSubSelectionKind subKind);
+    int getLastLayerAt(Position& position, MapEditorSelectionKind kind,
+                       MapEditorSubSelectionKind subKind) const;
+    void updateRemoveLayer(Position& position, MapEditorSelectionKind kind);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,

@@ -50,19 +50,19 @@ bool Lands::isEmpty() const {
 // -------------------------------------------------------
 
 LandDatas* Lands::getLand(Position& p) {
-    m_floors->getFloor(p);
+    return m_floors->getFloor(p);
 }
 
 // -------------------------------------------------------
 
 bool Lands::addLand(Position& p, LandDatas* land) {
-    m_floors->addFloor(p, (FloorDatas*) land);
+    return m_floors->addFloor(p, (FloorDatas*) land);
 }
 
 // -------------------------------------------------------
 
 bool Lands::deleteLand(Position& p) {
-    m_floors->deleteFloor(p);
+    return m_floors->deleteFloor(p);
 }
 
 // -------------------------------------------------------
@@ -77,6 +77,31 @@ void Lands::updateRaycasting(int squareSize, float& finalDistance,
                              Position &finalPosition, QRay3D &ray)
 {
     m_floors->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+}
+
+// -------------------------------------------------------
+
+MapElement* Lands::getMapElementAt(Position& position,
+                                   MapEditorSubSelectionKind subKind)
+{
+    switch (subKind) {
+    case MapEditorSubSelectionKind::Floors:
+        return m_floors->getFloor(position);
+    default:
+        return nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
+int Lands::getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind)
+{
+    switch (subKind) {
+    case MapEditorSubSelectionKind::Floors:
+        return m_floors->getLastLayerAt(position);
+    default:
+        return position.layer();
+    }
 }
 
 // -------------------------------------------------------

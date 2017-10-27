@@ -267,7 +267,7 @@ void ControlMapEditor::updateRaycasting(){
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, m_distancePlane);
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
-                            m_camera->positionZ());
+                             m_camera->positionZ());
     QRay3D ray(cameraPosition, rayDirection);
     getPortionsInRay(portions, ray);
 
@@ -522,38 +522,33 @@ void ControlMapEditor::updateWallIndicator() {
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePreviewElements(
-        MapEditorSelectionKind selection,
-        MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-        QRect& tileset, int specialID)
+        MapEditorSelectionKind kind, MapEditorSubSelectionKind subKind,
+        DrawKind drawKind, bool layerOn, QRect& tileset, int specialID)
 {
     if (drawKind == DrawKind::Pin)
         return;
 
-    Position position = getPositionSelected(selection, subSelection, true,
-                                            layerOn);
-    int layer = 0;
-    if (selection == MapEditorSelectionKind::Land)
-        layer = getLayer(m_distanceLand, position, layerOn);
-    else if (selection == MapEditorSelectionKind::Sprites)
-        layer = getLayer(m_distanceSprite, position, layerOn);
-    position.setLayer(layer);
+    Position position = getPositionSelected(kind, subKind, true, layerOn);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
+    int xOffset = m_positionRealOnSprite.x() - position.x();
+    int yOffset = m_positionRealOnSprite.y() - position.y();
+    int zOffset = m_positionRealOnSprite.z() - position.z();
     m_positionPreviousPreview = position;
 
     // Remove previous
     removePreviewElements();
 
     // Add new previous
-    if (subSelection == MapEditorSubSelectionKind::Floors)
-        updatePreviewFloors(upDown, layerOn, tileset, position);
-    else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
+    if (subKind == MapEditorSubSelectionKind::Floors)
+        updatePreviewFloors(kind, subKind, upDown, layerOn, tileset, position);
+    else if (subKind == MapEditorSubSelectionKind::SpritesWall) {
         if (m_isDrawingWall || m_isDeletingWall)
             updatePreviewWallSprites(specialID);
     }
     else
-        updatePreviewOthers(selection, subSelection, orientation, layerOn,
-                            tileset);
+        updatePreviewOthers(kind, subKind, orientation, layerOn, tileset,
+                            xOffset, yOffset, zOffset);
 }
 
 // -------------------------------------------------------
@@ -573,7 +568,9 @@ void ControlMapEditor::removePreviewElements() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewFloors(CameraUpDownKind upDown,
+void ControlMapEditor::updatePreviewFloors(MapEditorSelectionKind kind,
+                                           MapEditorSubSelectionKind subKind,
+                                           CameraUpDownKind upDown,
                                            bool layerOn, QRect &tileset,
                                            Position &position)
 {
@@ -591,6 +588,11 @@ void ControlMapEditor::updatePreviewFloors(CameraUpDownKind upDown,
             if (m_map->isInGrid(shortPosition) &&
                 m_map->isInPortion(shortPortion))
             {
+                int layer = getLayer(m_map->mapPortion(shortPortion),
+                                     m_distanceLand, shortPosition, layerOn,
+                                     kind, subKind);
+                shortPosition.setLayer(layer);
+
                 MapElement* element = new FloorDatas(
                             new QRect(tileset.x() + i, tileset.y() + j, 1, 1));
                 if (layerOn)
@@ -673,34 +675,23 @@ void ControlMapEditor::updatePreviewWallSprite(GridPosition& gridPosition,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind selection,
-        MapEditorSubSelectionKind subSelection, OrientationKind orientation,
-        bool layerOn, QRect& tileset)
+void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
+        MapEditorSubSelectionKind subKind, OrientationKind orientation,
+        bool layerOn, QRect& tileset, int xOffset, int yOffset, int zOffset)
 {
     MapElement* element = nullptr;
     Portion portion = m_map->getLocalPortion(m_positionPreviousPreview);
     if (m_map->isInGrid(m_positionPreviousPreview) &&
         m_map->isInPortion(portion))
     {
-        switch (subSelection) {
-        case MapEditorSubSelectionKind::Floors:
-            element = new FloorDatas(new QRect(tileset.x(),
-                                               tileset.y(),
-                                               tileset.width(),
-                                               tileset.height()));
-            break;
-        default:
-            break;
-        }
-        switch (selection) {
+        int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
+                             m_positionPreviousPreview, layerOn, kind, subKind);
+        m_positionPreviousPreview.setLayer(layer);
+
+        switch (kind) {
         case MapEditorSelectionKind::Sprites:
-            element = new SpriteDatas(subSelection, 50, 0,
-                                     new QRect(tileset.x(),
-                                               tileset.y(),
-                                               tileset.width(),
-                                               tileset.height()));
-            if (layerOn)
-                element->setOrientation(orientation);
+            element = getCompleteSprite(orientation, subKind, xOffset,
+                                        yOffset, zOffset, tileset, layerOn);
             break;
         default:
             break;
@@ -931,7 +922,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                     specialID, p);
             }
             else
-                remove(selection, drawKind, p);
+                remove(selection, drawKind, p, layerOn);
         }
     }
 }
@@ -987,12 +978,11 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 
 void ControlMapEditor::remove(MapEditorSelectionKind selection,
-                              DrawKind drawKind,
-                              Position& p)
+                              DrawKind drawKind, Position& p, bool layerOn)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeLand(p, drawKind);
+        removeLand(p, drawKind, layerOn);
         break;
     case MapEditorSelectionKind::Sprites:
         removeSprite(p, drawKind);
@@ -1016,9 +1006,6 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
 {
     FloorDatas* floor;
     QRect* shortTexture;
-    m_currentLayer = getLayer(m_distanceLand, p, layerOn);
-    p.setLayer(m_currentLayer);
-    qDebug() << QString::number(p.layer());
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
 
     // Pencil
@@ -1035,7 +1022,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                 floor = new FloorDatas(rect);
                 if (layerOn)
                     floor->setUpDown(upDown);
-                stockLand(positions[i], floor);
+                stockLand(positions[i], floor, kind, layerOn);
             }
         }
         for (int i = 0; i < tileset.width(); i++){
@@ -1052,14 +1039,14 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                 floor = new FloorDatas(shortTexture);
                 if (layerOn)
                     floor->setUpDown(upDown);
-                stockLand(shortPosition, floor);
+                stockLand(shortPosition, floor, kind, layerOn);
             }
         }
         break;
     case DrawKind::Rectangle:
         break; // TODO
     case DrawKind::Pin:
-        paintPinLand(p, kind, tileset);
+        paintPinLand(p, kind, tileset, layerOn);
         break;
     }
 
@@ -1070,7 +1057,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
 
 void ControlMapEditor::paintPinLand(Position& p,
                                     MapEditorSubSelectionKind kindAfter,
-                                    QRect& textureAfter)
+                                    QRect& textureAfter, bool layerOn)
 {
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
@@ -1096,7 +1083,8 @@ void ControlMapEditor::paintPinLand(Position& p,
                 if (kindAfter == MapEditorSubSelectionKind::None)
                     eraseLand(p);
                 else
-                    stockLand(p, getLandAfter(kindAfter, textureAfterReduced));
+                    stockLand(p, getLandAfter(kindAfter, textureAfterReduced),
+                              kindAfter, layerOn);
 
                 while(!tab.isEmpty()){
                     QList<Position> adjacent;
@@ -1136,7 +1124,8 @@ void ControlMapEditor::paintPinLand(Position& p,
                                         stockLand(adjacentPosition,
                                                   getLandAfter(
                                                       kindAfter,
-                                                      textureAfterReduced));
+                                                      textureAfterReduced),
+                                                  kindAfter, layerOn);
                                     tab.push_back(adjacentPosition);
                                 }
                             }
@@ -1240,11 +1229,21 @@ void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
+void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
+                                 MapEditorSubSelectionKind kind, bool layerOn)
+{
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
+
+            // Update layer
+            m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
+                                      MapEditorSelectionKind::Land, kind);
+            p.setLayer(m_currentLayer);
+            qDebug() << QString::number(m_currentLayer);
+
+            // Add the land
             if (mapPortion->addLand(p, landDatas) && m_map->saved())
                 setToNotSaved();
             m_portionsToUpdate += mapPortion;
@@ -1259,7 +1258,8 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
+void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
+{
     QList<Position> positions;
 
     // Pencil
@@ -1273,7 +1273,7 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
         break;
     case DrawKind::Pin:
         QRect tileset(0, 0, 1, 1);
-        paintPinLand(p, MapEditorSubSelectionKind::None, tileset);
+        paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn);
         break;
     }
 
@@ -1307,9 +1307,10 @@ void ControlMapEditor::addSprite(Position& p,
                                  QRect& tileset)
 {
     QList<Position> positions;
-    m_currentLayer = getLayer(m_distanceSprite, p, layerOn);
-    p.setLayer(m_currentLayer);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
+    int xOffset = m_positionRealOnSprite.x() - p.x();
+    int yOffset = m_positionRealOnSprite.y() - p.y();
+    int zOffset = m_positionRealOnSprite.z() - p.z();
     SpriteDatas* sprite;
 
     // Pencil
@@ -1317,15 +1318,13 @@ void ControlMapEditor::addSprite(Position& p,
     case DrawKind::Pencil:
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++) {
-            sprite = new SpriteDatas(kind, 50, 0, new QRect(tileset));
-            if (layerOn)
-                sprite->setOrientation(orientation);
-            stockSprite(positions[i], sprite);
+            sprite = getCompleteSprite(orientation, kind, xOffset, yOffset,
+                                       zOffset, tileset, layerOn);
+            stockSprite(positions[i], sprite, kind, layerOn);
         }
-        sprite = new SpriteDatas(kind, 50, 0, new QRect(tileset));
-        if (layerOn)
-            sprite->setOrientation(orientation);
-        stockSprite(p, sprite);
+        sprite = getCompleteSprite(orientation, kind, xOffset, yOffset,
+                                   zOffset, tileset, layerOn);
+        stockSprite(p, sprite, kind, layerOn);
         break;
     case DrawKind::Pin:
         break;
@@ -1334,6 +1333,24 @@ void ControlMapEditor::addSprite(Position& p,
     }
 
     m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+SpriteDatas* ControlMapEditor::getCompleteSprite(
+        OrientationKind orientation, MapEditorSubSelectionKind kind,
+        int xOffset, int yOffset, int zOffset, QRect& tileset,
+        bool layerOn) const
+{
+    SpriteDatas* sprite = new SpriteDatas(kind, 50, 0, new QRect(tileset));
+    if (layerOn) {
+        sprite->setOrientation(orientation);
+        sprite->setXOffset(xOffset);
+        sprite->setYOffset(yOffset);
+        sprite->setZOffset(zOffset);
+    }
+
+    return sprite;
 }
 
 // -------------------------------------------------------
@@ -1363,12 +1380,20 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, bool layerOn,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite)
+void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
+                                   MapEditorSubSelectionKind kind, bool layerOn)
 {
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
+
+            // Update layer
+            m_currentLayer = getLayer(mapPortion, m_distanceSprite, p, layerOn,
+                                      MapEditorSelectionKind::Sprites, kind);
+            p.setLayer(m_currentLayer);
+
+            // Add the sprite
             QSet<Portion> portionsOverflow;
             if (mapPortion->addSprite(portionsOverflow, p, sprite) &&
                 m_map->saved())
@@ -1463,6 +1488,7 @@ void ControlMapEditor::eraseSprite(Position& p){
             QSet<Portion> portionsOverflow;
             if (mapPortion->deleteSprite(portionsOverflow, p) && m_map->saved())
                 setToNotSaved();
+            mapPortion->updateRemoveLayer(p, MapEditorSelectionKind::Sprites);
 
             m_portionsToUpdate += mapPortion;
             m_portionsToSave += mapPortion;
@@ -1857,14 +1883,19 @@ bool ControlMapEditor::isPutLayerPossible(
 
 // -------------------------------------------------------
 
-int ControlMapEditor::getLayer(float d, Position& p, bool layerOn) {
+int ControlMapEditor::getLayer(MapPortion *mapPortion, float d, Position& p,
+                               bool layerOn, MapEditorSelectionKind kind,
+                               MapEditorSubSelectionKind subKind)
+{
     if (m_currentLayer == -1) {
         if (d != 0) {
+            int layer = p.layer();
             if (layerOn)
-                return p.layer() + 1;
-            return p.layer();
+                layer = mapPortion->getLastLayerAt(p, kind, subKind) + 1;
+
+            return layer;
         }
-        return 0;
+        return layerOn ? 1 : 0;
     }
 
     return m_currentLayer;

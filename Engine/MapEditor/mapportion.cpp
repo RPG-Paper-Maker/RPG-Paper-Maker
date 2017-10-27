@@ -245,6 +245,49 @@ void MapPortion::updateRaycastingOverflowSprite(int squareSize,
 }
 
 // -------------------------------------------------------
+
+MapElement* MapPortion::getMapElementAt(Position& position,
+                                        MapEditorSelectionKind kind,
+                                        MapEditorSubSelectionKind subKind)
+{
+    switch (kind) {
+    case MapEditorSelectionKind::Land:
+        return m_lands->getMapElementAt(position, subKind);
+    case MapEditorSelectionKind::Sprites:
+        return m_sprites->getMapElementAt(position, subKind);
+    default:
+        return nullptr;
+    }
+}
+
+int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind,
+                               MapEditorSubSelectionKind subKind) const
+{
+    switch (kind) {
+    case MapEditorSelectionKind::Land:
+        return m_lands->getLastLayerAt(position, subKind);
+    case MapEditorSelectionKind::Sprites:
+        return m_sprites->getLastLayerAt(position);
+    default:
+        return position.layer();
+    }
+}
+
+// -------------------------------------------------------
+
+void MapPortion::updateRemoveLayer(Position& position,
+                                   MapEditorSelectionKind kind)
+{
+    switch (kind) {
+    case MapEditorSelectionKind::Sprites:
+        m_sprites->updateRemoveLayer(position);
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

@@ -36,6 +36,9 @@ public:
     void removeLandOut(MapProperties& properties);
     void updateRaycasting(int squareSize, float& finalDistance,
                           Position &finalPosition, QRay3D &ray);
+    MapElement* getMapElementAt(Position& position,
+                                MapEditorSubSelectionKind subKind);
+    int getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);
