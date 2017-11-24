@@ -120,10 +120,10 @@ public:
 
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection, DrawKind drawKind,
-                   bool layerOn, QRect& tileset, int specialID, bool adding);
+                   bool layerOn, QRect& tileset, int specialID);
     Position getPositionSelected(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
-                                 bool adding, bool layerOn) const;
+                                 bool layerOn) const;
     void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
@@ -239,6 +239,7 @@ private:
     ContextMenuList* m_contextMenu;
     bool m_isDrawingWall;
     bool m_isDeletingWall;
+    bool m_isDeleting;
     int m_currentLayer = -1;
 };
 

@@ -370,8 +370,7 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
                 bool layerOn = m_menuBar->layerOn();
                 m_control.addRemove(m_menuBar->selectionKind(),
                                     subSelection, m_menuBar->drawKind(),
-                                    layerOn, tileset, specialID,
-                                    button == Qt::MouseButton::LeftButton);
+                                    layerOn, tileset, specialID);
             }
         }
     }

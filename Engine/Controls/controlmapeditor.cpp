@@ -43,7 +43,8 @@ ControlMapEditor::ControlMapEditor() :
     m_displayGrid(true),
     m_treeMapNode(nullptr),
     m_isDrawingWall(false),
-    m_isDeletingWall(false)
+    m_isDeletingWall(false),
+    m_isDeleting(false)
 {
 
 }
@@ -525,10 +526,10 @@ void ControlMapEditor::updatePreviewElements(
         MapEditorSelectionKind kind, MapEditorSubSelectionKind subKind,
         DrawKind drawKind, bool layerOn, QRect& tileset, int specialID)
 {
-    if (drawKind == DrawKind::Pin)
+    if (drawKind == DrawKind::Pin || m_isDeleting)
         return;
 
-    Position position = getPositionSelected(kind, subKind, true, layerOn);
+    Position position = getPositionSelected(kind, subKind, layerOn);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
     int xOffset = m_positionRealOnSprite.x() - position.x();
@@ -904,10 +905,10 @@ void ControlMapEditor::save(){
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                                  MapEditorSubSelectionKind subSelection,
-                                 DrawKind drawKind, bool layerOn, QRect& tileset,
-                                 int specialID, bool adding)
+                                 DrawKind drawKind, bool layerOn,
+                                 QRect& tileset, int specialID)
 {
-    Position p = getPositionSelected(selection, subSelection, adding, layerOn);
+    Position p = getPositionSelected(selection, subSelection, layerOn);
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {
             m_beginWallIndicator->setGridPosition(
@@ -917,12 +918,12 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     }
     else {
         if (m_map->isInGrid(p)) {
-            if (adding) {
+            if (m_isDeleting)
+                remove(selection, drawKind, p, layerOn);
+            else {
                 add(selection, subSelection, drawKind, layerOn, tileset,
                     specialID, p);
             }
-            else
-                remove(selection, drawKind, p, layerOn);
         }
     }
 }
@@ -932,14 +933,14 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
                                                selection,
                                                MapEditorSubSelectionKind
-                                               subSelection, bool adding,
+                                               subSelection,
                                                bool layerOn) const
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
         return m_positionOnLand;
     case MapEditorSelectionKind::Sprites:
-        if ((!adding && subSelection != MapEditorSubSelectionKind::SpritesWall)
+        if ((m_isDeleting && subSelection != MapEditorSubSelectionKind::SpritesWall)
             || layerOn)
         {
             return m_positionOnSprite;
@@ -1241,7 +1242,6 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
             m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
                                       MapEditorSelectionKind::Land, kind);
             p.setLayer(m_currentLayer);
-            qDebug() << QString::number(m_currentLayer);
 
             // Add the land
             if (mapPortion->addLand(p, landDatas) && m_map->saved())
@@ -1439,8 +1439,10 @@ void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
 void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
     QList<Position> positions;
 
-    if (m_currentLayer == -1) {
+    if (m_currentLayer == -1)
         m_currentLayer = p.layer();
+
+    if (m_currentLayer == p.layer()) {
 
         // Pencil
         switch (drawKind) {
@@ -1897,7 +1899,7 @@ int ControlMapEditor::getLayer(MapPortion *mapPortion, float d, Position& p,
 
             return layer;
         }
-        return layerOn ? 1 : 0;
+        return 0;
     }
 
     return m_currentLayer;
@@ -1984,15 +1986,18 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     updateMouse(point);
 
     if (button != Qt::MouseButton::MiddleButton){
+
         // Add/Remove something
-        bool adding = button == Qt::MouseButton::LeftButton;
+        m_isDeleting = button == Qt::MouseButton::RightButton;
+        if (m_isDeleting)
+            removePreviewElements();
         Position newPosition = getPositionSelected(selection, subSelection,
-                                                   adding, layerOn);
+                                                   layerOn);
         if (((Position3D) m_previousMouseCoords) != ((Position3D) newPosition))
         {
             m_previousMouseCoords = newPosition;
             addRemove(selection, subSelection, drawKind, layerOn, tileset,
-                      specialID, adding);
+                      specialID);
 
             // Wall sprite
             if (subSelection == MapEditorSubSelectionKind::SpritesWall)
@@ -2033,6 +2038,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 
     // Update current layer to undefined
     m_currentLayer = -1;
+    m_isDeleting = false;
 }
 
 // -------------------------------------------------------
