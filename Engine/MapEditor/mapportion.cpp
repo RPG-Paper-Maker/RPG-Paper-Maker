@@ -275,12 +275,13 @@ int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind,
 
 // -------------------------------------------------------
 
-void MapPortion::updateRemoveLayer(Position& position,
+void MapPortion::updateRemoveLayer(QSet<Portion> portionsOverflow,
+                                   Position& position,
                                    MapEditorSelectionKind kind)
 {
     switch (kind) {
     case MapEditorSelectionKind::Sprites:
-        m_sprites->updateRemoveLayer(position);
+        m_sprites->updateRemoveLayer(portionsOverflow, position);
         break;
     default:
         break;

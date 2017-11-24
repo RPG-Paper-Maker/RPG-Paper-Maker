@@ -1490,7 +1490,8 @@ void ControlMapEditor::eraseSprite(Position& p){
             QSet<Portion> portionsOverflow;
             if (mapPortion->deleteSprite(portionsOverflow, p) && m_map->saved())
                 setToNotSaved();
-            mapPortion->updateRemoveLayer(p, MapEditorSelectionKind::Sprites);
+            mapPortion->updateRemoveLayer(portionsOverflow, p,
+                                          MapEditorSelectionKind::Sprites);
 
             m_portionsToUpdate += mapPortion;
             m_portionsToSave += mapPortion;

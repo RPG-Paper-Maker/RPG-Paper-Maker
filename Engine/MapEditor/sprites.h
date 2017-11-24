@@ -107,7 +107,7 @@ public:
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;
-    void updateRemoveLayer(Position& position);
+    void updateRemoveLayer(QSet<Portion> portionsOverflow, Position& position);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,

@@ -491,19 +491,16 @@ int Sprites::getLastLayerAt(Position& position) const {
 
 // -------------------------------------------------------
 
-void Sprites::updateRemoveLayer(Position& position) {
+void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
+                                Position& position) {
     int i = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(),
                position.z(), i);
-    Position newP(position.x(), position.y(), position.yPlus(),
-                  position.z(), i - 1);
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {
-        changePosition(p, newP);
-        i++,
-        p.setLayer(i);
-        newP.setLayer(i - 1);
+        deleteSprite(portionsOverflow, p);
+        p.setLayer(++i);
         sprite = spriteAt(p);
     }
 }
