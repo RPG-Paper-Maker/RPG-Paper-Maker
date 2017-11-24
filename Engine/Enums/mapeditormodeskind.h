@@ -29,8 +29,12 @@
 // -------------------------------------------------------
 
 enum class MapEditorModesKind {
-    Draw,
-    Layer
+    DrawPencil,
+    DrawRectangle,
+    DrawPin,
+    Sepator1,
+    LayerNone,
+    LayerOn
 };
 
 #endif // MAPEDITORMODESKIND_H

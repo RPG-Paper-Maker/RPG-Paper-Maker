@@ -488,8 +488,8 @@ QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance){
 void ControlMapEditor::getCorrectPositionOnRay(Position &position,
                                                QVector3D &ray, int distance){
     QVector3D point = getPositionOnRay(ray, distance);
-    int x = ((int) point.x()) / m_map->squareSize();
-    int y = ((int) point.y()) / m_map->squareSize();
+    int x = ((int) point.x() - 1) / m_map->squareSize();
+    int y = ((int) point.y() - 1) / m_map->squareSize();
     int yPlus = (((int) point.y()) % m_map->squareSize() / m_map->squareSize())
             * 100;
     int z = ((int) point.z()) / m_map->squareSize();
@@ -1864,18 +1864,20 @@ bool ControlMapEditor::isTinPaintPossible(MapEditorSelectionKind selection,
 // -------------------------------------------------------
 
 bool ControlMapEditor::isPutLayerPossible(
-        MapEditorSubSelectionKind subSelection, DrawKind drawKind,
+        MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
         QString& messageError) const
 {
-    if (drawKind == DrawKind::Pin) {
-        messageError =
-                "A top layer cannot be applied with tin of paint option.";
-        return false;
-    }
-    else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
-        messageError =
-                "A top layer cannot be applied with sprite walls.";
-        return false;
+    if (layerOn) {
+        if (drawKind == DrawKind::Pin) {
+            messageError =
+                    "A top layer cannot be applied with tin of paint option.";
+            return false;
+        }
+        else if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
+            messageError =
+                    "A top layer cannot be applied with sprite walls.";
+            return false;
+        }
     }
 
     return true;

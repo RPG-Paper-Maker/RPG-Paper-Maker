@@ -49,6 +49,7 @@ public:
     explicit WidgetMenuBarMapEditor(QWidget *parent = 0, bool selection = true);
     ~WidgetMenuBarMapEditor();
     static QColor colorBackgroundSelected;
+    static QColor colorBackgroundRightSelected;
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind() const;
     DrawKind drawKind() const;
@@ -60,11 +61,9 @@ private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
     bool m_selection;
-    QMenu* m_menuPencil;
     QAction* m_actionPencil;
     QAction* m_actionRectangle;
     QAction* m_actionPin;
-    QMenu* m_menuLayer;
     QAction* m_actionLayerNone;
     QAction* m_actionLayerOn;
 
@@ -76,13 +75,11 @@ protected:
     void updateSelection(QAction* action);
     void updateMenutext(QMenu* menu, QAction *action);
     void updateSubSelection(QMenu* menu, QAction* menuAction, QAction *action);
-    void updateMode(MapEditorModesKind mode, QAction* action);
+    void updateRight(QAction* action);
 
 private slots:
     void on_menuFloors_triggered(QAction* action);
     void on_menuFace_Sprite_triggered(QAction* action);
-    void on_menuDrawTriggered(QAction* action);
-    void on_menuLayerTriggered(QAction* action);
 
 signals:
     void selectionChanged();

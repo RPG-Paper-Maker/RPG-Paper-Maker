@@ -90,22 +90,27 @@ WidgetTreeLocalMaps* PanelProject::widgetTreeLocalMaps() const{
 // -------------------------------------------------------
 
 void PanelProject::updateMenu(){
-
     WidgetMenuBarMapEditor* bar;
 
     bar = ui->widgetMenuBar;
     if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
         !bar->containsMenu())
     {
-        if (bar->activeAction() != nullptr)
+        if (bar->activeAction() != nullptr &&
+            bar->activeAction()->menu() != nullptr)
+        {
             bar->activeAction()->menu()->hide();
+        }
     }
     bar = (WidgetMenuBarMapEditor*) ui->widgetMenuBar->cornerWidget();
     if (!bar->rect().contains(bar->mapFromGlobal(QCursor::pos())) &&
         !bar->containsMenu())
     {
-        if (bar->activeAction() != nullptr)
+        if (bar->activeAction() != nullptr &&
+            bar->activeAction()->menu() != nullptr)
+        {
             bar->activeAction()->menu()->hide();
+        }
     }
 }
 

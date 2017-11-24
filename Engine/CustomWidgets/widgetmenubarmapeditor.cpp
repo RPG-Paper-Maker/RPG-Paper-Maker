@@ -21,7 +21,8 @@
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
 
-QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95,158,160);
+QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
+QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
 
 // -------------------------------------------------------
 //
@@ -35,14 +36,17 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
     ui(new Ui::WidgetMenuBarMapEditor),
     m_selectionKind(MapEditorSelectionKind::Land),
     m_selection(selection),
-    m_menuPencil(nullptr),
-    m_menuLayer(nullptr)
+    m_actionPencil(nullptr),
+    m_actionRectangle(nullptr),
+    m_actionPin(nullptr),
+    m_actionLayerNone(nullptr),
+    m_actionLayerOn(nullptr)
 {
     ui->setupUi(this);
 
     if (m_selection){
         for (int i = 0; i < this->actions().size(); i++)
-            actions().at(i)->setProperty("selection",false);
+            actions().at(i)->setProperty("selection", false);
         actions().at((int) m_selectionKind)->setProperty("selection",true);
     }
 }
@@ -51,14 +55,11 @@ WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
 {
     if (this->cornerWidget() != nullptr)
         delete this->cornerWidget();
-    if (m_menuPencil != nullptr) {
-        delete m_menuPencil;
+
+    if (!m_selection) {
         delete m_actionPencil;
         delete m_actionRectangle;
         delete m_actionPin;
-    }
-    if (m_menuLayer != nullptr) {
-        delete m_menuLayer;
         delete m_actionLayerNone;
         delete m_actionLayerOn;
     }
@@ -94,15 +95,13 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
 DrawKind WidgetMenuBarMapEditor::drawKind() const{
     WidgetMenuBarMapEditor* bar =
             (WidgetMenuBarMapEditor*) this->cornerWidget();
-    QAction* action = bar->actions().at((int) MapEditorModesKind::Draw);
-    QString text = action->text();
-    QList<QAction*> list = action->menu()->actions();
+    int index = (int) MapEditorModesKind::DrawPencil;
 
-    if (text == list.at((int) DrawKind::Pencil)->text())
+    if (bar->actions().at(index++)->property("selection") == true)
         return DrawKind::Pencil;
-    else if (text == list.at((int) DrawKind::Rectangle)->text())
+    else if (bar->actions().at(index++)->property("selection") == true)
         return DrawKind::Rectangle;
-    else if (text == list.at((int) DrawKind::Pin)->text())
+    else if (bar->actions().at(index++)->property("selection") == true)
         return DrawKind::Pin;
 
     return DrawKind::Pencil;
@@ -111,11 +110,14 @@ DrawKind WidgetMenuBarMapEditor::drawKind() const{
 bool WidgetMenuBarMapEditor::layerOn() const {
     WidgetMenuBarMapEditor* bar =
             (WidgetMenuBarMapEditor*) this->cornerWidget();
-    QAction* action = bar->actions().at((int) MapEditorModesKind::Layer);
-    QString text = action->text();
-    QList<QAction*> list = action->menu()->actions();
+    int index = (int) MapEditorModesKind::LayerNone;
 
-    return text == list.at(1)->text();
+    if (bar->actions().at(index++)->property("selection") == true)
+        return false;
+    else if (bar->actions().at(index++)->property("selection") == true)
+        return true;
+
+    return false;
 }
 
 // -------------------------------------------------------
@@ -126,7 +128,7 @@ bool WidgetMenuBarMapEditor::layerOn() const {
 
 bool WidgetMenuBarMapEditor::containsMenu() const{
     QAction* action = this->activeAction();
-    if (action != nullptr){
+    if (action != nullptr && action->menu() != nullptr) {
         return action->menu()->rect().contains(
                     action->menu()->mapFromGlobal(QCursor::pos()));
     }
@@ -141,34 +143,30 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
     bar->clear();
 
     // Draw mode
-    m_menuPencil = new QMenu("Pencil");
-    m_menuPencil->setIcon(QIcon(":/icons/Ressources/pencil.png"));
     m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"),
                                  "Pencil");
-    m_menuPencil->addAction(m_actionPencil);
+    m_actionPencil->setProperty("selection", true);
     m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
                          "Rectangle");
     m_actionRectangle->setEnabled(false);
-    m_menuPencil->addAction(m_actionRectangle);
+    m_actionRectangle->setProperty("selection", false);
     m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"),
                               "Pin of paint");
-    m_menuPencil->addAction(m_actionPin);
-    connect(m_menuPencil, SIGNAL(triggered(QAction*)),
-            this, SLOT(on_menuDrawTriggered(QAction*)));
-    bar->addMenu(m_menuPencil);
+    m_actionPin->setProperty("selection", false);
+    bar->addAction(m_actionPencil);
+    bar->addAction(m_actionRectangle);
+    bar->addAction(m_actionPin);
+    bar->addAction("|");
 
     // Layer
-    m_menuLayer = new QMenu("Normal");
-    m_menuLayer->setIcon(QIcon(":/icons/Ressources/layer_none.png"));
     m_actionLayerNone = new QAction(QIcon(":/icons/Ressources/layer_none.png"),
                                     "Normal");
-    m_menuLayer->addAction(m_actionLayerNone);
+    m_actionLayerNone->setProperty("selection", true);
     m_actionLayerOn = new QAction(QIcon(":/icons/Ressources/layer_on.png"),
                          "On top");
-    m_menuLayer->addAction(m_actionLayerOn);
-    connect(m_menuLayer, SIGNAL(triggered(QAction*)),
-            this, SLOT(on_menuLayerTriggered(QAction*)));
-    bar->addMenu(m_menuLayer);
+    m_actionLayerOn->setProperty("selection", false);
+    bar->addAction(m_actionLayerNone);
+    bar->addAction(m_actionLayerOn);
 
     this->setCornerWidget(bar);
 }
@@ -178,13 +176,13 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
 void WidgetMenuBarMapEditor::updateSelection(QAction* action){
 
     // Deselect previous selected action
-    actions().at((int) m_selectionKind)->setProperty("selection",false);
+    actions().at((int) m_selectionKind)->setProperty("selection", false);
 
     // Select the pressed action
     m_selectionKind =
          static_cast<MapEditorSelectionKind>(actions().indexOf(action));
 
-    action->setProperty("selection",true);
+    action->setProperty("selection", true);
 
     // Repaint
     this->repaint();
@@ -208,14 +206,30 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu,
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::updateMode(MapEditorModesKind mode,
-                                        QAction* action)
+void WidgetMenuBarMapEditor::updateRight(QAction* action)
 {
-    WidgetMenuBarMapEditor* bar =
-            (WidgetMenuBarMapEditor*) this->cornerWidget();
-    QMenu* menu = bar->actions().at((int) mode)->menu();
-    updateMenutext(menu, action);
-    menu->setIcon(action->icon());
+    int index = this->actions().indexOf(action);
+    QList<int> list;
+    list << (int) MapEditorModesKind::DrawPencil
+         << (int) MapEditorModesKind::DrawPin
+         << (int) MapEditorModesKind::LayerNone
+         << (int) MapEditorModesKind::LayerOn;
+
+    // Deselect previous selected action
+    for (int i = 0; i < list.size() / 2; i++) {
+        int l = list.at(i * 2);
+        int r = list.at(i * 2 + 1);
+        if (index >= l && index <= r) {
+            for (int i = l; i <= r; i++)
+                actions().at(i)->setProperty("selection", false);
+        }
+    }
+
+    // Select the pressed action
+    action->setProperty("selection", true);
+
+    // Repaint
+    this->repaint();
 }
 
 // -------------------------------------------------------
@@ -231,23 +245,25 @@ void WidgetMenuBarMapEditor::mouseMoveEvent(QMouseEvent* event){
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
-
-    if (m_selection){
-        QAction* action = this->actionAt(event->pos());
+    QAction* action = this->actionAt(event->pos());
+    if (m_selection) {
         if (action != nullptr) {
             updateSelection(action);
             emit selectionChanged();
         }
-
-        QMenuBar::mousePressEvent(event);
     }
+    else {
+        if (action != nullptr && action->text() != "|" && action->isEnabled())
+            updateRight(action);
+    }
+
+    QMenuBar::mousePressEvent(event);
 }
 
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
     QPainter p(this);
-    QRegion emptyArea(rect());
 
     // Draw the items
     for (int i = 0; i < actions().size(); ++i) {
@@ -255,20 +271,29 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
         QRect adjustedActionRect = this->actionGeometry(action);
 
         // Fill by the magic color the selected item
-        if (action->property("selection") == true)
-            p.fillRect(adjustedActionRect, colorBackgroundSelected);
+        if (action->property("selection") == true) {
+            if (m_selection)
+                p.fillRect(adjustedActionRect, colorBackgroundSelected);
+            else
+                p.fillRect(adjustedActionRect, colorBackgroundRightSelected);
+        }
 
         // Draw all the other stuff (text, special background..)
         if (adjustedActionRect.isEmpty() || !action->isVisible())
             continue;
         if(!e->rect().intersects(adjustedActionRect))
             continue;
-        emptyArea -= adjustedActionRect;
 
         QStyleOptionMenuItem opt;
         initStyleOption(&opt, action);
         opt.rect = adjustedActionRect;
 
+        // Drawing separator with darker color
+        if (action->text() == "|") {
+            p.setPen(QColor(100, 100, 100));
+            p.drawText(adjustedActionRect, "|", QTextOption(Qt::AlignCenter));
+            opt.text = "";
+        }
         style()->drawControl(QStyle::CE_MenuBarItem, &opt, &p, this);
     }
 }
@@ -291,16 +316,4 @@ void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction* action){
     updateSubSelection(ui->menuFace_Sprite,
                        this->actions().at((int)MapEditorSelectionKind::Sprites),
                        action);
-}
-
-// -------------------------------------------------------
-
-void WidgetMenuBarMapEditor::on_menuDrawTriggered(QAction* action){
-    updateMode(MapEditorModesKind::Draw, action);
-}
-
-// -------------------------------------------------------
-
-void WidgetMenuBarMapEditor::on_menuLayerTriggered(QAction* action){
-    updateMode(MapEditorModesKind::Layer, action);
 }

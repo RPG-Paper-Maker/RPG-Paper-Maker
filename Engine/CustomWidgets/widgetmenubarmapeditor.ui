@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>270</width>
     <height>29</height>
    </rect>
   </property>
@@ -127,6 +127,11 @@
    </property>
    <property name="text">
     <string>Wall Sprite</string>
+   </property>
+  </action>
+  <action name="actiondfsfffffffffffffffffffffffff">
+   <property name="text">
+    <string>dfsfffffffffffffffffffffffff</string>
    </property>
   </action>
   <addaction name="menuFloors"/>
