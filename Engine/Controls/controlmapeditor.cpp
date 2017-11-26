@@ -37,6 +37,8 @@ ControlMapEditor::ControlMapEditor() :
     m_endWallIndicator(nullptr),
     m_cursorObject(nullptr),
     m_camera(new Camera),
+    m_elementOnLand(nullptr),
+    m_elementOnSprite(nullptr),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_needMapInfosToSave(false),
     m_needMapObjectsUpdate(false),
@@ -63,6 +65,10 @@ Cursor* ControlMapEditor::cursor() const { return m_map->cursor(); }
 Cursor* ControlMapEditor::cursorObject() const { return m_cursorObject; }
 
 Camera* ControlMapEditor::camera() const { return m_camera; }
+
+bool ControlMapEditor::displaySquareInformations() const {
+    return m_displaySquareInformations;
+}
 
 void ControlMapEditor::setContextMenu(ContextMenuList* m){
     m_contextMenu = m;
@@ -413,8 +419,8 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
 
 void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
 {
-    mapPortion->updateRaycastingLand(m_map->squareSize(), m_distanceLand,
-                                     m_positionOnLand, ray);
+    m_elementOnLand = mapPortion->updateRaycastingLand(
+                m_map->squareSize(), m_distanceLand, m_positionOnLand, ray);
 }
 
 // -------------------------------------------------------
@@ -422,9 +428,9 @@ void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
 void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
                                                QRay3D& ray)
 {
-    mapPortion->updateRaycastingSprites(m_map->squareSize(), m_distanceSprite,
-                                        m_positionOnSprite, ray,
-                                        m_camera->horizontalAngle());
+    m_elementOnSprite = mapPortion->updateRaycastingSprites(
+                m_map->squareSize(), m_distanceSprite, m_positionOnSprite, ray,
+                m_camera->horizontalAngle());
 }
 
 // -------------------------------------------------------
@@ -529,7 +535,8 @@ void ControlMapEditor::updatePreviewElements(
     if (drawKind == DrawKind::Pin || m_isDeleting)
         return;
 
-    Position position = getPositionSelected(kind, subKind, layerOn);
+    Position position;
+    getPositionSelected(position, kind, subKind, layerOn);
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     CameraUpDownKind upDown = m_camera->cameraUpDownKind();
     int xOffset = m_positionRealOnSprite.x() - position.x();
@@ -908,7 +915,8 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                                  DrawKind drawKind, bool layerOn,
                                  QRect& tileset, int specialID)
 {
-    Position p = getPositionSelected(selection, subSelection, layerOn);
+    Position p;
+    getPositionSelected(p, selection, subSelection, layerOn);
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {
             m_beginWallIndicator->setGridPosition(
@@ -930,27 +938,30 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-Position ControlMapEditor::getPositionSelected(MapEditorSelectionKind
-                                               selection,
-                                               MapEditorSubSelectionKind
-                                               subSelection,
-                                               bool layerOn) const
+MapElement* ControlMapEditor::getPositionSelected(
+        Position& position, MapEditorSelectionKind selection,
+        MapEditorSubSelectionKind subSelection, bool layerOn) const
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        return m_positionOnLand;
+        position = m_positionOnLand;
+        return m_elementOnLand;
     case MapEditorSelectionKind::Sprites:
-        if ((m_isDeleting && subSelection != MapEditorSubSelectionKind::SpritesWall)
-            || layerOn)
+        if ((m_isDeleting && subSelection !=
+             MapEditorSubSelectionKind::SpritesWall) || layerOn)
         {
-            return m_positionOnSprite;
+            position = m_positionOnSprite;
+            return m_elementOnSprite;
         }
-        else
-            return m_positionOnPlane;
+
+        position = m_positionOnPlane;
+        return nullptr;
     case MapEditorSelectionKind::Objects:
-        return m_positionOnPlane;
+        position = m_positionOnPlane;
+        return nullptr;
     default:
-        return m_positionOnPlane;
+        position = m_positionOnPlane;
+        return nullptr;
     }
 }
 
@@ -972,6 +983,8 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             break;
         case MapEditorSelectionKind::Objects:
             setCursorObjectPosition(p); break;
+        default:
+            break;
         }
     }
 }
@@ -1945,6 +1958,33 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 }
 
 // -------------------------------------------------------
+
+void ControlMapEditor::showHideGrid() {
+    m_displayGrid = !m_displayGrid;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::showHideSquareInformations() {
+    m_displaySquareInformations = !m_displaySquareInformations;
+}
+
+// -------------------------------------------------------
+
+QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
+                                         MapEditorSubSelectionKind subKind,
+                                         bool layerOn)
+{
+    Position position;
+    MapElement* element = getPositionSelected(position, kind, subKind, layerOn);
+    if (!m_map->isInGrid(position))
+        return "";
+
+    return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
+            + "\n" + position.toString();
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -1992,8 +2032,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         m_isDeleting = button == Qt::MouseButton::RightButton;
         if (m_isDeleting)
             removePreviewElements();
-        Position newPosition = getPositionSelected(selection, subSelection,
-                                                   layerOn);
+        Position newPosition;
+        getPositionSelected(newPosition, selection, subSelection, layerOn);
         if (((Position3D) m_previousMouseCoords) != ((Position3D) newPosition))
         {
             m_previousMouseCoords = newPosition;
@@ -2050,13 +2090,6 @@ void ControlMapEditor::onKeyPressed(int k, double speed){
                                m_map->mapProperties()->length(),
                                m_map->mapProperties()->width(), speed);
     }
-}
-
-// -------------------------------------------------------
-
-void ControlMapEditor::onKeyPressedWithoutRepeat(int k){
-    if (k == Qt::Key_G)
-        m_displayGrid = !m_displayGrid;
 }
 
 // -------------------------------------------------------

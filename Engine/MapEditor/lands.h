@@ -34,8 +34,8 @@ public:
     bool addLand(Position& p, LandDatas* land);
     bool deleteLand(Position& p);
     void removeLandOut(MapProperties& properties);
-    void updateRaycasting(int squareSize, float& finalDistance,
-                          Position &finalPosition, QRay3D &ray);
+    MapElement *updateRaycasting(int squareSize, float& finalDistance,
+                                 Position &finalPosition, QRay3D &ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind);

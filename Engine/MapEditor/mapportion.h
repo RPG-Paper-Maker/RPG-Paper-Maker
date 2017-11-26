@@ -70,15 +70,17 @@ public:
     void addPreview(Position& p, MapElement* element);
     void addPreviewGrid(GridPosition& p, MapElement* element);
     void addPreviewDeleteGrid(GridPosition& p);
-    void updateRaycastingLand(int squareSize, float& finalDistance,
-                              Position &finalPosition, QRay3D& ray);
-    void updateRaycastingSprites(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D& ray,
-                                 double cameraHAngle);
-    void updateRaycastingOverflowSprite(int squareSize, Position& position,
-                                        float &finalDistance,
+    MapElement* updateRaycastingLand(int squareSize, float& finalDistance,
+                                     Position &finalPosition, QRay3D& ray);
+    MapElement* updateRaycastingSprites(int squareSize, float& finalDistance,
                                         Position &finalPosition, QRay3D& ray,
                                         double cameraHAngle);
+    MapElement* updateRaycastingOverflowSprite(int squareSize,
+                                               Position& position,
+                                               float &finalDistance,
+                                               Position &finalPosition,
+                                               QRay3D& ray,
+                                               double cameraHAngle);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);

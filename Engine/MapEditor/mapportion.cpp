@@ -213,35 +213,46 @@ void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
 
 // -------------------------------------------------------
 
-void MapPortion::updateRaycastingLand(int squareSize, float& finalDistance,
-                          Position &finalPosition, QRay3D& ray)
+MapElement* MapPortion::updateRaycastingLand(int squareSize,
+                                             float& finalDistance,
+                                             Position &finalPosition,
+                                             QRay3D& ray)
 {
-    m_lands->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+    return m_lands->updateRaycasting(squareSize, finalDistance, finalPosition,
+                                     ray);
 }
 
 // -------------------------------------------------------
 
-void MapPortion::updateRaycastingSprites(int squareSize, float& finalDistance,
-                                         Position& finalPosition, QRay3D &ray,
-                                         double cameraHAngle)
-{
-    m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition, ray,
-                                cameraHAngle);
-}
-
-// -------------------------------------------------------
-
-void MapPortion::updateRaycastingOverflowSprite(int squareSize,
-                                                Position& position,
-                                                float &finalDistance,
-                                                Position &finalPosition,
-                                                QRay3D& ray,
+MapElement* MapPortion::updateRaycastingSprites(int squareSize,
+                                                float& finalDistance,
+                                                Position& finalPosition,
+                                                QRay3D &ray,
                                                 double cameraHAngle)
 {
+    return m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition,
+                                       ray, cameraHAngle);
+}
+
+// -------------------------------------------------------
+
+MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
+                                                        Position& position,
+                                                        float &finalDistance,
+                                                        Position &finalPosition,
+                                                        QRay3D& ray,
+                                                        double cameraHAngle)
+{
     SpriteDatas* sprite = m_sprites->spriteAt(position);
-    m_sprites->updateRaycastingAt(position, sprite, squareSize,
-                                  finalDistance, finalPosition, ray,
-                                  cameraHAngle);
+
+    if (m_sprites->updateRaycastingAt(position, sprite, squareSize,
+                                      finalDistance, finalPosition, ray,
+                                      cameraHAngle))
+    {
+        return sprite;
+    }
+
+    return nullptr;
 }
 
 // -------------------------------------------------------

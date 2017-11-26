@@ -73,10 +73,11 @@ void Lands::removeLandOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
-void Lands::updateRaycasting(int squareSize, float& finalDistance,
-                             Position &finalPosition, QRay3D &ray)
+MapElement* Lands::updateRaycasting(int squareSize, float& finalDistance,
+                                    Position &finalPosition, QRay3D &ray)
 {
-    m_floors->updateRaycasting(squareSize, finalDistance, finalPosition, ray);
+    return m_floors->updateRaycasting(squareSize, finalDistance, finalPosition,
+                                      ray);
 }
 
 // -------------------------------------------------------

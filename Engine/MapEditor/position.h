@@ -36,6 +36,7 @@ class Position : public Position3D
 public:
     Position();
     Position(int x, int y, int y_plus, int z, int layer);
+    virtual ~Position();
 
     const static int LAYERS_NUMBER = 2;
     bool operator==(const Position& other) const;
@@ -45,6 +46,8 @@ public:
     void setCoords(int x, int y, int y_plus, int z);
     int layer() const;
     void setLayer(int l);
+
+    virtual QString toString() const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

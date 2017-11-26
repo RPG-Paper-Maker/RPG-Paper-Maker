@@ -76,6 +76,7 @@ public:
     virtual ~SpriteDatas();
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
+    virtual QString toString() const;
     int widthPosition() const;
     int angle() const;
     QRect* textureRect() const;

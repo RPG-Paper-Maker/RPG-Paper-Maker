@@ -42,6 +42,16 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
+
+    QSurfaceFormat  format;
+     //format.setSamples(4);
+     //format.setDepthBufferSize(24);
+     //format.setStencilBufferSize(8);
+       format.setProfile(QSurfaceFormat::OpenGLContextProfile::CompatibilityProfile);
+     QSurfaceFormat::setDefaultFormat(format);
+
+    this->setFormat(format);
+
     // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()),
@@ -113,18 +123,6 @@ void WidgetMapEditor::initializeGL(){
     initializeOpenGLFunctions();
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 
-    // Set global information
-    //glCullFace(GL_FRONT_AND_BACK);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glEnable( GL_BLEND );
-    glBlendEquation( GL_FUNC_ADD );
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-    /*
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0);
-    */
-
     isGLInitialized = true;
     if (m_needUpdateMap)
         initializeMap();
@@ -140,25 +138,35 @@ void WidgetMapEditor::resizeGL(int width, int height){
 
 void WidgetMapEditor::paintGL(){
 
+    QPainter p(this);
+
     // Clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_control.map() != nullptr) {
+        p.beginNativePainting();
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Config
         MapEditorSelectionKind kind;
         MapEditorSubSelectionKind subKind;
         DrawKind drawKind;
+        bool layerOn;
 
         if (m_menuBar == nullptr) {
             kind = MapEditorSelectionKind::Land;
             subKind = MapEditorSubSelectionKind::None;
             drawKind = DrawKind::Pencil;
+            layerOn = false;
         }
         else {
             kind = m_menuBar->selectionKind();
             subKind = m_menuBar->subSelectionKind();
             drawKind = m_menuBar->drawKind();
+            layerOn = m_menuBar->layerOn();
         }
 
         if (!Wanok::isInConfig || m_menuBar == nullptr) {
@@ -184,7 +192,6 @@ void WidgetMapEditor::paintGL(){
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
-                bool layerOn = m_menuBar->layerOn();
                 m_control.updateWallIndicator();
                 if (mousePosChanged) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
@@ -214,9 +221,23 @@ void WidgetMapEditor::paintGL(){
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
                           cameraUpWorldSpace, cameraDeepWorldSpace, kind,
                           subKind, drawKind);
+        p.endNativePainting();
 
+        // Draw additional text informations
+        if (m_menuBar != nullptr) {
+            QString infos = m_control.getSquareInfos(kind, subKind, layerOn);
+            QStringList listInfos = infos.split("\n");
+            for (int i = 0; i < listInfos.size(); i++) {
+                renderText(20, 20 * (listInfos.size() - i), listInfos.at(i),
+                           QFont(), QColor(255, 255, 255));
+            }
+        }
+
+        // Update elapsed time
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }
+
+    p.end();
 }
 
 // -------------------------------------------------------
@@ -327,6 +348,37 @@ void WidgetMapEditor::deleteObject(){
 
 void WidgetMapEditor::removePreviewElements() {
     m_control.removePreviewElements();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::renderText(double x, double y, const QString &text,
+                                 const QFont& font, const QColor& fontColor)
+{
+
+    // Identify x and y locations to render text within widget
+    int height = this->height();
+    GLdouble textPosX = x, textPosY = y;
+    textPosY = height - textPosY; // y is inverted
+
+    // Render text
+    QPainter painter(this);
+    painter.setPen(fontColor);
+    painter.setFont(font);
+    painter.drawText(textPosX, textPosY, text);
+    painter.end();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::showHideGrid() {
+    m_control.showHideGrid();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::showHideSquareInformations() {
+    m_control.showHideSquareInformations();
 }
 
 // -------------------------------------------------------
@@ -455,7 +507,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
         if (m_keysPressed.isEmpty()){
             m_firstPressure = true;
             m_timerFirstPressure->start(35);
-            m_control.onKeyPressedWithoutRepeat(event->key());
+            //m_control.onKeyPressedWithoutRepeat(event->key());
             onKeyPress(event->key(), -1);
             m_control.cursor()->updatePositionSquare();
         }

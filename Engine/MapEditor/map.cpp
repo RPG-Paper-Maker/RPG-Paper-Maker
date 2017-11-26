@@ -1188,14 +1188,15 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
-    m_textureTileset->bind();
 
     // Sprites
+    m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintSprites();
     }
+    m_textureTileset->release();
 
     // Objects
     QHash<int, QOpenGLTexture*>::iterator it;
@@ -1224,6 +1225,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintSpritesWalls(textureID);
         }
+        texture->release();
     }
 
     // Face sprites
@@ -1243,6 +1245,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         if (mapPortion != nullptr && mapPortion->isVisible())
             mapPortion->paintFaceSprites();
     }
+    m_textureTileset->release();
 
     // Objects face sprites
     for (it = m_texturesCharacters.begin();
@@ -1266,7 +1269,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintObjectsSquares();
     }
-
+    m_textureObjectSquare->release();
     m_programStatic->release();
 }
 

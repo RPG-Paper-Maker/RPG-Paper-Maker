@@ -34,6 +34,10 @@ Position::Position(int x, int y, int y_plus, int z, int layer) :
 
 }
 
+Position::~Position() {
+
+}
+
 bool Position::operator==(const Position& other) const{
     return m_x == other.x() && m_y == other.y() && m_y_plus == other.yPlus()
             && m_z == other.z() && m_layer == other.layer();
@@ -60,6 +64,12 @@ void Position::setCoords(int x, int y, int y_plus, int z){
 int Position::layer() const { return m_layer; }
 
 void Position::setLayer(int l) { m_layer = l; }
+
+QString Position::toString() const {
+    return "[x = " + QString::number(m_x) + ", y = " + QString::number(m_y) +
+            ", z = " + QString::number(m_z) + "]\nLayer = " +
+            QString::number(m_layer);
+}
 
 // -------------------------------------------------------
 //

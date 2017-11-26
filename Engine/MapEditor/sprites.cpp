@@ -424,16 +424,22 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
-void Sprites::updateRaycasting(int squareSize, float &finalDistance,
-                               Position& finalPosition, QRay3D &ray,
-                               double cameraHAngle)
+MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
+                                      Position& finalPosition, QRay3D &ray,
+                                      double cameraHAngle)
 {
+    MapElement* element = nullptr;
+
     for (QHash<Position, SpriteDatas*>::iterator i = m_all.begin();
          i != m_all.end(); i++)
     {
         Position position = i.key();
-        updateRaycastingAt(position, i.value(), squareSize, finalDistance,
-                           finalPosition, ray, cameraHAngle);
+        SpriteDatas *sprite = i.value();
+        if (updateRaycastingAt(position, sprite, squareSize, finalDistance,
+                               finalPosition, ray, cameraHAngle))
+        {
+            element = sprite;
+        }
     }
 
     // Overflow
@@ -444,23 +450,31 @@ void Sprites::updateRaycasting(int squareSize, float &finalDistance,
         Position position = *i;
         Portion portion = map->getLocalPortion(position);
         MapPortion* mapPortion = map->mapPortion(portion);
-        mapPortion->updateRaycastingOverflowSprite(squareSize, position,
-                                                   finalDistance, finalPosition,
-                                                   ray, cameraHAngle);
+        MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
+                    squareSize, position, finalDistance, finalPosition, ray,
+                    cameraHAngle);
+        if (newElement != nullptr)
+            element = newElement;
     }
+
+    return element;
 }
 
 // -------------------------------------------------------
 
-void Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
+bool Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
                                  int squareSize, float &finalDistance,
                                  Position &finalPosition, QRay3D& ray,
                                  double cameraHAngle)
 {
     float newDistance = sprite->intersection(squareSize, ray, position,
                                              cameraHAngle);
-    if (Wanok::getMinDistance(finalDistance, newDistance))
+    if (Wanok::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
+        return true;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------

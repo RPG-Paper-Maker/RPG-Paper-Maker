@@ -31,7 +31,8 @@
 enum class MapEditorSelectionKind {
     Land,
     Sprites,
-    Objects
+    Objects,
+    None
 };
 
 #endif // MAPEDITORSELECTIONKIND_H

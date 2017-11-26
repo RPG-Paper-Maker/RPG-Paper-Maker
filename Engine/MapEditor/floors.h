@@ -45,9 +45,9 @@ public:
     bool deleteFloor(Position& p);
 
     void removeFloorOut(MapProperties& properties);
-    void updateRaycasting(int squareSize, float& finalDistance,
-                          Position &finalPosition, QRay3D &ray);
-    void updateRaycastingAt(Position &position, FloorDatas *floor,
+    MapElement *updateRaycasting(int squareSize, float& finalDistance,
+                                 Position &finalPosition, QRay3D &ray);
+    bool updateRaycastingAt(Position &position, FloorDatas *floor,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
     int getLastLayerAt(Position& position) const;

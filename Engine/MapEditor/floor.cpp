@@ -57,6 +57,10 @@ MapEditorSubSelectionKind FloorDatas::getSubKind() const{
     return MapEditorSubSelectionKind::Floors;
 }
 
+QString FloorDatas::toString() const {
+    return "FLOOR";
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

@@ -120,27 +120,39 @@ void Floors::removeFloorOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
-void Floors::updateRaycasting(int squareSize, float& finalDistance,
-                              Position &finalPosition, QRay3D &ray)
+MapElement* Floors::updateRaycasting(int squareSize, float& finalDistance,
+                                     Position &finalPosition, QRay3D &ray)
 {
+    MapElement* element = nullptr;
+
     for (QHash<Position, FloorDatas*>::iterator i = m_all.begin();
          i != m_all.end(); i++)
     {
         Position position = i.key();
-        updateRaycastingAt(position, i.value(), squareSize, finalDistance,
-                           finalPosition, ray);
+        FloorDatas* floor = i.value();
+        if (updateRaycastingAt(position, floor, squareSize, finalDistance,
+                               finalPosition, ray))
+        {
+            element = floor;
+        }
     }
+
+    return element;
 }
 
 // -------------------------------------------------------
 
-void Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
+bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
                                 int squareSize, float &finalDistance,
                                 Position &finalPosition, QRay3D& ray)
 {
     float newDistance = floor->intersection(squareSize, ray, position);
-    if (Wanok::getMinDistance(finalDistance, newDistance))
+    if (Wanok::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
+        return true;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------
@@ -214,7 +226,7 @@ void Floors::updateGL(){
 void Floors::paintGL(){
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
-    m_vao.bind();
+    m_vao.release();
 }
 
 // -------------------------------------------------------

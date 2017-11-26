@@ -47,6 +47,7 @@ public:
     virtual ~FloorDatas();
     QRect* textureRect() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
+    virtual QString toString() const;
 
     virtual void initializeVertices(int squareSize, int width, int height,
                                     QVector<Vertex>& vertices,

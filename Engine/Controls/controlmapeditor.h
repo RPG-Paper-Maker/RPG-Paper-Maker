@@ -50,6 +50,7 @@ public:
     Cursor* cursor() const;
     Cursor* cursorObject() const;
     Camera* camera() const;
+    bool displaySquareInformations() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
     void moveCursorToMousePosition(QPoint point);
@@ -121,9 +122,10 @@ public:
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection, DrawKind drawKind,
                    bool layerOn, QRect& tileset, int specialID);
-    Position getPositionSelected(MapEditorSelectionKind selection,
-                                 MapEditorSubSelectionKind subSelection,
-                                 bool layerOn) const;
+    MapElement* getPositionSelected(Position &position,
+                                    MapEditorSelectionKind selection,
+                                    MapEditorSubSelectionKind subSelection,
+                                    bool layerOn) const;
     void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
@@ -179,6 +181,10 @@ public:
     bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
                             DrawKind drawKind, bool layerOn,
                             QString& messageError) const;
+    void showHideGrid();
+    void showHideSquareInformations();
+    QString getSquareInfos(MapEditorSelectionKind kind,
+                           MapEditorSubSelectionKind subKind,bool layerOn);
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
@@ -198,7 +204,6 @@ public:
                          DrawKind drawKind, bool layerOn, QRect &,
                          int specialID,  QPoint, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
-    void onKeyPressedWithoutRepeat(int k);
     void onKeyReleased(int);
 
 private:
@@ -221,6 +226,8 @@ private:
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;
+    MapElement* m_elementOnLand;
+    MapElement* m_elementOnSprite;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
@@ -234,6 +241,7 @@ private:
     bool m_needMapInfosToSave;
     bool m_needMapObjectsUpdate;
     bool m_displayGrid;
+    bool m_displaySquareInformations;
     QStandardItem* m_treeMapNode;
     SystemCommonObject* m_selectedObject;
     ContextMenuList* m_contextMenu;

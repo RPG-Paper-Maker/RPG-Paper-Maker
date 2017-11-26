@@ -53,6 +53,7 @@ public:
 
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
+    virtual QString toString() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

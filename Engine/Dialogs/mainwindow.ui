@@ -98,10 +98,26 @@
     <addaction name="action3D_objects"/>
     <addaction name="actionReliefs"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionShow_Hide_grid"/>
+    <addaction name="actionShow_Hide_square_informations"/>
+   </widget>
+   <widget class="QMenu" name="menuEdition">
+    <property name="title">
+     <string>Edition</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdition"/>
    <addaction name="menuManagement"/>
    <addaction name="menuSpecials"/>
    <addaction name="menuOptions"/>
+   <addaction name="menuDisplay"/>
    <addaction name="menuTest"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -358,6 +374,32 @@
    </property>
    <property name="text">
     <string>Reliefs</string>
+   </property>
+  </action>
+  <action name="actionShow_Hide_grid">
+   <property name="text">
+    <string>Show / Hide grid</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
+   </property>
+  </action>
+  <action name="actionShow_Hide_square_informations">
+   <property name="text">
+    <string>Show / Hide square informations</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
    </property>
   </action>
  </widget>

@@ -72,6 +72,10 @@ public:
     void addObject();
     void deleteObject();
     void removePreviewElements();
+    void renderText(double x, double y, const QString &text, const QFont& font
+                    = QFont(), const QColor& fontColor = QColor());
+    void showHideGrid();
+    void showHideSquareInformations();
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;

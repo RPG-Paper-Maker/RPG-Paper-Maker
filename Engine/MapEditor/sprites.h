@@ -97,10 +97,10 @@ public:
                              previewGrid,
                              QList<GridPosition>& previewDeleteGrid);
     void removeSpritesOut(MapProperties& properties);
-    void updateRaycasting(int squareSize, float& finalDistance,
-                          Position &finalPosition, QRay3D &ray,
-                          double cameraHAngle);
-    void updateRaycastingAt(Position &position, SpriteDatas* sprite,
+    MapElement *updateRaycasting(int squareSize, float& finalDistance,
+                                 Position &finalPosition, QRay3D &ray,
+                                 double cameraHAngle);
+    bool updateRaycastingAt(Position &position, SpriteDatas* sprite,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray,
                             double cameraHAngle);

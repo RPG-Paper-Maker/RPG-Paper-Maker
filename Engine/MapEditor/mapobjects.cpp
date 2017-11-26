@@ -278,6 +278,7 @@ void MapObjects::paintStaticSprites(int textureID, QOpenGLTexture *texture){
         texture->bind();
         for (int i = 0; i < list->size(); i++)
             list->at(i)->paintGL();
+        texture->release();
     }
 }
 
@@ -290,6 +291,7 @@ void MapObjects::paintFaceSprites(int textureID, QOpenGLTexture* texture){
         texture->bind();
         for (int i = 0; i < list->size(); i++)
             list->at(i)->paintGL();
+        texture->release();
     }
 }
 
@@ -298,7 +300,7 @@ void MapObjects::paintFaceSprites(int textureID, QOpenGLTexture* texture){
 void MapObjects::paintSquares(){
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
-    m_vao.bind();
+    m_vao.release();
 }
 
 // -------------------------------------------------------

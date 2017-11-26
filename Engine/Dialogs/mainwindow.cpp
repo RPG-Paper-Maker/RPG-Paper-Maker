@@ -213,12 +213,17 @@ void MainWindow::enableAll(bool b){
     ui->actionSave_all->setEnabled(b);
     ui->actionExport_standalone->setEnabled(b);
     ui->actionClose_project->setEnabled(b);
+    ui->actionUndo->setEnabled(b);
+    ui->actionRedo->setEnabled(b);
     ui->actionDatas_manager->setEnabled(b);
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
+    ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
+    ui->actionShow_Hide_grid->setEnabled(b);
+    ui->actionShow_Hide_square_informations->setEnabled(b);
     ui->actionPlay->setEnabled(b);
 }
 
@@ -238,12 +243,17 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionSave_all->setEnabled(true);
     ui->actionExport_standalone->setEnabled(true);
     ui->actionClose_project->setEnabled(true);
+    ui->actionUndo->setEnabled(true);
+    ui->actionRedo->setEnabled(true);
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
+    ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
+    ui->actionShow_Hide_grid->setEnabled(true);
+    ui->actionShow_Hide_square_informations->setEnabled(true);
     ui->actionPlay->setEnabled(true);
 }
 
@@ -440,8 +450,20 @@ void MainWindow::on_actionSet_BR_path_folder_triggered(){
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionShow_Hide_grid_triggered() {
+    ((PanelProject*)mainPanel)->widgetMapEditor()->showHideGrid();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionShow_Hide_square_informations_triggered() {
+    ((PanelProject*)mainPanel)->widgetMapEditor()->showHideSquareInformations();
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionPlay_triggered(){
-    if (Wanok::mapsToSave.count() > 0){
+    if (Wanok::mapsToSave.count() > 0) {
         QMessageBox::StandardButton box =
                 QMessageBox::question(this, "Save",
                                       "You have some maps that are not saved. "

@@ -74,6 +74,8 @@ MapEditorSubSelectionKind MapElement::getSubKind() const{
     return MapEditorSubSelectionKind::None;
 }
 
+QString MapElement::toString() const { return ""; }
+
 // -------------------------------------------------------
 //
 //  READ / WRITE

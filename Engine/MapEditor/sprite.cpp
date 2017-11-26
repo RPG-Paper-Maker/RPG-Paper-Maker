@@ -108,6 +108,23 @@ MapEditorSelectionKind SpriteDatas::getKind() const {
 
 MapEditorSubSelectionKind SpriteDatas::getSubKind() const { return m_kind; }
 
+QString SpriteDatas::toString() const {
+    switch (m_kind) {
+    case MapEditorSubSelectionKind::SpritesFace:
+        return "SPRITE FACE";
+    case MapEditorSubSelectionKind::SpritesFix:
+        return "SPRITE FIX";
+    case MapEditorSubSelectionKind::SpritesDouble:
+        return "SPRITE DOUBLE";
+    case MapEditorSubSelectionKind::SpritesQuadra:
+        return "SPRITE QUADRA";
+    case MapEditorSubSelectionKind::SpritesWall:
+        return "SPRITE WALL";
+    default:
+        return "";
+    }
+}
+
 int SpriteDatas::widthPosition() const { return m_widthPosition; }
 
 int SpriteDatas::angle() const { return m_angle; }
@@ -508,7 +525,7 @@ void SpriteObject::updateFaceGL(){
 void SpriteObject::paintGL(){
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
-    m_vao.bind();
+    m_vao.release();
 }
 
 // -------------------------------------------------------
