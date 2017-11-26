@@ -1275,22 +1275,28 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
 {
     QList<Position> positions;
 
-    // Pencil
-    switch (drawKind) {
-    case DrawKind::Pencil:
-        traceLine(m_previousMouseCoords, p, positions);
-        for (int i = 0; i < positions.size(); i++)
-            eraseLand(positions[i]);
-        eraseLand(p);
-    case DrawKind::Rectangle:
-        break;
-    case DrawKind::Pin:
-        QRect tileset(0, 0, 1, 1);
-        paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn);
-        break;
-    }
+    if (m_currentLayer == -1)
+        m_currentLayer = p.layer();
 
-    m_previousMouseCoords = p;
+    if (m_currentLayer == p.layer()) {
+
+        // Pencil
+        switch (drawKind) {
+        case DrawKind::Pencil:
+            traceLine(m_previousMouseCoords, p, positions);
+            for (int i = 0; i < positions.size(); i++)
+                eraseLand(positions[i]);
+            eraseLand(p);
+        case DrawKind::Rectangle:
+            break;
+        case DrawKind::Pin:
+            QRect tileset(0, 0, 1, 1);
+            paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn);
+            break;
+        }
+
+        m_previousMouseCoords = p;
+    }
 }
 
 // -------------------------------------------------------
@@ -1503,8 +1509,6 @@ void ControlMapEditor::eraseSprite(Position& p){
             QSet<Portion> portionsOverflow;
             if (mapPortion->deleteSprite(portionsOverflow, p) && m_map->saved())
                 setToNotSaved();
-            mapPortion->updateRemoveLayer(portionsOverflow, p,
-                                          MapEditorSelectionKind::Sprites);
 
             m_portionsToUpdate += mapPortion;
             m_portionsToSave += mapPortion;

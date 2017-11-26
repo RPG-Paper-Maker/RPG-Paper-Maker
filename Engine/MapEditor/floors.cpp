@@ -95,6 +95,8 @@ bool Floors::deleteFloor(Position& p){
     if (previousFloor != nullptr)
         delete previousFloor;
 
+    updateRemoveLayer(p);
+
     return true;
 }
 
@@ -170,6 +172,21 @@ int Floors::getLastLayerAt(Position& position) const {
     }
 
     return count - 1;
+}
+
+// -------------------------------------------------------
+
+void Floors::updateRemoveLayer(Position& position) {
+    int i = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(),
+               position.z(), i);
+    FloorDatas* floor = getFloor(p);
+
+    while (floor != nullptr) {
+        deleteFloor(p);
+        p.setLayer(++i);
+        floor = getFloor(p);
+    }
 }
 
 // -------------------------------------------------------

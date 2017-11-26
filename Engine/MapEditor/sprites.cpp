@@ -288,6 +288,8 @@ bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
     if (previousSprite != nullptr)
         delete previousSprite;
 
+    updateRemoveLayer(portionsOverflow, p);
+
     return true;
 }
 

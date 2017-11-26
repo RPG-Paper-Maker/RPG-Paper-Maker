@@ -51,6 +51,7 @@ public:
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
     int getLastLayerAt(Position& position) const;
+    void updateRemoveLayer(Position& position);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);
