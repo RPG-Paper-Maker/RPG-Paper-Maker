@@ -63,8 +63,6 @@ Object.freeze(ElementMapKind);
 *   @param {number} realX The real x portion.
 *   @param {number} realY The real y portion.
 *   @param {number} realZ The real z portion.
-*   @param {number} [spritesOffset=-0.005] In order to avoid flickerings on
-*   sprites with the same X / Z, we use an offset.
 */
 function MapPortion(realX, realY, realZ){
     this.realX = realX;
@@ -74,17 +72,7 @@ function MapPortion(realX, realY, realZ){
     this.staticSpritesList = new Array;
     this.objectsList = new Array;
     this.faceSpritesList = new Array;
-    this.spritesOffset = -0.005;
 }
-
-/** @static
-*   In order to avoid flickerings on sprites with the same X / Z, we use an
-*   offset. This coef is the number to increment for the offset for each
-*   sprites.
-*   @default 0.0005
-*   @constant
-*/
-MapPortion.SPRITES_OFFSET_COEF = 0.0015;
 
 MapPortion.prototype = {
 
@@ -264,12 +252,8 @@ MapPortion.prototype = {
                 index === -1)
             {
                 var localPosition = Wanok.positionToVector3(position);
-                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                                   + this.spritesOffset);
-                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
-                                                      100)
-                                   + this.spritesOffset);
-                this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
+                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
@@ -297,11 +281,8 @@ MapPortion.prototype = {
     */
     getSpriteMesh: function(position, material, sprite){
         var localPosition = Wanok.positionToVector3(position);
-        localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                           + this.spritesOffset);
-        localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100)
-                           + this.spritesOffset);
-        this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+        localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
+        localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
 
         var geometry = sprite.createGeometry(material.map.image.width,
                                              material.map.image.height);
@@ -361,12 +342,9 @@ MapPortion.prototype = {
                 if (jsonObjectValue.id === id){
                     object.readJSON(jsonObjectValue);
                     var localPosition = Wanok.positionToVector3(position);
-                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                                       + this.spritesOffset);
+                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
                     localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
-                                                          100)
-                                       + this.spritesOffset);
-                    this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                                                          100));
                     position = new THREE.Vector3(localPosition.x,
                                                  localPosition.y,
                                                  localPosition.z);
@@ -398,12 +376,8 @@ MapPortion.prototype = {
                 var object = new SystemObject;
                 object.readJSON(jsonObjectValue);
                 var localPosition = Wanok.positionToVector3(position);
-                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2)
-                                   + this.spritesOffset);
-                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE
-                                                      / 100)
-                                   + this.spritesOffset);
-                this.spritesOffset += MapPortion.SPRITES_OFFSET_COEF;
+                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
+                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
