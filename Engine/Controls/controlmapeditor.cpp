@@ -43,6 +43,7 @@ ControlMapEditor::ControlMapEditor() :
     m_needMapInfosToSave(false),
     m_needMapObjectsUpdate(false),
     m_displayGrid(true),
+    m_displaySquareInformations(true),
     m_treeMapNode(nullptr),
     m_isDrawingWall(false),
     m_isDeletingWall(false),
@@ -1004,6 +1005,8 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p);
         showObjectMenuContext();
+        break;
+    default:
         break;
     }
 }
@@ -1985,7 +1988,7 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
         return "";
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
-            + "\n" + position.toString();
+            + "\n" + position.toString(m_map->squareSize());
 }
 
 // -------------------------------------------------------

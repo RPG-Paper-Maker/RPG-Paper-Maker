@@ -41,6 +41,7 @@ public:
     int yPlus() const;
     void setYPlus(int yPlus);
     int getY(int squareSize) const;
+    int getYpx(int squareSize) const;
     void setCoords(int x, int y, int yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
 

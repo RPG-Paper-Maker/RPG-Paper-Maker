@@ -224,7 +224,7 @@ void WidgetMapEditor::paintGL(){
         p.endNativePainting();
 
         // Draw additional text informations
-        if (m_menuBar != nullptr) {
+        if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn);
             QStringList listInfos = infos.split("\n");
             for (int i = 0; i < listInfos.size(); i++) {

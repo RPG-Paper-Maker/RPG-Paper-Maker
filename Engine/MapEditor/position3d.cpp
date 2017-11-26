@@ -47,7 +47,11 @@ int Position3D::yPlus() const { return m_y_plus; }
 void Position3D::setYPlus(int yPlus) { m_y_plus = yPlus; }
 
 int Position3D::getY(int squareSize) const {
-    return (m_y * squareSize) + (m_y_plus * squareSize / 100);
+    return (m_y * squareSize) + getYpx(squareSize);
+}
+
+int Position3D::getYpx(int squareSize) const {
+    return m_y_plus * squareSize / 100;
 }
 
 void Position3D::setCoords(int x, int y, int yPlus, int z) {

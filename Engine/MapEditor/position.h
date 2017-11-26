@@ -47,7 +47,7 @@ public:
     int layer() const;
     void setLayer(int l);
 
-    virtual QString toString() const;
+    virtual QString toString(int squareSize) const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;
