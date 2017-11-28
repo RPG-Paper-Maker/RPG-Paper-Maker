@@ -100,9 +100,9 @@ OrientationKind Camera::orientationKind() const {
 // -------------------------------------------------------
 
 OrientationKind Camera::orientationFromTargetKind() const {
-    int basic = ((int) orientationKind()) - 1;
+    int basic = ((int) orientationKind());
 
-    return (OrientationKind) (((basic + 2) % 4) + 1);
+    return (OrientationKind) ((basic + 2) % 4);
 }
 
 // -------------------------------------------------------

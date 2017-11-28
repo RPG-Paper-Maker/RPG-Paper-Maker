@@ -26,7 +26,8 @@ var Orientation = {
     South: 0,
     West: 1,
     North: 2,
-    East: 3
+    East: 3,
+    None: 4
 }
 Object.freeze(Orientation);
 

@@ -142,7 +142,7 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                    int squareSize, Position& position)
 {
     // Offset
-    float zPlus = 0, off = position.layer() * 0.01f;
+    float zPlus = 0, off = position.layer() * 0.05f;
     if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
         zPlus += off;
     }

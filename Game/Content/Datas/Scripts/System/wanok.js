@@ -237,6 +237,17 @@ Wanok.positionToVector3 = function(position){
 
 // -------------------------------------------------------
 
+/** Extract the layer from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+Wanok.positionToLayer= function(position){
+    return position[4];
+}
+
+// -------------------------------------------------------
+
 /** Get the pixel position transformation according to screen size.
 *   @static
 *   @param {number} x The position on screen.

@@ -285,7 +285,8 @@ MapPortion.prototype = {
         localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
 
         var geometry = sprite.createGeometry(material.map.image.width,
-                                             material.map.image.height);
+                                             material.map.image.height,
+                                             Wanok.positionToLayer(position));
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(localPosition.x,
                            localPosition.y,

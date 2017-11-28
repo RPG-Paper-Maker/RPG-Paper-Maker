@@ -31,6 +31,8 @@
 *   @property {number[]} textureRect Texture UV coords.
 */
 function Sprite(kind, angle, widthPosition, texture) {
+    MapElement.call(this);
+
     this.kind = kind;
     this.angle = angle;
     this.widthPosition = widthPosition;
@@ -97,6 +99,8 @@ Sprite.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json) {
+        MapElement.prototype.read.call(this, json);
+
         this.kind = json.k;
         this.angle = json.a;
         this.widthPosition = json.p;
@@ -104,9 +108,12 @@ Sprite.prototype = {
     },
 
     /** Create the geometry associated to this sprite.
+    *   @param {number} width The texture total width.
+    *   @param {number} height The texture total height.
+    *   @param {number} layer The layer number of the sprite.
     *   @returns {THREE.Geometry}
     */
-    createGeometry: function(width, height) {
+    createGeometry: function(width, height, layer) {
         var geometry = new THREE.Geometry();
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
@@ -118,12 +125,7 @@ Sprite.prototype = {
         var x, y, w, h, c = 0, coefX, coefY;
         var texFaceA, texFaceB;
 
-        // Scale
-        vecA.multiply(size);
-        vecB.multiply(size);
-        vecC.multiply(size);
-        vecD.multiply(size);
-        center.multiply(size);
+        this.scale(vecA, vecB, vecC, vecD, center, layer, size);
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
@@ -203,5 +205,43 @@ Sprite.prototype = {
         geometry.uvsNeedUpdate = true;
 
         return geometry;
+    },
+
+    /** Scale the vertices correctly.
+    */
+    scale: function(vecA, vecB, vecC, vecD, center, layer, size) {
+        var zPlus = 0, off = layer * 0.05;
+
+        // Multiply all by the size
+        vecA.multiply(size);
+        vecB.multiply(size);
+        vecC.multiply(size);
+        vecD.multiply(size);
+        center.multiply(size);
+
+        // Apply an offset according to layer position
+        if (this.kind === ElementMapKind.SpritesFace)
+            zPlus += off;
+        else {
+            switch (this.orientation) {
+            case Orientation.West:
+            case Orientation.North:
+                zPlus -= off;
+                break;
+            case Orientation.East:
+            case Orientation.South:
+                zPlus += off;
+                break;
+            default:
+                break;
+            }
+        }
+        var offset = new THREE.Vector3(this.xOffset * $SQUARE_SIZE,
+                                       this.yOffset * $SQUARE_SIZE,
+                                       this.zOffset * $SQUARE_SIZE + zPlus);
+        vecA.add(offset);
+        vecB.add(offset);
+        vecC.add(offset);
+        vecD.add(offset);
     }
 }
