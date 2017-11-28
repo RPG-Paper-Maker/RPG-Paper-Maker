@@ -111,6 +111,7 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
 // -------------------------------------------------------
 
 void FloorDatas::read(const QJsonObject & json){
+    MapElement::read(json);
     QJsonArray tab = json["t"].toArray();
 
     m_textureRect->setLeft(tab[0].toInt());
@@ -122,6 +123,7 @@ void FloorDatas::read(const QJsonObject & json){
 // -------------------------------------------------------
 
 void FloorDatas::write(QJsonObject &json) const{
+    MapElement::write(json);
     QJsonArray tab;
 
     tab.append(m_textureRect->left());
