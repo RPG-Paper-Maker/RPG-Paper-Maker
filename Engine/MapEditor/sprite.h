@@ -181,6 +181,8 @@ public:
     void getPosSize(QVector3D& pos, QVector3D& size, int squareSize, int height,
                     GridPosition &gridPosition);
     float intersection(QRay3D& ray);
+    virtual QString toString() const;
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -36,7 +36,8 @@ MapElement::MapElement() :
     m_up(CameraUpDownKind::None),
     m_xOffset(0),
     m_yOffset(0),
-    m_zOffset(0)
+    m_zOffset(0),
+    m_isPositionInGrid(false)
 {
 
 }
@@ -65,6 +66,8 @@ void MapElement::setYOffset(int y) {
 void MapElement::setZOffset(int z) {
     m_zOffset = z;
 }
+
+bool MapElement::isPositionInGrid() const { return m_isPositionInGrid; }
 
 MapEditorSelectionKind MapElement::getKind() const{
     return MapEditorSelectionKind::Land;

@@ -52,6 +52,7 @@ public:
     void getTopRight(GridPosition& gridPosition) const;
     void getBotLeft(GridPosition& gridPosition) const;
     void getBotRight(GridPosition& gridPosition) const;
+    virtual QString toString(int squareSize) const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

@@ -432,8 +432,8 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
                                                QRay3D& ray, bool layerOn)
 {
     m_elementOnSprite = mapPortion->updateRaycastingSprites(
-                m_map->squareSize(), m_distanceSprite, m_positionOnSprite, ray,
-                m_camera->horizontalAngle(), layerOn);
+                m_map->squareSize(), m_distanceSprite, m_positionOnSprite,
+                m_positionOnGrid, ray, m_camera->horizontalAngle(), layerOn);
 }
 
 // -------------------------------------------------------
@@ -919,7 +919,9 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                                  QRect& tileset, int specialID)
 {
     Position p;
-    getPositionSelected(p, selection, subSelection, layerOn);
+    MapElement* element = getPositionSelected(p, selection, subSelection,
+                                              layerOn);
+
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {
             m_beginWallIndicator->setGridPosition(
@@ -930,9 +932,9 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     else {
         if (m_map->isInGrid(p)) {
             if (m_isDeleting)
-                remove(selection, drawKind, p, layerOn);
+                remove(element, selection, drawKind, p, layerOn);
             else {
-                add(selection, subSelection, drawKind, layerOn, tileset,
+                add(element, selection, subSelection, drawKind, layerOn, tileset,
                     specialID, p);
             }
         }
@@ -943,7 +945,8 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 
 MapElement* ControlMapEditor::getPositionSelected(
         Position& position, MapEditorSelectionKind selection,
-        MapEditorSubSelectionKind subSelection, bool layerOn) const
+        MapEditorSubSelectionKind subSelection, bool layerOn,
+        bool isForDisplay) const
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
@@ -951,7 +954,7 @@ MapElement* ControlMapEditor::getPositionSelected(
         return m_elementOnLand;
     case MapEditorSelectionKind::Sprites:
         if ((m_isDeleting && subSelection !=
-             MapEditorSubSelectionKind::SpritesWall) || layerOn)
+             MapEditorSubSelectionKind::SpritesWall) || layerOn || isForDisplay)
         {
             position = m_positionOnSprite;
             return m_elementOnSprite;
@@ -970,7 +973,8 @@ MapElement* ControlMapEditor::getPositionSelected(
 
 // -------------------------------------------------------
 
-void ControlMapEditor::add(MapEditorSelectionKind selection,
+void ControlMapEditor::add(MapElement* element,
+                           MapEditorSelectionKind selection,
                            MapEditorSubSelectionKind subSelection,
                            DrawKind drawKind, bool layerOn,
                            QRect& tileset, int specialID,
@@ -994,7 +998,8 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::remove(MapEditorSelectionKind selection,
+void ControlMapEditor::remove(MapElement* element,
+                              MapEditorSelectionKind selection,
                               DrawKind drawKind, Position& p, bool layerOn)
 {
     switch (selection){
@@ -1002,7 +1007,11 @@ void ControlMapEditor::remove(MapEditorSelectionKind selection,
         removeLand(p, drawKind, layerOn);
         break;
     case MapEditorSelectionKind::Sprites:
-        removeSprite(p, drawKind);
+        if (element != nullptr &&
+            element->getSubKind() != MapEditorSubSelectionKind::SpritesWall)
+        {
+            removeSprite(p, drawKind);
+        }
         break;
     case MapEditorSelectionKind::Objects:
         setCursorObjectPosition(p);
@@ -1984,12 +1993,20 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
                                          bool layerOn)
 {
     Position position;
-    MapElement* element = getPositionSelected(position, kind, subKind, layerOn);
-    if (!m_map->isInGrid(position))
-        return "";
+    QString positionString;
+    MapElement* element = getPositionSelected(position, kind, subKind, layerOn,
+                                              true);
+    if (element != nullptr && element->isPositionInGrid()) {
+        positionString = m_positionOnGrid.toString(m_map->squareSize());
+    }
+    else {
+        positionString = position.toString(m_map->squareSize());
+        if (!m_map->isInGrid(position))
+            return "";
+    }
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
-            + "\n" + position.toString(m_map->squareSize());
+            + "\n" + positionString;
 }
 
 // -------------------------------------------------------

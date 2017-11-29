@@ -432,8 +432,10 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 // -------------------------------------------------------
 
 MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
-                                      Position& finalPosition, QRay3D &ray,
-                                      double cameraHAngle, bool layerOn)
+                                      Position& finalPosition,
+                                      GridPosition& finalGridPosition,
+                                      QRay3D &ray, double cameraHAngle,
+                                      bool layerOn)
 {
     MapElement* element = nullptr;
 
@@ -472,7 +474,7 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
             GridPosition gridPosition = i.key();
             SpriteWallDatas *wall = i.value();
             if (updateRaycastingWallAt(gridPosition, wall, finalDistance,
-                                       finalPosition, ray))
+                                       finalGridPosition, ray))
             {
                 element = wall;
             }
@@ -503,11 +505,11 @@ bool Sprites::updateRaycastingAt(
 
 bool Sprites::updateRaycastingWallAt(
         GridPosition &gridPosition, SpriteWallDatas* wall, float &finalDistance,
-        Position &finalPosition, QRay3D& ray)
+        GridPosition &finalGridPosition, QRay3D& ray)
 {
     float newDistance = wall->intersection(ray);
     if (Wanok::getMinDistance(finalDistance, newDistance)) {
-        finalPosition = gridPosition;
+        finalGridPosition = gridPosition;
         return true;
     }
 

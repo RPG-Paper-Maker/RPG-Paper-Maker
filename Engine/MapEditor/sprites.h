@@ -98,7 +98,8 @@ public:
                              QList<GridPosition>& previewDeleteGrid);
     void removeSpritesOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D &ray,
+                                 Position &finalPosition,
+                                 GridPosition &finalGridPosition, QRay3D &ray,
                                  double cameraHAngle, bool layerOn);
     bool updateRaycastingAt(
             Position &position, SpriteDatas* sprite, int squareSize,
@@ -106,7 +107,7 @@ public:
             double cameraHAngle);
     bool updateRaycastingWallAt(
             GridPosition &gridPosition, SpriteWallDatas* wall,
-            float &finalDistance, Position &finalPosition, QRay3D& ray);
+            float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;

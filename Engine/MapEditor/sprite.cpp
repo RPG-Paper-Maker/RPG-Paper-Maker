@@ -118,8 +118,6 @@ QString SpriteDatas::toString() const {
         return "SPRITE DOUBLE";
     case MapEditorSubSelectionKind::SpritesQuadra:
         return "SPRITE QUADRA";
-    case MapEditorSubSelectionKind::SpritesWall:
-        return "SPRITE WALL";
     default:
         return "";
     }
@@ -533,7 +531,7 @@ SpriteWallDatas::SpriteWallDatas(int wallID) :
     m_wallID(wallID),
     m_wallKind(SpriteWallKind::Middle)
 {
-
+    m_isPositionInGrid = true;
 }
 
 int SpriteWallDatas::wallID() const {
@@ -740,6 +738,12 @@ float SpriteWallDatas::intersection(QRay3D& ray)
 {
     QBox3D box(m_vecA, m_vecC);
     return box.intersection(ray);
+}
+
+// -------------------------------------------------------
+
+QString SpriteWallDatas::toString() const {
+    return "SPRITE WALL";
 }
 
 // -------------------------------------------------------

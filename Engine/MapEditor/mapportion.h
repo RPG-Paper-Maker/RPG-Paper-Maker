@@ -73,8 +73,10 @@ public:
     MapElement* updateRaycastingLand(int squareSize, float& finalDistance,
                                      Position &finalPosition, QRay3D& ray);
     MapElement* updateRaycastingSprites(int squareSize, float& finalDistance,
-                                        Position &finalPosition, QRay3D& ray,
-                                        double cameraHAngle, bool layerOn);
+                                        Position &finalPosition,
+                                        GridPosition &finalGridPosition,
+                                        QRay3D& ray, double cameraHAngle,
+                                        bool layerOn);
     MapElement* updateRaycastingOverflowSprite(int squareSize,
                                                Position& position,
                                                float &finalDistance,

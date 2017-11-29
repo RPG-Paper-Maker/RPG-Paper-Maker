@@ -227,12 +227,14 @@ MapElement* MapPortion::updateRaycastingLand(int squareSize,
 MapElement* MapPortion::updateRaycastingSprites(int squareSize,
                                                 float& finalDistance,
                                                 Position& finalPosition,
+                                                GridPosition &finalGridPosition,
                                                 QRay3D &ray,
                                                 double cameraHAngle,
                                                 bool layerOn)
 {
     return m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition,
-                                       ray, cameraHAngle, layerOn);
+                                       finalGridPosition, ray, cameraHAngle,
+                                       layerOn);
 }
 
 // -------------------------------------------------------

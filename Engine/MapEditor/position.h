@@ -54,6 +54,8 @@ public:
 
 protected:
     int m_layer;
+
+    void getStringLayerYPlus(QString& infos, int squareSize) const;
 };
 
 inline uint qHash(const Position& pos)

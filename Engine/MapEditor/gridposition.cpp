@@ -162,6 +162,17 @@ void GridPosition::getBotRight(GridPosition& gridPosition) const {
 }
 
 // -------------------------------------------------------
+
+QString GridPosition::toString(int squareSize) const {
+    QString infos = "[x1 = " + QString::number(m_x1) + ", x2 = " +
+            QString::number(m_x2) + ", y = " + QString::number(m_y) + ", z1 = "
+            + QString::number(m_z1) + ", z2 = " + QString::number(m_z2) + "]\n";
+    getStringLayerYPlus(infos, squareSize);
+
+    return infos;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

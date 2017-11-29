@@ -123,16 +123,15 @@ public:
     void addRemove(MapEditorSelectionKind selection,
                    MapEditorSubSelectionKind subSelection, DrawKind drawKind,
                    bool layerOn, QRect& tileset, int specialID);
-    MapElement* getPositionSelected(Position &position,
-                                    MapEditorSelectionKind selection,
-                                    MapEditorSubSelectionKind subSelection,
-                                    bool layerOn) const;
-    void add(MapEditorSelectionKind selection,
+    MapElement* getPositionSelected(
+            Position &position, MapEditorSelectionKind selection,
+            MapEditorSubSelectionKind subSelection, bool layerOn,
+            bool isForDisplay = false) const;
+    void add(MapElement *element, MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
-    void remove(MapEditorSelectionKind selection,
-                DrawKind drawKind,
-                Position& p, bool layerOn);
+    void remove(MapElement* element, MapEditorSelectionKind selection,
+                DrawKind drawKind, Position& p, bool layerOn);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
                   DrawKind drawKind, bool layerOn, QRect& tileset, int);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
@@ -224,6 +223,7 @@ private:
     QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
+    GridPosition m_positionOnGrid;
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;

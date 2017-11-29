@@ -44,6 +44,7 @@ public:
     void setXOffset(int x);
     void setYOffset(int y);
     void setZOffset(int z);
+    bool isPositionInGrid() const;
 
     static QString jsonOrientation;
     static QString jsonUp;
@@ -64,6 +65,7 @@ protected:
     int m_xOffset;
     int m_yOffset;
     int m_zOffset;
+    bool m_isPositionInGrid;
 };
 
 #endif // MAPELEMENT_H

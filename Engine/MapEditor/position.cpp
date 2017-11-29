@@ -66,14 +66,20 @@ int Position::layer() const { return m_layer; }
 void Position::setLayer(int l) { m_layer = l; }
 
 QString Position::toString(int squareSize) const {
-    int yPlus = getYpx(squareSize);
     QString infos = "[x = " + QString::number(m_x) + ", y = " +
             QString::number(m_y) + ", z = " + QString::number(m_z) + "]\n";
+    getStringLayerYPlus(infos, squareSize);
+
+    return infos;
+}
+
+// -------------------------------------------------------
+
+void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
+    int yPlus = getYpx(squareSize);
     if (yPlus > 0)
         infos += "y+ = " + QString::number(yPlus) + "px\n";
     infos += "Layer = " + QString::number(m_layer);
-
-    return infos;
 }
 
 // -------------------------------------------------------
