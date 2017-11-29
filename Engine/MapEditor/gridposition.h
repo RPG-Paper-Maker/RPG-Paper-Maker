@@ -20,7 +20,7 @@
 #ifndef GRIDPOSITION_H
 #define GRIDPOSITION_H
 
-#include "position3d.h"
+#include "position.h"
 
 // -------------------------------------------------------
 //
@@ -30,11 +30,11 @@
 //
 // -------------------------------------------------------
 
-class GridPosition
+class GridPosition : public Position
 {
 public:
     GridPosition();
-    GridPosition(int x1, int z1, int x2, int z2, int y, int yPlus);
+    GridPosition(int x1, int z1, int x2, int z2, int y, int yPlus, int layer);
     GridPosition(Position3D& position, bool horizontal);
 
     bool operator==(const GridPosition& other) const;
@@ -43,8 +43,6 @@ public:
     int z1() const;
     int x2() const;
     int z2() const;
-    int y() const;
-    int yPlus() const;
     bool isHorizontal() const;
     void setCoords(int x1, int x2, int y, int yPlus, int z1, int z2);
     void getSquares(Position3D& p1, Position3D& p2) const;
@@ -63,13 +61,12 @@ protected:
     int m_z1;
     int m_x2;
     int m_z2;
-    int m_y;
-    int m_yPlus;
 };
 
 inline uint qHash(const GridPosition& pos)
 {
-   return (pos.x1() + pos.z1() + pos.x2() + pos.z2() + pos.y() + pos.yPlus());
+   return (pos.x1() + pos.z1() + pos.x2() + pos.z2() + pos.y() + pos.yPlus() +
+           pos.layer());
 }
 
 #endif // GRIDPOSITION_H

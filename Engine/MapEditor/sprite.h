@@ -56,7 +56,6 @@ public:
     static GLuint indexesQuad[];
     static int nbVerticesQuad;
     static int nbIndexesQuad;
-    static const int SPRITES_OFFSET_COEF = 0.0005;
 };
 
 // -------------------------------------------------------
@@ -111,6 +110,7 @@ protected:
     int m_widthPosition;
     int m_angle;
     QRect* m_textureRect;
+    QList<QVector3D> m_vertices;
 };
 
 // -------------------------------------------------------
@@ -178,12 +178,17 @@ public:
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
                                     GridPosition& position, int& count);
+    void getPosSize(QVector3D& pos, QVector3D& size, int squareSize, int height,
+                    GridPosition &gridPosition);
+    float intersection(QRay3D& ray);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     int m_wallID;
     SpriteWallKind m_wallKind;
+    QVector3D m_vecA;
+    QVector3D m_vecC;
 };
 
 #endif // SPRITE_H

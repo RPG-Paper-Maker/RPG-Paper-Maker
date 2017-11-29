@@ -99,11 +99,14 @@ public:
     void removeSpritesOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
                                  Position &finalPosition, QRay3D &ray,
-                                 double cameraHAngle);
-    bool updateRaycastingAt(Position &position, SpriteDatas* sprite,
-                            int squareSize, float &finalDistance,
-                            Position &finalPosition, QRay3D& ray,
-                            double cameraHAngle);
+                                 double cameraHAngle, bool layerOn);
+    bool updateRaycastingAt(
+            Position &position, SpriteDatas* sprite, int squareSize,
+            float &finalDistance, Position &finalPosition, QRay3D& ray,
+            double cameraHAngle);
+    bool updateRaycastingWallAt(
+            GridPosition &gridPosition, SpriteWallDatas* wall,
+            float &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;
@@ -127,6 +130,7 @@ public:
 protected:
     QHash<Position, SpriteDatas*> m_all;
     QHash<GridPosition, SpriteWallDatas*> m_walls;
+    QHash<GridPosition, SpriteDatas*> m_spritesOnWalls;
     QHash<int, SpritesWalls*> m_wallsGL;
     QSet<Position> m_overflow;
 

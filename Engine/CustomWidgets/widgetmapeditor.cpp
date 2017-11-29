@@ -188,7 +188,7 @@ void WidgetMapEditor::paintGL(){
             QPoint point = mapFromGlobal(QCursor::pos());
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
-            m_control.update(subKind);
+            m_control.update(subKind, layerOn);
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
@@ -458,12 +458,12 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
         // If in teleport command
         else{
             if (button != Qt::MouseButton::MiddleButton){
-                m_control.moveCursorToMousePosition(event->pos());
+                m_control.moveCursorToMousePosition(event->pos(), false);
                 updateSpinBoxes();
             }
             else{
                 m_control.updateMousePosition(event->pos());
-                m_control.update(MapEditorSubSelectionKind::None);
+                m_control.update(MapEditorSubSelectionKind::None, false);
             }
         }
     }
@@ -480,10 +480,9 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
         MapEditorSubSelectionKind subSelection =
                 m_menuBar->subSelectionKind();
         int specialID = m_panelTextures->getID(subSelection);
-        bool layerOn = m_menuBar->layerOn();
         m_control.onMouseReleased(m_menuBar->selectionKind(),
-                                  subSelection, m_menuBar->drawKind(), layerOn,
-                                  tileset, specialID, event->pos(), button);
+                                  subSelection, m_menuBar->drawKind(), tileset,
+                                  specialID, event->pos(), button);
     }
 }
 

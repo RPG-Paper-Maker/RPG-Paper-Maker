@@ -85,10 +85,10 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::moveCursorToMousePosition(QPoint point)
+void ControlMapEditor::moveCursorToMousePosition(QPoint point, bool layerOn)
 {
     updateMousePosition(point);
-    update(MapEditorSubSelectionKind::None);
+    update(MapEditorSubSelectionKind::None, layerOn);
 
     if (m_map->isInGrid(m_positionOnPlane))
         cursor()->setPositions(m_positionOnPlane);
@@ -221,8 +221,10 @@ void ControlMapEditor::updateCameraTreeNode(){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update(MapEditorSubSelectionKind subSelection) {
-    updateRaycasting();
+void ControlMapEditor::update(MapEditorSubSelectionKind subSelection,
+                              bool layerOn)
+{
+    updateRaycasting(layerOn);
 
     // Update portions
     updatePortions(subSelection);
@@ -239,10 +241,10 @@ void ControlMapEditor::update(MapEditorSubSelectionKind subSelection) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMouse(QPoint point) {
+void ControlMapEditor::updateMouse(QPoint point, bool layerOn) {
     updateMousePosition(point);
     m_mouseMove = point;
-    updateRaycasting();
+    updateRaycasting(layerOn);
     m_mouseBeforeUpdate = m_mouseMove;
 }
 
@@ -264,7 +266,7 @@ bool ControlMapEditor::mousePositionChanged(QPoint point) {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycasting(){
+void ControlMapEditor::updateRaycasting(bool layerOn){
     QList<Portion> portions;
 
     // Raycasting plane
@@ -293,7 +295,7 @@ void ControlMapEditor::updateRaycasting(){
         }
         else {
             updateRaycastingLand(mapPortion, ray);
-            updateRaycastingSprites(mapPortion, ray);
+            updateRaycastingSprites(mapPortion, ray, layerOn);
         }
     }
 
@@ -427,11 +429,11 @@ void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
 // -------------------------------------------------------
 
 void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
-                                               QRay3D& ray)
+                                               QRay3D& ray, bool layerOn)
 {
     m_elementOnSprite = mapPortion->updateRaycastingSprites(
                 m_map->squareSize(), m_distanceSprite, m_positionOnSprite, ray,
-                m_camera->horizontalAngle());
+                m_camera->horizontalAngle(), layerOn);
 }
 
 // -------------------------------------------------------
@@ -1377,8 +1379,7 @@ SpriteDatas* ControlMapEditor::getCompleteSprite(
 
 // -------------------------------------------------------
 
-void ControlMapEditor::addSpriteWall(DrawKind drawKind, bool layerOn,
-                                     int specialID)
+void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
 {
     if (specialID == -1)
         return;
@@ -2031,7 +2032,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       QPoint point, Qt::MouseButton button)
 {
     // Update mouse
-    updateMouse(point);
+    updateMouse(point, layerOn);
 
     if (button != Qt::MouseButton::MiddleButton){
 
@@ -2063,7 +2064,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
 void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
                                        MapEditorSubSelectionKind,
-                                       DrawKind drawKind, bool layerOn,
+                                       DrawKind drawKind,
                                        QRect &, int specialID,
                                        QPoint,
                                        Qt::MouseButton button)
@@ -2071,7 +2072,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
     if (button == Qt::MouseButton::LeftButton) {
         if (m_isDrawingWall) {
             m_isDrawingWall = false;
-            addSpriteWall(drawKind, layerOn, specialID);
+            addSpriteWall(drawKind, specialID);
         }
     }
     else if (button == Qt::MouseButton::RightButton) {

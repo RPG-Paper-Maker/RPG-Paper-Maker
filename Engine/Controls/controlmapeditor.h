@@ -53,7 +53,7 @@ public:
     bool displaySquareInformations() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
-    void moveCursorToMousePosition(QPoint point);
+    void moveCursorToMousePosition(QPoint point, bool layerOn);
     void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();
@@ -63,16 +63,17 @@ public:
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 
-    void update(MapEditorSubSelectionKind subSelection);
-    void updateMouse(QPoint point);
+    void update(MapEditorSubSelectionKind subSelection, bool layerOn);
+    void updateMouse(QPoint point, bool layerOn);
     void updateMousePosition(QPoint point);
     bool mousePositionChanged(QPoint point);
-    void updateRaycasting();
+    void updateRaycasting(bool layerOn);
     void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
     void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray,
                              QList<Portion> &adjacents);
     void updateRaycastingLand(MapPortion*mapPortion, QRay3D& ray);
-    void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray);
+    void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray,
+                                 bool layerOn);
     QVector3D transformToNormalizedCoords(const QPoint& mouse);
     QVector4D transformToHomogeneousClip(QVector3D& normalized);
     QVector4D transformToEyeCoords(QVector4D& rayClip, QMatrix4x4& projection);
@@ -155,7 +156,7 @@ public:
                                    MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
                                    bool layerOn) const;
-    void addSpriteWall(DrawKind drawKind, bool layerOn, int specialID);
+    void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, SpriteDatas *sprite,
                      MapEditorSubSelectionKind kind, bool layerOn);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
@@ -201,7 +202,7 @@ public:
                         DrawKind drawKind, bool layerOn, QRect& tileset,
                         int specialID, QPoint point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
-                         DrawKind drawKind, bool layerOn, QRect &,
+                         DrawKind drawKind, QRect &,
                          int specialID,  QPoint, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
     void onKeyReleased(int);

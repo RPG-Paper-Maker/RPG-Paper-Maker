@@ -228,10 +228,11 @@ MapElement* MapPortion::updateRaycastingSprites(int squareSize,
                                                 float& finalDistance,
                                                 Position& finalPosition,
                                                 QRay3D &ray,
-                                                double cameraHAngle)
+                                                double cameraHAngle,
+                                                bool layerOn)
 {
     return m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition,
-                                       ray, cameraHAngle);
+                                       ray, cameraHAngle, layerOn);
 }
 
 // -------------------------------------------------------

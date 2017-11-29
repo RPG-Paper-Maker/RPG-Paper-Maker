@@ -124,9 +124,13 @@ Sprites::~Sprites()
     for (j = m_walls.begin(); j != m_walls.end(); j++)
         delete *j;
 
-    QHash<int, SpritesWalls*>::iterator k;
-    for (k = m_wallsGL.begin(); k != m_wallsGL.end(); k++)
+    QHash<GridPosition, SpriteDatas*>::iterator k;
+    for (k = m_spritesOnWalls.begin(); k != m_spritesOnWalls.end(); k++)
         delete *k;
+
+    QHash<int, SpritesWalls*>::iterator l;
+    for (l = m_wallsGL.begin(); l != m_wallsGL.end(); l++)
+        delete *l;
 }
 
 void Sprites::addOverflow(Position& p) {
@@ -144,7 +148,8 @@ void Sprites::removeOverflow(Position& p) {
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_all.size() == 0 && m_walls.size() == 0 && m_overflow.size() == 0;
+    return m_all.size() == 0 && m_walls.size() == 0 &&
+           m_spritesOnWalls.size() == 0 && m_overflow.size() == 0;
 }
 
 // -------------------------------------------------------
@@ -428,7 +433,7 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 
 MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
                                       Position& finalPosition, QRay3D &ray,
-                                      double cameraHAngle)
+                                      double cameraHAngle, bool layerOn)
 {
     MapElement* element = nullptr;
 
@@ -459,20 +464,50 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
             element = newElement;
     }
 
+    // If layer on, also check the walls
+    if (layerOn) {
+        for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
+             m_walls.begin(); i != m_walls.end(); i++)
+        {
+            GridPosition gridPosition = i.key();
+            SpriteWallDatas *wall = i.value();
+            if (updateRaycastingWallAt(gridPosition, wall, finalDistance,
+                                       finalPosition, ray))
+            {
+                element = wall;
+            }
+        }
+    }
+
     return element;
 }
 
 // -------------------------------------------------------
 
-bool Sprites::updateRaycastingAt(Position &position, SpriteDatas *sprite,
-                                 int squareSize, float &finalDistance,
-                                 Position &finalPosition, QRay3D& ray,
-                                 double cameraHAngle)
+bool Sprites::updateRaycastingAt(
+        Position &position, SpriteDatas *sprite, int squareSize,
+        float &finalDistance, Position &finalPosition, QRay3D& ray,
+        double cameraHAngle)
 {
     float newDistance = sprite->intersection(squareSize, ray, position,
                                              cameraHAngle);
     if (Wanok::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
+        return true;
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
+
+bool Sprites::updateRaycastingWallAt(
+        GridPosition &gridPosition, SpriteWallDatas* wall, float &finalDistance,
+        Position &finalPosition, QRay3D& ray)
+{
+    float newDistance = wall->intersection(ray);
+    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+        finalPosition = gridPosition;
         return true;
     }
 

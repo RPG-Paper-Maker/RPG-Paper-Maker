@@ -211,6 +211,7 @@ void SpriteDatas::initializeVertices(int squareSize,
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
     // Adding to buffers according to the kind of sprite
+    m_vertices.clear();
     switch (m_kind) {
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesDouble:
@@ -223,6 +224,8 @@ void SpriteDatas::initializeVertices(int squareSize,
 
         addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                 vecA, vecB, vecC, vecD, texA, texB, texC, texD);
+        m_vertices.append(vecA);
+        m_vertices.append(vecC);
 
         // If double sprite, add one sprite more
         if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
@@ -235,6 +238,8 @@ void SpriteDatas::initializeVertices(int squareSize,
             addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                     vecDoubleA, vecDoubleB, vecDoubleC,
                                     vecDoubleD, texA, texB, texC, texD);
+            m_vertices.append(vecDoubleA);
+            m_vertices.append(vecDoubleC);
 
             if (m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
                 QVector3D vecQuadra1A(vecA), vecQuadra1B(vecB),
@@ -254,6 +259,10 @@ void SpriteDatas::initializeVertices(int squareSize,
                                         countStatic, vecQuadra2A, vecQuadra2B,
                                         vecQuadra2C, vecQuadra2D, texA, texB,
                                         texC, texD);
+                m_vertices.append(vecQuadra1A);
+                m_vertices.append(vecQuadra1C);
+                m_vertices.append(vecQuadra2A);
+                m_vertices.append(vecQuadra2C);
             }
         }
 
@@ -340,57 +349,29 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
 float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
                                 int cameraHAngle)
 {
-    QVector3D pos, size, center, off;
     float minDistance = 0, distance = 0;
     QBox3D box;
 
-    getPosSizeCenter(pos, size, center, off, squareSize, position);
-
-    QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
-              vecB = Sprite::verticesQuad[1] * size + pos,
-              vecC = Sprite::verticesQuad[2] * size + pos,
-              vecD = Sprite::verticesQuad[3] * size + pos;
-
     if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
+        QVector3D pos, size, center, off;
+        getPosSizeCenter(pos, size, center, off, squareSize, position);
+
+        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
+                  vecB = Sprite::verticesQuad[1] * size + pos,
+                  vecC = Sprite::verticesQuad[2] * size + pos,
+                  vecD = Sprite::verticesQuad[3] * size + pos;
         rotateSprite(vecA, vecB, vecC, vecD, center, cameraHAngle + 90);
         box = QBox3D(vecA, vecC);
         minDistance = box.intersection(ray);
     }
     else {
-        box = QBox3D(vecA, vecC);
-        minDistance = box.intersection(ray);
-        Wanok::getMinDistance(minDistance, 0);
-
-        // If double sprite, add one sprite more
-        if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
-            m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
-            QVector3D vecDoubleA(vecA), vecDoubleB(vecB),
-                      vecDoubleC(vecC), vecDoubleD(vecD);
-
-            rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
-                         90);
-            box = QBox3D(vecDoubleA, vecDoubleC);
+        int i = 0;
+        while (i < m_vertices.size()) {
+            QVector3D vecA = m_vertices.at(i++),
+                      vecC = m_vertices.at(i++);
+            box = QBox3D(vecA, vecC);
             distance = box.intersection(ray);
             Wanok::getMinDistance(minDistance, distance);
-
-            if (m_kind == MapEditorSubSelectionKind::SpritesQuadra) {
-                QVector3D vecQuadra1A(vecA), vecQuadra1B(vecB),
-                          vecQuadra1C(vecC), vecQuadra1D(vecD),
-                          vecQuadra2A(vecA), vecQuadra2B(vecB),
-                          vecQuadra2C(vecC), vecQuadra2D(vecD);
-
-                rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D,
-                             center, 45);
-                rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D,
-                             center, -45);
-
-                box = QBox3D(vecQuadra1A, vecQuadra1C);
-                distance = box.intersection(ray);
-                Wanok::getMinDistance(minDistance, distance);
-                box = QBox3D(vecQuadra2A, vecQuadra2C);
-                distance = box.intersection(ray);
-                Wanok::getMinDistance(minDistance, distance);
-            }
         }
     }
 
@@ -711,10 +692,9 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
                                          QVector<GLuint>& indexes,
                                          GridPosition& position, int& count)
 {
-    QVector3D pos((float) position.x1() * squareSize,
-                  (float) position.y() * squareSize,
-                  (float) position.z1() * squareSize);
-    QVector3D size(squareSize, height, 0.0f);
+    QVector3D pos, size;
+    getPosSize(pos, size, squareSize, height, position);
+
     float x, y, w, h;
     x = (float)((int) m_wallKind * squareSize) / width;
     y = (float)(0 * squareSize) / height;
@@ -728,15 +708,38 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
     h -= (coefY * 2);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
-    QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
-              vecB = Sprite::verticesQuad[1] * size + pos,
-              vecC = Sprite::verticesQuad[2] * size + pos,
+    m_vecA = Sprite::verticesQuad[0] * size + pos;
+    m_vecC = Sprite::verticesQuad[2] * size + pos;
+    QVector3D vecB = Sprite::verticesQuad[1] * size + pos,
               vecD = Sprite::verticesQuad[3] * size + pos;
 
     if (!position.isHorizontal())
-        SpriteDatas::rotateSprite(vecA, vecB, vecC, vecD, vecD, 90);
-    SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, vecA, vecB,
-                                         vecC, vecD, texA, texB, texC, texD);
+        SpriteDatas::rotateSprite(m_vecA, vecB, m_vecC, vecD, vecD, 90);
+    SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, m_vecA, vecB,
+                                         m_vecC, vecD, texA, texB, texC, texD);
+}
+
+// -------------------------------------------------------
+
+void SpriteWallDatas::getPosSize(
+        QVector3D& pos, QVector3D& size, int squareSize, int height,
+        GridPosition &gridPosition)
+{
+    pos.setX((float) gridPosition.x1() * squareSize);
+    pos.setY((float) gridPosition.y() * squareSize);
+    pos.setZ((float) gridPosition.z1() * squareSize);
+
+    size.setX(squareSize);
+    size.setY(height);
+    size.setZ(0.0f);
+}
+
+// -------------------------------------------------------
+
+float SpriteWallDatas::intersection(QRay3D& ray)
+{
+    QBox3D box(m_vecA, m_vecC);
+    return box.intersection(ray);
 }
 
 // -------------------------------------------------------

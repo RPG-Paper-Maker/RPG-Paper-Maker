@@ -40,7 +40,7 @@ Position::~Position() {
 
 bool Position::operator==(const Position& other) const{
     return m_x == other.x() && m_y == other.y() && m_y_plus == other.yPlus()
-            && m_z == other.z() && m_layer == other.layer();
+           && m_z == other.z() && m_layer == other.layer();
 }
 bool Position::operator!=(const Position& other) const{
     return !operator==(other);
