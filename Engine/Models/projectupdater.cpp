@@ -143,6 +143,7 @@ void ProjectUpdater::getAllPathsMapsPortions()
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Clear
+    m_listMapPaths.clear();
     m_listMapProperties.clear();
     m_listMapPropertiesPaths.clear();
     clearListMapPaths();
@@ -153,8 +154,9 @@ void ProjectUpdater::getAllPathsMapsPortions()
         directories.next();
         QString mapName = directories.fileName();
         if (mapName != "temp") {
-            QDirIterator files(Wanok::pathCombine(pathMaps, mapName),
-                               QDir::Files);
+            QString dirMap = Wanok::pathCombine(pathMaps, mapName);
+            m_listMapPaths.append(dirMap);
+            QDirIterator files(dirMap, QDir::Files);
             QList<QJsonObject>* mapPortions = new QList<QJsonObject>;
             QList<QString>* paths = new QList<QString>;
             m_listMapPortions.append(mapPortions);
@@ -310,8 +312,43 @@ void ProjectUpdater::updateVersion_0_4_0() {
         QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
         QList<QString>* paths = m_listMapPortionsPaths.at(i);
         QJsonObject objMapProperties = m_listMapProperties.at(i);
+
+        // Adding ofSprites field for overflow
         objMapProperties["ofsprites"] = QJsonArray();
-        Wanok::writeOtherJSON(m_listMapPropertiesPaths.at(i), objMapProperties);
+        QString pathMapProperties = m_listMapPropertiesPaths.at(i);
+        Wanok::writeOtherJSON(pathMapProperties, objMapProperties);
+
+        // Adding extremities empty map portions (for grid positions)
+        int length = objMapProperties["l"].toInt();
+        int width = objMapProperties["w"].toInt();
+        int l = length / Wanok::portionSize;
+        int w = width / Wanok::portionSize;
+        int d = objMapProperties["d"].toInt() / Wanok::portionSize;
+        int h = objMapProperties["h"].toInt() / Wanok::portionSize;
+        if (width % Wanok::portionSize == 0) {
+            for (int a = 0; a <= l; a++) {
+                for (int b = -d; b < h; b++) {
+                    QJsonObject obj;
+                    Wanok::writeOtherJSON(
+                                Wanok::pathCombine(
+                                    m_listMapPaths.at(i),
+                                    Map::getPortionPathMap(a, b, w)),
+                                obj);
+                }
+            }
+        }
+        if (length % Wanok::portionSize == 0) {
+            for (int c = 0; c <= w; c++) {
+                for (int b = -d; b < h; b++) {
+                    QJsonObject obj;
+                    Wanok::writeOtherJSON(
+                                Wanok::pathCombine(
+                                    m_listMapPaths.at(i),
+                                    Map::getPortionPathMap(l, b, c)),
+                                obj);
+                }
+            }
+        }
 
         for (int j = 0; j < mapPortions->size(); j++) {
             QJsonObject obj = mapPortions->at(j);

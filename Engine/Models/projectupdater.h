@@ -54,6 +54,7 @@ public:
 protected:
     Project* m_project;
     QString m_previousFolderName;
+    QList<QString> m_listMapPaths;
     QList<QJsonObject> m_listMapProperties;
     QList<QString> m_listMapPropertiesPaths;
     QList<QList<QJsonObject>*> m_listMapPortions;

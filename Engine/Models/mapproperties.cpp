@@ -130,9 +130,9 @@ bool MapProperties::isInGrid(Position3D& position, int squareSize) const {
 // -------------------------------------------------------
 
 void MapProperties::getPortionsNumber(int& lx, int& ly, int& lz) {
-    lx = (length() - 1) / Wanok::portionSize;
+    lx = length() / Wanok::portionSize;
     ly = (depth() + height() - 1) / Wanok::portionSize;;
-    lz = (width() - 1) / Wanok::portionSize;
+    lz = width() / Wanok::portionSize;
 }
 
 // -------------------------------------------------------

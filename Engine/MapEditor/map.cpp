@@ -250,10 +250,10 @@ QString Map::writeMap(QString path, MapProperties& properties,
                      properties);
 
     // Portions
-    int lx = (properties.length() - 1) / Wanok::portionSize;
+    int lx = properties.length() / Wanok::portionSize;
     int ly = (properties.depth() + properties.height() - 1) /
             Wanok::portionSize;;
-    int lz = (properties.width() - 1) / Wanok::portionSize;
+    int lz = properties.width() / Wanok::portionSize;
     for (int i = 0; i <= lx; i++){
         for (int j = 0; j <= ly; j++){
             for (int k = 0; k <= lz; k++){
