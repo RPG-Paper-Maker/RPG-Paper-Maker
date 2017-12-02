@@ -102,6 +102,12 @@ bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
     return m_sprites->addSprite(portionsOverflow, p, sprite);
 }
 
+bool MapPortion::addSpriteOnWall(QSet<Portion>& portionsOverflow,
+                                 GridPosition& p, SpriteDatas *sprite)
+{
+    return m_sprites->addSpriteOnWall(portionsOverflow, p, sprite);
+}
+
 // -------------------------------------------------------
 
 bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p){

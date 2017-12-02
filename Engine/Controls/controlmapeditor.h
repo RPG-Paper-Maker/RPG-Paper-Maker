@@ -149,8 +149,9 @@ public:
                    MapEditorSubSelectionKind kind, bool layerOn);
     void removeLand(Position& p, DrawKind drawKind, bool layerOn);
     void eraseLand(Position& p);
-    void addSprite(Position& p, MapEditorSubSelectionKind kind,
-                   DrawKind drawKind, bool layerOn, QRect& tileset);
+    void addSprite(MapElement* element, Position& p,
+                   MapEditorSubSelectionKind kind, DrawKind drawKind,
+                   bool layerOn, QRect& tileset);
     SpriteDatas *getCompleteSprite(OrientationKind orientation,
                                    MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
@@ -159,6 +160,7 @@ public:
     void stockSprite(Position& p, SpriteDatas *sprite,
                      MapEditorSubSelectionKind kind, bool layerOn);
     void stockSpriteWall(GridPosition& gridPosition, int specialID);
+    void stockSpriteOnWall(GridPosition& gridPosition, SpriteDatas *sprite);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
     void eraseSprite(Position& p);

@@ -53,6 +53,8 @@ public:
     bool deleteLand(Position& p);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas *sprite);
+    bool addSpriteOnWall(QSet<Portion>& portionsOverflow, GridPosition& p,
+                         SpriteDatas *sprite);
     bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p);
     bool addSpriteWall(GridPosition& gridPosition, int specialID);
     bool deleteSpriteWall(GridPosition& gridPosition);

@@ -861,25 +861,20 @@ Portion Map::getLocalPortion(Position3D& position) const{
 // -------------------------------------------------------
 
 Portion Map::getPortionGrid(GridPosition& gridPosition) const {
-    Position3D p1, p2;
-    gridPosition.getSquares(p1, p2);
-    Portion portion1 = getLocalPortion(p1);
-    Portion portion2 = getLocalPortion(p2);
-    bool isP1 = isInGrid(p1) && isInPortion(portion1);
+    Position3D p;
+    gridPosition.getSquare(p);
 
-    return isP1 ? portion1 : portion2;
+    return getLocalPortion(p);
 }
 
 // -------------------------------------------------------
 
 bool Map::isVisibleGridPosition(GridPosition& position) const {
-    Position3D p1, p2;
-    position.getSquares(p1, p2);
-    Portion portion1 = getLocalPortion(p1);
-    Portion portion2 = getLocalPortion(p2);
+    Position3D p;
+    position.getSquare(p);
+    Portion portion = getLocalPortion(p);
 
-    return ((isInGrid(p1) && isInPortion(portion1)) ||
-            (isInGrid(p2) && isInPortion(portion2)));
+    return isInGrid(p) && isInPortion(portion);
 }
 
 // -------------------------------------------------------

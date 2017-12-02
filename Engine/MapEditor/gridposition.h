@@ -45,7 +45,7 @@ public:
     int z2() const;
     bool isHorizontal() const;
     void setCoords(int x1, int x2, int y, int yPlus, int z1, int z2);
-    void getSquares(Position3D& p1, Position3D& p2) const;
+    void getSquare(Position3D& p) const;
     void getLeft(GridPosition& gridPosition) const;
     void getRight(GridPosition& gridPosition) const;
     void getTopLeft(GridPosition& gridPosition) const;

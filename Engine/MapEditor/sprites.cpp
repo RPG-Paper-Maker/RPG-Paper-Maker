@@ -287,6 +287,24 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 // -------------------------------------------------------
 
+bool Sprites::addSpriteOnWall(QSet<Portion> &portionsOverflow, GridPosition& p,
+                              SpriteDatas *sprite)
+{
+    m_spritesOnWalls[p] = sprite;
+
+    /*
+    // Getting overflowing portions
+    getSetPortionsOverflow(portionsOverflow, p, sprite);
+
+    // Adding to overflowing
+    addRemoveOverflow(portionsOverflow, p, true);
+    */
+
+    return true;
+}
+
+// -------------------------------------------------------
+
 bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
 
@@ -466,7 +484,7 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
             element = newElement;
     }
 
-    // If layer on, also check the walls
+    // If layer on, also check the walls, and sprites on walls
     if (layerOn) {
         for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
              m_walls.begin(); i != m_walls.end(); i++)
@@ -477,6 +495,18 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
                                        finalGridPosition, ray))
             {
                 element = wall;
+            }
+        }
+        for (QHash<GridPosition, SpriteDatas*>::iterator i =
+             m_spritesOnWalls.begin(); i != m_spritesOnWalls.end(); i++)
+        {
+            GridPosition gridPosition = i.key();
+            SpriteDatas *sprite = i.value();
+            if (updateRaycastingSpriteOnWallAt(
+                        gridPosition, sprite, finalDistance, finalGridPosition,
+                        ray))
+            {
+                element = sprite;
             }
         }
     }
@@ -513,6 +543,15 @@ bool Sprites::updateRaycastingWallAt(
         return true;
     }
 
+    return false;
+}
+
+// -------------------------------------------------------
+
+bool Sprites::updateRaycastingSpriteOnWallAt(
+        GridPosition &gridPosition, SpriteDatas* sprite,
+        float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray)
+{
     return false;
 }
 

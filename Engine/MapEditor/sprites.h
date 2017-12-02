@@ -81,6 +81,8 @@ public:
     SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
     bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
                    SpriteDatas *sprite);
+    bool addSpriteOnWall(QSet<Portion> &portionsOverflow, GridPosition& p,
+                         SpriteDatas *sprite);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p);
     void setSpriteWall(GridPosition& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(GridPosition& p);
@@ -107,6 +109,9 @@ public:
             double cameraHAngle);
     bool updateRaycastingWallAt(
             GridPosition &gridPosition, SpriteWallDatas* wall,
+            float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray);
+    bool updateRaycastingSpriteOnWallAt(
+            GridPosition &gridPosition, SpriteDatas* sprite,
             float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);

@@ -96,15 +96,8 @@ void GridPosition::setCoords(int x1, int x2, int y, int yPlus, int z1, int z2) {
 //
 // -------------------------------------------------------
 
-void GridPosition::getSquares(Position3D& p1, Position3D& p2) const {
-    if (isHorizontal()) {
-        p1.setCoords(m_x1, m_y, m_y_plus, m_z1 - 1);
-        p2.setCoords(m_x1, m_y, m_y_plus, m_z1);
-    }
-    else {
-        p1.setCoords(m_x1 - 1, m_y, m_y_plus, m_z1);
-        p2.setCoords(m_x1, m_y, m_y_plus, m_z1);
-    }
+void GridPosition::getSquare(Position3D& p) const {
+    p.setCoords(m_x1, m_y, m_y_plus, m_z1);
 }
 
 // -------------------------------------------------------
