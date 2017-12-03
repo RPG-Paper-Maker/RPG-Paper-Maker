@@ -74,6 +74,8 @@ Sprite::~Sprite()
 //
 // -------------------------------------------------------
 
+QString SpriteDatas::jsonFront = "f";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -86,9 +88,11 @@ SpriteDatas::SpriteDatas() :
 
 }
 
-SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, QRect *textureRect) :
+SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, QRect *textureRect,
+                         bool front) :
     m_kind(kind),
-    m_textureRect(textureRect)
+    m_textureRect(textureRect),
+    m_front(front)
 {
 
 }
@@ -133,7 +137,7 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
 {
     MapElement::getPosSizeCenter(pos, size, center, offset, squareSize,
                                  position, textureRect()->width(),
-                                 textureRect()->height());
+                                 textureRect()->height(), m_front);
 }
 
 // -------------------------------------------------------
@@ -344,7 +348,10 @@ void SpriteDatas::read(const QJsonObject & json){
     MapElement::read(json);
 
     m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
+    if (json.contains(jsonFront))
+        m_front = json[jsonFront].toBool();
 
+    // Texture
     QJsonArray tab = json["t"].toArray();
     m_textureRect->setLeft(tab[0].toInt());
     m_textureRect->setTop(tab[1].toInt());
@@ -366,6 +373,16 @@ void SpriteDatas::write(QJsonObject & json) const{
     tab.append(m_textureRect->width());
     tab.append(m_textureRect->height());
     json["t"] = tab;
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::writeFull(QJsonObject &json, bool front) const {
+    write(json);
+
+    // Only if layer > 0
+    if (front)
+        json[jsonFront] = m_front;
 }
 
 // -------------------------------------------------------
@@ -637,7 +654,7 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
 {
     QVector3D pos, size, center, off;
     MapElement::getPosSizeCenter(pos, size, center, off, squareSize, position,
-                                 1, height / squareSize);
+                                 1, height / squareSize, false);
 
     float x, y, w, h;
     x = (float)((int) m_wallKind * squareSize) / width;

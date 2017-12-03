@@ -732,9 +732,10 @@ void Sprites::write(QJsonObject & json) const{
     {
         QJsonObject objHash;
         QJsonArray tabKey;
-        i.key().write(tabKey);
+        Position position = i.key();
+        position.write(tabKey);
         QJsonObject objSprite;
-        i.value()->write(objSprite);
+        i.value()->writeFull(objSprite, position.layer() > 0);
 
         objHash["k"] = tabKey;
         objHash["v"] = objSprite;

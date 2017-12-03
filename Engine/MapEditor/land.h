@@ -29,7 +29,7 @@
 class LandDatas : public MapElement
 {
 public:
-    LandDatas();
+    LandDatas(bool up);
     virtual ~LandDatas();
     virtual MapEditorSubSelectionKind getSubKind() const;
 
@@ -39,8 +39,14 @@ public:
                     Position &position);
     float intersection(int squareSize, QRay3D& ray, Position& position);
 
+    static QString jsonUp;
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+    void writeFull(QJsonObject & json, bool up) const;
+
+protected:
+    bool m_up;
 };
 
 #endif // LAND_H

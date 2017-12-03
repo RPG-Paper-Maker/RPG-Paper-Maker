@@ -24,7 +24,6 @@
 #include <QMatrix4x4>
 #include "cursor.h"
 #include "orientationkind.h"
-#include "cameraupdownkind.h"
 
 // -------------------------------------------------------
 //
@@ -58,7 +57,8 @@ public:
     void addDistance(int d);
     OrientationKind orientationKind() const;
     OrientationKind orientationFromTargetKind() const;
-    CameraUpDownKind cameraUpDownKind() const;
+    bool cameraUp() const;
+    bool cameraFront(int angle) const;
     void update(Cursor* cursor, int squareSize);
     void zoomPlus(int squareSize);
     void zoomLess(int squareSize);

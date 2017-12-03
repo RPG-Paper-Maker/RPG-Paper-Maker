@@ -21,14 +21,17 @@
 #include "qbox3d.h"
 #include "floor.h"
 
+QString LandDatas::jsonUp = "up";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-LandDatas::LandDatas() :
-    MapElement()
+LandDatas::LandDatas(bool up) :
+    MapElement(),
+    m_up(up)
 {
 
 }
@@ -74,7 +77,7 @@ void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
 {
     // Position
     float yLayerOffset = position.layer() * 0.05f;
-    if (m_up == CameraUpDownKind::Down)
+    if (!m_up)
         yLayerOffset *= -1;
     float yPosition = position.getY(squareSize) + yLayerOffset;
     pos.setX(position.x() * squareSize);
@@ -101,4 +104,13 @@ void LandDatas::read(const QJsonObject &json){
 
 void LandDatas::write(QJsonObject &json) const{
     MapElement::write(json);
+}
+
+// -------------------------------------------------------
+
+void LandDatas::writeFull(QJsonObject & json, bool up) const {
+    write(json);
+
+    if (up)
+        json[jsonUp] = m_up;
 }

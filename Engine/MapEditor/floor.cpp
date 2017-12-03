@@ -27,6 +27,8 @@
 //
 // -------------------------------------------------------
 
+QString FloorDatas::jsonTexture = "t";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -39,8 +41,8 @@ FloorDatas::FloorDatas() :
 
 }
 
-FloorDatas::FloorDatas(QRect* texture) :
-    LandDatas(),
+FloorDatas::FloorDatas(QRect* texture, bool up) :
+    LandDatas(up),
     m_textureRect(texture)
 {
 
@@ -111,26 +113,29 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
 // -------------------------------------------------------
 
 void FloorDatas::read(const QJsonObject & json){
-    MapElement::read(json);
-    QJsonArray tab = json["t"].toArray();
+    LandDatas::read(json);
 
+    QJsonArray tab = json[jsonTexture].toArray();
     m_textureRect->setLeft(tab[0].toInt());
     m_textureRect->setTop(tab[1].toInt());
     m_textureRect->setWidth(tab[2].toInt());
     m_textureRect->setHeight(tab[3].toInt());
+
+    if (json.contains(jsonUp))
+        m_up = json[jsonUp].toBool();
 }
 
 // -------------------------------------------------------
 
 void FloorDatas::write(QJsonObject &json) const{
-    MapElement::write(json);
-    QJsonArray tab;
+    LandDatas::write(json);
 
+    QJsonArray tab;
     tab.append(m_textureRect->left());
     tab.append(m_textureRect->top());
     tab.append(m_textureRect->width());
     tab.append(m_textureRect->height());
-    json["t"] = tab;
+    json[jsonTexture] = tab;
 }
 
 // -------------------------------------------------------

@@ -43,7 +43,7 @@ class FloorDatas : public LandDatas
 {
 public:
     FloorDatas();
-    FloorDatas(QRect *texture);
+    FloorDatas(QRect *texture, bool up = false);
     virtual ~FloorDatas();
     QRect* textureRect() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
@@ -53,6 +53,8 @@ public:
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
                                     Position& position, int& count);
+
+    static QString jsonTexture;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;

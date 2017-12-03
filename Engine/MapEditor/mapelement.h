@@ -41,14 +41,10 @@ class MapElement : public Serializable
 public:
     MapElement();
     virtual ~MapElement();
-    void setOrientation(OrientationKind o);
-    void setUpDown(CameraUpDownKind upDown);
     void setXOffset(int x);
     void setYOffset(int y);
     void setZOffset(int z);
 
-    static QString jsonOrientation;
-    static QString jsonUp;
     static QString jsonX;
     static QString jsonY;
     static QString jsonZ;
@@ -59,14 +55,12 @@ public:
     virtual void getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                   QVector3D& center, QVector3D &offset,
                                   int squareSize, Position &position, int width,
-                                  int height);
+                                  int height, bool front);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    OrientationKind m_orientation;
-    CameraUpDownKind m_up;
     int m_xOffset;
     int m_yOffset;
     int m_zOffset;

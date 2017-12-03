@@ -275,10 +275,11 @@ void Floors::write(QJsonObject & json) const{
     for (i = m_all.begin(); i != m_all.end(); i++){
         QJsonObject objHash;
         QJsonArray tabKey;
-        i.key().write(tabKey);
+        Position position = i.key();
+        position.write(tabKey);
         FloorDatas* floor = i.value();
         QJsonObject objFloor;
-        floor->write(objFloor);
+        floor->writeFull(objFloor, position.layer() > 0);
         objHash["k"] = tabKey;
         objHash["v"] = objFloor;
         tabFloors.append(objHash);

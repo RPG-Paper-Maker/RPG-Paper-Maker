@@ -69,7 +69,8 @@ class SpriteDatas : public MapElement
 {
 public:
     SpriteDatas();
-    SpriteDatas(MapEditorSubSelectionKind kind, QRect* textureRect);
+    SpriteDatas(MapEditorSubSelectionKind kind, QRect* textureRect,
+                bool front = false);
     virtual ~SpriteDatas();
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
@@ -98,12 +99,16 @@ public:
     float intersection(int squareSize, QRay3D& ray, Position& position,
                        int cameraHAngle);
 
+    static QString jsonFront;
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+    void writeFull(QJsonObject &json, bool front) const;
 
 protected:
     MapEditorSubSelectionKind m_kind;
     QRect* m_textureRect;
+    bool m_front;
     QList<QVector3D> m_vertices;
 };
 

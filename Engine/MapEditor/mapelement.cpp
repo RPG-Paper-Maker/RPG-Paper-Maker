@@ -20,8 +20,6 @@
 #include "mapelement.h"
 #include "sprite.h"
 
-QString MapElement::jsonOrientation = "o";
-QString MapElement::jsonUp = "up";
 QString MapElement::jsonX = "xOff";
 QString MapElement::jsonY = "yOff";
 QString MapElement::jsonZ = "zOff";
@@ -33,8 +31,6 @@ QString MapElement::jsonZ = "zOff";
 // -------------------------------------------------------
 
 MapElement::MapElement() :
-    m_orientation(OrientationKind::None),
-    m_up(CameraUpDownKind::None),
     m_xOffset(0),
     m_yOffset(0),
     m_zOffset(0)
@@ -45,14 +41,6 @@ MapElement::MapElement() :
 MapElement::~MapElement()
 {
 
-}
-
-void MapElement::setOrientation(OrientationKind o) {
-    m_orientation = o;
-}
-
-void MapElement::setUpDown(CameraUpDownKind upDown) {
-    m_up = upDown;
 }
 
 void MapElement::setXOffset(int x) {
@@ -85,26 +73,14 @@ QString MapElement::toString() const { return ""; }
 
 void MapElement::getPosSizeCenter(
         QVector3D& pos, QVector3D& size, QVector3D& center, QVector3D &offset,
-        int squareSize, Position &position, int width, int height)
+        int squareSize, Position &position, int width, int height, bool front)
 {
     // Offset
     float zPlus = 0, off = position.layer() * 0.05f;
-    if (getSubKind() == MapEditorSubSelectionKind::SpritesFace)
+    if (getSubKind() == MapEditorSubSelectionKind::SpritesFace || front)
         zPlus += off;
-    else {
-        switch (m_orientation) {
-        case OrientationKind::West:
-        case OrientationKind::North:
-            zPlus -= off;
-            break;
-        case OrientationKind::East:
-        case OrientationKind::South:
-            zPlus += off;
-            break;
-        default:
-            break;
-        }
-    }
+    else
+        zPlus -= off;
     offset.setZ(zPlus);
 
     // Size
@@ -131,12 +107,6 @@ void MapElement::getPosSizeCenter(
 // -------------------------------------------------------
 
 void MapElement::read(const QJsonObject & json){
-    if (json.contains(MapElement::jsonOrientation)) {
-        m_orientation = static_cast<OrientationKind>(
-                    json[MapElement::jsonOrientation].toInt());
-    }
-    if (json.contains(MapElement::jsonUp))
-        m_up = static_cast<CameraUpDownKind>(json[MapElement::jsonUp].toInt());
     if (json.contains(MapElement::jsonX))
         m_xOffset = json[MapElement::jsonX].toInt();
     if (json.contains(MapElement::jsonY))
@@ -148,10 +118,6 @@ void MapElement::read(const QJsonObject & json){
 // -------------------------------------------------------
 
 void MapElement::write(QJsonObject &json) const{
-    if (m_orientation != OrientationKind::None)
-        json[MapElement::jsonOrientation] = (int) m_orientation;
-    if (m_up != CameraUpDownKind::None)
-        json[MapElement::jsonUp] = (int) m_up;
     if (m_xOffset != 0)
         json[MapElement::jsonX] = m_xOffset;
     if (m_yOffset != 0)

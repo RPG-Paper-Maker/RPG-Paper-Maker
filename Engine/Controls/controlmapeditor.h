@@ -92,16 +92,15 @@ public:
     void removePreviewElements();
     void updatePreviewFloors(MapEditorSelectionKind kind,
                              MapEditorSubSelectionKind subKind,
-                             CameraUpDownKind upDown, bool layerOn,
+                             bool up, bool layerOn,
                              QRect& tileset, Position& position);
     void getWallSpritesPositions(QList<Position> &positions);
     void updatePreviewWallSprites(int specialID);
     void updatePreviewWallSprite(Position &position, int specialID);
     void updatePreviewOthers(MapEditorSelectionKind kind,
-                             MapEditorSubSelectionKind subKind,
-                             OrientationKind orientation, bool layerOn,
-                             QRect& tileset, int xOffset, int yOffset,
-                             int zOffset);
+                             MapEditorSubSelectionKind subKind, bool front,
+                             bool layerOn, QRect& tileset, int xOffset,
+                             int yOffset, int zOffset);
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
     void updatePreviewElementGrid(Position &p, Portion &portion,
@@ -151,10 +150,9 @@ public:
     void addSprite(
             Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
             bool layerOn, QRect& tileset);
-    SpriteDatas *getCompleteSprite(OrientationKind orientation,
-                                   MapEditorSubSelectionKind kind, int xOffset,
+    SpriteDatas *getCompleteSprite(MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
-                                   bool layerOn) const;
+                                   bool front, bool layerOn) const;
     void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, SpriteDatas *sprite,
                      MapEditorSubSelectionKind kind, bool layerOn);
