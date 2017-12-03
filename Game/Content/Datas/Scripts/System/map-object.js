@@ -188,9 +188,10 @@ MapObject.prototype = {
             this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
             this.height = material.map.image.height / $SQUARE_SIZE / $FRAMES;
-            var sprite = new Sprite(this.currentState.graphicKind, 0, 50,
+            var sprite = new Sprite(this.currentState.graphicKind,
                                     [0, 0, this.width, this.height]);
-            var geometry = sprite.createGeometry(1, 1);
+            var geometry = sprite.createGeometry(this.width, this.height,
+                                                 this.position);
             this.mesh = new THREE.Mesh(geometry, material);
             this.mesh.position.set(this.position.x,
                                    this.position.y,

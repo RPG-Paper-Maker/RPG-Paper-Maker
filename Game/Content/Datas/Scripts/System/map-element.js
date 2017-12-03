@@ -74,5 +74,52 @@ MapElement.prototype = {
             this.yOffset = y;
         if (typeof(z) !== 'undefined')
             this.zOffset = z;
+    },
+
+    /** Scale the vertices correctly.
+    *   @param {THREE.Vector3} vecA The A vertex to rotate.
+    *   @param {THREE.Vector3} vecB The B vertex to rotate.
+    *   @param {THREE.Vector3} vecC The C vertex to rotate.
+    *   @param {THREE.Vector3} vecD The D vertex to rotate.
+    *   @param {THREE.Vector3} center The center to rotate around.
+    */
+    scale: function(vecA, vecB, vecC, vecD, center, position, size, kind) {
+        var zPlus = 0, off = Wanok.positionLayer(position) * 0.05;
+
+        // Apply an offset according to layer position
+        if (kind === ElementMapKind.SpritesFace)
+            zPlus += off;
+        else {
+            switch (this.orientation) {
+            case Orientation.West:
+            case Orientation.North:
+                zPlus -= off;
+                break;
+            case Orientation.East:
+            case Orientation.South:
+                zPlus += off;
+                break;
+            default:
+                break;
+            }
+        }
+        var offset = new THREE.Vector3(0, 0, zPlus);
+
+        // Center
+        center.setX(this.xOffset * $SQUARE_SIZE);
+        center.setY(this.yOffset * $SQUARE_SIZE);
+        center.setZ(this.zOffset * $SQUARE_SIZE);
+
+        // Position
+        var pos = center.clone();
+        pos.add(offset);
+        vecA.multiply(size);
+        vecB.multiply(size);
+        vecC.multiply(size);
+        vecD.multiply(size);
+        vecA.add(pos);
+        vecB.add(pos);
+        vecC.add(pos);
+        vecD.add(pos);
     }
 }

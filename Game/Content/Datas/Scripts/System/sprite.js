@@ -25,17 +25,12 @@
 
 /** @class
 *   A sprite in the map.
-*   @property {number} widthPosition (in %) position in the square in the
-*   X / Z axis.
-*   @property {number} angle Angle in the X / Z axis.
 *   @property {number[]} textureRect Texture UV coords.
 */
-function Sprite(kind, angle, widthPosition, texture) {
+function Sprite(kind, texture) {
     MapElement.call(this);
 
     this.kind = kind;
-    this.angle = angle;
-    this.widthPosition = widthPosition;
     this.textureRect = texture;
 }
 
@@ -92,7 +87,6 @@ Sprite.addStaticSpriteToGeometry = function(geometry, vecA, vecB, vecC, vecD,
     return c + 4;
 }
 
-
 Sprite.prototype = {
 
     /** Read the JSON associated to the sprite.
@@ -102,30 +96,29 @@ Sprite.prototype = {
         MapElement.prototype.read.call(this, json);
 
         this.kind = json.k;
-        this.angle = json.a;
-        this.widthPosition = json.p;
         this.textureRect = json.t;
     },
 
     /** Create the geometry associated to this sprite.
     *   @param {number} width The texture total width.
     *   @param {number} height The texture total height.
-    *   @param {number} layer The layer number of the sprite.
+    *   @param {number[]} position The position of the sprite.
     *   @returns {THREE.Geometry}
     */
-    createGeometry: function(width, height, layer) {
+    createGeometry: function(width, height, position) {
         var geometry = new THREE.Geometry();
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
-            center = new THREE.Vector3(0.0, 0.5, 0.0),
+            center = new THREE.Vector3(),
             size = new THREE.Vector3(this.textureRect[2] * $SQUARE_SIZE,
-                                     this.textureRect[3] * $SQUARE_SIZE, 0);
+                                     this.textureRect[3] * $SQUARE_SIZE, 1.0);
         var x, y, w, h, c = 0, coefX, coefY;
         var texFaceA, texFaceB;
 
-        this.scale(vecA, vecB, vecC, vecD, center, layer, size);
+        MapElement.prototype.scale.call(this, vecA, vecB, vecC, vecD, center,
+                                        position, size, this.kind);
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
@@ -205,43 +198,5 @@ Sprite.prototype = {
         geometry.uvsNeedUpdate = true;
 
         return geometry;
-    },
-
-    /** Scale the vertices correctly.
-    */
-    scale: function(vecA, vecB, vecC, vecD, center, layer, size) {
-        var zPlus = 0, off = layer * 0.05;
-
-        // Multiply all by the size
-        vecA.multiply(size);
-        vecB.multiply(size);
-        vecC.multiply(size);
-        vecD.multiply(size);
-        center.multiply(size);
-
-        // Apply an offset according to layer position
-        if (this.kind === ElementMapKind.SpritesFace)
-            zPlus += off;
-        else {
-            switch (this.orientation) {
-            case Orientation.West:
-            case Orientation.North:
-                zPlus -= off;
-                break;
-            case Orientation.East:
-            case Orientation.South:
-                zPlus += off;
-                break;
-            default:
-                break;
-            }
-        }
-        var offset = new THREE.Vector3(this.xOffset * $SQUARE_SIZE,
-                                       this.yOffset * $SQUARE_SIZE,
-                                       this.zOffset * $SQUARE_SIZE + zPlus);
-        vecA.add(offset);
-        vecB.add(offset);
-        vecC.add(offset);
-        vecD.add(offset);
     }
 }

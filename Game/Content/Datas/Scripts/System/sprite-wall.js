@@ -42,16 +42,7 @@ Object.freeze(SpriteWallKind);
 *   @property {SpriteWallKind} kind The kind of wall (border or not).
 */
 function SpriteWall() {
-
-}
-
-/** @static
-*   If a sprite wall is horizontal or not.
-*   @param {number[]} gridPosition The grid position.
-*   @return {boolean}
-*/
-SpriteWall.isHorizontal = function(gridPosition) {
-    return gridPosition[1] === gridPosition[3]; // z1 === z2
+    MapElement.call(this);
 }
 
 SpriteWall.prototype = {
@@ -60,28 +51,28 @@ SpriteWall.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json) {
+        MapElement.prototype.read.call(this, json);
+
         this.id = json.w;
         this.kind = json.k;
     },
 
     /** Update the geometry of a group of sprite walls with the same material.
     *   @param {THREE.Geometry} geometry of the sprites walls.
-    *   @param {number[]} gridPosition The grid position.
+    *   @param {number[]} position The position of the wall.
     *   @param {number} width The width of the texture.
     *   @param {number} height The height of the texture.
     *   @return {number}
     */
-    updateGeometry: function(geometry, gridPosition, width, height, c) {
+    updateGeometry: function(geometry, position, width, height, c) {
         var vecA = new THREE.Vector3(-0.5, 1.0, 0.0),
             vecB = new THREE.Vector3(0.5, 1.0, 0.0),
             vecC = new THREE.Vector3(0.5, 0.0, 0.0),
             vecD = new THREE.Vector3(-0.5, 0.0, 0.0),
-            center = new THREE.Vector3(-0.5, 0.5, 0.0),
+            center = new THREE.Vector3(),
             size = new THREE.Vector3($SQUARE_SIZE, height, 0);
         var x, y, w, h, coefX, coefY;
         var texFaceA, texFaceB;
-        var position = [gridPosition[0], gridPosition[4], gridPosition[5],
-                        gridPosition[1]];
         var localPosition = Wanok.positionToVector3(position);
 
         // Scale
@@ -89,7 +80,6 @@ SpriteWall.prototype = {
         vecB.multiply(size);
         vecC.multiply(size);
         vecD.multiply(size);
-        center.multiply(size);
 
         // Move to coords
         vecA.add(localPosition);
@@ -121,10 +111,8 @@ SpriteWall.prototype = {
             new THREE.Vector2(x+w,y+h),
             new THREE.Vector2(x,y+h)
         ];
-
-        // Simple sprite
-        if (!SpriteWall.isHorizontal(gridPosition))
-            Sprite.rotateSprite(vecA, vecB, vecC, vecD, center, -90);
+        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
+                            Wanok.positionAngle(position));
         c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD,
                                              texFaceA, texFaceB, c);
 

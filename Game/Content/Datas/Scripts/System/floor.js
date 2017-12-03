@@ -45,7 +45,7 @@ Floor.prototype = {
     *   @returns {THREE.Geometry}
     */
     updateGeometry: function(geometry, position, width, height, i) {
-        var localPosition = Wanok.positionToVector3(position);
+        var localPosition = Wanok.positionToBorderVector3(position);
         var x = localPosition.x;
         var yLayerOffset = position[4] * 0.05;
         if (this.upDown === CameraUpDown.Down)

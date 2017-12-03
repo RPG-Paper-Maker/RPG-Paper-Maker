@@ -634,7 +634,7 @@ void ControlMapEditor::getWallSpritesPositions(QList<Position> &positions) {
         int downZ = qMax(begin.z(), end.z());
 
         for (int i = upZ; i < downZ; i++)
-            positions.append(Position(x, y, yPlus, i, 0, 0, 50, -90));
+            positions.append(Position(x, y, yPlus, i, 0, 0, 50, 90));
     }
 
     // Horizontal

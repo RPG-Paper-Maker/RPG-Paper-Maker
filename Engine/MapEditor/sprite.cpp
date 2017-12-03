@@ -190,7 +190,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                       vecDoubleC(vecC), vecDoubleD(vecD);
 
             rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
-                         -90);
+                         90);
             addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                     vecDoubleA, vecDoubleB, vecDoubleC,
                                     vecDoubleD, texA, texB, texC, texD);
@@ -257,7 +257,7 @@ void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
     QVector3D v(vec);
 
     v -= center;
-    m.rotate(angle, 0.0, 1.0, 0.0);
+    m.rotate(-angle, 0.0, 1.0, 0.0);
     v = v * m + center;
 
     vec.setX(v.x());
@@ -316,7 +316,7 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
                   vecB = Sprite::modelQuad[1] * size + pos,
                   vecC = Sprite::modelQuad[2] * size + pos,
                   vecD = Sprite::modelQuad[3] * size + pos;
-        rotateSprite(vecA, vecB, vecC, vecD, center, cameraHAngle + 90);
+        rotateSprite(vecA, vecB, vecC, vecD, center, -cameraHAngle - 90);
         box = QBox3D(vecA, vecC);
         minDistance = box.intersection(ray);
     }

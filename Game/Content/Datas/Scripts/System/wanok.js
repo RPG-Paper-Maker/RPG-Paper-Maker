@@ -228,6 +228,21 @@ Wanok.generateMapName = function(id){
 *   @returns {THREE.Vector3}
 */
 Wanok.positionToVector3 = function(position){
+    var pos = Wanok.positionToBorderVector3(position);
+    pos.setX(pos.x + (Wanok.positionCenterX(position) / 100 * $SQUARE_SIZE));
+    pos.setZ(pos.z + (Wanok.positionCenterZ(position) / 100 * $SQUARE_SIZE));
+
+    return pos;
+}
+
+// -------------------------------------------------------
+
+/** Transform a json position to a THREE.Vector3.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns {THREE.Vector3}
+*/
+Wanok.positionToBorderVector3 = function(position){
     return new THREE.Vector3(
                 position[0] * $SQUARE_SIZE,
                 (position[1] * $SQUARE_SIZE) +
@@ -242,8 +257,53 @@ Wanok.positionToVector3 = function(position){
 *   @param {number[]} position The json position.
 *   @returns number
 */
-Wanok.positionToLayer= function(position){
+Wanok.positionLayer = function(position) {
     return position[4];
+}
+
+// -------------------------------------------------------
+
+/** Extract the x center from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+Wanok.positionCenterX = function(position) {
+    var x = position[5];
+    if (typeof x === 'undefined')
+        x = 50;
+
+    return x;
+}
+
+// -------------------------------------------------------
+
+/** Extract the z center from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+Wanok.positionCenterZ = function(position) {
+    var z = position[6];
+    if (typeof z === 'undefined')
+        z = 50;
+
+    return z;
+}
+
+// -------------------------------------------------------
+
+/** Extract the angle from position.
+*   @static
+*   @param {number[]} position The json position.
+*   @returns number
+*/
+Wanok.positionAngle = function(position) {
+    var a = position[7];
+    if (typeof a == 'undefined')
+        a = 0;
+
+    return a;
 }
 
 // -------------------------------------------------------
@@ -253,7 +313,7 @@ Wanok.positionToLayer= function(position){
 *   @param {number} x The position on screen.
 *   @returns {number}
 */
-Wanok.getScreenX = function(x){
+Wanok.getScreenX = function(x) {
     return Math.round(Wanok.getDoubleScreenX(x));
 }
 
@@ -264,7 +324,7 @@ Wanok.getScreenX = function(x){
 *   @param {number} y The position on screen.
 *   @returns {number}
 */
-Wanok.getScreenY = function(y){
+Wanok.getScreenY = function(y) {
     return Math.round(Wanok.getDoubleScreenY(y));
 }
 
@@ -276,7 +336,7 @@ Wanok.getScreenY = function(y){
 *   @returns {number}
 */
 
-Wanok.getScreenXY = function(xy){
+Wanok.getScreenXY = function(xy) {
     return Math.round(($windowX + $windowY) / 2 * xy);
 }
 
@@ -288,7 +348,7 @@ Wanok.getScreenXY = function(xy){
 *   @param {number} x The position on screen.
 *   @returns {number}
 */
-Wanok.getDoubleScreenX = function(x){
+Wanok.getDoubleScreenX = function(x) {
     return $windowX * x;
 }
 
@@ -300,7 +360,7 @@ Wanok.getDoubleScreenX = function(x){
 *   @param {number} y The position on screen.
 *   @returns {number}
 */
-Wanok.getDoubleScreenY = function(y){
+Wanok.getDoubleScreenY = function(y) {
     return $windowY * y;
 }
 
@@ -311,7 +371,7 @@ Wanok.getDoubleScreenY = function(y){
 *   @param {number} x The position.
 *   @returns {number}
 */
-Wanok.getSquare = function(x){
+Wanok.getSquare = function(x) {
     return Math.floor(x / $SQUARE_SIZE);
 };
 
@@ -321,7 +381,7 @@ Wanok.getSquare = function(x){
 *   @static
 *   @returns {number}
 */
-Wanok.countFields = function count(obj){
+Wanok.countFields = function count(obj) {
     if (obj.__count__ !== undefined) { // Old FF
         return obj.__count__;
     }

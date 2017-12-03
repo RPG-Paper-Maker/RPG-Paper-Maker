@@ -112,7 +112,7 @@ void Position::setHorizontal() {
 void Position::setVertical() {
     setCenterX(0);
     setCenterZ(50);
-    setAngle(-90);
+    setAngle(90);
 }
 
 // -------------------------------------------------------

@@ -173,7 +173,7 @@ MapPortion.prototype = {
 
             // Getting sprite
             var s = json[i];
-            var gridPosition = s.k;
+            var position = s.k;
             var ss = s.v;
             var sprite = new SpriteWall();
             sprite.read(ss);
@@ -198,7 +198,7 @@ MapPortion.prototype = {
                 c = obj.c;
             }
 
-            obj.c = sprite.updateGeometry(geometry, gridPosition,
+            obj.c = sprite.updateGeometry(geometry, position,
                                           material.map.image.width,
                                           material.map.image.height, c);
         }
@@ -252,8 +252,6 @@ MapPortion.prototype = {
                 index === -1)
             {
                 var localPosition = Wanok.positionToVector3(position);
-                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
-                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
@@ -281,12 +279,9 @@ MapPortion.prototype = {
     */
     getSpriteMesh: function(position, material, sprite){
         var localPosition = Wanok.positionToVector3(position);
-        localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
-        localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
-
         var geometry = sprite.createGeometry(material.map.image.width,
                                              material.map.image.height,
-                                             Wanok.positionToLayer(position));
+                                             position);
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(localPosition.x,
                            localPosition.y,
@@ -343,9 +338,6 @@ MapPortion.prototype = {
                 if (jsonObjectValue.id === id){
                     object.readJSON(jsonObjectValue);
                     var localPosition = Wanok.positionToVector3(position);
-                    localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
-                    localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE /
-                                                          100));
                     position = new THREE.Vector3(localPosition.x,
                                                  localPosition.y,
                                                  localPosition.z);
@@ -377,8 +369,6 @@ MapPortion.prototype = {
                 var object = new SystemObject;
                 object.readJSON(jsonObjectValue);
                 var localPosition = Wanok.positionToVector3(position);
-                localPosition.setX(localPosition.x + ($SQUARE_SIZE / 2));
-                localPosition.setZ(localPosition.z + (50 * $SQUARE_SIZE / 100));
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
