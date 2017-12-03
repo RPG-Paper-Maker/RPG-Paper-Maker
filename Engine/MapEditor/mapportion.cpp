@@ -102,12 +102,6 @@ bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
     return m_sprites->addSprite(portionsOverflow, p, sprite);
 }
 
-bool MapPortion::addSpriteOnWall(QSet<Portion>& portionsOverflow,
-                                 GridPosition& p, SpriteDatas *sprite)
-{
-    return m_sprites->addSpriteOnWall(portionsOverflow, p, sprite);
-}
-
 // -------------------------------------------------------
 
 bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p){
@@ -116,27 +110,26 @@ bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p){
 
 // -------------------------------------------------------
 
-bool MapPortion::addSpriteWall(GridPosition& gridPosition, int specialID) {
-    return m_sprites->addSpriteWall(gridPosition, specialID);
+bool MapPortion::addSpriteWall(Position &position, int specialID) {
+    return m_sprites->addSpriteWall(position, specialID);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteSpriteWall(GridPosition& gridPosition) {
-    return m_sprites->deleteSpriteWall(gridPosition);
+bool MapPortion::deleteSpriteWall(Position &position) {
+    return m_sprites->deleteSpriteWall(position);
 }
 
 // -------------------------------------------------------
 
 void MapPortion::updateSpriteWalls() {
-    m_sprites->updateSpriteWalls(m_previewGrid, m_previewDeleteGrid);
+    m_sprites->updateSpriteWalls(m_previewSquares, m_previewDelete);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* MapPortion::getWallAt(GridPosition& gridPosition) {
-    return m_sprites->getWallAt(m_previewGrid, m_previewDeleteGrid,
-                                gridPosition);
+SpriteWallDatas* MapPortion::getWallAt(Position &position) {
+    return m_sprites->getWallAt(m_previewSquares, m_previewDelete, position);
 }
 
 // -------------------------------------------------------
@@ -190,13 +183,8 @@ void MapPortion::clearPreview() {
     for (i = m_previewSquares.begin(); i != m_previewSquares.end(); i++)
         delete i.value();
 
-    QHash<GridPosition, MapElement*>::iterator j;
-    for (j = m_previewGrid.begin(); j != m_previewGrid.end(); j++)
-        delete j.value();
-
     m_previewSquares.clear();
-    m_previewGrid.clear();
-    m_previewDeleteGrid.clear();
+    m_previewDelete.clear();
 }
 
 // -------------------------------------------------------
@@ -207,14 +195,8 @@ void MapPortion::addPreview(Position& p, MapElement* element) {
 
 // -------------------------------------------------------
 
-void MapPortion::addPreviewGrid(GridPosition& p, MapElement* element) {
-    m_previewGrid.insert(p, element);
-}
-
-// -------------------------------------------------------
-
-void MapPortion::addPreviewDeleteGrid(GridPosition& p) {
-    m_previewDeleteGrid.append(p);
+void MapPortion::addPreviewDelete(Position &p) {
+    m_previewDelete.append(p);
 }
 
 // -------------------------------------------------------
@@ -233,14 +215,12 @@ MapElement* MapPortion::updateRaycastingLand(int squareSize,
 MapElement* MapPortion::updateRaycastingSprites(int squareSize,
                                                 float& finalDistance,
                                                 Position& finalPosition,
-                                                GridPosition &finalGridPosition,
                                                 QRay3D &ray,
                                                 double cameraHAngle,
                                                 bool layerOn)
 {
     return m_sprites->updateRaycasting(squareSize, finalDistance, finalPosition,
-                                       finalGridPosition, ray, cameraHAngle,
-                                       layerOn);
+                                       ray, cameraHAngle, layerOn);
 }
 
 // -------------------------------------------------------
@@ -321,9 +301,9 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
 {
     m_lands->initializeVertices(m_previewSquares, squareSize,
                                  tileset->width(), tileset->height());
-    m_sprites->initializeVertices(walls, m_previewSquares, m_previewGrid,
-                                  m_previewDeleteGrid, squareSize,
-                                  tileset->width(), tileset->height());
+    m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
+                                  squareSize, tileset->width(),
+                                  tileset->height());
     m_mapObjects->initializeVertices(squareSize, characters);
 }
 

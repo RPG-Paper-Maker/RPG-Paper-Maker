@@ -182,7 +182,7 @@ void MapObjects::initializeVertices(int squareSize,
             int width = texture->width() / frames / squareSize;
             int height = texture->height() / frames / squareSize;
             SpriteDatas sprite(
-                        state->graphicsKind(), 50, 0,
+                        state->graphicsKind(),
                         new QRect(state->indexX() * width,
                                   state->indexY() * height,
                                   width, height));

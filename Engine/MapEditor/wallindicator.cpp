@@ -40,11 +40,11 @@ void WallIndicator::initializeSquareSize(int s){
     m_squareSize = s;
 }
 
-void WallIndicator::getGridPosition(Position3D& position) {
-    position.setX(m_gridPosition.x());
-    position.setY(m_gridPosition.y());
-    position.setYPlus(m_gridPosition.yPlus());
-    position.setZ(m_gridPosition.z());
+void WallIndicator::getPosition(Position3D& position) {
+    position.setX(m_position.x());
+    position.setY(m_position.y());
+    position.setYPlus(m_position.yPlus());
+    position.setZ(m_position.z());
 }
 
 // -------------------------------------------------------
@@ -53,16 +53,16 @@ void WallIndicator::getGridPosition(Position3D& position) {
 //
 // -------------------------------------------------------
 
-void WallIndicator::setGridPosition(Position3D& pos, int w, int h) {
-    m_gridPosition.setInGrid(pos, w, h);
+void WallIndicator::setPosition(Position3D& pos, int w, int h) {
+    m_position.setInGrid(pos, w - 1, h - 1);
 }
 
 // -------------------------------------------------------
 
 void WallIndicator::get3DPosition(QVector3D& vector) {
-    vector.setX(m_gridPosition.x() * m_squareSize);
-    vector.setY(m_gridPosition.y());
-    vector.setZ(m_gridPosition.z() * m_squareSize);
+    vector.setX(m_position.x() * m_squareSize);
+    vector.setY(m_position.y());
+    vector.setZ(m_position.z() * m_squareSize);
 }
 
 // -------------------------------------------------------

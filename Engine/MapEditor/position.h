@@ -36,6 +36,8 @@ class Position : public Position3D
 public:
     Position();
     Position(int x, int y, int y_plus, int z, int layer);
+    Position(int x, int y, int y_plus, int z, int layer, int centerX,
+             int centerZ, int angle);
     virtual ~Position();
 
     const static int LAYERS_NUMBER = 2;
@@ -46,6 +48,23 @@ public:
     void setCoords(int x, int y, int y_plus, int z);
     int layer() const;
     void setLayer(int l);
+    int centerX() const;
+    void setCenterX(int x);
+    int centerZ() const;
+    void setCenterZ(int z);
+    int angle() const;
+    void setAngle(int a);
+
+    bool isHorizontal() const;
+    void setHorizontal();
+    void setVertical();
+    void setCurrent(Position& position) const;
+    void getLeft(Position& position) const;
+    void getRight(Position& position) const;
+    void getTopLeft(Position& position) const;
+    void getTopRight(Position& position) const;
+    void getBotLeft(Position& position) const;
+    void getBotRight(Position& position) const;
 
     virtual QString toString(int squareSize) const;
 
@@ -54,13 +73,17 @@ public:
 
 protected:
     int m_layer;
+    int m_centerX;
+    int m_centerZ;
+    int m_angle;
 
     void getStringLayerYPlus(QString& infos, int squareSize) const;
 };
 
 inline uint qHash(const Position& pos)
 {
-   return (pos.x() + pos.y() + pos.yPlus() + pos.z() + pos.layer());
+   return (pos.x() + pos.y() + pos.yPlus() + pos.z() + pos.layer()
+           + pos.centerX() + pos.centerZ() + pos.angle());
 }
 
 #endif // POSITION_H

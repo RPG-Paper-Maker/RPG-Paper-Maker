@@ -216,7 +216,6 @@ HEADERS += \
     CustomWidgets/widgetreleasenotes.h \
     MapEditor/mapelement.h \
     MapEditor/wallindicator.h \
-    MapEditor/gridposition.h \
     MapEditor/sprite.h \
     Dialogs/SpecialElements/dialogspritewalls.h \
     Dialogs/SpecialElements/panelspritewalls.h \
@@ -398,7 +397,6 @@ SOURCES += \
     CustomWidgets/widgetreleasenotes.cpp \
     MapEditor/mapelement.cpp \
     MapEditor/wallindicator.cpp \
-    MapEditor/gridposition.cpp \
     MapEditor/sprite.cpp \
     Dialogs/SpecialElements/dialogspritewalls.cpp \
     Dialogs/SpecialElements/panelspritewalls.cpp \

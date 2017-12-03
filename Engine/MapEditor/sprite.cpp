@@ -81,17 +81,13 @@ Sprite::~Sprite()
 // -------------------------------------------------------
 
 SpriteDatas::SpriteDatas() :
-    SpriteDatas(MapEditorSubSelectionKind::SpritesFace, 50, 0,
-                new QRect(0, 0, 2, 2))
+    SpriteDatas(MapEditorSubSelectionKind::SpritesFace, new QRect(0, 0, 2, 2))
 {
 
 }
 
-SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind,
-                         int widthPosition, int angle, QRect *textureRect) :
+SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, QRect *textureRect) :
     m_kind(kind),
-    m_widthPosition(widthPosition),
-    m_angle(angle),
     m_textureRect(textureRect)
 {
 
@@ -123,10 +119,6 @@ QString SpriteDatas::toString() const {
     }
 }
 
-int SpriteDatas::widthPosition() const { return m_widthPosition; }
-
-int SpriteDatas::angle() const { return m_angle; }
-
 QRect* SpriteDatas::textureRect() const { return m_textureRect; }
 
 // -------------------------------------------------------
@@ -139,44 +131,9 @@ void SpriteDatas::getPosSizeCenter(QVector3D& pos, QVector3D& size,
                                    QVector3D& center, QVector3D& offset,
                                    int squareSize, Position& position)
 {
-    // Offset
-    float zPlus = 0, off = position.layer() * 0.05f;
-    if (m_kind == MapEditorSubSelectionKind::SpritesFace) {
-        zPlus += off;
-    }
-    else {
-        switch (m_orientation) {
-        case OrientationKind::West:
-        case OrientationKind::North:
-            zPlus -= off;
-            break;
-        case OrientationKind::East:
-        case OrientationKind::South:
-            zPlus += off;
-            break;
-        default:
-            break;
-        }
-    }
-    offset.setZ(zPlus);
-
-    // Position
-    pos.setX(((float) position.x() + m_xOffset) * squareSize -
-             ((textureRect()->width() - 1) * squareSize / 2));
-    pos.setY((float) position.getY(squareSize) + (m_yOffset * squareSize));
-    pos.setZ(((float) position.z() + m_zOffset) * squareSize +
-             (widthPosition() * squareSize / 100));
-    QVector3D p(pos);
-    pos += offset;
-
-    // Size
-    size.setX((float) textureRect()->width() * squareSize);
-    size.setY((float) textureRect()->height() * squareSize);
-    size.setZ(1.0f);
-
-    // Center
-    center = Sprite::verticesQuad[0] * size + p +
-            QVector3D(size.x() / 2, - size.y() / 2, 0);
+    MapElement::getPosSizeCenter(pos, size, center, offset, squareSize,
+                                 position, textureRect()->width(),
+                                 textureRect()->height());
 }
 
 // -------------------------------------------------------
@@ -215,11 +172,12 @@ void SpriteDatas::initializeVertices(int squareSize,
     case MapEditorSubSelectionKind::SpritesDouble:
     case MapEditorSubSelectionKind::SpritesQuadra:
     {
-        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
-                  vecB = Sprite::verticesQuad[1] * size + pos,
-                  vecC = Sprite::verticesQuad[2] * size + pos,
-                  vecD = Sprite::verticesQuad[3] * size + pos;
+        QVector3D vecA = Sprite::modelQuad[0] * size + pos,
+                  vecB = Sprite::modelQuad[1] * size + pos,
+                  vecC = Sprite::modelQuad[2] * size + pos,
+                  vecD = Sprite::modelQuad[3] * size + pos;
 
+        rotateSprite(vecA, vecB, vecC, vecD, center, position.angle());
         addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                 vecA, vecB, vecC, vecD, texA, texB, texC, texD);
         m_vertices.append(vecA);
@@ -232,7 +190,7 @@ void SpriteDatas::initializeVertices(int squareSize,
                       vecDoubleC(vecC), vecDoubleD(vecD);
 
             rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center,
-                         90);
+                         -90);
             addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                     vecDoubleA, vecDoubleB, vecDoubleC,
                                     vecDoubleD, texA, texB, texC, texD);
@@ -354,10 +312,10 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
         QVector3D pos, size, center, off;
         getPosSizeCenter(pos, size, center, off, squareSize, position);
 
-        QVector3D vecA = Sprite::verticesQuad[0] * size + pos,
-                  vecB = Sprite::verticesQuad[1] * size + pos,
-                  vecC = Sprite::verticesQuad[2] * size + pos,
-                  vecD = Sprite::verticesQuad[3] * size + pos;
+        QVector3D vecA = Sprite::modelQuad[0] * size + pos,
+                  vecB = Sprite::modelQuad[1] * size + pos,
+                  vecC = Sprite::modelQuad[2] * size + pos,
+                  vecD = Sprite::modelQuad[3] * size + pos;
         rotateSprite(vecA, vecB, vecC, vecD, center, cameraHAngle + 90);
         box = QBox3D(vecA, vecC);
         minDistance = box.intersection(ray);
@@ -386,8 +344,6 @@ void SpriteDatas::read(const QJsonObject & json){
     MapElement::read(json);
 
     m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
-    m_widthPosition = json["p"].toInt();
-    m_angle = json["a"].toInt();
 
     QJsonArray tab = json["t"].toArray();
     m_textureRect->setLeft(tab[0].toInt());
@@ -403,8 +359,6 @@ void SpriteDatas::write(QJsonObject & json) const{
     QJsonArray tab;
 
     json["k"] = (int) m_kind;
-    json["p"] = m_widthPosition;
-    json["a"] = m_angle;
 
     // Texture
     tab.append(m_textureRect->left());
@@ -531,7 +485,7 @@ SpriteWallDatas::SpriteWallDatas(int wallID) :
     m_wallID(wallID),
     m_wallKind(SpriteWallKind::Middle)
 {
-    m_isPositionInGrid = true;
+
 }
 
 int SpriteWallDatas::wallID() const {
@@ -552,26 +506,18 @@ MapEditorSubSelectionKind SpriteWallDatas::getSubKind() const {
 //
 // -------------------------------------------------------
 
-void SpriteWallDatas::update(GridPosition& gridPosition) {
-    GridPosition leftGridPosition, rightGridPosition, topLeftGridPosition,
-            botLeftGridPosition, topRightGridPosition, botRightGridPosition;
+void SpriteWallDatas::update(Position &position) {
     SpriteWallDatas *leftSprite, *rightSprite, *topLeftSprite, *botLeftSprite,
             *topRightSprite, *botRightSprite;
     SpriteWallKind kA, kB;
 
     // Getting all sprites
-    gridPosition.getLeft(leftGridPosition);
-    gridPosition.getRight(rightGridPosition);
-    gridPosition.getTopLeft(topLeftGridPosition);
-    gridPosition.getTopRight(topRightGridPosition);
-    gridPosition.getBotLeft(botLeftGridPosition);
-    gridPosition.getBotRight(botRightGridPosition);
-    leftSprite = getWall(leftGridPosition);
-    rightSprite = getWall(rightGridPosition);
-    topLeftSprite = getWall(topLeftGridPosition);
-    topRightSprite = getWall(topRightGridPosition);
-    botLeftSprite = getWall(botLeftGridPosition);
-    botRightSprite = getWall(botRightGridPosition);
+    leftSprite = getLeft(position);
+    rightSprite = getRight(position);
+    topLeftSprite = getTopLeft(position);
+    topRightSprite = getTopRight(position);
+    botLeftSprite = getBotLeft(position);
+    botRightSprite = getBotRight(position);
 
     // Borders
     if (!isWallHere(leftSprite) && !isWallHere(rightSprite))
@@ -619,68 +565,67 @@ SpriteWallKind SpriteWallDatas::addKind(SpriteWallKind kA, SpriteWallKind kB) {
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getWall(GridPosition& gridPosition) {
+SpriteWallDatas* SpriteWallDatas::getWall(Position& position) {
     Map* map = Wanok::get()->project()->currentMap();
-    Portion portion = map->getPortionGrid(gridPosition);
+    Portion portion = map->getLocalPortion(position);
     MapPortion* mapPortion = map->mapPortion(portion);
 
-    return mapPortion != nullptr ? mapPortion->getWallAt(gridPosition)
-                                 : nullptr;
+    return mapPortion != nullptr ? mapPortion->getWallAt(position) : nullptr;
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getLeft(GridPosition& gridPosition) {
-    GridPosition newGridPosition;
-    gridPosition.getLeft(newGridPosition);
+SpriteWallDatas* SpriteWallDatas::getLeft(Position &position) {
+    Position newPosition;
+    position.getLeft(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getRight(GridPosition& gridPosition) {
-    GridPosition newGridPosition;
-    gridPosition.getRight(newGridPosition);
+SpriteWallDatas* SpriteWallDatas::getRight(Position& position) {
+    Position newPosition;
+    position.getRight(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getTopLeft(GridPosition& gridPosition) {
-    GridPosition newGridPosition;
-    gridPosition.getTopLeft(newGridPosition);
+SpriteWallDatas* SpriteWallDatas::getTopLeft(Position &position) {
+    Position newPosition;
+    position.getTopLeft(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getTopRight(GridPosition& gridPosition) {
-    GridPosition newGridPosition;
-    gridPosition.getTopRight(newGridPosition);
+SpriteWallDatas* SpriteWallDatas::getTopRight(Position &position) {
+    Position newPosition;
+    position.getTopRight(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getBotLeft(GridPosition& gridPosition) {
-    GridPosition newGridPosition;
-    gridPosition.getBotLeft(newGridPosition);
+SpriteWallDatas* SpriteWallDatas::getBotLeft(Position &position) {
+    Position newPosition;
+    position.getBotLeft(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* SpriteWallDatas::getBotRight(GridPosition& gridPosition)
+SpriteWallDatas* SpriteWallDatas::getBotRight(Position &position)
 {
-    GridPosition newGridPosition;
-    gridPosition.getBotRight(newGridPosition);
+    Position newPosition;
+    position.getBotRight(newPosition);
 
-    return getWall(newGridPosition);
+    return getWall(newPosition);
 }
 
 // -------------------------------------------------------
@@ -688,10 +633,11 @@ SpriteWallDatas* SpriteWallDatas::getBotRight(GridPosition& gridPosition)
 void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
                                          QVector<Vertex>& vertices,
                                          QVector<GLuint>& indexes,
-                                         GridPosition& position, int& count)
+                                         Position &position, int& count)
 {
-    QVector3D pos, size;
-    getPosSize(pos, size, squareSize, height, position);
+    QVector3D pos, size, center, off;
+    MapElement::getPosSizeCenter(pos, size, center, off, squareSize, position,
+                                 1, height / squareSize);
 
     float x, y, w, h;
     x = (float)((int) m_wallKind * squareSize) / width;
@@ -706,30 +652,15 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
     h -= (coefY * 2);
     QVector2D texA(x, y), texB(x + w, y), texC(x + w, y + h), texD(x, y + h);
 
-    m_vecA = Sprite::verticesQuad[0] * size + pos;
-    m_vecC = Sprite::verticesQuad[2] * size + pos;
-    QVector3D vecB = Sprite::verticesQuad[1] * size + pos,
-              vecD = Sprite::verticesQuad[3] * size + pos;
+    m_vecA = Sprite::modelQuad[0] * size + center;
+    m_vecC = Sprite::modelQuad[2] * size + center;
+    QVector3D vecB = Sprite::modelQuad[1] * size + center,
+              vecD = Sprite::modelQuad[3] * size + center;
 
-    if (!position.isHorizontal())
-        SpriteDatas::rotateSprite(m_vecA, vecB, m_vecC, vecD, vecD, 90);
+    SpriteDatas::rotateSprite(m_vecA, vecB, m_vecC, vecD, center,
+                              position.angle());
     SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, m_vecA, vecB,
                                          m_vecC, vecD, texA, texB, texC, texD);
-}
-
-// -------------------------------------------------------
-
-void SpriteWallDatas::getPosSize(
-        QVector3D& pos, QVector3D& size, int squareSize, int height,
-        GridPosition &gridPosition)
-{
-    pos.setX((float) gridPosition.x1() * squareSize);
-    pos.setY((float) gridPosition.y() * squareSize);
-    pos.setZ((float) gridPosition.z1() * squareSize);
-
-    size.setX(squareSize);
-    size.setY(height);
-    size.setZ(0.0f);
 }
 
 // -------------------------------------------------------

@@ -55,12 +55,12 @@ SpritesWalls::~SpritesWalls()
 //
 // -------------------------------------------------------
 
-void SpritesWalls::initializeVertices(GridPosition& position,
+void SpritesWalls::initializeVertices(Position &position,
                                       SpriteWallDatas* sprite,
                                       int squareSize, int width, int height)
 {
     sprite->initializeVertices(squareSize, width, height, m_vertices,
-                                   m_indexes, position, m_count);
+                               m_indexes, position, m_count);
 }
 
 // -------------------------------------------------------
@@ -120,17 +120,13 @@ Sprites::~Sprites()
     for (i = m_all.begin(); i != m_all.end(); i++)
         delete *i;
 
-    QHash<GridPosition, SpriteWallDatas*>::iterator j;
+    QHash<Position, SpriteWallDatas*>::iterator j;
     for (j = m_walls.begin(); j != m_walls.end(); j++)
         delete *j;
 
-    QHash<GridPosition, SpriteDatas*>::iterator k;
-    for (k = m_spritesOnWalls.begin(); k != m_spritesOnWalls.end(); k++)
+    QHash<int, SpritesWalls*>::iterator k;
+    for (k = m_wallsGL.begin(); k != m_wallsGL.end(); k++)
         delete *k;
-
-    QHash<int, SpritesWalls*>::iterator l;
-    for (l = m_wallsGL.begin(); l != m_wallsGL.end(); l++)
-        delete *l;
 }
 
 void Sprites::addOverflow(Position& p) {
@@ -148,8 +144,7 @@ void Sprites::removeOverflow(Position& p) {
 // -------------------------------------------------------
 
 bool Sprites::isEmpty() const{
-    return m_all.size() == 0 && m_walls.size() == 0 &&
-           m_spritesOnWalls.size() == 0 && m_overflow.size() == 0;
+    return m_all.size() == 0 && m_walls.size() == 0 && m_overflow.size() == 0;
 }
 
 // -------------------------------------------------------
@@ -287,24 +282,6 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 // -------------------------------------------------------
 
-bool Sprites::addSpriteOnWall(QSet<Portion> &portionsOverflow, GridPosition& p,
-                              SpriteDatas *sprite)
-{
-    m_spritesOnWalls[p] = sprite;
-
-    /*
-    // Getting overflowing portions
-    getSetPortionsOverflow(portionsOverflow, p, sprite);
-
-    // Adding to overflowing
-    addRemoveOverflow(portionsOverflow, p, true);
-    */
-
-    return true;
-}
-
-// -------------------------------------------------------
-
 bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
 
@@ -318,13 +295,13 @@ bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
 
 // -------------------------------------------------------
 
-void Sprites::setSpriteWall(GridPosition& p, SpriteWallDatas* sprite) {
+void Sprites::setSpriteWall(Position &p, SpriteWallDatas* sprite) {
     m_walls[p] = sprite;
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* Sprites::removeSpriteWall(GridPosition &p) {
+SpriteWallDatas* Sprites::removeSpriteWall(Position &p) {
     SpriteWallDatas* sprite = m_walls.value(p);
     if (sprite != nullptr){
         m_walls.remove(p);
@@ -336,7 +313,7 @@ SpriteWallDatas* Sprites::removeSpriteWall(GridPosition &p) {
 
 // -------------------------------------------------------
 
-bool Sprites::addSpriteWall(GridPosition& p, int specialID) {
+bool Sprites::addSpriteWall(Position &p, int specialID) {
     SpriteWallDatas* previousSprite = removeSpriteWall(p);
     SpriteWallDatas* sprite = new SpriteWallDatas(specialID);
 
@@ -350,7 +327,7 @@ bool Sprites::addSpriteWall(GridPosition& p, int specialID) {
 
 // -------------------------------------------------------
 
-bool Sprites::deleteSpriteWall(GridPosition& p) {
+bool Sprites::deleteSpriteWall(Position &p) {
     SpriteWallDatas* previousSprite = removeSpriteWall(p);
 
     if (previousSprite != nullptr)
@@ -361,60 +338,57 @@ bool Sprites::deleteSpriteWall(GridPosition& p) {
 
 // -------------------------------------------------------
 
-void Sprites::updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
-                                QList<GridPosition> &previewDeleteGrid) {
-    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
-    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
+void Sprites::updateSpriteWalls(QHash<Position, MapElement *> &preview,
+                                QList<Position> &previewDelete) {
+    QHash<Position, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, preview, previewDelete);
 
-    QHash<GridPosition, SpriteWallDatas*>::iterator i;
+    QHash<Position, SpriteWallDatas*>::iterator i;
     for (i = spritesWallWithPreview.begin(); i != spritesWallWithPreview.end();
          i++)
     {
-        GridPosition gridPosition = i.key();
+        Position position = i.key();
         SpriteWallDatas* sprite = i.value();
 
-        sprite->update(gridPosition);
+        sprite->update(position);
     }
 }
 
 // -------------------------------------------------------
 
-SpriteWallDatas* Sprites::getWallAt(QHash<GridPosition, MapElement*>&
-                                    previewGrid,
-                                    QList<GridPosition> &previewDeleteGrid,
-                                    GridPosition& gridPosition)
+SpriteWallDatas* Sprites::getWallAt(QHash<Position, MapElement *> &preview,
+                                    QList<Position> &previewDelete,
+                                    Position &position)
 {
-    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
-    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
+    QHash<Position, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, preview, previewDelete);
 
-    return spritesWallWithPreview.value(gridPosition);
+    return spritesWallWithPreview.value(position);
 }
 
 // -------------------------------------------------------
 
-void Sprites::getWallsWithPreview(QHash<GridPosition, SpriteWallDatas *> &
-                                  spritesWallWithPreview,
-                                  QHash<GridPosition, MapElement *>&
-                                  previewGrid,
-                                  QList<GridPosition> &previewDeleteGrid)
+void Sprites::getWallsWithPreview(QHash<Position, SpriteWallDatas *>
+                                  &spritesWallWithPreview,
+                                  QHash<Position, MapElement *> &preview,
+                                  QList<Position> &previewDelete)
 {
     spritesWallWithPreview = m_walls;
-    QHash<GridPosition, MapElement*>::iterator itw;
-    for (itw = previewGrid.begin(); itw != previewGrid.end(); itw++) {
+    QHash<Position, MapElement*>::iterator itw;
+    for (itw = preview.begin(); itw != preview.end(); itw++) {
         MapElement* element = itw.value();
         if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall)
             spritesWallWithPreview[itw.key()] = (SpriteWallDatas*) element;
     }
-    for (int i = 0; i < previewDeleteGrid.size(); i++) {
-        spritesWallWithPreview.remove(previewDeleteGrid.at(i));
-    }
+    for (int i = 0; i < previewDelete.size(); i++)
+        spritesWallWithPreview.remove(previewDelete.at(i));
 }
 
 // -------------------------------------------------------
 
 void Sprites::removeSpritesOut(MapProperties& properties) {
     QList<Position> listGlobal;
-    QList<GridPosition> listWalls;
+    QList<Position> listWalls;
 
     // Global sprites
     QHash<Position, SpriteDatas*>::iterator i;
@@ -432,15 +406,15 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
         m_all.remove(listGlobal.at(k));
 
     // Walls sprites
-    QHash<GridPosition, SpriteWallDatas*>::iterator j;
+    QHash<Position, SpriteWallDatas*>::iterator j;
     for (j = m_walls.begin(); j != m_walls.end(); j++) {
-        GridPosition gridPosition = j.key();
+        Position position = j.key();
 
-        if (gridPosition.x1() >= properties.length() ||
-            gridPosition.z1() >= properties.width())
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
         {
             delete j.value();
-            listWalls.push_back(gridPosition);
+            listWalls.push_back(position);
         }
     }
     for (int k = 0; k < listWalls.size(); k++)
@@ -451,7 +425,6 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
 
 MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
                                       Position& finalPosition,
-                                      GridPosition& finalGridPosition,
                                       QRay3D &ray, double cameraHAngle,
                                       bool layerOn)
 {
@@ -486,27 +459,15 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
 
     // If layer on, also check the walls, and sprites on walls
     if (layerOn) {
-        for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
+        for (QHash<Position, SpriteWallDatas*>::iterator i =
              m_walls.begin(); i != m_walls.end(); i++)
         {
-            GridPosition gridPosition = i.key();
+            Position position = i.key();
             SpriteWallDatas *wall = i.value();
-            if (updateRaycastingWallAt(gridPosition, wall, finalDistance,
-                                       finalGridPosition, ray))
+            if (updateRaycastingWallAt(position, wall, finalDistance,
+                                       finalPosition, ray))
             {
                 element = wall;
-            }
-        }
-        for (QHash<GridPosition, SpriteDatas*>::iterator i =
-             m_spritesOnWalls.begin(); i != m_spritesOnWalls.end(); i++)
-        {
-            GridPosition gridPosition = i.key();
-            SpriteDatas *sprite = i.value();
-            if (updateRaycastingSpriteOnWallAt(
-                        gridPosition, sprite, finalDistance, finalGridPosition,
-                        ray))
-            {
-                element = sprite;
             }
         }
     }
@@ -534,24 +495,15 @@ bool Sprites::updateRaycastingAt(
 // -------------------------------------------------------
 
 bool Sprites::updateRaycastingWallAt(
-        GridPosition &gridPosition, SpriteWallDatas* wall, float &finalDistance,
-        GridPosition &finalGridPosition, QRay3D& ray)
+        Position &position, SpriteWallDatas* wall, float &finalDistance,
+        Position &finalPosition, QRay3D& ray)
 {
     float newDistance = wall->intersection(ray);
     if (Wanok::getMinDistance(finalDistance, newDistance)) {
-        finalGridPosition = gridPosition;
+        finalPosition = position;
         return true;
     }
 
-    return false;
-}
-
-// -------------------------------------------------------
-
-bool Sprites::updateRaycastingSpriteOnWallAt(
-        GridPosition &gridPosition, SpriteDatas* sprite,
-        float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray)
-{
     return false;
 }
 
@@ -605,8 +557,7 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
 
 void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
                                  QHash<Position, MapElement *> &previewSquares,
-                                 QHash<GridPosition, MapElement *> &previewGrid,
-                                 QList<GridPosition> &previewDeleteGrid,
+                                 QList<Position> &previewDelete,
                                  int squareSize, int width, int height)
 {
     int countStatic = 0;
@@ -630,11 +581,14 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
          i != previewSquares.end(); i++)
     {
         MapElement* element = i.value();
-        if (element->getKind() == MapEditorSelectionKind::Sprites)
+        if (element->getKind() == MapEditorSelectionKind::Sprites &&
+            element->getSubKind() != MapEditorSubSelectionKind::SpritesWall)
+        {
             spritesWithPreview[i.key()] = (SpriteDatas*) element;
+        }
     }
-    QHash<GridPosition, SpriteWallDatas*> spritesWallWithPreview;
-    getWallsWithPreview(spritesWallWithPreview, previewGrid, previewDeleteGrid);
+    QHash<Position, SpriteWallDatas*> spritesWallWithPreview;
+    getWallsWithPreview(spritesWallWithPreview, previewSquares, previewDelete);
 
     // Initialize vertices in squares
     for (QHash<Position, SpriteDatas*>::iterator i = spritesWithPreview.begin();
@@ -650,10 +604,10 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
     }
 
     // Initialize vertices for walls
-    for (QHash<GridPosition, SpriteWallDatas*>::iterator i =
+    for (QHash<Position, SpriteWallDatas*>::iterator i =
          spritesWallWithPreview.begin(); i != spritesWallWithPreview.end(); i++)
     {
-        GridPosition gridPosition = i.key();
+        Position position = i.key();
         SpriteWallDatas* sprite = i.value();
         int id = sprite->wallID();
         SpritesWalls* sprites = m_wallsGL.value(id);
@@ -665,7 +619,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
         if (texture == nullptr)
             texture = texturesWalls.value(-1);
 
-        sprites->initializeVertices(gridPosition, sprite, squareSize,
+        sprites->initializeVertices(position, sprite, squareSize,
                                     texture->width(), texture->height());
     }
 }
@@ -749,7 +703,7 @@ void Sprites::read(const QJsonObject & json){
     tab = json["walls"].toArray();
     for (int i = 0; i < tab.size(); i++){
         QJsonObject obj = tab.at(i).toObject();
-        GridPosition p;
+        Position p;
         p.read(obj["k"].toArray());
         QJsonObject objVal = obj["v"].toObject();
         SpriteWallDatas* sprite = new SpriteWallDatas;
@@ -789,7 +743,7 @@ void Sprites::write(QJsonObject & json) const{
     json["list"] = tabGlobals;
 
     // Walls
-    for (QHash<GridPosition, SpriteWallDatas*>::const_iterator i =
+    for (QHash<Position, SpriteWallDatas*>::const_iterator i =
          m_walls.begin(); i != m_walls.end(); i++)
     {
         QJsonObject objHash;

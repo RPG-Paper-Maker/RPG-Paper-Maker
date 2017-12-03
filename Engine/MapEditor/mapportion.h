@@ -53,13 +53,11 @@ public:
     bool deleteLand(Position& p);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas *sprite);
-    bool addSpriteOnWall(QSet<Portion>& portionsOverflow, GridPosition& p,
-                         SpriteDatas *sprite);
     bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p);
-    bool addSpriteWall(GridPosition& gridPosition, int specialID);
-    bool deleteSpriteWall(GridPosition& gridPosition);
+    bool addSpriteWall(Position& position, int specialID);
+    bool deleteSpriteWall(Position& position);
     void updateSpriteWalls();
-    SpriteWallDatas* getWallAt(GridPosition& gridPosition);
+    SpriteWallDatas* getWallAt(Position& position);
     bool addObject(Position& p, SystemCommonObject* o);
     bool deleteObject(Position& p);
     void addOverflow(Position& p);
@@ -70,13 +68,11 @@ public:
                           MapProperties& properties);
     void clearPreview();
     void addPreview(Position& p, MapElement* element);
-    void addPreviewGrid(GridPosition& p, MapElement* element);
-    void addPreviewDeleteGrid(GridPosition& p);
+    void addPreviewDelete(Position& p);
     MapElement* updateRaycastingLand(int squareSize, float& finalDistance,
                                      Position &finalPosition, QRay3D& ray);
     MapElement* updateRaycastingSprites(int squareSize, float& finalDistance,
                                         Position &finalPosition,
-                                        GridPosition &finalGridPosition,
                                         QRay3D& ray, double cameraHAngle,
                                         bool layerOn);
     MapElement* updateRaycastingOverflowSprite(int squareSize,
@@ -121,8 +117,7 @@ private:
     Sprites* m_sprites;
     MapObjects* m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;
-    QHash<GridPosition, MapElement*> m_previewGrid;
-    QList<GridPosition> m_previewDeleteGrid;
+    QList<Position> m_previewDelete;
     bool m_isVisible;
     bool m_isLoaded;
 };

@@ -34,7 +34,6 @@
 #include "mapeditorsubselectionkind.h"
 #include "mapproperties.h"
 #include "mapelement.h"
-#include "gridposition.h"
 #include "spritewallkind.h"
 #include "qray3d.h"
 
@@ -70,14 +69,11 @@ class SpriteDatas : public MapElement
 {
 public:
     SpriteDatas();
-    SpriteDatas(MapEditorSubSelectionKind kind, int widthPosition,
-                int angle, QRect* textureRect);
+    SpriteDatas(MapEditorSubSelectionKind kind, QRect* textureRect);
     virtual ~SpriteDatas();
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
-    int widthPosition() const;
-    int angle() const;
     QRect* textureRect() const;
     void getPosSizeCenter(QVector3D& pos, QVector3D& size, QVector3D& center,
                           QVector3D &offset, int squareSize,
@@ -107,8 +103,6 @@ public:
 
 protected:
     MapEditorSubSelectionKind m_kind;
-    int m_widthPosition;
-    int m_angle;
     QRect* m_textureRect;
     QList<QVector3D> m_vertices;
 };
@@ -164,22 +158,20 @@ public:
     int wallID() const;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
-    void update(GridPosition& gridPosition);
+    void update(Position& position);
     bool isWallHere(SpriteWallDatas* sprite);
     static SpriteWallKind addKind(SpriteWallKind kA, SpriteWallKind kB);
-    static SpriteWallDatas* getWall(GridPosition& gridPosition);
-    static SpriteWallDatas* getLeft(GridPosition& gridPosition);
-    static SpriteWallDatas* getRight(GridPosition& gridPosition);
-    static SpriteWallDatas* getTopLeft(GridPosition& gridPosition);
-    static SpriteWallDatas* getTopRight(GridPosition& gridPosition);
-    static SpriteWallDatas* getBotLeft(GridPosition& gridPosition);
-    static SpriteWallDatas* getBotRight(GridPosition& gridPosition);
+    static SpriteWallDatas* getWall(Position& position);
+    static SpriteWallDatas* getLeft(Position& position);
+    static SpriteWallDatas* getRight(Position &position);
+    static SpriteWallDatas* getTopLeft(Position& position);
+    static SpriteWallDatas* getTopRight(Position& position);
+    static SpriteWallDatas* getBotLeft(Position& position);
+    static SpriteWallDatas* getBotRight(Position& position);
     virtual void initializeVertices(int squareSize, int width, int height,
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
-                                    GridPosition& position, int& count);
-    void getPosSize(QVector3D& pos, QVector3D& size, int squareSize, int height,
-                    GridPosition &gridPosition);
+                                    Position& position, int& count);
     float intersection(QRay3D& ray);
     virtual QString toString() const;
 

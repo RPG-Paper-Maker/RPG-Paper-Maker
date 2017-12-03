@@ -250,10 +250,10 @@ QString Map::writeMap(QString path, MapProperties& properties,
                      properties);
 
     // Portions
-    int lx = properties.length() / Wanok::portionSize;
+    int lx = (properties.length() - 1) / Wanok::portionSize;
     int ly = (properties.depth() + properties.height() - 1) /
             Wanok::portionSize;;
-    int lz = properties.width() / Wanok::portionSize;
+    int lz = (properties.width() - 1) / Wanok::portionSize;
     for (int i = 0; i <= lx; i++){
         for (int j = 0; j <= ly; j++){
             for (int k = 0; k <= lz; k++){
@@ -856,25 +856,6 @@ Portion Map::getLocalPortion(Position3D& position) const{
                 (m_cursor->getSquareY() / Wanok::portionSize),
                 (position.z() / Wanok::portionSize) -
                 (m_cursor->getSquareZ() / Wanok::portionSize));
-}
-
-// -------------------------------------------------------
-
-Portion Map::getPortionGrid(GridPosition& gridPosition) const {
-    Position3D p;
-    gridPosition.getSquare(p);
-
-    return getLocalPortion(p);
-}
-
-// -------------------------------------------------------
-
-bool Map::isVisibleGridPosition(GridPosition& position) const {
-    Position3D p;
-    position.getSquare(p);
-    Portion portion = getLocalPortion(p);
-
-    return isInGrid(p) && isInPortion(portion);
 }
 
 // -------------------------------------------------------

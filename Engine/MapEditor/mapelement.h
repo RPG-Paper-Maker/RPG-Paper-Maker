@@ -25,6 +25,8 @@
 #include "serializable.h"
 #include "orientationkind.h"
 #include "cameraupdownkind.h"
+#include "position.h"
+#include <QVector3D>
 
 // -------------------------------------------------------
 //
@@ -44,7 +46,6 @@ public:
     void setXOffset(int x);
     void setYOffset(int y);
     void setZOffset(int z);
-    bool isPositionInGrid() const;
 
     static QString jsonOrientation;
     static QString jsonUp;
@@ -55,6 +56,10 @@ public:
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
+    virtual void getPosSizeCenter(QVector3D& pos, QVector3D& size,
+                                  QVector3D& center, QVector3D &offset,
+                                  int squareSize, Position &position, int width,
+                                  int height);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -65,7 +70,6 @@ protected:
     int m_xOffset;
     int m_yOffset;
     int m_zOffset;
-    bool m_isPositionInGrid;
 };
 
 #endif // MAPELEMENT_H

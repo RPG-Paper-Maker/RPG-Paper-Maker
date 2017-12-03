@@ -94,10 +94,9 @@ public:
                              MapEditorSubSelectionKind subKind,
                              CameraUpDownKind upDown, bool layerOn,
                              QRect& tileset, Position& position);
-    void getWallSpritesPositions(QList<GridPosition> &positions);
+    void getWallSpritesPositions(QList<Position> &positions);
     void updatePreviewWallSprites(int specialID);
-    void updatePreviewWallSprite(GridPosition &gridPosition,
-                                 int specialID);
+    void updatePreviewWallSprite(Position &position, int specialID);
     void updatePreviewOthers(MapEditorSelectionKind kind,
                              MapEditorSubSelectionKind subKind,
                              OrientationKind orientation, bool layerOn,
@@ -105,7 +104,7 @@ public:
                              int zOffset);
     void updatePreviewElement(Position& p, Portion &portion,
                               MapElement* element);
-    void updatePreviewElementGrid(GridPosition &p, Portion &portion,
+    void updatePreviewElementGrid(Position &p, Portion &portion,
                                   MapElement* element);
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion& newPortion);
@@ -127,7 +126,7 @@ public:
             Position &position, MapEditorSelectionKind selection,
             MapEditorSubSelectionKind subSelection, bool layerOn,
             bool isForDisplay = false) const;
-    void add(MapElement *element, MapEditorSelectionKind selection,
+    void add(MapEditorSelectionKind selection,
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
     void remove(MapElement* element, MapEditorSelectionKind selection,
@@ -149,9 +148,9 @@ public:
                    MapEditorSubSelectionKind kind, bool layerOn);
     void removeLand(Position& p, DrawKind drawKind, bool layerOn);
     void eraseLand(Position& p);
-    void addSprite(MapElement* element, Position& p,
-                   MapEditorSubSelectionKind kind, DrawKind drawKind,
-                   bool layerOn, QRect& tileset);
+    void addSprite(
+            Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
+            bool layerOn, QRect& tileset);
     SpriteDatas *getCompleteSprite(OrientationKind orientation,
                                    MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
@@ -159,12 +158,11 @@ public:
     void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, SpriteDatas *sprite,
                      MapEditorSubSelectionKind kind, bool layerOn);
-    void stockSpriteWall(GridPosition& gridPosition, int specialID);
-    void stockSpriteOnWall(GridPosition& gridPosition, SpriteDatas *sprite);
+    void stockSpriteWall(Position& position, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
     void eraseSprite(Position& p);
-    void eraseSpriteWall(GridPosition& gridPosition);
+    void eraseSpriteWall(Position& position);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
     void defineAsHero();
@@ -225,7 +223,6 @@ private:
     QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
     Position m_positionOnPlane;
-    GridPosition m_positionOnGrid;
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;

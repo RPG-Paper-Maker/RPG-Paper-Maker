@@ -318,45 +318,24 @@ void ProjectUpdater::updateVersion_0_4_0() {
         QString pathMapProperties = m_listMapPropertiesPaths.at(i);
         Wanok::writeOtherJSON(pathMapProperties, objMapProperties);
 
-        // Adding extremities empty map portions (for grid positions)
-        int length = objMapProperties["l"].toInt();
-        int width = objMapProperties["w"].toInt();
-        int l = length / Wanok::portionSize;
-        int w = width / Wanok::portionSize;
-        int d = objMapProperties["d"].toInt() / Wanok::portionSize;
-        int h = objMapProperties["h"].toInt() / Wanok::portionSize;
-        if (width % Wanok::portionSize == 0) {
-            for (int a = 0; a <= l; a++) {
-                for (int b = -d; b < h; b++) {
-                    QJsonObject obj;
-                    Wanok::writeOtherJSON(
-                                Wanok::pathCombine(
-                                    m_listMapPaths.at(i),
-                                    Map::getPortionPathMap(a, b, w)),
-                                obj);
-                }
-            }
-        }
-        if (length % Wanok::portionSize == 0) {
-            for (int c = 0; c <= w; c++) {
-                for (int b = -d; b < h; b++) {
-                    QJsonObject obj;
-                    Wanok::writeOtherJSON(
-                                Wanok::pathCombine(
-                                    m_listMapPaths.at(i),
-                                    Map::getPortionPathMap(l, b, c)),
-                                obj);
-                }
-            }
-        }
-
         for (int j = 0; j < mapPortions->size(); j++) {
             QJsonObject obj = mapPortions->at(j);
 
-            // Add lands and floors inside
+            // Add lands and floors inside and removing width and angle for
+            // each sprite
             QJsonObject objSprites = obj["sprites"].toObject();
             objSprites["walls"] = QJsonArray();
             objSprites["overflow"] = QJsonArray();
+            QJsonArray tabSprites = objSprites["list"].toArray();
+            for (int k = 0; k < tabSprites.size(); k++){
+                QJsonObject obj = tabSprites.at(k).toObject();
+                QJsonObject objSprite = obj["v"].toObject();
+                objSprite.remove("p");
+                objSprite.remove("a");
+                obj["v"] = objSprite;
+                tabSprites[k] = obj;
+            }
+            objSprites["list"] = tabSprites;
             obj["sprites"] = objSprites;
 
             // Add lands and floors inside

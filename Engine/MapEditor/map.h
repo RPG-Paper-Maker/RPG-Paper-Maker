@@ -136,8 +136,6 @@ public:
                        int offset = -1) const;
     static Portion getGlobalPortion(Position3D &position);
     Portion getLocalPortion(Position3D &position) const;
-    Portion getPortionGrid(GridPosition& gridPosition) const;
-    bool isVisibleGridPosition(GridPosition& position) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
     Portion getLocalFromGlobalPortion(Portion& portion) const;
     void save();

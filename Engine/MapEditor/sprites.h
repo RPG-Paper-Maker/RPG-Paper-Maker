@@ -35,7 +35,7 @@ class SpritesWalls : protected QOpenGLFunctions
 public:
     SpritesWalls();
     virtual ~SpritesWalls();
-    void initializeVertices(GridPosition& position, SpriteWallDatas* sprite,
+    void initializeVertices(Position& position, SpriteWallDatas* sprite,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* program);
     void updateGL();
@@ -81,38 +81,31 @@ public:
     SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
     bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
                    SpriteDatas *sprite);
-    bool addSpriteOnWall(QSet<Portion> &portionsOverflow, GridPosition& p,
-                         SpriteDatas *sprite);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p);
-    void setSpriteWall(GridPosition& p, SpriteWallDatas* sprite);
-    SpriteWallDatas* removeSpriteWall(GridPosition& p);
-    bool addSpriteWall(GridPosition& p, int specialID);
-    bool deleteSpriteWall(GridPosition& p);
-    void updateSpriteWalls(QHash<GridPosition, MapElement*>& previewGrid,
-                           QList<GridPosition> &previewDeleteGrid);
-    SpriteWallDatas* getWallAt(QHash<GridPosition, MapElement*>& previewGrid,
-                               QList<GridPosition> &previewDeleteGrid,
-                               GridPosition& gridPosition);
-    void getWallsWithPreview(QHash<GridPosition, SpriteWallDatas*>&
+    void setSpriteWall(Position& p, SpriteWallDatas* sprite);
+    SpriteWallDatas* removeSpriteWall(Position& p);
+    bool addSpriteWall(Position& p, int specialID);
+    bool deleteSpriteWall(Position& p);
+    void updateSpriteWalls(QHash<Position, MapElement*>& preview,
+                           QList<Position> &previewDelete);
+    SpriteWallDatas* getWallAt(QHash<Position, MapElement*>& preview,
+                               QList<Position> &previewDelete,
+                               Position& position);
+    void getWallsWithPreview(QHash<Position, SpriteWallDatas*>&
                              spritesWallWithPreview,
-                             QHash<GridPosition, MapElement *>&
-                             previewGrid,
-                             QList<GridPosition>& previewDeleteGrid);
+                             QHash<Position, MapElement *>& preview,
+                             QList<Position>& previewDelete);
     void removeSpritesOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition,
-                                 GridPosition &finalGridPosition, QRay3D &ray,
+                                 Position &finalPosition, QRay3D &ray,
                                  double cameraHAngle, bool layerOn);
     bool updateRaycastingAt(
             Position &position, SpriteDatas* sprite, int squareSize,
             float &finalDistance, Position &finalPosition, QRay3D& ray,
             double cameraHAngle);
     bool updateRaycastingWallAt(
-            GridPosition &gridPosition, SpriteWallDatas* wall,
-            float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray);
-    bool updateRaycastingSpriteOnWallAt(
-            GridPosition &gridPosition, SpriteDatas* sprite,
-            float &finalDistance, GridPosition &finalGridPosition, QRay3D& ray);
+            Position &position, SpriteWallDatas* wall,
+            float &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;
@@ -120,8 +113,7 @@ public:
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,
-                            QHash<GridPosition, MapElement*>& previewGrid,
-                            QList<GridPosition>& previewDeleteGrid,
+                            QList<Position>& previewDelete,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram* programFace);
@@ -135,8 +127,7 @@ public:
 
 protected:
     QHash<Position, SpriteDatas*> m_all;
-    QHash<GridPosition, SpriteWallDatas*> m_walls;
-    QHash<GridPosition, SpriteDatas*> m_spritesOnWalls;
+    QHash<Position, SpriteWallDatas*> m_walls;
     QHash<int, SpritesWalls*> m_wallsGL;
     QSet<Position> m_overflow;
 

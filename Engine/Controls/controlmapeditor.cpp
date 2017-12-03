@@ -433,7 +433,7 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
 {
     m_elementOnSprite = mapPortion->updateRaycastingSprites(
                 m_map->squareSize(), m_distanceSprite, m_positionOnSprite,
-                m_positionOnGrid, ray, m_camera->horizontalAngle(), layerOn);
+                ray, m_camera->horizontalAngle(), layerOn);
 }
 
 // -------------------------------------------------------
@@ -520,13 +520,13 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 
 void ControlMapEditor::updateWallIndicator() {
     if (!m_isDrawingWall && !m_isDeletingWall) {
-        m_beginWallIndicator->setGridPosition(m_positionOnPlane,
-                                              m_map->mapProperties()->length(),
-                                              m_map->mapProperties()->width());
+        m_beginWallIndicator->setPosition(m_positionOnPlane,
+                                          m_map->mapProperties()->length(),
+                                          m_map->mapProperties()->width());
     }
-    m_endWallIndicator->setGridPosition(m_positionOnPlane,
-                                        m_map->mapProperties()->length(),
-                                        m_map->mapProperties()->width());
+    m_endWallIndicator->setPosition(m_positionOnPlane,
+                                    m_map->mapProperties()->length(),
+                                    m_map->mapProperties()->width());
 }
 
 // -------------------------------------------------------
@@ -535,7 +535,7 @@ void ControlMapEditor::updatePreviewElements(
         MapEditorSelectionKind kind, MapEditorSubSelectionKind subKind,
         DrawKind drawKind, bool layerOn, QRect& tileset, int specialID)
 {
-    if (drawKind == DrawKind::Pin || m_isDeleting)
+    if (drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall))
         return;
 
     Position position;
@@ -616,11 +616,11 @@ void ControlMapEditor::updatePreviewFloors(MapEditorSelectionKind kind,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::getWallSpritesPositions(QList<GridPosition>& positions) {
+void ControlMapEditor::getWallSpritesPositions(QList<Position> &positions) {
     int x, y, yPlus, z;
     Position3D begin, end;
-    m_beginWallIndicator->getGridPosition(begin);
-    m_endWallIndicator->getGridPosition(end);
+    m_beginWallIndicator->getPosition(begin);
+    m_endWallIndicator->getPosition(end);
 
     // Can't build a wall if not in the same height
     if (begin.y() != end.y())
@@ -633,11 +633,8 @@ void ControlMapEditor::getWallSpritesPositions(QList<GridPosition>& positions) {
         int upZ = qMin(begin.z(), end.z());
         int downZ = qMax(begin.z(), end.z());
 
-        for (int i = upZ; i < downZ; i++) {
-            Position shortPosition(x, y, yPlus, i, 0);
-            GridPosition gridPosition(shortPosition, false);
-            positions.append(gridPosition);
-        }
+        for (int i = upZ; i < downZ; i++)
+            positions.append(Position(x, y, yPlus, i, 0, 0, 50, -90));
     }
 
     // Horizontal
@@ -646,18 +643,15 @@ void ControlMapEditor::getWallSpritesPositions(QList<GridPosition>& positions) {
         int leftX = qMin(begin.x(), end.x());
         int rightX = qMax(begin.x(), end.x());
 
-        for (int i = leftX; i < rightX; i++) {
-            Position shortPosition(i, y, yPlus, z, 0);
-            GridPosition gridPosition(shortPosition, true);
-            positions.append(gridPosition);
-        }
+        for (int i = leftX; i < rightX; i++)
+            positions.append(Position(i, y, yPlus, z, 0, 50, 0, 0));
     }
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePreviewWallSprites(int specialID) {
-    QList<GridPosition> positions;
+    QList<Position> positions;
     getWallSpritesPositions(positions);
 
     for (int i = 0; i < positions.size(); i++)
@@ -666,17 +660,15 @@ void ControlMapEditor::updatePreviewWallSprites(int specialID) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewWallSprite(GridPosition& gridPosition,
+void ControlMapEditor::updatePreviewWallSprite(Position &position,
                                                int specialID)
 {
-    Position3D p;
-    gridPosition.getSquare(p);
-    Portion portion = m_map->getLocalPortion(p);
+    Portion portion = m_map->getLocalPortion(position);
 
-    if (m_map->isInGrid(p) && m_map->isInPortion(portion)) {
+    if (m_map->isInGrid(position) && m_map->isInPortion(portion)) {
         MapElement* element = m_isDeletingWall ? nullptr
                                                : new SpriteWallDatas(specialID);
-        updatePreviewElementGrid(gridPosition, portion, element);
+        updatePreviewElementGrid(position, portion, element);
     }
 }
 
@@ -724,15 +716,14 @@ void ControlMapEditor::updatePreviewElement(Position &p, Portion& portion,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewElementGrid(GridPosition& p,
-                                                Portion &portion,
+void ControlMapEditor::updatePreviewElementGrid(Position &p, Portion &portion,
                                                 MapElement* element)
 {
     MapPortion* mapPortion = m_map->mapPortion(portion);
     if (element == nullptr)
-        mapPortion->addPreviewDeleteGrid(p);
+        mapPortion->addPreviewDelete(p);
     else
-        mapPortion->addPreviewGrid(p, element);
+        mapPortion->addPreview(p, element);
     m_portionsToUpdate += mapPortion;
     m_portionsPreviousPreview += mapPortion;
 }
@@ -920,9 +911,9 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {
-            m_beginWallIndicator->setGridPosition(
-                        p, m_map->mapProperties()->length(),
-                        m_map->mapProperties()->width());
+            m_beginWallIndicator->setPosition(p,
+                                              m_map->mapProperties()->length(),
+                                              m_map->mapProperties()->width());
         }
     }
     else {
@@ -930,11 +921,15 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
             if (m_isDeleting)
                 remove(element, selection, drawKind, p, layerOn);
             else {
-                add(element, selection, subSelection, drawKind, layerOn,
+                add(selection, subSelection, drawKind, layerOn,
                     tileset, specialID, p);
             }
         }
     }
+
+    // Avoid pointing to a deleted element before the next raycasting
+    m_elementOnLand = nullptr;
+    m_elementOnSprite = nullptr;
 }
 
 // -------------------------------------------------------
@@ -969,8 +964,7 @@ MapElement* ControlMapEditor::getPositionSelected(
 
 // -------------------------------------------------------
 
-void ControlMapEditor::add(MapElement* element,
-                           MapEditorSelectionKind selection,
+void ControlMapEditor::add(MapEditorSelectionKind selection,
                            MapEditorSubSelectionKind subSelection,
                            DrawKind drawKind, bool layerOn,
                            QRect& tileset, int specialID,
@@ -982,7 +976,7 @@ void ControlMapEditor::add(MapElement* element,
             addFloor(p, subSelection, drawKind, layerOn, tileset, specialID);
             break;
         case MapEditorSelectionKind::Sprites:
-            addSprite(element, p, subSelection, drawKind, layerOn, tileset);
+            addSprite(p, subSelection, drawKind, layerOn, tileset);
         case MapEditorSelectionKind::Objects:
             setCursorObjectPosition(p); break;
         default:
@@ -1330,9 +1324,10 @@ void ControlMapEditor::eraseLand(Position& p){
 // -------------------------------------------------------
 
 void ControlMapEditor::addSprite(
-        MapElement *element, Position& p,MapEditorSubSelectionKind kind,
+        Position& p,MapEditorSubSelectionKind kind,
         DrawKind drawKind, bool layerOn, QRect& tileset)
 {
+    QList<Position> positions;
     OrientationKind orientation = m_camera->orientationFromTargetKind();
     int xOffset = m_positionRealOnSprite.x() - p.x();
     int yOffset = m_positionRealOnSprite.y() - p.y();
@@ -1344,17 +1339,12 @@ void ControlMapEditor::addSprite(
     case DrawKind::Pencil:
         sprite = getCompleteSprite(orientation, kind, xOffset, yOffset,
                                    zOffset, tileset, layerOn);
-        if (element->isPositionInGrid())
-            stockSpriteOnWall(m_positionOnGrid, sprite);
-        else {
-            QList<Position> positions;
-            stockSprite(p, sprite, kind, layerOn);
-            traceLine(m_previousMouseCoords, p, positions);
-            for (int i = 0; i < positions.size(); i++) {
-                sprite = getCompleteSprite(orientation, kind, xOffset, yOffset,
-                                           zOffset, tileset, layerOn);
-                stockSprite(positions[i], sprite, kind, layerOn);
-            }
+        stockSprite(p, sprite, kind, layerOn);
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++) {
+            sprite = getCompleteSprite(orientation, kind, xOffset, yOffset,
+                                       zOffset, tileset, layerOn);
+            stockSprite(positions[i], sprite, kind, layerOn);
         }
         break;
     case DrawKind::Pin:
@@ -1373,7 +1363,7 @@ SpriteDatas* ControlMapEditor::getCompleteSprite(
         int xOffset, int yOffset, int zOffset, QRect& tileset,
         bool layerOn) const
 {
-    SpriteDatas* sprite = new SpriteDatas(kind, 50, 0, new QRect(tileset));
+    SpriteDatas* sprite = new SpriteDatas(kind, new QRect(tileset));
     if (layerOn) {
         sprite->setOrientation(orientation);
         sprite->setXOffset(xOffset);
@@ -1391,7 +1381,7 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
     if (specialID == -1)
         return;
 
-    QList<GridPosition> positions;
+    QList<Position> positions;
 
     // Pencil
     switch (drawKind) {
@@ -1445,14 +1435,14 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
+void ControlMapEditor::stockSpriteWall(Position &position,
                                        int specialID)
 {
-    if (m_map->isVisibleGridPosition(gridPosition)) {
-        Portion portion = m_map->getPortionGrid(gridPosition);
+    if (m_map->isInGrid(position)) {
+        Portion portion = m_map->getLocalPortion(position);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->addSpriteWall(gridPosition, specialID) &&
+            if (mapPortion->addSpriteWall(position, specialID) &&
                 m_map->saved())
             {
                 setToNotSaved();
@@ -1462,40 +1452,6 @@ void ControlMapEditor::stockSpriteWall(GridPosition& gridPosition,
             m_portionsToSave += mapPortion;
         }
     }
-}
-
-// -------------------------------------------------------
-
-void ControlMapEditor::stockSpriteOnWall(GridPosition& gridPosition,
-                                         SpriteDatas *sprite)
-{
-    if (m_map->isVisibleGridPosition(gridPosition)) {
-        Portion portion = m_map->getPortionGrid(gridPosition);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-
-            // Update layer
-            gridPosition.setLayer(gridPosition.layer() + 1);
-
-            // Add the sprite
-            QSet<Portion> portionsOverflow;
-            if (mapPortion->addSpriteOnWall(portionsOverflow,
-                                            gridPosition, sprite) &&
-                m_map->saved())
-            {
-                setToNotSaved();
-            }
-
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
-            m_needMapInfosToSave = true;
-            updatePortionsToSaveOverflow(portionsOverflow);
-
-            return;
-        }
-    }
-
-    delete sprite;
 }
 
 // -------------------------------------------------------
@@ -1528,7 +1484,7 @@ void ControlMapEditor::removeSprite(Position& p, DrawKind drawKind) {
 // -------------------------------------------------------
 
 void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
-    QList<GridPosition> positions;
+    QList<Position> positions;
 
     // Pencil
     switch (drawKind) {
@@ -1565,12 +1521,12 @@ void ControlMapEditor::eraseSprite(Position& p){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseSpriteWall(GridPosition& gridPosition) {
-    if (m_map->isVisibleGridPosition(gridPosition)) {
-        Portion portion = m_map->getPortionGrid(gridPosition);
+void ControlMapEditor::eraseSpriteWall(Position &position) {
+    if (m_map->isInGrid(position)) {
+        Portion portion = m_map->getLocalPortion(position);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->deleteSpriteWall(gridPosition) && m_map->saved())
+            if (mapPortion->deleteSpriteWall(position) && m_map->saved())
             {
                 setToNotSaved();
             }
@@ -2025,20 +1981,13 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
                                          bool layerOn)
 {
     Position position;
-    QString positionString;
     MapElement* element = getPositionSelected(position, kind, subKind, layerOn,
                                               true);
-    if (element != nullptr && element->isPositionInGrid()) {
-        positionString = m_positionOnGrid.toString(m_map->squareSize());
-    }
-    else {
-        positionString = position.toString(m_map->squareSize());
-        if (!m_map->isInGrid(position))
-            return "";
-    }
+    if (!m_map->isInGrid(position))
+        return "";
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
-            + "\n" + positionString;
+            + "\n" + position.toString(m_map->squareSize());
 }
 
 // -------------------------------------------------------

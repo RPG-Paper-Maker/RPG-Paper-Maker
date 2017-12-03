@@ -18,6 +18,7 @@
 */
 
 #include "mapelement.h"
+#include "sprite.h"
 
 QString MapElement::jsonOrientation = "o";
 QString MapElement::jsonUp = "up";
@@ -36,8 +37,7 @@ MapElement::MapElement() :
     m_up(CameraUpDownKind::None),
     m_xOffset(0),
     m_yOffset(0),
-    m_zOffset(0),
-    m_isPositionInGrid(false)
+    m_zOffset(0)
 {
 
 }
@@ -67,8 +67,6 @@ void MapElement::setZOffset(int z) {
     m_zOffset = z;
 }
 
-bool MapElement::isPositionInGrid() const { return m_isPositionInGrid; }
-
 MapEditorSelectionKind MapElement::getKind() const{
     return MapEditorSelectionKind::Land;
 }
@@ -78,6 +76,53 @@ MapEditorSubSelectionKind MapElement::getSubKind() const{
 }
 
 QString MapElement::toString() const { return ""; }
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void MapElement::getPosSizeCenter(
+        QVector3D& pos, QVector3D& size, QVector3D& center, QVector3D &offset,
+        int squareSize, Position &position, int width, int height)
+{
+    // Offset
+    float zPlus = 0, off = position.layer() * 0.05f;
+    if (getSubKind() == MapEditorSubSelectionKind::SpritesFace)
+        zPlus += off;
+    else {
+        switch (m_orientation) {
+        case OrientationKind::West:
+        case OrientationKind::North:
+            zPlus -= off;
+            break;
+        case OrientationKind::East:
+        case OrientationKind::South:
+            zPlus += off;
+            break;
+        default:
+            break;
+        }
+    }
+    offset.setZ(zPlus);
+
+    // Size
+    size.setX((float) width * squareSize);
+    size.setY((float) height * squareSize);
+    size.setZ(1.0f);
+
+    // Center
+    center.setX((position.x() + m_xOffset) * squareSize +
+                ((int)(squareSize * position.centerX() / 100.0)));
+    center.setY((float) position.getY(squareSize) +
+                ((m_yOffset + (height / 2.0)) * squareSize));
+    center.setZ((position.z() + m_zOffset) * squareSize +
+                ((int)(squareSize * position.centerZ() / 100.0)));
+
+    // Position
+    pos = center + offset;
+}
 
 // -------------------------------------------------------
 //
