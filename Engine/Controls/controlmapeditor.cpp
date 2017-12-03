@@ -278,8 +278,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, m_distancePlane);
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
                              m_camera->positionZ());
-    QRay3D ray(cameraPosition, rayDirection);
-    getPortionsInRay(portions, ray);
+    m_ray.setOrigin(cameraPosition);
+    m_ray.setDirection(rayDirection);
+    getPortionsInRay(portions);
 
     // Others
     m_distanceLand = 0;
@@ -291,11 +292,11 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
             Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
             m_map->mapProperties()->updateRaycastingOverflowSprites(
                         globalPortion, m_distanceSprite, m_positionOnSprite,
-                        ray, m_camera->horizontalAngle());
+                        m_ray, m_camera->horizontalAngle());
         }
         else {
-            updateRaycastingLand(mapPortion, ray);
-            updateRaycastingSprites(mapPortion, ray, layerOn);
+            updateRaycastingLand(mapPortion);
+            updateRaycastingSprites(mapPortion, layerOn);
         }
     }
 
@@ -314,8 +315,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
-    QVector3D direction = ray.direction();
+void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
+    QVector3D direction = m_ray.direction();
 
     // Getting here the portion were is positioned the camera first
     Position positionCamera;
@@ -348,7 +349,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         QBox3D box(leftBotCorner, rightTopCorner);
 
         // Testing intersection
-        float distance = box.intersection(ray);
+        float distance = box.intersection(m_ray);
         if (isnan(distance))
             return;
         else {
@@ -374,13 +375,12 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions, QRay3D& ray) {
         adjacents << Portion(0, 0, -1);
 
     // Update the portions ray with adjacent portions
-    updatePortionsInRay(portions, ray, adjacents);
+    updatePortionsInRay(portions, adjacents);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
-                                           QRay3D &ray,
                                            QList<Portion>& adjacents)
 {
     Portion portion = portions.first();
@@ -408,10 +408,10 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
             QBox3D box(leftBotCorner, rightTopCorner);
 
             // Testing intersection
-            float distance = box.intersection(ray);
+            float distance = box.intersection(m_ray);
             if (!isnan(distance)) {
                 portions.insert(0, adjacent);
-                updatePortionsInRay(portions, ray, adjacents);
+                updatePortionsInRay(portions, adjacents);
                 return;
             }
         }
@@ -420,20 +420,20 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion, QRay3D& ray)
+void ControlMapEditor::updateRaycastingLand(MapPortion* mapPortion)
 {
     m_elementOnLand = mapPortion->updateRaycastingLand(
-                m_map->squareSize(), m_distanceLand, m_positionOnLand, ray);
+                m_map->squareSize(), m_distanceLand, m_positionOnLand, m_ray);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updateRaycastingSprites(MapPortion* mapPortion,
-                                               QRay3D& ray, bool layerOn)
+                                               bool layerOn)
 {
     m_elementOnSprite = mapPortion->updateRaycastingSprites(
                 m_map->squareSize(), m_distanceSprite, m_positionOnSprite,
-                ray, m_camera->horizontalAngle(), layerOn);
+                m_ray, m_camera->horizontalAngle(), layerOn);
 }
 
 // -------------------------------------------------------
@@ -541,7 +541,7 @@ void ControlMapEditor::updatePreviewElements(
     Position position;
     getPositionSelected(position, kind, subKind, layerOn);
     bool up = m_camera->cameraUp();
-    bool front = m_camera->cameraFront(position.angle());
+    bool front = m_camera->cameraFront(m_ray.direction(), position.angle());
     int xOffset = m_positionRealOnSprite.x() - position.x();
     int yOffset = m_positionRealOnSprite.y() - position.y();
     int zOffset = m_positionRealOnSprite.z() - position.z();
@@ -1322,7 +1322,7 @@ void ControlMapEditor::addSprite(
         DrawKind drawKind, bool layerOn, QRect& tileset)
 {
     QList<Position> positions;
-    bool front = m_camera->cameraFront(0);
+    bool front = m_camera->cameraFront(m_ray.direction(), p.angle());
     int xOffset = m_positionRealOnSprite.x() - p.x();
     int yOffset = m_positionRealOnSprite.y() - p.y();
     int zOffset = m_positionRealOnSprite.z() - p.z();

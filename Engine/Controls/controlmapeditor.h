@@ -68,11 +68,11 @@ public:
     void updateMousePosition(QPoint point);
     bool mousePositionChanged(QPoint point);
     void updateRaycasting(bool layerOn);
-    void getPortionsInRay(QList<Portion>& portions, QRay3D &ray);
-    void updatePortionsInRay(QList<Portion>& portions, QRay3D &ray,
+    void getPortionsInRay(QList<Portion>& portions);
+    void updatePortionsInRay(QList<Portion>& portions,
                              QList<Portion> &adjacents);
-    void updateRaycastingLand(MapPortion*mapPortion, QRay3D& ray);
-    void updateRaycastingSprites(MapPortion *mapPortion, QRay3D& ray,
+    void updateRaycastingLand(MapPortion*mapPortion);
+    void updateRaycastingSprites(MapPortion *mapPortion,
                                  bool layerOn);
     QVector3D transformToNormalizedCoords(const QPoint& mouse);
     QVector4D transformToHomogeneousClip(QVector3D& normalized);
@@ -220,6 +220,7 @@ private:
     QPoint m_mouse;
     QPoint m_mouseMove;
     QPoint m_mouseBeforeUpdate;
+    QRay3D m_ray;
     Position m_positionOnPlane;
     Position m_positionOnLand;
     Position m_positionOnSprite;
