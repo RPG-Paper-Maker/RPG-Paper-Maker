@@ -201,7 +201,10 @@ void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
     int yPlus = getYpx(squareSize);
     if (yPlus > 0)
         infos += "y+ = " + QString::number(yPlus) + "px\n";
-    infos += "Layer = " + QString::number(m_layer);
+    infos += "Layer = " + QString::number(m_layer) + "\nAngle = " +
+            QString::number(m_angle) + "\nCenter x = " +
+            QString::number(m_centerX) + "%\nCenter z = " +
+            QString::number(m_centerZ) + "%";
 }
 
 // -------------------------------------------------------

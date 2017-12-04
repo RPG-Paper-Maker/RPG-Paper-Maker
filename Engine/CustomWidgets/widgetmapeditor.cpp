@@ -42,16 +42,6 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
-
-    QSurfaceFormat  format;
-     //format.setSamples(4);
-     //format.setDepthBufferSize(24);
-     //format.setStencilBufferSize(8);
-       format.setProfile(QSurfaceFormat::OpenGLContextProfile::CompatibilityProfile);
-     QSurfaceFormat::setDefaultFormat(format);
-
-    this->setFormat(format);
-
     // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()),
@@ -442,9 +432,10 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
             DrawKind drawKind = m_menuBar->drawKind();
             QString messageError;
             bool layerOn = m_menuBar->layerOn();
-            if (m_control.isTinPaintPossible(selection, drawKind, messageError)
+            if (button == Qt::MouseButton::MiddleButton ||
+                (m_control.isTinPaintPossible(selection, drawKind, messageError)
                 && m_control.isPutLayerPossible(subSelection, drawKind, layerOn,
-                                                messageError))
+                                                messageError)))
             {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subSelection);
@@ -506,7 +497,6 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
         if (m_keysPressed.isEmpty()){
             m_firstPressure = true;
             m_timerFirstPressure->start(35);
-            //m_control.onKeyPressedWithoutRepeat(event->key());
             onKeyPress(event->key(), -1);
             m_control.cursor()->updatePositionSquare();
         }

@@ -308,6 +308,21 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
         m_positionRealOnSprite = m_positionOnPlane;
     }
     else {
+        Position positionLayerZero(m_positionOnSprite);
+        positionLayerZero.setLayer(0);
+        Portion portion = m_map->getLocalPortion(positionLayerZero);
+        MapPortion* mapPortion = m_map->mapPortion(portion);
+        MapElement* element = mapPortion->getMapElementAt(
+                    positionLayerZero, MapEditorSelectionKind::Sprites,
+                    MapEditorSubSelectionKind::None);
+        if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall) {
+            m_distanceSprite = ((SpriteWallDatas*) element)->intersectionPlane(
+                        positionLayerZero.angle(), m_ray);
+        }
+        else {
+            m_distanceSprite = ((SpriteDatas*) element)->intersectionPlane(
+                        positionLayerZero.angle(), m_ray);
+        }
         getCorrectPositionOnRay(m_positionRealOnSprite, rayDirection,
                                 m_distanceSprite);
     }
@@ -498,13 +513,13 @@ QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance){
 void ControlMapEditor::getCorrectPositionOnRay(Position &position,
                                                QVector3D &ray, int distance){
     QVector3D point = getPositionOnRay(ray, distance);
-    int x = ((int) point.x() - 1) / m_map->squareSize();
+    int x = qRound(point.x() + 1) / m_map->squareSize();
     int y = ((int) point.y() - 1) / m_map->squareSize();
     int yPlus = (((int) point.y()) % m_map->squareSize() / m_map->squareSize())
             * 100;
-    int z = ((int) point.z()) / m_map->squareSize();
-    if (point.x() < 0) x--;
-    if (point.z() < 0) z--;
+    int z = qRound(point.z() + 1) / m_map->squareSize();
+    if ((int)point.x() < 0) x--;
+    if ((int)point.z() < 0) z--;
 
     position.setX(x);
     position.setY(y);

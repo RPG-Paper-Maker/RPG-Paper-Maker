@@ -98,6 +98,7 @@ public:
                                         QVector2D& texC, QVector2D& texD);
     float intersection(int squareSize, QRay3D& ray, Position& position,
                        int cameraHAngle);
+    float intersectionPlane(int angle, QRay3D& ray);
 
     static QString jsonFront;
 
@@ -178,6 +179,7 @@ public:
                                     QVector<GLuint>& indexes,
                                     Position& position, int& count);
     float intersection(QRay3D& ray);
+    float intersectionPlane(int angle, QRay3D& ray);
     virtual QString toString() const;
 
     virtual void read(const QJsonObject &json);

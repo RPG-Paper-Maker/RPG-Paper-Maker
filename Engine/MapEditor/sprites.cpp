@@ -368,6 +368,12 @@ SpriteWallDatas* Sprites::getWallAt(QHash<Position, MapElement *> &preview,
 
 // -------------------------------------------------------
 
+SpriteWallDatas* Sprites::getWallAtPosition(Position& position) {
+    return m_walls.value(position);
+}
+
+// -------------------------------------------------------
+
 void Sprites::getWallsWithPreview(QHash<Position, SpriteWallDatas *>
                                   &spritesWallWithPreview,
                                   QHash<Position, MapElement *> &preview,
@@ -512,8 +518,17 @@ bool Sprites::updateRaycastingWallAt(
 MapElement* Sprites::getMapElementAt(Position& position,
                                      MapEditorSubSelectionKind subKind)
 {
-    return (subKind == MapEditorSubSelectionKind::SpritesWall)
-            ? nullptr : spriteAt(position);
+    MapElement* element;
+
+    switch (subKind) {
+    case MapEditorSubSelectionKind::SpritesWall:
+        return getWallAtPosition(position);
+    case MapEditorSubSelectionKind::None:
+        element = spriteAt(position);
+        return element == nullptr ? getWallAtPosition(position) : element;
+    default:
+        return spriteAt(position);
+    }
 }
 
 // -------------------------------------------------------
@@ -521,7 +536,7 @@ MapElement* Sprites::getMapElementAt(Position& position,
 int Sprites::getLastLayerAt(Position& position) const {
     int count = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(), position.z(),
-               count);
+               count, position.centerX(), position.centerZ(), position.angle());
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {
@@ -539,7 +554,8 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
                                 Position& position) {
     int i = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(),
-               position.z(), i);
+               position.z(), i, position.centerX(), position.centerZ(),
+               position.angle());
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {

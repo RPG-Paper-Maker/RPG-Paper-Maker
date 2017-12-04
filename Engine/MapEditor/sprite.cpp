@@ -21,6 +21,8 @@
 #include "map.h"
 #include "wanok.h"
 #include "qbox3d.h"
+#include "qplane3d.h"
+#include <math.h>
 
 // -------------------------------------------------------
 //
@@ -171,21 +173,20 @@ void SpriteDatas::initializeVertices(int squareSize,
 
     // Adding to buffers according to the kind of sprite
     m_vertices.clear();
+    QVector3D vecA = Sprite::modelQuad[0] * size + pos,
+              vecB = Sprite::modelQuad[1] * size + pos,
+              vecC = Sprite::modelQuad[2] * size + pos,
+              vecD = Sprite::modelQuad[3] * size + pos;
+    rotateSprite(vecA, vecB, vecC, vecD, center, position.angle());
+    m_vertices.append(vecA);
+    m_vertices.append(vecC);
     switch (m_kind) {
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesDouble:
     case MapEditorSubSelectionKind::SpritesQuadra:
     {
-        QVector3D vecA = Sprite::modelQuad[0] * size + pos,
-                  vecB = Sprite::modelQuad[1] * size + pos,
-                  vecC = Sprite::modelQuad[2] * size + pos,
-                  vecD = Sprite::modelQuad[3] * size + pos;
-
-        rotateSprite(vecA, vecB, vecC, vecD, center, position.angle());
         addStaticSpriteToBuffer(verticesStatic, indexesStatic, countStatic,
                                 vecA, vecB, vecC, vecD, texA, texB, texC, texD);
-        m_vertices.append(vecA);
-        m_vertices.append(vecC);
 
         // If double sprite, add one sprite more
         if (m_kind == MapEditorSubSelectionKind::SpritesDouble ||
@@ -336,6 +337,21 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
     }
 
     return minDistance;
+}
+
+// -------------------------------------------------------
+
+float SpriteDatas::intersectionPlane(int angle, QRay3D& ray)
+{
+    QVector3D normal(0, 0, 1);
+    QMatrix4x4 m;
+    m.rotate(-angle, 0.0, 1.0, 0.0);
+    normal = normal * m;
+
+    QPlane3D plane(m_vertices.isEmpty() ? QVector3D() : m_vertices.at(0),
+                   normal);
+
+    return plane.intersection(ray);
 }
 
 // -------------------------------------------------------
@@ -686,6 +702,18 @@ float SpriteWallDatas::intersection(QRay3D& ray)
 {
     QBox3D box(m_vecA, m_vecC);
     return box.intersection(ray);
+}
+
+// -------------------------------------------------------
+
+float SpriteWallDatas::intersectionPlane(int angle, QRay3D& ray) {
+    QVector3D normal(0, 0, 1);
+    QMatrix4x4 m;
+    m.rotate(-angle, 0.0, 1.0, 0.0);
+    normal = normal * m;
+    QPlane3D plane(m_vecA, normal);
+
+    return plane.intersection(ray);
 }
 
 // -------------------------------------------------------

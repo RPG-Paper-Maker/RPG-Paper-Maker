@@ -91,6 +91,7 @@ public:
     SpriteWallDatas* getWallAt(QHash<Position, MapElement*>& preview,
                                QList<Position> &previewDelete,
                                Position& position);
+    SpriteWallDatas* getWallAtPosition(Position& position);
     void getWallsWithPreview(QHash<Position, SpriteWallDatas*>&
                              spritesWallWithPreview,
                              QHash<Position, MapElement *>& preview,
