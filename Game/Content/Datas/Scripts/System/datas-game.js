@@ -70,7 +70,7 @@ DatasGame.prototype = {
     readSettings: function(){
         this.settings = {};
 
-        Wanok.openFile(this, Wanok.FILE_VARIABLES, true, function(res){
+        RPM.openFile(this, RPM.FILE_VARIABLES, true, function(res){
             var json = JSON.parse(res).variables;
 
             this.variablesNumbers =

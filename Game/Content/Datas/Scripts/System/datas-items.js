@@ -37,7 +37,7 @@ DatasItems.prototype = {
     /** Read the JSON file associated to items.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_ITEMS, true, function(res){
+        RPM.openFile(this, RPM.FILE_ITEMS, true, function(res){
             var json = JSON.parse(res).items;
             var i, l = json.length;
             this.list = new Array(l+1);

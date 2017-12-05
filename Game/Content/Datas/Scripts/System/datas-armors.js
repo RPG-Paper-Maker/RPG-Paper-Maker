@@ -37,7 +37,7 @@ DatasArmors.prototype = {
     /** Read the JSON file associated to armors.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_ARMORS, true, function(res){
+        RPM.openFile(this, RPM.FILE_ARMORS, true, function(res){
             var json = JSON.parse(res)["armors"];
             var i, l = json.length;
             this.list = new Array(l+1);

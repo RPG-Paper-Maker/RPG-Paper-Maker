@@ -63,9 +63,9 @@ function GraphicText(text, align, fontSize, fontName, x, y, w, h){
     this.align = align;
 
     // Font
-    this.fontWithoutResize = Wanok.createFont(fontSize, fontName);
-    fontSize = Wanok.getScreenXY(fontSize);
-    this.font = Wanok.createFont(fontSize, fontName);
+    this.fontWithoutResize = RPM.createFont(fontSize, fontName);
+    fontSize = RPM.getScreenXY(fontSize);
+    this.font = RPM.createFont(fontSize, fontName);
     this.fontSize = fontSize;
 }
 
@@ -124,10 +124,10 @@ GraphicText.prototype = {
         if (typeof w === 'undefined') w = this.w;
         if (typeof h === 'undefined') h = this.h;
 
-        x = Wanok.getScreenX(x);
-        y = Wanok.getScreenY(y);
-        w = Wanok.getScreenX(w);
-        h = Wanok.getScreenY(h);
+        x = RPM.getScreenX(x);
+        y = RPM.getScreenY(y);
+        w = RPM.getScreenX(w);
+        h = RPM.getScreenY(h);
 
         // Set context options
         context.fillStyle = "white";

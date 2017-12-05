@@ -97,7 +97,7 @@ GameStack.prototype = {
     *   @returns {boolean}
     */
     isEmpty: function() {
-        return Wanok.isEmpty(this.content);
+        return RPM.isEmpty(this.content);
     },
 
     // -------------------------------------------------------

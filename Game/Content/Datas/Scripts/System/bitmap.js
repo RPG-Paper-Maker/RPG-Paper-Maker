@@ -55,7 +55,7 @@ Bitmap.prototype = {
     *   @param {number} x The x value.
     */
     setX: function(x){
-        this.x = Wanok.getScreenX(x);
+        this.x = RPM.getScreenX(x);
     },
 
     // -------------------------------------------------------
@@ -64,7 +64,7 @@ Bitmap.prototype = {
     *   @param {number} y The y value.
     */
     setY: function(y){
-        this.y = Wanok.getScreenY(y);
+        this.y = RPM.getScreenY(y);
     },
 
     // -------------------------------------------------------
@@ -73,7 +73,7 @@ Bitmap.prototype = {
     *   @param {number} w The w value.
     */
     setW: function(w){
-        this.w = Wanok.getScreenX(w);
+        this.w = RPM.getScreenX(w);
     },
 
     // -------------------------------------------------------
@@ -82,7 +82,7 @@ Bitmap.prototype = {
     *   @param {number} h The h value.
     */
     setH: function(h){
-        this.h = Wanok.getScreenY(h);
+        this.h = RPM.getScreenY(h);
     },
 
     // -------------------------------------------------------

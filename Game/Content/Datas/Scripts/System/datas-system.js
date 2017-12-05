@@ -43,7 +43,7 @@ DatasSystem.prototype = {
     /** Read the JSON file associated to system.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_SYSTEM, true, function(res){
+        RPM.openFile(this, RPM.FILE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
             var jsonItemsTypes = json.itemsTypes;
             var i, l = jsonItemsTypes.length;
@@ -56,7 +56,7 @@ DatasSystem.prototype = {
             $FRAMES = json.frames;
 
             // Path BR
-            Wanok.PATH_BR = "file:///" + json.pathBR + "/";
+            RPM.PATH_BR = "file:///" + json.pathBR + "/";
 
             // Hero beginning
             this.idMapStartHero = json.idMapHero;
@@ -82,8 +82,8 @@ DatasSystem.prototype = {
     /** Update the $modelHero global variable by loading the hero model.
     */
     getModelHero: function(){
-        var mapName = Wanok.generateMapName(this.idMapStartHero);
-        Wanok.openFile(null, Wanok.FILE_MAPS + mapName + Wanok.FILE_MAP_OBJECTS,
+        var mapName = RPM.generateMapName(this.idMapStartHero);
+        RPM.openFile(null, RPM.FILE_MAPS + mapName + RPM.FILE_MAP_OBJECTS,
                        true, function(res)
         {
             var json = JSON.parse(res).objs;
@@ -106,7 +106,7 @@ DatasSystem.prototype = {
                                                    globalPortion[1],
                                                    globalPortion[2]);
 
-            Wanok.openFile(null, Wanok.FILE_MAPS + mapName + "/" + fileName,
+            RPM.openFile(null, RPM.FILE_MAPS + mapName + "/" + fileName,
                            false, function(res){
                 var json = JSON.parse(res);
                 var mapPortion = new MapPortion(globalPortion[0],

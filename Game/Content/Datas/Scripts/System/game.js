@@ -204,7 +204,7 @@ Game.prototype = {
         for (i = 0; i < l; i++)
             hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
 
-        Wanok.openFile(this, Wanok.FILE_SAVE, true, function(res){
+        RPM.openFile(this, RPM.FILE_SAVE, true, function(res){
             var jsonList = JSON.parse(res);
             jsonList[slot - 1] =
             {
@@ -223,7 +223,7 @@ Game.prototype = {
                 heroStates: this.heroStates,
                 mapsDatas : this.getCompressedMapsDatas()
             };
-            Wanok.saveFile(Wanok.FILE_SAVE, jsonList);
+            RPM.saveFile(RPM.FILE_SAVE, jsonList);
         });
     },
 

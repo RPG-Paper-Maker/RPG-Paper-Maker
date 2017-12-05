@@ -75,7 +75,7 @@ Window {
     Timer {
         interval: 1000; running: true; repeat: true
         onTriggered: {
-            Game.Wanok.updateTimer();
+            Game.RPM.updateTimer();
         }
     }
 
@@ -103,7 +103,7 @@ Window {
 
                 if (!event.isAutoRepeat){
                     Game.$keysPressed.unshift(key);
-                    if (!Game.Wanok.isLoading())
+                    if (!Game.RPM.isLoading())
                         Game.onKeyPressed(key);
                 }
 
@@ -111,7 +111,7 @@ Window {
                 var t = new Date().getTime();
                 if (t - startTime >= 50){
                     startTime = t;
-                    if (!Game.Wanok.isLoading())
+                    if (!Game.RPM.isLoading())
                         Game.onKeyPressedAndRepeat(key);
                 }
             }
@@ -126,7 +126,7 @@ Window {
                 var key = event.key;
                 Game.$keysPressed.splice(Game.$keysPressed.indexOf(key), 1);
 
-                if (!Game.Wanok.isLoading())
+                if (!Game.RPM.isLoading())
                     Game.onKeyReleased(key);
             }
             catch (e){
@@ -160,7 +160,7 @@ Window {
 
         onPaintGL: {
             try{
-                if (!Game.Wanok.isLoading()) {
+                if (!Game.RPM.isLoading()) {
                     if (!Game.$gameStack.isEmpty()) {
                         var callback =
                                 Game.$gameStack.top().callBackAfterLoading;

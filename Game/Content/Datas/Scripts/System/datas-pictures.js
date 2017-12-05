@@ -37,12 +37,12 @@ DatasPictures.prototype = {
     /** Read the JSON file associated to pictures.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_PICTURES_DATAS, true, function(res){
+        RPM.openFile(this, RPM.FILE_PICTURES_DATAS, true, function(res){
             var json = JSON.parse(res).list;
             var i, j, l, ll, lll;
             var list;
 
-            l = Wanok.countFields(PictureKind) - 1;
+            l = RPM.countFields(PictureKind) - 1;
             this.list = new Array(l);
             for (i = 0; i < l; i++){
                 var jsonHash = json[i];

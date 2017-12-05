@@ -37,7 +37,7 @@ DatasTilesets.prototype = {
     /** Read the JSON file associated to tilesets.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_TILESETS_DATAS, true, function(res){
+        RPM.openFile(this, RPM.FILE_TILESETS_DATAS, true, function(res){
             var json = JSON.parse(res).list;
             var i, l = json.length;
             this.list = new Array(l+1);

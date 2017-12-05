@@ -47,7 +47,7 @@ DatasCommonEvents.prototype = {
     /** Read the JSON file associated to common events.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_COMMON_EVENTS, true, function(res){
+        RPM.openFile(this, RPM.FILE_COMMON_EVENTS, true, function(res){
             var json = JSON.parse(res);
             var i, l;
 

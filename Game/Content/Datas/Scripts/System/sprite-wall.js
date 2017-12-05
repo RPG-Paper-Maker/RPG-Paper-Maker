@@ -73,7 +73,7 @@ SpriteWall.prototype = {
             size = new THREE.Vector3($SQUARE_SIZE, height, 0);
         var x, y, w, h, coefX, coefY;
         var texFaceA, texFaceB;
-        var localPosition = Wanok.positionToVector3(position);
+        var localPosition = RPM.positionToVector3(position);
 
         // Scale
         vecA.multiply(size);
@@ -112,7 +112,7 @@ SpriteWall.prototype = {
             new THREE.Vector2(x,y+h)
         ];
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
-                            Wanok.positionAngle(position));
+                            RPM.positionAngle(position));
         c = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD,
                                              texFaceA, texFaceB, c);
 

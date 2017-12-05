@@ -228,10 +228,6 @@
                 "target": "Content/basic/Content/Datas/Scripts/System/system-item.js"
             },
             {
-                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/wanok.js",
-                "target": "Content/basic/Content/Datas/Scripts/System/wanok.js"
-            },
-            {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/datas-armors.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/datas-armors.js"
             },
@@ -402,6 +398,28 @@
     	{
     		"v": "0.3.1",
     		"add": [],
+    		"remove": [],
+    		"replace": [],
+    		"features": ["Preview of floors and sprites when moving mouse in the map editor grid"],
+    		"bugs": ["Engine updater was displayed even without connexion"]
+    	},
+    	{
+    		"v": "0.4.0",
+    		"add": [
+    			{
+    				"files": [
+    					{
+			                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Content/BR/Content/Pictures/Textures2D/Walls/grass.png",
+			                "target": "Content/BR/Content/Pictures/Textures2D/Walls/grass.png"
+			            },
+			            {
+			                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside1.png",
+			                "target": "Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
+			            }
+    				],
+	                "target": "Content/BR/Content/Pictures/Textures2D/Walls"
+    			}
+    		],
     		"remove": [],
     		"replace": [],
     		"features": ["Preview of floors and sprites when moving mouse in the map editor grid"],

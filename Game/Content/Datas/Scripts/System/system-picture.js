@@ -54,7 +54,7 @@ function SystemPicture(){
 *   @returns {string}
 */
 SystemPicture.getFolder = function(kind, isBR){
-    var folder = isBR ? Wanok.PATH_BR
+    var folder = isBR ? RPM.PATH_BR
                       : $ROOT_DIRECTORY;
 
     return folder + SystemPicture.getLocalFolder(kind);
@@ -70,19 +70,19 @@ SystemPicture.getLocalFolder = function(kind){
 
     switch(kind){
     case PictureKind.Bars:
-        return Wanok.PATH_BARS;
+        return RPM.PATH_BARS;
     case PictureKind.Icons:
-        return Wanok.PATH_ICONS;
+        return RPM.PATH_ICONS;
     case PictureKind.Autotiles:
-        return Wanok.PATH_AUTOTILES;
+        return RPM.PATH_AUTOTILES;
     case PictureKind.Characters:
-        return Wanok.PATH_CHARACTERS;
+        return RPM.PATH_CHARACTERS;
     case PictureKind.Reliefs:
-        return Wanok.PATH_RELIEFS;
+        return RPM.PATH_RELIEFS;
     case PictureKind.Tilesets:
-        return Wanok.PATH_TILESETS;
+        return RPM.PATH_TILESETS;
     case PictureKind.Walls:
-        return Wanok.PATH_WALLS;
+        return RPM.PATH_WALLS;
     }
 
     return "";

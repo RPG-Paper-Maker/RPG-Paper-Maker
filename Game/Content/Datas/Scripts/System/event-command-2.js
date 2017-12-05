@@ -642,7 +642,7 @@ EventCommandTeleportObject.prototype = {
 
                 // Set object's position
                 if (this.objectIDPosition === null){
-                    currentState.position = Wanok.positionToVector3(
+                    currentState.position = RPM.positionToVector3(
                         [
                             this.x.getValue(),
                             this.y.getValue(),

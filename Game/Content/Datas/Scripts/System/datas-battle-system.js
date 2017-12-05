@@ -45,7 +45,7 @@ DatasBattleSystem.prototype = {
     /** Read the JSON file associated to battle system.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_BATTLE_SYSTEM, true, function(res){
+        RPM.openFile(this, RPM.FILE_BATTLE_SYSTEM, true, function(res){
             var json = JSON.parse(res);
             var id;
 

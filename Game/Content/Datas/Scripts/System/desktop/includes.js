@@ -1,4 +1,4 @@
-Qt.include("../wanok.js")
+Qt.include("../rpm.js")
 Qt.include("../utilities.js")
 Qt.include("../datas-game.js")
 Qt.include("../datas-pictures.js")

@@ -42,13 +42,13 @@ function SceneMap(id){
 
     $currentMap = this;
     this.id = id;
-    this.mapName = Wanok.generateMapName(id);
+    this.mapName = RPM.generateMapName(id);
     this.scene = new THREE.Scene();
     this.camera = new Camera(250, -90, 55);
     this.camera.update();
     this.orientation = this.camera.getMapOrientation();
     this.readMapInfos();
-    this.currentPortion = Wanok.getPortion($game.hero.position);
+    this.currentPortion = RPM.getPortion($game.hero.position);
     this.callBackAfterLoading = this.loadTextures;
 }
 
@@ -80,8 +80,8 @@ SceneMap.prototype = {
     /** Read the map infos file.
     */
     readMapInfos: function(){
-        Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName +
-                       Wanok.FILE_MAP_INFOS, true, function(res)
+        RPM.openFile(this, RPM.FILE_MAPS + this.mapName +
+                       RPM.FILE_MAP_INFOS, true, function(res)
         {
             var json = JSON.parse(res);
 
@@ -117,7 +117,7 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     loadPortions: function(){
-        this.currentPortion = Wanok.getPortion($game.hero.position);
+        this.currentPortion = RPM.getPortion($game.hero.position);
 
         var limit = this.getMapPortionLimit();
         this.mapPortions = new Array(this.getMapPortionTotalSize());
@@ -153,7 +153,7 @@ SceneMap.prototype = {
             realZ >= 0 && realZ <= lz)
         {
             var fileName = SceneMap.getPortionName(realX, realY, realZ);
-            Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName + "/" +
+            RPM.openFile(this, RPM.FILE_MAPS + this.mapName + "/" +
                            fileName, wait, function(res)
             {
                 var json = JSON.parse(res);
@@ -198,8 +198,8 @@ SceneMap.prototype = {
     /** Initialize the map objects
     */
     initializeObjects: function(){
-        Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName +
-                       Wanok.FILE_MAP_OBJECTS, true, function(res)
+        RPM.openFile(this, RPM.FILE_MAPS + this.mapName +
+                       RPM.FILE_MAP_OBJECTS, true, function(res)
         {
             var json = JSON.parse(res).objs;
             var i, l;
@@ -343,7 +343,7 @@ SceneMap.prototype = {
 
             },
             function (t) {
-                Wanok.showErrorMessage("Could not load " + path);
+                RPM.showErrorMessage("Could not load " + path);
             }
         );
         texture.magFilter = THREE.NearestFilter;
@@ -464,9 +464,9 @@ SceneMap.prototype = {
     // -------------------------------------------------------
 
     updateMovingPortions: function() {
-        var newPortion = Wanok.getPortion($game.hero.position);
+        var newPortion = RPM.getPortion($game.hero.position);
 
-        if (!Wanok.arePortionEquals(newPortion, this.currentPortion)){
+        if (!RPM.arePortionEquals(newPortion, this.currentPortion)){
             this.updateMovingPortionsEastWest(newPortion);
             this.updateMovingPortionsNorthSouth(newPortion);
             this.updateMovingPortionsUpDown(newPortion);

@@ -357,6 +357,15 @@ void EngineUpdater::downloadScripts() {
 
 // -------------------------------------------------------
 
+void EngineUpdater::removePreviousScripts() {
+    QDir dir(Wanok::pathScriptsSystemDir);
+    dir.removeRecursively();
+    dir.cdUp();
+    dir.mkdir("System");
+}
+
+// -------------------------------------------------------
+
 void EngineUpdater::getVersions(QJsonArray& versions) const {
     QJsonArray tab = m_document["versions"].toArray();
     for (int i = m_index; i < tab.size(); i++)
@@ -443,6 +452,7 @@ void EngineUpdater::update() {
 
     // Executables
     emit progress(80, "Downloading all the system scripts...");
+    removePreviousScripts();
     downloadScripts();
 
     // System scripts

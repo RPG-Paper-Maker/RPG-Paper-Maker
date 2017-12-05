@@ -125,7 +125,7 @@ Sprite.prototype = {
         MapElement.prototype.scale.call(this, vecA, vecB, vecC, vecD, center,
                                         position, size, this.kind);
         Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
-                            Wanok.positionAngle(position));
+                            RPM.positionAngle(position));
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;

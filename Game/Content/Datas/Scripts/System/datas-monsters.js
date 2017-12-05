@@ -37,7 +37,7 @@ DatasMonsters.prototype = {
     /** Read the JSON file associated to monsters.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_MONSTERS, true, function(res){
+        RPM.openFile(this, RPM.FILE_MONSTERS, true, function(res){
             var json = JSON.parse(res).monsters;
             var i, l = json.length;
             this.list = new Array(l+1);

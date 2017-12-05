@@ -18,8 +18,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     Content/Datas/Scripts/System/desktop/includes.js \
-    Content/Datas/Scripts/System/wanok.js \
-    Content/Datas/Scripts/System/utilities.js \
     Content/Datas/Scripts/System/main.js \
     Content/Datas/Scripts/System/battler.js \
     Content/Datas/Scripts/System/camera.js \
@@ -106,7 +104,8 @@ DISTFILES += \
     Content/Datas/Scripts/System/system-wall.js \
     Content/Datas/Scripts/System/datas-special-elements.js \
     Content/Datas/Scripts/System/map-element.js \
-    Content/Datas/Scripts/System/floor.js
+    Content/Datas/Scripts/System/floor.js \
+    Content/Datas/Scripts/System/rpm.js
 
 RESOURCES += \
     qml.qrc

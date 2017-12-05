@@ -144,7 +144,7 @@ SceneMenu.prototype = {
      // -------------------------------------------------------
 
     update: function(){
-        this.textPlayTime.text = Wanok.getStringDate($game.playTime);
+        this.textPlayTime.text = RPM.getStringDate($game.playTime);
     },
 
     // -------------------------------------------------------

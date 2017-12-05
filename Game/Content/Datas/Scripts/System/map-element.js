@@ -64,7 +64,7 @@ MapElement.prototype = {
     *   @param {THREE.Vector3} center The center to rotate around.
     */
     scale: function(vecA, vecB, vecC, vecD, center, position, size, kind) {
-        var zPlus = Wanok.positionLayer(position) * 0.05;
+        var zPlus = RPM.positionLayer(position) * 0.05;
 
         // Apply an offset according to layer position
         if (kind !== ElementMapKind.SpritesFace && !this.front)

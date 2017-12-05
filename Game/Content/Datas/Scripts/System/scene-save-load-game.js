@@ -71,7 +71,7 @@ SceneSaveLoadGame.prototype = {
     initializeGames: function(){
         this.gamesDatas = [null, null, null, null];
 
-        Wanok.openFile(this, Wanok.FILE_SAVE, true, function(res){
+        RPM.openFile(this, RPM.FILE_SAVE, true, function(res){
             var jsonList = JSON.parse(res);
             var game, j, ll;
 

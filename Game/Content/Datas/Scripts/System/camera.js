@@ -152,6 +152,6 @@ Camera.prototype = {
     /** Update the camera angle.
     */
     getMapOrientation: function() {
-        return Wanok.mod(Math.round((this.horizontalAngle) / 90) - 1, 4);
+        return RPM.mod(Math.round((this.horizontalAngle) / 90) - 1, 4);
     }
 }

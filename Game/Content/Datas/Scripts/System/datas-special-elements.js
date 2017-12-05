@@ -37,7 +37,7 @@ DatasSpecialElements.prototype = {
     /** Read the JSON file associated to pictures.
     */
     read: function(){
-        Wanok.openFile(this, Wanok.FILE_SPECIAL_ELEMENTS, true, function(res){
+        RPM.openFile(this, RPM.FILE_SPECIAL_ELEMENTS, true, function(res){
             var json, jsonWalls, jsonWall;
             var wall;
             var i, l, id;

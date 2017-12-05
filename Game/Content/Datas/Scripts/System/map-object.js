@@ -129,7 +129,7 @@ MapObject.updateObjectWithID = function(object, objectID, base, callback){
         // Load the file if not already in temp
         else{
             var fileName = SceneMap.getPortionName(realX, realY, realZ);
-            Wanok.openFile(this, Wanok.FILE_MAPS + this.mapName + "/" +
+            RPM.openFile(this, RPM.FILE_MAPS + this.mapName + "/" +
                            fileName, false, function(res)
             {
                 var json = JSON.parse(res);
@@ -183,7 +183,7 @@ MapObject.prototype = {
         {
             this.frame = this.currentState.indexX;
             this.orientationEye = this.currentState.indexY;
-            this.orientationEye = Wanok.mod(this.orientationEye +
+            this.orientationEye = RPM.mod(this.orientationEye +
                                 $currentMap.camera.getMapOrientation() - 2, 4);
             this.updateOrientation();
             this.width = material.map.image.width / $SQUARE_SIZE / $FRAMES;
@@ -210,7 +210,7 @@ MapObject.prototype = {
     */
     read: function(json){
         var jsonPosition = json.k;
-        this.position = Wanok.positionToVector3(jsonPosition);
+        this.position = RPM.positionToVector3(jsonPosition);
         this.system = new SystemObject;
         this.system.readJSON(json.v);
     },
@@ -233,8 +233,8 @@ MapObject.prototype = {
 
         switch (orientation){
         case Orientation.South:
-            xPlus = distance * Wanok.cos(angle * Math.PI / 180.0);
-            zPlus = distance * Wanok.sin(angle * Math.PI / 180.0);
+            xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
+            zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
             res = position.z - zPlus;
             if (res >= 0 && res < h)
                 position.setZ(res);
@@ -243,8 +243,8 @@ MapObject.prototype = {
                 position.setX(res);
             break;
         case Orientation.West:
-            xPlus = distance * Wanok.cos((angle - 90.0) * Math.PI / 180.0);
-            zPlus = distance * Wanok.sin((angle - 90.0) * Math.PI / 180.0);
+            xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
+            zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
             res = position.x + xPlus;
             if (res >= 0 && res < w)
                 position.setX(res);
@@ -253,8 +253,8 @@ MapObject.prototype = {
                position.setZ(res);
             break;
         case Orientation.North:
-            xPlus = distance * Wanok.cos(angle * Math.PI / 180.0);
-            zPlus = distance * Wanok.sin(angle * Math.PI / 180.0);
+            xPlus = distance * RPM.cos(angle * Math.PI / 180.0);
+            zPlus = distance * RPM.sin(angle * Math.PI / 180.0);
             res = position.z + zPlus;
             if (res >= 0 && res < h)
                 position.setZ(res);
@@ -263,8 +263,8 @@ MapObject.prototype = {
                 position.setX(res);
             break;
         case Orientation.East:
-            xPlus = distance * Wanok.cos((angle - 90.0) * Math.PI / 180.0);
-            zPlus = distance * Wanok.sin((angle - 90.0) * Math.PI / 180.0);
+            xPlus = distance * RPM.cos((angle - 90.0) * Math.PI / 180.0);
+            zPlus = distance * RPM.sin((angle - 90.0) * Math.PI / 180.0);
             res = position.x - xPlus;
             if (res >= 0 && res < w)
                 position.setX(res);
@@ -295,7 +295,7 @@ MapObject.prototype = {
                                 $averageElapsedTime * $SQUARE_SIZE);
         var position = this.getFuturPosition(orientation, distance, angle);
         if (isCameraOrientation) {
-            orientation = Wanok.mod(orientation +
+            orientation = RPM.mod(orientation +
                                 $currentMap.camera.getMapOrientation() - 2, 4);
         }
         this.position.set(position.x, position.y, position.z);
@@ -342,7 +342,7 @@ MapObject.prototype = {
             originalPortion, localPortion;
 
         if (!this.isHero){
-            previousPortion = Wanok.getPortion(this.position);
+            previousPortion = RPM.getPortion(this.position);
             objects = $game.mapsDatas[$currentMap.id]
                    [previousPortion[0]][previousPortion[1]][previousPortion[2]];
 
@@ -378,7 +378,7 @@ MapObject.prototype = {
 
     addMoveTemp: function(){
         var objects, afterPortion, originalPortion, localPortion;
-        afterPortion = Wanok.getPortion(this.position);
+        afterPortion = RPM.getPortion(this.position);
 
         if (!this.isHero){
             objects = $game.mapsDatas[$currentMap.id]
@@ -506,7 +506,7 @@ MapObject.prototype = {
     /** Update the orientation according to the camera position
     */
     updateOrientation: function(){
-        this.orientation = Wanok.mod(($currentMap.orientation - 2) * 3 +
+        this.orientation = RPM.mod(($currentMap.orientation - 2) * 3 +
                                      this.orientationEye, 4);
     },
 

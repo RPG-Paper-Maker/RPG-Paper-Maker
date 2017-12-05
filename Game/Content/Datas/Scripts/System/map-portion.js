@@ -251,7 +251,7 @@ MapPortion.prototype = {
                 $datasGame.system.idObjectStartHero !== object.id) &&
                 index === -1)
             {
-                var localPosition = Wanok.positionToVector3(position);
+                var localPosition = RPM.positionToVector3(position);
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);
@@ -278,7 +278,7 @@ MapPortion.prototype = {
     *   @param {Sprite} sprite The sprite.
     */
     getSpriteMesh: function(position, material, sprite){
-        var localPosition = Wanok.positionToVector3(position);
+        var localPosition = RPM.positionToVector3(position);
         var geometry = sprite.createGeometry(material.map.image.width,
                                              material.map.image.height,
                                              position);
@@ -337,7 +337,7 @@ MapPortion.prototype = {
                 var object = new SystemObject;
                 if (jsonObjectValue.id === id){
                     object.readJSON(jsonObjectValue);
-                    var localPosition = Wanok.positionToVector3(position);
+                    var localPosition = RPM.positionToVector3(position);
                     position = new THREE.Vector3(localPosition.x,
                                                  localPosition.y,
                                                  localPosition.z);
@@ -368,7 +368,7 @@ MapPortion.prototype = {
             if ($datasGame.system.idObjectStartHero === jsonObjectValue.id){
                 var object = new SystemObject;
                 object.readJSON(jsonObjectValue);
-                var localPosition = Wanok.positionToVector3(position);
+                var localPosition = RPM.positionToVector3(position);
                 position = new THREE.Vector3(localPosition.x,
                                              localPosition.y,
                                              localPosition.z);

@@ -57,10 +57,10 @@ function WindowBox(x, y, w, h, content, padding) {
 
     // Adjusting dimensions
     this.windowDimension = [
-        Wanok.getScreenX(x),
-        Wanok.getScreenY(y),
-        Wanok.getScreenX(w),
-        Wanok.getScreenY(h)
+        RPM.getScreenX(x),
+        RPM.getScreenY(y),
+        RPM.getScreenX(w),
+        RPM.getScreenY(h)
     ];
 
     this.padding = padding;

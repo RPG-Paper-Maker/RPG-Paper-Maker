@@ -146,7 +146,7 @@ ReactionInterpreter.prototype = {
                 }
                 /* If going here, that means there is no parent while...
                 bring error */
-                Wanok.show("Error : there is a breaking loop that is not inside"
+                RPM.show("Error : there is a breaking loop that is not inside"
                            + " a loop.");
             }
             // If positive number, then it's the number of nodes to skip
