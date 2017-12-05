@@ -17,18 +17,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-*   Enum for the different camera up down orientation kind.
-*   @enum {string}
-*   @readonly
-*/
-var CameraUpDown = {
-    None: 0,
-    Up: 1,
-    Down: 2
-}
-Object.freeze(CameraUpDown);
-
 // -------------------------------------------------------
 //
 //  CLASS MapElement
@@ -45,8 +33,6 @@ Object.freeze(CameraUpDown);
 *   @property {number} zOffset The offset of the object according to layer.
 */
 function MapElement() {
-    this.orientation = Orientation.South;
-    this.upDown = CameraUpDown.None;
     this.xOffset = 0;
     this.yOffset = 0;
     this.zOffset = 0;
@@ -58,16 +44,10 @@ MapElement.prototype = {
     *   @param {Object} json Json object describing the object.
     */
     read: function(json) {
-        var orientation = json.o;
-        var upDown = json.up;
         var x = json.xOff;
         var y = json.yOff;
         var z = json.zOff;
 
-        if (typeof(orientation) !== 'undefined')
-            this.orientation = orientation;
-        if (typeof(upDown) !== 'undefined')
-            this.upDown = upDown;
         if (typeof(x) !== 'undefined')
             this.xOffset = x;
         if (typeof(y) !== 'undefined')
@@ -84,25 +64,12 @@ MapElement.prototype = {
     *   @param {THREE.Vector3} center The center to rotate around.
     */
     scale: function(vecA, vecB, vecC, vecD, center, position, size, kind) {
-        var zPlus = 0, off = Wanok.positionLayer(position) * 0.05;
+        var zPlus = Wanok.positionLayer(position) * 0.05;
 
         // Apply an offset according to layer position
-        if (kind === ElementMapKind.SpritesFace)
-            zPlus += off;
-        else {
-            switch (this.orientation) {
-            case Orientation.West:
-            case Orientation.North:
-                zPlus -= off;
-                break;
-            case Orientation.East:
-            case Orientation.South:
-                zPlus += off;
-                break;
-            default:
-                break;
-            }
-        }
+        if (kind !== ElementMapKind.SpritesFace && !this.front)
+            zPlus *= -1;
+
         var offset = new THREE.Vector3(0, 0, zPlus);
 
         // Center

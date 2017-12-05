@@ -29,6 +29,8 @@
 */
 function Floor() {
     MapElement.call(this);
+
+    this.up = true;
 }
 
 Floor.prototype = {
@@ -38,7 +40,12 @@ Floor.prototype = {
     */
     read: function(json) {
         MapElement.prototype.read.call(this, json);
+
+        var up = json.up;
         this.texture = json.t;
+
+        if (typeof(up) !== 'undefined')
+            this.up = up;
     },
 
     /** Update the geometry associated to this floor.
@@ -47,8 +54,8 @@ Floor.prototype = {
     updateGeometry: function(geometry, position, width, height, i) {
         var localPosition = Wanok.positionToBorderVector3(position);
         var x = localPosition.x;
-        var yLayerOffset = position[4] * 0.05;
-        if (this.upDown === CameraUpDown.Down)
+        var yLayerOffset = Wanok.positionLayer(position) * 0.05;
+        if (!this.up)
             yLayerOffset *= -1;
         var y = localPosition.y + yLayerOffset;
         var z = localPosition.z;

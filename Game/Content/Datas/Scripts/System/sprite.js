@@ -32,6 +32,7 @@ function Sprite(kind, texture) {
 
     this.kind = kind;
     this.textureRect = texture;
+    this.front = true;
 }
 
 /** @static
@@ -95,8 +96,12 @@ Sprite.prototype = {
     read: function(json) {
         MapElement.prototype.read.call(this, json);
 
+        var front = json.f;
         this.kind = json.k;
         this.textureRect = json.t;
+
+        if (typeof(front) !== 'undefined')
+            this.front = front;
     },
 
     /** Create the geometry associated to this sprite.
@@ -119,6 +124,8 @@ Sprite.prototype = {
 
         MapElement.prototype.scale.call(this, vecA, vecB, vecC, vecD, center,
                                         position, size, this.kind);
+        Sprite.rotateSprite(vecA, vecB, vecC, vecD, center,
+                            Wanok.positionAngle(position));
 
         // Getting UV coordinates
         x = (this.textureRect[0] * $SQUARE_SIZE) / width;
