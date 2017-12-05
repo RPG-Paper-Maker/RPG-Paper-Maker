@@ -207,7 +207,7 @@ void MapProperties::read(const QJsonObject &json){
         QSet<Position>* positions = new QSet<Position>;
 
         for (int j = 0; j < tabValue.size(); j++) {
-            QJsonArray tabPosition = tabValue.at(i).toArray();
+            QJsonArray tabPosition = tabValue.at(j).toArray();
             Position position;
             position.read(tabPosition);
             positions->insert(position);
