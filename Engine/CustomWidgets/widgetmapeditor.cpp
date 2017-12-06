@@ -215,12 +215,14 @@ void WidgetMapEditor::paintGL(){
 
         // Draw additional text informations
         if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
+            QPainter painterHUD(this);
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn);
             QStringList listInfos = infos.split("\n");
             for (int i = 0; i < listInfos.size(); i++) {
-                renderText(20, 20 * (listInfos.size() - i), listInfos.at(i),
-                           QFont(), QColor(255, 255, 255));
+                renderText(painterHUD, 20, 20 * (listInfos.size() - i),
+                           listInfos.at(i), QFont(), QColor(255, 255, 255));
             }
+            painterHUD.end();
         }
 
         // Update elapsed time
@@ -342,8 +344,10 @@ void WidgetMapEditor::removePreviewElements() {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::renderText(double x, double y, const QString &text,
-                                 const QFont& font, const QColor& fontColor)
+void WidgetMapEditor::renderText(QPainter &p, double x, double y,
+                                 const QString &text, const QFont& font,
+                                 const QColor& fontColor,
+                                 const QColor &outlineColor)
 {
 
     // Identify x and y locations to render text within widget
@@ -351,12 +355,17 @@ void WidgetMapEditor::renderText(double x, double y, const QString &text,
     GLdouble textPosX = x, textPosY = y;
     textPosY = height - textPosY; // y is inverted
 
+    // Render outline
+    p.setFont(font);
+    p.setPen(outlineColor);
+    p.drawText(textPosX + 1, textPosY, text);
+    p.drawText(textPosX, textPosY + 1, text);
+    p.drawText(textPosX - 1, textPosY, text);
+    p.drawText(textPosX, textPosY - 1, text);
+
     // Render text
-    QPainter painter(this);
-    painter.setPen(fontColor);
-    painter.setFont(font);
-    painter.drawText(textPosX, textPosY, text);
-    painter.end();
+    p.setPen(fontColor);
+    p.drawText(textPosX, textPosY, text);
 }
 
 // -------------------------------------------------------

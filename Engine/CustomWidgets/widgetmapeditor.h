@@ -72,8 +72,10 @@ public:
     void addObject();
     void deleteObject();
     void removePreviewElements();
-    void renderText(double x, double y, const QString &text, const QFont& font
-                    = QFont(), const QColor& fontColor = QColor());
+    void renderText(QPainter& p, double x, double y, const QString &text,
+                    const QFont& font = QFont(),
+                    const QColor& fontColor = QColor(),
+                    const QColor& outlineColor = QColor());
     void showHideGrid();
     void showHideSquareInformations();
 

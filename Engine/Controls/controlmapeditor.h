@@ -82,7 +82,7 @@ public:
                           QMatrix4x4& view);
     QVector3D getPositionOnRay(QVector3D& ray, int distance);
     void getCorrectPositionOnRay(Position& position, QVector3D &ray,
-                                 int distance);
+                                 int distance, bool accurate = false);
 
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind kind,
@@ -222,6 +222,7 @@ private:
     QPoint m_mouseBeforeUpdate;
     QRay3D m_ray;
     Position m_positionOnPlane;
+    Position m_positionOnPlaneWallIndicator;
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;

@@ -276,6 +276,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
     int height = 0;
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, m_distancePlane);
+    getCorrectPositionOnRay(m_positionOnPlaneWallIndicator, rayDirection,
+                            m_distancePlane, true);
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
                              m_camera->positionZ());
     m_ray.setOrigin(cameraPosition);
@@ -511,15 +513,25 @@ QVector3D ControlMapEditor::getPositionOnRay(QVector3D &ray, int distance){
 // -------------------------------------------------------
 
 void ControlMapEditor::getCorrectPositionOnRay(Position &position,
-                                               QVector3D &ray, int distance){
+                                               QVector3D &ray, int distance,
+                                               bool accurate)
+{
     QVector3D point = getPositionOnRay(ray, distance);
-    int x = qRound(point.x() + 1) / m_map->squareSize();
+    int x, z;
     int y = ((int) point.y() - 1) / m_map->squareSize();
     int yPlus = (((int) point.y()) % m_map->squareSize() / m_map->squareSize())
             * 100;
-    int z = qRound(point.z() + 1) / m_map->squareSize();
-    if ((int)point.x() < 0) x--;
-    if ((int)point.z() < 0) z--;
+
+    if (accurate) {
+        x = qRound((point.x() + 1) / m_map->squareSize());
+        z = qRound((point.z() + 1) / m_map->squareSize());
+    }
+    else {
+        x = qRound(point.x() + 1) / m_map->squareSize();
+        z = qRound(point.z() + 1) / m_map->squareSize();
+        if ((int)point.x() < 0) x--;
+        if ((int)point.z() < 0) z--;
+    }
 
     position.setX(x);
     position.setY(y);
@@ -535,11 +547,11 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 
 void ControlMapEditor::updateWallIndicator() {
     if (!m_isDrawingWall && !m_isDeletingWall) {
-        m_beginWallIndicator->setPosition(m_positionOnPlane,
+        m_beginWallIndicator->setPosition(m_positionOnPlaneWallIndicator,
                                           m_map->mapProperties()->length(),
                                           m_map->mapProperties()->width());
     }
-    m_endWallIndicator->setPosition(m_positionOnPlane,
+    m_endWallIndicator->setPosition(m_positionOnPlaneWallIndicator,
                                     m_map->mapProperties()->length(),
                                     m_map->mapProperties()->width());
 }
@@ -924,7 +936,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
 
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {
-            m_beginWallIndicator->setPosition(p,
+            m_beginWallIndicator->setPosition(m_positionOnPlaneWallIndicator,
                                               m_map->mapProperties()->length(),
                                               m_map->mapProperties()->width());
         }
@@ -1682,6 +1694,9 @@ void ControlMapEditor::updatePortionsToSaveOverflow(
 void ControlMapEditor::traceLine(Position& previousCoords, Position& coords,
                                  QList<Position>& positions)
 {
+    if (m_previousMouseCoords.x() == -1)
+        return;
+
     int x1 = previousCoords.x(), x2 = coords.x();
     int y = coords.y();
     int yPlus = coords.yPlus();
