@@ -52,7 +52,7 @@ RPG Paper Maker has a `master` branch for stable releases and a `develop` branch
 Try to respect the code style as much as possible. **We are much more strict on the game scripts' code** that is a code that can be edited by the user and particularly needs to be clear.
 
 ### Documentation
-Always check out our [documentation](http://rpgpapermaker.gq/index.php/documentation) here (not completed yet).
+Always check out our [documentation](http://rpg-paper-maker.com/index.php/documentation) here (not completed yet).
 
 ## Project organization
 There are two main systems:
