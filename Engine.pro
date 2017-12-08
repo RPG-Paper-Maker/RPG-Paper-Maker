@@ -498,14 +498,22 @@ win32{
     DESTDIR = $$OUT_PWD\\$$VARIANT
 }
 
-FROMS= \"$$shell_path($$PWD\\..\\Game\\Content\\Datas\\Scripts)\"
-DESTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
+FROMSCRIPTS= \"$$shell_path($$PWD\\mods\\Scripts)\"
+DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
 win32{
-    DESTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
+    DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
 }
 
+FROMBR= \"$$shell_path($$PWD\\mods\\BR)\"
+DESTBR = \"$$shell_path($$OUT_PWD\\Content)\"
+win32{
+    DESTBR = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\BR)\"
+}
+
+
 !equals(PWD, $${OUT_PWD}) {
-    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMS $$DESTS
+    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMSCRIPTS $$DESTSCRIPTS $$escape_expand(\n\t) $(COPY_DIR) $$FROMBR $$DESTBR
+    first.depends = $(first) copyBR
     first.depends = $(first) copyBR
     export(first.depends)
     export(copyBR.commands)
