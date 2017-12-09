@@ -18,7 +18,6 @@
 */
 
 #include "mapproperties.h"
-#include "widgettreelocalmaps.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -29,7 +28,7 @@
 
 MapProperties::MapProperties() :
     MapProperties(1,
-                  new LangsTranslation(WidgetTreeLocalMaps::generateMapName(1)),
+                  new LangsTranslation(Wanok::generateMapName(1)),
                   16, 16, 16, 0, 1)
 {
 
@@ -60,7 +59,7 @@ MapProperties::~MapProperties()
 }
 
 QString MapProperties::realName() const {
-    return WidgetTreeLocalMaps::generateMapName(id());
+    return Wanok::generateMapName(id());
 }
 
 int MapProperties::length() const { return m_length; }

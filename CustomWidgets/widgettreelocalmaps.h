@@ -51,9 +51,6 @@ public:
     void initializeModel(QStandardItemModel* m);
     QStandardItem* getSelected() const;
     QStandardItemModel* getModel() const;
-    static bool isMapIdExisting(int id);
-    static int generateMapId();
-    static QString generateMapName(int id);
     static void updateNodeSaved(QStandardItem* item);
     void updateAllNodesSaved();
     void deleteAllMapTemp();

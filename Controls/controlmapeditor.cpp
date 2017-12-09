@@ -996,15 +996,12 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
                            Position& p)
 {
     if (tileset.width() != 0 && tileset.height() != 0) {
-        QList<QJsonObject> changes;
-
         switch (selection){
         case MapEditorSelectionKind::Land:
-            addFloor(p, subSelection, drawKind, layerOn, tileset, specialID,
-                     changes);
+            addFloor(p, subSelection, drawKind, layerOn, tileset, specialID);
             break;
         case MapEditorSelectionKind::Sprites:
-            addSprite(p, subSelection, drawKind, layerOn, tileset, changes);
+            addSprite(p, subSelection, drawKind, layerOn, tileset);
         case MapEditorSelectionKind::Objects:
             setCursorObjectPosition(p); break;
         default:
@@ -1019,11 +1016,9 @@ void ControlMapEditor::remove(MapElement* element,
                               MapEditorSelectionKind selection,
                               DrawKind drawKind, Position& p, bool layerOn)
 {
-    QList<QJsonObject> changes;
-
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeLand(p, drawKind, layerOn, changes);
+        removeLand(p, drawKind, layerOn);
         break;
     case MapEditorSelectionKind::Sprites:
         if (element != nullptr &&
@@ -1049,7 +1044,7 @@ void ControlMapEditor::remove(MapElement* element,
 
 void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                                 DrawKind drawKind, bool layerOn, QRect &tileset,
-                                int specialID, QList<QJsonObject> &changes)
+                                int specialID)
 {
     FloorDatas* floor;
     QRect* shortTexture;
@@ -1067,7 +1062,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                                         tileset.width(),
                                         tileset.height());
                 floor = new FloorDatas(rect, up);
-                stockLand(positions[i], floor, kind, layerOn, changes);
+                stockLand(positions[i], floor, kind, layerOn);
             }
         }
         for (int i = 0; i < tileset.width(); i++){
@@ -1082,14 +1077,14 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                 shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
                                          1, 1);
                 floor = new FloorDatas(shortTexture, up);
-                stockLand(shortPosition, floor, kind, layerOn, changes);
+                stockLand(shortPosition, floor, kind, layerOn);
             }
         }
         break;
     case DrawKind::Rectangle:
         break; // TODO
     case DrawKind::Pin:
-        paintPinLand(p, kind, tileset, layerOn, changes);
+        paintPinLand(p, kind, tileset, layerOn);
         break;
     }
 
@@ -1100,8 +1095,7 @@ void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
 
 void ControlMapEditor::paintPinLand(Position& p,
                                     MapEditorSubSelectionKind kindAfter,
-                                    QRect& textureAfter, bool layerOn,
-                                    QList<QJsonObject> &changes)
+                                    QRect& textureAfter, bool layerOn)
 {
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
@@ -1125,10 +1119,10 @@ void ControlMapEditor::paintPinLand(Position& p,
                 QList<Position> tab;
                 tab.push_back(p);
                 if (kindAfter == MapEditorSubSelectionKind::None)
-                    eraseLand(p, changes);
+                    eraseLand(p);
                 else
                     stockLand(p, getLandAfter(kindAfter, textureAfterReduced),
-                              kindAfter, layerOn, changes);
+                              kindAfter, layerOn);
 
                 while(!tab.isEmpty()){
                     QList<Position> adjacent;
@@ -1163,13 +1157,13 @@ void ControlMapEditor::paintPinLand(Position& p,
                                 {
                                     if (kindAfter ==
                                             MapEditorSubSelectionKind::None)
-                                        eraseLand(adjacentPosition, changes);
+                                        eraseLand(adjacentPosition);
                                     else
                                         stockLand(adjacentPosition,
                                                   getLandAfter(
                                                       kindAfter,
                                                       textureAfterReduced),
-                                                  kindAfter, layerOn, changes);
+                                                  kindAfter, layerOn);
                                     tab.push_back(adjacentPosition);
                                 }
                             }
@@ -1275,7 +1269,7 @@ void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
 
 void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
                                  MapEditorSubSelectionKind kind, bool layerOn,
-                                 QList<QJsonObject>& changes)
+                                 bool undoRedo)
 {
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
@@ -1283,9 +1277,11 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
             MapPortion* mapPortion = m_map->mapPortion(portion);
 
             // Update layer
-            m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
-                                      MapEditorSelectionKind::Land, kind);
-            p.setLayer(m_currentLayer);
+            if (!undoRedo) {
+                m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
+                                          MapEditorSelectionKind::Land, kind);
+                p.setLayer(m_currentLayer);
+            }
 
             // Add the land
             QJsonObject previous;
@@ -1296,8 +1292,11 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {
-                m_controlUndoRedo.updateJsonList(
-                           changes, previous, previousType, landDatas, kind, p);
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(
+                               m_changes, previous, previousType, landDatas,
+                               kind, p);
+                }
                 m_portionsToUpdate += mapPortion;
                 m_portionsToSave += mapPortion;
             }
@@ -1311,8 +1310,7 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn,
-                                  QList<QJsonObject> &changes)
+void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
 {
     QList<Position> positions;
 
@@ -1326,14 +1324,13 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn,
         case DrawKind::Pencil:
             traceLine(m_previousMouseCoords, p, positions);
             for (int i = 0; i < positions.size(); i++)
-                eraseLand(positions[i], changes);
-            eraseLand(p, changes);
+                eraseLand(positions[i]);
+            eraseLand(p);
         case DrawKind::Rectangle:
             break;
         case DrawKind::Pin:
             QRect tileset(0, 0, 1, 1);
-            paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn,
-                         changes);
+            paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn);
             break;
         }
 
@@ -1343,7 +1340,7 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseLand(Position& p, QList<QJsonObject> &changes){
+void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
         if (m_map->isInPortion(portion)){
@@ -1357,11 +1354,13 @@ void ControlMapEditor::eraseLand(Position& p, QList<QJsonObject> &changes){
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {
-                for (int i = 0; i < previous.size(); i++) {
-                    m_controlUndoRedo.updateJsonList(
-                                changes, previous.at(i), previousType.at(i),
-                                nullptr, MapEditorSubSelectionKind::None,
-                                positions.at(i));
+                if (!undoRedo) {
+                    for (int i = 0; i < previous.size(); i++) {
+                        m_controlUndoRedo.updateJsonList(
+                                    m_changes, previous.at(i), previousType.at(i),
+                                    nullptr, MapEditorSubSelectionKind::None,
+                                    positions.at(i));
+                    }
                 }
                 m_portionsToUpdate += mapPortion;
                 m_portionsToSave += mapPortion;
@@ -1377,8 +1376,7 @@ void ControlMapEditor::eraseLand(Position& p, QList<QJsonObject> &changes){
 // -------------------------------------------------------
 
 void ControlMapEditor::addSprite(Position& p, MapEditorSubSelectionKind kind,
-        DrawKind drawKind, bool layerOn, QRect& tileset,
-        QList<QJsonObject> &changes)
+        DrawKind drawKind, bool layerOn, QRect& tileset)
 {
     QList<Position> positions;
     bool front = m_camera->cameraFront(m_ray.direction(), p.angle());
@@ -1392,12 +1390,12 @@ void ControlMapEditor::addSprite(Position& p, MapEditorSubSelectionKind kind,
     case DrawKind::Pencil:
         sprite = getCompleteSprite(kind, xOffset, yOffset, zOffset, tileset,
                                    front, layerOn);
-        stockSprite(p, sprite, kind, layerOn, changes);
+        stockSprite(p, sprite, kind, layerOn);
         traceLine(m_previousMouseCoords, p, positions);
         for (int i = 0; i < positions.size(); i++) {
             sprite = getCompleteSprite(kind, xOffset, yOffset, zOffset, tileset,
                                        front, layerOn);
-            stockSprite(positions[i], sprite, kind, layerOn, changes);
+            stockSprite(positions[i], sprite, kind, layerOn);
         }
         break;
     case DrawKind::Pin:
@@ -1452,8 +1450,7 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
 // -------------------------------------------------------
 
 void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
-                                   MapEditorSubSelectionKind kind, bool layerOn,
-                                   QList<QJsonObject> &changes)
+                                   MapEditorSubSelectionKind kind, bool layerOn)
 {
     if (m_map->isInGrid(p)){
         Portion portion = m_map->getLocalPortion(p);
@@ -2008,13 +2005,61 @@ int ControlMapEditor::getLayer(MapPortion *mapPortion, float d, Position& p,
 // -------------------------------------------------------
 
 void ControlMapEditor::undo() {
-
+    QJsonArray states;
+    m_controlUndoRedo.undo(m_map->mapProperties()->id(), states);
+    undoRedo(states, true);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::redo() {
+    QJsonArray states;
+    m_controlUndoRedo.redo(m_map->mapProperties()->id(), states);
+    undoRedo(states, false);
+}
 
+// -------------------------------------------------------
+
+void ControlMapEditor::undoRedo(QJsonArray& states, bool reverseAction) {
+    for (int i = 0; i < states.size(); i++) {
+        QJsonObject objState = states.at(i).toObject(), objBefore, objAfter;
+        MapEditorSubSelectionKind kindBefore, kindAfter;
+        Position position;
+        m_controlUndoRedo.getStateInfos(objState, kindBefore, kindAfter,
+                                        objBefore, objAfter, position);
+        performUndoRedoAction(kindBefore, reverseAction, objBefore, position);
+        performUndoRedoAction(kindAfter, !reverseAction, objAfter, position);
+    }
+}
+
+void ControlMapEditor::performUndoRedoAction(
+        MapEditorSubSelectionKind kind, bool before, QJsonObject& obj,
+        Position& position)
+{
+    switch (kind) {
+    case MapEditorSubSelectionKind::None:
+        break;
+    case MapEditorSubSelectionKind::Floors:
+        if (before) {
+            FloorDatas* floor = new FloorDatas;
+            floor->read(obj);
+            stockLand(position, floor, kind, false, true);
+        }
+        else
+            eraseLand(position, true);
+        break;
+    case MapEditorSubSelectionKind::SpritesFace:
+    case MapEditorSubSelectionKind::SpritesFix:
+    case MapEditorSubSelectionKind::SpritesDouble:
+    case MapEditorSubSelectionKind::SpritesQuadra:
+        break;
+    case MapEditorSubSelectionKind::SpritesWall:
+        break;
+    case MapEditorSubSelectionKind::Object:
+        break;
+    default:
+        break;
+    }
 }
 
 // -------------------------------------------------------
@@ -2081,6 +2126,12 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
             + "\n" + position.toString(m_map->squareSize());
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::deleteTempUndoRedo() {
+    m_controlUndoRedo.deleteTempUndoRedo();
 }
 
 // -------------------------------------------------------
@@ -2179,6 +2230,9 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
     // Update current layer to undefined
     m_currentLayer = -1;
     m_isDeleting = false;
+
+    // Update the undo redo
+    m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
 }
 
 // -------------------------------------------------------

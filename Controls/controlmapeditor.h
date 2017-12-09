@@ -133,10 +133,9 @@ public:
                 DrawKind drawKind, Position& p, bool layerOn);
     void addFloor(Position& p, MapEditorSubSelectionKind kind,
                   DrawKind drawKind, bool layerOn, QRect& tileset,
-                  int specialID, QList<QJsonObject>& changes);
+                  int specialID);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
-                      QRect &textureAfter, bool layerOn,
-                      QList<QJsonObject> &changes);
+                      QRect &textureAfter, bool layerOn);
     LandDatas* getLand(Portion& portion, Position& p);
     void getFloorTextureReduced(QRect &rect, QRect& rectAfter,
                                 int localX, int localZ);
@@ -148,20 +147,17 @@ public:
     void getLandTexture(QRect& rect, LandDatas* land);
     void stockLand(Position& p, LandDatas* landDatas,
                    MapEditorSubSelectionKind kind, bool layerOn,
-                   QList<QJsonObject> &changes);
-    void removeLand(Position& p, DrawKind drawKind, bool layerOn,
-                    QList<QJsonObject> &changes);
-    void eraseLand(Position& p, QList<QJsonObject> &changes);
-    void addSprite(
-            Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
-            bool layerOn, QRect& tileset, QList<QJsonObject>& changes);
+                   bool undoRedo = false);
+    void removeLand(Position& p, DrawKind drawKind, bool layerOn);
+    void eraseLand(Position& p, bool undoRedo = false);
+    void addSprite(Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
+            bool layerOn, QRect& tileset);
     SpriteDatas *getCompleteSprite(MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
                                    bool front, bool layerOn) const;
     void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, SpriteDatas *sprite,
-                     MapEditorSubSelectionKind kind, bool layerOn,
-                     QList<QJsonObject>& changes);
+                     MapEditorSubSelectionKind kind, bool layerOn);
     void stockSpriteWall(Position& position, int specialID);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
@@ -189,8 +185,13 @@ public:
     void showHideSquareInformations();
     void undo();
     void redo();
+    void undoRedo(QJsonArray& states, bool reverseAction);
+    void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
+                               QJsonObject& obj, Position &position);
+
+    void deleteTempUndoRedo();
     QString getSquareInfos(MapEditorSelectionKind kind,
-                           MapEditorSubSelectionKind subKind,bool layerOn);
+                           MapEditorSubSelectionKind subKind, bool layerOn);
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,
@@ -214,6 +215,7 @@ public:
 
 private:
     ControlUndoRedo m_controlUndoRedo;
+    QJsonArray m_changes;
 
     // Widgets
     Map* m_map;

@@ -24,7 +24,6 @@
 #include <QDir>
 #include "map.h"
 #include "wanok.h"
-#include "widgettreelocalmaps.h"
 #include "systemmapobject.h"
 #include "systemspecialelement.h"
 
@@ -57,7 +56,7 @@ Map::Map(int id) :
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr)
 {
-    QString realName = WidgetTreeLocalMaps::generateMapName(id);
+    QString realName = Wanok::generateMapName(id);
     QString pathMaps = Wanok::pathCombine(Wanok::get()->project()
                                           ->pathCurrentProject(),
                                           Wanok::pathMaps);

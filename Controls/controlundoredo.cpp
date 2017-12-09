@@ -18,6 +18,21 @@
 */
 
 #include "controlundoredo.h"
+#include "wanok.h"
+#include <QFile>
+
+const QString ControlUndoRedo::jsonBefore = "before";
+const QString ControlUndoRedo::jsonBeforeType = "beforeT";
+const QString ControlUndoRedo::jsonAfter = "after";
+const QString ControlUndoRedo::jsonAfterType = "afterT";
+const QString ControlUndoRedo::jsonPos = "pos";
+const QString ControlUndoRedo::jsonStates = "states";
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
 
 ControlUndoRedo::ControlUndoRedo()
 {
@@ -31,7 +46,7 @@ ControlUndoRedo::ControlUndoRedo()
 // -------------------------------------------------------
 
 void ControlUndoRedo::updateJsonList(
-        QList<QJsonObject> list, QJsonObject previous,
+        QJsonArray &list, const QJsonObject &previous,
         MapEditorSubSelectionKind previousType, MapElement* after,
         MapEditorSubSelectionKind afterType, const Position& position)
 {
@@ -41,11 +56,133 @@ void ControlUndoRedo::updateJsonList(
         after->write(afterJson);
     position.write(positionJson);
 
-    state["before"] = previous;
-    state["beforeT"] = (int) previousType;
-    state["after"] = afterJson;
-    state["afterT"] = (int) afterType;
-    state["pos"] = positionJson;
+    state[jsonBefore] = previous;
+    state[jsonBeforeType] = (int) previousType;
+    state[jsonAfter] = afterJson;
+    state[jsonAfterType] = (int) afterType;
+    state[jsonPos] = positionJson;
 
     list.append(state);
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
+    QJsonObject obj;
+    obj[jsonStates] = tab;
+    int currentState = updateMapCurrentState(idMap);
+
+    // Save in temp file
+    Wanok::writeOtherJSON(getTempFile(idMap, currentState - 1), obj);
+
+    // Remove all the state >
+    int state = currentState;
+    QString path = getTempFile(idMap, state);
+    while (QFile::exists(path)) {
+        QFile(path).remove();
+        path = getTempFile(idMap, ++state);
+    }
+
+    // Clear the changes from map editor control
+    for (int i = tab.size() - 1; i >= 0; i--)
+        tab.removeAt(i);
+}
+
+// -------------------------------------------------------
+
+int ControlUndoRedo::getMapCurrentState(int idMap) const {
+    if (m_states.contains(idMap))
+        return m_states.value(idMap);
+
+    return 0;
+}
+
+// -------------------------------------------------------
+
+int ControlUndoRedo::updateMapCurrentState(int idMap) {
+    if (m_states.contains(idMap)) {
+        int currentValue = m_states.value(idMap) + 1;
+        m_states[idMap] = currentValue;
+        return currentValue;
+    }
+    else {
+        m_states[idMap] = 1;
+        return 1;
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::deleteTempUndoRedo() {
+    QHash<int, int>::iterator i;
+    for (i = m_states.begin(); i != m_states.end(); i++)
+        Wanok::deleteAllFiles(getTempDir(i.key()));
+}
+
+// -------------------------------------------------------
+
+QString ControlUndoRedo::getTempDir(int idMap) const {
+    return Wanok::pathCombine(Wanok::pathCombine(Wanok::pathCombine(
+               Wanok::get()->project()->pathCurrentProject(),
+               Wanok::pathMaps),
+               Wanok::generateMapName(idMap)),
+               Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+}
+
+// -------------------------------------------------------
+
+QString ControlUndoRedo::getTempFile(int idMap, int state) const {
+    return Wanok::pathCombine(getTempDir(idMap),
+                              QString::number(state) + ".json");
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::undo(int idMap, QJsonArray& states)
+{
+    undoRedo(idMap, -1, states);
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::redo(int idMap, QJsonArray &states)
+{
+    undoRedo(idMap, 0, states);
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::undoRedo(int idMap, int offset, QJsonArray &states)
+{
+    int state = getMapCurrentState(idMap) + offset;
+
+    QString path = getTempFile(idMap, state);
+    if (QFile(path).exists()) {
+
+        // Get the states
+        QJsonDocument doc;
+        QJsonObject obj;
+        Wanok::readOtherJSON(path, doc);
+        obj = doc.object();
+        states = obj[jsonStates].toArray();
+
+        // Update current state
+        m_states[idMap] = state + (offset == 0 ? 1 : 0);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlUndoRedo::getStateInfos(QJsonObject& objState,
+        MapEditorSubSelectionKind& beforeT, MapEditorSubSelectionKind& afterT,
+        QJsonObject& objBefore, QJsonObject& objAfter, Position &position)
+{
+    beforeT = static_cast<MapEditorSubSelectionKind>(
+                objState[jsonBeforeType].toInt());
+    afterT = static_cast<MapEditorSubSelectionKind>(
+                objState[jsonAfterType].toInt());
+    objBefore = objState[jsonBefore].toObject();
+    objAfter = objState[jsonAfter].toObject();
+    QJsonArray jsonPosition = objState[jsonPos].toArray();
+    position.read(jsonPosition);
 }

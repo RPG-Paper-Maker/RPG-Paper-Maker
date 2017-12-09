@@ -23,7 +23,6 @@
 #include "wanok.h"
 #include "treemapdatas.h"
 #include <QDir>
-#include <QDirIterator>
 #include <QMessageBox>
 
 // -------------------------------------------------------
@@ -110,49 +109,6 @@ QStandardItemModel* WidgetTreeLocalMaps::getModel() const { return m_model; }
 //
 // -------------------------------------------------------
 
-// -------------------------------------------------------
-// check if a directory with that id in Maps folder already exists
-
-bool WidgetTreeLocalMaps::isMapIdExisting(int id){
-    QDirIterator directories(Wanok::pathCombine(Wanok::get()->project()
-                                                ->pathCurrentProject(),
-                                                Wanok::pathMaps),
-                             QDir::Dirs | QDir::NoDotAndDotDot);
-
-    while (directories.hasNext()){
-        directories.next();
-        if (directories.fileName() == generateMapName(id))
-            return true;
-    }
-
-    return false;
-}
-
-// -------------------------------------------------------
-// generate an id for a new map according to the ids of the already existing
-// maps
-
-int WidgetTreeLocalMaps::generateMapId(){
-    int id;
-    QDir dir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
-                                Wanok::pathMaps));
-    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    int nbMaps = dir.count();
-
-    for (id = 1; id <= nbMaps + 1; id++)
-        if (!isMapIdExisting(id)) break;
-
-    return id;
-}
-
-// -------------------------------------------------------
-
-QString WidgetTreeLocalMaps::generateMapName(int id){
-    return "MAP" + Wanok::getFormatNumber(id);
-}
-
-// -------------------------------------------------------
-
 void WidgetTreeLocalMaps::updateNodeSaved(QStandardItem* item){
     TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
     if (tag != nullptr)
@@ -192,7 +148,7 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
     if (tag != nullptr && !tag->isDir()){
         QString pathMap =
                 Wanok::pathCombine(path,
-                                   WidgetTreeLocalMaps::generateMapName(
+                                   Wanok::generateMapName(
                                        tag->id()));
         QString pathTemp = Wanok::pathCombine(pathMap,
                                               Wanok::TEMP_MAP_FOLDER_NAME);
@@ -277,7 +233,7 @@ void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
     TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
     QString mapPath =
             Wanok::pathCombine(Wanok::pathMaps,
-                               WidgetTreeLocalMaps::generateMapName(tag->id()));
+                               Wanok::generateMapName(tag->id()));
 
     QDir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
                             mapPath)).removeRecursively();
@@ -326,7 +282,7 @@ void WidgetTreeLocalMaps::updateTileset(){
                             Wanok::pathCombine(Wanok::get()->project()
                                                ->pathCurrentProject(),
                                                Wanok::pathMaps),
-                            generateMapName(tag->id()));
+                            Wanok::generateMapName(tag->id()));
             MapProperties properties(path);
             SystemTileset* tileset = properties.tileset();
             switch (m_widgetMenuMapEditor->subSelectionKind()) {
@@ -437,10 +393,10 @@ void WidgetTreeLocalMaps::contextNewMap(){
     if (selected != nullptr){
         MapProperties properties;
         properties.names()->updateNames();
-        int id = WidgetTreeLocalMaps::generateMapId();
+        int id = Wanok::generateMapId();
         properties.setId(id);
         properties.names()->setAllNames(
-                    WidgetTreeLocalMaps::generateMapName(id));
+                    Wanok::generateMapName(id));
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
@@ -484,7 +440,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
                         Wanok::pathCombine(Wanok::get()->project()
                                            ->pathCurrentProject(),
                                            Wanok::pathMaps),
-                        generateMapName(tag->id()));
+                        Wanok::generateMapName(tag->id()));
         MapProperties properties(path);
         properties.names()->updateNames();
         MapProperties previousProperties;

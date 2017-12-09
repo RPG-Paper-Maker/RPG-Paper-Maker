@@ -389,3 +389,44 @@ bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
 
     return false;
 }
+
+// -------------------------------------------------------
+// check if a directory with that id in Maps folder already exists
+
+bool Wanok::isMapIdExisting(int id){
+    QDirIterator directories(Wanok::pathCombine(Wanok::get()->project()
+                                                ->pathCurrentProject(),
+                                                Wanok::pathMaps),
+                             QDir::Dirs | QDir::NoDotAndDotDot);
+
+    while (directories.hasNext()){
+        directories.next();
+        if (directories.fileName() == generateMapName(id))
+            return true;
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
+// generate an id for a new map according to the ids of the already existing
+// maps
+
+int Wanok::generateMapId(){
+    int id;
+    QDir dir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
+                                Wanok::pathMaps));
+    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    int nbMaps = dir.count();
+
+    for (id = 1; id <= nbMaps + 1; id++)
+        if (!isMapIdExisting(id)) break;
+
+    return id;
+}
+
+// -------------------------------------------------------
+
+QString Wanok::generateMapName(int id){
+    return "MAP" + Wanok::getFormatNumber(id);
+}

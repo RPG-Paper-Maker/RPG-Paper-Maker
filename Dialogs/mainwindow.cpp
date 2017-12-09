@@ -180,6 +180,7 @@ bool MainWindow::closeProject(){
     else
         deleteTempMaps();
 
+    deleteTempUndoRedo();
     Wanok::mapsToSave.clear();
     enableNoGame();
     delete project;
@@ -310,6 +311,12 @@ void MainWindow::openEngineUpdater() {
         m_engineUpdater->start();
         dialog.exec();
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::deleteTempUndoRedo() {
+    ((PanelProject*)mainPanel)->widgetMapEditor()->deleteTempUndoRedo();
 }
 
 // -------------------------------------------------------
@@ -543,6 +550,7 @@ void MainWindow::on_updateFinished() {
 
 void MainWindow::closeEvent(QCloseEvent * event){
     if (project != nullptr){
+        bool deleteUndoRedo = true;
         if (Wanok::mapsToSave.count() > 0){
             QMessageBox::StandardButton box =
                     QMessageBox::question(this, "Quit",
@@ -555,10 +563,15 @@ void MainWindow::closeEvent(QCloseEvent * event){
                 saveAllMaps();
             else if (box == QMessageBox::No)
                 deleteTempMaps();
-            else
+            else {
                 event->ignore();
+                deleteUndoRedo = false;
+            }
         }
         else
             deleteTempMaps();
+
+        if (deleteUndoRedo)
+            deleteTempUndoRedo();
     }
 }

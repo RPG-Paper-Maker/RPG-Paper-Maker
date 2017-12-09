@@ -130,6 +130,9 @@ public:
     static float coefSquareSize();
     static QString osToString(OSKind os);
     static bool getMinDistance(float &finalDistance, float newDistance);
+    static bool isMapIdExisting(int id);
+    static int generateMapId();
+    static QString generateMapName(int id);
 
 protected:
     Project* p_project;

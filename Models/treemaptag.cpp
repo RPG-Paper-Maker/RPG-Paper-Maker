@@ -18,8 +18,8 @@
 */
 
 #include "treemaptag.h"
-#include "widgettreelocalmaps.h"
 #include "wanok.h"
+#include "camera.h"
 #include <QDir>
 
 // -------------------------------------------------------
@@ -61,7 +61,7 @@ TreeMapTag::~TreeMapTag(){
 bool TreeMapTag::isDir() const { return p_id == -1; }
 
 QString TreeMapTag::realName() const {
-    return WidgetTreeLocalMaps::generateMapName(id());
+    return Wanok::generateMapName(id());
 }
 
 QVector3D* TreeMapTag::position() const { return m_position; }
@@ -120,7 +120,7 @@ void TreeMapTag::copyItem(const QStandardItem* from,
 
         if (!copyTag->isDir()){
             QString mapName =
-                    WidgetTreeLocalMaps::generateMapName(copyTag->id());
+                    Wanok::generateMapName(copyTag->id());
             QString pathMaps = Wanok::pathCombine(
                         Wanok::get()->project()->pathCurrentProject(),
                         Wanok::pathMaps);
@@ -176,10 +176,10 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
                     Wanok::pathCombine(pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
             QString pathMap =
                     Wanok::pathCombine(pathMapsTemp,
-                                       WidgetTreeLocalMaps::generateMapName(
+                                       Wanok::generateMapName(
                                            copyTag->id()));
-            int newId = WidgetTreeLocalMaps::generateMapId();
-            QString newMapName = WidgetTreeLocalMaps::generateMapName(newId);
+            int newId = Wanok::generateMapId();
+            QString newMapName = Wanok::generateMapName(newId);
             MapProperties properties(pathMap);
             properties.setId(newId);
             QDir(pathMaps).mkdir(newMapName);

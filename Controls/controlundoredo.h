@@ -37,10 +37,31 @@ class ControlUndoRedo
 {
 public:
     ControlUndoRedo();
-    void updateJsonList(QList<QJsonObject> list, QJsonObject previous,
+    static const QString jsonBefore;
+    static const QString jsonBeforeType;
+    static const QString jsonAfter;
+    static const QString jsonAfterType;
+    static const QString jsonPos;
+    static const QString jsonStates;
+
+    void updateJsonList(QJsonArray& list, const QJsonObject& previous,
                         MapEditorSubSelectionKind previousType,
                         MapElement* after, MapEditorSubSelectionKind afterType,
                         const Position &position);
+    void addState(int idMap, QJsonArray& tab);
+    int getMapCurrentState(int idMap) const;
+    int updateMapCurrentState(int idMap);
+    void deleteTempUndoRedo();
+    QString getTempDir(int idMap) const;
+    QString getTempFile(int idMap, int state) const;
+    void undo(int idMap, QJsonArray &states);
+    void redo(int idMap, QJsonArray &states);
+    void undoRedo(int idMap, int offset, QJsonArray &states);
+    void getStateInfos(QJsonObject &objState,
+                       MapEditorSubSelectionKind& beforeT,
+                       MapEditorSubSelectionKind& afterT,
+                       QJsonObject &objBefore, QJsonObject &objAfter,
+                       Position& position);
 
 protected:
     QHash<int, int> m_states;
