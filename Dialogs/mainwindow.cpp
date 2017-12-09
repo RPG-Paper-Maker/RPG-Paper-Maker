@@ -331,7 +331,7 @@ void MainWindow::on_actionBrowse_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionSave_triggered(){
-    if (project->currentMap() != nullptr){
+    if (project->currentMap() != nullptr) {
         project->saveCurrentMap();
         Wanok::mapsToSave.remove(project->currentMap()->mapProperties()->id());
         ((PanelProject*)mainPanel)->widgetMapEditor()->save();
@@ -361,6 +361,20 @@ void MainWindow::on_actionClose_project_triggered(){
 
 void MainWindow::on_actionQuit_triggered(){
     qApp->quit();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionUndo_triggered() {
+    if (project->currentMap() != nullptr)
+        ((PanelProject*)mainPanel)->widgetMapEditor()->undo();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionRedo_triggered() {
+    if (project->currentMap() != nullptr)
+        ((PanelProject*)mainPanel)->widgetMapEditor()->redo();
 }
 
 // -------------------------------------------------------

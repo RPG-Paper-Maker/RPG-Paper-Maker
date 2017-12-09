@@ -31,6 +31,8 @@ class LandDatas : public MapElement
 public:
     LandDatas(bool up);
     virtual ~LandDatas();
+    bool operator==(const LandDatas& other) const;
+    bool operator!=(const LandDatas& other) const;
     virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void initializeVertices(int, int, int, QVector<Vertex>&,

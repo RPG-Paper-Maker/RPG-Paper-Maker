@@ -55,14 +55,30 @@ LandDatas* Lands::getLand(Position& p) {
 
 // -------------------------------------------------------
 
-bool Lands::addLand(Position& p, LandDatas* land) {
-    return m_floors->addFloor(p, (FloorDatas*) land);
+bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
+                    MapEditorSubSelectionKind &previousType)
+{
+    return m_floors->addFloor(p, (FloorDatas*) land, previous, previousType);
 }
 
 // -------------------------------------------------------
 
-bool Lands::deleteLand(Position& p) {
-    return m_floors->deleteFloor(p);
+bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
+                       QList<MapEditorSubSelectionKind> &previousType,
+                       QList<Position>& positions)
+{
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+    bool changed = m_floors->deleteFloor(p, prev, kind);
+
+    if (changed) {
+        previous.append(prev);
+        previousType.append(kind);
+        positions.append(p);
+        m_floors->updateRemoveLayer(p, previous, previousType, positions);
+    }
+
+    return changed;
 }
 
 // -------------------------------------------------------

@@ -49,11 +49,16 @@ public:
     void setIsLoaded(bool b);
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
-    bool addLand(Position& p, LandDatas* land);
-    bool deleteLand(Position& p);
+    bool addLand(Position& p, LandDatas* land, QJsonObject &previous,
+                 MapEditorSubSelectionKind &previousType);
+    bool deleteLand(Position& p, QList<QJsonObject> &previous,
+                    QList<MapEditorSubSelectionKind> &previousType,
+                    QList<Position>& positions);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas *sprite);
-    bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p);
+    bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
+                      QJsonObject &previous,
+                      MapEditorSubSelectionKind &previousType);
     bool addSpriteWall(Position& position, int specialID);
     bool deleteSpriteWall(Position& position);
     void updateSpriteWalls();
@@ -86,8 +91,6 @@ public:
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSelectionKind kind,
                        MapEditorSubSelectionKind subKind) const;
-    void updateRemoveLayer(QSet<Portion> portionsOverflow, Position& position,
-                           MapEditorSelectionKind kind);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QHash<int, QOpenGLTexture*>& characters,

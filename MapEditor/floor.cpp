@@ -53,6 +53,18 @@ FloorDatas::~FloorDatas()
     delete m_textureRect;
 }
 
+bool FloorDatas::operator==(const FloorDatas& other) const {
+    return LandDatas::operator==(other) &&
+           m_textureRect->x() == other.m_textureRect->x() &&
+           m_textureRect->y() == other.m_textureRect->y() &&
+           m_textureRect->width() == other.m_textureRect->width() &&
+           m_textureRect->height() == other.m_textureRect->height();
+}
+
+bool FloorDatas::operator!=(const FloorDatas& other) const {
+    return !operator==(other);
+}
+
 QRect *FloorDatas::textureRect() const { return m_textureRect; }
 
 MapEditorSubSelectionKind FloorDatas::getSubKind() const{

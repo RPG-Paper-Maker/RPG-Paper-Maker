@@ -83,6 +83,8 @@ private slots:
     void on_actionExport_standalone_triggered();
     void on_actionClose_project_triggered();
     void on_actionQuit_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
     void on_actionDatas_manager_triggered();
     void on_actionSystems_manager_triggered();
     void on_actionVariables_manager_triggered();

@@ -231,7 +231,8 @@ HEADERS += \
     MathUtils/qbox3d.h \
     MapEditor/land.h \
     MapEditor/floor.h \
-    Enums/cameraupdownkind.h
+    Enums/cameraupdownkind.h \
+    Controls/controlundoredo.h
 
 SOURCES += \
     main.cpp \
@@ -408,7 +409,8 @@ SOURCES += \
     MathUtils/qray3d.cpp \
     MathUtils/qbox3d.cpp \
     MapEditor/land.cpp \
-    MapEditor/floor.cpp
+    MapEditor/floor.cpp \
+    Controls/controlundoredo.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

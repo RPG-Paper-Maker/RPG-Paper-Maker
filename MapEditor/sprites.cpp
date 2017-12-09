@@ -282,13 +282,14 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 // -------------------------------------------------------
 
-bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p){
+bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
+                           QJsonObject &previous,
+                           MapEditorSubSelectionKind &previousType)
+{
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
 
     if (previousSprite != nullptr)
         delete previousSprite;
-
-    updateRemoveLayer(portionsOverflow, p);
 
     return true;
 }
@@ -551,7 +552,10 @@ int Sprites::getLastLayerAt(Position& position) const {
 // -------------------------------------------------------
 
 void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
-                                Position& position) {
+                                Position& position, QList<QJsonObject> previous,
+                                QList<MapEditorSubSelectionKind> previousType,
+                                QList<Position> positions)
+{
     int i = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(),
                position.z(), i, position.centerX(), position.centerZ(),
@@ -559,7 +563,12 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {
-        deleteSprite(portionsOverflow, p);
+        QJsonObject obj;
+        MapEditorSubSelectionKind kind;
+        deleteSprite(portionsOverflow, p, obj, kind);
+        previous.append(obj);
+        previousType.append(kind);
+        positions.append(p);
         p.setLayer(++i);
         sprite = spriteAt(p);
     }

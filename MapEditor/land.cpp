@@ -41,6 +41,14 @@ LandDatas::~LandDatas()
 
 }
 
+bool LandDatas::operator==(const LandDatas& other) const {
+    return MapElement::operator==(other) && m_up == other.m_up;
+}
+
+bool LandDatas::operator!=(const LandDatas& other) const {
+    return !operator==(other);
+}
+
 MapEditorSubSelectionKind LandDatas::getSubKind() const{
     return MapEditorSubSelectionKind::None;
 }

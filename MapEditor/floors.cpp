@@ -76,28 +76,40 @@ FloorDatas *Floors::removeFloor(Position& p){
 
 // -------------------------------------------------------
 
-bool Floors::addFloor(Position& p, FloorDatas *floor){
+bool Floors::addFloor(Position& p, FloorDatas *floor, QJsonObject& previousObj,
+                      MapEditorSubSelectionKind &previousType)
+{
     FloorDatas* previousFloor = removeFloor(p);
+    bool changed = true;
 
-    if (previousFloor != nullptr)
+    if (previousFloor != nullptr) {
+        previousFloor->write(previousObj);
+        previousType = previousFloor->getSubKind();
+        changed = (*previousFloor) != (*floor);
         delete previousFloor;
+    }
 
     setFloor(p, floor);
 
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
 
-bool Floors::deleteFloor(Position& p){
+bool Floors::deleteFloor(Position& p, QJsonObject &previous,
+                         MapEditorSubSelectionKind &previousType)
+{
     FloorDatas* previousFloor = removeFloor(p);
+    bool changed = false;
 
-    if (previousFloor != nullptr)
+    if (previousFloor != nullptr) {
+        previousFloor->write(previous);
+        previousType = previousFloor->getSubKind();
+        changed = true;
         delete previousFloor;
+    }
 
-    updateRemoveLayer(p);
-
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
@@ -176,14 +188,22 @@ int Floors::getLastLayerAt(Position& position) const {
 
 // -------------------------------------------------------
 
-void Floors::updateRemoveLayer(Position& position) {
+void Floors::updateRemoveLayer(Position& position, QList<QJsonObject>& previous,
+                               QList<MapEditorSubSelectionKind>& previousType,
+                               QList<Position>& positions)
+{
     int i = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(),
                position.z(), i);
     FloorDatas* floor = getFloor(p);
 
     while (floor != nullptr) {
-        deleteFloor(p);
+        QJsonObject obj;
+        MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+        deleteFloor(p, obj, kind);
+        previous.append(obj);
+        previousType.append(kind);
+        positions.append(p);
         p.setLayer(++i);
         floor = getFloor(p);
     }

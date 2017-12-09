@@ -34,4 +34,4 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
-./mods
+mods

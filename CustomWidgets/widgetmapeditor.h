@@ -78,6 +78,8 @@ public:
                     const QColor& outlineColor = QColor());
     void showHideGrid();
     void showHideSquareInformations();
+    void undo();
+    void redo();
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;

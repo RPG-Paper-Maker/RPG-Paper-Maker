@@ -45,6 +45,9 @@ public:
     FloorDatas();
     FloorDatas(QRect *texture, bool up = false);
     virtual ~FloorDatas();
+    bool operator==(const FloorDatas& other) const;
+    bool operator!=(const FloorDatas& other) const;
+
     QRect* textureRect() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;

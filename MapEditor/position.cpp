@@ -54,6 +54,7 @@ bool Position::operator==(const Position& other) const{
            other.centerX() && m_centerZ == other.centerZ() && m_angle ==
            other.angle();
 }
+
 bool Position::operator!=(const Position& other) const{
     return !operator==(other);
 }

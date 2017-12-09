@@ -84,14 +84,18 @@ LandDatas* MapPortion::getLand(Position& p){
     return m_lands->getLand(p);
 }
 
-bool MapPortion::addLand(Position& p, LandDatas *land){
-    return m_lands->addLand(p, land);
+bool MapPortion::addLand(Position& p, LandDatas *land, QJsonObject& previous,
+                         MapEditorSubSelectionKind& previousType){
+    return m_lands->addLand(p, land, previous, previousType);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteLand(Position& p){
-    return m_lands->deleteLand(p);
+bool MapPortion::deleteLand(Position& p, QList<QJsonObject> &previous,
+                            QList<MapEditorSubSelectionKind> &previousType,
+                            QList<Position> &positions)
+{
+    return m_lands->deleteLand(p, previous, previousType, positions);
 }
 
 // -------------------------------------------------------
@@ -104,8 +108,11 @@ bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p){
-    return m_sprites->deleteSprite(portionsOverflow, p);
+bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
+                              QJsonObject &previous,
+                              MapEditorSubSelectionKind &previousType)
+{
+    return m_sprites->deleteSprite(portionsOverflow, p, previous, previousType);
 }
 
 // -------------------------------------------------------
@@ -270,21 +277,6 @@ int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind,
         return m_sprites->getLastLayerAt(position);
     default:
         return position.layer();
-    }
-}
-
-// -------------------------------------------------------
-
-void MapPortion::updateRemoveLayer(QSet<Portion> portionsOverflow,
-                                   Position& position,
-                                   MapEditorSelectionKind kind)
-{
-    switch (kind) {
-    case MapEditorSelectionKind::Sprites:
-        m_sprites->updateRemoveLayer(portionsOverflow, position);
-        break;
-    default:
-        break;
     }
 }
 

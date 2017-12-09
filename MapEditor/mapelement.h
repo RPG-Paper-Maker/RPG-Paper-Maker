@@ -41,6 +41,8 @@ class MapElement : public Serializable
 public:
     MapElement();
     virtual ~MapElement();
+    bool operator==(const MapElement& other) const;
+    bool operator!=(const MapElement& other) const;
     void setXOffset(int x);
     void setYOffset(int y);
     void setZOffset(int z);

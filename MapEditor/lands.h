@@ -31,8 +31,11 @@ public:
 
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
-    bool addLand(Position& p, LandDatas* land);
-    bool deleteLand(Position& p);
+    bool addLand(Position& p, LandDatas* land, QJsonObject& previous,
+                 MapEditorSubSelectionKind& previousType);
+    bool deleteLand(Position& p, QList<QJsonObject> &previous,
+                    QList<MapEditorSubSelectionKind> &previousType,
+                    QList<Position> &positions);
     void removeLandOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
                                  Position &finalPosition, QRay3D &ray);

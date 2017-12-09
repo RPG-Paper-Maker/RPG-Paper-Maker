@@ -43,6 +43,15 @@ MapElement::~MapElement()
 
 }
 
+bool MapElement::operator==(const MapElement& other) const{
+    return m_xOffset == other.m_xOffset && m_yOffset == other.m_yOffset &&
+           m_zOffset == other.m_zOffset;
+}
+
+bool MapElement::operator!=(const MapElement& other) const{
+    return !operator==(other);
+}
+
 void MapElement::setXOffset(int x) {
     m_xOffset = x;
 }

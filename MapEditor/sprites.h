@@ -74,14 +74,16 @@ public:
     SpriteDatas* spriteAt(Position& position) const;
     void setSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas* sprite);
-    static void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position& p,
-                                SpriteDatas* sprite);
-    void addRemoveOverflow(QSet<Portion>& portionsOverflow, Position &p,
-                           bool add);
+    static void getSetPortionsOverflow(
+            QSet<Portion>& portionsOverflow, Position& p, SpriteDatas* sprite);
+    void addRemoveOverflow(
+            QSet<Portion>& portionsOverflow, Position &p, bool add);
     SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
     bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
                    SpriteDatas *sprite);
-    bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p);
+    bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
+                      QJsonObject &previous,
+                      MapEditorSubSelectionKind &previousType);
     void setSpriteWall(Position& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(Position& p);
     bool addSpriteWall(Position& p, int specialID);
@@ -110,7 +112,11 @@ public:
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;
-    void updateRemoveLayer(QSet<Portion> portionsOverflow, Position& position);
+    void updateRemoveLayer(
+            QSet<Portion> portionsOverflow, Position& position,
+            QList<QJsonObject> previous,
+            QList<MapEditorSubSelectionKind> previousType,
+            QList<Position> positions);
 
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,

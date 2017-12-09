@@ -381,6 +381,18 @@ void WidgetMapEditor::showHideSquareInformations() {
 }
 
 // -------------------------------------------------------
+
+void WidgetMapEditor::undo() {
+    m_control.undo();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::redo() {
+    m_control.redo();
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
