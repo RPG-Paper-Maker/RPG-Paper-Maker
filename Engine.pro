@@ -28,6 +28,7 @@ INCLUDEPATH += \
     Dialogs/SpecialElements \
     CustomWidgets \
     Controls \
+    Controls/MapEditor \
     MapEditor \
     Singletons \
     Models \
@@ -75,7 +76,7 @@ HEADERS += \
     MapEditor/grid.h \
     MapEditor/position.h \
     Models/GameDatas/systemdatas.h \
-    Controls/controlmapeditor.h \
+    Controls/MapEditor/controlmapeditor.h \
     Models/serializable.h \
     CustomWidgets/widgetconditionslist.h \
     CustomWidgets/contextmenulist.h \
@@ -232,7 +233,7 @@ HEADERS += \
     MapEditor/land.h \
     MapEditor/floor.h \
     Enums/cameraupdownkind.h \
-    Controls/controlundoredo.h
+    Controls/MapEditor/controlundoredo.h
 
 SOURCES += \
     main.cpp \
@@ -270,7 +271,7 @@ SOURCES += \
     MapEditor/grid.cpp \
     MapEditor/position.cpp \
     Models/GameDatas/systemdatas.cpp \
-    Controls/controlmapeditor.cpp \
+    Controls/MapEditor/controlmapeditor.cpp \
     CustomWidgets/widgetconditionslist.cpp \
     CustomWidgets/contextmenulist.cpp \
     Models/GameDatas/itemsdatas.cpp \
@@ -410,7 +411,11 @@ SOURCES += \
     MathUtils/qbox3d.cpp \
     MapEditor/land.cpp \
     MapEditor/floor.cpp \
-    Controls/controlundoredo.cpp
+    Controls/MapEditor/controlundoredo.cpp \
+    Controls/MapEditor/controlmapeditor-preview.cpp \
+    Controls/MapEditor/controlmapeditor-raycasting.cpp \
+    Controls/MapEditor/controlmapeditor-add-remove.cpp \
+    Controls/MapEditor/controlmapeditor-objects.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
