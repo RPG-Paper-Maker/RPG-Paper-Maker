@@ -73,8 +73,7 @@ public:
     void updatePortionsInRay(QList<Portion>& portions,
                              QList<Portion> &adjacents);
     void updateRaycastingLand(MapPortion*mapPortion);
-    void updateRaycastingSprites(MapPortion *mapPortion,
-                                 bool layerOn);
+    void updateRaycastingSprites(MapPortion *mapPortion, bool layerOn);
     QVector3D transformToNormalizedCoords(const QPoint& mouse);
     QVector4D transformToHomogeneousClip(QVector3D& normalized);
     QVector4D transformToEyeCoords(QVector4D& rayClip, QMatrix4x4& projection);
@@ -170,6 +169,7 @@ public:
     void updateMapObjects();
     void removeObject(Position& p);
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
+    MapPortion *getMapPortion(Position& p, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
     bool isTinPaintPossible(MapEditorSelectionKind selection,
@@ -188,7 +188,6 @@ public:
     void undoRedo(QJsonArray& states, bool reverseAction);
     void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
                                QJsonObject& obj, Position &position);
-
     void deleteTempUndoRedo();
     QString getSquareInfos(MapEditorSelectionKind kind,
                            MapEditorSubSelectionKind subKind, bool layerOn);
@@ -249,6 +248,7 @@ private:
     Portion m_currentPortion;
     QSet<MapPortion*> m_portionsToUpdate;
     QSet<MapPortion*> m_portionsToSave;
+    QHash<Portion, MapPortion*> m_portionsGlobalSave;
     bool m_needMapInfosToSave;
     bool m_needMapObjectsUpdate;
     bool m_displayGrid;

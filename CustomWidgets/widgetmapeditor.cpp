@@ -212,24 +212,25 @@ void WidgetMapEditor::paintGL(){
                           cameraUpWorldSpace, cameraDeepWorldSpace, kind,
                           subKind, drawKind);
         p.endNativePainting();
+        p.end();
 
         // Draw additional text informations
         if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
-            QPainter painterHUD(this);
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn);
             QStringList listInfos = infos.split("\n");
+            p.begin(this);
             for (int i = 0; i < listInfos.size(); i++) {
-                renderText(painterHUD, 20, 20 * (listInfos.size() - i),
+                renderText(p, 20, 20 * (listInfos.size() - i),
                            listInfos.at(i), QFont(), QColor(255, 255, 255));
             }
-            painterHUD.end();
+            p.end();
         }
 
         // Update elapsed time
         m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
     }
-
-    p.end();
+    else
+        p.end();
 }
 
 // -------------------------------------------------------
@@ -572,6 +573,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
                 m_control.cursor()->centerInSquare(0);
             }
         }
+
         m_keysPressed += event->key();
     }
 }

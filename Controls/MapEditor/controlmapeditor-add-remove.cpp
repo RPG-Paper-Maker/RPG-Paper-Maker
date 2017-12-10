@@ -228,15 +228,16 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
                                  MapEditorSubSelectionKind kind, bool layerOn,
                                  bool undoRedo)
 {
-    if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
+    if (m_map->isInGrid(p)) {
+        MapPortion* mapPortion = getMapPortion(p, undoRedo);
+
+        if (mapPortion != nullptr) {
 
             // Update layer
             if (!undoRedo) {
-                m_currentLayer = getLayer(mapPortion, m_distanceLand, p, layerOn,
-                                          MapEditorSelectionKind::Land, kind);
+                m_currentLayer = getLayer(mapPortion, m_distanceLand, p,
+                                          layerOn, MapEditorSelectionKind::Land,
+                                          kind);
                 p.setLayer(m_currentLayer);
             }
 
@@ -298,11 +299,10 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
 // -------------------------------------------------------
 
 void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
-    if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
+    if (m_map->isInGrid(p)) {
+        MapPortion* mapPortion = getMapPortion(p, undoRedo);
 
+        if (mapPortion != nullptr) {
             QList<QJsonObject> previous;
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
@@ -314,9 +314,9 @@ void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
                 if (!undoRedo) {
                     for (int i = 0; i < previous.size(); i++) {
                         m_controlUndoRedo.updateJsonList(
-                                    m_changes, previous.at(i), previousType.at(i),
-                                    nullptr, MapEditorSubSelectionKind::None,
-                                    positions.at(i));
+                                  m_changes, previous.at(i), previousType.at(i),
+                                  nullptr, MapEditorSubSelectionKind::None,
+                                  positions.at(i));
                     }
                 }
                 m_portionsToUpdate += mapPortion;

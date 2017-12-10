@@ -56,7 +56,7 @@ WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
     if (this->cornerWidget() != nullptr)
         delete this->cornerWidget();
 
-    if (!m_selection) {
+    if (m_actionPencil != nullptr) {
         delete m_actionPencil;
         delete m_actionRectangle;
         delete m_actionPin;

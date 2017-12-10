@@ -595,14 +595,14 @@ void Map::addEmptyPicture(QHash<int, QOpenGLTexture*>& textures) {
 
 // -------------------------------------------------------
 
-MapPortion* Map::loadPortionMap(int i, int j, int k){
+MapPortion* Map::loadPortionMap(int i, int j, int k, bool force){
 
     int lx = (m_mapProperties->length() - 1) / Wanok::portionSize;
     int ly = (m_mapProperties->depth() + m_mapProperties->height() - 1) /
             Wanok::portionSize;;
     int lz = (m_mapProperties->width() - 1) / Wanok::portionSize;
 
-    if (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz){
+    if (force || (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz)){
         Portion portion(i, j, k);
         QString path = getPortionPath(i, j, k);
         MapPortion* mapPortion = new MapPortion(portion);

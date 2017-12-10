@@ -416,6 +416,10 @@ void ControlMapEditor::saveTempPortions(){
     for (i = m_portionsToSave.begin(); i != m_portionsToSave.end(); i++)
         m_map->savePortionMap(*i);
 
+    QHash<Portion, MapPortion*>::iterator j;
+    for (j = m_portionsGlobalSave.begin(); j != m_portionsGlobalSave.end(); j++)
+        m_map->savePortionMap(*j);
+
     // Save file infos
     if (m_needMapInfosToSave) {
         m_map->saveMapProperties();
@@ -428,6 +432,12 @@ void ControlMapEditor::saveTempPortions(){
 void ControlMapEditor::clearPortionsToUpdate(){
     m_portionsToUpdate.clear();
     m_portionsToSave.clear();
+
+    QHash<Portion, MapPortion*>::iterator i;
+    for (i = m_portionsGlobalSave.begin(); i != m_portionsGlobalSave.end(); i++)
+        delete *i;
+
+    m_portionsGlobalSave.clear();
 }
 
 // -------------------------------------------------------
@@ -626,9 +636,33 @@ void ControlMapEditor::updatePortionsToSaveOverflow(
         MapPortion* newMapPortion = m_map->mapPortionFromGlobal(portion);
 
         if (newMapPortion != nullptr)
-        m_portionsToSave += newMapPortion;
+            m_portionsToSave += newMapPortion;
     }
 
+}
+
+// -------------------------------------------------------
+
+MapPortion* ControlMapEditor::getMapPortion(Position& p, bool undoRedo) {
+    MapPortion* mapPortion = nullptr;
+    Portion portion = m_map->getLocalPortion(p);
+
+    if (m_map->isInPortion(portion))
+        mapPortion = m_map->mapPortion(portion);
+    else if (undoRedo) {
+        Portion globalPortion = m_map->getGlobalPortion(p);
+        if (mapPortion == nullptr) {
+            mapPortion = m_portionsGlobalSave.value(globalPortion);
+
+            if (mapPortion == nullptr) {
+                mapPortion = m_map->loadPortionMap(globalPortion.x(),
+                                                   globalPortion.y(),
+                                                   globalPortion.z(), true);
+            }
+        }
+    }
+
+    return mapPortion;
 }
 
 // -------------------------------------------------------
@@ -951,6 +985,13 @@ void ControlMapEditor::performUndoRedoAction(
 }
 
 // -------------------------------------------------------
+
+void ControlMapEditor::deleteTempUndoRedo() {
+    m_controlUndoRedo.deleteTempUndoRedo();
+}
+
+
+// -------------------------------------------------------
 //
 //  GL
 //
@@ -1014,12 +1055,6 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
             + "\n" + position.toString(m_map->squareSize());
-}
-
-// -------------------------------------------------------
-
-void ControlMapEditor::deleteTempUndoRedo() {
-    m_controlUndoRedo.deleteTempUndoRedo();
 }
 
 // -------------------------------------------------------
