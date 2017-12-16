@@ -62,7 +62,7 @@ public:
     void saveAllMaps();
     void deleteTempMaps();
     void openEngineUpdater();
-    void deleteTempUndoRedo();
+    bool close();
 
 private:
     Ui::MainWindow *ui;

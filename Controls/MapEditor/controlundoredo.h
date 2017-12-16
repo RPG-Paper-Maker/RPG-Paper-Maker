@@ -51,7 +51,6 @@ public:
     void addState(int idMap, QJsonArray& tab);
     int getMapCurrentState(int idMap) const;
     int updateMapCurrentState(int idMap);
-    void deleteTempUndoRedo();
     QString getTempDir(int idMap) const;
     QString getTempFile(int idMap, int state) const;
     void undo(int idMap, QJsonArray &states);

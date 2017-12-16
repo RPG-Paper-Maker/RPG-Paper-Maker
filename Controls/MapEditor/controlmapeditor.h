@@ -188,7 +188,6 @@ public:
     void undoRedo(QJsonArray& states, bool reverseAction);
     void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
                                QJsonObject& obj, Position &position);
-    void deleteTempUndoRedo();
     QString getSquareInfos(MapEditorSelectionKind kind,
                            MapEditorSubSelectionKind subKind, bool layerOn);
 

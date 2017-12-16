@@ -61,14 +61,18 @@ Map::Map(int id) :
                                           ->pathCurrentProject(),
                                           Wanok::pathMaps);
     m_pathMap = Wanok::pathCombine(pathMaps, realName);
-    QString pathTemp = Wanok::pathCombine(m_pathMap,
-                                          Wanok::TEMP_MAP_FOLDER_NAME);
 
     // Temp map files
-    if (!Wanok::mapsToSave.contains(id)){
+    if (!Wanok::mapsToSave.contains(id)) {
+        QString pathTemp = Wanok::pathCombine(m_pathMap,
+                                              Wanok::TEMP_MAP_FOLDER_NAME);
         Wanok::deleteAllFiles(pathTemp);
         QFile(Wanok::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
                     Wanok::pathCombine(pathTemp, Wanok::fileMapObjects));
+    }
+    if (!Wanok::mapsUndoRedo.contains(id)) {
+        Wanok::deleteAllFiles(
+           Wanok::pathCombine(m_pathMap, Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME));
     }
 
     m_mapProperties = new MapProperties(m_pathMap);

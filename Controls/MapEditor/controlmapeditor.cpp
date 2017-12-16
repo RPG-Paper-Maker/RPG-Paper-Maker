@@ -987,13 +987,6 @@ void ControlMapEditor::performUndoRedoAction(
 }
 
 // -------------------------------------------------------
-
-void ControlMapEditor::deleteTempUndoRedo() {
-    m_controlUndoRedo.deleteTempUndoRedo();
-}
-
-
-// -------------------------------------------------------
 //
 //  GL
 //

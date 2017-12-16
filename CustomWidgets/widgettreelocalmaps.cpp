@@ -153,6 +153,9 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
         QString pathTemp = Wanok::pathCombine(pathMap,
                                               Wanok::TEMP_MAP_FOLDER_NAME);
         Wanok::deleteAllFiles(pathTemp);
+        pathTemp = Wanok::pathCombine(pathMap,
+                                      Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+        Wanok::deleteAllFiles(pathTemp);
     }
     else{
         for (int i = 0; i < item->rowCount(); i++){

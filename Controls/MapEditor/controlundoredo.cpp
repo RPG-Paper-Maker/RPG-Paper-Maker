@@ -75,6 +75,9 @@ void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
     obj[jsonStates] = tab;
     int currentState = updateMapCurrentState(idMap);
 
+    // Add to undeoRedo idMaps in project
+    Wanok::mapsUndoRedo += idMap;
+
     // Save in temp file
     Wanok::writeOtherJSON(getTempFile(idMap, currentState - 1), obj);
 
@@ -112,14 +115,6 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
         m_states[idMap] = 1;
         return 1;
     }
-}
-
-// -------------------------------------------------------
-
-void ControlUndoRedo::deleteTempUndoRedo() {
-    QHash<int, int>::iterator i;
-    for (i = m_states.begin(); i != m_states.end(); i++)
-        Wanok::deleteAllFiles(getTempDir(i.key()));
 }
 
 // -------------------------------------------------------

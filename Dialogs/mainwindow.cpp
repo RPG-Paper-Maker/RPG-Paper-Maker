@@ -162,26 +162,11 @@ void MainWindow::openProject(QString pathProject) {
 // -------------------------------------------------------
 
 bool MainWindow::closeProject(){
-    if (Wanok::mapsToSave.count() > 0){
-        QMessageBox::StandardButton box =
-                QMessageBox::question(this, "Close project",
-                                      "You have some maps that are not saved. "
-                                      "Do you want to save all?",
-                                      QMessageBox::Yes | QMessageBox::No |
-                                      QMessageBox::Cancel);
+    if (!close())
+        return false;
 
-        if (box == QMessageBox::Yes)
-            saveAllMaps();
-        else if (box == QMessageBox::No)
-            deleteTempMaps();
-        else
-            return false;
-    }
-    else
-        deleteTempMaps();
-
-    deleteTempUndoRedo();
     Wanok::mapsToSave.clear();
+    Wanok::mapsUndoRedo.clear();
     enableNoGame();
     delete project;
     project = nullptr;
@@ -315,8 +300,31 @@ void MainWindow::openEngineUpdater() {
 
 // -------------------------------------------------------
 
-void MainWindow::deleteTempUndoRedo() {
-    ((PanelProject*)mainPanel)->widgetMapEditor()->deleteTempUndoRedo();
+bool MainWindow::close() {
+    if (project != nullptr){
+        if (Wanok::mapsToSave.count() > 0){
+            QMessageBox::StandardButton box =
+                    QMessageBox::question(this, "Quit",
+                                          "You have some maps that are not "
+                                          "saved. Do you want to save all?",
+                                          QMessageBox::Yes | QMessageBox::No |
+                                          QMessageBox::Cancel);
+
+            if (box == QMessageBox::Yes)
+                saveAllMaps();
+            else if (box == QMessageBox::No)
+                deleteTempMaps();
+            else {
+                return false;
+            }
+        }
+        else
+            deleteTempMaps();
+
+        return true;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------
@@ -367,7 +375,8 @@ void MainWindow::on_actionClose_project_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionQuit_triggered(){
-    qApp->quit();
+    if (close())
+        qApp->quit();
 }
 
 // -------------------------------------------------------
@@ -549,29 +558,6 @@ void MainWindow::on_updateFinished() {
 // -------------------------------------------------------
 
 void MainWindow::closeEvent(QCloseEvent * event){
-    if (project != nullptr){
-        bool deleteUndoRedo = true;
-        if (Wanok::mapsToSave.count() > 0){
-            QMessageBox::StandardButton box =
-                    QMessageBox::question(this, "Quit",
-                                          "You have some maps that are not "
-                                          "saved. Do you want to save all?",
-                                          QMessageBox::Yes | QMessageBox::No |
-                                          QMessageBox::Cancel);
-
-            if (box == QMessageBox::Yes)
-                saveAllMaps();
-            else if (box == QMessageBox::No)
-                deleteTempMaps();
-            else {
-                event->ignore();
-                deleteUndoRedo = false;
-            }
-        }
-        else
-            deleteTempMaps();
-
-        if (deleteUndoRedo)
-            deleteTempUndoRedo();
-    }
+    if (!close())
+        event->ignore();
 }

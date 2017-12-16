@@ -52,6 +52,7 @@ public:
     int getPortionsRay() const;
     int getSquareSize() const;
     static QSet<int> mapsToSave;
+    static QSet<int> mapsUndoRedo;
     static bool isInConfig;
 
     // PATHS

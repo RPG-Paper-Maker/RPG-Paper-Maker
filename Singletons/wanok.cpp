@@ -27,6 +27,7 @@
 #include "wanok.h"
 
 QSet<int> Wanok::mapsToSave;
+QSet<int> Wanok::mapsUndoRedo;
 
 // PATHS DATAS
 const QString Wanok::pathBasic = pathCombine("Content", "basic");

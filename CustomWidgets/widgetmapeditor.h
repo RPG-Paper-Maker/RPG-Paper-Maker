@@ -80,7 +80,6 @@ public:
     void showHideSquareInformations();
     void undo();
     void redo();
-    void deleteTempUndoRedo();
 
 private:
     WidgetMenuBarMapEditor* m_menuBar;

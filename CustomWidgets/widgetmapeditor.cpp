@@ -394,12 +394,6 @@ void WidgetMapEditor::redo() {
 }
 
 // -------------------------------------------------------
-
-void WidgetMapEditor::deleteTempUndoRedo() {
-    m_control.deleteTempUndoRedo();
-}
-
-// -------------------------------------------------------
 //
 //  EVENTS
 //
