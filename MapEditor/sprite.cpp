@@ -600,7 +600,8 @@ SpriteWallKind SpriteWallDatas::addKind(SpriteWallKind kA, SpriteWallKind kB) {
 
 SpriteWallDatas* SpriteWallDatas::getWall(Position& position) {
     Map* map = Wanok::get()->project()->currentMap();
-    Portion portion = map->getLocalPortion(position);
+    Portion portion;
+    map->getLocalPortion(position, portion);
     MapPortion* mapPortion = map->mapPortion(portion);
 
     return mapPortion != nullptr ? mapPortion->getWallAt(position) : nullptr;

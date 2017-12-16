@@ -169,7 +169,7 @@ public:
     void updateMapObjects();
     void removeObject(Position& p);
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
-    MapPortion *getMapPortion(Position& p, bool undoRedo);
+    MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
     bool isTinPaintPossible(MapEditorSelectionKind selection,

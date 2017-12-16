@@ -51,7 +51,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
     else {
         Position positionLayerZero(m_positionOnSprite);
         positionLayerZero.setLayer(0);
-        Portion portion = m_map->getLocalPortion(positionLayerZero);
+        Portion portion;
+        m_map->getLocalPortion(positionLayerZero, portion);
         MapPortion* mapPortion = m_map->mapPortion(portion);
         MapElement* element = mapPortion->getMapElementAt(
                     positionLayerZero, MapEditorSelectionKind::Sprites,
@@ -78,7 +79,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
     Position positionCamera;
     getCorrectPositionOnRay(positionCamera, direction, 0);
     Portion portionCamera;
-    portionCamera = m_map->getLocalPortion(positionCamera);
+    m_map->getLocalPortion(positionCamera, portionCamera);
 
     // If camera is inside the portions, ok !
     if (m_map->isInPortion(portionCamera))
@@ -110,7 +111,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
             return;
         else {
             getCorrectPositionOnRay(positionCamera, direction, distance);
-            portionCamera = m_map->getLocalPortion(positionCamera);
+            m_map->getLocalPortion(positionCamera, portionCamera);
             portions.append(portionCamera);
         }
     }

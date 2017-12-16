@@ -70,6 +70,10 @@ FloorDatas *Floors::removeFloor(Position& p){
 
     if (floor != nullptr)
         m_all.remove(p);
+    else {
+        int a = 3;
+        a = 3;
+    }
 
     return floor;
 }

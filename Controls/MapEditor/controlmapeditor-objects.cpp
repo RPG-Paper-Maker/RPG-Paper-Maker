@@ -6,7 +6,8 @@ void ControlMapEditor::setCursorObjectPosition(Position& p){
     m_cursorObject->setX(p.x());
     m_cursorObject->setZ(p.z());
 
-    Portion portion = m_map->getLocalPortion(p);
+    Portion portion;
+    m_map->getLocalPortion(p, portion);
     if (m_map->isInPortion(portion)){
         m_selectedObject = nullptr;
         MapObjects* mapObjects = m_map->objectsPortion(portion);
@@ -46,7 +47,8 @@ void ControlMapEditor::defineAsHero(){
 // -------------------------------------------------------
 
 void ControlMapEditor::addObject(Position& p){
-    Portion portion = m_map->getLocalPortion(p);
+    Portion portion;
+    m_map->getLocalPortion(p, portion);
     SystemCommonObject* object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -83,7 +85,8 @@ void ControlMapEditor::addObject(Position& p){
 
 void ControlMapEditor::removeObject(Position& p){
     if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             MapObjects* mapObjects = m_map->objectsPortion(portion);

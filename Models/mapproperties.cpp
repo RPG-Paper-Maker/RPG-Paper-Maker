@@ -167,7 +167,8 @@ void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
         QSet<Position>::iterator i;
         for (i = positions->begin(); i != positions->end(); i++) {
             Position position = *i;
-            Portion portion = map->getLocalPortion(position);
+            Portion portion;
+            map->getLocalPortion(position, portion);
             MapPortion* mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
                 mapPortion->updateRaycastingOverflowSprite(map->squareSize(),

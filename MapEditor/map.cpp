@@ -64,7 +64,7 @@ Map::Map(int id) :
     QString pathTemp = Wanok::pathCombine(m_pathMap,
                                           Wanok::TEMP_MAP_FOLDER_NAME);
 
-    // Reading map infos
+    // Temp map files
     if (!Wanok::mapsToSave.contains(id)){
         Wanok::deleteAllFiles(pathTemp);
         QFile(Wanok::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
@@ -830,10 +830,10 @@ bool Map::isInSomething(Position3D& position, Portion& portion,
 
 // -------------------------------------------------------
 
-Portion Map::getGlobalPortion(Position3D& position){
-    Portion portion(position.x() / Wanok::portionSize,
-                    position.y() / Wanok::portionSize,
-                    position.z() / Wanok::portionSize);
+void Map::getGlobalPortion(Position3D& position, Portion &portion){
+    portion.setX(position.x() / Wanok::portionSize);
+    portion.setY(position.y() / Wanok::portionSize);
+    portion.setZ(position.z() / Wanok::portionSize);
 
     if (position.x() < 0)
         portion.addX(-1);
@@ -841,20 +841,17 @@ Portion Map::getGlobalPortion(Position3D& position){
         portion.addY(-1);
     if (position.z() < 0)
         portion.addZ(-1);
-
-    return portion;
 }
 
 // -------------------------------------------------------
 
-Portion Map::getLocalPortion(Position3D& position) const{
-    return Portion(
-                (position.x() / Wanok::portionSize) -
-                (m_cursor->getSquareX() / Wanok::portionSize),
-                (position.y() / Wanok::portionSize) -
-                (m_cursor->getSquareY() / Wanok::portionSize),
-                (position.z() / Wanok::portionSize) -
-                (m_cursor->getSquareZ() / Wanok::portionSize));
+void Map::getLocalPortion(Position3D& position, Portion& portion) const{
+    portion.setX((position.x() / Wanok::portionSize) -
+                 (m_cursor->getSquareX() / Wanok::portionSize));
+    portion.setY((position.y() / Wanok::portionSize) -
+                 (m_cursor->getSquareY() / Wanok::portionSize));
+    portion.setZ((position.z() / Wanok::portionSize) -
+                 (m_cursor->getSquareZ() / Wanok::portionSize));
 }
 
 // -------------------------------------------------------

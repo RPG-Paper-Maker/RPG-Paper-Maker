@@ -134,8 +134,8 @@ public:
     bool isInPortion(Portion& portion, int offset = -1) const;
     bool isInSomething(Position3D& position, Portion& portion,
                        int offset = -1) const;
-    static Portion getGlobalPortion(Position3D &position);
-    Portion getLocalPortion(Position3D &position) const;
+    static void getGlobalPortion(Position3D &position, Portion& portion);
+    void getLocalPortion(Position3D &position, Portion& portion) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
     Portion getLocalFromGlobalPortion(Portion& portion) const;
     void save();

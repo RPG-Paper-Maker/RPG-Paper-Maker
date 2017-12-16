@@ -185,7 +185,8 @@ void Sprites::setSprite(QSet<Portion>& portionsOverflow, Position& p,
 void Sprites::getSetPortionsOverflow(QSet<Portion>& portionsOverflow,
                                      Position& p, SpriteDatas* sprite)
 {
-    Portion currentPortion = Map::getGlobalPortion(p);
+    Portion currentPortion;
+    Map::getGlobalPortion(p, currentPortion);
     int r = sprite->textureRect()->width() / 2;
     int h = sprite->textureRect()->height();
 
@@ -196,7 +197,8 @@ void Sprites::getSetPortionsOverflow(QSet<Portion>& portionsOverflow,
                 newPosition.addX(i);
                 newPosition.addY(j);
                 newPosition.addZ(k);
-                Portion newPortion = Map::getGlobalPortion(newPosition);
+                Portion newPortion;
+                Map::getGlobalPortion(newPosition, newPortion);
                 if (newPortion != currentPortion)
                     portionsOverflow += newPortion;
             }
@@ -455,7 +457,8 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
          i != m_overflow.end(); i++)
     {
         Position position = *i;
-        Portion portion = map->getLocalPortion(position);
+        Portion portion;
+        map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
         MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
                     squareSize, position, finalDistance, finalPosition, ray,

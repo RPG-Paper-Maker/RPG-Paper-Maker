@@ -145,7 +145,8 @@ void ControlMapEditor::paintPinLand(Position& p,
                                     QRect& textureAfter, bool layerOn)
 {
     if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
         if (m_map->isInPortion(portion)){
             LandDatas* landBefore = getLand(portion, p);
             MapEditorSubSelectionKind kindBefore =
@@ -195,7 +196,7 @@ void ControlMapEditor::paintPinLand(Position& p,
                                                textureAfterReduced,
                                                localX, localZ);
                         if (m_map->isInGrid(adjacentPosition)){
-                            portion = m_map->getLocalPortion(adjacentPosition);
+                            m_map->getLocalPortion(adjacentPosition, portion);
                             if (m_map->isInPortion(portion)){
                                 LandDatas* landHere = getLand(portion,
                                                               adjacentPosition);
@@ -229,7 +230,8 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
                                  bool undoRedo)
 {
     if (m_map->isInGrid(p)) {
-        MapPortion* mapPortion = getMapPortion(p, undoRedo);
+        Portion portion;
+        MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
 
         if (mapPortion != nullptr) {
 
@@ -255,8 +257,10 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
                                m_changes, previous, previousType, landDatas,
                                kind, p);
                 }
-                m_portionsToUpdate += mapPortion;
-                m_portionsToSave += mapPortion;
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
             }
 
             return;
@@ -300,7 +304,8 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
 
 void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
     if (m_map->isInGrid(p)) {
-        MapPortion* mapPortion = getMapPortion(p, undoRedo);
+        Portion portion;
+        MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
 
         if (mapPortion != nullptr) {
             QList<QJsonObject> previous;
@@ -319,8 +324,10 @@ void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
                                   positions.at(i));
                     }
                 }
-                m_portionsToUpdate += mapPortion;
-                m_portionsToSave += mapPortion;
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
             }
         }
     }
@@ -394,7 +401,8 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
                                    MapEditorSubSelectionKind kind, bool layerOn)
 {
     if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
 
@@ -429,7 +437,8 @@ void ControlMapEditor::stockSpriteWall(Position &position,
                                        int specialID)
 {
     if (m_map->isInGrid(position)) {
-        Portion portion = m_map->getLocalPortion(position);
+        Portion portion;
+        m_map->getLocalPortion(position, portion);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->addSpriteWall(position, specialID) &&
@@ -494,7 +503,8 @@ void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
 
 void ControlMapEditor::eraseSprite(Position& p){
     if (m_map->isInGrid(p)){
-        Portion portion = m_map->getLocalPortion(p);
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             QSet<Portion> portionsOverflow;
@@ -539,7 +549,8 @@ void ControlMapEditor::eraseSprite(Position& p){
 
 void ControlMapEditor::eraseSpriteWall(Position &position) {
     if (m_map->isInGrid(position)) {
-        Portion portion = m_map->getLocalPortion(position);
+        Portion portion;
+        m_map->getLocalPortion(position, portion);
         if (m_map->isInPortion(portion)){
             MapPortion* mapPortion = m_map->mapPortion(portion);
             if (mapPortion->deleteSpriteWall(position) && m_map->saved())

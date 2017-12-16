@@ -69,7 +69,6 @@ public:
 protected:
     QVector3D* m_positionSquare;
     QVector3D m_positionReal;
-    QPair<int,int> m_size;
     int m_squareSize;
 
     // OpenGL informations

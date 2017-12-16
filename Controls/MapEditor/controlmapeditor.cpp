@@ -643,22 +643,24 @@ void ControlMapEditor::updatePortionsToSaveOverflow(
 
 // -------------------------------------------------------
 
-MapPortion* ControlMapEditor::getMapPortion(Position& p, bool undoRedo) {
+MapPortion* ControlMapEditor::getMapPortion(Position& p, Portion& portion,
+                                            bool undoRedo)
+{
     MapPortion* mapPortion = nullptr;
-    Portion portion = m_map->getLocalPortion(p);
+    m_map->getLocalPortion(p, portion);
 
-    if (m_map->isInPortion(portion))
+    if (m_map->isInPortion(portion, undoRedo ? 0 : -1))
         mapPortion = m_map->mapPortion(portion);
     else if (undoRedo) {
-        Portion globalPortion = m_map->getGlobalPortion(p);
-        if (mapPortion == nullptr) {
-            mapPortion = m_portionsGlobalSave.value(globalPortion);
+        Portion globalPortion;
+        m_map->getGlobalPortion(p, globalPortion);
+        mapPortion = m_portionsGlobalSave.value(globalPortion);
 
-            if (mapPortion == nullptr) {
-                mapPortion = m_map->loadPortionMap(globalPortion.x(),
-                                                   globalPortion.y(),
-                                                   globalPortion.z(), true);
-            }
+        if (mapPortion == nullptr) {
+            mapPortion = m_map->loadPortionMap(globalPortion.x(),
+                                               globalPortion.y(),
+                                               globalPortion.z(), true);
+            m_portionsGlobalSave.insert(globalPortion, mapPortion);
         }
     }
 

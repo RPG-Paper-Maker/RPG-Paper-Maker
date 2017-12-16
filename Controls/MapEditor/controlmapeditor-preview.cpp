@@ -65,7 +65,8 @@ void ControlMapEditor::updatePreviewFloors(MapEditorSelectionKind kind,
 
             Position shortPosition(position.x() + i, 0, 0, position.z() + j,
                                    position.layer());
-            Portion shortPortion = m_map->getLocalPortion(shortPosition);
+            Portion shortPortion;
+            m_map->getLocalPortion(shortPosition, shortPortion);
             if (m_map->isInGrid(shortPosition) &&
                 m_map->isInPortion(shortPortion))
             {
@@ -98,7 +99,8 @@ void ControlMapEditor::updatePreviewWallSprites(int specialID) {
 void ControlMapEditor::updatePreviewWallSprite(Position &position,
                                                int specialID)
 {
-    Portion portion = m_map->getLocalPortion(position);
+    Portion portion;
+    m_map->getLocalPortion(position, portion);
 
     if (m_map->isInGrid(position) && m_map->isInPortion(portion)) {
         MapElement* element = m_isDeletingWall ? nullptr
@@ -114,7 +116,8 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         bool layerOn, QRect& tileset, int xOffset, int yOffset, int zOffset)
 {
     MapElement* element = nullptr;
-    Portion portion = m_map->getLocalPortion(m_positionPreviousPreview);
+    Portion portion;
+    m_map->getLocalPortion(m_positionPreviousPreview, portion);
     if (m_map->isInGrid(m_positionPreviousPreview) &&
         m_map->isInPortion(portion))
     {

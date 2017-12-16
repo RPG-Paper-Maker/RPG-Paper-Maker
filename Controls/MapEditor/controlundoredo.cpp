@@ -68,6 +68,9 @@ void ControlUndoRedo::updateJsonList(
 // -------------------------------------------------------
 
 void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
+    if (tab.isEmpty())
+        return;
+
     QJsonObject obj;
     obj[jsonStates] = tab;
     int currentState = updateMapCurrentState(idMap);
