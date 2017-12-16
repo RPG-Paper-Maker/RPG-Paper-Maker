@@ -45,7 +45,6 @@ public:
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-    void writeFull(QJsonObject & json, bool up) const;
 
 protected:
     bool m_up;

@@ -70,10 +70,6 @@ FloorDatas *Floors::removeFloor(Position& p){
 
     if (floor != nullptr)
         m_all.remove(p);
-    else {
-        int a = 3;
-        a = 3;
-    }
 
     return floor;
 }
@@ -303,7 +299,7 @@ void Floors::write(QJsonObject & json) const{
         position.write(tabKey);
         FloorDatas* floor = i.value();
         QJsonObject objFloor;
-        floor->writeFull(objFloor, position.layer() > 0);
+        floor->write(objFloor);
         objHash["k"] = tabKey;
         objHash["v"] = objFloor;
         tabFloors.append(objHash);

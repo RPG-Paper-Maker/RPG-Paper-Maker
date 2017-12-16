@@ -132,9 +132,6 @@ void FloorDatas::read(const QJsonObject & json){
     m_textureRect->setTop(tab[1].toInt());
     m_textureRect->setWidth(tab[2].toInt());
     m_textureRect->setHeight(tab[3].toInt());
-
-    if (json.contains(jsonUp))
-        m_up = json[jsonUp].toBool();
 }
 
 // -------------------------------------------------------

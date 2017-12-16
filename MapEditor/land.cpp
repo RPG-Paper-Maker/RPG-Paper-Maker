@@ -106,19 +106,16 @@ void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
 
 void LandDatas::read(const QJsonObject &json){
     MapElement::read(json);
+
+    if (json.contains(jsonUp))
+        m_up = json[jsonUp].toBool();
 }
 
 // -------------------------------------------------------
 
 void LandDatas::write(QJsonObject &json) const{
     MapElement::write(json);
-}
 
-// -------------------------------------------------------
-
-void LandDatas::writeFull(QJsonObject & json, bool up) const {
-    write(json);
-
-    if (up)
+    if (!m_up)
         json[jsonUp] = m_up;
 }

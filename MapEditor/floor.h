@@ -43,7 +43,7 @@ class FloorDatas : public LandDatas
 {
 public:
     FloorDatas();
-    FloorDatas(QRect *texture, bool up = false);
+    FloorDatas(QRect *texture, bool up = true);
     virtual ~FloorDatas();
     bool operator==(const FloorDatas& other) const;
     bool operator!=(const FloorDatas& other) const;
