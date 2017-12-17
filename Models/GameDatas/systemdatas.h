@@ -42,6 +42,7 @@ public:
     void read(QString path);
     SystemDatas(QString path);
     int portionsRay() const;
+    void setPortionRay(int p);
     int squareSize() const;
     void setSquareSize(int i);
     void setIdMapHero(int i);

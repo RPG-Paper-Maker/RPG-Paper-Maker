@@ -365,4 +365,10 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Updating special elements (empty) in each tileset
     m_project->readTilesetsDatas();
     m_project->writeTilesetsDatas();
+
+    // Limit portion ray
+    m_project->readLangsDatas();
+    m_project->readSystemDatas();
+    m_project->gameDatas()->systemDatas()->setPortionRay(6);
+    m_project->writeSystemDatas();
 }

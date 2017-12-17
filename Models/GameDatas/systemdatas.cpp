@@ -48,6 +48,8 @@ void SystemDatas::read(QString path){
 
 int SystemDatas::portionsRay() const { return m_portionsRay; }
 
+void SystemDatas::setPortionRay(int p) { m_portionsRay = p; }
+
 int SystemDatas::squareSize() const { return m_squareSize; }
 
 void SystemDatas::setSquareSize(int i) { m_squareSize = i; }
@@ -82,7 +84,7 @@ void SystemDatas::setDefault(){
     int length;
     QStandardItem* item;
 
-    m_portionsRay = 10;
+    m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
 
