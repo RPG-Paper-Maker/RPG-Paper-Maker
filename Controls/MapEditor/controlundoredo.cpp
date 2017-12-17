@@ -27,6 +27,7 @@ const QString ControlUndoRedo::jsonAfter = "after";
 const QString ControlUndoRedo::jsonAfterType = "afterT";
 const QString ControlUndoRedo::jsonPos = "pos";
 const QString ControlUndoRedo::jsonStates = "states";
+const int ControlUndoRedo::MAX_SIZE = 50;
 
 // -------------------------------------------------------
 //
@@ -74,16 +75,35 @@ void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
     QJsonObject obj;
     obj[jsonStates] = tab;
     int currentState = updateMapCurrentState(idMap);
+    int state;
 
     // Add to undeoRedo idMaps in project
     Wanok::mapsUndoRedo += idMap;
 
-    // Save in temp file
-    Wanok::writeOtherJSON(getTempFile(idMap, currentState - 1), obj);
+    // If max size reached, remove the first state and move the others
+    QString path = getTempFile(idMap, currentState - 1);
+    if (currentState == MAX_SIZE && QFile::exists(path)) {
+        state = 0;
+        QString pathSource = getTempFile(idMap, state + 1);
+        QString pathTarget = getTempFile(idMap, state);
 
-    // Remove all the state >
-    int state = currentState;
-    QString path = getTempFile(idMap, state);
+        while (QFile::exists(pathSource)) {
+            QFile::remove(pathTarget);
+            QFile::copy(pathSource, pathTarget);
+            state++;
+            pathSource = getTempFile(idMap, state + 1);
+            pathTarget = getTempFile(idMap, state);
+        }
+
+        QFile::remove(pathTarget);
+    }
+
+    // Save in temp file
+    Wanok::writeOtherJSON(path, obj);
+
+    // Remove all the state > state
+    state = currentState;
+    path = getTempFile(idMap, state);
     while (QFile::exists(path)) {
         QFile(path).remove();
         path = getTempFile(idMap, ++state);
@@ -107,7 +127,9 @@ int ControlUndoRedo::getMapCurrentState(int idMap) const {
 
 int ControlUndoRedo::updateMapCurrentState(int idMap) {
     if (m_states.contains(idMap)) {
-        int currentValue = m_states.value(idMap) + 1;
+        int currentValue = m_states.value(idMap);
+        if (currentValue < MAX_SIZE)
+            currentValue++;
         m_states[idMap] = currentValue;
         return currentValue;
     }

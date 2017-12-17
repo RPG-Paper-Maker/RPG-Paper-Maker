@@ -301,7 +301,7 @@ void MainWindow::openEngineUpdater() {
 // -------------------------------------------------------
 
 bool MainWindow::close() {
-    if (project != nullptr){
+    if (project != nullptr) {
         if (Wanok::mapsToSave.count() > 0){
             QMessageBox::StandardButton box =
                     QMessageBox::question(this, "Quit",
@@ -320,11 +320,9 @@ bool MainWindow::close() {
         }
         else
             deleteTempMaps();
-
-        return true;
     }
 
-    return false;
+    return true;
 }
 
 // -------------------------------------------------------

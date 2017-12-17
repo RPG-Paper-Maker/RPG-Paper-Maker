@@ -43,6 +43,7 @@ public:
     static const QString jsonAfterType;
     static const QString jsonPos;
     static const QString jsonStates;
+    static const int MAX_SIZE;
 
     void updateJsonList(QJsonArray& list, const QJsonObject& previous,
                         MapEditorSubSelectionKind previousType,
