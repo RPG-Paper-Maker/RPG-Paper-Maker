@@ -149,19 +149,22 @@ public:
                    bool undoRedo = false);
     void removeLand(Position& p, DrawKind drawKind, bool layerOn);
     void eraseLand(Position& p, bool undoRedo = false);
-    void addSprite(Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
+    void addSprite(
+            Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
             bool layerOn, QRect& tileset);
     SpriteDatas *getCompleteSprite(MapEditorSubSelectionKind kind, int xOffset,
                                    int yOffset, int zOffset, QRect& tileset,
                                    bool front, bool layerOn) const;
     void addSpriteWall(DrawKind drawKind, int specialID);
     void stockSprite(Position& p, SpriteDatas *sprite,
-                     MapEditorSubSelectionKind kind, bool layerOn);
-    void stockSpriteWall(Position& position, int specialID);
+                     MapEditorSubSelectionKind kind, bool layerOn,
+                     bool undoRedo = false);
+    void stockSpriteWall(Position& position, SpriteWallDatas *sprite,
+                         bool undoRedo = false);
     void removeSprite(Position& p, DrawKind drawKind);
     void removeSpriteWall(DrawKind drawKind);
-    void eraseSprite(Position& p);
-    void eraseSpriteWall(Position& position);
+    void eraseSprite(Position& p, bool undoRedo = false);
+    void eraseSpriteWall(Position& position, bool undoRedo = false);
     void setCursorObjectPosition(Position& p);
     void showObjectMenuContext();
     void defineAsHero();

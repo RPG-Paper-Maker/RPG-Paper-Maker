@@ -265,13 +265,19 @@ SpriteDatas* Sprites::removeSprite(QSet<Portion>& portionsOverflow, Position& p)
 // -------------------------------------------------------
 
 bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
-                        SpriteDatas* sprite)
+                        SpriteDatas* sprite, QJsonObject &previousObj,
+                        MapEditorSubSelectionKind &previousType)
 {
     QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
     SpriteDatas* previousSprite = removeSprite(portionsOverflowRemove, p);
+    bool changed = true;
 
-    if (previousSprite != nullptr)
+    if (previousSprite != nullptr) {
+        previousSprite->write(previousObj);
+        previousType = previousSprite->getSubKind();
+        changed = (*previousSprite) != (*sprite);
         delete previousSprite;
+    }
 
     setSprite(portionsOverflowSet, p, sprite);
 
@@ -279,21 +285,26 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
     portionsOverflow.unite(portionsOverflowRemove);
     portionsOverflow.unite(portionsOverflowSet);
 
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
 
 bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
-                           QJsonObject &previous,
+                           QJsonObject &previousObj,
                            MapEditorSubSelectionKind &previousType)
 {
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
+    bool changed = false;
 
-    if (previousSprite != nullptr)
+    if (previousSprite != nullptr) {
+        previousSprite->write(previousObj);
+        previousType = previousSprite->getSubKind();
+        changed = true;
         delete previousSprite;
+    }
 
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
@@ -316,27 +327,41 @@ SpriteWallDatas* Sprites::removeSpriteWall(Position &p) {
 
 // -------------------------------------------------------
 
-bool Sprites::addSpriteWall(Position &p, int specialID) {
+bool Sprites::addSpriteWall(Position &p, SpriteWallDatas* sprite,
+                            QJsonObject&previousObj,
+                            MapEditorSubSelectionKind &previousType)
+{
     SpriteWallDatas* previousSprite = removeSpriteWall(p);
-    SpriteWallDatas* sprite = new SpriteWallDatas(specialID);
+    bool changed = true;
 
-    if (previousSprite != nullptr)
+    if (previousSprite != nullptr) {
+        previousSprite->write(previousObj);
+        previousType = previousSprite->getSubKind();
+        changed = (*previousSprite) != (*sprite);
         delete previousSprite;
+    }
 
     setSpriteWall(p, sprite);
 
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
 
-bool Sprites::deleteSpriteWall(Position &p) {
+bool Sprites::deleteSpriteWall(Position &p, QJsonObject &previousObj,
+                               MapEditorSubSelectionKind &previousType)
+{
     SpriteWallDatas* previousSprite = removeSpriteWall(p);
+    bool changed = false;
 
-    if (previousSprite != nullptr)
+    if (previousSprite != nullptr) {
+        previousSprite->write(previousObj);
+        previousType = previousSprite->getSubKind();
+        changed = true;
         delete previousSprite;
+    }
 
-    return true;
+    return changed;
 }
 
 // -------------------------------------------------------
@@ -763,7 +788,7 @@ void Sprites::write(QJsonObject & json) const{
         Position position = i.key();
         position.write(tabKey);
         QJsonObject objSprite;
-        i.value()->writeFull(objSprite, position.layer() > 0);
+        i.value()->write(objSprite);
 
         objHash["k"] = tabKey;
         objHash["v"] = objSprite;

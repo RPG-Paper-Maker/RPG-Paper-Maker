@@ -55,12 +55,17 @@ public:
                     QList<MapEditorSubSelectionKind> &previousType,
                     QList<Position>& positions);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
-                   SpriteDatas *sprite);
+                   SpriteDatas *sprite, QJsonObject &previous,
+                   MapEditorSubSelectionKind &previousType);
     bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
-                      QJsonObject &previous,
-                      MapEditorSubSelectionKind &previousType);
-    bool addSpriteWall(Position& position, int specialID);
-    bool deleteSpriteWall(Position& position);
+                      QList<QJsonObject> &previous,
+                      QList<MapEditorSubSelectionKind> &previousType,
+                      QList<Position>& positions);
+    bool addSpriteWall(Position& position, SpriteWallDatas *sprite,
+                       QJsonObject &previous,
+                       MapEditorSubSelectionKind &previousType);
+    bool deleteSpriteWall(Position& position, QJsonObject &previous,
+                          MapEditorSubSelectionKind &previousType);
     void updateSpriteWalls();
     SpriteWallDatas* getWallAt(Position& position);
     bool addObject(Position& p, SystemCommonObject* o);

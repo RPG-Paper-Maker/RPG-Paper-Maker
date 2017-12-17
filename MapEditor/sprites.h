@@ -80,14 +80,18 @@ public:
             QSet<Portion>& portionsOverflow, Position &p, bool add);
     SpriteDatas* removeSprite(QSet<Portion> &portionsOverflow, Position& p);
     bool addSprite(QSet<Portion> &portionsOverflow, Position& p,
-                   SpriteDatas *sprite);
+                   SpriteDatas *sprite, QJsonObject &previousObj,
+                   MapEditorSubSelectionKind &previousType);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
-                      QJsonObject &previous,
+                      QJsonObject &previousObj,
                       MapEditorSubSelectionKind &previousType);
     void setSpriteWall(Position& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(Position& p);
-    bool addSpriteWall(Position& p, int specialID);
-    bool deleteSpriteWall(Position& p);
+    bool addSpriteWall(Position& p, SpriteWallDatas *sprite,
+                       QJsonObject &previousObj,
+                       MapEditorSubSelectionKind &previousType);
+    bool deleteSpriteWall(Position& p, QJsonObject &previousObj,
+                          MapEditorSubSelectionKind &previousType);
     void updateSpriteWalls(QHash<Position, MapElement*>& preview,
                            QList<Position> &previewDelete);
     SpriteWallDatas* getWallAt(QHash<Position, MapElement*>& preview,

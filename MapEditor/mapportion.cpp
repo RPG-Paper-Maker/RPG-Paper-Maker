@@ -101,30 +101,52 @@ bool MapPortion::deleteLand(Position& p, QList<QJsonObject> &previous,
 // -------------------------------------------------------
 
 bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
-                           SpriteDatas* sprite)
+                           SpriteDatas* sprite, QJsonObject &previous,
+                           MapEditorSubSelectionKind &previousType)
 {
-    return m_sprites->addSprite(portionsOverflow, p, sprite);
+    return m_sprites->addSprite(portionsOverflow, p, sprite, previous,
+                                previousType);
 }
 
 // -------------------------------------------------------
 
 bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
-                              QJsonObject &previous,
-                              MapEditorSubSelectionKind &previousType)
+                              QList<QJsonObject> &previous,
+                              QList<MapEditorSubSelectionKind> &previousType,
+                              QList<Position> &positions)
 {
-    return m_sprites->deleteSprite(portionsOverflow, p, previous, previousType);
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+    bool changed = m_sprites->deleteSprite(portionsOverflow, p, prev, kind);
+
+    if (changed) {
+        previous.append(prev);
+        previousType.append(kind);
+        positions.append(p);
+        m_sprites->updateRemoveLayer(portionsOverflow, p, previous,
+                                     previousType, positions);
+    }
+
+    return changed;
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::addSpriteWall(Position &position, int specialID) {
-    return m_sprites->addSpriteWall(position, specialID);
+bool MapPortion::addSpriteWall(Position &position, SpriteWallDatas* sprite,
+                               QJsonObject &previous,
+                               MapEditorSubSelectionKind &previousType)
+{
+    return m_sprites->addSpriteWall(position, sprite, previous,
+                                    previousType);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteSpriteWall(Position &position) {
-    return m_sprites->deleteSpriteWall(position);
+bool MapPortion::deleteSpriteWall(Position &position,
+                                  QJsonObject &previous,
+                                  MapEditorSubSelectionKind &previousType)
+{
+    return m_sprites->deleteSpriteWall(position, previous, previousType);
 }
 
 // -------------------------------------------------------

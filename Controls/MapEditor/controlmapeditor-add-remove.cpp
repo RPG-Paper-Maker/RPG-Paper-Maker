@@ -385,7 +385,7 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
     case DrawKind::Pencil:
         getWallSpritesPositions(positions);
         for (int i = 0; i < positions.size(); i++)
-            stockSpriteWall(positions[i], specialID);
+            stockSpriteWall(positions[i], new SpriteWallDatas(specialID));
         removePreviewElements();
         break;
     case DrawKind::Pin:
@@ -398,31 +398,46 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
 // -------------------------------------------------------
 
 void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
-                                   MapEditorSubSelectionKind kind, bool layerOn)
+                                   MapEditorSubSelectionKind kind, bool layerOn,
+                                   bool undoRedo)
 {
     if (m_map->isInGrid(p)){
         Portion portion;
-        m_map->getLocalPortion(p, portion);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
+        MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
 
             // Update layer
-            m_currentLayer = getLayer(mapPortion, m_distanceSprite, p, layerOn,
-                                      MapEditorSelectionKind::Sprites, kind);
-            p.setLayer(m_currentLayer);
+            if (!undoRedo) {
+                m_currentLayer = getLayer(
+                            mapPortion, m_distanceSprite, p, layerOn,
+                            MapEditorSelectionKind::Sprites, kind);
+                p.setLayer(m_currentLayer);
+            }
 
             // Add the sprite
             QSet<Portion> portionsOverflow;
-            if (mapPortion->addSprite(portionsOverflow, p, sprite) &&
-                m_map->saved())
-            {
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType =
+                    MapEditorSubSelectionKind::None;
+            bool changed = mapPortion->addSprite(portionsOverflow, p, sprite,
+                                                 previous, previousType);
+            if (changed && m_map->saved())
                 setToNotSaved();
-            }
+            if (changed) {
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(
+                               m_changes, previous, previousType, sprite,
+                               kind, p);
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
 
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
-            m_needMapInfosToSave = true;
-            updatePortionsToSaveOverflow(portionsOverflow);
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
 
             return;
         }
@@ -434,23 +449,38 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
 // -------------------------------------------------------
 
 void ControlMapEditor::stockSpriteWall(Position &position,
-                                       int specialID)
+                                       SpriteWallDatas* sprite, bool undoRedo)
 {
     if (m_map->isInGrid(position)) {
         Portion portion;
-        m_map->getLocalPortion(position, portion);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->addSpriteWall(position, specialID) &&
-                m_map->saved())
-            {
+        MapPortion* mapPortion = getMapPortion(position, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType =
+                    MapEditorSubSelectionKind::None;
+            bool changed = mapPortion->addSpriteWall(
+                        position, sprite, previous, previousType);
+            if (changed && m_map->saved())
                 setToNotSaved();
+            if (changed) {
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(
+                               m_changes, previous, previousType, sprite,
+                               MapEditorSubSelectionKind::SpritesWall,
+                               position);
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
             }
 
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
+            return;
         }
     }
+
+    delete sprite;
 }
 
 // -------------------------------------------------------
@@ -501,65 +531,70 @@ void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseSprite(Position& p){
+void ControlMapEditor::eraseSprite(Position& p, bool undoRedo) {
     if (m_map->isInGrid(p)){
         Portion portion;
-        m_map->getLocalPortion(p, portion);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            QSet<Portion> portionsOverflow;
+        MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
 
-            /*
-            QJsonObject previous;
-            MapEditorSubSelectionKind previousType;
+        if (mapPortion != nullptr) {
+            QSet<Portion> portionsOverflow;
+            QList<QJsonObject> previous;
+            QList<MapEditorSubSelectionKind> previousType;
+            QList<Position> positions;
             bool changed = mapPortion->deleteSprite(
-                        portionsOverflow, p, previous, previousType);
+                       portionsOverflow, p, previous, previousType, positions);
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {
-                QList<QJsonObject> previouses;
-                QList<MapEditorSubSelectionKind> previousTypes;
-                QList<Position> positions;
-                previouses.append(previous);
-                previousTypes.append(previousType);
-                previousTypes.append(p);
-                updateRemoveLayer(p, previouses, previousTypes, positions);
-                for (int i = 0; i < previous.size(); i++) {
-                    m_controlUndoRedo.updateJsonList(
-                                changes, previous.at(i), previousType.at(i),
-                                nullptr, MapEditorSubSelectionKind::None,
-                                positions.at(i));
+                if (!undoRedo) {
+                    for (int i = 0; i < previous.size(); i++) {
+                        m_controlUndoRedo.updateJsonList(
+                                  m_changes, previous.at(i), previousType.at(i),
+                                  nullptr, MapEditorSubSelectionKind::None,
+                                  positions.at(i));
+                    }
                 }
-                m_portionsToUpdate += mapPortion;
-                m_portionsToSave += mapPortion;
-            }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
 
-            if (mapPortion->deleteSprite(portionsOverflow, p) && m_map->saved())
-                setToNotSaved();
-*/
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
-            m_needMapInfosToSave = true;
-            updatePortionsToSaveOverflow(portionsOverflow);
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
         }
     }
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseSpriteWall(Position &position) {
+void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo) {
     if (m_map->isInGrid(position)) {
         Portion portion;
-        m_map->getLocalPortion(position, portion);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            if (mapPortion->deleteSpriteWall(position) && m_map->saved())
-            {
+        MapPortion* mapPortion = getMapPortion(position, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType =
+                    MapEditorSubSelectionKind::None;
+            bool changed = mapPortion->deleteSpriteWall(position, previous,
+                                                        previousType);
+            if (changed && m_map->saved())
                 setToNotSaved();
+            if (changed) {
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(
+                               m_changes, previous, previousType,
+                               nullptr, MapEditorSubSelectionKind::None,
+                               position);
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
             }
 
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
+            return;
         }
     }
 }

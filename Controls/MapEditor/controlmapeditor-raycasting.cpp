@@ -50,13 +50,17 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
     }
     else {
         Position positionLayerZero(m_positionOnSprite);
-        positionLayerZero.setLayer(0);
         Portion portion;
         m_map->getLocalPortion(positionLayerZero, portion);
         MapPortion* mapPortion = m_map->mapPortion(portion);
-        MapElement* element = mapPortion->getMapElementAt(
-                    positionLayerZero, MapEditorSelectionKind::Sprites,
-                    MapEditorSubSelectionKind::None);
+        MapElement* element = nullptr;
+        int layer = 0;
+        while (element == nullptr) {
+            positionLayerZero.setLayer(layer++);
+            element = mapPortion->getMapElementAt(
+                        positionLayerZero, MapEditorSelectionKind::Sprites,
+                        MapEditorSubSelectionKind::None);
+        }
         if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall) {
             m_distanceSprite = ((SpriteWallDatas*) element)->intersectionPlane(
                         positionLayerZero.angle(), m_ray);

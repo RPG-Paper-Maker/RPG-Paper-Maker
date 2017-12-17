@@ -289,8 +289,6 @@ void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
     QSet<MapPortion*>::iterator i;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion* mapPortion = *i;
-        if (subSelection == MapEditorSubSelectionKind::SpritesWall)
-            mapPortion->updateSpriteWalls();
         m_map->updatePortion(mapPortion);
     }
 }
@@ -976,9 +974,27 @@ void ControlMapEditor::performUndoRedoAction(
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesDouble:
     case MapEditorSubSelectionKind::SpritesQuadra:
+    {
+        if (before) {
+            SpriteDatas* sprite = new SpriteDatas;
+            sprite->read(obj);
+            stockSprite(position, sprite, kind, false, true);
+        }
+        else
+            eraseSprite(position, true);
         break;
+    }
     case MapEditorSubSelectionKind::SpritesWall:
+    {
+        if (before) {
+            SpriteWallDatas* sprite = new SpriteWallDatas;
+            sprite->read(obj);
+            stockSpriteWall(position, sprite, true);
+        }
+        else
+            eraseSpriteWall(position, true);
         break;
+    }
     case MapEditorSubSelectionKind::Object:
         break;
     default:

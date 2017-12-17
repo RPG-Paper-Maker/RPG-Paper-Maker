@@ -104,6 +104,19 @@ SpriteDatas::~SpriteDatas()
     delete m_textureRect;
 }
 
+bool SpriteDatas::operator==(const SpriteDatas& other) const {
+    return MapElement::operator==(other) &&
+            m_textureRect->x() == other.m_textureRect->x() &&
+            m_textureRect->y() == other.m_textureRect->y() &&
+            m_textureRect->width() == other.m_textureRect->width() &&
+            m_textureRect->height() == other.m_textureRect->height() &&
+            (int) m_kind == (int) other.m_kind && m_front == other.m_front;
+}
+
+bool SpriteDatas::operator!=(const SpriteDatas& other) const {
+    return !operator==(other);
+}
+
 MapEditorSelectionKind SpriteDatas::getKind() const {
     return MapEditorSelectionKind::Sprites;
 }
@@ -364,8 +377,6 @@ void SpriteDatas::read(const QJsonObject & json){
     MapElement::read(json);
 
     m_kind = static_cast<MapEditorSubSelectionKind>(json["k"].toInt());
-    if (json.contains(jsonFront))
-        m_front = json[jsonFront].toBool();
 
     // Texture
     QJsonArray tab = json["t"].toArray();
@@ -373,6 +384,9 @@ void SpriteDatas::read(const QJsonObject & json){
     m_textureRect->setTop(tab[1].toInt());
     m_textureRect->setWidth(tab[2].toInt());
     m_textureRect->setHeight(tab[3].toInt());
+
+    if (json.contains(jsonFront))
+        m_front = json[jsonFront].toBool();
 }
 
 // -------------------------------------------------------
@@ -389,15 +403,8 @@ void SpriteDatas::write(QJsonObject & json) const{
     tab.append(m_textureRect->width());
     tab.append(m_textureRect->height());
     json["t"] = tab;
-}
 
-// -------------------------------------------------------
-
-void SpriteDatas::writeFull(QJsonObject &json, bool front) const {
-    write(json);
-
-    // Only if layer > 0
-    if (front)
+    if (!m_front)
         json[jsonFront] = m_front;
 }
 
@@ -519,6 +526,14 @@ SpriteWallDatas::SpriteWallDatas(int wallID) :
     m_wallKind(SpriteWallKind::Middle)
 {
 
+}
+
+bool SpriteWallDatas::operator==(const SpriteWallDatas& other) const {
+    return MapElement::operator==(other) && m_wallID == other.m_wallID;
+}
+
+bool SpriteWallDatas::operator!=(const SpriteWallDatas& other) const {
+    return !operator==(other);
 }
 
 int SpriteWallDatas::wallID() const {

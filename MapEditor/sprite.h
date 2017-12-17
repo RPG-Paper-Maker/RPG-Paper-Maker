@@ -70,8 +70,10 @@ class SpriteDatas : public MapElement
 public:
     SpriteDatas();
     SpriteDatas(MapEditorSubSelectionKind kind, QRect* textureRect,
-                bool front = false);
+                bool front = true);
     virtual ~SpriteDatas();
+    bool operator==(const SpriteDatas& other) const;
+    bool operator!=(const SpriteDatas& other) const;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
@@ -104,7 +106,6 @@ public:
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-    void writeFull(QJsonObject &json, bool front) const;
 
 protected:
     MapEditorSubSelectionKind m_kind;
@@ -161,6 +162,8 @@ class SpriteWallDatas : public MapElement
 public:
     SpriteWallDatas();
     SpriteWallDatas(int wallID);
+    bool operator==(const SpriteWallDatas& other) const;
+    bool operator!=(const SpriteWallDatas& other) const;
     int wallID() const;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
