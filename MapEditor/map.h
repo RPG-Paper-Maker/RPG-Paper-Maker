@@ -63,11 +63,13 @@ public:
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
     bool addObject(Position& p, MapPortion *mapPortion,
-                   SystemCommonObject* object);
+                   SystemCommonObject* object, QJsonObject &previous,
+                   MapEditorSubSelectionKind &previousType);
     static int removeObject(QStandardItemModel* model,
                             SystemCommonObject *object);
     bool deleteObject(Position& p, MapPortion *mapPortion,
-                      SystemCommonObject *object);
+                      SystemCommonObject *object, QJsonObject &previous,
+                      MapEditorSubSelectionKind &previousType);
     void addOverflow(Position& p, Portion& portion);
     void removeOverflow(Position& p, Portion& portion);
 

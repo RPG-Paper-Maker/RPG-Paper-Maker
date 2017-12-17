@@ -68,8 +68,10 @@ public:
                           MapEditorSubSelectionKind &previousType);
     void updateSpriteWalls();
     SpriteWallDatas* getWallAt(Position& position);
-    bool addObject(Position& p, SystemCommonObject* o);
-    bool deleteObject(Position& p);
+    bool addObject(Position& p, SystemCommonObject* o, QJsonObject &previous,
+                   MapEditorSubSelectionKind &previousType);
+    bool deleteObject(Position& p, QJsonObject &previous,
+                      MapEditorSubSelectionKind &previousType);
     void addOverflow(Position& p);
     void removeOverflow(Position& p);
     void removeLandOut(MapProperties& properties);

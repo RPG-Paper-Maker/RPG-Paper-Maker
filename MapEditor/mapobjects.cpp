@@ -77,11 +77,17 @@ SystemCommonObject* MapObjects::removeObject(Position& p){
 
 // -------------------------------------------------------
 
-bool MapObjects::addObject(Position& p, SystemCommonObject* object){
+bool MapObjects::addObject(Position& p, SystemCommonObject* object,
+                           QJsonObject &previousObj,
+                           MapEditorSubSelectionKind &previousType)
+{
     SystemCommonObject* previousObject = removeObject(p);
 
-    if (previousObject != nullptr)
+    if (previousObject != nullptr) {
+        previousObject->write(previousObj);
+        previousType = MapEditorSubSelectionKind::Object;
         delete previousObject;
+    }
 
     setObject(p, object);
 
@@ -90,11 +96,16 @@ bool MapObjects::addObject(Position& p, SystemCommonObject* object){
 
 // -------------------------------------------------------
 
-bool MapObjects::deleteObject(Position& p){
+bool MapObjects::deleteObject(Position& p, QJsonObject &previousObj,
+                              MapEditorSubSelectionKind &previousType)
+{
     SystemCommonObject* previousObject = removeObject(p);
 
-    if (previousObject != nullptr)
+    if (previousObject != nullptr) {
+        previousObject->write(previousObj);
+        previousType = MapEditorSubSelectionKind::Object;
         delete previousObject;
+    }
 
     return true;
 }

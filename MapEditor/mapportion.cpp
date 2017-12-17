@@ -163,14 +163,18 @@ SpriteWallDatas* MapPortion::getWallAt(Position &position) {
 
 // -------------------------------------------------------
 
-bool MapPortion::addObject(Position& p, SystemCommonObject* o){
-    return m_mapObjects->addObject(p, o);
+bool MapPortion::addObject(Position& p, SystemCommonObject* o,
+                           QJsonObject &previous,
+                           MapEditorSubSelectionKind &previousType)
+{
+    return m_mapObjects->addObject(p, o, previous, previousType);
 }
 
 // -------------------------------------------------------
 
-bool MapPortion::deleteObject(Position& p){
-    return m_mapObjects->deleteObject(p);
+bool MapPortion::deleteObject(Position& p, QJsonObject &previous,
+                              MapEditorSubSelectionKind &previousType){
+    return m_mapObjects->deleteObject(p, previous, previousType);
 }
 
 // -------------------------------------------------------

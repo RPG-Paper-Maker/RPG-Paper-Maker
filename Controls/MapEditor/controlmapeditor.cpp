@@ -93,7 +93,7 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 void ControlMapEditor::moveCursorToMousePosition(QPoint point, bool layerOn)
 {
     updateMousePosition(point);
-    update(MapEditorSubSelectionKind::None, layerOn);
+    update(layerOn);
 
     if (m_map->isInGrid(m_positionOnPlane))
         cursor()->setPositions(m_positionOnPlane);
@@ -226,13 +226,12 @@ void ControlMapEditor::updateCameraTreeNode(){
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update(MapEditorSubSelectionKind subSelection,
-                              bool layerOn)
+void ControlMapEditor::update(bool layerOn)
 {
     updateRaycasting(layerOn);
 
     // Update portions
-    updatePortions(subSelection);
+    updatePortions();
     saveTempPortions();
     clearPortionsToUpdate();
     updateMovingPortions();
@@ -280,7 +279,7 @@ void ControlMapEditor::updateWallIndicator() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePortions(MapEditorSubSelectionKind subSelection) {
+void ControlMapEditor::updatePortions() {
     if (m_needMapObjectsUpdate) {
         m_needMapObjectsUpdate = false;
         m_map->updateMapObjects();
@@ -996,6 +995,13 @@ void ControlMapEditor::performUndoRedoAction(
         break;
     }
     case MapEditorSubSelectionKind::Object:
+        if (before) {
+            SystemCommonObject* object = new SystemCommonObject;
+            object->read(obj);
+            stockObject(position, object, true);
+        }
+        else
+            eraseObject(position, true);
         break;
     default:
         break;

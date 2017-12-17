@@ -38,17 +38,15 @@ void ControlMapEditor::showObjectMenuContext(){
 // -------------------------------------------------------
 
 void ControlMapEditor::defineAsHero(){
-   SystemDatas* datas = Wanok::get()->project()->gameDatas()->systemDatas();
-   datas->setIdMapHero(m_map->mapProperties()->id());
-   datas->setIdObjectHero(m_selectedObject->id());
-   Wanok::get()->project()->writeGameDatas();
+    SystemDatas* datas = Wanok::get()->project()->gameDatas()->systemDatas();
+    datas->setIdMapHero(m_map->mapProperties()->id());
+    datas->setIdObjectHero(m_selectedObject->id());
+    Wanok::get()->project()->writeGameDatas();
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::addObject(Position& p){
-    Portion portion;
-    m_map->getLocalPortion(p, portion);
     SystemCommonObject* object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -65,17 +63,9 @@ void ControlMapEditor::addObject(Position& p){
     DialogObject dialog(object);
     int result = dialog.exec();
     Wanok::isInConfig = false;
-    if (result == QDialog::Accepted){
-        MapPortion* mapPortion = m_map->mapPortion(portion);
-        if (m_map->addObject(p, mapPortion, object) &&
-            m_map->saved())
-        {
-            setToNotSaved();
-        }
-        m_selectedObject = object;
-        m_map->writeObjects(true);
-        m_map->savePortionMap(mapPortion);
-        m_needMapObjectsUpdate = true;
+    if (result == QDialog::Accepted) {
+        stockObject(p, object);
+        m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
     }
     else
         delete object;
@@ -83,28 +73,87 @@ void ControlMapEditor::addObject(Position& p){
 
 // -------------------------------------------------------
 
+void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
+                                   bool undoRedo)
+{
+    Portion portion;
+    m_map->getLocalPortion(p, portion);
+    MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
+
+    if (mapPortion != nullptr) {
+        QJsonObject previous;
+        MapEditorSubSelectionKind previousType =
+                MapEditorSubSelectionKind::None;
+        if (m_map->addObject(p, mapPortion, object, previous, previousType) &&
+            m_map->saved())
+        {
+            setToNotSaved();
+        }
+
+        if (!undoRedo) {
+            m_controlUndoRedo.updateJsonList(
+                       m_changes, previous, previousType,
+                       object, MapEditorSubSelectionKind::Object, p);
+        }
+
+        if (m_cursorObject->getSquareX() == p.x() &&
+            m_cursorObject->getSquareY() == p.y() &&
+            m_cursorObject->getSquareZ() == p.z())
+        {
+            m_selectedObject = object;
+        }
+        m_map->writeObjects(true);
+        m_map->savePortionMap(mapPortion);
+        m_needMapObjectsUpdate = true;
+
+        return;
+    }
+
+    delete object;
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::removeObject(Position& p){
-    if (m_map->isInGrid(p)){
-        Portion portion;
-        m_map->getLocalPortion(p, portion);
-        if (m_map->isInPortion(portion)){
-            MapPortion* mapPortion = m_map->mapPortion(portion);
-            MapObjects* mapObjects = m_map->objectsPortion(portion);
-            SystemCommonObject* object;
-            if (mapObjects != nullptr)
-                object = mapObjects->getObjectAt(p);
+    if (m_map->isInGrid(p)) {
+        eraseObject(p);
+        m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
+    }
+}
 
-            if (object != nullptr){
-                if (m_map->deleteObject(p, mapPortion, object) &&
-                    m_map->saved())
-                {
-                    setToNotSaved();
-                }
+// -------------------------------------------------------
 
-                m_map->writeObjects(true);
-                m_portionsToUpdate += mapPortion;
-                m_portionsToSave += mapPortion;
+void ControlMapEditor::eraseObject(Position& p, bool undoRedo) {
+    Portion portion;
+    m_map->getLocalPortion(p, portion);
+    MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
+
+    if (mapPortion != nullptr) {
+        MapObjects* mapObjects = m_map->objectsPortion(portion);
+        SystemCommonObject* object;
+        if (mapObjects != nullptr)
+            object = mapObjects->getObjectAt(p);
+
+        if (object != nullptr){
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType =
+                    MapEditorSubSelectionKind::None;
+            if (m_map->deleteObject(p, mapPortion, object, previous,
+                                    previousType) &&
+                m_map->saved())
+            {
+                setToNotSaved();
             }
+
+            if (!undoRedo) {
+                m_controlUndoRedo.updateJsonList(
+                           m_changes, previous, previousType,
+                           nullptr, MapEditorSubSelectionKind::None, p);
+            }
+
+            m_map->writeObjects(true);
+            m_portionsToUpdate += mapPortion;
+            m_portionsToSave += mapPortion;
         }
     }
 }

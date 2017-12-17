@@ -50,8 +50,11 @@ public:
     SystemCommonObject* getObjectAt(Position& p) const;
     void setObject(Position& p, SystemCommonObject* object);
     SystemCommonObject* removeObject(Position& p);
-    bool addObject(Position& p, SystemCommonObject* object);
-    bool deleteObject(Position& p);
+    bool addObject(Position& p, SystemCommonObject* object,
+                   QJsonObject &previousObj,
+                   MapEditorSubSelectionKind &previousType);
+    bool deleteObject(Position& p, QJsonObject &previousObj,
+                      MapEditorSubSelectionKind &previousType);
 
     void removeObjectsOut(QList<int> &listDeletedObjectsIDs,
                           MapProperties& properties);

@@ -178,7 +178,7 @@ void WidgetMapEditor::paintGL(){
             QPoint point = mapFromGlobal(QCursor::pos());
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
-            m_control.update(subKind, layerOn);
+            m_control.update(layerOn);
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
@@ -476,7 +476,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
             }
             else{
                 m_control.updateMousePosition(event->pos());
-                m_control.update(MapEditorSubSelectionKind::None, false);
+                m_control.update(false);
             }
         }
     }

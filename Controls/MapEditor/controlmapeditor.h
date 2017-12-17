@@ -64,7 +64,7 @@ public:
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
 
-    void update(MapEditorSubSelectionKind subSelection, bool layerOn);
+    void update(bool layerOn);
     void updateMouse(QPoint point, bool layerOn);
     void updateMousePosition(QPoint point);
     bool mousePositionChanged(QPoint point);
@@ -112,7 +112,7 @@ public:
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(Portion& currentPortion, int i, int j, int k);
-    void updatePortions(MapEditorSubSelectionKind subSelection);
+    void updatePortions();
     void saveTempPortions();
     void clearPortionsToUpdate();
     void setToNotSaved();
@@ -169,8 +169,11 @@ public:
     void showObjectMenuContext();
     void defineAsHero();
     void addObject(Position& p);
-    void updateMapObjects();
+    void stockObject(Position& p, SystemCommonObject* object,
+                     bool undoRedo = false);
     void removeObject(Position& p);
+    void eraseObject(Position& p, bool undoRedo = false);
+    void updateMapObjects();
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,

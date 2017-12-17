@@ -47,7 +47,8 @@ public:
 
     void updateJsonList(QJsonArray& list, const QJsonObject& previous,
                         MapEditorSubSelectionKind previousType,
-                        MapElement* after, MapEditorSubSelectionKind afterType,
+                        Serializable *after,
+                        MapEditorSubSelectionKind afterType,
                         const Position &position);
     void addState(int idMap, QJsonArray& tab);
     int getMapCurrentState(int idMap) const;

@@ -233,7 +233,9 @@ void Map::writeDefaultMap(QString path){
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", 2,
                                                    new QStandardItemModel,
                                                    new QStandardItemModel);
-    mapPortion.addObject(position, o);
+    QJsonObject previous;
+    MapEditorSubSelectionKind previousType;
+    mapPortion.addObject(position, o, previous, previousType);
     Wanok::writeJSON(Wanok::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
                      mapPortion);
 }
@@ -880,9 +882,10 @@ Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
 // -------------------------------------------------------
 
 bool Map::addObject(Position& p, MapPortion* mapPortion,
-                    SystemCommonObject *object)
+                    SystemCommonObject *object, QJsonObject &previous,
+                    MapEditorSubSelectionKind &previousType)
 {
-    bool b = mapPortion->addObject(p, object);
+    bool b = mapPortion->addObject(p, object, previous, previousType);
 
     int row = Map::removeObject(m_modelObjects, object);
     SystemMapObject* newObject = new SystemMapObject(object->id(),
@@ -916,13 +919,12 @@ int Map::removeObject(QStandardItemModel *model, SystemCommonObject *object) {
 // -------------------------------------------------------
 
 bool Map::deleteObject(Position& p, MapPortion *mapPortion,
-                       SystemCommonObject *object)
+                       SystemCommonObject *object, QJsonObject &previous,
+                       MapEditorSubSelectionKind &previousType)
 {
     Map::removeObject(m_modelObjects, object);
 
-    bool b = mapPortion->deleteObject(p);
-
-    return b;
+    return mapPortion->deleteObject(p, previous, previousType);
 }
 
 // -------------------------------------------------------
