@@ -64,6 +64,9 @@ public:
     void cleanCopy();
     void paste(QStandardItem* item);
 
+protected:
+    virtual void keyPressEvent(QKeyEvent *event);
+
 private:
     QStandardItemModel* m_model;
     ContextMenuList* m_contextMenuMap;

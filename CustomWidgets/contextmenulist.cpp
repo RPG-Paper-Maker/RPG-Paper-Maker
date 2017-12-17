@@ -25,7 +25,8 @@
 //
 // -------------------------------------------------------
 
-ContextMenuList::ContextMenuList(QWidget *parent) : QMenu(parent)
+ContextMenuList::ContextMenuList(QWidget *parent) :
+    QMenu(parent)
 {
 
 }
@@ -41,11 +42,15 @@ ContextMenuList* ContextMenuList::createContextCommand(QWidget *parent){
     QAction* actionCopy = new QAction("Copy", parent);
     QAction* actionPaste = new QAction("Paste", parent);
     QAction* actionDelete = new QAction("Delete", parent);
+    menu->setActionNew(actionNew);
+    menu->setActionEdit(actionEdit);
+    menu->setActionCopy(actionCopy);
+    menu->setActionPaste(actionPaste);
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
-    actionNew->setShortcut(QKeySequence(QKeySequence::New));
-    actionEdit->setShortcut(QKeySequence(QKeySequence::Replace));
+    actionNew->setShortcut(QKeySequence(Qt::Key_Enter));
+    actionEdit->setShortcut(QKeySequence(Qt::Key_Enter));
     actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
     actionPaste->setShortcut(QKeySequence(QKeySequence::Paste));
     actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
@@ -113,7 +118,7 @@ ContextMenuList* ContextMenuList::createContextMap(QWidget *parent){
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
-    actionEdit->setShortcut(QKeySequence(QKeySequence::Replace));
+    actionEdit->setShortcut(QKeySequence(Qt::Key_Enter));
     actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
     actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
 
@@ -149,7 +154,9 @@ ContextMenuList* ContextMenuList::createContextDirectory(QWidget *parent){
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
-    actionEdit->setShortcut(QKeySequence(QKeySequence::Replace));
+    actionNewMap->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    actionNewDirectory->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    actionEdit->setShortcut(QKeySequence(Qt::Key_Enter));
     actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
     actionPaste->setShortcut(QKeySequence(QKeySequence::Paste));
     actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
@@ -201,11 +208,12 @@ ContextMenuList* ContextMenuList::createContextObject(QWidget *parent){
     menu->setActionHero(actionHero);
 
     // Editing shortcut
-    actionNew->setShortcut(QKeySequence(QKeySequence::New));
-    actionEdit->setShortcut(QKeySequence(QKeySequence::Replace));
+    actionNew->setShortcut(QKeySequence(Qt::Key_Enter));
+    actionEdit->setShortcut(QKeySequence(Qt::Key_Enter));
     actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
     actionPaste->setShortcut(QKeySequence(QKeySequence::Paste));
     actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
+    actionHero->setShortcut(QKeySequence(Qt::Key_H));
 
     // Adding action to the menu
     menu->addAction(actionNew);

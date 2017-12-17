@@ -74,6 +74,11 @@ void WidgetTreeCommands::initializeModel(QStandardItemModel* m){
     this->setModel(p_model);
     this->expandAll();
 
+    // Connect for context menu
+    connect(this->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(onSelectionChanged(QModelIndex,QModelIndex)));
+
     // Update text in nodes
     updateAllNodesString(p_model->invisibleRootItem());
 }
@@ -550,22 +555,33 @@ bool WidgetTreeCommands::itemLessThan(const QStandardItem* item1,
 void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
     QKeySequence seq = Wanok::getKeySequence(event);
     QList<QAction*> actions = m_contextMenuCommonCommands->actions();
+    QAction* action;
 
     // Forcing shortcuts
-    if (actions.at(0)->shortcut().matches(seq))
+    action = actions.at(1);
+    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+        contextEdit();
+        return;
+    }
+    action = actions.at(0);
+    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
         contextNew();
-    else if (actions.at(3)->shortcut().matches(seq))
+        return;
+    }
+    action = actions.at(3);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
         contextCopy();
-    else if (actions.at(4)->shortcut().matches(seq))
+        return;
+    }
+    action = actions.at(4);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
         contextPaste();
-    else if (actions.at(6)->shortcut().matches(seq))
+        return;
+    }
+    action = actions.at(6);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
         contextDelete();
-
-    // Pressing space or enter open command
-    if (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
-        event->key() == Qt::Key_Return)
-    {
-        openCommand();
+        return;
     }
 }
 
@@ -582,6 +598,18 @@ void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = p_model->itemFromIndex(index);
+    EventCommand* command = nullptr;
+    if (selected != nullptr)
+        command = (EventCommand*)selected->data().value<quintptr>();
+
+    m_contextMenuCommonCommands->canEdit(command != nullptr &&
+                                         command->isEditable());
+}
+
 // -------------------------------------------------------
 
 void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &){
@@ -610,8 +638,7 @@ void WidgetTreeCommands::showContextMenu(const QPoint & p){
 
 void WidgetTreeCommands::contextNew(){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        newCommand(selected);
+    newCommand(selected);
 }
 
 // -------------------------------------------------------
@@ -619,25 +646,20 @@ void WidgetTreeCommands::contextNew(){
 void WidgetTreeCommands::contextEdit(){
     QStandardItem* selected = getSelected();
     EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
-    if (selected != nullptr && command->kind() != EventCommandKind::None)
-        editCommand(selected, command);
+    editCommand(selected, command);
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextCopy(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        copyCommand();
+    copyCommand();
 }
 
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextPaste(){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr){
-        pasteCommand(selected);
-    }
+    pasteCommand(selected);
 }
 
 // -------------------------------------------------------

@@ -85,6 +85,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
 
 private slots:
+    void onSelectionChanged(QModelIndex index, QModelIndex);
     void onTreeViewClicked(const QModelIndex &);
     void showContextMenu(const QPoint & p);
     void contextNew();

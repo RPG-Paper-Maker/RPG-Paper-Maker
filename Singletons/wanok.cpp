@@ -431,3 +431,11 @@ int Wanok::generateMapId(){
 QString Wanok::generateMapName(int id){
     return "MAP" + Wanok::getFormatNumber(id);
 }
+
+
+// -------------------------------------------------------
+
+bool Wanok::isPressingEnter(QKeyEvent* event) {
+    return event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
+           event->key() == Qt::Key_Return;
+}

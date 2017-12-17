@@ -134,6 +134,7 @@ public:
     static bool isMapIdExisting(int id);
     static int generateMapId();
     static QString generateMapName(int id);
+    static bool isPressingEnter(QKeyEvent* event);
 
 protected:
     Project* p_project;

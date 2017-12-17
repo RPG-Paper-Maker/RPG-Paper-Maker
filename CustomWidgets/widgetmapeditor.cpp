@@ -523,6 +523,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
             m_control.cursor()->updatePositionSquare();
         }
 
+        // Move
         int key = event->key();
         if (!m_keysPressed.contains(key)) {
             KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
@@ -565,6 +566,44 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
                                         KeyBoardEngineKind::MoveCursorDown)))
             {
                 m_control.cursor()->centerInSquare(0);
+            }
+        }
+
+        // Shortcut
+        if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects) {
+            QKeySequence seq = Wanok::getKeySequence(event);
+            QList<QAction*> actions = m_contextMenu->actions();
+            QAction* action;
+
+            action = actions.at(0);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+                contextNew();
+                return;
+            }
+            action = actions.at(1);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+                contextEdit();
+                return;
+            }
+            action = actions.at(3);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextCopy();
+                return;
+            }
+            action = actions.at(4);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextPaste();
+                return;
+            }
+            action = actions.at(6);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextDelete();
+                return;
+            }
+            action = actions.at(8);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextHero();
+                return;
             }
         }
 

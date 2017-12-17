@@ -377,7 +377,7 @@ void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
 
 void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
     QStandardItem* selected = getSelected();
-    if (selected != nullptr){
+    if (selected != nullptr) {
         TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
         if (tag->isDir()){
             m_contextMenuDirectory->canPaste(m_copied != nullptr);
@@ -386,6 +386,69 @@ void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
         }
         else
             m_contextMenuMap->showContextMenu(p);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
+    QKeySequence seq = Wanok::getKeySequence(event);
+    QStandardItem* selected = getSelected();
+    QList<QAction*> actions;
+    QAction* action;
+    if (selected != nullptr) {
+        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        if (tag->isDir()) {
+            actions = m_contextMenuDirectory->actions();
+            action = actions.at(0);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextNewMap();
+                return;
+            }
+            action = actions.at(1);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextNewDirectory();
+                return;
+            }
+            action = actions.at(2);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+                contextEditDirectory();
+                return;
+            }
+            action = actions.at(4);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextCopyDirectory();
+                return;
+            }
+            action = actions.at(5);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextPaste();
+                return;
+            }
+            action = actions.at(7);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextDeleteDirectory();
+                return;
+            }
+        }
+        else {
+            actions = m_contextMenuMap->actions();
+            action = actions.at(0);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+                contextEditMap();
+                return;
+            }
+            action = actions.at(2);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextCopyMap();
+                return;
+            }
+            action = actions.at(4);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
+                contextDeleteMap();
+                return;
+            }
+        }
     }
 }
 
