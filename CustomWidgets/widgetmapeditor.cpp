@@ -425,7 +425,8 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
             m_control.onMouseMove(event->pos(), button,
                                   m_menuBar != nullptr);
 
-            if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton)
+            if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton
+                && !m_control.isCtrlPressed())
             {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 MapEditorSubSelectionKind subSelection =
@@ -523,6 +524,11 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
             m_control.cursor()->updatePositionSquare();
         }
 
+        if (event->modifiers() & Qt::ControlModifier) {
+            m_control.setIsCtrlPressed(true);
+            m_control.removePreviewElements();
+        }
+
         // Move
         int key = event->key();
         if (!m_keysPressed.contains(key)) {
@@ -607,7 +613,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
             }
         }
 
-        m_keysPressed += event->key();
+        m_keysPressed += key;
     }
 }
 
@@ -618,6 +624,9 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent* event){
         if (!event->isAutoRepeat()){
             m_keysPressed -= event->key();
             m_control.onKeyReleased(event->key());
+
+            if (!(event->modifiers() & Qt::ControlModifier))
+                m_control.setIsCtrlPressed(false);
         }
     }
 }

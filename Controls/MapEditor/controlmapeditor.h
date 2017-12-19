@@ -51,6 +51,8 @@ public:
     Cursor* cursor() const;
     Cursor* cursorObject() const;
     Camera* camera() const;
+    bool isCtrlPressed() const;
+    void setIsCtrlPressed(bool b);
     bool displaySquareInformations() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
@@ -111,7 +113,7 @@ public:
     void updateMovingPortionsUpDown(Portion&);
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
-    void loadPortion(Portion& currentPortion, int i, int j, int k);
+    void loadPortion(int a, int b, int c, int i, int j, int k);
     void updatePortions();
     void saveTempPortions();
     void clearPortionsToUpdate();
@@ -264,6 +266,7 @@ private:
     bool m_isDrawingWall;
     bool m_isDeletingWall;
     bool m_isDeleting;
+    bool m_isCtrlPressed;
     int m_currentLayer = -1;
 };
 

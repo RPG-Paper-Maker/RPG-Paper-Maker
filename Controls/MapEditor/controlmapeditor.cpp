@@ -21,6 +21,7 @@
 #include "dialogobject.h"
 #include "wanok.h"
 #include <QTime>
+#include <QApplication>
 
 // -------------------------------------------------------
 
@@ -52,7 +53,8 @@ ControlMapEditor::ControlMapEditor() :
     m_treeMapNode(nullptr),
     m_isDrawingWall(false),
     m_isDeletingWall(false),
-    m_isDeleting(false)
+    m_isDeleting(false),
+    m_isCtrlPressed(false)
 {
 
 }
@@ -71,6 +73,10 @@ Cursor* ControlMapEditor::cursor() const { return m_map->cursor(); }
 Cursor* ControlMapEditor::cursorObject() const { return m_cursorObject; }
 
 Camera* ControlMapEditor::camera() const { return m_camera; }
+
+bool ControlMapEditor::isCtrlPressed() const { return m_isCtrlPressed; }
+
+void ControlMapEditor::setIsCtrlPressed(bool b) { m_isCtrlPressed = b; }
 
 bool ControlMapEditor::displaySquareInformations() const {
     return m_displaySquareInformations;
@@ -94,8 +100,10 @@ void ControlMapEditor::moveCursorToMousePosition(QPoint point, bool layerOn)
 {
     updateMousePosition(point);
     update(layerOn);
+    Portion portion;
+    m_map->getLocalPortion(m_positionOnPlane, portion);
 
-    if (m_map->isInGrid(m_positionOnPlane))
+    if (m_map->isInSomething(m_positionOnPlane, portion))
         cursor()->setPositions(m_positionOnPlane);
 }
 
@@ -300,8 +308,6 @@ void ControlMapEditor::updateMovingPortions() {
     updateMovingPortionsEastWest(newPortion);
     updateMovingPortionsNorthSouth(newPortion);
     updateMovingPortionsUpDown(newPortion);
-
-    m_currentPortion = newPortion;
 }
 
 // -------------------------------------------------------
@@ -309,32 +315,48 @@ void ControlMapEditor::updateMovingPortions() {
 void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
     int r = m_map->portionsRay();
     if (newPortion.x() > m_currentPortion.x()) {
-        int k = 0;
-        for (int j = -r; j <= r; j++) {
-            bool visible = j != -r && j != r;
-            int i = -r;
-            removePortion(i, k, j);
-            setPortion(i, k, j, i + 1, k, j, false);
-            i++;
-            for (; i < r; i++)
-                setPortion(i, k, j, i + 1, k, j, visible);
+        int dif = newPortion.x() - m_currentPortion.x();
+        int state = 1;
+        while (state <= dif) {
+            int k = 0;
+            for (int j = -r; j <= r; j++) {
+                bool visible = j != -r && j != r;
+                int i = -r;
+                removePortion(i, k, j);
+                setPortion(i, k, j, i + 1, k, j, false);
+                i++;
+                for (; i < r; i++)
+                    setPortion(i, k, j, i + 1, k, j, visible);
 
-            loadPortion(newPortion, r, k, j);
+                loadPortion(m_currentPortion.x() + state,
+                            m_currentPortion.y(), m_currentPortion.z(),
+                            r, k, j);
+            }
+            state++;
         }
+        m_currentPortion.setX(m_currentPortion.x() + dif);
     }
     else if (newPortion.x() < m_currentPortion.x()) {
-        int k = 0;
-        for (int j = -r; j <= r; j++) {
-            bool visible = j != -r && j != r;
-            int i = r;
-            removePortion(i, k, j);
-            setPortion(i, k, j, i - 1, k, j, false);
-            i--;
-            for (; i > -r; i--)
-                setPortion(i, k, j, i - 1, k, j, visible);
+        int dif = m_currentPortion.x() - newPortion.x();
+        int state = 1;
+        while (state <= dif) {
+            int k = 0;
+            for (int j = -r; j <= r; j++) {
+                bool visible = j != -r && j != r;
+                int i = r;
+                removePortion(i, k, j);
+                setPortion(i, k, j, i - 1, k, j, false);
+                i--;
+                for (; i > -r; i--)
+                    setPortion(i, k, j, i - 1, k, j, visible);
 
-            loadPortion(newPortion, -r, k, j);
+                loadPortion(m_currentPortion.x() - state,
+                            m_currentPortion.y(), m_currentPortion.z(),
+                            -r, k, j);
+            }
+            state++;
         }
+        m_currentPortion.setX(m_currentPortion.x() - dif);
     }
 }
 
@@ -343,32 +365,46 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion& newPortion){
 void ControlMapEditor::updateMovingPortionsNorthSouth(Portion& newPortion){
     int r = m_map->portionsRay();
     if (newPortion.z() > m_currentPortion.z()) {
-        int k = 0;
-        for (int i = -r; i <= r; i++) {
-            bool visible = i != -r && i != r;
-            int j = -r;
-            removePortion(i, k, j);
-            setPortion(i, k, j, i, k, j + 1, false);
-            j++;
-            for (; j < r; j++)
-                setPortion(i, k, j, i, k, j + 1, visible);
+        int dif = newPortion.z() - m_currentPortion.z();
+        int state = 1;
+        while (state <= dif) {
+            int k = 0;
+            for (int i = -r; i <= r; i++) {
+                bool visible = i != -r && i != r;
+                int j = -r;
+                removePortion(i, k, j);
+                setPortion(i, k, j, i, k, j + 1, false);
+                j++;
+                for (; j < r; j++)
+                    setPortion(i, k, j, i, k, j + 1, visible);
 
-            loadPortion(newPortion, i, k, r);
+                loadPortion(m_currentPortion.x(), m_currentPortion.y(),
+                            m_currentPortion.z() + state, i, k, r);
+            }
+            state++;
         }
+        m_currentPortion.setZ(m_currentPortion.z() + dif);
     }
     else if (newPortion.z() < m_currentPortion.z()) {
-        int k = 0;
-        for (int i = -r; i <= r; i++) {
-            bool visible = i != -r && i != r;
-            int j = r;
-            removePortion(i, k, j);
-            setPortion(i, k, j, i, k, j - 1, false);
-            j--;
-            for (; j > -r; j--)
-                setPortion(i, k, j, i, k, j - 1, visible);
+        int dif = m_currentPortion.z() - newPortion.z();
+        int state = 1;
+        while (state <= dif) {
+            int k = 0;
+            for (int i = -r; i <= r; i++) {
+                bool visible = i != -r && i != r;
+                int j = r;
+                removePortion(i, k, j);
+                setPortion(i, k, j, i, k, j - 1, false);
+                j--;
+                for (; j > -r; j--)
+                    setPortion(i, k, j, i, k, j - 1, visible);
 
-            loadPortion(newPortion, i, k, -r);
+                loadPortion(m_currentPortion.x(), m_currentPortion.y(),
+                            m_currentPortion.z() - state, i, k, -r);
+            }
+            state++;
         }
+        m_currentPortion.setZ(m_currentPortion.z() - dif);
     }
 }
 
@@ -399,11 +435,9 @@ void ControlMapEditor::setPortion(int i, int j, int k, int m, int n, int o,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::loadPortion(Portion& currentPortion, int i, int j,
-                                   int k)
+void ControlMapEditor::loadPortion(int a, int b, int c, int i, int j, int k)
 {
-    m_map->loadPortion(currentPortion.x() + i, currentPortion.y() + j,
-                       currentPortion.z() + k, i, j, k, false);
+    m_map->loadPortion(a + i, b + j, c + k, i, j, k, false);
 }
 
 // -------------------------------------------------------
@@ -1098,7 +1132,7 @@ void ControlMapEditor::onMouseMove(QPoint point,
     updateMousePosition(point);
     m_mouseMove = point;
 
-    if (button == Qt::MouseButton::MiddleButton){
+    if (button == Qt::MouseButton::MiddleButton) {
         m_camera->onMouseWheelPressed(m_mouseMove, m_mouseBeforeUpdate);
         if (updateTree)
             updateCameraTreeNode();
@@ -1116,7 +1150,13 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     // Update mouse
     updateMouse(point, layerOn);
 
-    if (button != Qt::MouseButton::MiddleButton){
+    if (button != Qt::MouseButton::MiddleButton) {
+
+        // If ctrl key is pressed, teleport
+        if (m_isCtrlPressed) {
+            moveCursorToMousePosition(point, false);
+            return;
+        }
 
         // Add/Remove something
         m_isDeleting = button == Qt::MouseButton::RightButton;
@@ -1177,7 +1217,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onKeyPressed(int k, double speed){
+void ControlMapEditor::onKeyPressed(int k, double speed) {
     if (!m_isDrawingWall && !m_isDeletingWall) {
         cursor()->onKeyPressed(k, m_camera->horizontalAngle(),
                                m_map->mapProperties()->length(),
@@ -1187,6 +1227,6 @@ void ControlMapEditor::onKeyPressed(int k, double speed){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::onKeyReleased(int ){
+void ControlMapEditor::onKeyReleased(int) {
 
 }

@@ -6,8 +6,11 @@ void ControlMapEditor::updatePreviewElements(
         MapEditorSelectionKind kind, MapEditorSubSelectionKind subKind,
         DrawKind drawKind, bool layerOn, QRect& tileset, int specialID)
 {
-    if (drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall))
+    if (drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall) ||
+        m_isCtrlPressed)
+    {
         return;
+    }
 
     Position position;
     getPositionSelected(position, kind, subKind, layerOn);
@@ -147,9 +150,12 @@ void ControlMapEditor::updatePreviewElement(Position &p, Portion& portion,
                                             MapElement* element)
 {
     MapPortion* mapPortion = m_map->mapPortion(portion);
-    mapPortion->addPreview(p, element);
-    m_portionsToUpdate += mapPortion;
-    m_portionsPreviousPreview += mapPortion;
+
+    if (mapPortion != nullptr) {
+        mapPortion->addPreview(p, element);
+        m_portionsToUpdate += mapPortion;
+        m_portionsPreviousPreview += mapPortion;
+    }
 }
 
 // -------------------------------------------------------
