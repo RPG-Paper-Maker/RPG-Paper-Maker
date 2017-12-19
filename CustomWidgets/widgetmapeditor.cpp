@@ -420,7 +420,7 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
 
         // Multi keys
         QSet<Qt::MouseButton>::iterator i;
-        for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++){
+        for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++) {
             Qt::MouseButton button = *i;
             m_control.onMouseMove(event->pos(), button,
                                   m_menuBar != nullptr);
@@ -472,7 +472,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
         // If in teleport command
         else{
             if (button != Qt::MouseButton::MiddleButton){
-                m_control.moveCursorToMousePosition(event->pos(), false);
+                m_control.moveCursorToMousePosition(event->pos());
                 updateSpinBoxes();
             }
             else{

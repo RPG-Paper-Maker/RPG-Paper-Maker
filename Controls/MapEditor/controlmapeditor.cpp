@@ -96,14 +96,11 @@ void ControlMapEditor::setTreeMapNode(QStandardItem* item) {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::moveCursorToMousePosition(QPoint point, bool layerOn)
+void ControlMapEditor::moveCursorToMousePosition(QPoint point)
 {
     updateMousePosition(point);
-    update(layerOn);
-    Portion portion;
-    m_map->getLocalPortion(m_positionOnPlane, portion);
 
-    if (m_map->isInSomething(m_positionOnPlane, portion))
+    if (m_map->isInGrid(m_positionOnPlane))
         cursor()->setPositions(m_positionOnPlane);
 }
 
@@ -236,6 +233,8 @@ void ControlMapEditor::updateCameraTreeNode(){
 
 void ControlMapEditor::update(bool layerOn)
 {
+
+    // Raycasting
     updateRaycasting(layerOn);
 
     // Update portions
@@ -303,11 +302,22 @@ void ControlMapEditor::updatePortions() {
 // -------------------------------------------------------
 
 void ControlMapEditor::updateMovingPortions() {
-    Portion newPortion = cursor()->getPortion();
 
-    updateMovingPortionsEastWest(newPortion);
-    updateMovingPortionsNorthSouth(newPortion);
-    updateMovingPortionsUpDown(newPortion);
+    // Move portions
+    Portion newPortion = cursor()->getPortion();
+    if (qAbs(m_currentPortion.x() - newPortion.x()) < m_map->getMapPortionSize()
+        && qAbs(m_currentPortion.z() - newPortion.z()) <
+        m_map->getMapPortionSize())
+    {
+        Portion newPortion = cursor()->getPortion();
+        updateMovingPortionsEastWest(newPortion);
+        updateMovingPortionsNorthSouth(newPortion);
+        updateMovingPortionsUpDown(newPortion);
+    }
+    else {
+        m_map->loadPortions(newPortion);
+        m_currentPortion = newPortion;
+    }
 }
 
 // -------------------------------------------------------
@@ -1154,7 +1164,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
         // If ctrl key is pressed, teleport
         if (m_isCtrlPressed) {
-            moveCursorToMousePosition(point, false);
+            moveCursorToMousePosition(point);
             return;
         }
 

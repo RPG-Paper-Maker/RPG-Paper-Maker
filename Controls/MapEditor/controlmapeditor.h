@@ -56,7 +56,7 @@ public:
     bool displaySquareInformations() const;
     void setContextMenu(ContextMenuList* m);
     void setTreeMapNode(QStandardItem* item);
-    void moveCursorToMousePosition(QPoint point, bool layerOn);
+    void moveCursorToMousePosition(QPoint point);
     void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();
