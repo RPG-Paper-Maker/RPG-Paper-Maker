@@ -50,7 +50,16 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
         case MapEditorSelectionKind::Sprites:
             addSprite(p, subSelection, drawKind, layerOn, tileset);
         case MapEditorSelectionKind::Objects:
-            setCursorObjectPosition(p); break;
+        {
+            Portion portion;
+            m_map->getLocalPortion(p, portion);
+            if (m_map->isInSomething(p, portion)) {
+                if (m_selectedObject != nullptr)
+                    moveObject(p);
+                setCursorObjectPosition(p);
+            }
+            break;
+        }
         default:
             break;
         }
@@ -75,9 +84,15 @@ void ControlMapEditor::remove(MapElement* element,
         }
         break;
     case MapEditorSelectionKind::Objects:
-        setCursorObjectPosition(p);
-        showObjectMenuContext();
+    {
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
+        if (m_map->isInSomething(p, portion)) {
+            setCursorObjectPosition(p);
+            showObjectMenuContext();
+        }
         break;
+    }
     default:
         break;
     }

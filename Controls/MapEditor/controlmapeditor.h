@@ -175,6 +175,7 @@ public:
                      bool undoRedo = false);
     void removeObject(Position& p);
     void eraseObject(Position& p, bool undoRedo = false);
+    void moveObject(Position& p);
     void updateMapObjects();
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
@@ -267,6 +268,7 @@ private:
     bool m_isDeletingWall;
     bool m_isDeleting;
     bool m_isCtrlPressed;
+    bool m_isMovingObject;
     int m_currentLayer = -1;
 };
 

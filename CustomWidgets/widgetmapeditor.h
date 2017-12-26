@@ -89,7 +89,6 @@ private:
     bool isGLInitialized;
     int m_idMap;
     QSet<int> m_keysPressed;
-    QSet<Qt::MouseButton> m_mousesPressed;
     QTimer* m_timerFirstPressure;
     bool m_firstPressure;
     QSpinBox* m_spinBoxX;
@@ -101,7 +100,6 @@ private:
     double m_cameraVerticalAngle;
     ContextMenuList* m_contextMenu;
     long m_elapsedTime;
-    bool test;
 
 public slots:
     void update();

@@ -54,7 +54,8 @@ ControlMapEditor::ControlMapEditor() :
     m_isDrawingWall(false),
     m_isDeletingWall(false),
     m_isDeleting(false),
-    m_isCtrlPressed(false)
+    m_isCtrlPressed(false),
+    m_isMovingObject(false)
 {
 
 }
@@ -1155,6 +1156,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
                                       QRect &tileset, int specialID,
                                       QPoint point, Qt::MouseButton button)
 {
+
     // Update mouse
     updateMouse(point, layerOn);
 
@@ -1218,6 +1220,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
     // Update current layer to undefined
     m_currentLayer = -1;
     m_isDeleting = false;
+    m_isMovingObject = false;
 
     // Update the undo redo
     m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
@@ -1226,7 +1229,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 // -------------------------------------------------------
 
 void ControlMapEditor::onKeyPressed(int k, double speed) {
-    if (!m_isDrawingWall && !m_isDeletingWall) {
+    if (!m_isDrawingWall && !m_isDeletingWall && !m_isMovingObject) {
         cursor()->onKeyPressed(k, m_camera->horizontalAngle(),
                                m_map->mapProperties()->length(),
                                m_map->mapProperties()->width(), speed);

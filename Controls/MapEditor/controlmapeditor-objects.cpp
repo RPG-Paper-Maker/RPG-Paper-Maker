@@ -160,6 +160,20 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo) {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::moveObject(Position& p) {
+    m_isMovingObject = true;
+    if (m_previousMouseCoords != p) {
+        SystemCommonObject* object =
+                (SystemCommonObject*) m_selectedObject->createCopy();
+        eraseObject(m_previousMouseCoords);
+        stockObject(p, object);
+
+        m_previousMouseCoords = p;
+    }
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::updateMapObjects() {
     m_map->updateMapObjects();
 }

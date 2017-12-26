@@ -400,7 +400,6 @@ void WidgetMapEditor::redo() {
 
 void WidgetMapEditor::focusOutEvent(QFocusEvent*){
     m_keysPressed.clear();
-    m_mousesPressed.clear();
     this->setFocus();
 }
 
@@ -415,11 +414,18 @@ void WidgetMapEditor::wheelEvent(QWheelEvent* event){
 // -------------------------------------------------------
 
 void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
-    if (m_control.map() != nullptr){
+    if (m_control.map() != nullptr) {
 
         // Multi keys
+        QSet<Qt::MouseButton> buttons;
+        if (event->buttons() & Qt::LeftButton)
+            buttons += Qt::LeftButton;
+        if (event->buttons() & Qt::RightButton)
+            buttons += Qt::RightButton;
+        if (event->buttons() & Qt::MiddleButton)
+            buttons += Qt::MiddleButton;
         QSet<Qt::MouseButton>::iterator i;
-        for (i = m_mousesPressed.begin(); i != m_mousesPressed.end(); i++) {
+        for (i = buttons.begin(); i != buttons.end(); i++) {
             Qt::MouseButton button = *i;
             m_control.onMouseMove(event->pos(), button,
                                   m_menuBar != nullptr);
@@ -446,7 +452,6 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
         Qt::MouseButton button = event->button();
-        m_mousesPressed += button;
         if (m_menuBar != nullptr){
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
             MapEditorSubSelectionKind subSelection =
@@ -488,7 +493,6 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr && m_menuBar != nullptr){
         Qt::MouseButton button = event->button();
-        m_mousesPressed -= button;
         QRect tileset = m_panelTextures->getTilesetTexture();
         MapEditorSubSelectionKind subSelection =
                 m_menuBar->subSelectionKind();
@@ -505,7 +509,6 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr){
         if (m_menuBar != nullptr){
-            m_mousesPressed += event->button();
             if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
                 addObject();
         }
