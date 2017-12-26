@@ -2,6 +2,7 @@
 #include "wanok.h"
 #include "qbox3d.h"
 #include <math.h>
+#include <QTime>
 
 // -------------------------------------------------------
 
@@ -26,6 +27,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
     // Others
     m_distanceLand = 0;
     m_distanceSprite = 0;
+    m_elementOnLand = nullptr;
+    m_elementOnSprite = nullptr;
     for (int i = portions.size() - 1; i >= 0; i--) {
         Portion portion = portions.at(i);
         MapPortion* mapPortion = m_map->mapPortion(portion);
@@ -36,8 +39,10 @@ void ControlMapEditor::updateRaycasting(bool layerOn){
                         m_ray, m_camera->horizontalAngle());
         }
         else {
-            updateRaycastingLand(mapPortion);
-            updateRaycastingSprites(mapPortion, layerOn);
+            if (m_elementOnLand == nullptr)
+                updateRaycastingLand(mapPortion);
+            if (m_elementOnSprite == nullptr)
+                updateRaycastingSprites(mapPortion, layerOn);
         }
     }
 

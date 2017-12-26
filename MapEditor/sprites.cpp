@@ -492,7 +492,7 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
             element = newElement;
     }
 
-    // If layer on, also check the walls, and sprites on walls
+    // If layer on, also check the walls
     if (layerOn) {
         for (QHash<Position, SpriteWallDatas*>::iterator i =
              m_walls.begin(); i != m_walls.end(); i++)
