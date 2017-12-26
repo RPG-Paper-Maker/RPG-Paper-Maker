@@ -56,7 +56,7 @@ public:
     void addOverflow(Position& p, Portion& portion);
     void removeOverflow(Position& p, Portion& portion);
 
-    bool isInGrid(Position3D& position, int squareSize) const;
+    bool isInGrid(Position3D& position, int squareSize, int offset) const;
     void getPortionsNumber(int& lx, int& ly, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path, bool temp = false);

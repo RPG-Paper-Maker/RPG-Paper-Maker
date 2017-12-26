@@ -1213,7 +1213,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
     }
 
     // Force previous mouse coords to be different
-    m_previousMouseCoords.setCoords(-1, 0, 0, -1);
+    m_previousMouseCoords.setCoords(-500, 0, 0, -500);
 
     // Update current layer to undefined
     m_currentLayer = -1;

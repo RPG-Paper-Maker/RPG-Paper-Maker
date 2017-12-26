@@ -19,7 +19,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
         }
     }
     else {
-        if (m_map->isInGrid(p)) {
+        if (m_map->isInGrid(p, 500)) {
             if (m_isDeleting)
                 remove(element, selection, drawKind, p, layerOn);
             else {

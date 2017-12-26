@@ -799,8 +799,8 @@ void Map::deletePortions(){
 
 // -------------------------------------------------------
 
-bool Map::isInGrid(Position3D &position) const {
-    return m_mapProperties->isInGrid(position, m_squareSize);
+bool Map::isInGrid(Position3D &position, int offset) const {
+    return m_mapProperties->isInGrid(position, m_squareSize, offset);
 }
 
 // -------------------------------------------------------

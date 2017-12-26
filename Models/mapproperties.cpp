@@ -117,13 +117,16 @@ void MapProperties::removeOverflow(Position& p, Portion& portion) {
 //
 // -------------------------------------------------------
 
-bool MapProperties::isInGrid(Position3D& position, int squareSize) const {
+bool MapProperties::isInGrid(Position3D& position, int squareSize, int offset)
+const
+{
     int y = position.getY(squareSize);
     int d = m_depth * squareSize;
     int h = m_height * squareSize;
 
-    return (position.x() >= 0 && position.x() < m_length &&
-            y >= -d && y < h && position.z() >= 0 && position.z() < m_width);
+    return (position.x() >= -offset && position.x() < m_length + offset &&
+            y >= -d && y < h && position.z() >= -offset &&
+            position.z() < m_width + offset);
 }
 
 // -------------------------------------------------------

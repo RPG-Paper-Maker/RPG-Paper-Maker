@@ -131,7 +131,7 @@ public:
     void updateMapObjects();
     void loadPortions(Portion portion);
     void deletePortions();
-    bool isInGrid(Position3D& position) const;
+    bool isInGrid(Position3D& position, int offset = 0) const;
     bool isPortionInGrid(Portion& portion) const;
     bool isInPortion(Portion& portion, int offset = -1) const;
     bool isInSomething(Position3D& position, Portion& portion,
