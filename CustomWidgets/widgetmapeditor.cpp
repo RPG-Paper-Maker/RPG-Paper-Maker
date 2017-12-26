@@ -126,8 +126,7 @@ void WidgetMapEditor::resizeGL(int width, int height){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::paintGL(){
-
+void WidgetMapEditor::paintGL() {
     QPainter p(this);
 
     // Clear buffer

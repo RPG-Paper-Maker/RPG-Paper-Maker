@@ -101,6 +101,7 @@ private:
     double m_cameraVerticalAngle;
     ContextMenuList* m_contextMenu;
     long m_elapsedTime;
+    bool test;
 
 public slots:
     void update();

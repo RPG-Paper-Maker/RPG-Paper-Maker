@@ -702,7 +702,6 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 void Map::updatePortion(MapPortion* mapPortion)
 {
     mapPortion->updateSpriteWalls();
-    mapPortion->setIsVisible(true);
     mapPortion->initializeVertices(m_squareSize,
                                    m_textureTileset,
                                    m_texturesCharacters,
