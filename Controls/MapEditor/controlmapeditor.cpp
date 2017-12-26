@@ -233,10 +233,6 @@ void ControlMapEditor::updateCameraTreeNode(){
 
 void ControlMapEditor::update(bool layerOn)
 {
-
-    // Raycasting
-    updateRaycasting(layerOn);
-
     // Update portions
     updatePortions();
     saveTempPortions();
@@ -245,6 +241,9 @@ void ControlMapEditor::update(bool layerOn)
 
     // Camera
     m_camera->update(cursor(), m_map->squareSize());
+
+    // Raycasting
+    updateRaycasting(layerOn);
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -309,7 +308,6 @@ void ControlMapEditor::updateMovingPortions() {
         && qAbs(m_currentPortion.z() - newPortion.z()) <
         m_map->getMapPortionSize())
     {
-        Portion newPortion = cursor()->getPortion();
         updateMovingPortionsEastWest(newPortion);
         updateMovingPortionsNorthSouth(newPortion);
         updateMovingPortionsUpDown(newPortion);
