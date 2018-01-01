@@ -597,7 +597,7 @@ void SpriteWallDatas::update(Position &position) {
 // -------------------------------------------------------
 
 bool SpriteWallDatas::isWallHere(SpriteWallDatas* sprite) {
-    return (sprite != nullptr);
+    return (sprite != nullptr && sprite->wallID() == m_wallID);
 }
 
 // -------------------------------------------------------

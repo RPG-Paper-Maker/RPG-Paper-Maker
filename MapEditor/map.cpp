@@ -578,17 +578,40 @@ void Map::loadPicture(SystemPicture* picture, PictureKind kind,
 {
     QOpenGLTexture* texture;
     QImage image(1, 1, QImage::Format_ARGB32);
+    QImage& refImage = image;
     QString path = picture->getPath(kind);
 
     if (path.isEmpty())
         image.fill(QColor(0, 0, 0, 0));
-    else
+    else {
         image.load(path);
+        if (!image.isNull() && kind == PictureKind::Walls)
+            editPictureWall(image, refImage);
+    }
 
-    texture = new QOpenGLTexture(image);
+    texture = new QOpenGLTexture(refImage);
     texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
     texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
     textures[id] = texture;
+}
+
+// -------------------------------------------------------
+
+void Map::editPictureWall(QImage& image, QImage& refImage) {
+    QImage newImage(image.width() + m_squareSize, image.height(),
+                    QImage::Format_ARGB32);
+    QImage borderLeft =
+            image.copy(0, 0, m_squareSize / 2, image.height());
+    QImage borderRight =
+            image.copy(image.width() - (m_squareSize / 2), 0,
+                       m_squareSize / 2, image.height());
+    QPainter paint;
+    paint.begin(&newImage);
+    paint.drawImage(0, 0, image);
+    paint.drawImage(image.width(), 0, borderLeft);
+    paint.drawImage(image.width() + m_squareSize / 2, 0, borderRight);
+    paint.end();
+    refImage = newImage;
 }
 
 // -------------------------------------------------------

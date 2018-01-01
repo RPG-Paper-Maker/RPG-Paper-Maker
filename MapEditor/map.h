@@ -113,6 +113,7 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind,
                      QHash<int, QOpenGLTexture*>& textures, int id);
+    void editPictureWall(QImage& image, QImage& refImage);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
