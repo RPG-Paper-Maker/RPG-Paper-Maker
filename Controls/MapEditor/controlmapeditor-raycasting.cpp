@@ -116,7 +116,7 @@ void ControlMapEditor::getPortionsInRay(QList<Portion>& portions) {
 
         // Testing intersection
         float distance = box.intersection(m_ray);
-        if (isnan(distance))
+        if (std::isnan(distance))
             return;
         else {
             getCorrectPositionOnRay(positionCamera, direction, distance);
@@ -175,7 +175,7 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion>& portions,
 
             // Testing intersection
             float distance = box.intersection(m_ray);
-            if (!isnan(distance)) {
+            if (!std::isnan(distance)) {
                 portions.insert(0, adjacent);
                 updatePortionsInRay(portions, adjacents);
                 return;

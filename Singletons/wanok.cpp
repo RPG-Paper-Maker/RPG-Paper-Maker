@@ -368,9 +368,9 @@ QString Wanok::osToString(OSKind os) {
 // -------------------------------------------------------
 
 bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
-    if (isnan(finalDistance))
+    if (std::isnan(finalDistance))
         finalDistance = 0;
-    if (isnan(newDistance))
+    if (std::isnan(newDistance))
         newDistance = 0;
 
     if (finalDistance == 0) {
