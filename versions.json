@@ -417,15 +417,37 @@
     			{
     				"files": [
 			            {
-			                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside1.png",
-			                "target": "Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
-			            }
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/master/Content/Pictures/Textures2D/Walls/inside1.png",
+                            "target": "Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
+                        }
     				],
 	                "target": "Content/BR/Content/Pictures/Textures2D/Walls"
     			}
     		],
-    		"remove": [],
-    		"replace": [],
+    		"remove": [
+                {
+                    "files": [],
+                    "target": "Content/win32/QtQuick/Controls"
+                },
+                {
+                    "target": "Content/win32/QtQuick/Window.2/windowplugind.dll"
+                }
+            ],
+    		"replace": [
+                {
+                    "files": [
+                        {
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/dialogplugin.dll",
+                            "target": "Content/win32/QtQuick/Dialogs/dialogplugin.dll",
+                        },
+                        {
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/qmldir",
+                            "target": "Content/win32/QtQuick/Dialogs/qmldir",
+                        }
+                    ],
+                    "target": "Content/win32/QtQuick/Dialogs"
+                }
+            ],
     		"features": [
     			"Adding sprite walls with graphic tileset pack for simple interior + 2 kind of walls",
     			"Undo/Redo",
