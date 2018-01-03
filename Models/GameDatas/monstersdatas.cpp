@@ -64,7 +64,7 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     QStandardItemModel* currencies;
     QStandardItemModel* loots;
     QStandardItemModel* actions;
-    SuperListItem* sys;
+    SuperListItem* sys = nullptr;
     SystemLoot* loot;
     LangsTranslation* names[] = {new LangsTranslation("Wooly")};
     int classesIds[] = {5};

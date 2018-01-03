@@ -130,7 +130,7 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo) {
 
     if (mapPortion != nullptr) {
         MapObjects* mapObjects = m_map->objectsPortion(portion);
-        SystemCommonObject* object;
+        SystemCommonObject* object = nullptr;
         if (mapObjects != nullptr)
             object = mapObjects->getObjectAt(p);
 

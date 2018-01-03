@@ -505,7 +505,7 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent* event){
+void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent*){
     this->setFocus();
     if (m_control.map() != nullptr){
         if (m_menuBar != nullptr){

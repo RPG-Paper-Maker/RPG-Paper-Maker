@@ -373,7 +373,7 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex){
 
             // Graphics
             ui->frameGraphics->setState(super);
-            int i;
+            int i = 0;
             switch (super->graphicsKind()){
             case MapEditorSubSelectionKind::None:
                 i = 0; break;
@@ -494,7 +494,7 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index){
     if (selected != nullptr){
         SystemState* super = (SystemState*) selected->data().value<quintptr>();
         if (super != nullptr){
-            MapEditorSubSelectionKind kind;
+            MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
             switch (index){
             case 0:
                 kind = MapEditorSubSelectionKind::None; break;

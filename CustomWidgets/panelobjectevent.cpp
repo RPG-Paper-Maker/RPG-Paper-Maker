@@ -124,8 +124,8 @@ SystemObjectEvent *PanelObjectEvent::initializeCommand(const EventCommand*
 void PanelObjectEvent::getCommandObjectEvent(QVector<QString>& command) const{
 
     // Event
-    QStandardItemModel* model;
-    SystemEvent* event;
+    QStandardItemModel* model = nullptr;
+    SystemEvent* event = nullptr;
     if (ui->radioButtonEventSystem->isChecked()){
         command.append("0");
         model = Wanok::get()->project()->gameDatas()->commonEventsDatas()

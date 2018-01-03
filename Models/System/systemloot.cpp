@@ -111,7 +111,7 @@ QList<QStandardItem *> SystemLoot::getModelRow() const{
 // -------------------------------------------------------
 
 void SystemLoot::updateName(){
-    QStandardItemModel* model;
+    QStandardItemModel* model = nullptr;
     switch (kind()){
     case LootKind::Item:
         model = Wanok::get()->project()->gameDatas()->itemsDatas()->model();

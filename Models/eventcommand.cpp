@@ -375,7 +375,7 @@ QString EventCommand::strModifyInventorySelection(int &i) const{
 
     // Id of the object
     int objectId = p_listCommand.at(i++).toInt();
-    QStandardItem* item;
+    QStandardItem* item = nullptr;
     switch(objectType){
     case 0:
         item = Wanok::get()->project()->gameDatas()->itemsDatas()->model()

@@ -106,7 +106,7 @@ void ControlMapEditor::remove(MapElement* element,
 
 void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
                                 DrawKind drawKind, bool layerOn, QRect &tileset,
-                                int specialID)
+                                int)
 {
     FloorDatas* floor;
     QRect* shortTexture;

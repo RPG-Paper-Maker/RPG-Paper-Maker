@@ -112,8 +112,8 @@ void DialogSystemLoot::initialize(){
 void DialogSystemLoot::radioChanged(bool checked, LootKind kind){
 
     // Getting all the informations according to loot kind
-    QStandardItemModel* model;
-    QComboBox* combo;
+    QStandardItemModel* model = nullptr;
+    QComboBox* combo = nullptr;
     switch (kind){
     case LootKind::Item:
         combo = ui->comboBoxItem;
