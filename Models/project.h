@@ -28,6 +28,7 @@
 #include "picturesdatas.h"
 #include "keyboarddatas.h"
 #include "specialelementsdatas.h"
+#include "oskind.h"
 
 // -------------------------------------------------------
 //
@@ -61,6 +62,8 @@ public:
     bool read(QString path);
     bool readVersion();
     bool readOS();
+    OSKind getProjectOS();
+    static OSKind getComputerOS();
     bool copyOSFiles();
     void removeOSFiles();
     void readGameDatas();

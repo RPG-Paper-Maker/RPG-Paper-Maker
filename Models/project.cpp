@@ -19,7 +19,6 @@
 
 #include "project.h"
 #include "wanok.h"
-#include "oskind.h"
 #include "projectupdater.h"
 #include "dialogprogress.h"
 #include <QDirIterator>
@@ -229,25 +228,8 @@ bool Project::readVersion(){
 // -------------------------------------------------------
 
 bool Project::readOS() {
-
-    // Get the project OS
-    OSKind projectOS;
-    if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
-        projectOS = OSKind::Window;
-    else if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
-        projectOS = OSKind::Linux;
-    else
-        projectOS = OSKind::Mac;
-
-    // Get the computer OS
-    OSKind computerOS;
-    #ifdef Q_OS_WIN
-        computerOS = OSKind::Window;
-    #elif __linux__
-        computerOS = OSKind::Linux;
-    #else
-        computerOS = OSKind::Mac;
-    #endif
+    OSKind projectOS = getProjectOS();
+    OSKind computerOS = getComputerOS();
 
     // Compare
     if (computerOS != projectOS) {
@@ -271,6 +253,29 @@ bool Project::readOS() {
     }
 
     return true;
+}
+
+// -------------------------------------------------------
+
+OSKind Project::getProjectOS() {
+    if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
+        return OSKind::Window;
+    else if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+        return OSKind::Linux;
+    else
+        return OSKind::Mac;
+}
+
+// -------------------------------------------------------
+
+OSKind Project::getComputerOS() {
+    #ifdef Q_OS_WIN
+        return OSKind::Window;
+    #elif __linux__
+        return OSKind::Linux;
+    #else
+        return OSKind::Mac;
+    #endif
 }
 
 // -------------------------------------------------------
