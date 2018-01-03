@@ -49,7 +49,7 @@ QT_BEGIN_NAMESPACE
 
 class QMatrix4x4;
 
-class Q_MATH_3D_EXPORT QBox3D
+class QBox3D
 {
 public:
     QBox3D();
@@ -197,12 +197,12 @@ inline bool qFuzzyCompare(const QBox3D& box1, const QBox3D& box2)
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-Q_MATH_3D_EXPORT QDebug operator<<(QDebug dbg, const QBox3D &box);
+QDebug operator<<(QDebug dbg, const QBox3D &box);
 #endif
 
 #ifndef QT_NO_DATASTREAM
-Q_MATH_3D_EXPORT QDataStream &operator<<(QDataStream &stream, const QBox3D &box);
-Q_MATH_3D_EXPORT QDataStream &operator>>(QDataStream &stream, QBox3D &box);
+QDataStream &operator<<(QDataStream &stream, const QBox3D &box);
+QDataStream &operator>>(QDataStream &stream, QBox3D &box);
 #endif
 
 QT_END_NAMESPACE

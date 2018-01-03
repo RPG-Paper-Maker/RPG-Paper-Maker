@@ -48,7 +48,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Q_MATH_3D_EXPORT QRay3D
+class QRay3D
 {
 public:
     QRay3D();
@@ -143,12 +143,12 @@ inline bool qFuzzyCompare(const QRay3D &ray1, const QRay3D &ray2)
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-Q_MATH_3D_EXPORT QDebug operator<<(QDebug dbg, const QRay3D &ray);
+QDebug operator<<(QDebug dbg, const QRay3D &ray);
 #endif
 
 #ifndef QT_NO_DATASTREAM
-Q_MATH_3D_EXPORT QDataStream &operator<<(QDataStream &stream, const QRay3D &ray);
-Q_MATH_3D_EXPORT QDataStream &operator>>(QDataStream &stream, QRay3D &ray);
+QDataStream &operator<<(QDataStream &stream, const QRay3D &ray);
+QDataStream &operator>>(QDataStream &stream, QRay3D &ray);
 #endif
 
 QT_END_NAMESPACE
