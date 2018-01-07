@@ -438,11 +438,11 @@
                     "files": [
                         {
                             "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/dialogplugin.dll",
-                            "target": "Content/win32/QtQuick/Dialogs/dialogplugin.dll",
+                            "target": "Content/win32/QtQuick/Dialogs/dialogplugin.dll"
                         },
                         {
                             "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/qmldir",
-                            "target": "Content/win32/QtQuick/Dialogs/qmldir",
+                            "target": "Content/win32/QtQuick/Dialogs/qmldir"
                         }
                     ],
                     "target": "Content/win32/QtQuick/Dialogs"
