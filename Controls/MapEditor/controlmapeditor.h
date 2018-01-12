@@ -69,6 +69,7 @@ public:
     void update(bool layerOn);
     void updateMouse(QPoint point, bool layerOn);
     void updateMousePosition(QPoint point);
+    void updateMouseMove(QPoint point);
     bool mousePositionChanged(QPoint point);
     void updateRaycasting(bool layerOn);
     void getPortionsInRay(QList<Portion>& portions);

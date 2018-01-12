@@ -267,6 +267,13 @@ void ControlMapEditor::updateMousePosition(QPoint point) {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::updateMouseMove(QPoint point) {
+    updateMousePosition(point);
+    m_mouseMove = point;
+}
+
+// -------------------------------------------------------
+
 bool ControlMapEditor::mousePositionChanged(QPoint point) {
     return m_mouse != point;
 }

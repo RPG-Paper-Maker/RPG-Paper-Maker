@@ -480,7 +480,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                 updateSpinBoxes();
             }
             else{
-                m_control.updateMousePosition(event->pos());
+                m_control.updateMouseMove(event->pos());
                 m_control.update(false);
             }
         }

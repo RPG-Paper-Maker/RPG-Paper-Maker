@@ -473,7 +473,8 @@
     			"User was losing focus on map cursor after selecting a tileset / wall / tileset",
     			"Preview elements buffers were not cleared after loading a new map",
     			"Command teleport object: after resizing the map the position was not updated if out of the map",
-    			"After editing/creating object, the engine was freezing few seconds for big maps"
+    			"After editing/creating object, the engine was freezing few seconds for big maps",
+    			"Control of camera performed in command teleport object context"
     		]
     	}
     ]
