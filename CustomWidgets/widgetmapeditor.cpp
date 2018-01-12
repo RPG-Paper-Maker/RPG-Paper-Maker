@@ -578,7 +578,9 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
         }
 
         // Shortcut
-        if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects) {
+        if (m_menuBar != nullptr &&
+            m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
+        {
             QKeySequence seq = Wanok::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
             QAction* action;
