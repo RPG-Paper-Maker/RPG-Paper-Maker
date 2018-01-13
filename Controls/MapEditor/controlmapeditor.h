@@ -179,6 +179,8 @@ public:
     void updateMapObjects();
     void setObjectPosition(Position& position);
     bool isCursorObjectVisible();
+    bool isObjectInCursor(Position3D& p);
+    void updateObjectEdition(MapPortion *mapPortion);
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,

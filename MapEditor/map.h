@@ -65,10 +65,9 @@ public:
     bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);
-    static int removeObject(QStandardItemModel* model,
-                            SystemCommonObject *object);
+    static int removeObject(QStandardItemModel* model, Position3D &p);
     bool deleteObject(Position& p, MapPortion *mapPortion,
-                      SystemCommonObject *object, QJsonObject &previous,
+                      QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);
     void addOverflow(Position& p, Portion& portion);
     void removeOverflow(Position& p, Portion& portion);

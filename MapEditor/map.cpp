@@ -909,7 +909,7 @@ bool Map::addObject(Position& p, MapPortion* mapPortion,
 {
     bool b = mapPortion->addObject(p, object, previous, previousType);
 
-    int row = Map::removeObject(m_modelObjects, object);
+    int row = Map::removeObject(m_modelObjects, p);
     SystemMapObject* newObject = new SystemMapObject(object->id(),
                                                      object->name(), p);
     QStandardItem* item = new QStandardItem;
@@ -922,13 +922,13 @@ bool Map::addObject(Position& p, MapPortion* mapPortion,
 
 // -------------------------------------------------------
 
-int Map::removeObject(QStandardItemModel *model, SystemCommonObject *object) {
+int Map::removeObject(QStandardItemModel *model, Position3D& p) {
     SystemMapObject* super;
 
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         super = ((SystemMapObject*) model->item(i)->data()
                  .value<quintptr>());
-        if (object->id() == super->id()){
+        if (p == super->position()) {
             model->removeRow(i);
             delete super;
             return i;
@@ -941,10 +941,10 @@ int Map::removeObject(QStandardItemModel *model, SystemCommonObject *object) {
 // -------------------------------------------------------
 
 bool Map::deleteObject(Position& p, MapPortion *mapPortion,
-                       SystemCommonObject *object, QJsonObject &previous,
+                       QJsonObject &previous,
                        MapEditorSubSelectionKind &previousType)
 {
-    Map::removeObject(m_modelObjects, object);
+    Map::removeObject(m_modelObjects, p);
 
     return mapPortion->deleteObject(p, previous, previousType);
 }

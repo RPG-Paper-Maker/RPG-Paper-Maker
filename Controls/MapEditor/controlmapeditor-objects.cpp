@@ -96,15 +96,10 @@ void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
                        object, MapEditorSubSelectionKind::Object, p, move);
         }
 
-        if (m_cursorObject->getSquareX() == p.x() &&
-            m_cursorObject->getSquareY() == p.y() &&
-            m_cursorObject->getSquareZ() == p.z())
-        {
+        if (isObjectInCursor(p))
             m_selectedObject = object;
-        }
-        m_map->writeObjects(true);
-        m_map->savePortionMap(mapPortion);
-        m_needMapObjectsUpdate = true;
+
+        updateObjectEdition(mapPortion);
 
         return;
     }
@@ -129,17 +124,14 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
     MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
 
     if (mapPortion != nullptr) {
-        MapObjects* mapObjects = m_map->objectsPortion(portion);
-        SystemCommonObject* object = nullptr;
-        if (mapObjects != nullptr)
-            object = mapObjects->getObjectAt(p);
+        MapObjects* mapObjects = mapPortion->mapObjects();
+        SystemCommonObject* object = mapObjects->getObjectAt(p);
 
         if (object != nullptr){
             QJsonObject previous;
             MapEditorSubSelectionKind previousType =
                     MapEditorSubSelectionKind::None;
-            if (m_map->deleteObject(p, mapPortion, object, previous,
-                                    previousType) &&
+            if (m_map->deleteObject(p, mapPortion, previous, previousType) &&
                 m_map->saved())
             {
                 setToNotSaved();
@@ -151,9 +143,10 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
                            nullptr, MapEditorSubSelectionKind::None, p, move);
             }
 
-            m_map->writeObjects(true);
-            m_portionsToUpdate += mapPortion;
-            m_portionsToSave += mapPortion;
+            if (isObjectInCursor(p))
+                m_selectedObject = nullptr;
+
+            updateObjectEdition(mapPortion);
         }
     }
 }
@@ -192,4 +185,20 @@ bool ControlMapEditor::isCursorObjectVisible() {
     setObjectPosition(position);
 
     return isVisible(position);
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::isObjectInCursor(Position3D& p) {
+    return (m_cursorObject->getSquareX() == p.x() &&
+            m_cursorObject->getSquareY() == p.y() &&
+            m_cursorObject->getSquareZ() == p.z());
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateObjectEdition(MapPortion* mapPortion) {
+    m_map->writeObjects(true);
+    m_map->savePortionMap(mapPortion);
+    m_needMapObjectsUpdate = true;
 }
