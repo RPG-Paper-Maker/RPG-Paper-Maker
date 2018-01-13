@@ -175,15 +175,30 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
     if (m_hasContextMenu || m_canBrutRemove){
 
-        // Forcing shortcuts
         QKeySequence seq = Wanok::getKeySequence(event);
-        QList<QAction*> actions =  m_contextMenu->actions();
+        QList<QAction*> actions = m_contextMenu->actions();
+        QAction* action;
 
-        if (actions.at(3)->shortcut().matches(seq))
+        // Forcing shortcuts
+        action = actions.at(0);
+        if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+            contextEdit();
+            return;
+        }
+        action = actions.at(2);
+        if (action->shortcut().matches(seq) && action->isEnabled()) {
+            contextCopy();
+            return;
+        }
+        action = actions.at(3);
+        if (action->shortcut().matches(seq) && action->isEnabled()) {
+            contextPaste();
+            return;
+        }
+        action = actions.at(5);
+        if (action->shortcut().matches(seq) && action->isEnabled()) {
             contextDelete();
-
-        if (m_hasContextMenu){
-
+            return;
         }
     }
 }
@@ -219,12 +234,20 @@ void WidgetSuperList::showContextMenu(const QPoint & p){
     if (m_hasContextMenu){
         QStandardItem* selected = getSelected();
         if (selected != nullptr){
+            m_contextMenu->canEdit(m_canEdit);
             m_contextMenu->canCopy(false);
             m_contextMenu->canPaste(false);
             m_contextMenu->canDelete(m_canBrutRemove);
             m_contextMenu->showContextMenu(p);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::contextEdit(){
+    QStandardItem* selected = getSelected();
+    openDialog(selected->index());
 }
 
 // -------------------------------------------------------

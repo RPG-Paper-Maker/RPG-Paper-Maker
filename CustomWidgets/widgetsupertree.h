@@ -85,6 +85,7 @@ private:
     virtual void updateAllNodesString(QStandardItem* item);
 
 private slots:
+    void onSelectionChanged(QModelIndex index, QModelIndex);
     void showContextMenu(const QPoint & p);
     void contextNew();
     void contextEdit();

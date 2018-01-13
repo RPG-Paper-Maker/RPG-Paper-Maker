@@ -72,6 +72,12 @@ void WidgetSuperTree::setCanMove(bool b) { m_canMove = b; }
 void WidgetSuperTree::initializeModel(QStandardItemModel* m){
     p_model = m;
     this->setModel(m);
+
+    // Connect for context menu
+    connect(this->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(onSelectionChanged(QModelIndex,QModelIndex)));
+
 }
 
 void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){
@@ -239,18 +245,36 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
 
         // Forcing shortcuts
         QKeySequence seq = Wanok::getKeySequence(event);
-        QList<QAction*> actions =  m_contextMenuCommonCommands->actions();
+        QList<QAction*> actions = m_contextMenuCommonCommands->actions();
+        QAction* action;
 
-        if (actions.at(6)->shortcut().matches(seq))
+        action = actions.at(6);
+        if (action->shortcut().matches(seq) && action->isEnabled()) {
             contextDelete();
+            return;
+        }
 
         if (m_canBeControled){
-            if (actions.at(0)->shortcut().matches(seq))
+            action = actions.at(1);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+                contextEdit();
+                return;
+            }
+            action = actions.at(0);
+            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
                 contextNew();
-            else if (actions.at(3)->shortcut().matches(seq))
+                return;
+            }
+            action = actions.at(3);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
                 contextCopy();
-            else if (actions.at(4)->shortcut().matches(seq))
+                return;
+            }
+            action = actions.at(4);
+            if (action->shortcut().matches(seq) && action->isEnabled()) {
                 contextPaste();
+                return;
+            }
         }
     }
 
@@ -319,59 +343,61 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 //
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetSuperTree::onSelectionChanged(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = p_model->itemFromIndex(index);
+    SuperListItem* super = nullptr;
+    if (selected != nullptr)
+        super = (SuperListItem*) selected->data().value<quintptr>();
+
+    m_contextMenuCommonCommands->canEdit(super != nullptr);
+}
+
+// -------------------------------------------------------
+//
 //  CONTEXT MENU SLOTS
 //
 // -------------------------------------------------------
-// -------------------------------------------------------
-//  showContextMenu: if right clicking, open this menu context
 
 void WidgetSuperTree::showContextMenu(const QPoint & p){
-    if (m_hasContextMenu){
+    if (m_hasContextMenu) {
         QStandardItem* selected = getSelected();
-        if (selected != nullptr){
+        if (selected != nullptr)
             m_contextMenuCommonCommands->showContextMenu(p);
-        }
     }
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::contextNew(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        newItem(selected);
+    newItem(getSelected());
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::contextEdit(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        editItem(selected);
+    editItem(getSelected());
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::contextCopy(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        copyItem(selected);
+    copyItem(getSelected());
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::contextPaste(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        pasteItem(selected);
+    pasteItem(getSelected());
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::contextDelete(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr)
-        deleteItem(selected);
+    deleteItem(getSelected());
 }
 
 // -------------------------------------------------------

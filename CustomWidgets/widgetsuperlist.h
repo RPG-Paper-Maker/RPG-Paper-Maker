@@ -69,6 +69,7 @@ private:
 private slots:
     void openDialog(QModelIndex);
     void showContextMenu(const QPoint & p);
+    void contextEdit();
     void contextCopy();
     void contextPaste();
     void contextDelete();
