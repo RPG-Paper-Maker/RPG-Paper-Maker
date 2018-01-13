@@ -42,6 +42,7 @@ public:
     virtual ~WidgetSuperList();
     void setCanBrutRemove(bool b);
     void setHasContextMenu(bool b);
+    void setCanEdit(bool b);
     void initializeModel(QStandardItemModel* m);
     void initializeNewItemInstance(SuperListItem *item);
     QStandardItemModel* getModel() const;
@@ -61,6 +62,7 @@ private:
     ContextMenuList* m_contextMenu;
     bool m_canBrutRemove;
     bool m_hasContextMenu;
+    bool m_canEdit;
 
     void brutDelete(QStandardItem* item);
 

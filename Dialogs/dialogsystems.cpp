@@ -72,6 +72,14 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListCurrencies->showEditName(false);
     ui->panelSuperListParticules->showEditName(false);
 
+    // Allow editions
+    ui->panelSuperListCameraMovements->list()->setCanEdit(true);
+    ui->panelSuperListCameraProperties->list()->setCanEdit(true);
+    ui->panelSuperListColors->list()->setCanEdit(true);
+    ui->panelSuperListDetections->list()->setCanEdit(true);
+    ui->panelSuperListCurrencies->list()->setCanEdit(true);
+    ui->panelSuperListParticules->list()->setCanEdit(true);
+
     // Integers
     ui->spinBoxSquareSize->setValue(Wanok::get()->project()->gameDatas()
                                     ->systemDatas()->squareSize());
@@ -86,11 +94,20 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
+
+    // Don't show edit name
     ui->panelSuperListCommonBattleCommands->showEditName(false);
     ui->panelSuperListCommonStatistics->showEditName(false);
     ui->panelSuperListElements->showEditName(false);
     ui->panelSuperListWeaponsKind->showEditName(false);
     ui->panelSuperListArmorsKind->showEditName(false);
+
+    // Allow editions
+    ui->panelSuperListCommonBattleCommands->list()->setCanEdit(true);
+    ui->panelSuperListCommonStatistics->list()->setCanEdit(true);
+    ui->panelSuperListElements->list()->setCanEdit(true);
+    ui->panelSuperListWeaponsKind->list()->setCanEdit(true);
+    ui->panelSuperListArmorsKind->list()->setCanEdit(true);
 
     // Fill combo boxes
     updateStatisticsBase();

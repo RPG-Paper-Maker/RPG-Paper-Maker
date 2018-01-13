@@ -31,7 +31,8 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     QListView(parent),
     m_newItemInstance(nullptr),
     m_canBrutRemove(false),
-    m_hasContextMenu(true)
+    m_hasContextMenu(true),
+    m_canEdit(false)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setAcceptDrops(true);
@@ -40,6 +41,10 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     this->setDragDropMode(QAbstractItemView::InternalMove);
     this->setDefaultDropAction(Qt::TargetMoveAction);
     this->showDropIndicator();
+
+    // Can edit
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this,
+            SLOT(openDialog(QModelIndex)));
 
     // Context
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -58,6 +63,8 @@ WidgetSuperList::~WidgetSuperList()
 void WidgetSuperList::setCanBrutRemove(bool b) { m_canBrutRemove = b; }
 
 void WidgetSuperList::setHasContextMenu(bool b) { m_hasContextMenu = b; }
+
+void WidgetSuperList::setCanEdit(bool b) { m_canEdit = b; }
 
 QStandardItemModel *WidgetSuperList::getModel() const { return p_model; }
 
@@ -165,7 +172,7 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 //
 // -------------------------------------------------------
 
-void WidgetSuperList::keyPressEvent(QKeyEvent *event){
+void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
     if (m_hasContextMenu || m_canBrutRemove){
 
         // Forcing shortcuts
@@ -188,14 +195,16 @@ void WidgetSuperList::keyPressEvent(QKeyEvent *event){
 // -------------------------------------------------------
 
 void WidgetSuperList::openDialog(QModelIndex){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr){
-        SuperListItem* super = (SuperListItem*)(selected->data()
-                                                .value<quintptr>());
-        if (super->openDialog()){
-            selected->setText(super->toString());
+    if (m_canEdit) {
+        QStandardItem* selected = getSelected();
+        if (selected != nullptr) {
+            SuperListItem* super = (SuperListItem*)(selected->data()
+                                                    .value<quintptr>());
+            if (super->openDialog()){
+                selected->setText(super->toString());
 
-            emit updated();
+                emit updated();
+            }
         }
     }
 }
