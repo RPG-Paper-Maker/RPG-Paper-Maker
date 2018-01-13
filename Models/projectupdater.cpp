@@ -259,6 +259,13 @@ void ProjectUpdater::check() {
     emit progress(95, "Copying recent executable and scripts");
     copyExecutable();
     copySystemScripts();
+    emit progress(99, "Correcting the BR path");
+    QThread::sleep(1);
+    m_project->readLangsDatas();
+    m_project->readSystemDatas();
+    m_project->gameDatas()->systemDatas()->setPathBR(
+                Wanok::pathCombine(QDir::currentPath(), Wanok::pathBR));
+    m_project->writeSystemDatas();
     emit progress(100, "");
     QThread::sleep(1);
 

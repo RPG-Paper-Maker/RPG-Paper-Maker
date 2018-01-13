@@ -57,7 +57,8 @@ void SystemPicture::setIsBR(bool b) { m_isBR = b; }
 // -------------------------------------------------------
 
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
-    QString folder = isBR ? Wanok::pathBR
+    QString folder = isBR ? Wanok::get()->project()->gameDatas()->systemDatas()
+                            ->pathBR()
                           : Wanok::get()->project()->pathCurrentProject();
 
     return Wanok::pathCombine(folder, getLocalFolder(kind));

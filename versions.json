@@ -419,9 +419,17 @@
 			            {
                             "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/master/Content/Pictures/Textures2D/Walls/inside1.png",
                             "target": "Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
+                        },
+                        {
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/master/Content/Pictures/Textures2D/Walls/inside2.png",
+                            "target": "Content/BR/Content/Pictures/Textures2D/Walls/inside2.png"
                         }
     				],
 	                "target": "Content/BR/Content/Pictures/Textures2D/Walls"
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/master/Content/Pictures/Textures2D/Tilesets/inside.png",
+                    "target": "Content/BR/Content/Pictures/Textures2D/Tilesets/inside.png"
     			}
     		],
     		"remove": [
@@ -474,7 +482,8 @@
     			"Preview elements buffers were not cleared after loading a new map",
     			"Command teleport object: after resizing the map the position was not updated if out of the map",
     			"After editing/creating object, the engine was freezing few seconds for big maps",
-    			"Control of camera performed in command teleport object context"
+    			"Control of camera performed in command teleport object context",
+    			"Project updater now correcting path BR"
     		]
     	}
     ]
