@@ -996,8 +996,18 @@ void ControlMapEditor::undoRedo(QJsonArray& states, bool reverseAction) {
         Position position;
         m_controlUndoRedo.getStateInfos(objState, kindBefore, kindAfter,
                                         objBefore, objAfter, position);
-        performUndoRedoAction(kindBefore, reverseAction, objBefore, position);
-        performUndoRedoAction(kindAfter, !reverseAction, objAfter, position);
+        if (reverseAction) {
+            performUndoRedoAction(kindAfter, !reverseAction, objAfter,
+                                  position);
+            performUndoRedoAction(kindBefore, reverseAction, objBefore,
+                                  position);
+        }
+        else {
+            performUndoRedoAction(kindBefore, reverseAction, objBefore,
+                                  position);
+            performUndoRedoAction(kindAfter, !reverseAction, objAfter,
+                                  position);
+        }
     }
 }
 
