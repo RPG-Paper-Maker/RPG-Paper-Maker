@@ -548,6 +548,7 @@ void Map::loadPictures(PictureKind kind,
 
 void Map::loadCharactersTextures()
 {
+    m_texturesCharacters.clear();
     loadPictures(PictureKind::Characters, m_texturesCharacters);
 }
 
