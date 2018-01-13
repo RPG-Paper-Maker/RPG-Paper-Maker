@@ -1082,22 +1082,30 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
                                MapEditorSubSelectionKind subSelectionKind,
                                DrawKind drawKind)
 {
+    // Drawing floors
     m_map->paintFloors(modelviewProjection);
 
-    if (selectionKind == MapEditorSelectionKind::Objects)
-        m_cursorObject->paintGL(modelviewProjection);
+    // Drawing object cursor
+    if (selectionKind == MapEditorSelectionKind::Objects) {
+        if (isCursorObjectVisible())
+            m_cursorObject->paintGL(modelviewProjection);
+    }
 
+    // Drawing user cursor
     m_map->cursor()->paintGL(modelviewProjection);
 
+    // Drawing grid
     if (m_displayGrid){
         glDisable(GL_DEPTH_TEST);
         m_grid->paintGL(modelviewProjection);
         glEnable(GL_DEPTH_TEST);
     }
 
+    // Drawing other stuff
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
                        cameraUpWorldSpace, cameraDeepWorldSpace);
 
+    // Drawing wall indicator
     if (subSelectionKind == MapEditorSubSelectionKind::SpritesWall &&
         drawKind != DrawKind::Pin)
     {
@@ -1132,6 +1140,15 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
 
     return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
             + "\n" + position.toString(m_map->squareSize());
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::isVisible(Position3D& position) {
+    Portion portion;
+    m_map->getLocalPortion(position, portion);
+
+    return m_map->isInPortion(portion);
 }
 
 // -------------------------------------------------------

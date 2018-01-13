@@ -74,7 +74,7 @@ void ControlMapEditor::addObject(Position& p){
 // -------------------------------------------------------
 
 void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
-                                   bool undoRedo)
+                                   bool undoRedo, bool move)
 {
     Portion portion;
     m_map->getLocalPortion(p, portion);
@@ -93,7 +93,7 @@ void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
         if (!undoRedo) {
             m_controlUndoRedo.updateJsonList(
                        m_changes, previous, previousType,
-                       object, MapEditorSubSelectionKind::Object, p);
+                       object, MapEditorSubSelectionKind::Object, p, move);
         }
 
         if (m_cursorObject->getSquareX() == p.x() &&
@@ -123,7 +123,7 @@ void ControlMapEditor::removeObject(Position& p){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseObject(Position& p, bool undoRedo) {
+void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
     Portion portion;
     m_map->getLocalPortion(p, portion);
     MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
@@ -148,7 +148,7 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo) {
             if (!undoRedo) {
                 m_controlUndoRedo.updateJsonList(
                            m_changes, previous, previousType,
-                           nullptr, MapEditorSubSelectionKind::None, p);
+                           nullptr, MapEditorSubSelectionKind::None, p, move);
             }
 
             m_map->writeObjects(true);
@@ -165,8 +165,8 @@ void ControlMapEditor::moveObject(Position& p) {
     if (m_previousMouseCoords != p) {
         SystemCommonObject* object =
                 (SystemCommonObject*) m_selectedObject->createCopy();
-        eraseObject(m_previousMouseCoords);
-        stockObject(p, object);
+        eraseObject(m_previousMouseCoords, false, true);
+        stockObject(p, object, false, true);
 
         m_previousMouseCoords = p;
     }
@@ -176,4 +176,20 @@ void ControlMapEditor::moveObject(Position& p) {
 
 void ControlMapEditor::updateMapObjects() {
     m_map->updateMapObjects();
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::setObjectPosition(Position& position){
+    position.setX(cursorObject()->getSquareX());
+    position.setZ(cursorObject()->getSquareZ());
+}
+
+// -------------------------------------------------------
+
+bool ControlMapEditor::isCursorObjectVisible() {
+    Position position;
+    setObjectPosition(position);
+
+    return isVisible(position);
 }

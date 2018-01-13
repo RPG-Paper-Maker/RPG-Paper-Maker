@@ -172,11 +172,13 @@ public:
     void defineAsHero();
     void addObject(Position& p);
     void stockObject(Position& p, SystemCommonObject* object,
-                     bool undoRedo = false);
+                     bool undoRedo = false, bool move = false);
     void removeObject(Position& p);
-    void eraseObject(Position& p, bool undoRedo = false);
+    void eraseObject(Position& p, bool undoRedo = false, bool move = false);
     void moveObject(Position& p);
     void updateMapObjects();
+    void setObjectPosition(Position& position);
+    bool isCursorObjectVisible();
     void updatePortionsToSaveOverflow(QSet<Portion>& portionsOverflow);
     MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,
@@ -199,6 +201,7 @@ public:
                                QJsonObject& obj, Position &position);
     QString getSquareInfos(MapEditorSelectionKind kind,
                            MapEditorSubSelectionKind subKind, bool layerOn);
+    bool isVisible(Position3D &position);
 
     void paintGL(QMatrix4x4& modelviewProjection,
                  QVector3D& cameraRightWorldSpace,

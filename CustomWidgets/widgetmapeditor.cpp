@@ -315,25 +315,20 @@ void WidgetMapEditor::updateSpinBoxes(){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::setObjectPosition(Position& position){
-    position.setX(m_control.cursorObject()->getSquareX());
-    position.setZ(m_control.cursorObject()->getSquareZ());
-}
-
-// -------------------------------------------------------
-
 void WidgetMapEditor::addObject(){
     Position p;
-    setObjectPosition(p);
-    m_control.addObject(p);
+    m_control.setObjectPosition(p);
+    if (m_control.isVisible(p))
+        m_control.addObject(p);
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::deleteObject(){
     Position p;
-    setObjectPosition(p);
-    m_control.removeObject(p);
+    m_control.setObjectPosition(p);
+    if (m_control.isVisible(p))
+        m_control.removeObject(p);
 }
 
 // -------------------------------------------------------
@@ -685,5 +680,6 @@ void WidgetMapEditor::contextDelete(){
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextHero(){
-    m_control.defineAsHero();
+    if (m_control.isCursorObjectVisible())
+        m_control.defineAsHero();
 }

@@ -49,7 +49,7 @@ public:
                         MapEditorSubSelectionKind previousType,
                         Serializable *after,
                         MapEditorSubSelectionKind afterType,
-                        const Position &position);
+                        const Position &position, bool removeAll = false);
     void addState(int idMap, QJsonArray& tab);
     int getMapCurrentState(int idMap) const;
     int updateMapCurrentState(int idMap);

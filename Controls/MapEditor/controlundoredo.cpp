@@ -49,7 +49,8 @@ ControlUndoRedo::ControlUndoRedo()
 void ControlUndoRedo::updateJsonList(
         QJsonArray &list, const QJsonObject &previous,
         MapEditorSubSelectionKind previousType, Serializable* after,
-        MapEditorSubSelectionKind afterType, const Position& position)
+        MapEditorSubSelectionKind afterType, const Position& position,
+        bool removeAll)
 {
     QJsonObject state, afterJson;
     QJsonArray positionJson;
@@ -63,6 +64,10 @@ void ControlUndoRedo::updateJsonList(
     state[jsonAfterType] = (int) afterType;
     state[jsonPos] = positionJson;
 
+    if (removeAll) {
+        if (list.size() > 1)
+            list.removeLast();
+    }
     list.append(state);
 }
 
