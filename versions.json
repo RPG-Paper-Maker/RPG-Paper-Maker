@@ -492,7 +492,10 @@
     		"remove": [],
     		"replace": [],
     		"features": ["Recent projects: indication not implemented yet"],
-    		"bugs": ["Tileset selector is now updating cursor position if out of the new texture"]
+    		"bugs": [
+    			"Tileset selector is now updating cursor position if out of the new texture",
+    			"Sprites on right and bottom walls were inverted"
+    		]
     	}
     ]
 }

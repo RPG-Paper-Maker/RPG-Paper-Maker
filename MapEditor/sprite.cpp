@@ -186,13 +186,25 @@ void SpriteDatas::initializeVertices(int squareSize,
 
     // Adding to buffers according to the kind of sprite
     m_vertices.clear();
-    QVector3D vecA = Sprite::modelQuad[0] * size + pos,
-              vecB = Sprite::modelQuad[1] * size + pos,
-              vecC = Sprite::modelQuad[2] * size + pos,
-              vecD = Sprite::modelQuad[3] * size + pos;
+    QVector3D vecA, vecB, vecC, vecD;
+
+    // Reverse vertices if not in front
+    if (m_kind == MapEditorSubSelectionKind::SpritesFix && !m_front) {
+        vecA = Sprite::modelQuad[1] * size + pos;
+        vecB = Sprite::modelQuad[0] * size + pos;
+        vecC = Sprite::modelQuad[3] * size + pos;
+        vecD = Sprite::modelQuad[2] * size + pos;
+    }
+    else {
+        vecA = Sprite::modelQuad[0] * size + pos;
+        vecB = Sprite::modelQuad[1] * size + pos;
+        vecC = Sprite::modelQuad[2] * size + pos;
+        vecD = Sprite::modelQuad[3] * size + pos;
+    }
     rotateSprite(vecA, vecB, vecC, vecD, center, position.angle());
     m_vertices.append(vecA);
     m_vertices.append(vecC);
+
     switch (m_kind) {
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesDouble:
