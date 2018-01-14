@@ -485,6 +485,14 @@
     			"Control of camera performed in command teleport object context",
     			"Project updater now correcting path BR"
     		]
+    	},
+    	{
+    		"v": "0.4.1",
+    		"add": [],
+    		"remove": [],
+    		"replace": [],
+    		"features": [],
+    		"bugs": ["Tileset selector is now updating cursor position if out of the new texture"]
     	}
     ]
 }

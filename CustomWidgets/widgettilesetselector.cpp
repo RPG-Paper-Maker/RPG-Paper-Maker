@@ -75,6 +75,16 @@ void WidgetTilesetSelector::updateImage(){
                       m_textureTileset.width(),
                       m_textureTileset.height());
     setFixedSize(m_textureTileset.width(), m_textureTileset.height());
+
+    // If cursor out of the new texture
+    QRect cursorRect = m_selectionRectangle->getCoefRect();
+    QRect newTextureRect(0, 0,
+                         m_textureTileset.width() / Wanok::BASIC_SQUARE_SIZE,
+                         m_textureTileset.height() / Wanok::BASIC_SQUARE_SIZE);
+    if (!newTextureRect.contains(cursorRect)) {
+        makeFirstSelection(0, 0);
+        this->repaint();
+    }
 }
 
 // -------------------------------------------------------
