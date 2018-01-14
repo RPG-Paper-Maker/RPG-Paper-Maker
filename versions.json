@@ -491,7 +491,7 @@
     		"add": [],
     		"remove": [],
     		"replace": [],
-    		"features": [],
+    		"features": ["Recent projects: indication not implemented yet"],
     		"bugs": ["Tileset selector is now updating cursor position if out of the new texture"]
     	}
     ]

@@ -18,8 +18,11 @@
     <layout class="QGridLayout" name="gridLayout" columnstretch="1,4">
      <item row="0" column="0">
       <widget class="QGroupBox" name="groupBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="title">
-        <string>Recent projects</string>
+        <string>Recent projects [not implemented yet]</string>
        </property>
        <property name="flat">
         <bool>false</bool>
