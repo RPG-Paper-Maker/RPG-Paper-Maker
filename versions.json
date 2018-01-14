@@ -394,6 +394,10 @@
             {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/picture2d.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/picture2d.js"
+            },
+            {
+                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/rpm.js",
+                "target": "Content/basic/Content/Datas/Scripts/System/rpm.js"
             }
         ],
         "target": "Content/basic/Content/Datas/Scripts/System"
