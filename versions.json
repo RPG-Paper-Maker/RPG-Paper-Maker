@@ -364,10 +364,6 @@
                 "target": "Content/basic/Content/Datas/Scripts/System/system-troop.js"
             },
             {
-                "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/utilities.js",
-                "target": "Content/basic/Content/Datas/Scripts/System/utilities.js"
-            },
-            {
                 "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/datas-skills.js",
                 "target": "Content/basic/Content/Datas/Scripts/System/datas-skills.js"
             },
