@@ -1,0 +1,58 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>Ressources/new_file.png</file>
+        <file>Ressources/open_file.png</file>
+        <file>Ressources/save.png</file>
+        <file>Ressources/play.png</file>
+        <file>Ressources/datas.png</file>
+        <file>Ressources/map.png</file>
+        <file>Ressources/dir.png</file>
+        <file>Ressources/lang.png</file>
+        <file>Ressources/inputs.png</file>
+        <file>Ressources/big_arrow_left.png</file>
+        <file>Ressources/point_b.png</file>
+        <file>Ressources/point_r.png</file>
+        <file>Ressources/autotile.png</file>
+        <file>Ressources/ev.png</file>
+        <file>Ressources/height.png</file>
+        <file>Ressources/montain.png</file>
+        <file>Ressources/mousewheel.png</file>
+        <file>Ressources/none.png</file>
+        <file>Ressources/pencil.png</file>
+        <file>Ressources/pin.png</file>
+        <file>Ressources/rectangle.png</file>
+        <file>Ressources/sprite_double.png</file>
+        <file>Ressources/sprite_face.png</file>
+        <file>Ressources/sprite_quadra.png</file>
+        <file>Ressources/water.png</file>
+        <file>Ressources/picture.png</file>
+        <file>Ressources/floor.png</file>
+        <file>Ressources/sprite_fix.png</file>
+        <file>Ressources/icon.ico</file>
+        <file>Ressources/delete.png</file>
+        <file>Ressources/layer_none.png</file>
+        <file>Ressources/layer_on.png</file>
+        <file>Ressources/sprite_walls.png</file>
+    </qresource>
+    <qresource prefix="/stylesheets">
+        <file>style.qss</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>Shaders/cursor.frag</file>
+        <file>Shaders/cursor.vert</file>
+        <file>Shaders/static.frag</file>
+        <file>Shaders/static.vert</file>
+        <file>Shaders/grid.frag</file>
+        <file>Shaders/grid.vert</file>
+        <file>Shaders/spriteFace.frag</file>
+        <file>Shaders/spriteFace.vert</file>
+        <file>Shaders/wallIndicator.frag</file>
+        <file>Shaders/wallIndicator.vert</file>
+    </qresource>
+    <qresource prefix="/textures">
+        <file>Ressources/editor_cursor.png</file>
+        <file>Ressources/object_square.png</file>
+        <file>Ressources/object_square_cursor.png</file>
+        <file>Ressources/tileset_cursor.png</file>
+    </qresource>
+</RCC>

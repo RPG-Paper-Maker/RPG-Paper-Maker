@@ -1,0 +1,34 @@
+#!/bin/bash
+
+modsPath='./mods'
+localMessage='Local copy: '
+githubMessage='Github repository copy: '
+moveSymbol='->'
+
+if [ -d $modsPath ]; then
+	rm -r $modsPath
+fi
+mkdir mods
+
+path='../Game-Scripts/Content/Datas/Scripts'
+pathModsScript="${modsPath}/Scripts"
+if [ -d $path ]; then
+	echo "$localMessage $path > $pathModsScript"
+	cp -r $path $pathModsScript
+else
+	pathGit="https://github.com/RPG-Paper-Maker/Game-Scripts/trunk/Content/Datas/Scripts"
+	echo "$githubMessage $pathGit > $modsPath"
+	svn export $pathGit $pathModsScript
+fi
+
+path='../Basic-Ressources/Content'
+pathModsBR="${modsPath}/BR/Content"
+mkdir "${modsPath}/BR"
+if [ -d $path ]; then
+	echo "$localMessage $path > $pathModsBR"
+	cp -r $path $pathModsBR
+else
+	pathGit="https://github.com/RPG-Paper-Maker/Basic-Ressources/trunk/Content"
+	echo "$githubMessage $pathGit > $pathModsBR"
+	svn export $pathGit $pathModsBR
+fi
