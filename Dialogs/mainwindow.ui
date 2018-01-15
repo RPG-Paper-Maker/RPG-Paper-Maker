@@ -81,6 +81,7 @@
     <addaction name="actionSystems_manager"/>
     <addaction name="actionVariables_manager"/>
     <addaction name="actionPictures_manager"/>
+    <addaction name="actionSongs_manager"/>
     <addaction name="actionKeyboard_controls"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -94,6 +95,7 @@
      <string>Special elements</string>
     </property>
     <addaction name="actionAutotiles"/>
+    <addaction name="actionAnimated_Autotiles"/>
     <addaction name="actionSprite_walls"/>
     <addaction name="action3D_objects"/>
     <addaction name="actionReliefs"/>
@@ -121,6 +123,9 @@
    <addaction name="menuTest"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="movable">
     <bool>false</bool>
    </property>
@@ -145,9 +150,11 @@
    <addaction name="actionSystems_manager"/>
    <addaction name="actionVariables_manager"/>
    <addaction name="actionPictures_manager"/>
+   <addaction name="actionSongs_manager"/>
    <addaction name="actionKeyboard_controls"/>
    <addaction name="separator"/>
    <addaction name="actionAutotiles"/>
+   <addaction name="actionAnimated_Autotiles"/>
    <addaction name="actionSprite_walls"/>
    <addaction name="action3D_objects"/>
    <addaction name="actionReliefs"/>
@@ -406,6 +413,36 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Z</string>
+   </property>
+  </action>
+  <action name="actionAnimated_Autotiles">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Animated Autotiles</string>
+   </property>
+   <property name="iconText">
+    <string>! Autotiles</string>
+   </property>
+  </action>
+  <action name="actionSongs_manager">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+   </property>
+   <property name="text">
+    <string>Songs manager</string>
+   </property>
+   <property name="iconText">
+    <string>Songs</string>
    </property>
   </action>
  </widget>

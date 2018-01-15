@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "panelspritewalls.h"
-#include "ui_panelspritewalls.h"
+#include "panelspecialelements.h"
+#include "ui_panelspecialelements.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -27,25 +27,25 @@
 //
 // -------------------------------------------------------
 
-PanelSpriteWalls::PanelSpriteWalls(QWidget *parent) :
+PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelSpriteWalls)
+    ui(new Ui::PanelSpecialElements)
 {
     ui->setupUi(this);
 
     initialize();
 }
 
-PanelSpriteWalls::~PanelSpriteWalls()
+PanelSpecialElements::~PanelSpecialElements()
 {
     delete ui;
 }
 
-int PanelSpriteWalls::currentIndex() const {
+int PanelSpecialElements::currentIndex() const {
     return superList()->list()->getIndex();
 }
 
-PanelSuperList *PanelSpriteWalls::superList() const {
+PanelSuperList *PanelSpecialElements::superList() const {
     return ui->panelSuperList;
 }
 
@@ -55,7 +55,7 @@ PanelSuperList *PanelSpriteWalls::superList() const {
 //
 // -------------------------------------------------------
 
-void PanelSpriteWalls::initialize() {
+void PanelSpecialElements::initialize() {
     ui->panelSuperList->list()->initializeNewItemInstance(new SystemSpriteWall);
     ui->panelSuperList->initializeModel(Wanok::get()->project()
                                         ->specialElementsDatas()
@@ -74,7 +74,7 @@ void PanelSpriteWalls::initialize() {
 
 // -------------------------------------------------------
 
-void PanelSpriteWalls::update(SystemSpriteWall* sys) {
+void PanelSpecialElements::update(SystemSpriteWall* sys) {
     SystemPicture* picture = sys->picture();
 
     ui->widgetPicture->setPicture(picture);
@@ -87,7 +87,7 @@ void PanelSpriteWalls::update(SystemSpriteWall* sys) {
 //
 // -------------------------------------------------------
 
-void PanelSpriteWalls::on_pageSelected(QModelIndex index, QModelIndex) {
+void PanelSpecialElements::on_pageSelected(QModelIndex index, QModelIndex) {
     QStandardItem* selected = ui->panelSuperList->list()->getModel()
             ->itemFromIndex(index);
     if (selected != nullptr)
@@ -96,7 +96,7 @@ void PanelSpriteWalls::on_pageSelected(QModelIndex index, QModelIndex) {
 
 // -------------------------------------------------------
 
-void PanelSpriteWalls::on_pictureChanged(SystemPicture* picture) {
+void PanelSpecialElements::on_pictureChanged(SystemPicture* picture) {
     SystemSpriteWall* wall = (SystemSpriteWall*) ui->panelSuperList->list()
             ->getSelected()->data().value<quintptr>();
     wall->setPictureID(picture->id());

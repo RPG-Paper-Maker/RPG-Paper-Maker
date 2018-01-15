@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogTilesetSpriteWalls</class>
- <widget class="QDialog" name="DialogTilesetSpriteWalls">
+ <class>DialogTilesetSpecialElements</class>
+ <widget class="QDialog" name="DialogTilesetSpecialElements">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Sprite walls</string>
+   <string></string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -123,7 +123,7 @@
         </layout>
        </item>
        <item>
-        <widget class="PanelSpriteWalls" name="widget" native="true"/>
+        <widget class="PanelSpecialElements" name="widget" native="true"/>
        </item>
       </layout>
      </item>
@@ -149,9 +149,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PanelSpriteWalls</class>
+   <class>PanelSpecialElements</class>
    <extends>QWidget</extends>
-   <header>panelspritewalls.h</header>
+   <header>panelspecialelements.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -162,7 +162,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogTilesetSpriteWalls</receiver>
+   <receiver>DialogTilesetSpecialElements</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -178,7 +178,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogTilesetSpriteWalls</receiver>
+   <receiver>DialogTilesetSpecialElements</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

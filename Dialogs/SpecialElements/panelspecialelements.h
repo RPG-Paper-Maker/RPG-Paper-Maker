@@ -17,33 +17,43 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGSPRITEWALLS_H
-#define DIALOGSPRITEWALLS_H
+#ifndef PANELSPECIALELEMENTS_H
+#define PANELSPECIALELEMENTS_H
 
-#include <QDialog>
+#include <QWidget>
+#include "systemspritewall.h"
+#include "panelsuperlist.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogSpriteWalls
+//  CLASS PanelSpecialElements
 //
-//  The sprite walls dialog.
+//  The special elements panel (complete list).
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogSpriteWalls;
+class PanelSpecialElements;
 }
 
-class DialogSpriteWalls : public QDialog
+class PanelSpecialElements : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DialogSpriteWalls(QWidget *parent = 0);
-    ~DialogSpriteWalls();
+    explicit PanelSpecialElements(QWidget *parent = 0);
+    ~PanelSpecialElements();
+    void initialize();
+    void update(SystemSpriteWall* sys);
+    int currentIndex() const;
+    PanelSuperList* superList() const;
 
 private:
-    Ui::DialogSpriteWalls *ui;
+    Ui::PanelSpecialElements *ui;
+
+private slots:
+    void on_pageSelected(QModelIndex index, QModelIndex);
+    void on_pictureChanged(SystemPicture* picture);
 };
 
-#endif // DIALOGSPRITEWALLS_H
+#endif // PANELSPECIALELEMENTS_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PanelSpriteWalls</class>
- <widget class="QWidget" name="PanelSpriteWalls">
+ <class>PanelSpecialElements</class>
+ <widget class="QWidget" name="PanelSpecialElements">
   <property name="geometry">
    <rect>
     <x>0</x>

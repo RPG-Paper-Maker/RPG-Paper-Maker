@@ -26,7 +26,7 @@
 #include "dialogdatasmonsterrewards.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
-#include "dialogtilesetspritewalls.h"
+#include "dialogtilesetspecialelements.h"
 
 // -------------------------------------------------------
 //
@@ -443,7 +443,7 @@ void DialogDatas::on_pushButtonSpriteWalls_clicked() {
     SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
             ->getSelected()->data().value<quintptr>();
 
-    DialogTilesetSpriteWalls dialog(tileset);
+    DialogTilesetSpecialElements dialog(tileset);
     if (dialog.exec() == QDialog::Accepted)
         Wanok::get()->project()->writeSpecialsDatas();
     else

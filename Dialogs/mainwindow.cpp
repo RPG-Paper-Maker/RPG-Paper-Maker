@@ -38,7 +38,7 @@
 #include "dialoglocation.h"
 #include "dialogprogress.h"
 #include "dialogengineupdate.h"
-#include "dialogspritewalls.h"
+#include "dialogspecialelements.h"
 
 // -------------------------------------------------------
 //
@@ -207,6 +207,7 @@ void MainWindow::enableAll(bool b){
     ui->actionPictures_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
+    ui->actionAutotiles->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
     ui->actionShow_Hide_grid->setEnabled(b);
     ui->actionShow_Hide_square_informations->setEnabled(b);
@@ -237,6 +238,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionPictures_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
+    ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
     ui->actionShow_Hide_grid->setEnabled(true);
     ui->actionShow_Hide_square_informations->setEnabled(true);
@@ -456,8 +458,20 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionAutotiles_triggered() {
+    DialogSpecialElements dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeSpecialsDatas();
+    else
+        project->readSpecialsDatas();
+
+    updateTextures();
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionSprite_walls_triggered() {
-    DialogSpriteWalls dialog;
+    DialogSpecialElements dialog;
     if (openDialog(dialog) == QDialog::Accepted)
         project->writeSpecialsDatas();
     else

@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGTILESETSPRITEWALLS_H
-#define DIALOGTILESETSPRITEWALLS_H
+#ifndef DIALOGTILESETSPECIALELEMENTS_H
+#define DIALOGTILESETSPECIALELEMENTS_H
 
 #include <QDialog>
 #include <QStandardItemModel>
@@ -26,31 +26,31 @@
 
 // -------------------------------------------------------
 //
-//  CLASS DialogTilesetSpriteWalls
+//  CLASS DialogTilesetSpecialElements
 //
-//  A dialog used for setting sprite walls for a particular tileset.
+//  A dialog used for setting special elements for a particular tileset.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogTilesetSpriteWalls;
+class DialogTilesetSpecialElements;
 }
 
-class DialogTilesetSpriteWalls : public QDialog
+class DialogTilesetSpecialElements : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogTilesetSpriteWalls(SystemTileset* tileset,
-                                      QWidget *parent = 0);
-    virtual ~DialogTilesetSpriteWalls();
+    explicit DialogTilesetSpecialElements(SystemTileset* tileset,
+                                          QWidget *parent = 0);
+    virtual ~DialogTilesetSpecialElements();
     QStandardItemModel* model() const;
     void initialize();
     void move();
     void remove();
 
 private:
-    Ui::DialogTilesetSpriteWalls *ui;
+    Ui::DialogTilesetSpecialElements *ui;
     SystemTileset* m_tileset;
 
 public slots:
@@ -61,4 +61,4 @@ public slots:
     virtual void accept();
 };
 
-#endif // DIALOGTILESETSPRITEWALLS_H
+#endif // DIALOGTILESETSPECIALELEMENTS_H

@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogtilesetspritewalls.h"
-#include "ui_dialogtilesetspritewalls.h"
+#include "dialogtilesetspecialelements.h"
+#include "ui_dialogtilesetspecialelements.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -27,10 +27,10 @@
 //
 // -------------------------------------------------------
 
-DialogTilesetSpriteWalls::DialogTilesetSpriteWalls(SystemTileset *tileset,
+DialogTilesetSpecialElements::DialogTilesetSpecialElements(SystemTileset *tileset,
                                                    QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogTilesetSpriteWalls),
+    ui(new Ui::DialogTilesetSpecialElements),
     m_tileset(tileset)
 {
     ui->setupUi(this);
@@ -39,13 +39,13 @@ DialogTilesetSpriteWalls::DialogTilesetSpriteWalls(SystemTileset *tileset,
     initialize();
 }
 
-DialogTilesetSpriteWalls::~DialogTilesetSpriteWalls()
+DialogTilesetSpecialElements::~DialogTilesetSpecialElements()
 {
     SuperListItem::deleteModel(model());
     delete ui;
 }
 
-QStandardItemModel* DialogTilesetSpriteWalls::model() const {
+QStandardItemModel* DialogTilesetSpecialElements::model() const {
     return ui->panelSuperList->list()->getModel();
 }
 
@@ -55,7 +55,7 @@ QStandardItemModel* DialogTilesetSpriteWalls::model() const {
 //
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::initialize() {
+void DialogTilesetSpecialElements::initialize() {
     QStandardItemModel* model = new QStandardItemModel;
     SuperListItem::copyModel(model, m_tileset->modelSpriteWalls());
 
@@ -80,7 +80,7 @@ void DialogTilesetSpriteWalls::initialize() {
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::move() {
+void DialogTilesetSpecialElements::move() {
     int index = ui->widget->currentIndex();
     QStandardItemModel* model = ui->panelSuperList->list()->getModel();
 
@@ -91,7 +91,7 @@ void DialogTilesetSpriteWalls::move() {
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::remove() {
+void DialogTilesetSpecialElements::remove() {
     int index = ui->panelSuperList->list()->getIndex();
     if (index >= 0) {
         QStandardItemModel* model = ui->panelSuperList->list()->getModel();
@@ -105,19 +105,19 @@ void DialogTilesetSpriteWalls::remove() {
 //
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::on_pushButtonMove_clicked() {
+void DialogTilesetSpecialElements::on_pushButtonMove_clicked() {
     move();
 }
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::on_pushButtonDelete_clicked() {
+void DialogTilesetSpecialElements::on_pushButtonDelete_clicked() {
     remove();
 }
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::on_deletingIDs() {
+void DialogTilesetSpecialElements::on_deletingIDs() {
 
     // When deleting IDs, we need to update the list and also delete these
     // removed IDs in the tileset list
@@ -128,7 +128,7 @@ void DialogTilesetSpriteWalls::on_deletingIDs() {
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::on_nameChanged(QStandardItem* item)
+void DialogTilesetSpecialElements::on_nameChanged(QStandardItem* item)
 {
     QStandardItemModel* model = ui->panelSuperList->list()->getModel();
     SuperListItem* super = (SuperListItem*) item->data().value<quintptr>();
@@ -145,7 +145,7 @@ void DialogTilesetSpriteWalls::on_nameChanged(QStandardItem* item)
 
 // -------------------------------------------------------
 
-void DialogTilesetSpriteWalls::accept() {
+void DialogTilesetSpecialElements::accept() {
     QStandardItemModel* model = m_tileset->modelSpriteWalls();
 
     // Clear

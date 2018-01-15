@@ -218,11 +218,8 @@ HEADERS += \
     MapEditor/mapelement.h \
     MapEditor/wallindicator.h \
     MapEditor/sprite.h \
-    Dialogs/SpecialElements/dialogspritewalls.h \
-    Dialogs/SpecialElements/panelspritewalls.h \
     Models/System/systemspritewall.h \
     Models/GameDatas/specialelementsdatas.h \
-    Dialogs/SpecialElements/dialogtilesetspritewalls.h \
     Enums/spritewallkind.h \
     Models/System/systemspecialelement.h \
     Enums/orientationkind.h \
@@ -233,7 +230,10 @@ HEADERS += \
     MapEditor/land.h \
     MapEditor/floor.h \
     Enums/cameraupdownkind.h \
-    Controls/MapEditor/controlundoredo.h
+    Controls/MapEditor/controlundoredo.h \
+    Dialogs/SpecialElements/dialogtilesetspecialelements.h \
+    Dialogs/SpecialElements/dialogspecialelements.h \
+    Dialogs/SpecialElements/panelspecialelements.h
 
 SOURCES += \
     main.cpp \
@@ -400,11 +400,8 @@ SOURCES += \
     MapEditor/mapelement.cpp \
     MapEditor/wallindicator.cpp \
     MapEditor/sprite.cpp \
-    Dialogs/SpecialElements/dialogspritewalls.cpp \
-    Dialogs/SpecialElements/panelspritewalls.cpp \
     Models/System/systemspritewall.cpp \
     Models/GameDatas/specialelementsdatas.cpp \
-    Dialogs/SpecialElements/dialogtilesetspritewalls.cpp \
     Models/System/systemspecialelement.cpp \
     MathUtils/qplane3d.cpp \
     MathUtils/qray3d.cpp \
@@ -415,7 +412,10 @@ SOURCES += \
     Controls/MapEditor/controlmapeditor-preview.cpp \
     Controls/MapEditor/controlmapeditor-raycasting.cpp \
     Controls/MapEditor/controlmapeditor-add-remove.cpp \
-    Controls/MapEditor/controlmapeditor-objects.cpp
+    Controls/MapEditor/controlmapeditor-objects.cpp \
+    Dialogs/SpecialElements/dialogspecialelements.cpp \
+    Dialogs/SpecialElements/dialogtilesetspecialelements.cpp \
+    Dialogs/SpecialElements/panelspecialelements.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -479,9 +479,9 @@ FORMS += \
     Dialogs/Commands/dialogcommandmovecamera.ui \
     Dialogs/dialogprogress.ui \
     Dialogs/dialogengineupdate.ui \
-    Dialogs/SpecialElements/dialogspritewalls.ui \
-    Dialogs/SpecialElements/panelspritewalls.ui \
-    Dialogs/SpecialElements/dialogtilesetspritewalls.ui
+    Dialogs/SpecialElements/dialogspecialelements.ui \
+    Dialogs/SpecialElements/dialogtilesetspecialelements.ui \
+    Dialogs/SpecialElements/panelspecialelements.ui
 
 OTHER_FILES += \
     style.qss

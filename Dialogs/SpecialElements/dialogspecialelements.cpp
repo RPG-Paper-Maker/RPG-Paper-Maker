@@ -17,18 +17,18 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogspritewalls.h"
-#include "ui_dialogspritewalls.h"
+#include "dialogspecialelements.h"
+#include "ui_dialogspecialelements.h"
 
-DialogSpriteWalls::DialogSpriteWalls(QWidget *parent) :
+DialogSpecialElements::DialogSpecialElements(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSpriteWalls)
+    ui(new Ui::DialogSpecialElements)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 }
 
-DialogSpriteWalls::~DialogSpriteWalls()
+DialogSpecialElements::~DialogSpecialElements()
 {
     delete ui;
 }

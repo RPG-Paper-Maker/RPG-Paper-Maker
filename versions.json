@@ -491,10 +491,13 @@
     		"add": [],
     		"remove": [],
     		"replace": [],
-    		"features": ["Recent projects: indication not implemented yet"],
+    		"features": [
+    			"Recent projects: indication not implemented yet",
+    			"Square size limited to 64px"
+    		],
     		"bugs": [
     			"Tileset selector is now updating cursor position if out of the new texture",
-    			"Sprites on right and bottom walls were inverted"
+    			"Sprites layers were inverted if not in front"
     		]
     	}
     ]
