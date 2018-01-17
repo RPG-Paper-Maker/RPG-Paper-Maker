@@ -434,8 +434,13 @@
     		],
     		"remove": [
                 {
-                    "files": [],
-                    "target": "Content/win32/QtQuick/Controls"
+                    "target": "Content/win32/QtQuick/Controls/qtquickcontrolsplugind.dll"
+                },
+                {
+                    "target": "Content/win32/QtQuick/Controls/Styles/Flat/qtquickextrasflatplugind.dll"
+                },
+                {
+                    "target": "Content/win32/QtQuick/Controls/Styles/Flat/qtquickextrasflatplugin.dll"
                 },
                 {
                     "target": "Content/win32/QtQuick/Window.2/windowplugind.dll"
