@@ -66,7 +66,7 @@ void WidgetTilesetSelector::setImageNone(){
 
 void WidgetTilesetSelector::updateImage(){
     if (!m_textureTileset.isNull()){
-        int coef = Wanok::BASIC_SQUARE_SIZE / Wanok::get()->getSquareSize();
+        float coef = Wanok::coefReverseSquareSize();
         m_textureTileset = m_textureTileset.scaled(
                     m_textureTileset.width() * coef,
                     m_textureTileset.height() * coef);

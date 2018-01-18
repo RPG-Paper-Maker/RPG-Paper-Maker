@@ -498,11 +498,13 @@
     		"replace": [],
     		"features": [
     			"Recent projects: indication not implemented yet",
-    			"Square size limited to 64px"
+    			"Square size limited to 64px",
+    			"Updating Qt version from 5.7 to 5.10 and forcing ANGLE project (no openGL) use for Windows"
     		],
     		"bugs": [
     			"Tileset selector is now updating cursor position if out of the new texture",
-    			"Sprites layers were inverted if not in front"
+    			"Sprites layers were inverted if not in front",
+    			"Square size different to 16 and 32px was causing issues"
     		]
     	}
     ]

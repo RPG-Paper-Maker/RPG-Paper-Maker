@@ -131,7 +131,7 @@ void WidgetGraphics::paintEvent(QPaintEvent* event){
             PictureKind kind = getPictureKind();
             SystemPicture* picture = getPicture();
             QImage image(picture->getPath(kind));
-            int coef = Wanok::BASIC_SQUARE_SIZE / Wanok::get()->getSquareSize();
+            float coef = Wanok::coefReverseSquareSize();
             int width = image.width() / Wanok::get()->project()->gameDatas()
                     ->systemDatas()->framesAnimation();
             int height = image.height() / Wanok::get()->project()->gameDatas()

@@ -346,8 +346,13 @@ int Wanok::mod(int x, int m) {
 // -------------------------------------------------------
 
 float Wanok::coefSquareSize() {
-    return Wanok::get()->project()->gameDatas()->systemDatas()->squareSize() /
-           ((float) Wanok::BASIC_SQUARE_SIZE);
+    return Wanok::get()->getSquareSize() / ((float) Wanok::BASIC_SQUARE_SIZE);
+}
+
+// -------------------------------------------------------
+
+float Wanok::coefReverseSquareSize() {
+    return ((float) Wanok::BASIC_SQUARE_SIZE) / Wanok::get()->getSquareSize();
 }
 
 // -------------------------------------------------------

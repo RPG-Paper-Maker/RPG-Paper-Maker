@@ -94,7 +94,7 @@ void WidgetPicturePreview::setNoneImage(){
 
 void WidgetPicturePreview::updateImageSize(){
 
-    int coef = Wanok::BASIC_SQUARE_SIZE / Wanok::get()->getSquareSize();
+    float coef = Wanok::coefReverseSquareSize();
 
     // Set selector
     if (m_chooseRect && !m_image.isNull()){

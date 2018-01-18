@@ -129,6 +129,7 @@ public:
     static QString keyToString(int keyInt);
     static int mod(int x, int m);
     static float coefSquareSize();
+    static float coefReverseSquareSize();
     static QString osToString(OSKind os);
     static bool getMinDistance(float &finalDistance, float newDistance);
     static bool isMapIdExisting(int id);
