@@ -34,7 +34,7 @@
 //
 // -------------------------------------------------------
 
-class WallIndicator
+class WallIndicator : protected QOpenGLFunctions
 {
 public:
     WallIndicator();

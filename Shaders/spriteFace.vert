@@ -1,16 +1,14 @@
-#version 130
-
-in vec3 centerPosition;
-in vec2 texCoord0;
-in vec2 size;
-in vec3 model;
+attribute vec3 centerPosition;
+attribute vec2 texCoord0;
+attribute vec2 size;
+attribute vec3 model;
 
 uniform vec3 cameraRightWorldspace;
 uniform vec3 cameraUpWorldspace; // Used for full billboard
 uniform vec3 cameraDeepWorldspace;
 uniform mat4 modelViewProjection;
 
-out vec2 coordTexture;
+varying vec2 coordTexture;
 
 void main()
 {

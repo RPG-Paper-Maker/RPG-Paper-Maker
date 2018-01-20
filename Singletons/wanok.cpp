@@ -29,6 +29,8 @@
 QSet<int> Wanok::mapsToSave;
 QSet<int> Wanok::mapsUndoRedo;
 
+QString Wanok::shadersExtension = "-3.0";
+
 // PATHS DATAS
 const QString Wanok::pathBasic = pathCombine("Content", "basic");
 const QString Wanok::pathBR = pathCombine("Content", "BR");

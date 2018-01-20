@@ -1,6 +1,4 @@
-#version 130
-
-in vec3 position;
+attribute vec3 position;
 
 uniform mat4 modelviewProjection;
 uniform vec3 gridPosition;

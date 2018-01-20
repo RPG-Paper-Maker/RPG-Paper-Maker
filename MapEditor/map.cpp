@@ -1004,13 +1004,7 @@ void Map::initializeGL(){
     initializeOpenGLFunctions();
 
     // Create STATIC Shader
-    m_programStatic = new QOpenGLShaderProgram();
-    m_programStatic->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                             ":/Shaders/static.vert");
-    m_programStatic->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                             ":/Shaders/static.frag");
-    m_programStatic->link();
-    m_programStatic->bind();
+    m_programStatic = Map::createProgram("static");
 
     // Uniform location of camera
     u_modelviewProjectionStatic = m_programStatic
@@ -1021,11 +1015,7 @@ void Map::initializeGL(){
 
 
     // Create SPRITE FACE Shader
-    m_programFaceSprite = new QOpenGLShaderProgram();
-    m_programFaceSprite->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                                 ":/Shaders/spriteFace.vert");
-    m_programFaceSprite->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                                 ":/Shaders/spriteFace.frag");
+    m_programFaceSprite = Map::createProgram("spriteFace");
     m_programFaceSprite->link();
     m_programFaceSprite->bind();
 
@@ -1159,8 +1149,20 @@ void Map::updateGLFace(QOpenGLBuffer &vertexBuffer,
 
 // -------------------------------------------------------
 
-void Map::paintFloors(QMatrix4x4& modelviewProjection)
-{
+QOpenGLShaderProgram* Map::createProgram(QString shaderName) {
+    QOpenGLShaderProgram* program = new QOpenGLShaderProgram;
+    QString path = ":/Shaders/" + shaderName + Wanok::shadersExtension;
+    program->addShaderFromSourceFile(QOpenGLShader::Vertex, path + ".vert");
+    program->addShaderFromSourceFile(QOpenGLShader::Fragment, path + ".frag");
+    program->link();
+    program->bind();
+
+    return program;
+}
+
+// -------------------------------------------------------
+
+void Map::paintFloors(QMatrix4x4& modelviewProjection) {
 
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,

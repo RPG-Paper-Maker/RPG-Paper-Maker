@@ -18,6 +18,7 @@
 */
 
 #include "grid.h"
+#include "map.h"
 
 // -------------------------------------------------------
 //
@@ -65,13 +66,7 @@ void Grid::initializeVertices(int w, int h, int squareSize){
 void Grid::initializeGL(){
 
     // Create Shader
-    m_program = new QOpenGLShaderProgram();
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                       ":/Shaders/grid.vert");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                       ":/Shaders/grid.frag");
-    m_program->link();
-    m_program->bind();
+    m_program = Map::createProgram("grid");
 
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");

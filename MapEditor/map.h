@@ -62,6 +62,8 @@ public:
     void setMapPortion(Portion& p, MapPortion *mapPortion);
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
+
+
     bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);
@@ -103,6 +105,7 @@ public:
                              QVector<GLuint>& indexes,
                              QOpenGLVertexArrayObject& vao,
                              QOpenGLShaderProgram* program);
+    static QOpenGLShaderProgram* createProgram(QString shaderName);
     void loadTextures();
     void deleteTextures();
     void loadCharactersTextures();
@@ -144,6 +147,7 @@ public:
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;
     static QString generateObjectName(int id);
+
 
     void readObjects();
     static void loadObjects(QStandardItemModel *model, QString pathMap,

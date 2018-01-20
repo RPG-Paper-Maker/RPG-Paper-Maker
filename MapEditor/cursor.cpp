@@ -235,13 +235,7 @@ void Cursor::initializeGL(){
     initializeOpenGLFunctions();
 
     // Create Shader
-    m_program = new QOpenGLShaderProgram();
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                       ":/Shaders/cursor.vert");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                       ":/Shaders/cursor.frag");
-    m_program->link();
-    m_program->bind();
+    m_program = Map::createProgram("cursor");
 
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");

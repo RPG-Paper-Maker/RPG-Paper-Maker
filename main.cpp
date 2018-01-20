@@ -33,6 +33,11 @@
 
 int main(int argc, char *argv[])
 {
+    #ifdef Q_OS_WIN
+        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+        Wanok::shadersExtension = "";
+    #endif
+
     QApplication a(argc, argv);
 
     // The application can now be used even if called from another directory

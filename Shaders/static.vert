@@ -1,11 +1,9 @@
-#version 130
-
-in vec3 position;
-in vec2 texCoord0;
+attribute vec3 position;
+attribute vec2 texCoord0;
 
 uniform mat4 modelviewProjection;
 
-out vec2 coordTexture;
+varying vec2 coordTexture;
 
 void main()
 {

@@ -1,14 +1,12 @@
-#version 130
-
-in vec3 position;
-in vec2 texCoord0;
+attribute vec3 position;
+attribute vec2 texCoord0;
 
 uniform mat4 modelviewProjection;
 uniform vec3 cursorPosition;
 uniform float frameTex;
 
-out vec2 coordTexture;
-out float frame;
+varying vec2 coordTexture;
+varying float frame;
 
 void main()
 {

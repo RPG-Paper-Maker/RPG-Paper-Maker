@@ -48,6 +48,16 @@
         <file>Shaders/spriteFace.vert</file>
         <file>Shaders/wallIndicator.frag</file>
         <file>Shaders/wallIndicator.vert</file>
+        <file>Shaders/cursor-3.0.frag</file>
+        <file>Shaders/cursor-3.0.vert</file>
+        <file>Shaders/grid-3.0.frag</file>
+        <file>Shaders/grid-3.0.vert</file>
+        <file>Shaders/spriteFace-3.0.frag</file>
+        <file>Shaders/spriteFace-3.0.vert</file>
+        <file>Shaders/static-3.0.frag</file>
+        <file>Shaders/static-3.0.vert</file>
+        <file>Shaders/wallIndicator-3.0.frag</file>
+        <file>Shaders/wallIndicator-3.0.vert</file>
     </qresource>
     <qresource prefix="/textures">
         <file>Ressources/editor_cursor.png</file>

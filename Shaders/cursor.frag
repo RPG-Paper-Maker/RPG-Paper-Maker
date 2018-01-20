@@ -1,12 +1,9 @@
-#version 130
-
-in highp vec2 coordTexture;
-in float frame;
+precision mediump float;
+varying highp vec2 coordTexture;
+varying float frame;
 
 uniform sampler2D texture;
 uniform float alpha_threshold;
-
-out highp vec4 fColor;
 
 void main()
 {
@@ -15,5 +12,5 @@ void main()
     if (color.a <= alpha_threshold) // Or whichever comparison here
         discard;
 
-    fColor = color;
+    gl_FragColor = color;
 }

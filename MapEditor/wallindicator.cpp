@@ -18,6 +18,7 @@
 */
 
 #include "wallindicator.h"
+#include "map.h"
 
 // -------------------------------------------------------
 //
@@ -27,7 +28,7 @@
 
 WallIndicator::WallIndicator()
 {
-
+    initializeOpenGLFunctions();
 }
 
 WallIndicator::~WallIndicator()
@@ -83,13 +84,7 @@ void WallIndicator::initializeVertices() {
 void WallIndicator::initializeGL() {
 
     // Create Shader
-    m_program = new QOpenGLShaderProgram();
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                       ":/Shaders/wallIndicator.vert");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                       ":/Shaders/wallIndicator.frag");
-    m_program->link();
-    m_program->bind();
+    m_program = Map::createProgram("wallIndicator");
 
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");

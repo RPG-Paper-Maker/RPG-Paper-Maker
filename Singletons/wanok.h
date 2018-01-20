@@ -54,6 +54,7 @@ public:
     static QSet<int> mapsToSave;
     static QSet<int> mapsUndoRedo;
     static bool isInConfig;
+    static QString shadersExtension;
 
     // PATHS
     const static QString pathBasic;
