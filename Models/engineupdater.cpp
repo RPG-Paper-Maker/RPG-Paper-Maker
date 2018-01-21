@@ -37,8 +37,13 @@ const QString EngineUpdater::jsonWindows = "w";
 const QString EngineUpdater::jsonLinux = "l";
 const QString EngineUpdater::jsonMac = "m";
 const QString EngineUpdater::jsonOnlyFiles = "onlyFiles";
+const QString EngineUpdater::jsonAdd = "add";
+const QString EngineUpdater::jsonRemove = "remove";
+const QString EngineUpdater::jsonReplace = "replace";
 const QString EngineUpdater::gitRepoEngine = "RPG-Paper-Maker";
 const QString EngineUpdater::gitRepoGame = "Game-Scripts";
+const QString EngineUpdater::pathGitHub =
+        "https://raw.githubusercontent.com/RPG-Paper-Maker";
 
 // -------------------------------------------------------
 //
@@ -90,9 +95,8 @@ void EngineUpdater::writeBasicJSONFile() {
         files.next();
         QString name = files.fileName();
         objFile = QJsonObject();
-        getJSONFile(objFile,
-                    "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                    "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
+        getJSONFile(objFile, pathGitHub +
+                    "/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                     + name,
                     "Content/basic/Content/Datas/Scripts/System/" + name);
         tabScripts.append(objFile);
@@ -135,19 +139,24 @@ void EngineUpdater::writeTrees() {
     writeTree("Content/Datas/Scripts/System", "system-scripts", gitRepoGame);
     writeTree("Content/linux/libraries", "game-linux-libraries", gitRepoEngine);
     writeTree("Dependencies/linux/libraries", "engine-linux-libraries",
-              gitRepoEngine);
+              gitRepoEngine, "libraries");
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::writeTree(QString path, QString fileName, QString gitRepo) {
-    QString prefixPath = "https://raw.githubusercontent.com/RPG-Paper-Maker/";
-    QString networkUrl = prefixPath + gitRepo + "/master/";
+void EngineUpdater::writeTree(QString path, QString fileName, QString gitRepo,
+                              QString targetPath)
+{
+    QString networkUrl = pathGitHub + gitRepo + "/master/";
     QString localUrl = "../" + gitRepo + "/"; // Only for unix
     QJsonObject objTree;
+
     if (gitRepo == gitRepoGame)
-        path = "Content/basic/" + path;
-    getTree(objTree, localUrl, networkUrl, path);
+        targetPath = "Content/basic/" + path;
+    if (targetPath.isEmpty())
+        targetPath = path;
+
+    getTree(objTree, localUrl, networkUrl, path, targetPath);
     Wanok::writeOtherJSON("../RPG-Paper-Maker/Trees/" + fileName + ".json",
                           objTree, QJsonDocument::Indented);
 }
@@ -155,9 +164,9 @@ void EngineUpdater::writeTree(QString path, QString fileName, QString gitRepo) {
 // -------------------------------------------------------
 
 void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
-                            QString networkUrl, QString targetUrl)
+                            QString networkUrl, QString path, QString targetUrl)
 {
-    QDirIterator directories(Wanok::pathCombine(localUrl, targetUrl),
+    QDirIterator directories(Wanok::pathCombine(localUrl, path),
                              QDir::Dirs | QDir::NoDotAndDotDot | QDir::Files);
     QJsonArray tabFiles;
 
@@ -165,14 +174,14 @@ void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
         directories.next();
         QString name = directories.fileName();
         if (name != "RPG Paper Maker.exe") {
-            QString currentPath = Wanok::pathCombine(targetUrl, name);
+            QString currentPath = Wanok::pathCombine(path, name);
+            QString currentTarget = Wanok::pathCombine(targetUrl, name);
             QJsonObject obj;
-            if (directories.fileInfo().isDir()) {
-                getTree(obj, localUrl, networkUrl, currentPath);
-            }
+            if (directories.fileInfo().isDir())
+                getTree(obj, localUrl, networkUrl, currentPath, currentTarget);
             else {
                 getJSONFile(obj, Wanok::pathCombine(networkUrl, currentPath),
-                            currentPath);
+                            currentTarget);
             }
             tabFiles.append(obj);
         }
@@ -186,7 +195,7 @@ void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
 void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
                                 QString target)
 {
-    obj[jsonFiles] = source;
+    obj[jsonSource] = source;
     obj[jsonTarget] = target;
 }
 
@@ -240,9 +249,12 @@ void EngineUpdater::start() {
 // -------------------------------------------------------
 
 void EngineUpdater::updateVersion(QJsonObject& obj) {
-    QJsonArray tabAdd = obj["add"].toArray();
-    QJsonArray tabRemove = obj["remove"].toArray();
-    QJsonArray tabReplace = obj["replace"].toArray();
+    QJsonArray tabAdd =
+          obj.contains(jsonAdd) ? obj[jsonAdd].toArray() : QJsonArray();
+    QJsonArray tabRemove =
+          obj.contains(jsonRemove) ? obj[jsonRemove].toArray() : QJsonArray();
+    QJsonArray tabReplace =
+          obj.contains(jsonReplace) ? obj[jsonReplace].toArray() : QJsonArray();
     QJsonObject objFile;
 
     for (int i = 0; i < tabAdd.size(); i++) {
@@ -311,7 +323,7 @@ void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
 
 // -------------------------------------------------------
 
-QNetworkReply* EngineUpdater::readFile(QString& source) {
+QNetworkReply* EngineUpdater::readFile(QString source) {
     QNetworkAccessManager manager;
     QNetworkReply* reply;
     QEventLoop loop;
@@ -463,17 +475,10 @@ void EngineUpdater::downloadExecutables() {
 // -------------------------------------------------------
 
 void EngineUpdater::downloadScripts() {
-    QJsonObject objScripts = m_document["scripts"].toObject();
-    download(EngineUpdateFileKind::Replace, objScripts);
-}
-
-// -------------------------------------------------------
-
-void EngineUpdater::removePreviousScripts() {
-    QDir dir(Wanok::pathScriptsSystemDir);
-    dir.removeRecursively();
-    dir.cdUp();
-    dir.mkdir("System");
+    QNetworkReply* reply = readFile(
+                pathGitHub + "RPG-Paper-Maker/master/Trees/system-script.json");
+    QJsonObject objTree = QJsonDocument::fromJson(reply->readAll()).object();
+    downloadFolder(EngineUpdateFileKind::Replace, objTree);
 }
 
 // -------------------------------------------------------
@@ -564,7 +569,6 @@ void EngineUpdater::update() {
 
     // Executables
     emit progress(80, "Downloading all the system scripts...");
-    removePreviousScripts();
     downloadScripts();
 
     // System scripts

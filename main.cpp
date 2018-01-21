@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //EngineUpdater::writeTrees();
+    EngineUpdater::writeTrees();
 
     // The application can now be used even if called from another directory
     QDir bin(qApp->applicationDirPath());

@@ -48,14 +48,19 @@ public:
     static const QString jsonLinux;
     static const QString jsonMac;
     static const QString jsonOnlyFiles;
+    static const QString jsonAdd;
+    static const QString jsonReplace;
+    static const QString jsonRemove;
     static const QString gitRepoEngine;
     static const QString gitRepoGame;
+    static const QString pathGitHub;
 
     static void writeBasicJSONFile();
     static void writeTrees();
-    static void writeTree(QString path, QString fileName, QString gitRepo);
+    static void writeTree(QString path, QString fileName, QString gitRepo,
+                          QString targetPath = QString());
     static void getTree(QJsonObject& objTree, QString localUrl,
-                        QString networkUrl, QString targetUrl);
+                        QString networkUrl, QString path, QString targetUrl);
     static void getJSONFile(QJsonObject &obj, QString source, QString target);
     static void getJSONDir(QJsonObject &obj, QJsonArray& files, QString target);
     static void getJSONExeEngine(QJsonObject &obj, QString os);
@@ -65,7 +70,7 @@ public:
     void download(EngineUpdateFileKind action, QJsonObject& obj);
     void downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
                       bool exe = false);
-    QNetworkReply* readFile(QString& source);
+    QNetworkReply* readFile(QString source);
     void addFile(QString& source, QString& target, bool exe);
     void removeFile(QString& target);
     void replaceFile(QString& source, QString& target, bool exe);
@@ -77,7 +82,6 @@ public:
                        bool onlyFiles = false);
     void downloadExecutables();
     void downloadScripts();
-    void removePreviousScripts();
     void getVersions(QJsonArray& versions) const;
 
 protected:

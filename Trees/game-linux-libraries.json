@@ -1,35 +1,35 @@
 {
     "files": [
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5XcbQpa.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5XcbQpa.so.5",
             "target": "Content/linux/libraries/libQt5XcbQpa.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Qml.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Qml.so.5",
             "target": "Content/linux/libraries/libQt5Qml.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libicuuc.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libicuuc.so.56",
             "target": "Content/linux/libraries/libicuuc.so.56"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Network.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Network.so.5",
             "target": "Content/linux/libraries/libQt5Network.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libicudata.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libicudata.so.56",
             "target": "Content/linux/libraries/libicudata.so.56"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Gui.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Gui.so.5",
             "target": "Content/linux/libraries/libQt5Gui.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Core.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Core.so.5",
             "target": "Content/linux/libraries/libQt5Core.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5DBus.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5DBus.so.5",
             "target": "Content/linux/libraries/libQt5DBus.so.5"
         },
         {
@@ -37,11 +37,11 @@
                 {
                     "files": [
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtCanvas3D/libqtcanvas3d.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtCanvas3D/libqtcanvas3d.so",
                             "target": "Content/linux/libraries/qml/QtCanvas3D/libqtcanvas3d.so"
                         },
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtCanvas3D/qmldir",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtCanvas3D/qmldir",
                             "target": "Content/linux/libraries/qml/QtCanvas3D/qmldir"
                         }
                     ],
@@ -50,11 +50,11 @@
                 {
                     "files": [
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick.2/qmldir",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick.2/qmldir",
                             "target": "Content/linux/libraries/qml/QtQuick.2/qmldir"
                         },
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick.2/libqtquick2plugin.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick.2/libqtquick2plugin.so",
                             "target": "Content/linux/libraries/qml/QtQuick.2/libqtquick2plugin.so"
                         }
                     ],
@@ -65,11 +65,11 @@
                         {
                             "files": [
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Dialogs/qmldir",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Dialogs/qmldir",
                                     "target": "Content/linux/libraries/qml/QtQuick/Dialogs/qmldir"
                                 },
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Dialogs/libdialogplugin.so",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Dialogs/libdialogplugin.so",
                                     "target": "Content/linux/libraries/qml/QtQuick/Dialogs/libdialogplugin.so"
                                 }
                             ],
@@ -78,30 +78,30 @@
                         {
                             "files": [
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/ScrollView.qml",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/ScrollView.qml",
                                     "target": "Content/linux/libraries/qml/QtQuick/Controls/ScrollView.qml"
                                 },
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/libqtquickcontrolsplugin.so",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/libqtquickcontrolsplugin.so",
                                     "target": "Content/linux/libraries/qml/QtQuick/Controls/libqtquickcontrolsplugin.so"
                                 },
                                 {
                                     "files": [
                                         {
-                                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/Styles/qmldir",
+                                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/Styles/qmldir",
                                             "target": "Content/linux/libraries/qml/QtQuick/Controls/Styles/qmldir"
                                         }
                                     ],
                                     "target": "Content/linux/libraries/qml/QtQuick/Controls/Styles"
                                 },
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/qmldir",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/qmldir",
                                     "target": "Content/linux/libraries/qml/QtQuick/Controls/qmldir"
                                 },
                                 {
                                     "files": [
                                         {
-                                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/Private/qmldir",
+                                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Controls/Private/qmldir",
                                             "target": "Content/linux/libraries/qml/QtQuick/Controls/Private/qmldir"
                                         }
                                     ],
@@ -113,11 +113,11 @@
                         {
                             "files": [
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Window.2/libwindowplugin.so",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Window.2/libwindowplugin.so",
                                     "target": "Content/linux/libraries/qml/QtQuick/Window.2/libwindowplugin.so"
                                 },
                                 {
-                                    "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Window.2/qmldir",
+                                    "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/qml/QtQuick/Window.2/qmldir",
                                     "target": "Content/linux/libraries/qml/QtQuick/Window.2/qmldir"
                                 }
                             ],
@@ -134,7 +134,7 @@
                 {
                     "files": [
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/plugins/platforms/libqxcb.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/plugins/platforms/libqxcb.so",
                             "target": "Content/linux/libraries/plugins/platforms/libqxcb.so"
                         }
                     ],
@@ -143,7 +143,7 @@
                 {
                     "files": [
                         {
-                            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so",
                             "target": "Content/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so"
                         }
                     ],
@@ -153,15 +153,15 @@
             "target": "Content/linux/libraries/plugins"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libicui18n.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libicui18n.so.56",
             "target": "Content/linux/libraries/libicui18n.so.56"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Widgets.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Widgets.so.5",
             "target": "Content/linux/libraries/libQt5Widgets.so.5"
         },
         {
-            "files": "https:/raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/libraries/libQt5Quick.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Content/linux/libraries/libQt5Quick.so.5",
             "target": "Content/linux/libraries/libQt5Quick.so.5"
         }
     ],
