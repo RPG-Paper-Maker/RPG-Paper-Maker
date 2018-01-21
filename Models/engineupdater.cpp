@@ -22,7 +22,6 @@
 #include "wanok.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QEventLoop>
 #include <QUrl>
 #include <QJsonDocument>
@@ -32,6 +31,12 @@
 const QString EngineUpdater::jsonFiles = "files";
 const QString EngineUpdater::jsonSource = "source";
 const QString EngineUpdater::jsonTarget = "target";
+const QString EngineUpdater::jsonTree = "tree";
+const QString EngineUpdater::jsonOS = "os";
+const QString EngineUpdater::jsonWindows = "w";
+const QString EngineUpdater::jsonLinux = "l";
+const QString EngineUpdater::jsonMac = "m";
+const QString EngineUpdater::jsonOnlyFiles = "onlyFiles";
 const QString EngineUpdater::gitRepoEngine = "RPG-Paper-Maker";
 const QString EngineUpdater::gitRepoGame = "Game-Scripts";
 
@@ -159,16 +164,18 @@ void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
     while (directories.hasNext()) {
         directories.next();
         QString name = directories.fileName();
-        QString currentPath = Wanok::pathCombine(targetUrl, name);
-        QJsonObject obj;
-        if (directories.fileInfo().isDir()) {
-            getTree(obj, localUrl, networkUrl, currentPath);
+        if (name != "RPG Paper Maker.exe") {
+            QString currentPath = Wanok::pathCombine(targetUrl, name);
+            QJsonObject obj;
+            if (directories.fileInfo().isDir()) {
+                getTree(obj, localUrl, networkUrl, currentPath);
+            }
+            else {
+                getJSONFile(obj, Wanok::pathCombine(networkUrl, currentPath),
+                            currentPath);
+            }
+            tabFiles.append(obj);
         }
-        else {
-            getJSONFile(obj, Wanok::pathCombine(networkUrl, currentPath),
-                        currentPath);
-        }
-        tabFiles.append(obj);
     }
 
     getJSONDir(objTree, tabFiles, targetUrl);
@@ -255,7 +262,7 @@ void EngineUpdater::updateVersion(QJsonObject& obj) {
 // -------------------------------------------------------
 
 void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
-    if (obj.contains("files"))
+    if (obj.contains(jsonFiles))
         downloadFolder(action, obj);
     else
         downloadFile(action, obj);
@@ -266,24 +273,34 @@ void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
 void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
                                  bool exe)
 {
-    QString source = obj["source"].toString();
-    QString target = obj["target"].toString();
+    QString source = obj[jsonSource].toString();
+    QString target = obj[jsonTarget].toString();
+    bool onlyFiles = obj.contains(jsonOnlyFiles) ? obj[jsonOnlyFiles].toBool()
+                                                 : false;
+    bool isTree = obj.contains(jsonTree) ? obj[jsonTree].toBool() : false;
 
-    if (action == EngineUpdateFileKind::Add)
-        addFile(source, target, exe);
-    else if (action == EngineUpdateFileKind::Remove)
-        removeFile(target);
-    else if (action == EngineUpdateFileKind::Replace)
-        replaceFile(source, target, exe);
+    if (isTree) {
+        QNetworkReply* reply = readFile(source);
+        QJsonObject objTree =
+                QJsonDocument::fromJson(reply->readAll()).object();
+        downloadFolder(action, objTree, onlyFiles);
+    }
+    else {
+        if (action == EngineUpdateFileKind::Add)
+            addFile(source, target, exe);
+        else if (action == EngineUpdateFileKind::Remove)
+            removeFile(target);
+        else if (action == EngineUpdateFileKind::Replace)
+            replaceFile(source, target, exe);
+    }
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
+QNetworkReply* EngineUpdater::readFile(QString& source) {
     QNetworkAccessManager manager;
-    QNetworkReply *reply;
+    QNetworkReply* reply;
     QEventLoop loop;
-    QString path;
 
     reply = manager.get(QNetworkRequest(QUrl(source)));
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -293,9 +310,17 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
                               "A network error occured: " +
                               reply->errorString());
     }
-    path = Wanok::pathCombine(QDir::currentPath(), target);
 
+    return reply;
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
+    QString path = Wanok::pathCombine(QDir::currentPath(), target);
+    QNetworkReply* reply = readFile(source);
     QFile file(path);
+
     file.open(QIODevice::WriteOnly);
     file.write(reply->readAll());
 
@@ -306,7 +331,6 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
                             QFileDevice::ExeGroup | QFileDevice::ReadOther |
                             QFileDevice::ExeOther);
     }
-
     file.close();
 }
 
@@ -328,30 +352,35 @@ void EngineUpdater::replaceFile(QString& source, QString& target, bool exe) {
 // -------------------------------------------------------
 
 void EngineUpdater::downloadFolder(EngineUpdateFileKind action,
-                                   QJsonObject& obj)
+                                   QJsonObject& obj, bool onlyFiles)
 {
-    QString target = obj["target"].toString();
-    QJsonArray files = obj["files"].toArray();
+    QString target = obj[jsonTarget].toString();
+    QJsonArray files = obj[jsonFiles].toArray();
+    onlyFiles = obj.contains(jsonOnlyFiles) ? obj[jsonOnlyFiles].toBool()
+                                            : onlyFiles;
 
     // The folder itself
     if (action == EngineUpdateFileKind::Add)
-        addFolder(target, files);
+        addFolder(target, files, onlyFiles);
     else if (action == EngineUpdateFileKind::Remove)
-        removeFolder(target);
+        removeFolder(target, onlyFiles);
     else if (action == EngineUpdateFileKind::Replace)
-        replaceFolder(target, files);
+        replaceFolder(target, files, onlyFiles);
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFolder(QString& target, QJsonArray& files) {
-
+void EngineUpdater::addFolder(QString& target, QJsonArray& files,
+                              bool onlyFiles)
+{
     // Create the folder
-    QString path = Wanok::pathCombine(QDir::currentPath(), target);
-    QDir dir(path);
-    QString dirName = dir.dirName();
-    dir.cdUp();
-    dir.mkdir(dirName);
+    if (!onlyFiles) {
+        QString path = Wanok::pathCombine(QDir::currentPath(), target);
+        QDir dir(path);
+        QString dirName = dir.dirName();
+        dir.cdUp();
+        dir.mkdir(dirName);
+    }
 
     // Files inside the folder
     QJsonObject obj;
@@ -363,17 +392,30 @@ void EngineUpdater::addFolder(QString& target, QJsonArray& files) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::removeFolder(QString& target) {
+void EngineUpdater::removeFolder(QString& target, bool onlyFiles) {
     QString path = Wanok::pathCombine(QDir::currentPath(), target);
-    QDir dir(path);
-    dir.removeRecursively();
+
+    if (onlyFiles) {
+        QDirIterator files(path, QDir::Files);
+
+        while (files.hasNext()) {
+            files.next();
+            QFile(files.filePath()).remove();
+        }
+    }
+    else {
+        QDir dir(path);
+        dir.removeRecursively();
+    }
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::replaceFolder(QString& target, QJsonArray &files) {
-    removeFolder(target);
-    addFolder(target, files);
+void EngineUpdater::replaceFolder(QString& target, QJsonArray &files,
+                                  bool onlyFiles)
+{
+    removeFolder(target, onlyFiles);
+    addFolder(target, files, onlyFiles);
 }
 
 // -------------------------------------------------------

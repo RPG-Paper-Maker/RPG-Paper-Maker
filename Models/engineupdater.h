@@ -22,6 +22,7 @@
 
 #include <QCoreApplication>
 #include <QJsonObject>
+#include <QNetworkReply>
 #include "engineupdatefilekind.h"
 
 // -------------------------------------------------------
@@ -41,6 +42,12 @@ public:
     static const QString jsonFiles;
     static const QString jsonSource;
     static const QString jsonTarget;
+    static const QString jsonTree;
+    static const QString jsonOS;
+    static const QString jsonWindows;
+    static const QString jsonLinux;
+    static const QString jsonMac;
+    static const QString jsonOnlyFiles;
     static const QString gitRepoEngine;
     static const QString gitRepoGame;
 
@@ -58,13 +65,16 @@ public:
     void download(EngineUpdateFileKind action, QJsonObject& obj);
     void downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
                       bool exe = false);
+    QNetworkReply* readFile(QString& source);
     void addFile(QString& source, QString& target, bool exe);
     void removeFile(QString& target);
     void replaceFile(QString& source, QString& target, bool exe);
-    void downloadFolder(EngineUpdateFileKind action, QJsonObject& obj);
-    void addFolder(QString& target, QJsonArray& files);
-    void removeFolder(QString& target);
-    void replaceFolder(QString& target, QJsonArray& files);
+    void downloadFolder(EngineUpdateFileKind action, QJsonObject& obj,
+                        bool onlyFiles = false);
+    void addFolder(QString& target, QJsonArray& files, bool onlyFiles = false);
+    void removeFolder(QString& target, bool onlyFiles = false);
+    void replaceFolder(QString& target, QJsonArray& files,
+                       bool onlyFiles = false);
     void downloadExecutables();
     void downloadScripts();
     void removePreviousScripts();
