@@ -22,12 +22,29 @@
 #include "wanok.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QEventLoop>
 #include <QUrl>
 #include <QJsonDocument>
 #include <QDirIterator>
 #include <QMessageBox>
+
+const QString EngineUpdater::VERSION = "2.0";
+const QString EngineUpdater::jsonFiles = "files";
+const QString EngineUpdater::jsonSource = "source";
+const QString EngineUpdater::jsonTarget = "target";
+const QString EngineUpdater::jsonTree = "tree";
+const QString EngineUpdater::jsonOS = "os";
+const QString EngineUpdater::jsonWindows = "w";
+const QString EngineUpdater::jsonLinux = "l";
+const QString EngineUpdater::jsonMac = "m";
+const QString EngineUpdater::jsonOnlyFiles = "onlyFiles";
+const QString EngineUpdater::jsonAdd = "add";
+const QString EngineUpdater::jsonRemove = "remove";
+const QString EngineUpdater::jsonReplace = "replace";
+const QString EngineUpdater::gitRepoEngine = "RPG-Paper-Maker";
+const QString EngineUpdater::gitRepoGame = "Game-Scripts";
+const QString EngineUpdater::pathGitHub =
+        "https://raw.githubusercontent.com/RPG-Paper-Maker";
 
 // -------------------------------------------------------
 //
@@ -60,9 +77,8 @@ void EngineUpdater::writeBasicJSONFile() {
     obj["lastVersion"] = Project::ENGINE_VERSION;
 
     // Scripts
-    getJSONFile(objFile,
-                "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
+    getJSONFile(objFile, pathGitHub +
+                "/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                 "desktop/includes.js",
                 "Content/basic/Content/Datas/Scripts/System/desktop/"
                 "includes.js");
@@ -79,9 +95,8 @@ void EngineUpdater::writeBasicJSONFile() {
         files.next();
         QString name = files.fileName();
         objFile = QJsonObject();
-        getJSONFile(objFile,
-                    "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                    "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
+        getJSONFile(objFile, pathGitHub +
+                    "/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                     + name,
                     "Content/basic/Content/Datas/Scripts/System/" + name);
         tabScripts.append(objFile);
@@ -120,11 +135,68 @@ void EngineUpdater::writeBasicJSONFile() {
 
 // -------------------------------------------------------
 
+void EngineUpdater::writeTrees() {
+    writeTree("Content/Datas/Scripts/System", "system-scripts", gitRepoGame);
+    writeTree("Content/linux/libraries", "game-linux-libraries", gitRepoEngine);
+    writeTree("Dependencies/linux/libraries", "engine-linux-libraries",
+              gitRepoEngine, "libraries");
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::writeTree(QString path, QString fileName, QString gitRepo,
+                              QString targetPath)
+{
+    QString networkUrl = pathGitHub + gitRepo + "/master/";
+    QString localUrl = "../" + gitRepo + "/"; // Only for unix
+    QJsonObject objTree;
+
+    if (gitRepo == gitRepoGame)
+        targetPath = "Content/basic/" + path;
+    if (targetPath.isEmpty())
+        targetPath = path;
+
+    getTree(objTree, localUrl, networkUrl, path, targetPath);
+    Wanok::writeOtherJSON("../RPG-Paper-Maker/Trees/" + fileName + ".json",
+                          objTree, QJsonDocument::Indented);
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
+                            QString networkUrl, QString path, QString targetUrl)
+{
+    QDirIterator directories(Wanok::pathCombine(localUrl, path),
+                             QDir::Dirs | QDir::NoDotAndDotDot | QDir::Files);
+    QJsonArray tabFiles;
+
+    while (directories.hasNext()) {
+        directories.next();
+        QString name = directories.fileName();
+        if (name != "RPG Paper Maker.exe") {
+            QString currentPath = Wanok::pathCombine(path, name);
+            QString currentTarget = Wanok::pathCombine(targetUrl, name);
+            QJsonObject obj;
+            if (directories.fileInfo().isDir())
+                getTree(obj, localUrl, networkUrl, currentPath, currentTarget);
+            else {
+                getJSONFile(obj, Wanok::pathCombine(networkUrl, currentPath),
+                            currentTarget);
+            }
+            tabFiles.append(obj);
+        }
+    }
+
+    getJSONDir(objTree, tabFiles, targetUrl);
+}
+
+// -------------------------------------------------------
+
 void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
                                 QString target)
 {
-    obj["source"] = source;
-    obj["target"] = target;
+    obj[jsonSource] = source;
+    obj[jsonTarget] = target;
 }
 
 // -------------------------------------------------------
@@ -132,8 +204,8 @@ void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
 void EngineUpdater::getJSONDir(QJsonObject &obj, QJsonArray& files,
                                QString target)
 {
-    obj["files"] = files;
-    obj["target"] = target;
+    obj[jsonFiles] = files;
+    obj[jsonTarget] = target;
 }
 
 // -------------------------------------------------------
@@ -148,8 +220,8 @@ void EngineUpdater::getJSONExeEngine(QJsonObject& obj, QString os) {
     else
         exe = "RPG-Paper-Maker.app";
 
-    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                     "RPG-Paper-Maker/master/Engine/Dependencies/" +
+    getJSONFile(obj, pathGitHub +
+                "/RPG-Paper-Maker/master/Engine/Dependencies/" +
                 os + "/" + exe, exe);
 }
 
@@ -163,8 +235,8 @@ void EngineUpdater::getJSONExeGame(QJsonObject& obj, QString os) {
     else if (os == "osx")
         exe += ".app";
 
-    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                "RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
+    getJSONFile(obj, pathGitHub +
+                "/RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
                 "Content/" + os + "/" + exe);
 }
 
@@ -177,9 +249,12 @@ void EngineUpdater::start() {
 // -------------------------------------------------------
 
 void EngineUpdater::updateVersion(QJsonObject& obj) {
-    QJsonArray tabAdd = obj["add"].toArray();
-    QJsonArray tabRemove = obj["remove"].toArray();
-    QJsonArray tabReplace = obj["replace"].toArray();
+    QJsonArray tabAdd =
+          obj.contains(jsonAdd) ? obj[jsonAdd].toArray() : QJsonArray();
+    QJsonArray tabRemove =
+          obj.contains(jsonRemove) ? obj[jsonRemove].toArray() : QJsonArray();
+    QJsonArray tabReplace =
+          obj.contains(jsonReplace) ? obj[jsonReplace].toArray() : QJsonArray();
     QJsonObject objFile;
 
     for (int i = 0; i < tabAdd.size(); i++) {
@@ -199,7 +274,21 @@ void EngineUpdater::updateVersion(QJsonObject& obj) {
 // -------------------------------------------------------
 
 void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
-    if (obj.contains("files"))
+    if (obj.contains(jsonOS)) {
+        QString strOS = "";
+        #ifdef Q_OS_WIN
+            strOS = jsonWindows;
+        #elif __linux__
+            strOS = jsonLinux;
+        #else
+            strOS = jsonMac;
+        #endif
+
+        if (!obj[jsonOS].toArray().contains(strOS))
+            return;
+    }
+
+    if (obj.contains(jsonFiles))
         downloadFolder(action, obj);
     else
         downloadFile(action, obj);
@@ -210,24 +299,34 @@ void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
 void EngineUpdater::downloadFile(EngineUpdateFileKind action, QJsonObject& obj,
                                  bool exe)
 {
-    QString source = obj["source"].toString();
-    QString target = obj["target"].toString();
+    QString source = obj[jsonSource].toString();
+    QString target = obj[jsonTarget].toString();
+    bool onlyFiles = obj.contains(jsonOnlyFiles) ? obj[jsonOnlyFiles].toBool()
+                                                 : false;
+    bool isTree = obj.contains(jsonTree) ? obj[jsonTree].toBool() : false;
 
-    if (action == EngineUpdateFileKind::Add)
-        addFile(source, target, exe);
-    else if (action == EngineUpdateFileKind::Remove)
-        removeFile(target);
-    else if (action == EngineUpdateFileKind::Replace)
-        replaceFile(source, target, exe);
+    if (isTree) {
+        QNetworkReply* reply = readFile(source);
+        QJsonObject objTree =
+                QJsonDocument::fromJson(reply->readAll()).object();
+        downloadFolder(action, objTree, onlyFiles);
+    }
+    else {
+        if (action == EngineUpdateFileKind::Add)
+            addFile(source, target, exe);
+        else if (action == EngineUpdateFileKind::Remove)
+            removeFile(target);
+        else if (action == EngineUpdateFileKind::Replace)
+            replaceFile(source, target, exe);
+    }
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
+QNetworkReply* EngineUpdater::readFile(QString source) {
     QNetworkAccessManager manager;
-    QNetworkReply *reply;
+    QNetworkReply* reply;
     QEventLoop loop;
-    QString path;
 
     reply = manager.get(QNetworkRequest(QUrl(source)));
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -237,9 +336,17 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
                               "A network error occured: " +
                               reply->errorString());
     }
-    path = Wanok::pathCombine(QDir::currentPath(), target);
 
+    return reply;
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
+    QString path = Wanok::pathCombine(QDir::currentPath(), target);
+    QNetworkReply* reply = readFile(source);
     QFile file(path);
+
     file.open(QIODevice::WriteOnly);
     file.write(reply->readAll());
 
@@ -250,7 +357,6 @@ void EngineUpdater::addFile(QString& source, QString& target, bool exe) {
                             QFileDevice::ExeGroup | QFileDevice::ReadOther |
                             QFileDevice::ExeOther);
     }
-
     file.close();
 }
 
@@ -272,30 +378,35 @@ void EngineUpdater::replaceFile(QString& source, QString& target, bool exe) {
 // -------------------------------------------------------
 
 void EngineUpdater::downloadFolder(EngineUpdateFileKind action,
-                                   QJsonObject& obj)
+                                   QJsonObject& obj, bool onlyFiles)
 {
-    QString target = obj["target"].toString();
-    QJsonArray files = obj["files"].toArray();
+    QString target = obj[jsonTarget].toString();
+    QJsonArray files = obj[jsonFiles].toArray();
+    onlyFiles = obj.contains(jsonOnlyFiles) ? obj[jsonOnlyFiles].toBool()
+                                            : onlyFiles;
 
     // The folder itself
     if (action == EngineUpdateFileKind::Add)
-        addFolder(target, files);
+        addFolder(target, files, onlyFiles);
     else if (action == EngineUpdateFileKind::Remove)
-        removeFolder(target);
+        removeFolder(target, onlyFiles);
     else if (action == EngineUpdateFileKind::Replace)
-        replaceFolder(target, files);
+        replaceFolder(target, files, onlyFiles);
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::addFolder(QString& target, QJsonArray& files) {
-
+void EngineUpdater::addFolder(QString& target, QJsonArray& files,
+                              bool onlyFiles)
+{
     // Create the folder
-    QString path = Wanok::pathCombine(QDir::currentPath(), target);
-    QDir dir(path);
-    QString dirName = dir.dirName();
-    dir.cdUp();
-    dir.mkdir(dirName);
+    if (!onlyFiles) {
+        QString path = Wanok::pathCombine(QDir::currentPath(), target);
+        QDir dir(path);
+        QString dirName = dir.dirName();
+        dir.cdUp();
+        dir.mkdir(dirName);
+    }
 
     // Files inside the folder
     QJsonObject obj;
@@ -307,17 +418,30 @@ void EngineUpdater::addFolder(QString& target, QJsonArray& files) {
 
 // -------------------------------------------------------
 
-void EngineUpdater::removeFolder(QString& target) {
+void EngineUpdater::removeFolder(QString& target, bool onlyFiles) {
     QString path = Wanok::pathCombine(QDir::currentPath(), target);
-    QDir dir(path);
-    dir.removeRecursively();
+
+    if (onlyFiles) {
+        QDirIterator files(path, QDir::Files);
+
+        while (files.hasNext()) {
+            files.next();
+            QFile(files.filePath()).remove();
+        }
+    }
+    else {
+        QDir dir(path);
+        dir.removeRecursively();
+    }
 }
 
 // -------------------------------------------------------
 
-void EngineUpdater::replaceFolder(QString& target, QJsonArray &files) {
-    removeFolder(target);
-    addFolder(target, files);
+void EngineUpdater::replaceFolder(QString& target, QJsonArray &files,
+                                  bool onlyFiles)
+{
+    removeFolder(target, onlyFiles);
+    addFolder(target, files, onlyFiles);
 }
 
 // -------------------------------------------------------
@@ -351,27 +475,25 @@ void EngineUpdater::downloadExecutables() {
 // -------------------------------------------------------
 
 void EngineUpdater::downloadScripts() {
-    QJsonObject objScripts = m_document["scripts"].toObject();
-    download(EngineUpdateFileKind::Replace, objScripts);
-}
-
-// -------------------------------------------------------
-
-void EngineUpdater::removePreviousScripts() {
-    QDir dir(Wanok::pathScriptsSystemDir);
-    dir.removeRecursively();
-    dir.cdUp();
-    dir.mkdir("System");
+    QNetworkReply* reply = readFile(
+                pathGitHub + "RPG-Paper-Maker/master/Trees/system-script.json");
+    QJsonObject objTree = QJsonDocument::fromJson(reply->readAll()).object();
+    downloadFolder(EngineUpdateFileKind::Replace, objTree);
 }
 
 // -------------------------------------------------------
 
 void EngineUpdater::getVersions(QJsonArray& versions) const {
-    QJsonArray tab = m_document["versions"].toArray();
+    QJsonArray tab = m_document[getVersionsName()].toArray();
     for (int i = m_index; i < tab.size(); i++)
         versions.append(tab.at(i));
 }
 
+// -------------------------------------------------------
+
+QString EngineUpdater::getVersionsName() const {
+    return "versions-" + m_updaterVersion;
+}
 
 // -------------------------------------------------------
 //
@@ -388,8 +510,7 @@ void EngineUpdater::check() {
 
     // Get the JSON
     reply = manager.get(QNetworkRequest(
-        QUrl("https://raw.githubusercontent.com/RPG-Paper-Maker/"
-             "RPG-Paper-Maker/master/versions.json")));
+        QUrl(pathGitHub + "/RPG-Paper-Maker/master/versions.json")));
 
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
@@ -409,19 +530,33 @@ void EngineUpdater::check() {
     m_document = json.object();
     */
 
+    // Check if updater was updated
+    m_currentVersion = Project::ENGINE_VERSION;
+    m_updaterVersion = EngineUpdater::VERSION;
+    QString pathUpdater = Wanok::pathCombine(QDir::currentPath(),
+                                             "updater.json");
+    QFile updater(pathUpdater);
+    if (updater.exists()) {
+        QJsonDocument document;
+        Wanok::readOtherJSON(pathUpdater, document);
+        QJsonObject objUpdater = document.object();
+        m_updaterVersion = objUpdater["updaterVersion"].toString();
+        m_currentVersion = objUpdater["version"].toString();
+    }
+
     // Check last version
     lastVersion = m_document["lastVersion"].toString();
-    dif = ProjectUpdater:: versionDifferent(lastVersion);
+    dif = ProjectUpdater::versionDifferent(lastVersion, m_currentVersion);
 
     // Checking versions index
-    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonArray tabVersions = m_document[getVersionsName()].toArray();
     QJsonObject obj;
     m_index = tabVersions.size();
     if (m_index != 0) {
         for (int i = 0; i < tabVersions.size(); i++) {
             obj = tabVersions.at(i).toObject();
             if (ProjectUpdater::versionDifferent(obj["v"].toString(),
-                                                 Project::ENGINE_VERSION) == 1)
+                                                 m_currentVersion) == 1)
             {
                 m_index = i;
                 break;
@@ -435,7 +570,7 @@ void EngineUpdater::check() {
 // -------------------------------------------------------
 
 void EngineUpdater::update() {
-    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonArray tabVersions = m_document[getVersionsName()].toArray();
     QJsonObject obj;
 
     // Updating for each versions
@@ -452,7 +587,6 @@ void EngineUpdater::update() {
 
     // Executables
     emit progress(80, "Downloading all the system scripts...");
-    removePreviousScripts();
     downloadScripts();
 
     // System scripts
@@ -460,6 +594,11 @@ void EngineUpdater::update() {
     downloadExecutables();
     emit progress(100, "Finished!");
     QThread::sleep(1);
+
+    // Remove updater.json
+    QFile updater(Wanok::pathCombine(QDir::currentPath(), "updater.json"));
+    if (updater.exists())
+        updater.remove();
 
     emit finished();
 }

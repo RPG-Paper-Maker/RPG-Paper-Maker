@@ -27,7 +27,7 @@
             "target": "Content/win32/Game.exe"
         }
     },
-    "lastVersion": "0.4.0",
+    "lastVersion": "0.4.1",
     "scripts": {
         "files": [
             {
@@ -495,6 +495,7 @@
     		"v": "0.4.1",
     		"add": [],
     		"remove": [],
+<<<<<<< HEAD
     		"replace": [],
     		"features": [
     			"Recent projects: indication not implemented yet",
@@ -506,6 +507,19 @@
     			"Sprites layers were inverted if not in front",
     			"Square size different to 16 and 32px was causing issues"
     		]
+=======
+    		"replace": [
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/UpdaterVersions/updater-2.0.json",
+                    "target": "updater.json"
+    			}
+    		],
+    		"features": ["Updating the engine updater to 2.0 (OS specific, trees, option to only replace files)"],
+    		"bugs": []
+>>>>>>> master
     	}
-    ]
+    ],
+	"versions-2.0": [
+
+	]
 }

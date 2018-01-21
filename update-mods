@@ -13,11 +13,11 @@ mkdir mods
 path='../Game-Scripts/Content/Datas/Scripts'
 pathModsScript="${modsPath}/Scripts"
 if [ -d $path ]; then
-	echo "$localMessage $path > $pathModsScript"
+	echo "$localMessage $path $moveSymbol $pathModsScript"
 	cp -r $path $pathModsScript
 else
 	pathGit="https://github.com/RPG-Paper-Maker/Game-Scripts/trunk/Content/Datas/Scripts"
-	echo "$githubMessage $pathGit > $modsPath"
+	echo "$githubMessage $pathGit $moveSymbol $modsPath"
 	svn export $pathGit $pathModsScript
 fi
 
@@ -25,10 +25,21 @@ path='../Basic-Ressources/Content'
 pathModsBR="${modsPath}/BR/Content"
 mkdir "${modsPath}/BR"
 if [ -d $path ]; then
-	echo "$localMessage $path > $pathModsBR"
+	echo "$localMessage $path $moveSymbol $pathModsBR"
 	cp -r $path $pathModsBR
 else
 	pathGit="https://github.com/RPG-Paper-Maker/Basic-Ressources/trunk/Content"
-	echo "$githubMessage $pathGit > $pathModsBR"
+	echo "$githubMessage $pathGit $moveSymbol $pathModsBR"
 	svn export $pathGit $pathModsBR
+fi
+
+path='../Dependencies/Game'
+pathModsGame="${modsPath}/Game"
+if [ -d $path ]; then
+	echo "$localMessage $path $moveSymbol $pathModsGame"
+	cp -r $path $pathModsGame
+else
+	pathGit="https://github.com/RPG-Paper-Maker/Dependencies/trunk/Game"
+	echo "$githubMessage $pathGit $moveSymbol $pathModsGame"
+	svn export $pathGit $pathModsGame
 fi
