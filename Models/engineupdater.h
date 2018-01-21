@@ -39,6 +39,7 @@ class EngineUpdater : public QObject
 public:
     EngineUpdater();
     virtual ~EngineUpdater();
+    static const QString VERSION;
     static const QString jsonFiles;
     static const QString jsonSource;
     static const QString jsonTarget;
@@ -83,10 +84,13 @@ public:
     void downloadExecutables();
     void downloadScripts();
     void getVersions(QJsonArray& versions) const;
+    QString getVersionsName() const;
 
 protected:
     QJsonObject m_document;
     int m_index;
+    QString m_currentVersion;
+    QString m_updaterVersion;
 
 public slots:
     void check();

@@ -495,7 +495,12 @@
     		"v": "0.4.1",
     		"add": [],
     		"remove": [],
-    		"replace": [],
+    		"replace": [
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/UpdaterVersions/updater-2.0.json",
+                    "target": "updater.json"
+    			}
+    		],
     		"features": ["Updating the engine updater to 2.0 (OS specific, trees, option to only replace files)"],
     		"bugs": []
     	}

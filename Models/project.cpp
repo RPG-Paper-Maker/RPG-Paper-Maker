@@ -25,7 +25,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "0.4.0";
+const QString Project::ENGINE_VERSION = "0.4.1";
 
 // -------------------------------------------------------
 //

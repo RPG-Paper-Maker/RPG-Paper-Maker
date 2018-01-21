@@ -28,6 +28,7 @@
 #include <QDirIterator>
 #include <QMessageBox>
 
+const QString EngineUpdater::VERSION = "2.0";
 const QString EngineUpdater::jsonFiles = "files";
 const QString EngineUpdater::jsonSource = "source";
 const QString EngineUpdater::jsonTarget = "target";
@@ -483,11 +484,16 @@ void EngineUpdater::downloadScripts() {
 // -------------------------------------------------------
 
 void EngineUpdater::getVersions(QJsonArray& versions) const {
-    QJsonArray tab = m_document["versions"].toArray();
+    QJsonArray tab = m_document[getVersionsName()].toArray();
     for (int i = m_index; i < tab.size(); i++)
         versions.append(tab.at(i));
 }
 
+// -------------------------------------------------------
+
+QString EngineUpdater::getVersionsName() const {
+    return "versions-" + m_updaterVersion;
+}
 
 // -------------------------------------------------------
 //
@@ -524,19 +530,33 @@ void EngineUpdater::check() {
     m_document = json.object();
     */
 
+    // Check if updater was updated
+    m_currentVersion = Project::ENGINE_VERSION;
+    m_updaterVersion = EngineUpdater::VERSION;
+    QString pathUpdater = Wanok::pathCombine(QDir::currentPath(),
+                                             "updater.json");
+    QFile updater(pathUpdater);
+    if (updater.exists()) {
+        QJsonDocument document;
+        Wanok::readOtherJSON(pathUpdater, document);
+        QJsonObject objUpdater = document.object();
+        m_updaterVersion = objUpdater["updaterVersion"].toString();
+        m_currentVersion = objUpdater["version"].toString();
+    }
+
     // Check last version
     lastVersion = m_document["lastVersion"].toString();
-    dif = ProjectUpdater:: versionDifferent(lastVersion);
+    dif = ProjectUpdater::versionDifferent(lastVersion, m_currentVersion);
 
     // Checking versions index
-    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonArray tabVersions = m_document[getVersionsName()].toArray();
     QJsonObject obj;
     m_index = tabVersions.size();
     if (m_index != 0) {
         for (int i = 0; i < tabVersions.size(); i++) {
             obj = tabVersions.at(i).toObject();
             if (ProjectUpdater::versionDifferent(obj["v"].toString(),
-                                                 Project::ENGINE_VERSION) == 1)
+                                                 m_currentVersion) == 1)
             {
                 m_index = i;
                 break;
@@ -550,7 +570,7 @@ void EngineUpdater::check() {
 // -------------------------------------------------------
 
 void EngineUpdater::update() {
-    QJsonArray tabVersions = m_document["versions"].toArray();
+    QJsonArray tabVersions = m_document[getVersionsName()].toArray();
     QJsonObject obj;
 
     // Updating for each versions
@@ -574,6 +594,11 @@ void EngineUpdater::update() {
     downloadExecutables();
     emit progress(100, "Finished!");
     QThread::sleep(1);
+
+    // Remove updater.json
+    QFile updater(Wanok::pathCombine(QDir::currentPath(), "updater.json"));
+    if (updater.exists())
+        updater.remove();
 
     emit finished();
 }
