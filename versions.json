@@ -27,7 +27,7 @@
             "target": "Content/win32/Game.exe"
         }
     },
-    "lastVersion": "0.4.1",
+    "lastVersion": "0.4.2",
     "scripts": {
         "files": [
             {
@@ -495,19 +495,6 @@
     		"v": "0.4.1",
     		"add": [],
     		"remove": [],
-<<<<<<< HEAD
-    		"replace": [],
-    		"features": [
-    			"Recent projects: indication not implemented yet",
-    			"Square size limited to 64px",
-    			"Updating Qt version from 5.7 to 5.10 and forcing ANGLE project (no openGL) use for Windows"
-    		],
-    		"bugs": [
-    			"Tileset selector is now updating cursor position if out of the new texture",
-    			"Sprites layers were inverted if not in front",
-    			"Square size different to 16 and 32px was causing issues"
-    		]
-=======
     		"replace": [
     			{
     				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/UpdaterVersions/updater-2.0.json",
@@ -516,10 +503,64 @@
     		],
     		"features": ["Updating the engine updater to 2.0 (OS specific, trees, option to only replace files)"],
     		"bugs": []
->>>>>>> master
     	}
     ],
 	"versions-2.0": [
-
+		{
+    		"v": "0.4.2",
+    		"add": [
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/d3dcompiler_47.dll",
+                    "target": "Content/win32/d3dcompiler_47.dll"
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/libEGL.dll",
+                    "target": "Content/win32/libEGL.dll"
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/libGLESv2.dll",
+                    "target": "Content/win32/libGLESv2.dll"
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/d3dcompiler_47.dll",
+                    "target": "d3dcompiler_47.dll",
+                    "os": ["w"]
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/libEGL.dll",
+                    "target": "libEGL.dll",
+                    "os": ["w"]
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/libGLESv2.dll",
+                    "target": "libGLESv2.dll",
+                    "os": ["w"]
+    			}
+    		],
+    		"remove": [],
+    		"replace": [
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Trees/engine-linux-libraries.json",
+                    "target": "libraries",
+                    "tree": true,
+                    "os": ["l"]
+    			},
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Trees/game-linux-libraries.json",
+                    "target": "Content/linux/libraries",
+                    "tree": true
+    			}
+    		],
+    		"features": [
+    			"Updating Qt version from 5.7 to 5.10 for linux only and forcing ANGLE project (no openGL) use for Windows",
+    			"Recent projects: indication not implemented yet",
+    			"Square size limited to 16 to 64px"
+    		],
+    		"bugs": [
+    			"Tileset selector is now updating cursor position if out of the new texture",
+    			"Sprites layers were inverted if not in front",
+    			"Square size different to 16 and 32px was causing issues"
+    		]
+    	}
 	]
 }

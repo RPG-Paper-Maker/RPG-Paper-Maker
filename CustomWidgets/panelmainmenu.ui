@@ -22,7 +22,7 @@
         <bool>false</bool>
        </property>
        <property name="title">
-        <string>Recent projects [not implemented yet]</string>
+        <string>Recent projects [not implemented]</string>
        </property>
        <property name="flat">
         <bool>false</bool>

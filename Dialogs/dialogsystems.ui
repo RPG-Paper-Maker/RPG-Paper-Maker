@@ -187,7 +187,7 @@
                        <bool>true</bool>
                       </property>
                       <property name="minimum">
-                       <number>1</number>
+                       <number>16</number>
                       </property>
                       <property name="maximum">
                        <number>64</number>
