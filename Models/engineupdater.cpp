@@ -29,6 +29,12 @@
 #include <QDirIterator>
 #include <QMessageBox>
 
+const QString EngineUpdater::jsonFiles = "files";
+const QString EngineUpdater::jsonSource = "source";
+const QString EngineUpdater::jsonTarget = "target";
+const QString EngineUpdater::gitRepoEngine = "RPG-Paper-Maker";
+const QString EngineUpdater::gitRepoGame = "Game-Scripts";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -120,11 +126,61 @@ void EngineUpdater::writeBasicJSONFile() {
 
 // -------------------------------------------------------
 
+void EngineUpdater::writeTrees() {
+    writeTree("Content/Datas/Scripts/System", "system-scripts", gitRepoGame);
+    writeTree("Content/linux/libraries", "game-linux-libraries", gitRepoEngine);
+    writeTree("Dependencies/linux/libraries", "engine-linux-libraries",
+              gitRepoEngine);
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::writeTree(QString path, QString fileName, QString gitRepo) {
+    QString prefixPath = "https://raw.githubusercontent.com/RPG-Paper-Maker/";
+    QString networkUrl = prefixPath + gitRepo + "/master/";
+    QString localUrl = "../" + gitRepo + "/"; // Only for unix
+    QJsonObject objTree;
+    if (gitRepo == gitRepoGame)
+        path = "Content/basic/" + path;
+    getTree(objTree, localUrl, networkUrl, path);
+    Wanok::writeOtherJSON("../RPG-Paper-Maker/Trees/" + fileName + ".json",
+                          objTree, QJsonDocument::Indented);
+}
+
+// -------------------------------------------------------
+
+void EngineUpdater::getTree(QJsonObject& objTree, QString localUrl,
+                            QString networkUrl, QString targetUrl)
+{
+    QDirIterator directories(Wanok::pathCombine(localUrl, targetUrl),
+                             QDir::Dirs | QDir::NoDotAndDotDot | QDir::Files);
+    QJsonArray tabFiles;
+
+    while (directories.hasNext()) {
+        directories.next();
+        QString name = directories.fileName();
+        QString currentPath = Wanok::pathCombine(targetUrl, name);
+        QJsonObject obj;
+        if (directories.fileInfo().isDir()) {
+            getTree(obj, localUrl, networkUrl, currentPath);
+        }
+        else {
+            getJSONFile(obj, Wanok::pathCombine(networkUrl, currentPath),
+                        currentPath);
+        }
+        tabFiles.append(obj);
+    }
+
+    getJSONDir(objTree, tabFiles, targetUrl);
+}
+
+// -------------------------------------------------------
+
 void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
                                 QString target)
 {
-    obj["source"] = source;
-    obj["target"] = target;
+    obj[jsonFiles] = source;
+    obj[jsonTarget] = target;
 }
 
 // -------------------------------------------------------
@@ -132,8 +188,8 @@ void EngineUpdater::getJSONFile(QJsonObject& obj, QString source,
 void EngineUpdater::getJSONDir(QJsonObject &obj, QJsonArray& files,
                                QString target)
 {
-    obj["files"] = files;
-    obj["target"] = target;
+    obj[jsonFiles] = files;
+    obj[jsonTarget] = target;
 }
 
 // -------------------------------------------------------

@@ -38,7 +38,17 @@ class EngineUpdater : public QObject
 public:
     EngineUpdater();
     virtual ~EngineUpdater();
+    static const QString jsonFiles;
+    static const QString jsonSource;
+    static const QString jsonTarget;
+    static const QString gitRepoEngine;
+    static const QString gitRepoGame;
+
     static void writeBasicJSONFile();
+    static void writeTrees();
+    static void writeTree(QString path, QString fileName, QString gitRepo);
+    static void getTree(QJsonObject& objTree, QString localUrl,
+                        QString networkUrl, QString targetUrl);
     static void getJSONFile(QJsonObject &obj, QString source, QString target);
     static void getJSONDir(QJsonObject &obj, QJsonArray& files, QString target);
     static void getJSONExeEngine(QJsonObject &obj, QString os);
