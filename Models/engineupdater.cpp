@@ -76,9 +76,8 @@ void EngineUpdater::writeBasicJSONFile() {
     obj["lastVersion"] = Project::ENGINE_VERSION;
 
     // Scripts
-    getJSONFile(objFile,
-                "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                "RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
+    getJSONFile(objFile, pathGitHub +
+                "/RPG-Paper-Maker/master/Game/Content/Datas/Scripts/System/"
                 "desktop/includes.js",
                 "Content/basic/Content/Datas/Scripts/System/desktop/"
                 "includes.js");
@@ -220,8 +219,8 @@ void EngineUpdater::getJSONExeEngine(QJsonObject& obj, QString os) {
     else
         exe = "RPG-Paper-Maker.app";
 
-    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                     "RPG-Paper-Maker/master/Engine/Dependencies/" +
+    getJSONFile(obj, pathGitHub +
+                "/RPG-Paper-Maker/master/Engine/Dependencies/" +
                 os + "/" + exe, exe);
 }
 
@@ -235,8 +234,8 @@ void EngineUpdater::getJSONExeGame(QJsonObject& obj, QString os) {
     else if (os == "osx")
         exe += ".app";
 
-    getJSONFile(obj, "https://raw.githubusercontent.com/RPG-Paper-Maker/"
-                "RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
+    getJSONFile(obj, pathGitHub +
+                "/RPG-Paper-Maker/master/Engine/Content/" + os + "/" + exe,
                 "Content/" + os + "/" + exe);
 }
 
@@ -505,8 +504,7 @@ void EngineUpdater::check() {
 
     // Get the JSON
     reply = manager.get(QNetworkRequest(
-        QUrl("https://raw.githubusercontent.com/RPG-Paper-Maker/"
-             "RPG-Paper-Maker/master/versions.json")));
+        QUrl(pathGitHub + "/RPG-Paper-Maker/master/versions.json")));
 
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
