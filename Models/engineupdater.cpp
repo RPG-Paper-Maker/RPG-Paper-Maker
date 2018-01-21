@@ -262,6 +262,20 @@ void EngineUpdater::updateVersion(QJsonObject& obj) {
 // -------------------------------------------------------
 
 void EngineUpdater::download(EngineUpdateFileKind action, QJsonObject& obj) {
+    if (obj.contains(jsonOS)) {
+        QString strOS = "";
+        #ifdef Q_OS_WIN
+            strOS = jsonWindows;
+        #elif __linux__
+            strOS = jsonLinux;
+        #else
+            strOS = jsonMac;
+        #endif
+
+        if (!obj[jsonOS].toArray().contains(strOS))
+            return;
+    }
+
     if (obj.contains(jsonFiles))
         downloadFolder(action, obj);
     else
