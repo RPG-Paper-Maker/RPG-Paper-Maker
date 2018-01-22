@@ -564,7 +564,8 @@ void EngineUpdater::check() {
         }
     }
 
-    emit finishedCheck(dif != 0);
+    //emit finishedCheck(dif != 0);
+    emit finishedCheck(false);
 }
 
 // -------------------------------------------------------
