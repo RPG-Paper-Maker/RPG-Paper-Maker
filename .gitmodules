@@ -1,0 +1,3 @@
+[submodule "Engine/Content/BR"]
+	path = Engine/Content/BR
+	url = git@github.com:RPG-Paper-Maker/RPG-Paper-Base-Resources.git
