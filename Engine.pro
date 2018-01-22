@@ -517,10 +517,32 @@ win32{
     DESTBR = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\BR)\"
 }
 
+FROMWIN= \"$$shell_path($$PWD\\mods\\Game\\win32)\"
+DESTWIN = \"$$shell_path($$OUT_PWD\\Content)\"
+win32{
+    DESTWIN = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\win32)\"
+}
+
+FROMLINUX= \"$$shell_path($$PWD\\mods\\Game\\linux)\"
+DESTLINUX = \"$$shell_path($$OUT_PWD\\Content)\"
+win32{
+    DESTLINUX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\linux)\"
+}
+
+FROMOSX= \"$$shell_path($$PWD\\mods\\Game\\osx)\"
+DESTOSX = \"$$shell_path($$OUT_PWD\\Content)\"
+win32{
+    DESTOSX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\osx)\"
+}
+
+FROMWEB= \"$$shell_path($$PWD\\mods\\Game\\web)\"
+DESTWEB = \"$$shell_path($$OUT_PWD\\Content)\"
+win32{
+    DESTWEB = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\web)\"
+}
 
 !equals(PWD, $${OUT_PWD}) {
-    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMSCRIPTS $$DESTSCRIPTS $$escape_expand(\n\t) $(COPY_DIR) $$FROMBR $$DESTBR
-    first.depends = $(first) copyBR
+    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMSCRIPTS $$DESTSCRIPTS $$escape_expand(\n\t) $(COPY_DIR) $$FROMBR $$DESTBR $$escape_expand(\n\t) $(COPY_DIR) $$FROMWIN $$DESTWIN $$escape_expand(\n\t) $(COPY_DIR) $$FROMLINUX $$DESTLINUX $$escape_expand(\n\t) $(COPY_DIR) $$FROMOSX $$DESTOSX $$escape_expand(\n\t) $(COPY_DIR) $$FROMWEB $$DESTWEB
     first.depends = $(first) copyBR
     export(first.depends)
     export(copyBR.commands)

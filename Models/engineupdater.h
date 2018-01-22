@@ -54,6 +54,7 @@ public:
     static const QString jsonRemove;
     static const QString gitRepoEngine;
     static const QString gitRepoGame;
+    static const QString gitRepoDependencies;
     static const QString pathGitHub;
 
     static void writeBasicJSONFile();

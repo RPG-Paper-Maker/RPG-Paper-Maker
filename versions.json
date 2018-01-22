@@ -1,29 +1,29 @@
 {
     "exeEngine": {
         "linux": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/linux/RPG-Paper-Maker",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/RPG-Paper-Maker",
             "target": "RPG-Paper-Maker-temp"
         },
         "osx": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/osx/RPG-Paper-Maker.app",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/osx/RPG-Paper-Maker.app",
             "target": "RPG-Paper-Maker-temp.app"
         },
         "win32": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/RPG Paper Maker.exe",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/win32/RPG Paper Maker.exe",
             "target": "RPG Paper Maker temp.exe"
         }
     },
     "exeGame": {
         "linux": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/linux/Game",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/linux/Game",
             "target": "Content/linux/Game"
         },
         "osx": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/osx/Game.app",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/osx/Game.app",
             "target": "Content/osx/Game.app"
         },
         "win32": {
-            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/Game.exe",
+            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/Game.exe",
             "target": "Content/win32/Game.exe"
         }
     },
@@ -450,11 +450,11 @@
                 {
                     "files": [
                         {
-                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/dialogplugin.dll",
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/QtQuick/Dialogs/dialogplugin.dll",
                             "target": "Content/win32/QtQuick/Dialogs/dialogplugin.dll"
                         },
                         {
-                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/QtQuick/Dialogs/qmldir",
+                            "source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/QtQuick/Dialogs/qmldir",
                             "target": "Content/win32/QtQuick/Dialogs/qmldir"
                         }
                     ],
@@ -510,29 +510,29 @@
     		"v": "0.4.2",
     		"add": [
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/d3dcompiler_47.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/d3dcompiler_47.dll",
                     "target": "Content/win32/d3dcompiler_47.dll"
     			},
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/libEGL.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/libEGL.dll",
                     "target": "Content/win32/libEGL.dll"
     			},
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Content/win32/libGLESv2.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Game/win32/libGLESv2.dll",
                     "target": "Content/win32/libGLESv2.dll"
     			},
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/d3dcompiler_47.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/win32/d3dcompiler_47.dll",
                     "target": "d3dcompiler_47.dll",
                     "os": ["w"]
     			},
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/libEGL.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/win32/libEGL.dll",
                     "target": "libEGL.dll",
                     "os": ["w"]
     			},
     			{
-    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/RPG-Paper-Maker/master/Dependencies/win32/libGLESv2.dll",
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/win32/libGLESv2.dll",
                     "target": "libGLESv2.dll",
                     "os": ["w"]
     			}

@@ -43,8 +43,9 @@ const QString EngineUpdater::jsonRemove = "remove";
 const QString EngineUpdater::jsonReplace = "replace";
 const QString EngineUpdater::gitRepoEngine = "RPG-Paper-Maker";
 const QString EngineUpdater::gitRepoGame = "Game-Scripts";
+const QString EngineUpdater::gitRepoDependencies = "Dependencies";
 const QString EngineUpdater::pathGitHub =
-        "https://raw.githubusercontent.com/RPG-Paper-Maker";
+        "https://raw.githubusercontent.com/RPG-Paper-Maker/";
 
 // -------------------------------------------------------
 //
@@ -137,9 +138,10 @@ void EngineUpdater::writeBasicJSONFile() {
 
 void EngineUpdater::writeTrees() {
     writeTree("Content/Datas/Scripts/System", "system-scripts", gitRepoGame);
-    writeTree("Content/linux/libraries", "game-linux-libraries", gitRepoEngine);
-    writeTree("Dependencies/linux/libraries", "engine-linux-libraries",
-              gitRepoEngine, "libraries");
+    writeTree("Game/linux/libraries", "game-linux-libraries",
+              gitRepoDependencies);
+    writeTree("Engine/linux/libraries", "engine-linux-libraries",
+              gitRepoDependencies, "libraries");
 }
 
 // -------------------------------------------------------

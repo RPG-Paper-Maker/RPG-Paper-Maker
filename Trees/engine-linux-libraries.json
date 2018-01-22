@@ -1,31 +1,31 @@
 {
     "files": [
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5XcbQpa.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5XcbQpa.so.5",
             "target": "libraries/libQt5XcbQpa.so.5"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libicuuc.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libicuuc.so.56",
             "target": "libraries/libicuuc.so.56"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5Network.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5Network.so.5",
             "target": "libraries/libQt5Network.so.5"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libicudata.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libicudata.so.56",
             "target": "libraries/libicudata.so.56"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5Gui.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5Gui.so.5",
             "target": "libraries/libQt5Gui.so.5"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5Core.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5Core.so.5",
             "target": "libraries/libQt5Core.so.5"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5DBus.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5DBus.so.5",
             "target": "libraries/libQt5DBus.so.5"
         },
         {
@@ -33,7 +33,7 @@
                 {
                     "files": [
                         {
-                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/plugins/platforms/libqxcb.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/plugins/platforms/libqxcb.so",
                             "target": "libraries/plugins/platforms/libqxcb.so"
                         }
                     ],
@@ -42,7 +42,7 @@
                 {
                     "files": [
                         {
-                            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so",
+                            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so",
                             "target": "libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so"
                         }
                     ],
@@ -52,11 +52,11 @@
             "target": "libraries/plugins"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libicui18n.so.56",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libicui18n.so.56",
             "target": "libraries/libicui18n.so.56"
         },
         {
-            "source": "https:/raw.githubusercontent.com/RPG-Paper-MakerRPG-Paper-Maker/master/Dependencies/linux/libraries/libQt5Widgets.so.5",
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Dependencies/master/Engine/linux/libraries/libQt5Widgets.so.5",
             "target": "libraries/libQt5Widgets.so.5"
         }
     ],
