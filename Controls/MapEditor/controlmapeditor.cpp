@@ -1130,16 +1130,22 @@ void ControlMapEditor::showHideSquareInformations() {
 
 QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
                                          MapEditorSubSelectionKind subKind,
-                                         bool layerOn)
+                                         bool layerOn, bool focus)
 {
-    Position position;
-    MapElement* element = getPositionSelected(position, kind, subKind, layerOn,
-                                              true);
-    if (!m_map->isInGrid(position))
-        return "";
+    if (focus) {
+        Position position;
+        MapElement* element = getPositionSelected(position, kind, subKind,
+                                                  layerOn, true);
+        if (!m_map->isInGrid(position))
+            m_lastSquareInfos = "";
+        else {
+            m_lastSquareInfos =
+               (element == nullptr ? "[NONE]" : "[" + element->toString() + "]")
+               + "\n" + position.toString(m_map->squareSize());
+        }
+    }
 
-    return (element == nullptr ? "[NONE]" : "[" + element->toString() + "]") +
-            + "\n" + position.toString(m_map->squareSize());
+    return m_lastSquareInfos;
 }
 
 // -------------------------------------------------------

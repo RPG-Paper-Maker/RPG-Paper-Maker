@@ -182,7 +182,7 @@ void WidgetMapEditor::paintGL() {
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 int specialID = m_panelTextures->getID(subKind);
                 m_control.updateWallIndicator();
-                if (mousePosChanged) {
+                if (mousePosChanged && this->hasFocus()) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
                                                     layerOn, tileset,
                                                     specialID);
@@ -215,7 +215,8 @@ void WidgetMapEditor::paintGL() {
 
         // Draw additional text informations
         if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
-            QString infos = m_control.getSquareInfos(kind, subKind, layerOn);
+            QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
+                                                     this->hasFocus());
             QStringList listInfos = infos.split("\n");
             p.begin(this);
             for (int i = 0; i < listInfos.size(); i++) {

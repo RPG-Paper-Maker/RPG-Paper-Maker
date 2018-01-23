@@ -202,7 +202,8 @@ public:
     void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
                                QJsonObject& obj, Position &position);
     QString getSquareInfos(MapEditorSelectionKind kind,
-                           MapEditorSubSelectionKind subKind, bool layerOn);
+                           MapEditorSubSelectionKind subKind, bool layerOn,
+                           bool focus);
     bool isVisible(Position3D &position);
 
     void paintGL(QMatrix4x4& modelviewProjection,
@@ -275,6 +276,7 @@ private:
     bool m_isCtrlPressed;
     bool m_isMovingObject;
     int m_currentLayer = -1;
+    QString m_lastSquareInfos;
 };
 
 #endif // CONTROLMAPEDITOR_H
