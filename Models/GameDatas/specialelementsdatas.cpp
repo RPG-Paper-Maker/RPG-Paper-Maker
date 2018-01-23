@@ -19,7 +19,11 @@
 
 #include "specialelementsdatas.h"
 #include "systemspritewall.h"
+#include "systemautotile.h"
 #include "wanok.h"
+
+const QString SpecialElementsDatas::JSON_WALLS = "walls";
+const QString SpecialElementsDatas::JSON_AUTOTILES = "autotiles";
 
 // -------------------------------------------------------
 //
@@ -85,17 +89,36 @@ QStandardItemModel* SpecialElementsDatas::modelReliefs() const {
 
 void SpecialElementsDatas::setDefault()
 {
-    QStandardItem* item;
-    SystemSpriteWall* sysWall;
+    setDefaultSpriteWalls();
+    setDefaultAutotiles();
+}
 
-    // Sprite wall
+// -------------------------------------------------------
+
+void SpecialElementsDatas::setDefaultSpriteWalls() {
+    QStandardItem* item;
+    SystemSpriteWall* sys;
+
     item = new QStandardItem;
-    sysWall = new SystemSpriteWall(1, "Inside1", 1);
-    item->setData(QVariant::fromValue(
-                      reinterpret_cast<quintptr>(sysWall)));
+    sys = new SystemSpriteWall(1, "Inside1", 1);
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(sysWall->toString());
+    item->setText(sys->toString());
     m_modelSpriteWalls->appendRow(item);
+}
+
+// -------------------------------------------------------
+
+void SpecialElementsDatas::setDefaultAutotiles() {
+    QStandardItem* item;
+    SystemAutotile* sys;
+
+    item = new QStandardItem;
+    sys = new SystemAutotile(1, "Grass", 1);
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(sys->toString());
+    m_modelAutotiles->appendRow(item);
 }
 
 // -------------------------------------------------------
@@ -112,37 +135,52 @@ void SpecialElementsDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_model3DObjects, false);
     SuperListItem::deleteModel(m_modelReliefs, false);
 
-    // Sprite wall
-    QJsonArray jsonList = json["walls"].toArray();
+    // Read
+    readSpecials(json, PictureKind::Walls, JSON_WALLS);
+    readSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
+}
+
+// -------------------------------------------------------
+
+void SpecialElementsDatas::readSpecials(const QJsonObject &json,
+                                        PictureKind kind, QString jsonName)
+{
+    QJsonArray jsonList = json[jsonName].toArray();
     QStandardItem* item;
-    SystemSpriteWall* sysWall;
+    SuperListItem* sys;
     for (int i = 0; i < jsonList.size(); i++) {
         item = new QStandardItem;
-        sysWall = new SystemSpriteWall;
-        sysWall->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysWall)));
+        sys = SuperListItem::getnewInstance(kind);
+        sys->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysWall->toString());
-        m_modelSpriteWalls->appendRow(item);
+        item->setText(sys->toString());
+        this->model(kind)->appendRow(item);
     }
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::write(QJsonObject &json) const{
+    writeSpecials(json, PictureKind::Walls, JSON_WALLS);
+    writeSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
+}
+
+// -------------------------------------------------------
+
+void SpecialElementsDatas::writeSpecials(QJsonObject &json, PictureKind kind,
+                                         QString jsonName) const
+{
     QJsonArray jsonArray;
 
-    // Sprite wall
-    for (int i = 0; i < m_modelSpriteWalls->invisibleRootItem()->rowCount();
-         i++)
+    for (int i = 0; i < this->model(kind)->invisibleRootItem()->rowCount(); i++)
     {
         QJsonObject json;
-        SystemSpriteWall* sysWall =
-                ((SystemSpriteWall*) m_modelSpriteWalls->item(i)->data()
+        SuperListItem* sys =
+                ((SuperListItem*) m_modelSpriteWalls->item(i)->data()
                  .value<quintptr>());
-        sysWall->write(json);
+        sys->write(json);
         jsonArray.append(json);
     }
-    json["walls"] = jsonArray;
+    json[jsonName] = jsonArray;
 }

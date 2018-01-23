@@ -233,7 +233,8 @@ HEADERS += \
     Controls/MapEditor/controlundoredo.h \
     Dialogs/SpecialElements/dialogtilesetspecialelements.h \
     Dialogs/SpecialElements/dialogspecialelements.h \
-    Dialogs/SpecialElements/panelspecialelements.h
+    Dialogs/SpecialElements/panelspecialelements.h \
+    Models/System/systemautotile.h
 
 SOURCES += \
     main.cpp \
@@ -415,7 +416,8 @@ SOURCES += \
     Controls/MapEditor/controlmapeditor-objects.cpp \
     Dialogs/SpecialElements/dialogspecialelements.cpp \
     Dialogs/SpecialElements/dialogtilesetspecialelements.cpp \
-    Dialogs/SpecialElements/panelspecialelements.cpp
+    Dialogs/SpecialElements/panelspecialelements.cpp \
+    Models/System/systemautotile.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

@@ -27,7 +27,7 @@
             "target": "Content/win32/Game.exe"
         }
     },
-    "lastVersion": "0.4.2",
+    "lastVersion": "0.4.3",
     "scripts": {
         "files": [
             {
@@ -561,6 +561,13 @@
     			"Sprites layers were inverted if not in front",
     			"Square size different to 16 and 32px was causing issues"
     		]
+    	},
+    	{
+    		"v": "0.4.3",
+    		"features": [
+    			"No More preview when the editor doesn't have focus"
+    		],
+    		"bugs": []
     	}
 	]
 }

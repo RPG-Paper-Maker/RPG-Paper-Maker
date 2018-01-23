@@ -20,6 +20,7 @@
 #include "superlistitem.h"
 #include "wanok.h"
 #include "dialogsystemname.h"
+#include "systemautotile.h"
 
 QString SuperListItem::beginningText = "<>";
 
@@ -232,7 +233,7 @@ void SuperListItem::copyModel(QStandardItemModel* model,
 SuperListItem* SuperListItem::getnewInstance(PictureKind kind) {
     switch(kind) {
     case PictureKind::Autotiles:
-        return nullptr;
+        return new SystemAutotile;
     case PictureKind::Walls:
         return new SystemSpriteWall;
     default:
