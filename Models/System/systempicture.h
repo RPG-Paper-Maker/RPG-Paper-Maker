@@ -44,6 +44,7 @@ public:
     void setIsBR(bool b);
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
+    static QString getPictureTitle(PictureKind kind);
     QString getPath(PictureKind kind) const;
     QString getLocalPath(PictureKind kind) const;
 

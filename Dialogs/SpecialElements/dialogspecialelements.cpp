@@ -19,13 +19,26 @@
 
 #include "dialogspecialelements.h"
 #include "ui_dialogspecialelements.h"
+#include "wanok.h"
 
-DialogSpecialElements::DialogSpecialElements(QWidget *parent) :
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+DialogSpecialElements::DialogSpecialElements(PictureKind kind,
+                                             QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSpecialElements)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
+
+    setWindowTitle(SystemPicture::getPictureTitle(kind));
+    ui->widget->initialize(
+                Wanok::get()->project()->specialElementsDatas()->model(kind),
+                kind);
 }
 
 DialogSpecialElements::~DialogSpecialElements()

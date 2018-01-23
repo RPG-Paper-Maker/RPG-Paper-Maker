@@ -443,7 +443,7 @@ void DialogDatas::on_pushButtonSpriteWalls_clicked() {
     SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
             ->getSelected()->data().value<quintptr>();
 
-    DialogTilesetSpecialElements dialog(tileset);
+    DialogTilesetSpecialElements dialog(tileset, PictureKind::Walls);
     if (dialog.exec() == QDialog::Accepted)
         Wanok::get()->project()->writeSpecialsDatas();
     else

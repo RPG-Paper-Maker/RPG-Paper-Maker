@@ -27,15 +27,20 @@
 //
 // -------------------------------------------------------
 
-DialogTilesetSpecialElements::DialogTilesetSpecialElements(SystemTileset *tileset,
-                                                   QWidget *parent) :
+DialogTilesetSpecialElements::DialogTilesetSpecialElements(
+        SystemTileset *tileset, PictureKind kind, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogTilesetSpecialElements),
-    m_tileset(tileset)
+    m_tileset(tileset),
+    m_kind(kind)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
+    setWindowTitle(SystemPicture::getPictureTitle(kind));
+    ui->widget->initialize(
+                Wanok::get()->project()->specialElementsDatas()->model(kind),
+                kind);
     initialize();
 }
 
@@ -57,17 +62,14 @@ QStandardItemModel* DialogTilesetSpecialElements::model() const {
 
 void DialogTilesetSpecialElements::initialize() {
     QStandardItemModel* model = new QStandardItemModel;
-    SuperListItem::copyModel(model, m_tileset->modelSpriteWalls());
+    SuperListItem::copyModel(model, m_tileset->model(m_kind));
 
     ui->panelSuperList->list()->setCanBrutRemove(true);
     ui->panelSuperList->showButtonMax(false);
     ui->panelSuperList->showEditName(false);
     ui->panelSuperList->initializeModel(model);
-    if (ui->panelSuperList->list()->getModel()->invisibleRootItem()->rowCount()
-        > 0)
-    {
+    if (this->model()->invisibleRootItem()->rowCount() > 0)
         ui->panelSuperList->list()->setIndex(0);
-    }
 
     // Connexions
     connect(ui->widget->superList()->list(), SIGNAL(deleteIDs()),
@@ -82,21 +84,18 @@ void DialogTilesetSpecialElements::initialize() {
 
 void DialogTilesetSpecialElements::move() {
     int index = ui->widget->currentIndex();
-    QStandardItemModel* model = ui->panelSuperList->list()->getModel();
+    QStandardItemModel* model = this->model();
 
-    SystemTileset::moveModel(
-                model, Wanok::get()->project()->specialElementsDatas()
-                ->modelSpriteWalls(), index);
+    SystemTileset::moveModel(model, Wanok::get()->project()
+                             ->specialElementsDatas()->model(m_kind), index);
 }
 
 // -------------------------------------------------------
 
 void DialogTilesetSpecialElements::remove() {
     int index = ui->panelSuperList->list()->getIndex();
-    if (index >= 0) {
-        QStandardItemModel* model = ui->panelSuperList->list()->getModel();
-        model->removeRow(index);
-    }
+    if (index >= 0)
+        model()->removeRow(index);
 }
 
 // -------------------------------------------------------
@@ -123,19 +122,18 @@ void DialogTilesetSpecialElements::on_deletingIDs() {
     // removed IDs in the tileset list
     SystemTileset::updateModel(ui->panelSuperList->list()->getModel(),
                                Wanok::get()->project()->specialElementsDatas()
-                               ->modelSpriteWalls());
+                               ->model(m_kind));
 }
 
 // -------------------------------------------------------
 
 void DialogTilesetSpecialElements::on_nameChanged(QStandardItem* item)
 {
-    QStandardItemModel* model = ui->panelSuperList->list()->getModel();
     SuperListItem* super = (SuperListItem*) item->data().value<quintptr>();
-    int index = SuperListItem::getIndexById(model->invisibleRootItem(),
+    int index = SuperListItem::getIndexById(model()->invisibleRootItem(),
                                             super->id());
     if (index >= 0) {
-        QStandardItem* item = model->item(index);
+        QStandardItem* item = model()->item(index);
         SuperListItem* superTileset =
                 (SuperListItem*) item->data().value<quintptr>();
         superTileset->setName(super->name());
@@ -146,7 +144,7 @@ void DialogTilesetSpecialElements::on_nameChanged(QStandardItem* item)
 // -------------------------------------------------------
 
 void DialogTilesetSpecialElements::accept() {
-    QStandardItemModel* model = m_tileset->modelSpriteWalls();
+    QStandardItemModel* model = m_tileset->model(m_kind);
 
     // Clear
     SuperListItem::deleteModel(model, false);

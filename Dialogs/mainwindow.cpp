@@ -459,7 +459,7 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionAutotiles_triggered() {
-    DialogSpecialElements dialog;
+    DialogSpecialElements dialog(PictureKind::Autotiles);
     if (openDialog(dialog) == QDialog::Accepted)
         project->writeSpecialsDatas();
     else
@@ -471,7 +471,7 @@ void MainWindow::on_actionAutotiles_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionSprite_walls_triggered() {
-    DialogSpecialElements dialog;
+    DialogSpecialElements dialog(PictureKind::Walls);
     if (openDialog(dialog) == QDialog::Accepted)
         project->writeSpecialsDatas();
     else

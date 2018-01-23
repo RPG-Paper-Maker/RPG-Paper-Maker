@@ -32,8 +32,6 @@ PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     ui(new Ui::PanelSpecialElements)
 {
     ui->setupUi(this);
-
-    initialize();
 }
 
 PanelSpecialElements::~PanelSpecialElements()
@@ -55,26 +53,29 @@ PanelSuperList *PanelSpecialElements::superList() const {
 //
 // -------------------------------------------------------
 
-void PanelSpecialElements::initialize() {
-    ui->panelSuperList->list()->initializeNewItemInstance(new SystemSpriteWall);
-    ui->panelSuperList->initializeModel(Wanok::get()->project()
-                                        ->specialElementsDatas()
-                                        ->modelSpriteWalls());
+void PanelSpecialElements::initialize(QStandardItemModel* model,
+                                      PictureKind kind)
+{
+    m_model = model;
+
+    ui->panelSuperList->list()->initializeNewItemInstance(
+                SuperListItem::getnewInstance(kind));
+    ui->panelSuperList->initializeModel(m_model);
     connect(ui->panelSuperList->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageSelected(QModelIndex,QModelIndex)));
-    ui->widgetPicture->setKind(PictureKind::Walls);
-    ui->widgetTilesetSettings->setKind(PictureKind::Walls);
+    ui->widgetPicture->setKind(kind);
+    ui->widgetTilesetSettings->setKind(kind);
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture*)),
             this, SLOT(on_pictureChanged(SystemPicture*)));
-    QModelIndex index = ui->panelSuperList->list()->getModel()->index(0,0);
+    QModelIndex index = m_model->index(0,0);
     ui->panelSuperList->list()->setIndex(0);
     on_pageSelected(index,index);
 }
 
 // -------------------------------------------------------
 
-void PanelSpecialElements::update(SystemSpriteWall* sys) {
+void PanelSpecialElements::update(SystemSpecialElement* sys) {
     SystemPicture* picture = sys->picture();
 
     ui->widgetPicture->setPicture(picture);
@@ -88,17 +89,16 @@ void PanelSpecialElements::update(SystemSpriteWall* sys) {
 // -------------------------------------------------------
 
 void PanelSpecialElements::on_pageSelected(QModelIndex index, QModelIndex) {
-    QStandardItem* selected = ui->panelSuperList->list()->getModel()
-            ->itemFromIndex(index);
+    QStandardItem* selected = m_model->itemFromIndex(index);
     if (selected != nullptr)
-        update((SystemSpriteWall*) selected->data().value<quintptr>());
+        update((SystemSpecialElement*) selected->data().value<quintptr>());
 }
 
 // -------------------------------------------------------
 
 void PanelSpecialElements::on_pictureChanged(SystemPicture* picture) {
-    SystemSpriteWall* wall = (SystemSpriteWall*) ui->panelSuperList->list()
-            ->getSelected()->data().value<quintptr>();
-    wall->setPictureID(picture->id());
+    SystemSpecialElement* sys = (SystemSpecialElement*) ui->panelSuperList
+            ->list()->getSelected()->data().value<quintptr>();
+    sys->setPictureID(picture->id());
     ui->widgetTilesetSettings->updateImage(picture);
 }

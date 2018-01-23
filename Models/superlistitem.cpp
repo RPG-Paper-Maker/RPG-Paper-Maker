@@ -229,6 +229,19 @@ void SuperListItem::copyModel(QStandardItemModel* model,
 
 // -------------------------------------------------------
 
+SuperListItem* SuperListItem::getnewInstance(PictureKind kind) {
+    switch(kind) {
+    case PictureKind::Autotiles:
+        return nullptr;
+    case PictureKind::Walls:
+        return new SystemSpriteWall;
+    default:
+        return nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
 QList<QStandardItem *> SuperListItem::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;

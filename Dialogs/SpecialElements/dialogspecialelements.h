@@ -21,6 +21,8 @@
 #define DIALOGSPECIALELEMENTS_H
 
 #include <QDialog>
+#include "picturekind.h"
+#include "superlistitem.h"
 
 // -------------------------------------------------------
 //
@@ -39,7 +41,7 @@ class DialogSpecialElements : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSpecialElements(QWidget *parent = 0);
+    explicit DialogSpecialElements(PictureKind kind, QWidget *parent = 0);
     ~DialogSpecialElements();
 
 private:

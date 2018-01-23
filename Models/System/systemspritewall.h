@@ -44,9 +44,6 @@ public:
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-
-protected:
-    int m_pictureID;
 };
 
 Q_DECLARE_METATYPE(SystemSpriteWall)

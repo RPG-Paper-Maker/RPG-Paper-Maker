@@ -89,6 +89,19 @@ QString SystemPicture::getLocalFolder(PictureKind kind){
 
 // -------------------------------------------------------
 
+QString SystemPicture::getPictureTitle(PictureKind kind) {
+    switch(kind) {
+    case PictureKind::Autotiles:
+        return "Autotiles";
+    case PictureKind::Walls:
+        return "Walls";
+    default:
+        return "";
+    }
+}
+
+// -------------------------------------------------------
+
 QString SystemPicture::getPath(PictureKind kind) const{
     if (id() == -1)
         return "";

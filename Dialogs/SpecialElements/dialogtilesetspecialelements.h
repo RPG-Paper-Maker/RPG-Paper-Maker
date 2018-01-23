@@ -42,6 +42,7 @@ class DialogTilesetSpecialElements : public QDialog
 
 public:
     explicit DialogTilesetSpecialElements(SystemTileset* tileset,
+                                          PictureKind kind,
                                           QWidget *parent = 0);
     virtual ~DialogTilesetSpecialElements();
     QStandardItemModel* model() const;
@@ -52,6 +53,7 @@ public:
 private:
     Ui::DialogTilesetSpecialElements *ui;
     SystemTileset* m_tileset;
+    PictureKind m_kind;
 
 public slots:
     void on_pushButtonMove_clicked();

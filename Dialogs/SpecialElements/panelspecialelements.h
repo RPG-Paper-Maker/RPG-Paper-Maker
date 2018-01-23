@@ -43,13 +43,14 @@ class PanelSpecialElements : public QWidget
 public:
     explicit PanelSpecialElements(QWidget *parent = 0);
     ~PanelSpecialElements();
-    void initialize();
-    void update(SystemSpriteWall* sys);
+    void initialize(QStandardItemModel* model, PictureKind kind);
+    void update(SystemSpecialElement *sys);
     int currentIndex() const;
     PanelSuperList* superList() const;
 
 private:
     Ui::PanelSpecialElements *ui;
+    QStandardItemModel* m_model;
 
 private slots:
     void on_pageSelected(QModelIndex index, QModelIndex);

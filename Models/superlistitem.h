@@ -25,6 +25,7 @@
 #include <QStandardItem>
 #include <QComboBox>
 #include "serializable.h"
+#include "picturekind.h"
 
 // -------------------------------------------------------
 //
@@ -63,6 +64,7 @@ public:
     static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
+    static SuperListItem* getnewInstance(PictureKind kind);
 
     virtual void read(const QJsonObject &json);
     void readId(const QJsonObject &json);
