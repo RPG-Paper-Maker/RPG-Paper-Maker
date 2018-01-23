@@ -21,10 +21,10 @@
 #include "wanok.h"
 #include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 2;
+const int ProjectUpdater::incompatibleVersionsCount = 3;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0"};
+    {"0.3.1", "0.4.0", "0.4.3"};
 
 // -------------------------------------------------------
 //
@@ -378,4 +378,14 @@ void ProjectUpdater::updateVersion_0_4_0() {
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setPortionRay(6);
     m_project->writeSystemDatas();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_0_4_3() {
+
+    // Adding default autotiles
+    m_project->readSpecialsDatas();
+    m_project->specialElementsDatas()->setDefaultAutotiles();
+    m_project->writeSpecialsDatas();
 }
