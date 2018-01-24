@@ -564,8 +564,26 @@
     	},
     	{
     		"v": "0.4.3",
+    		"add": [
+    			{
+    				"source": "https://raw.githubusercontent.com/RPG-Paper-Maker/Basic-Ressources/master/Content/Pictures/Textures2D/Autotiles/general.png",
+                    "target": "Content/BR/Content/Pictures/Textures2D/Autotiles/general.png"
+    			}
+    		],
+    		"remove": [
+    			{
+                    "target": "Content/BR/Content/Pictures/Textures2D/Autotiles/grass.png"
+    			},
+    			{
+                    "target": "Content/BR/Content/Pictures/Textures2D/Autotiles/ground.png"
+    			},
+    			{
+                    "target": "Content/BR/Content/Pictures/Textures2D/Autotiles/water.png"
+    			}
+    		],
     		"features": [
-    			"No More preview when the editor doesn't have focus"
+    			"No More preview when the editor doesn't have focus",
+    			"Autotiles in BR fusionned into one single file"
     		],
     		"bugs": [
     			"No more crash when canceling and re-opening a window for picture preview"
