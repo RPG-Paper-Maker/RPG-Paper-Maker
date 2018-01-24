@@ -114,7 +114,7 @@ void SpecialElementsDatas::setDefaultAutotiles() {
     SystemAutotile* sys;
 
     item = new QStandardItem;
-    sys = new SystemAutotile(1, "Grass", 1);
+    sys = new SystemAutotile(1, "General", 1);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(sys->toString());
@@ -177,7 +177,7 @@ void SpecialElementsDatas::writeSpecials(QJsonObject &json, PictureKind kind,
     {
         QJsonObject json;
         SuperListItem* sys =
-                ((SuperListItem*) m_modelSpriteWalls->item(i)->data()
+                ((SuperListItem*) this->model(kind)->item(i)->data()
                  .value<quintptr>());
         sys->write(json);
         jsonArray.append(json);

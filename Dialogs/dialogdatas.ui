@@ -1024,11 +1024,11 @@
                 </layout>
                </item>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1,1,1">
+                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1,1,1,1">
                  <item>
                   <widget class="QGroupBox" name="groupBox_4">
                    <property name="enabled">
-                    <bool>false</bool>
+                    <bool>true</bool>
                    </property>
                    <property name="title">
                     <string>Autotiles</string>
@@ -1054,6 +1054,45 @@
                       </item>
                       <item>
                        <widget class="QPushButton" name="pushButtonAutotiles">
+                        <property name="text">
+                         <string>Choose...</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_7">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="title">
+                    <string>Animated autotiles</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_15">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_11" stretch="1,0">
+                      <item>
+                       <widget class="PanelSuperList" name="panelSuperListTilesetAnimatedAutotiles" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>230</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>230</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonAnimatedAutotiles">
                         <property name="text">
                          <string>Choose...</string>
                         </property>

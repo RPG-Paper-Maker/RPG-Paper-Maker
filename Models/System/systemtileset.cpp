@@ -101,21 +101,15 @@ void SystemTileset::initializeModels() {
 
 // -------------------------------------------------------
 
-void SystemTileset::addSpecial(SystemSpecialElement* special,
-                               QStandardItemModel* model)
+void SystemTileset::addSpecial(SuperListItem* special, PictureKind kind)
 {
+    QStandardItemModel* model = this->model(kind);
     QStandardItem* item;
     item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(special)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(special->toString());
     model->appendRow(item);
-}
-
-// -------------------------------------------------------
-
-void SystemTileset::addSpriteWall(SystemSpriteWall* wall) {
-    addSpecial(wall, modelSpriteWalls());
 }
 
 // -------------------------------------------------------

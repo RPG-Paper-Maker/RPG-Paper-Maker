@@ -21,6 +21,7 @@
 #include "wanok.h"
 #include "dialogsystemname.h"
 #include "systemautotile.h"
+#include "systemspritewall.h"
 
 QString SuperListItem::beginningText = "<>";
 

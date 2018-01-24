@@ -288,6 +288,8 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
     // Initialize special elements
     ui->panelSuperListTilesetAutotiles->showButtonMax(false);
     ui->panelSuperListTilesetAutotiles->showEditName(false);
+    ui->panelSuperListTilesetAnimatedAutotiles->showButtonMax(false);
+    ui->panelSuperListTilesetAnimatedAutotiles->showEditName(false);
     ui->panelSuperListTilesetSpriteWalls->showButtonMax(false);
     ui->panelSuperListTilesetSpriteWalls->showEditName(false);
     ui->panelSuperListTileset3DObjects->showButtonMax(false);
@@ -324,6 +326,19 @@ void DialogDatas::updateTileset(SystemTileset *sysTileset){
     sysTileset->updateModelSpriteWalls();
     sysTileset->updateModel3DObjects();
     sysTileset->updateModelReliefs();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
+    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
+            ->getSelected()->data().value<quintptr>();
+
+    DialogTilesetSpecialElements dialog(tileset, kind);
+    if (dialog.exec() == QDialog::Accepted)
+        Wanok::get()->project()->writeSpecialsDatas();
+    else
+        Wanok::get()->project()->readSpecialsDatas();
 }
 
 // -------------------------------------------------------
@@ -439,15 +454,14 @@ void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
 
 // -------------------------------------------------------
 
-void DialogDatas::on_pushButtonSpriteWalls_clicked() {
-    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
-            ->getSelected()->data().value<quintptr>();
+void DialogDatas::on_pushButtonAutotiles_clicked() {
+    openSpecialElementsDialog(PictureKind::Autotiles);
+}
 
-    DialogTilesetSpecialElements dialog(tileset, PictureKind::Walls);
-    if (dialog.exec() == QDialog::Accepted)
-        Wanok::get()->project()->writeSpecialsDatas();
-    else
-        Wanok::get()->project()->readSpecialsDatas();
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonSpriteWalls_clicked() {
+    openSpecialElementsDialog(PictureKind::Walls);
 }
 
 // -------------------------------------------------------

@@ -21,8 +21,7 @@
 #define SYSTEMTILESET_H
 
 #include <QMetaType>
-#include "superlistitem.h"
-#include "systemspritewall.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -47,8 +46,7 @@ public:
     QStandardItemModel* modelReliefs() const;
     void setPictureID(int id);
     void initializeModels();
-    void addSpecial(SystemSpecialElement* special, QStandardItemModel* model);
-    void addSpriteWall(SystemSpriteWall* wall);
+    void addSpecial(SuperListItem *special, PictureKind kind);
     void updateModelAutotiles();
     void updateModelSpriteWalls();
     void updateModel3DObjects();

@@ -72,6 +72,7 @@ private:
     void updateClass(SystemClass *sysClass);
     void initializeTilesets(GameDatas *gameDatas);
     void updateTileset(SystemTileset *sysTileset);
+    void openSpecialElementsDialog(PictureKind kind);
 
 private slots:
     void on_comboBoxItemType_currentIndexChanged(int index);
@@ -84,6 +85,7 @@ private slots:
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
+    void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
     void on_tilesetPictureChanged(SystemPicture* picture);
     void on_pushButtonMonsterbattleRewards_clicked();

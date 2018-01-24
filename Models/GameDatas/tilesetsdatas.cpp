@@ -54,6 +54,8 @@ void TilesetsDatas::setDefault(){
 
     item = new QStandardItem;
     tileset = new SystemTileset(1, "Plains", 1);
+    tileset->addSpecial(new SuperListItem(1, "General"),
+                        PictureKind::Autotiles);
     item->setData(QVariant::fromValue(
                       reinterpret_cast<quintptr>(tileset)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
