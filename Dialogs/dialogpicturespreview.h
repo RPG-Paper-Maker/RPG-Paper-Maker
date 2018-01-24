@@ -56,6 +56,8 @@ protected:
 
 private:
     Ui::DialogPicturesPreview *ui;
+    PictureKind m_kind;
+    int m_initialPictureID;
 
 private slots:
     void on_accepted();

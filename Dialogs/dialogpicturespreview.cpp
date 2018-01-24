@@ -31,14 +31,16 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
                                              PictureKind kind,
                                              QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogPicturesPreview)
+    ui(new Ui::DialogPicturesPreview),
+    m_kind(kind),
+    m_initialPictureID(picture->id())
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
-    ui->widget->setPicture(picture);
+    ui->widget->changePicture(picture);
     ui->widget->showAvailableContent(false);
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
@@ -91,4 +93,10 @@ void DialogPicturesPreview::on_accepted(){
 
 void DialogPicturesPreview::on_rejected(){
     Wanok::get()->project()->readPicturesDatas();
+
+    // Update new picture adress
+    ui->widget->setPicture((SystemPicture*)
+                SuperListItem::getById(Wanok::get()->project()->picturesDatas()
+                                       ->model(m_kind)->invisibleRootItem(),
+                                       m_initialPictureID));
 }

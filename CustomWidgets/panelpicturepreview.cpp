@@ -71,6 +71,10 @@ PanelPicturePreview::~PanelPicturePreview()
 
 SystemPicture* PanelPicturePreview::picture() const { return m_picture; }
 
+void PanelPicturePreview::setPicture(SystemPicture* picture) {
+    m_picture = picture;
+}
+
 int PanelPicturePreview::indexX() const {
     return ui->widgetPreview->indexX();
 }
@@ -136,8 +140,8 @@ void PanelPicturePreview::setPictureKind(PictureKind kind){
 
 // -------------------------------------------------------
 
-void PanelPicturePreview::setPicture(SystemPicture* picture){
-    m_picture = picture;
+void PanelPicturePreview::changePicture(SystemPicture* picture){
+    setPicture(picture);
 
     int index = SuperListItem::getIndexById(ui->widgetPanelIDs->list()
                                             ->getModel()->invisibleRootItem(),

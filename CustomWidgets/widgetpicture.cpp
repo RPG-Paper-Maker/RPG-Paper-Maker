@@ -89,15 +89,10 @@ void WidgetPicture::openDialog(){
     DialogPicturesPreview dialog(m_picture, m_kind);
     SystemPicture* previousPicture = m_picture;
 
-    if (dialog.exec() == QDialog::Accepted){
-        Wanok::get()->project()->writePicturesDatas();
-        setPicture(dialog.picture());
-
-        if (previousPicture != m_picture)
-            emit pictureChanged(m_picture);
-    }
-    else
-        Wanok::get()->project()->readPicturesDatas();
+    int result = dialog.exec();
+    setPicture(dialog.picture());
+    if (result == QDialog::Accepted && previousPicture != m_picture)
+        emit pictureChanged(m_picture);
 }
 
 // -------------------------------------------------------

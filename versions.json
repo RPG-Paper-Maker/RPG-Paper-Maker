@@ -567,7 +567,9 @@
     		"features": [
     			"No More preview when the editor doesn't have focus"
     		],
-    		"bugs": []
+    		"bugs": [
+    			"No more crash when canceling and re-opening a window for picture preview"
+    		]
     	}
 	]
 }
