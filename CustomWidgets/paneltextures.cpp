@@ -76,50 +76,76 @@ void PanelTextures::updateTilesetImage(){
 
 // -------------------------------------------------------
 
-void PanelTextures::showTileset() {
+void PanelTextures::hideAll() {
+    ui->widgetTilesetSelector->hide();
+    ui->widgetWallPreview->hide();
     ui->comboBox->hide();
+    ui->labelInformation->hide();
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showTileset() {
+    hideAll();
     ui->widgetTilesetSelector->show();
 }
 
 // -------------------------------------------------------
 
-int PanelTextures::getID(MapEditorSubSelectionKind subSelection) const {
-    Map* map = Wanok::get()->project()->currentMap();
+int PanelTextures::getID() const {
+    SystemTileset* tileset = Wanok::get()->project()->currentMap()
+            ->mapProperties()->tileset();
+    int index = ui->comboBox->currentIndex();
 
-    if (map != nullptr) {
-        SystemTileset* tileset = map->mapProperties()->tileset();
-        int index = ui->comboBox->currentIndex();
-
-        switch(subSelection) {
-        case MapEditorSubSelectionKind::SpritesWall:
-            return SuperListItem::getIdByIndex(tileset->modelSpriteWalls(),
-                                               index);
-        default:
-            break;
-        }
-    }
-
-    return -1;
+    return SuperListItem::getIdByIndex(tileset->model(m_kind), index);
 }
 
 // -------------------------------------------------------
 
 void PanelTextures::showComboBox() {
-    ui->comboBox->show();
-    ui->widgetTilesetSelector->hide();
-    this->setGeometry(0, 0, 210, 27);
-    setFixedSize(210, 27);
+    updateComboBoxSize();
+
+    // Setting label text
+    if (ui->comboBox->count() == 0) {
+        ui->labelInformation->show();
+        ui->labelInformation->setText(createlabelText());
+        this->setGeometry(0, 0,
+                          this->parentWidget()->geometry().width(),
+                          this->parentWidget()->geometry().height());
+        setFixedSize(this->parentWidget()->geometry().width(),
+                     this->parentWidget()->geometry().height());
+        ui->comboBox->hide();
+    }
+    else {
+        ui->labelInformation->hide();
+        ui->comboBox->show();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::updateComboBoxSize() {
+    ui->comboBox->setGeometry(0, 0, this->parentWidget()->geometry().width(),
+                              ui->comboBox->geometry().height());
+    ui->comboBox->setFixedSize(this->parentWidget()->geometry().width(),
+                               ui->comboBox->geometry().height());
+
+    int width = qMax(ui->widgetTilesetSelector->width(),
+                     this->parentWidget()->geometry().width());
+    this->setGeometry(0, 0, width, ui->widgetTilesetSelector->height());
+    setFixedSize(width, ui->widgetTilesetSelector->height());
 }
 
 // -------------------------------------------------------
 
 void PanelTextures::showSpriteWalls(SystemTileset* tileset) {
-    showComboBox();
-
     tileset->updateModelSpriteWalls();
     QStandardItemModel* model = tileset->modelSpriteWalls();
     QStandardItemModel* modelComplete = Wanok::get()->project()
             ->specialElementsDatas()->modelSpriteWalls();
+
+    // Update picture kind
+    m_kind = PictureKind::Walls;
 
     // ComboBox filling
     ui->comboBox->clear();
@@ -133,4 +159,46 @@ void PanelTextures::showSpriteWalls(SystemTileset* tileset) {
         ui->comboBox->setItemIcon(i, QIcon(wall->picture()
                                            ->getPath(PictureKind::Walls)));
     }
+
+    // Ui display
+    hideAll();
+    showComboBox();
+    ui->widgetWallPreview->show();
+}
+
+// -------------------------------------------------------
+
+QString PanelTextures::createlabelText() {
+    QString kindText = "";
+    switch (m_kind) {
+    case PictureKind::Walls:
+        kindText = "walls";
+        break;
+    default:
+        break;
+    }
+
+    return "You don't have any " + kindText + " in this tileset. You can add "
+           "it in the tileset tab in the datas manager.";
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelTextures::onSplitterMoved(int, int) {
+    updateComboBoxSize();
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::on_comboBox_currentIndexChanged(int) {
+    int id = getID();
+    SystemSpecialElement* special =
+            (SystemSpecialElement*) SuperListItem::getById(
+                Wanok::get()->project()->specialElementsDatas()->model(m_kind)
+                ->invisibleRootItem(), id);
+    ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
 }

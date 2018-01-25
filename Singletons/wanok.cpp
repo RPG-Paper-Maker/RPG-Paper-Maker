@@ -446,3 +446,17 @@ bool Wanok::isPressingEnter(QKeyEvent* event) {
     return event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
            event->key() == Qt::Key_Return;
 }
+
+// -------------------------------------------------------
+
+PictureKind Wanok::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
+{
+    switch (subKind) {
+    case MapEditorSubSelectionKind::Autotiles:
+        return PictureKind::Autotiles;
+    case MapEditorSubSelectionKind::SpritesWall:
+        return PictureKind::Walls;
+    default:
+        return PictureKind::None;
+    }
+}

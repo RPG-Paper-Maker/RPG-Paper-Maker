@@ -137,6 +137,8 @@ public:
     static int generateMapId();
     static QString generateMapName(int id);
     static bool isPressingEnter(QKeyEvent* event);
+    static PictureKind subSelectionToPictureKind(
+            MapEditorSubSelectionKind subKind);
 
 protected:
     Project* p_project;

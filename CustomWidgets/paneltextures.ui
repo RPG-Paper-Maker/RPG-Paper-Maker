@@ -27,25 +27,28 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
      <item>
       <widget class="QComboBox" name="comboBox"/>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
-       <property name="spacing">
-        <number>0</number>
+      <widget class="WidgetShowPicture" name="widgetWallPreview" native="true"/>
+     </item>
+     <item>
+      <widget class="WidgetTilesetSelector" name="widgetTilesetSelector" native="true"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelInformation">
+       <property name="text">
+        <string>Text</string>
        </property>
-       <item>
-        <widget class="WidgetTilesetSelector" name="widgetTilesetSelector" native="true"/>
-       </item>
-       <item>
-        <widget class="QWidget" name="widget_2" native="true"/>
-       </item>
-      </layout>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="verticalSpacer">
@@ -69,6 +72,12 @@
    <class>WidgetTilesetSelector</class>
    <extends>QWidget</extends>
    <header>widgettilesetselector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetShowPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetshowpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

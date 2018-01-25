@@ -40,14 +40,22 @@ public:
     void setTilesetImage(QString path);
     void setTilesetImageNone();
     void showTileset();
-    int getID(MapEditorSubSelectionKind subSelection) const;
+    int getID() const;
+    void hideAll();
     void showComboBox();
+    void updateComboBoxSize();
     void showSpriteWalls(SystemTileset* tileset);
+    QString createlabelText();
 
 private:
     Ui::PanelTextures *ui;
+    PictureKind m_kind;
 
     void updateTilesetImage();
+
+private slots:
+    void onSplitterMoved(int, int);
+    void on_comboBox_currentIndexChanged(int);
 };
 
 #endif // PANELTEXTURES_H

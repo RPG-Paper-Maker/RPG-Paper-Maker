@@ -180,7 +180,7 @@ void WidgetMapEditor::paintGL() {
             m_control.update(layerOn);
             if (m_menuBar != nullptr) {
                 QRect tileset = m_panelTextures->getTilesetTexture();
-                int specialID = m_panelTextures->getID(subKind);
+                int specialID = m_panelTextures->getID();
                 m_control.updateWallIndicator();
                 if (mousePosChanged && this->hasFocus()) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
@@ -432,7 +432,7 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
                 QRect tileset = m_panelTextures->getTilesetTexture();
                 MapEditorSubSelectionKind subSelection =
                         m_menuBar->subSelectionKind();
-                int specialID = m_panelTextures->getID(subSelection);
+                int specialID = m_panelTextures->getID();
                 bool layerOn = m_menuBar->layerOn();
                 m_control.addRemove(m_menuBar->selectionKind(),
                                     subSelection, m_menuBar->drawKind(),
@@ -461,7 +461,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                                                 messageError)))
             {
                 QRect tileset = m_panelTextures->getTilesetTexture();
-                int specialID = m_panelTextures->getID(subSelection);
+                int specialID = m_panelTextures->getID();
                 m_control.onMousePressed(selection, subSelection, drawKind,
                                          layerOn, tileset, specialID,
                                          event->pos(), button);
@@ -492,7 +492,7 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
         QRect tileset = m_panelTextures->getTilesetTexture();
         MapEditorSubSelectionKind subSelection =
                 m_menuBar->subSelectionKind();
-        int specialID = m_panelTextures->getID(subSelection);
+        int specialID = m_panelTextures->getID();
         m_control.onMouseReleased(m_menuBar->selectionKind(),
                                   subSelection, m_menuBar->drawKind(), tileset,
                                   specialID, event->pos(), button);

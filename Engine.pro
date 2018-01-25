@@ -234,7 +234,8 @@ HEADERS += \
     Dialogs/SpecialElements/dialogtilesetspecialelements.h \
     Dialogs/SpecialElements/dialogspecialelements.h \
     Dialogs/SpecialElements/panelspecialelements.h \
-    Models/System/systemautotile.h
+    Models/System/systemautotile.h \
+    CustomWidgets/widgetshowpicture.h
 
 SOURCES += \
     main.cpp \
@@ -417,7 +418,8 @@ SOURCES += \
     Dialogs/SpecialElements/dialogspecialelements.cpp \
     Dialogs/SpecialElements/dialogtilesetspecialelements.cpp \
     Dialogs/SpecialElements/panelspecialelements.cpp \
-    Models/System/systemautotile.cpp
+    Models/System/systemautotile.cpp \
+    CustomWidgets/widgetshowpicture.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
