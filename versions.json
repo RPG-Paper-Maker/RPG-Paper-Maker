@@ -583,7 +583,9 @@
     		],
     		"features": [
     			"No More preview when the editor doesn't have focus",
-    			"Autotiles in BR fusionned into one single file"
+    			"Autotiles in BR fusionned into one single file",
+    			"No walls in tileset: texture panel displays a warning message",
+    			"Walls selection is kept even after switching to tileset selection"
     		],
     		"bugs": [
     			"No more crash when canceling and re-opening a window for picture preview"

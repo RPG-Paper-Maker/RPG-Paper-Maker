@@ -44,18 +44,20 @@ public:
     void hideAll();
     void showComboBox();
     void updateComboBoxSize();
+    void updateLabelSize();
     void showSpriteWalls(SystemTileset* tileset);
     QString createlabelText();
 
 private:
     Ui::PanelTextures *ui;
     PictureKind m_kind;
+    int m_currentWallsID;
 
     void updateTilesetImage();
 
 private slots:
     void onSplitterMoved(int, int);
-    void on_comboBox_currentIndexChanged(int);
+    void on_comboBox_currentIndexChanged(int index);
 };
 
 #endif // PANELTEXTURES_H

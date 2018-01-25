@@ -30,7 +30,9 @@
 
 PanelTextures::PanelTextures(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelTextures)
+    ui(new Ui::PanelTextures),
+    m_kind(PictureKind::None),
+    m_currentWallsID(-1)
 {
     ui->setupUi(this);
 }
@@ -86,18 +88,25 @@ void PanelTextures::hideAll() {
 // -------------------------------------------------------
 
 void PanelTextures::showTileset() {
+    m_kind = PictureKind::None;
+
     hideAll();
     ui->widgetTilesetSelector->show();
+    updateTilesetImage();
 }
 
 // -------------------------------------------------------
 
 int PanelTextures::getID() const {
-    SystemTileset* tileset = Wanok::get()->project()->currentMap()
-            ->mapProperties()->tileset();
-    int index = ui->comboBox->currentIndex();
+    if (m_kind != PictureKind::None) {
+        SystemTileset* tileset = Wanok::get()->project()->currentMap()
+                ->mapProperties()->tileset();
+        int index = ui->comboBox->currentIndex();
 
-    return SuperListItem::getIdByIndex(tileset->model(m_kind), index);
+        return SuperListItem::getIdByIndex(tileset->model(m_kind), index);
+    }
+
+    return -1;
 }
 
 // -------------------------------------------------------
@@ -109,16 +118,19 @@ void PanelTextures::showComboBox() {
     if (ui->comboBox->count() == 0) {
         ui->labelInformation->show();
         ui->labelInformation->setText(createlabelText());
-        this->setGeometry(0, 0,
-                          this->parentWidget()->geometry().width(),
-                          this->parentWidget()->geometry().height());
-        setFixedSize(this->parentWidget()->geometry().width(),
-                     this->parentWidget()->geometry().height());
+        updateLabelSize();
         ui->comboBox->hide();
     }
     else {
         ui->labelInformation->hide();
         ui->comboBox->show();
+        switch (m_kind) {
+        case PictureKind::Walls:
+            ui->widgetWallPreview->show();
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -130,10 +142,27 @@ void PanelTextures::updateComboBoxSize() {
     ui->comboBox->setFixedSize(this->parentWidget()->geometry().width(),
                                ui->comboBox->geometry().height());
 
-    int width = qMax(ui->widgetTilesetSelector->width(),
+    int width = qMax(ui->widgetWallPreview->width(),
                      this->parentWidget()->geometry().width());
-    this->setGeometry(0, 0, width, ui->widgetTilesetSelector->height());
-    setFixedSize(width, ui->widgetTilesetSelector->height());
+    int height = ui->comboBox->geometry().height() + 6 +
+            ui->widgetWallPreview->height();
+    this->setGeometry(0, 0, width, height);
+    setFixedSize(width, height);
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::updateLabelSize() {
+    ui->labelInformation->setGeometry(0, 0,
+                                      this->parentWidget()->geometry().width(),
+                                      this->parentWidget()->geometry().height());
+    ui->labelInformation->setFixedSize(this->parentWidget()->geometry().width(),
+                               this->parentWidget()->geometry().height());
+    this->setGeometry(0, 0,
+                      this->parentWidget()->geometry().width(),
+                      this->parentWidget()->geometry().height());
+    setFixedSize(this->parentWidget()->geometry().width(),
+                 this->parentWidget()->geometry().height());
 }
 
 // -------------------------------------------------------
@@ -160,10 +189,15 @@ void PanelTextures::showSpriteWalls(SystemTileset* tileset) {
                                            ->getPath(PictureKind::Walls)));
     }
 
-    // Ui display
+    // Select current ID
+    int index = SuperListItem::getIndexById(modelComplete->invisibleRootItem(),
+                                            m_currentWallsID);
+    if (index > 0)
+        ui->comboBox->setCurrentIndex(index);
+
+    // UI display
     hideAll();
     showComboBox();
-    ui->widgetWallPreview->show();
 }
 
 // -------------------------------------------------------
@@ -189,13 +223,33 @@ QString PanelTextures::createlabelText() {
 // -------------------------------------------------------
 
 void PanelTextures::onSplitterMoved(int, int) {
-    updateComboBoxSize();
+    if (m_kind == PictureKind::None)
+        updateTilesetImage();
+    else {
+        if (ui->comboBox->count() == 0)
+            updateLabelSize();
+        else
+            updateComboBoxSize();
+    }
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::on_comboBox_currentIndexChanged(int) {
+void PanelTextures::on_comboBox_currentIndexChanged(int index) {
     int id = getID();
+
+    // Update index selection
+    if (ui->comboBox->count() > 1) {
+        switch (m_kind) {
+        case PictureKind::Walls:
+            m_currentWallsID = id;
+            break;
+        default:
+            break;
+        }
+    }
+
+    // Update picture preview
     SystemSpecialElement* special =
             (SystemSpecialElement*) SuperListItem::getById(
                 Wanok::get()->project()->specialElementsDatas()->model(m_kind)

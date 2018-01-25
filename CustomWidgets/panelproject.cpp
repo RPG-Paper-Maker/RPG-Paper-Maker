@@ -65,6 +65,8 @@ PanelProject::PanelProject(QWidget *parent, Project* p) :
             this, SLOT(on_menuBarPressed()));
     connect(ui->widgetMenuBar, SIGNAL(triggered(QAction*)),
             this, SLOT(on_menuBarPressed()));
+    connect(ui->splitter, SIGNAL(splitterMoved(int,int)), ui->panelTextures,
+            SLOT(onSplitterMoved(int,int)));
     connect(ui->splitter_2, SIGNAL(splitterMoved(int,int)), ui->panelTextures,
             SLOT(onSplitterMoved(int,int)));
 }
