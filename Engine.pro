@@ -30,6 +30,7 @@ INCLUDEPATH += \
     Controls \
     Controls/MapEditor \
     MapEditor \
+    MapEditor/Map \
     Singletons \
     Models \
     Models/GameDatas \
@@ -46,7 +47,7 @@ HEADERS += \
     Singletons/wanok.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
-    MapEditor/map.h \
+    MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
     Singletons/singleton.h \
     Models/project.h \
@@ -247,7 +248,7 @@ SOURCES += \
     Singletons/wanok.cpp \
     CustomWidgets/widgetmapeditor.cpp \
     CustomWidgets/panelproject.cpp \
-    MapEditor/map.cpp \
+    MapEditor/Map/map.cpp \
     Controls/controlmainwindow.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
@@ -421,7 +422,10 @@ SOURCES += \
     Dialogs/SpecialElements/panelspecialelements.cpp \
     Models/System/systemautotile.cpp \
     CustomWidgets/widgetshowpicture.cpp \
-    CustomWidgets/widgetautotilesselector.cpp
+    CustomWidgets/widgetautotilesselector.cpp \
+    MapEditor/Map/mapgl.cpp \
+    MapEditor/Map/maptextures.cpp \
+    MapEditor/Map/mapwritting.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
