@@ -156,23 +156,31 @@ void Map::loadAutotiles() {
     QPainter painter;
     painter.begin(&newImage);
     int offset = 0;
-
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+    TextureAutotile* textureAutotile = new TextureAutotile;
+    textureAutotile->setBegin(((SuperListItem*) model->item(0)->data()
+                               .value<qintptr>())->id(), 0);
+    int i = 0;
+    for (i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
         special = (SystemSpecialElement*) SuperListItem::getById(
                     modelSpecials->invisibleRootItem(), id);
-        loadPictureAutotile(painter, newImage, special->picture(), offset);
+        loadPictureAutotile(painter, textureAutotile, newImage,
+                            special->picture(), offset, id);
     }
 
     painter.end();
-    if (offset > 0)
-        m_texturesAutotiles.append(createTexture(newImage));
+    if (offset > 0) {
+        textureAutotile->setTexture(createTexture(newImage));
+        m_texturesAutotiles.append(textureAutotile);
+    }
 }
 
 // -------------------------------------------------------
 
-void Map::loadPictureAutotile(QPainter& painter, QImage& newImage,
-                              SystemPicture* picture, int& offset)
+void Map::loadPictureAutotile(QPainter& painter,
+                              TextureAutotile *textureAutotile,
+                              QImage& newImage, SystemPicture* picture,
+                              int& offset, int id)
 {
     QImage image(1, 1, QImage::Format_ARGB32);
     QString path = picture->getPath(PictureKind::Autotiles);
@@ -181,8 +189,10 @@ void Map::loadPictureAutotile(QPainter& painter, QImage& newImage,
         image.fill(QColor(0, 0, 0, 0));
     else {
         image.load(path);
-        if (!image.isNull())
-            editPictureAutotile(painter, newImage, image, offset);
+        if (!image.isNull()) {
+            editPictureAutotile(painter, textureAutotile, newImage, image,
+                                offset, id);
+        }
     }
 }
 
@@ -207,24 +217,33 @@ void Map::editPictureWall(QImage& image, QImage& refImage) {
 
 // -------------------------------------------------------
 
-void Map::editPictureAutotile(QPainter &painter, QImage& newImage,
-                              QImage& image, int &offset)
+void Map::editPictureAutotile(QPainter &painter,
+                              TextureAutotile* textureAutotile,
+                              QImage& newImage, QImage& image, int &offset,
+                              int id)
 {
     int width = (image.width() / 2) / m_squareSize;
     int height = (image.height() / 3) / m_squareSize;
     int size = width * height;
 
     for (int i = 0; i < size; i++) {
+        if (offset == 0 && textureAutotile == nullptr) {
+            textureAutotile = new TextureAutotile;
+            textureAutotile->setBegin(id, i);
+        }
         QPoint point(i % width, i / width);
         paintPictureAutotile(painter, image, offset, point);
+        textureAutotile->setEnd(id, i);
         offset++;
 
         if (offset == 6) {
             painter.end();
-            m_texturesAutotiles.append(createTexture(newImage));
+            textureAutotile->setTexture(createTexture(newImage));
+            m_texturesAutotiles.append(textureAutotile);
             newImage = QImage(64 * m_squareSize, Wanok::MAX_PIXEL_SIZE,
                               QImage::Format_ARGB32);
             painter.begin(&newImage);
+            textureAutotile = nullptr;
             offset = 0;
         }
     }

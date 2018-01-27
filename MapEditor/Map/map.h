@@ -20,13 +20,13 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <QOpenGLTexture>
 #include "mapportion.h"
 #include "mapobjects.h"
 #include "mapproperties.h"
 #include "systemcommonobject.h"
 #include "threadmapportionloader.h"
 #include "cursor.h"
+#include "textureautotile.h"
 
 // -------------------------------------------------------
 //
@@ -115,11 +115,13 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind, QImage &refImage);
     void loadAutotiles();
-    void loadPictureAutotile(QPainter& painter, QImage& newImage,
-                             SystemPicture* picture, int& offset);
+    void loadPictureAutotile(QPainter& painter,
+                             TextureAutotile* textureAutotile, QImage& newImage,
+                             SystemPicture* picture, int& offset, int id);
     void editPictureWall(QImage& image, QImage& refImage);
-    void editPictureAutotile(QPainter& painter, QImage& newImage, QImage& image,
-                             int& offset);
+    void editPictureAutotile(QPainter& painter,
+                             TextureAutotile* textureAutotile, QImage& newImage,
+                             QImage& image, int& offset, int id);
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
@@ -200,7 +202,7 @@ private:
     QOpenGLTexture* m_textureTileset;
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
     QHash<int, QOpenGLTexture*> m_texturesSpriteWalls;
-    QList<QOpenGLTexture*> m_texturesAutotiles;
+    QList<TextureAutotile*> m_texturesAutotiles;
     QOpenGLTexture* m_textureObjectSquare;
 };
 
