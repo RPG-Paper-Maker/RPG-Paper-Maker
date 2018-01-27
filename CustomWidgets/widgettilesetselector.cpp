@@ -44,8 +44,8 @@ WidgetTilesetSelector::~WidgetTilesetSelector()
 //
 // -------------------------------------------------------
 
-QRect WidgetTilesetSelector::currentTexture() const{
-    return m_selectionRectangle->getCoefRect();
+void WidgetTilesetSelector::currentTexture(QRect& rect) const{
+    m_selectionRectangle->getCoefRect(rect);
 }
 
 // -------------------------------------------------------
@@ -77,7 +77,8 @@ void WidgetTilesetSelector::updateImage(){
     setFixedSize(m_textureTileset.width(), m_textureTileset.height());
 
     // If cursor out of the new texture
-    QRect cursorRect = m_selectionRectangle->getCoefRect();
+    QRect cursorRect;
+    m_selectionRectangle->getCoefRect(cursorRect);
     QRect newTextureRect(0, 0,
                          m_textureTileset.width() / Wanok::BASIC_SQUARE_SIZE,
                          m_textureTileset.height() / Wanok::BASIC_SQUARE_SIZE);

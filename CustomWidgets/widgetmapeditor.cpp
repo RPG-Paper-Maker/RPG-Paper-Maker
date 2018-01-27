@@ -179,7 +179,8 @@ void WidgetMapEditor::paintGL() {
             m_control.updateMousePosition(point);
             m_control.update(layerOn);
             if (m_menuBar != nullptr) {
-                QRect tileset = m_panelTextures->getTilesetTexture();
+                QRect tileset;
+                m_panelTextures->getTilesetTexture(tileset);
                 int specialID = m_panelTextures->getID();
                 m_control.updateWallIndicator();
                 if (mousePosChanged && this->hasFocus()) {
@@ -429,7 +430,8 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
             if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton
                 && !m_control.isCtrlPressed())
             {
-                QRect tileset = m_panelTextures->getTilesetTexture();
+                QRect tileset;
+                m_panelTextures->getTilesetTexture(tileset);
                 MapEditorSubSelectionKind subSelection =
                         m_menuBar->subSelectionKind();
                 int specialID = m_panelTextures->getID();
@@ -460,7 +462,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                 && m_control.isPutLayerPossible(subSelection, drawKind, layerOn,
                                                 messageError)))
             {
-                QRect tileset = m_panelTextures->getTilesetTexture();
+                QRect tileset;
+                m_panelTextures->getTilesetTexture(tileset);
                 int specialID = m_panelTextures->getID();
                 m_control.onMousePressed(selection, subSelection, drawKind,
                                          layerOn, tileset, specialID,
@@ -489,7 +492,8 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
     this->setFocus();
     if (m_control.map() != nullptr && m_menuBar != nullptr){
         Qt::MouseButton button = event->button();
-        QRect tileset = m_panelTextures->getTilesetTexture();
+        QRect tileset;
+        m_panelTextures->getTilesetTexture(tileset);
         MapEditorSubSelectionKind subSelection =
                 m_menuBar->subSelectionKind();
         int specialID = m_panelTextures->getID();

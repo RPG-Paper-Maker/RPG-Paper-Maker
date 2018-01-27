@@ -19,6 +19,9 @@
 
 #include "systemautotile.h"
 
+int SystemAutotile::NUMBER_ROWS = 3;
+int SystemAutotile::NUMBER_COLUMNS = 2;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET

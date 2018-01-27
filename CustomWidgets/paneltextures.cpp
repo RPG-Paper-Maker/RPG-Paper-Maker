@@ -49,8 +49,8 @@ PanelTextures::~PanelTextures()
 //
 // -------------------------------------------------------
 
-QRect PanelTextures::getTilesetTexture() const{
-    return ui->widgetTilesetSelector->currentTexture();
+void PanelTextures::getTilesetTexture(QRect& rect) const{
+    ui->widgetTilesetSelector->currentTexture(rect);
 }
 
 // -------------------------------------------------------

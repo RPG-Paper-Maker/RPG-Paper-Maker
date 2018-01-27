@@ -37,6 +37,8 @@ public:
     SystemAutotile();
     SystemAutotile(int i, QString n, int pictureId);
     virtual ~SystemAutotile();
+    static int NUMBER_ROWS;
+    static int NUMBER_COLUMNS;
     virtual SystemPicture* picture() const;
 
     virtual SuperListItem* createCopy() const;

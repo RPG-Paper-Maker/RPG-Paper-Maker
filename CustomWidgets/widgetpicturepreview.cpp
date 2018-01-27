@@ -153,7 +153,8 @@ void WidgetPicturePreview::mousePressEvent(QMouseEvent *event){
         m_selectionRectangle->makeFirstSelection(event->pos().x(),
                                                  event->pos().y(),
                                                  1.0f);
-        QRect rect = m_selectionRectangle->getCoefRect();
+        QRect rect;
+        m_selectionRectangle->getCoefRect(rect);
         m_indexX = rect.x();
         m_indexY = rect.y();
         this->repaint();

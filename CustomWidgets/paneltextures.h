@@ -37,7 +37,7 @@ class PanelTextures : public QWidget
 public:
     explicit PanelTextures(QWidget *parent = 0);
     ~PanelTextures();
-    QRect getTilesetTexture() const;
+    void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);
     void setTilesetImageNone();
     void showTileset();

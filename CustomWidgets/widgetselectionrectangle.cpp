@@ -56,16 +56,16 @@ void WidgetSelectionRectangle::setSquareHeight(int s) { m_squareHeight = s; }
 //
 // -------------------------------------------------------
 
-QRect WidgetSelectionRectangle::getCoefRect() const{
+void WidgetSelectionRectangle::getCoefRect(QRect& rect) const{
     if (m_squareWidth != 0 && m_squareHeight != 0){
-        return QRect(m_realX / m_squareWidth,
-                     m_realY / m_squareHeight,
-                     m_rect.width() / m_squareWidth,
-                     m_rect.height() / m_squareHeight
-                     );
+        rect.setX(m_realX / m_squareWidth);
+        rect.setY(m_realY / m_squareHeight);
+        rect.setWidth(m_rect.width() / m_squareWidth);
+        rect.setHeight(m_rect.height() / m_squareHeight);
     }
-    else
-        return QRect(0, 0, 0, 0);
+    else {
+        rect.setX(0); rect.setY(0); rect.setWidth(0); rect.setHeight(0);
+    }
 }
 
 // -------------------------------------------------------

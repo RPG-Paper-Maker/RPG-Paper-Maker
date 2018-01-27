@@ -39,7 +39,7 @@ class WidgetTilesetSelector : public QWidget
 public:
     explicit WidgetTilesetSelector(QWidget *parent = 0);
     ~WidgetTilesetSelector();
-    QRect currentTexture() const;
+    void currentTexture(QRect &rect) const;
     void setImage(QString path);
     void setImageNone();
 

@@ -40,7 +40,7 @@ class WidgetSelectionRectangle  : public QWidget
         ~WidgetSelectionRectangle();
         void setSquareWidth(int s);
         void setSquareHeight(int s);
-        QRect getCoefRect() const;
+        void getCoefRect(QRect &rect) const;
         void setRectangle(int x, int y, int width, int height);
         void setRealPosition();
         void makeFirstSelection(int x, int y, float zoom);
