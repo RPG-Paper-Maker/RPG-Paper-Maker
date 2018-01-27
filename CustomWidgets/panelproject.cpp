@@ -129,6 +129,9 @@ void PanelProject::on_menuBarPressed() {
 
     // Update panel textures
     switch (ui->widgetMenuBar->subSelectionKind()) {
+    case MapEditorSubSelectionKind::Autotiles:
+        ui->panelTextures->showAutotiles(tileset);
+        break;
     case MapEditorSubSelectionKind::SpritesWall:
         ui->panelTextures->showSpriteWalls(tileset);
         break;

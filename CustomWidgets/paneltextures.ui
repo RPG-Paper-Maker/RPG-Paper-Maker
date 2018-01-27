@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1">
      <item>
       <widget class="QComboBox" name="comboBox"/>
      </item>
@@ -36,6 +36,9 @@
      </item>
      <item>
       <widget class="WidgetTilesetSelector" name="widgetTilesetSelector" native="true"/>
+     </item>
+     <item>
+      <widget class="WidgetAutotilesSelector" name="widgetAutotilesSelector" native="true"/>
      </item>
      <item>
       <widget class="QLabel" name="labelInformation">
@@ -87,6 +90,12 @@
    <class>WidgetShowPicture</class>
    <extends>QWidget</extends>
    <header>widgetshowpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetAutotilesSelector</class>
+   <extends>QWidget</extends>
+   <header>widgetautotilesselector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

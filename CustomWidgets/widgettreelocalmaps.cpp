@@ -289,6 +289,9 @@ void WidgetTreeLocalMaps::updateTileset(){
             MapProperties properties(path);
             SystemTileset* tileset = properties.tileset();
             switch (m_widgetMenuMapEditor->subSelectionKind()) {
+            case MapEditorSubSelectionKind::Autotiles:
+                m_panelTextures->showAutotiles(tileset);
+                break;
             case MapEditorSubSelectionKind::SpritesWall:
                 m_panelTextures->showSpriteWalls(tileset);
                 break;

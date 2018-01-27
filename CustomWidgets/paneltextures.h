@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include "systemtileset.h"
+#include "systemspecialelement.h"
 #include "widgettilesetselector.h"
 #include "mapeditorsubselectionkind.h"
 
@@ -41,23 +42,31 @@ public:
     void setTilesetImageNone();
     void showTileset();
     int getID() const;
+    QWidget *getSpecialWidget() const;
     void hideAll();
     void showComboBox();
+    void showWidgetSpecial();
     void updateComboBoxSize();
     void updateLabelSize();
-    void showSpriteWalls(SystemTileset* tileset);
     QString createlabelText();
+    void showAutotiles(SystemTileset* tileset);
+    void showSpriteWalls(SystemTileset* tileset);
+    void fillComboBox(SystemTileset *tileset, PictureKind kind);
 
 private:
     Ui::PanelTextures *ui;
     PictureKind m_kind;
+    int m_currentAutotilesID;
     int m_currentWallsID;
 
     void updateTilesetImage();
+    int getCurrentID() const;
+    void updateCurrentID(int id);
+    void updateImageSpecial(SystemSpecialElement *special);
 
 private slots:
     void onSplitterMoved(int, int);
-    void on_comboBox_currentIndexChanged(int index);
+    void on_comboBox_currentIndexChanged(int);
 };
 
 #endif // PANELTEXTURES_H

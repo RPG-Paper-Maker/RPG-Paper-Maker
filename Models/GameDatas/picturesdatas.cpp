@@ -85,7 +85,7 @@ void PicturesDatas::setDefaultIcons(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
-    names << "grass";
+    names << "general";
     setDefaultPictures(names, PictureKind::Autotiles);
 }
 

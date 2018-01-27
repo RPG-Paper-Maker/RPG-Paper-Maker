@@ -33,6 +33,7 @@
     <bool>false</bool>
    </property>
    <addaction name="actionFloors"/>
+   <addaction name="actionAutotile"/>
   </widget>
   <widget class="QMenu" name="menuEvents">
    <property name="title">
@@ -132,6 +133,15 @@
   <action name="actiondfsfffffffffffffffffffffffff">
    <property name="text">
     <string>dfsfffffffffffffffffffffffff</string>
+   </property>
+  </action>
+  <action name="actionAutotile">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/autotile.png</normaloff>:/icons/Ressources/autotile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Autotile</string>
    </property>
   </action>
   <addaction name="menuFloors"/>

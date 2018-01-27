@@ -76,6 +76,8 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() const {
 
     if (text == ui->actionFloors->text())
         return MapEditorSubSelectionKind::Floors;
+    else if (text == ui->actionAutotile->text())
+        return MapEditorSubSelectionKind::Autotiles;
     else if (text == ui->actionFace_Sprite->text())
         return MapEditorSubSelectionKind::SpritesFace;
     else if (text == ui->actionFix_Sprite->text())
