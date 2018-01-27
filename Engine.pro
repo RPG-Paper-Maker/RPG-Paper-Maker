@@ -237,7 +237,8 @@ HEADERS += \
     Dialogs/SpecialElements/panelspecialelements.h \
     Models/System/systemautotile.h \
     CustomWidgets/widgetshowpicture.h \
-    CustomWidgets/widgetautotilesselector.h
+    CustomWidgets/widgetautotilesselector.h \
+    MapEditor/autotiles.h
 
 SOURCES += \
     main.cpp \
@@ -425,7 +426,8 @@ SOURCES += \
     CustomWidgets/widgetautotilesselector.cpp \
     MapEditor/Map/mapgl.cpp \
     MapEditor/Map/maptextures.cpp \
-    MapEditor/Map/mapwritting.cpp
+    MapEditor/Map/mapwritting.cpp \
+    MapEditor/autotiles.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

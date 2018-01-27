@@ -113,10 +113,17 @@ public:
     void deleteCharactersTextures();
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
-    void loadPicture(SystemPicture* picture, PictureKind kind,
-                     QHash<int, QOpenGLTexture*>& textures, int id);
+    void loadPicture(SystemPicture* picture, PictureKind kind, QImage &refImage);
+    void loadAutotiles();
+    void loadPictureAutotile(QPainter& painter, QImage& newImage,
+                             SystemPicture* picture, int& offset);
     void editPictureWall(QImage& image, QImage& refImage);
+    void editPictureAutotile(QPainter& painter, QImage& newImage, QImage& image,
+                             int& offset);
+    void paintPictureAutotile(QPainter& painter,
+                              QImage& image, int& offset, QPoint &point);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
+    QOpenGLTexture* createTexture(QImage& image);
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k, bool force = false);
@@ -193,6 +200,7 @@ private:
     QOpenGLTexture* m_textureTileset;
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
     QHash<int, QOpenGLTexture*> m_texturesSpriteWalls;
+    QList<QOpenGLTexture*> m_texturesAutotiles;
     QOpenGLTexture* m_textureObjectSquare;
 };
 

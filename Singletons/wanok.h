@@ -108,6 +108,7 @@ public:
     // INTEGERS
     const static int portionSize;
     const static int BASIC_SQUARE_SIZE;
+    const static int MAX_PIXEL_SIZE;
 
     // METHODS
     static QString pathCombine(const QString& p1, const QString& p2);

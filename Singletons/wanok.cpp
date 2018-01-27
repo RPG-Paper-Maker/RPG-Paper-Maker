@@ -96,6 +96,7 @@ const QString Wanok::dirDesktop = "desktop";
 
 const int Wanok::portionSize = 16;
 const int Wanok::BASIC_SQUARE_SIZE = 32;
+const int Wanok::MAX_PIXEL_SIZE = 4096;
 
 bool Wanok::isInConfig = false;
 

@@ -20,6 +20,7 @@
 #include "map.h"
 #include "systemspecialelement.h"
 #include "wanok.h"
+#include "autotiles.h"
 
 // -------------------------------------------------------
 
@@ -27,23 +28,18 @@ void Map::loadTextures(){
     deleteTextures();
 
     // Tileset
-    m_textureTileset = new QOpenGLTexture(
-                QImage(m_mapProperties->tileset()->picture()
-                       ->getPath(PictureKind::Tilesets)));
-    m_textureTileset->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-    m_textureTileset->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+    QImage imageTileset(m_mapProperties->tileset()->picture()
+                        ->getPath(PictureKind::Tilesets));
+    m_textureTileset = createTexture(imageTileset);
 
     // Characters && walls
     loadCharactersTextures();
     loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
+    loadAutotiles();
 
     // Object square
-    m_textureObjectSquare = new QOpenGLTexture(
-                QImage(":/textures/Ressources/object_square.png"));
-    m_textureObjectSquare->setMinificationFilter(
-                QOpenGLTexture::Filter::Nearest);
-    m_textureObjectSquare->setMagnificationFilter(
-                QOpenGLTexture::Filter::Nearest);
+    QImage imageObjectSquare(":/textures/Ressources/object_square.png");
+    m_textureObjectSquare = createTexture(imageObjectSquare);
 }
 
 // -------------------------------------------------------
@@ -57,6 +53,10 @@ void Map::deleteTextures(){
     {
         delete *i;
     }
+    m_texturesSpriteWalls.clear();
+    for (int i = 0; i < m_texturesAutotiles.size(); i++)
+        delete m_texturesAutotiles[i];
+    m_texturesAutotiles.clear();
     if (m_textureObjectSquare != nullptr)
         delete m_textureObjectSquare;
 }
@@ -69,6 +69,7 @@ void Map::deleteCharactersTextures() {
     {
         delete *i;
     }
+    m_texturesCharacters.clear();
 }
 
 // -------------------------------------------------------
@@ -81,7 +82,9 @@ void Map::loadPictures(PictureKind kind,
             ->model(kind);
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
         picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
-        loadPicture(picture, kind, textures, picture->id());
+        QImage image;
+        loadPicture(picture, kind, image);
+        textures[picture->id()] = createTexture(image);
     }
 }
 
@@ -89,7 +92,6 @@ void Map::loadPictures(PictureKind kind,
 
 void Map::loadCharactersTextures()
 {
-    m_texturesCharacters.clear();
     loadPictures(PictureKind::Characters, m_texturesCharacters);
 }
 
@@ -108,7 +110,9 @@ void Map::loadSpecialPictures(PictureKind kind,
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
         special = (SystemSpecialElement*) SuperListItem::getById(
                     modelSpecials->invisibleRootItem(), id);
-        loadPicture(special->picture(), kind, textures, special->id());
+        QImage image;
+        loadPicture(special->picture(), kind, image);
+        textures[special->id()] = createTexture(image);
     }
     addEmptyPicture(textures);
 }
@@ -116,25 +120,70 @@ void Map::loadSpecialPictures(PictureKind kind,
 // -------------------------------------------------------
 
 void Map::loadPicture(SystemPicture* picture, PictureKind kind,
-                      QHash<int, QOpenGLTexture*>& textures, int id)
+                      QImage& refImage)
 {
-    QOpenGLTexture* texture;
     QImage image(1, 1, QImage::Format_ARGB32);
-    QImage& refImage = image;
+    refImage = image;
     QString path = picture->getPath(kind);
 
     if (path.isEmpty())
         image.fill(QColor(0, 0, 0, 0));
     else {
         image.load(path);
-        if (!image.isNull() && kind == PictureKind::Walls)
-            editPictureWall(image, refImage);
+        if (!image.isNull()) {
+            switch (kind) {
+            case PictureKind::Walls:
+                editPictureWall(image, refImage); break;
+            default:
+                refImage = image;
+                break;
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::loadAutotiles() {
+    SystemSpecialElement* special;
+    SystemTileset* tileset = m_mapProperties->tileset();
+    QStandardItemModel* model = tileset->model(PictureKind::Autotiles);
+    QStandardItemModel* modelSpecials = Wanok::get()->project()
+            ->specialElementsDatas()->model(PictureKind::Autotiles);
+    int id;
+    QImage newImage(64 * m_squareSize, Wanok::MAX_PIXEL_SIZE,
+                    QImage::Format_ARGB32);
+    QPainter painter;
+    painter.begin(&newImage);
+    int offset = 0;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
+        special = (SystemSpecialElement*) SuperListItem::getById(
+                    modelSpecials->invisibleRootItem(), id);
+        loadPictureAutotile(painter, newImage, special->picture(), offset);
     }
 
-    texture = new QOpenGLTexture(refImage);
-    texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
-    texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
-    textures[id] = texture;
+    painter.end();
+    if (offset > 0)
+        m_texturesAutotiles.append(createTexture(newImage));
+}
+
+// -------------------------------------------------------
+
+void Map::loadPictureAutotile(QPainter& painter, QImage& newImage,
+                              SystemPicture* picture, int& offset)
+{
+    QImage image(1, 1, QImage::Format_ARGB32);
+    QString path = picture->getPath(PictureKind::Autotiles);
+
+    if (path.isEmpty())
+        image.fill(QColor(0, 0, 0, 0));
+    else {
+        image.load(path);
+        if (!image.isNull())
+            editPictureAutotile(painter, newImage, image, offset);
+    }
 }
 
 // -------------------------------------------------------
@@ -158,8 +207,94 @@ void Map::editPictureWall(QImage& image, QImage& refImage) {
 
 // -------------------------------------------------------
 
+void Map::editPictureAutotile(QPainter &painter, QImage& newImage,
+                              QImage& image, int &offset)
+{
+    int width = (image.width() / 2) / m_squareSize;
+    int height = (image.height() / 3) / m_squareSize;
+    int size = width * height;
+
+    for (int i = 0; i < size; i++) {
+        QPoint point(i % width, i / width);
+        paintPictureAutotile(painter, image, offset, point);
+        offset++;
+
+        if (offset == 6) {
+            painter.end();
+            m_texturesAutotiles.append(createTexture(newImage));
+            newImage = QImage(64 * m_squareSize, Wanok::MAX_PIXEL_SIZE,
+                              QImage::Format_ARGB32);
+            painter.begin(&newImage);
+            offset = 0;
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Map::paintPictureAutotile(QPainter& painter, QImage& image, int& offset,
+                               QPoint& point)
+{
+    int count, lA, lB, lC, lD, row = -1;
+    int offsetX = point.x() * 2 * m_squareSize;
+    int offsetY = point.y() * 3 * m_squareSize;
+    float sDiv = m_squareSize / 2.0f;
+    int y = offset * Autotiles::COUNT_LIST * 2;
+
+    for (int a = 0; a < Autotiles::COUNT_LIST; a++) {
+        lA = Autotiles::autotileBorder[Autotiles::listA[a]];
+        count = 0;
+        row++;
+        for (int b = 0; b < Autotiles::COUNT_LIST; b++) {
+            lB = Autotiles::autotileBorder[Autotiles::listB[b]];
+            for (int c = 0; c < Autotiles::COUNT_LIST; c++) {
+                lC = Autotiles::autotileBorder[Autotiles::listC[c]];
+                for (int d = 0; d < Autotiles::COUNT_LIST; d++) {
+                    lD = Autotiles::autotileBorder[Autotiles::listD[d]];
+
+                    // Draw
+                    painter.drawImage(count * m_squareSize,
+                                      (row + y) * m_squareSize, image,
+                                      (lA % 4 * sDiv) + offsetX,
+                                      (lA / 4 * sDiv) + offsetY, sDiv, sDiv);
+                    painter.drawImage(count * m_squareSize + sDiv,
+                                      (row + y) * m_squareSize, image,
+                                      (lB % 4 * sDiv) + offsetX,
+                                      (lB / 4 * sDiv) + offsetY, sDiv, sDiv);
+                    painter.drawImage(count * m_squareSize,
+                                      (row + y) * m_squareSize + sDiv, image,
+                                      (lC % 4 * sDiv) + offsetX,
+                                      (lC / 4 * sDiv) + offsetY, sDiv, sDiv);
+                    painter.drawImage(count * m_squareSize + sDiv,
+                                      (row + y) * m_squareSize + sDiv, image,
+                                      (lD % 4 * sDiv) + offsetX,
+                                      (lD / 4 * sDiv) + offsetY, sDiv, sDiv);
+
+                    count++;
+                    if (count == 64) {
+                        count = 0;
+                        row++;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void Map::addEmptyPicture(QHash<int, QOpenGLTexture*>& textures) {
     QImage image(1, 1, QImage::Format_ARGB32);
     image.fill(QColor(0, 0, 0, 0));
     textures[-1] = new QOpenGLTexture(image);
+}
+
+// -------------------------------------------------------
+
+QOpenGLTexture* Map::createTexture(QImage& image) {
+    QOpenGLTexture* texture = new QOpenGLTexture(image);
+    texture->setMinificationFilter(QOpenGLTexture::Filter::Nearest);
+    texture->setMagnificationFilter(QOpenGLTexture::Filter::Nearest);
+
+    return texture;
 }
