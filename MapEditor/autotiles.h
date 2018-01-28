@@ -23,6 +23,7 @@
 #include <QOpenGLFunctions>
 #include "autotile.h"
 #include "mapproperties.h"
+#include "textureautotile.h"
 
 // -------------------------------------------------------
 //
@@ -46,6 +47,7 @@ public:
     static QString listD[];
 
     bool isEmpty() const;
+    void clearAutotilesGL();
     AutotileDatas* getAutotile(Position& p) const;
     void setAutotile(Position& p, AutotileDatas* autotile);
     AutotileDatas* removeAutotile(Position& p);
@@ -65,12 +67,22 @@ public:
     void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
                            QList<MapEditorSubSelectionKind> &previousType,
                            QList<Position> &positions);
+    void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+                            QHash<Position, MapElement*>& previewSquares,
+                            int squareSize);
+    void initializeGL(QOpenGLShaderProgram* program);
+    void updateGL();
+    void paintGL(int textureID);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     QHash<Position, AutotileDatas*> m_all;
+    QList<Autotile*> m_autotilesGL;
+
+    // OpenGL
+    QOpenGLShaderProgram* m_program;
 };
 
 #endif // AUTOTILES_H

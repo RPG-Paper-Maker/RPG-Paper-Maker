@@ -314,11 +314,12 @@ int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind,
 
 
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
+                                    QList<TextureAutotile*>& autotiles,
                                     QHash<int, QOpenGLTexture *> &characters,
                                     QHash<int, QOpenGLTexture *> &walls)
 {
-    m_lands->initializeVertices(m_previewSquares, squareSize,
-                                 tileset->width(), tileset->height());
+    m_lands->initializeVertices(autotiles, m_previewSquares, squareSize,
+                                tileset->width(), tileset->height());
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
                                   squareSize, tileset->width(),
                                   tileset->height());
@@ -371,6 +372,12 @@ void MapPortion::updateGLObjects() {
 
 void MapPortion::paintFloors(){
     m_lands->paintGL();
+}
+
+// -------------------------------------------------------
+
+void MapPortion::paintAutotiles(int textureID) {
+    m_lands->paintAutotilesGL(textureID);
 }
 
 // -------------------------------------------------------

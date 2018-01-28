@@ -37,16 +37,18 @@ public:
     ~TextureAutotile();
     QOpenGLTexture* texture();
     void setTexture(QOpenGLTexture* texture);
-    void setBegin(int id, int offset);
-    void setEnd(int id, int offset);
-    int isInTexture(int id, int offset);
+    void setBegin(int id, QPoint& point);
+    void setEnd(int id, QPoint& point);
+    static bool isSup(QRect* rect, QPoint& point);
+    static bool isInf(QRect* rect, QPoint& point);
+    int isInTexture(int id, QRect* rect);
 
 protected:
     QOpenGLTexture* m_texture;
     int m_beginID;
-    int m_beginOffset;
+    QPoint m_beginPoint;
     int m_endID;
-    int m_endOffset;
+    QPoint m_endPoint;
 };
 
 #endif // TEXTUREAUTOTILE_H

@@ -29,6 +29,10 @@ class Lands : public Serializable
 public:
     Lands();
     virtual ~Lands();
+    static QVector3D verticesQuad[];
+    static GLuint indexesQuad[];
+    static int nbVerticesQuad;
+    static int nbIndexesQuad;
 
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
@@ -44,11 +48,13 @@ public:
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind);
 
-    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
+    void initializeVertices(QList<TextureAutotile *> &texturesAutotiles,
+                            QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL();
+    void paintAutotilesGL(int textureID);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

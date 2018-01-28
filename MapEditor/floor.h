@@ -60,23 +60,4 @@ public:
     virtual void write(QJsonObject & json) const;
 };
 
-// -------------------------------------------------------
-//
-//  CLASS Floor
-//
-//  A square floor.
-//
-// -------------------------------------------------------
-
-class Floor : protected QOpenGLFunctions
-{
-public:
-    Floor();
-    virtual ~Floor();
-    static QVector3D verticesQuad[];
-    static GLuint indexesQuad[];
-    static int nbVerticesQuad;
-    static int nbIndexesQuad;
-};
-
 #endif // FLOOR_H

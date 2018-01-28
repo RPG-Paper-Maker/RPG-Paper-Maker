@@ -20,6 +20,7 @@
 #include "land.h"
 #include "qbox3d.h"
 #include "floor.h"
+#include "lands.h"
 
 const QString LandDatas::JSON_UP = "up";
 const QString LandDatas::JSON_TEXTURE = "t";
@@ -79,8 +80,8 @@ float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
     QVector3D pos, size;
     getPosSize(pos, size, squareSize, position);
 
-    QVector3D vecA = Floor::verticesQuad[0] * size + pos,
-              vecC = Floor::verticesQuad[2] * size + pos;
+    QVector3D vecA = Lands::verticesQuad[0] * size + pos,
+              vecC = Lands::verticesQuad[2] * size + pos;
     QBox3D box(vecA, vecC);
 
     return box.intersection(ray);

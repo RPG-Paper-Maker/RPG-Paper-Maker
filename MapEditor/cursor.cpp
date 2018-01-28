@@ -214,19 +214,19 @@ void Cursor::initializeVertices(){
 
     // Vertices
     m_vertices.clear();
-    m_vertices.append(Vertex(Floor::verticesQuad[0] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[0] * m_squareSize + pos,
                       QVector2D(0.0f, 0.0f)));
-    m_vertices.append(Vertex(Floor::verticesQuad[1] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[1] * m_squareSize + pos,
                       QVector2D(w, 0.0f)));
-    m_vertices.append(Vertex(Floor::verticesQuad[2] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[2] * m_squareSize + pos,
                       QVector2D(w, h)));
-    m_vertices.append(Vertex(Floor::verticesQuad[3] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[3] * m_squareSize + pos,
                       QVector2D(0.0f, h)));
 
     // indexes
     m_indexes.clear();
-    for (int i = 0; i < Floor::nbIndexesQuad; i++)
-        m_indexes.append(Floor::indexesQuad[i]);
+    for (int i = 0; i < Lands::nbIndexesQuad; i++)
+        m_indexes.append(Lands::indexesQuad[i]);
 }
 
 // -------------------------------------------------------
@@ -246,13 +246,13 @@ void Cursor::initializeGL(){
     m_vertexBuffer.create();
     m_vertexBuffer.bind();
     m_vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_vertexBuffer.allocate(m_vertices.constData(), Floor::nbVerticesQuad *
+    m_vertexBuffer.allocate(m_vertices.constData(), Lands::nbVerticesQuad *
                             sizeof(Vertex));
 
     m_indexBuffer.create();
     m_indexBuffer.bind();
     m_indexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    m_indexBuffer.allocate(m_indexes.constData(), Floor::nbIndexesQuad *
+    m_indexBuffer.allocate(m_indexes.constData(), Lands::nbIndexesQuad *
                            sizeof(GLuint));
 
     // Create Vertex Array Object
@@ -295,7 +295,7 @@ void Cursor::paintGL(QMatrix4x4 &modelviewProjection){
       m_vao.bind();
       m_texture->bind();
       m_indexBuffer.bind();
-      glDrawElements(GL_TRIANGLES, Floor::nbIndexesQuad, GL_UNSIGNED_INT, 0);
+      glDrawElements(GL_TRIANGLES, Lands::nbIndexesQuad, GL_UNSIGNED_INT, 0);
       m_indexBuffer.release();
       m_vao.release();
     }

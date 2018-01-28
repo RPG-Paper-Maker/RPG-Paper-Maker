@@ -185,17 +185,31 @@ QOpenGLShaderProgram* Map::createProgram(QString shaderName) {
 // -------------------------------------------------------
 
 void Map::paintFloors(QMatrix4x4& modelviewProjection) {
+    MapPortion* mapPortion;
+    int totalSize = getMapPortionTotalSize();
 
+    // Floors
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
     m_textureTileset->bind();
-
-    int totalSize = getMapPortionTotalSize();
     for (int i = 0; i < totalSize; i++) {
-        MapPortion* mapPortion = this->mapPortionBrut(i);
+        mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintFloors();
+    }
+    m_textureTileset->release();
+
+    // Autotiles
+    for (int j = 0; j < m_texturesAutotiles.size(); j++) {
+        QOpenGLTexture* texture = m_texturesAutotiles[j]->texture();
+        texture->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                mapPortion->paintAutotiles(j);
+        }
+        texture->release();
     }
 
     m_programStatic->release();

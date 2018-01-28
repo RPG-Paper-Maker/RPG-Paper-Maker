@@ -100,6 +100,7 @@ public:
                        MapEditorSubSelectionKind subKind) const;
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
+                            QList<TextureAutotile *> &autotiles,
                             QHash<int, QOpenGLTexture*>& characters,
                             QHash<int, QOpenGLTexture *> &walls);
     void initializeVerticesObjects(int squareSize,
@@ -111,6 +112,7 @@ public:
     void updateGL();
     void updateGLObjects();
     void paintFloors();
+    void paintAutotiles(int textureID);
     void paintSprites();
     void paintSpritesWalls(int textureID);
     void paintFaceSprites();

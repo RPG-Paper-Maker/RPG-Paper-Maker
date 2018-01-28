@@ -680,7 +680,8 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
 // -------------------------------------------------------
 
 void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
-                           QOpenGLShaderProgram *programFace){
+                           QOpenGLShaderProgram *programFace)
+{
     if (m_programStatic == nullptr){
         initializeOpenGLFunctions();
 
@@ -696,7 +697,7 @@ void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
 
 // -------------------------------------------------------
 
-void Sprites::updateGL(){
+void Sprites::updateGL() {
     Map::updateGLStatic(m_vertexBufferStatic, m_indexBufferStatic,
                         m_verticesStatic, m_indexesStatic, m_vaoStatic,
                         m_programStatic);

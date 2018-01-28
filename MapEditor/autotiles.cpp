@@ -67,7 +67,11 @@ Autotiles::Autotiles()
 
 Autotiles::~Autotiles()
 {
+    QHash<Position, AutotileDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++)
+        delete i.value();
 
+    clearAutotilesGL();
 }
 
 // -------------------------------------------------------
@@ -78,6 +82,14 @@ Autotiles::~Autotiles()
 
 bool Autotiles::isEmpty() const {
     return true;
+}
+
+// -------------------------------------------------------
+
+void Autotiles::clearAutotilesGL() {
+    for (int i = 0; i < m_autotilesGL.size(); i++)
+        delete m_autotilesGL.at(i);
+    m_autotilesGL.clear();
 }
 
 // -------------------------------------------------------
@@ -238,6 +250,74 @@ void Autotiles::updateRemoveLayer(
         p.setLayer(++i);
         autotile = getAutotile(p);
     }
+}
+
+// -------------------------------------------------------
+//
+//  GL
+//
+// -------------------------------------------------------
+
+void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+                                   QHash<Position, MapElement*>& previewSquares,
+                                   int squareSize)
+{
+    clearAutotilesGL();
+    for (int j = 0; j < texturesAutotiles.size(); j++)
+        m_autotilesGL.append(new Autotile);
+
+    // Create temp hash for preview
+    QHash<Position, AutotileDatas*> autotilesWithPreview(m_all);
+    QHash<Position, MapElement*>::iterator it;
+    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
+        MapElement* element = it.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+            autotilesWithPreview[it.key()] = (AutotileDatas*) element;
+    }
+
+    // Initialize vertices for walls
+    QHash<Position, AutotileDatas*>::iterator i;
+    for (i = autotilesWithPreview.begin(); i != autotilesWithPreview.end(); i++)
+    {
+        Position position = i.key();
+        AutotileDatas* autotile = i.value();
+        QOpenGLTexture* texture = nullptr;
+        int id = 0;
+        for (; id < texturesAutotiles.size(); id++) {
+            TextureAutotile* textureAutotile = texturesAutotiles[id];
+            if (textureAutotile->isInTexture(autotile->autotileID(),
+                                             autotile->textureRect()))
+            {
+                texture = textureAutotile->texture();
+                break;
+            }
+        }
+        if (texture != nullptr) {
+            Autotile* autotileGL = m_autotilesGL.at(id);
+            autotileGL->initializeVertices(position, autotile, squareSize,
+                                           texture->width(), texture->height());
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Autotiles::initializeGL(QOpenGLShaderProgram *program){
+    for (int i = 0; i < m_autotilesGL.size(); i++)
+        m_autotilesGL.at(i)->initializeGL(program);
+}
+
+// -------------------------------------------------------
+
+void Autotiles::updateGL(){
+    for (int i = 0; i < m_autotilesGL.size(); i++)
+        m_autotilesGL.at(i)->updateGL();
+}
+
+// -------------------------------------------------------
+
+void Autotiles::paintGL(int textureID){
+    m_autotilesGL.at(textureID)->paintGL();
 }
 
 // -------------------------------------------------------

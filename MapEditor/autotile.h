@@ -40,12 +40,21 @@ public:
     AutotileDatas();
     AutotileDatas(int autotileID, QRect *texture, bool up = true);
     int autotileID() const;
+    static const QString JSON_ID;
 
     bool operator==(const AutotileDatas& other) const;
     bool operator!=(const AutotileDatas& other) const;
 
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
+
+    virtual void initializeVertices(int squareSize, int width, int height,
+                                    QVector<Vertex>& vertices,
+                                    QVector<GLuint>& indexes,
+                                    Position& position, int& count);
+
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject & json) const;
 
 protected:
     int m_autotileID;
@@ -59,10 +68,27 @@ protected:
 //
 // -------------------------------------------------------
 
-class Autotile
+class Autotile : protected QOpenGLFunctions
 {
 public:
     Autotile();
+    virtual ~Autotile();
+    void initializeVertices(Position& position, AutotileDatas* autotile,
+                            int squareSize, int width, int height);
+    void initializeGL(QOpenGLShaderProgram* program);
+    void updateGL();
+    void paintGL();
+
+protected:
+    int m_count;
+
+    // OpenGL
+    QOpenGLBuffer m_vertexBuffer;
+    QOpenGLBuffer m_indexBuffer;
+    QVector<Vertex> m_vertices;
+    QVector<GLuint> m_indexes;
+    QOpenGLVertexArrayObject m_vao;
+    QOpenGLShaderProgram* m_program;
 };
 
 #endif // AUTOTILE_H

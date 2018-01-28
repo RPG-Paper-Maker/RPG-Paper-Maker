@@ -215,17 +215,17 @@ void MapObjects::initializeVertices(int squareSize,
                       position.z() * squareSize);
         QVector3D size(squareSize, 0.0, squareSize);
         float x = 0.0, y = 0.0, w = 1.0, h = 1.0;
-        m_vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+        m_vertices.append(Vertex(Lands::verticesQuad[0] * size + pos,
                           QVector2D(x, y)));
-        m_vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+        m_vertices.append(Vertex(Lands::verticesQuad[1] * size + pos,
                           QVector2D(x + w, y)));
-        m_vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+        m_vertices.append(Vertex(Lands::verticesQuad[2] * size + pos,
                           QVector2D(x + w, y + h)));
-        m_vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+        m_vertices.append(Vertex(Lands::verticesQuad[3] * size + pos,
                           QVector2D(x, y + h)));
-        int offset = count * Floor::nbVerticesQuad;
-        for (int i = 0; i < Floor::nbIndexesQuad; i++)
-            m_indexes.append(Floor::indexesQuad[i] + offset);
+        int offset = count * Lands::nbVerticesQuad;
+        for (int i = 0; i < Lands::nbIndexesQuad; i++)
+            m_indexes.append(Lands::indexesQuad[i] + offset);
 
         count++;
     }

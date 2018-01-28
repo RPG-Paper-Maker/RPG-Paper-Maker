@@ -43,14 +43,14 @@ void TextureAutotile::setTexture(QOpenGLTexture* texture) {
     m_texture = texture;
 }
 
-void TextureAutotile::setBegin(int id, int offset) {
+void TextureAutotile::setBegin(int id, QPoint& point) {
     m_beginID = id;
-    m_beginOffset = offset;
+    m_beginPoint = point;
 }
 
-void TextureAutotile::setEnd(int id, int offset) {
+void TextureAutotile::setEnd(int id, QPoint& point) {
     m_endID = id;
-    m_endOffset = offset;
+    m_endPoint = point;
 }
 
 // -------------------------------------------------------
@@ -59,18 +59,40 @@ void TextureAutotile::setEnd(int id, int offset) {
 //
 // -------------------------------------------------------
 
-int TextureAutotile::isInTexture(int id, int offset) {
+bool TextureAutotile::isSup(QRect* rect, QPoint& point) {
+    if (rect->y() > point.y())
+        return true;
+    else if (rect->y() == point.y())
+        return rect->x() >= point.x();
+
+    return false;
+}
+
+// -------------------------------------------------------
+
+bool TextureAutotile::isInf(QRect* rect, QPoint& point) {
+    if (rect->y() < point.y())
+        return true;
+    else if (rect->y() == point.y())
+        return rect->x() <= point.x();
+
+    return false;
+}
+
+// -------------------------------------------------------
+
+int TextureAutotile::isInTexture(int id, QRect* rect) {
     if (id >= m_beginID && id <= m_endID) {
         if (id == m_beginID) {
             if (id == m_endID)
-                return offset >= m_beginOffset && offset <= m_endOffset;
+                return isSup(rect, m_beginPoint) && isInf(rect, m_endPoint);
             else
-                return offset >= m_beginOffset;
+                return isSup(rect, m_beginPoint);
         }
         else if (id < m_endID)
             return true;
         else
-            return offset <= m_endOffset;
+            return isInf(rect, m_endPoint);
     }
     return false;
 }

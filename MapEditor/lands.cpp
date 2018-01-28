@@ -20,6 +20,19 @@
 #include "lands.h"
 #include "floors.h"
 
+QVector3D Lands::verticesQuad[4]{
+    QVector3D(0.0f, 0.0f, 0.0f),
+    QVector3D(1.0f, 0.0f, 0.0f),
+    QVector3D(1.0f, 0.0f, 1.0f),
+    QVector3D(0.0f, 0.0f, 1.0f)
+};
+
+GLuint Lands::indexesQuad[6]{0, 1, 2, 0, 2, 3};
+
+int Lands::nbVerticesQuad(4);
+
+int Lands::nbIndexesQuad(6);
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -171,28 +184,39 @@ int Lands::getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind)
 //
 // -------------------------------------------------------
 
-void Lands::initializeVertices(QHash<Position, MapElement *> &previewSquares,
+void Lands::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+                               QHash<Position, MapElement *> &previewSquares,
                                int squareSize, int width, int height)
 {
     m_floors->initializeVertices(previewSquares, squareSize, width, height);
+    m_autotiles->initializeVertices(texturesAutotiles, previewSquares,
+                                    squareSize);
 }
 
 // -------------------------------------------------------
 
 void Lands::initializeGL(QOpenGLShaderProgram *programStatic){
     m_floors->initializeGL(programStatic);
+    m_autotiles->initializeGL(programStatic);
 }
 
 // -------------------------------------------------------
 
 void Lands::updateGL(){
     m_floors->updateGL();
+    m_autotiles->updateGL();
 }
 
 // -------------------------------------------------------
 
 void Lands::paintGL(){
     m_floors->paintGL();
+}
+
+// -------------------------------------------------------
+
+void Lands::paintAutotilesGL(int textureID) {
+    m_autotiles->paintGL(textureID);
 }
 
 // -------------------------------------------------------

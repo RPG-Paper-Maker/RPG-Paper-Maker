@@ -157,8 +157,9 @@ void Map::loadAutotiles() {
     painter.begin(&newImage);
     int offset = 0;
     TextureAutotile* textureAutotile = new TextureAutotile;
+    QPoint point(0, 0);
     textureAutotile->setBegin(((SuperListItem*) model->item(0)->data()
-                               .value<qintptr>())->id(), 0);
+                               .value<qintptr>())->id(), point);
     int i = 0;
     for (i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
@@ -227,13 +228,13 @@ void Map::editPictureAutotile(QPainter &painter,
     int size = width * height;
 
     for (int i = 0; i < size; i++) {
+        QPoint point(i % width, i / width);
         if (offset == 0 && textureAutotile == nullptr) {
             textureAutotile = new TextureAutotile;
-            textureAutotile->setBegin(id, i);
+            textureAutotile->setBegin(id, point);
         }
-        QPoint point(i % width, i / width);
         paintPictureAutotile(painter, image, offset, point);
-        textureAutotile->setEnd(id, i);
+        textureAutotile->setEnd(id, point);
         offset++;
 
         if (offset == 6) {

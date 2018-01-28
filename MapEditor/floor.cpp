@@ -18,6 +18,7 @@
 */
 
 #include "floor.h"
+#include "lands.h"
 
 // -------------------------------------------------------
 //
@@ -92,19 +93,19 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
     h -= (coefY * 2);
 
     // Vertices
-    vertices.append(Vertex(Floor::verticesQuad[0] * size + pos,
+    vertices.append(Vertex(Lands::verticesQuad[0] * size + pos,
                     QVector2D(x, y)));
-    vertices.append(Vertex(Floor::verticesQuad[1] * size + pos,
+    vertices.append(Vertex(Lands::verticesQuad[1] * size + pos,
                     QVector2D(x + w, y)));
-    vertices.append(Vertex(Floor::verticesQuad[2] * size + pos,
+    vertices.append(Vertex(Lands::verticesQuad[2] * size + pos,
                     QVector2D(x + w, y + h)));
-    vertices.append(Vertex(Floor::verticesQuad[3] * size + pos,
+    vertices.append(Vertex(Lands::verticesQuad[3] * size + pos,
                     QVector2D(x, y + h)));
 
     // indexes
-    int offset = count * Floor::nbVerticesQuad;
-    for (int i = 0; i < Floor::nbIndexesQuad; i++)
-        indexes.append(Floor::indexesQuad[i] + offset);
+    int offset = count * Lands::nbVerticesQuad;
+    for (int i = 0; i < Lands::nbIndexesQuad; i++)
+        indexes.append(Lands::indexesQuad[i] + offset);
 
     count++;
 }
@@ -123,41 +124,4 @@ void FloorDatas::read(const QJsonObject & json){
 
 void FloorDatas::write(QJsonObject &json) const{
     LandDatas::write(json);
-}
-
-// -------------------------------------------------------
-//
-//
-//  ---------- FLOOR
-//
-//
-// -------------------------------------------------------
-
-QVector3D Floor::verticesQuad[4]{
-                                  QVector3D(0.0f, 0.0f, 0.0f),
-                                  QVector3D(1.0f, 0.0f, 0.0f),
-                                  QVector3D(1.0f, 0.0f, 1.0f),
-                                  QVector3D(0.0f, 0.0f, 1.0f)
-                                };
-
-GLuint Floor::indexesQuad[6]{0, 1, 2, 0, 2, 3};
-
-int Floor::nbVerticesQuad(4);
-
-int Floor::nbIndexesQuad(6);
-
-// -------------------------------------------------------
-//
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
-//
-// -------------------------------------------------------
-
-Floor::Floor()
-{
-
-}
-
-Floor::~Floor()
-{
-
 }
