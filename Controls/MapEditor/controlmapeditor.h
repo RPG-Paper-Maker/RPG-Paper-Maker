@@ -133,8 +133,9 @@ public:
              bool layerOn, QRect& tileset, int specialID, Position& p);
     void remove(MapElement* element, MapEditorSelectionKind selection,
                 DrawKind drawKind, Position& p, bool layerOn);
-    void addFloor(Position& p, MapEditorSubSelectionKind kind,
-                  DrawKind drawKind, bool layerOn, QRect& tileset, int);
+    void addLand(Position& p, MapEditorSubSelectionKind kind,
+                 DrawKind drawKind, bool layerOn, QRect& tileset,
+                 int specialID);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
                       QRect &textureAfter, bool layerOn);
     LandDatas* getLand(Portion& portion, Position& p);

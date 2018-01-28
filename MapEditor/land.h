@@ -29,10 +29,11 @@
 class LandDatas : public MapElement
 {
 public:
-    LandDatas(bool up);
+    LandDatas(QRect* texture, bool up);
     virtual ~LandDatas();
     bool operator==(const LandDatas& other) const;
     bool operator!=(const LandDatas& other) const;
+    QRect* textureRect() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void initializeVertices(int, int, int, QVector<Vertex>&,
@@ -41,12 +42,14 @@ public:
                     Position &position);
     float intersection(int squareSize, QRay3D& ray, Position& position);
 
-    static QString jsonUp;
+    static const QString JSON_UP;
+    static const QString JSON_TEXTURE;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
+    QRect* m_textureRect;
     bool m_up;
 };
 

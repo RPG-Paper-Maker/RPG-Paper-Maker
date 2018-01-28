@@ -50,7 +50,12 @@ PanelTextures::~PanelTextures()
 // -------------------------------------------------------
 
 void PanelTextures::getTilesetTexture(QRect& rect) const{
-    ui->widgetTilesetSelector->currentTexture(rect);
+    switch (m_kind) {
+    case PictureKind::Autotiles:
+        ui->widgetAutotilesSelector->currentTexture(rect); break;
+    default:
+        ui->widgetTilesetSelector->currentTexture(rect);
+    }
 }
 
 // -------------------------------------------------------

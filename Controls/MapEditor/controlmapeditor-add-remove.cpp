@@ -64,7 +64,7 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
     if (tileset.width() != 0 && tileset.height() != 0) {
         switch (selection){
         case MapEditorSelectionKind::Land:
-            addFloor(p, subSelection, drawKind, layerOn, tileset, specialID);
+            addLand(p, subSelection, drawKind, layerOn, tileset, specialID);
             break;
         case MapEditorSelectionKind::Sprites:
             addSprite(p, subSelection, drawKind, layerOn, tileset);
@@ -119,49 +119,69 @@ void ControlMapEditor::remove(MapElement* element,
 
 // -------------------------------------------------------
 //
-//  Floors
+//  LANDS
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::addFloor(Position& p, MapEditorSubSelectionKind kind,
-                                DrawKind drawKind, bool layerOn, QRect &tileset,
-                                int)
+void ControlMapEditor::addLand(Position& p, MapEditorSubSelectionKind kind,
+                               DrawKind drawKind, bool layerOn, QRect &tileset,
+                               int specialID)
 {
-    FloorDatas* floor;
+    LandDatas* land;
     QRect* shortTexture;
     bool up = m_camera->cameraUp();
 
     // Pencil
     switch (drawKind) {
     case DrawKind::Pencil:
-        if (tileset.width() == 1 && tileset.height() == 1){
+    {
+        if (tileset.width() == 1 && tileset.height() == 1) {
             QList<Position> positions;
             traceLine(m_previousMouseCoords, p, positions);
-            for (int i = 0; i < positions.size(); i++){
+            for (int i = 0; i < positions.size(); i++) {
                 QRect* rect = new QRect(tileset.x(),
                                         tileset.y(),
                                         tileset.width(),
                                         tileset.height());
-                floor = new FloorDatas(rect, up);
-                stockLand(positions[i], floor, kind, layerOn);
+                switch (kind) {
+                case MapEditorSubSelectionKind::Floors:
+                    land = new FloorDatas(rect, up);
+                    break;
+                case MapEditorSubSelectionKind::Autotiles:
+                    land = new AutotileDatas(specialID, rect, up);
+                    break;
+                default:
+                    break;
+                }
+                stockLand(positions[i], land, kind, layerOn);
             }
         }
-        for (int i = 0; i < tileset.width(); i++){
+        for (int i = 0; i < tileset.width(); i++) {
             if (p.x() + i > m_map->mapProperties()->length())
                 break;
 
-            for (int j = 0; j < tileset.height(); j++){
+            for (int j = 0; j < tileset.height(); j++) {
                 if (p.z() + j > m_map->mapProperties()->width())
                     break;
 
                 Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
                 shortTexture = new QRect(tileset.x() + i, tileset.y() + j,
                                          1, 1);
-                floor = new FloorDatas(shortTexture, up);
-                stockLand(shortPosition, floor, kind, layerOn);
+                switch (kind) {
+                case MapEditorSubSelectionKind::Floors:
+                    land = new FloorDatas(shortTexture, up);
+                    break;
+                case MapEditorSubSelectionKind::Autotiles:
+                    land = new AutotileDatas(specialID, shortTexture, up);
+                    break;
+                default:
+                    break;
+                }
+                stockLand(shortPosition, land, kind, layerOn);
             }
         }
         break;
+    }
     case DrawKind::Rectangle:
         break; // TODO
     case DrawKind::Pin:

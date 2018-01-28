@@ -22,6 +22,7 @@
 
 #include "land.h"
 #include "floors.h"
+#include "autotiles.h"
 
 class Lands : public Serializable
 {
@@ -54,6 +55,7 @@ public:
 
 protected:
     Floors* m_floors;
+    Autotiles* m_autotiles;
 };
 
 #endif // LANDS_H

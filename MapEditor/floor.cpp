@@ -27,8 +27,6 @@
 //
 // -------------------------------------------------------
 
-QString FloorDatas::jsonTexture = "t";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -42,30 +40,23 @@ FloorDatas::FloorDatas() :
 }
 
 FloorDatas::FloorDatas(QRect* texture, bool up) :
-    LandDatas(up),
-    m_textureRect(texture)
+    LandDatas(texture, up)
 {
 
 }
 
 FloorDatas::~FloorDatas()
 {
-    delete m_textureRect;
+
 }
 
 bool FloorDatas::operator==(const FloorDatas& other) const {
-    return LandDatas::operator==(other) &&
-           m_textureRect->x() == other.m_textureRect->x() &&
-           m_textureRect->y() == other.m_textureRect->y() &&
-           m_textureRect->width() == other.m_textureRect->width() &&
-           m_textureRect->height() == other.m_textureRect->height();
+    return LandDatas::operator==(other);
 }
 
 bool FloorDatas::operator!=(const FloorDatas& other) const {
     return !operator==(other);
 }
-
-QRect *FloorDatas::textureRect() const { return m_textureRect; }
 
 MapEditorSubSelectionKind FloorDatas::getSubKind() const{
     return MapEditorSubSelectionKind::Floors;
@@ -126,25 +117,12 @@ void FloorDatas::initializeVertices(int squareSize, int width, int height,
 
 void FloorDatas::read(const QJsonObject & json){
     LandDatas::read(json);
-
-    QJsonArray tab = json[jsonTexture].toArray();
-    m_textureRect->setLeft(tab[0].toInt());
-    m_textureRect->setTop(tab[1].toInt());
-    m_textureRect->setWidth(tab[2].toInt());
-    m_textureRect->setHeight(tab[3].toInt());
 }
 
 // -------------------------------------------------------
 
 void FloorDatas::write(QJsonObject &json) const{
     LandDatas::write(json);
-
-    QJsonArray tab;
-    tab.append(m_textureRect->left());
-    tab.append(m_textureRect->top());
-    tab.append(m_textureRect->width());
-    tab.append(m_textureRect->height());
-    json[jsonTexture] = tab;
 }
 
 // -------------------------------------------------------

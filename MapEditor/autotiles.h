@@ -20,7 +20,9 @@
 #ifndef AUTOTILES_H
 #define AUTOTILES_H
 
-#include <QHash>
+#include <QOpenGLFunctions>
+#include "autotile.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -30,10 +32,11 @@
 //
 // -------------------------------------------------------
 
-class Autotiles
+class Autotiles : public Serializable, protected QOpenGLFunctions
 {
 public:
     Autotiles();
+    virtual ~Autotiles();
     static QHash<QString, int> initializeAutotileBorder();
     static QHash<QString, int> autotileBorder;
     static const int COUNT_LIST;
@@ -41,6 +44,33 @@ public:
     static QString listB[];
     static QString listC[];
     static QString listD[];
+
+    bool isEmpty() const;
+    AutotileDatas* getAutotile(Position& p) const;
+    void setAutotile(Position& p, AutotileDatas* autotile);
+    AutotileDatas* removeAutotile(Position& p);
+    bool addAutotile(Position& p, AutotileDatas* autotile,
+                     QJsonObject &previousObj,
+                     MapEditorSubSelectionKind& previousType);
+    bool deleteAutotile(Position& p, QJsonObject &previous,
+                        MapEditorSubSelectionKind &previousType);
+
+    void removeAutotileOut(MapProperties& properties);
+    MapElement *updateRaycasting(int squareSize, float& finalDistance,
+                                 Position &finalPosition, QRay3D &ray);
+    bool updateRaycastingAt(Position &position, AutotileDatas *autotile,
+                            int squareSize, float &finalDistance,
+                            Position &finalPosition, QRay3D& ray);
+    int getLastLayerAt(Position& position) const;
+    void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
+                           QList<MapEditorSubSelectionKind> &previousType,
+                           QList<Position> &positions);
+
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
+
+protected:
+    QHash<Position, AutotileDatas*> m_all;
 };
 
 #endif // AUTOTILES_H

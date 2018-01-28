@@ -27,7 +27,8 @@
 // -------------------------------------------------------
 
 Lands::Lands() :
-    m_floors(new Floors)
+    m_floors(new Floors),
+    m_autotiles(new Autotiles)
 {
 
 }
@@ -35,6 +36,7 @@ Lands::Lands() :
 Lands::~Lands()
 {
     delete m_floors;
+    delete m_autotiles;
 }
 
 // -------------------------------------------------------
@@ -44,13 +46,20 @@ Lands::~Lands()
 // -------------------------------------------------------
 
 bool Lands::isEmpty() const {
-    return m_floors->isEmpty();
+    return m_floors->isEmpty() && m_autotiles->isEmpty();
 }
 
 // -------------------------------------------------------
 
 LandDatas* Lands::getLand(Position& p) {
-    return m_floors->getFloor(p);
+    LandDatas* land = m_floors->getFloor(p);
+
+    if (land != nullptr)
+        return land;
+
+    land = m_autotiles->getAutotile(p);
+
+    return land;
 }
 
 // -------------------------------------------------------
@@ -58,7 +67,18 @@ LandDatas* Lands::getLand(Position& p) {
 bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
                     MapEditorSubSelectionKind &previousType)
 {
-    return m_floors->addFloor(p, (FloorDatas*) land, previous, previousType);
+    switch (land->getSubKind()) {
+    case MapEditorSubSelectionKind::Floors:
+        return m_floors->addFloor(p, (FloorDatas*) land, previous,
+                                  previousType);
+        break;
+    case MapEditorSubSelectionKind::Autotiles:
+        return m_autotiles->addAutotile(p, (AutotileDatas*) land, previous,
+                                        previousType);
+        break;
+    default:
+        return false;
+    }
 }
 
 // -------------------------------------------------------
@@ -70,12 +90,25 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
     bool changed = m_floors->deleteFloor(p, prev, kind);
+    if (kind == MapEditorSubSelectionKind::None) {
+        changed = m_autotiles->deleteAutotile(p, prev, kind);
+    }
 
     if (changed) {
         previous.append(prev);
         previousType.append(kind);
         positions.append(p);
-        m_floors->updateRemoveLayer(p, previous, previousType, positions);
+        switch (kind) {
+        case MapEditorSubSelectionKind::Floors:
+            m_floors->updateRemoveLayer(p, previous, previousType, positions);
+            break;
+        case MapEditorSubSelectionKind::Autotiles:
+            m_autotiles->updateRemoveLayer(p, previous, previousType,
+                                           positions);
+            break;
+        default:
+            break;
+        }
     }
 
     return changed;
@@ -85,6 +118,7 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
 
 void Lands::removeLandOut(MapProperties& properties) {
     m_floors->removeFloorOut(properties);
+    m_autotiles->removeAutotileOut(properties);
 }
 
 // -------------------------------------------------------
@@ -92,8 +126,14 @@ void Lands::removeLandOut(MapProperties& properties) {
 MapElement* Lands::updateRaycasting(int squareSize, float& finalDistance,
                                     Position &finalPosition, QRay3D &ray)
 {
-    return m_floors->updateRaycasting(squareSize, finalDistance, finalPosition,
-                                      ray);
+    MapElement* element = m_floors->updateRaycasting(squareSize, finalDistance,
+                                                     finalPosition, ray);
+    if (element == nullptr) {
+        element = m_autotiles->updateRaycasting(squareSize, finalDistance,
+                                                finalPosition, ray);
+    }
+
+    return element;
 }
 
 // -------------------------------------------------------
@@ -104,6 +144,8 @@ MapElement* Lands::getMapElementAt(Position& position,
     switch (subKind) {
     case MapEditorSubSelectionKind::Floors:
         return m_floors->getFloor(position);
+    case MapEditorSubSelectionKind::Autotiles:
+        return m_autotiles->getAutotile(position);
     default:
         return nullptr;
     }
@@ -116,6 +158,8 @@ int Lands::getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind)
     switch (subKind) {
     case MapEditorSubSelectionKind::Floors:
         return m_floors->getLastLayerAt(position);
+    case MapEditorSubSelectionKind::Autotiles:
+        return m_autotiles->getLastLayerAt(position);
     default:
         return position.layer();
     }
@@ -159,10 +203,12 @@ void Lands::paintGL(){
 
 void Lands::read(const QJsonObject & json){
     m_floors->read(json);
+    m_autotiles->read(json);
 }
 
 // -------------------------------------------------------
 
 void Lands::write(QJsonObject & json) const{
     m_floors->write(json);
+    m_autotiles->write(json);
 }

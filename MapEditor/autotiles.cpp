@@ -18,6 +18,7 @@
 */
 
 #include "autotiles.h"
+#include "wanok.h"
 
 QHash<QString, int> Autotiles::initializeAutotileBorder() {
     QHash<QString, int> hash;
@@ -62,4 +63,220 @@ QString Autotiles::listD[COUNT_LIST] {"D1", "D2", "D3", "D4", "D5"};
 Autotiles::Autotiles()
 {
 
+}
+
+Autotiles::~Autotiles()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+bool Autotiles::isEmpty() const {
+    return true;
+}
+
+// -------------------------------------------------------
+
+AutotileDatas* Autotiles::getAutotile(Position& p) const {
+    return m_all.value(p);
+}
+
+// -------------------------------------------------------
+
+void Autotiles::setAutotile(Position& p, AutotileDatas* autotile) {
+    m_all.insert(p, autotile);
+}
+
+// -------------------------------------------------------
+
+AutotileDatas* Autotiles::removeAutotile(Position& p) {
+    AutotileDatas* autotile = m_all.value(p);
+
+    if (autotile != nullptr)
+        m_all.remove(p);
+
+    return autotile;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
+                            QJsonObject &previousObj,
+                            MapEditorSubSelectionKind& previousType)
+{
+    AutotileDatas* previousAutotile = removeAutotile(p);
+    bool changed = true;
+
+    if (previousAutotile != nullptr) {
+        previousAutotile->write(previousObj);
+        previousType = previousAutotile->getSubKind();
+        changed = (*previousAutotile) != (*autotile);
+        delete previousAutotile;
+    }
+
+    setAutotile(p, autotile);
+
+    return changed;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
+                               MapEditorSubSelectionKind &previousType)
+{
+    AutotileDatas* previousAutotile = removeAutotile(p);
+    bool changed = false;
+
+    if (previousAutotile != nullptr) {
+        previousAutotile->write(previous);
+        previousType = previousAutotile->getSubKind();
+        changed = true;
+        delete previousAutotile;
+    }
+
+    return changed;
+}
+
+// -------------------------------------------------------
+
+void Autotiles::removeAutotileOut(MapProperties& properties) {
+    QList<Position> list;
+    QHash<Position, AutotileDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        Position position = i.key();
+
+        if (position.x() >= properties.length() ||
+            position.z() >= properties.width())
+        {
+            delete *i;
+            list.push_back(position);
+        }
+    }
+
+    for (int j = 0; j < list.size(); j++)
+        m_all.remove(list.at(j));
+}
+
+// -------------------------------------------------------
+
+MapElement *Autotiles::updateRaycasting(int squareSize, float& finalDistance,
+                                        Position &finalPosition, QRay3D &ray)
+{
+    MapElement* element = nullptr;
+
+    for (QHash<Position, AutotileDatas*>::iterator i = m_all.begin();
+         i != m_all.end(); i++)
+    {
+        Position position = i.key();
+        AutotileDatas* autotile = i.value();
+        if (updateRaycastingAt(position, autotile, squareSize, finalDistance,
+                               finalPosition, ray))
+        {
+            element = autotile;
+        }
+    }
+
+    return element;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
+                                   int squareSize, float &finalDistance,
+                                   Position &finalPosition, QRay3D& ray)
+{
+    float newDistance = autotile->intersection(squareSize, ray, position);
+    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+        finalPosition = position;
+        return true;
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
+
+int Autotiles::getLastLayerAt(Position& position) const {
+    int count = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(), position.z(),
+               count);
+    AutotileDatas* autotile = getAutotile(p);
+
+    while (autotile != nullptr) {
+        count++;
+        p.setLayer(count);
+        autotile = getAutotile(p);
+    }
+
+    return count - 1;
+}
+
+// -------------------------------------------------------
+
+void Autotiles::updateRemoveLayer(
+        Position& position, QList<QJsonObject> &previous,
+        QList<MapEditorSubSelectionKind> &previousType,
+        QList<Position> &positions)
+{
+    int i = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(),
+               position.z(), i);
+    AutotileDatas* autotile = getAutotile(p);
+
+    while (autotile != nullptr) {
+        QJsonObject obj;
+        MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+        deleteAutotile(p, obj, kind);
+        previous.append(obj);
+        previousType.append(kind);
+        positions.append(p);
+        p.setLayer(++i);
+        autotile = getAutotile(p);
+    }
+}
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void Autotiles::read(const QJsonObject & json){
+    QJsonArray tab = json["autotiles"].toArray();
+
+    for (int i = 0; i < tab.size(); i++){
+        QJsonObject obj = tab.at(i).toObject();
+        Position p;
+        p.read(obj["k"].toArray());
+        QJsonObject objLand = obj["v"].toObject();
+        AutotileDatas* autotile = new AutotileDatas;
+        autotile->read(objLand);
+        m_all[p] = autotile;
+    }
+}
+
+// -------------------------------------------------------
+
+void Autotiles::write(QJsonObject & json) const{
+    QJsonArray tab;
+
+    QHash<Position, AutotileDatas*>::const_iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++){
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        Position position = i.key();
+        position.write(tabKey);
+        AutotileDatas* autotile = i.value();
+        QJsonObject obj;
+        autotile->write(obj);
+        objHash["k"] = tabKey;
+        objHash["v"] = obj;
+        tab.append(objHash);
+    }
+    json["autotile"] = tab;
 }

@@ -17,66 +17,52 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FLOOR_H
-#define FLOOR_H
+#ifndef AUTOTILE_H
+#define AUTOTILE_H
 
-#include <QHash>
-#include <QRect>
-#include <QVector>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include "land.h"
-#include "position.h"
-#include "vertex.h"
 
 // -------------------------------------------------------
 //
-//  CLASS FloorDatas
+//  CLASS AutotileDatas
 //
-//  A square floor datas.
+//  Autotiles grouped that are having the same texture.
 //
 // -------------------------------------------------------
 
-class FloorDatas : public LandDatas
+class AutotileDatas : public LandDatas
 {
 public:
-    FloorDatas();
-    FloorDatas(QRect *texture, bool up = true);
-    virtual ~FloorDatas();
-    bool operator==(const FloorDatas& other) const;
-    bool operator!=(const FloorDatas& other) const;
+    AutotileDatas();
+    AutotileDatas(int autotileID, QRect *texture, bool up = true);
+    int autotileID() const;
+
+    bool operator==(const AutotileDatas& other) const;
+    bool operator!=(const AutotileDatas& other) const;
 
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
 
-    virtual void initializeVertices(int squareSize, int width, int height,
-                                    QVector<Vertex>& vertices,
-                                    QVector<GLuint>& indexes,
-                                    Position& position, int& count);
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject & json) const;
+protected:
+    int m_autotileID;
 };
 
 // -------------------------------------------------------
 //
-//  CLASS Floor
+//  CLASS Autotile
 //
-//  A square floor.
+//  Autotiles grouped that are having the same texture.
 //
 // -------------------------------------------------------
 
-class Floor : protected QOpenGLFunctions
+class Autotile
 {
 public:
-    Floor();
-    virtual ~Floor();
-    static QVector3D verticesQuad[];
-    static GLuint indexesQuad[];
-    static int nbVerticesQuad;
-    static int nbIndexesQuad;
+    Autotile();
 };
 
-#endif // FLOOR_H
+#endif // AUTOTILE_H
