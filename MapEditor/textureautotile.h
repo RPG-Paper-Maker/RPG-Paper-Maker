@@ -42,6 +42,8 @@ public:
     static bool isSup(QRect* rect, QPoint& point);
     static bool isInf(QRect* rect, QPoint& point);
     int isInTexture(int id, QRect* rect);
+    void addToList(int id, QPoint& point);
+    int getOffset(int id, QRect* rect);
 
 protected:
     QOpenGLTexture* m_texture;
@@ -49,6 +51,7 @@ protected:
     QPoint m_beginPoint;
     int m_endID;
     QPoint m_endPoint;
+    QList<QPair<int, QPoint>> m_list;
 };
 
 #endif // TEXTUREAUTOTILE_H

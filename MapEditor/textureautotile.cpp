@@ -18,7 +18,7 @@
 */
 
 #include "textureautotile.h"
-
+#include <QDebug>
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -95,4 +95,23 @@ int TextureAutotile::isInTexture(int id, QRect* rect) {
             return isInf(rect, m_endPoint);
     }
     return false;
+}
+
+// -------------------------------------------------------
+
+void TextureAutotile::addToList(int id, QPoint& point) {
+    m_list.append(QPair<int, QPoint>(id, point));
+}
+
+// -------------------------------------------------------
+
+int TextureAutotile::getOffset(int id, QRect* rect) {
+    for (int i = 0; i < m_list.size(); i++) {
+        const QPair<int, QPoint>& pair = m_list.at(i);
+        const QPoint& p = pair.second;
+        if (id == pair.first && p.x() == rect->x() && p.y() == rect->y())
+            return i;
+    }
+
+    return -1;
 }

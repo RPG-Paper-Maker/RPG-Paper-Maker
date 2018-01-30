@@ -44,7 +44,8 @@ AutotileDatas::AutotileDatas() :
 
 AutotileDatas::AutotileDatas(int autotileID, QRect *texture, bool up) :
     LandDatas(texture, up),
-    m_autotileID(autotileID)
+    m_autotileID(autotileID),
+    m_tileID(0)
 {
 
 }
@@ -75,7 +76,8 @@ QString AutotileDatas::toString() const {
 //
 // -------------------------------------------------------
 
-void AutotileDatas::initializeVertices(int squareSize, int width, int height,
+void AutotileDatas::initializeVertices(TextureAutotile* textureAutotile,
+                                       int squareSize, int width, int height,
                                        QVector<Vertex>& vertices,
                                        QVector<GLuint>& indexes,
                                        Position& position, int& count)
@@ -83,10 +85,14 @@ void AutotileDatas::initializeVertices(int squareSize, int width, int height,
     QVector3D pos, size;
     getPosSize(pos, size, squareSize, position);
 
-    float x = (float)(0 * squareSize) / width;
-    float y = (float)(0 * squareSize) / height;
-    float w = (float)(1 * squareSize) / width;
-    float h = (float)(1 * squareSize) / height;
+    int xTile = m_tileID % 64;
+    int yTile = (m_tileID / 64) +
+            (10 * textureAutotile->getOffset(m_autotileID, m_textureRect));
+
+    float x = ((float) xTile * squareSize) / width;
+    float y = ((float) yTile * squareSize) / height;
+    float w = ((float) squareSize) / width;
+    float h = ((float) squareSize) / height;
     float coefX = 0.1 / width;
     float coefY = 0.1 / height;
     x += coefX;
@@ -110,6 +116,12 @@ void AutotileDatas::initializeVertices(int squareSize, int width, int height,
         indexes.append(Lands::indexesQuad[i] + offset);
 
     count++;
+}
+
+// -------------------------------------------------------
+
+void AutotileDatas::update(Autotiles* autotiles) {
+
 }
 
 // -------------------------------------------------------
@@ -166,11 +178,12 @@ Autotile::~Autotile()
 //
 // -------------------------------------------------------
 
-void Autotile::initializeVertices(Position &position, AutotileDatas* autotile,
+void Autotile::initializeVertices(TextureAutotile* textureAutotile,
+                                  Position &position, AutotileDatas* autotile,
                                   int squareSize, int width, int height)
 {
-    autotile->initializeVertices(squareSize, width, height, m_vertices,
-                                 m_indexes, position, m_count);
+    autotile->initializeVertices(textureAutotile, squareSize, width, height,
+                                 m_vertices, m_indexes, position, m_count);
 }
 
 // -------------------------------------------------------

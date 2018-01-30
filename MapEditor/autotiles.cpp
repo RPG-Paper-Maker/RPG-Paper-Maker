@@ -281,21 +281,23 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
     {
         Position position = i.key();
         AutotileDatas* autotile = i.value();
-        QOpenGLTexture* texture = nullptr;
+        TextureAutotile* texture = nullptr;
         int id = 0;
         for (; id < texturesAutotiles.size(); id++) {
             TextureAutotile* textureAutotile = texturesAutotiles[id];
             if (textureAutotile->isInTexture(autotile->autotileID(),
                                              autotile->textureRect()))
             {
-                texture = textureAutotile->texture();
+                texture = textureAutotile;
                 break;
             }
         }
-        if (texture != nullptr) {
+        if (texture->texture() != nullptr) {
             Autotile* autotileGL = m_autotilesGL.at(id);
-            autotileGL->initializeVertices(position, autotile, squareSize,
-                                           texture->width(), texture->height());
+            autotileGL->initializeVertices(texture, position, autotile,
+                                           squareSize,
+                                           texture->texture()->width(),
+                                           texture->texture()->height());
         }
     }
 }

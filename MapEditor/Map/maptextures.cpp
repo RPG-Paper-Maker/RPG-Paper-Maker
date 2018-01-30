@@ -235,6 +235,7 @@ void Map::editPictureAutotile(QPainter &painter,
         }
         paintPictureAutotile(painter, image, offset, point);
         textureAutotile->setEnd(id, point);
+        textureAutotile->addToList(id, point);
         offset++;
 
         if (offset == 6) {
