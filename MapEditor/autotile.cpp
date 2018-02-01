@@ -50,6 +50,12 @@ AutotileDatas::AutotileDatas(int autotileID, QRect *texture, bool up) :
 
 }
 
+AutotileDatas::AutotileDatas(const AutotileDatas &autotile)  :
+    AutotileDatas(autotile.m_autotileID, autotile.m_textureRect, autotile.m_up)
+{
+    m_tileID = autotile.m_tileID;
+}
+
 int AutotileDatas::autotileID() const {
     return m_autotileID;
 }

@@ -42,6 +42,7 @@ class AutotileDatas : public LandDatas
 public:
     AutotileDatas();
     AutotileDatas(int autotileID, QRect *texture, bool up = true);
+    AutotileDatas(const AutotileDatas &autotile);
     int autotileID() const;
     static const QString JSON_ID;
 

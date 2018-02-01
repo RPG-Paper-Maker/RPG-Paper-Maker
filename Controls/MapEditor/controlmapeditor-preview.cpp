@@ -44,8 +44,9 @@ void ControlMapEditor::updatePreviewElements(
     removePreviewElements();
 
     // Add new previous
-    if (subKind == MapEditorSubSelectionKind::Floors)
-        updatePreviewFloors(kind, subKind, up, layerOn, tileset, position);
+    if (kind == MapEditorSelectionKind::Land)
+        updatePreviewLands(kind, subKind, up, layerOn, tileset, specialID,
+                           position);
     else if (subKind == MapEditorSubSelectionKind::SpritesWall) {
         if (m_isDrawingWall || m_isDeletingWall)
             updatePreviewWallSprites(specialID);
@@ -72,10 +73,11 @@ void ControlMapEditor::removePreviewElements() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePreviewFloors(MapEditorSelectionKind kind,
-                                           MapEditorSubSelectionKind subKind,
-                                           bool up, bool layerOn,
-                                           QRect &tileset, Position &position)
+void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
+                                          MapEditorSubSelectionKind subKind,
+                                          bool up, bool layerOn,
+                                          QRect &tileset, int specialID,
+                                          Position &position)
 {
     for (int i = 0; i < tileset.width(); i++){
         if (position.x() + i > m_map->mapProperties()->length())
@@ -96,11 +98,26 @@ void ControlMapEditor::updatePreviewFloors(MapEditorSelectionKind kind,
                                      m_distanceLand, shortPosition, layerOn,
                                      kind, subKind);
                 shortPosition.setLayer(layer);
+                QRect* rect = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
 
-                MapElement* element = new FloorDatas(
-                            new QRect(tileset.x() + i, tileset.y() + j, 1, 1),
-                            up);
-                updatePreviewElement(shortPosition, shortPortion, element);
+                MapElement* element = nullptr;
+                switch (subKind) {
+                case MapEditorSubSelectionKind::Floors:
+                    element = new FloorDatas(rect, up);
+                    updatePreviewElement(shortPosition, shortPortion, element);
+                    break;
+                case MapEditorSubSelectionKind::Autotiles:
+                {
+                    element = new AutotileDatas(specialID, rect, up);
+                    updatePreviewElement(shortPosition, shortPortion, element);
+                    MapPortion* mapPortion = m_map->mapPortion(shortPortion);
+                    mapPortion->updateAutotiles(
+                           shortPosition, m_portionsToUpdate, m_portionsToSave);
+                    break;
+                }
+                default:
+                    break;
+                }
             }
         }
     }

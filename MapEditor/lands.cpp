@@ -181,6 +181,18 @@ int Lands::getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind)
 }
 
 // -------------------------------------------------------
+
+void Lands::updateAutotiles(Position& position,
+                            QHash<Position, MapElement*> &preview,
+                            QSet<MapPortion*> &update, QSet<MapPortion*> &save)
+{
+    QHash<Position, AutotileDatas*> autotilesWithPreview;
+    m_autotiles->getAutotilesWithPreview(autotilesWithPreview, preview);
+    m_autotiles->updateAround(position, autotilesWithPreview, update, save,
+                              &preview);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

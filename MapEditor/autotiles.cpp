@@ -133,7 +133,7 @@ bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
     }
 
     setAutotile(p, autotile);
-    updateAround(p, m_all, update, save);
+    updateAround(p, m_all, update, save, nullptr);
 
     return changed;
 }
@@ -154,7 +154,7 @@ bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
         changed = true;
         delete previousAutotile;
     }
-    updateAround(p, m_all, update, save);
+    updateAround(p, m_all, update, save, nullptr);
 
     return changed;
 }
@@ -264,6 +264,7 @@ void Autotiles::getAutotilesWithPreview(
         QHash<Position, AutotileDatas*> &autotilesWithPreview,
         QHash<Position, MapElement*> &preview)
 {
+    autotilesWithPreview = m_all;
     QHash<Position, MapElement*>::iterator itw;
     for (itw = preview.begin(); itw != preview.end(); itw++) {
         MapElement* element = itw.value();
@@ -282,7 +283,7 @@ AutotileDatas* Autotiles::tileOnWhatever(Position& position, Portion &portion,
                                                            newPortion);
     if (portion == newPortion)
         return (AutotileDatas*) preview.value(position);
-    else {
+    else { // If out of current portion
         return (AutotileDatas*) Wanok::get()->project()->currentMap()
             ->mapPortion(newPortion)->getMapElementAt(position,
             MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles);
@@ -372,8 +373,9 @@ bool Autotiles::tileOnBottomRight(Position& position, Portion& portion,
 // -------------------------------------------------------
 
 void Autotiles::updateAround(Position& position,
-                             QHash<Position, AutotileDatas*> &preview,
-                             QSet<MapPortion*>& update, QSet<MapPortion*>& save)
+                             QHash<Position, AutotileDatas *> &autotiles,
+                             QSet<MapPortion*>& update, QSet<MapPortion*>& save,
+                             QHash<Position, MapElement *> *preview)
 {
     Portion portion;
     Wanok::get()->project()->currentMap()->getLocalPortion(position, portion);
@@ -382,9 +384,20 @@ void Autotiles::updateAround(Position& position,
             Position newPosition(i, position.y(), position.yPlus(), j,
                                  position.layer());
             AutotileDatas* autotile = tileOnWhatever(newPosition, portion,
-                                                     preview);
+                                                     autotiles);
             if (autotile != nullptr) {
-                bool changed = autotile->update(newPosition, portion, preview);
+
+                // Update the current autotile
+                bool changed;
+                if (preview == nullptr)
+                    changed = autotile->update(newPosition, portion, autotiles);
+                else {
+                    AutotileDatas* previewAutotile(autotile);
+                    changed = previewAutotile->update(newPosition, portion,
+                                                      autotiles);
+                }
+
+                // Update view if changed
                 if (changed) {
                     Portion newPortion;
                     Wanok::get()->project()->currentMap()->getLocalPortion(
@@ -416,13 +429,8 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
         m_autotilesGL.append(new Autotile);
 
     // Create temp hash for preview
-    QHash<Position, AutotileDatas*> autotilesWithPreview(m_all);
-    QHash<Position, MapElement*>::iterator it;
-    for (it = previewSquares.begin(); it != previewSquares.end(); it++) {
-        MapElement* element = it.value();
-        if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
-            autotilesWithPreview[it.key()] = (AutotileDatas*) element;
-    }
+    QHash<Position, AutotileDatas*> autotilesWithPreview;
+    getAutotilesWithPreview(autotilesWithPreview, previewSquares);
 
     // Initialize vertices for walls
     QHash<Position, AutotileDatas*>::iterator i;

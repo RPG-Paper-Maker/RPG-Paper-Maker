@@ -68,6 +68,8 @@ public:
                        MapEditorSubSelectionKind &previousType);
     bool deleteSpriteWall(Position& position, QJsonObject &previous,
                           MapEditorSubSelectionKind &previousType);
+    void updateAutotiles(Position& position,
+                         QSet<MapPortion*> &update, QSet<MapPortion*> &save);
     void updateSpriteWalls();
     SpriteWallDatas* getWallAt(Position& position);
     bool addObject(Position& p, SystemCommonObject* o, QJsonObject &previous,

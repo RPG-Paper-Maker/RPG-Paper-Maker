@@ -94,8 +94,9 @@ public:
     static bool tileOnBottomRight(Position& position, Portion& portion,
                                   QHash<Position, AutotileDatas*> &preview);
     void updateAround(Position& position,
-                      QHash<Position, AutotileDatas *> &preview,
-                      QSet<MapPortion *> &update, QSet<MapPortion *> &save);
+                      QHash<Position, AutotileDatas *> &autotiles,
+                      QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+                      QHash<Position, MapElement*>* preview);
     void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);

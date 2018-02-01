@@ -51,6 +51,9 @@ public:
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind);
+    void updateAutotiles(Position& position,
+                         QHash<Position, MapElement *> &preview,
+                         QSet<MapPortion*> &update, QSet<MapPortion*> &save);
 
     void initializeVertices(QList<TextureAutotile *> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,

@@ -93,10 +93,10 @@ public:
                                DrawKind drawKind, bool layerOn, QRect &tileset,
                                int specialID);
     void removePreviewElements();
-    void updatePreviewFloors(MapEditorSelectionKind kind,
-                             MapEditorSubSelectionKind subKind,
-                             bool up, bool layerOn,
-                             QRect& tileset, Position& position);
+    void updatePreviewLands(MapEditorSelectionKind kind,
+                            MapEditorSubSelectionKind subKind,
+                            bool up, bool layerOn,
+                            QRect& tileset, int specialID, Position& position);
     void getWallSpritesPositions(QList<Position> &positions);
     void updatePreviewWallSprites(int specialID);
     void updatePreviewWallSprite(Position &position, int specialID);
