@@ -120,8 +120,81 @@ void AutotileDatas::initializeVertices(TextureAutotile* textureAutotile,
 
 // -------------------------------------------------------
 
-void AutotileDatas::update(Autotiles* autotiles) {
+void AutotileDatas::update(Position &position, Portion &portion,
+                           QHash<Position, AutotileDatas *> &preview)
+{
+    int a, b, c, d;
 
+    // Top left
+    if (!Autotiles::tileOnLeft(position, portion, preview) &&
+        !Autotiles::tileOnTop(position, portion, preview))
+        a = 1;
+    else if (!Autotiles::tileOnTop(position, portion, preview) &&
+             Autotiles::tileOnLeft(position, portion, preview))
+        a = 3;
+    else if (!Autotiles::tileOnLeft(position, portion, preview) &&
+             Autotiles::tileOnTop(position, portion, preview))
+        a = 4;
+    else if (Autotiles::tileOnLeft(position, portion, preview) &&
+             Autotiles::tileOnTop(position, portion, preview) &&
+             Autotiles::tileOnTopLeft(position, portion, preview))
+        a = 2;
+    else
+        a = 0;
+
+    // Top right
+    if (!Autotiles::tileOnRight(position, portion, preview) &&
+        !Autotiles::tileOnTop(position, portion, preview))
+        b = 1;
+    else if (!Autotiles::tileOnTop(position, portion, preview) &&
+             Autotiles::tileOnRight(position, portion, preview))
+        b = 3;
+    else if (!Autotiles::tileOnRight(position, portion, preview) &&
+             Autotiles::tileOnTop(position, portion, preview))
+        b = 4;
+    else if (Autotiles::tileOnRight(position, portion, preview) &&
+             Autotiles::tileOnTop(position, portion, preview) &&
+             Autotiles::tileOnTopRight(position, portion, preview))
+        b = 2;
+    else
+        b = 0;
+
+    // Bottom left
+    if (!Autotiles::tileOnLeft(position, portion, preview) &&
+            !Autotiles::tileOnBottom(position, portion, preview))
+        c = 1;
+    else if (!Autotiles::tileOnBottom(position, portion, preview) &&
+             Autotiles::tileOnLeft(position, portion, preview))
+        c = 3;
+    else if (!Autotiles::tileOnLeft(position, portion, preview) &&
+             Autotiles::tileOnBottom(position, portion, preview))
+        c = 4;
+    else if (Autotiles::tileOnLeft(position, portion, preview) &&
+             Autotiles::tileOnBottom(position, portion, preview) &&
+             Autotiles::tileOnBottomLeft(position, portion, preview))
+        c = 2;
+    else
+        c = 0;
+
+    // Bottom right
+    if (!Autotiles::tileOnRight(position, portion, preview) &&
+        !Autotiles::tileOnBottom(position, portion, preview))
+        d = 1;
+    else if (!Autotiles::tileOnBottom(position, portion, preview) &&
+             Autotiles::tileOnRight(position, portion, preview))
+        d = 3;
+    else if (!Autotiles::tileOnRight(position, portion, preview) &&
+             Autotiles::tileOnBottom(position, portion, preview))
+        d = 4;
+    else if (Autotiles::tileOnRight(position, portion, preview) &&
+             Autotiles::tileOnBottom(position, portion, preview) &&
+             Autotiles::tileOnBottomRight(position, portion, preview))
+        d = 2;
+    else
+        d = 0;
+
+    // Update tileId
+    m_tileID = (a * 64 * 2) + (b * 25) + (c * 5) + d;
 }
 
 // -------------------------------------------------------

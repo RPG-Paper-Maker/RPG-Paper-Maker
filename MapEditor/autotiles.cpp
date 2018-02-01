@@ -132,6 +132,7 @@ bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
     }
 
     setAutotile(p, autotile);
+    updateAround(p, m_all);
 
     return changed;
 }
@@ -150,6 +151,7 @@ bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
         changed = true;
         delete previousAutotile;
     }
+    updateAround(p, m_all);
 
     return changed;
 }
@@ -249,6 +251,136 @@ void Autotiles::updateRemoveLayer(
         positions.append(p);
         p.setLayer(++i);
         autotile = getAutotile(p);
+    }
+}
+
+// -------------------------------------------------------
+
+void Autotiles::getAutotilesWithPreview(
+        QHash<Position, AutotileDatas*> &autotilesWithPreview,
+        QHash<Position, MapElement*> &preview)
+{
+    QHash<Position, MapElement*>::iterator itw;
+    for (itw = preview.begin(); itw != preview.end(); itw++) {
+        MapElement* element = itw.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+            autotilesWithPreview[itw.key()] = (AutotileDatas*) element;
+    }
+}
+
+// -------------------------------------------------------
+
+AutotileDatas* Autotiles::tileOnWhatever(Position& position, Portion &portion,
+                                       QHash<Position, AutotileDatas*> &preview)
+{
+    Portion newPortion;
+    Wanok::get()->project()->currentMap()->getLocalPortion(position,
+                                                           newPortion);
+    if (portion == newPortion)
+        return (AutotileDatas*) preview.value(position);
+    else {
+        return (AutotileDatas*) Wanok::get()->project()->currentMap()
+            ->mapPortion(newPortion)->getMapElementAt(position,
+            MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles);
+    }
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnLeft(Position& position, Portion& portion,
+                           QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() - 1, position.y(), position.yPlus(),
+                         position.z(), position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnRight(Position& position, Portion& portion,
+                            QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() + 1, position.y(), position.yPlus(),
+                         position.z(), position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnTop(Position& position, Portion& portion,
+                          QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x(), position.y(), position.yPlus(),
+                         position.z() - 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnBottom(Position& position, Portion& portion,
+                             QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x(), position.y(), position.yPlus(),
+                         position.z() + 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnTopLeft(Position& position, Portion& portion,
+                              QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() - 1, position.y(), position.yPlus(),
+                         position.z() - 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnTopRight(Position& position, Portion& portion,
+                               QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() + 1, position.y(), position.yPlus(),
+                         position.z() - 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnBottomLeft(Position& position, Portion& portion,
+                                 QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() - 1, position.y(), position.yPlus(),
+                         position.z() + 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Autotiles::tileOnBottomRight(Position& position, Portion& portion,
+                                  QHash<Position, AutotileDatas*> &preview)
+{
+    Position newPosition(position.x() + 1, position.y(), position.yPlus(),
+                         position.z() + 1, position.layer());
+    return tileOnWhatever(newPosition, portion, preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+void Autotiles::updateAround(Position& position,
+                             QHash<Position, AutotileDatas*> &preview)
+{
+    Portion portion;
+    Wanok::get()->project()->currentMap()->getLocalPortion(position, portion);
+    for (int i = position.x() - 1; i <= position.x() + 1; i++) {
+        for (int j = position.z() - 1; j <= position.z() + 1; j++) {
+            Position newPosition(i, position.y(), position.yPlus(), j,
+                                 position.layer());
+            AutotileDatas* autotile = tileOnWhatever(newPosition, portion,
+                                                     preview);
+            if (autotile != nullptr)
+                autotile->update(newPosition, portion, preview);
+        }
     }
 }
 

@@ -56,7 +56,8 @@ public:
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
                                     Position& position, int& count);
-    void update(Autotiles* autotiles);
+    void update(Position &position, Portion& portion,
+                QHash<Position, AutotileDatas*> &preview);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject & json) const;

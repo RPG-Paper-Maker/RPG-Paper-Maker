@@ -67,6 +67,29 @@ public:
     void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
                            QList<MapEditorSubSelectionKind> &previousType,
                            QList<Position> &positions);
+    void getAutotilesWithPreview(
+            QHash<Position, AutotileDatas*> &autotilesWithPreview,
+            QHash<Position, MapElement *> &preview);
+    static AutotileDatas* tileOnWhatever(Position& position, Portion& portion,
+                                      QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnLeft(Position& position, Portion& portion,
+                           QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnRight(Position& position, Portion& portion,
+                            QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnTop(Position& position, Portion& portion,
+                          QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnBottom(Position& position, Portion& portion,
+                             QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnTopLeft(Position& position, Portion& portion,
+                              QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnTopRight(Position& position, Portion& portion,
+                               QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnBottomLeft(Position& position, Portion& portion,
+                                 QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnBottomRight(Position& position, Portion& portion,
+                                  QHash<Position, AutotileDatas*> &preview);
+    void updateAround(Position& position,
+                      QHash<Position, AutotileDatas *> &preview);
     void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);
