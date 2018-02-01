@@ -119,7 +119,8 @@ AutotileDatas* Autotiles::removeAutotile(Position& p) {
 
 bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
                             QJsonObject &previousObj,
-                            MapEditorSubSelectionKind& previousType)
+                            MapEditorSubSelectionKind& previousType,
+                            QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
     AutotileDatas* previousAutotile = removeAutotile(p);
     bool changed = true;
@@ -132,7 +133,7 @@ bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
     }
 
     setAutotile(p, autotile);
-    updateAround(p, m_all);
+    updateAround(p, m_all, update, save);
 
     return changed;
 }
@@ -140,7 +141,9 @@ bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
 // -------------------------------------------------------
 
 bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
-                               MapEditorSubSelectionKind &previousType)
+                               MapEditorSubSelectionKind &previousType,
+                               QSet<MapPortion*> &update,
+                               QSet<MapPortion*> &save)
 {
     AutotileDatas* previousAutotile = removeAutotile(p);
     bool changed = false;
@@ -151,7 +154,7 @@ bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
         changed = true;
         delete previousAutotile;
     }
-    updateAround(p, m_all);
+    updateAround(p, m_all, update, save);
 
     return changed;
 }
@@ -235,7 +238,8 @@ int Autotiles::getLastLayerAt(Position& position) const {
 void Autotiles::updateRemoveLayer(
         Position& position, QList<QJsonObject> &previous,
         QList<MapEditorSubSelectionKind> &previousType,
-        QList<Position> &positions)
+        QList<Position> &positions,
+        QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
     int i = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(),
@@ -245,7 +249,7 @@ void Autotiles::updateRemoveLayer(
     while (autotile != nullptr) {
         QJsonObject obj;
         MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-        deleteAutotile(p, obj, kind);
+        deleteAutotile(p, obj, kind, update, save);
         previous.append(obj);
         previousType.append(kind);
         positions.append(p);
@@ -368,7 +372,8 @@ bool Autotiles::tileOnBottomRight(Position& position, Portion& portion,
 // -------------------------------------------------------
 
 void Autotiles::updateAround(Position& position,
-                             QHash<Position, AutotileDatas*> &preview)
+                             QHash<Position, AutotileDatas*> &preview,
+                             QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
     Portion portion;
     Wanok::get()->project()->currentMap()->getLocalPortion(position, portion);
@@ -378,8 +383,20 @@ void Autotiles::updateAround(Position& position,
                                  position.layer());
             AutotileDatas* autotile = tileOnWhatever(newPosition, portion,
                                                      preview);
-            if (autotile != nullptr)
-                autotile->update(newPosition, portion, preview);
+            if (autotile != nullptr) {
+                bool changed = autotile->update(newPosition, portion, preview);
+                if (changed) {
+                    Portion newPortion;
+                    Wanok::get()->project()->currentMap()->getLocalPortion(
+                                newPosition, newPortion);
+                    if (portion != newPortion) {
+                        MapPortion* mapPortion = Wanok::get()->project()
+                                ->currentMap()->mapPortion(newPortion);
+                        update += mapPortion;
+                        save += mapPortion;
+                    }
+                }
+            }
         }
     }
 }

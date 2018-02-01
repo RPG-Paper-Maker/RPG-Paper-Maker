@@ -50,10 +50,12 @@ public:
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject &previous,
-                 MapEditorSubSelectionKind &previousType);
+                 MapEditorSubSelectionKind &previousType,
+                 QSet<MapPortion*>& update, QSet<MapPortion*>& save);
     bool deleteLand(Position& p, QList<QJsonObject> &previous,
                     QList<MapEditorSubSelectionKind> &previousType,
-                    QList<Position>& positions);
+                    QList<Position>& positions, QSet<MapPortion *> &update,
+                    QSet<MapPortion *> &save);
     bool addSprite(QSet<Portion>& portionsOverflow, Position& p,
                    SpriteDatas *sprite, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);

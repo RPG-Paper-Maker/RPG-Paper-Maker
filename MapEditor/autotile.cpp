@@ -120,10 +120,10 @@ void AutotileDatas::initializeVertices(TextureAutotile* textureAutotile,
 
 // -------------------------------------------------------
 
-void AutotileDatas::update(Position &position, Portion &portion,
+bool AutotileDatas::update(Position &position, Portion &portion,
                            QHash<Position, AutotileDatas *> &preview)
 {
-    int a, b, c, d;
+    int a, b, c, d, previousTileID;
 
     // Top left
     if (!Autotiles::tileOnLeft(position, portion, preview) &&
@@ -194,7 +194,10 @@ void AutotileDatas::update(Position &position, Portion &portion,
         d = 0;
 
     // Update tileId
+    previousTileID = m_tileID;
     m_tileID = (a * 64 * 2) + (b * 25) + (c * 5) + d;
+
+    return previousTileID != m_tileID;
 }
 
 // -------------------------------------------------------

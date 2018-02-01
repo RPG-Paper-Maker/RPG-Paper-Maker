@@ -56,7 +56,7 @@ public:
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
                                     Position& position, int& count);
-    void update(Position &position, Portion& portion,
+    bool update(Position &position, Portion& portion,
                 QHash<Position, AutotileDatas*> &preview);
 
     virtual void read(const QJsonObject &json);

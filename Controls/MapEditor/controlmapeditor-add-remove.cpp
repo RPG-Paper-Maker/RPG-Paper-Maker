@@ -301,8 +301,9 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
             QJsonObject previous;
             MapEditorSubSelectionKind previousType =
                     MapEditorSubSelectionKind::None;
-            bool changed = mapPortion->addLand(p, landDatas, previous,
-                                               previousType);
+            bool changed = mapPortion->addLand(
+                       p, landDatas, previous, previousType, m_portionsToUpdate,
+                       m_portionsToSave);
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {
@@ -366,7 +367,8 @@ void ControlMapEditor::eraseLand(Position& p, bool undoRedo){
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteLand(p, previous, previousType,
-                                                  positions);
+                                                  positions, m_portionsToUpdate,
+                                                  m_portionsToSave);
             if (changed && m_map->saved())
                 setToNotSaved();
             if (changed) {

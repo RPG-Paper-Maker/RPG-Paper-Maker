@@ -85,17 +85,21 @@ LandDatas* MapPortion::getLand(Position& p){
 }
 
 bool MapPortion::addLand(Position& p, LandDatas *land, QJsonObject& previous,
-                         MapEditorSubSelectionKind& previousType){
-    return m_lands->addLand(p, land, previous, previousType);
+                         MapEditorSubSelectionKind& previousType,
+                         QSet<MapPortion*>& update, QSet<MapPortion*>& save)
+{
+    return m_lands->addLand(p, land, previous, previousType, update, save);
 }
 
 // -------------------------------------------------------
 
 bool MapPortion::deleteLand(Position& p, QList<QJsonObject> &previous,
                             QList<MapEditorSubSelectionKind> &previousType,
-                            QList<Position> &positions)
+                            QList<Position> &positions,
+                            QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
-    return m_lands->deleteLand(p, previous, previousType, positions);
+    return m_lands->deleteLand(p, previous, previousType, positions, update,
+                               save);
 }
 
 // -------------------------------------------------------

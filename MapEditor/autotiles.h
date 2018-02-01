@@ -25,6 +25,8 @@
 #include "mapproperties.h"
 #include "textureautotile.h"
 
+class MapPortion;
+
 // -------------------------------------------------------
 //
 //  CLASS Autotiles
@@ -53,9 +55,11 @@ public:
     AutotileDatas* removeAutotile(Position& p);
     bool addAutotile(Position& p, AutotileDatas* autotile,
                      QJsonObject &previousObj,
-                     MapEditorSubSelectionKind& previousType);
+                     MapEditorSubSelectionKind& previousType,
+                     QSet<MapPortion*>& update, QSet<MapPortion*>& save);
     bool deleteAutotile(Position& p, QJsonObject &previous,
-                        MapEditorSubSelectionKind &previousType);
+                        MapEditorSubSelectionKind &previousType,
+                        QSet<MapPortion*>& update, QSet<MapPortion*>& save);
 
     void removeAutotileOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
@@ -66,7 +70,8 @@ public:
     int getLastLayerAt(Position& position) const;
     void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
                            QList<MapEditorSubSelectionKind> &previousType,
-                           QList<Position> &positions);
+                           QList<Position> &positions,
+                           QSet<MapPortion*> &update, QSet<MapPortion*> &save);
     void getAutotilesWithPreview(
             QHash<Position, AutotileDatas*> &autotilesWithPreview,
             QHash<Position, MapElement *> &preview);
@@ -89,7 +94,8 @@ public:
     static bool tileOnBottomRight(Position& position, Portion& portion,
                                   QHash<Position, AutotileDatas*> &preview);
     void updateAround(Position& position,
-                      QHash<Position, AutotileDatas *> &preview);
+                      QHash<Position, AutotileDatas *> &preview,
+                      QSet<MapPortion *> &update, QSet<MapPortion *> &save);
     void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);

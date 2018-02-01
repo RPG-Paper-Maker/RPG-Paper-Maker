@@ -78,7 +78,8 @@ LandDatas* Lands::getLand(Position& p) {
 // -------------------------------------------------------
 
 bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
-                    MapEditorSubSelectionKind &previousType)
+                    MapEditorSubSelectionKind &previousType,
+                    QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
     switch (land->getSubKind()) {
     case MapEditorSubSelectionKind::Floors:
@@ -87,7 +88,7 @@ bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
         break;
     case MapEditorSubSelectionKind::Autotiles:
         return m_autotiles->addAutotile(p, (AutotileDatas*) land, previous,
-                                        previousType);
+                                        previousType, update, save);
         break;
     default:
         return false;
@@ -98,13 +99,14 @@ bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
 
 bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
                        QList<MapEditorSubSelectionKind> &previousType,
-                       QList<Position>& positions)
+                       QList<Position>& positions, QSet<MapPortion *> &update,
+                       QSet<MapPortion *> &save)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
     bool changed = m_floors->deleteFloor(p, prev, kind);
     if (kind == MapEditorSubSelectionKind::None) {
-        changed = m_autotiles->deleteAutotile(p, prev, kind);
+        changed = m_autotiles->deleteAutotile(p, prev, kind, update, save);
     }
 
     if (changed) {
@@ -117,7 +119,7 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
             break;
         case MapEditorSubSelectionKind::Autotiles:
             m_autotiles->updateRemoveLayer(p, previous, previousType,
-                                           positions);
+                                           positions, update, save);
             break;
         default:
             break;
