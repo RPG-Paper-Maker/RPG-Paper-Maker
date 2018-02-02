@@ -112,16 +112,16 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                     AutotileDatas* element = new AutotileDatas(specialID, rect,
                                                                up);
                     updatePreviewElement(shortPosition, shortPortion, element);
-                    MapPortion* mapPortion = m_map->mapPortion(shortPortion);
-                    mapPortion->updateAutotiles(shortPosition,
-                                                m_portionsToUpdate,
-                                                m_portionsToSave,
-                                                m_portionsPreviousPreview);
                     break;
                 }
                 default:
                     break;
                 }
+                MapPortion* mapPortion = m_map->mapPortion(shortPortion);
+                mapPortion->updateAutotiles(shortPosition,
+                                            m_portionsToUpdate,
+                                            m_portionsToSave,
+                                            m_portionsPreviousPreview);
             }
         }
     }

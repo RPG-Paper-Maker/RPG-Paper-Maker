@@ -108,6 +108,8 @@ public:
                       QHash<Position, AutotileDatas *> &autotiles,
                       QSet<MapPortion *> &update, QSet<MapPortion *> &save,
                       QSet<MapPortion*>* previousPreview);
+    void updateWithoutPreview(Position& position, QSet<MapPortion *> &update,
+                              QSet<MapPortion *> &save);
     void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);

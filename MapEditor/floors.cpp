@@ -229,6 +229,8 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
         MapElement* element = it.value();
         if (element->getSubKind() == MapEditorSubSelectionKind::Floors)
             floorsWithPreview[it.key()] = (FloorDatas*) element;
+        else if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+            floorsWithPreview.remove(it.key());
     }
 
     // Initialize vertices

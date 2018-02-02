@@ -77,22 +77,53 @@ LandDatas* Lands::getLand(Position& p) {
 
 // -------------------------------------------------------
 
+void Lands::setLand(Position& p, LandDatas* land) {
+    switch (land->getSubKind()) {
+    case MapEditorSubSelectionKind::Floors:
+        m_floors->setFloor(p, (FloorDatas*) land);
+        break;
+    case MapEditorSubSelectionKind::Autotiles:
+        m_autotiles->setAutotile(p, (AutotileDatas*) land);
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+LandDatas* Lands::removeLand(Position& p) {
+    LandDatas* land = m_floors->removeFloor(p);
+
+    if (land != nullptr)
+        return land;
+
+    land = m_autotiles->removeAutotile(p);
+
+    return land;
+}
+
+// -------------------------------------------------------
+
 bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
                     MapEditorSubSelectionKind &previousType,
                     QSet<MapPortion*>& update, QSet<MapPortion*>& save)
 {
-    switch (land->getSubKind()) {
-    case MapEditorSubSelectionKind::Floors:
-        return m_floors->addFloor(p, (FloorDatas*) land, previous,
-                                  previousType);
-        break;
-    case MapEditorSubSelectionKind::Autotiles:
-        return m_autotiles->addAutotile(p, (AutotileDatas*) land, previous,
-                                        previousType, update, save);
-        break;
-    default:
-        return false;
+    LandDatas* previousLand = removeLand(p);
+    bool changed = true;
+
+    if (previousLand != nullptr) {
+        previousLand->write(previous);
+        previousType = previousLand->getSubKind();
+        changed = (previousType == land->getSubKind())
+                ? (*previousLand) != (*land) : true;
+        delete previousLand;
     }
+
+    setLand(p, land);
+    m_autotiles->updateWithoutPreview(p, update, save);
+
+    return changed;
 }
 
 // -------------------------------------------------------
@@ -101,13 +132,21 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
                        QList<MapEditorSubSelectionKind> &previousType,
                        QList<Position>& positions, QSet<MapPortion *> &update,
                        QSet<MapPortion *> &save)
-{
+{ 
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_floors->deleteFloor(p, prev, kind);
-    if (kind == MapEditorSubSelectionKind::None) {
-        changed = m_autotiles->deleteAutotile(p, prev, kind, update, save);
+    LandDatas* previousLand = removeLand(p);
+    bool changed = false;
+
+    if (previousLand != nullptr) {
+        previousLand->write(prev);
+        kind = previousLand->getSubKind();
+        changed = true;
+
+        delete previousLand;
     }
+
+    m_autotiles->updateWithoutPreview(p, update, save);
 
     if (changed) {
         previous.append(prev);

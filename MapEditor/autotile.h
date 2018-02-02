@@ -45,6 +45,7 @@ public:
     AutotileDatas(const AutotileDatas &autotile);
     int autotileID() const;
     static const QString JSON_ID;
+    static const QString JSON_TILE_ID;
 
     bool operator==(const AutotileDatas& other) const;
     bool operator!=(const AutotileDatas& other) const;

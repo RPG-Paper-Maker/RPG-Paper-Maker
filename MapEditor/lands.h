@@ -38,6 +38,8 @@ public:
 
     bool isEmpty() const;
     LandDatas* getLand(Position& p);
+    void setLand(Position& p, LandDatas* land);
+    LandDatas* removeLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject& previous,
                  MapEditorSubSelectionKind& previousType,
                  QSet<MapPortion *> &update, QSet<MapPortion *> &save);

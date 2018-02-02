@@ -270,7 +270,9 @@ void Autotiles::getAutotilesWithPreview(
     QHash<Position, MapElement*>::iterator itw;
     for (itw = preview.begin(); itw != preview.end(); itw++) {
         MapElement* element = itw.value();
-        if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+        if (element->getSubKind() == MapEditorSubSelectionKind::Floors)
+            autotilesWithPreview.remove(itw.key());
+        else if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
             autotilesWithPreview[itw.key()] = (AutotileDatas*) element;
     }
 }
@@ -450,6 +452,15 @@ void Autotiles::updateAround(Position& position,
 }
 
 // -------------------------------------------------------
+
+void Autotiles::updateWithoutPreview(Position& position,
+                                     QSet<MapPortion *> &update,
+                                     QSet<MapPortion *> &save)
+{
+    updateAround(position, m_all, update, save, nullptr);
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //
@@ -552,5 +563,5 @@ void Autotiles::write(QJsonObject & json) const{
         objHash["v"] = obj;
         tab.append(objHash);
     }
-    json["autotile"] = tab;
+    json["autotiles"] = tab;
 }

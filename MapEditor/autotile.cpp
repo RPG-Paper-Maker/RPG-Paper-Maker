@@ -29,6 +29,7 @@
 // -------------------------------------------------------
 
 const QString AutotileDatas::JSON_ID = "id";
+const QString AutotileDatas::JSON_TILE_ID = "tid";
 
 // -------------------------------------------------------
 //
@@ -253,6 +254,7 @@ void AutotileDatas::read(const QJsonObject & json){
     LandDatas::read(json);
 
     m_autotileID = json[JSON_ID].toInt();
+    m_tileID = json[JSON_TILE_ID].toInt();
 }
 
 // -------------------------------------------------------
@@ -261,6 +263,7 @@ void AutotileDatas::write(QJsonObject &json) const{
     LandDatas::write(json);
 
     json[JSON_ID] = m_autotileID;
+    json[JSON_TILE_ID] = m_tileID;
 }
 
 // -------------------------------------------------------
