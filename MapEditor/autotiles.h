@@ -75,28 +75,39 @@ public:
     void getAutotilesWithPreview(
             QHash<Position, AutotileDatas*> &autotilesWithPreview,
             QHash<Position, MapElement *> &preview);
-    static AutotileDatas* tileOnWhatever(Position& position, Portion& portion,
+    static AutotileDatas* tileExisting(Position& position, Portion& portion,
                                       QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnLeft(Position& position, Portion& portion,
+    static AutotileDatas* tileOnWhatever(
+            Position& position, Portion& portion, int id, QRect &rect,
+            QHash<Position, AutotileDatas*> &preview);
+    static bool tileOnLeft(Position& position, Portion& portion, int id,
+                           QRect& rect,
                            QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnRight(Position& position, Portion& portion,
+    static bool tileOnRight(Position& position, Portion& portion, int id,
+                            QRect& rect,
                             QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnTop(Position& position, Portion& portion,
+    static bool tileOnTop(Position& position, Portion& portion, int id,
+                          QRect& rect,
                           QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnBottom(Position& position, Portion& portion,
+    static bool tileOnBottom(Position& position, Portion& portion, int id,
+                             QRect& rect,
                              QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnTopLeft(Position& position, Portion& portion,
+    static bool tileOnTopLeft(Position& position, Portion& portion, int id,
+                              QRect& rect,
                               QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnTopRight(Position& position, Portion& portion,
+    static bool tileOnTopRight(Position& position, Portion& portion, int id,
+                               QRect& rect,
                                QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnBottomLeft(Position& position, Portion& portion,
+    static bool tileOnBottomLeft(Position& position, Portion& portion, int id,
+                                 QRect& rect,
                                  QHash<Position, AutotileDatas*> &preview);
-    static bool tileOnBottomRight(Position& position, Portion& portion,
+    static bool tileOnBottomRight(Position& position, Portion& portion, int id,
+                                  QRect& rect,
                                   QHash<Position, AutotileDatas*> &preview);
     void updateAround(Position& position,
                       QHash<Position, AutotileDatas *> &autotiles,
                       QSet<MapPortion *> &update, QSet<MapPortion *> &save,
-                      QHash<Position, MapElement*>* preview);
+                      QSet<MapPortion*>* previousPreview);
     void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);

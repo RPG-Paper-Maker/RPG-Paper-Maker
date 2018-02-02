@@ -51,7 +51,8 @@ AutotileDatas::AutotileDatas(int autotileID, QRect *texture, bool up) :
 }
 
 AutotileDatas::AutotileDatas(const AutotileDatas &autotile)  :
-    AutotileDatas(autotile.m_autotileID, autotile.m_textureRect, autotile.m_up)
+    AutotileDatas(autotile.m_autotileID, new QRect(*autotile.m_textureRect),
+                  autotile.m_up)
 {
     m_tileID = autotile.m_tileID;
 }
@@ -132,69 +133,105 @@ bool AutotileDatas::update(Position &position, Portion &portion,
     int a, b, c, d, previousTileID;
 
     // Top left
-    if (!Autotiles::tileOnLeft(position, portion, preview) &&
-        !Autotiles::tileOnTop(position, portion, preview))
+    if (!Autotiles::tileOnLeft(
+                position, portion, m_autotileID, *m_textureRect, preview) &&
+        !Autotiles::tileOnTop(
+                position, portion, m_autotileID, *m_textureRect, preview))
         a = 1;
-    else if (!Autotiles::tileOnTop(position, portion, preview) &&
-             Autotiles::tileOnLeft(position, portion, preview))
+    else if (!Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         a = 3;
-    else if (!Autotiles::tileOnLeft(position, portion, preview) &&
-             Autotiles::tileOnTop(position, portion, preview))
+    else if (!Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         a = 4;
-    else if (Autotiles::tileOnLeft(position, portion, preview) &&
-             Autotiles::tileOnTop(position, portion, preview) &&
-             Autotiles::tileOnTopLeft(position, portion, preview))
+    else if (Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnTopLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         a = 2;
     else
         a = 0;
 
     // Top right
-    if (!Autotiles::tileOnRight(position, portion, preview) &&
-        !Autotiles::tileOnTop(position, portion, preview))
+    if (!Autotiles::tileOnRight(
+                position, portion, m_autotileID, *m_textureRect, preview) &&
+        !Autotiles::tileOnTop(
+                position, portion, m_autotileID, *m_textureRect, preview))
         b = 1;
-    else if (!Autotiles::tileOnTop(position, portion, preview) &&
-             Autotiles::tileOnRight(position, portion, preview))
+    else if (!Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         b = 3;
-    else if (!Autotiles::tileOnRight(position, portion, preview) &&
-             Autotiles::tileOnTop(position, portion, preview))
+    else if (!Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview)&&
+             Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         b = 4;
-    else if (Autotiles::tileOnRight(position, portion, preview) &&
-             Autotiles::tileOnTop(position, portion, preview) &&
-             Autotiles::tileOnTopRight(position, portion, preview))
+    else if (Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+            Autotiles::tileOnTop(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+            Autotiles::tileOnTopRight(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         b = 2;
     else
         b = 0;
 
     // Bottom left
-    if (!Autotiles::tileOnLeft(position, portion, preview) &&
-            !Autotiles::tileOnBottom(position, portion, preview))
+    if (!Autotiles::tileOnLeft(
+                position, portion, m_autotileID, *m_textureRect, preview) &&
+            !Autotiles::tileOnBottom(
+                position, portion, m_autotileID, *m_textureRect, preview))
         c = 1;
-    else if (!Autotiles::tileOnBottom(position, portion, preview) &&
-             Autotiles::tileOnLeft(position, portion, preview))
+    else if (!Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         c = 3;
-    else if (!Autotiles::tileOnLeft(position, portion, preview) &&
-             Autotiles::tileOnBottom(position, portion, preview))
+    else if (!Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         c = 4;
-    else if (Autotiles::tileOnLeft(position, portion, preview) &&
-             Autotiles::tileOnBottom(position, portion, preview) &&
-             Autotiles::tileOnBottomLeft(position, portion, preview))
+    else if (Autotiles::tileOnLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+          Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+          Autotiles::tileOnBottomLeft(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         c = 2;
     else
         c = 0;
 
     // Bottom right
-    if (!Autotiles::tileOnRight(position, portion, preview) &&
-        !Autotiles::tileOnBottom(position, portion, preview))
+    if (!Autotiles::tileOnRight(
+                position, portion, m_autotileID, *m_textureRect, preview) &&
+        !Autotiles::tileOnBottom(
+                position, portion, m_autotileID, *m_textureRect, preview))
         d = 1;
-    else if (!Autotiles::tileOnBottom(position, portion, preview) &&
-             Autotiles::tileOnRight(position, portion, preview))
+    else if (!Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         d = 3;
-    else if (!Autotiles::tileOnRight(position, portion, preview) &&
-             Autotiles::tileOnBottom(position, portion, preview))
+    else if (!Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+             Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         d = 4;
-    else if (Autotiles::tileOnRight(position, portion, preview) &&
-             Autotiles::tileOnBottom(position, portion, preview) &&
-             Autotiles::tileOnBottomRight(position, portion, preview))
+    else if (Autotiles::tileOnRight(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+         Autotiles::tileOnBottom(
+                 position, portion, m_autotileID, *m_textureRect, preview) &&
+         Autotiles::tileOnBottomRight(
+                 position, portion, m_autotileID, *m_textureRect, preview))
         d = 2;
     else
         d = 0;

@@ -100,19 +100,23 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 shortPosition.setLayer(layer);
                 QRect* rect = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
 
-                MapElement* element = nullptr;
                 switch (subKind) {
                 case MapEditorSubSelectionKind::Floors:
-                    element = new FloorDatas(rect, up);
+                {
+                    FloorDatas* element = new FloorDatas(rect, up);
                     updatePreviewElement(shortPosition, shortPortion, element);
                     break;
+                }
                 case MapEditorSubSelectionKind::Autotiles:
                 {
-                    element = new AutotileDatas(specialID, rect, up);
+                    AutotileDatas* element = new AutotileDatas(specialID, rect,
+                                                               up);
                     updatePreviewElement(shortPosition, shortPortion, element);
                     MapPortion* mapPortion = m_map->mapPortion(shortPortion);
-                    mapPortion->updateAutotiles(
-                           shortPosition, m_portionsToUpdate, m_portionsToSave);
+                    mapPortion->updateAutotiles(shortPosition,
+                                                m_portionsToUpdate,
+                                                m_portionsToSave,
+                                                m_portionsPreviousPreview);
                     break;
                 }
                 default:

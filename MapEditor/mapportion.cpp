@@ -155,10 +155,12 @@ bool MapPortion::deleteSpriteWall(Position &position,
 
 // -------------------------------------------------------
 
-void MapPortion::updateAutotiles(Position& position,
-        QSet<MapPortion*> &update, QSet<MapPortion*> &save)
+void MapPortion::updateAutotiles(Position& position, QSet<MapPortion*> &update,
+                                 QSet<MapPortion*> &save,
+                                 QSet<MapPortion*> &previousPreview)
 {
-    m_lands->updateAutotiles(position, m_previewSquares, update, save);
+    m_lands->updateAutotiles(position, m_previewSquares, update, save,
+                             previousPreview);
 }
 
 // -------------------------------------------------------
