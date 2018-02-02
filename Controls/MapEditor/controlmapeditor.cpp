@@ -1021,14 +1021,25 @@ void ControlMapEditor::performUndoRedoAction(
     case MapEditorSubSelectionKind::None:
         break;
     case MapEditorSubSelectionKind::Floors:
+    case MapEditorSubSelectionKind::Autotiles:
+    {
         if (before) {
-            FloorDatas* floor = new FloorDatas;
-            floor->read(obj);
-            stockLand(position, floor, kind, false, true);
+            LandDatas* land = nullptr;
+            switch (kind) {
+            case MapEditorSubSelectionKind::Floors:
+                land = new FloorDatas; break;
+            case MapEditorSubSelectionKind::Autotiles:
+                land = new AutotileDatas; break;
+            default:
+                break;
+            }
+            land->read(obj);
+            stockLand(position, land, kind, false, true);
         }
         else
             eraseLand(position, true);
         break;
+    }
     case MapEditorSubSelectionKind::SpritesFace:
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesDouble:
