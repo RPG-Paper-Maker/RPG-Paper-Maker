@@ -187,14 +187,9 @@ public:
     MapPortion *getMapPortion(Position& p, Portion &portion, bool undoRedo);
     void traceLine(Position& previousCoords, Position& coords,
                    QList<Position>& positions);
-    bool isTinPaintPossible(MapEditorSelectionKind selection,
-                            DrawKind drawKind, QString& messageError) const;
     int getLayer(MapPortion* mapPortion, float d, Position& p, bool layerOn,
                  MapEditorSelectionKind kind);
     void updatePositionLayer(Position& p, bool layerOn);
-    bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
-                            DrawKind drawKind, bool layerOn,
-                            QString& messageError) const;
     void showHideGrid();
     void showHideSquareInformations();
     void undo();

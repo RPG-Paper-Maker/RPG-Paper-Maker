@@ -585,10 +585,12 @@
     			"No More preview when the editor doesn't have focus",
     			"Autotiles in BR fusionned into one single file",
     			"No walls in tileset: texture panel displays a warning message",
-    			"Walls selection is kept even after switching to tileset selection"
+    			"Walls selection is kept even after switching to tileset selection",
+    			"Map editor bar disable paint kind according to floors/sprites"
     		],
     		"bugs": [
-    			"No more crash when canceling and re-opening a window for picture preview"
+    			"No more crash when canceling and re-opening a window for picture preview",
+    			"First adding element on map is now not ignored"
     		]
     	}
 	]

@@ -455,13 +455,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
             MapEditorSubSelectionKind subSelection =
                     m_menuBar->subSelectionKind();
             DrawKind drawKind = m_menuBar->drawKind();
-            QString messageError;
             bool layerOn = m_menuBar->layerOn();
-            if (button == Qt::MouseButton::MiddleButton ||
-                (m_control.isTinPaintPossible(selection, drawKind, messageError)
-                && m_control.isPutLayerPossible(subSelection, drawKind, layerOn,
-                                                messageError)))
-            {
+            if (button != Qt::MouseButton::MiddleButton) {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
                 int specialID = m_panelTextures->getID();
@@ -469,8 +464,6 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                                          layerOn, tileset, specialID,
                                          event->pos(), button);
             }
-            else
-                QMessageBox::information(nullptr, "Warning", messageError);
         }
         // If in teleport command
         else{

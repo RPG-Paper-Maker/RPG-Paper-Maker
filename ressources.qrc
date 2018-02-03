@@ -33,6 +33,8 @@
         <file>Ressources/layer_none.png</file>
         <file>Ressources/layer_on.png</file>
         <file>Ressources/sprite_walls.png</file>
+        <file>Ressources/layer_on_disable.png</file>
+        <file>Ressources/pin_disable.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

@@ -51,10 +51,23 @@ public:
     static QColor colorBackgroundSelected;
     static QColor colorBackgroundRightSelected;
     MapEditorSelectionKind selectionKind() const;
-    MapEditorSubSelectionKind subSelectionKind() const;
-    DrawKind drawKind() const;
+    MapEditorSubSelectionKind subSelectionKind();
+    DrawKind drawKind();
     bool layerOn() const;
     bool containsMenu() const;
+    QAction* actionFloors() const;
+    QAction* actionAutotiles() const;
+    QAction* actionFaceSprite() const;
+    QAction* actionFixSprite() const;
+    QAction* actionDoubleSprite() const;
+    QAction* actionQuadraSprite() const;
+    QAction* actionWallSprite() const;
+    QAction* actionEvents() const;
+    QAction* actionPencil() const;
+    QAction* actionRectangle() const;
+    QAction* actionPin() const;
+    QAction* actionLayerNone() const;
+    QAction* actionLayerOn() const;
     void initializeRightMenu();
 
 private:
@@ -76,6 +89,11 @@ protected:
     void updateMenutext(QMenu* menu, QAction *action);
     void updateSubSelection(QMenu* menu, QAction* menuAction, QAction *action);
     void updateRight(QAction* action);
+    void forceNoneLayer();
+    void forcePencil();
+    void forceRight(int i);
+    void enableAllRight();
+    WidgetMenuBarMapEditor* getBarRight();
 
 private slots:
     void on_menuFloors_triggered(QAction* action);
