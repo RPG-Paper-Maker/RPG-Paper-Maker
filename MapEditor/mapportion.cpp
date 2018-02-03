@@ -237,6 +237,8 @@ void MapPortion::clearPreview() {
 // -------------------------------------------------------
 
 void MapPortion::addPreview(Position& p, MapElement* element) {
+
+
     m_previewSquares.insert(p, element);
 }
 

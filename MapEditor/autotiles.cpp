@@ -403,24 +403,31 @@ void Autotiles::updateAround(Position& position,
 {
     Portion portion;
     Wanok::get()->project()->currentMap()->getLocalPortion(position, portion);
-    for (int i = position.x() - 1; i <= position.x() + 1; i++) {
-        for (int j = position.z() - 1; j <= position.z() + 1; j++) {
-            Position newPosition(i, position.y(), position.yPlus(), j,
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            Position newPosition(position.x() + i, position.y(),
+                                 position.yPlus(), position.z() + j,
                                  position.layer());
             AutotileDatas* newAutotile = tileExisting(newPosition, portion,
                                                       autotiles);
             if (newAutotile != nullptr) {
 
                 // Update the current autotile
-                bool changed;
                 AutotileDatas* previewAutotile = nullptr;
+                bool changed;
                 if (previousPreview == nullptr)
                     changed = newAutotile->update(newPosition, portion,
                                                   autotiles);
                 else {
-                    previewAutotile = new AutotileDatas(*newAutotile);
+                    bool center = (i == 0 && j == 0);
+                    if (center)
+                        previewAutotile = newAutotile;
+                    else
+                        previewAutotile = new AutotileDatas(*newAutotile);
                     changed = previewAutotile->update(newPosition, portion,
                                                       autotiles);
+                    if (!changed && !center)
+                        delete previewAutotile;
                 }
 
                 if (changed) {
@@ -485,9 +492,9 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
         Position position = i.key();
         AutotileDatas* autotile = i.value();
         TextureAutotile* texture = nullptr;
-        int id = 0;
-        for (; id < texturesAutotiles.size(); id++) {
-            TextureAutotile* textureAutotile = texturesAutotiles[id];
+        int index = 0;
+        for (; index < texturesAutotiles.size(); index++) {
+            TextureAutotile* textureAutotile = texturesAutotiles[index];
             if (textureAutotile->isInTexture(autotile->autotileID(),
                                              autotile->textureRect()))
             {
@@ -496,7 +503,7 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
             }
         }
         if (texture->texture() != nullptr) {
-            Autotile* autotileGL = m_autotilesGL.at(id);
+            Autotile* autotileGL = m_autotilesGL.at(index);
             autotileGL->initializeVertices(texture, position, autotile,
                                            squareSize,
                                            texture->texture()->width(),

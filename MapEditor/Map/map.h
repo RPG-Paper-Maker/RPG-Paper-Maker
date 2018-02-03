@@ -115,13 +115,13 @@ public:
                              QHash<int, QOpenGLTexture*>& textures);
     void loadPicture(SystemPicture* picture, PictureKind kind, QImage &refImage);
     void loadAutotiles();
-    void loadPictureAutotile(QPainter& painter,
-                             TextureAutotile* textureAutotile, QImage& newImage,
-                             SystemPicture* picture, int& offset, int id);
+    TextureAutotile *loadPictureAutotile(
+            QPainter& painter, TextureAutotile* textureAutotile,
+            QImage& newImage, SystemPicture* picture, int& offset, int id);
     void editPictureWall(QImage& image, QImage& refImage);
-    void editPictureAutotile(QPainter& painter,
-                             TextureAutotile* textureAutotile, QImage& newImage,
-                             QImage& image, int& offset, int id);
+    TextureAutotile *editPictureAutotile(
+            QPainter& painter, TextureAutotile* textureAutotile,
+            QImage& newImage, QImage& image, int& offset, int id);
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);

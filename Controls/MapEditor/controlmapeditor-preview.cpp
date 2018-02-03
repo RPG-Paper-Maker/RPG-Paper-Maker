@@ -196,6 +196,8 @@ void ControlMapEditor::updatePreviewElement(Position &p, Portion& portion,
         m_portionsToUpdate += mapPortion;
         m_portionsPreviousPreview += mapPortion;
     }
+    else
+        delete element;
 }
 
 // -------------------------------------------------------
