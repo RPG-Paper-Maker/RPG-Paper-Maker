@@ -46,6 +46,7 @@ ControlMapEditor::ControlMapEditor() :
     m_elementOnLand(nullptr),
     m_elementOnSprite(nullptr),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
+    m_previousMouseCoords(-500, 0, 0, -500),
     m_needMapInfosToSave(false),
     m_needMapObjectsUpdate(false),
     m_displayGrid(true),
