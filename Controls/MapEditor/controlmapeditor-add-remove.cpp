@@ -40,7 +40,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     else {
         if (m_map->isInGrid(p, 500)) {
             if (m_isDeleting)
-                remove(element, selection, drawKind, p, layerOn);
+                remove(element, selection, drawKind, p);
             else {
                 add(selection, subSelection, drawKind, layerOn,
                     tileset, specialID, p);
@@ -89,11 +89,11 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
 
 void ControlMapEditor::remove(MapElement* element,
                               MapEditorSelectionKind selection,
-                              DrawKind drawKind, Position& p, bool layerOn)
+                              DrawKind drawKind, Position& p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
-        removeLand(p, drawKind, layerOn);
+        removeLand(p, drawKind);
         break;
     case MapEditorSelectionKind::Sprites:
         if (element != nullptr &&
@@ -185,7 +185,7 @@ void ControlMapEditor::addLand(Position& p, MapEditorSubSelectionKind kind,
     case DrawKind::Rectangle:
         break; // TODO
     case DrawKind::Pin:
-        paintPinLand(p, kind, tileset, layerOn);
+        paintPinLand(p, kind, specialID, tileset, up);
         break;
     }
 
@@ -196,7 +196,8 @@ void ControlMapEditor::addLand(Position& p, MapEditorSubSelectionKind kind,
 
 void ControlMapEditor::paintPinLand(Position& p,
                                     MapEditorSubSelectionKind kindAfter,
-                                    QRect& textureAfter, bool layerOn)
+                                    int specialIDAfter, QRect& textureAfter,
+                                    bool up)
 {
     if (m_map->isInGrid(p)){
         Portion portion;
@@ -210,21 +211,19 @@ void ControlMapEditor::paintPinLand(Position& p,
                 kindBefore = landBefore->getSubKind();
                 getLandTexture(textureBefore, landBefore);
             }
-
-            // If it's floor, we need to reduce to square * square size texture
             QRect textureAfterReduced;
-            if (kindAfter == MapEditorSubSelectionKind::Floors)
-                getFloorTextureReduced(textureAfter, textureAfterReduced, 0, 0);
+            getFloorTextureReduced(textureAfter, textureAfterReduced, 0, 0);
 
-            // If the texture à different, start the algorithm
+            // If the texture is different, start the algorithm
             if (!areLandsEquals(landBefore, textureAfterReduced, kindAfter)){
                 QList<Position> tab;
                 tab.push_back(p);
                 if (kindAfter == MapEditorSubSelectionKind::None)
                     eraseLand(p);
                 else
-                    stockLand(p, getLandAfter(kindAfter, textureAfterReduced),
-                              kindAfter, layerOn);
+                    stockLand(p, getLandAfter(kindAfter, specialIDAfter,
+                                              textureAfterReduced, up),
+                              kindAfter, false);
 
                 while(!tab.isEmpty()){
                     QList<Position> adjacent;
@@ -263,9 +262,9 @@ void ControlMapEditor::paintPinLand(Position& p,
                                     else
                                         stockLand(adjacentPosition,
                                                   getLandAfter(
-                                                      kindAfter,
-                                                      textureAfterReduced),
-                                                  kindAfter, layerOn);
+                                                      kindAfter, specialIDAfter,
+                                                      textureAfterReduced, up),
+                                                  kindAfter, false);
                                     tab.push_back(adjacentPosition);
                                 }
                             }
@@ -292,8 +291,7 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
             // Update layer
             if (!undoRedo) {
                 m_currentLayer = getLayer(mapPortion, m_distanceLand, p,
-                                          layerOn, MapEditorSelectionKind::Land,
-                                          kind);
+                                         layerOn, MapEditorSelectionKind::Land);
                 p.setLayer(m_currentLayer);
             }
 
@@ -327,8 +325,7 @@ void ControlMapEditor::stockLand(Position& p, LandDatas *landDatas,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
-{
+void ControlMapEditor::removeLand(Position& p, DrawKind drawKind) {
     QList<Position> positions;
 
     if (m_currentLayer == -1)
@@ -347,7 +344,8 @@ void ControlMapEditor::removeLand(Position& p, DrawKind drawKind, bool layerOn)
             break;
         case DrawKind::Pin:
             QRect tileset(0, 0, 1, 1);
-            paintPinLand(p, MapEditorSubSelectionKind::None, tileset, layerOn);
+            paintPinLand(p, MapEditorSubSelectionKind::None, -1, tileset,
+                         m_camera->cameraUp());
             break;
         }
 
@@ -467,7 +465,7 @@ void ControlMapEditor::stockSprite(Position& p, SpriteDatas* sprite,
             if (!undoRedo) {
                 m_currentLayer = getLayer(
                             mapPortion, m_distanceSprite, p, layerOn,
-                            MapEditorSelectionKind::Sprites, kind);
+                            MapEditorSelectionKind::Sprites);
                 p.setLayer(m_currentLayer);
             }
 

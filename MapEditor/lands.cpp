@@ -64,7 +64,7 @@ bool Lands::isEmpty() const {
 
 // -------------------------------------------------------
 
-LandDatas* Lands::getLand(Position& p) {
+LandDatas* Lands::getLand(Position& p) const {
     LandDatas* land = m_floors->getFloor(p);
 
     if (land != nullptr)
@@ -131,7 +131,7 @@ bool Lands::addLand(Position& p, LandDatas* land, QJsonObject &previous,
 bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
                        QList<MapEditorSubSelectionKind> &previousType,
                        QList<Position>& positions, QSet<MapPortion *> &update,
-                       QSet<MapPortion *> &save)
+                       QSet<MapPortion *> &save, bool removeLayers)
 { 
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
@@ -152,17 +152,9 @@ bool Lands::deleteLand(Position& p, QList<QJsonObject> &previous,
         previous.append(prev);
         previousType.append(kind);
         positions.append(p);
-        switch (kind) {
-        case MapEditorSubSelectionKind::Floors:
-            m_floors->updateRemoveLayer(p, previous, previousType, positions);
-            break;
-        case MapEditorSubSelectionKind::Autotiles:
-            m_autotiles->updateRemoveLayer(p, previous, previousType,
-                                           positions, update, save);
-            break;
-        default:
-            break;
-        }
+        if (removeLayers)
+            updateRemoveLayer(p, previous, previousType, positions, update,
+                              save);
     }
 
     return changed;
@@ -180,14 +172,13 @@ void Lands::removeLandOut(MapProperties& properties) {
 MapElement* Lands::updateRaycasting(int squareSize, float& finalDistance,
                                     Position &finalPosition, QRay3D &ray)
 {
-    MapElement* element = m_floors->updateRaycasting(squareSize, finalDistance,
-                                                     finalPosition, ray);
-    if (element == nullptr) {
-        element = m_autotiles->updateRaycasting(squareSize, finalDistance,
-                                                finalPosition, ray);
-    }
+    MapElement* elementFloor, *elementAutotile;
+    elementFloor = m_floors->updateRaycasting(squareSize, finalDistance,
+                                              finalPosition, ray);
+    elementAutotile = m_autotiles->updateRaycasting(squareSize, finalDistance,
+                                                    finalPosition, ray);
 
-    return element;
+    return elementAutotile == nullptr ? elementFloor : elementAutotile;
 }
 
 // -------------------------------------------------------
@@ -207,15 +198,38 @@ MapElement* Lands::getMapElementAt(Position& position,
 
 // -------------------------------------------------------
 
-int Lands::getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind)
+int Lands::getLastLayerAt(Position& position) const
 {
-    switch (subKind) {
-    case MapEditorSubSelectionKind::Floors:
-        return m_floors->getLastLayerAt(position);
-    case MapEditorSubSelectionKind::Autotiles:
-        return m_autotiles->getLastLayerAt(position);
-    default:
-        return position.layer();
+    int count = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(), position.z(),
+               count);
+    LandDatas* land = getLand(p);
+
+    while (land != nullptr) {
+        count++;
+        p.setLayer(count);
+        land = getLand(p);
+    }
+
+    return count - 1;
+}
+
+// -------------------------------------------------------
+
+void Lands::updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
+                             QList<MapEditorSubSelectionKind> &previousType,
+                             QList<Position> &positions,
+                             QSet<MapPortion*>& update, QSet<MapPortion*>& save)
+{
+    int i = position.layer() + 1;
+    Position p(position.x(), position.y(), position.yPlus(),
+               position.z(), i);
+    LandDatas* land = getLand(p);
+
+    while (land != nullptr) {
+        deleteLand(p, previous, previousType, positions, update, save, false);
+        p.setLayer(++i);
+        land = getLand(p);
     }
 }
 

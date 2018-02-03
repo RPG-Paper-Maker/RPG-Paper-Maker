@@ -237,8 +237,6 @@ void MapPortion::clearPreview() {
 // -------------------------------------------------------
 
 void MapPortion::addPreview(Position& p, MapElement* element) {
-
-
     m_previewSquares.insert(p, element);
 }
 
@@ -309,12 +307,12 @@ MapElement* MapPortion::getMapElementAt(Position& position,
     }
 }
 
-int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind,
-                               MapEditorSubSelectionKind subKind) const
+int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind)
+const
 {
     switch (kind) {
     case MapEditorSelectionKind::Land:
-        return m_lands->getLastLayerAt(position, subKind);
+        return m_lands->getLastLayerAt(position);
     case MapEditorSelectionKind::Sprites:
         return m_sprites->getLastLayerAt(position);
     default:

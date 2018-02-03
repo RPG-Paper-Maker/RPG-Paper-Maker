@@ -96,7 +96,7 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
             {
                 int layer = getLayer(m_map->mapPortion(shortPortion),
                                      m_distanceLand, shortPosition, layerOn,
-                                     kind, subKind);
+                                     kind);
                 shortPosition.setLayer(layer);
                 QRect* rect = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
 
@@ -165,7 +165,7 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         m_map->isInPortion(portion))
     {
         int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
-                             m_positionPreviousPreview, layerOn, kind, subKind);
+                             m_positionPreviousPreview, layerOn, kind);
         m_positionPreviousPreview.setLayer(layer);
 
         switch (kind) {

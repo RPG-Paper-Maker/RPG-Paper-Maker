@@ -37,7 +37,7 @@ public:
     static int nbIndexesQuad;
 
     bool isEmpty() const;
-    LandDatas* getLand(Position& p);
+    LandDatas* getLand(Position& p) const;
     void setLand(Position& p, LandDatas* land);
     LandDatas* removeLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject& previous,
@@ -46,13 +46,17 @@ public:
     bool deleteLand(Position& p, QList<QJsonObject> &previous,
                     QList<MapEditorSubSelectionKind> &previousType,
                     QList<Position> &positions, QSet<MapPortion *> &update,
-                    QSet<MapPortion *> &save);
+                    QSet<MapPortion *> &save, bool removeLayers = true);
     void removeLandOut(MapProperties& properties);
     MapElement *updateRaycasting(int squareSize, float& finalDistance,
                                  Position &finalPosition, QRay3D &ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
-    int getLastLayerAt(Position& position, MapEditorSubSelectionKind subKind);
+    int getLastLayerAt(Position& position) const;
+    void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
+                           QList<MapEditorSubSelectionKind> &previousType,
+                           QList<Position> &positions,
+                           QSet<MapPortion*>& update, QSet<MapPortion*>& save);
     void updateAutotiles(Position& position,
                          QHash<Position, MapElement *> &preview,
                          QSet<MapPortion*> &update, QSet<MapPortion*> &save,

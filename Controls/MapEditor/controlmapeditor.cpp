@@ -593,29 +593,16 @@ bool ControlMapEditor::areLandsEquals(LandDatas* landBefore,
 {
     if (landBefore == nullptr)
         return kindAfter == MapEditorSubSelectionKind::None;
-    else{
-        if (landBefore->getSubKind() == kindAfter){
-            switch (kindAfter){
-            case MapEditorSubSelectionKind::Floors:
-                return (*(((FloorDatas*) landBefore)->textureRect())) ==
-                        textureAfter;
-            case MapEditorSubSelectionKind::Autotiles:
-                return false; // TODO
-            case MapEditorSubSelectionKind::Water:
-                return false; // TODO
-            default:
-                return false;
-            }
-        }
-        else
-            return false;
-    }
+    else
+        return (landBefore->getSubKind() == kindAfter)
+                ? (*landBefore->textureRect()) == textureAfter : false;
 }
 
 // -------------------------------------------------------
 
 LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
-                                          QRect &textureAfter)
+                                          int specialID, QRect &textureAfter,
+                                          bool up)
 {
     QRect* texture = new QRect(textureAfter.x(),
                                textureAfter.y(),
@@ -623,9 +610,9 @@ LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
                                textureAfter.height());
     switch (kindAfter) {
     case MapEditorSubSelectionKind::Floors:
-        return new FloorDatas(texture);
+        return new FloorDatas(texture, up);
     case MapEditorSubSelectionKind::Autotiles:
-        return nullptr;
+        return new AutotileDatas(specialID, texture, up);
     case MapEditorSubSelectionKind::Water:
         return nullptr;
     default:
@@ -636,23 +623,10 @@ LandDatas* ControlMapEditor::getLandAfter(MapEditorSubSelectionKind kindAfter,
 // -------------------------------------------------------
 
 void ControlMapEditor::getLandTexture(QRect& rect, LandDatas* land){
-    FloorDatas* floor;
-
-    switch (land->getSubKind()) {
-    case MapEditorSubSelectionKind::Floors:
-        floor = (FloorDatas*) land;
-        rect.setX(floor->textureRect()->x());
-        rect.setY(floor->textureRect()->y());
-        rect.setWidth(floor->textureRect()->width());
-        rect.setHeight(floor->textureRect()->height());
-        break;
-    case MapEditorSubSelectionKind::Autotiles:
-        break;
-    case MapEditorSubSelectionKind::Water:
-        break;
-    default:
-        break;
-    }
+    rect.setX(land->textureRect()->x());
+    rect.setY(land->textureRect()->y());
+    rect.setWidth(land->textureRect()->width());
+    rect.setHeight(land->textureRect()->height());
 }
 
 // -------------------------------------------------------
@@ -954,14 +928,13 @@ bool ControlMapEditor::isPutLayerPossible(
 // -------------------------------------------------------
 
 int ControlMapEditor::getLayer(MapPortion *mapPortion, float d, Position& p,
-                               bool layerOn, MapEditorSelectionKind kind,
-                               MapEditorSubSelectionKind subKind)
+                               bool layerOn, MapEditorSelectionKind kind)
 {
     if (m_currentLayer == -1) {
         if (d != 0) {
             int layer = p.layer();
             if (layerOn)
-                layer = mapPortion->getLastLayerAt(p, kind, subKind) + 1;
+                layer = mapPortion->getLastLayerAt(p, kind) + 1;
 
             return layer;
         }

@@ -117,52 +117,6 @@ AutotileDatas* Autotiles::removeAutotile(Position& p) {
 
 // -------------------------------------------------------
 
-bool Autotiles::addAutotile(Position& p, AutotileDatas* autotile,
-                            QJsonObject &previousObj,
-                            MapEditorSubSelectionKind& previousType,
-                            QSet<MapPortion*>& update, QSet<MapPortion*>& save)
-{
-    AutotileDatas* previousAutotile = removeAutotile(p);
-    bool changed = true;
-
-    if (previousAutotile != nullptr) {
-        previousAutotile->write(previousObj);
-        previousType = previousAutotile->getSubKind();
-        changed = (*previousAutotile) != (*autotile);
-        delete previousAutotile;
-    }
-
-    setAutotile(p, autotile);
-    updateAround(p, m_all, update, save, nullptr);
-
-    return changed;
-}
-
-// -------------------------------------------------------
-
-bool Autotiles::deleteAutotile(Position& p, QJsonObject &previous,
-                               MapEditorSubSelectionKind &previousType,
-                               QSet<MapPortion*> &update,
-                               QSet<MapPortion*> &save)
-{
-    AutotileDatas* previousAutotile = removeAutotile(p);
-    bool changed = false;
-
-    if (previousAutotile != nullptr) {
-        previousAutotile->write(previous);
-        previousType = previousAutotile->getSubKind();
-        changed = true;
-
-        delete previousAutotile;
-    }
-
-    updateAround(p, m_all, update, save, nullptr);
-
-    return changed;
-}
-
-// -------------------------------------------------------
-
 void Autotiles::removeAutotileOut(MapProperties& properties) {
     QList<Position> list;
     QHash<Position, AutotileDatas*>::iterator i;
@@ -216,48 +170,6 @@ bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
     }
 
     return false;
-}
-
-// -------------------------------------------------------
-
-int Autotiles::getLastLayerAt(Position& position) const {
-    int count = position.layer() + 1;
-    Position p(position.x(), position.y(), position.yPlus(), position.z(),
-               count);
-    AutotileDatas* autotile = getAutotile(p);
-
-    while (autotile != nullptr) {
-        count++;
-        p.setLayer(count);
-        autotile = getAutotile(p);
-    }
-
-    return count - 1;
-}
-
-// -------------------------------------------------------
-
-void Autotiles::updateRemoveLayer(
-        Position& position, QList<QJsonObject> &previous,
-        QList<MapEditorSubSelectionKind> &previousType,
-        QList<Position> &positions,
-        QSet<MapPortion*>& update, QSet<MapPortion*>& save)
-{
-    int i = position.layer() + 1;
-    Position p(position.x(), position.y(), position.yPlus(),
-               position.z(), i);
-    AutotileDatas* autotile = getAutotile(p);
-
-    while (autotile != nullptr) {
-        QJsonObject obj;
-        MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-        deleteAutotile(p, obj, kind, update, save);
-        previous.append(obj);
-        previousType.append(kind);
-        positions.append(p);
-        p.setLayer(++i);
-        autotile = getAutotile(p);
-    }
 }
 
 // -------------------------------------------------------

@@ -67,11 +67,6 @@ public:
     bool updateRaycastingAt(Position &position, AutotileDatas *autotile,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
-    int getLastLayerAt(Position& position) const;
-    void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
-                           QList<MapEditorSubSelectionKind> &previousType,
-                           QList<Position> &positions,
-                           QSet<MapPortion*> &update, QSet<MapPortion*> &save);
     void getAutotilesWithPreview(
             QHash<Position, AutotileDatas*> &autotilesWithPreview,
             QHash<Position, MapElement *> &preview);

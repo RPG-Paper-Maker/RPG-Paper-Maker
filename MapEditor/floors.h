@@ -52,10 +52,6 @@ public:
     bool updateRaycastingAt(Position &position, FloorDatas *floor,
                             int squareSize, float &finalDistance,
                             Position &finalPosition, QRay3D& ray);
-    int getLastLayerAt(Position& position) const;
-    void updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
-                           QList<MapEditorSubSelectionKind> &previousType,
-                           QList<Position> &positions);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);

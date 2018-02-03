@@ -132,25 +132,26 @@ public:
              MapEditorSubSelectionKind subSelection, DrawKind drawKind,
              bool layerOn, QRect& tileset, int specialID, Position& p);
     void remove(MapElement* element, MapEditorSelectionKind selection,
-                DrawKind drawKind, Position& p, bool layerOn);
+                DrawKind drawKind, Position& p);
     void addLand(Position& p, MapEditorSubSelectionKind kind,
                  DrawKind drawKind, bool layerOn, QRect& tileset,
                  int specialID);
     void paintPinLand(Position& p, MapEditorSubSelectionKind kindAfter,
-                      QRect &textureAfter, bool layerOn);
+                      int specialIDAfter, QRect &textureAfter,
+                      bool up);
     LandDatas* getLand(Portion& portion, Position& p);
     void getFloorTextureReduced(QRect &rect, QRect& rectAfter,
                                 int localX, int localZ);
     bool areLandsEquals(LandDatas* landBefore,
                         QRect &textureAfter,
                         MapEditorSubSelectionKind kindAfter);
-    LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter,
-                            QRect &textureAfter);
+    LandDatas* getLandAfter(MapEditorSubSelectionKind kindAfter, int specialID,
+                            QRect &textureAfter, bool up);
     void getLandTexture(QRect& rect, LandDatas* land);
     void stockLand(Position& p, LandDatas* landDatas,
                    MapEditorSubSelectionKind kind, bool layerOn,
                    bool undoRedo = false);
-    void removeLand(Position& p, DrawKind drawKind, bool layerOn);
+    void removeLand(Position& p, DrawKind drawKind);
     void eraseLand(Position& p, bool undoRedo = false);
     void addSprite(
             Position& p, MapEditorSubSelectionKind kind, DrawKind drawKind,
@@ -189,8 +190,7 @@ public:
     bool isTinPaintPossible(MapEditorSelectionKind selection,
                             DrawKind drawKind, QString& messageError) const;
     int getLayer(MapPortion* mapPortion, float d, Position& p, bool layerOn,
-                 MapEditorSelectionKind kind,
-                 MapEditorSubSelectionKind subKind);
+                 MapEditorSelectionKind kind);
     void updatePositionLayer(Position& p, bool layerOn);
     bool isPutLayerPossible(MapEditorSubSelectionKind subSelectionCurrent,
                             DrawKind drawKind, bool layerOn,

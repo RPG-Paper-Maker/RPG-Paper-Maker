@@ -101,8 +101,7 @@ public:
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);
-    int getLastLayerAt(Position& position, MapEditorSelectionKind kind,
-                       MapEditorSubSelectionKind subKind) const;
+    int getLastLayerAt(Position& position, MapEditorSelectionKind kind) const;
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
                             QList<TextureAutotile *> &autotiles,
