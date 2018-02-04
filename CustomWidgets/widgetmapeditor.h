@@ -59,6 +59,7 @@ public:
                        QVector3D *positionObject, int cameraDistance,
                        double cameraHorizontalAngle,
                        double cameraVerticalAngle);
+    void updateCameraDistance(float coef);
     void initializeMap();
     void save();
     void onKeyPress(int k, double speed);

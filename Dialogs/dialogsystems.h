@@ -47,6 +47,7 @@ class DialogSystems : public QDialog
 public:
     explicit DialogSystems(GameDatas *gameDatas, QWidget *parent = 0);
     ~DialogSystems();
+    int getSquareSize() const;
 
 private:
     Ui::DialogSystems *ui;

@@ -262,6 +262,12 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
 
 // -------------------------------------------------------
 
+void WidgetMapEditor::updateCameraDistance(float coef) {
+    m_control.camera()->setDistance(m_control.camera()->distance() * coef);
+}
+
+// -------------------------------------------------------
+
 void WidgetMapEditor::initializeMap(){
     makeCurrent();
     loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,

@@ -18,6 +18,7 @@
 */
 
 #include "camera.h"
+#include "wanok.h"
 #include <QtMath>
 
 int Camera::defaultDistance = 800;
@@ -164,7 +165,8 @@ void Camera::zoomLess(int squareSize) {
 // -------------------------------------------------------
 
 int Camera::getZoom(int squareSize) const {
-    return 10 + (m_distance / squareSize);
+    float coef = squareSize / ((float)(Wanok::BASIC_SQUARE_SIZE));
+    return (50 + (m_distance / squareSize)) * coef;
 }
 
 // -------------------------------------------------------

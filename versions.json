@@ -591,7 +591,8 @@
     		],
     		"bugs": [
     			"No more crash when canceling and re-opening a window for picture preview",
-    			"First adding element on map is now not ignored"
+    			"First adding element on map is now not ignored",
+    			"Camera distance adjusted according to square size: http://rpg-paper-maker.com/index.php/forum/suggestion-box/37-adaptive-camera-to-tilesize#91"
     		]
     	}
 	]

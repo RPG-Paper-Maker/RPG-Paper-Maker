@@ -56,6 +56,10 @@ DialogSystems::~DialogSystems()
     delete ui;
 }
 
+int DialogSystems::getSquareSize() const {
+    return ui->spinBoxSquareSize->value();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

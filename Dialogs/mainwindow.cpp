@@ -412,8 +412,15 @@ void MainWindow::on_actionDatas_manager_triggered(){
 void MainWindow::on_actionSystems_manager_triggered(){
     Wanok::isInConfig = true;
     DialogSystems dialog(project->gameDatas());
-    if (openDialog(dialog) == QDialog::Accepted)
+    int oldSquareSize = project->gameDatas()->systemDatas()->squareSize();
+    if (openDialog(dialog) == QDialog::Accepted) {
+        // If square size different, update all maps camera distance
+        int newSquareSize = dialog.getSquareSize();
+        if (newSquareSize != oldSquareSize)
+            ((PanelProject*)mainPanel)->widgetMapEditor()
+                ->updateCameraDistance(newSquareSize / ((float) oldSquareSize));
         project->writeGameDatas();
+    }
     else
         project->readGameDatas();
     Wanok::isInConfig = false;
