@@ -109,6 +109,8 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 }
                 case MapEditorSubSelectionKind::Autotiles:
                 {
+                    if (specialID == -1)
+                        break;
                     AutotileDatas* element = new AutotileDatas(specialID, rect,
                                                                up);
                     updatePreviewElement(shortPosition, shortPortion, element);

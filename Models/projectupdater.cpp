@@ -385,6 +385,10 @@ void ProjectUpdater::updateVersion_0_4_0() {
 void ProjectUpdater::updateVersion_0_4_3() {
 
     // Adding default autotiles
+    QList<QString> names;
+    m_project->readPicturesDatas();
+    m_project->picturesDatas()->setDefaultAutotiles(names);
+    m_project->writePicturesDatas();
     m_project->readSpecialsDatas();
     m_project->specialElementsDatas()->setDefaultAutotiles();
     m_project->writeSpecialsDatas();

@@ -45,6 +45,7 @@ class WidgetSelectionRectangle  : public QWidget
         void setRealPosition();
         void makeFirstSelection(int x, int y, float zoom);
         void makeSelection(int x, int y, int w, int h, float zoom);
+        void selectNone();
         void draw(QPainter& painter, float zoom = 1.0f);
 
     protected:

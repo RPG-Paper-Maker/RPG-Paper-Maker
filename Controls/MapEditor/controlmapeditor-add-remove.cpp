@@ -127,6 +127,9 @@ void ControlMapEditor::addLand(Position& p, MapEditorSubSelectionKind kind,
                                DrawKind drawKind, bool layerOn, QRect &tileset,
                                int specialID)
 {
+    if (kind == MapEditorSubSelectionKind::Autotiles && specialID == -1)
+        return;
+
     LandDatas* land;
     QRect* shortTexture;
     bool up = m_camera->cameraUp();

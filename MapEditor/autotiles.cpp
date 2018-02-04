@@ -200,9 +200,12 @@ AutotileDatas* Autotiles::tileExisting(Position& position, Portion& portion,
     if (portion == newPortion)
         return (AutotileDatas*) preview.value(position);
     else { // If out of current portion
-        return (AutotileDatas*) Wanok::get()->project()->currentMap()
-            ->mapPortion(newPortion)->getMapElementAt(position,
-            MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles);
+        MapPortion* mapPortion = Wanok::get()->project()->currentMap()
+                ->mapPortion(newPortion);
+
+        return (mapPortion == nullptr) ? nullptr : (AutotileDatas*) mapPortion
+            ->getMapElementAt(position, MapEditorSelectionKind::Land,
+                              MapEditorSubSelectionKind::Autotiles);
     }
 }
 
@@ -414,7 +417,7 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
                 break;
             }
         }
-        if (texture->texture() != nullptr) {
+        if (texture != nullptr && texture->texture() != nullptr) {
             Autotile* autotileGL = m_autotilesGL.at(index);
             autotileGL->initializeVertices(texture, position, autotile,
                                            squareSize,

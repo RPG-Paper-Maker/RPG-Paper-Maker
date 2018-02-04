@@ -51,6 +51,7 @@ protected:
     void setRealCursorPosition();
     void makeFirstSelection(int x, int y, float zoom = 1.0f);
     void makeSelection(int x, int y, float zoom = 1.0f);
+    void selectNone();
 
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);

@@ -135,6 +135,12 @@ void WidgetSelectionRectangle::makeSelection(int x, int y, int w, int h,
 
 // -------------------------------------------------------
 
+void WidgetSelectionRectangle::selectNone() {
+    m_rect.setWidth(0); m_rect.setHeight(0);
+}
+
+// -------------------------------------------------------
+
 void WidgetSelectionRectangle::draw(QPainter& painter, float zoom){
 
     // Setting coords

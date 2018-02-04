@@ -86,6 +86,11 @@ void WidgetTilesetSelector::updateImage(){
         makeFirstSelection(0, 0);
         this->repaint();
     }
+
+    // If < 32 x 32
+    if (m_textureTileset.width() < Wanok::BASIC_SQUARE_SIZE ||
+        m_textureTileset.height() < Wanok::BASIC_SQUARE_SIZE)
+        selectNone();
 }
 
 // -------------------------------------------------------
@@ -107,6 +112,12 @@ void WidgetTilesetSelector::makeSelection(int x, int y, float zoom){
                                         m_textureTileset.width(),
                                         m_textureTileset.height(),
                                         zoom);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSelector::selectNone() {
+    m_selectionRectangle->selectNone();
 }
 
 // -------------------------------------------------------

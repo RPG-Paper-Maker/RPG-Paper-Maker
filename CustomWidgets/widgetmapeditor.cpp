@@ -456,14 +456,12 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
                     m_menuBar->subSelectionKind();
             DrawKind drawKind = m_menuBar->drawKind();
             bool layerOn = m_menuBar->layerOn();
-            if (button != Qt::MouseButton::MiddleButton) {
-                QRect tileset;
-                m_panelTextures->getTilesetTexture(tileset);
-                int specialID = m_panelTextures->getID();
-                m_control.onMousePressed(selection, subSelection, drawKind,
-                                         layerOn, tileset, specialID,
-                                         event->pos(), button);
-            }
+            QRect tileset;
+            m_panelTextures->getTilesetTexture(tileset);
+            int specialID = m_panelTextures->getID();
+            m_control.onMousePressed(selection, subSelection, drawKind,
+                                     layerOn, tileset, specialID,
+                                     event->pos(), button);
         }
         // If in teleport command
         else{

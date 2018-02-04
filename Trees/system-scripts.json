@@ -149,6 +149,10 @@
             "target": "Content/basic/Content/Datas/Scripts/System/graphic-item.js"
         },
         {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/autotiles.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/autotiles.js"
+        },
+        {
             "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/datas-weapons.js",
             "target": "Content/basic/Content/Datas/Scripts/System/datas-weapons.js"
         },
@@ -205,8 +209,20 @@
             "target": "Content/basic/Content/Datas/Scripts/System/reaction-interpreter.js"
         },
         {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/land.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/land.js"
+        },
+        {
             "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/system-class-skill.js",
             "target": "Content/basic/Content/Datas/Scripts/System/system-class-skill.js"
+        },
+        {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/texture-autotile.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/texture-autotile.js"
+        },
+        {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/autotile.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/autotile.js"
         },
         {
             "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/scene-menu-skills.js",
@@ -271,6 +287,10 @@
         {
             "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/datas-common-events.js",
             "target": "Content/basic/Content/Datas/Scripts/System/datas-common-events.js"
+        },
+        {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/system-autotile.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/system-autotile.js"
         },
         {
             "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/picture2d.js",
