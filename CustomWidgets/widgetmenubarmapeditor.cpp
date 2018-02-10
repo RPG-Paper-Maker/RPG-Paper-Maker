@@ -18,9 +18,9 @@
 */
 
 #include <QPainter>
+#include <QDebug>
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
-#include <QDebug>
 
 QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
 QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
@@ -374,7 +374,7 @@ void WidgetMenuBarMapEditor::mouseMoveEvent(QMouseEvent* event){
 void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
     QAction* action = this->actionAt(event->pos());
     if (m_selection) {
-        if (action != nullptr) {
+        if (action != nullptr && action->isEnabled()) {
             updateSelection(action);
 
             emit selectionChanged();
@@ -416,12 +416,17 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
         initStyleOption(&opt, action);
         opt.rect = adjustedActionRect;
 
-        // Drawing separator with darker color
-        if (action->text() == "|") {
-            p.setPen(QColor(100, 100, 100));
-            p.drawText(adjustedActionRect, "|", QTextOption(Qt::AlignCenter));
+        // Drawing separator and disabled with darker color
+        if (opt.icon.isNull()) {
+            if (action->text() == "|" || !action->isEnabled())
+                p.setPen(QColor(100, 100, 100));
+            else
+                p.setPen(Qt::white);
+            p.drawText(adjustedActionRect, action->text(),
+                       QTextOption(Qt::AlignCenter));
             opt.text = "";
         }
+
         style()->drawControl(QStyle::CE_MenuBarItem, &opt, &p, this);
     }
 }
@@ -443,5 +448,13 @@ void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction* action){
 void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction* action){
     updateSubSelection(ui->menuFace_Sprite,
                        this->actions().at((int)MapEditorSelectionKind::Sprites),
+                       action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction* action) {
+    updateSubSelection(ui->menuEvents,
+                       this->actions().at((int)MapEditorSelectionKind::Objects),
                        action);
 }

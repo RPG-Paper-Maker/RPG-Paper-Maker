@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
+    <width>430</width>
     <height>29</height>
    </rect>
   </property>
@@ -34,11 +34,13 @@
    </property>
    <addaction name="actionFloors"/>
    <addaction name="actionAutotile"/>
+   <addaction name="actionAnimated_Autotile"/>
   </widget>
   <widget class="QMenu" name="menuEvents">
    <property name="title">
     <string>Object</string>
    </property>
+   <addaction name="actionObject"/>
   </widget>
   <widget class="QMenu" name="menuFace_Sprite">
    <property name="title">
@@ -49,6 +51,25 @@
    <addaction name="actionDouble_Sprite"/>
    <addaction name="actionQuadra_Sprite"/>
    <addaction name="actionWall_Sprite"/>
+  </widget>
+  <widget class="QMenu" name="menuMountain">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="title">
+    <string>Mountain</string>
+   </property>
+   <addaction name="actionMountain"/>
+   <addaction name="actionSlope"/>
+  </widget>
+  <widget class="QMenu" name="menu3D_object">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="title">
+    <string>3D object</string>
+   </property>
+   <addaction name="action3D_object"/>
   </widget>
   <action name="actionFloors">
    <property name="icon">
@@ -144,8 +165,67 @@
     <string>Autotile</string>
    </property>
   </action>
+  <action name="actionAnimated_Autotile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/autotile_animated_disabled.png</normaloff>:/icons/Ressources/autotile_animated_disabled.png</iconset>
+   </property>
+   <property name="text">
+    <string>Animated Autotile</string>
+   </property>
+  </action>
+  <action name="actionMountain">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/montain_disabled.png</normaloff>:/icons/Ressources/montain_disabled.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mountain</string>
+   </property>
+  </action>
+  <action name="actionSlope">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/slope_disabled.png</normaloff>:/icons/Ressources/slope_disabled.png</iconset>
+   </property>
+   <property name="text">
+    <string>Slope</string>
+   </property>
+  </action>
+  <action name="action3D_object">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/object_disabled.png</normaloff>:/icons/Ressources/object_disabled.png</iconset>
+   </property>
+   <property name="text">
+    <string>3D object</string>
+   </property>
+  </action>
+  <action name="actionObject">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/ev.png</normaloff>:/icons/Ressources/ev.png</iconset>
+   </property>
+   <property name="text">
+    <string>Object</string>
+   </property>
+  </action>
   <addaction name="menuFloors"/>
   <addaction name="menuFace_Sprite"/>
+  <addaction name="menuMountain"/>
+  <addaction name="menu3D_object"/>
   <addaction name="menuEvents"/>
  </widget>
  <resources>

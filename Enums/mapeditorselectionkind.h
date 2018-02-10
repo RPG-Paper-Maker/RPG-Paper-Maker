@@ -31,6 +31,8 @@
 enum class MapEditorSelectionKind {
     Land,
     Sprites,
+    Mountains,
+    Objects3D,
     Objects,
     None
 };

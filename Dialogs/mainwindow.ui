@@ -83,6 +83,8 @@
     <addaction name="actionPictures_manager"/>
     <addaction name="actionSongs_manager"/>
     <addaction name="actionKeyboard_controls"/>
+    <addaction name="actionCollisions_manager"/>
+    <addaction name="actionScripts_manager"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -152,6 +154,8 @@
    <addaction name="actionPictures_manager"/>
    <addaction name="actionSongs_manager"/>
    <addaction name="actionKeyboard_controls"/>
+   <addaction name="actionCollisions_manager"/>
+   <addaction name="actionScripts_manager"/>
    <addaction name="separator"/>
    <addaction name="actionAutotiles"/>
    <addaction name="actionAnimated_Autotiles"/>
@@ -259,7 +263,7 @@
   <action name="actionVariables_manager">
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
    </property>
    <property name="text">
     <string>Variables manager</string>
@@ -271,7 +275,7 @@
   <action name="actionSystems_manager">
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
    </property>
    <property name="text">
     <string>Systems manager</string>
@@ -315,7 +319,7 @@
   <action name="actionPictures_manager">
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/pictures.png</normaloff>:/icons/Ressources/pictures.png</iconset>
    </property>
    <property name="text">
     <string>Pictures manager</string>
@@ -335,7 +339,7 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/autotile_toolbar.png</normaloff>:/icons/Ressources/autotile_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Autotiles</string>
@@ -347,7 +351,7 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/walls_toolbar.png</normaloff>:/icons/Ressources/walls_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Sprite walls</string>
@@ -362,7 +366,7 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/object_toolbar.png</normaloff>:/icons/Ressources/object_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>3D objects</string>
@@ -377,7 +381,7 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/mountain_toolbar.png</normaloff>:/icons/Ressources/mountain_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Reliefs</string>
@@ -421,7 +425,7 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/autotile_animated_toolbar.png</normaloff>:/icons/Ressources/autotile_animated_toolbar.png</iconset>
    </property>
    <property name="text">
     <string>Animated Autotiles</string>
@@ -436,13 +440,37 @@
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+     <normaloff>:/icons/Ressources/songs.png</normaloff>:/icons/Ressources/songs.png</iconset>
    </property>
    <property name="text">
     <string>Songs manager</string>
    </property>
    <property name="iconText">
     <string>Songs</string>
+   </property>
+  </action>
+  <action name="actionCollisions_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/collisions.png</normaloff>:/icons/Ressources/collisions.png</iconset>
+   </property>
+   <property name="text">
+    <string>Collisions manager</string>
+   </property>
+   <property name="iconText">
+    <string>Collisions</string>
+   </property>
+  </action>
+  <action name="actionScripts_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/scripts.png</normaloff>:/icons/Ressources/scripts.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scripts manager</string>
+   </property>
+   <property name="iconText">
+    <string>Scripts</string>
    </property>
   </action>
  </widget>

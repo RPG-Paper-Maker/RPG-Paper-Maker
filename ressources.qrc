@@ -35,6 +35,24 @@
         <file>Ressources/sprite_walls.png</file>
         <file>Ressources/layer_on_disable.png</file>
         <file>Ressources/pin_disable.png</file>
+        <file>Ressources/autotile_animated.png</file>
+        <file>Ressources/autotile_animated_disabled.png</file>
+        <file>Ressources/autotile_animated_toolbar.png</file>
+        <file>Ressources/autotile_toolbar.png</file>
+        <file>Ressources/collisions.png</file>
+        <file>Ressources/montain_disabled.png</file>
+        <file>Ressources/mountain_toolbar.png</file>
+        <file>Ressources/object.png</file>
+        <file>Ressources/object_disabled.png</file>
+        <file>Ressources/object_toolbar.png</file>
+        <file>Ressources/pictures.png</file>
+        <file>Ressources/scripts.png</file>
+        <file>Ressources/slope.png</file>
+        <file>Ressources/slope_disabled.png</file>
+        <file>Ressources/songs.png</file>
+        <file>Ressources/systems.png</file>
+        <file>Ressources/variables.png</file>
+        <file>Ressources/walls_toolbar.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

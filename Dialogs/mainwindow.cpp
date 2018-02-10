@@ -207,6 +207,8 @@ void MainWindow::enableAll(bool b){
     ui->actionPictures_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
+    ui->actionCollisions_manager->setEnabled(b);
+    ui->actionScripts_manager->setEnabled(b);
     ui->actionAutotiles->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
     ui->actionShow_Hide_grid->setEnabled(b);
@@ -238,6 +240,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionPictures_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
+    ui->actionCollisions_manager->setEnabled(true);
     ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
     ui->actionShow_Hide_grid->setEnabled(true);
