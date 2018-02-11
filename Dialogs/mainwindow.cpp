@@ -30,6 +30,7 @@
 #include "dialogvariables.h"
 #include "dialogpictures.h"
 #include "dialogkeyboardcontrols.h"
+#include "dialogcollisions.h"
 #include "dialogexport.h"
 #include "panelmainmenu.h"
 #include "panelproject.h"
@@ -464,6 +465,16 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
         Wanok::get()->loadEngineSettings();
         project->readKeyBoardDatas();
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionCollisions_manager_triggered() {
+    DialogCollisions dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeGameDatas();
+    else
+        project->readGameDatas();
 }
 
 // -------------------------------------------------------

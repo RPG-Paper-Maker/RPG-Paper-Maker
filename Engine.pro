@@ -240,7 +240,8 @@ HEADERS += \
     CustomWidgets/widgetautotilesselector.h \
     MapEditor/autotiles.h \
     MapEditor/textureautotile.h \
-    MapEditor/autotile.h
+    MapEditor/autotile.h \
+    Dialogs/dialogcollisions.h
 
 SOURCES += \
     main.cpp \
@@ -431,7 +432,8 @@ SOURCES += \
     MapEditor/Map/mapwritting.cpp \
     MapEditor/autotiles.cpp \
     MapEditor/textureautotile.cpp \
-    MapEditor/autotile.cpp
+    MapEditor/autotile.cpp \
+    Dialogs/dialogcollisions.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -497,7 +499,8 @@ FORMS += \
     Dialogs/dialogengineupdate.ui \
     Dialogs/SpecialElements/dialogspecialelements.ui \
     Dialogs/SpecialElements/dialogtilesetspecialelements.ui \
-    Dialogs/SpecialElements/panelspecialelements.ui
+    Dialogs/SpecialElements/panelspecialelements.ui \
+    Dialogs/dialogcollisions.ui
 
 OTHER_FILES += \
     style.qss
