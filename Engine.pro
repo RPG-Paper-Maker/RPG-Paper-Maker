@@ -241,7 +241,8 @@ HEADERS += \
     MapEditor/autotiles.h \
     MapEditor/textureautotile.h \
     MapEditor/autotile.h \
-    Dialogs/dialogcollisions.h
+    Dialogs/dialogcollisions.h \
+    Models/collisionsquare.h
 
 SOURCES += \
     main.cpp \
@@ -433,7 +434,8 @@ SOURCES += \
     MapEditor/autotiles.cpp \
     MapEditor/textureautotile.cpp \
     MapEditor/autotile.cpp \
-    Dialogs/dialogcollisions.cpp
+    Dialogs/dialogcollisions.cpp \
+    Models/collisionsquare.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

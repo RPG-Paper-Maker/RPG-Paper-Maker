@@ -38,6 +38,11 @@ WidgetTilesetSettings::~WidgetTilesetSettings()
     delete ui;
 }
 
+void WidgetTilesetSettings::setSquares(QHash<QPoint, CollisionSquare*>* squares)
+{
+    ui->widgetTilesetPraticable->setSquares(squares);
+}
+
 PictureKind WidgetTilesetSettings::kind() const {
     return m_kind;
 }

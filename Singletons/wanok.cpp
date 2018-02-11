@@ -31,6 +31,10 @@ QSet<int> Wanok::mapsUndoRedo;
 
 QString Wanok::shadersExtension = "-3.0";
 
+// COLORS
+const QColor Wanok::colorRedSelection = QColor(200, 20, 20);
+const QColor Wanok::colorRedSelectionBackground = QColor(200, 20, 20, 100);
+
 // PATHS DATAS
 const QString Wanok::pathBasic = pathCombine("Content", "basic");
 const QString Wanok::pathBR = pathCombine("Content", "BR");

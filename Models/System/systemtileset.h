@@ -22,6 +22,7 @@
 
 #include <QMetaType>
 #include "systempicture.h"
+#include "collisionsquare.h"
 
 // -------------------------------------------------------
 //
@@ -39,6 +40,7 @@ public:
     SystemTileset(int i, QString n, int pictureID);
     virtual ~SystemTileset();
     SystemPicture* picture() const;
+    QHash<QPoint, CollisionSquare *> *collisions();
     QStandardItemModel* model(PictureKind kind) const;
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
@@ -69,6 +71,7 @@ public:
 
 protected:
     int m_pictureID;
+    QHash<QPoint, CollisionSquare*> m_collisions;
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_model3DObjects;

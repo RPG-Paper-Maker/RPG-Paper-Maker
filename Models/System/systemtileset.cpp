@@ -57,6 +57,10 @@ void SystemTileset::setPictureID(int id) {
     m_pictureID = id;
 }
 
+QHash<QPoint, CollisionSquare*>* SystemTileset::collisions() {
+    return &m_collisions;
+}
+
 QStandardItemModel* SystemTileset::model(PictureKind kind) const {
     switch (kind) {
     case PictureKind::Autotiles:
@@ -227,6 +231,20 @@ void SystemTileset::read(const QJsonObject &json){
     readModel(json, "walls", m_modelSpriteWalls);
     readModel(json, "3D", m_model3DObjects);
     readModel(json, "relief", m_modelReliefs);
+
+    // Collisions
+    QJsonArray tabCollisions = json["collisions"].toArray();
+    for (int i = 0; i < tabCollisions.size(); i++) {
+        QJsonObject objHash = tabCollisions.at(i).toObject();
+        QJsonArray tabKey = objHash["k"].toArray();
+        QJsonObject objValue = objHash["v"].toObject();
+        QPoint point;
+        CollisionSquare* collision = new CollisionSquare;
+        point.setX(tabKey.at(0).toInt());
+        point.setY(tabKey.at(1).toInt());
+        collision->read(objValue);
+        m_collisions.insert(point, collision);
+    }
 }
 
 // -------------------------------------------------------
@@ -264,6 +282,25 @@ void SystemTileset::write(QJsonObject &json) const{
     writeModel(json, "walls", m_modelSpriteWalls);
     writeModel(json, "3D", m_model3DObjects);
     writeModel(json, "relief", m_modelReliefs);
+
+    // Collisions
+    QJsonArray tabCollisions;
+    for (QHash<QPoint, CollisionSquare*>::const_iterator i=m_collisions.begin();
+         i != m_collisions.end(); i++)
+    {
+        QPoint point = i.key();
+        CollisionSquare* collision = i.value();
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        tabKey.append(point.x());
+        tabKey.append(point.y());
+        QJsonObject objValue;
+        collision->write(objValue);
+        objHash["k"] = tabKey;
+        objHash["v"] = objValue;
+        tabCollisions.append(objHash);
+    }
+    json["collisions"] = tabCollisions;
 }
 
 // -------------------------------------------------------

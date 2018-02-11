@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include "systempicture.h"
+#include "collisionsquare.h"
 
 // -------------------------------------------------------
 //
@@ -36,11 +37,16 @@ class WidgetTilesetPraticable : public QWidget
     Q_OBJECT
 public:
     explicit WidgetTilesetPraticable(QWidget *parent = 0);
+    void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
 
 protected:
     QImage m_image;
+    QHash<QPoint, CollisionSquare*>* m_squares;
 
+    void getMousePoint(QPoint& point, QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };
 

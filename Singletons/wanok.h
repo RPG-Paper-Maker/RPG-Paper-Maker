@@ -56,6 +56,10 @@ public:
     static bool isInConfig;
     static QString shadersExtension;
 
+    // COLORS
+    const static QColor colorRedSelection;
+    const static QColor colorRedSelectionBackground;
+
     // PATHS
     const static QString pathBasic;
     const static QString pathBR;

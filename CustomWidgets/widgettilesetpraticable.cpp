@@ -30,7 +30,13 @@
 WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     QWidget(parent)
 {
+    this->setMouseTracking(true);
+}
 
+void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
+                                         squares)
+{
+    m_squares = squares;
 }
 
 // -------------------------------------------------------
@@ -47,9 +53,15 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
         m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
                                  m_image.height() / Wanok::coefSquareSize());
     }
-    this->setGeometry(0, 0, m_image.width(), m_image.height());
-    setFixedSize(m_image.width(), m_image.height());
+    this->setGeometry(0, 0, m_image.width() + 1, m_image.height() + 1);
+    setFixedSize(m_image.width() + 1, m_image.height() + 1);
     this->repaint();
+}
+
+void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
+    point = event->pos();
+    point.setX((int)(point.x() / ((float) Wanok::BASIC_SQUARE_SIZE)));
+    point.setY((int)(point.y() / ((float) Wanok::BASIC_SQUARE_SIZE)));
 }
 
 // -------------------------------------------------------
@@ -58,8 +70,49 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
 //
 // -------------------------------------------------------
 
+void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
+    QPoint point;
+    getMousePoint(point, event);
+
+    CollisionSquare* collision = m_squares->value(point);
+    if (collision == nullptr) {
+        collision = new CollisionSquare;
+        m_squares->insert(point, collision);
+    }
+
+    this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
+    QPoint point;
+    getMousePoint(point, event);
+
+    CollisionSquare* collision = m_squares->value(point);
+    if (collision == nullptr)
+        this->setCursor(QCursor(Qt::ArrowCursor));
+    else
+        this->setCursor(QCursor(Qt::SizeHorCursor));
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     painter.drawImage(0, 0, m_image);
+
+    painter.setPen(Wanok::colorRedSelection);
+    for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
+         i != m_squares->end(); i++)
+    {
+        QPoint localPoint = i.key();
+        QRect rectBefore = *i.value()->rect();
+        QRect rect(rectBefore.x() + (localPoint.x() * Wanok::BASIC_SQUARE_SIZE),
+                   rectBefore.y() + (localPoint.y() * Wanok::BASIC_SQUARE_SIZE),
+                   rectBefore.width(), rectBefore.height());
+        painter.fillRect(rect, Wanok::colorRedSelectionBackground);
+        painter.drawRect(rect);
+    }
 }

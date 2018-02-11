@@ -17,40 +17,45 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETTILESETSETTINGS_H
-#define WIDGETTILESETSETTINGS_H
+#ifndef COLLISIONSQUARE_H
+#define COLLISIONSQUARE_H
 
-#include <QWidget>
-#include "systempicture.h"
-#include "collisionsquare.h"
+#include <QRect>
+#include "serializable.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetTilesetSettings
+//  CLASS CollisionSquare
 //
-//  Widget used for choosing a setting picture existing in the database.
+//  Collisions applied to a particular square of a picture.
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class WidgetTilesetSettings;
-}
-
-class WidgetTilesetSettings : public QWidget
+class CollisionSquare : public Serializable
 {
-    Q_OBJECT
-
 public:
-    explicit WidgetTilesetSettings(QWidget *parent = 0);
-    ~WidgetTilesetSettings();
-    void setSquares(QHash<QPoint, CollisionSquare*>* squares);
-    void updateImage(SystemPicture* picture);
-    PictureKind kind() const;
-    void setKind(PictureKind kind);
+    CollisionSquare();
+    virtual ~CollisionSquare();
+    QRect* rect() const;
+    static const QString JSON_RECT;
+    static const QString JSON_LEFT;
+    static const QString JSON_RIGHT;
+    static const QString JSON_TOP;
+    static const QString JSON_BOT;
 
-private:
-    Ui::WidgetTilesetSettings *ui;
-    PictureKind m_kind;
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
+
+protected:
+    QRect* m_rect;
+    bool m_left;
+    bool m_right;
+    bool m_top;
+    bool m_bot;
 };
 
-#endif // WIDGETTILESETSETTINGS_H
+inline uint qHash(const QPoint & key) {
+    return key.x() + key.y();
+}
+
+#endif // COLLISIONSQUARE_H
