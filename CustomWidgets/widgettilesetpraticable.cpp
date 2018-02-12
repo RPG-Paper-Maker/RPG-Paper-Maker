@@ -21,6 +21,8 @@
 #include "wanok.h"
 #include <QPainter>
 
+const int WidgetTilesetPraticable::OFFSET = 5;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -58,10 +60,52 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
     this->repaint();
 }
 
+// -------------------------------------------------------
+
 void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
     point = event->pos();
     point.setX((int)(point.x() / ((float) Wanok::BASIC_SQUARE_SIZE)));
     point.setY((int)(point.y() / ((float) Wanok::BASIC_SQUARE_SIZE)));
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::getRect(QRect& rect, QPoint& localPoint,
+                                      CollisionSquare* collision)
+{
+    QRect rectBefore = *collision->rect();
+    rect.setX(rectBefore.x() + (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
+    rect.setY(rectBefore.y() + (localPoint.y() * Wanok::BASIC_SQUARE_SIZE));
+    rect.setWidth(rectBefore.width());
+    rect.setHeight(rectBefore.height());
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOn(QPoint point, QPoint &mousePoint) const{
+    return mousePoint.x() >= point.x() - OFFSET && mousePoint.x() <= point.x() +
+           OFFSET && mousePoint.y() >= point.y() - OFFSET &&
+           mousePoint.y() <= point.y() + OFFSET;
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOnVertical(QRect& rect,
+                                                QPoint& mousePoint) const
+{
+    return (mousePoint.x() >= rect.x() - OFFSET && mousePoint.x() <= rect.x() +
+           OFFSET) || (mousePoint.x() >= rect.right() - OFFSET &&
+           mousePoint.x() <= rect.right() + OFFSET);
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOnHorizontal(QRect& rect,
+                                                  QPoint& mousePoint) const
+{
+    return (mousePoint.y() >= rect.y() - OFFSET && mousePoint.y() <= rect.y() +
+           OFFSET) || (mousePoint.y() >= rect.bottom() - OFFSET &&
+           mousePoint.y() <= rect.bottom() + OFFSET);
 }
 
 // -------------------------------------------------------
@@ -92,8 +136,24 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
     CollisionSquare* collision = m_squares->value(point);
     if (collision == nullptr)
         this->setCursor(QCursor(Qt::ArrowCursor));
-    else
-        this->setCursor(QCursor(Qt::SizeHorCursor));
+    else {
+        QRect rect;
+        getRect(rect, point, collision);
+        QPoint mousePoint = event->pos();
+        if (isMouseOn(rect.topLeft(), mousePoint) ||
+            isMouseOn(rect.bottomRight(), mousePoint))
+            this->setCursor(QCursor(Qt::SizeFDiagCursor));
+        else if (isMouseOn(rect.topRight(), mousePoint) ||
+                 isMouseOn(rect.bottomLeft(), mousePoint))
+            this->setCursor(QCursor(Qt::SizeBDiagCursor));
+        else if (isMouseOnVertical(rect, mousePoint))
+            this->setCursor(QCursor(Qt::SizeHorCursor));
+        else if (isMouseOnHorizontal(rect, mousePoint))
+            this->setCursor(QCursor(Qt::SizeVerCursor));
+        else
+            this->setCursor(QCursor(Qt::ArrowCursor));
+
+    }
 }
 
 // -------------------------------------------------------
@@ -108,10 +168,8 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
          i != m_squares->end(); i++)
     {
         QPoint localPoint = i.key();
-        QRect rectBefore = *i.value()->rect();
-        QRect rect(rectBefore.x() + (localPoint.x() * Wanok::BASIC_SQUARE_SIZE),
-                   rectBefore.y() + (localPoint.y() * Wanok::BASIC_SQUARE_SIZE),
-                   rectBefore.width(), rectBefore.height());
+        QRect rect;
+        getRect(rect, localPoint, i.value());
         painter.fillRect(rect, Wanok::colorRedSelectionBackground);
         painter.drawRect(rect);
     }

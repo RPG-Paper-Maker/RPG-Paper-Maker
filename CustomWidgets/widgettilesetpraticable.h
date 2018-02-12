@@ -37,6 +37,7 @@ class WidgetTilesetPraticable : public QWidget
     Q_OBJECT
 public:
     explicit WidgetTilesetPraticable(QWidget *parent = 0);
+    const static int OFFSET;
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
 
@@ -45,6 +46,10 @@ protected:
     QHash<QPoint, CollisionSquare*>* m_squares;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
+    void getRect(QRect& rect, QPoint& localPoint, CollisionSquare *collision);
+    bool isMouseOn(QPoint point, QPoint& mousePoint) const;
+    bool isMouseOnVertical(QRect& rect, QPoint& mousePoint) const;
+    bool isMouseOnHorizontal(QRect& rect, QPoint &mousePoint) const;
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
