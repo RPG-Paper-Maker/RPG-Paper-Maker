@@ -152,7 +152,6 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
             this->setCursor(QCursor(Qt::SizeVerCursor));
         else
             this->setCursor(QCursor(Qt::ArrowCursor));
-
     }
 }
 
@@ -162,6 +161,9 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     painter.drawImage(0, 0, m_image);
+
+    if (m_squares == nullptr)
+        return;
 
     painter.setPen(Wanok::colorRedSelection);
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();

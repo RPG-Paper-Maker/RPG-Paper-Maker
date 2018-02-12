@@ -63,28 +63,56 @@ QRect* CollisionSquare::rect() const {
 // -------------------------------------------------------
 
 void CollisionSquare::read(const QJsonObject &json) {
-    QJsonArray tab = json[JSON_RECT].toArray();
-    m_rect->setX(tab.at(0).toInt());
-    m_rect->setY(tab.at(1).toInt());
-    m_rect->setWidth(tab.at(2).toInt());
-    m_rect->setHeight(tab.at(3).toInt());
+    if (json.contains(JSON_RECT)) {
+        QJsonArray tab = json[JSON_RECT].toArray();
+        m_rect->setX(tab.at(0).toInt());
+        m_rect->setY(tab.at(1).toInt());
+        m_rect->setWidth(tab.at(2).toInt());
+        m_rect->setHeight(tab.at(3).toInt());
+    }
+    else {
+        m_rect->setX(0); m_rect->setY(0);
+        m_rect->setWidth(Wanok::BASIC_SQUARE_SIZE);
+        m_rect->setHeight(Wanok::BASIC_SQUARE_SIZE);
+    }
 
-    m_left = json[JSON_LEFT].toBool();
-    m_right = json[JSON_RIGHT].toBool();
-    m_top = json[JSON_TOP].toBool();
-    m_bot = json[JSON_BOT].toBool();
+    if (json.contains(JSON_LEFT))
+        m_left = json[JSON_LEFT].toBool();
+    else
+        m_left = true;
+    if (json.contains(JSON_RIGHT))
+        m_right = json[JSON_RIGHT].toBool();
+    else
+        m_right = true;
+    if (json.contains(JSON_TOP))
+        m_top = json[JSON_TOP].toBool();
+    else
+        m_top = true;
+    if (json.contains(JSON_BOT))
+        m_bot = json[JSON_BOT].toBool();
+    else
+        m_bot = true;
 }
 
 void CollisionSquare::write(QJsonObject &json) const {
-    QJsonArray tab;
-    tab.append(m_rect->x());
-    tab.append(m_rect->y());
-    tab.append(m_rect->width());
-    tab.append(m_rect->height());
-    json[JSON_RECT] = tab;
+    if (m_rect->x() != 0 || m_rect->y() != 0 ||
+        m_rect->width() != Wanok::BASIC_SQUARE_SIZE ||
+        m_rect->height() != Wanok::BASIC_SQUARE_SIZE)
+    {
+        QJsonArray tab;
+        tab.append(m_rect->x());
+        tab.append(m_rect->y());
+        tab.append(m_rect->width());
+        tab.append(m_rect->height());
+        json[JSON_RECT] = tab;
+    }
 
-    json[JSON_LEFT] = m_left;
-    json[JSON_RIGHT] = m_right;
-    json[JSON_TOP] = m_top;
-    json[JSON_BOT] = m_bot;
+    if (!m_left)
+        json[JSON_LEFT] = m_left;
+    if (!m_right)
+        json[JSON_RIGHT] = m_right;
+    if (!m_top)
+        json[JSON_TOP] = m_top;
+    if (!m_bot)
+        json[JSON_BOT] = m_bot;
 }
