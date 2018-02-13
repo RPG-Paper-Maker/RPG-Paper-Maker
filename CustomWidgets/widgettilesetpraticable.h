@@ -44,12 +44,16 @@ public:
 protected:
     QImage m_image;
     QHash<QPoint, CollisionSquare*>* m_squares;
+    QPoint m_selectedPoint;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
-    void getRect(QRect& rect, QPoint& localPoint, CollisionSquare *collision);
+    void getRect(QRect& rect, const QPoint& localPoint,
+                 CollisionSquare *collision);
     bool isMouseOn(QPoint point, QPoint& mousePoint) const;
     bool isMouseOnVertical(QRect& rect, QPoint& mousePoint) const;
     bool isMouseOnHorizontal(QRect& rect, QPoint &mousePoint) const;
+    void drawCollision(QPainter &painter, const QPoint& localPoint,
+                       CollisionSquare* collision, const QColor& color);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);

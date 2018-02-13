@@ -34,6 +34,8 @@ QString Wanok::shadersExtension = "-3.0";
 // COLORS
 const QColor Wanok::colorRedSelection = QColor(200, 20, 20);
 const QColor Wanok::colorRedSelectionBackground = QColor(200, 20, 20, 100);
+const QColor Wanok::colorBlueSelection = QColor(20, 20, 200);
+const QColor Wanok::colorBlueSelectionBackground = QColor(20, 20, 200, 100);
 
 // PATHS DATAS
 const QString Wanok::pathBasic = pathCombine("Content", "basic");

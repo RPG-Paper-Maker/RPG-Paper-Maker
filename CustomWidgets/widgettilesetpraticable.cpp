@@ -30,7 +30,9 @@ const int WidgetTilesetPraticable::OFFSET = 5;
 // -------------------------------------------------------
 
 WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_squares(nullptr),
+    m_selectedPoint(-1, -1)
 {
     this->setMouseTracking(true);
 }
@@ -70,7 +72,7 @@ void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::getRect(QRect& rect, QPoint& localPoint,
+void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
                                       CollisionSquare* collision)
 {
     QRect rectBefore = *collision->rect();
@@ -109,6 +111,18 @@ bool WidgetTilesetPraticable::isMouseOnHorizontal(QRect& rect,
 }
 
 // -------------------------------------------------------
+
+void WidgetTilesetPraticable::drawCollision(
+        QPainter& painter, const QPoint &localPoint, CollisionSquare* collision,
+        const QColor &color)
+{
+    QRect rect;
+    getRect(rect, localPoint, collision);
+    painter.fillRect(rect, color);
+    painter.drawRect(rect);
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -118,11 +132,15 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
     QPoint point;
     getMousePoint(point, event);
 
+    // Update collisions
     CollisionSquare* collision = m_squares->value(point);
     if (collision == nullptr) {
         collision = new CollisionSquare;
         m_squares->insert(point, collision);
     }
+
+    // Update selected collision
+    m_selectedPoint = point;
 
     this->repaint();
 }
@@ -160,19 +178,29 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
 void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
+    // Draw background
+    painter.fillRect(0, 0, m_image.width(), m_image.height(), Qt::white);
+
+    // Draw image
     painter.drawImage(0, 0, m_image);
 
     if (m_squares == nullptr)
         return;
 
+    // Draw all the collisions
     painter.setPen(Wanok::colorRedSelection);
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
          i != m_squares->end(); i++)
     {
-        QPoint localPoint = i.key();
-        QRect rect;
-        getRect(rect, localPoint, i.value());
-        painter.fillRect(rect, Wanok::colorRedSelectionBackground);
-        painter.drawRect(rect);
+        drawCollision(painter, i.key(), i.value(),
+                      Wanok::colorRedSelectionBackground);
+    }
+
+    // Draw another layer for the selected collision
+    CollisionSquare* collision = m_squares->value(m_selectedPoint);
+    if (collision != nullptr) {
+        painter.setPen(Wanok::colorBlueSelection);
+        drawCollision(painter, m_selectedPoint, collision,
+                      Wanok::colorBlueSelectionBackground);
     }
 }

@@ -43,6 +43,7 @@ class WidgetTilesetSettings : public QWidget
 public:
     explicit WidgetTilesetSettings(QWidget *parent = 0);
     ~WidgetTilesetSettings();
+    static const QString tabStyleSheet;
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture);
     PictureKind kind() const;
