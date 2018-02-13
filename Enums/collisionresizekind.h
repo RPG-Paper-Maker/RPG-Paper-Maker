@@ -17,21 +17,27 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CAMERAUPDOWNKIND_H
-#define CAMERAUPDOWNKIND_H
+#ifndef COLLISIONRESIZEKIND_H
+#define COLLISIONRESIZEKIND_H
 
 // -------------------------------------------------------
 //
-//  ENUM CameraUpDownKind
+//  ENUM CollisionResizeKind
 //
-//  All the possible camera orientation up down.
+//  All the possible collision resize kind.
 //
 // -------------------------------------------------------
 
-enum class CameraUpDownKind {
+enum class CollisionResizeKind {
     None,
-    Up,
-    Down
+    Left,
+    Right,
+    Top,
+    Bottom,
+    TopLeft,
+    TopRight,
+    BotLeft,
+    BotRight
 };
 
-#endif // CAMERAUPDOWNKIND_H
+#endif // COLLISIONRESIZEKIND_H

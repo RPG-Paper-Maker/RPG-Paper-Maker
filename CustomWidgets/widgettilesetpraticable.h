@@ -23,6 +23,7 @@
 #include <QWidget>
 #include "systempicture.h"
 #include "collisionsquare.h"
+#include "collisionresizekind.h"
 
 // -------------------------------------------------------
 //
@@ -45,15 +46,31 @@ protected:
     QImage m_image;
     QHash<QPoint, CollisionSquare*>* m_squares;
     QPoint m_selectedPoint;
+    QPoint m_hoveredPoint;
+    CollisionResizeKind m_resizeKind;
+    CollisionSquare* m_selectedCollision;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRect(QRect& rect, const QPoint& localPoint,
                  CollisionSquare *collision);
-    bool isMouseOn(QPoint point, QPoint& mousePoint) const;
-    bool isMouseOnVertical(QRect& rect, QPoint& mousePoint) const;
-    bool isMouseOnHorizontal(QRect& rect, QPoint &mousePoint) const;
+    void getBasicRect(QRect& rect, const QPoint& localPoint);
+    bool isMouseOn(QRect& rect, QPoint point, QPoint& mousePoint) const;
+    bool isMouseOnLeft(QRect& rect, QPoint& mousePoint) const;
+    bool isMouseOnRight(QRect& rect, QPoint& mousePoint) const;
+    bool isMouseOnTop(QRect& rect, QPoint &mousePoint) const;
+    bool isMouseOnBot(QRect& rect, QPoint &mousePoint) const;
+    void updateCursor(QRect &rect, QPoint& mousePoint);
+    void updateRect(QRect &rect, QPoint& mousePoint, QPoint &localPoint,
+                    CollisionSquare *collision);
+    void updateRectLeft(QRect &rect, QPoint& mousePoint, QRect& rectBasic);
+    void updateRectRight(QRect &rect, QPoint& mousePoint, QRect& rectBasic);
+    void updateRectTop(QRect &rect, QPoint& mousePoint, QRect& rectBasic);
+    void updateRectBot(QRect &rect, QPoint& mousePoint, QRect& rectBasic);
+    int getRectValue(int mousePos, int left, int right);
     void drawCollision(QPainter &painter, const QPoint& localPoint,
-                       CollisionSquare* collision, const QColor& color);
+                       CollisionSquare* collision, const QColor& color,
+                       bool outline = true);
+    int getOffset(QRect& rect) const;
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);

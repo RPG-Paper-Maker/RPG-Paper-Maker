@@ -32,7 +32,10 @@ const int WidgetTilesetPraticable::OFFSET = 5;
 WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     QWidget(parent),
     m_squares(nullptr),
-    m_selectedPoint(-1, -1)
+    m_selectedPoint(-1, -1),
+    m_hoveredPoint(-1, -1),
+    m_resizeKind(CollisionResizeKind::None),
+    m_selectedCollision(nullptr)
 {
     this->setMouseTracking(true);
 }
@@ -84,42 +87,230 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
 
 // -------------------------------------------------------
 
-bool WidgetTilesetPraticable::isMouseOn(QPoint point, QPoint &mousePoint) const{
-    return mousePoint.x() >= point.x() - OFFSET && mousePoint.x() <= point.x() +
-           OFFSET && mousePoint.y() >= point.y() - OFFSET &&
-           mousePoint.y() <= point.y() + OFFSET;
+void WidgetTilesetPraticable::getBasicRect(QRect& rect,
+                                           const QPoint& localPoint)
+{
+    rect.setX(localPoint.x() * Wanok::BASIC_SQUARE_SIZE);
+    rect.setY(localPoint.y() * Wanok::BASIC_SQUARE_SIZE);
+    rect.setWidth(Wanok::BASIC_SQUARE_SIZE);
+    rect.setHeight(Wanok::BASIC_SQUARE_SIZE);
 }
 
 // -------------------------------------------------------
 
-bool WidgetTilesetPraticable::isMouseOnVertical(QRect& rect,
-                                                QPoint& mousePoint) const
+bool WidgetTilesetPraticable::isMouseOn(QRect& rect, QPoint point,
+                                        QPoint &mousePoint) const
 {
-    return (mousePoint.x() >= rect.x() - OFFSET && mousePoint.x() <= rect.x() +
-           OFFSET) || (mousePoint.x() >= rect.right() - OFFSET &&
-           mousePoint.x() <= rect.right() + OFFSET);
+    int offset = getOffset(rect);
+    return mousePoint.x() >= point.x() - offset && mousePoint.x() <= point.x() +
+           offset && mousePoint.y() >= point.y() - offset &&
+           mousePoint.y() <= point.y() + offset;
 }
 
 // -------------------------------------------------------
 
-bool WidgetTilesetPraticable::isMouseOnHorizontal(QRect& rect,
-                                                  QPoint& mousePoint) const
+bool WidgetTilesetPraticable::isMouseOnLeft(QRect& rect,
+                                            QPoint& mousePoint) const
 {
-    return (mousePoint.y() >= rect.y() - OFFSET && mousePoint.y() <= rect.y() +
-           OFFSET) || (mousePoint.y() >= rect.bottom() - OFFSET &&
-           mousePoint.y() <= rect.bottom() + OFFSET);
+    int offset = getOffset(rect);
+    return mousePoint.x() >= rect.x() - offset && mousePoint.x() <= rect.x() +
+           offset;
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOnRight(QRect& rect,
+                                             QPoint& mousePoint) const
+{
+    int offset = getOffset(rect);
+    return mousePoint.x() >= rect.right() - offset && mousePoint.x() <=
+           rect.right() + offset;
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOnTop(QRect& rect,
+                                           QPoint& mousePoint) const
+{
+    int offset = getOffset(rect);
+    return mousePoint.y() >= rect.y() - offset && mousePoint.y() <= rect.y() +
+           offset;
+}
+
+// -------------------------------------------------------
+
+bool WidgetTilesetPraticable::isMouseOnBot(QRect& rect,
+                                           QPoint& mousePoint) const
+{
+    int offset = getOffset(rect);
+    return mousePoint.y() >= rect.bottom() - offset && mousePoint.y() <=
+           rect.bottom() + offset;
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateCursor(QRect& rect, QPoint& mousePoint)
+{
+    if (isMouseOn(rect, rect.topLeft(), mousePoint))
+    {
+        m_resizeKind = CollisionResizeKind::TopLeft;
+        this->setCursor(QCursor(Qt::SizeFDiagCursor));
+    }
+    else if (isMouseOn(rect, rect.bottomRight(), mousePoint)) {
+        m_resizeKind = CollisionResizeKind::BotRight;
+        this->setCursor(QCursor(Qt::SizeFDiagCursor));
+    }
+    else if (isMouseOn(rect, rect.topRight(), mousePoint)) {
+        m_resizeKind = CollisionResizeKind::TopRight;
+        this->setCursor(QCursor(Qt::SizeBDiagCursor));
+    }
+    else if (isMouseOn(rect, rect.bottomLeft(), mousePoint)) {
+        m_resizeKind = CollisionResizeKind::BotLeft;
+        this->setCursor(QCursor(Qt::SizeBDiagCursor));
+    }
+    else if (isMouseOnLeft(rect, mousePoint)) {
+        m_resizeKind = CollisionResizeKind::Left;
+        this->setCursor(QCursor(Qt::SizeHorCursor));
+    }
+    else if (isMouseOnRight(rect, mousePoint)) {
+        m_resizeKind = CollisionResizeKind::Right;
+        this->setCursor(QCursor(Qt::SizeHorCursor));
+    }
+    else if (isMouseOnTop(rect, mousePoint)) {
+        m_resizeKind = CollisionResizeKind::Top;
+        this->setCursor(QCursor(Qt::SizeVerCursor));
+    }
+    else if (isMouseOnBot(rect, mousePoint)) {
+        m_resizeKind = CollisionResizeKind::Bottom;
+        this->setCursor(QCursor(Qt::SizeVerCursor));
+    }
+    else {
+        m_resizeKind = CollisionResizeKind::None;
+        this->setCursor(QCursor(Qt::ArrowCursor));
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
+                                         QPoint& localPoint,
+                                         CollisionSquare* collision)
+{
+    QRect rectBasic;
+    getBasicRect(rectBasic, localPoint);
+    switch (m_resizeKind) {
+    case CollisionResizeKind::Left:
+        updateRectLeft(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::Right:
+        updateRectRight(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::Top:
+        updateRectTop(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::Bottom:
+        updateRectBot(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::TopLeft:
+        updateRectTop(rect, mousePoint, rectBasic);
+        updateRectLeft(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::TopRight:
+        updateRectTop(rect, mousePoint, rectBasic);
+        updateRectRight(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::BotLeft:
+        updateRectBot(rect, mousePoint, rectBasic);
+        updateRectLeft(rect, mousePoint, rectBasic);
+        break;
+    case CollisionResizeKind::BotRight:
+        updateRectBot(rect, mousePoint, rectBasic);
+        updateRectRight(rect, mousePoint, rectBasic);
+        break;
+    default:
+        break;
+    }
+
+    collision->rect()->setX(rect.x() % Wanok::BASIC_SQUARE_SIZE);
+    collision->rect()->setY(rect.y() % Wanok::BASIC_SQUARE_SIZE);
+    collision->rect()->setWidth(rect.width());
+    collision->rect()->setHeight(rect.height());
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateRectLeft(QRect &rect, QPoint& mousePoint,
+                                             QRect& rectBasic)
+{
+    int value = getRectValue(mousePoint.x(), rectBasic.left(), rect.right());
+    rect.setLeft(value);
+    if (rect.width() == 1)
+        rect.setLeft(rect.left() - 1);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateRectRight(QRect &rect, QPoint& mousePoint,
+                                              QRect& rectBasic)
+{
+    int value = getRectValue(mousePoint.x(), rect.left(), rectBasic.right());
+    rect.setRight(value);
+    if (rect.width() == 1)
+        rect.setRight(rect.right() + 1);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateRectTop(QRect &rect, QPoint& mousePoint,
+                                            QRect& rectBasic)
+{
+    int value = getRectValue(mousePoint.y(), rectBasic.top(), rect.bottom());
+    rect.setTop(value);
+    if (rect.height() == 1)
+        rect.setTop(rect.top() - 1);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateRectBot(QRect &rect, QPoint& mousePoint,
+                                            QRect& rectBasic)
+{
+    int value = getRectValue(mousePoint.y(), rect.top(), rectBasic.bottom());
+    rect.setBottom(value);
+    if (rect.height() == 1)
+        rect.setBottom(rect.bottom() + 1);
+}
+
+// -------------------------------------------------------
+
+int WidgetTilesetPraticable::getRectValue(int mousePos, int left, int right) {
+    int value = mousePos;
+    if (value < left)
+        value = left;
+    else if (value > right)
+        value = right;
+
+    return value;
 }
 
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::drawCollision(
         QPainter& painter, const QPoint &localPoint, CollisionSquare* collision,
-        const QColor &color)
+        const QColor &color, bool outline)
 {
     QRect rect;
     getRect(rect, localPoint, collision);
     painter.fillRect(rect, color);
-    painter.drawRect(rect);
+    if (outline)
+        painter.drawRect(rect);
+}
+
+// -------------------------------------------------------
+
+int WidgetTilesetPraticable::getOffset(QRect& rect) const {
+    return (rect.width() < (OFFSET * 2) || rect.height() < (OFFSET * 2)) ?
+           0 : OFFSET;
 }
 
 // -------------------------------------------------------
@@ -141,6 +332,7 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
 
     // Update selected collision
     m_selectedPoint = point;
+    m_selectedCollision = collision;
 
     this->repaint();
 }
@@ -148,29 +340,29 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
+    QRect rect;
+    QPoint mousePoint = event->pos();
     QPoint point;
     getMousePoint(point, event);
 
-    CollisionSquare* collision = m_squares->value(point);
-    if (collision == nullptr)
-        this->setCursor(QCursor(Qt::ArrowCursor));
-    else {
-        QRect rect;
-        getRect(rect, point, collision);
-        QPoint mousePoint = event->pos();
-        if (isMouseOn(rect.topLeft(), mousePoint) ||
-            isMouseOn(rect.bottomRight(), mousePoint))
-            this->setCursor(QCursor(Qt::SizeFDiagCursor));
-        else if (isMouseOn(rect.topRight(), mousePoint) ||
-                 isMouseOn(rect.bottomLeft(), mousePoint))
-            this->setCursor(QCursor(Qt::SizeBDiagCursor));
-        else if (isMouseOnVertical(rect, mousePoint))
-            this->setCursor(QCursor(Qt::SizeHorCursor));
-        else if (isMouseOnHorizontal(rect, mousePoint))
-            this->setCursor(QCursor(Qt::SizeVerCursor));
-        else
-            this->setCursor(QCursor(Qt::ArrowCursor));
+    if (event->buttons() == Qt::MouseButton::LeftButton &&
+        m_selectedCollision != nullptr)
+    {
+        getRect(rect, m_selectedPoint, m_selectedCollision);
+        updateRect(rect, mousePoint, m_selectedPoint, m_selectedCollision);
     }
+    else {
+        CollisionSquare* collision = m_squares->value(point);
+        if (collision == nullptr)
+            this->setCursor(QCursor(Qt::ArrowCursor));
+        else {
+            getRect(rect, point, collision);
+            updateCursor(rect, mousePoint);
+        }
+        m_hoveredPoint = point;
+    }
+
+    this->repaint();
 }
 
 // -------------------------------------------------------
@@ -202,5 +394,12 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         painter.setPen(Wanok::colorBlueSelection);
         drawCollision(painter, m_selectedPoint, collision,
                       Wanok::colorBlueSelectionBackground);
+    }
+
+    // Draw hovered layer
+    collision = m_squares->value(m_hoveredPoint);
+    if (collision != nullptr) {
+        drawCollision(painter, m_hoveredPoint, collision,
+                      Wanok::colorGrayHoverBackground, false);
     }
 }

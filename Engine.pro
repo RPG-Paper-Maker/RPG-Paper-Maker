@@ -242,7 +242,8 @@ HEADERS += \
     MapEditor/textureautotile.h \
     MapEditor/autotile.h \
     Dialogs/dialogcollisions.h \
-    Models/collisionsquare.h
+    Models/collisionsquare.h \
+    Enums/collisionresizekind.h
 
 SOURCES += \
     main.cpp \
