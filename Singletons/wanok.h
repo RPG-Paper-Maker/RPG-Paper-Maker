@@ -62,6 +62,7 @@ public:
     const static QColor colorBlueSelection;
     const static QColor colorBlueSelectionBackground;
     const static QColor colorGrayHoverBackground;
+    const static QColor colorAlmostWhite;
 
     // PATHS
     const static QString pathBasic;

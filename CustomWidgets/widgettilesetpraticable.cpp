@@ -38,6 +38,18 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_selectedCollision(nullptr)
 {
     this->setMouseTracking(true);
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocus();
+
+    // Context menu connections
+    m_contextMenu = ContextMenuList::createContextPraticable(this);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(showContextMenu(const QPoint &)));
+}
+
+WidgetTilesetPraticable::~WidgetTilesetPraticable() {
+    delete m_contextMenu;
 }
 
 void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
@@ -314,9 +326,40 @@ int WidgetTilesetPraticable::getOffset(QRect& rect) const {
 }
 
 // -------------------------------------------------------
+
+void WidgetTilesetPraticable::deleteCollision() {
+    if (m_selectedCollision->hasAllDirections()) {
+        delete m_selectedCollision;
+        m_squares->remove(m_selectedPoint);
+    }
+    m_selectedCollision = nullptr;
+    m_selectedPoint = QPoint(-1, -1);
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::keyPressEvent(QKeyEvent *event){
+    QKeySequence seq = Wanok::getKeySequence(event);
+    QList<QAction*> actions = m_contextMenu->actions();
+    QAction* action;
+
+    // Forcing shortcuts
+    action = actions.at(0);
+    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+        contextEdit();
+        return;
+    }
+    action = actions.at(2);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        contextDelete();
+        return;
+    }
+}
+
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
@@ -327,8 +370,11 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
     CollisionSquare* collision = m_squares->value(point);
     if (collision == nullptr) {
         collision = new CollisionSquare;
+        collision->setDefaultPraticable();
         m_squares->insert(point, collision);
     }
+    else if (collision->rect() == nullptr)
+        collision->setDefaultPraticable();
 
     // Update selected collision
     m_selectedPoint = point;
@@ -371,7 +417,8 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     // Draw background
-    painter.fillRect(0, 0, m_image.width(), m_image.height(), Qt::white);
+    painter.fillRect(0, 0, m_image.width(), m_image.height(),
+                     Wanok::colorAlmostWhite);
 
     // Draw image
     painter.drawImage(0, 0, m_image);
@@ -402,4 +449,28 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         drawCollision(painter, m_hoveredPoint, collision,
                       Wanok::colorGrayHoverBackground, false);
     }
+}
+
+// -------------------------------------------------------
+//
+//  CONTEXT MENU SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::showContextMenu(const QPoint& p) {
+    if (m_selectedPoint.x() != -1 && m_selectedPoint.y() != -1)
+        m_contextMenu->showContextMenu(p);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::contextEdit() {
+
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::contextDelete() {
+    if (m_selectedCollision != nullptr)
+        deleteCollision();
 }

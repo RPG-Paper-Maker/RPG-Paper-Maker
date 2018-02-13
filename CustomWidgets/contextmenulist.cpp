@@ -245,6 +245,33 @@ ContextMenuList* ContextMenuList::createContextObject(QWidget *parent){
 
 // -------------------------------------------------------
 
+ContextMenuList* ContextMenuList::createContextPraticable(QWidget *parent) {
+    ContextMenuList* menu = new ContextMenuList(parent);
+
+    // Creating actions
+    QAction* actionEdit = new QAction("Edit", parent);
+    QAction* actionDelete = new QAction("Delete", parent);
+    menu->setActionEdit(actionEdit);
+    menu->setActionDelete(actionDelete);
+
+    // Editing shortcut
+    actionEdit->setShortcut(QKeySequence(Qt::Key_Enter));
+    actionDelete->setShortcut(QKeySequence(QKeySequence::Delete));
+
+    // Adding action to the menu
+    menu->addAction(actionEdit);
+    menu->addSeparator();
+    menu->addAction(actionDelete);
+
+    // Connexions
+    connect(actionEdit, SIGNAL(triggered()), parent, SLOT(contextEdit()));
+    connect(actionDelete, SIGNAL(triggered()), parent, SLOT(contextDelete()));
+
+    return menu;
+}
+
+// -------------------------------------------------------
+
 void ContextMenuList::setActionNew(QAction* action){
     m_actionNew = action;
 }

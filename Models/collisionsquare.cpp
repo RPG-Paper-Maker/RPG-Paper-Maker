@@ -33,7 +33,7 @@ const QString CollisionSquare::JSON_BOT = "b";
 // -------------------------------------------------------
 
 CollisionSquare::CollisionSquare() :
-    m_rect(new QRect(0, 0, Wanok::BASIC_SQUARE_SIZE, Wanok::BASIC_SQUARE_SIZE)),
+    m_rect(nullptr),
     m_left(true),
     m_right(true),
     m_top(true),
@@ -43,11 +43,18 @@ CollisionSquare::CollisionSquare() :
 }
 
 CollisionSquare::~CollisionSquare() {
-    delete m_rect;
+    if (m_rect != nullptr)
+        delete m_rect;
 }
 
 QRect* CollisionSquare::rect() const {
     return m_rect;
+}
+
+void CollisionSquare::setRect(QRect* rect) {
+    if (m_rect != nullptr)
+        delete m_rect;
+    m_rect = rect;
 }
 
 // -------------------------------------------------------
@@ -55,6 +62,16 @@ QRect* CollisionSquare::rect() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+bool CollisionSquare::hasAllDirections() const {
+    return m_left && m_right && m_top && m_bot;
+}
+
+void CollisionSquare::setDefaultPraticable() {
+    if (m_rect != nullptr)
+        delete m_rect;
+    m_rect = new QRect(0, 0, Wanok::BASIC_SQUARE_SIZE,Wanok::BASIC_SQUARE_SIZE);
+}
 
 // -------------------------------------------------------
 //
@@ -65,16 +82,11 @@ QRect* CollisionSquare::rect() const {
 void CollisionSquare::read(const QJsonObject &json) {
     if (json.contains(JSON_RECT)) {
         QJsonArray tab = json[JSON_RECT].toArray();
-        m_rect->setX(tab.at(0).toInt());
-        m_rect->setY(tab.at(1).toInt());
-        m_rect->setWidth(tab.at(2).toInt());
-        m_rect->setHeight(tab.at(3).toInt());
+        m_rect = new QRect(tab.at(0).toInt(), tab.at(1).toInt(),
+                           tab.at(2).toInt(), tab.at(3).toInt());
     }
-    else {
-        m_rect->setX(0); m_rect->setY(0);
-        m_rect->setWidth(Wanok::BASIC_SQUARE_SIZE);
-        m_rect->setHeight(Wanok::BASIC_SQUARE_SIZE);
-    }
+    else
+        setDefaultPraticable();
 
     if (json.contains(JSON_LEFT))
         m_left = json[JSON_LEFT].toBool();
@@ -95,16 +107,18 @@ void CollisionSquare::read(const QJsonObject &json) {
 }
 
 void CollisionSquare::write(QJsonObject &json) const {
-    if (m_rect->x() != 0 || m_rect->y() != 0 ||
-        m_rect->width() != Wanok::BASIC_SQUARE_SIZE ||
-        m_rect->height() != Wanok::BASIC_SQUARE_SIZE)
-    {
-        QJsonArray tab;
-        tab.append(m_rect->x());
-        tab.append(m_rect->y());
-        tab.append(m_rect->width());
-        tab.append(m_rect->height());
-        json[JSON_RECT] = tab;
+    if (m_rect != nullptr) {
+        if (m_rect->x() != 0 || m_rect->y() != 0 ||
+            m_rect->width() != Wanok::BASIC_SQUARE_SIZE ||
+            m_rect->height() != Wanok::BASIC_SQUARE_SIZE)
+        {
+            QJsonArray tab;
+            tab.append(m_rect->x());
+            tab.append(m_rect->y());
+            tab.append(m_rect->width());
+            tab.append(m_rect->height());
+            json[JSON_RECT] = tab;
+        }
     }
 
     if (!m_left)

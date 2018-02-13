@@ -37,6 +37,7 @@ const QColor Wanok::colorRedSelectionBackground = QColor(200, 50, 50, 75);
 const QColor Wanok::colorBlueSelection = QColor(50, 50, 200);
 const QColor Wanok::colorBlueSelectionBackground = QColor(50, 50, 200, 75);
 const QColor Wanok::colorGrayHoverBackground = QColor(50, 50, 50, 75);
+const QColor Wanok::colorAlmostWhite = QColor(245, 245, 245);
 
 // PATHS DATAS
 const QString Wanok::pathBasic = pathCombine("Content", "basic");

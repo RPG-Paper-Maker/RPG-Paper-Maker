@@ -44,6 +44,12 @@ SystemTileset::~SystemTileset(){
     SuperListItem::deleteModel(m_modelSpriteWalls);
     SuperListItem::deleteModel(m_model3DObjects);
     SuperListItem::deleteModel(m_modelReliefs);
+
+    for (QHash<QPoint, CollisionSquare*>::iterator i = m_collisions.begin();
+         i != m_collisions.end(); i++)
+    {
+        delete *i;
+    }
 }
 
 SystemPicture* SystemTileset::picture() const {

@@ -20,9 +20,6 @@
 #include "widgettilesetsettings.h"
 #include "ui_widgettilesetsettings.h"
 
-const QString WidgetTilesetSettings::tabStyleSheet =
-        "background-color:rgb(245,245,245);";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -34,8 +31,6 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     ui(new Ui::WidgetTilesetSettings)
 {
     ui->setupUi(this);
-
-    ui->tab->setStyleSheet(tabStyleSheet);
 }
 
 WidgetTilesetSettings::~WidgetTilesetSettings()

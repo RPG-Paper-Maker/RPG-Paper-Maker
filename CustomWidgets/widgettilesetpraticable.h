@@ -24,6 +24,7 @@
 #include "systempicture.h"
 #include "collisionsquare.h"
 #include "collisionresizekind.h"
+#include "contextmenulist.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +39,7 @@ class WidgetTilesetPraticable : public QWidget
     Q_OBJECT
 public:
     explicit WidgetTilesetPraticable(QWidget *parent = 0);
+    virtual ~WidgetTilesetPraticable();
     const static int OFFSET;
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
@@ -49,6 +51,7 @@ protected:
     QPoint m_hoveredPoint;
     CollisionResizeKind m_resizeKind;
     CollisionSquare* m_selectedCollision;
+    ContextMenuList* m_contextMenu;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRect(QRect& rect, const QPoint& localPoint,
@@ -71,9 +74,17 @@ protected:
                        CollisionSquare* collision, const QColor& color,
                        bool outline = true);
     int getOffset(QRect& rect) const;
+    void deleteCollision();
+
+    virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
+
+private slots:
+    void showContextMenu(const QPoint & p);
+    void contextEdit();
+    void contextDelete();
 };
 
 #endif // WIDGETTILESETPRATICABLE_H

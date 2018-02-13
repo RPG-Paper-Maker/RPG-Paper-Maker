@@ -41,6 +41,7 @@ public:
     static ContextMenuList* createContextMap(QWidget *parent = 0);
     static ContextMenuList* createContextDirectory(QWidget *parent = 0);
     static ContextMenuList* createContextObject(QWidget *parent = 0);
+    static ContextMenuList* createContextPraticable(QWidget *parent = 0);
     void setActionNew(QAction* action);
     void setActionEdit(QAction* action);
     void setActionCopy(QAction* action);
