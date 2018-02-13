@@ -74,6 +74,7 @@ protected:
                        CollisionSquare* collision, const QColor& color,
                        bool outline = true);
     int getOffset(QRect& rect) const;
+    void editCollision();
     void deleteCollision();
 
     virtual void keyPressEvent(QKeyEvent *event);

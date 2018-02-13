@@ -243,7 +243,8 @@ HEADERS += \
     MapEditor/autotile.h \
     Dialogs/dialogcollisions.h \
     Models/collisionsquare.h \
-    Enums/collisionresizekind.h
+    Enums/collisionresizekind.h \
+    Dialogs/dialogrect.h
 
 SOURCES += \
     main.cpp \
@@ -436,7 +437,8 @@ SOURCES += \
     MapEditor/textureautotile.cpp \
     MapEditor/autotile.cpp \
     Dialogs/dialogcollisions.cpp \
-    Models/collisionsquare.cpp
+    Models/collisionsquare.cpp \
+    Dialogs/dialogrect.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -503,7 +505,8 @@ FORMS += \
     Dialogs/SpecialElements/dialogspecialelements.ui \
     Dialogs/SpecialElements/dialogtilesetspecialelements.ui \
     Dialogs/SpecialElements/panelspecialelements.ui \
-    Dialogs/dialogcollisions.ui
+    Dialogs/dialogcollisions.ui \
+    Dialogs/dialogrect.ui
 
 OTHER_FILES += \
     style.qss

@@ -19,6 +19,7 @@
 
 #include "widgettilesetpraticable.h"
 #include "wanok.h"
+#include "dialogrect.h"
 #include <QPainter>
 
 const int WidgetTilesetPraticable::OFFSET = 5;
@@ -327,6 +328,19 @@ int WidgetTilesetPraticable::getOffset(QRect& rect) const {
 
 // -------------------------------------------------------
 
+void WidgetTilesetPraticable::editCollision() {
+    DialogRect dialog(m_selectedCollision->rect(), this);
+    QRect rect;
+    getRect(rect, m_selectedPoint, m_selectedCollision);
+    QPoint point = this->mapToGlobal(
+                QPoint(rect.x() + Wanok::BASIC_SQUARE_SIZE,
+                       rect.y() + Wanok::BASIC_SQUARE_SIZE));
+    dialog.setGeometry(point.x(), point.y(), dialog.width(), dialog.height());
+    dialog.exec();
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetPraticable::deleteCollision() {
     if (m_selectedCollision->hasAllDirections()) {
         delete m_selectedCollision;
@@ -458,19 +472,20 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::showContextMenu(const QPoint& p) {
-    if (m_selectedPoint.x() != -1 && m_selectedPoint.y() != -1)
+    if (m_selectedCollision != nullptr &&m_selectedCollision->rect() != nullptr)
         m_contextMenu->showContextMenu(p);
 }
 
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::contextEdit() {
-
+    if (m_selectedCollision != nullptr &&m_selectedCollision->rect() != nullptr)
+        editCollision();
 }
 
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::contextDelete() {
-    if (m_selectedCollision != nullptr)
+    if (m_selectedCollision != nullptr &&m_selectedCollision->rect() != nullptr)
         deleteCollision();
 }

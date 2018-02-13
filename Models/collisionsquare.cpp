@@ -67,6 +67,8 @@ bool CollisionSquare::hasAllDirections() const {
     return m_left && m_right && m_top && m_bot;
 }
 
+// -------------------------------------------------------
+
 void CollisionSquare::setDefaultPraticable() {
     if (m_rect != nullptr)
         delete m_rect;
