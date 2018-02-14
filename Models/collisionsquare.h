@@ -38,6 +38,10 @@ public:
     virtual ~CollisionSquare();
     QRectF* rect() const;
     void setRect(QRectF* rect);
+    bool left() const;
+    bool right() const;
+    bool top() const;
+    bool bot() const;
     static const QString JSON_RECT;
     static const QString JSON_LEFT;
     static const QString JSON_RIGHT;
@@ -45,6 +49,7 @@ public:
     static const QString JSON_BOT;
     bool hasAllDirections() const;
     void setDefaultPraticable();
+    void revertAllDirections();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -39,14 +39,27 @@ public:
     explicit WidgetTilesetDirection(QWidget *parent = nullptr);
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
-    void drawArrow(QPainter& painter, int angle, int dx, int dy, int x, int y);
+    void getMousePoint(QPoint& point, QMouseEvent *event);
+    void getCenterRect(QRect& rect, int i, int j);
+    bool isInsideRect(int dx, int dy, int x, int y, QPoint& mousePoint) const;
+    void updateHovered(QPoint& hovered, QPoint& point, int dx, int dy, int x,
+                       int y, QPoint& mousePoint);
+    void drawArrow(QPainter& painter, QPoint &hoveredPoint, bool arrow,
+                   int angle, int dx, int dy, int i, int j);
 
 protected:
     QImage m_image;
     QImage m_imageArrow;
+    QImage m_imageArrowHover;
     QHash<QPoint, CollisionSquare*>* m_squares;
+    QPoint m_hoveredPoint;
+    QPoint m_hoveredLeft;
+    QPoint m_hoveredRight;
+    QPoint m_hoveredTop;
+    QPoint m_hoveredBot;
 
     virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };
 

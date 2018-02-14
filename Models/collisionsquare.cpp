@@ -57,6 +57,22 @@ void CollisionSquare::setRect(QRectF *rect) {
     m_rect = rect;
 }
 
+bool CollisionSquare::left() const {
+    return m_left;
+}
+
+bool CollisionSquare::right() const {
+    return m_right;
+}
+
+bool CollisionSquare::top() const {
+    return m_top;
+}
+
+bool CollisionSquare::bot() const {
+    return m_bot;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -73,6 +89,15 @@ void CollisionSquare::setDefaultPraticable() {
     if (m_rect != nullptr)
         delete m_rect;
     m_rect = new QRectF(0, 0, 100, 100);
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::revertAllDirections() {
+    m_left = !m_left;
+    m_right = !m_right;
+    m_top = !m_top;
+    m_bot = !m_bot;
 }
 
 // -------------------------------------------------------

@@ -54,6 +54,7 @@
         <file>Ressources/variables.png</file>
         <file>Ressources/walls_toolbar.png</file>
         <file>Ressources/direction.png</file>
+        <file>Ressources/direction_hover.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>
