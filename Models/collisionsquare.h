@@ -36,8 +36,8 @@ class CollisionSquare : public Serializable
 public:
     CollisionSquare();
     virtual ~CollisionSquare();
-    QRect* rect() const;
-    void setRect(QRect* rect);
+    QRectF* rect() const;
+    void setRect(QRectF* rect);
     static const QString JSON_RECT;
     static const QString JSON_LEFT;
     static const QString JSON_RIGHT;
@@ -50,7 +50,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QRect* m_rect;
+    QRectF* m_rect;
     bool m_left;
     bool m_right;
     bool m_top;

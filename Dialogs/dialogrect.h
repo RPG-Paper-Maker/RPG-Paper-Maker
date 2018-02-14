@@ -21,6 +21,7 @@
 #define DIALOGRECT_H
 
 #include <QDialog>
+#include <QLabel>
 
 // -------------------------------------------------------
 //
@@ -39,14 +40,18 @@ class DialogRect : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogRect(QRect *rect, QWidget *parent = 0);
+    explicit DialogRect(QRectF *rect, QWidget *parent = 0);
     ~DialogRect();
 
 private:
     Ui::DialogRect *ui;
-    QRect* m_rect;
+    QRectF* m_rect;
 
     void updateValues();
+    int translateToSpinValue(float percent);
+    float translateFromSpinValue(int px);
+    int getOne();
+    int getTwo();
 
 private slots:
     void on_spinBoxX_valueChanged(int i);

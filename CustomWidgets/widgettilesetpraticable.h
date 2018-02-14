@@ -52,6 +52,7 @@ protected:
     CollisionResizeKind m_resizeKind;
     CollisionSquare* m_selectedCollision;
     ContextMenuList* m_contextMenu;
+    bool m_isCreating;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRect(QRect& rect, const QPoint& localPoint,
@@ -80,6 +81,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
 
 private slots:

@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -36,7 +36,8 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_selectedPoint(-1, -1),
     m_hoveredPoint(-1, -1),
     m_resizeKind(CollisionResizeKind::None),
-    m_selectedCollision(nullptr)
+    m_selectedCollision(nullptr),
+    m_isCreating(false)
 {
     this->setMouseTracking(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -91,11 +92,13 @@ void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
 void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
                                       CollisionSquare* collision)
 {
-    QRect rectBefore = *collision->rect();
-    rect.setX(rectBefore.x() + (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
-    rect.setY(rectBefore.y() + (localPoint.y() * Wanok::BASIC_SQUARE_SIZE));
-    rect.setWidth(rectBefore.width());
-    rect.setHeight(rectBefore.height());
+    QRectF rectBefore = *collision->rect();
+    rect.setX((rectBefore.x() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
+              (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
+    rect.setY((rectBefore.y() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
+              (localPoint.y() * Wanok::BASIC_SQUARE_SIZE));
+    rect.setWidth(rectBefore.width() * Wanok::BASIC_SQUARE_SIZE / 100.0);
+    rect.setHeight(rectBefore.height() * Wanok::BASIC_SQUARE_SIZE / 100.0);
 }
 
 // -------------------------------------------------------
@@ -211,6 +214,7 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
 {
     QRect rectBasic;
     getBasicRect(rectBasic, localPoint);
+
     switch (m_resizeKind) {
     case CollisionResizeKind::Left:
         updateRectLeft(rect, mousePoint, rectBasic);
@@ -244,10 +248,14 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
         break;
     }
 
-    collision->rect()->setX(rect.x() % Wanok::BASIC_SQUARE_SIZE);
-    collision->rect()->setY(rect.y() % Wanok::BASIC_SQUARE_SIZE);
-    collision->rect()->setWidth(rect.width());
-    collision->rect()->setHeight(rect.height());
+    collision->rect()->setX((rect.x() % Wanok::BASIC_SQUARE_SIZE) /
+                            ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
+    collision->rect()->setY((rect.y() % Wanok::BASIC_SQUARE_SIZE) /
+                            ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
+    collision->rect()->setWidth(rect.width() /
+                                ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
+    collision->rect()->setHeight(rect.height() /
+                                 ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
 }
 
 // -------------------------------------------------------
@@ -386,9 +394,12 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
         collision = new CollisionSquare;
         collision->setDefaultPraticable();
         m_squares->insert(point, collision);
+        m_isCreating = true;
     }
-    else if (collision->rect() == nullptr)
+    else if (collision->rect() == nullptr) {
         collision->setDefaultPraticable();
+        m_isCreating = true;
+    }
 
     // Update selected collision
     m_selectedPoint = point;
@@ -400,6 +411,9 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
+    if (m_isCreating)
+        return;
+
     QRect rect;
     QPoint mousePoint = event->pos();
     QPoint point;
@@ -423,6 +437,12 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
     }
 
     this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::mouseReleaseEvent(QMouseEvent*) {
+    m_isCreating = false;
 }
 
 // -------------------------------------------------------
