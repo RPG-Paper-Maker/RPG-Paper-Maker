@@ -41,6 +41,7 @@ WidgetTilesetSettings::~WidgetTilesetSettings()
 void WidgetTilesetSettings::setSquares(QHash<QPoint, CollisionSquare*>* squares)
 {
     ui->widgetTilesetPraticable->setSquares(squares);
+    ui->widgetTilesetDirection->setSquares(squares);
 }
 
 PictureKind WidgetTilesetSettings::kind() const {
@@ -59,4 +60,5 @@ void WidgetTilesetSettings::setKind(PictureKind kind) {
 
 void WidgetTilesetSettings::updateImage(SystemPicture* picture){
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
+    ui->widgetTilesetDirection->updateImage(picture, m_kind);
 }

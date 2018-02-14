@@ -53,6 +53,7 @@
         <file>Ressources/systems.png</file>
         <file>Ressources/variables.png</file>
         <file>Ressources/walls_toolbar.png</file>
+        <file>Ressources/direction.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>style.qss</file>

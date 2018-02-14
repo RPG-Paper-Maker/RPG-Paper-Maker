@@ -244,7 +244,8 @@ HEADERS += \
     Dialogs/dialogcollisions.h \
     Models/collisionsquare.h \
     Enums/collisionresizekind.h \
-    Dialogs/dialogrect.h
+    Dialogs/dialogrect.h \
+    CustomWidgets/widgettilesetdirection.h
 
 SOURCES += \
     main.cpp \
@@ -438,7 +439,8 @@ SOURCES += \
     MapEditor/autotile.cpp \
     Dialogs/dialogcollisions.cpp \
     Models/collisionsquare.cpp \
-    Dialogs/dialogrect.cpp
+    Dialogs/dialogrect.cpp \
+    CustomWidgets/widgettilesetdirection.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
