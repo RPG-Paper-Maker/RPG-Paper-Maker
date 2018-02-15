@@ -44,6 +44,8 @@ public:
     bool isInsideRect(int dx, int dy, int x, int y, QPoint& mousePoint) const;
     void updateHovered(QPoint& hovered, QPoint& point, int dx, int dy, int x,
                        int y, QPoint& mousePoint);
+    CollisionSquare* activateHovered(QPoint& hovered);
+    void checkStillExisting(QPoint& hovered, CollisionSquare* collision);
     void drawArrow(QPainter& painter, QPoint &hoveredPoint, bool arrow,
                    int angle, int dx, int dy, int i, int j);
 
@@ -58,7 +60,7 @@ protected:
     QPoint m_hoveredTop;
     QPoint m_hoveredBot;
 
-    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };

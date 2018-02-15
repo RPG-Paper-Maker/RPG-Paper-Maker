@@ -94,10 +94,34 @@ void CollisionSquare::setDefaultPraticable() {
 // -------------------------------------------------------
 
 void CollisionSquare::revertAllDirections() {
-    m_left = !m_left;
-    m_right = !m_right;
+    revertTop();
+    revertRight();
+    revertBot();
+    revertLeft();
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::revertTop() {
     m_top = !m_top;
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::revertRight() {
+    m_right = !m_right;
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::revertBot() {
     m_bot = !m_bot;
+}
+
+// -------------------------------------------------------
+
+void CollisionSquare::revertLeft() {
+    m_left = !m_left;
 }
 
 // -------------------------------------------------------

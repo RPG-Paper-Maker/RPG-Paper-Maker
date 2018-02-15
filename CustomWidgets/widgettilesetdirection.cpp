@@ -112,6 +112,32 @@ void WidgetTilesetDirection::updateHovered(QPoint& hovered, QPoint& point,
 
 // -------------------------------------------------------
 
+CollisionSquare* WidgetTilesetDirection::activateHovered(QPoint& hovered) {
+    if (hovered.x() != -1 && hovered.y() != -1) {
+        CollisionSquare* collision = m_squares->value(hovered);
+        if (collision == nullptr) {
+            collision = new CollisionSquare;
+            m_squares->insert(hovered, collision);
+        }
+        return collision;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetDirection::checkStillExisting(QPoint& hovered,
+                                                CollisionSquare* collision)
+{
+    if (collision->hasAllDirections() && collision->rect() == nullptr) {
+        delete collision;
+        m_squares->remove(hovered);
+    }
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
                                        bool arrow, int angle, int dx, int dy,
                                        int i, int j)
@@ -133,6 +159,8 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
             painter.drawImage(0, 0, m_imageArrow);
     }
     else {
+        QTransform transform;
+        painter.setTransform(transform);
         QRect rect(posX - 3, posY - 3, 5, 5);
         if (hoveredPoint.x() == i && hoveredPoint.y() == j)
             painter.fillRect(rect, Wanok::colorGrayHoverBackground);
@@ -146,24 +174,32 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
 //
 // -------------------------------------------------------
 
-void WidgetTilesetDirection::mousePressEvent(QMouseEvent *event) {
-
-    // Side arrows
-
-
-    // Pointing center
-    if (m_hoveredPoint.x() != -1 && m_hoveredPoint.y() != -1) {
-        CollisionSquare* collision = m_squares->value(m_hoveredPoint);
-        if (collision == nullptr) {
-            collision = new CollisionSquare;
-            m_squares->insert(m_hoveredPoint, collision);
-        }
+void WidgetTilesetDirection::mousePressEvent(QMouseEvent*) {
+    CollisionSquare* collision = nullptr;
+    collision = activateHovered(m_hoveredPoint);
+    if (collision != nullptr) {
         collision->revertAllDirections();
-
-        if (collision->hasAllDirections() && collision->rect() == nullptr) {
-            delete collision;
-            m_squares->remove(m_hoveredPoint);
-        }
+        checkStillExisting(m_hoveredPoint, collision);
+    }
+    collision = activateHovered(m_hoveredTop);
+    if (collision != nullptr) {
+        collision->revertTop();
+        checkStillExisting(m_hoveredTop, collision);
+    }
+    collision = activateHovered(m_hoveredRight);
+    if (collision != nullptr) {
+        collision->revertRight();
+        checkStillExisting(m_hoveredRight, collision);
+    }
+    collision = activateHovered(m_hoveredBot);
+    if (collision != nullptr) {
+        collision->revertBot();
+        checkStillExisting(m_hoveredBot, collision);
+    }
+    collision = activateHovered(m_hoveredLeft);
+    if (collision != nullptr) {
+        collision->revertLeft();
+        checkStillExisting(m_hoveredLeft, collision);
     }
 
     this->repaint();

@@ -50,6 +50,10 @@ public:
     bool hasAllDirections() const;
     void setDefaultPraticable();
     void revertAllDirections();
+    void revertTop();
+    void revertRight();
+    void revertBot();
+    void revertLeft();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
