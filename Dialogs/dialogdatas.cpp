@@ -309,6 +309,7 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 void DialogDatas::updateTileset(SystemTileset *sysTileset){
     SystemPicture* picture = sysTileset->picture();
     ui->widgetPictureTileset->setPicture(picture);
+    ui->widgetTilesetPictureSettings->setSquares(sysTileset->collisions());
     ui->widgetTilesetPictureSettings->updateImage(picture);
 
     // Initialize special models

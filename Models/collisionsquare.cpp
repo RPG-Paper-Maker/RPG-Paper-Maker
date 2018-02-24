@@ -132,9 +132,11 @@ void CollisionSquare::revertLeft() {
 
 void CollisionSquare::read(const QJsonObject &json) {
     if (json.contains(JSON_RECT)) {
-        QJsonArray tab = json[JSON_RECT].toArray();
-        m_rect = new QRectF(tab.at(0).toDouble(), tab.at(1).toDouble(),
-                            tab.at(2).toDouble(), tab.at(3).toDouble());
+        if (!json[JSON_RECT].isNull()) {
+            QJsonArray tab = json[JSON_RECT].toArray();
+            m_rect = new QRectF(tab.at(0).toDouble(), tab.at(1).toDouble(),
+                                tab.at(2).toDouble(), tab.at(3).toDouble());
+        }
     }
     else
         setDefaultPraticable();
@@ -170,6 +172,9 @@ void CollisionSquare::write(QJsonObject &json) const {
             json[JSON_RECT] = tab;
         }
     }
+    else
+        json[JSON_RECT] = QJsonValue();
+
 
     if (!m_left)
         json[JSON_LEFT] = m_left;

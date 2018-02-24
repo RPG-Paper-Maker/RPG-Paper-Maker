@@ -325,6 +325,10 @@
             "target": "Content/basic/Content/Datas/Scripts/System/system-object-event.js"
         },
         {
+            "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/collision-square.js",
+            "target": "Content/basic/Content/Datas/Scripts/System/collision-square.js"
+        },
+        {
             "files": [
                 {
                     "source": "https:/raw.githubusercontent.com/RPG-Paper-Maker/Game-Scripts/master/Content/Datas/Scripts/System/desktop/main.qml",

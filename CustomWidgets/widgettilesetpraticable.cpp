@@ -92,6 +92,9 @@ void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
 void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
                                       CollisionSquare* collision)
 {
+    if (collision->rect() == nullptr)
+        return;
+
     QRectF rectBefore = *collision->rect();
     rect.setX((rectBefore.x() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
               (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
@@ -353,9 +356,11 @@ void WidgetTilesetPraticable::deleteCollision() {
     if (m_selectedCollision->hasAllDirections()) {
         delete m_selectedCollision;
         m_squares->remove(m_selectedPoint);
+        m_selectedCollision = nullptr;
+        m_selectedPoint = QPoint(-1, -1);
     }
-    m_selectedCollision = nullptr;
-    m_selectedPoint = QPoint(-1, -1);
+    else
+        m_selectedCollision->setRect(nullptr);
 }
 
 // -------------------------------------------------------
