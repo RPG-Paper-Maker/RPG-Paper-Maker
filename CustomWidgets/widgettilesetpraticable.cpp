@@ -96,12 +96,14 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
         return;
 
     QRectF rectBefore = *collision->rect();
-    rect.setX((rectBefore.x() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
+    rect.setX(qRound(rectBefore.x() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
               (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
-    rect.setY((rectBefore.y() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
+    rect.setY(qRound(rectBefore.y() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
               (localPoint.y() * Wanok::BASIC_SQUARE_SIZE));
-    rect.setWidth(rectBefore.width() * Wanok::BASIC_SQUARE_SIZE / 100.0);
-    rect.setHeight(rectBefore.height() * Wanok::BASIC_SQUARE_SIZE / 100.0);
+    rect.setWidth(qRound(rectBefore.width() *
+                         Wanok::BASIC_SQUARE_SIZE / 100.0));
+    rect.setHeight(qRound(rectBefore.height() *
+                          Wanok::BASIC_SQUARE_SIZE / 100.0));
 }
 
 // -------------------------------------------------------
