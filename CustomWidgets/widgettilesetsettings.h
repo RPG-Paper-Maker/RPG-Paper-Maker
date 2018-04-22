@@ -47,10 +47,15 @@ public:
     void updateImage(SystemPicture* picture);
     PictureKind kind() const;
     void setKind(PictureKind kind);
+    void updateZoom(int zoom);
 
 private:
     Ui::WidgetTilesetSettings *ui;
     PictureKind m_kind;
+    float m_zoom;
+
+public slots:
+    void on_horizontalSlider_valueChanged(int value);
 };
 
 #endif // WIDGETTILESETSETTINGS_H

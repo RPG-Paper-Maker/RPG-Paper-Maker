@@ -31,6 +31,7 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     ui(new Ui::WidgetTilesetSettings)
 {
     ui->setupUi(this);
+    updateZoom(0);
 }
 
 WidgetTilesetSettings::~WidgetTilesetSettings()
@@ -61,4 +62,26 @@ void WidgetTilesetSettings::setKind(PictureKind kind) {
 void WidgetTilesetSettings::updateImage(SystemPicture* picture){
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
     ui->widgetTilesetDirection->updateImage(picture, m_kind);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSettings::updateZoom(int zoom) {
+    m_zoom = 1.0;
+    if (zoom > 0)
+        m_zoom *= (zoom + 1);
+    else if (zoom < 0)
+        m_zoom /= ((-zoom) + 1);
+    ui->horizontalSlider->setValue(zoom);
+    ui->widgetTilesetPraticable->updateZoom(m_zoom);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
+    updateZoom(value);
 }

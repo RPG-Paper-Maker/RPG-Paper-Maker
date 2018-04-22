@@ -43,6 +43,8 @@ public:
     const static int OFFSET;
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
+    void updateZoom(float zoom);
+    void updateImageSize();
 
 protected:
     QImage m_image;
@@ -53,6 +55,8 @@ protected:
     CollisionSquare* m_selectedCollision;
     ContextMenuList* m_contextMenu;
     bool m_isCreating;
+    float m_zoom;
+    QImage m_baseImage;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRect(QRect& rect, const QPoint& localPoint,
@@ -77,6 +81,7 @@ protected:
     int getOffset(QRect& rect) const;
     void editCollision();
     void deleteCollision();
+    float getSquareProportion() const;
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

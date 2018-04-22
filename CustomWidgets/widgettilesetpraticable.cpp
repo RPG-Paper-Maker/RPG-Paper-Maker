@@ -37,7 +37,8 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_hoveredPoint(-1, -1),
     m_resizeKind(CollisionResizeKind::None),
     m_selectedCollision(nullptr),
-    m_isCreating(false)
+    m_isCreating(false),
+    m_zoom(1.0f)
 {
     this->setMouseTracking(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -69,10 +70,24 @@ void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    m_image = QImage(picture->getPath(kind));
+    m_baseImage = QImage(picture->getPath(kind));
+    m_image = m_baseImage;
+    updateImageSize();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateZoom(float zoom) {
+    m_zoom = zoom;
+    updateImageSize();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateImageSize() {
     if (!m_image.isNull()) {
-        m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
-                                 m_image.height() / Wanok::coefSquareSize());
+        m_image = m_baseImage.scaled(m_baseImage.width() * m_zoom,
+                                     m_baseImage.height() * m_zoom);
     }
     this->setGeometry(0, 0, m_image.width() + 1, m_image.height() + 1);
     setFixedSize(m_image.width() + 1, m_image.height() + 1);
@@ -83,8 +98,8 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
 
 void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
     point = event->pos();
-    point.setX((int)(point.x() / ((float) Wanok::BASIC_SQUARE_SIZE)));
-    point.setY((int)(point.y() / ((float) Wanok::BASIC_SQUARE_SIZE)));
+    point.setX((int)(point.x() / getSquareProportion()));
+    point.setY((int)(point.y() / getSquareProportion()));
 }
 
 // -------------------------------------------------------
@@ -96,14 +111,14 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
         return;
 
     QRectF rectBefore = *collision->rect();
-    rect.setX(qRound(rectBefore.x() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
-              (localPoint.x() * Wanok::BASIC_SQUARE_SIZE));
-    rect.setY(qRound(rectBefore.y() * Wanok::BASIC_SQUARE_SIZE / 100.0) +
-              (localPoint.y() * Wanok::BASIC_SQUARE_SIZE));
+    rect.setX(qRound(rectBefore.x() * getSquareProportion() / 100.0) +
+              (localPoint.x() * getSquareProportion()));
+    rect.setY(qRound(rectBefore.y() * getSquareProportion() / 100.0) +
+              (localPoint.y() * getSquareProportion()));
     rect.setWidth(qRound(rectBefore.width() *
-                         Wanok::BASIC_SQUARE_SIZE / 100.0));
+                         getSquareProportion() / 100.0));
     rect.setHeight(qRound(rectBefore.height() *
-                          Wanok::BASIC_SQUARE_SIZE / 100.0));
+                          getSquareProportion() / 100.0));
 }
 
 // -------------------------------------------------------
@@ -111,10 +126,10 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
 void WidgetTilesetPraticable::getBasicRect(QRect& rect,
                                            const QPoint& localPoint)
 {
-    rect.setX(localPoint.x() * Wanok::BASIC_SQUARE_SIZE);
-    rect.setY(localPoint.y() * Wanok::BASIC_SQUARE_SIZE);
-    rect.setWidth(Wanok::BASIC_SQUARE_SIZE);
-    rect.setHeight(Wanok::BASIC_SQUARE_SIZE);
+    rect.setX(localPoint.x() * getSquareProportion());
+    rect.setY(localPoint.y() * getSquareProportion());
+    rect.setWidth(getSquareProportion());
+    rect.setHeight(getSquareProportion());
 }
 
 // -------------------------------------------------------
@@ -253,14 +268,22 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
         break;
     }
 
-    collision->rect()->setX((rect.x() % Wanok::BASIC_SQUARE_SIZE) /
-                            ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
-    collision->rect()->setY((rect.y() % Wanok::BASIC_SQUARE_SIZE) /
-                            ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
-    collision->rect()->setWidth(rect.width() /
-                                ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
-    collision->rect()->setHeight(rect.height() /
-                                 ((float) Wanok::BASIC_SQUARE_SIZE) * 100.0);
+    float x = (rect.x() % ((int) getSquareProportion())) / getSquareProportion()
+            * 100.0;
+    float y = (rect.y() % ((int) getSquareProportion())) / getSquareProportion()
+            * 100.0;
+    float w = rect.width() / getSquareProportion() * 100.0;
+    float h = rect.height() / getSquareProportion() * 100.0;
+    int i_x = qRound((x / 100.0f) * Wanok::get()->getSquareSize());
+    int i_y = qRound((y / 100.0f) * Wanok::get()->getSquareSize());
+    int i_w = qRound((w / 100.0f) * Wanok::get()->getSquareSize());
+    int i_h = qRound((h / 100.0f) * Wanok::get()->getSquareSize());
+
+    collision->rect()->setX((i_x / (float) Wanok::get()->getSquareSize()) * 100.0f);
+    collision->rect()->setY((i_y / (float) Wanok::get()->getSquareSize()) * 100.0f);
+    collision->rect()->setWidth((i_w / (float) Wanok::get()->getSquareSize()) * 100.0f);
+    collision->rect()->setHeight((i_h / (float) Wanok::get()->getSquareSize()) * 100.0f);
+    getRect(rect, localPoint, collision);
 }
 
 // -------------------------------------------------------
@@ -346,8 +369,8 @@ void WidgetTilesetPraticable::editCollision() {
     QRect rect;
     getRect(rect, m_selectedPoint, m_selectedCollision);
     QPoint point = this->mapToGlobal(
-                QPoint(rect.x() + Wanok::BASIC_SQUARE_SIZE,
-                       rect.y() + Wanok::BASIC_SQUARE_SIZE));
+                QPoint(rect.x() + getSquareProportion(),
+                       rect.y() + getSquareProportion()));
     dialog.setGeometry(point.x(), point.y(), dialog.width(), dialog.height());
     dialog.exec();
 }
@@ -363,6 +386,12 @@ void WidgetTilesetPraticable::deleteCollision() {
     }
     else
         m_selectedCollision->setRect(nullptr);
+}
+
+// -------------------------------------------------------
+
+float WidgetTilesetPraticable::getSquareProportion() const {
+    return Wanok::get()->getSquareSize() * m_zoom;
 }
 
 // -------------------------------------------------------
