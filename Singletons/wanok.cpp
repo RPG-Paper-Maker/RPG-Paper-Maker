@@ -32,10 +32,10 @@ QSet<int> Wanok::mapsUndoRedo;
 QString Wanok::shadersExtension = "-3.0";
 
 // COLORS
-const QColor Wanok::colorRedSelection = QColor(200, 50, 50);
-const QColor Wanok::colorRedSelectionBackground = QColor(200, 50, 50, 75);
-const QColor Wanok::colorBlueSelection = QColor(50, 50, 200);
-const QColor Wanok::colorBlueSelectionBackground = QColor(50, 50, 200, 75);
+const QColor Wanok::colorGraySelection = QColor(80, 80, 80);
+const QColor Wanok::colorGraySelectionBackground = QColor(80, 80, 80, 75);
+const QColor Wanok::colorPurpleSelection = QColor(134, 29, 226);
+const QColor Wanok::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);
 const QColor Wanok::colorGrayHoverBackground = QColor(50, 50, 50, 75);
 const QColor Wanok::colorAlmostWhite = QColor(245, 245, 245);
 const QColor Wanok::colorAlmostBlack = QColor(25, 25, 25);

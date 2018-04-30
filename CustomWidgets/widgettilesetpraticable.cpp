@@ -292,12 +292,12 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
     int i_w = qFloor((w / 100.0f) * Wanok::get()->getSquareSize());
     int i_h = qFloor((h / 100.0f) * Wanok::get()->getSquareSize());
     if (i_w < 1) {
-        if (i_x > 0)
+        if (i_x >= Wanok::get()->getSquareSize())
             i_x -= 1;
         i_w = 1;
     }
     if (i_h < 1) {
-        if (i_y > 0)
+        if (i_y >= Wanok::get()->getSquareSize())
             i_y -= 1;
         i_h = 1;
     }
@@ -534,20 +534,20 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         return;
 
     // Draw all the collisions
-    painter.setPen(Wanok::colorRedSelection);
+    painter.setPen(Wanok::colorGraySelection);
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
          i != m_squares->end(); i++)
     {
         drawCollision(painter, i.key(), i.value(),
-                      Wanok::colorRedSelectionBackground);
+                      Wanok::colorGraySelectionBackground);
     }
 
     // Draw another layer for the selected collision
     CollisionSquare* collision = m_squares->value(m_selectedPoint);
     if (collision != nullptr) {
-        painter.setPen(Wanok::colorBlueSelection);
+        painter.setPen(Wanok::colorPurpleSelection);
         drawCollision(painter, m_selectedPoint, collision,
-                      Wanok::colorBlueSelectionBackground);
+                      Wanok::colorPurpleSelectionBackground);
     }
 
     // Draw hovered layer

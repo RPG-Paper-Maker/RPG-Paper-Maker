@@ -19,6 +19,7 @@
 
 #include "widgettilesetsettings.h"
 #include "ui_widgettilesetsettings.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -31,7 +32,7 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     ui(new Ui::WidgetTilesetSettings)
 {
     ui->setupUi(this);
-    updateZoom(0);
+    updateZoom(Wanok::get()->engineSettings()->zoomPictures());
 }
 
 WidgetTilesetSettings::~WidgetTilesetSettings()
@@ -84,4 +85,7 @@ void WidgetTilesetSettings::updateZoom(int zoom) {
 
 void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
     updateZoom(value);
+
+    // Update in the settings
+    Wanok::get()->engineSettings()->setZoomPictures(value);
 }

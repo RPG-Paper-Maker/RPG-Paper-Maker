@@ -57,10 +57,10 @@ public:
     static QString shadersExtension;
 
     // COLORS
-    const static QColor colorRedSelection;
-    const static QColor colorRedSelectionBackground;
-    const static QColor colorBlueSelection;
-    const static QColor colorBlueSelectionBackground;
+    const static QColor colorGraySelection;
+    const static QColor colorGraySelectionBackground;
+    const static QColor colorPurpleSelection;
+    const static QColor colorPurpleSelectionBackground;
     const static QColor colorGrayHoverBackground;
     const static QColor colorAlmostWhite;
     const static QColor colorAlmostBlack;

@@ -38,6 +38,8 @@ public:
     void read();
     void write();
     KeyBoardDatas* keyBoardDatas() const;
+    int zoomPictures() const;
+    void setZoomPictures(int z);
     void setDefault();
 
     virtual void read(const QJsonObject &json);
@@ -45,6 +47,7 @@ public:
 
 protected:
     KeyBoardDatas* m_keyBoardDatas;
+    int m_zoomPictures;
 };
 
 #endif // ENGINESETTINGS_H

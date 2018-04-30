@@ -28,7 +28,8 @@
 // -------------------------------------------------------
 
 EngineSettings::EngineSettings() :
-    m_keyBoardDatas(new KeyBoardDatas)
+    m_keyBoardDatas(new KeyBoardDatas),
+    m_zoomPictures(0)
 {
 
 }
@@ -52,6 +53,14 @@ KeyBoardDatas* EngineSettings::keyBoardDatas() const {
     return m_keyBoardDatas;
 }
 
+int EngineSettings::zoomPictures() const {
+    return m_zoomPictures;
+}
+
+void EngineSettings::setZoomPictures(int z) {
+    m_zoomPictures = z;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -70,6 +79,9 @@ void EngineSettings::setDefault(){
 
 void EngineSettings::read(const QJsonObject &json){
     m_keyBoardDatas->read(json["kb"].toObject());
+
+    if (json.contains("zp"))
+        m_zoomPictures = json["zp"].toInt();
 }
 
 // -------------------------------------------------------
@@ -79,4 +91,5 @@ void EngineSettings::write(QJsonObject &json) const{
 
     m_keyBoardDatas->write(obj);
     json["kb"] = obj;
+    json["zp"] = m_zoomPictures;
 }
