@@ -21,6 +21,7 @@
 #include "wanok.h"
 #include "dialogrect.h"
 #include <QPainter>
+#include <QtMath>
 
 const int WidgetTilesetPraticable::OFFSET = 5;
 
@@ -38,7 +39,8 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_resizeKind(CollisionResizeKind::None),
     m_selectedCollision(nullptr),
     m_isCreating(false),
-    m_zoom(1.0f)
+    m_zoom(1.0f),
+    m_firstResize(false)
 {
     this->setMouseTracking(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -104,13 +106,21 @@ void WidgetTilesetPraticable::getMousePoint(QPoint& point, QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
-                                      CollisionSquare* collision)
+void WidgetTilesetPraticable::getRectCollision(QRect& rect,
+                                               const QPoint& localPoint,
+                                               CollisionSquare* collision)
 {
     if (collision->rect() == nullptr)
         return;
 
-    QRectF rectBefore = *collision->rect();
+    getRect(rect, localPoint, *collision->rect());
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
+                                      QRectF& rectBefore)
+{
     rect.setX(qRound(rectBefore.x() * getSquareProportion() / 100.0) +
               (localPoint.x() * getSquareProportion()));
     rect.setY(qRound(rectBefore.y() * getSquareProportion() / 100.0) +
@@ -268,22 +278,42 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
         break;
     }
 
-    float x = (rect.x() % ((int) getSquareProportion())) / getSquareProportion()
-            * 100.0;
-    float y = (rect.y() % ((int) getSquareProportion())) / getSquareProportion()
-            * 100.0;
-    float w = rect.width() / getSquareProportion() * 100.0;
-    float h = rect.height() / getSquareProportion() * 100.0;
-    int i_x = qRound((x / 100.0f) * Wanok::get()->getSquareSize());
-    int i_y = qRound((y / 100.0f) * Wanok::get()->getSquareSize());
-    int i_w = qRound((w / 100.0f) * Wanok::get()->getSquareSize());
-    int i_h = qRound((h / 100.0f) * Wanok::get()->getSquareSize());
+    // Getting in percent
+    float x = (rect.x() % (int)(getSquareProportion())) / getSquareProportion()
+            * 100.0f;
+    float y = (rect.y() % (int)(getSquareProportion())) / getSquareProportion()
+            * 100.0f;
+    float w = rect.width() / getSquareProportion() * 100.0f;
+    float h = rect.height() / getSquareProportion() * 100.0f;
 
-    collision->rect()->setX((i_x / (float) Wanok::get()->getSquareSize()) * 100.0f);
-    collision->rect()->setY((i_y / (float) Wanok::get()->getSquareSize()) * 100.0f);
-    collision->rect()->setWidth((i_w / (float) Wanok::get()->getSquareSize()) * 100.0f);
-    collision->rect()->setHeight((i_h / (float) Wanok::get()->getSquareSize()) * 100.0f);
-    getRect(rect, localPoint, collision);
+    // But round for adapting to the square size
+    int i_x = qCeil((x / 100.0f) * Wanok::get()->getSquareSize());
+    int i_y = qCeil((y / 100.0f) * Wanok::get()->getSquareSize());
+    int i_w = qFloor((w / 100.0f) * Wanok::get()->getSquareSize());
+    int i_h = qFloor((h / 100.0f) * Wanok::get()->getSquareSize());
+    if (i_w < 1) {
+        if (i_x > 0)
+            i_x -= 1;
+        i_w = 1;
+    }
+    if (i_h < 1) {
+        if (i_y > 0)
+            i_y -= 1;
+        i_h = 1;
+    }
+
+    // Update collision rect with rounded values
+    collision->rect()->setX((i_x / (float) Wanok::get()->getSquareSize()) *
+                            100.0f);
+    collision->rect()->setY((i_y / (float) Wanok::get()->getSquareSize()) *
+                            100.0f);
+    collision->rect()->setWidth((i_w / (float) Wanok::get()->getSquareSize()) *
+                                100.0f);
+    collision->rect()->setHeight((i_h / (float) Wanok::get()->getSquareSize()) *
+                                 100.0f);
+
+    // Update the fake rect (no rounded values)
+    m_fakeRect = QRectF(x, y, w, h);
 }
 
 // -------------------------------------------------------
@@ -349,7 +379,7 @@ void WidgetTilesetPraticable::drawCollision(
         const QColor &color, bool outline)
 {
     QRect rect;
-    getRect(rect, localPoint, collision);
+    getRectCollision(rect, localPoint, collision);
     painter.fillRect(rect, color);
     if (outline)
         painter.drawRect(rect);
@@ -367,7 +397,7 @@ int WidgetTilesetPraticable::getOffset(QRect& rect) const {
 void WidgetTilesetPraticable::editCollision() {
     DialogRect dialog(m_selectedCollision->rect(), this);
     QRect rect;
-    getRect(rect, m_selectedPoint, m_selectedCollision);
+    getRectCollision(rect, m_selectedPoint, m_selectedCollision);
     QPoint point = this->mapToGlobal(
                 QPoint(rect.x() + getSquareProportion(),
                        rect.y() + getSquareProportion()));
@@ -441,6 +471,8 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
     m_selectedPoint = point;
     m_selectedCollision = collision;
 
+    m_firstResize = true;
+
     this->repaint();
 }
 
@@ -458,7 +490,10 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
     if (event->buttons() == Qt::MouseButton::LeftButton &&
         m_selectedCollision != nullptr)
     {
-        getRect(rect, m_selectedPoint, m_selectedCollision);
+        if (m_firstResize) {
+            m_fakeRect = *m_selectedCollision->rect();
+        }
+        getRect(rect, m_selectedPoint, m_fakeRect);
         updateRect(rect, mousePoint, m_selectedPoint, m_selectedCollision);
     }
     else {
@@ -466,11 +501,13 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
         if (collision == nullptr)
             this->setCursor(QCursor(Qt::ArrowCursor));
         else {
-            getRect(rect, point, collision);
+            getRectCollision(rect, point, collision);
             updateCursor(rect, mousePoint);
         }
         m_hoveredPoint = point;
     }
+
+    m_firstResize = false;
 
     this->repaint();
 }

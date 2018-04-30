@@ -57,10 +57,13 @@ protected:
     bool m_isCreating;
     float m_zoom;
     QImage m_baseImage;
+    QRectF m_fakeRect;
+    bool m_firstResize;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
-    void getRect(QRect& rect, const QPoint& localPoint,
-                 CollisionSquare *collision);
+    void getRectCollision(QRect& rect, const QPoint& localPoint,
+                          CollisionSquare* collision);
+    void getRect(QRect& rect, const QPoint& localPoint, QRectF& rectBefore);
     void getBasicRect(QRect& rect, const QPoint& localPoint);
     bool isMouseOn(QRect& rect, QPoint point, QPoint& mousePoint) const;
     bool isMouseOnLeft(QRect& rect, QPoint& mousePoint) const;
