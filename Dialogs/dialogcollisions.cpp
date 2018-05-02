@@ -71,7 +71,7 @@ void DialogCollisions::initializeTilesets() {
 
 void DialogCollisions::updateTileset(SystemTileset* tileset) {
     SystemPicture* picture = tileset->picture();
-    ui->widgetTilesetPictureSettings->setSquares(tileset->collisions());
+    ui->widgetTilesetPictureSettings->setSquares(picture->collisions());
     ui->widgetTilesetPictureSettings->updateImage(picture);
 }
 

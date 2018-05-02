@@ -402,10 +402,14 @@ void MainWindow::on_actionRedo_triggered() {
 void MainWindow::on_actionDatas_manager_triggered(){
     Wanok::isInConfig = true;
     DialogDatas dialog(project->gameDatas());
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
         project->writeGameDatas();
-    else
+        project->writePicturesDatas();
+    }
+    else {
         project->readGameDatas();
+        project->readPicturesDatas();
+    }
     Wanok::isInConfig = false;
 
     updateTextures();
@@ -472,9 +476,9 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 void MainWindow::on_actionCollisions_manager_triggered() {
     DialogCollisions dialog;
     if (openDialog(dialog) == QDialog::Accepted)
-        project->writeGameDatas();
+        project->writePicturesDatas();
     else
-        project->readGameDatas();
+        project->readPicturesDatas();
 }
 
 // -------------------------------------------------------

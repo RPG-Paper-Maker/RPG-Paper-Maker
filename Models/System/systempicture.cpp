@@ -42,13 +42,21 @@ SystemPicture::SystemPicture(int i, QString n, bool isBR) :
 
 }
 
-SystemPicture::~SystemPicture(){
-
+SystemPicture::~SystemPicture() {
+    for (QHash<QPoint, CollisionSquare*>::iterator i = m_collisions.begin();
+         i != m_collisions.end(); i++)
+    {
+        delete *i;
+    }
 }
 
 bool SystemPicture::isBR() const { return m_isBR; }
 
 void SystemPicture::setIsBR(bool b) { m_isBR = b; }
+
+QHash<QPoint, CollisionSquare*>* SystemPicture::collisions() {
+    return &m_collisions;
+}
 
 // -------------------------------------------------------
 //
@@ -165,6 +173,20 @@ void SystemPicture::read(const QJsonObject &json){
     SuperListItem::read(json);
 
     m_isBR = json["br"].toBool();
+
+    // Collisions
+    QJsonArray tabCollisions = json["col"].toArray();
+    for (int i = 0; i < tabCollisions.size(); i++) {
+        QJsonObject objHash = tabCollisions.at(i).toObject();
+        QJsonArray tabKey = objHash["k"].toArray();
+        QJsonObject objValue = objHash["v"].toObject();
+        QPoint point;
+        CollisionSquare* collision = new CollisionSquare;
+        point.setX(tabKey.at(0).toInt());
+        point.setY(tabKey.at(1).toInt());
+        collision->read(objValue);
+        m_collisions.insert(point, collision);
+    }
 }
 
 // -------------------------------------------------------
@@ -173,4 +195,23 @@ void SystemPicture::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
     json["br"] = m_isBR;
+
+    // Collisions
+    QJsonArray tabCollisions;
+    for (QHash<QPoint, CollisionSquare*>::const_iterator i=m_collisions.begin();
+         i != m_collisions.end(); i++)
+    {
+        QPoint point = i.key();
+        CollisionSquare* collision = i.value();
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        tabKey.append(point.x());
+        tabKey.append(point.y());
+        QJsonObject objValue;
+        collision->write(objValue);
+        objHash["k"] = tabKey;
+        objHash["v"] = objValue;
+        tabCollisions.append(objHash);
+    }
+    json["col"] = tabCollisions;
 }

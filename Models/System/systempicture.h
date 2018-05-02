@@ -23,6 +23,7 @@
 #include <QMetaType>
 #include "superlistitem.h"
 #include "picturekind.h"
+#include "collisionsquare.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +43,7 @@ public:
     static QString pathIconBlue;
     bool isBR() const;
     void setIsBR(bool b);
+    QHash<QPoint, CollisionSquare*> *collisions();
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);
@@ -57,6 +59,7 @@ public:
 
 protected:
     bool m_isBR;
+    QHash<QPoint, CollisionSquare*> m_collisions;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)
