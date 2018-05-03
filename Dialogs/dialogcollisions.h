@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include "systemtileset.h"
+#include "panelsuperlist.h"
 
 // -------------------------------------------------------
 //
@@ -46,6 +47,7 @@ public:
 private:
     Ui::DialogCollisions *ui;
 
+    void disablePanelListEdition(PanelSuperList *panel);
     void initializeTilesets();
     void updateTileset(SystemTileset* tileset);
     void initializeCharacters();

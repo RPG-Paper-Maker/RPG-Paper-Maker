@@ -40,7 +40,8 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_selectedCollision(nullptr),
     m_isCreating(false),
     m_zoom(1.0f),
-    m_firstResize(false)
+    m_firstResize(false),
+    m_picture(nullptr)
 {
     this->setMouseTracking(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -72,6 +73,7 @@ void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
+    m_picture = picture;
     m_baseImage = QImage(picture->getPath(kind));
     m_image = m_baseImage;
     updateImageSize();
@@ -129,6 +131,54 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
                          getSquareProportion() / 100.0));
     rect.setHeight(qRound(rectBefore.height() *
                           getSquareProportion() / 100.0));
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) {
+    int h = qCeil(m_image.height() / 4.0f);
+    rect.setX(0);
+    rect.setY(h);
+    rect.setWidth(m_image.width());
+    rect.setHeight(m_image.height() - h);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) {
+    int w = qCeil(m_image.width() / ((float) Wanok::get()->project()
+                                     ->gameDatas()->systemDatas()
+                                     ->framesAnimation()));
+    rect.setX(w);
+    rect.setY(0);
+    rect.setWidth(m_image.width() - w);
+    rect.setHeight(qCeil(m_image.height() / 4.0f));
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::getPointsRepeat(QHash<QPoint, CollisionSquare *>&
+                                              list)
+{
+    int xOffset = m_image.width() / Wanok::get()->project()->gameDatas()
+            ->systemDatas()->framesAnimation() / getSquareProportion();
+    int yOffset = m_image.height() / 4 / getSquareProportion();
+
+    for (QHash<QPoint, CollisionSquare*>::iterator k = m_squares->begin();
+         k != m_squares->end(); k++)
+    {
+        QPoint p = k.key();
+        for (int i = 0; i < Wanok::get()->project()->gameDatas()->systemDatas()
+             ->framesAnimation(); i++)
+        {
+            for (int j = 0; j < 4; j++) {
+                if (i != 0 || j != 0) {
+                    list.insert(QPoint(p.x() + (i * xOffset),
+                                       p.y() + (j * yOffset)), k.value());
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -379,6 +429,8 @@ void WidgetTilesetPraticable::drawCollision(
         const QColor &color, bool outline)
 {
     QRect rect;
+    QPen pen(color, 2, Qt::DashLine);
+    painter.setPen(pen);
     getRectCollision(rect, localPoint, collision);
     painter.fillRect(rect, color);
     if (outline)
@@ -555,6 +607,23 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     if (collision != nullptr) {
         drawCollision(painter, m_hoveredPoint, collision,
                       Wanok::colorGrayHoverBackground, false);
+    }
+
+    // For repeat option :
+    if (m_picture->repeatCollisions()) {
+        QRect rect;
+        getRectRepeatBot(rect);
+        painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+        getRectRepeatTop(rect);
+        painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+        QHash<QPoint, CollisionSquare*> list;
+        getPointsRepeat(list);
+        for (QHash<QPoint, CollisionSquare*>::iterator i = list.begin();
+             i != list.end(); i++)
+        {
+            drawCollision(painter, i.key(), i.value(),
+                          Wanok::colorGraySelectionBackground, true);
+        }
     }
 }
 

@@ -43,6 +43,7 @@ public:
     void setCanBrutRemove(bool b);
     void setHasContextMenu(bool b);
     void setCanEdit(bool b);
+    void setCanDragAndDrop(bool b);
     void initializeModel(QStandardItemModel* m);
     void initializeNewItemInstance(SuperListItem *item);
     QStandardItemModel* getModel() const;

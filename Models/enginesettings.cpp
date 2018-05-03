@@ -59,6 +59,7 @@ int EngineSettings::zoomPictures() const {
 
 void EngineSettings::setZoomPictures(int z) {
     m_zoomPictures = z;
+    write();
 }
 
 // -------------------------------------------------------

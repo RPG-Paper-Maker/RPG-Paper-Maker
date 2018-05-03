@@ -59,11 +59,15 @@ protected:
     QImage m_baseImage;
     QRectF m_fakeRect;
     bool m_firstResize;
+    SystemPicture* m_picture;
 
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRectCollision(QRect& rect, const QPoint& localPoint,
                           CollisionSquare* collision);
     void getRect(QRect& rect, const QPoint& localPoint, QRectF& rectBefore);
+    void getRectRepeatBot(QRect& rect);
+    void getRectRepeatTop(QRect& rect);
+    void getPointsRepeat(QHash<QPoint, CollisionSquare*>& list);
     void getBasicRect(QRect& rect, const QPoint& localPoint);
     bool isMouseOn(QRect& rect, QPoint point, QPoint& mousePoint) const;
     bool isMouseOnLeft(QRect& rect, QPoint& mousePoint) const;

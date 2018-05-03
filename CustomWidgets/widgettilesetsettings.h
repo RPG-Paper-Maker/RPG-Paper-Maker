@@ -49,14 +49,18 @@ public:
     void setKind(PictureKind kind);
     void updateZoom(int zoom);
     void deleteDirectionTab();
+    void showRepeat();
+    void disableNone(bool b);
 
 private:
     Ui::WidgetTilesetSettings *ui;
+    SystemPicture* m_picture;
     PictureKind m_kind;
     float m_zoom;
 
 public slots:
     void on_horizontalSlider_valueChanged(int value);
+    void on_checkBoxRepeat_toggled(bool checked);
 };
 
 #endif // WIDGETTILESETSETTINGS_H

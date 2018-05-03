@@ -29,9 +29,11 @@
 
 WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetTilesetSettings)
+    ui(new Ui::WidgetTilesetSettings),
+    m_picture(nullptr)
 {
     ui->setupUi(this);
+    ui->checkBoxRepeat->hide();
     updateZoom(Wanok::get()->engineSettings()->zoomPictures());
 }
 
@@ -61,8 +63,10 @@ void WidgetTilesetSettings::setKind(PictureKind kind) {
 // -------------------------------------------------------
 
 void WidgetTilesetSettings::updateImage(SystemPicture* picture){
+    m_picture = picture;
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
     ui->widgetTilesetDirection->updateImage(picture, m_kind);
+    ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 
 // -------------------------------------------------------
@@ -84,6 +88,19 @@ void WidgetTilesetSettings::deleteDirectionTab() {
 }
 
 // -------------------------------------------------------
+
+void WidgetTilesetSettings::showRepeat() {
+    ui->checkBoxRepeat->show();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSettings::disableNone(bool b) {
+    ui->horizontalSlider->setEnabled(!b);
+    ui->checkBoxRepeat->setEnabled(!b);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -94,4 +111,11 @@ void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
 
     // Update in the settings
     Wanok::get()->engineSettings()->setZoomPictures(value);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetSettings::on_checkBoxRepeat_toggled(bool checked) {
+    m_picture->setRepeatCollisions(checked);
+    ui->widgetTilesetPraticable->repaint();
 }

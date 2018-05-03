@@ -49,6 +49,15 @@ DialogCollisions::~DialogCollisions()
 //
 // -------------------------------------------------------
 
+void DialogCollisions::disablePanelListEdition(PanelSuperList* panel) {
+    panel->showEditName(false);
+    panel->showButtonMax(false);
+    panel->list()->setHasContextMenu(false);
+    panel->list()->setCanDragAndDrop(false);
+}
+
+// -------------------------------------------------------
+
 void DialogCollisions::initializeTilesets() {
 
     // Initialize name & pictures
@@ -61,6 +70,7 @@ void DialogCollisions::initializeTilesets() {
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_tilesetSelected(QModelIndex,QModelIndex)));
     ui->widgetTilesetPictureSettings->setKind(PictureKind::Tilesets);
+    disablePanelListEdition(ui->panelSuperListTilesets);
 
     // Select the first tileset
     QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
@@ -92,6 +102,8 @@ void DialogCollisions::initializeCharacters() {
             SLOT(on_characterSelected(QModelIndex,QModelIndex)));
     ui->widgetCharacterPraticable->setKind(PictureKind::Characters);
     ui->widgetCharacterPraticable->deleteDirectionTab();
+    ui->widgetCharacterPraticable->showRepeat();
+    disablePanelListEdition(ui->panelSuperListCharacters);
 
     // Select the first tileset
     QModelIndex index = ui->panelSuperListCharacters->list()->getModel()
@@ -105,6 +117,7 @@ void DialogCollisions::initializeCharacters() {
 void DialogCollisions::updateCharacter(SystemPicture* picture) {
     ui->widgetCharacterPraticable->setSquares(picture->collisions());
     ui->widgetCharacterPraticable->updateImage(picture);
+    ui->widgetCharacterPraticable->disableNone(picture->id() == -1);
 }
 
 // -------------------------------------------------------

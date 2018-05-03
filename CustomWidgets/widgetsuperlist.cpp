@@ -35,12 +35,10 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     m_canEdit(false)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setAcceptDrops(true);
-    this->setDragEnabled(true);
     this->setDefaultDropAction(Qt::MoveAction);
     this->setDragDropMode(QAbstractItemView::InternalMove);
     this->setDefaultDropAction(Qt::TargetMoveAction);
-    this->showDropIndicator();
+    setCanDragAndDrop(true);
 
     // Can edit
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this,
@@ -65,6 +63,12 @@ void WidgetSuperList::setCanBrutRemove(bool b) { m_canBrutRemove = b; }
 void WidgetSuperList::setHasContextMenu(bool b) { m_hasContextMenu = b; }
 
 void WidgetSuperList::setCanEdit(bool b) { m_canEdit = b; }
+
+void WidgetSuperList::setCanDragAndDrop(bool b) {
+    this->setAcceptDrops(b);
+    this->setDragEnabled(b);
+    this->setDropIndicatorShown(b);
+}
 
 QStandardItemModel *WidgetSuperList::getModel() const { return p_model; }
 
