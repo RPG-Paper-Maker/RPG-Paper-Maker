@@ -37,7 +37,8 @@ SystemPicture::SystemPicture() :
 
 SystemPicture::SystemPicture(int i, QString n, bool isBR) :
     SuperListItem(i,n),
-    m_isBR(isBR)
+    m_isBR(isBR),
+    m_repeatCollisions(false)
 {
 
 }
@@ -56,6 +57,14 @@ void SystemPicture::setIsBR(bool b) { m_isBR = b; }
 
 QHash<QPoint, CollisionSquare*>* SystemPicture::collisions() {
     return &m_collisions;
+}
+
+bool SystemPicture::repeatCollisions() const {
+    return m_repeatCollisions;
+}
+
+void SystemPicture::setRepeatCollisions(bool b) {
+    m_repeatCollisions = b;
 }
 
 // -------------------------------------------------------
@@ -187,6 +196,8 @@ void SystemPicture::read(const QJsonObject &json){
         collision->read(objValue);
         m_collisions.insert(point, collision);
     }
+    if (json.contains("rcol"))
+        m_repeatCollisions = json["rcol"].toBool();
 }
 
 // -------------------------------------------------------
@@ -213,5 +224,8 @@ void SystemPicture::write(QJsonObject &json) const{
         objHash["v"] = objValue;
         tabCollisions.append(objHash);
     }
-    json["col"] = tabCollisions;
+    if (!tabCollisions.isEmpty())
+        json["col"] = tabCollisions;
+    if (m_repeatCollisions)
+        json["rcol"] = m_repeatCollisions;
 }

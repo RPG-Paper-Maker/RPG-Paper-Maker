@@ -48,9 +48,12 @@ private:
 
     void initializeTilesets();
     void updateTileset(SystemTileset* tileset);
+    void initializeCharacters();
+    void updateCharacter(SystemPicture* picture);
 
 private slots:
     void on_tilesetSelected(QModelIndex index, QModelIndex);
+    void on_characterSelected(QModelIndex index, QModelIndex);
 };
 
 #endif // DIALOGCOLLISIONS_H

@@ -44,6 +44,8 @@ public:
     bool isBR() const;
     void setIsBR(bool b);
     QHash<QPoint, CollisionSquare*> *collisions();
+    bool repeatCollisions() const;
+    void setRepeatCollisions(bool b);
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);
@@ -60,6 +62,7 @@ public:
 protected:
     bool m_isBR;
     QHash<QPoint, CollisionSquare*> m_collisions;
+    bool m_repeatCollisions;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)

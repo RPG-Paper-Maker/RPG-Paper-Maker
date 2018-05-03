@@ -78,6 +78,12 @@ void WidgetTilesetSettings::updateZoom(int zoom) {
 }
 
 // -------------------------------------------------------
+
+void WidgetTilesetSettings::deleteDirectionTab() {
+    ui->tabWidget->removeTab(1);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //

@@ -35,6 +35,7 @@ DialogCollisions::DialogCollisions(QWidget *parent) :
     setFixedSize(geometry().width(), geometry().height());
 
     initializeTilesets();
+    initializeCharacters();
 }
 
 DialogCollisions::~DialogCollisions()
@@ -49,6 +50,7 @@ DialogCollisions::~DialogCollisions()
 // -------------------------------------------------------
 
 void DialogCollisions::initializeTilesets() {
+
     // Initialize name & pictures
     ui->panelSuperListTilesets->list()->initializeNewItemInstance(
                 new SystemTileset);
@@ -76,6 +78,36 @@ void DialogCollisions::updateTileset(SystemTileset* tileset) {
 }
 
 // -------------------------------------------------------
+
+void DialogCollisions::initializeCharacters() {
+
+    // Initialize name & pictures
+    ui->panelSuperListCharacters->list()->initializeNewItemInstance(
+                new SystemPicture);
+    ui->panelSuperListCharacters->initializeModel(Wanok::get()->project()
+                                              ->picturesDatas()
+                                              ->model(PictureKind::Characters));
+    connect(ui->panelSuperListCharacters->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_characterSelected(QModelIndex,QModelIndex)));
+    ui->widgetCharacterPraticable->setKind(PictureKind::Characters);
+    ui->widgetCharacterPraticable->deleteDirectionTab();
+
+    // Select the first tileset
+    QModelIndex index = ui->panelSuperListCharacters->list()->getModel()
+            ->index(0,0);
+    ui->panelSuperListCharacters->list()->setIndex(0);
+    on_characterSelected(index,index);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::updateCharacter(SystemPicture* picture) {
+    ui->widgetCharacterPraticable->setSquares(picture->collisions());
+    ui->widgetCharacterPraticable->updateImage(picture);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -86,4 +118,13 @@ void DialogCollisions::on_tilesetSelected(QModelIndex index, QModelIndex) {
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateTileset((SystemTileset*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_characterSelected(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = ui->panelSuperListCharacters->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr)
+        updateCharacter((SystemPicture*)selected->data().value<quintptr>());
 }

@@ -48,6 +48,7 @@ public:
     PictureKind kind() const;
     void setKind(PictureKind kind);
     void updateZoom(int zoom);
+    void deleteDirectionTab();
 
 private:
     Ui::WidgetTilesetSettings *ui;
