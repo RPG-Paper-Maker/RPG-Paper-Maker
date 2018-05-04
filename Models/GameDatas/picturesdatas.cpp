@@ -94,6 +94,9 @@ void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
 void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
     names << "lucas";
     setDefaultPictures(names, PictureKind::Characters);
+    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Characters]
+            ->item(1)->data().value<quintptr>();
+    picture->setDefaultLucas();
 }
 
 // -------------------------------------------------------

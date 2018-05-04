@@ -35,6 +35,7 @@ class CollisionSquare : public Serializable
 {
 public:
     CollisionSquare();
+    CollisionSquare(QRectF* rect);
     virtual ~CollisionSquare();
     QRectF* rect() const;
     void setRect(QRectF* rect);
@@ -54,6 +55,7 @@ public:
     void revertRight();
     void revertBot();
     void revertLeft();
+    CollisionSquare *createCopy();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

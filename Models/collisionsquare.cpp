@@ -33,7 +33,13 @@ const QString CollisionSquare::JSON_BOT = "b";
 // -------------------------------------------------------
 
 CollisionSquare::CollisionSquare() :
-    m_rect(nullptr),
+    CollisionSquare(nullptr)
+{
+
+}
+
+CollisionSquare::CollisionSquare(QRectF* rect) :
+    m_rect(rect),
     m_left(true),
     m_right(true),
     m_top(true),
@@ -124,6 +130,23 @@ void CollisionSquare::revertLeft() {
     m_left = !m_left;
 }
 
+
+// -------------------------------------------------------
+
+CollisionSquare* CollisionSquare::createCopy() {
+    CollisionSquare* collision = new CollisionSquare;
+    if (m_rect == nullptr)
+        collision->m_rect = nullptr;
+    else
+        collision->m_rect = new QRectF(*m_rect);
+    collision->m_top = m_top;
+    collision->m_right = m_right;
+    collision->m_bot = m_bot;
+    collision->m_left = m_left;
+
+    return collision;
+}
+
 // -------------------------------------------------------
 //
 //  READ / WRITE
@@ -158,6 +181,8 @@ void CollisionSquare::read(const QJsonObject &json) {
     else
         m_bot = true;
 }
+
+// -------------------------------------------------------
 
 void CollisionSquare::write(QJsonObject &json) const {
     if (m_rect != nullptr) {

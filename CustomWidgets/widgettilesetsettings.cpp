@@ -116,6 +116,6 @@ void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
 // -------------------------------------------------------
 
 void WidgetTilesetSettings::on_checkBoxRepeat_toggled(bool checked) {
-    m_picture->setRepeatCollisions(checked);
+    m_picture->setRepeatCollisions(checked, m_kind);
     ui->widgetTilesetPraticable->repaint();
 }

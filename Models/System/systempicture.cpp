@@ -63,8 +63,28 @@ bool SystemPicture::repeatCollisions() const {
     return m_repeatCollisions;
 }
 
-void SystemPicture::setRepeatCollisions(bool b) {
+void SystemPicture::setRepeatCollisions(bool b, PictureKind kind) {
     m_repeatCollisions = b;
+
+    // Clear collisions
+    QImage image(this->getPath(kind));
+    int xOffset = image.width() / Wanok::get()->project()->gameDatas()
+            ->systemDatas()->framesAnimation() / Wanok::get()->getSquareSize();
+    int yOffset = image.height() / 4 / Wanok::get()->getSquareSize();
+    QHash<QPoint, CollisionSquare*> colCopy(m_collisions);
+    if (b) {
+        for (QHash<QPoint, CollisionSquare*>::iterator k = colCopy.begin();
+             k != colCopy.end(); k++)
+        {
+            QPoint p = k.key();
+            if (p.x() >= xOffset || p.y() >= yOffset) {
+                delete k.value();
+                m_collisions.remove(p);
+            }
+        }
+    }
+    else
+        getRepeatList(image, colCopy, m_collisions, true);
 }
 
 // -------------------------------------------------------
@@ -170,6 +190,49 @@ QList<QStandardItem *> SystemPicture::getModelRow() const{
     row.append(item);
 
     return row;
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::getRepeatList(QImage& image,
+                                  QHash<QPoint, CollisionSquare *>& squares,
+                                  QHash<QPoint, CollisionSquare*>& list,
+                                  bool needsCopy) const
+{
+    int xOffset = image.width() / Wanok::get()->project()->gameDatas()
+            ->systemDatas()->framesAnimation() / Wanok::get()->getSquareSize();
+    int yOffset = image.height() / 4 / Wanok::get()->getSquareSize();
+    for (QHash<QPoint, CollisionSquare*>::iterator k = squares.begin();
+         k != squares.end(); k++)
+    {
+        QPoint p = k.key();
+        for (int i = 0; i < Wanok::get()->project()->gameDatas()
+             ->systemDatas()->framesAnimation(); i++)
+        {
+            for (int j = 0; j < 4; j++) {
+                if (i != 0 || j != 0) {
+                    list.insert(QPoint(p.x() + (i * xOffset),
+                                       p.y() + (j * yOffset)),
+                                needsCopy ? k.value()->createCopy() : k.value()
+                    );
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setDefaultLucas() {
+    m_repeatCollisions = true;
+    m_collisions.insert(QPoint(0, 0),
+                        new CollisionSquare(new QRectF(81.25, 75, 18.75, 25)));
+    m_collisions.insert(QPoint(1, 0),
+                        new CollisionSquare(new QRectF(0, 75, 18.75, 25)));
+    m_collisions.insert(QPoint(0, 1),
+                        new CollisionSquare(new QRectF(56.25, 0, 43.75, 100)));
+    m_collisions.insert(QPoint(1, 1),
+                        new CollisionSquare(new QRectF(0, 0, 43.75, 100)));
 }
 
 // -------------------------------------------------------

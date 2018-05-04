@@ -65,8 +65,8 @@ protected:
     void getRectCollision(QRect& rect, const QPoint& localPoint,
                           CollisionSquare* collision);
     void getRect(QRect& rect, const QPoint& localPoint, QRectF& rectBefore);
-    void getRectRepeatBot(QRect& rect);
-    void getRectRepeatTop(QRect& rect);
+    void getRectRepeatBot(QRect& rect) const;
+    void getRectRepeatTop(QRect& rect) const;
     void getPointsRepeat(QHash<QPoint, CollisionSquare*>& list);
     void getBasicRect(QRect& rect, const QPoint& localPoint);
     bool isMouseOn(QRect& rect, QPoint point, QPoint& mousePoint) const;
@@ -89,6 +89,7 @@ protected:
     void editCollision();
     void deleteCollision();
     float getSquareProportion() const;
+    bool canDraw(QPoint &mousePoint) const;
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

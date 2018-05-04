@@ -45,12 +45,17 @@ public:
     void setIsBR(bool b);
     QHash<QPoint, CollisionSquare*> *collisions();
     bool repeatCollisions() const;
-    void setRepeatCollisions(bool b);
+    void setRepeatCollisions(bool b, PictureKind kind);
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);
     QString getPath(PictureKind kind) const;
     QString getLocalPath(PictureKind kind) const;
+    void getRepeatList(QImage& image,
+                       QHash<QPoint, CollisionSquare *>& squares,
+                       QHash<QPoint, CollisionSquare *>& list,
+                       bool needsCopy = false) const;
+    void setDefaultLucas();
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);

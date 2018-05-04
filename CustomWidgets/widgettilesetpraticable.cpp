@@ -135,7 +135,7 @@ void WidgetTilesetPraticable::getRect(QRect& rect, const QPoint& localPoint,
 
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) {
+void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) const {
     int h = qCeil(m_image.height() / 4.0f);
     rect.setX(0);
     rect.setY(h);
@@ -145,7 +145,7 @@ void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) {
 
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) {
+void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) const {
     int w = qCeil(m_image.width() / ((float) Wanok::get()->project()
                                      ->gameDatas()->systemDatas()
                                      ->framesAnimation()));
@@ -160,25 +160,7 @@ void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) {
 void WidgetTilesetPraticable::getPointsRepeat(QHash<QPoint, CollisionSquare *>&
                                               list)
 {
-    int xOffset = m_image.width() / Wanok::get()->project()->gameDatas()
-            ->systemDatas()->framesAnimation() / getSquareProportion();
-    int yOffset = m_image.height() / 4 / getSquareProportion();
-
-    for (QHash<QPoint, CollisionSquare*>::iterator k = m_squares->begin();
-         k != m_squares->end(); k++)
-    {
-        QPoint p = k.key();
-        for (int i = 0; i < Wanok::get()->project()->gameDatas()->systemDatas()
-             ->framesAnimation(); i++)
-        {
-            for (int j = 0; j < 4; j++) {
-                if (i != 0 || j != 0) {
-                    list.insert(QPoint(p.x() + (i * xOffset),
-                                       p.y() + (j * yOffset)), k.value());
-                }
-            }
-        }
-    }
+    m_picture->getRepeatList(m_baseImage, *m_squares, list);
 }
 
 // -------------------------------------------------------
@@ -477,6 +459,17 @@ float WidgetTilesetPraticable::getSquareProportion() const {
 }
 
 // -------------------------------------------------------
+
+bool WidgetTilesetPraticable::canDraw(QPoint& mousePoint) const {
+    QRect rectBot, rectTop;
+    getRectRepeatBot(rectBot);
+    getRectRepeatTop(rectTop);
+
+    return (!m_picture->repeatCollisions() ||
+        (!rectBot.contains(mousePoint) && !rectTop.contains(mousePoint)));
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -503,29 +496,33 @@ void WidgetTilesetPraticable::keyPressEvent(QKeyEvent *event){
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
-    QPoint point;
-    getMousePoint(point, event);
+    QPoint mousePoint = event->pos();
+    if (canDraw(mousePoint)) {
+        QPoint point;
 
-    // Update collisions
-    CollisionSquare* collision = m_squares->value(point);
-    if (collision == nullptr) {
-        collision = new CollisionSquare;
-        collision->setDefaultPraticable();
-        m_squares->insert(point, collision);
-        m_isCreating = true;
+        getMousePoint(point, event);
+
+        // Update collisions
+        CollisionSquare* collision = m_squares->value(point);
+        if (collision == nullptr) {
+            collision = new CollisionSquare;
+            collision->setDefaultPraticable();
+            m_squares->insert(point, collision);
+            m_isCreating = true;
+        }
+        else if (collision->rect() == nullptr) {
+            collision->setDefaultPraticable();
+            m_isCreating = true;
+        }
+
+        // Update selected collision
+        m_selectedPoint = point;
+        m_selectedCollision = collision;
+
+        m_firstResize = true;
+
+        this->repaint();
     }
-    else if (collision->rect() == nullptr) {
-        collision->setDefaultPraticable();
-        m_isCreating = true;
-    }
-
-    // Update selected collision
-    m_selectedPoint = point;
-    m_selectedCollision = collision;
-
-    m_firstResize = true;
-
-    this->repaint();
 }
 
 // -------------------------------------------------------
@@ -539,25 +536,29 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
     QPoint point;
     getMousePoint(point, event);
 
-    if (event->buttons() == Qt::MouseButton::LeftButton &&
-        m_selectedCollision != nullptr)
-    {
-        if (m_firstResize) {
-            m_fakeRect = *m_selectedCollision->rect();
+    if (canDraw(mousePoint)) {
+        if (event->buttons() == Qt::MouseButton::LeftButton &&
+            m_selectedCollision != nullptr)
+        {
+            if (m_firstResize) {
+                m_fakeRect = *m_selectedCollision->rect();
+            }
+            getRect(rect, m_selectedPoint, m_fakeRect);
+            updateRect(rect, mousePoint, m_selectedPoint, m_selectedCollision);
         }
-        getRect(rect, m_selectedPoint, m_fakeRect);
-        updateRect(rect, mousePoint, m_selectedPoint, m_selectedCollision);
-    }
-    else {
-        CollisionSquare* collision = m_squares->value(point);
-        if (collision == nullptr)
-            this->setCursor(QCursor(Qt::ArrowCursor));
         else {
-            getRectCollision(rect, point, collision);
-            updateCursor(rect, mousePoint);
+            CollisionSquare* collision = m_squares->value(point);
+            if (collision == nullptr)
+                this->setCursor(QCursor(Qt::ArrowCursor));
+            else {
+                getRectCollision(rect, point, collision);
+                updateCursor(rect, mousePoint);
+            }
+            m_hoveredPoint = point;
         }
-        m_hoveredPoint = point;
     }
+    else
+        this->setCursor(QCursor(Qt::ForbiddenCursor));
 
     m_firstResize = false;
 
