@@ -594,6 +594,15 @@
     			"First adding element on map is now not ignored",
     			"Camera distance adjusted according to square size: http://rpg-paper-maker.com/index.php/forum/suggestion-box/37-adaptive-camera-to-tilesize#91"
     		]
-    	}
+    	},
+        {
+            "v": "0.4.4",
+            "features": [
+                "Collisions system for tileset (praticable, directions), characters (repeat system), autotiles, and walls"
+            ],
+            "bugs": [
+                "Lists with drag and drop was sometimes erasing content while droping"
+            ]
+        }
 	]
 }

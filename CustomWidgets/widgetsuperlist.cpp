@@ -20,6 +20,8 @@
 #include "widgetsuperlist.h"
 #include "widgetsupertree.h"
 #include "wanok.h"
+#include <QListWidgetItem>
+#include <QMimeData>
 
 // -------------------------------------------------------
 //
@@ -35,9 +37,8 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     m_canEdit(false)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setDefaultDropAction(Qt::MoveAction);
     this->setDragDropMode(QAbstractItemView::InternalMove);
-    this->setDefaultDropAction(Qt::TargetMoveAction);
+    this->setDefaultDropAction(Qt::CopyAction);
     setCanDragAndDrop(true);
 
     // Can edit
