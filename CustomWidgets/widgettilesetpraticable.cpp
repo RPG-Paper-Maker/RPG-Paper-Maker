@@ -41,7 +41,8 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_isCreating(false),
     m_zoom(1.0f),
     m_firstResize(false),
-    m_picture(nullptr)
+    m_picture(nullptr),
+    m_lastCursorShape(Qt::ArrowCursor)
 {
     this->setMouseTracking(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -248,40 +249,42 @@ void WidgetTilesetPraticable::updateCursor(QRect& rect, QPoint& mousePoint)
     if (isMouseOn(rect, rect.topLeft(), mousePoint))
     {
         m_resizeKind = CollisionResizeKind::TopLeft;
-        this->setCursor(QCursor(Qt::SizeFDiagCursor));
+        m_lastCursorShape = Qt::SizeFDiagCursor;
     }
     else if (isMouseOn(rect, rect.bottomRight(), mousePoint)) {
         m_resizeKind = CollisionResizeKind::BotRight;
-        this->setCursor(QCursor(Qt::SizeFDiagCursor));
+        m_lastCursorShape = Qt::SizeFDiagCursor;
     }
     else if (isMouseOn(rect, rect.topRight(), mousePoint)) {
         m_resizeKind = CollisionResizeKind::TopRight;
-        this->setCursor(QCursor(Qt::SizeBDiagCursor));
+        m_lastCursorShape = Qt::SizeBDiagCursor;
     }
     else if (isMouseOn(rect, rect.bottomLeft(), mousePoint)) {
         m_resizeKind = CollisionResizeKind::BotLeft;
-        this->setCursor(QCursor(Qt::SizeBDiagCursor));
+        m_lastCursorShape = Qt::SizeBDiagCursor;
     }
     else if (isMouseOnLeft(rect, mousePoint)) {
         m_resizeKind = CollisionResizeKind::Left;
-        this->setCursor(QCursor(Qt::SizeHorCursor));
+        m_lastCursorShape = Qt::SizeHorCursor;
     }
     else if (isMouseOnRight(rect, mousePoint)) {
         m_resizeKind = CollisionResizeKind::Right;
-        this->setCursor(QCursor(Qt::SizeHorCursor));
+        m_lastCursorShape = Qt::SizeHorCursor;
     }
     else if (isMouseOnTop(rect, mousePoint)) {
         m_resizeKind = CollisionResizeKind::Top;
-        this->setCursor(QCursor(Qt::SizeVerCursor));
+        m_lastCursorShape = Qt::SizeVerCursor;
     }
     else if (isMouseOnBot(rect, mousePoint)) {
         m_resizeKind = CollisionResizeKind::Bottom;
-        this->setCursor(QCursor(Qt::SizeVerCursor));
+        m_lastCursorShape = Qt::SizeVerCursor;
     }
     else {
         m_resizeKind = CollisionResizeKind::None;
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        m_lastCursorShape = Qt::ArrowCursor;
     }
+
+    this->setCursor(QCursor(m_lastCursorShape));
 }
 
 // -------------------------------------------------------
@@ -561,11 +564,14 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
             }
             getRect(rect, m_selectedPoint, m_fakeRect);
             updateRect(rect, mousePoint, m_selectedPoint, m_selectedCollision);
+            this->setCursor(QCursor(m_lastCursorShape));
         }
         else {
             CollisionSquare* collision = m_squares->value(point);
-            if (collision == nullptr)
+            if (collision == nullptr) {
                 this->setCursor(QCursor(Qt::ArrowCursor));
+                m_lastCursorShape = Qt::ArrowCursor;
+            }
             else {
                 getRectCollision(rect, point, collision);
                 updateCursor(rect, mousePoint);

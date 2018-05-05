@@ -61,6 +61,7 @@ protected:
     QRectF m_fakeRect;
     bool m_firstResize;
     SystemPicture* m_picture;
+    Qt::CursorShape m_lastCursorShape;
 
     void updateImageGeneral(SystemPicture* picture);
     void getMousePoint(QPoint& point, QMouseEvent *event);
