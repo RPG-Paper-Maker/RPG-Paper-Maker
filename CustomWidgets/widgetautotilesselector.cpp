@@ -51,56 +51,34 @@ void WidgetAutotilesSelector::currentTexture(QRect& rect) const{
 // -------------------------------------------------------
 
 void WidgetAutotilesSelector::setImage(SystemAutotile* autotile){
-    m_texture = QImage(autotile->picture()->getPath(PictureKind::Autotiles));
-    if (!m_texture.isNull()){
-        float coef = Wanok::coefReverseSquareSize();
+    QImage image(autotile->picture()->getPath(PictureKind::Autotiles));
+    float coef = Wanok::coefReverseSquareSize();
+    if (!image.isNull()) {
+        Map::editPictureAutotilePreview(image, m_texture);
         m_texture = m_texture.scaled(m_texture.width() * coef,
                                      m_texture.height() * coef);
     }
+    else
+        m_texture = image;
+
     this->setGeometry(this->geometry().x(), this->geometry().y(),
-                      getPreviewWidth(), getPreviewHeight());
-    setFixedSize(getPreviewWidth(), getPreviewHeight());
+                      SystemAutotile::getPreviewWidth(m_texture) * coef,
+                      SystemAutotile::getPreviewHeight(m_texture) * coef);
+    setFixedSize(SystemAutotile::getPreviewWidth(m_texture) * coef,
+                 SystemAutotile::getPreviewHeight(m_texture) * coef);
 
     // If cursor out of the new texture
     QRect cursorRect;
     m_selectionRectangle->getCoefRect(cursorRect);
     QRect newTextureRect(0, 0,
-                         getPreviewWidth() / Wanok::BASIC_SQUARE_SIZE,
-                         getPreviewHeight() / Wanok::BASIC_SQUARE_SIZE);
+                         SystemAutotile::getPreviewWidth(m_texture) /
+                         Wanok::get()->getSquareSize(),
+                         SystemAutotile::getPreviewHeight(m_texture) /
+                         Wanok::get()->getSquareSize());
     if (!newTextureRect.contains(cursorRect)) {
         makeSelection(0, 0);
         this->repaint();
     }
-}
-
-// -------------------------------------------------------
-
-int WidgetAutotilesSelector::getPreviewWidth() const {
-    return getPreviewColumns() * Wanok::BASIC_SQUARE_SIZE;
-}
-
-// -------------------------------------------------------
-
-int WidgetAutotilesSelector::getPreviewHeight() const {
-    return getPreviewRows() * Wanok::BASIC_SQUARE_SIZE;
-}
-
-// -------------------------------------------------------
-
-int WidgetAutotilesSelector::getPreviewColumns() const {
-    return getPreviewSize(m_texture.width()) / SystemAutotile::NUMBER_COLUMNS;
-}
-
-// -------------------------------------------------------
-
-int WidgetAutotilesSelector::getPreviewRows() const {
-    return getPreviewSize(m_texture.height()) / SystemAutotile::NUMBER_ROWS;
-}
-
-// -------------------------------------------------------
-
-int WidgetAutotilesSelector::getPreviewSize(int size) const {
-    return size / Wanok::BASIC_SQUARE_SIZE;
 }
 
 // -------------------------------------------------------
@@ -126,9 +104,10 @@ void WidgetAutotilesSelector::mousePressEvent(QMouseEvent *event){
 
 void WidgetAutotilesSelector::paintEvent(QPaintEvent *){
     QPainter painter(this);
+    /*
 
-    int rows = getPreviewRows();
-    int columns = getPreviewColumns();
+    int rows = SystemAutotile::getPreviewRows(m_texture);
+    int columns = SystemAutotile::getPreviewColumns(m_texture);
 
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
@@ -141,7 +120,8 @@ void WidgetAutotilesSelector::paintEvent(QPaintEvent *){
                      Wanok::BASIC_SQUARE_SIZE, Wanok::BASIC_SQUARE_SIZE);
             painter.drawImage(out, m_texture, in);
         }
-    }
+    }*/
+    painter.drawImage(0, 0, m_texture);
 
     m_selectionRectangle->draw(painter);
 }

@@ -18,6 +18,7 @@
 */
 
 #include "systemautotile.h"
+#include "wanok.h"
 
 int SystemAutotile::NUMBER_ROWS = 3;
 int SystemAutotile::NUMBER_COLUMNS = 2;
@@ -65,6 +66,36 @@ SuperListItem* SystemAutotile::createCopy() const{
 
 void SystemAutotile::setCopy(const SystemAutotile& super){
     SystemSpecialElement::setCopy(super);
+}
+
+// -------------------------------------------------------
+
+int SystemAutotile::getPreviewWidth(QImage& image) {
+    return getPreviewColumns(image) * Wanok::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+int SystemAutotile::getPreviewHeight(QImage& image) {
+    return getPreviewRows(image) * Wanok::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+int SystemAutotile::getPreviewColumns(QImage& image) {
+    return getPreviewSize(image.width()) / SystemAutotile::NUMBER_COLUMNS;
+}
+
+// -------------------------------------------------------
+
+int SystemAutotile::getPreviewRows(QImage& image) {
+    return getPreviewSize(image.height()) / SystemAutotile::NUMBER_ROWS;
+}
+
+// -------------------------------------------------------
+
+int SystemAutotile::getPreviewSize(int size) {
+    return size / Wanok::get()->getSquareSize();
 }
 
 // -------------------------------------------------------

@@ -39,6 +39,12 @@ public:
     virtual ~SystemAutotile();
     static int NUMBER_ROWS;
     static int NUMBER_COLUMNS;
+    static int getPreviewWidth(QImage& image);
+    static int getPreviewHeight(QImage& image);
+    static int getPreviewColumns(QImage& image);
+    static int getPreviewRows(QImage& image);
+    static int getPreviewSize(int size);
+
     virtual SystemPicture* picture() const;
 
     virtual SuperListItem* createCopy() const;

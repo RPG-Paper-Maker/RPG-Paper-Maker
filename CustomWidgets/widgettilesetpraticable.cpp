@@ -73,8 +73,24 @@ void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    m_picture = picture;
     m_baseImage = QImage(picture->getPath(kind));
+    updateImageGeneral(picture);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateImageSpecial(QImage& editedImage,
+                                                 SystemPicture* picture)
+{
+    m_baseImage = editedImage;
+    updateImageGeneral(picture);
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetPraticable::updateImageGeneral(SystemPicture* picture)
+{
+    m_picture = picture;
     m_image = m_baseImage;
     updateImageSize();
 }

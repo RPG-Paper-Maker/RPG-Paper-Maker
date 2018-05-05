@@ -59,6 +59,19 @@ void WidgetTilesetDirection::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
     m_image = QImage(picture->getPath(kind));
+    updateImageGeneral();
+}
+
+void WidgetTilesetDirection::updateImageSpecial(QImage& editedImage)
+{
+    m_image = editedImage;
+    updateImageGeneral();
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetDirection::updateImageGeneral()
+{
     if (!m_image.isNull()) {
         m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
                                  m_image.height() / Wanok::coefSquareSize());

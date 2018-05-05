@@ -71,6 +71,17 @@ void WidgetTilesetSettings::updateImage(SystemPicture* picture){
 
 // -------------------------------------------------------
 
+void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
+                                               SystemPicture* picture)
+{
+    m_picture = picture;
+    ui->widgetTilesetPraticable->updateImageSpecial(editedImage, picture);
+    ui->widgetTilesetDirection->updateImageSpecial(editedImage);
+    ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetSettings::updateZoom(int zoom) {
     m_zoom = 1.0;
     if (zoom > 0)

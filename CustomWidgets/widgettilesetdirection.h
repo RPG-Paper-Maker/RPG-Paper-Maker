@@ -39,6 +39,7 @@ public:
     explicit WidgetTilesetDirection(QWidget *parent = nullptr);
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
+    void updateImageSpecial(QImage& editedImage);
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getCenterRect(QRect& rect, int i, int j);
     bool isInsideRect(int dx, int dy, int x, int y, QPoint& mousePoint) const;
@@ -59,6 +60,8 @@ protected:
     QPoint m_hoveredRight;
     QPoint m_hoveredTop;
     QPoint m_hoveredBot;
+
+    void updateImageGeneral();
 
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);

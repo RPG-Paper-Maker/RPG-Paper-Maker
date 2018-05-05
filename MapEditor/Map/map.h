@@ -118,12 +118,13 @@ public:
     TextureAutotile *loadPictureAutotile(
             QPainter& painter, TextureAutotile* textureAutotile,
             QImage& newImage, SystemPicture* picture, int& offset, int id);
-    void editPictureWall(QImage& image, QImage& refImage);
+    static void editPictureWall(QImage& image, QImage& refImage);
     TextureAutotile *editPictureAutotile(
             QPainter& painter, TextureAutotile* textureAutotile,
             QImage& newImage, QImage& image, int& offset, int id);
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
+    static void editPictureAutotilePreview(QImage& image, QImage& refImage);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
     QOpenGLTexture* createTexture(QImage& image);
     QString getPortionPath(int i, int j, int k);

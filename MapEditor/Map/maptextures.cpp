@@ -18,7 +18,7 @@
 */
 
 #include "map.h"
-#include "systemspecialelement.h"
+#include "systemautotile.h"
 #include "wanok.h"
 #include "autotiles.h"
 
@@ -197,18 +197,19 @@ TextureAutotile* Map::loadPictureAutotile(
 // -------------------------------------------------------
 
 void Map::editPictureWall(QImage& image, QImage& refImage) {
-    QImage newImage(image.width() + m_squareSize, image.height(),
-                    QImage::Format_ARGB32);
+    QImage newImage(image.width() + Wanok::get()->getSquareSize(),
+                    image.height(), QImage::Format_ARGB32);
     QImage borderLeft =
-            image.copy(0, 0, m_squareSize / 2, image.height());
+            image.copy(0, 0, Wanok::get()->getSquareSize() / 2, image.height());
     QImage borderRight =
-            image.copy(image.width() - (m_squareSize / 2), 0,
-                       m_squareSize / 2, image.height());
+            image.copy(image.width() - (Wanok::get()->getSquareSize() / 2), 0,
+                       Wanok::get()->getSquareSize() / 2, image.height());
     QPainter paint;
     paint.begin(&newImage);
     paint.drawImage(0, 0, image);
     paint.drawImage(image.width(), 0, borderLeft);
-    paint.drawImage(image.width() + m_squareSize / 2, 0, borderRight);
+    paint.drawImage(image.width() + Wanok::get()->getSquareSize() / 2, 0,
+                    borderRight);
     paint.end();
     refImage = newImage;
 }
@@ -298,6 +299,36 @@ void Map::paintPictureAutotile(QPainter& painter, QImage& image, int& offset,
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void Map::editPictureAutotilePreview(QImage& image, QImage& refImage) {
+    QImage newImage(SystemAutotile::getPreviewWidth(image),
+                    SystemAutotile::getPreviewHeight(image),
+                    QImage::Format_ARGB32);
+    QPainter paint;
+    paint.begin(&newImage);
+    int rows = SystemAutotile::getPreviewRows(image);
+    int columns = SystemAutotile::getPreviewColumns(image);
+
+    for (int i = 0; i < columns; i++) {
+        for (int j = 0; j < rows; j++) {
+            QRect out(i * Wanok::get()->getSquareSize(),
+                      j * Wanok::get()->getSquareSize(),
+                      Wanok::get()->getSquareSize(),
+                      Wanok::get()->getSquareSize());
+            QRect in(i * SystemAutotile::NUMBER_COLUMNS *
+                     Wanok::get()->getSquareSize(),
+                     j * SystemAutotile::NUMBER_ROWS *
+                     Wanok::get()->getSquareSize(),
+                     Wanok::get()->getSquareSize(),
+                     Wanok::get()->getSquareSize());
+            paint.drawImage(out, image, in);
+        }
+    }
+    paint.end();
+    refImage = newImage;
 }
 
 // -------------------------------------------------------
