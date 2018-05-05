@@ -36,6 +36,8 @@ DialogCollisions::DialogCollisions(QWidget *parent) :
 
     initializeTilesets();
     initializeCharacters();
+    initializeAutotiles();
+    initializeWalls();
 }
 
 DialogCollisions::~DialogCollisions()
@@ -121,6 +123,70 @@ void DialogCollisions::updateCharacter(SystemPicture* picture) {
 }
 
 // -------------------------------------------------------
+
+void DialogCollisions::initializeAutotiles() {
+
+    // Initialize name & pictures
+    ui->panelSuperListAutotiles->list()->initializeNewItemInstance(
+                new SystemAutotile);
+    ui->panelSuperListAutotiles->initializeModel(Wanok::get()->project()
+                                                 ->specialElementsDatas()
+                                                 ->modelAutotiles());
+    connect(ui->panelSuperListAutotiles->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_autotileSelected(QModelIndex,QModelIndex)));
+    ui->widgetAutotilePictureSettings->setKind(PictureKind::Autotiles);
+    disablePanelListEdition(ui->panelSuperListAutotiles);
+
+    // Select the first tileset
+    QModelIndex index = ui->panelSuperListAutotiles->list()->getModel()
+            ->index(0,0);
+    ui->panelSuperListAutotiles->list()->setIndex(0);
+    on_autotileSelected(index,index);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::updateAutotile(SystemAutotile* autotile) {
+    SystemPicture* picture = autotile->picture();
+    ui->widgetAutotilePictureSettings->setSquares(picture->collisions());
+    ui->widgetAutotilePictureSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::initializeWalls() {
+
+    // Initialize name & pictures
+    ui->panelSuperListWalls->list()->initializeNewItemInstance(
+                new SystemSpriteWall);
+    ui->panelSuperListWalls->initializeModel(Wanok::get()->project()
+                                             ->specialElementsDatas()
+                                             ->modelSpriteWalls());
+    connect(ui->panelSuperListWalls->list()->selectionModel(),
+            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
+            SLOT(on_wallSelected(QModelIndex,QModelIndex)));
+    ui->widgetWallPraticable->setKind(PictureKind::Walls);
+    ui->widgetWallPraticable->deleteDirectionTab();
+    disablePanelListEdition(ui->panelSuperListWalls);
+
+    // Select the first tileset
+    QModelIndex index = ui->panelSuperListWalls->list()->getModel()
+            ->index(0,0);
+    ui->panelSuperListWalls->list()->setIndex(0);
+    on_wallSelected(index,index);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::updateWall(SystemSpriteWall *wall) {
+    SystemPicture* picture = wall->picture();
+    ui->widgetWallPraticable->setSquares(picture->collisions());
+    ui->widgetWallPraticable->updateImage(picture);
+    ui->widgetWallPraticable->disableNone(picture->id() == -1);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -140,4 +206,22 @@ void DialogCollisions::on_characterSelected(QModelIndex index, QModelIndex) {
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateCharacter((SystemPicture*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_autotileSelected(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = ui->panelSuperListAutotiles->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr)
+        updateAutotile((SystemAutotile*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_wallSelected(QModelIndex index, QModelIndex) {
+    QStandardItem* selected = ui->panelSuperListWalls->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr)
+        updateWall((SystemSpriteWall*)selected->data().value<quintptr>());
 }

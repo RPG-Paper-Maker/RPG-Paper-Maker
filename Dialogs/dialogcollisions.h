@@ -22,6 +22,8 @@
 
 #include <QDialog>
 #include "systemtileset.h"
+#include "systemautotile.h"
+#include "systemspritewall.h"
 #include "panelsuperlist.h"
 
 // -------------------------------------------------------
@@ -52,10 +54,16 @@ private:
     void updateTileset(SystemTileset* tileset);
     void initializeCharacters();
     void updateCharacter(SystemPicture* picture);
+    void initializeAutotiles();
+    void updateAutotile(SystemAutotile* autotile);
+    void initializeWalls();
+    void updateWall(SystemSpriteWall* wall);
 
 private slots:
     void on_tilesetSelected(QModelIndex index, QModelIndex);
     void on_characterSelected(QModelIndex index, QModelIndex);
+    void on_autotileSelected(QModelIndex index, QModelIndex);
+    void on_wallSelected(QModelIndex index, QModelIndex);
 };
 
 #endif // DIALOGCOLLISIONS_H
