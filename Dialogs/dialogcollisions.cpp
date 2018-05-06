@@ -150,15 +150,7 @@ void DialogCollisions::initializeAutotiles() {
 void DialogCollisions::updateAutotile(SystemAutotile* autotile) {
     SystemPicture* picture = autotile->picture();
     ui->widgetAutotilePictureSettings->setSquares(picture->collisions());
-
-    // Update with a special image (preview)
-    QImage editedImage;
-    QImage image(autotile->picture()->getPath(PictureKind::Autotiles));
-    if (!image.isNull())
-        Map::editPictureAutotilePreview(image, editedImage);
-    else
-        editedImage = image;
-    ui->widgetAutotilePictureSettings->updateImageSpecial(editedImage, picture);
+    ui->widgetAutotilePictureSettings->updateImageAutotile(picture);
 }
 
 // -------------------------------------------------------

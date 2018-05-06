@@ -57,6 +57,7 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
                                       PictureKind kind)
 {
     m_model = model;
+    m_kind = kind;
 
     ui->panelSuperList->list()->initializeNewItemInstance(
                 SuperListItem::getnewInstance(kind));
@@ -66,6 +67,9 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
             SLOT(on_pageSelected(QModelIndex,QModelIndex)));
     ui->widgetPicture->setKind(kind);
     ui->widgetTilesetSettings->setKind(kind);
+    if (kind == PictureKind::Walls)
+        ui->widgetTilesetSettings->deleteDirectionTab();
+
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture*)),
             this, SLOT(on_pictureChanged(SystemPicture*)));
     QModelIndex index = m_model->index(0,0);
@@ -77,9 +81,12 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
 
 void PanelSpecialElements::update(SystemSpecialElement* sys) {
     SystemPicture* picture = sys->picture();
-
     ui->widgetPicture->setPicture(picture);
-    ui->widgetTilesetSettings->updateImage(picture);
+    ui->widgetTilesetSettings->setSquares(picture->collisions());
+    if (m_kind == PictureKind::Autotiles)
+        ui->widgetTilesetSettings->updateImageAutotile(picture);
+    else
+        ui->widgetTilesetSettings->updateImage(picture);
 }
 
 // -------------------------------------------------------

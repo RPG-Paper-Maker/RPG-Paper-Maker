@@ -82,6 +82,18 @@ void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
 
 // -------------------------------------------------------
 
+void WidgetTilesetSettings::updateImageAutotile(SystemPicture* picture) {
+    QImage editedImage;
+    QImage image(picture->getPath(PictureKind::Autotiles));
+    if (!image.isNull())
+        Map::editPictureAutotilePreview(image, editedImage);
+    else
+        editedImage = image;
+    updateImageSpecial(editedImage, picture);
+}
+
+// -------------------------------------------------------
+
 void WidgetTilesetSettings::updateZoom(int zoom) {
     m_zoom = 1.0;
     if (zoom > 0)

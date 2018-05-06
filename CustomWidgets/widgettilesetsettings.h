@@ -46,6 +46,7 @@ public:
     void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture);
     void updateImageSpecial(QImage& editedImage, SystemPicture* picture);
+    void updateImageAutotile(SystemPicture* picture);
     PictureKind kind() const;
     void setKind(PictureKind kind);
     void updateZoom(int zoom);

@@ -51,6 +51,7 @@ public:
 private:
     Ui::PanelSpecialElements *ui;
     QStandardItemModel* m_model;
+    PictureKind m_kind;
 
 private slots:
     void on_pageSelected(QModelIndex index, QModelIndex);
