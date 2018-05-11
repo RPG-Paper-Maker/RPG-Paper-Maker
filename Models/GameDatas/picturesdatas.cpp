@@ -87,6 +87,9 @@ void PicturesDatas::setDefaultIcons(QList<QString>& names) {
 void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
     names << "general";
     setDefaultPictures(names, PictureKind::Autotiles);
+    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Autotiles]
+            ->item(1)->data().value<quintptr>();
+    picture->setDefaultAutotiles();
 }
 
 // -------------------------------------------------------
@@ -111,6 +114,9 @@ void PicturesDatas::setDefaultReliefs(QList<QString>& names) {
 void PicturesDatas::setDefaultTilesets(QList<QString>& names) {
     names << "plains";
     setDefaultPictures(names, PictureKind::Tilesets);
+    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Tilesets]
+            ->item(1)->data().value<quintptr>();
+    picture->setDefaultTilesetPlains();
 }
 
 // -------------------------------------------------------
@@ -118,6 +124,9 @@ void PicturesDatas::setDefaultTilesets(QList<QString>& names) {
 void PicturesDatas::setDefaultWalls(QList<QString>& names) {
     names << "inside1";
     setDefaultPictures(names, PictureKind::Walls);
+    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Walls]
+            ->item(1)->data().value<quintptr>();
+    picture->setDefaultWallInside();
 }
 
 // -------------------------------------------------------

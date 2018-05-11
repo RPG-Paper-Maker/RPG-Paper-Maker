@@ -56,6 +56,9 @@ public:
                        QHash<QPoint, CollisionSquare *>& list,
                        bool needsCopy = false) const;
     void setDefaultLucas();
+    void setDefaultTilesetPlains();
+    void setDefaultAutotiles();
+    void setDefaultWallInside();
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);

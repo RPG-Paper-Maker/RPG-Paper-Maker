@@ -236,6 +236,64 @@ void SystemPicture::setDefaultLucas() {
 }
 
 // -------------------------------------------------------
+
+void SystemPicture::setDefaultTilesetPlains() {
+    m_collisions.insert(QPoint(0, 1),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(0, 2),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(1, 1),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(1, 2),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+
+    m_collisions.insert(QPoint(2, 1),
+                        new CollisionSquare(new QRectF(12.5, 6.25,87.5,93.75)));
+    m_collisions.insert(QPoint(2, 2),
+                        new CollisionSquare(new QRectF(12.5, 0, 87.5, 100)));
+    m_collisions.insert(QPoint(3, 1),
+                        new CollisionSquare(new QRectF(0, 6.25, 87.5, 93.75)));
+    m_collisions.insert(QPoint(3, 2),
+                        new CollisionSquare(new QRectF(0, 0, 87.5, 100)));
+
+    m_collisions.insert(QPoint(4, 1),
+                        new CollisionSquare(new QRectF(18.75, 43.75, 62.5,
+                                                       56.25)));
+    m_collisions.insert(QPoint(5, 1),
+                        new CollisionSquare(new QRectF(18.75, 37.5,62.5,62.5)));
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setDefaultAutotiles() {
+    m_collisions.insert(QPoint(2, 0),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setDefaultWallInside() {
+    m_collisions.insert(QPoint(0, 0),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(1, 0),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(2, 0),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(0, 1),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(1, 1),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(2, 1),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(0, 2),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(1, 2),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+    m_collisions.insert(QPoint(2, 2),
+                        new CollisionSquare(new QRectF(0, 0, 100, 100)));
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
