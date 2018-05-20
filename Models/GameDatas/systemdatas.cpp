@@ -31,6 +31,7 @@
 SystemDatas::SystemDatas() :
     m_idMapHero(1),
     m_idObjectHero(1),
+    m_showBB(false),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel)
 {
@@ -65,6 +66,10 @@ void SystemDatas::setPathBR(QString p) { m_pathBR = p; }
 int SystemDatas::framesAnimation() const { return m_framesAnimation; }
 
 void SystemDatas::setFramesAnimation(int f) { m_framesAnimation = f; }
+
+bool SystemDatas::showBB() const { return m_showBB; }
+
+void SystemDatas::setShowBB(bool b) { m_showBB = b; }
 
 QStandardItemModel* SystemDatas::modelCurrencies() const {
     return m_modelCurrencies;
@@ -141,6 +146,7 @@ void SystemDatas::read(const QJsonObject &json){
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
+    m_showBB = json.contains("bb");
 
     // Currencies
     jsonList = json["currencies"].toArray();
@@ -180,6 +186,8 @@ void SystemDatas::write(QJsonObject &json) const{
     json["idObjHero"] = m_idObjectHero;
     json["pathBR"] = m_pathBR;
     json["frames"] = m_framesAnimation;
+    if (m_showBB)
+        json["bb"] = m_showBB;
 
     // Currencies
     jsonArray = QJsonArray();

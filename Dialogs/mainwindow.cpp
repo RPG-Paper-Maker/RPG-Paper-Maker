@@ -40,6 +40,7 @@
 #include "dialogprogress.h"
 #include "dialogengineupdate.h"
 #include "dialogspecialelements.h"
+#include "dialogdebugoptions.h"
 
 // -------------------------------------------------------
 //
@@ -207,6 +208,7 @@ void MainWindow::enableAll(bool b){
     ui->actionVariables_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
+    ui->actionDebug_options->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
     ui->actionCollisions_manager->setEnabled(b);
     ui->actionScripts_manager->setEnabled(b);
@@ -240,6 +242,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionVariables_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
+    ui->actionDebug_options->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionCollisions_manager->setEnabled(true);
     ui->actionAutotiles->setEnabled(true);
@@ -513,6 +516,16 @@ void MainWindow::on_actionSet_BR_path_folder_triggered(){
         project->gameDatas()->systemDatas()->setPathBR(dialog.location());
         project->writeSystemDatas();
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionDebug_options_triggered() {
+    DialogDebugOptions dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeSystemDatas();
+    else
+        project->readSystemDatas();
 }
 
 // -------------------------------------------------------

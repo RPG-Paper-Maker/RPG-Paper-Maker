@@ -91,6 +91,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionSet_BR_path_folder"/>
+    <addaction name="actionDebug_options"/>
    </widget>
    <widget class="QMenu" name="menuSpecials">
     <property name="title">
@@ -471,6 +472,11 @@
    </property>
    <property name="iconText">
     <string>Scripts</string>
+   </property>
+  </action>
+  <action name="actionDebug_options">
+   <property name="text">
+    <string>Debug options...</string>
    </property>
   </action>
  </widget>

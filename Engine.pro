@@ -245,7 +245,8 @@ HEADERS += \
     Models/collisionsquare.h \
     Enums/collisionresizekind.h \
     Dialogs/dialogrect.h \
-    CustomWidgets/widgettilesetdirection.h
+    CustomWidgets/widgettilesetdirection.h \
+    Dialogs/dialogdebugoptions.h
 
 SOURCES += \
     main.cpp \
@@ -440,7 +441,8 @@ SOURCES += \
     Dialogs/dialogcollisions.cpp \
     Models/collisionsquare.cpp \
     Dialogs/dialogrect.cpp \
-    CustomWidgets/widgettilesetdirection.cpp
+    CustomWidgets/widgettilesetdirection.cpp \
+    Dialogs/dialogdebugoptions.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -508,7 +510,8 @@ FORMS += \
     Dialogs/SpecialElements/dialogtilesetspecialelements.ui \
     Dialogs/SpecialElements/panelspecialelements.ui \
     Dialogs/dialogcollisions.ui \
-    Dialogs/dialogrect.ui
+    Dialogs/dialogrect.ui \
+    Dialogs/dialogdebugoptions.ui
 
 OTHER_FILES += \
     style.qss
