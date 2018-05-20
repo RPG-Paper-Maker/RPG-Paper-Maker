@@ -125,6 +125,17 @@ void WidgetTilesetSettings::disableNone(bool b) {
 
 // -------------------------------------------------------
 //
+//  EVENTS
+//
+// -------------------------------------------------------
+
+void WidgetTilesetSettings::showEvent(QShowEvent *event) {
+    updateZoom(Wanok::get()->engineSettings()->zoomPictures());
+    QWidget::showEvent(event);
+}
+
+// -------------------------------------------------------
+//
 //  SLOTS
 //
 // -------------------------------------------------------

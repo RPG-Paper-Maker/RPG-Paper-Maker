@@ -596,9 +596,10 @@
     		]
     	},
         {
-            "v": "0.4.4",
+            "v": "0.5.0",
             "features": [
-                "Collisions system for tileset (praticable, directions), characters (repeat system), autotiles, and walls"
+                "Collisions system for tileset (praticable, directions), characters (repeat system), autotiles, and walls",
+                "Adding debug options window (today only for showing collisions bounding boxes)"
             ],
             "bugs": [
                 "Lists with drag and drop was sometimes erasing content while droping"

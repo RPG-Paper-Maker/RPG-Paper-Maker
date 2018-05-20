@@ -113,7 +113,7 @@ void SystemDatas::setDefault(){
 
     // Items kind
     SuperListItem* sys;
-    QString namesItemsKind[] = {"ingredients", "key items"};
+    QString namesItemsKind[] = {"ingredient", "key items"};
     length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;

@@ -60,6 +60,9 @@ private:
     PictureKind m_kind;
     float m_zoom;
 
+protected:
+    virtual void showEvent(QShowEvent *event);
+
 public slots:
     void on_horizontalSlider_valueChanged(int value);
     void on_checkBoxRepeat_toggled(bool checked);
