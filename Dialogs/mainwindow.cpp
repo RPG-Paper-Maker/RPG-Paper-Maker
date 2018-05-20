@@ -567,6 +567,8 @@ void MainWindow::on_actionPlay_triggered(){
         execName += ".app";
     #endif
 
+    if (gameProcess->isOpen())
+        gameProcess->close();
     gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
 }
