@@ -41,6 +41,7 @@
 #include "dialogengineupdate.h"
 #include "dialogspecialelements.h"
 #include "dialogdebugoptions.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -67,23 +68,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Menu bar enabled actions
     enableNoGame();
-
-    // Check update
-    QThread* thread = new QThread(parent);
-    m_engineUpdater = new EngineUpdater();
-    m_engineUpdater->moveToThread(thread);
-    connect(thread, SIGNAL(started()), m_engineUpdater, SLOT(check()));
-    connect(m_engineUpdater, SIGNAL(finishedCheck(bool)),
-            this, SLOT(on_updateCheckFinished(bool)));
-    thread->start();
-
-    //EngineUpdater::writeBasicJSONFile();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete m_engineUpdater;
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
@@ -128,7 +117,7 @@ int MainWindow::openDialog(QDialog& dialog){
 void MainWindow::newProject(){
     DialogNewProject dialog;
     if (openDialog(dialog) == QDialog::Accepted){
-        openProject(Wanok::pathCombine(dialog.getLocation(),
+        openProject(Common::pathCombine(dialog.getLocation(),
                                        dialog.getDirectoryName()));
     }
 }
@@ -139,7 +128,7 @@ void MainWindow::openExistingProject(){
     QString file = QFileDialog::getOpenFileName(this, "Open a project",
                                                 Wanok::dirGames,
                                                 "RPG Paper Maker (*.rpm)");
-    if (file.count() > 0) openProject(Wanok::getDirectoryPath(file));
+    if (file.count() > 0) openProject(Common::getDirectoryPath(file));
 }
 
 // -------------------------------------------------------
@@ -283,28 +272,6 @@ void MainWindow::updateTextures(){
             ->widgetTreeLocalMaps();
 
     treeMap->reload();
-}
-
-// -------------------------------------------------------
-
-void MainWindow::openEngineUpdater() {
-    QJsonArray tab;
-    m_engineUpdater->getVersions(tab);
-
-    DialogEngineUpdate dialog(tab);
-    if (openDialog(dialog) == QDialog::Accepted) {
-        DialogProgress dialog;
-        connect(m_engineUpdater, SIGNAL(finished()),
-                this, SLOT(on_updateFinished()));
-        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
-                &dialog, SLOT(setValueLabel(int, QString)));
-        connect(m_engineUpdater, SIGNAL(progress(int, QString)),
-                &dialog, SLOT(setValueLabel(int, QString)));
-        connect(m_engineUpdater, SIGNAL(needUpdate()),
-                m_engineUpdater, SLOT(update()));
-        m_engineUpdater->start();
-        dialog.exec();
-    }
 }
 
 // -------------------------------------------------------
@@ -569,15 +536,8 @@ void MainWindow::on_actionPlay_triggered(){
 
     if (gameProcess->isOpen())
         gameProcess->close();
-    gameProcess->start("\"" + Wanok::pathCombine(project->pathCurrentProject(),
+    gameProcess->start("\"" + Common::pathCombine(project->pathCurrentProject(),
                                                  execName) + "\"");
-}
-
-// -------------------------------------------------------
-
-void MainWindow::on_updateCheckFinished(bool b) {
-    if (b)
-        openEngineUpdater();
 }
 
 // -------------------------------------------------------
@@ -595,7 +555,7 @@ void MainWindow::on_updateFinished() {
     #else
         realApplicationName = "RPG-Paper-Maker-temp.app";
     #endif
-    QString path = Wanok::pathCombine(QDir::currentPath(), realApplicationName);
+    QString path = Common::pathCombine(QDir::currentPath(), realApplicationName);
     QStringList arguments = qApp->arguments();
     arguments[0] = path;
 

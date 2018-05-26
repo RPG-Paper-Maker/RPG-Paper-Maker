@@ -19,6 +19,7 @@
 
 #include "mapproperties.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -36,7 +37,7 @@ MapProperties::MapProperties() :
 
 MapProperties::MapProperties(QString path)
 {
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::fileMapInfos), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::fileMapInfos), *this);
 }
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
@@ -152,8 +153,8 @@ void MapProperties::setCopy(const MapProperties& super){
 
 void MapProperties::save(QString path, bool temp){
     if (temp)
-        path = Wanok::pathCombine(path, Wanok::TEMP_MAP_FOLDER_NAME);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::fileMapInfos), *this);
+        path = Common::pathCombine(path, Wanok::TEMP_MAP_FOLDER_NAME);
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::fileMapInfos), *this);
 }
 
 // -------------------------------------------------------

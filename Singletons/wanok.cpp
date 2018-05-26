@@ -25,6 +25,7 @@
 #include <QDirIterator>
 #include <math.h>
 #include "wanok.h"
+#include "common.h"
 
 QSet<int> Wanok::mapsToSave;
 QSet<int> Wanok::mapsUndoRedo;
@@ -42,63 +43,63 @@ const QColor Wanok::colorAlmostBlack = QColor(25, 25, 25);
 const QColor Wanok::colorGrey = QColor(90, 90, 90);
 
 // PATHS DATAS
-const QString Wanok::pathBasic = pathCombine("Content", "basic");
-const QString Wanok::pathBR = pathCombine("Content", "BR");
-const QString Wanok::pathDatas = pathCombine("Content", "Datas");
-const QString Wanok::pathMaps = pathCombine(pathDatas, "Maps");
-const QString Wanok::pathScriptsDir = pathCombine(pathDatas, "Scripts");
+const QString Wanok::pathBasic = Common::pathCombine("Content", "basic");
+const QString Wanok::pathBR = Common::pathCombine("Content", "BR");
+const QString Wanok::pathDatas = Common::pathCombine("Content", "Datas");
+const QString Wanok::pathMaps = Common::pathCombine(pathDatas, "Maps");
+const QString Wanok::pathScriptsDir = Common::pathCombine(pathDatas, "Scripts");
 const QString Wanok::pathScriptsSystemDir =
-        pathCombine(pathScriptsDir, "System");
+        Common::pathCombine(pathScriptsDir, "System");
 const QString Wanok::pathScriptsPluginsDir =
-        pathCombine(pathScriptsDir, "Plugins");
+        Common::pathCombine(pathScriptsDir, "Plugins");
 const QString Wanok::pathCommonEvents =
-        pathCombine(pathDatas, "commonEvents.json");
+        Common::pathCombine(pathDatas, "commonEvents.json");
 const QString Wanok::pathVariables =
-        pathCombine(pathDatas, "variables.json");
-const QString Wanok::pathSystem = pathCombine(pathDatas, "system.json");
+        Common::pathCombine(pathDatas, "variables.json");
+const QString Wanok::pathSystem = Common::pathCombine(pathDatas, "system.json");
 const QString Wanok::pathBattleSystem =
-        pathCombine(pathDatas, "battleSystem.json");
-const QString Wanok::pathItems = pathCombine(pathDatas, "items.json");
-const QString Wanok::pathSkills = pathCombine(pathDatas, "skills.json");
-const QString Wanok::pathWeapons = pathCombine(pathDatas, "weapons.json");
-const QString Wanok::pathArmors = pathCombine(pathDatas, "armors.json");
-const QString Wanok::pathHeroes = pathCombine(pathDatas, "heroes.json");
-const QString Wanok::pathMonsters = pathCombine(pathDatas, "monsters.json");
-const QString Wanok::pathTroops = pathCombine(pathDatas, "troops.json");
-const QString Wanok::pathClasses = pathCombine(pathDatas, "classes.json");
-const QString Wanok::PATH_TILESETS = pathCombine(pathDatas, "tilesets.json");
+        Common::pathCombine(pathDatas, "battleSystem.json");
+const QString Wanok::pathItems = Common::pathCombine(pathDatas, "items.json");
+const QString Wanok::pathSkills = Common::pathCombine(pathDatas, "skills.json");
+const QString Wanok::pathWeapons = Common::pathCombine(pathDatas, "weapons.json");
+const QString Wanok::pathArmors = Common::pathCombine(pathDatas, "armors.json");
+const QString Wanok::pathHeroes = Common::pathCombine(pathDatas, "heroes.json");
+const QString Wanok::pathMonsters = Common::pathCombine(pathDatas, "monsters.json");
+const QString Wanok::pathTroops = Common::pathCombine(pathDatas, "troops.json");
+const QString Wanok::pathClasses = Common::pathCombine(pathDatas, "classes.json");
+const QString Wanok::PATH_TILESETS = Common::pathCombine(pathDatas, "tilesets.json");
 const QString Wanok::PATH_SPECIAL_ELEMENTS =
-        pathCombine(pathDatas, "specialElements.json");
-const QString Wanok::pathTreeMap = pathCombine(pathDatas, "treeMap.json");
-const QString Wanok::pathLangs = pathCombine(pathDatas, "langs.json");
-const QString Wanok::pathScripts = pathCombine(pathDatas, "scripts.json");
-const QString Wanok::pathKeyBoard = pathCombine(pathDatas, "keyBoard.json");
+        Common::pathCombine(pathDatas, "specialElements.json");
+const QString Wanok::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");
+const QString Wanok::pathLangs = Common::pathCombine(pathDatas, "langs.json");
+const QString Wanok::pathScripts = Common::pathCombine(pathDatas, "scripts.json");
+const QString Wanok::pathKeyBoard = Common::pathCombine(pathDatas, "keyBoard.json");
 const QString Wanok::pathPicturesDatas =
-        pathCombine(pathDatas, "pictures.json");
-const QString Wanok::pathSaves = pathCombine(pathDatas, "saves.json");
+        Common::pathCombine(pathDatas, "pictures.json");
+const QString Wanok::pathSaves = Common::pathCombine(pathDatas, "saves.json");
 
 // PATHS PICTURES
-const QString Wanok::pathPictures = pathCombine("Content", "Pictures");
-const QString Wanok::pathHUD = pathCombine(pathPictures, "HUD");
-const QString Wanok::pathTextures2D = pathCombine(pathPictures, "Textures2D");
-const QString Wanok::pathBars = pathCombine(pathHUD, "Bars");
-const QString Wanok::pathIcons = pathCombine(pathHUD, "Icons");
-const QString Wanok::pathAutotiles = pathCombine(pathTextures2D, "Autotiles");
-const QString Wanok::pathCharacters = pathCombine(pathTextures2D, "Characters");
-const QString Wanok::pathReliefs = pathCombine(pathTextures2D, "Reliefs");
-const QString Wanok::pathTilesets = pathCombine(pathTextures2D, "Tilesets");
-const QString Wanok::PATH_SPRITE_WALLS = pathCombine(pathTextures2D, "Walls");
-const QString Wanok::PATH_3D_OBJECT = pathCombine(pathTextures2D, "3DObjects");
-const QString Wanok::PATH_RELIEFS = pathCombine(pathTextures2D, "Reliefs");
+const QString Wanok::pathPictures = Common::pathCombine("Content", "Pictures");
+const QString Wanok::pathHUD = Common::pathCombine(pathPictures, "HUD");
+const QString Wanok::pathTextures2D = Common::pathCombine(pathPictures, "Textures2D");
+const QString Wanok::pathBars = Common::pathCombine(pathHUD, "Bars");
+const QString Wanok::pathIcons = Common::pathCombine(pathHUD, "Icons");
+const QString Wanok::pathAutotiles = Common::pathCombine(pathTextures2D, "Autotiles");
+const QString Wanok::pathCharacters = Common::pathCombine(pathTextures2D, "Characters");
+const QString Wanok::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString Wanok::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
+const QString Wanok::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
+const QString Wanok::PATH_3D_OBJECT = Common::pathCombine(pathTextures2D, "3DObjects");
+const QString Wanok::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
 
 const QString Wanok::pathEngineSettings =
-        pathCombine("Content", "engineSettings.json");
+        Common::pathCombine("Content", "engineSettings.json");
 const QString Wanok::fileMapInfos = "infos.json";
 const QString Wanok::fileMapObjects = "objects.json";
 const QString Wanok::gamesFolderName = "RPG Paper Maker Games";
 const QString Wanok::TEMP_MAP_FOLDER_NAME = "temp";
 const QString Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME = "tempUndoRedo";
-const QString Wanok::dirGames = Wanok::pathCombine(
+const QString Wanok::dirGames = Common::pathCombine(
             QStandardPaths::writableLocation(
                 QStandardPaths::StandardLocation::DocumentsLocation),
             gamesFolderName);
@@ -166,128 +167,18 @@ void Wanok::loadEngineSettings(){
 //
 // -------------------------------------------------------
 
-QString Wanok::pathCombine(const QString & p1, const QString & p2){
-    return QDir::cleanPath(p1 + QDir::separator() + p2);
-}
-
-// -------------------------------------------------------
-
 void Wanok::writeJSON(QString path, const Serializable &obj){
     QJsonObject gameObject;
     obj.write(gameObject);
-    writeOtherJSON(path, gameObject);
+    Common::writeOtherJSON(path, gameObject);
 }
 
 // -------------------------------------------------------
 
 void Wanok::readJSON(QString path, Serializable &obj){
     QJsonDocument loadDoc;
-    readOtherJSON(path, loadDoc);
+    Common::readOtherJSON(path, loadDoc);
     obj.read(loadDoc.object());
-}
-
-// -------------------------------------------------------
-
-void Wanok::writeOtherJSON(QString path, const QJsonObject &obj,
-                           QJsonDocument::JsonFormat format)
-{
-    QFile saveFile(path);
-    if (!saveFile.open(QIODevice::WriteOnly)) { return; }
-    QJsonDocument saveDoc(obj);
-    saveFile.write(saveDoc.toJson(format));
-}
-
-// -------------------------------------------------------
-
-void Wanok::readOtherJSON(QString path, QJsonDocument& loadDoc){
-    QFile loadFile(path);
-    loadFile.open(QIODevice::ReadOnly);
-    QByteArray saveData = loadFile.readAll();
-    loadDoc = QJsonDocument::fromJson(saveData);
-}
-
-// -------------------------------------------------------
-
-void Wanok::writeArrayJSON(QString path, const QJsonArray &tab){
-    QFile saveFile(path);
-    if (!saveFile.open(QIODevice::WriteOnly)) { return; }
-    QJsonDocument saveDoc(tab);
-    saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
-}
-
-// -------------------------------------------------------
-
-void Wanok::readArrayJSON(QString path, QJsonDocument& loadDoc){
-    QFile loadFile(path);
-    loadFile.open(QIODevice::ReadOnly);
-    QByteArray saveData = loadFile.readAll();
-    loadDoc = QJsonDocument::fromJson(saveData);
-}
-
-// -------------------------------------------------------
-
-bool Wanok::copyPath(QString src, QString dst)
-{
-    QDir dir(src);
-    if (!dir.exists())
-        return false;
-
-    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        QString dst_path = pathCombine(dst, d);
-        if (!dir.mkpath(dst_path)) return false;
-        if (!copyPath(pathCombine(src, d), dst_path)) return false;
-    }
-
-    foreach (QString f, dir.entryList(QDir::Files)) {
-        if (!QFile::copy(pathCombine(src, f), pathCombine(dst, f)))
-            return false;
-    }
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-QString Wanok::getDirectoryPath(QString& file){
-    return QFileInfo(file).dir().absolutePath();
-}
-
-// -------------------------------------------------------
-
-bool Wanok::isDirEmpty(QString path){
-    return QDir(path).entryInfoList(QDir::NoDotAndDotDot |
-                                    QDir::AllEntries).count() == 0;
-}
-
-// -------------------------------------------------------
-
-void Wanok::copyAllFiles(QString pathSource, QString pathTarget){
-    QDirIterator files(pathSource, QDir::Files);
-    QString path;
-
-    while (files.hasNext()){
-        files.next();
-        path = Wanok::pathCombine(pathTarget, files.fileName());
-        QFile::remove(path);
-        QFile::copy(files.filePath(), path);
-    }
-}
-
-// -------------------------------------------------------
-
-void Wanok::deleteAllFiles(QString pathSource){
-    QDirIterator files(pathSource, QDir::Files);
-
-    while (files.hasNext()){
-        files.next();
-        QFile(files.filePath()).remove();
-    }
-}
-
-// -------------------------------------------------------
-
-QString Wanok::getFormatNumber(int number, int format, int type){
-    return QString("%1").arg(number, format, type, QChar('0'));
 }
 
 // -------------------------------------------------------
@@ -413,7 +304,7 @@ bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
 // check if a directory with that id in Maps folder already exists
 
 bool Wanok::isMapIdExisting(int id){
-    QDirIterator directories(Wanok::pathCombine(Wanok::get()->project()
+    QDirIterator directories(Common::pathCombine(Wanok::get()->project()
                                                 ->pathCurrentProject(),
                                                 Wanok::pathMaps),
                              QDir::Dirs | QDir::NoDotAndDotDot);
@@ -433,7 +324,7 @@ bool Wanok::isMapIdExisting(int id){
 
 int Wanok::generateMapId(){
     int id;
-    QDir dir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
+    QDir dir(Common::pathCombine(Wanok::get()->project()->pathCurrentProject(),
                                 Wanok::pathMaps));
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     int nbMaps = dir.count();
@@ -447,7 +338,7 @@ int Wanok::generateMapId(){
 // -------------------------------------------------------
 
 QString Wanok::generateMapName(int id){
-    return "MAP" + Wanok::getFormatNumber(id);
+    return "MAP" + Common::getFormatNumber(id);
 }
 
 

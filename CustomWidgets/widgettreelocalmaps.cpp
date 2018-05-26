@@ -21,6 +21,7 @@
 #include "dialogmapproperties.h"
 #include "dialogsystemname.h"
 #include "wanok.h"
+#include "common.h"
 #include "treemapdatas.h"
 #include <QDir>
 #include <QMessageBox>
@@ -134,7 +135,7 @@ void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem* item){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::deleteAllMapTemp(){
-    QString pathMaps = Wanok::pathCombine(Wanok::get()->project()
+    QString pathMaps = Common::pathCombine(Wanok::get()->project()
                                           ->pathCurrentProject(),
                                           Wanok::pathMaps);
     deleteMapTemp(pathMaps, m_model->invisibleRootItem());
@@ -147,15 +148,15 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
 
     if (tag != nullptr && !tag->isDir()){
         QString pathMap =
-                Wanok::pathCombine(path,
+                Common::pathCombine(path,
                                    Wanok::generateMapName(
                                        tag->id()));
-        QString pathTemp = Wanok::pathCombine(pathMap,
+        QString pathTemp = Common::pathCombine(pathMap,
                                               Wanok::TEMP_MAP_FOLDER_NAME);
-        Wanok::deleteAllFiles(pathTemp);
-        pathTemp = Wanok::pathCombine(pathMap,
+        Common::deleteAllFiles(pathTemp);
+        pathTemp = Common::pathCombine(pathMap,
                                       Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
-        Wanok::deleteAllFiles(pathTemp);
+        Common::deleteAllFiles(pathTemp);
     }
     else{
         for (int i = 0; i < item->rowCount(); i++){
@@ -235,10 +236,10 @@ QStandardItem* WidgetTreeLocalMaps::getMap(int id, QStandardItem* item){
 void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
     TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
     QString mapPath =
-            Wanok::pathCombine(Wanok::pathMaps,
+            Common::pathCombine(Wanok::pathMaps,
                                Wanok::generateMapName(tag->id()));
 
-    QDir(Wanok::pathCombine(Wanok::get()->project()->pathCurrentProject(),
+    QDir(Common::pathCombine(Wanok::get()->project()->pathCurrentProject(),
                             mapPath)).removeRecursively();
 
     // Remove from tree
@@ -281,8 +282,8 @@ void WidgetTreeLocalMaps::updateTileset(){
         if (tag->id() == -1)
             m_panelTextures->setTilesetImageNone();
         else {
-            QString path = Wanok::pathCombine(
-                            Wanok::pathCombine(Wanok::get()->project()
+            QString path = Common::pathCombine(
+                            Common::pathCombine(Wanok::get()->project()
                                                ->pathCurrentProject(),
                                                Wanok::pathMaps),
                             Wanok::generateMapName(tag->id()));
@@ -347,8 +348,8 @@ void WidgetTreeLocalMaps::cleanCopy(){
         m_copied = nullptr;
 
         // Remove files temp
-        QString pathMaps = Wanok::pathCombine(m_pathProject, Wanok::pathMaps);
-        QDir(Wanok::pathCombine(
+        QString pathMaps = Common::pathCombine(m_pathProject, Wanok::pathMaps);
+        QDir(Common::pathCombine(
                  pathMaps, Wanok::TEMP_MAP_FOLDER_NAME)).removeRecursively();
         QDir(pathMaps).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
     }
@@ -505,8 +506,8 @@ void WidgetTreeLocalMaps::contextEditMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
         TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
-        QString path = Wanok::pathCombine(
-                        Wanok::pathCombine(Wanok::get()->project()
+        QString path = Common::pathCombine(
+                        Common::pathCombine(Wanok::get()->project()
                                            ->pathCurrentProject(),
                                            Wanok::pathMaps),
                         Wanok::generateMapName(tag->id()));
@@ -517,11 +518,11 @@ void WidgetTreeLocalMaps::contextEditMap(){
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
-            QString pathTemp = Wanok::pathCombine(path,
+            QString pathTemp = Common::pathCombine(path,
                                                   Wanok::TEMP_MAP_FOLDER_NAME);
             if (Wanok::mapsToSave.contains(properties.id())) {
-                Wanok::copyAllFiles(pathTemp, path);
-                Wanok::deleteAllFiles(pathTemp);
+                Common::copyAllFiles(pathTemp, path);
+                Common::deleteAllFiles(pathTemp);
                 Wanok::mapsToSave.remove(properties.id());
             }
             properties.save(path);

@@ -26,6 +26,7 @@
 #include "wanok.h"
 #include "map.h"
 #include "gamedatas.h"
+#include "common.h"
 
 // All the forbidden symbols in a folder name
 QChar ControlNewproject::forbiddenSymbols[10]{'/', '\\', ':', '?', '*', '|',
@@ -67,7 +68,7 @@ QString ControlNewproject::filterDirectoryName(const QString & s){
 
 QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir pathLocation(location);
-    QString pathDir(Wanok::pathCombine(location, dirName));
+    QString pathDir(Common::pathCombine(location, dirName));
 
     // Checking if the project can be created
     if (dirName.count() == 0)
@@ -82,11 +83,11 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     // If all is ok, then let's fill the project folder
 
     // Copying a basic project content
-    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
-    QString pathBasicContent = Wanok::pathCombine(
-                Wanok::pathCombine(pathContent, "basic"), "Content");
-    if (!Wanok::copyPath(pathBasicContent,
-                         Wanok::pathCombine(pathDir, "Content")))
+    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
+    QString pathBasicContent = Common::pathCombine(
+                Common::pathCombine(pathContent, "basic"), "Content");
+    if (!Common::copyPath(pathBasicContent,
+                         Common::pathCombine(pathDir, "Content")))
     {
         return "Error while copying Content directory. Please verify if " +
                pathBasicContent + " folder exists.";
@@ -123,11 +124,11 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
-    Wanok::writeArrayJSON(Wanok::pathCombine(pathDir, Wanok::pathSaves), tab);
+    Common::writeArrayJSON(Common::pathCombine(pathDir, Wanok::pathSaves), tab);
 
     // Creating first empty map
     QDir(pathDir).mkdir(Wanok::pathMaps);
-    QDir(pathDir).mkdir(Wanok::pathCombine(Wanok::pathMaps,
+    QDir(pathDir).mkdir(Common::pathCombine(Wanok::pathMaps,
                                            Wanok::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
 

@@ -212,7 +212,6 @@ HEADERS += \
     Dialogs/Commands/dialogcommandmovecamera.h \
     Models/projectupdater.h \
     Dialogs/dialogprogress.h \
-    Models/engineupdater.h \
     Enums/engineupdatefilekind.h \
     Dialogs/dialogengineupdate.h \
     CustomWidgets/widgetreleasenotes.h \
@@ -246,7 +245,8 @@ HEADERS += \
     Enums/collisionresizekind.h \
     Dialogs/dialogrect.h \
     CustomWidgets/widgettilesetdirection.h \
-    Dialogs/dialogdebugoptions.h
+    Dialogs/dialogdebugoptions.h \
+    Singletons/common.h
 
 SOURCES += \
     main.cpp \
@@ -407,7 +407,6 @@ SOURCES += \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
     Models/projectupdater.cpp \
     Dialogs/dialogprogress.cpp \
-    Models/engineupdater.cpp \
     Dialogs/dialogengineupdate.cpp \
     CustomWidgets/widgetreleasenotes.cpp \
     MapEditor/mapelement.cpp \
@@ -442,7 +441,8 @@ SOURCES += \
     Models/collisionsquare.cpp \
     Dialogs/dialogrect.cpp \
     CustomWidgets/widgettilesetdirection.cpp \
-    Dialogs/dialogdebugoptions.cpp
+    Dialogs/dialogdebugoptions.cpp \
+    Singletons/common.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

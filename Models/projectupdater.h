@@ -40,9 +40,6 @@ public:
 
     static const int incompatibleVersionsCount;
     static QString incompatibleVersions[];
-    static bool getSubVersions(QString& version, int& m, int& f, int& b);
-    static int versionDifferent(QString projectVersion, QString otherVersion
-                                = Project::ENGINE_VERSION);
     void clearListMapPaths();
     void clearListMapPortions();
     void copyPreviousProject();

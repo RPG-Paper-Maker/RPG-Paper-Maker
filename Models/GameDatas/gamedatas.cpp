@@ -19,6 +19,7 @@
 
 #include "gamedatas.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -184,28 +185,28 @@ void GameDatas::readSystem(QString path){
 // -------------------------------------------------------
 
 void GameDatas::write(QString path){
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathCommonEvents),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathCommonEvents),
                      *m_commonEventsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathVariables),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathVariables),
                      *m_variablesDatas);
     writeSystem(path);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathBattleSystem),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathBattleSystem),
                      *m_battleSystemDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathItems),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathItems),
                      *m_itemsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathSkills),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSkills),
                      *m_skillsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathWeapons),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathWeapons),
                      *m_weaponsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathArmors),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathArmors),
                      *m_armorsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathHeroes),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathHeroes),
                      *m_heroesDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathMonsters),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathMonsters),
                      *m_monstersDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathTroops),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathTroops),
                      *m_troopsDatas);
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathClasses),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathClasses),
                      *m_classesDatas);
     writeTilesets(path);
 }
@@ -213,14 +214,14 @@ void GameDatas::write(QString path){
 // -------------------------------------------------------
 
 void GameDatas::writeTilesets(QString path) {
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::PATH_TILESETS),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::PATH_TILESETS),
                      *m_tilesetsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSystem(QString path){
-    Wanok::writeJSON(Wanok::pathCombine(path, Wanok::pathSystem),
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSystem),
                      *m_systemDatas);
 }
 

@@ -19,6 +19,7 @@
 
 #include "langsdatas.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -37,7 +38,7 @@ LangsDatas::~LangsDatas()
 }
 
 void LangsDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathLangs), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathLangs), *this);
 }
 
 QStandardItemModel* LangsDatas::model() const { return m_model; }

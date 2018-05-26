@@ -19,6 +19,7 @@
 
 #include "projectupdater.h"
 #include "wanok.h"
+#include "common.h"
 #include <QDirIterator>
 
 const int ProjectUpdater::incompatibleVersionsCount = 3;
@@ -51,64 +52,6 @@ ProjectUpdater::~ProjectUpdater()
 //
 // -------------------------------------------------------
 
-bool ProjectUpdater::getSubVersions(QString& version, int& m, int& f, int& b) {
-    QStringList list = version.split(".");
-    if (list.size() != 3)
-        return false;
-    bool ok;
-    int integer;
-    integer = list.at(0).toInt(&ok);
-    if (!ok)
-        return false;
-    m = integer;
-    integer = list.at(1).toInt(&ok);
-    if (!ok)
-        return false;
-    f = integer;
-    integer = list.at(2).toInt(&ok);
-    if (!ok)
-        return false;
-    b = integer;
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-int ProjectUpdater::versionDifferent(QString projectVersion,
-                                     QString otherVersion)
-{
-    int mProject, fProject, bProject, mEngine, fEngine, bEngine;
-    bool ok = getSubVersions(projectVersion, mProject, fProject, bProject);
-    bool ok2 = getSubVersions(otherVersion, mEngine, fEngine, bEngine);
-
-    // Error while trying to convert one of the versions version
-    if (!ok || !ok2)
-        return -2;
-
-    // If project <, return -1, if =, return 0, if > return 1
-    if (mProject < mEngine)
-        return -1;
-    else if (mProject > mEngine)
-        return 1;
-    else {
-        if (fProject < fEngine)
-            return -1;
-        else if (fProject > fEngine)
-            return 1;
-        else {
-            if (bProject < bEngine)
-                return -1;
-            else if (bProject > bEngine)
-                return 1;
-            else
-                return 0;
-        }
-    }
-}
-
-// -------------------------------------------------------
-
 void ProjectUpdater::clearListMapPaths() {
     for (int i = 0; i < m_listMapPortionsPaths.size(); i++)
         delete m_listMapPortionsPaths.at(i);
@@ -129,8 +72,8 @@ void ProjectUpdater::copyPreviousProject() {
     QDir dirProject(m_project->pathCurrentProject());
     dirProject.cdUp();
     QDir(dirProject.path()).mkdir(m_previousFolderName);
-    Wanok::copyPath(m_project->pathCurrentProject(),
-                    Wanok::pathCombine(dirProject.path(),
+    Common::copyPath(m_project->pathCurrentProject(),
+                    Common::pathCombine(dirProject.path(),
                                        m_previousFolderName));
 }
 
@@ -138,7 +81,7 @@ void ProjectUpdater::copyPreviousProject() {
 
 void ProjectUpdater::getAllPathsMapsPortions()
 {
-    QString pathMaps = Wanok::pathCombine(m_project->pathCurrentProject(),
+    QString pathMaps = Common::pathCombine(m_project->pathCurrentProject(),
                                           Wanok::pathMaps);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -154,7 +97,7 @@ void ProjectUpdater::getAllPathsMapsPortions()
         directories.next();
         QString mapName = directories.fileName();
         if (mapName != "temp") {
-            QString dirMap = Wanok::pathCombine(pathMaps, mapName);
+            QString dirMap = Common::pathCombine(pathMaps, mapName);
             m_listMapPaths.append(dirMap);
             QDirIterator files(dirMap, QDir::Files);
             QList<QJsonObject>* mapPortions = new QList<QJsonObject>;
@@ -168,12 +111,12 @@ void ProjectUpdater::getAllPathsMapsPortions()
                 QString path = files.filePath();
                 QJsonDocument document;
                 if (fileName == "infos.json") {
-                    Wanok::readOtherJSON(path, document);
+                    Common::readOtherJSON(path, document);
                     m_listMapProperties.append(document.object());
                     m_listMapPropertiesPaths.append(path);
                 }
                 else if (fileName != "objects.json") {
-                    Wanok::readOtherJSON(path, document);
+                    Common::readOtherJSON(path, document);
                     QJsonObject object = document.object();
                     if (!object.isEmpty()) {
                         paths->append(path);
@@ -211,18 +154,18 @@ void ProjectUpdater::copyExecutable() {
 // -------------------------------------------------------
 
 void ProjectUpdater::copySystemScripts() {
-    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
-    QString pathBasic = Wanok::pathCombine(pathContent, "basic");
-    QString pathScripts = Wanok::pathCombine(pathBasic,
+    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
+    QString pathBasic = Common::pathCombine(pathContent, "basic");
+    QString pathScripts = Common::pathCombine(pathBasic,
                                              Wanok::pathScriptsSystemDir);
     QString pathProjectScripts =
-            Wanok::pathCombine(m_project->pathCurrentProject(),
+            Common::pathCombine(m_project->pathCurrentProject(),
                                Wanok::pathScriptsSystemDir);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();
     dir.cdUp();
     dir.mkdir("System");
-    Wanok::copyPath(pathScripts, pathProjectScripts);
+    Common::copyPath(pathScripts, pathProjectScripts);
 }
 
 // -------------------------------------------------------
@@ -240,8 +183,8 @@ void ProjectUpdater::check() {
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (ProjectUpdater::versionDifferent(incompatibleVersions[i],
-                                             m_project->version()) == 1)
+        if (Common::versionDifferent(incompatibleVersions[i],
+                                     m_project->version()) == 1)
         {
             index = i;
             break;
@@ -264,7 +207,7 @@ void ProjectUpdater::check() {
     m_project->readLangsDatas();
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setPathBR(
-                Wanok::pathCombine(QDir::currentPath(), Wanok::pathBR));
+                Common::pathCombine(QDir::currentPath(), Wanok::pathBR));
     m_project->writeSystemDatas();
     emit progress(100, "");
     QThread::sleep(1);
@@ -303,7 +246,7 @@ void ProjectUpdater::updateVersion_0_3_1() {
 
             objSprites["list"] = tabSprites;
             obj["sprites"] = objSprites;
-            Wanok::writeOtherJSON(paths->at(j), obj);
+            Common::writeOtherJSON(paths->at(j), obj);
         }
     }
 }
@@ -323,7 +266,7 @@ void ProjectUpdater::updateVersion_0_4_0() {
         // Adding ofSprites field for overflow
         objMapProperties["ofsprites"] = QJsonArray();
         QString pathMapProperties = m_listMapPropertiesPaths.at(i);
-        Wanok::writeOtherJSON(pathMapProperties, objMapProperties);
+        Common::writeOtherJSON(pathMapProperties, objMapProperties);
 
         for (int j = 0; j < mapPortions->size(); j++) {
             QJsonObject obj = mapPortions->at(j);
@@ -352,14 +295,14 @@ void ProjectUpdater::updateVersion_0_4_0() {
             obj["lands"] = objLands;
             obj.remove("floors");
 
-            Wanok::writeOtherJSON(paths->at(j), obj);
+            Common::writeOtherJSON(paths->at(j), obj);
         }
     }
 
     // Adding a default special elements datas to the project
     SpecialElementsDatas specialElementsDatas;
     specialElementsDatas.setDefault();
-    Wanok::writeJSON(Wanok::pathCombine(
+    Wanok::writeJSON(Common::pathCombine(
                          m_project->pathCurrentProject(),
                          Wanok::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
 

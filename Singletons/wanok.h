@@ -121,22 +121,8 @@ public:
     const static int MAX_PIXEL_SIZE;
 
     // METHODS
-    static QString pathCombine(const QString& p1, const QString& p2);
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
-    static void writeOtherJSON(QString path, const QJsonObject &obj,
-                               QJsonDocument::JsonFormat format
-                               = QJsonDocument::Compact);
-    static void readOtherJSON(QString path, QJsonDocument& loadDoc);
-    static void writeArrayJSON(QString path, const QJsonArray &tab);
-    static void readArrayJSON(QString path, QJsonDocument& loadDoc);
-    static bool copyPath(QString src, QString dst);
-    static QString getDirectoryPath(QString& file);
-    static bool isDirEmpty(QString path);
-    static void copyAllFiles(QString pathSource, QString pathTarget);
-    static void copyAll(QString pathSource, QString pathTarget);
-    static void deleteAllFiles(QString pathSource);
-    static QString getFormatNumber(int number, int format = 4, int type = 10);
     static QKeySequence getKeySequence(QKeyEvent *event);
     static QString keyToString(int keyInt);
     static int mod(int x, int m);

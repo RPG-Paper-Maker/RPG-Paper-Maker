@@ -19,6 +19,7 @@
 
 #include "superlistitem.h"
 #include "wanok.h"
+#include "common.h"
 #include "dialogsystemname.h"
 #include "systemautotile.h"
 #include "systemspritewall.h"
@@ -100,7 +101,7 @@ QString SuperListItem::toStringName() const {
 // -------------------------------------------------------
 
 QString SuperListItem::idToString() const {
-    return Wanok::getFormatNumber(id());
+    return Common::getFormatNumber(id());
 }
 
 // -------------------------------------------------------

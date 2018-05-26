@@ -24,6 +24,7 @@
 #include "systemstatistic.h"
 #include "systembattlecommand.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -54,7 +55,7 @@ BattleSystemDatas::~BattleSystemDatas()
 }
 
 void BattleSystemDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathBattleSystem), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathBattleSystem), *this);
 }
 
 int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }

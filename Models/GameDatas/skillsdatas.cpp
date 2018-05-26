@@ -20,6 +20,7 @@
 #include "skillsdatas.h"
 #include "systemskill.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -38,7 +39,7 @@ SkillsDatas::~SkillsDatas()
 }
 
 void SkillsDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathSkills), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathSkills), *this);
 }
 
 QStandardItemModel* SkillsDatas::model() const { return m_model; }

@@ -19,6 +19,7 @@
 
 #include "systempicture.h"
 #include "wanok.h"
+#include "common.h"
 
 QString SystemPicture::pathIconRed = ":/icons/Ressources/point_r.png";
 QString SystemPicture::pathIconBlue = ":/icons/Ressources/point_b.png";
@@ -98,7 +99,7 @@ QString SystemPicture::getFolder(PictureKind kind, bool isBR){
                             ->pathBR()
                           : Wanok::get()->project()->pathCurrentProject();
 
-    return Wanok::pathCombine(folder, getLocalFolder(kind));
+    return Common::pathCombine(folder, getLocalFolder(kind));
 }
 
 // -------------------------------------------------------
@@ -145,7 +146,7 @@ QString SystemPicture::getPath(PictureKind kind) const{
 
     QString folder = getFolder(kind, m_isBR);
 
-    return Wanok::pathCombine(folder, name());
+    return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------
@@ -153,7 +154,7 @@ QString SystemPicture::getPath(PictureKind kind) const{
 QString SystemPicture::getLocalPath(PictureKind kind) const{
     QString folder = getLocalFolder(kind);
 
-    return Wanok::pathCombine(folder, name());
+    return Common::pathCombine(folder, name());
 }
 
 // -------------------------------------------------------

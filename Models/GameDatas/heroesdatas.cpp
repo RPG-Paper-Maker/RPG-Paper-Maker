@@ -20,6 +20,7 @@
 #include "heroesdatas.h"
 #include "systemhero.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -38,7 +39,7 @@ HeroesDatas::~HeroesDatas()
 }
 
 void HeroesDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathHeroes), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathHeroes), *this);
 }
 
 QStandardItemModel* HeroesDatas::model() const { return m_model; }

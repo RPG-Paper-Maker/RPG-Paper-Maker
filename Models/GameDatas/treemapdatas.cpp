@@ -19,6 +19,7 @@
 
 #include "treemapdatas.h"
 #include "wanok.h"
+#include "common.h"
 #include "treemaptag.h"
 #include <QIcon>
 
@@ -41,7 +42,7 @@ TreeMapDatas::~TreeMapDatas()
 }
 
 void TreeMapDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathTreeMap), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathTreeMap), *this);
 }
 
 QStandardItemModel* TreeMapDatas::model() const { return m_model; }

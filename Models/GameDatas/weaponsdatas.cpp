@@ -20,6 +20,7 @@
 #include "weaponsdatas.h"
 #include "systemweapon.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -38,7 +39,7 @@ WeaponsDatas::~WeaponsDatas()
 }
 
 void WeaponsDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathWeapons), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathWeapons), *this);
 }
 
 QStandardItemModel* WeaponsDatas::model() const { return m_model; }

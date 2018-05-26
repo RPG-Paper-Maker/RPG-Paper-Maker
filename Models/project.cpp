@@ -21,6 +21,7 @@
 #include "wanok.h"
 #include "projectupdater.h"
 #include "dialogprogress.h"
+#include "common.h"
 #include <QDirIterator>
 #include <QMessageBox>
 #include <QApplication>
@@ -147,7 +148,7 @@ bool Project::read(QString path){
 
 bool Project::readVersion(){
 
-    QFile file(Wanok::pathCombine(p_pathCurrentProject, "game.rpm"));
+    QFile file(Common::pathCombine(p_pathCurrentProject, "game.rpm"));
     if(!file.open(QIODevice::ReadOnly)) {
         QMessageBox::information(nullptr, "error", file.errorString());
     }
@@ -159,7 +160,7 @@ bool Project::readVersion(){
                           + " your current RPG Paper Maker version is " +
                           Project::ENGINE_VERSION;
 
-    int dBefore = ProjectUpdater::versionDifferent(m_version, "0.3.0");
+    int dBefore = Common::versionDifferent(m_version, "0.3.0");
 
     // If impossible to convert the version
     if (dBefore == -2) {
@@ -177,7 +178,7 @@ bool Project::readVersion(){
         return false;
     }
 
-    int d = ProjectUpdater::versionDifferent(m_version);
+    int d = Common::versionDifferent(m_version, Project::ENGINE_VERSION);
 
     // If the project if superior to the engine
     if (d == 1) {
@@ -258,9 +259,9 @@ bool Project::readOS() {
 // -------------------------------------------------------
 
 OSKind Project::getProjectOS() {
-    if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
+    if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
         return OSKind::Window;
-    else if (QFile(Wanok::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+    else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
         return OSKind::Linux;
     else
         return OSKind::Mac;
@@ -281,7 +282,7 @@ OSKind Project::getComputerOS() {
 // -------------------------------------------------------
 
 bool Project::copyOSFiles() {
-    QString pathContent = Wanok::pathCombine(QDir::currentPath(), "Content");
+    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
 
     // Copy excecutable and libraries according to current OS
     QString strOS = "";
@@ -294,7 +295,7 @@ bool Project::copyOSFiles() {
     #endif
 
     // Copying a basic project content
-    return Wanok::copyPath(Wanok::pathCombine(pathContent, strOS),
+    return Common::copyPath(Common::pathCombine(pathContent, strOS),
                            p_pathCurrentProject);
 }
 
@@ -396,35 +397,35 @@ void Project::writeGameDatas(){
 // -------------------------------------------------------
 
 void Project::writeLangsDatas(){
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathLangs), *m_langsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeTreeMapDatas(){
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathTreeMap), *m_treeMapDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeScriptsDatas(){
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathScripts), *m_scriptsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeKeyBoardDatas(){
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathKeyBoard), *m_keyBoardDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
 }
@@ -432,7 +433,7 @@ void Project::writePicturesDatas(){
 // -------------------------------------------------------
 
 void Project::writeSpecialsDatas() {
-    Wanok::writeJSON(Wanok::pathCombine(p_pathCurrentProject,
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
 }
@@ -452,7 +453,7 @@ void Project::writeTilesetsDatas() {
 // -------------------------------------------------------
 
 QString Project::createRPMFile() {
-    QFile file(Wanok::pathCombine(p_pathCurrentProject, "game.rpm"));
+    QFile file(Common::pathCombine(p_pathCurrentProject, "game.rpm"));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return "Error while creating game.rpm file";
     QTextStream out(&file);

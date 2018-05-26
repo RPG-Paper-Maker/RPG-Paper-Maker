@@ -19,6 +19,7 @@
 
 #include "monstersdatas.h"
 #include "wanok.h"
+#include "common.h"
 #include "systemmonster.h"
 #include "lootkind.h"
 #include "systemloot.h"
@@ -40,7 +41,7 @@ MonstersDatas::~MonstersDatas()
 }
 
 void MonstersDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathMonsters), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathMonsters), *this);
 }
 
 QStandardItemModel* MonstersDatas::model() const { return m_model; }

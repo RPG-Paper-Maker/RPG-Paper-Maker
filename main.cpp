@@ -24,6 +24,7 @@
 #include <QDir>
 #include "mainwindow.h"
 #include "wanok.h"
+#include "common.h"
 
 //-------------------------------------------------
 //
@@ -63,13 +64,13 @@ int main(int argc, char *argv[])
     QString currentApplicationName = QFileInfo(qApp->arguments()[0]).fileName();
 
     if (currentApplicationName != realApplicationName) {
-        QString pathReal = Wanok::pathCombine(QDir::currentPath(),
+        QString pathReal = Common::pathCombine(QDir::currentPath(),
                                               realApplicationName);
         QFile fileReal(pathReal);
         if (fileReal.exists()) {
             while (!fileReal.remove()) {}
         }
-        QFile(Wanok::pathCombine(QDir::currentPath(), currentApplicationName))
+        QFile(Common::pathCombine(QDir::currentPath(), currentApplicationName))
                 .rename(realApplicationName);
     }
 
@@ -97,7 +98,7 @@ int main(int argc, char *argv[])
 
     // Load engine settings
     EngineSettings* engineSettings = new EngineSettings;
-    QFile fileSettings(Wanok::pathCombine(QDir::currentPath(),
+    QFile fileSettings(Common::pathCombine(QDir::currentPath(),
                                           Wanok::pathEngineSettings));
     if (fileSettings.exists()){
         engineSettings->read();

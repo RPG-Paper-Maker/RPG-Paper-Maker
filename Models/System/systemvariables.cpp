@@ -19,6 +19,7 @@
 
 #include "systemvariables.h"
 #include "wanok.h"
+#include "common.h"
 
 int SystemVariables::variablesPerPage = 25;
 
@@ -62,8 +63,8 @@ QStandardItemModel* SystemVariables::model() const { return p_model; }
 
 QString SystemVariables::idToString() const
 {
-    return QString("[") + Wanok::getFormatNumber((p_id-1)*25 + 1)
-            + QString(",") + Wanok::getFormatNumber((p_id)*25)
+    return QString("[") + Common::getFormatNumber((p_id-1)*25 + 1)
+            + QString(",") + Common::getFormatNumber((p_id)*25)
             + QString("]");
 }
 

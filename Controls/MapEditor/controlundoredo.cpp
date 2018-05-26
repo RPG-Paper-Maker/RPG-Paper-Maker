@@ -19,6 +19,7 @@
 
 #include "controlundoredo.h"
 #include "wanok.h"
+#include "common.h"
 #include <QFile>
 
 const QString ControlUndoRedo::jsonBefore = "before";
@@ -104,7 +105,7 @@ void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
     }
 
     // Save in temp file
-    Wanok::writeOtherJSON(path, obj);
+    Common::writeOtherJSON(path, obj);
 
     // Remove all the state > state
     state = currentState;
@@ -147,7 +148,7 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
 // -------------------------------------------------------
 
 QString ControlUndoRedo::getTempDir(int idMap) const {
-    return Wanok::pathCombine(Wanok::pathCombine(Wanok::pathCombine(
+    return Common::pathCombine(Common::pathCombine(Common::pathCombine(
                Wanok::get()->project()->pathCurrentProject(),
                Wanok::pathMaps),
                Wanok::generateMapName(idMap)),
@@ -157,7 +158,7 @@ QString ControlUndoRedo::getTempDir(int idMap) const {
 // -------------------------------------------------------
 
 QString ControlUndoRedo::getTempFile(int idMap, int state) const {
-    return Wanok::pathCombine(getTempDir(idMap),
+    return Common::pathCombine(getTempDir(idMap),
                               QString::number(state) + ".json");
 }
 
@@ -187,7 +188,7 @@ void ControlUndoRedo::undoRedo(int idMap, int offset, QJsonArray &states)
         // Get the states
         QJsonDocument doc;
         QJsonObject obj;
-        Wanok::readOtherJSON(path, doc);
+        Common::readOtherJSON(path, doc);
         obj = doc.object();
         states = obj[jsonStates].toArray();
 

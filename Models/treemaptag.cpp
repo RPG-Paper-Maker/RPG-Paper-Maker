@@ -19,6 +19,7 @@
 
 #include "treemaptag.h"
 #include "wanok.h"
+#include "common.h"
 #include "camera.h"
 #include <QDir>
 
@@ -121,23 +122,23 @@ void TreeMapTag::copyItem(const QStandardItem* from,
         if (!copyTag->isDir()){
             QString mapName =
                     Wanok::generateMapName(copyTag->id());
-            QString pathMaps = Wanok::pathCombine(
+            QString pathMaps = Common::pathCombine(
                         Wanok::get()->project()->pathCurrentProject(),
                         Wanok::pathMaps);
-            QString pathMapsTemp = Wanok::pathCombine(
+            QString pathMapsTemp = Common::pathCombine(
                         pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
-            QString pathMapSource = Wanok::pathCombine(pathMaps, mapName);
-            QString pathMapTarget = Wanok::pathCombine(pathMapsTemp, mapName);
+            QString pathMapSource = Common::pathCombine(pathMaps, mapName);
+            QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
             QDir(pathMapsTemp).mkdir(mapName);
 
             // Copy content
-            Wanok::copyPath(pathMapSource, pathMapTarget);
+            Common::copyPath(pathMapSource, pathMapTarget);
 
             // Remove temp
-            QDir(Wanok::pathCombine(
+            QDir(Common::pathCombine(
                      pathMapTarget,
                      Wanok::TEMP_MAP_FOLDER_NAME)).removeRecursively();
-            QDir(Wanok::pathCombine(
+            QDir(Common::pathCombine(
                      pathMapTarget,
                      Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME)).removeRecursively();
             QDir(pathMapTarget).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
@@ -169,13 +170,13 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
 
         // Paste content
         if (!copyTag->isDir()){
-            QString pathMaps = Wanok::pathCombine(
+            QString pathMaps = Common::pathCombine(
                         Wanok::get()->project()->pathCurrentProject(),
                         Wanok::pathMaps);
             QString pathMapsTemp =
-                    Wanok::pathCombine(pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
+                    Common::pathCombine(pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
             QString pathMap =
-                    Wanok::pathCombine(pathMapsTemp,
+                    Common::pathCombine(pathMapsTemp,
                                        Wanok::generateMapName(
                                            copyTag->id()));
             int newId = Wanok::generateMapId();
@@ -184,9 +185,9 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
             properties.setId(newId);
             QDir(pathMaps).mkdir(newMapName);
             copyTag->setId(newId);
-            QString newPathMap = Wanok::pathCombine(pathMaps, newMapName);
-            Wanok::copyPath(pathMap, newPathMap);
-            Wanok::writeJSON(Wanok::pathCombine(newPathMap,
+            QString newPathMap = Common::pathCombine(pathMaps, newMapName);
+            Common::copyPath(pathMap, newPathMap);
+            Wanok::writeJSON(Common::pathCombine(newPathMap,
                                                 Wanok::fileMapInfos),
                              properties);
         }

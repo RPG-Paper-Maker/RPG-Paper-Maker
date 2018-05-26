@@ -20,6 +20,7 @@
 #include "variablesdatas.h"
 #include "systemvariables.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -38,7 +39,7 @@ VariablesDatas::~VariablesDatas()
 }
 
 void VariablesDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathVariables), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathVariables), *this);
 }
 
 QStandardItemModel* VariablesDatas::model() const {

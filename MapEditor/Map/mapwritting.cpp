@@ -19,16 +19,17 @@
 
 #include "map.h"
 #include "wanok.h"
+#include "common.h"
 #include "systemmapobject.h"
 #include <QDir>
 
 // -------------------------------------------------------
 
 void Map::save(){
-    QString pathTemp = Wanok::pathCombine(m_pathMap,
+    QString pathTemp = Common::pathCombine(m_pathMap,
                                           Wanok::TEMP_MAP_FOLDER_NAME);
-    Wanok::copyAllFiles(pathTemp, m_pathMap);
-    Wanok::deleteAllFiles(pathTemp);
+    Common::copyAllFiles(pathTemp, m_pathMap);
+    Common::deleteAllFiles(pathTemp);
 }
 
 // -------------------------------------------------------
@@ -60,7 +61,7 @@ void Map::writeDefaultMap(QString path){
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;
     mapPortion.addObject(position, o, previous, previousType);
-    Wanok::writeJSON(Wanok::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
+    Wanok::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
                      mapPortion);
 }
 
@@ -69,13 +70,13 @@ void Map::writeDefaultMap(QString path){
 QString Map::writeMap(QString path, MapProperties& properties,
                       QJsonArray& jsonObject)
 {
-    QString dirMaps = Wanok::pathCombine(path, Wanok::pathMaps);
+    QString dirMaps = Common::pathCombine(path, Wanok::pathMaps);
     QString mapName = properties.realName();
     QDir(dirMaps).mkdir(mapName);
-    QString dirMap = Wanok::pathCombine(dirMaps, mapName);
+    QString dirMap = Common::pathCombine(dirMaps, mapName);
 
     // Properties
-    Wanok::writeJSON(Wanok::pathCombine(dirMap, Wanok::fileMapInfos),
+    Wanok::writeJSON(Common::pathCombine(dirMap, Wanok::fileMapInfos),
                      properties);
 
     // Portions
@@ -87,8 +88,8 @@ QString Map::writeMap(QString path, MapProperties& properties,
         for (int j = 0; j <= ly; j++){
             for (int k = 0; k <= lz; k++){
                 QJsonObject obj;
-                Wanok::writeOtherJSON(
-                            Wanok::pathCombine(dirMap,
+                Common::writeOtherJSON(
+                            Common::pathCombine(dirMap,
                                                getPortionPathMap(i, j, k)),
                             obj);
             }
@@ -98,7 +99,7 @@ QString Map::writeMap(QString path, MapProperties& properties,
     // Objects
     QJsonObject json;
     json["objs"] = jsonObject;
-    Wanok::writeOtherJSON(Wanok::pathCombine(dirMap, Wanok::fileMapObjects),
+    Common::writeOtherJSON(Common::pathCombine(dirMap, Wanok::fileMapObjects),
                           json);
 
     QDir(dirMap).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
@@ -191,15 +192,15 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
 // -------------------------------------------------------
 
 void Map::writeEmptyMap(QString path, int i, int j, int k) {
-    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    QString pathPortion = Common::pathCombine(path, getPortionPathMap(i, j, k));
     QJsonObject obj;
-    Wanok::writeOtherJSON(pathPortion, obj);
+    Common::writeOtherJSON(pathPortion, obj);
 }
 
 // -------------------------------------------------------
 
 void Map::deleteCompleteMap(QString path, int i, int j, int k) {
-    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    QString pathPortion = Common::pathCombine(path, getPortionPathMap(i, j, k));
     QFile file(pathPortion);
     file.remove();
 }
@@ -248,7 +249,7 @@ void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
                             int i, int j, int k, MapProperties &properties)
 {
     Portion portion(i, j, k);
-    QString pathPortion = Wanok::pathCombine(path, getPortionPathMap(i, j, k));
+    QString pathPortion = Common::pathCombine(path, getPortionPathMap(i, j, k));
     MapPortion mapPortion(portion);
     Wanok::readJSON(pathPortion, mapPortion);
 
@@ -270,10 +271,10 @@ void Map::readObjects(){
 
 void Map::loadObjects(QStandardItemModel* model, QString pathMap, bool temp) {
     if (temp)
-        pathMap = Wanok::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
-    QString path = Wanok::pathCombine(pathMap, Wanok::fileMapObjects);
+        pathMap = Common::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
+    QString path = Common::pathCombine(pathMap, Wanok::fileMapObjects);
     QJsonDocument loadDoc;
-    Wanok::readOtherJSON(path, loadDoc);
+    Common::readOtherJSON(path, loadDoc);
     QJsonObject json = loadDoc.object();
     Map::readJSONArray(model, json["objs"].toArray());
 }
@@ -288,13 +289,13 @@ void Map::writeObjects(bool temp) const {
 
 void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
     if (temp)
-        pathMap = Wanok::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
-    QString path = Wanok::pathCombine(pathMap, Wanok::fileMapObjects);
+        pathMap = Common::pathCombine(pathMap, Wanok::TEMP_MAP_FOLDER_NAME);
+    QString path = Common::pathCombine(pathMap, Wanok::fileMapObjects);
     QJsonObject json;
     QJsonArray portions;
     Map::writeJSONArray(model, portions);
     json["objs"] = portions;
-    Wanok::writeOtherJSON(path, json);
+    Common::writeOtherJSON(path, json);
 }
 
 // -------------------------------------------------------

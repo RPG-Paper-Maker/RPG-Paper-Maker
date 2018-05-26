@@ -20,6 +20,7 @@
 #include "map.h"
 #include "wanok.h"
 #include "systemmapobject.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -51,22 +52,22 @@ Map::Map(int id) :
     m_textureObjectSquare(nullptr)
 {
     QString realName = Wanok::generateMapName(id);
-    QString pathMaps = Wanok::pathCombine(Wanok::get()->project()
+    QString pathMaps = Common::pathCombine(Wanok::get()->project()
                                           ->pathCurrentProject(),
                                           Wanok::pathMaps);
-    m_pathMap = Wanok::pathCombine(pathMaps, realName);
+    m_pathMap = Common::pathCombine(pathMaps, realName);
 
     // Temp map files
     if (!Wanok::mapsToSave.contains(id)) {
-        QString pathTemp = Wanok::pathCombine(m_pathMap,
+        QString pathTemp = Common::pathCombine(m_pathMap,
                                               Wanok::TEMP_MAP_FOLDER_NAME);
-        Wanok::deleteAllFiles(pathTemp);
-        QFile(Wanok::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
-                    Wanok::pathCombine(pathTemp, Wanok::fileMapObjects));
+        Common::deleteAllFiles(pathTemp);
+        QFile(Common::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
+                    Common::pathCombine(pathTemp, Wanok::fileMapObjects));
     }
     if (!Wanok::mapsUndoRedo.contains(id)) {
-        Wanok::deleteAllFiles(
-           Wanok::pathCombine(m_pathMap, Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME));
+        Common::deleteAllFiles(
+           Common::pathCombine(m_pathMap, Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME));
     }
 
     m_mapProperties = new MapProperties(m_pathMap);
@@ -215,13 +216,13 @@ QString Map::getPortionPath(int i, int j, int k) {
     if (QFile(tempPath).exists())
         return tempPath;
     else
-        return Wanok::pathCombine(m_pathMap, getPortionPathMap(i, j, k));
+        return Common::pathCombine(m_pathMap, getPortionPathMap(i, j, k));
 }
 
 // -------------------------------------------------------
 
 QString Map::getPortionPathTemp(int i, int j, int k) {
-    return Wanok::pathCombine(m_pathMap, Wanok::pathCombine(
+    return Common::pathCombine(m_pathMap, Common::pathCombine(
                                   Wanok::TEMP_MAP_FOLDER_NAME,
                                   getPortionPathMap(i, j, k)));
 }
@@ -281,7 +282,7 @@ void Map::savePortionMap(MapPortion* mapPortion){
     QString path = getPortionPathTemp(portion.x(), portion.y(), portion.z());
     if (mapPortion->isEmpty()) {
         QJsonObject obj;
-        Wanok::writeOtherJSON(path, obj);
+        Common::writeOtherJSON(path, obj);
     }
     else
         Wanok::writeJSON(path, *mapPortion);
@@ -296,14 +297,14 @@ void Map::saveMapProperties() {
 // -------------------------------------------------------
 
 QString Map::getMapInfosPath() const{
-    return Wanok::pathCombine(m_pathMap, Wanok::fileMapInfos);
+    return Common::pathCombine(m_pathMap, Wanok::fileMapInfos);
 }
 
 // -------------------------------------------------------
 
 QString Map::getMapObjectsPath() const{
-    return Wanok::pathCombine(m_pathMap,
-                              Wanok::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
+    return Common::pathCombine(m_pathMap,
+                              Common::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
                                                  Wanok::fileMapObjects));
 }
 
@@ -602,5 +603,5 @@ int Map::generateObjectId() const{
 // -------------------------------------------------------
 
 QString Map::generateObjectName(int id){
-    return "OBJ" + Wanok::getFormatNumber(id);
+    return "OBJ" + Common::getFormatNumber(id);
 }

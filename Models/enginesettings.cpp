@@ -19,6 +19,7 @@
 
 #include "enginesettings.h"
 #include "wanok.h"
+#include "common.h"
 #include <QDir>
 
 // -------------------------------------------------------
@@ -40,12 +41,12 @@ EngineSettings::~EngineSettings()
 }
 
 void EngineSettings::read(){
-    Wanok::readJSON(Wanok::pathCombine(QDir::currentPath(),
+    Wanok::readJSON(Common::pathCombine(QDir::currentPath(),
                                        Wanok::pathEngineSettings), *this);
 }
 
 void EngineSettings::write(){
-    Wanok::writeJSON(Wanok::pathCombine(QDir::currentPath(),
+    Wanok::writeJSON(Common::pathCombine(QDir::currentPath(),
                                         Wanok::pathEngineSettings), *this);
 }
 

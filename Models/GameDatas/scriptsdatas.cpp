@@ -19,6 +19,7 @@
 
 #include "scriptsdatas.h"
 #include "wanok.h"
+#include "common.h"
 #include <QDir>
 
 // -------------------------------------------------------
@@ -41,7 +42,7 @@ ScriptsDatas::~ScriptsDatas()
 }
 
 void ScriptsDatas::read(QString path){
-    Wanok::readJSON(Wanok::pathCombine(path, Wanok::pathScripts), *this);
+    Wanok::readJSON(Common::pathCombine(path, Wanok::pathScripts), *this);
 }
 
 QStandardItemModel* ScriptsDatas::modelSystem() const { return m_modelSystem; }
@@ -196,9 +197,9 @@ void ScriptsDatas::write(QJsonObject &json) const{
 // -------------------------------------------------------
 
 void ScriptsDatas::writeDesktop(QString path) const{
-    path = Wanok::pathCombine(path, Wanok::pathScriptsDir);
+    path = Common::pathCombine(path, Wanok::pathScriptsDir);
     QDir(path).mkdir(Wanok::dirDesktop);
-    path = Wanok::pathCombine(path, Wanok::pathCombine(Wanok::dirDesktop,
+    path = Common::pathCombine(path, Common::pathCombine(Wanok::dirDesktop,
                                                        "includes.js"));
 
     QFile writeInfos(path);
@@ -217,7 +218,7 @@ void ScriptsDatas::writeDesktop(QString path) const{
 // -------------------------------------------------------
 
 void ScriptsDatas::writeBrowser(QString path) const{
-    path = Wanok::pathCombine(path, "includes.html");
+    path = Common::pathCombine(path, "includes.html");
 
     QFile writeInfos(path);
     if(!writeInfos.open(QIODevice::Append | QIODevice::Text))

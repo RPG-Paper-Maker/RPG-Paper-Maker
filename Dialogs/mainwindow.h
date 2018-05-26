@@ -25,7 +25,6 @@
 #include "controlmainwindow.h"
 #include "project.h"
 #include "widgetmapeditor.h"
-#include "engineupdater.h"
 
 // -------------------------------------------------------
 //
@@ -61,7 +60,6 @@ public:
     void enableGame();
     void saveAllMaps();
     void deleteTempMaps();
-    void openEngineUpdater();
     bool close();
 
 private:
@@ -69,7 +67,6 @@ private:
     QWidget* mainPanel;
     QProcess* gameProcess;
     Project* project;
-    EngineUpdater* m_engineUpdater;
     int openDialog(QDialog& dialog);
     QString p_appName;
     QString p_version;
@@ -99,7 +96,6 @@ private slots:
     void on_actionShow_Hide_grid_triggered();
     void on_actionShow_Hide_square_informations_triggered();
     void on_actionPlay_triggered();
-    void on_updateCheckFinished(bool b);
     void on_updateFinished();
     void closeEvent(QCloseEvent *event);
 };

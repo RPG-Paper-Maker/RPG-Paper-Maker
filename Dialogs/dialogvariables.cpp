@@ -21,6 +21,7 @@
 #include "systemvariables.h"
 #include "ui_dialogvariables.h"
 #include "wanok.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -92,7 +93,7 @@ void DialogVariables::on_pageSelected(QModelIndex index, QModelIndex){
 
 void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     if((QPushButton*)button == ui->buttonBox->button(QDialogButtonBox::Ok)){
-        Wanok::writeJSON(Wanok::pathCombine(Wanok::get()->project()
+        Wanok::writeJSON(Common::pathCombine(Wanok::get()->project()
                                             ->pathCurrentProject(),
                                             Wanok::pathVariables),
                          *(Wanok::get()->project()->gameDatas()

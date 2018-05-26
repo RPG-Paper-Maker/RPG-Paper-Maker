@@ -19,6 +19,7 @@
 
 #include "controlexport.h"
 #include "wanok.h"
+#include "common.h"
 #include <QDirIterator>
 
 // -------------------------------------------------------
@@ -55,7 +56,7 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool){
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
                           osMessage;
-    QString path = Wanok::pathCombine(location, projectName);
+    QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(location, projectName, path, dirLocation);
@@ -75,7 +76,7 @@ QString ControlExport::createBrowser(QString location){
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
                           "BROWSER";
-    QString path = Wanok::pathCombine(location, projectName);
+    QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(location, projectName, path, dirLocation);
@@ -102,9 +103,9 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
     // Copy Content
     QDir(m_project->pathCurrentProject()).mkdir("Content");
     QString pathContentProject =
-            Wanok::pathCombine(m_project->pathCurrentProject(), "Content");
-    QString pathContent = Wanok::pathCombine(path, "Content");
-    if (!Wanok::copyPath(pathContentProject, pathContent))
+            Common::pathCombine(m_project->pathCurrentProject(), "Content");
+    QString pathContent = Common::pathCombine(path, "Content");
+    if (!Common::copyPath(pathContentProject, pathContent))
         return "Error while copying Content directory. Please retry.";
 
     return NULL;
@@ -115,11 +116,11 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 void ControlExport::removeWebNoNeed(QString path){
 
     // Remove useless datas
-    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
-    QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
-    QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Wanok::pathCombine(path, Wanok::pathScriptsSystemDir);
-    QDir(Wanok::pathCombine(pathScripts, "desktop")).removeRecursively();
+    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
+    QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
+    QString pathScripts = Common::pathCombine(path, Wanok::pathScriptsSystemDir);
+    QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
 
@@ -128,21 +129,21 @@ void ControlExport::removeWebNoNeed(QString path){
 void ControlExport::removeDesktopNoNeed(QString path){
 
     // Remove useless datas
-    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
-    QFile(Wanok::pathCombine(pathDatas, "treeMap.json")).remove();
-    QFile(Wanok::pathCombine(pathDatas, "scripts.json")).remove();
-    QFile(Wanok::pathCombine(pathDatas, "pictures.json")).remove();
+    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
+    QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
+    QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
     removeMapsTemp(pathDatas);
 }
 
 // -------------------------------------------------------
 
 QString ControlExport::generateWebStuff(QString path){
-    QString pathWeb = Wanok::pathCombine("Content", "web");
+    QString pathWeb = Common::pathCombine("Content", "web");
 
     // Write index.php
-    QFile::copy(Wanok::pathCombine(pathWeb, "index.php"),
-                Wanok::pathCombine(path, "index.php"));
+    QFile::copy(Common::pathCombine(pathWeb, "index.php"),
+                Common::pathCombine(path, "index.php"));
 
     // Write include.html
     m_project->scriptsDatas()->writeBrowser(path);
@@ -151,13 +152,13 @@ QString ControlExport::generateWebStuff(QString path){
     QDir dir(path);
     if (!dir.mkdir("js"))
         return "The directory js already exists.";
-    QString pathJS = Wanok::pathCombine(path, "js");
-    QFile::copy(Wanok::pathCombine(pathWeb, "three.js"),
-                Wanok::pathCombine(pathJS, "three.js"));
-    QFile::copy(Wanok::pathCombine(pathWeb, "index.js"),
-                Wanok::pathCombine(pathJS, "index.js"));
-    QFile::copy(Wanok::pathCombine(pathWeb, "utilities.js"),
-                Wanok::pathCombine(pathJS, "utilities.js"));
+    QString pathJS = Common::pathCombine(path, "js");
+    QFile::copy(Common::pathCombine(pathWeb, "three.js"),
+                Common::pathCombine(pathJS, "three.js"));
+    QFile::copy(Common::pathCombine(pathWeb, "index.js"),
+                Common::pathCombine(pathJS, "index.js"));
+    QFile::copy(Common::pathCombine(pathWeb, "utilities.js"),
+                Common::pathCombine(pathJS, "utilities.js"));
 
     // Pictures
     copyBRPictures(path);
@@ -183,9 +184,9 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os){
         executableFolder = "mac";
         break;
     }
-    QString pathExecutable = Wanok::pathCombine("Content", executableFolder);
+    QString pathExecutable = Common::pathCombine("Content", executableFolder);
 
-    if (!Wanok::copyPath(pathExecutable, path))
+    if (!Common::copyPath(pathExecutable, path))
         return "Could not copy in " + pathExecutable;
 
     // Pictures
@@ -197,13 +198,13 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os){
 // -------------------------------------------------------
 
 void ControlExport::removeMapsTemp(QString pathDatas){
-    QString pathMaps = Wanok::pathCombine(pathDatas, "Maps");
+    QString pathMaps = Common::pathCombine(pathDatas, "Maps");
 
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
     while (directories.hasNext()){
         directories.next();
-        QDir(Wanok::pathCombine(Wanok::pathCombine(pathMaps,
+        QDir(Common::pathCombine(Common::pathCombine(pathMaps,
                                                    directories.fileName()),
                                 "temp")).removeRecursively();
     }
@@ -234,14 +235,14 @@ void ControlExport::copyBRPictures(QString path){
            if (picture->isBR()){
                 QString pathBR = picture->getPath(kind);
                 QString pathProject =
-                        Wanok::pathCombine(path, picture->getLocalPath(kind));
+                        Common::pathCombine(path, picture->getLocalPath(kind));
                 if (QFile(pathProject).exists()) {
                     QFileInfo fileInfo(picture->name());
                     QString extension = fileInfo.completeSuffix();
                     QString baseName = fileInfo.baseName();
                     newPicture->setName(baseName + "_br" + extension);
                     pathProject =
-                       Wanok::pathCombine(path, newPicture->getLocalPath(kind));
+                       Common::pathCombine(path, newPicture->getLocalPath(kind));
                 }
 
                 QFile::copy(pathBR, pathProject);
@@ -252,7 +253,7 @@ void ControlExport::copyBRPictures(QString path){
     }
 
     // Copy the new picutres datas without BR
-    QString pathDatas = Wanok::pathCombine(path, Wanok::pathDatas);
-    Wanok::writeJSON(Wanok::pathCombine(pathDatas, "pictures.json"),
+    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
+    Wanok::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
                      newPicturesDatas);
 }

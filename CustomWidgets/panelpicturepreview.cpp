@@ -20,6 +20,7 @@
 #include "panelpicturepreview.h"
 #include "ui_panelpicturepreview.h"
 #include "wanok.h"
+#include "common.h"
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -309,7 +310,7 @@ void PanelPicturePreview::on_pushButtonAdd_clicked(){
     for (int i = 0; i < files.size(); i++){
         path = files.at(i);
         if (!QFile::copy(path,
-                    Wanok::pathCombine(
+                    Common::pathCombine(
                         SystemPicture::getFolder(m_pictureKind, false),
                         QFileInfo(path).fileName())))
         {
