@@ -213,8 +213,6 @@ HEADERS += \
     Models/projectupdater.h \
     Dialogs/dialogprogress.h \
     Enums/engineupdatefilekind.h \
-    Dialogs/dialogengineupdate.h \
-    CustomWidgets/widgetreleasenotes.h \
     MapEditor/mapelement.h \
     MapEditor/wallindicator.h \
     MapEditor/sprite.h \
@@ -407,8 +405,6 @@ SOURCES += \
     Dialogs/Commands/dialogcommandmovecamera.cpp \
     Models/projectupdater.cpp \
     Dialogs/dialogprogress.cpp \
-    Dialogs/dialogengineupdate.cpp \
-    CustomWidgets/widgetreleasenotes.cpp \
     MapEditor/mapelement.cpp \
     MapEditor/wallindicator.cpp \
     MapEditor/sprite.cpp \
@@ -505,7 +501,6 @@ FORMS += \
     Dialogs/Systems/dialogsystemlang.ui \
     Dialogs/Commands/dialogcommandmovecamera.ui \
     Dialogs/dialogprogress.ui \
-    Dialogs/dialogengineupdate.ui \
     Dialogs/SpecialElements/dialogspecialelements.ui \
     Dialogs/SpecialElements/dialogtilesetspecialelements.ui \
     Dialogs/SpecialElements/panelspecialelements.ui \
