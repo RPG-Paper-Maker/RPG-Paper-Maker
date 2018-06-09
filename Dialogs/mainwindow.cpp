@@ -38,7 +38,6 @@
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
 #include "dialogprogress.h"
-#include "dialogengineupdate.h"
 #include "dialogspecialelements.h"
 #include "dialogdebugoptions.h"
 #include "common.h"
@@ -542,7 +541,7 @@ void MainWindow::on_actionPlay_triggered(){
 
 // -------------------------------------------------------
 
-void MainWindow::on_updateFinished() {
+void MainWindow::checkUpdate() {
 
     QMessageBox::information(this, "Restart",
                              "The engine is going to be restarted.");

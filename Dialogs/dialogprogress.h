@@ -47,6 +47,7 @@ private:
 
 public slots:
     void setValueLabel(int v, QString s);
+    void setDescription(QString s);
 };
 
 #endif // DIALOGPROGRESS_H

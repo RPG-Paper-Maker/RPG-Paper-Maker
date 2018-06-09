@@ -44,11 +44,17 @@ DialogProgress::~DialogProgress()
 
 // -------------------------------------------------------
 //
-//  SIGNALS
+//  SLOTS
 //
 // -------------------------------------------------------
 
 void DialogProgress::setValueLabel(int v, QString s) {
     ui->progressBar->setValue(v);
     ui->label->setText(s);
+}
+
+// -------------------------------------------------------
+
+void DialogProgress::setDescription(QString s) {
+    ui->labelDescription->setText(s);
 }
