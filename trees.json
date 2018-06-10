@@ -446,6 +446,7 @@
             {
                 "files": [
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/osx/Game.app",
                         "target": "Engine/Content/osx/Game.app"
@@ -566,6 +567,7 @@
                         "target": "Engine/Content/win32/Qt5Core.dll"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/win32/Game.exe",
                         "target": "Engine/Content/win32/Game.exe"
@@ -2986,11 +2988,13 @@
                         "target": "Engine/Content/linux/libraries"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/linux/Game.sh",
                         "target": "Engine/Content/linux/Game.sh"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/linux/Game",
                         "target": "Engine/Content/linux/Game"
