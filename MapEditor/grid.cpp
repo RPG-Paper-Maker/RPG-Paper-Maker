@@ -93,6 +93,7 @@ void Grid::initializeGL(){
 // -------------------------------------------------------
 
 void Grid::paintGL(QMatrix4x4& modelviewProjection){
+    glDisable(GL_DEPTH_TEST);
     m_program->bind();
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
     {
@@ -101,4 +102,5 @@ void Grid::paintGL(QMatrix4x4& modelviewProjection){
       m_vao.release();
     }
     m_program->release();
+    glEnable(GL_DEPTH_TEST);
 }

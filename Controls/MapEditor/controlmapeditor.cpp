@@ -1039,9 +1039,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
     // Drawing grid
     if (m_displayGrid){
-        glDisable(GL_DEPTH_TEST);
         m_grid->paintGL(modelviewProjection);
-        glEnable(GL_DEPTH_TEST);
     }
 
     // Drawing other stuff
