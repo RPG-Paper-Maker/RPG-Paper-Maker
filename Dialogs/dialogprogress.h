@@ -44,10 +44,16 @@ public:
 
 private:
     Ui::DialogProgress *ui;
+    int m_totalCount;
+    int m_count;
+    int m_beginValue;
+    int m_endValue;
 
 public slots:
     void setValueLabel(int v, QString s);
     void setDescription(QString s);
+    void setCount(int v);
+    void addOne();
 };
 
 #endif // DIALOGPROGRESS_H

@@ -10,98 +10,98 @@
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Tilesets/beach.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Tilesets/beach.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/beach.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Tilesets/halloween.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Tilesets/halloween.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/halloween.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Tilesets/plains.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Tilesets/plains.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/plains.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Tilesets/inside.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Tilesets/inside.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/inside.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/Textures2D/Tilesets"
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets"
                             },
                             {
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Walls/inside2.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Walls/inside2.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside2.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Walls/inside1.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Walls/inside1.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/Textures2D/Walls"
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls"
                             },
                             {
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Autotiles/general.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Autotiles/general.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Autotiles/general.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/Textures2D/Autotiles"
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Autotiles"
                             },
                             {
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Reliefs/desert.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Reliefs/desert.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/desert.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Reliefs/grass.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Reliefs/grass.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/grass.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Reliefs/halloween.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Reliefs/halloween.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/halloween.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/Textures2D/Reliefs"
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs"
                             },
                             {
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Characters/template.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Characters/template.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/template.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Characters/lucas_act.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Characters/lucas_act.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/lucas_act.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Characters/lucas.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Characters/lucas.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/lucas.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Characters/kate.png",
-                                        "target": "Engine/Content/BR/Pictures/Textures2D/Characters/kate.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/kate.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/Textures2D/Characters"
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters"
                             }
                         ],
-                        "target": "Engine/Content/BR/Pictures/Textures2D"
+                        "target": "Engine/Content/BR/Content/Pictures/Textures2D"
                     },
                     {
                         "files": [
@@ -110,64 +110,64 @@
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Bars/hpBar.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Bars/hpBar.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/hpBar.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Bars/spBar.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Bars/spBar.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/spBar.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Bars/mpBar.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Bars/mpBar.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/mpBar.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/HUD/Bars"
+                                "target": "Engine/Content/BR/Content/Pictures/HUD/Bars"
                             },
                             {
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/darkness.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/darkness.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/darkness.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/wind.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/wind.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/wind.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/grass.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/grass.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/grass.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/fire.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/fire.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/fire.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/light.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/light.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/light.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/Icons/water.png",
-                                        "target": "Engine/Content/BR/Pictures/HUD/Icons/water.png"
+                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/water.png"
                                     }
                                 ],
-                                "target": "Engine/Content/BR/Pictures/HUD/Icons"
+                                "target": "Engine/Content/BR/Content/Pictures/HUD/Icons"
                             }
                         ],
-                        "target": "Engine/Content/BR/Pictures/HUD"
+                        "target": "Engine/Content/BR/Content/Pictures/HUD"
                     }
                 ],
-                "target": "Engine/Content/BR/Pictures"
+                "target": "Engine/Content/BR/Content/Pictures"
             }
         ],
-        "target": "Engine/Content/BR"
+        "target": "Engine/Content/BR/Content"
     },
     "content": {
         "files": [

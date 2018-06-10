@@ -19,6 +19,7 @@
 
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
+#include <QtMath>
 
 // -------------------------------------------------------
 //
@@ -28,7 +29,11 @@
 
 DialogProgress::DialogProgress(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogProgress)
+    ui(new Ui::DialogProgress),
+    m_totalCount(1),
+    m_count(0),
+    m_beginValue(0),
+    m_endValue(0)
 {
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
@@ -49,7 +54,11 @@ DialogProgress::~DialogProgress()
 // -------------------------------------------------------
 
 void DialogProgress::setValueLabel(int v, QString s) {
-    ui->progressBar->setValue(v);
+    m_beginValue = m_endValue;
+    m_count = 0;
+    m_totalCount = 1;
+    ui->progressBar->setValue(m_endValue);
+    m_endValue = v;
     ui->label->setText(s);
 }
 
@@ -57,4 +66,18 @@ void DialogProgress::setValueLabel(int v, QString s) {
 
 void DialogProgress::setDescription(QString s) {
     ui->labelDescription->setText(s);
+}
+
+// -------------------------------------------------------
+
+void DialogProgress::setCount(int v) {
+    m_totalCount = v;
+}
+
+// -------------------------------------------------------
+
+void DialogProgress::addOne() {
+    m_count++;
+    ui->progressBar->setValue(qFloor(m_beginValue + ((float) m_count /
+                              m_totalCount) * (m_endValue - m_beginValue)));
 }
