@@ -244,7 +244,9 @@ HEADERS += \
     Dialogs/dialogrect.h \
     CustomWidgets/widgettilesetdirection.h \
     Dialogs/dialogdebugoptions.h \
-    Singletons/common.h
+    Singletons/common.h \
+    Dialogs/dialogsongs.h \
+    CustomWidgets/panelsongs.h
 
 SOURCES += \
     main.cpp \
@@ -438,7 +440,9 @@ SOURCES += \
     Dialogs/dialogrect.cpp \
     CustomWidgets/widgettilesetdirection.cpp \
     Dialogs/dialogdebugoptions.cpp \
-    Singletons/common.cpp
+    Singletons/common.cpp \
+    Dialogs/dialogsongs.cpp \
+    CustomWidgets/panelsongs.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -506,7 +510,9 @@ FORMS += \
     Dialogs/SpecialElements/panelspecialelements.ui \
     Dialogs/dialogcollisions.ui \
     Dialogs/dialogrect.ui \
-    Dialogs/dialogdebugoptions.ui
+    Dialogs/dialogdebugoptions.ui \
+    Dialogs/dialogsongs.ui \
+    CustomWidgets/panelsongs.ui
 
 OTHER_FILES += \
     style.qss

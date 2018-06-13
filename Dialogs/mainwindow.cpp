@@ -40,6 +40,7 @@
 #include "dialogprogress.h"
 #include "dialogspecialelements.h"
 #include "dialogdebugoptions.h"
+#include "dialogsongs.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -228,6 +229,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
+    ui->actionSongs_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
@@ -410,6 +412,13 @@ void MainWindow::on_actionSystems_manager_triggered(){
 void MainWindow::on_actionVariables_manager_triggered(){
     DialogVariables dialog;
     dialog.initializeModel(project->gameDatas()->variablesDatas()->model());
+    openDialog(dialog);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionSongs_manager_triggered() {
+    DialogSongs dialog;
     openDialog(dialog);
 }
 
