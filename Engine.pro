@@ -246,7 +246,10 @@ HEADERS += \
     Dialogs/dialogdebugoptions.h \
     Singletons/common.h \
     Dialogs/dialogsongs.h \
-    CustomWidgets/panelsongs.h
+    CustomWidgets/panelsongs.h \
+    Models/System/systemsong.h \
+    Enums/songkind.h \
+    Models/GameDatas/songsdatas.h
 
 SOURCES += \
     main.cpp \
@@ -442,7 +445,9 @@ SOURCES += \
     Dialogs/dialogdebugoptions.cpp \
     Singletons/common.cpp \
     Dialogs/dialogsongs.cpp \
-    CustomWidgets/panelsongs.cpp
+    CustomWidgets/panelsongs.cpp \
+    Models/System/systemsong.cpp \
+    Models/GameDatas/songsdatas.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

@@ -93,6 +93,7 @@ public:
     const static QString pathScripts;
     const static QString pathKeyBoard;
     const static QString pathPicturesDatas;
+    const static QString pathSongsDatas;
     const static QString pathSaves;
     const static QString pathPictures;
     const static QString pathHUD;
@@ -106,6 +107,11 @@ public:
     const static QString PATH_SPRITE_WALLS;
     const static QString PATH_3D_OBJECT;
     const static QString PATH_RELIEFS;
+    const static QString PATH_SONGS;
+    const static QString PATH_MUSICS;
+    const static QString PATH_BACKGROUND_SOUNDS;
+    const static QString PATH_SOUNDS;
+    const static QString PATH_MUSIC_EFFECTS;
     const static QString pathEngineSettings;
     const static QString fileMapInfos;
     const static QString fileMapObjects;

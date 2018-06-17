@@ -26,6 +26,7 @@
 #include "langsdatas.h"
 #include "scriptsdatas.h"
 #include "picturesdatas.h"
+#include "songsdatas.h"
 #include "keyboarddatas.h"
 #include "specialelementsdatas.h"
 #include "oskind.h"
@@ -55,6 +56,7 @@ public:
     LangsDatas* langsDatas() const;
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
+    SongsDatas* songsDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
     SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
@@ -72,6 +74,7 @@ public:
     void readScriptsDatas();
     void readKeyBoardDatas();
     void readPicturesDatas();
+    void readSongsDatas();
     void readSpecialsDatas();
     void readSystemDatas();
     void readTilesetsDatas();
@@ -82,6 +85,7 @@ public:
     void writeScriptsDatas();
     void writeKeyBoardDatas();
     void writePicturesDatas();
+    void writeSongsDatas();
     void writeSpecialsDatas();
     void writeSystemDatas();
     void writeTilesetsDatas();
@@ -97,6 +101,7 @@ private:
     LangsDatas* m_langsDatas;
     ScriptsDatas* m_scriptsDatas;
     PicturesDatas* m_picturesDatas;
+    SongsDatas* m_songsDatas;
     KeyBoardDatas* m_keyBoardDatas;
     SpecialElementsDatas* m_specialElementsDatas;
     QString m_version;

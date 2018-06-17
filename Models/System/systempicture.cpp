@@ -21,9 +21,6 @@
 #include "wanok.h"
 #include "common.h"
 
-QString SystemPicture::pathIconRed = ":/icons/Ressources/point_r.png";
-QString SystemPicture::pathIconBlue = ":/icons/Ressources/point_b.png";
-
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -178,8 +175,8 @@ void SystemPicture::setCopy(const SystemPicture& super){
 QList<QStandardItem *> SystemPicture::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;
-    QIcon icon = m_isBR ? QIcon(SystemPicture::pathIconBlue)
-                        : QIcon(SystemPicture::pathIconRed);
+    QIcon icon = m_isBR ? QIcon(SuperListItem::pathIconBlue)
+                        : QIcon(SuperListItem::pathIconRed);
 
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
 

@@ -39,8 +39,6 @@ public:
     SystemPicture();
     SystemPicture(int i, QString n, bool isBR);
     virtual ~SystemPicture();
-    static QString pathIconRed;
-    static QString pathIconBlue;
     bool isBR() const;
     void setIsBR(bool b);
     QHash<QPoint, CollisionSquare*> *collisions();

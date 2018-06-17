@@ -24,6 +24,8 @@
 #include "systemautotile.h"
 #include "systemspritewall.h"
 
+QString SuperListItem::pathIconRed = ":/icons/Ressources/point_r.png";
+QString SuperListItem::pathIconBlue = ":/icons/Ressources/point_b.png";
 QString SuperListItem::beginningText = "<>";
 
 // -------------------------------------------------------

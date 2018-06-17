@@ -42,6 +42,7 @@ Project::Project() :
     m_langsDatas(new LangsDatas),
     m_scriptsDatas(new ScriptsDatas),
     m_picturesDatas(new PicturesDatas),
+    m_songsDatas(new SongsDatas),
     m_keyBoardDatas(new KeyBoardDatas),
     m_specialElementsDatas(new SpecialElementsDatas)
 {
@@ -55,6 +56,7 @@ Project::~Project()
     delete m_treeMapDatas;
     delete m_scriptsDatas;
     delete m_picturesDatas;
+    delete m_songsDatas;
     delete m_keyBoardDatas;
     delete m_specialElementsDatas;
 }
@@ -104,6 +106,7 @@ void Project::setDefault(){
     m_langsDatas->setDefault();
     m_keyBoardDatas->setDefaultGame();
     m_picturesDatas->setDefault();
+    m_songsDatas->setDefault();
     p_gameDatas->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
@@ -135,6 +138,7 @@ bool Project::read(QString path){
     readLangsDatas();
     readKeyBoardDatas();
     readPicturesDatas();
+    readSongsDatas();
     readGameDatas();
     readTreeMapDatas();
     readScriptsDatas();
@@ -359,6 +363,12 @@ void Project::readPicturesDatas(){
 
 // -------------------------------------------------------
 
+void Project::readSongsDatas(){
+    m_songsDatas->read(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::readSpecialsDatas() {
     m_specialElementsDatas->read(p_pathCurrentProject);
 }
@@ -382,6 +392,7 @@ void Project::write(QString path){
     writeLangsDatas();
     writeKeyBoardDatas();
     writePicturesDatas();
+    writeSongsDatas();
     writeSpecialsDatas();
     writeGameDatas();
     writeTreeMapDatas();
@@ -428,6 +439,14 @@ void Project::writePicturesDatas(){
     Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         Wanok::pathPicturesDatas),
                      *m_picturesDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writeSongsDatas(){
+    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        Wanok::pathSongsDatas),
+                     *m_songsDatas);
 }
 
 // -------------------------------------------------------

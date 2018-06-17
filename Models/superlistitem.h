@@ -48,6 +48,8 @@ public:
     virtual void setName(QString n);
     virtual QString toString() const;
     virtual QString toStringName() const;
+    static QString pathIconRed;
+    static QString pathIconBlue;
     static QString beginningText;
     virtual QString idToString() const;
     virtual void setDefault();

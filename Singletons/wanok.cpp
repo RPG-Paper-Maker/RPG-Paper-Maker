@@ -76,6 +76,8 @@ const QString Wanok::pathScripts = Common::pathCombine(pathDatas, "scripts.json"
 const QString Wanok::pathKeyBoard = Common::pathCombine(pathDatas, "keyBoard.json");
 const QString Wanok::pathPicturesDatas =
         Common::pathCombine(pathDatas, "pictures.json");
+const QString Wanok::pathSongsDatas =
+        Common::pathCombine(pathDatas, "songs.json");
 const QString Wanok::pathSaves = Common::pathCombine(pathDatas, "saves.json");
 
 // PATHS PICTURES
@@ -91,6 +93,11 @@ const QString Wanok::pathTilesets = Common::pathCombine(pathTextures2D, "Tileset
 const QString Wanok::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
 const QString Wanok::PATH_3D_OBJECT = Common::pathCombine(pathTextures2D, "3DObjects");
 const QString Wanok::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString Wanok::PATH_SONGS = Common::pathCombine("Content", "Songs");
+const QString Wanok::PATH_MUSICS = Common::pathCombine(PATH_SONGS, "Musics");
+const QString Wanok::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS, "BackgroundSounds");
+const QString Wanok::PATH_SOUNDS = Common::pathCombine(PATH_SONGS, "Sounds");
+const QString Wanok::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEffects");
 
 const QString Wanok::pathEngineSettings =
         Common::pathCombine("Content", "engineSettings.json");
