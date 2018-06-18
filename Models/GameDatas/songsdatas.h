@@ -43,8 +43,14 @@ public:
     QStandardItemModel* model(SongKind kind) const;
     void setModel(SongKind kind, QStandardItemModel* model);
     void setDefault();
-    void fillList(QList<SystemSong*> &songs, QList<QString> &names);
-    void setDefaultSongs(QList<QString>& names, SongKind kind);
+    void fillList(QList<SystemSong*> &songs, QList<QString> &names,
+                  QString extension);
+    void setDefaultSongs(QList<QString>& names, SongKind kind,
+                         QString extension);
+    void setDefaultMusics(QList<QString>& names);
+    void setDefaultBackgroundSounds(QList<QString>& names);
+    void setDefaultSounds(QList<QString>& names);
+    void setDefaultMusicEffects(QList<QString>& names);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -83,7 +83,33 @@ void PanelSongs::setSong(SystemSong* song) {
 // -------------------------------------------------------
 
 void PanelSongs::setSongKind(SongKind kind){
+    bool isNone = kind == SongKind::None;
     m_songKind = kind;
+
+    if (!isNone){
+        ui->widgetPanelIDs->initializeModel(
+                    Wanok::get()->project()->songsDatas()->model(kind));
+
+        // Connection of list
+        connect(ui->widgetPanelIDs->list()->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(on_listIDsIndexChanged(QModelIndex,QModelIndex)));
+
+        QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0, 0);
+        ui->widgetPanelIDs->list()->setCurrentIndex(index);
+
+
+        // Loading first available content
+        loadAvailableContent(-2);
+
+        connect(ui->treeViewAvailableContent->selectionModel(),
+                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
+
+        // Update checkBox
+        ui->checkBoxContent->setText("Show available content of " +
+                                     SystemSong::getLocalFolder(kind));
+    }
 }
 
 // -------------------------------------------------------
@@ -227,7 +253,7 @@ void PanelSongs::on_pushButtonAdd_clicked(){
 
     // Open dialog box
     QStringList files = QFileDialog::getOpenFileNames(
-                this, "Add new contents", "", "Audio (*.mp3 *.ogg, *.wav)");
+                this, "Add new contents", "", "Music (*.mp3 *.ogg, *.wav)");
     QString path;
 
     // Copy all the selected files

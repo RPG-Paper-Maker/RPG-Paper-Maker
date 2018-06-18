@@ -60,25 +60,31 @@ void SongsDatas::setModel(SongKind kind, QStandardItemModel *model) {
 void SongsDatas::setDefault(){
     QList<QString> names;
 
+    setDefaultMusics(names);
+    setDefaultBackgroundSounds(names);
+    setDefaultSounds(names);
+    setDefaultMusicEffects(names);
 }
 
 // -------------------------------------------------------
 
-void SongsDatas::fillList(QList<SystemSong*> &songs, QList<QString>& names)
+void SongsDatas::fillList(QList<SystemSong*> &songs, QList<QString>& names,
+                          QString extension)
 {
     int i;
 
     songs << new SystemSong;
     for (i = 0; i < names.size() ; i++)
-        songs << new SystemSong(i + 1, names.at(i) + ".mp3", true);
+        songs << new SystemSong(i + 1, names.at(i) + "." + extension, true);
 }
 
 // -------------------------------------------------------
 
-void SongsDatas::setDefaultSongs(QList<QString> &names, SongKind kind)
+void SongsDatas::setDefaultSongs(QList<QString> &names, SongKind kind,
+                                 QString extension)
 {
     QList<SystemSong*> songs;
-    fillList(songs, names);
+    fillList(songs, names, extension);
 
     QStandardItemModel* model = new QStandardItemModel;
     QList<QStandardItem*> row;
@@ -90,6 +96,33 @@ void SongsDatas::setDefaultSongs(QList<QString> &names, SongKind kind)
     m_models[kind] = model;
 
     names.clear();
+}
+
+// -------------------------------------------------------
+
+void SongsDatas::setDefaultMusics(QList<QString>& names) {
+    names << "Battle1" << "Field1";
+    setDefaultSongs(names, SongKind::Music, "mp3");
+}
+
+// -------------------------------------------------------
+
+void SongsDatas::setDefaultBackgroundSounds(QList<QString>& names) {
+    setDefaultSongs(names, SongKind::BackgroundSound, "mp3");
+}
+
+// -------------------------------------------------------
+
+void SongsDatas::setDefaultSounds(QList<QString>& names) {
+    names << "Cancel" << "Confirmation" << "Cursor";
+    setDefaultSongs(names, SongKind::Sound, "wav");
+}
+
+// -------------------------------------------------------
+
+void SongsDatas::setDefaultMusicEffects(QList<QString>& names) {
+    names << "Levelup";
+    setDefaultSongs(names, SongKind::MusicEffect, "wav");
 }
 
 // -------------------------------------------------------
