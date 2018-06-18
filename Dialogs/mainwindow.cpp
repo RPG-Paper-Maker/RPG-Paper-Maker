@@ -419,7 +419,10 @@ void MainWindow::on_actionVariables_manager_triggered(){
 
 void MainWindow::on_actionSongs_manager_triggered() {
     DialogSongs dialog;
-    openDialog(dialog);
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeSongsDatas();
+    else
+        project->readSongsDatas();
 }
 
 // -------------------------------------------------------

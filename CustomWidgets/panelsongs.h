@@ -21,6 +21,11 @@
 #define PANELSONGS_H
 
 #include <QWidget>
+#include <QModelIndex>
+#include <QStandardItemModel>
+#include "songkind.h"
+#include "superlistitem.h"
+#include "systemsong.h"
 
 namespace Ui {
 class PanelSongs;
@@ -33,9 +38,34 @@ class PanelSongs : public QWidget
 public:
     explicit PanelSongs(QWidget *parent = 0);
     ~PanelSongs();
+    SystemSong* song() const;
+    void setSong(SystemSong* song);
+    void setSongKind(SongKind kind);
+    void changeSong(SystemSong* song);
 
 private:
     Ui::PanelSongs *ui;
+    SongKind m_songKind;
+    SystemSong* m_song;
+
+    void updateSong(QStandardItem* item);
+    void loadAvailableContent(int row = -1);
+    void loadContentFromFolder(QString path, bool isBR);
+    void deleteContent(QString path);
+    void moveContent();
+    void updatePicture();
+
+public slots:
+    void showAvailableContent(bool b);
+
+private slots:
+    void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
+    void on_listIndexChanged(QModelIndex index, QModelIndex);
+    void on_pushButtonMove_clicked();
+    void on_pushButtonRefresh_clicked();
+    void on_pushButtonAdd_clicked();
+    void deletingContent(SuperListItem* super, int row);
+    void on_treeViewAvailableContentDoubleClicked(QModelIndex);
 };
 
 #endif // PANELSONGS_H

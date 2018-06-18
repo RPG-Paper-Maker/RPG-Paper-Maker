@@ -211,8 +211,8 @@ void PanelPicturePreview::loadAvailableContent(int row){
 void PanelPicturePreview::loadContentFromFolder(QString path, bool isBR){
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SystemPicture::pathIconBlue)
-                      : QIcon(SystemPicture::pathIconRed);
+    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue)
+                      : QIcon(SuperListItem::pathIconRed);
     QStandardItem* item;
     SystemPicture* super;
 

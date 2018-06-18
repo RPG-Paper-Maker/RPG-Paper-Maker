@@ -22,10 +22,10 @@
 #include "common.h"
 #include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 3;
+const int ProjectUpdater::incompatibleVersionsCount = 4;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2"};
 
 // -------------------------------------------------------
 //
@@ -326,7 +326,6 @@ void ProjectUpdater::updateVersion_0_4_0() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_4_3() {
-
     // Adding default autotiles
     QList<QString> names;
     m_project->readPicturesDatas();
@@ -335,4 +334,13 @@ void ProjectUpdater::updateVersion_0_4_3() {
     m_project->readSpecialsDatas();
     m_project->specialElementsDatas()->setDefaultAutotiles();
     m_project->writeSpecialsDatas();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_0_5_2() {
+    // Adding default songs
+    m_project->readSongsDatas();
+    m_project->songsDatas()->setDefault();
+    m_project->writeSongsDatas();;
 }

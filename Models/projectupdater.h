@@ -62,6 +62,7 @@ public slots:
     void updateVersion_0_3_1();
     void updateVersion_0_4_0();
     void updateVersion_0_4_3();
+    void updateVersion_0_5_2();
 
 signals:
     void progress(int, QString);

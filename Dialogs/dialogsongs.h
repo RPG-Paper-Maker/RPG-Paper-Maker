@@ -29,6 +29,8 @@
 // -------------------------------------------------------
 
 #include <QDialog>
+#include <QStandardItemModel>
+#include "songkind.h"
 
 namespace Ui {
 class DialogSongs;
@@ -41,9 +43,18 @@ class DialogSongs : public QDialog
 public:
     explicit DialogSongs(QWidget *parent = 0);
     ~DialogSongs();
+    QStandardItemModel* createFoldersModel() const;
+    void addfolders(QIcon& icon,
+                    QStandardItem* root,
+                    QList<QString>& names,
+                    QList<SongKind>& enums) const;
+
 
 private:
     Ui::DialogSongs *ui;
+
+private slots:
+    void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };
 
 #endif // DIALOGSONGS_H

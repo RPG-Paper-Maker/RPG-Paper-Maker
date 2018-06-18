@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "0.5.1";
+const QString Project::ENGINE_VERSION = "0.5.2";
 
 // -------------------------------------------------------
 //
@@ -87,6 +87,8 @@ LangsDatas* Project::langsDatas() const { return m_langsDatas; }
 ScriptsDatas* Project::scriptsDatas() const { return m_scriptsDatas; }
 
 PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
+
+SongsDatas* Project::songsDatas() const { return m_songsDatas; }
 
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 
