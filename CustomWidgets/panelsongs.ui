@@ -130,7 +130,7 @@
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_2">
-              <item row="4" column="1">
+              <item row="2" column="1">
                <widget class="QDoubleSpinBox" name="doubleSpinBoxStart">
                 <property name="enabled">
                  <bool>false</bool>
@@ -140,7 +140,7 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="0" colspan="4">
+              <item row="4" column="0" colspan="4">
                <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -153,7 +153,7 @@
                 </property>
                </spacer>
               </item>
-              <item row="5" column="2">
+              <item row="3" column="2">
                <widget class="QLabel" name="labelSeconds2">
                 <property name="enabled">
                  <bool>false</bool>
@@ -163,7 +163,7 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="3" rowspan="2">
+              <item row="2" column="3" rowspan="2">
                <spacer name="horizontalSpacer">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -186,19 +186,6 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0" colspan="4">
-               <widget class="QSlider" name="horizontalSliderSpeed">
-                <property name="maximum">
-                 <number>5000</number>
-                </property>
-                <property name="value">
-                 <number>2500</number>
-                </property>
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="2" colspan="2">
                <widget class="QLabel" name="label_3">
                 <property name="text">
@@ -207,13 +194,6 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Speed:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
                <widget class="QCheckBox" name="checkBoxStart">
                 <property name="text">
                  <string>Start</string>
@@ -245,7 +225,7 @@
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
+              <item row="3" column="1">
                <widget class="QDoubleSpinBox" name="doubleSpinBoxEnd">
                 <property name="enabled">
                  <bool>false</bool>
@@ -255,7 +235,7 @@
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="3" column="0">
                <widget class="QCheckBox" name="checkBoxEnd">
                 <property name="text">
                  <string>End</string>
@@ -269,23 +249,13 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="2">
+              <item row="2" column="2">
                <widget class="QLabel" name="labelSeconds1">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
                 <property name="text">
                  <string>secondes</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBoxSpeed">
-                <property name="decimals">
-                 <number>3</number>
-                </property>
-                <property name="value">
-                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>

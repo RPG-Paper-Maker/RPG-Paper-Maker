@@ -56,16 +56,17 @@ PanelSongs::PanelSongs(QWidget *parent) :
             SIGNAL(deletingItem(SuperListItem*, int)),
             this,
             SLOT(deletingContent(SuperListItem*, int)));
-
-    connect(ui->treeViewAvailableContent,
-            SIGNAL(doubleClicked(QModelIndex)),
-            this,
-            SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+    connect(ui->widgetPanelIDs->list(), SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(on_widgetPanelIDsDoubleClicked(QModelIndex)));
+    connect(&m_mediaPlayer,
+            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
+            SLOT(on_mediaStatusChanged(QMediaPlayer::MediaStatus)));
 }
 
 PanelSongs::~PanelSongs()
 {
     SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel());
+    m_mediaPlayer.stop();
     delete ui;
 }
 
@@ -137,8 +138,13 @@ void PanelSongs::showSongs(bool b) {
 void PanelSongs::updateSong(QStandardItem* item) {
     if (item != nullptr) {
         m_song = (SystemSong*) item->data().value<qintptr>();
-        if (m_song != nullptr)
+        if (m_song != nullptr) {
+            if (m_song->id() != -1) {
+                m_mediaPlayer.setMedia(
+                    QUrl::fromLocalFile(m_song->getPath(m_songKind)));
+            }
             ui->pushButtonPlay->setEnabled(m_song->id() != -1);
+        }
     }
 }
 
@@ -234,6 +240,14 @@ void PanelSongs::showAvailableContent(bool b){
 
 // -------------------------------------------------------
 
+void PanelSongs::play() {
+    m_mediaPlayer.play();
+    ui->pushButtonStop->setEnabled(true);
+    ui->pushButtonPause->setEnabled(true);
+}
+
+// -------------------------------------------------------
+
 void PanelSongs::on_listIDsIndexChanged(QModelIndex index, QModelIndex)
 {
     updateSong(ui->widgetPanelIDs->list()->getModel()->itemFromIndex(index));
@@ -309,8 +323,14 @@ void PanelSongs::deletingContent(SuperListItem* super, int row){
 
 // -------------------------------------------------------
 
-void PanelSongs::on_treeViewAvailableContentDoubleClicked(QModelIndex){
-    moveContent();
+void PanelSongs::on_treeViewAvailableContent_doubleClicked(QModelIndex){
+    play();
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_widgetPanelIDsDoubleClicked(QModelIndex){
+    play();
 }
 
 // -------------------------------------------------------
@@ -325,4 +345,46 @@ void PanelSongs::on_checkBoxStart_toggled(bool checked) {
 void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
     ui->doubleSpinBoxEnd->setEnabled(checked);
     ui->labelSeconds2->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_spinBoxVolume_valueChanged(int value) {
+    ui->horizontalSliderVolume->setValue(value);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_horizontalSliderVolume_valueChanged(int value) {
+    ui->spinBoxVolume->setValue(value);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonPlay_clicked() {
+    play();
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonStop_clicked() {
+    m_mediaPlayer.stop();
+    ui->pushButtonStop->setEnabled(false);
+    ui->pushButtonPause->setEnabled(false);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_pushButtonPause_clicked() {
+    m_mediaPlayer.pause();
+    ui->pushButtonPause->setEnabled(false);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_mediaStatusChanged(QMediaPlayer::MediaStatus status) {
+    if (status == QMediaPlayer::EndOfMedia) {
+        m_mediaPlayer.stop();
+        ui->pushButtonStop->setEnabled(false);
+    }
 }

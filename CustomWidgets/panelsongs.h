@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QStandardItemModel>
+#include <QMediaPlayer>
 #include "songkind.h"
 #include "superlistitem.h"
 #include "systemsong.h"
@@ -47,6 +48,7 @@ private:
     Ui::PanelSongs *ui;
     SongKind m_songKind;
     SystemSong* m_song;
+    QMediaPlayer m_mediaPlayer;
 
     void showSongs(bool b);
     void updateSong(QStandardItem* item);
@@ -58,6 +60,7 @@ private:
 
 public slots:
     void showAvailableContent(bool b);
+    void play();
 
 private slots:
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
@@ -66,9 +69,16 @@ private slots:
     void on_pushButtonRefresh_clicked();
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem* super, int row);
-    void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_treeViewAvailableContent_doubleClicked(QModelIndex);
+    void on_widgetPanelIDsDoubleClicked(QModelIndex);
     void on_checkBoxStart_toggled(bool checked);
     void on_checkBoxEnd_toggled(bool checked);
+    void on_spinBoxVolume_valueChanged(int value);
+    void on_horizontalSliderVolume_valueChanged(int value);
+    void on_pushButtonPlay_clicked();
+    void on_pushButtonStop_clicked();
+    void on_pushButtonPause_clicked();
+    void on_mediaStatusChanged(QMediaPlayer::MediaStatus status);
 };
 
 #endif // PANELSONGS_H
