@@ -48,12 +48,13 @@ private:
     SongKind m_songKind;
     SystemSong* m_song;
 
+    void showSongs(bool b);
     void updateSong(QStandardItem* item);
     void loadAvailableContent(int row = -1);
     void loadContentFromFolder(QString path, bool isBR);
     void deleteContent(QString path);
     void moveContent();
-    void updatePicture();
+    void updateSongs();
 
 public slots:
     void showAvailableContent(bool b);
@@ -66,6 +67,8 @@ private slots:
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem* super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_checkBoxStart_toggled(bool checked);
+    void on_checkBoxEnd_toggled(bool checked);
 };
 
 #endif // PANELSONGS_H

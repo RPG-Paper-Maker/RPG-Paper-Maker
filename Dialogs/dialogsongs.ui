@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
-    <height>538</height>
+    <width>900</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Songs</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">

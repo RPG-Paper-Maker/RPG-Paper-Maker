@@ -38,7 +38,6 @@ PanelSongs::PanelSongs(QWidget *parent) :
     m_song(nullptr)
 {
     ui->setupUi(this);
-    ui->groupBox->hide();
 
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
@@ -86,6 +85,8 @@ void PanelSongs::setSongKind(SongKind kind){
     bool isNone = kind == SongKind::None;
     m_songKind = kind;
 
+    showSongs(!isNone);
+
     if (!isNone){
         ui->widgetPanelIDs->initializeModel(
                     Wanok::get()->project()->songsDatas()->model(kind));
@@ -127,8 +128,18 @@ void PanelSongs::changeSong(SystemSong* song){
 
 // -------------------------------------------------------
 
-void PanelSongs::updateSong(QStandardItem* item) {
+void PanelSongs::showSongs(bool b) {
+    this->setVisible(b);
+}
 
+// -------------------------------------------------------
+
+void PanelSongs::updateSong(QStandardItem* item) {
+    if (item != nullptr) {
+        m_song = (SystemSong*) item->data().value<qintptr>();
+        if (m_song != nullptr)
+            ui->pushButtonPlay->setEnabled(m_song->id() != -1);
+    }
 }
 
 // -------------------------------------------------------
@@ -202,7 +213,7 @@ void PanelSongs::moveContent(){
 
 // -------------------------------------------------------
 
-void PanelSongs::updatePicture(){
+void PanelSongs::updateSongs(){
     m_song = (SystemSong*) ui->widgetPanelIDs->list()->getSelected()
             ->data().value<qintptr>();
 }
@@ -300,4 +311,18 @@ void PanelSongs::deletingContent(SuperListItem* super, int row){
 
 void PanelSongs::on_treeViewAvailableContentDoubleClicked(QModelIndex){
     moveContent();
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_checkBoxStart_toggled(bool checked) {
+    ui->doubleSpinBoxStart->setEnabled(checked);
+    ui->labelSeconds1->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
+    ui->doubleSpinBoxEnd->setEnabled(checked);
+    ui->labelSeconds2->setEnabled(checked);
 }
