@@ -50,10 +50,10 @@ private:
     Ui::PanelSongs *ui;
     SongKind m_songKind;
     SystemSong* m_song;
-    QMediaPlayer m_mediaPlayerMusic, m_mediaPlayerBackgroundSound;
-    QSound m_sound, m_musicEffect;
+    QMediaPlayer m_mediaPlayerMusic, m_mediaPlayerBackgroundSound,
+                 m_mediaPlayerMusicEffect;
     QTimer m_timer;
-    bool m_needFadeOut;
+    bool m_needRestartMusic;
 
     void showSongs(bool b);
     void updateSong(QStandardItem* item);
@@ -66,7 +66,9 @@ private:
 public slots:
     void showAvailableContent(bool b);
     void play();
+    void stop();
     void fadeOut();
+    void pauseFromMusicEffect();
 
 private slots:
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
@@ -85,6 +87,8 @@ private slots:
     void on_pushButtonStop_clicked();
     void on_pushButtonPause_clicked();
     void on_mediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus status);
+    void on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus status);
 };
 
 #endif // PANELSONGS_H

@@ -36,7 +36,7 @@ PanelSongs::PanelSongs(QWidget *parent) :
     ui(new Ui::PanelSongs),
     m_songKind(SongKind::None),
     m_song(nullptr),
-    m_needFadeOut(false)
+    m_needRestartMusic(false)
 {
     ui->setupUi(this);
 
@@ -62,6 +62,12 @@ PanelSongs::PanelSongs(QWidget *parent) :
     connect(&m_mediaPlayerMusic,
             SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
             SLOT(on_mediaStatusChanged(QMediaPlayer::MediaStatus)));
+    connect(&m_mediaPlayerBackgroundSound,
+            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
+            SLOT(on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus)));
+    connect(&m_mediaPlayerMusicEffect,
+            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
+            SLOT(on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus)));
 }
 
 PanelSongs::~PanelSongs()
@@ -140,9 +146,6 @@ void PanelSongs::updateSong(QStandardItem* item) {
     if (item != nullptr) {
         m_song = (SystemSong*) item->data().value<qintptr>();
         if (m_song != nullptr) {
-            if (m_song->id() != -1) {
-                m_mediaPlayerMusic.setMedia(QUrl::fromLocalFile(m_song->getPath(m_songKind)));
-            }
             ui->pushButtonPlay->setEnabled(m_song->id() != -1);
         }
     }
@@ -241,12 +244,59 @@ void PanelSongs::showAvailableContent(bool b){
 // -------------------------------------------------------
 
 void PanelSongs::play() {
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(fadeOut()));
-    m_timer.start(10);
-    m_mediaPlayerMusic.setVolume(0);
-    m_mediaPlayerMusic.play();
+    if (m_song->id() == -1) {
+        stop();
+        return;
+    }
+    QString path = m_song->getPath(m_songKind);
+    switch (m_songKind) {
+    case SongKind::Music:
+        m_needRestartMusic = false;
+        m_mediaPlayerMusic.setMedia(QUrl::fromLocalFile(path));
+        m_mediaPlayerMusic.play();
+        break;
+    case SongKind::BackgroundSound:
+        m_mediaPlayerBackgroundSound.setMedia(QUrl::fromLocalFile(path));
+        m_mediaPlayerBackgroundSound.play();
+        break;
+    case SongKind::Sound:
+        QSound::play(path);
+        break;
+    case SongKind::MusicEffect:
+        if (m_mediaPlayerMusic.state() == QMediaPlayer::PlayingState) {
+            m_needRestartMusic = true;
+            m_mediaPlayerMusic.setVolume(0);
+            QTimer::singleShot(100, this, SLOT(pauseFromMusicEffect()));
+        }
+        m_mediaPlayerMusicEffect.setMedia(QUrl::fromLocalFile(path));
+        m_mediaPlayerMusicEffect.play();
+        break;
+    default:
+        break;
+    }
     ui->pushButtonStop->setEnabled(true);
     ui->pushButtonPause->setEnabled(true);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::stop() {
+    switch (m_songKind) {
+    case SongKind::Music:
+        m_mediaPlayerMusic.stop();
+        break;
+    case SongKind::BackgroundSound:
+        m_mediaPlayerBackgroundSound.stop();
+        break;
+    case SongKind::MusicEffect:
+        m_mediaPlayerMusicEffect.stop();
+        break;
+    default:
+        break;
+    }
+
+    ui->pushButtonStop->setEnabled(false);
+    ui->pushButtonPause->setEnabled(false);
 }
 
 // -------------------------------------------------------
@@ -258,6 +308,12 @@ void PanelSongs::fadeOut() {
         disconnect(&m_timer, SIGNAL(timeout()), this, SLOT(fadeOut()));
         m_timer.stop();
     }
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::pauseFromMusicEffect() {
+    m_mediaPlayerMusic.pause();
 }
 
 // -------------------------------------------------------
@@ -384,9 +440,7 @@ void PanelSongs::on_pushButtonPlay_clicked() {
 // -------------------------------------------------------
 
 void PanelSongs::on_pushButtonStop_clicked() {
-    m_mediaPlayerMusic.stop();
-    ui->pushButtonStop->setEnabled(false);
-    ui->pushButtonPause->setEnabled(false);
+    stop();
 }
 
 // -------------------------------------------------------
@@ -400,7 +454,30 @@ void PanelSongs::on_pushButtonPause_clicked() {
 
 void PanelSongs::on_mediaStatusChanged(QMediaPlayer::MediaStatus status) {
     if (status == QMediaPlayer::EndOfMedia) {
-        m_mediaPlayerMusic.stop();
-        ui->pushButtonStop->setEnabled(false);
+        m_mediaPlayerMusic.play();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_mediaStatusBackgroundChanged(
+        QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::EndOfMedia) {
+        m_mediaPlayerBackgroundSound.play();
+    }
+}
+
+
+// -------------------------------------------------------
+
+void PanelSongs::on_mediaStatusMusicEffectChanged(
+        QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::EndOfMedia && m_needRestartMusic) {
+        m_mediaPlayerMusic.play();
+        connect(&m_timer, SIGNAL(timeout()), this, SLOT(fadeOut()));
+        m_timer.start(10);
+        m_needRestartMusic = false;
     }
 }
