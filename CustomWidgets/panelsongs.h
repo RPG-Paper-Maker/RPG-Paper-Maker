@@ -24,6 +24,8 @@
 #include <QModelIndex>
 #include <QStandardItemModel>
 #include <QMediaPlayer>
+#include <QSound>
+#include <QTimer>
 #include "songkind.h"
 #include "superlistitem.h"
 #include "systemsong.h"
@@ -48,7 +50,10 @@ private:
     Ui::PanelSongs *ui;
     SongKind m_songKind;
     SystemSong* m_song;
-    QMediaPlayer m_mediaPlayer;
+    QMediaPlayer m_mediaPlayerMusic, m_mediaPlayerBackgroundSound;
+    QSound m_sound, m_musicEffect;
+    QTimer m_timer;
+    bool m_needFadeOut;
 
     void showSongs(bool b);
     void updateSong(QStandardItem* item);
@@ -61,6 +66,7 @@ private:
 public slots:
     void showAvailableContent(bool b);
     void play();
+    void fadeOut();
 
 private slots:
     void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
