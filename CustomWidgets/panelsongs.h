@@ -51,8 +51,9 @@ private:
     SongKind m_songKind;
     SystemSong* m_song;
     QMediaPlayer m_mediaPlayerMusic, m_mediaPlayerBackgroundSound,
-                 m_mediaPlayerMusicEffect;
+                 m_mediaPlayerSound, m_mediaPlayerMusicEffect;
     QTimer m_timer;
+    SystemSong* m_playedMusic, *m_playedBackgoundSound;
     bool m_needRestartMusic;
 
     void showSongs(bool b);
@@ -62,11 +63,13 @@ private:
     void deleteContent(QString path);
     void moveContent();
     void updateSongs();
+    void updateVolume(int volume);
 
 public slots:
     void showAvailableContent(bool b);
     void play();
     void stop();
+    void pause();
     void fadeOut();
     void pauseFromMusicEffect();
 

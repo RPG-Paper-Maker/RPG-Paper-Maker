@@ -36,6 +36,8 @@ PanelSongs::PanelSongs(QWidget *parent) :
     ui(new Ui::PanelSongs),
     m_songKind(SongKind::None),
     m_song(nullptr),
+    m_playedMusic(nullptr),
+    m_playedBackgoundSound(nullptr),
     m_needRestartMusic(false)
 {
     ui->setupUi(this);
@@ -73,7 +75,6 @@ PanelSongs::PanelSongs(QWidget *parent) :
 PanelSongs::~PanelSongs()
 {
     SuperListItem::deleteModel(ui->treeViewAvailableContent->getModel());
-    m_mediaPlayerMusic.stop();
     delete ui;
 }
 
@@ -118,6 +119,46 @@ void PanelSongs::setSongKind(SongKind kind){
         // Update checkBox
         ui->checkBoxContent->setText("Show available content of " +
                                      SystemSong::getLocalFolder(kind));
+
+        // Buttons according to state of song
+        ui->pushButtonPlay->show();
+        ui->pushButtonStop->show();
+        ui->pushButtonPause->show();
+        ui->pushButtonPlay->setEnabled(true);
+        ui->pushButtonStop->setEnabled(true);
+        ui->pushButtonPause->setEnabled(true);
+        QMediaPlayer::State state = QMediaPlayer::StoppedState;
+        switch (m_songKind) {
+        case SongKind::Music:
+            state = m_mediaPlayerMusic.state();
+            break;
+        case SongKind::BackgroundSound:
+            state = m_mediaPlayerBackgroundSound.state();
+            break;
+        case SongKind::Sound:
+            state = m_mediaPlayerSound.state();
+            ui->pushButtonPause->hide();
+            ui->pushButtonStop->hide();
+            break;
+        case SongKind::MusicEffect:
+            state = m_mediaPlayerMusicEffect.state();
+            ui->pushButtonPause->hide();
+            ui->pushButtonStop->hide();
+            break;
+        default:
+            break;
+        }
+        switch (state) {
+        case QMediaPlayer::StoppedState:
+            ui->pushButtonStop->setEnabled(false);
+            ui->pushButtonPause->setEnabled(false);
+            break;
+        case QMediaPlayer::PausedState:
+            ui->pushButtonPause->setEnabled(false);
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -228,6 +269,27 @@ void PanelSongs::updateSongs(){
 }
 
 // -------------------------------------------------------
+
+void PanelSongs::updateVolume(int volume) {
+    switch (m_songKind) {
+    case SongKind::Music:
+        m_mediaPlayerMusic.setVolume(volume);
+        break;
+    case SongKind::BackgroundSound:
+        m_mediaPlayerBackgroundSound.setVolume(volume);
+        break;
+    case SongKind::Sound:
+        m_mediaPlayerSound.setVolume(volume);
+        break;
+    case SongKind::MusicEffect:
+        m_mediaPlayerMusicEffect.setVolume(volume);
+        break;
+    default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -252,21 +314,32 @@ void PanelSongs::play() {
     switch (m_songKind) {
     case SongKind::Music:
         m_needRestartMusic = false;
-        m_mediaPlayerMusic.setMedia(QUrl::fromLocalFile(path));
+        if (m_playedMusic != m_song ||
+            m_mediaPlayerMusic.state() != QMediaPlayer::PausedState)
+        {
+            m_mediaPlayerMusic.setMedia(QUrl::fromLocalFile(path));
+        }
+        m_playedMusic = m_song;
         m_mediaPlayerMusic.play();
         break;
     case SongKind::BackgroundSound:
-        m_mediaPlayerBackgroundSound.setMedia(QUrl::fromLocalFile(path));
+        if (m_playedBackgoundSound != m_song ||
+            m_mediaPlayerBackgroundSound.state() != QMediaPlayer::PausedState)
+        {
+            m_mediaPlayerBackgroundSound.setMedia(QUrl::fromLocalFile(path));
+        }
+        m_playedBackgoundSound = m_song;
         m_mediaPlayerBackgroundSound.play();
         break;
     case SongKind::Sound:
-        QSound::play(path);
+        m_mediaPlayerSound.setMedia(QUrl::fromLocalFile(path));
+        m_mediaPlayerSound.play();
         break;
     case SongKind::MusicEffect:
         if (m_mediaPlayerMusic.state() == QMediaPlayer::PlayingState) {
             m_needRestartMusic = true;
             m_mediaPlayerMusic.setVolume(0);
-            QTimer::singleShot(100, this, SLOT(pauseFromMusicEffect()));
+            QTimer::singleShot(500, this, SLOT(pauseFromMusicEffect()));
         }
         m_mediaPlayerMusicEffect.setMedia(QUrl::fromLocalFile(path));
         m_mediaPlayerMusicEffect.play();
@@ -288,14 +361,28 @@ void PanelSongs::stop() {
     case SongKind::BackgroundSound:
         m_mediaPlayerBackgroundSound.stop();
         break;
-    case SongKind::MusicEffect:
-        m_mediaPlayerMusicEffect.stop();
-        break;
     default:
         break;
     }
 
     ui->pushButtonStop->setEnabled(false);
+    ui->pushButtonPause->setEnabled(false);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::pause() {
+    switch (m_songKind) {
+    case SongKind::Music:
+        m_mediaPlayerMusic.pause();
+        break;
+    case SongKind::BackgroundSound:
+        m_mediaPlayerBackgroundSound.pause();
+        break;
+    default:
+        break;
+    }
+
     ui->pushButtonPause->setEnabled(false);
 }
 
@@ -421,14 +508,14 @@ void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
 
 void PanelSongs::on_spinBoxVolume_valueChanged(int value) {
     ui->horizontalSliderVolume->setValue(value);
-    m_mediaPlayerMusic.setVolume(value);
+    updateVolume(value);
 }
 
 // -------------------------------------------------------
 
 void PanelSongs::on_horizontalSliderVolume_valueChanged(int value) {
     ui->spinBoxVolume->setValue(value);
-    m_mediaPlayerMusic.setVolume(value);
+    updateVolume(value);
 }
 
 // -------------------------------------------------------
@@ -446,8 +533,7 @@ void PanelSongs::on_pushButtonStop_clicked() {
 // -------------------------------------------------------
 
 void PanelSongs::on_pushButtonPause_clicked() {
-    m_mediaPlayerMusic.pause();
-    ui->pushButtonPause->setEnabled(false);
+    pause();
 }
 
 // -------------------------------------------------------
