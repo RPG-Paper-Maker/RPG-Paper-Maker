@@ -59,8 +59,14 @@ PanelSongs::PanelSongs(QWidget *parent) :
             SIGNAL(deletingItem(SuperListItem*, int)),
             this,
             SLOT(deletingContent(SuperListItem*, int)));
-    connect(ui->widgetPanelIDs->list(), SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(on_widgetPanelIDsDoubleClicked(QModelIndex)));
+    connect(ui->treeViewAvailableContent,
+            SIGNAL(doubleClicked(QModelIndex)),
+            this,
+            SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+    connect(ui->widgetPanelIDs->list(), SIGNAL(tryingEdit()),
+            this, SLOT(on_widgetPanelIDPressEnter()));
+    connect(ui->treeViewAvailableContent, SIGNAL(tryingEdit()),
+            this, SLOT(on_treeViewAvailableContentPressEnter()));
     connect(&m_mediaPlayerMusic,
             SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
             SLOT(on_mediaStatusChanged(QMediaPlayer::MediaStatus)));
@@ -480,13 +486,19 @@ void PanelSongs::deletingContent(SuperListItem* super, int row){
 
 // -------------------------------------------------------
 
-void PanelSongs::on_treeViewAvailableContent_doubleClicked(QModelIndex){
+void PanelSongs::on_treeViewAvailableContentDoubleClicked(QModelIndex) {
+    moveContent();
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_widgetPanelIDPressEnter() {
     play();
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_widgetPanelIDsDoubleClicked(QModelIndex){
+void PanelSongs::on_treeViewAvailableContentPressEnter() {
     play();
 }
 

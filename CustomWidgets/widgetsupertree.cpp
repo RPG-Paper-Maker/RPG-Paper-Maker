@@ -241,6 +241,10 @@ void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
 // -------------------------------------------------------
 
 void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
+    if (Wanok::isPressingEnter(event)) {
+        emit tryingEdit();
+    }
+
     if (m_hasContextMenu || !m_canBeControled){
 
         // Forcing shortcuts

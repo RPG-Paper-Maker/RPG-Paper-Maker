@@ -78,6 +78,7 @@ private slots:
 signals:
     void updated();
     void deleteIDs();
+    void tryingEdit();
 };
 
 #endif // WIDGETSUPERLIST_H

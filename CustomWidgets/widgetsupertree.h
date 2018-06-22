@@ -96,6 +96,7 @@ private slots:
 signals:
     void needsUpdateJson(SuperListItem* super);
     void deletingItem(SuperListItem* super, int row);
+    void tryingEdit();
 };
 
 #endif // WIDGETSUPERTREE_H

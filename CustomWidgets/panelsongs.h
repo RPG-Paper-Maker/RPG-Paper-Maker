@@ -80,8 +80,9 @@ private slots:
     void on_pushButtonRefresh_clicked();
     void on_pushButtonAdd_clicked();
     void deletingContent(SuperListItem* super, int row);
-    void on_treeViewAvailableContent_doubleClicked(QModelIndex);
-    void on_widgetPanelIDsDoubleClicked(QModelIndex);
+    void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_widgetPanelIDPressEnter();
+    void on_treeViewAvailableContentPressEnter();
     void on_checkBoxStart_toggled(bool checked);
     void on_checkBoxEnd_toggled(bool checked);
     void on_spinBoxVolume_valueChanged(int value);

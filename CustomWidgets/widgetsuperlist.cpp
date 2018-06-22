@@ -178,6 +178,10 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 // -------------------------------------------------------
 
 void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
+    if (Wanok::isPressingEnter(event)) {
+        emit tryingEdit();
+    }
+
     if (m_hasContextMenu || m_canBrutRemove){
 
         QKeySequence seq = Wanok::getKeySequence(event);
