@@ -50,8 +50,14 @@ private:
     Ui::PanelSongs *ui;
     SongKind m_songKind;
     SystemSong* m_song;
-    QMediaPlayer m_mediaPlayerMusic, m_mediaPlayerBackgroundSound,
-                 m_mediaPlayerSound, m_mediaPlayerMusicEffect;
+    QMediaPlayer *m_mediaPlayerMusic, *m_mediaPlayerBackgroundSound,
+                 *m_mediaPlayerSound, *m_mediaPlayerMusicEffect;
+    QMediaPlayer *m_mediaPlayerMusicTemp, *m_mediaPlayerBackgroundSoundTemp,
+                 *m_mediaPlayerSoundTemp, *m_mediaPlayerMusicEffectTemp;
+    QMediaPlayer m_mediaPlayerMusic1, m_mediaPlayerBackgroundSound1,
+                 m_mediaPlayerSound1, m_mediaPlayerMusicEffect1,
+                 m_mediaPlayerMusic2, m_mediaPlayerBackgroundSound2,
+                 m_mediaPlayerSound2, m_mediaPlayerMusicEffect2;
     QTimer m_timer;
     SystemSong* m_playedMusic, *m_playedBackgoundSound;
     bool m_needRestartMusic;
@@ -90,9 +96,9 @@ private slots:
     void on_pushButtonPlay_clicked();
     void on_pushButtonStop_clicked();
     void on_pushButtonPause_clicked();
-    void on_mediaStatusChanged(QMediaPlayer::MediaStatus status);
-    void on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus status);
-    void on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus status);
+    void on_mediaStatusChanged(QMediaPlayer::MediaStatus);
+    void on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus);
+    void on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus);
 };
 
 #endif // PANELSONGS_H
