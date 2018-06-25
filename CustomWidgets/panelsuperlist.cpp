@@ -118,7 +118,9 @@ void PanelSuperList::on_listIndexChanged(QModelIndex index ,QModelIndex){
     if (selected != nullptr){
         SuperListItem* super = (SuperListItem*) selected
                                ->data().value<quintptr>();
+        ui->lineEditName->blockSignals(true);
         ui->lineEditName->setText(super->name());
+        ui->lineEditName->blockSignals(false);
 
         // If ID == -1, can't edit the name
         if (super->id() == -1)

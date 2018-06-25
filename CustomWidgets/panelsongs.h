@@ -61,6 +61,8 @@ private:
     QTimer m_timer;
     SystemSong* m_playedMusic, *m_playedBackgoundSound;
     bool m_needRestartMusic;
+    QHash<SongKind, int> m_start;
+    QHash<SongKind, int> m_end;
 
     void showSongs(bool b);
     void updateSong(QStandardItem* item);
@@ -70,6 +72,7 @@ private:
     void moveContent();
     void updateSongs();
     void updateVolume(int volume);
+    void stopOnEnd(int end, qint64 pos, QMediaPlayer* player);
 
 public slots:
     void showAvailableContent(bool b);
@@ -91,6 +94,8 @@ private slots:
     void on_treeViewAvailableContentPressEnter();
     void on_checkBoxStart_toggled(bool checked);
     void on_checkBoxEnd_toggled(bool checked);
+    void on_doubleSpinBoxStart_valueChanged(double value);
+    void on_doubleSpinBoxEnd_valueChanged(double value);
     void on_spinBoxVolume_valueChanged(int value);
     void on_horizontalSliderVolume_valueChanged(int value);
     void on_pushButtonPlay_clicked();
@@ -99,6 +104,10 @@ private slots:
     void on_mediaStatusChanged(QMediaPlayer::MediaStatus);
     void on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus);
     void on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus);
+    void positionMusicChanged(qint64 pos);
+    void positionBackgroundSoundChanged(qint64 pos);
+    void positionSoundChanged(qint64 pos);
+    void positionMusicEffectChanged(qint64 pos);
 };
 
 #endif // PANELSONGS_H

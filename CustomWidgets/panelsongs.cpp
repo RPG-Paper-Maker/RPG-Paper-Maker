@@ -63,6 +63,17 @@ PanelSongs::PanelSongs(QWidget *parent) :
     ui->treeViewAvailableContent->setCanMove(false);
     ui->treeViewAvailableContent->setUpdateId(true);
 
+    // Start and end init
+    m_start[SongKind::Music] = -1;
+    m_start[SongKind::BackgroundSound] = -1;
+    m_start[SongKind::Sound] = -1;
+    m_start[SongKind::MusicEffect] = -1;
+    m_end[SongKind::Music] = -1;
+    m_end[SongKind::BackgroundSound] = -1;
+    m_end[SongKind::Sound] = -1;
+    m_end[SongKind::MusicEffect] = -1;
+
+    // Connections
     connect(ui->treeViewAvailableContent,
             SIGNAL(deletingItem(SuperListItem*, int)),
             this,
@@ -93,6 +104,22 @@ PanelSongs::PanelSongs(QWidget *parent) :
     connect(m_mediaPlayerMusicEffectTemp,
             SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
             SLOT(on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerMusic, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionMusicChanged(qint64)));
+    connect(m_mediaPlayerMusicTemp, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionMusicChanged(qint64)));
+    connect(m_mediaPlayerBackgroundSound, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionBackgroundSoundChanged(qint64)));
+    connect(m_mediaPlayerBackgroundSoundTemp, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionBackgroundSoundChanged(qint64)));
+    connect(m_mediaPlayerSound, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionSoundChanged(qint64)));
+    connect(m_mediaPlayerSoundTemp, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionSoundChanged(qint64)));
+    connect(m_mediaPlayerMusicEffect, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionMusicEffectChanged(qint64)));
+    connect(m_mediaPlayerMusicEffectTemp, SIGNAL(positionChanged(qint64)), this,
+            SLOT(positionMusicEffectChanged(qint64)));
 }
 
 PanelSongs::~PanelSongs()
@@ -143,7 +170,7 @@ void PanelSongs::setSongKind(SongKind kind){
         ui->checkBoxContent->setText("Show available content of " +
                                      SystemSong::getLocalFolder(kind));
 
-        // Buttons according to state of song
+        // Buttons & volume according to state of song
         ui->pushButtonPlay->show();
         ui->pushButtonStop->show();
         ui->pushButtonPause->show();
@@ -151,20 +178,25 @@ void PanelSongs::setSongKind(SongKind kind){
         ui->pushButtonStop->setEnabled(true);
         ui->pushButtonPause->setEnabled(true);
         QMediaPlayer::State state = QMediaPlayer::StoppedState;
+        int volume = 0;
         switch (m_songKind) {
         case SongKind::Music:
             state = m_mediaPlayerMusic->state();
+            volume = m_mediaPlayerMusic->volume();
             break;
         case SongKind::BackgroundSound:
             state = m_mediaPlayerBackgroundSound->state();
+            volume = m_mediaPlayerBackgroundSound->volume();
             break;
         case SongKind::Sound:
             state = m_mediaPlayerSound->state();
+            volume = m_mediaPlayerSound->volume();
             ui->pushButtonPause->hide();
             ui->pushButtonStop->hide();
             break;
         case SongKind::MusicEffect:
             state = m_mediaPlayerMusicEffect->state();
+            volume = m_mediaPlayerMusicEffect->volume();
             ui->pushButtonPause->hide();
             ui->pushButtonStop->hide();
             break;
@@ -183,6 +215,11 @@ void PanelSongs::setSongKind(SongKind kind){
             break;
         }
         updateSong(ui->widgetPanelIDs->list()->getModel()->item(0));
+        ui->horizontalSliderVolume->setValue(volume);
+        ui->checkBoxStart->setChecked(m_start[m_songKind] != -1);
+        ui->checkBoxEnd->setChecked(m_end[m_songKind] != -1);
+        ui->doubleSpinBoxStart->setValue(m_start[m_songKind] / 1000.0);
+        ui->doubleSpinBoxEnd->setValue(m_end[m_songKind] / 1000.0);
     }
 
 }
@@ -334,6 +371,14 @@ void PanelSongs::updateVolume(int volume) {
 }
 
 // -------------------------------------------------------
+
+void PanelSongs::stopOnEnd(int end, qint64 pos, QMediaPlayer* player) {
+    if (end > -1 && pos >= end) {
+        player->stop();
+    }
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -355,6 +400,7 @@ void PanelSongs::play() {
     }
     QMediaPlayer* temp = nullptr;
     QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
+    int start = m_start[m_songKind];
     switch (m_songKind) {
     case SongKind::Music:
         m_needRestartMusic = false;
@@ -364,6 +410,9 @@ void PanelSongs::play() {
             temp = m_mediaPlayerMusic;
             m_mediaPlayerMusic = m_mediaPlayerMusicTemp;
             m_mediaPlayerMusicTemp = temp;
+            if (start != -1) {
+                m_mediaPlayerMusic->setPosition(start);
+            }
         }
         m_playedMusic = m_song;
         m_mediaPlayerMusicTemp->stop();
@@ -377,6 +426,9 @@ void PanelSongs::play() {
             temp = m_mediaPlayerBackgroundSound;
             m_mediaPlayerBackgroundSound = m_mediaPlayerBackgroundSoundTemp;
             m_mediaPlayerBackgroundSoundTemp = temp;
+            if (start != -1) {
+                m_mediaPlayerBackgroundSound->setPosition(start);
+            }
         }
         m_playedBackgoundSound = m_song;
         m_mediaPlayerBackgroundSoundTemp->stop();
@@ -388,6 +440,9 @@ void PanelSongs::play() {
         m_mediaPlayerSound = m_mediaPlayerSoundTemp;
         m_mediaPlayerSoundTemp = temp;
         m_mediaPlayerSoundTemp->stop();
+        if (start != -1) {
+            m_mediaPlayerSound->setPosition(start);
+        }
         m_mediaPlayerSound->play();
         m_mediaPlayerSoundTemp->setMedia(path);
         break;
@@ -401,6 +456,9 @@ void PanelSongs::play() {
         m_mediaPlayerMusicEffect = m_mediaPlayerMusicEffectTemp;
         m_mediaPlayerMusicEffectTemp = temp;
         m_mediaPlayerMusicEffectTemp->stop();
+        if (start != -1) {
+            m_mediaPlayerMusicEffect->setPosition(start);
+        }
         m_mediaPlayerMusicEffect->play();
         m_mediaPlayerMusicEffectTemp->setMedia(path);
         break;
@@ -561,6 +619,7 @@ void PanelSongs::on_treeViewAvailableContentPressEnter() {
 void PanelSongs::on_checkBoxStart_toggled(bool checked) {
     ui->doubleSpinBoxStart->setEnabled(checked);
     ui->labelSeconds1->setEnabled(checked);
+    m_start[m_songKind] = checked ? ui->doubleSpinBoxStart->value() * 1000 : -1;
 }
 
 // -------------------------------------------------------
@@ -568,6 +627,7 @@ void PanelSongs::on_checkBoxStart_toggled(bool checked) {
 void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
     ui->doubleSpinBoxEnd->setEnabled(checked);
     ui->labelSeconds2->setEnabled(checked);
+    m_end[m_songKind] = checked ? ui->doubleSpinBoxEnd->value() * 1000 : -1;
 }
 
 // -------------------------------------------------------
@@ -575,6 +635,18 @@ void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
 void PanelSongs::on_spinBoxVolume_valueChanged(int value) {
     ui->horizontalSliderVolume->setValue(value);
     updateVolume(value);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_doubleSpinBoxStart_valueChanged(double value) {
+    m_start[m_songKind] = value * 1000;
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::on_doubleSpinBoxEnd_valueChanged(double value) {
+    m_end[m_songKind] = value * 1000;
 }
 
 // -------------------------------------------------------
@@ -633,4 +705,29 @@ void PanelSongs::on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus)
         m_timer.start(10);
         m_needRestartMusic = false;
     }
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::positionMusicChanged(qint64 pos) {
+    stopOnEnd(m_end[SongKind::Music], pos, m_mediaPlayerMusic);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::positionBackgroundSoundChanged(qint64 pos) {
+    stopOnEnd(m_end[SongKind::BackgroundSound], pos,
+              m_mediaPlayerBackgroundSound);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::positionSoundChanged(qint64 pos) {
+    stopOnEnd(m_end[SongKind::Sound], pos, m_mediaPlayerSound);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::positionMusicEffectChanged(qint64 pos) {
+    stopOnEnd(m_end[SongKind::MusicEffect], pos, m_mediaPlayerMusicEffect);
 }
