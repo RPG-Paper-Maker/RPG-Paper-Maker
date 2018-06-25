@@ -17,44 +17,43 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EVENTCOMMANDKIND_H
-#define EVENTCOMMANDKIND_H
+#ifndef DIALOGCOMMANDPLAYSONG_H
+#define DIALOGCOMMANDPLAYSONG_H
 
 // -------------------------------------------------------
 //
-//  ENUM EventCommandKind
+//  CLASS DialogCommanPlaySong
 //
-//  All the types of possible commands. The same order should
-//  be respected in the interpreter.
+//  A generic dialog command for playing song.
 //
 // -------------------------------------------------------
 
-enum class EventCommandKind {
-    None,
-    ShowText,
-    ChangeVariables,
-    EndGame,
-    While,
-    EndWhile,
-    WhileBreak,
-    InputNumber,
-    If,
-    Else,
-    EndIf,
-    OpenMainMenu,
-    OpenSavesMenu,
-    ModifyInventory,
-    ModifyTeam,
-    StartBattle,
-    IfWin,
-    IfLose,
-    ChangeState,
-    SendEvent,
-    TeleportObject,
-    MoveObject,
-    Wait,
-    MoveCamera,
-    PlayMusic
+#include <QDialog>
+#include "dialogcommand.h"
+#include "songkind.h"
+
+namespace Ui {
+class DialogCommandPlaySong;
+}
+
+class DialogCommandPlaySong : public DialogCommand
+{
+    Q_OBJECT
+
+public:
+    explicit DialogCommandPlaySong(QString title, SongKind kind,
+                                   EventCommand *command = nullptr,
+                                   SystemCommonObject *object = nullptr,
+                                   QStandardItemModel* parameters = nullptr,
+                                   QWidget *parent = 0);
+    ~DialogCommandPlaySong();
+    EventCommand* getCommand() const;
+
+protected:
+    virtual void initialize(EventCommand* command);
+
+private:
+    Ui::DialogCommandPlaySong *ui;
 };
 
-#endif // EVENTCOMMANDKIND_H
+#endif // DIALOGCOMMANDPLAYSONG_H

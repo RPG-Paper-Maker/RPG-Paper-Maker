@@ -81,6 +81,7 @@ private slots:
     void on_pushButtonMoveObject_clicked();
     void on_pushButtonWait_clicked();
     void on_pushButtonMoveCamera_clicked();
+    void on_pushButtonPlayMusic_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

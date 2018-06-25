@@ -249,7 +249,8 @@ HEADERS += \
     CustomWidgets/panelsongs.h \
     Models/System/systemsong.h \
     Enums/songkind.h \
-    Models/GameDatas/songsdatas.h
+    Models/GameDatas/songsdatas.h \
+    Dialogs/Commands/dialogcommandplaysong.h
 
 SOURCES += \
     main.cpp \
@@ -447,7 +448,8 @@ SOURCES += \
     Dialogs/dialogsongs.cpp \
     CustomWidgets/panelsongs.cpp \
     Models/System/systemsong.cpp \
-    Models/GameDatas/songsdatas.cpp
+    Models/GameDatas/songsdatas.cpp \
+    Dialogs/Commands/dialogcommandplaysong.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -517,7 +519,8 @@ FORMS += \
     Dialogs/dialogrect.ui \
     Dialogs/dialogdebugoptions.ui \
     Dialogs/dialogsongs.ui \
-    CustomWidgets/panelsongs.ui
+    CustomWidgets/panelsongs.ui \
+    Dialogs/Commands/dialogcommandplaysong.ui
 
 OTHER_FILES += \
     style.qss

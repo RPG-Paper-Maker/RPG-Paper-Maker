@@ -32,6 +32,7 @@
 #include "dialogcommandmoveobject.h"
 #include "dialogcommandwait.h"
 #include "dialogcommandmovecamera.h"
+#include "dialogcommandplaysong.h"
 
 // -------------------------------------------------------
 //
@@ -96,6 +97,9 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandWait(command);
     case EventCommandKind::MoveCamera:
         return new DialogCommandMoveCamera(command, object, parameters);
+    case EventCommandKind::PlayMusic:
+        return new DialogCommandPlaySong("Play a music", SongKind::Music,
+                                         command, object, parameters);
     default:
         return nullptr;
     }
@@ -232,4 +236,10 @@ void DialogCommands::on_pushButtonWait_clicked(){
 
 void DialogCommands::on_pushButtonMoveCamera_clicked() {
     openDialogCommand(EventCommandKind::MoveCamera);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlayMusic_clicked() {
+    openDialogCommand(EventCommandKind::PlayMusic);
 }

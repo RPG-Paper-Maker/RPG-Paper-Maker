@@ -43,6 +43,9 @@ public:
     ~PanelSongs();
     SystemSong* song() const;
     void setSong(SystemSong* song);
+    int currentVolume() const;
+    double currentStart() const;
+    double currentEnd() const;
     void setSongKind(SongKind kind);
     void changeSong(SystemSong* song);
 

@@ -134,6 +134,18 @@ void PanelSongs::setSong(SystemSong* song) {
     m_song = song;
 }
 
+int PanelSongs::currentVolume() const {
+    return ui->spinBoxVolume->value();
+}
+
+double PanelSongs::currentStart() const {
+    return ui->doubleSpinBoxStart->value();
+}
+
+double PanelSongs::currentEnd() const {
+    return ui->doubleSpinBoxEnd->value();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -221,7 +233,6 @@ void PanelSongs::setSongKind(SongKind kind){
         ui->doubleSpinBoxStart->setValue(m_start[m_songKind] / 1000.0);
         ui->doubleSpinBoxEnd->setValue(m_end[m_songKind] / 1000.0);
     }
-
 }
 
 // -------------------------------------------------------
