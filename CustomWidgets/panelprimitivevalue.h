@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QListWidgetItem>
+#include <QSpinBox>
 #include "primitivevalue.h"
 #include "eventcommand.h"
 #include "panelprimitivevaluekind.h"
@@ -46,6 +47,7 @@ class PanelPrimitiveValue : public QWidget
 public:
     explicit PanelPrimitiveValue(QWidget *parent = 0);
     ~PanelPrimitiveValue();
+    QSpinBox* spinBoxNumber() const;
     void initializePrimitives();
     void initializeParameterEvent();
     void initializeNumberVariable();

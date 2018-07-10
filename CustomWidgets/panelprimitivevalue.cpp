@@ -42,6 +42,10 @@ PanelPrimitiveValue::~PanelPrimitiveValue()
     delete ui;
 }
 
+QSpinBox* PanelPrimitiveValue::spinBoxNumber() const {
+    return ui->spinBoxNumber;
+}
+
 PrimitiveValue* PanelPrimitiveValue::model() const { return m_model; }
 
 // -------------------------------------------------------

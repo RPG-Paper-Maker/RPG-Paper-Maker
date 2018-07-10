@@ -39,18 +39,18 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
      <item>
       <widget class="QComboBox" name="comboBoxChoice">
        <property name="minimumSize">
         <size>
-         <width>84</width>
+         <width>90</width>
          <height>23</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>84</width>
+         <width>90</width>
          <height>23</height>
         </size>
        </property>
@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1,1,1,1,1,1,1,1">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -71,14 +71,14 @@
         <widget class="QSpinBox" name="spinBoxNumber">
          <property name="minimumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>16777215</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="minimum">
@@ -144,14 +144,14 @@
         <widget class="QDoubleSpinBox" name="doubleSpinBoxNumber">
          <property name="minimumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>16777215</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="decimals">
@@ -169,14 +169,14 @@
         <widget class="WidgetVariable" name="widgetVariable" native="true">
          <property name="minimumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>180</width>
-           <height>23</height>
+           <width>16777215</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -240,19 +240,6 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
