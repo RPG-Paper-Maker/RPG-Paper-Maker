@@ -64,14 +64,27 @@ PanelSongs::PanelSongs(QWidget *parent) :
     ui->treeViewAvailableContent->setUpdateId(true);
 
     // Start and end init
-    m_start[SongKind::Music] = -1;
-    m_start[SongKind::BackgroundSound] = -1;
-    m_start[SongKind::Sound] = -1;
-    m_start[SongKind::MusicEffect] = -1;
-    m_end[SongKind::Music] = -1;
-    m_end[SongKind::BackgroundSound] = -1;
-    m_end[SongKind::Sound] = -1;
-    m_end[SongKind::MusicEffect] = -1;
+    m_startBool[SongKind::Music] = false;
+    m_startBool[SongKind::BackgroundSound] = false;
+    m_startBool[SongKind::Sound] = false;
+    m_startBool[SongKind::MusicEffect] = false;
+    m_start[SongKind::Music] = 0;
+    m_start[SongKind::BackgroundSound] = 0;
+    m_start[SongKind::Sound] = 0;
+    m_start[SongKind::MusicEffect] = 0;
+    m_endBool[SongKind::Music] = false;
+    m_endBool[SongKind::BackgroundSound] = false;
+    m_endBool[SongKind::Sound] = false;
+    m_endBool[SongKind::MusicEffect] = false;
+    m_end[SongKind::Music] = 0;
+    m_end[SongKind::BackgroundSound] = 0;
+    m_end[SongKind::Sound] = 0;
+    m_end[SongKind::MusicEffect] = 0;
+
+    // Initialize number
+    ui->panelPrimitiveValueVolume->initializeNumber(nullptr, nullptr);
+    ui->panelPrimitiveValueStart->initializeNumber(nullptr, nullptr, false);
+    ui->panelPrimitiveValueEnd->initializeNumber(nullptr, nullptr, false);
 
     // Connections
     connect(ui->treeViewAvailableContent,
@@ -120,6 +133,15 @@ PanelSongs::PanelSongs(QWidget *parent) :
             SLOT(positionMusicEffectChanged(qint64)));
     connect(m_mediaPlayerMusicEffectTemp, SIGNAL(positionChanged(qint64)), this,
             SLOT(positionMusicEffectChanged(qint64)));
+    connect(ui->panelPrimitiveValueVolume->spinBoxNumber(),
+            SIGNAL(valueChanged(int)), this,
+            SLOT(on_spinBoxVolumeValueChanged(int)));
+    connect(ui->panelPrimitiveValueStart->doubleSpinBoxNumber(),
+            SIGNAL(valueChanged(double)), this,
+            SLOT(on_doubleSpinBoxStartValueChanged(double)));
+    connect(ui->panelPrimitiveValueEnd->doubleSpinBoxNumber(),
+            SIGNAL(valueChanged(double)), this,
+            SLOT(on_doubleSpinBoxEndValueChanged(double)));
 }
 
 PanelSongs::~PanelSongs()
@@ -132,18 +154,6 @@ SystemSong* PanelSongs::song() const { return m_song; }
 
 void PanelSongs::setSong(SystemSong* song) {
     m_song = song;
-}
-
-int PanelSongs::currentVolume() const {
-    return ui->spinBoxVolume->value();
-}
-
-double PanelSongs::currentStart() const {
-    return ui->doubleSpinBoxStart->value();
-}
-
-double PanelSongs::currentEnd() const {
-    return ui->doubleSpinBoxEnd->value();
 }
 
 // -------------------------------------------------------
@@ -228,10 +238,12 @@ void PanelSongs::setSongKind(SongKind kind){
         }
         updateSong(ui->widgetPanelIDs->list()->getModel()->item(0));
         ui->horizontalSliderVolume->setValue(volume);
-        ui->checkBoxStart->setChecked(m_start[m_songKind] != -1);
-        ui->checkBoxEnd->setChecked(m_end[m_songKind] != -1);
-        ui->doubleSpinBoxStart->setValue(m_start[m_songKind] / 1000.0);
-        ui->doubleSpinBoxEnd->setValue(m_end[m_songKind] / 1000.0);
+        ui->checkBoxStart->setChecked(m_startBool[m_songKind]);
+        ui->checkBoxEnd->setChecked(m_endBool[m_songKind]);
+        ui->panelPrimitiveValueStart->doubleSpinBoxNumber()
+            ->setValue(m_start[m_songKind] / 1000.0);
+        ui->panelPrimitiveValueEnd->doubleSpinBoxNumber()
+            ->setValue(m_end[m_songKind] / 1000.0);
     }
 }
 
@@ -520,7 +532,9 @@ void PanelSongs::pause() {
 void PanelSongs::fadeOut() {
     m_mediaPlayerMusic->setVolume(m_mediaPlayerMusic->volume() + 1);
 
-    if (m_mediaPlayerMusic->volume() >= ui->spinBoxVolume->value()) {
+    if (m_mediaPlayerMusic->volume() >= ui->panelPrimitiveValueVolume->model()
+        ->numberValue())
+    {
         disconnect(&m_timer, SIGNAL(timeout()), this, SLOT(fadeOut()));
         m_timer.stop();
     }
@@ -628,42 +642,42 @@ void PanelSongs::on_treeViewAvailableContentPressEnter() {
 // -------------------------------------------------------
 
 void PanelSongs::on_checkBoxStart_toggled(bool checked) {
-    ui->doubleSpinBoxStart->setEnabled(checked);
+    ui->panelPrimitiveValueStart->setEnabled(checked);
     ui->labelSeconds1->setEnabled(checked);
-    m_start[m_songKind] = checked ? ui->doubleSpinBoxStart->value() * 1000 : -1;
+    m_startBool[m_songKind] = checked;
 }
 
 // -------------------------------------------------------
 
 void PanelSongs::on_checkBoxEnd_toggled(bool checked) {
-    ui->doubleSpinBoxEnd->setEnabled(checked);
+    ui->panelPrimitiveValueEnd->setEnabled(checked);
     ui->labelSeconds2->setEnabled(checked);
-    m_end[m_songKind] = checked ? ui->doubleSpinBoxEnd->value() * 1000 : -1;
+    m_endBool[m_songKind] = checked;
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_spinBoxVolume_valueChanged(int value) {
+void PanelSongs::on_spinBoxVolumeValueChanged(int value) {
     ui->horizontalSliderVolume->setValue(value);
     updateVolume(value);
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_doubleSpinBoxStart_valueChanged(double value) {
+void PanelSongs::on_doubleSpinBoxStartValueChanged(double value) {
     m_start[m_songKind] = value * 1000;
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_doubleSpinBoxEnd_valueChanged(double value) {
+void PanelSongs::on_doubleSpinBoxEndValueChanged(double value) {
     m_end[m_songKind] = value * 1000;
 }
 
 // -------------------------------------------------------
 
 void PanelSongs::on_horizontalSliderVolume_valueChanged(int value) {
-    ui->spinBoxVolume->setValue(value);
+    ui->panelPrimitiveValueVolume->setNumberValue(value);
     updateVolume(value);
 }
 

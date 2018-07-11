@@ -43,9 +43,6 @@ public:
     ~PanelSongs();
     SystemSong* song() const;
     void setSong(SystemSong* song);
-    int currentVolume() const;
-    double currentStart() const;
-    double currentEnd() const;
     void setSongKind(SongKind kind);
     void changeSong(SystemSong* song);
 
@@ -64,7 +61,9 @@ private:
     QTimer m_timer;
     SystemSong* m_playedMusic, *m_playedBackgoundSound;
     bool m_needRestartMusic;
+    QHash<SongKind, bool> m_startBool;
     QHash<SongKind, int> m_start;
+    QHash<SongKind, bool> m_endBool;
     QHash<SongKind, int> m_end;
 
     void showSongs(bool b);
@@ -97,9 +96,9 @@ private slots:
     void on_treeViewAvailableContentPressEnter();
     void on_checkBoxStart_toggled(bool checked);
     void on_checkBoxEnd_toggled(bool checked);
-    void on_doubleSpinBoxStart_valueChanged(double value);
-    void on_doubleSpinBoxEnd_valueChanged(double value);
-    void on_spinBoxVolume_valueChanged(int value);
+    void on_doubleSpinBoxStartValueChanged(double value);
+    void on_doubleSpinBoxEndValueChanged(double value);
+    void on_spinBoxVolumeValueChanged(int value);
     void on_horizontalSliderVolume_valueChanged(int value);
     void on_pushButtonPlay_clicked();
     void on_pushButtonStop_clicked();

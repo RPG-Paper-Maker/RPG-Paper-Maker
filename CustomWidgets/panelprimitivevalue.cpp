@@ -46,6 +46,10 @@ QSpinBox* PanelPrimitiveValue::spinBoxNumber() const {
     return ui->spinBoxNumber;
 }
 
+QDoubleSpinBox* PanelPrimitiveValue::doubleSpinBoxNumber() const {
+    return ui->doubleSpinBoxNumber;
+}
+
 PrimitiveValue* PanelPrimitiveValue::model() const { return m_model; }
 
 // -------------------------------------------------------

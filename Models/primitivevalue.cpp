@@ -29,6 +29,7 @@
 PrimitiveValue::PrimitiveValue() :
     m_kind(PrimitiveValueKind::Anything),
     m_numberValue(1),
+    m_numberDoubleValue(0),
     m_messageValue(""),
     m_switchValue(true),
     m_modelParameter(nullptr),
