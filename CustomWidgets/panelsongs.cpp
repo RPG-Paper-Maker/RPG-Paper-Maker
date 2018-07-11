@@ -81,11 +81,6 @@ PanelSongs::PanelSongs(QWidget *parent) :
     m_end[SongKind::Sound] = 0;
     m_end[SongKind::MusicEffect] = 0;
 
-    // Initialize number
-    ui->panelPrimitiveValueVolume->initializeNumber(nullptr, nullptr);
-    ui->panelPrimitiveValueStart->initializeNumber(nullptr, nullptr, false);
-    ui->panelPrimitiveValueEnd->initializeNumber(nullptr, nullptr, false);
-
     // Connections
     connect(ui->treeViewAvailableContent,
             SIGNAL(deletingItem(SuperListItem*, int)),
@@ -160,6 +155,17 @@ void PanelSongs::setSong(SystemSong* song) {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void PanelSongs::initializePrimitives(QStandardItemModel* parameters,
+                                      QStandardItemModel* properties)
+{
+    ui->panelPrimitiveValueVolume->initializeNumber(parameters, properties);
+    ui->panelPrimitiveValueStart->initializeNumber(parameters, properties,
+                                                   false);
+    ui->panelPrimitiveValueEnd->initializeNumber(parameters, properties, false);
+}
+
 // -------------------------------------------------------
 
 void PanelSongs::setSongKind(SongKind kind){

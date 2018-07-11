@@ -33,6 +33,8 @@ DialogSongs::DialogSongs(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(geometry().width(), geometry().height());
 
+    ui->widgetSongs->initializePrimitives(nullptr, nullptr);
+
     // Tree model
     ui->treeView->setModel(createFoldersModel());
     ui->treeView->expandAll();

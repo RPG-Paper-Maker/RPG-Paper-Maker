@@ -38,6 +38,7 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     setFixedSize(geometry().width(), geometry().height());
     this->setWindowTitle(title);
     ui->widget->setSongKind(kind);
+    ui->widget->initializePrimitives(parameters, nullptr);
 
     if (command != nullptr) initialize(command);
 }

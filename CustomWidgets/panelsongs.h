@@ -43,6 +43,8 @@ public:
     ~PanelSongs();
     SystemSong* song() const;
     void setSong(SystemSong* song);
+    void initializePrimitives(QStandardItemModel* parameters,
+                              QStandardItemModel* properties);
     void setSongKind(SongKind kind);
     void changeSong(SystemSong* song);
 
