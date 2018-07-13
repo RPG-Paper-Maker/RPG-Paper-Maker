@@ -54,6 +54,9 @@ protected:
 
 private:
     Ui::DialogCommandPlaySong *ui;
+
+private slots:
+    void on_checkBoxSongID_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDPLAYSONG_H

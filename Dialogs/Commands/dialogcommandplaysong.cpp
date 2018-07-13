@@ -39,6 +39,7 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     this->setWindowTitle(title);
     ui->widget->setSongKind(kind);
     ui->widget->initializePrimitives(parameters, nullptr);
+    ui->panelPrimitiveValueSongID->initializeNumber(parameters, nullptr);
 
     if (command != nullptr) initialize(command);
 }
@@ -55,6 +56,10 @@ DialogCommandPlaySong::~DialogCommandPlaySong()
 // -------------------------------------------------------
 
 void DialogCommandPlaySong::initialize(EventCommand* command) {
+    int i = 0;
+
+    ui->checkBoxSongID->setChecked(command->valueCommandAt(i++) == "1");
+    ui->panelPrimitiveValueSongID->initializeCommand(command, i);
     ui->widget->initialize(command);
 }
 
@@ -62,7 +67,19 @@ void DialogCommandPlaySong::initialize(EventCommand* command) {
 
 EventCommand* DialogCommandPlaySong::getCommand() const {
     QVector<QString> command;
+    command.append(ui->checkBoxSongID->isChecked() ? "1" : "0");
+    ui->panelPrimitiveValueSongID->getCommand(command);
     ui->widget->getCommand(command);
 
     return new EventCommand(EventCommandKind::PlayMusic, command);
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandPlaySong::on_checkBoxSongID_toggled(bool checked) {
+    ui->panelPrimitiveValueSongID->setEnabled(checked);
 }

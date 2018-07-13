@@ -825,6 +825,8 @@ QString EventCommand::strPlaySong(SystemCommonObject*,
 {
     int i = 0;
 
+    bool isIDNumber = p_listCommand.at(i++) == "1";
+    QString idNumber = strNumber(i, parameters);
     QString id = SuperListItem::getById(Wanok::get()->project()->songsDatas()
         ->model(SongKind::Music)->invisibleRootItem(), p_listCommand.at(i++)
         .toInt())->toString();
@@ -834,8 +836,8 @@ QString EventCommand::strPlaySong(SystemCommonObject*,
     bool isEnd = p_listCommand.at(i++) == "1";
     QString end = strNumber(i, parameters);
 
-    return "Play song: " + id + " with volume: " + volume +
-            (isStart ? "\nStart: " + start : "") +
+    return "Play song: " + (isIDNumber ? "with ID " + idNumber : id) +
+            " with volume: " + volume + (isStart ? "\nStart: " + start : "") +
             (isEnd ? "\nEnd: " + end : "");
 }
 
