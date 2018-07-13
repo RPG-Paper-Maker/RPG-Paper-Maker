@@ -54,15 +54,15 @@ DialogCommandPlaySong::~DialogCommandPlaySong()
 //
 // -------------------------------------------------------
 
-void DialogCommandPlaySong::initialize(EventCommand* command){
-    //ui->widgetVariable->setCurrentId(command->valueCommandAt(0).toInt());
+void DialogCommandPlaySong::initialize(EventCommand* command) {
+    ui->widget->initialize(command);
 }
 
 // -------------------------------------------------------
 
-EventCommand* DialogCommandPlaySong::getCommand() const{
+EventCommand* DialogCommandPlaySong::getCommand() const {
     QVector<QString> command;
-    //command.append(QString::number(ui->widgetVariable->currentId()));
+    ui->widget->getCommand(command);
 
     return new EventCommand(EventCommandKind::PlayMusic, command);
 }

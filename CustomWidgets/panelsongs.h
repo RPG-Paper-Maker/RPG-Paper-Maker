@@ -29,6 +29,7 @@
 #include "songkind.h"
 #include "superlistitem.h"
 #include "systemsong.h"
+#include "eventcommand.h"
 
 namespace Ui {
 class PanelSongs;
@@ -47,6 +48,8 @@ public:
                               QStandardItemModel* properties);
     void setSongKind(SongKind kind);
     void changeSong(SystemSong* song);
+    void initialize(EventCommand* command);
+    void getCommand(QVector<QString>& command) const;
 
 private:
     Ui::PanelSongs *ui;

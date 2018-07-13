@@ -161,6 +161,7 @@ void PanelSongs::initializePrimitives(QStandardItemModel* parameters,
                                       QStandardItemModel* properties)
 {
     ui->panelPrimitiveValueVolume->initializeNumber(parameters, properties);
+    ui->panelPrimitiveValueVolume->setNumberValue(100);
     ui->panelPrimitiveValueStart->initializeNumber(parameters, properties,
                                                    false);
     ui->panelPrimitiveValueEnd->initializeNumber(parameters, properties, false);
@@ -264,6 +265,31 @@ void PanelSongs::changeSong(SystemSong* song){
     QModelIndex indexModel = ui->widgetPanelIDs->list()->getModel()
             ->index(index, 0);
     ui->widgetPanelIDs->list()->setCurrentIndex(indexModel);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::initialize(EventCommand* command) {
+    int i = 0;
+    changeSong((SystemSong*) SuperListItem::getById(Wanok::get()->project()
+        ->songsDatas()->model(m_songKind)->invisibleRootItem(), command
+        ->valueCommandAt(i++).toInt()));
+    ui->panelPrimitiveValueVolume->initializeCommand(command, i);
+    ui->checkBoxStart->setChecked(command->valueCommandAt(i++) == "1");
+    ui->panelPrimitiveValueStart->initializeCommand(command, i);
+    ui->checkBoxEnd->setChecked(command->valueCommandAt(i++) == "1");
+    ui->panelPrimitiveValueEnd->initializeCommand(command, i);
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::getCommand(QVector<QString>& command) const {
+    command.append(QString::number(m_song->id()));
+    ui->panelPrimitiveValueVolume->getCommand(command);
+    command.append(ui->checkBoxStart->isChecked() ? "1" : "0");
+    ui->panelPrimitiveValueStart->getCommand(command);
+    command.append(ui->checkBoxEnd->isChecked() ? "1" : "0");
+    ui->panelPrimitiveValueEnd->getCommand(command);
 }
 
 // -------------------------------------------------------

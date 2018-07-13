@@ -106,6 +106,8 @@ private:
     QString strMoveCameraZoom(QStandardItemModel *parameters, int& i,
                               QString &operation) const;
     QString strMoveCameraOptions(QStandardItemModel *parameters, int& i) const;
+    QString strPlaySong(SystemCommonObject*,
+                        QStandardItemModel* parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

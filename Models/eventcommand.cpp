@@ -162,6 +162,8 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strWait(); break;
     case EventCommandKind::MoveCamera:
         str += strMoveCamera(parameters); break;
+    case EventCommandKind::PlayMusic:
+        str += strPlaySong(object, parameters); break;
     default:
         break;
     }
@@ -814,6 +816,27 @@ QString EventCommand::strMoveCameraOptions(QStandardItemModel* parameters,
     str += "TIME: " + strNumber(i, parameters) + " seconds";
 
     return str;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlaySong(SystemCommonObject*,
+                                  QStandardItemModel* parameters) const
+{
+    int i = 0;
+
+    QString id = SuperListItem::getById(Wanok::get()->project()->songsDatas()
+        ->model(SongKind::Music)->invisibleRootItem(), p_listCommand.at(i++)
+        .toInt())->toString();
+    QString volume = strNumber(i, parameters);
+    bool isStart = p_listCommand.at(i++) == "1";
+    QString start = strNumber(i, parameters);
+    bool isEnd = p_listCommand.at(i++) == "1";
+    QString end = strNumber(i, parameters);
+
+    return "Play song: " + id + " with volume: " + volume +
+            (isStart ? "\nStart: " + start : "") +
+            (isEnd ? "\nEnd: " + end : "");
 }
 
 // -------------------------------------------------------
