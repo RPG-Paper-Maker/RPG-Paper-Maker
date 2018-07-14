@@ -47,9 +47,12 @@ public:
                                    QStandardItemModel* parameters = nullptr,
                                    QWidget *parent = 0);
     ~DialogCommandPlaySong();
+    EventCommandKind getCommandKind() const;
     EventCommand* getCommand() const;
 
 protected:
+    SongKind m_kind;
+
     virtual void initialize(EventCommand* command);
 
 private:

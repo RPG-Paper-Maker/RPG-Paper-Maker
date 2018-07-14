@@ -48,7 +48,7 @@ public:
                               QStandardItemModel* properties);
     void setSongKind(SongKind kind);
     void changeSong(SystemSong* song);
-    void initialize(EventCommand* command);
+    void initialize(EventCommand* command, int &i);
     void getCommand(QVector<QString>& command) const;
 
 private:

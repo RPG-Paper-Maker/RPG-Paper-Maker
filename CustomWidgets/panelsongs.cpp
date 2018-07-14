@@ -269,8 +269,7 @@ void PanelSongs::changeSong(SystemSong* song){
 
 // -------------------------------------------------------
 
-void PanelSongs::initialize(EventCommand* command) {
-    int i = 0;
+void PanelSongs::initialize(EventCommand* command, int& i) {
     changeSong((SystemSong*) SuperListItem::getById(Wanok::get()->project()
         ->songsDatas()->model(m_songKind)->invisibleRootItem(), command
         ->valueCommandAt(i++).toInt()));

@@ -54,7 +54,12 @@ enum class EventCommandKind {
     MoveObject,
     Wait,
     MoveCamera,
-    PlayMusic
+    PlayMusic,
+    StopMusic,
+    PlayBackgroundSound,
+    StopBackgroundSound,
+    PlaySound,
+    PlayMusicEffect
 };
 
 #endif // EVENTCOMMANDKIND_H

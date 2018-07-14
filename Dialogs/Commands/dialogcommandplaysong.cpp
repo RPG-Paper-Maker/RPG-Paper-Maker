@@ -32,6 +32,7 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
                                              QStandardItemModel *parameters,
                                              QWidget *parent) :
     DialogCommand(parent),
+    m_kind(kind),
     ui(new Ui::DialogCommandPlaySong)
 {
     ui->setupUi(this);
@@ -49,6 +50,23 @@ DialogCommandPlaySong::~DialogCommandPlaySong()
     delete ui;
 }
 
+EventCommandKind DialogCommandPlaySong::getCommandKind() const {
+    switch(m_kind) {
+    case SongKind::Music:
+        return EventCommandKind::PlayMusic;
+    case SongKind::BackgroundSound:
+        return EventCommandKind::PlayBackgroundSound;
+    case SongKind::Sound:
+        return EventCommandKind::PlaySound;
+    case SongKind::MusicEffect:
+        return EventCommandKind::PlayMusicEffect;
+    case SongKind::None:
+        return EventCommandKind::None;
+    }
+
+    return EventCommandKind::None;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -60,7 +78,7 @@ void DialogCommandPlaySong::initialize(EventCommand* command) {
 
     ui->checkBoxSongID->setChecked(command->valueCommandAt(i++) == "1");
     ui->panelPrimitiveValueSongID->initializeCommand(command, i);
-    ui->widget->initialize(command);
+    ui->widget->initialize(command, i);
 }
 
 // -------------------------------------------------------
@@ -71,7 +89,7 @@ EventCommand* DialogCommandPlaySong::getCommand() const {
     ui->panelPrimitiveValueSongID->getCommand(command);
     ui->widget->getCommand(command);
 
-    return new EventCommand(EventCommandKind::PlayMusic, command);
+    return new EventCommand(getCommandKind(), command);
 }
 
 // -------------------------------------------------------

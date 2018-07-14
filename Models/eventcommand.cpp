@@ -163,7 +163,17 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::MoveCamera:
         str += strMoveCamera(parameters); break;
     case EventCommandKind::PlayMusic:
-        str += strPlaySong(object, parameters); break;
+        str += strPlayMusic(object, parameters); break;
+    case EventCommandKind::StopMusic:
+        str += strPlayMusic(object, parameters); break;
+    case EventCommandKind::PlayBackgroundSound:
+        str += strPlayBackgroundSound(object, parameters); break;
+    case EventCommandKind::StopBackgroundSound:
+        str += strPlayMusic(object, parameters); break;
+    case EventCommandKind::PlaySound:
+        str += strPlaySound(object, parameters); break;
+    case EventCommandKind::PlayMusicEffect:
+        str += strPlayMusicEffect(object, parameters); break;
     default:
         break;
     }
@@ -821,14 +831,15 @@ QString EventCommand::strMoveCameraOptions(QStandardItemModel* parameters,
 // -------------------------------------------------------
 
 QString EventCommand::strPlaySong(SystemCommonObject*,
-                                  QStandardItemModel* parameters) const
+                                  QStandardItemModel* parameters,
+                                  SongKind kind) const
 {
     int i = 0;
 
     bool isIDNumber = p_listCommand.at(i++) == "1";
     QString idNumber = strNumber(i, parameters);
     QString id = SuperListItem::getById(Wanok::get()->project()->songsDatas()
-        ->model(SongKind::Music)->invisibleRootItem(), p_listCommand.at(i++)
+        ->model(kind)->invisibleRootItem(), p_listCommand.at(i++)
         .toInt())->toString();
     QString volume = strNumber(i, parameters);
     bool isStart = p_listCommand.at(i++) == "1";
@@ -836,9 +847,42 @@ QString EventCommand::strPlaySong(SystemCommonObject*,
     bool isEnd = p_listCommand.at(i++) == "1";
     QString end = strNumber(i, parameters);
 
-    return "Play song: " + (isIDNumber ? "with ID " + idNumber : id) +
+    return (isIDNumber ? "with ID " + idNumber : id) +
             " with volume: " + volume + (isStart ? "\nStart: " + start : "") +
             (isEnd ? "\nEnd: " + end : "");
+}
+
+QString EventCommand::strPlayMusic(SystemCommonObject* object,
+                                   QStandardItemModel* parameters) const
+{
+    return "Play music: " + strPlaySong(object, parameters, SongKind::Music);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlayBackgroundSound(SystemCommonObject* object,
+                                             QStandardItemModel* parameters)
+                                             const
+{
+    return "Play background sound: " + strPlaySong(object, parameters,
+                                                   SongKind::BackgroundSound);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlaySound(SystemCommonObject* object,
+                                   QStandardItemModel* parameters) const
+{
+    return "Play sound: " + strPlaySong(object, parameters, SongKind::Sound);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlayMusicEffect(SystemCommonObject* object,
+                                         QStandardItemModel* parameters) const
+{
+    return "Play music effect: " + strPlaySong(object, parameters,
+                                               SongKind::MusicEffect);
 }
 
 // -------------------------------------------------------

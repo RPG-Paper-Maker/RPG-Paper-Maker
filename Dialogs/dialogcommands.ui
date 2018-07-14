@@ -936,7 +936,7 @@
                 <item>
                  <widget class="QPushButton" name="pushButtonPlayBackgroundSound">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Play a background sound...</string>
@@ -956,7 +956,7 @@
                 <item>
                  <widget class="QPushButton" name="pushButtonPlaySound">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Play a sound...</string>
@@ -964,9 +964,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButtonMusicEffect">
+                 <widget class="QPushButton" name="pushButtonPlayMusicEffect">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Play a music effect...</string>

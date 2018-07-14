@@ -28,6 +28,7 @@
 #include <QStandardItemModel>
 #include "eventcommandkind.h"
 #include "systemcommonobject.h"
+#include "songkind.h"
 
 // -------------------------------------------------------
 //
@@ -107,7 +108,15 @@ private:
                               QString &operation) const;
     QString strMoveCameraOptions(QStandardItemModel *parameters, int& i) const;
     QString strPlaySong(SystemCommonObject*,
-                        QStandardItemModel* parameters) const;
+                        QStandardItemModel* parameters, SongKind kind) const;
+    QString strPlayMusic(SystemCommonObject* object,
+                         QStandardItemModel* parameters) const;
+    QString strPlayBackgroundSound(SystemCommonObject* object,
+                                   QStandardItemModel* parameters) const;
+    QString strPlaySound(SystemCommonObject* object,
+                         QStandardItemModel* parameters) const;
+    QString strPlayMusicEffect(SystemCommonObject* object,
+                               QStandardItemModel* parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

@@ -100,6 +100,17 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::PlayMusic:
         return new DialogCommandPlaySong("Play a music", SongKind::Music,
                                          command, object, parameters);
+    case EventCommandKind::PlayBackgroundSound:
+        return new DialogCommandPlaySong("Play a background sound",
+                                         SongKind::BackgroundSound,
+                                         command, object, parameters);
+    case EventCommandKind::PlaySound:
+        return new DialogCommandPlaySong("Play a sound", SongKind::Sound,
+                                         command, object, parameters);
+    case EventCommandKind::PlayMusicEffect:
+        return new DialogCommandPlaySong("Play a music effect",
+                                         SongKind::MusicEffect,
+                                         command, object, parameters);
     default:
         return nullptr;
     }
@@ -242,4 +253,22 @@ void DialogCommands::on_pushButtonMoveCamera_clicked() {
 
 void DialogCommands::on_pushButtonPlayMusic_clicked() {
     openDialogCommand(EventCommandKind::PlayMusic);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlayBackgroundSound_clicked() {
+    openDialogCommand(EventCommandKind::PlayBackgroundSound);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlaySound_clicked() {
+    openDialogCommand(EventCommandKind::PlaySound);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonPlayMusicEffect_clicked() {
+    openDialogCommand(EventCommandKind::PlayMusicEffect);
 }
