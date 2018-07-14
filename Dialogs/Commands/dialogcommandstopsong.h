@@ -17,35 +17,34 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGCOMMANDPLAYSONG_H
-#define DIALOGCOMMANDPLAYSONG_H
+#ifndef DIALOGCOMMANDSTOPSONG_H
+#define DIALOGCOMMANDSTOPSONG_H
 
 // -------------------------------------------------------
 //
-//  CLASS DialogCommanPlaySong
+//  CLASS DialogCommanStopSong
 //
-//  A generic dialog command for playing song.
+//  A generic dialog command for stopping song.
 //
 // -------------------------------------------------------
 
 #include "dialogcommand.h"
-#include "songkind.h"
 
 namespace Ui {
-class DialogCommandPlaySong;
+class DialogCommandStopSong;
 }
 
-class DialogCommandPlaySong : public DialogCommand
+class DialogCommandStopSong : public DialogCommand
 {
     Q_OBJECT
 
 public:
-    explicit DialogCommandPlaySong(QString title, SongKind kind,
+    explicit DialogCommandStopSong(QString title, SongKind kind,
                                    EventCommand *command = nullptr,
                                    SystemCommonObject *object = nullptr,
                                    QStandardItemModel* parameters = nullptr,
                                    QWidget *parent = 0);
-    ~DialogCommandPlaySong();
+    ~DialogCommandStopSong();
     EventCommandKind getCommandKind() const;
     EventCommand* getCommand() const;
 
@@ -55,10 +54,7 @@ protected:
     virtual void initialize(EventCommand* command);
 
 private:
-    Ui::DialogCommandPlaySong *ui;
-
-private slots:
-    void on_checkBoxSongID_toggled(bool checked);
+    Ui::DialogCommandStopSong *ui;
 };
 
-#endif // DIALOGCOMMANDPLAYSONG_H
+#endif // DIALOGCOMMANDSTOPSONG_H

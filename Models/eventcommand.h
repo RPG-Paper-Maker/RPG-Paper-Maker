@@ -117,6 +117,12 @@ private:
                          QStandardItemModel* parameters) const;
     QString strPlayMusicEffect(SystemCommonObject* object,
                                QStandardItemModel* parameters) const;
+    QString strStopSong(SystemCommonObject*,
+                        QStandardItemModel* parameters) const;
+    QString strStopMusic(SystemCommonObject* object,
+                         QStandardItemModel* parameters) const;
+    QString strStopBackgroundSound(SystemCommonObject* object,
+                                   QStandardItemModel* parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

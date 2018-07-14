@@ -165,11 +165,11 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::PlayMusic:
         str += strPlayMusic(object, parameters); break;
     case EventCommandKind::StopMusic:
-        str += strPlayMusic(object, parameters); break;
+        str += strStopMusic(object, parameters); break;
     case EventCommandKind::PlayBackgroundSound:
         str += strPlayBackgroundSound(object, parameters); break;
     case EventCommandKind::StopBackgroundSound:
-        str += strPlayMusic(object, parameters); break;
+        str += strStopBackgroundSound(object, parameters); break;
     case EventCommandKind::PlaySound:
         str += strPlaySound(object, parameters); break;
     case EventCommandKind::PlayMusicEffect:
@@ -883,6 +883,32 @@ QString EventCommand::strPlayMusicEffect(SystemCommonObject* object,
 {
     return "Play music effect: " + strPlaySong(object, parameters,
                                                SongKind::MusicEffect);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStopSong(SystemCommonObject*,
+                                  QStandardItemModel* parameters) const
+{
+    int i = 0;
+    QString seconds = strNumber(i, parameters);
+
+    return seconds + " seconds";
+}
+
+QString EventCommand::strStopMusic(SystemCommonObject* object,
+                                   QStandardItemModel* parameters) const
+{
+    return "Stop music: " + strStopSong(object, parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStopBackgroundSound(SystemCommonObject* object,
+                                             QStandardItemModel* parameters)
+                                             const
+{
+    return "Stop background sound: " + strStopSong(object, parameters);
 }
 
 // -------------------------------------------------------

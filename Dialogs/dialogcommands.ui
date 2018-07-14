@@ -926,7 +926,7 @@
                 <item>
                  <widget class="QPushButton" name="pushButtonStopMusic">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Stop music...</string>
@@ -946,7 +946,7 @@
                 <item>
                  <widget class="QPushButton" name="pushButtonStopBackgroundSound">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Stop background sound...</string>

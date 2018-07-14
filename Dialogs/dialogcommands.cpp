@@ -33,6 +33,7 @@
 #include "dialogcommandwait.h"
 #include "dialogcommandmovecamera.h"
 #include "dialogcommandplaysong.h"
+#include "dialogcommandstopsong.h"
 
 // -------------------------------------------------------
 //
@@ -100,8 +101,15 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::PlayMusic:
         return new DialogCommandPlaySong("Play a music", SongKind::Music,
                                          command, object, parameters);
+    case EventCommandKind::StopMusic:
+        return new DialogCommandStopSong("Stop a music", SongKind::Music,
+                                         command, object, parameters);
     case EventCommandKind::PlayBackgroundSound:
         return new DialogCommandPlaySong("Play a background sound",
+                                         SongKind::BackgroundSound,
+                                         command, object, parameters);
+    case EventCommandKind::StopBackgroundSound:
+        return new DialogCommandStopSong("Stop a background sound",
                                          SongKind::BackgroundSound,
                                          command, object, parameters);
     case EventCommandKind::PlaySound:
@@ -257,8 +265,20 @@ void DialogCommands::on_pushButtonPlayMusic_clicked() {
 
 // -------------------------------------------------------
 
+void DialogCommands::on_pushButtonStopMusic_clicked() {
+    openDialogCommand(EventCommandKind::StopMusic);
+}
+
+// -------------------------------------------------------
+
 void DialogCommands::on_pushButtonPlayBackgroundSound_clicked() {
     openDialogCommand(EventCommandKind::PlayBackgroundSound);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonStopBackgroundSound_clicked() {
+    openDialogCommand(EventCommandKind::StopBackgroundSound);
 }
 
 // -------------------------------------------------------
