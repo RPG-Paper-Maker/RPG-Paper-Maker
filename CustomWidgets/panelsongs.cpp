@@ -206,6 +206,7 @@ void PanelSongs::setSongKind(SongKind kind){
         ui->pushButtonPlay->setEnabled(true);
         ui->pushButtonStop->setEnabled(true);
         ui->pushButtonPause->setEnabled(true);
+        setVisibleStartEnd(true);
         QMediaPlayer::State state = QMediaPlayer::StoppedState;
         int volume = 0;
         switch (m_songKind) {
@@ -222,6 +223,7 @@ void PanelSongs::setSongKind(SongKind kind){
             volume = m_mediaPlayerSound->volume();
             ui->pushButtonPause->hide();
             ui->pushButtonStop->hide();
+            setVisibleStartEnd(false);
             break;
         case SongKind::MusicEffect:
             state = m_mediaPlayerMusicEffect->state();
@@ -430,6 +432,17 @@ void PanelSongs::stopOnEnd(int end, qint64 pos, QMediaPlayer* player) {
     if (end > -1 && pos >= end) {
         player->stop();
     }
+}
+
+// -------------------------------------------------------
+
+void PanelSongs::setVisibleStartEnd(bool b) {
+    ui->checkBoxStart->setVisible(b);
+    ui->panelPrimitiveValueStart->setVisible(b);
+    ui->labelSeconds1->setVisible(b);
+    ui->checkBoxEnd->setVisible(b);
+    ui->panelPrimitiveValueEnd->setVisible(b);
+    ui->labelSeconds2->setVisible(b);
 }
 
 // -------------------------------------------------------

@@ -18,7 +18,7 @@
 */
 
 #include <QPainter>
-#include <QDebug>
+#include <QStyleOptionMenuItem>
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
 

@@ -80,6 +80,7 @@ private:
     void updateSongs();
     void updateVolume(int volume);
     void stopOnEnd(int end, qint64 pos, QMediaPlayer* player);
+    void setVisibleStartEnd(bool b);
 
 public slots:
     void showAvailableContent(bool b);
