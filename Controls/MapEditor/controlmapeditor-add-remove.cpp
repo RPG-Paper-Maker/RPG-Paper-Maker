@@ -75,7 +75,7 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             if (m_map->isInSomething(p, portion)) {
                 if (m_selectedObject != nullptr)
                     moveObject(p);
-                setCursorObjectPosition(p);
+                setCursorObjectPosition(m_previousMouseCoords);
             }
             break;
         }

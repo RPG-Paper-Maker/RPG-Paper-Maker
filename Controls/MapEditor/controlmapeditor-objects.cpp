@@ -18,6 +18,8 @@
 */
 
 #include "controlmapeditor.h"
+#include "wanok.h"
+#include "dialogobject.h"
 
 // -------------------------------------------------------
 
@@ -175,12 +177,19 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
 void ControlMapEditor::moveObject(Position& p) {
     m_isMovingObject = true;
     if (m_previousMouseCoords != p) {
-        SystemCommonObject* object =
-                (SystemCommonObject*) m_selectedObject->createCopy();
-        eraseObject(m_previousMouseCoords, false, true);
-        stockObject(p, object, false, true);
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
+        MapPortion* mapPortion = getMapPortion(p, portion, false);
+        if (mapPortion != nullptr &&
+            mapPortion->mapObjects()->getObjectAt(p) == nullptr)
+        {
+            SystemCommonObject* object =
+                    (SystemCommonObject*) m_selectedObject->createCopy();
+            eraseObject(m_previousMouseCoords, false, true);
+            stockObject(p, object, false, true);
 
-        m_previousMouseCoords = p;
+            m_previousMouseCoords = p;
+        }
     }
 }
 
