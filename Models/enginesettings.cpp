@@ -21,6 +21,7 @@
 #include "wanok.h"
 #include "common.h"
 #include <QDir>
+#include <QApplication>
 
 // -------------------------------------------------------
 //
@@ -30,7 +31,8 @@
 
 EngineSettings::EngineSettings() :
     m_keyBoardDatas(new KeyBoardDatas),
-    m_zoomPictures(0)
+    m_zoomPictures(0),
+    m_theme(ThemeKind::Dark)
 {
 
 }
@@ -63,10 +65,44 @@ void EngineSettings::setZoomPictures(int z) {
     write();
 }
 
+ThemeKind EngineSettings::theme() const {
+    return m_theme;
+}
+
+void EngineSettings::setTheme(ThemeKind t) {
+    m_theme = t;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+QString EngineSettings::getThemeFile() const {
+    QString file = ":/stylesheets/";
+    switch (m_theme) {
+    case ThemeKind::Dark:
+        file += "darktheme";
+        break;
+    case ThemeKind::White:
+        file += "whitetheme";
+        break;
+    }
+
+    return file + ".qss";
+}
+
+// -------------------------------------------------------
+
+void EngineSettings::updateTheme() {
+    QFile file(getThemeFile());
+    if (file.open(QFile::ReadOnly)) {
+       QString styleSheet = QLatin1String(file.readAll());
+       qApp->setStyleSheet(styleSheet);
+    }
+}
+
 // -------------------------------------------------------
 
 void EngineSettings::setDefault(){
@@ -82,8 +118,12 @@ void EngineSettings::setDefault(){
 void EngineSettings::read(const QJsonObject &json){
     m_keyBoardDatas->read(json["kb"].toObject());
 
-    if (json.contains("zp"))
+    if (json.contains("zp")) {
         m_zoomPictures = json["zp"].toInt();
+    }
+    if (json.contains("theme")) {
+        m_theme = static_cast<ThemeKind>(json["theme"].toInt());
+    }
 }
 
 // -------------------------------------------------------
@@ -94,4 +134,7 @@ void EngineSettings::write(QJsonObject &json) const{
     m_keyBoardDatas->write(obj);
     json["kb"] = obj;
     json["zp"] = m_zoomPictures;
+    if (m_theme != ThemeKind::Dark) {
+        json["theme"] = static_cast<int>(m_theme);
+    }
 }

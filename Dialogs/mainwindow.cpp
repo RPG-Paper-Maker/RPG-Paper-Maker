@@ -195,6 +195,7 @@ void MainWindow::enableAll(bool b){
     ui->actionDatas_manager->setEnabled(b);
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
+    ui->actionSongs_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionDebug_options->setEnabled(b);

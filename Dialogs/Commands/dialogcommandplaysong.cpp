@@ -19,6 +19,7 @@
 
 #include "dialogcommandplaysong.h"
 #include "ui_dialogcommandplaysong.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -96,6 +97,20 @@ EventCommand* DialogCommandPlaySong::getCommand() const {
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogCommandPlaySong::accept() {
+    Wanok::get()->project()->writeSongsDatas();
+    QDialog::accept();
+}
+
+// -------------------------------------------------------
+
+void DialogCommandPlaySong::reject() {
+    Wanok::get()->project()->readSongsDatas();
+    QDialog::reject();
+}
+
 // -------------------------------------------------------
 
 void DialogCommandPlaySong::on_checkBoxSongID_toggled(bool checked) {

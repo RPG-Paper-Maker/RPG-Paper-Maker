@@ -430,7 +430,7 @@ void WidgetTilesetPraticable::drawCollision(
         const QColor &color, bool outline)
 {
     QRect rect;
-    QPen pen(color, 2, Qt::DashLine);
+    QPen pen(painter.pen().color(), 2, Qt::DashLine);
     painter.setPen(pen);
     getRectCollision(rect, localPoint, collision);
     painter.fillRect(rect, color);
@@ -600,7 +600,7 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
 
     // Draw background
     painter.fillRect(0, 0, m_image.width(), m_image.height(),
-                     Wanok::colorAlmostWhite);
+                     Wanok::colorAlmostTransparent);
 
     // Draw image
     painter.drawImage(0, 0, m_image);
@@ -609,12 +609,13 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         return;
 
     // Draw all the collisions
-    painter.setPen(Wanok::colorGraySelection);
+    painter.setPen(Wanok::get()->engineSettings()->theme() == ThemeKind::Dark ?
+        Wanok::colorAlmostWhite : Wanok::colorFortyTransparent);
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
          i != m_squares->end(); i++)
     {
         drawCollision(painter, i.key(), i.value(),
-                      Wanok::colorGraySelectionBackground);
+                      Wanok::colorFortyTransparent);
     }
 
     // Draw another layer for the selected collision
@@ -636,16 +637,16 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     if (m_picture->repeatCollisions()) {
         QRect rect;
         getRectRepeatBot(rect);
-        painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+        painter.fillRect(rect, Wanok::colorFortyTransparent);
         getRectRepeatTop(rect);
-        painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+        painter.fillRect(rect, Wanok::colorFortyTransparent);
         QHash<QPoint, CollisionSquare*> list;
         getPointsRepeat(list);
         for (QHash<QPoint, CollisionSquare*>::iterator i = list.begin();
              i != list.end(); i++)
         {
             drawCollision(painter, i.key(), i.value(),
-                          Wanok::colorGraySelectionBackground, true);
+                          Wanok::colorFortyTransparent, true);
         }
     }
 }

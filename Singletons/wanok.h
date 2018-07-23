@@ -64,6 +64,8 @@ public:
     const static QColor colorGrayHoverBackground;
     const static QColor colorAlmostWhite;
     const static QColor colorAlmostBlack;
+    const static QColor colorAlmostTransparent;
+    const static QColor colorFortyTransparent;
     const static QColor colorGrey;
 
     // PATHS

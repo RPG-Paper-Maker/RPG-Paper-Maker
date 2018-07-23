@@ -74,12 +74,21 @@ int main(int argc, char *argv[])
                 .rename(realApplicationName);
     }
 
-    // General stylesheet configuration
-    QFile file(":/stylesheets/style.qss");
-    if (file.open(QFile::ReadOnly)) {
-       QString styleSheet = QLatin1String(file.readAll());
-       qApp->setStyleSheet(styleSheet);
+    // Load engine settings
+    EngineSettings* engineSettings = new EngineSettings;
+    QFile fileSettings(Common::pathCombine(QDir::currentPath(),
+                                          Wanok::pathEngineSettings));
+    if (fileSettings.exists()){
+        engineSettings->read();
     }
+    else{
+        engineSettings->setDefault();
+        engineSettings->write();
+    }
+    Wanok::get()->setEngineSettings(engineSettings);
+
+    // General stylesheet configuration
+    engineSettings->updateTheme();
     qApp->setWindowIcon(QIcon(":/icons/Ressources/icon.ico"));
 
     // Create document folder for games if not existing
@@ -95,19 +104,6 @@ int main(int argc, char *argv[])
         }
 
     }
-
-    // Load engine settings
-    EngineSettings* engineSettings = new EngineSettings;
-    QFile fileSettings(Common::pathCombine(QDir::currentPath(),
-                                          Wanok::pathEngineSettings));
-    if (fileSettings.exists()){
-        engineSettings->read();
-    }
-    else{
-        engineSettings->setDefault();
-        engineSettings->write();
-    }
-    Wanok::get()->setEngineSettings(engineSettings);
 
     // Opening window
     MainWindow w;

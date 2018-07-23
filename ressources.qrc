@@ -60,7 +60,8 @@
         <file>Ressources/stop_song.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
-        <file>style.qss</file>
+        <file>darktheme.qss</file>
+        <file>whitetheme.qss</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

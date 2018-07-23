@@ -40,6 +40,8 @@ const QColor Wanok::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);
 const QColor Wanok::colorGrayHoverBackground = QColor(50, 50, 50, 75);
 const QColor Wanok::colorAlmostWhite = QColor(245, 245, 245);
 const QColor Wanok::colorAlmostBlack = QColor(25, 25, 25);
+const QColor Wanok::colorAlmostTransparent = QColor(0, 0, 0, 20);
+const QColor Wanok::colorFortyTransparent = QColor(0, 0, 0, 40);
 const QColor Wanok::colorGrey = QColor(90, 90, 90);
 
 // PATHS DATAS

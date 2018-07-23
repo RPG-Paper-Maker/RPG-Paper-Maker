@@ -251,7 +251,8 @@ HEADERS += \
     Enums/songkind.h \
     Models/GameDatas/songsdatas.h \
     Dialogs/Commands/dialogcommandplaysong.h \
-    Dialogs/Commands/dialogcommandstopsong.h
+    Dialogs/Commands/dialogcommandstopsong.h \
+    Enums/themekind.h
 
 SOURCES += \
     main.cpp \
@@ -525,8 +526,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandplaysong.ui \
     Dialogs/Commands/dialogcommandstopsong.ui
 
-OTHER_FILES += \
-    style.qss
+OTHER_FILES +=
 
 RESOURCES += \
     ressources.qrc
@@ -590,3 +590,7 @@ win32{
     export(copyBR.commands)
     QMAKE_EXTRA_TARGETS += first copyBR
 }
+
+DISTFILES += \
+    darktheme.qss \
+    whitetheme.qss

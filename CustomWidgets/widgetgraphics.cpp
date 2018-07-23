@@ -123,7 +123,7 @@ void WidgetGraphics::paintEvent(QPaintEvent* event){
     // Draw background
     painter.fillRect(QRectF(rect().x() + 1, rect().y() + 1,
                             rect().width() - 2, rect().height() - 2),
-                     QColor(255, 255, 255));
+                     Wanok::colorAlmostTransparent);
 
     // Draw image
     if (m_state->graphicsKind() != MapEditorSubSelectionKind::None){

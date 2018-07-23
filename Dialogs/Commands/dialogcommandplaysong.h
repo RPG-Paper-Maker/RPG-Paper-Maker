@@ -57,7 +57,9 @@ protected:
 private:
     Ui::DialogCommandPlaySong *ui;
 
-private slots:
+public slots:
+    virtual void accept();
+    virtual void reject();
     void on_checkBoxSongID_toggled(bool checked);
 };
 

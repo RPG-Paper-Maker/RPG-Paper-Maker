@@ -17,44 +17,20 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ENGINESETTINGS_H
-#define ENGINESETTINGS_H
-
-#include "keyboarddatas.h"
-#include "themekind.h"
+#ifndef THEMEKIND_H
+#define THEMEKIND_H
 
 // -------------------------------------------------------
 //
-//  CLASS EngineSettings
+//  ENUM ThemeKind
 //
-//  The engine settings (keyboard for the engine).
+//  All the possible theme skins kind.
 //
 // -------------------------------------------------------
 
-class EngineSettings : public Serializable
-{
-public:
-    EngineSettings();
-    virtual ~EngineSettings();
-    void read();
-    void write();
-    KeyBoardDatas* keyBoardDatas() const;
-    int zoomPictures() const;
-    void setZoomPictures(int z);
-    ThemeKind theme() const;
-    void setTheme(ThemeKind t);
-
-    QString getThemeFile() const;
-    void updateTheme();
-    void setDefault();
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
-
-protected:
-    KeyBoardDatas* m_keyBoardDatas;
-    int m_zoomPictures;
-    ThemeKind m_theme;
+enum class ThemeKind {
+    Dark,
+    White
 };
 
-#endif // ENGINESETTINGS_H
+#endif // THEMEKIND_H
