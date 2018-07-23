@@ -121,9 +121,8 @@ void EngineSettings::read(const QJsonObject &json){
     if (json.contains("zp")) {
         m_zoomPictures = json["zp"].toInt();
     }
-    if (json.contains("theme")) {
-        m_theme = static_cast<ThemeKind>(json["theme"].toInt());
-    }
+    m_theme = json.contains("theme") ? static_cast<ThemeKind>(
+        json["theme"].toInt()) : ThemeKind::Dark;
 }
 
 // -------------------------------------------------------

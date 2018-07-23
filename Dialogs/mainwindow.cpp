@@ -40,6 +40,7 @@
 #include "dialogprogress.h"
 #include "dialogspecialelements.h"
 #include "dialogdebugoptions.h"
+#include "dialoggeneraloptions.h"
 #include "dialogsongs.h"
 #include "common.h"
 
@@ -505,6 +506,13 @@ void MainWindow::on_actionDebug_options_triggered() {
         project->writeSystemDatas();
     else
         project->readSystemDatas();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionGeneral_options_triggered() {
+    DialogGeneralOptions dialog;
+    openDialog(dialog);
 }
 
 // -------------------------------------------------------

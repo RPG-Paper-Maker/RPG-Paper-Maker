@@ -92,6 +92,7 @@
     </property>
     <addaction name="actionSet_BR_path_folder"/>
     <addaction name="actionDebug_options"/>
+    <addaction name="actionGeneral_options"/>
    </widget>
    <widget class="QMenu" name="menuSpecials">
     <property name="title">
@@ -477,6 +478,11 @@
   <action name="actionDebug_options">
    <property name="text">
     <string>Debug options...</string>
+   </property>
+  </action>
+  <action name="actionGeneral_options">
+   <property name="text">
+    <string>General options...</string>
    </property>
   </action>
  </widget>

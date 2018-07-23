@@ -94,6 +94,7 @@ private slots:
     void on_actionSprite_walls_triggered();
     void on_actionSet_BR_path_folder_triggered();
     void on_actionDebug_options_triggered();
+    void on_actionGeneral_options_triggered();
     void on_actionShow_Hide_grid_triggered();
     void on_actionShow_Hide_square_informations_triggered();
     void on_actionPlay_triggered();
