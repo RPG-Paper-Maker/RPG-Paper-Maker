@@ -48,6 +48,9 @@ private:
     Ui::DialogSystemWeaponArmorKind *ui;
     SystemWeaponArmorKind& m_weaponArmorKind;
     void initialize();
+
+public slots:
+    virtual void accept();
 };
 
 #endif // DIALOGSYSTEMWEAPONARMORKIND_H

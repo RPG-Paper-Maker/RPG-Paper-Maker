@@ -55,3 +55,15 @@ void DialogSystemWeaponArmorKind::initialize(){
     ui->widgetName->initializeNames(&m_weaponArmorKind);
     ui->treeViewEquipment->setModel(m_weaponArmorKind.getEquipmentModel());
 }
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogSystemWeaponArmorKind::accept() {
+    m_weaponArmorKind.updateByModel(static_cast<QStandardItemModel*>(
+        ui->treeViewEquipment->model()));
+    QDialog::accept();
+}

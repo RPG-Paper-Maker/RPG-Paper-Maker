@@ -41,6 +41,7 @@ public:
     virtual ~SystemWeaponArmorKind();
     QStandardItemModel* getEquipmentModel() const;
     void updateEquipment();
+    void updateByModel(QStandardItemModel *model);
     void setDefault();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

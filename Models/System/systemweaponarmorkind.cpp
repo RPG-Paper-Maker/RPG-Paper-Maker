@@ -97,6 +97,14 @@ void SystemWeaponArmorKind::updateEquipment(){
 
 // -------------------------------------------------------
 
+void SystemWeaponArmorKind::updateByModel(QStandardItemModel *model) {
+    for (int i = 0; i < model->rowCount(); i++) {
+        m_equipment.replace(i, model->item(i)->checkState() == Qt::Checked);
+    }
+}
+
+// -------------------------------------------------------
+
 void SystemWeaponArmorKind::setDefault(){
     updateEquipment();
 }
