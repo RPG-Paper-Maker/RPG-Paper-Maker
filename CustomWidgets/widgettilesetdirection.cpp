@@ -58,7 +58,9 @@ void WidgetTilesetDirection::setSquares(QHash<QPoint, CollisionSquare*>*squares)
 void WidgetTilesetDirection::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    m_image = QImage(picture->getPath(kind));
+    QString path = picture->getPath(kind);
+    m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
+        QImage();
     updateImageGeneral();
 }
 
@@ -242,7 +244,9 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     // Draw image
-    painter.drawImage(0, 0, m_image);
+    if (!m_image.isNull()) {
+        painter.drawImage(0, 0, m_image);
+    }
 
     if (m_squares == nullptr)
         return;

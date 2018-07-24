@@ -68,19 +68,18 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             break;
         case MapEditorSelectionKind::Sprites:
             addSprite(p, subSelection, drawKind, layerOn, tileset);
-        case MapEditorSelectionKind::Objects:
-        {
-            Portion portion;
-            m_map->getLocalPortion(p, portion);
-            if (m_map->isInSomething(p, portion)) {
-                if (m_selectedObject != nullptr)
-                    moveObject(p);
-                setCursorObjectPosition(m_previousMouseCoords);
-            }
             break;
-        }
         default:
             break;
+        }
+    }
+    if (selection == MapEditorSelectionKind::Objects) {
+        Portion portion;
+        m_map->getLocalPortion(p, portion);
+        if (m_map->isInSomething(p, portion)) {
+            if (m_selectedObject != nullptr)
+                moveObject(p);
+            setCursorObjectPosition(m_previousMouseCoords);
         }
     }
 }

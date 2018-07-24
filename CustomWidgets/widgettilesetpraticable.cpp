@@ -74,7 +74,9 @@ void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
 void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
                                           PictureKind kind)
 {
-    m_baseImage = QImage(picture->getPath(kind));
+    QString path = picture->getPath(kind);
+    m_baseImage = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
+        QImage();
     updateImageGeneral(picture);
 }
 
@@ -603,7 +605,9 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
                      Wanok::colorAlmostTransparent);
 
     // Draw image
-    painter.drawImage(0, 0, m_image);
+    if (!m_image.isNull()) {
+        painter.drawImage(0, 0, m_image);
+    }
 
     if (m_squares == nullptr)
         return;

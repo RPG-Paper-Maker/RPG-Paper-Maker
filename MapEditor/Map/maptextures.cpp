@@ -28,8 +28,15 @@ void Map::loadTextures(){
     deleteTextures();
 
     // Tileset
-    QImage imageTileset(m_mapProperties->tileset()->picture()
-                        ->getPath(PictureKind::Tilesets));
+    QImage imageTileset(1, 1, QImage::Format_ARGB32);
+    QString path = m_mapProperties->tileset()->picture()->getPath(
+        PictureKind::Tilesets);
+    if (!path.isEmpty() && QFile::exists(path)) {
+        imageTileset = QImage(path);
+    }
+    else {
+        imageTileset.fill(QColor(0, 0, 0, 0));
+    }
     m_textureTileset = createTexture(imageTileset);
 
     // Characters && walls

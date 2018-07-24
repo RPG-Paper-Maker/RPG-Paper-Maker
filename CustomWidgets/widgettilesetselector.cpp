@@ -51,7 +51,8 @@ void WidgetTilesetSelector::currentTexture(QRect& rect) const{
 // -------------------------------------------------------
 
 void WidgetTilesetSelector::setImage(QString path){
-    m_textureTileset = QImage(path);
+    m_textureTileset = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
+        QImage();
     updateImage();
 }
 

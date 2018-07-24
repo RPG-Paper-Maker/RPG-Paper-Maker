@@ -39,7 +39,9 @@ WidgetShowPicture::WidgetShowPicture(QWidget *parent) : QWidget(parent)
 
 void WidgetShowPicture::updatePicture(SystemPicture* picture, PictureKind kind)
 {
-    m_image = QImage(picture->getPath(kind));
+    QString path = picture->getPath(kind);
+    m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
+        QImage();
     if (!m_image.isNull()){
         float coef = Wanok::coefReverseSquareSize();
         m_image = m_image.scaled(m_image.width() * coef,
