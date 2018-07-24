@@ -73,11 +73,16 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 void SystemCommonObject::setDefault(){
     QStandardItem* model = Wanok::get()->project()->gameDatas()
             ->commonEventsDatas()->modelCommonObjects()->invisibleRootItem();
+    int id = p_id;
 
     // Copy the object with ID 1
-    SystemCommonObject* object =
-            (SystemCommonObject*) SuperListItem::getById(model, 1);
+    SystemCommonObject* object = static_cast<SystemCommonObject*>(
+        SuperListItem::getById(model, 1));
+    SuperListItem::deleteModel(m_states, false);
+    SuperListItem::deleteModel(m_events, false);
     setCopy(*object);
+    setId(id);
+    setName("");
 }
 
 // -------------------------------------------------------
