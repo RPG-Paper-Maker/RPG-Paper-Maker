@@ -23,7 +23,7 @@ QWidget {
 }
 
 QWidget:disabled {
-    color: darkgray;
+    color: #474747;
 }
 
 QGroupBox {
@@ -108,4 +108,12 @@ QRadioButton::indicator:checked {
 QRadioButton::indicator:unchecked {
     background-color: transparent;
     border: 2px solid grey;
+}
+
+QTabBar::tab {
+    color: grey;
+}
+
+QTabBar::tab:selected {
+    color: white;
 }
