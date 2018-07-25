@@ -47,7 +47,9 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_length(l),
     m_width(w),
     m_height(h),
-    m_depth(d)
+    m_depth(d),
+    m_idMusic(-1),
+    m_idBackgroundSound(-1)
 {
 
 }
@@ -88,6 +90,14 @@ void MapProperties::setWidth(int w) { m_width = w; }
 void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
+
+int MapProperties::idMusic() const { return m_idMusic; }
+
+void MapProperties::setIdMusic(int id) { m_idMusic = id; }
+
+int MapProperties::idBackgroundSound() const { return m_idBackgroundSound; }
+
+void MapProperties::setIdBackgroundSound(int id) { m_idBackgroundSound = id; }
 
 void MapProperties::addOverflow(Position& p, Portion& portion) {
     QSet<Position>* portions = m_outOverflowSprites.value(portion);
@@ -199,6 +209,8 @@ void MapProperties::read(const QJsonObject &json){
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
+    m_idMusic = json.contains("music") ? json["music"].toInt() : -1;
+    m_idBackgroundSound = json.contains("bgs") ? json["bgs"].toInt() : -1;
 
     // Overflow
     QJsonArray tabOverflow = json["ofsprites"].toArray();
@@ -225,11 +237,15 @@ void MapProperties::read(const QJsonObject &json){
 void MapProperties::write(QJsonObject &json) const{
     SystemLang::write(json);
 
+    json["tileset"] = m_tilesetID;
     json["l"] = m_length;
     json["w"] = m_width;
     json["h"] = m_height;
     json["d"] = m_depth;
-    json["tileset"] = m_tilesetID;
+    if (m_idMusic != -1)
+        json["music"] = m_idMusic;
+    if (m_idBackgroundSound != -1)
+        json["bgs"] = m_idBackgroundSound;
 
     // Overflow
     QHash<Portion, QSet<Position>*>::const_iterator i;

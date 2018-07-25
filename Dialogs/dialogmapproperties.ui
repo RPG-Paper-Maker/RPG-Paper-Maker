@@ -290,7 +290,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Music:</string>
@@ -311,6 +311,28 @@
                <height>27</height>
               </size>
              </property>
+             <widget class="QComboBox" name="comboBoxMusic">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>200</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
             </widget>
            </item>
            <item row="0" column="2" rowspan="3">
@@ -329,7 +351,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_8">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Background sound:</string>
@@ -350,6 +372,28 @@
                <height>27</height>
               </size>
              </property>
+             <widget class="QComboBox" name="comboBoxBackgroundSound">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>200</width>
+                <height>25</height>
+               </rect>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
             </widget>
            </item>
            <item row="2" column="0">

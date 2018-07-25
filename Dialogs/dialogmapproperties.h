@@ -55,6 +55,8 @@ private slots:
     void on_spinBoxHeight_valueChanged(int i);
     void on_spinBoxDepth_valueChanged(int i);
     void on_comboBoxTilesetCurrentIndexChanged(int index);
+    void on_comboBoxMusicCurrentIndexChanged(int index);
+    void on_comboBoxBackgroundSoundCurrentIndexChanged(int index);
 };
 
 #endif // DIALOGMAPPROPERTIES_H
