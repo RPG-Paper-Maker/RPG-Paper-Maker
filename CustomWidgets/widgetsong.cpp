@@ -75,8 +75,9 @@ void WidgetSong::update() {
     else {
         ui->listWidget->item(0)->setText(SuperListItem::getById(Wanok::get()
             ->project()->songsDatas()->model(m_kind)->invisibleRootItem(),
-            m_command->getSongID(nullptr))->toString());
+            m_command->getSongID(m_parameters))->toString());
     }
+    emit updated();
 }
 
 // -------------------------------------------------------
@@ -89,6 +90,10 @@ void WidgetSong::openDialog(){
             delete m_command;
         }
         m_command = dialog.getCommand();
+        if (m_command->getSongID(m_parameters) == -1) {
+            delete m_command;
+            m_command = nullptr;
+        }
         update();
     }
 }
