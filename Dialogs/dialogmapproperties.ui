@@ -298,7 +298,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QWidget" name="widgetChooseMusic" native="true">
+            <widget class="WidgetSong" name="widgetChooseMusic" native="true">
              <property name="minimumSize">
               <size>
                <width>200</width>
@@ -311,28 +311,6 @@
                <height>27</height>
               </size>
              </property>
-             <widget class="QComboBox" name="comboBoxMusic">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>200</width>
-                <height>25</height>
-               </rect>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
             </widget>
            </item>
            <item row="0" column="2" rowspan="3">
@@ -359,7 +337,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="widgetChooseBackgroundSound" native="true">
+            <widget class="WidgetSong" name="widgetChooseBackgroundSound" native="true">
              <property name="minimumSize">
               <size>
                <width>200</width>
@@ -372,28 +350,6 @@
                <height>27</height>
               </size>
              </property>
-             <widget class="QComboBox" name="comboBoxBackgroundSound">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>200</width>
-                <height>25</height>
-               </rect>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
             </widget>
            </item>
            <item row="2" column="0">
@@ -681,6 +637,12 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSong</class>
+   <extends>QWidget</extends>
+   <header>widgetsong.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -61,25 +61,15 @@ void DialogMapProperties::initialize(){
         Wanok::get()->project()->gameDatas()->tilesetsDatas()->model()
         ->invisibleRootItem(), m_mapProperties.tileset()->id()));
 
+    ui->widgetLangName->initializeNames(&m_mapProperties);
+
     // Music
-    SuperListItem::fillComboBox(ui->comboBoxMusic, Wanok::get()->project()
-        ->songsDatas()->model(SongKind::Music));
-    connect(ui->comboBoxMusic, SIGNAL(currentIndexChanged(int)), this,
-        SLOT(on_comboBoxMusicCurrentIndexChanged(int)));
-    ui->comboBoxMusic->setCurrentIndex(SuperListItem::getIndexById(
-        Wanok::get()->project()->songsDatas()->model(SongKind::Music)
-        ->invisibleRootItem(), m_mapProperties.idMusic()));
+    ui->widgetChooseMusic->initialize(m_mapProperties.music(), SongKind::Music,
+    nullptr, nullptr);
 
     // Background sound
-    SuperListItem::fillComboBox(ui->comboBoxBackgroundSound, Wanok::get()
-        ->project()->songsDatas()->model(SongKind::BackgroundSound));
-    connect(ui->comboBoxBackgroundSound, SIGNAL(currentIndexChanged(int)), this,
-        SLOT(on_comboBoxBackgroundSoundCurrentIndexChanged(int)));
-    ui->comboBoxBackgroundSound->setCurrentIndex(SuperListItem::getIndexById(
-        Wanok::get()->project()->songsDatas()->model(SongKind::BackgroundSound)
-        ->invisibleRootItem(), m_mapProperties.idBackgroundSound()));
-
-    ui->widgetLangName->initializeNames(&m_mapProperties);
+    ui->widgetChooseBackgroundSound->initialize(m_mapProperties
+        .backgroundSound(), SongKind::BackgroundSound, nullptr, nullptr);
 
     // Sizes
     ui->spinBoxLength->setValue(m_mapProperties.length());
@@ -125,26 +115,4 @@ void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
     m_mapProperties.setTilesetID(reinterpret_cast<SystemTileset*>(Wanok::get()
         ->project()->gameDatas()->tilesetsDatas()->model()->item(index)->data()
         .value<qintptr>())->id());
-}
-
-// -------------------------------------------------------
-
-void DialogMapProperties::on_comboBoxMusicCurrentIndexChanged(int index){
-    if (index == -1)
-        index = 0;
-    m_mapProperties.setIdMusic(reinterpret_cast<SystemSong*>(Wanok::get()
-        ->project()->songsDatas()->model(SongKind::Music)->item(index)->data()
-        .value<qintptr>())->id());
-}
-
-// -------------------------------------------------------
-
-void DialogMapProperties::on_comboBoxBackgroundSoundCurrentIndexChanged(
-    int index)
-{
-    if (index == -1)
-        index = 0;
-    m_mapProperties.setIdBackgroundSound(reinterpret_cast<SystemSong*>(
-        Wanok::get()->project()->songsDatas()->model(SongKind::BackgroundSound)
-        ->item(index)->data().value<qintptr>())->id());
 }

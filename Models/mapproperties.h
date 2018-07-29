@@ -25,6 +25,7 @@
 #include "systemtileset.h"
 #include "position.h"
 #include "qray3d.h"
+#include "eventcommand.h"
 
 // -------------------------------------------------------
 //
@@ -53,10 +54,10 @@ public:
     void setWidth(int w);
     void setHeight(int h);
     void setDepth(int d);
-    int idMusic() const;
-    void setIdMusic(int id);
-    int idBackgroundSound() const;
-    void setIdBackgroundSound(int id);
+    EventCommand* music() const;
+    void setMusic(EventCommand* command);
+    EventCommand* backgroundSound() const;
+    void setBackgroundSound(EventCommand* command);
     void addOverflow(Position& p, Portion& portion);
     void removeOverflow(Position& p, Portion& portion);
 
@@ -77,8 +78,8 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
-    int m_idMusic;
-    int m_idBackgroundSound;
+    EventCommand* m_music;
+    EventCommand* m_backgroundSound;
     QHash<Portion, QSet<Position>*> m_outOverflowSprites;
 };
 

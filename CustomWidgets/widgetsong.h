@@ -17,44 +17,49 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGMAPPROPERTIES_H
-#define DIALOGMAPPROPERTIES_H
-
-#include <QDialog>
-#include "mapproperties.h"
+#ifndef WIDGETSONG_H
+#define WIDGETSONG_H
 
 // -------------------------------------------------------
 //
-//  CLASS DialogMapProperties
+//  CLASS WidgetSong
 //
-//  A dialog used for configuring the properties of a map.
+//  Widget used for choosing a song existing in the database.
 //
 // -------------------------------------------------------
+
+#include <QWidget>
+#include <QListWidget>
+#include "eventcommand.h"
+#include "systemcommonobject.h"
 
 namespace Ui {
-class DialogMapProperties;
+class WidgetSong;
 }
 
-class DialogMapProperties : public QDialog
+class WidgetSong : public QWidget
 {
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
-    ~DialogMapProperties();
+    explicit WidgetSong(QWidget *parent = nullptr);
+    ~WidgetSong();
+    EventCommand* command() const;
+    void initialize(EventCommand *command, SongKind kind,
+                    SystemCommonObject* object, QStandardItemModel* parameters);
+    void update();
+    void openDialog();
 
 private:
-    Ui::DialogMapProperties *ui;
-    MapProperties& m_mapProperties;
-
-    void initialize();
+    Ui::WidgetSong *ui;
+    EventCommand* m_command;
+    SongKind m_kind;
+    SystemCommonObject* m_object;
+    QStandardItemModel* m_parameters;
 
 private slots:
-    void on_spinBoxLength_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
-    void on_spinBoxDepth_valueChanged(int i);
-    void on_comboBoxTilesetCurrentIndexChanged(int index);
+    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
+    void on_pushButton_clicked();
 };
 
-#endif // DIALOGMAPPROPERTIES_H
+#endif // WIDGETSONG_H

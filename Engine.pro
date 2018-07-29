@@ -253,7 +253,8 @@ HEADERS += \
     Dialogs/Commands/dialogcommandplaysong.h \
     Dialogs/Commands/dialogcommandstopsong.h \
     Enums/themekind.h \
-    Dialogs/dialoggeneraloptions.h
+    Dialogs/dialoggeneraloptions.h \
+    CustomWidgets/widgetsong.h
 
 SOURCES += \
     main.cpp \
@@ -454,7 +455,8 @@ SOURCES += \
     Models/GameDatas/songsdatas.cpp \
     Dialogs/Commands/dialogcommandplaysong.cpp \
     Dialogs/Commands/dialogcommandstopsong.cpp \
-    Dialogs/dialoggeneraloptions.cpp
+    Dialogs/dialoggeneraloptions.cpp \
+    CustomWidgets/widgetsong.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -527,7 +529,8 @@ FORMS += \
     CustomWidgets/panelsongs.ui \
     Dialogs/Commands/dialogcommandplaysong.ui \
     Dialogs/Commands/dialogcommandstopsong.ui \
-    Dialogs/dialoggeneraloptions.ui
+    Dialogs/dialoggeneraloptions.ui \
+    CustomWidgets/widgetsong.ui
 
 OTHER_FILES +=
 

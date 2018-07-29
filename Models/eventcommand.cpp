@@ -99,6 +99,19 @@ bool EventCommand::isErasable() const{
 
 // -------------------------------------------------------
 
+int EventCommand::getSongID(QStandardItemModel *parameters) const
+{
+    int i = 0;
+
+    bool isIDNumber = p_listCommand.at(i++) == "1";
+    QString idNumber = strNumber(i, parameters);
+    int id = p_listCommand.at(i++).toInt();
+
+    return isIDNumber ? idNumber.toInt() : id;
+}
+
+// -------------------------------------------------------
+
 void EventCommand::setCopy(const EventCommand& copy){
     p_kind = copy.p_kind;
     p_listCommand = copy.p_listCommand;

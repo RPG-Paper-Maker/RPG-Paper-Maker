@@ -52,6 +52,7 @@ public:
     bool isBattleWithoutGameOver() const;
     bool isEditable() const;
     bool isErasable() const;
+    int getSongID(QStandardItemModel* parameters) const;
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
     void setCopy(const EventCommand& copy);

@@ -48,8 +48,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_width(w),
     m_height(h),
     m_depth(d),
-    m_idMusic(-1),
-    m_idBackgroundSound(-1)
+    m_music(nullptr),
+    m_backgroundSound(nullptr)
 {
 
 }
@@ -59,6 +59,12 @@ MapProperties::~MapProperties()
     QHash<Portion, QSet<Position>*>::iterator i;
     for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
         delete *i;
+    if (m_music != nullptr) {
+        delete m_music;
+    }
+    if (m_backgroundSound != nullptr) {
+        delete m_backgroundSound;
+    }
 }
 
 QString MapProperties::realName() const {
@@ -91,13 +97,19 @@ void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
 
-int MapProperties::idMusic() const { return m_idMusic; }
+EventCommand* MapProperties::music() const { return m_music; }
 
-void MapProperties::setIdMusic(int id) { m_idMusic = id; }
+void MapProperties::setMusic(EventCommand* command) {
+    m_music = command;
+}
 
-int MapProperties::idBackgroundSound() const { return m_idBackgroundSound; }
+EventCommand* MapProperties::backgroundSound() const {
+    return m_backgroundSound;
+}
 
-void MapProperties::setIdBackgroundSound(int id) { m_idBackgroundSound = id; }
+void MapProperties::setBackgroundSound(EventCommand* command) {
+    m_backgroundSound = command;
+}
 
 void MapProperties::addOverflow(Position& p, Portion& portion) {
     QSet<Position>* portions = m_outOverflowSprites.value(portion);
@@ -203,14 +215,25 @@ void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
 
 void MapProperties::read(const QJsonObject &json){
     SystemLang::read(json);
+    QJsonObject obj;
 
     setTilesetID(json["tileset"].toInt());
     m_length = json["l"].toInt();
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
-    m_idMusic = json.contains("music") ? json["music"].toInt() : -1;
-    m_idBackgroundSound = json.contains("bgs") ? json["bgs"].toInt() : -1;
+    m_music = nullptr;
+    if (json.contains("music")) {
+        m_music = new EventCommand(EventCommandKind::PlayMusic);
+        obj = json["music"].toObject();
+        m_music->read(obj);
+    }
+    m_backgroundSound = nullptr;
+    if (json.contains("bgs")) {
+        m_music = new EventCommand(EventCommandKind::PlayBackgroundSound);
+        obj = json["bgs"].toObject();
+        m_backgroundSound->read(obj);
+    }
 
     // Overflow
     QJsonArray tabOverflow = json["ofsprites"].toArray();
@@ -242,10 +265,12 @@ void MapProperties::write(QJsonObject &json) const{
     json["w"] = m_width;
     json["h"] = m_height;
     json["d"] = m_depth;
-    if (m_idMusic != -1)
-        json["music"] = m_idMusic;
-    if (m_idBackgroundSound != -1)
-        json["bgs"] = m_idBackgroundSound;
+    if (m_music != nullptr) {
+        json["music"] = m_music->getJSON();
+    }
+    if (m_backgroundSound != nullptr) {
+        json["bgs"] = m_backgroundSound->getJSON();
+    }
 
     // Overflow
     QHash<Portion, QSet<Position>*>::const_iterator i;
