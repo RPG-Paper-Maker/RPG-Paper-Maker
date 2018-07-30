@@ -230,7 +230,8 @@ void MapProperties::read(const QJsonObject &json){
     }
     m_backgroundSound = nullptr;
     if (json.contains("bgs")) {
-        m_music = new EventCommand(EventCommandKind::PlayBackgroundSound);
+        m_backgroundSound = new EventCommand(
+            EventCommandKind::PlayBackgroundSound);
         obj = json["bgs"].toObject();
         m_backgroundSound->read(obj);
     }
