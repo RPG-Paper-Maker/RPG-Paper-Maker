@@ -230,6 +230,7 @@ void PanelSongs::setSongKind(SongKind kind){
             volume = m_mediaPlayerMusicEffect->volume();
             ui->pushButtonPause->hide();
             ui->pushButtonStop->hide();
+            setVisibleStartEnd(false);
             break;
         default:
             break;
@@ -411,15 +412,19 @@ void PanelSongs::updateVolume(int volume) {
     switch (m_songKind) {
     case SongKind::Music:
         m_mediaPlayerMusic->setVolume(volume);
+        m_mediaPlayerMusicTemp->setVolume(volume);
         break;
     case SongKind::BackgroundSound:
         m_mediaPlayerBackgroundSound->setVolume(volume);
+        m_mediaPlayerBackgroundSoundTemp->setVolume(volume);
         break;
     case SongKind::Sound:
         m_mediaPlayerSound->setVolume(volume);
+        m_mediaPlayerSoundTemp->setVolume(volume);
         break;
     case SongKind::MusicEffect:
         m_mediaPlayerMusicEffect->setVolume(volume);
+        m_mediaPlayerMusicEffectTemp->setVolume(volume);
         break;
     default:
         break;
@@ -429,7 +434,7 @@ void PanelSongs::updateVolume(int volume) {
 // -------------------------------------------------------
 
 void PanelSongs::stopOnEnd(int end, qint64 pos, QMediaPlayer* player) {
-    if (end > -1 && pos >= end) {
+    if (end > 0 && pos >= end) {
         player->stop();
     }
 }
@@ -468,6 +473,7 @@ void PanelSongs::play() {
     QMediaPlayer* temp = nullptr;
     QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
     int start = m_start[m_songKind];
+    bool isStart = m_startBool[m_songKind];
     switch (m_songKind) {
     case SongKind::Music:
         m_needRestartMusic = false;
@@ -477,7 +483,7 @@ void PanelSongs::play() {
             temp = m_mediaPlayerMusic;
             m_mediaPlayerMusic = m_mediaPlayerMusicTemp;
             m_mediaPlayerMusicTemp = temp;
-            if (start != -1) {
+            if (isStart) {
                 m_mediaPlayerMusic->setPosition(start);
             }
         }
@@ -493,7 +499,7 @@ void PanelSongs::play() {
             temp = m_mediaPlayerBackgroundSound;
             m_mediaPlayerBackgroundSound = m_mediaPlayerBackgroundSoundTemp;
             m_mediaPlayerBackgroundSoundTemp = temp;
-            if (start != -1) {
+            if (isStart) {
                 m_mediaPlayerBackgroundSound->setPosition(start);
             }
         }
@@ -507,23 +513,21 @@ void PanelSongs::play() {
         m_mediaPlayerSound = m_mediaPlayerSoundTemp;
         m_mediaPlayerSoundTemp = temp;
         m_mediaPlayerSoundTemp->stop();
-        if (start != -1) {
+        if (isStart) {
             m_mediaPlayerSound->setPosition(start);
         }
         m_mediaPlayerSound->play();
         m_mediaPlayerSoundTemp->setMedia(path);
         break;
     case SongKind::MusicEffect:
-        if (m_mediaPlayerMusic->state() == QMediaPlayer::PlayingState) {
-            m_needRestartMusic = true;
-            m_mediaPlayerMusic->setVolume(0);
-            QTimer::singleShot(500, this, SLOT(pauseFromMusicEffect()));
-        }
+        m_needRestartMusic = true;
+        m_mediaPlayerMusic->setVolume(0);
+        QTimer::singleShot(500, this, SLOT(pauseFromMusicEffect()));
         temp = m_mediaPlayerMusicEffect;
         m_mediaPlayerMusicEffect = m_mediaPlayerMusicEffectTemp;
         m_mediaPlayerMusicEffectTemp = temp;
         m_mediaPlayerMusicEffectTemp->stop();
-        if (start != -1) {
+        if (isStart) {
             m_mediaPlayerMusicEffect->setPosition(start);
         }
         m_mediaPlayerMusicEffect->play();
@@ -575,6 +579,7 @@ void PanelSongs::pause() {
 
 void PanelSongs::fadeOut() {
     m_mediaPlayerMusic->setVolume(m_mediaPlayerMusic->volume() + 1);
+    m_mediaPlayerMusicTemp->setVolume(m_mediaPlayerMusic->volume() + 1);
 
     if (m_mediaPlayerMusic->volume() >= ui->panelPrimitiveValueVolume->model()
         ->numberValue())
