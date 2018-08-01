@@ -82,5 +82,4 @@ void DialogGeneralOptions::reject() {
 
 void DialogGeneralOptions::on_comboBoxThemeCurrentIndexChanged(int index) {
     Wanok::get()->engineSettings()->setTheme(static_cast<ThemeKind>(index));
-    Wanok::get()->engineSettings()->updateTheme();
 }

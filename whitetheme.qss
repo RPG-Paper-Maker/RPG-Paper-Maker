@@ -27,7 +27,9 @@ QGroupBox::title {
     left: 10px;
     padding: 0 3px 0 3px;
 }
-
+QGroupBox::disabled {
+    border: 1px solid grey;
+}
 
 QMenuBar {
      background: #333333;
@@ -58,4 +60,8 @@ WidgetMenuBarMapEditor::item{
 
 WidgetMenuBarMapEditor > QMenu::item:selected{
      background-color: #8c8c8c;
+}
+
+QToolButton::disabled {
+    color: #474747;
 }

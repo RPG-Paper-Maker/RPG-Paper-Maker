@@ -58,7 +58,7 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
     case SongKind::BackgroundSound:
         return EventCommandKind::PlayBackgroundSound;
     case SongKind::Sound:
-        return EventCommandKind::PlaySound;
+        return EventCommandKind::PlayASound;
     case SongKind::MusicEffect:
         return EventCommandKind::PlayMusicEffect;
     case SongKind::None:

@@ -183,7 +183,7 @@ QString EventCommand::toString(SystemCommonObject* object,
         str += strPlayBackgroundSound(object, parameters); break;
     case EventCommandKind::StopBackgroundSound:
         str += strStopBackgroundSound(object, parameters); break;
-    case EventCommandKind::PlaySound:
+    case EventCommandKind::PlayASound:
         str += strPlaySound(object, parameters); break;
     case EventCommandKind::PlayMusicEffect:
         str += strPlayMusicEffect(object, parameters); break;

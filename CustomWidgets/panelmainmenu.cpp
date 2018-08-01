@@ -32,6 +32,7 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     ui(new Ui::PanelMainMenu)
 {
     ui->setupUi(this);
+    ui->pushButtonNewProject->setAutoFillBackground(true);
 }
 
 PanelMainMenu::~PanelMainMenu()

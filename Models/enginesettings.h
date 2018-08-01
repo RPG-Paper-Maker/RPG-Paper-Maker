@@ -44,7 +44,7 @@ public:
     ThemeKind theme() const;
     void setTheme(ThemeKind t);
 
-    QString getThemeFile() const;
+    QString getThemeContent() const;
     void updateTheme();
     void setDefault();
 
@@ -55,6 +55,8 @@ protected:
     KeyBoardDatas* m_keyBoardDatas;
     int m_zoomPictures;
     ThemeKind m_theme;
+
+    QString readContent(QString name) const;
 };
 
 #endif // ENGINESETTINGS_H

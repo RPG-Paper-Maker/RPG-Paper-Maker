@@ -22,6 +22,7 @@
 #include "common.h"
 #include <QDir>
 #include <QApplication>
+#include <QStyleFactory>
 
 // -------------------------------------------------------
 //
@@ -79,27 +80,67 @@ void EngineSettings::setTheme(ThemeKind t) {
 //
 // -------------------------------------------------------
 
-QString EngineSettings::getThemeFile() const {
-    QString file = ":/stylesheets/";
+QString EngineSettings::getThemeContent() const {
+    QString content = "";
     switch (m_theme) {
     case ThemeKind::Dark:
-        file += "darktheme";
+        content += readContent("darktheme");
+        #ifdef Q_OS_WIN
+            content += readContent("darkthemeWin32");
+        #endif
         break;
     case ThemeKind::White:
-        file += "whitetheme";
+        content += readContent("whitetheme");
         break;
     }
 
-    return file + ".qss";
+    return content;
+}
+
+// -------------------------------------------------------
+
+QString EngineSettings::readContent(QString name) const {
+    QFile file(":/stylesheets/" + name + ".qss");
+    if (file.open(QFile::ReadOnly)) {
+       return QLatin1String(file.readAll());
+    }
+    return "";
 }
 
 // -------------------------------------------------------
 
 void EngineSettings::updateTheme() {
-    QFile file(getThemeFile());
-    if (file.open(QFile::ReadOnly)) {
-       QString styleSheet = QLatin1String(file.readAll());
-       qApp->setStyleSheet(styleSheet);
+    switch (m_theme) {
+    case ThemeKind::Dark:
+    {
+        #ifdef Q_OS_WIN
+            qApp->setStyleSheet(readContent("whitetheme"));
+            qApp->setStyle(QStyleFactory::create("Fusion"));
+            QPalette darkPalette;
+            darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+            darkPalette.setColor(QPalette::WindowText, Qt::white);
+            darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+            darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+            darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+            darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+            darkPalette.setColor(QPalette::Text, Qt::white);
+            darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+            darkPalette.setColor(QPalette::ButtonText, Qt::white);
+            darkPalette.setColor(QPalette::BrightText, Qt::red);
+            darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+            darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+            darkPalette.setColor(QPalette::HighlightedText, Qt::white);
+            darkPalette.setColor(QPalette::Disabled, QPalette::Text,
+                                 QColor(75,75,75));
+            qApp->setPalette(darkPalette);
+        #else
+            qApp->setStyleSheet(readContent("darktheme"));
+        #endif
+        break;
+    }
+    case ThemeKind::White:
+        qApp->setStyleSheet(readContent("whitetheme"));
+        break;
     }
 }
 

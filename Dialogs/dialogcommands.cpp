@@ -112,7 +112,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandStopSong("Stop a background sound",
                                          SongKind::BackgroundSound,
                                          command, object, parameters);
-    case EventCommandKind::PlaySound:
+    case EventCommandKind::PlayASound:
         return new DialogCommandPlaySong("Play a sound", SongKind::Sound,
                                          command, object, parameters);
     case EventCommandKind::PlayMusicEffect:
@@ -284,7 +284,7 @@ void DialogCommands::on_pushButtonStopBackgroundSound_clicked() {
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonPlaySound_clicked() {
-    openDialogCommand(EventCommandKind::PlaySound);
+    openDialogCommand(EventCommandKind::PlayASound);
 }
 
 // -------------------------------------------------------

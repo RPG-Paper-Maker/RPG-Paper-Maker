@@ -38,5 +38,3 @@ IF EXIST %path% (
 ) ELSE (
 	echo "ERROR: The repo Dependencies doesn't exists. Clone it (supported only on linux)."
 )
-
-pause
