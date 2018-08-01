@@ -340,7 +340,11 @@ void ProjectUpdater::updateVersion_0_4_3() {
 
 void ProjectUpdater::updateVersion_0_5_2() {
     // Adding default songs
-    m_project->readSongsDatas();
     m_project->songsDatas()->setDefault();
     m_project->writeSongsDatas();;
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SONGS);
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_MUSICS);
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_BACKGROUND_SOUNDS);
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SOUNDS);
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_MUSIC_EFFECTS);
 }
