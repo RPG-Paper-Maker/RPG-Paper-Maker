@@ -36,6 +36,9 @@ QGroupBox::title {
     left: 10px;
     padding: 0 3px 0 3px;
 }
+QGroupBox::disabled {
+    border: 1px solid grey;
+}
 
 
 QMenuBar {
