@@ -131,7 +131,11 @@ void EngineSettings::updateTheme() {
             darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
             darkPalette.setColor(QPalette::HighlightedText, Qt::white);
             darkPalette.setColor(QPalette::Disabled, QPalette::Text,
-                                 QColor(75,75,75));
+                                 QColor(150,150,150));
+            darkPalette.setColor(QPalette::Disabled, QPalette::WindowText,
+                                 QColor(150,150,150));
+            darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText,
+                                 QColor(150,150,150));
             qApp->setPalette(darkPalette);
         #else
             qApp->setStyleSheet(readContent("darktheme"));
