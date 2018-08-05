@@ -1,7 +1,278 @@
 {
-    "lastVersion": "0.5.1",
+    "lastVersion": "0.5.2",
     "uversion": "2.0",
     "versions": [
-    	
+    	{
+			"v": "0.5.2",
+			"add": [
+				{
+					"files": [
+			            {
+			                "files": [
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Sounds/Cancel.wav",
+			                        "target": "Engine/Content/BR/Content/Songs/Sounds/Cancel.wav"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Sounds/Cursor.wav",
+			                        "target": "Engine/Content/BR/Content/Songs/Sounds/Cursor.wav"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Sounds/Confirmation.wav",
+			                        "target": "Engine/Content/BR/Content/Songs/Sounds/Confirmation.wav"
+			                    }
+			                ],
+			                "target": "Engine/Content/BR/Content/Songs/Sounds"
+			            },
+			            {
+			                "files": [
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/MusicEffects/Levelup.wav",
+			                        "target": "Engine/Content/BR/Content/Songs/MusicEffects/Levelup.wav"
+			                    }
+			                ],
+			                "target": "Engine/Content/BR/Content/Songs/MusicEffects"
+			            },
+			            {
+			                "files": [
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/BackgroundSounds/Rain.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/BackgroundSounds/Rain.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/BackgroundSounds/Cave.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/BackgroundSounds/Cave.mp3"
+			                    }
+			                ],
+			                "target": "Engine/Content/BR/Content/Songs/BackgroundSounds"
+			            },
+			            {
+			                "files": [
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Dungeon2.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Dungeon2.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Dungeon1.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Dungeon1.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Field1.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Field1.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Town1.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Town1.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Battle1.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Battle1.mp3"
+			                    },
+			                    {
+			                        "repo": "Basic-Ressources",
+			                        "source": "Content/Songs/Musics/Theme1.mp3",
+			                        "target": "Engine/Content/BR/Content/Songs/Musics/Theme1.mp3"
+			                    }
+			                ],
+			                "target": "Engine/Content/BR/Content/Songs/Musics"
+			            }
+		            ],
+		            "target": "Engine/Content/BR/Content/Songs"
+				},
+	            {
+                    "repo": "Dependencies",
+                    "source": "Engine/linux/libraries/libQt5Multimedia.so.5",
+                    "target": "Engine/libraries/libQt5Multimedia.so.5",
+                    "os": ["l"]
+                },
+                {
+	                "files": [
+	                    {
+	                        "repo": "Dependencies",
+	                        "source": "Engine/linux/libraries/plugins/mediaservice/libgstmediaplayer.so",
+	                        "target": "Engine/libraries/plugins/mediaservice/libgstmediaplayer.so"
+	                    }
+	                ],
+	                "target": "Engine/libraries/plugins/mediaservice",
+	                "os": ["l"]
+	            },
+	            {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Engine/linux/libraries/QtMultimedia/libdeclarative_multimedia.so",
+                            "target": "Engine/libraries/QtMultimedia/libdeclarative_multimedia.so"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Engine/linux/libraries/QtMultimedia/Video.qml",
+                            "target": "Engine/libraries/QtMultimedia/Video.qml"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Engine/linux/libraries/QtMultimedia/qmldir",
+                            "target": "Engine/libraries/QtMultimedia/qmldir"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Engine/linux/libraries/QtMultimedia/plugins.qmltypes",
+                            "target": "Engine/libraries/QtMultimedia/plugins.qmltypes"
+                        }
+                    ],
+                    "target": "Engine/libraries/QtMultimedia",
+                    "os": ["l"]
+                },
+	            {
+                    "repo": "Dependencies",
+                    "source": "Game/linux/libraries/libQt5Multimedia.so.5",
+                    "target": "Engine/Content/linux/libraries/libQt5Multimedia.so.5"
+                },
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/linux/libraries/libQt5MultimediaQuick.so.5",
+                    "target": "Engine/Content/linux/libraries/libQt5MultimediaQuick.so.5"
+                },
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/win32/Qt5MultimediaQuick.dll",
+                    "target": "Engine/Content/win32/Qt5MultimediaQuick.dll"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/mediaservice/dsengine.dll",
+                            "target": "Engine/Content/win32/mediaservice/dsengine.dll"
+                        }
+                    ],
+                    "target": "Engine/Content/win32/mediaservice"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/linux/libraries/qml/QtMultimedia/libdeclarative_multimedia.so",
+                            "target": "Engine/Content/linux/libraries/qml/QtMultimedia/libdeclarative_multimedia.so"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/linux/libraries/qml/QtMultimedia/Video.qml",
+                            "target": "Engine/Content/linux/libraries/qml/QtMultimedia/Video.qml"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/linux/libraries/qml/QtMultimedia/qmldir",
+                            "target": "Engine/Content/linux/libraries/qml/QtMultimedia/qmldir"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/linux/libraries/qml/QtMultimedia/plugins.qmltypes",
+                            "target": "Engine/Content/linux/libraries/qml/QtMultimedia/plugins.qmltypes"
+                        }
+                    ],
+                    "target": "Engine/Content/linux/libraries/qml/QtMultimedia"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/linux/libraries/plugins/mediaservice/libgstmediaplayer.so",
+                            "target": "Engine/Content/linux/libraries/plugins/mediaservice/libgstmediaplayer.so"
+                        }
+                    ],
+                    "target": "Engine/Content/linux/libraries/plugins/mediaservice"
+                },
+                {
+	                "repo": "Dependencies",
+	                "source": "Engine/win32/Qt5Multimedia.dll",
+	                "target": "Engine/Qt5Multimedia.dll",
+	                "os": ["w"]
+	            },
+	            {
+		            "files": [
+		                {
+		                    "repo": "Dependencies",
+		                    "source": "Engine/win32/mediaservice/dsengine.dll",
+		                    "target": "Engine/mediaservice/dsengine.dll"
+		                }
+		            ],
+		            "target": "Engine/mediaservice",
+		            "os": ["w"]
+		        },
+	            {
+                    "repo": "Dependencies",
+                    "source": "Game/win32/Qt5Multimedia.dll",
+                    "target": "Engine/Content/win32/Qt5Multimedia.dll",
+                    "os": ["w"]
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/QtMultimedia/declarative_multimedia.dll",
+                            "target": "Engine/Content/win32/QtMultimedia/declarative_multimedia.dll"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/QtMultimedia/Video.qml",
+                            "target": "Engine/Content/win32/QtMultimedia/Video.qml"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/QtMultimedia/qmldir",
+                            "target": "Engine/Content/win32/QtMultimedia/qmldir"
+                        },
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/QtMultimedia/plugins.qmltypes",
+                            "target": "Engine/Content/win32/QtMultimedia/plugins.qmltypes"
+                        }
+                    ],
+                    "target": "Engine/Content/win32/QtMultimedia"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Dependencies",
+                            "source": "Game/win32/mediaservice/dsengine.dll",
+                            "target": "Engine/Content/win32/mediaservice/dsengine.dll"
+                        }
+                    ],
+                    "target": "Engine/Content/win32/mediaservice"
+                }
+			],
+			"remove": [],
+			"replace": [
+	            {
+	                "repo": "Dependencies",
+	                "source": "Engine/linux/README.txt",
+	                "target": "./README.txt",
+	                "os": ["l"]
+	            }
+			],
+			"features": [
+				"Songs manager",
+				"Songs commands",
+				"Music and background sound in map properties",
+				"Dark theme (change it in general options)"
+			],
+			"bugs": [
+				"Correcting move object feature that was removing objects",
+				"Creating a new model and viewing it was crashing",
+				"Weapon / armor kind was not settings saved correctly",
+				"No more QFSFileEngine::open: No file name specified terminal warning"
+			]
+		}
 	]
 }
