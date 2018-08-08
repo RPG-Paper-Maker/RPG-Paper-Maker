@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogcommandteleportobjectselect.h"
-#include "ui_dialogcommandteleportobjectselect.h"
+#include "dialogselectposition.h"
+#include "ui_dialogselectposition.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -27,7 +27,7 @@
 //
 // -------------------------------------------------------
 
-DialogCommandTeleportObjectSelect::DialogCommandTeleportObjectSelect(
+DialogSelectPosition::DialogSelectPosition(
         int idMap,
         int x,
         int y,
@@ -35,7 +35,7 @@ DialogCommandTeleportObjectSelect::DialogCommandTeleportObjectSelect(
         int z,
         QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogCommandTeleportObjectSelect),
+    ui(new Ui::DialogSelectPosition),
     m_treeMapDatas(new TreeMapDatas)
 {
     ui->setupUi(this);
@@ -52,13 +52,13 @@ DialogCommandTeleportObjectSelect::DialogCommandTeleportObjectSelect(
     ui->treeViewLocalMaps->setMap(idMap, position);
 }
 
-DialogCommandTeleportObjectSelect::~DialogCommandTeleportObjectSelect()
+DialogSelectPosition::~DialogSelectPosition()
 {
     delete ui;
     delete m_treeMapDatas;
 }
 
-int DialogCommandTeleportObjectSelect::idMap() const{
+int DialogSelectPosition::idMap() const{
     QStandardItem* selected = ui->treeViewLocalMaps->getSelected();
     TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
 
@@ -68,19 +68,19 @@ int DialogCommandTeleportObjectSelect::idMap() const{
         return tag->id();
 }
 
-int DialogCommandTeleportObjectSelect::x() const {
+int DialogSelectPosition::x() const {
     return ui->spinBoxX->value();
 }
 
-int DialogCommandTeleportObjectSelect::y() const {
+int DialogSelectPosition::y() const {
     return ui->spinBoxY->value();
 }
 
-int DialogCommandTeleportObjectSelect::yPlus() const {
+int DialogSelectPosition::yPlus() const {
     return ui->spinBoxYplus->value();
 }
 
-int DialogCommandTeleportObjectSelect::z() const {
+int DialogSelectPosition::z() const {
     return ui->spinBoxZ->value();
 }
 
@@ -90,7 +90,7 @@ int DialogCommandTeleportObjectSelect::z() const {
 //
 //--------------------------------------------
 
-void DialogCommandTeleportObjectSelect::on_spinBoxX_valueChanged(int i){
+void DialogSelectPosition::on_spinBoxX_valueChanged(int i){
     Map* map = ui->widgetMap->getMap();
     if (map != nullptr){
         MapProperties* properties = map->mapProperties();
@@ -106,19 +106,19 @@ void DialogCommandTeleportObjectSelect::on_spinBoxX_valueChanged(int i){
 
 //--------------------------------------------
 
-void DialogCommandTeleportObjectSelect::on_spinBoxY_valueChanged(int i){
+void DialogSelectPosition::on_spinBoxY_valueChanged(int i){
     ui->widgetMap->setCursorY(i);
 }
 
 //--------------------------------------------
 
-void DialogCommandTeleportObjectSelect::on_spinBoxYplus_valueChanged(int i){
+void DialogSelectPosition::on_spinBoxYplus_valueChanged(int i){
     ui->widgetMap->setCursorYplus(i);
 }
 
 //--------------------------------------------
 
-void DialogCommandTeleportObjectSelect::on_spinBoxZ_valueChanged(int i){
+void DialogSelectPosition::on_spinBoxZ_valueChanged(int i){
     Map* map = ui->widgetMap->getMap();
     if (map != nullptr){
         MapProperties* properties = map->mapProperties();

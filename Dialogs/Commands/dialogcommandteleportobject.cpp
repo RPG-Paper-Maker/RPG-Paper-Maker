@@ -19,7 +19,7 @@
 
 #include "dialogcommandteleportobject.h"
 #include "ui_dialogcommandteleportobject.h"
-#include "dialogcommandteleportobjectselect.h"
+#include "dialogselectposition.h"
 #include "wanok.h"
 
 // -------------------------------------------------------
@@ -160,11 +160,9 @@ EventCommand* DialogCommandTeleportObject::getCommand() const{
 //--------------------------------------------
 
 void DialogCommandTeleportObject::on_pushButtonSelect_clicked(){
-     DialogCommandTeleportObjectSelect dialog(ui->labelIDMap->text().toInt(),
-                                              ui->labelX->text().toInt(),
-                                              ui->labelY->text().toInt(),
-                                              ui->labelYPlus->text().toInt(),
-                                              ui->labelZ->text().toInt());
+     DialogSelectPosition dialog(ui->labelIDMap->text().toInt(),
+        ui->labelX->text().toInt(), ui->labelY->text().toInt(),
+        ui->labelYPlus->text().toInt(), ui->labelZ->text().toInt());
 
     if (dialog.exec() == QDialog::Accepted){
         ui->labelIDMap->setText(QString::number(dialog.idMap()));

@@ -34,18 +34,18 @@
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogCommandTeleportObjectSelect;
+class DialogSelectPosition;
 }
 
-class DialogCommandTeleportObjectSelect : public QDialog
+class DialogSelectPosition : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogCommandTeleportObjectSelect(int idMap, int x, int y,
+    explicit DialogSelectPosition(int idMap, int x, int y,
                                                int yPlus, int z,
                                                QWidget *parent = 0);
-    ~DialogCommandTeleportObjectSelect();
+    ~DialogSelectPosition();
     int idMap() const;
     int x() const;
     int y() const;
@@ -53,7 +53,7 @@ public:
     int z() const;
 
 private:
-    Ui::DialogCommandTeleportObjectSelect *ui;
+    Ui::DialogSelectPosition *ui;
     TreeMapDatas* m_treeMapDatas;
 
 private slots:

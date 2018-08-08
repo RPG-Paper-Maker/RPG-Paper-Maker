@@ -165,7 +165,7 @@ HEADERS += \
     MapEditor/sprites.h \
     MapEditor/vertex.h \
     Dialogs/Commands/dialogcommandteleportobject.h \
-    Dialogs/Commands/dialogcommandteleportobjectselect.h \
+    Dialogs/dialogselectposition.h \
     Dialogs/dialogexport.h \
     Controls/controlexport.h \
     Enums/oskind.h \
@@ -375,7 +375,7 @@ SOURCES += \
     MapEditor/sprites.cpp \
     MapEditor/vertex.cpp \
     Dialogs/Commands/dialogcommandteleportobject.cpp \
-    Dialogs/Commands/dialogcommandteleportobjectselect.cpp \
+    Dialogs/dialogselectposition.cpp \
     Dialogs/dialogexport.cpp \
     Controls/controlexport.cpp \
     Models/GameDatas/scriptsdatas.cpp \
@@ -500,7 +500,6 @@ FORMS += \
     Dialogs/dialogmapproperties.ui \
     Dialogs/dialogkeyboardcontrols.ui \
     Dialogs/Commands/dialogcommandteleportobject.ui \
-    Dialogs/Commands/dialogcommandteleportobjectselect.ui \
     Dialogs/dialogexport.ui \
     Dialogs/Systems/dialogsystemparameter.ui \
     Dialogs/Commands/dialogcommandmoveobject.ui \
@@ -530,7 +529,8 @@ FORMS += \
     Dialogs/Commands/dialogcommandplaysong.ui \
     Dialogs/Commands/dialogcommandstopsong.ui \
     Dialogs/dialoggeneraloptions.ui \
-    CustomWidgets/widgetsong.ui
+    CustomWidgets/widgetsong.ui \
+    Dialogs/dialogselectposition.ui
 
 OTHER_FILES +=
 
