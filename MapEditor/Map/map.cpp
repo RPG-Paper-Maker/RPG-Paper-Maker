@@ -547,7 +547,7 @@ bool Map::addObject(Position& p, MapPortion* mapPortion,
 int Map::removeObject(QStandardItemModel *model, Position3D& p) {
     SystemMapObject* super;
 
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++) {
         super = ((SystemMapObject*) model->item(i)->data()
                  .value<quintptr>());
         if (p == super->position()) {
