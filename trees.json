@@ -2926,6 +2926,31 @@
                                         "files": [
                                             {
                                                 "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/audio/libqtmedia_pulse.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/audio/libqtmedia_pulse.so"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/audio/libqtaudio_alsa.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/audio/libqtaudio_alsa.so"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/linux/libraries/plugins/audio"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/playlistformats/libqtmultimedia_m3u.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/playlistformats/libqtmultimedia_m3u.so"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/linux/libraries/plugins/playlistformats"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "repo": "Dependencies",
                                                 "source": "Game/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so",
                                                 "target": "Engine/Content/linux/libraries/plugins/xcbglintegrations/libqxcb-glx-integration.so"
                                             }
@@ -2946,8 +2971,23 @@
                                         "files": [
                                             {
                                                 "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/mediaservice/libgstmediacapture.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/mediaservice/libgstmediacapture.so"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/mediaservice/libgstaudiodecoder.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/mediaservice/libgstaudiodecoder.so"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
                                                 "source": "Game/linux/libraries/plugins/mediaservice/libgstmediaplayer.so",
                                                 "target": "Engine/Content/linux/libraries/plugins/mediaservice/libgstmediaplayer.so"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/plugins/mediaservice/libgstcamerabin.so",
+                                                "target": "Engine/Content/linux/libraries/plugins/mediaservice/libgstcamerabin.so"
                                             }
                                         ],
                                         "target": "Engine/Content/linux/libraries/plugins/mediaservice"
