@@ -64,7 +64,7 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
     QList<QStandardItem *> row;
     QStandardItemModel* skills;
     QStandardItemModel* statisticsProgression;
-    QString names[] = {"Knight", "Witch", "Mage", "Lancer", "Wooly"};
+    QString names[] = {"Knight", "Witch", "Mage", "Ninja", "Wooly"};
     int initialLevels[] = {1,1,1,1,1};
     int maxLevels[] = {100,100,100,100,100};
     int expBases[] = {5,5,5,5,5};

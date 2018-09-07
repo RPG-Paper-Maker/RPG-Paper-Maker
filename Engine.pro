@@ -254,7 +254,8 @@ HEADERS += \
     Dialogs/Commands/dialogcommandstopsong.h \
     Enums/themekind.h \
     Dialogs/dialoggeneraloptions.h \
-    CustomWidgets/widgetsong.h
+    CustomWidgets/widgetsong.h \
+    Models/System/systembattlemap.h
 
 SOURCES += \
     main.cpp \
@@ -456,7 +457,8 @@ SOURCES += \
     Dialogs/Commands/dialogcommandplaysong.cpp \
     Dialogs/Commands/dialogcommandstopsong.cpp \
     Dialogs/dialoggeneraloptions.cpp \
-    CustomWidgets/widgetsong.cpp
+    CustomWidgets/widgetsong.cpp \
+    Models/System/systembattlemap.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

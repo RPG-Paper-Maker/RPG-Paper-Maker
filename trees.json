@@ -104,13 +104,18 @@
                                     },
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/lucas_act.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/lucas_act.png"
+                                        "source": "Content/Pictures/Textures2D/Characters/bibi.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/bibi.png"
                                     },
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Characters/kate.png",
                                         "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/kate.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Characters/shana.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/shana.png"
                                     }
                                 ],
                                 "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters"
@@ -386,8 +391,23 @@
                                 "files": [
                                     {
                                         "repo": "Dependencies",
+                                        "source": "Engine/linux/libraries/plugins/mediaservice/libgstmediacapture.so",
+                                        "target": "Engine/libraries/plugins/mediaservice/libgstmediacapture.so"
+                                    },
+                                    {
+                                        "repo": "Dependencies",
+                                        "source": "Engine/linux/libraries/plugins/mediaservice/libgstaudiodecoder.so",
+                                        "target": "Engine/libraries/plugins/mediaservice/libgstaudiodecoder.so"
+                                    },
+                                    {
+                                        "repo": "Dependencies",
                                         "source": "Engine/linux/libraries/plugins/mediaservice/libgstmediaplayer.so",
                                         "target": "Engine/libraries/plugins/mediaservice/libgstmediaplayer.so"
+                                    },
+                                    {
+                                        "repo": "Dependencies",
+                                        "source": "Engine/linux/libraries/plugins/mediaservice/libgstcamerabin.so",
+                                        "target": "Engine/libraries/plugins/mediaservice/libgstcamerabin.so"
                                     }
                                 ],
                                 "target": "Engine/libraries/plugins/mediaservice"
@@ -1970,6 +1990,11 @@
                                                         "repo": "Dependencies",
                                                         "source": "Game/linux/libraries/qml/QtQuick/Window.2/qmldir",
                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Window.2/qmldir"
+                                                    },
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQuick/Window.2/plugins.qmltypes",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Window.2/plugins.qmltypes"
                                                     }
                                                 ],
                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Window.2"
@@ -2045,16 +2070,6 @@
                                                         "files": [
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TreeViewItemDelegateLoader.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TreeViewItemDelegateLoader.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TableViewItemDelegateLoader.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TableViewItemDelegateLoader.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/StackViewSlideDelegate.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/StackViewSlideDelegate.qml"
                                                             },
@@ -2075,11 +2090,6 @@
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/EditMenu_base.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/EditMenu_base.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/Control.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/Control.qml"
                                                             },
@@ -2092,21 +2102,6 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/SystemPaletteSingleton.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/SystemPaletteSingleton.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/CalendarHeaderModel.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/CalendarHeaderModel.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/EditMenu.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/EditMenu.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TabBar.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TabBar.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2127,11 +2122,6 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ColumnMenuContent.qmlc",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ColumnMenuContent.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TableViewSelection.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TableViewSelection.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2165,33 +2155,13 @@
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/BasicTableView.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/BasicTableView.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ContentItem.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ContentItem.qml"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TextHandle.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TextHandle.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TextHandle.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TextHandle.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/SourceProxy.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/SourceProxy.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/StackViewSlideDelegate.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/StackViewSlideDelegate.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2220,16 +2190,6 @@
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/MenuItemSubControls.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/MenuItemSubControls.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TextInputWithHandles.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TextInputWithHandles.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ScrollBar.qmlc",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ScrollBar.qmlc"
                                                             },
@@ -2237,11 +2197,6 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ScrollBar.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ScrollBar.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ContentItem.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ContentItem.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2280,11 +2235,6 @@
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ModalPopupBehavior.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ModalPopupBehavior.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/SystemPaletteSingleton.qmlc",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/SystemPaletteSingleton.qmlc"
                                                             },
@@ -2292,16 +2242,6 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/TextSingleton.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/TextSingleton.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/AbstractCheckable.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/AbstractCheckable.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/HoverButton.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/HoverButton.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2345,11 +2285,6 @@
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ToolMenuButton.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ToolMenuButton.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/Style.qmlc",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/Style.qmlc"
                                                             },
@@ -2362,11 +2297,6 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/ToolMenuButton.qml",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/ToolMenuButton.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Controls/Private/FastGlow.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Private/FastGlow.qmlc"
                                                             },
                                                             {
                                                                 "repo": "Dependencies",
@@ -2397,54 +2327,139 @@
                                                                 "files": [
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CommonStyleHelper.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CommonStyleHelper.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SliderStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SliderStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/SliderStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/SliderStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ScrollViewStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ScrollViewStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ScrollViewStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ScrollViewStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/GroupBoxStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/GroupBoxStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/GroupBoxStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/GroupBoxStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/MenuBarStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/MenuBarStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/MenuBarStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/MenuBarStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SwitchStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SwitchStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/DialStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/DialStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TextFieldStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TextFieldStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/HandleStyleHelper.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/HandleStyleHelper.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/RowItemSingleton.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/RowItemSingleton.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/SwitchStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/SwitchStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/MenuStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/MenuStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TextFieldStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TextFieldStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/RadioButtonStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/RadioButtonStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularButtonStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularButtonStyle.qml"
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ProgressBarStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ProgressBarStyle.qml"
                                                                     },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TreeViewStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TreeViewStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/CheckBoxStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/CheckBoxStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TabViewStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TabViewStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/StatusBarStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/StatusBarStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ButtonStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ButtonStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ToolButtonStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ToolButtonStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TableViewStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TableViewStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/CalendarStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/CalendarStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SpinBoxStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/SpinBoxStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ToolBarStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ToolBarStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/FocusFrameStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/FocusFrameStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ComboBoxStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ComboBoxStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TextAreaStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/TextAreaStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/qmldir",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/qmldir"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/BusyIndicatorStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/BusyIndicatorStyle.qml"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ApplicationWindowStyle.qml",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop/ApplicationWindowStyle.qml"
+                                                                    }
+                                                                ],
+                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Desktop"
+                                                            },
+                                                            {
+                                                                "files": [
                                                                     {
                                                                         "files": [
                                                                             {
@@ -2607,148 +2622,13 @@
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/MenuStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/MenuStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/RadioButtonStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/RadioButtonStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ProgressBarStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ProgressBarStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TreeViewStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TreeViewStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/StatusIndicatorStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/StatusIndicatorStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularTickmarkLabelStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularTickmarkLabelStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CheckBoxStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CheckBoxStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToggleButtonStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToggleButtonStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TabViewStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TabViewStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/StatusBarStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/StatusBarStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
                                                                         "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ButtonStyle.qml",
                                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ButtonStyle.qml"
                                                                     },
                                                                     {
                                                                         "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToolButtonStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToolButtonStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TableViewStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TableViewStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CalendarStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CalendarStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/SpinBoxStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/SpinBoxStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToolBarStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ToolBarStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/FocusFrameStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/FocusFrameStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ComboBoxStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ComboBoxStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TumblerStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TumblerStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/PieMenuStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/PieMenuStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/HandleStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/HandleStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/DelayButtonStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/DelayButtonStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/GaugeStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/GaugeStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/BasicTableViewStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/BasicTableViewStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/TextAreaStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/TextAreaStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/BusyIndicatorStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/BusyIndicatorStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularGaugeStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/CircularGaugeStyle.qml"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
                                                                         "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ButtonStyle.qmlc",
                                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ButtonStyle.qmlc"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Base/ApplicationWindowStyle.qml",
-                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base/ApplicationWindowStyle.qml"
                                                                     }
                                                                 ],
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Base"
@@ -2757,6 +2637,21 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/qmldir",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/qmldir"
+                                                            },
+                                                            {
+                                                                "files": [
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Flat/libqtquickextrasflatplugin.so",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Flat/libqtquickextrasflatplugin.so"
+                                                                    },
+                                                                    {
+                                                                        "repo": "Dependencies",
+                                                                        "source": "Game/linux/libraries/qml/QtQuick/Controls/Styles/Flat/qmldir",
+                                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Flat/qmldir"
+                                                                    }
+                                                                ],
+                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles/Flat"
                                                             }
                                                         ],
                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Controls/Styles"
@@ -2872,156 +2767,6 @@
                                             {
                                                 "files": [
                                                     {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetColorDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetColorDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/DefaultWindowDecoration.qml",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/DefaultWindowDecoration.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/IconGlyph.qml",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/IconGlyph.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/IconButtonStyle.qml",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/IconButtonStyle.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/icons.ttf",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/icons.ttf"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/ColorSlider.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/ColorSlider.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/ColorSlider.qml",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/ColorSlider.qml"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/IconGlyph.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/IconGlyph.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/IconButtonStyle.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/IconButtonStyle.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/DefaultWindowDecoration.qmlc",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/DefaultWindowDecoration.qmlc"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qml/qmldir",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml/qmldir"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultFileDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultFileDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultMessageDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultMessageDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/window_border.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/window_border.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/information.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/information.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/checkmark.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/checkmark.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/checkers.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/checkers.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/copy.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/copy.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/slider_handle.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/slider_handle.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/question.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/question.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/crosshairs.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/crosshairs.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/warning.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/warning.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/critical.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/critical.png"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/images/sunken_frame.png",
-                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images/sunken_frame.png"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/images"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetFontDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetFontDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetFileDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetFileDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetMessageDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetMessageDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultFontDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultFontDialog.qml"
-                                                    },
-                                                    {
                                                         "files": [
                                                             {
                                                                 "repo": "Dependencies",
@@ -3032,64 +2777,19 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/linux/libraries/qml/QtQuick/Dialogs/Private/qmldir",
                                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/Private/qmldir"
+                                                            },
+                                                            {
+                                                                "repo": "Dependencies",
+                                                                "source": "Game/linux/libraries/qml/QtQuick/Dialogs/Private/plugins.qmltypes",
+                                                                "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/Private/plugins.qmltypes"
                                                             }
                                                         ],
                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/Private"
                                                     },
                                                     {
                                                         "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultMessageDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultMessageDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetMessageDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetMessageDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultColorDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultColorDialog.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultDialogWrapper.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultDialogWrapper.qmlc"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultDialogWrapper.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultDialogWrapper.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultFileDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultFileDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetFontDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetFontDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetFileDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetFileDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
                                                         "source": "Game/linux/libraries/qml/QtQuick/Dialogs/qmldir",
                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/qmldir"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultColorDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultColorDialog.qml"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/DefaultFontDialog.qmlc",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/DefaultFontDialog.qmlc"
                                                     },
                                                     {
                                                         "repo": "Dependencies",
@@ -3100,17 +2800,67 @@
                                                         "repo": "Dependencies",
                                                         "source": "Game/linux/libraries/qml/QtQuick/Dialogs/libdialogplugin.so",
                                                         "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/libdialogplugin.so"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/linux/libraries/qml/QtQuick/Dialogs/WidgetColorDialog.qml",
-                                                        "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs/WidgetColorDialog.qml"
                                                     }
                                                 ],
                                                 "target": "Engine/Content/linux/libraries/qml/QtQuick/Dialogs"
                                             }
                                         ],
                                         "target": "Engine/Content/linux/libraries/qml/QtQuick"
+                                    },
+                                    {
+                                        "files": [
+                                            {
+                                                "files": [
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/Models.2/qmldir",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/Models.2/qmldir"
+                                                    },
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/Models.2/plugins.qmltypes",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/Models.2/plugins.qmltypes"
+                                                    },
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/Models.2/libmodelsplugin.so",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/Models.2/libmodelsplugin.so"
+                                                    }
+                                                ],
+                                                "target": "Engine/Content/linux/libraries/qml/QtQml/Models.2"
+                                            },
+                                            {
+                                                "files": [
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/StateMachine/libqtqmlstatemachine.so",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/StateMachine/libqtqmlstatemachine.so"
+                                                    },
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/StateMachine/qmldir",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/StateMachine/qmldir"
+                                                    },
+                                                    {
+                                                        "repo": "Dependencies",
+                                                        "source": "Game/linux/libraries/qml/QtQml/StateMachine/plugins.qmltypes",
+                                                        "target": "Engine/Content/linux/libraries/qml/QtQml/StateMachine/plugins.qmltypes"
+                                                    }
+                                                ],
+                                                "target": "Engine/Content/linux/libraries/qml/QtQml/StateMachine"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/qml/QtQml/qmldir",
+                                                "target": "Engine/Content/linux/libraries/qml/QtQml/qmldir"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Game/linux/libraries/qml/QtQml/plugins.qmltypes",
+                                                "target": "Engine/Content/linux/libraries/qml/QtQml/plugins.qmltypes"
+                                            }
+                                        ],
+                                        "target": "Engine/Content/linux/libraries/qml/QtQml"
                                     }
                                 ],
                                 "target": "Engine/Content/linux/libraries/qml"
@@ -3119,6 +2869,11 @@
                                 "repo": "Dependencies",
                                 "source": "Game/linux/libraries/libicudata.so.56",
                                 "target": "Engine/Content/linux/libraries/libicudata.so.56"
+                            },
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/linux/libraries/libQt5MultimediaQuick_p.so.5",
+                                "target": "Engine/Content/linux/libraries/libQt5MultimediaQuick_p.so.5"
                             },
                             {
                                 "repo": "Dependencies",
@@ -3139,11 +2894,6 @@
                                 "repo": "Dependencies",
                                 "source": "Game/linux/libraries/libQt5DBus.so.5",
                                 "target": "Engine/Content/linux/libraries/libQt5DBus.so.5"
-                            },
-                            {
-                                "repo": "Dependencies",
-                                "source": "Game/linux/libraries/libQt5MultimediaQuick.so.5",
-                                "target": "Engine/Content/linux/libraries/libQt5MultimediaQuick.so.5"
                             },
                             {
                                 "repo": "Dependencies",
