@@ -4,6 +4,7 @@
 [![Join the chat at https://gitter.im/RPG-Paper-Maker/Lobby](https://badges.gitter.im/RPG-Paper-Maker/Lobby.svg)](https://gitter.im/RPG-Paper-Maker/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/Wano-k/RPG-Paper-Maker)
 [![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
+[![Feature Requests](http://feathub.com/RPG-Paper-Maker/RPG-Paper-Maker?format=svg)](http://feathub.com/RPG-Paper-Maker/RPG-Paper-Maker)
 
 RPG Paper Maker is a free game maker engine including a 3D universe with many 2D sprites and some simplified 3D objects. Pretty close to the RPG Maker series, RPG Paper Maker finally give a way to create RPGs in a totally 3D universe as easy as it is in 2D!
 
