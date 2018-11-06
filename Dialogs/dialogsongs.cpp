@@ -31,7 +31,7 @@ DialogSongs::DialogSongs(QWidget *parent) :
     ui(new Ui::DialogSongs)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->widgetSongs->initializePrimitives(nullptr, nullptr);
 

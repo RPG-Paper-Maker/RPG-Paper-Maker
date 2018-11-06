@@ -27,7 +27,7 @@ DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
     m_event(event)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

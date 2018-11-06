@@ -39,7 +39,7 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     ui(new Ui::DialogDatas)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initializeItems(gameDatas);
     initializeSkills(gameDatas);

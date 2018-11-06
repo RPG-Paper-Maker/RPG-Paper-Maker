@@ -33,7 +33,7 @@ DialogCommandModifyTeam::DialogCommandModifyTeam(EventCommand *command,
     ui(new Ui::DialogCommandModifyTeam)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     SuperListItem::fillComboBox(ui->comboBoxHero, Wanok::get()->project()
                                 ->gameDatas()->heroesDatas()->model());

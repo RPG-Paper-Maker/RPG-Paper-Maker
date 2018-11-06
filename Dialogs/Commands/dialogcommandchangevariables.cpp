@@ -33,7 +33,7 @@ DialogCommandChangeVariables::DialogCommandChangeVariables(
     ui(new Ui::DialogCommandChangeVariables)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+
     ui->widgetVariableOne->initialize();
 
     if (command != nullptr) initialize(command);

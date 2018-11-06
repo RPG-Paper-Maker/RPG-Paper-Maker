@@ -33,7 +33,7 @@ DialogSystemElement::DialogSystemElement(SystemElement& element,
     m_element(element)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

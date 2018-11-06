@@ -35,7 +35,7 @@ DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, int max,
     m_model(model)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->spinBoxMaximum->setMaximum(max);
     ui->spinBoxMaximum->setValue(model->invisibleRootItem()->rowCount());

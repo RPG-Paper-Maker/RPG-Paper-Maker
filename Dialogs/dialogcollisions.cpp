@@ -32,7 +32,7 @@ DialogCollisions::DialogCollisions(QWidget *parent) :
     ui(new Ui::DialogCollisions)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initializeTilesets();
     initializeCharacters();

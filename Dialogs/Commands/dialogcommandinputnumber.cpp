@@ -32,7 +32,7 @@ DialogCommandInputNumber::DialogCommandInputNumber(EventCommand *command,
     ui(new Ui::DialogCommandInputNumber)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
     ui->widgetVariable->initialize();
 
     if (command != nullptr) initialize(command);

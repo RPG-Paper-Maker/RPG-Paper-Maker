@@ -34,7 +34,7 @@ DialogSystemClassSkill::DialogSystemClassSkill(SystemClassSkill &skill,
     m_skill(skill)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

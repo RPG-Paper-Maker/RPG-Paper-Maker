@@ -35,7 +35,7 @@ DialogTilesetSpecialElements::DialogTilesetSpecialElements(
     m_kind(kind)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     setWindowTitle(SystemPicture::getPictureTitle(kind));
     ui->widget->initialize(

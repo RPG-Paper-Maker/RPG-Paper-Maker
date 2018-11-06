@@ -33,7 +33,7 @@ DialogCommandShowText::DialogCommandShowText(EventCommand* command,
     ui(new Ui::DialogCommandShowText)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     if (command != nullptr) initialize(command);
 }

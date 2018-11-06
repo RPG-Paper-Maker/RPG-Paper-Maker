@@ -32,7 +32,7 @@ DialogLocation::DialogLocation(QString location, QWidget *parent) :
     ui(new Ui::DialogLocation)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->lineEdit->setText(location);
     ui->lineEdit->setCursorPosition(0);

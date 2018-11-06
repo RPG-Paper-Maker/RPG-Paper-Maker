@@ -50,7 +50,6 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
-    setFixedSize(510, 470);
 }
 
 DialogCommands::~DialogCommands()

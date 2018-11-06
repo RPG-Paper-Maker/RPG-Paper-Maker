@@ -12,7 +12,7 @@ DialogCommandWait::DialogCommandWait(EventCommand *command, QWidget *parent) :
     ui(new Ui::DialogCommandWait)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     if (command != nullptr)
         initialize(command);

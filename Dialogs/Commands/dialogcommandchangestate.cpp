@@ -38,7 +38,6 @@ DialogCommandChangeState::DialogCommandChangeState(
     m_parameters(parameters)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
 
     initializeStateId();
     if(command != nullptr) initialize(command);

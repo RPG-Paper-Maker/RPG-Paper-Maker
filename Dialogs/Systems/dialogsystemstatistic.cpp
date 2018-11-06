@@ -33,7 +33,7 @@ DialogSystemStatistic::DialogSystemStatistic(SystemStatistic &statistic,
     m_statistic(statistic)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

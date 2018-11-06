@@ -38,7 +38,7 @@ DialogNewProject::DialogNewProject(QWidget *parent) :
     ui(new Ui::DialogNewProject)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->lineEditProjectName->setFocus();
     ui->lineEditLocation->setText(Wanok::dirGames);

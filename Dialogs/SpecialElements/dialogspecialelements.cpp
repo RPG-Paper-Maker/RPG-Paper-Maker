@@ -33,7 +33,7 @@ DialogSpecialElements::DialogSpecialElements(PictureKind kind,
     ui(new Ui::DialogSpecialElements)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     setWindowTitle(SystemPicture::getPictureTitle(kind));
     ui->widget->initialize(

@@ -35,7 +35,7 @@ DialogSystemStatisticProgression::DialogSystemStatisticProgression(
     m_statisticProgression(statisticProgression)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

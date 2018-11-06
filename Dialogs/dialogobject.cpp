@@ -32,7 +32,6 @@ DialogObject::DialogObject(SystemCommonObject *object, QWidget *parent) :
     ui(new Ui::DialogObject)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
 
     ui->widget->initializeList(Wanok::get()->project()->gameDatas()
                                ->commonEventsDatas()->modelCommonObjects());

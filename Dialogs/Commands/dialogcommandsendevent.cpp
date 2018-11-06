@@ -32,7 +32,7 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
     ui(new Ui::DialogCommandSendEvent)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     bool test = command == nullptr;
     if (test){

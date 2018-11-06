@@ -35,7 +35,7 @@ DialogCommandModifyInventory::DialogCommandModifyInventory(
     ui(new Ui::DialogCommandModifyInventory)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
     ui->widgetNumber->initializeNumberVariable();
 
     // Initilize comboBoxes

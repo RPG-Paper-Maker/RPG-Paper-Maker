@@ -33,7 +33,7 @@ DialogSystemParameter::DialogSystemParameter(SystemParameter &param,
     m_param(param)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

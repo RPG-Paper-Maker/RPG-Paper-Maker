@@ -40,7 +40,7 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     ui(new Ui::DialogSystems)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initializeSystem(gameDatas);
     initializeBattleSystem(gameDatas);

@@ -35,7 +35,7 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
     ui(new Ui::DialogExport)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->lineEditLocation->setText(Wanok::dirGames);
     ui->lineEditLocation->setCursorPosition(0);

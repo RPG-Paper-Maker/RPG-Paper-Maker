@@ -33,7 +33,7 @@ DialogSystemState::DialogSystemState(SystemState& state, QWidget *parent) :
     m_state(state)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

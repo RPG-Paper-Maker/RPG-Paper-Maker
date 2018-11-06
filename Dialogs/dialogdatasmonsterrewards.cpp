@@ -36,7 +36,7 @@ DialogDatasMonsterRewards::DialogDatasMonsterRewards(SystemMonster &monster,
     m_monster(monster)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

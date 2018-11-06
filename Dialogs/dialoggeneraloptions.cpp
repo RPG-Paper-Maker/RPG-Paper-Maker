@@ -32,7 +32,7 @@ DialogGeneralOptions::DialogGeneralOptions(QWidget *parent) :
     ui(new Ui::DialogGeneralOptions)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

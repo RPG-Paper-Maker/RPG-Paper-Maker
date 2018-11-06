@@ -34,7 +34,7 @@ DialogMapProperties::DialogMapProperties(MapProperties &properties,
     m_mapProperties(properties)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

@@ -33,7 +33,7 @@ DialogSystemCurrency::DialogSystemCurrency(SystemCurrency* currency,
     m_currency(currency)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

@@ -32,7 +32,7 @@ DialogSystemName::DialogSystemName(SuperListItem& model, QWidget *parent) :
     m_model(model)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

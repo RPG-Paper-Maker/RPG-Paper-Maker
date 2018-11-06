@@ -33,7 +33,7 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
     m_loot(loot)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     // Initilize comboBoxes
     SuperListItem::fillComboBox(ui->comboBoxItem, Wanok::get()->project()

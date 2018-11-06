@@ -35,7 +35,7 @@ DialogSystemMonsterTroop::DialogSystemMonsterTroop(
     m_monsterTroop(monsterTroop)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

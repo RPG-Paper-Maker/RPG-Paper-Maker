@@ -32,7 +32,7 @@ DialogDebugOptions::DialogDebugOptions(QWidget *parent) :
     ui(new Ui::DialogDebugOptions)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

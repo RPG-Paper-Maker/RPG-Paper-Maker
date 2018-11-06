@@ -36,7 +36,7 @@ DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
     ui(new Ui::DialogCommandStopSong)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
     this->setWindowTitle(title);
     ui->panelPrimitiveValueSeconds->initializeNumber(parameters, nullptr);
 

@@ -34,7 +34,7 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
     ui(new Ui::DialogCommandStartBattle)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     // Initialize widgets
     SuperListItem::fillComboBox(ui->comboBoxDB, Wanok::get()->project()

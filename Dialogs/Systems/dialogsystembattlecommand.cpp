@@ -35,7 +35,7 @@ DialogSystemBattleCommand::DialogSystemBattleCommand(
     m_battleCommand(battleCommand)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

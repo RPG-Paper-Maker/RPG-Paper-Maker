@@ -36,7 +36,7 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_endValue(0)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowFlags(Qt::WindowTitleHint);

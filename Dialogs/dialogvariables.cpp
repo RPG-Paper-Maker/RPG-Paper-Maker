@@ -34,7 +34,7 @@ DialogVariables::DialogVariables(QWidget *parent) :
     ui(new Ui::DialogVariables)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->panelList->showButtonMax(false);
     ui->panelListPages->list()->initializeNewItemInstance(new SystemVariables);

@@ -34,7 +34,7 @@ DialogSystemWeaponArmorKind::DialogSystemWeaponArmorKind(
     m_weaponArmorKind(weaponArmorKind)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     initialize();
 }

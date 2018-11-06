@@ -35,7 +35,7 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
     m_canUpdateKey(false)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     // Engine keyBoard
     ui->treeViewEngine->initializeModel(settings->keyBoardDatas()->model());

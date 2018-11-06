@@ -38,7 +38,7 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     if (object != nullptr){
 

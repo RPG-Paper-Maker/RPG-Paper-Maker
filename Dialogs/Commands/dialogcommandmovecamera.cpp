@@ -36,7 +36,6 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height() - 75);
 
     if (Wanok::isInConfig){
         m_modelObjects = new QStandardItemModel;

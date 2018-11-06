@@ -31,7 +31,7 @@ DialogPictures::DialogPictures(QWidget *parent) :
     ui(new Ui::DialogPictures)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     // Tree model
     ui->treeView->setModel(createFoldersModel());

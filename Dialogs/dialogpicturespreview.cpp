@@ -36,7 +36,7 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     m_initialPictureID(picture->id())
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);

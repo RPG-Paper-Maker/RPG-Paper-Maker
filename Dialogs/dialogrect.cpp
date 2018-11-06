@@ -33,7 +33,7 @@ DialogRect::DialogRect(QRectF *rect, QWidget *parent) :
     m_rect(rect)
 {
     ui->setupUi(this);
-    setFixedSize(geometry().width(), geometry().height());
+    
 
     int squareSize = Wanok::get()->getSquareSize();
     int two = getTwo();
