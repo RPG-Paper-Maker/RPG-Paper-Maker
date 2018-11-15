@@ -24,6 +24,7 @@
 #include <QMetaType>
 #include "superlistitem.h"
 #include "primitivevalue.h"
+#include "position3d.h"
 
 // -------------------------------------------------------
 //
@@ -43,15 +44,15 @@ public:
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemBattleMap &battleMap);
 
+    static const QString jsonIdMap;
+    static const QString jsonPosition;
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    PrimitiveValue m_idMap;
-    PrimitiveValue m_x;
-    PrimitiveValue m_y;
-    PrimitiveValue m_yPlus;
-    PrimitiveValue m_z;
+    int m_idMap;
+    Position3D m_position;
 };
 
 Q_DECLARE_METATYPE(SystemBattleMap)

@@ -18,6 +18,10 @@
 */
 
 #include "systembattlemap.h"
+#include "dialogselectposition.h"
+
+const QString SystemBattleMap::jsonIdMap = "idm";
+const QString SystemBattleMap::jsonPosition = "p";
 
 // -------------------------------------------------------
 //
@@ -49,12 +53,15 @@ SystemBattleMap::~SystemBattleMap(){
 bool SystemBattleMap::openDialog(){
     SystemBattleMap battleMap;
     battleMap.setCopy(*this);
-    /*
-    DialogSystemBattleCommand dialog(battleCommand);
+
+    DialogSelectPosition dialog(battleMap.m_idMap, battleMap.m_position.x(),
+        battleMap.m_position.y(), battleMap.m_position.yPlus(), battleMap
+        .m_position.z());
     if (dialog.exec() == QDialog::Accepted){
-        setCopy(battleCommand);
+        m_idMap = dialog.idMap();
+        m_position.setCoords(dialog.x(), dialog.y(), dialog.yPlus(),dialog.z());
         return true;
-    }*/
+    }
     return false;
 }
 
@@ -71,6 +78,10 @@ SuperListItem* SystemBattleMap::createCopy() const{
 
 void SystemBattleMap::setCopy(const SystemBattleMap& battleMap){
     SuperListItem::setCopy(battleMap);
+
+    m_idMap = battleMap.m_idMap;
+    m_position.setCoords(battleMap.m_position.x(), battleMap.m_position.y(),
+        battleMap.m_position.yPlus(), battleMap.m_position.z());
 }
 
 // -------------------------------------------------------
@@ -81,10 +92,18 @@ void SystemBattleMap::setCopy(const SystemBattleMap& battleMap){
 
 void SystemBattleMap::read(const QJsonObject &json){
     SuperListItem::read(json);
+
+    m_idMap = json[jsonIdMap].toInt();
+    m_position.read(json[jsonPosition].toArray());
 }
 
 // -------------------------------------------------------
 
 void SystemBattleMap::write(QJsonObject &json) const{
     SuperListItem::write(json);
+    QJsonArray objTab;
+
+    json[jsonIdMap] = m_idMap;
+    m_position.write(objTab);
+    json[jsonPosition] = objTab;
 }

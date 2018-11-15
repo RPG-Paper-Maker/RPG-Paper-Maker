@@ -99,8 +99,8 @@ void HeroesDatas::write(QJsonObject &json) const{
     QJsonArray jsonArray;
     for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
         QJsonObject jsonCommon;
-        SystemHero* sysHero = ((SystemHero*)m_model->item(i)->data()
-                               .value<quintptr>());
+        SystemHero* sysHero = reinterpret_cast<SystemHero*>(m_model->item(i)
+            ->data().value<quintptr>());
         sysHero->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }

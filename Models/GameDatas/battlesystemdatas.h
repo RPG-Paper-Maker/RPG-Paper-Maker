@@ -63,6 +63,14 @@ public:
     void setDefaultCommonStatistics();
     void setDefaultCommonBattleCommand();
 
+    static const QString jsonWeaponsKind;
+    static const QString jsonArmorsKind;
+    static const QString jsonBattleMaps;
+    static const QString jsonElements;
+    static const QString jsonCommonEquipment;
+    static const QString jsonCommonStatistics;
+    static const QString jsonCommonBattleCommand;
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

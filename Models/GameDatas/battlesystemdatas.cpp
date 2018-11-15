@@ -23,8 +23,17 @@
 #include "systemelement.h"
 #include "systemstatistic.h"
 #include "systembattlecommand.h"
+#include "systembattlemap.h"
 #include "wanok.h"
 #include "common.h"
+
+const QString BattleSystemDatas::jsonWeaponsKind = "weaponsKind";
+const QString BattleSystemDatas::jsonArmorsKind = "armorsKind";
+const QString BattleSystemDatas::jsonBattleMaps = "battleMaps";
+const QString BattleSystemDatas::jsonElements = "elements";
+const QString BattleSystemDatas::jsonCommonEquipment = "equipments";
+const QString BattleSystemDatas::jsonCommonStatistics = "statistics";
+const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 
 // -------------------------------------------------------
 //
@@ -379,8 +388,21 @@ void BattleSystemDatas::read(const QJsonObject &json){
 
     QJsonArray jsonList;
 
+    // Battle maps
+    jsonList = json[jsonBattleMaps].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem* item = new QStandardItem;
+        SystemBattleMap* sysBattleMap = new SystemBattleMap;
+        sysBattleMap->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(
+                          reinterpret_cast<quintptr>(sysBattleMap)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sysBattleMap->toString());
+        m_modelBattleMaps->appendRow(item);
+    }
+
     // Equipments
-    jsonList = json["equipments"].toArray();
+    jsonList = json[jsonCommonEquipment].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemLang* sysEquipment = new SystemLang;
@@ -393,7 +415,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Weapons kind
-    jsonList = json["weaponsKind"].toArray();
+    jsonList = json[jsonWeaponsKind].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemWeaponArmorKind* sysWeaponKind = new SystemWeaponArmorKind;
@@ -407,7 +429,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Armors kind
-    jsonList = json["armorsKind"].toArray();
+    jsonList = json[jsonArmorsKind].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemWeaponArmorKind* sysArmorKind = new SystemWeaponArmorKind;
@@ -421,7 +443,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Elements
-    jsonList = json["elements"].toArray();
+    jsonList = json[jsonElements].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemElement* sysElement = new SystemElement;
@@ -433,14 +455,13 @@ void BattleSystemDatas::read(const QJsonObject &json){
         m_modelElements->appendRow(item);
     }
     for (int i = 0; i < jsonList.size(); i++){
-        SystemElement* sysElement =
-                ((SystemElement*)m_modelElements->item(i)->data()
-                 .value<quintptr>());
+        SystemElement* sysElement = reinterpret_cast<SystemElement*>(
+            m_modelElements->item(i)->data().value<quintptr>());
         sysElement->readEfficiency(m_modelElements, jsonList[i].toObject());
     }
 
     // Statistics
-    jsonList = json["statistics"].toArray();
+    jsonList = json[jsonCommonStatistics].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemStatistic* sysStatistic = new SystemStatistic;
@@ -453,7 +474,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Battle commands
-    jsonList = json["battleCommands"].toArray();
+    jsonList = json[jsonCommonBattleCommand].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         QStandardItem* item = new QStandardItem;
         SystemBattleCommand* sysBattleCommand = new SystemBattleCommand;
@@ -477,81 +498,88 @@ void BattleSystemDatas::write(QJsonObject &json) const{
 
     QJsonArray jsonArray;
 
+    // Battle maps
+    jsonArray = QJsonArray();
+    l = m_modelBattleMaps->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemBattleMap* sysBattleMap = reinterpret_cast<SystemBattleMap*>(
+            m_modelBattleMaps->item(i)->data().value<quintptr>());
+        sysBattleMap->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[jsonBattleMaps] = jsonArray;
+
     // Equipments
     jsonArray = QJsonArray();
     l = m_modelCommonEquipment->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysEquipment =
-                ((SystemLang*)m_modelCommonEquipment->item(i)->data()
-                 .value<quintptr>());
+        SystemLang* sysEquipment = reinterpret_cast<SystemLang*>(
+            m_modelCommonEquipment->item(i)->data().value<quintptr>());
         sysEquipment->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["equipments"] = jsonArray;
+    json[jsonCommonEquipment] = jsonArray;
 
     // Weapons kind
     jsonArray = QJsonArray();
     l = m_modelWeaponsKind->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysWeaponKind =
-                ((SystemLang*)m_modelWeaponsKind->item(i)->data()
-                 .value<quintptr>());
+        SystemLang* sysWeaponKind = reinterpret_cast<SystemLang*>(
+            m_modelWeaponsKind->item(i)->data().value<quintptr>());
         sysWeaponKind->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["weaponsKind"] = jsonArray;
+    json[jsonWeaponsKind] = jsonArray;
 
     // Armors kind
     jsonArray = QJsonArray();
     l = m_modelArmorsKind->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemLang* sysArmorKind =
-                ((SystemLang*)m_modelArmorsKind->item(i)->data()
-                 .value<quintptr>());
+        SystemLang* sysArmorKind = reinterpret_cast<SystemLang*>(
+            m_modelArmorsKind->item(i)->data().value<quintptr>());
         sysArmorKind->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["armorsKind"] = jsonArray;
+    json[jsonArmorsKind] = jsonArray;
 
     // Elements
     jsonArray = QJsonArray();
     l = m_modelElements->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemElement* sysElement =
-                ((SystemElement*)m_modelElements->item(i)->data()
-                 .value<quintptr>());
+        SystemElement* sysElement = reinterpret_cast<SystemElement*>(
+            m_modelElements->item(i)->data().value<quintptr>());
         sysElement->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["elements"] = jsonArray;
+    json[jsonElements] = jsonArray;
 
     // Statistics
     jsonArray = QJsonArray();
     l = m_modelCommonStatistics->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemStatistic* sysStatistics =
-                ((SystemStatistic*)m_modelCommonStatistics->item(i)->data()
-                 .value<quintptr>());
+        SystemStatistic* sysStatistics = reinterpret_cast<SystemStatistic*>(
+            m_modelCommonStatistics->item(i)->data().value<quintptr>());
         sysStatistics->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["statistics"] = jsonArray;
+    json[jsonCommonStatistics] = jsonArray;
 
     // Battle commands
     l = m_modelCommonBattleCommand->invisibleRootItem()->rowCount();
     jsonArray = QJsonArray();
     for (int i = 0; i < l; i++){
         QJsonObject jsonCommon;
-        SystemBattleCommand* sysBattleCommand =
-                ((SystemBattleCommand*)m_modelCommonBattleCommand->item(i)
-                 ->data().value<quintptr>());
+        SystemBattleCommand* sysBattleCommand = reinterpret_cast
+            <SystemBattleCommand*>(m_modelCommonBattleCommand->item(i)->data()
+            .value<quintptr>());
         sysBattleCommand->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json["battleCommands"] = jsonArray;
+    json[jsonCommonBattleCommand] = jsonArray;
 }
