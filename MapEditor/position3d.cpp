@@ -82,8 +82,8 @@ void Position3D::setInGrid(Position3D& p, int w, int h) {
 // -------------------------------------------------------
 
 QString Position3D::toString() const {
-    QString infos = QString::number(m_x) + "," + QString::number(m_y) +
-        "," + QString::number(m_y_plus) + "," + QString::number(m_z);
+    QString infos = "[" + QString::number(m_x) + "," + QString::number(m_y) +
+        "," + QString::number(m_y_plus) + "," + QString::number(m_z) + "]";
 
     return infos;
 }

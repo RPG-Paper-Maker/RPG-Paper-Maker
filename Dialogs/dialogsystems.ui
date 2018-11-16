@@ -513,7 +513,11 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_25">
                 <item row="0" column="0">
-                 <widget class="WidgetSuperTree" name="treeViewBattleMap"/>
+                 <widget class="WidgetSuperTree" name="treeViewBattleMap">
+                  <attribute name="headerVisible">
+                   <bool>false</bool>
+                  </attribute>
+                 </widget>
                 </item>
                </layout>
               </widget>

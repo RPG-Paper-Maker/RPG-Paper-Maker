@@ -225,7 +225,15 @@ void BattleSystemDatas::setDefaultArmorsKind(){
 // -------------------------------------------------------
 
 void BattleSystemDatas::setDefaultBattleMaps(){
-
+    SystemBattleMap* sysBattleMap = new SystemBattleMap(1, "Default", 2,
+        Position3D(9, 0, 0, 7));
+    QStandardItem* item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sysBattleMap)));
+    item->setText(sysBattleMap->toString());
+    m_modelBattleMaps->appendRow(item);
+    item = new QStandardItem;
+    item->setText(SuperListItem::beginningText);
+    m_modelBattleMaps->appendRow(item);
 }
 
 // -------------------------------------------------------
@@ -391,13 +399,15 @@ void BattleSystemDatas::read(const QJsonObject &json){
     QJsonArray jsonList;
 
     // Battle maps
-    m_modelBattleMaps->setHorizontalHeaderLabels(QStringList({"Name","Id"}));
     jsonList = json[jsonBattleMaps].toArray();
     for (int i = 0; i < jsonList.size(); i++){
+        item = new QStandardItem;
         SystemBattleMap* sysBattleMap = new SystemBattleMap;
         sysBattleMap->read(jsonList.at(i).toObject());
-        row = sysBattleMap->getModelRow();
-        m_modelBattleMaps->appendRow(row);
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(
+            sysBattleMap)));
+        item->setText(sysBattleMap->toString());
+        m_modelBattleMaps->appendRow(item);
     }
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);

@@ -69,7 +69,7 @@ void Map::writeDefaultMap(QString path){
 
 void Map::writeDefaultBattleMap(QString path){
     MapProperties properties;
-    properties.setId(2);
+    properties.setId(Wanok::generateMapId());
     QJsonArray jsonObject;
     QString pathMap = writeMap(path, properties, jsonObject);
     Portion globalPortion(0, 0, 0);

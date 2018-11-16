@@ -39,11 +39,12 @@ class SystemBattleMap : public SuperListItem
 public:
     SystemBattleMap();
     SystemBattleMap(int i, QString name);
+    SystemBattleMap(int i, QString name, int idMap, Position3D position);
     virtual ~SystemBattleMap();
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemBattleMap &battleMap);
-    virtual QList<QStandardItem*> getModelRow() const;
+    virtual QString toString() const;
 
     static const QString jsonIdMap;
     static const QString jsonPosition;

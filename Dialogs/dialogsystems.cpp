@@ -116,6 +116,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
 
     // Update ID
     ui->treeViewBattleMap->setUpdateId(true);
+    ui->treeViewBattleMap->setCanBeEmpty(false);
 
     // Fill combo boxes
     updateStatisticsBase();
@@ -127,11 +128,10 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
             this, SLOT(on_equipmentUpdated()));
 
     // Initialize models
+
     ui->treeViewBattleMap->initializeModel(gameDatas->battleSystemDatas()
         ->modelBattleMaps());
     ui->treeViewBattleMap->initializeNewItemInstance(new SystemBattleMap);
-    ui->treeViewBattleMap->setColumnWidth(0,150);
-    ui->treeViewBattleMap->setColumnWidth(1,25);
     ui->panelSuperListWeaponsKind->initializeModel(gameDatas
         ->battleSystemDatas()->modelWeaponsKind());
     ui->panelSuperListWeaponsKind->list()->initializeNewItemInstance(

@@ -35,7 +35,14 @@ SystemBattleMap::SystemBattleMap()
 }
 
 SystemBattleMap::SystemBattleMap(int i, QString name) :
-    SuperListItem(i, name)
+    SystemBattleMap(i, name, 1, Position3D(0, 0, 0, 0))
+{
+
+}
+
+SystemBattleMap::SystemBattleMap(int i, QString name, int idMap,
+    Position3D position) : SuperListItem(i, name), m_idMap(idMap), m_position(
+    position)
 {
 
 }
@@ -87,17 +94,8 @@ void SystemBattleMap::setCopy(const SystemBattleMap& battleMap){
 
 // -------------------------------------------------------
 
-QList<QStandardItem *> SystemBattleMap::getModelRow() const{
-    QList<QStandardItem*> row = QList<QStandardItem*>();
-    QStandardItem* item = new QStandardItem;
-    QStandardItem* itemId = new QStandardItem;
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    item->setText(toString());
-    itemId->setText(QString::number(m_idMap));
-    row.append(item);
-    row.append(itemId);
-
-    return row;
+QString SystemBattleMap::toString() const {
+    return SuperListItem::toString() + " " + m_position.toString();
 }
 
 // -------------------------------------------------------
