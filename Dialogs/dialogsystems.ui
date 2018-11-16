@@ -513,11 +513,7 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_25">
                 <item row="0" column="0">
-                 <widget class="PanelSuperList" name="panelSuperListBattleMaps" native="true">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
+                 <widget class="WidgetSuperTree" name="treeViewBattleMap"/>
                 </item>
                </layout>
               </widget>

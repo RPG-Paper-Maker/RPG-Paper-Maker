@@ -28,6 +28,7 @@
 #include "systemweaponarmorkind.h"
 #include "systemelement.h"
 #include "systembattlecommand.h"
+#include "systembattlemap.h"
 
 // -------------------------------------------------------
 //
@@ -113,6 +114,9 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelSuperListWeaponsKind->list()->setCanEdit(true);
     ui->panelSuperListArmorsKind->list()->setCanEdit(true);
 
+    // Update ID
+    ui->treeViewBattleMap->setUpdateId(true);
+
     // Fill combo boxes
     updateStatisticsBase();
     connect(ui->panelSuperListCommonStatistics->list(), SIGNAL(updated()),
@@ -123,36 +127,35 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
             this, SLOT(on_equipmentUpdated()));
 
     // Initialize models
-    ui->panelSuperListWeaponsKind
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelWeaponsKind());
+    ui->treeViewBattleMap->initializeModel(gameDatas->battleSystemDatas()
+        ->modelBattleMaps());
+    ui->treeViewBattleMap->initializeNewItemInstance(new SystemBattleMap);
+    ui->treeViewBattleMap->setColumnWidth(0,150);
+    ui->treeViewBattleMap->setColumnWidth(1,25);
+    ui->panelSuperListWeaponsKind->initializeModel(gameDatas
+        ->battleSystemDatas()->modelWeaponsKind());
     ui->panelSuperListWeaponsKind->list()->initializeNewItemInstance(
-                new SystemWeaponArmorKind);
-    ui->panelSuperListArmorsKind->list()
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelArmorsKind());
+        new SystemWeaponArmorKind);
+    ui->panelSuperListArmorsKind->list()->initializeModel(gameDatas
+        ->battleSystemDatas()->modelArmorsKind());
     ui->panelSuperListArmorsKind->list()->initializeNewItemInstance(
-                new SystemWeaponArmorKind);
-    ui->panelSuperListElements->list()
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelElements());
+        new SystemWeaponArmorKind);
+    ui->panelSuperListElements->list()->initializeModel(gameDatas
+        ->battleSystemDatas()->modelElements());
     ui->panelSuperListElements->list()->initializeNewItemInstance(
-                new SystemElement);
-    ui->panelSuperListCommonEquipments->list()
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelCommonEquipment());
+        new SystemElement);
+    ui->panelSuperListCommonEquipments->list()->initializeModel(gameDatas
+        ->battleSystemDatas()->modelCommonEquipment());
     ui->panelSuperListCommonEquipments->list()->initializeNewItemInstance(
-                new SystemLang);
-    ui->panelSuperListCommonStatistics->list()
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelCommonStatistics());
+        new SystemLang);
+    ui->panelSuperListCommonStatistics->list()->initializeModel(gameDatas
+        ->battleSystemDatas()->modelCommonStatistics());
     ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
-                new SystemStatistic);
-    ui->panelSuperListCommonBattleCommands->list()
-            ->initializeModel(gameDatas->battleSystemDatas()
-                              ->modelCommonBattleCommand());
+        new SystemStatistic);
+    ui->panelSuperListCommonBattleCommands->list()->initializeModel(gameDatas
+        ->battleSystemDatas()->modelCommonBattleCommand());
     ui->panelSuperListCommonBattleCommands->list()->initializeNewItemInstance(
-                new SystemBattleCommand);
+        new SystemBattleCommand);
 }
 
 // -------------------------------------------------------

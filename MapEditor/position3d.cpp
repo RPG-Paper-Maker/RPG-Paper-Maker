@@ -34,6 +34,10 @@ Position3D::Position3D(int x, int y, int y_plus, int z) :
 
 }
 
+Position3D::~Position3D() {
+
+}
+
 bool Position3D::operator==(const Position3D& other) const{
     return m_x == other.x() && m_y == other.y() && m_y_plus == other.yPlus() &&
             m_z == other.z();
@@ -73,6 +77,15 @@ void Position3D::setInGrid(Position3D& p, int w, int h) {
         z = h;
 
     setCoords(x, p.y(), p.yPlus(), z);
+}
+
+// -------------------------------------------------------
+
+QString Position3D::toString() const {
+    QString infos = QString::number(m_x) + "," + QString::number(m_y) +
+        "," + QString::number(m_y_plus) + "," + QString::number(m_z);
+
+    return infos;
 }
 
 // -------------------------------------------------------

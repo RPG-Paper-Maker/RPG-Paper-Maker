@@ -43,6 +43,7 @@ public:
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemBattleMap &battleMap);
+    virtual QList<QStandardItem*> getModelRow() const;
 
     static const QString jsonIdMap;
     static const QString jsonPosition;

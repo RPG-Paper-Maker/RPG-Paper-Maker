@@ -20,6 +20,7 @@
 #include "dialogselectposition.h"
 #include "ui_dialogselectposition.h"
 #include "wanok.h"
+#include <QMessageBox>
 
 // -------------------------------------------------------
 //
@@ -59,13 +60,11 @@ DialogSelectPosition::~DialogSelectPosition()
 }
 
 int DialogSelectPosition::idMap() const{
-    QStandardItem* selected = ui->treeViewLocalMaps->getSelected();
-    TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+    return currentTag()->id();
+}
 
-    if (tag->isDir())
-        return 1;
-    else
-        return tag->id();
+QString DialogSelectPosition::mapName() const {
+    return currentTag()->name();
 }
 
 int DialogSelectPosition::x() const {
@@ -82,6 +81,11 @@ int DialogSelectPosition::yPlus() const {
 
 int DialogSelectPosition::z() const {
     return ui->spinBoxZ->value();
+}
+
+TreeMapTag* DialogSelectPosition::currentTag() const {
+    return reinterpret_cast<TreeMapTag*>(ui->treeViewLocalMaps->getSelected()
+        ->data().value<quintptr>());
 }
 
 //--------------------------------------------
@@ -130,4 +134,16 @@ void DialogSelectPosition::on_spinBoxZ_valueChanged(int i){
     }
     else
         ui->spinBoxZ->setValue(0);
+}
+
+// -------------------------------------------------------
+
+void DialogSelectPosition::accept(){
+    if (currentTag()->isDir()) {
+        QMessageBox::warning(this, "Warning", "You should select a map and not "
+            "a folder.");
+    }
+    else{
+        QDialog::accept();
+    }
 }

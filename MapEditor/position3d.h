@@ -35,6 +35,7 @@ class Position3D : public Portion
 public:
     Position3D();
     Position3D(int x, int y, int yPlus, int z);
+    virtual ~Position3D();
 
     bool operator==(const Position3D& other) const;
     bool operator!=(const Position3D& other) const;
@@ -44,6 +45,8 @@ public:
     int getYpx(int squareSize) const;
     void setCoords(int x, int y, int yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
+
+    virtual QString toString() const;
 
     void read(const QJsonArray &json);
     void write(QJsonArray & json) const;

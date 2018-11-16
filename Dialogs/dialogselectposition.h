@@ -47,10 +47,12 @@ public:
                                                QWidget *parent = 0);
     ~DialogSelectPosition();
     int idMap() const;
+    QString mapName() const;
     int x() const;
     int y() const;
     int yPlus() const;
     int z() const;
+    TreeMapTag* currentTag() const;
 
 private:
     Ui::DialogSelectPosition *ui;
@@ -61,6 +63,7 @@ private slots:
     void on_spinBoxY_valueChanged(int i);
     void on_spinBoxYplus_valueChanged(int i);
     void on_spinBoxZ_valueChanged(int i);
+    void accept();
 };
 
 #endif // DIALOGCOMMANDTELEPORTOBJECTSELECT_H

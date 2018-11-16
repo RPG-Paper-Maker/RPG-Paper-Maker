@@ -59,6 +59,7 @@ bool SystemBattleMap::openDialog(){
         .m_position.z());
     if (dialog.exec() == QDialog::Accepted){
         m_idMap = dialog.idMap();
+        p_name = dialog.mapName();
         m_position.setCoords(dialog.x(), dialog.y(), dialog.yPlus(),dialog.z());
         return true;
     }
@@ -82,6 +83,21 @@ void SystemBattleMap::setCopy(const SystemBattleMap& battleMap){
     m_idMap = battleMap.m_idMap;
     m_position.setCoords(battleMap.m_position.x(), battleMap.m_position.y(),
         battleMap.m_position.yPlus(), battleMap.m_position.z());
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem *> SystemBattleMap::getModelRow() const{
+    QList<QStandardItem*> row = QList<QStandardItem*>();
+    QStandardItem* item = new QStandardItem;
+    QStandardItem* itemId = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    item->setText(toString());
+    itemId->setText(QString::number(m_idMap));
+    row.append(item);
+    row.append(itemId);
+
+    return row;
 }
 
 // -------------------------------------------------------

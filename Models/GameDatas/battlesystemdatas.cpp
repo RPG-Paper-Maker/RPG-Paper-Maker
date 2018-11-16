@@ -372,6 +372,8 @@ void BattleSystemDatas::setDefaultCommonBattleCommand(){
 // -------------------------------------------------------
 
 void BattleSystemDatas::read(const QJsonObject &json){
+    QList<QStandardItem *> row;
+    QStandardItem* item;
 
     // Clear
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
@@ -389,22 +391,22 @@ void BattleSystemDatas::read(const QJsonObject &json){
     QJsonArray jsonList;
 
     // Battle maps
+    m_modelBattleMaps->setHorizontalHeaderLabels(QStringList({"Name","Id"}));
     jsonList = json[jsonBattleMaps].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
         SystemBattleMap* sysBattleMap = new SystemBattleMap;
-        sysBattleMap->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysBattleMap)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysBattleMap->toString());
-        m_modelBattleMaps->appendRow(item);
+        sysBattleMap->read(jsonList.at(i).toObject());
+        row = sysBattleMap->getModelRow();
+        m_modelBattleMaps->appendRow(row);
     }
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_modelBattleMaps->appendRow(item);
 
     // Equipments
     jsonList = json[jsonCommonEquipment].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemLang* sysEquipment = new SystemLang;
         sysEquipment->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(
@@ -417,7 +419,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Weapons kind
     jsonList = json[jsonWeaponsKind].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemWeaponArmorKind* sysWeaponKind = new SystemWeaponArmorKind;
         QJsonObject jsonKind = jsonList[i].toObject();
         sysWeaponKind->read(jsonKind);
@@ -431,7 +433,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Armors kind
     jsonList = json[jsonArmorsKind].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemWeaponArmorKind* sysArmorKind = new SystemWeaponArmorKind;
         QJsonObject jsonKind = jsonList[i].toObject();
         sysArmorKind->read(jsonKind);
@@ -445,7 +447,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Elements
     jsonList = json[jsonElements].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemElement* sysElement = new SystemElement;
         sysElement->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(
@@ -463,7 +465,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Statistics
     jsonList = json[jsonCommonStatistics].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemStatistic* sysStatistic = new SystemStatistic;
         sysStatistic->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(
@@ -476,7 +478,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Battle commands
     jsonList = json[jsonCommonBattleCommand].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemBattleCommand* sysBattleCommand = new SystemBattleCommand;
         sysBattleCommand->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(
@@ -501,7 +503,7 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     // Battle maps
     jsonArray = QJsonArray();
     l = m_modelBattleMaps->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l; i++){
+    for (int i = 0; i < l - 1; i++){
         QJsonObject jsonCommon;
         SystemBattleMap* sysBattleMap = reinterpret_cast<SystemBattleMap*>(
             m_modelBattleMaps->item(i)->data().value<quintptr>());
