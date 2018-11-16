@@ -73,6 +73,7 @@ public:
                          QSet<MapPortion*> &previousPreview);
     void updateSpriteWalls();
     SpriteWallDatas* getWallAt(Position& position);
+    void fillWithFloor();
     bool addObject(Position& p, SystemCommonObject* o, QJsonObject &previous,
                    MapEditorSubSelectionKind &previousType);
     bool deleteObject(Position& p, QJsonObject &previous,

@@ -56,8 +56,12 @@ QStandardItem* TreeMapDatas::root() const { return m_model->item(0); }
 // -------------------------------------------------------
 
 void TreeMapDatas::setDefault(){
-    QStandardItem* item = addDir(root(), 0, TreeMapTag::createDir("Plains"));
-    addMap(item, 0, TreeMapTag::createMap("MAP0001", 1));
+    QStandardItem* itemPlains = addDir(root(), 0, TreeMapTag::createDir(
+        "Plains"));
+    QStandardItem* itemBattles = addDir(root(), 1, TreeMapTag::createDir(
+        "Battle maps"));
+    addMap(itemPlains, 0, TreeMapTag::createMap("MAP0001", 1));
+    addMap(itemBattles, 0, TreeMapTag::createMap("Default", 2));
 }
 
 // -------------------------------------------------------

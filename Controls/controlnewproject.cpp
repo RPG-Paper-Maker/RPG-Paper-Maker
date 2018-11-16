@@ -136,6 +136,7 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir(pathDir).mkdir(Common::pathCombine(Wanok::pathMaps,
                                            Wanok::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
+    Map::writeDefaultBattleMap(pathDir);
 
     // Restoring project
     Wanok::get()->setProject(previousProject);

@@ -18,6 +18,7 @@
 */
 
 #include "mapportion.h"
+#include "wanok.h"
 
 // -------------------------------------------------------
 //
@@ -173,6 +174,20 @@ void MapPortion::updateSpriteWalls() {
 
 SpriteWallDatas* MapPortion::getWallAt(Position &position) {
     return m_sprites->getWallAt(m_previewSquares, m_previewDelete, position);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::fillWithFloor() {
+    QRect rect(0, 0, 1, 1);
+    Position p;
+
+    for (int i = 0; i < Wanok::portionSize; i++) {
+        for (int j = 0; j < Wanok::portionSize; j++) {
+            p.setCoords(i, 0, 0, j);
+            m_lands->setLand(p, new FloorDatas(new QRect(rect)));
+        }
+    }
 }
 
 // -------------------------------------------------------

@@ -88,6 +88,7 @@ public:
                                   QString path, int i, int j, int k,
                                   MapProperties& properties);
     static void writeDefaultMap(QString path);
+    static void writeDefaultBattleMap(QString path);
     static QString writeMap(QString path, MapProperties& properties,
                             QJsonArray &jsonObject);
     static QString getPortionPathMap(int i, int j, int k);

@@ -55,14 +55,28 @@ void Map::writeDefaultMap(QString path){
     // Portion
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
+    mapPortion.fillWithFloor();
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", 2,
-                                                   new QStandardItemModel,
-                                                   new QStandardItemModel);
+        new QStandardItemModel, new QStandardItemModel);
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;
     mapPortion.addObject(position, o, previous, previousType);
     Wanok::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
-                     mapPortion);
+        mapPortion);
+}
+
+// -------------------------------------------------------
+
+void Map::writeDefaultBattleMap(QString path){
+    MapProperties properties;
+    properties.setId(2);
+    QJsonArray jsonObject;
+    QString pathMap = writeMap(path, properties, jsonObject);
+    Portion globalPortion(0, 0, 0);
+    MapPortion mapPortion(globalPortion);
+    mapPortion.fillWithFloor();
+    Wanok::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
+        mapPortion);
 }
 
 // -------------------------------------------------------
