@@ -22,10 +22,10 @@
 #include "common.h"
 #include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 4;
+const int ProjectUpdater::incompatibleVersionsCount = 5;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "0.6.0"};
 
 // -------------------------------------------------------
 //
@@ -347,4 +347,19 @@ void ProjectUpdater::updateVersion_0_5_2() {
     QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_BACKGROUND_SOUNDS);
     QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SOUNDS);
     QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_MUSIC_EFFECTS);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_0_6_0() {
+    // Write default battle map
+    Map::writeDefaultBattleMap(m_project->pathCurrentProject());
+    m_project->readLangsDatas();
+    m_project->gameDatas()->readSkills(m_project->pathCurrentProject());
+    m_project->gameDatas()->readBattleSystem(m_project->pathCurrentProject());
+    m_project->gameDatas()->battleSystemDatas()->setDefaultBattleMaps();
+    m_project->gameDatas()->writeBattleSystem(m_project->pathCurrentProject());
+    m_project->readTreeMapDatas();
+    m_project->treeMapDatas()->setDefault();
+    m_project->writeTreeMapDatas();
 }

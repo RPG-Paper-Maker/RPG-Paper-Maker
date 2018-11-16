@@ -43,6 +43,7 @@ public:
     QStandardItem* root() const;
     void setDefault();
     void addMapSelectorDir();
+    void clearModel();
     static QStandardItem* add(QStandardItem *root, int i, TreeMapTag *tag,
                               QString iconName);
     static QStandardItem* addDir(QStandardItem *root, int i, TreeMapTag *tag);

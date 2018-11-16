@@ -66,9 +66,13 @@ public:
     void readVariablesSwitches(QString path);
     void readTilesets(QString path);
     void readSystem(QString path);
+    void readBattleSystem(QString path);
+    void readSkills(QString path);
     void write(QString path);
     void writeTilesets(QString path);
     void writeSystem(QString path);
+    void writeBattleSystem(QString path);
+    void writeSkills(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;

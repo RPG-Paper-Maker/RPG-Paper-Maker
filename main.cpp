@@ -34,6 +34,8 @@
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<QVector<int>>("QVector<int>");
+
     #ifdef Q_OS_WIN
         QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
         Wanok::shadersExtension = "";

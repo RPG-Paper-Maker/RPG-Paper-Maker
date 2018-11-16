@@ -225,6 +225,7 @@ void BattleSystemDatas::setDefaultArmorsKind(){
 // -------------------------------------------------------
 
 void BattleSystemDatas::setDefaultBattleMaps(){
+    SuperListItem::deleteModel(m_modelBattleMaps, false);
     SystemBattleMap* sysBattleMap = new SystemBattleMap(1, "Default", 2,
         Position3D(9, 0, 0, 7));
     QStandardItem* item = new QStandardItem;

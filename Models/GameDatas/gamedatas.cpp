@@ -184,18 +184,28 @@ void GameDatas::readSystem(QString path){
 
 // -------------------------------------------------------
 
+void GameDatas::readBattleSystem(QString path) {
+    m_battleSystemDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readSkills(QString path) {
+    m_skillsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::write(QString path){
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathCommonEvents),
                      *m_commonEventsDatas);
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathVariables),
                      *m_variablesDatas);
     writeSystem(path);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathBattleSystem),
-                     *m_battleSystemDatas);
+    writeBattleSystem(path);
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathItems),
                      *m_itemsDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSkills),
-                     *m_skillsDatas);
+    writeSkills(path);
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathWeapons),
                      *m_weaponsDatas);
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathArmors),
@@ -215,13 +225,26 @@ void GameDatas::write(QString path){
 
 void GameDatas::writeTilesets(QString path) {
     Wanok::writeJSON(Common::pathCombine(path, Wanok::PATH_TILESETS),
-                     *m_tilesetsDatas);
+        *m_tilesetsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSystem(QString path){
     Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSystem),
-                     *m_systemDatas);
+        *m_systemDatas);
 }
 
+// -------------------------------------------------------
+
+void GameDatas::writeBattleSystem(QString path) {
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathBattleSystem),
+        *m_battleSystemDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeSkills(QString path) {
+    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSkills),
+        *m_skillsDatas);
+}
