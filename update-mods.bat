@@ -15,7 +15,7 @@ set path=%pathRepos%\Game-Scripts\Content\Datas\Scripts
 set pathModsScript=%pathMods%\Scripts
 IF EXIST %path% (
 	echo "%localMessage% %path% -> %pathModsScript%"
-	echo r | C:\Windows\System32\xcopy.exe %path% %pathModsScript% /E
+	C:\Windows\System32\xcopy.exe %path% %pathModsScript% /E /I
 ) ELSE (
 	echo "ERROR: The repo Game-Scripts doesn't exists. Clone it (supported only on linux)."
 )
@@ -25,7 +25,7 @@ set pathModsBR=%pathMods%\BR\Content
 mkdir %pathMods%\BR
 IF EXIST %path% (
 	echo "%localMessage% %path% -> %pathModsBR%"
-	echo r | C:\Windows\System32\xcopy.exe %path% %pathModsBR% /E
+	C:\Windows\System32\xcopy.exe %path% %pathModsBR% /E /I
 ) ELSE (
 	echo "ERROR: The repo Basic-Ressources doesn't exists. Clone it (supported only on linux)."
 )
@@ -34,7 +34,7 @@ set path=%pathRepos%\Dependencies\Game
 set pathModsGame=%pathMods%\Game
 IF EXIST %path% (
 	echo "%localMessage% %path% -> %pathModsGame%"
-	echo r | C:\Windows\System32\xcopy.exe %path% %pathModsGame% /E
+	C:\Windows\System32\xcopy.exe %path% %pathModsGame% /E /I
 ) ELSE (
 	echo "ERROR: The repo Dependencies doesn't exists. Clone it (supported only on linux)."
 )
