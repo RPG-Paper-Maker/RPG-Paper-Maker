@@ -3,7 +3,7 @@ title Update mods
 
 set modsPath=./mods
 set localMessage=Local copy: 
-set pathRepos=C:\Users\Marie_MSI\Documents\Qt\RPM
+set pathRepos=..
 set pathMods=%pathRepos%\RPG-Paper-Maker\mods
 
 IF EXIST %pathMods% (
