@@ -85,9 +85,10 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
     connect(this->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_selectionChanged(QModelIndex,QModelIndex)));
-    QModelIndex modelIndex = m_model->index(0,0);
-    setCurrentIndex(modelIndex);
-
+    if (!setCurrentIndexFirstMap(m_model->invisibleRootItem())) {
+        QModelIndex modelIndex = m_model->index(0, 0);
+        setCurrentIndex(modelIndex);
+    }
     connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(removed(QModelIndex,int,int)));
 }
@@ -111,7 +112,8 @@ QStandardItemModel* WidgetTreeLocalMaps::getModel() const { return m_model; }
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::updateNodeSaved(QStandardItem* item){
-    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+        <quintptr>());
     if (tag != nullptr)
         item->setText(tag->name());
 }
@@ -144,7 +146,8 @@ void WidgetTreeLocalMaps::deleteAllMapTemp(){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
-    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+        <quintptr>());
 
     if (tag != nullptr && !tag->isDir()){
         QString pathMap =
@@ -167,9 +170,9 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::showMap(QStandardItem *item)
-{
-    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+void WidgetTreeLocalMaps::showMap(QStandardItem *item) {
+    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+        <quintptr>());
     m_widgetMapEditor->deleteMap();
 
     if (m_project != nullptr)
@@ -203,7 +206,8 @@ void WidgetTreeLocalMaps::hideMap(){
 void WidgetTreeLocalMaps::setMap(int id, QVector3D &position){
     QStandardItem* item = getMap(id, this->getModel()->invisibleRootItem());
     if (item != nullptr){
-        TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+            <quintptr>());
         tag->position()->setX(position.x());
         tag->position()->setY(position.y());
         tag->position()->setZ(position.z());
@@ -214,7 +218,8 @@ void WidgetTreeLocalMaps::setMap(int id, QVector3D &position){
 // -------------------------------------------------------
 
 QStandardItem* WidgetTreeLocalMaps::getMap(int id, QStandardItem* item){
-    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+        <quintptr>());
 
     if (tag != nullptr && !tag->isDir()){
         if (tag->id() == id)
@@ -234,7 +239,8 @@ QStandardItem* WidgetTreeLocalMaps::getMap(int id, QStandardItem* item){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
-    TreeMapTag* tag = (TreeMapTag*) item->data().value<quintptr>();
+    TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
+        <quintptr>());
     QString mapPath =
             Common::pathCombine(Wanok::pathMaps,
                                Wanok::generateMapName(tag->id()));
@@ -260,7 +266,7 @@ void WidgetTreeLocalMaps::deleteDirectory(QStandardItem* item){
     // Recursively remove all the children
     for (int i = 0; i < children.size(); i++){
         child = children.at(i);
-        tag = (TreeMapTag*) child->data().value<quintptr>();
+        tag = reinterpret_cast<TreeMapTag*>(child->data().value<quintptr>());
 
         // Remove map or directory
         if (tag->isDir())
@@ -277,7 +283,8 @@ void WidgetTreeLocalMaps::deleteDirectory(QStandardItem* item){
 
 void WidgetTreeLocalMaps::updateTileset(){
     if (m_panelTextures != nullptr){
-        TreeMapTag* tag = (TreeMapTag*)getSelected()->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(getSelected()->data()
+            .value<quintptr>());
 
         if (tag->id() == -1)
             m_panelTextures->setTilesetImageNone();
@@ -314,7 +321,8 @@ void WidgetTreeLocalMaps::reload(){
     // Loading map
     if (m_widgetMapEditor != nullptr){
         QStandardItem* selected = getSelected();
-        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
+            <quintptr>());
 
         if (tag->id() == -1)
             hideMap();
@@ -343,7 +351,8 @@ void WidgetTreeLocalMaps::copy(QStandardItem* item){
 void WidgetTreeLocalMaps::cleanCopy(){
     if (m_copied != nullptr){
         SuperListItem::deleteModelTree(m_copied);
-        delete ((SuperListItem*) m_copied->data().value<qintptr>());
+        delete reinterpret_cast<SuperListItem*>(m_copied->data().value
+            <qintptr>());
         delete m_copied;
         m_copied = nullptr;
 
@@ -367,6 +376,23 @@ void WidgetTreeLocalMaps::paste(QStandardItem* item){
 }
 
 // -------------------------------------------------------
+
+bool WidgetTreeLocalMaps::setCurrentIndexFirstMap(QStandardItem* item) {
+    if (item->rowCount() == 0) {
+        setCurrentIndex(item->index());
+        return true;
+    }
+
+    for (int i = 0; i < item->rowCount(); i++) {
+        if (setCurrentIndexFirstMap(item->child(i))) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //
@@ -382,7 +408,8 @@ void WidgetTreeLocalMaps::on_selectionChanged(QModelIndex, QModelIndex){
 void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
     QStandardItem* selected = getSelected();
     if (selected != nullptr) {
-        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
+            <quintptr>());
         if (tag->isDir()){
             m_contextMenuDirectory->canPaste(m_copied != nullptr);
             m_contextMenuDirectory->canDelete(selected->parent() != nullptr);
@@ -401,7 +428,8 @@ void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
     QList<QAction*> actions;
     QAction* action;
     if (selected != nullptr) {
-        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
+            <quintptr>());
         if (tag->isDir()) {
             actions = m_contextMenuDirectory->actions();
             action = actions.at(0);
@@ -505,7 +533,8 @@ void WidgetTreeLocalMaps::contextNewDirectory(){
 void WidgetTreeLocalMaps::contextEditMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
+            <quintptr>());
         QString path = Common::pathCombine(
                         Common::pathCombine(Wanok::get()->project()
                                            ->pathCurrentProject(),
@@ -543,7 +572,8 @@ void WidgetTreeLocalMaps::contextEditMap(){
 void WidgetTreeLocalMaps::contextEditDirectory(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        TreeMapTag* tag = (TreeMapTag*) selected->data().value<quintptr>();
+        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
+            <quintptr>());
         SuperListItem super;
         super.setName(tag->name());
 
