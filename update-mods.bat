@@ -1,6 +1,8 @@
 @echo off
 title Update mods
 
+setlocal
+
 set modsPath=./mods
 set localMessage=Local copy: 
 set pathRepos=..
@@ -11,30 +13,35 @@ IF EXIST %pathMods% (
 )
 mkdir %pathMods%
 
-set path=%pathRepos%\Game-Scripts\Content\Datas\Scripts
+set sourcePathModsScript=%pathRepos%\Game-Scripts\Content\Datas\Scripts
 set pathModsScript=%pathMods%\Scripts
-IF EXIST %path% (
-	echo "%localMessage% %path% -> %pathModsScript%"
-	C:\Windows\System32\xcopy.exe %path% %pathModsScript% /E /I
-) ELSE (
-	echo "ERROR: Could not find repo Game-Scripts in %path%. Please clone it manually to that location before running this script (cloning via update-mods is supported only on Linux)"
-)
+CALL :copy_mod %sourcePathModsScript% %pathModsScript% Game-Scripts
 
-set path=%pathRepos%\Basic-Ressources\Content
+set sourcePathModsBR=%pathRepos%\Basic-Ressources\Content
 set pathModsBR=%pathMods%\BR\Content
 mkdir %pathMods%\BR
-IF EXIST %path% (
-	echo "%localMessage% %path% -> %pathModsBR%"
-	C:\Windows\System32\xcopy.exe %path% %pathModsBR% /E /I
+CALL :copy_mod %sourcePathModsBR% %pathModsBR% Basic-Ressources
+
+set sourcePathModsGame=%pathRepos%\Dependencies\Game
+set pathModsGame=%pathMods%\Game
+CALL :copy_mod %sourcePathModsGame% %pathModsGame% Dependencies
+
+EXIT /B 0
+
+:: Copy a mod directory to a target directory
+:copy_mod
+
+setlocal
+
+set source=%~1
+set target=%~2
+set modName=%~3
+
+IF EXIST %source% (
+	echo "%localMessage% %source% -> %target%"
+	C:\Windows\System32\xcopy.exe %source% %target% /E /I
 ) ELSE (
-	echo "ERROR: Could not find repo Basic-Ressources in %path%. Please clone it manually to that location before running this script (cloning via update-mods is supported only on Linux)"
+	echo "ERROR: Could not find directory %source%. Please manually clone %modName% manually to %pathRepos% before running this script (cloning via update-mods is supported only on Linux)"
 )
 
-set path=%pathRepos%\Dependencies\Game
-set pathModsGame=%pathMods%\Game
-IF EXIST %path% (
-	echo "%localMessage% %path% -> %pathModsGame%"
-	C:\Windows\System32\xcopy.exe %path% %pathModsGame% /E /I
-) ELSE (
-	echo "ERROR: Could not find repo Dependencies in %path%. Please clone it manually to that location before running this script (cloning via update-mods is supported only on Linux)"
-)
+EXIT /B 0
