@@ -86,11 +86,7 @@ void DialogCommandTeleportObject::initialize(EventCommand* command){
     switch (command->valueCommandAt(i++).toInt()){
     case 0:
         ui->radioButtonSelect->setChecked(true);
-        ui->labelIDMap->setText(command->valueCommandAt(i++));
-        ui->labelX->setText(command->valueCommandAt(i++));
-        ui->labelY->setText(command->valueCommandAt(i++));
-        ui->labelYPlus->setText(command->valueCommandAt(i++));
-        ui->labelZ->setText(command->valueCommandAt(i++));
+        ui->panelSelectPosition->initialize(command, i);
         break;
     case 1:
         ui->radioButtonNumber->setChecked(true);
@@ -126,11 +122,7 @@ EventCommand* DialogCommandTeleportObject::getCommand() const{
     // Position
     if (ui->radioButtonSelect->isChecked()){
         command.append("0");
-        command.append(ui->labelIDMap->text());
-        command.append(ui->labelX->text());
-        command.append(ui->labelY->text());
-        command.append(ui->labelYPlus->text());
-        command.append(ui->labelZ->text());
+        ui->panelSelectPosition->getCommand(command);
     }
     else if (ui->radioButtonNumber->isChecked()){
         command.append("1");
@@ -159,39 +151,18 @@ EventCommand* DialogCommandTeleportObject::getCommand() const{
 //
 //--------------------------------------------
 
-void DialogCommandTeleportObject::on_pushButtonSelect_clicked(){
-     DialogSelectPosition dialog(ui->labelIDMap->text().toInt(),
-        ui->labelX->text().toInt(), ui->labelY->text().toInt(),
-        ui->labelYPlus->text().toInt(), ui->labelZ->text().toInt());
-
-    if (dialog.exec() == QDialog::Accepted){
-        ui->labelIDMap->setText(QString::number(dialog.idMap()));
-        ui->labelX->setText(QString::number(dialog.x()));
-        ui->labelY->setText(QString::number(dialog.y()));
-        ui->labelYPlus->setText(QString::number(dialog.yPlus()));
-        ui->labelZ->setText(QString::number(dialog.z()));
-    }
-}
-
-//--------------------------------------------
-
 void DialogCommandTeleportObject::on_radioButtonSelect_toggled(bool checked){
-    ui->pushButtonSelect->setEnabled(checked);
-    ui->labelLIDMap->setEnabled(checked);
-    ui->labelIDMap->setEnabled(checked);
-    ui->labelLX->setEnabled(checked);
-    ui->labelX->setEnabled(checked);
-    ui->labelLY->setEnabled(checked);
-    ui->labelY->setEnabled(checked);
-    ui->labelLYPlus->setEnabled(checked);
-    ui->labelYPlus->setEnabled(checked);
-    ui->labelLZ->setEnabled(checked);
-    ui->labelZ->setEnabled(checked);
+    ui->panelSelectPosition->setEnabled(checked);
 }
 
 //--------------------------------------------
 
 void DialogCommandTeleportObject::on_radioButtonNumber_toggled(bool checked){
+    ui->label_2->setEnabled(checked);
+    ui->label_3->setEnabled(checked);
+    ui->label_4->setEnabled(checked);
+    ui->label_5->setEnabled(checked);
+    ui->label_6->setEnabled(checked);
     ui->widgetIdMap->setEnabled(checked);
     ui->widgetX->setEnabled(checked);
     ui->widgetY->setEnabled(checked);

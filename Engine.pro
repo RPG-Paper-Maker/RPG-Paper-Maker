@@ -255,7 +255,8 @@ HEADERS += \
     Enums/themekind.h \
     Dialogs/dialoggeneraloptions.h \
     CustomWidgets/widgetsong.h \
-    Models/System/systembattlemap.h
+    Models/System/systembattlemap.h \
+    CustomWidgets/panelselectposition.h
 
 SOURCES += \
     main.cpp \
@@ -458,7 +459,8 @@ SOURCES += \
     Dialogs/Commands/dialogcommandstopsong.cpp \
     Dialogs/dialoggeneraloptions.cpp \
     CustomWidgets/widgetsong.cpp \
-    Models/System/systembattlemap.cpp
+    Models/System/systembattlemap.cpp \
+    CustomWidgets/panelselectposition.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -532,7 +534,8 @@ FORMS += \
     Dialogs/Commands/dialogcommandstopsong.ui \
     Dialogs/dialoggeneraloptions.ui \
     CustomWidgets/widgetsong.ui \
-    Dialogs/dialogselectposition.ui
+    Dialogs/dialogselectposition.ui \
+    CustomWidgets/panelselectposition.ui
 
 OTHER_FILES +=
 

@@ -40,7 +40,9 @@ class DialogCommandStartBattle : public DialogCommand
 
 public:
     explicit DialogCommandStartBattle(EventCommand *command = nullptr,
-                                      QWidget *parent = 0);
+                                      SystemCommonObject *object = nullptr,
+                                      QStandardItemModel *parameters = nullptr,
+                                      QWidget *parent = nullptr);
     virtual ~DialogCommandStartBattle();
     EventCommand* getCommand() const;
 
@@ -49,10 +51,14 @@ protected:
 
 private:
     Ui::DialogCommandStartBattle *ui;
+    SystemCommonObject* m_object;
+    QStandardItemModel* m_parameters;
 
 private slots:
-    void on_radioButtonDB_toggled(bool checked);
     void on_radioButtonVariableConstant_toggled(bool checked);
+    void on_radioButtonID_toggled(bool checked);
+    void on_radioButtonSelect_toggled(bool checked);
+    void on_radioButtonNumber_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDSTARTBATTLE_H

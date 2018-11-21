@@ -82,7 +82,10 @@ private:
     QString strModifyTeam() const;
     QString strModifyTeamInstance(int &i) const;
     QString strModifyTeamMoveDelete(int &i) const;
-    QString strStartBattle() const;
+    QString strStartBattle(QStandardItemModel* parameters) const;
+    QString strStartBattleTroop(QStandardItemModel* parameters, int& i) const;
+    QString strStartBattleMap(QStandardItemModel* parameters, int& i) const;
+    QString strStartBattleOptions(int& i) const;
     QString strChangeState(SystemCommonObject* object,
                            QStandardItemModel* parameters) const;
     QString strChangeStateOperation(int& i) const;

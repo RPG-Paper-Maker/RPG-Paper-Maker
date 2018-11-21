@@ -55,7 +55,6 @@ private:
     QStandardItemModel* m_modelObjects;
 
 private slots:
-   void on_pushButtonSelect_clicked();
    void on_radioButtonSelect_toggled(bool checked);
    void on_radioButtonNumber_toggled(bool checked);
    void on_radioButtonObject_toggled(bool checked);

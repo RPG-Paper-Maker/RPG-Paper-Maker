@@ -84,7 +84,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::ModifyTeam:
         return new DialogCommandModifyTeam(command);
     case EventCommandKind::StartBattle:
-        return new DialogCommandStartBattle(command);
+        return new DialogCommandStartBattle(command, object, parameters);
     case EventCommandKind::ChangeState:
         return new DialogCommandChangeState(command, object, parameters);
     case EventCommandKind::SendEvent:

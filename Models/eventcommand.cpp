@@ -158,7 +158,7 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::ModifyTeam:
         str += strModifyTeam(); break;
     case EventCommandKind::StartBattle:
-        str += strStartBattle(); break;
+        str += strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
         str += "if Win"; break;
     case EventCommandKind::IfLose:
@@ -473,27 +473,83 @@ QString EventCommand::strModifyTeamMoveDelete(int &i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattle() const{
-    int i = 2;
-    QString troop = "troop ";
+QString EventCommand::strStartBattle(QStandardItemModel* parameters) const{
+    int i = 0;
+
+    QString options = strStartBattleOptions(i);
+    QString troop = strStartBattleTroop(parameters, i);
+    QString battleMap = strStartBattleMap(parameters, i);
+
+    return "Start battle: troop " + troop + " with battle map " + battleMap +
+        "\n\n" + options;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartBattleTroop(QStandardItemModel* parameters,
+    int& i) const
+{
     int kind = p_listCommand.at(i++).toInt();
-    int id;
     switch(kind){
     case 0:
-        id = p_listCommand.at(i++).toInt();
-        troop += SuperListItem::getById(Wanok::get()->project()->gameDatas()
-                                        ->troopsDatas()->model()
-                                        ->invisibleRootItem(), id)->toString();
-        break;
+        return "with ID " + strDataBaseId(i, Wanok::get()->project()
+            ->gameDatas()->troopsDatas()->model(), parameters);
     case 1:
-        troop += "with ID " + strNumberVariable(i);
+        return "random (in map property)";
+    }
+
+    return "";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartBattleMap(QStandardItemModel* parameters,
+    int& i) const
+{
+    int kind = p_listCommand.at(i++).toInt();
+    QString id, x, y, yPlus, z;
+    switch (kind){
+    case 0:
+        return strDataBaseId(i, Wanok::get()->project()->gameDatas()
+            ->battleSystemDatas()->modelBattleMaps(), parameters);
+    case 1:
+        id = p_listCommand.at(i++);
+        x = p_listCommand.at(i++);
+        y = p_listCommand.at(i++);
+        yPlus = p_listCommand.at(i++);
+        z = p_listCommand.at(i++);
         break;
     case 2:
-        troop += "random (in map property)";
+        id = strNumber(i, parameters);
+        x = strNumber(i, parameters);
+        y = strNumber(i, parameters);
+        yPlus = strNumber(i, parameters);
+        z = strNumber(i, parameters);
         break;
     }
 
-    return "Start battle: " + troop;
+    return "\n\tID map: " + id + "\n" +
+           "\tX: " + x + "\n" +
+           "\tY: " + y + "\n" +
+           "\tY plus: " + yPlus + "\n" +
+           "\tZ: " + z;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartBattleOptions(int& i) const {
+    QString strOptions = "[";
+    QStringList listOptions;
+    if (p_listCommand.at(i++) == "1") {
+        listOptions << "Allow escape";
+    }
+    if (p_listCommand.at(i++) == "1") {
+        listOptions << "Defeat causes Game Over";
+    }
+    strOptions += listOptions.join(";");
+    strOptions += "]";
+
+    return strOptions;
 }
 
 // -------------------------------------------------------

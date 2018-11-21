@@ -29,17 +29,25 @@
 // -------------------------------------------------------
 
 DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
-                                                   QWidget *parent) :
+    SystemCommonObject* object, QStandardItemModel* parameters, QWidget *parent) :
     DialogCommand(parent),
-    ui(new Ui::DialogCommandStartBattle)
+    ui(new Ui::DialogCommandStartBattle),
+    m_object(object),
+    m_parameters(parameters)
 {
     ui->setupUi(this);
-    
 
     // Initialize widgets
-    SuperListItem::fillComboBox(ui->comboBoxDB, Wanok::get()->project()
-                                ->gameDatas()->troopsDatas()->model());
-    ui->widgetVariableConstant->initializeNumberVariable();
+    ui->widgetVariableConstant->initializeDataBaseCommandId(Wanok::get()
+        ->project()->gameDatas()->troopsDatas()->model(), m_parameters, nullptr);
+    ui->panelPrimitiveValueIDBattleMap->initializeDataBaseCommandId(Wanok::get()
+        ->project()->gameDatas()->battleSystemDatas()->modelBattleMaps(),
+        m_parameters, nullptr);
+    ui->widgetIdMap->initializeNumber(parameters, nullptr);
+    ui->widgetX->initializeNumber(parameters, nullptr);
+    ui->widgetY->initializeNumber(parameters, nullptr);
+    ui->widgetYplus->initializeNumber(parameters, nullptr);
+    ui->widgetZ->initializeNumber(parameters, nullptr);
 
     if (command != nullptr) initialize(command);
 }
@@ -66,19 +74,32 @@ void DialogCommandStartBattle::initialize(EventCommand* command){
     int type = command->valueCommandAt(i++).toInt();
     switch(type){
     case 0:
-        ui->radioButtonDB->setChecked(true);
-        ui->comboBoxDB->setCurrentIndex(
-                    SuperListItem::getIndexById(
-                        Wanok::get()->project()->gameDatas()->troopsDatas()
-                        ->model()->invisibleRootItem(),
-                        command->valueCommandAt(i++).toInt()));
-        break;
-    case 1:
         ui->radioButtonVariableConstant->setChecked(true);
         ui->widgetVariableConstant->initializeCommand(command, i);
         break;
-    case 2:
+    case 1:
         ui->radioButtonRandom->setChecked(true);
+        break;
+    }
+
+    // Battle map
+    type = command->valueCommandAt(i++).toInt();
+    switch(type){
+    case 0:
+        ui->radioButtonID->setChecked(true);
+        ui->panelPrimitiveValueIDBattleMap->initializeCommand(command, i);
+        break;
+    case 1:
+        ui->radioButtonSelect->setChecked(true);
+        ui->panelSelectPosition->initialize(command, i);
+        break;
+    case 2:
+        ui->radioButtonNumber->setChecked(true);
+        ui->widgetIdMap->initializeCommand(command, i);
+        ui->widgetX->initializeCommand(command, i);
+        ui->widgetY->initializeCommand(command, i);
+        ui->widgetYplus->initializeCommand(command, i);
+        ui->widgetZ->initializeCommand(command, i);
         break;
     }
 }
@@ -93,19 +114,30 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
     command.append(ui->checkBoxGameOver->isChecked() ? "1" : "0");
 
     // Troop's ID
-    if (ui->radioButtonDB->isChecked()){
+    if (ui->radioButtonVariableConstant->isChecked()){
         command.append("0");
-        QStandardItem* model = Wanok::get()->project()->gameDatas()
-                ->troopsDatas()->model()->item(ui->comboBoxDB->currentIndex());
-        command.append(QString::number(((SuperListItem*)model->data()
-                                        .value<qintptr>())->id()));
-    }
-    else if (ui->radioButtonVariableConstant->isChecked()){
-        command.append("1");
         ui->widgetVariableConstant->getCommand(command);
     }
     else if (ui->radioButtonRandom->isChecked()){
+        command.append("1");
+    }
+
+    // Battle map
+    if (ui->radioButtonID->isChecked()){
+        command.append("0");
+        ui->panelPrimitiveValueIDBattleMap->getCommand(command);
+    }
+    else if (ui->radioButtonSelect->isChecked()) {
+        command.append("1");
+        ui->panelSelectPosition->getCommand(command);
+    }
+    else if (ui->radioButtonNumber->isChecked()){
         command.append("2");
+        ui->widgetIdMap->getCommand(command);
+        ui->widgetX->getCommand(command);
+        ui->widgetY->getCommand(command);
+        ui->widgetYplus->getCommand(command);
+        ui->widgetZ->getCommand(command);
     }
 
     return new EventCommand(EventCommandKind::StartBattle, command);
@@ -117,10 +149,34 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
 //
 // -------------------------------------------------------
 
-void DialogCommandStartBattle::on_radioButtonDB_toggled(bool checked){
-    ui->comboBoxDB->setEnabled(checked);
+void DialogCommandStartBattle::on_radioButtonVariableConstant_toggled(bool checked)
+{
+    ui->widgetVariableConstant->setEnabled(checked);
 }
 
-void DialogCommandStartBattle::on_radioButtonVariableConstant_toggled(bool checked){
-    ui->widgetVariableConstant->setEnabled(checked);
+//--------------------------------------------
+
+void DialogCommandStartBattle::on_radioButtonID_toggled(bool checked){
+    ui->panelPrimitiveValueIDBattleMap->setEnabled(checked);
+}
+
+//--------------------------------------------
+
+void DialogCommandStartBattle::on_radioButtonSelect_toggled(bool checked){
+    ui->panelSelectPosition->setEnabled(checked);
+}
+
+//--------------------------------------------
+
+void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
+    ui->label_7->setEnabled(checked);
+    ui->label_8->setEnabled(checked);
+    ui->label_9->setEnabled(checked);
+    ui->label_10->setEnabled(checked);
+    ui->label_11->setEnabled(checked);
+    ui->widgetIdMap->setEnabled(checked);
+    ui->widgetX->setEnabled(checked);
+    ui->widgetY->setEnabled(checked);
+    ui->widgetYplus->setEnabled(checked);
+    ui->widgetZ->setEnabled(checked);
 }
