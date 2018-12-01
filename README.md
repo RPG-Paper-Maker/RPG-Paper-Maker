@@ -2,14 +2,14 @@
 --------------
 
 [![Join the chat at https://gitter.im/RPG-Paper-Maker/Lobby](https://badges.gitter.im/RPG-Paper-Maker/Lobby.svg)](https://gitter.im/RPG-Paper-Maker/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build](https://travis-ci.org/Wano-k/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/Wano-k/RPG-Paper-Maker)
+[![Build](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker)
 [![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 
 RPG Paper Maker is a free game maker engine including a 3D universe with many 2D sprites and some simplified 3D objects. Pretty close to the RPG Maker series, RPG Paper Maker finally give a way to create RPGs in a totally 3D universe as easy as it is in 2D!
 
 ## How to build the project
 
-* Install Qt on your OS with 
+* Install Qt on your OS with
 [this installer](https://www.qt.io/download-open-source/#section-2). During the installation, you should select the most recent Qt version, and Qt creator IDE. You should also install gcc if it is not already done. For windows users, the operation is more painful and you will need to install MinGW.
 * Run QtCreator.
 * Update the modules with the command:
@@ -47,7 +47,7 @@ That means that you should:
     git pull rpm develop
 
 After that, you should create a branch for your correction:
-    
+
     git checkout -b <choose_a_branch_name>
 
 When your correction is done, push it (always in your branch). Finally, just propose you branch as a new pull request in the original project.
