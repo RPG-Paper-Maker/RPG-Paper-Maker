@@ -1,6 +1,6 @@
 language: cpp
 
-osx_image: xcode8.3
+osx_image: xcode10.1
 
 matrix:
   include:
