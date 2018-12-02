@@ -22,7 +22,6 @@
 #include "wanok.h"
 #include "qbox3d.h"
 #include "qplane3d.h"
-#include <math.h>
 
 // -------------------------------------------------------
 //

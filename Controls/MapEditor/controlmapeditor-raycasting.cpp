@@ -20,7 +20,7 @@
 #include "controlmapeditor.h"
 #include "wanok.h"
 #include "qbox3d.h"
-#include <math.h>
+#include <cmath>
 #include <QTime>
 
 // -------------------------------------------------------
