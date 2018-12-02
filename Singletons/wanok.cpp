@@ -23,7 +23,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDirIterator>
-#include <math.h>
+#include <cmath>
 #include "wanok.h"
 #include "common.h"
 
