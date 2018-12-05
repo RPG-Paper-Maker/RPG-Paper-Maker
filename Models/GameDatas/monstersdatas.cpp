@@ -69,6 +69,7 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     SystemLoot* loot;
     LangsTranslation* names[] = {new LangsTranslation("Wooly")};
     int classesIds[] = {5};
+    int battlersIds[] = {1};
     int experiences[] = {5};
     QVector<int> currenciesIds[] = {QVector<int>({1})};
     QVector<int> currenciesNb[] = {QVector<int>({1})};
@@ -135,8 +136,8 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
         actions = new QStandardItemModel;
         // TODO
 
-        monster = new SystemMonster(i+1, names[i], classesIds[i],
-                                    experiences[i], currencies, loots, actions);
+        monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
+            experiences[i], currencies, loots, actions);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

@@ -40,7 +40,6 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     initializeItems(gameDatas);
     initializeSkills(gameDatas);
     initializeWeapons(gameDatas);
@@ -165,10 +164,18 @@ void DialogDatas::initializeHeroes(GameDatas *gameDatas){
     connect(ui->panelSuperListHeroes->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageHeroSelected(QModelIndex,QModelIndex)));
+
+    // Class
     SuperListItem::fillComboBox(ui->comboBoxHeroClass, gameDatas
                                 ->classesDatas()->model());
     QModelIndex index = ui->panelSuperListHeroes->list()->getModel()
             ->index(0,0);
+
+    // Battlers
+    ui->widgetPictureBattlerHero->setKind(PictureKind::Battlers);
+    connect(ui->widgetPictureBattlerHero, SIGNAL(pictureChanged(SystemPicture*)),
+            this, SLOT(on_battlerHeroPictureChanged(SystemPicture*)));
+
     ui->panelSuperListHeroes->list()->setIndex(0);
     on_pageHeroSelected(index,index);
 }
@@ -180,6 +187,7 @@ void DialogDatas::updateHero(SystemHero* sysHero){
                                         ->getModel()->invisibleRootItem(),
                            sysHero->idClass());
     ui->comboBoxHeroClass->setCurrentIndex(i);
+    ui->widgetPictureBattlerHero->setPicture(sysHero->getPictureBattler());
 }
 
 // -------------------------------------------------------
@@ -192,10 +200,18 @@ void DialogDatas::initializeMonsters(GameDatas *gameDatas){
     connect(ui->panelSuperListMonsters->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageMonsterSelected(QModelIndex,QModelIndex)));
+
+    // Class
     SuperListItem::fillComboBox(ui->comboBoxMonsterClass,
                                 gameDatas->classesDatas()->model());
     QModelIndex index = ui->panelSuperListMonsters->list()->getModel()
             ->index(0,0);
+
+    // Battlers
+    ui->widgetPictureBattlerMonster->setKind(PictureKind::Battlers);
+    connect(ui->widgetPictureBattlerMonster, SIGNAL(pictureChanged(SystemPicture*)),
+        this, SLOT(on_battlerMonsterPictureChanged(SystemPicture*)));
+
     ui->panelSuperListMonsters->list()->setIndex(0);
     on_pageMonsterSelected(index,index);
 }
@@ -207,6 +223,7 @@ void DialogDatas::updateMonster(SystemMonster *sysMonster){
                                         ->getModel()->invisibleRootItem(),
                            sysMonster->idClass());
     ui->comboBoxMonsterClass->setCurrentIndex(i);
+    ui->widgetPictureBattlerMonster->setPicture(sysMonster->getPictureBattler());
 }
 
 // -------------------------------------------------------
@@ -441,6 +458,24 @@ void DialogDatas::on_pageTilesetSelected(QModelIndex index, QModelIndex){
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateTileset((SystemTileset*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_battlerHeroPictureChanged(SystemPicture* picture) {
+    SystemHero* hero = (SystemHero*) ui->panelSuperListHeroes->list()
+            ->getSelected()->data().value<quintptr>();
+
+    hero->setIdBattlerPicture(picture->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_battlerMonsterPictureChanged(SystemPicture* picture) {
+    SystemMonster* monster = (SystemMonster*) ui->panelSuperListMonsters->list()
+            ->getSelected()->data().value<quintptr>();
+
+    monster->setIdBattlerPicture(picture->id());
 }
 
 // -------------------------------------------------------

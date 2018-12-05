@@ -18,6 +18,11 @@
 */
 
 #include "systemhero.h"
+#include "wanok.h"
+#include "superlistitem.h"
+
+const QString SystemHero::jsonClass = "class";
+const QString SystemHero::jsonBattler = "bid";
 
 // -------------------------------------------------------
 //
@@ -30,9 +35,11 @@ SystemHero::SystemHero() : SystemLang()
 
 }
 
-SystemHero::SystemHero(int i, LangsTranslation* names, int idClass) :
-    SystemLang(i,names),
-    m_idClass(idClass)
+SystemHero::SystemHero(int i, LangsTranslation* names, int idClass,
+    int idBattler) :
+    SystemLang(i, names),
+    m_idClass(idClass),
+    m_idBattlerPicture(idBattler)
 {
 
 }
@@ -41,7 +48,17 @@ SystemHero::~SystemHero(){
 
 }
 
-int SystemHero::idClass() const { return m_idClass; }
+int SystemHero::idClass() const { return m_idClass;}
+
+int SystemHero::idBattlerPicture() const { return m_idBattlerPicture; }
+
+void SystemHero::setIdBattlerPicture(int id) { m_idBattlerPicture = id; }
+
+SystemPicture* SystemHero::getPictureBattler() const {
+    return reinterpret_cast<SystemPicture*>(SuperListItem::getById(Wanok::get()
+        ->project()->picturesDatas()->model(PictureKind::Battlers)
+        ->invisibleRootItem(), m_idBattlerPicture));
+}
 
 // -------------------------------------------------------
 //
@@ -52,6 +69,7 @@ int SystemHero::idClass() const { return m_idClass; }
 void SystemHero::setCopy(const SystemHero& hero){
     SystemLang::setCopy(hero);
     m_idClass = hero.idClass();
+    m_idBattlerPicture = hero.idBattlerPicture();
 }
 
 // -------------------------------------------------------
@@ -62,10 +80,12 @@ void SystemHero::setCopy(const SystemHero& hero){
 
 void SystemHero::read(const QJsonObject &json){
     SystemLang::read(json);
-    m_idClass = json["class"].toInt();
+    m_idClass = json[jsonClass].toInt();
+    m_idBattlerPicture = json[jsonBattler].toInt();
 }
 
 void SystemHero::write(QJsonObject &json) const{
     SystemLang::write(json);
-    json["class"] = m_idClass;
+    json[jsonClass] = m_idClass;
+    json[jsonBattler] = m_idBattlerPicture;
 }

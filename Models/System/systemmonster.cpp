@@ -36,10 +36,9 @@ SystemMonster::SystemMonster() : SystemHero()
 }
 
 SystemMonster::SystemMonster(int i, LangsTranslation* names, int idClass,
-                             int exp, QStandardItemModel* currencies,
-                             QStandardItemModel* loots,
-                             QStandardItemModel* actions) :
-    SystemHero(i, names, idClass),
+    int idBattler, int exp, QStandardItemModel* currencies, QStandardItemModel*
+    loots, QStandardItemModel* actions) :
+    SystemHero(i, names, idClass, idBattler),
     m_exp(exp),
     m_modelCurrencies(currencies),
     m_modelLoots(loots),

@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -340,28 +340,68 @@
            </item>
            <item>
             <widget class="QWidget" name="widget" native="true">
-             <widget class="QWidget" name="layoutWidget_2">
+             <widget class="QWidget" name="">
               <property name="geometry">
                <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>161</width>
-                <height>46</height>
+                <x>12</x>
+                <y>11</y>
+                <width>692</width>
+                <height>52</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0,1">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
+              <layout class="QGridLayout" name="gridLayout_16">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_13">
                  <property name="text">
                   <string>Class:</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QComboBox" name="comboBoxHeroClass"/>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Battler:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2" rowspan="2">
+                <spacer name="horizontalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>328</width>
+                   <height>48</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="0">
+                <widget class="QComboBox" name="comboBoxHeroClass">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="WidgetPicture" name="widgetPictureBattlerHero" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -417,46 +457,80 @@
            </item>
            <item>
             <widget class="QWidget" name="widget_2" native="true">
-             <widget class="QWidget" name="layoutWidget_4">
+             <widget class="QWidget" name="">
               <property name="geometry">
                <rect>
-                <x>10</x>
+                <x>11</x>
                 <y>10</y>
-                <width>161</width>
-                <height>46</height>
+                <width>711</width>
+                <height>52</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,1">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
+              <layout class="QGridLayout" name="gridLayout_30">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_18">
                  <property name="text">
                   <string>Class:</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QComboBox" name="comboBoxMonsterClass"/>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Battler:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2" rowspan="2">
+                <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>118</width>
+                   <height>38</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="3" rowspan="2">
+                <widget class="QPushButton" name="pushButtonMonsterbattleRewards">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Configure battle...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QComboBox" name="comboBoxMonsterClass">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="WidgetPicture" name="widgetPictureBattlerMonster" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
               </layout>
-             </widget>
-             <widget class="QPushButton" name="pushButtonMonsterbattleRewards">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="geometry">
-               <rect>
-                <x>440</x>
-                <y>30</y>
-                <width>171</width>
-                <height>25</height>
-               </rect>
-              </property>
-              <property name="text">
-               <string>Configure battle...</string>
-              </property>
              </widget>
             </widget>
            </item>

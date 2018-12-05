@@ -20,9 +20,8 @@
 #ifndef SYSTEMHEROES_H
 #define SYSTEMHEROES_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
 #include "systemlang.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -36,16 +35,24 @@ class SystemHero : public SystemLang
 {
 public:
     SystemHero();
-    SystemHero(int i, LangsTranslation* names, int idClass);
+    SystemHero(int i, LangsTranslation* names, int idClass, int idBattler);
     virtual ~SystemHero();
     int idClass() const;
+    int idBattlerPicture() const;
+    void setIdBattlerPicture(int id);
+    SystemPicture* getPictureBattler() const;
+
     void setCopy(const SystemHero& hero);
+
+    static const QString jsonClass;
+    static const QString jsonBattler;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     int m_idClass;
+    int m_idBattlerPicture;
 };
 
 Q_DECLARE_METATYPE(SystemHero)

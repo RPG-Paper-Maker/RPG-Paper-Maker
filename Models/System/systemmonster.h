@@ -20,8 +20,6 @@
 #ifndef SYSTEMMONSTER_H
 #define SYSTEMMONSTER_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
 #include "systemhero.h"
 
 // -------------------------------------------------------
@@ -36,9 +34,9 @@ class SystemMonster : public SystemHero
 {
 public:
     SystemMonster();
-    SystemMonster(int i, LangsTranslation* names, int idClass, int exp,
-                  QStandardItemModel *currencies, QStandardItemModel *loots,
-                  QStandardItemModel *actions);
+    SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
+        int exp, QStandardItemModel *currencies, QStandardItemModel *loots,
+        QStandardItemModel *actions);
     virtual ~SystemMonster();
     int exp() const;
     void setExp(int i);
