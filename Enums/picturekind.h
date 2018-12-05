@@ -39,6 +39,7 @@ enum class PictureKind {
     Reliefs,
     Tilesets,
     Walls,
+    Battlers,
     Last
 };
 

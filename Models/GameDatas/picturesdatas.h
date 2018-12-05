@@ -49,6 +49,7 @@ public:
     void setDefaultBars(QList<QString>& names);
     void setDefaultIcons(QList<QString>& names);
     void setDefaultAutotiles(QList<QString>& names);
+    void setDefaultBattlers(QList<QString>& names);
     void setDefaultCharacters(QList<QString>& names);
     void setDefaultReliefs(QList<QString>& names);
     void setDefaultTilesets(QList<QString>& names);

@@ -362,4 +362,11 @@ void ProjectUpdater::updateVersion_0_6_0() {
     m_project->readTreeMapDatas();
     m_project->treeMapDatas()->setDefault();
     m_project->writeTreeMapDatas();
+
+    // Battlers
+    QList<QString> names;
+    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_BATTLERS);
+    m_project->readPicturesDatas();
+    m_project->picturesDatas()->setDefaultBattlers(names);
+    m_project->writePicturesDatas();
 }

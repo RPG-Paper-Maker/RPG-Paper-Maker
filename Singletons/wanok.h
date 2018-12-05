@@ -109,6 +109,7 @@ public:
     const static QString PATH_SPRITE_WALLS;
     const static QString PATH_3D_OBJECT;
     const static QString PATH_RELIEFS;
+    const static QString PATH_BATTLERS;
     const static QString PATH_SONGS;
     const static QString PATH_MUSICS;
     const static QString PATH_BACKGROUND_SOUNDS;

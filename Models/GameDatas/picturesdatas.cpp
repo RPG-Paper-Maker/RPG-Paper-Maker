@@ -63,6 +63,7 @@ void PicturesDatas::setDefault(){
     setDefaultBars(names);
     setDefaultIcons(names);
     setDefaultAutotiles(names);
+    setDefaultBattlers(names);
     setDefaultCharacters(names);
     setDefaultReliefs(names);
     setDefaultTilesets(names);
@@ -91,6 +92,15 @@ void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
     SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Autotiles]
             ->item(1)->data().value<quintptr>();
     picture->setDefaultAutotiles();
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultBattlers(QList<QString>& names) {
+    names << "lucas";
+    setDefaultPictures(names, PictureKind::Battlers);
+    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Battlers]
+            ->item(1)->data().value<quintptr>();
 }
 
 // -------------------------------------------------------

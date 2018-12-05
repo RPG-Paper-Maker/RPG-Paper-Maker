@@ -117,6 +117,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind){
         return Wanok::pathTilesets;
     case PictureKind::Walls:
         return Wanok::PATH_SPRITE_WALLS;
+    case PictureKind::Battlers:
+        return Wanok::PATH_BATTLERS;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }
