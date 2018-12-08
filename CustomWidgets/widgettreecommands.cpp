@@ -171,23 +171,34 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected){
     if (dialog.exec() == QDialog::Accepted){
         EventCommand* command = dialog.getCommand();
         QStandardItem* root = getRootOfCommand(selected);
-        QStandardItem* item = insertCommand(command, root, selected->row());
+        int insertionRow;
+        if (selected != nullptr){
+            // Insert pasted command just above selection
+            insertionRow = selected->row();
+        }
+        else{
+            // No selection, insert pasted command one row before the end
+            // (to preserve None command at the end)
+            insertionRow = root->rowCount() - 1;
+        }
+        // post-increment insertionRow to insert command below the initial command row
+        QStandardItem* item = insertCommand(command, root, insertionRow++);
 
         // If event command block, more commands to add...
         switch (command->kind()){
         case EventCommandKind::While:
             SystemCommonReaction::addEmptyCommand(item);
             this->expand(item->index());
-            insertWhileBlock(root, selected->row());
+            insertWhileBlock(root, insertionRow);
             break;
         case EventCommandKind::If:
             SystemCommonReaction::addEmptyCommand(item);
             this->expand(item->index());
-            insertIfBlock(command, root, selected->row());
+            insertIfBlock(command, root, insertionRow);
             break;
         case EventCommandKind::StartBattle:
             if (command->isBattleWithoutGameOver())
-                insertStartBattle(root, selected->row());
+                insertStartBattle(root, insertionRow);
             break;
         default:
             break;
@@ -659,8 +670,10 @@ void WidgetTreeCommands::contextNew(){
 
 void WidgetTreeCommands::contextEdit(){
     QStandardItem* selected = getSelected();
-    EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
-    editCommand(selected, command);
+    if (selected != nullptr){
+        EventCommand* command = (EventCommand*)selected->data().value<quintptr>();
+        editCommand(selected, command);
+    }
 }
 
 // -------------------------------------------------------
