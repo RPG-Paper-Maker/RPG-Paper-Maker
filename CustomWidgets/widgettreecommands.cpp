@@ -147,8 +147,12 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
 QStandardItem* WidgetTreeCommands::getRootOfCommand(QStandardItem* selected)
 const
 {
-    return (selected->parent() == nullptr) ? p_model->invisibleRootItem()
-                                           : selected->parent();
+    if (selected != nullptr && selected->parent() != nullptr){
+        return selected->parent();
+    }
+    else{
+        return p_model->invisibleRootItem();
+    }
 }
 
 QStandardItemModel *WidgetTreeCommands::getModel() const { return p_model; }
@@ -289,7 +293,17 @@ void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
         copiedCommand = m_copiedCommands.at(i);
         copy = new QStandardItem;
         SystemCommonReaction::copyCommandsItem(copiedCommand, copy);
-        root->insertRow(selected->row(), copy);
+        int insertionRow;
+        if (selected != nullptr){
+            // Insert pasted command just above selection
+            insertionRow = selected->row();
+        }
+        else{
+            // No selection, insert pasted command one row before the end
+            // (to preserve None command at the end)
+            insertionRow = root->rowCount() - 1;
+        }
+        root->insertRow(insertionRow, copy);
         expand(copy->index());
         updateAllNodesString(copy);
     }
