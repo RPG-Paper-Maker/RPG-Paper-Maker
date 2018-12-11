@@ -69,7 +69,7 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     SystemLoot* loot;
     LangsTranslation* names[] = {new LangsTranslation("Wooly")};
     int classesIds[] = {5};
-    int battlersIds[] = {1};
+    int battlersIds[] = {5};
     int experiences[] = {5};
     QVector<int> currenciesIds[] = {QVector<int>({1})};
     QVector<int> currenciesNb[] = {QVector<int>({1})};

@@ -97,7 +97,7 @@ void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultBattlers(QList<QString>& names) {
-    names << "lucas";
+    names << "lucas" << "kate" << "bibi" << "shana" << "wooly";
     setDefaultPictures(names, PictureKind::Battlers);
     SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Battlers]
             ->item(1)->data().value<quintptr>();
