@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
     This file is part of RPG Paper Maker.
 
@@ -17,10 +17,10 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QDirIterator>
 #include "controlexport.h"
 #include "wanok.h"
 #include "common.h"
-#include <QDirIterator>
 
 // -------------------------------------------------------
 //

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
     This file is part of RPG Paper Maker.
 
@@ -36,11 +36,11 @@
 class ControlExport
 {
 public:
-    ControlExport(Project* project);
+    ControlExport(Project *project);
     QString createDesktop(QString location, OSKind os, bool);
     QString createBrowser(QString location);
     QString copyAllProject(QString location, QString projectName, QString path,
-                           QDir dirLocation);
+        QDir dirLocation);
     void removeWebNoNeed(QString path);
     void removeDesktopNoNeed(QString path);
     QString generateWebStuff(QString path);
@@ -49,7 +49,7 @@ public:
     void copyBRPictures(QString path);
 
 protected:
-    Project* m_project;
+    Project *m_project;
 };
 
 #endif // CONTROLEXPORT_H

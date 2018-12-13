@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
     This file is part of RPG Paper Maker.
 
@@ -17,17 +17,17 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QFile>
 #include "controlundoredo.h"
 #include "wanok.h"
 #include "common.h"
-#include <QFile>
 
-const QString ControlUndoRedo::jsonBefore = "before";
-const QString ControlUndoRedo::jsonBeforeType = "beforeT";
-const QString ControlUndoRedo::jsonAfter = "after";
-const QString ControlUndoRedo::jsonAfterType = "afterT";
-const QString ControlUndoRedo::jsonPos = "pos";
-const QString ControlUndoRedo::jsonStates = "states";
+const QString ControlUndoRedo::JSON_BEFORE = "before";
+const QString ControlUndoRedo::JSON_BEFORE_TYPE = "beforeT";
+const QString ControlUndoRedo::JSON_AFTER = "after";
+const QString ControlUndoRedo::JSON_AFTER_TYPE = "afterT";
+const QString ControlUndoRedo::JSON_POS = "pos";
+const QString ControlUndoRedo::JSON_STATES = "states";
 const int ControlUndoRedo::MAX_SIZE = 50;
 
 // -------------------------------------------------------
@@ -47,11 +47,9 @@ ControlUndoRedo::ControlUndoRedo()
 //
 // -------------------------------------------------------
 
-void ControlUndoRedo::updateJsonList(
-        QJsonArray &list, const QJsonObject &previous,
-        MapEditorSubSelectionKind previousType, Serializable* after,
-        MapEditorSubSelectionKind afterType, const Position& position,
-        bool removeAll)
+void ControlUndoRedo::updateJsonList(QJsonArray &list, const QJsonObject &previous,
+    MapEditorSubSelectionKind previousType, Serializable *after,
+    MapEditorSubSelectionKind afterType, const Position &position, bool removeAll)
 {
     QJsonObject state, afterJson;
     QJsonArray positionJson;
@@ -59,11 +57,11 @@ void ControlUndoRedo::updateJsonList(
         after->write(afterJson);
     position.write(positionJson);
 
-    state[jsonBefore] = previous;
-    state[jsonBeforeType] = (int) previousType;
-    state[jsonAfter] = afterJson;
-    state[jsonAfterType] = (int) afterType;
-    state[jsonPos] = positionJson;
+    state[JSON_BEFORE] = previous;
+    state[JSON_BEFORE_TYPE] = static_cast<int>(previousType);
+    state[JSON_AFTER] = afterJson;
+    state[JSON_AFTER_TYPE] = static_cast<int>(afterType);
+    state[JSON_POS] = positionJson;
 
     if (removeAll) {
         if (list.size() > 1)
@@ -74,12 +72,12 @@ void ControlUndoRedo::updateJsonList(
 
 // -------------------------------------------------------
 
-void ControlUndoRedo::addState(int idMap, QJsonArray& tab) {
+void ControlUndoRedo::addState(int idMap, QJsonArray &tab) {
     if (tab.isEmpty())
         return;
 
     QJsonObject obj;
-    obj[jsonStates] = tab;
+    obj[JSON_STATES] = tab;
     int currentState = updateMapCurrentState(idMap);
     int state;
 
@@ -149,22 +147,21 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
 
 QString ControlUndoRedo::getTempDir(int idMap) const {
     return Common::pathCombine(Common::pathCombine(Common::pathCombine(
-               Wanok::get()->project()->pathCurrentProject(),
-               Wanok::pathMaps),
-               Wanok::generateMapName(idMap)),
-               Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+        Wanok::get()->project()->pathCurrentProject(),
+        Wanok::pathMaps),
+        Wanok::generateMapName(idMap)),
+        Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
 }
 
 // -------------------------------------------------------
 
 QString ControlUndoRedo::getTempFile(int idMap, int state) const {
-    return Common::pathCombine(getTempDir(idMap),
-                              QString::number(state) + ".json");
+    return Common::pathCombine(getTempDir(idMap), QString::number(state) + ".json");
 }
 
 // -------------------------------------------------------
 
-void ControlUndoRedo::undo(int idMap, QJsonArray& states)
+void ControlUndoRedo::undo(int idMap, QJsonArray &states)
 {
     undoRedo(idMap, -1, states);
 }
@@ -190,7 +187,7 @@ void ControlUndoRedo::undoRedo(int idMap, int offset, QJsonArray &states)
         QJsonObject obj;
         Common::readOtherJSON(path, doc);
         obj = doc.object();
-        states = obj[jsonStates].toArray();
+        states = obj[JSON_STATES].toArray();
 
         // Update current state
         m_states[idMap] = state + (offset == 0 ? 1 : 0);
@@ -199,16 +196,16 @@ void ControlUndoRedo::undoRedo(int idMap, int offset, QJsonArray &states)
 
 // -------------------------------------------------------
 
-void ControlUndoRedo::getStateInfos(QJsonObject& objState,
-        MapEditorSubSelectionKind& beforeT, MapEditorSubSelectionKind& afterT,
-        QJsonObject& objBefore, QJsonObject& objAfter, Position &position)
+void ControlUndoRedo::getStateInfos(QJsonObject &objState,
+    MapEditorSubSelectionKind &beforeT, MapEditorSubSelectionKind &afterT,
+    QJsonObject &objBefore, QJsonObject &objAfter, Position &position)
 {
-    beforeT = static_cast<MapEditorSubSelectionKind>(
-                objState[jsonBeforeType].toInt());
-    afterT = static_cast<MapEditorSubSelectionKind>(
-                objState[jsonAfterType].toInt());
-    objBefore = objState[jsonBefore].toObject();
-    objAfter = objState[jsonAfter].toObject();
-    QJsonArray jsonPosition = objState[jsonPos].toArray();
+    beforeT = static_cast<MapEditorSubSelectionKind>(objState[JSON_BEFORE_TYPE]
+        .toInt());
+    afterT = static_cast<MapEditorSubSelectionKind>(objState[JSON_AFTER_TYPE]
+        .toInt());
+    objBefore = objState[JSON_BEFORE].toObject();
+    objAfter = objState[JSON_AFTER].toObject();
+    QJsonArray jsonPosition = objState[JSON_POS].toArray();
     position.read(jsonPosition);
 }

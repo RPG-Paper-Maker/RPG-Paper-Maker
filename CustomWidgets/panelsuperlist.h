@@ -2,7 +2,7 @@
 #define PANELSUPERLIST_H
 
 /*
-    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
     This file is part of RPG Paper Maker.
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
     This file is part of RPG Paper Maker.
 
@@ -23,7 +23,7 @@
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setCursorObjectPosition(Position& p){
+void ControlMapEditor::setCursorObjectPosition(Position &p){
     m_cursorObject->setX(p.x());
     m_cursorObject->setZ(p.z());
 
@@ -31,7 +31,7 @@ void ControlMapEditor::setCursorObjectPosition(Position& p){
     m_map->getLocalPortion(p, portion);
     if (m_map->isInPortion(portion)){
         m_selectedObject = nullptr;
-        MapObjects* mapObjects = m_map->objectsPortion(portion);
+        MapObjects *mapObjects = m_map->objectsPortion(portion);
 
         // Generate object informations
         if (mapObjects != nullptr)
@@ -59,7 +59,7 @@ void ControlMapEditor::showObjectMenuContext(){
 // -------------------------------------------------------
 
 void ControlMapEditor::defineAsHero(){
-    SystemDatas* datas = Wanok::get()->project()->gameDatas()->systemDatas();
+    SystemDatas *datas = Wanok::get()->project()->gameDatas()->systemDatas();
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
     Wanok::get()->project()->writeGameDatas();
@@ -67,12 +67,12 @@ void ControlMapEditor::defineAsHero(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::addObject(Position& p){
-    SystemCommonObject* object = new SystemCommonObject;
+void ControlMapEditor::addObject(Position &p){
+    SystemCommonObject *object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
         object->setCopy(*m_selectedObject);
-    else{
+    else {
         object->setDefault();
         int id = m_map->generateObjectId();
         object->setId(id);
@@ -87,24 +87,22 @@ void ControlMapEditor::addObject(Position& p){
     if (result == QDialog::Accepted) {
         stockObject(p, object);
         m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
-    }
-    else
+    } else
         delete object;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
-                                   bool undoRedo, bool move)
+void ControlMapEditor::stockObject(Position &p, SystemCommonObject *object,
+    bool undoRedo, bool move)
 {
     Portion portion;
     m_map->getLocalPortion(p, portion);
-    MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
+    MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
     if (mapPortion != nullptr) {
         QJsonObject previous;
-        MapEditorSubSelectionKind previousType =
-                MapEditorSubSelectionKind::None;
+        MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
         if (m_map->addObject(p, mapPortion, object, previous, previousType) &&
             m_map->saved())
         {
@@ -112,9 +110,8 @@ void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
         }
 
         if (!undoRedo) {
-            m_controlUndoRedo.updateJsonList(
-                       m_changes, previous, previousType,
-                       object, MapEditorSubSelectionKind::Object, p, move);
+            m_controlUndoRedo.updateJsonList(m_changes, previous, previousType,
+                object, MapEditorSubSelectionKind::Object, p, move);
         }
 
         if (isObjectInCursor(p))
@@ -130,7 +127,7 @@ void ControlMapEditor::stockObject(Position& p, SystemCommonObject* object,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeObject(Position& p){
+void ControlMapEditor::removeObject(Position &p){
     if (m_map->isInGrid(p)) {
         eraseObject(p);
         m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
@@ -139,19 +136,18 @@ void ControlMapEditor::removeObject(Position& p){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
+void ControlMapEditor::eraseObject(Position &p, bool undoRedo, bool move) {
     Portion portion;
     m_map->getLocalPortion(p, portion);
-    MapPortion* mapPortion = getMapPortion(p, portion, undoRedo);
+    MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
     if (mapPortion != nullptr) {
-        MapObjects* mapObjects = mapPortion->mapObjects();
-        SystemCommonObject* object = mapObjects->getObjectAt(p);
+        MapObjects *mapObjects = mapPortion->mapObjects();
+        SystemCommonObject *object = mapObjects->getObjectAt(p);
 
-        if (object != nullptr){
+        if (object != nullptr) {
             QJsonObject previous;
-            MapEditorSubSelectionKind previousType =
-                    MapEditorSubSelectionKind::None;
+            MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
             if (m_map->deleteObject(p, mapPortion, previous, previousType) &&
                 m_map->saved())
             {
@@ -159,9 +155,8 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
             }
 
             if (!undoRedo) {
-                m_controlUndoRedo.updateJsonList(
-                           m_changes, previous, previousType,
-                           nullptr, MapEditorSubSelectionKind::None, p, move);
+                m_controlUndoRedo.updateJsonList(m_changes, previous, previousType,
+                    nullptr, MapEditorSubSelectionKind::None, p, move);
             }
 
             if (isObjectInCursor(p))
@@ -174,17 +169,17 @@ void ControlMapEditor::eraseObject(Position& p, bool undoRedo, bool move) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::moveObject(Position& p) {
+void ControlMapEditor::moveObject(Position &p) {
     m_isMovingObject = true;
     if (m_previousMouseCoords != p) {
         Portion portion;
         m_map->getLocalPortion(p, portion);
-        MapPortion* mapPortion = getMapPortion(p, portion, false);
+        MapPortion *mapPortion = getMapPortion(p, portion, false);
         if (mapPortion != nullptr &&
             mapPortion->mapObjects()->getObjectAt(p) == nullptr)
         {
-            SystemCommonObject* object =
-                    (SystemCommonObject*) m_selectedObject->createCopy();
+            SystemCommonObject *object = reinterpret_cast<SystemCommonObject *>(
+                m_selectedObject->createCopy());
             eraseObject(m_previousMouseCoords, false, true);
             stockObject(p, object, false, true);
 
@@ -201,7 +196,7 @@ void ControlMapEditor::updateMapObjects() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::setObjectPosition(Position& position){
+void ControlMapEditor::setObjectPosition(Position &position){
     position.setX(cursorObject()->getSquareX());
     position.setZ(cursorObject()->getSquareZ());
 }
@@ -217,15 +212,14 @@ bool ControlMapEditor::isCursorObjectVisible() {
 
 // -------------------------------------------------------
 
-bool ControlMapEditor::isObjectInCursor(Position3D& p) {
-    return (m_cursorObject->getSquareX() == p.x() &&
-            m_cursorObject->getSquareY() == p.y() &&
-            m_cursorObject->getSquareZ() == p.z());
+bool ControlMapEditor::isObjectInCursor(Position3D &p) {
+    return (m_cursorObject->getSquareX() == p.x() && m_cursorObject->getSquareY()
+            == p.y() && m_cursorObject->getSquareZ() == p.z());
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateObjectEdition(MapPortion* mapPortion) {
+void ControlMapEditor::updateObjectEdition(MapPortion *mapPortion) {
     m_map->writeObjects(true);
     m_map->savePortionMap(mapPortion);
     m_needMapObjectsUpdate = true;
