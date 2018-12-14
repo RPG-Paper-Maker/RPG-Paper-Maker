@@ -20,7 +20,7 @@
 #include "paneltextures.h"
 #include "ui_paneltextures.h"
 #include "systemspritewall.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -105,7 +105,7 @@ void PanelTextures::showTileset() {
 
 int PanelTextures::getID() const {
     if (m_kind != PictureKind::None) {
-        SystemTileset *tileset = Wanok::get()->project()->currentMap()
+        SystemTileset *tileset = RPM::get()->project()->currentMap()
             ->mapProperties()->tileset();
         int index = ui->comboBox->currentIndex();
 
@@ -227,7 +227,7 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
     m_kind = kind;
 
     QStandardItemModel *model = tileset->model(kind);
-    QStandardItemModel *modelComplete = Wanok::get()->project()
+    QStandardItemModel *modelComplete = RPM::get()->project()
         ->specialElementsDatas()->model(kind);
 
     // ComboBox filling
@@ -326,7 +326,7 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
 
     // Update picture preview
     SystemSpecialElement* special = reinterpret_cast<SystemSpecialElement *>(
-        SuperListItem::getById(Wanok::get()->project()->specialElementsDatas()
+        SuperListItem::getById(RPM::get()->project()->specialElementsDatas()
         ->model(m_kind)->invisibleRootItem(), id));
 
     // Updating image on preview

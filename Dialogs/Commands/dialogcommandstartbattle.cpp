@@ -20,7 +20,7 @@
 #include "dialogcommandstartbattle.h"
 #include "ui_dialogcommandstartbattle.h"
 #include "eventcommandkind.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -38,9 +38,9 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
     ui->setupUi(this);
 
     // Initialize widgets
-    ui->widgetVariableConstant->initializeDataBaseCommandId(Wanok::get()
+    ui->widgetVariableConstant->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->troopsDatas()->model(), m_parameters, nullptr);
-    ui->panelPrimitiveValueIDBattleMap->initializeDataBaseCommandId(Wanok::get()
+    ui->panelPrimitiveValueIDBattleMap->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->battleSystemDatas()->modelBattleMaps(),
         m_parameters, nullptr);
     ui->widgetIdMap->initializeNumber(parameters, nullptr);

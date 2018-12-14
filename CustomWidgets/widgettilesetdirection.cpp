@@ -18,7 +18,7 @@
 */
 
 #include "widgettilesetdirection.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -75,8 +75,8 @@ void WidgetTilesetDirection::updateImageSpecial(QImage& editedImage)
 void WidgetTilesetDirection::updateImageGeneral()
 {
     if (!m_image.isNull()) {
-        m_image = m_image.scaled(m_image.width() / Wanok::coefSquareSize(),
-                                 m_image.height() / Wanok::coefSquareSize());
+        m_image = m_image.scaled(m_image.width() / RPM::coefSquareSize(),
+                                 m_image.height() / RPM::coefSquareSize());
     }
     this->setGeometry(0, 0, m_image.width() + 1, m_image.height() + 1);
     setFixedSize(m_image.width() + 1, m_image.height() + 1);
@@ -87,17 +87,17 @@ void WidgetTilesetDirection::updateImageGeneral()
 
 void WidgetTilesetDirection::getMousePoint(QPoint& point, QMouseEvent *event) {
     point = event->pos();
-    point.setX((int)(point.x() / ((float) Wanok::BASIC_SQUARE_SIZE)));
-    point.setY((int)(point.y() / ((float) Wanok::BASIC_SQUARE_SIZE)));
+    point.setX((int)(point.x() / ((float) RPM::BASIC_SQUARE_SIZE)));
+    point.setY((int)(point.y() / ((float) RPM::BASIC_SQUARE_SIZE)));
 }
 
 // -------------------------------------------------------
 
 
 void WidgetTilesetDirection::getCenterRect(QRect& rect, int i, int j) {
-    rect.setX((i * Wanok::BASIC_SQUARE_SIZE) + (Wanok::BASIC_SQUARE_SIZE / 2)
+    rect.setX((i * RPM::BASIC_SQUARE_SIZE) + (RPM::BASIC_SQUARE_SIZE / 2)
               - 3);
-    rect.setY((j * Wanok::BASIC_SQUARE_SIZE) + (Wanok::BASIC_SQUARE_SIZE / 2)
+    rect.setY((j * RPM::BASIC_SQUARE_SIZE) + (RPM::BASIC_SQUARE_SIZE / 2)
               - 3);
     rect.setWidth(5);
     rect.setHeight(5);
@@ -108,8 +108,8 @@ void WidgetTilesetDirection::getCenterRect(QRect& rect, int i, int j) {
 bool WidgetTilesetDirection::isInsideRect(int dx, int dy, int x, int y,
                                           QPoint& mousePoint) const
 {
-    QRect rect((Wanok::BASIC_SQUARE_SIZE / 2) + dx + x - 3,
-               (Wanok::BASIC_SQUARE_SIZE / 2) + dy + y - 3, 8, 8);
+    QRect rect((RPM::BASIC_SQUARE_SIZE / 2) + dx + x - 3,
+               (RPM::BASIC_SQUARE_SIZE / 2) + dy + y - 3, 8, 8);
     return rect.contains(mousePoint);
 }
 
@@ -157,10 +157,10 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
                                        bool arrow, int angle, int dx, int dy,
                                        int i, int j)
 {
-    int x = i * Wanok::BASIC_SQUARE_SIZE;
-    int y = j * Wanok::BASIC_SQUARE_SIZE;
-    int posX = (Wanok::BASIC_SQUARE_SIZE / 2) + dx + x;
-    int posY = (Wanok::BASIC_SQUARE_SIZE / 2) + dy + y;
+    int x = i * RPM::BASIC_SQUARE_SIZE;
+    int y = j * RPM::BASIC_SQUARE_SIZE;
+    int posX = (RPM::BASIC_SQUARE_SIZE / 2) + dx + x;
+    int posY = (RPM::BASIC_SQUARE_SIZE / 2) + dy + y;
     if (arrow) {
         QTransform transform;
         transform.translate(posX, posY);
@@ -178,7 +178,7 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
         painter.setTransform(transform);
         QRect rect(posX - 3, posY - 3, 5, 5);
         if (hoveredPoint.x() == i && hoveredPoint.y() == j)
-            painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+            painter.fillRect(rect, RPM::colorGrayHoverBackground);
         painter.drawRect(rect);
     }
 }
@@ -226,8 +226,8 @@ void WidgetTilesetDirection::mouseMoveEvent(QMouseEvent *event) {
     QPoint point;
     QPoint mousePoint = event->pos();
     getMousePoint(point, event);
-    int x = point.x() * Wanok::BASIC_SQUARE_SIZE;
-    int y = point.y() * Wanok::BASIC_SQUARE_SIZE;
+    int x = point.x() * RPM::BASIC_SQUARE_SIZE;
+    int y = point.y() * RPM::BASIC_SQUARE_SIZE;
 
     updateHovered(m_hoveredPoint, point, 0, 0, x, y, mousePoint);
     updateHovered(m_hoveredTop, point, 0, -10, x, y, mousePoint);
@@ -252,9 +252,9 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
         return;
 
     // Draw arrows
-    painter.setPen(Wanok::colorGrey);
-    for (int i = 0; i < m_image.width() / Wanok::BASIC_SQUARE_SIZE; i++) {
-        for (int j = 0; j < m_image.height() / Wanok::BASIC_SQUARE_SIZE; j++) {
+    painter.setPen(RPM::colorGrey);
+    for (int i = 0; i < m_image.width() / RPM::BASIC_SQUARE_SIZE; i++) {
+        for (int j = 0; j < m_image.height() / RPM::BASIC_SQUARE_SIZE; j++) {
 
             // Get collision setting
             CollisionSquare* collision = m_squares->value(QPoint(i, j));
@@ -278,7 +278,7 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
             QRect rect;
             getCenterRect(rect, i, j);
             if (m_hoveredPoint.x() == i && m_hoveredPoint.y() == j)
-                painter.fillRect(rect, Wanok::colorGrayHoverBackground);
+                painter.fillRect(rect, RPM::colorGrayHoverBackground);
             painter.drawRect(rect);
         }
     }

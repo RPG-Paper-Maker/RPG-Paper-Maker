@@ -21,7 +21,7 @@
 #include <QApplication>
 #include "controlmapeditor.h"
 #include "dialogobject.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 
@@ -136,7 +136,7 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
 
     // Map & cursor
     m_map = new Map(idMap);
-    Wanok::get()->project()->setCurrentMap(m_map);
+    RPM::get()->project()->setCurrentMap(m_map);
     m_map->initializeCursor(position);
     m_map->initializeGL();
 
@@ -172,7 +172,7 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     m_endWallIndicator->initializeGL();
 
     // Camera
-    m_camera->setDistance(static_cast<int>(cameraDistance * Wanok::coefSquareSize()));
+    m_camera->setDistance(static_cast<int>(cameraDistance * RPM::coefSquareSize()));
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
     m_camera->setVerticalAngle(cameraVerticalAngle);
     m_camera->update(cursor(), m_map->squareSize());
@@ -215,7 +215,7 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
     // Update camera node
     if (updateCamera && m_treeMapNode != nullptr) {
         m_camera->setDistance(static_cast<int>(m_camera->distance() /
-            Wanok::coefSquareSize()));
+            RPM::coefSquareSize()));
         updateCameraTreeNode();
     }
 }
@@ -497,7 +497,7 @@ void ControlMapEditor::clearPortionsToUpdate() {
 
 void ControlMapEditor::setToNotSaved () {
     m_map->setSaved(false);
-    Wanok::mapsToSave.insert(m_map->mapProperties()->id());
+    RPM::mapsToSave.insert(m_map->mapProperties()->id());
     m_treeMapNode->setText(m_map->mapProperties()->name() + " *");
 }
 
@@ -584,8 +584,8 @@ LandDatas * ControlMapEditor::getLand(Portion &portion, Position &p) {
 void ControlMapEditor::getFloorTextureReduced(QRect &rect, QRect &rectAfter,
     int localX, int localZ)
 {
-    rectAfter.setX(rect.x() + Wanok::mod(localX, rect.width()));
-    rectAfter.setY(rect.y() + Wanok::mod(localZ, rect.height()));
+    rectAfter.setX(rect.x() + RPM::mod(localX, rect.width()));
+    rectAfter.setY(rect.y() + RPM::mod(localZ, rect.height()));
     rectAfter.setWidth(1);
     rectAfter.setHeight(1);
 }

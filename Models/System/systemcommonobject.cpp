@@ -18,7 +18,7 @@
 */
 
 #include "systemcommonobject.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "widgetsupertree.h"
 #include "systemobjectevent.h"
 #include "systemstate.h"
@@ -71,7 +71,7 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 // -------------------------------------------------------
 
 void SystemCommonObject::setDefault(){
-    QStandardItem* model = Wanok::get()->project()->gameDatas()
+    QStandardItem* model = RPM::get()->project()->gameDatas()
             ->commonEventsDatas()->modelCommonObjects()->invisibleRootItem();
     int id = p_id;
 
@@ -98,7 +98,7 @@ void SystemCommonObject::setDefaultFirst() {
     setName("Basic");
 
     QStandardItemModel* modelEventsUser =
-            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            RPM::get()->project()->gameDatas()->commonEventsDatas()
             ->modelEventsUser();
 
     // Events
@@ -117,7 +117,7 @@ void SystemCommonObject::setDefaultFirst() {
 
     // States
     m_states->clear();
-    super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
+    super = SuperListItem::getById(RPM::get()->project()->gameDatas()
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
@@ -191,7 +191,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
 
     // States
     m_states->clear();
-    super = SuperListItem::getById(Wanok::get()->project()->gameDatas()
+    super = SuperListItem::getById(RPM::get()->project()->gameDatas()
                                    ->commonEventsDatas()->modelStates()
                                    ->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::SpritesFace, 1, 0,
@@ -253,7 +253,7 @@ bool SystemCommonObject::inherit(const SystemCommonObject *object){
     if (id == p_id) return true;
     else if (id == -1) return false;
     else{
-        QStandardItemModel* model = Wanok::get()->project()->gameDatas()
+        QStandardItemModel* model = RPM::get()->project()->gameDatas()
                 ->commonEventsDatas()->modelCommonObjects();
         SystemCommonObject* obj =
                 (SystemCommonObject*)
@@ -285,7 +285,7 @@ SystemState* SystemCommonObject::getFirstState() const{
     if (m_inheritanceId != -1){
         SystemCommonObject* obj;
         obj = (SystemCommonObject*) SuperListItem::getById(
-                    Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                    RPM::get()->project()->gameDatas()->commonEventsDatas()
                     ->modelCommonObjects()->invisibleRootItem(),
                     m_inheritanceId);
         state = obj->getFirstState();

@@ -19,7 +19,7 @@
 
 #include "widgetgraphics.h"
 #include "dialogpicturespreview.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "panelobject.h"
 
 // -------------------------------------------------------
@@ -50,7 +50,7 @@ void WidgetGraphics::setState(SystemState* s) {
 SystemPicture* WidgetGraphics::getPicture() {
     PictureKind kind = getPictureKind();
 
-    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(Wanok::get()
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
         ->project()->picturesDatas()->model(kind)->invisibleRootItem(), m_state
         ->graphicsId()));
 }
@@ -101,12 +101,12 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
     dialog.setIndexY(m_state->indexY());
 
     if (dialog.exec() == QDialog::Accepted) {
-        Wanok::get()->project()->writePicturesDatas();
+        RPM::get()->project()->writePicturesDatas();
         m_state->setGraphicsId(dialog.picture()->id());
         m_state->setIndexX(dialog.indexX());
         m_state->setIndexY(dialog.indexY());
     } else {
-        Wanok::get()->project()->readPicturesDatas();
+        RPM::get()->project()->readPicturesDatas();
         if (wasNone)
             reinterpret_cast<PanelObject *>(this->parent())->passToNone();
     }
@@ -123,18 +123,18 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
 
     // Draw background
     painter.fillRect(QRectF(rect().x() + 1, rect().y() + 1, rect().width() - 2,
-        rect().height() - 2), Wanok::colorAlmostTransparent);
+        rect().height() - 2), RPM::colorAlmostTransparent);
 
     // Draw image
     if (m_state->graphicsKind() != MapEditorSubSelectionKind::None) {
-        if (m_state->graphicsId() != -1) {            t
+        if (m_state->graphicsId() != -1) {
             PictureKind kind = getPictureKind();
             SystemPicture* picture = getPicture();
             QImage image(picture->getPath(kind));
-            float coef = Wanok::coefReverseSquareSize();
-            int width = image.width() / Wanok::get()->project()->gameDatas()
+            float coef = RPM::coefReverseSquareSize();
+            int width = image.width() / RPM::get()->project()->gameDatas()
                 ->systemDatas()->framesAnimation();
-            int height = image.height() / Wanok::get()->project()->gameDatas()
+            int height = image.height() / RPM::get()->project()->gameDatas()
                 ->systemDatas()->framesAnimation();
             int newWidth = static_cast<int>(width * coef), newHeight =
                 static_cast<int>(height * coef);

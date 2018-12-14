@@ -19,7 +19,7 @@
 
 #include "dialogselectposition.h"
 #include "ui_dialogselectposition.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QMessageBox>
 
 // -------------------------------------------------------
@@ -41,15 +41,15 @@ DialogSelectPosition::DialogSelectPosition(
 {
     ui->setupUi(this);
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
-    m_treeMapDatas->read(Wanok::get()->project()->pathCurrentProject());
+    m_treeMapDatas->read(RPM::get()->project()->pathCurrentProject());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
 
     ui->widgetMap->initializeSpinBoxesCoords(ui->spinBoxX, ui->spinBoxZ);
 
     // Initialize coords
-    QVector3D position(x * Wanok::get()->getSquareSize(),
-                       y * Wanok::get()->getSquareSize() + yPlus,
-                       z * Wanok::get()->getSquareSize());
+    QVector3D position(x * RPM::get()->getSquareSize(),
+                       y * RPM::get()->getSquareSize() + yPlus,
+                       z * RPM::get()->getSquareSize());
     ui->treeViewLocalMaps->setMap(idMap, position);
 }
 

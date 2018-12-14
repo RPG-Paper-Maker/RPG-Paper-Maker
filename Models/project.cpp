@@ -18,7 +18,7 @@
 */
 
 #include "project.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "projectupdater.h"
 #include "dialogprogress.h"
 #include "common.h"
@@ -68,11 +68,11 @@ QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
 void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
 
 Map* Project::currentMap() const {
-    return Wanok::isInConfig ? p_currentMapConfig : p_currentMap;
+    return RPM::isInConfig ? p_currentMapConfig : p_currentMap;
 }
 
 void Project::setCurrentMap(Map* m) {
-    if (Wanok::isInConfig)
+    if (RPM::isInConfig)
         p_currentMapConfig = m;
     else
         p_currentMap = m;
@@ -241,10 +241,10 @@ bool Project::readOS() {
     // Compare
     if (computerOS != projectOS) {
         QString information = "This project is configured for " +
-                Wanok::osToString(projectOS) + " OS but you seems to be on " +
-                Wanok::osToString(computerOS) + " OS.";
+                RPM::osToString(projectOS) + " OS but you seems to be on " +
+                RPM::osToString(computerOS) + " OS.";
         QString question = "Would you like to convert the project for " +
-                Wanok::osToString(computerOS) + " OS? (This will only keep" +
+                RPM::osToString(computerOS) + " OS? (This will only keep" +
                 " \"Content\" folder, and \"game.rpm\", all the other " +
                 " files will be removed in the root of the project)";
         QMessageBox::StandardButton box =
@@ -410,52 +410,52 @@ void Project::writeGameDatas(){
 // -------------------------------------------------------
 
 void Project::writeLangsDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathLangs), *m_langsDatas);
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathLangs), *m_langsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeTreeMapDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathTreeMap), *m_treeMapDatas);
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathTreeMap), *m_treeMapDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeScriptsDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathScripts), *m_scriptsDatas);
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathScripts), *m_scriptsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeKeyBoardDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathKeyBoard), *m_keyBoardDatas);
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathKeyBoard), *m_keyBoardDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathPicturesDatas),
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathPicturesDatas),
                      *m_picturesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSongsDatas(){
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::pathSongsDatas),
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::pathSongsDatas),
                      *m_songsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSpecialsDatas() {
-    Wanok::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        Wanok::PATH_SPECIAL_ELEMENTS),
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+                                        RPM::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
 }
 

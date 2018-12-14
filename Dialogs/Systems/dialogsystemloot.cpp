@@ -19,7 +19,7 @@
 
 #include "dialogsystemloot.h"
 #include "ui_dialogsystemloot.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -36,11 +36,11 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
     
 
     // Initilize comboBoxes
-    SuperListItem::fillComboBox(ui->comboBoxItem, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
                                 ->gameDatas()->itemsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxWeapon, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxWeapon, RPM::get()->project()
                                 ->gameDatas()->weaponsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxArmor, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxArmor, RPM::get()->project()
                                 ->gameDatas()->armorsDatas()->model());
 
     // Connect
@@ -84,21 +84,21 @@ void DialogSystemLoot::initialize(){
     QStandardItem* item;
     switch(m_loot.kind()){
     case LootKind::Item:
-        item = Wanok::get()->project()->gameDatas()->itemsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
                 ->invisibleRootItem();
         ui->comboBoxItem->setCurrentIndex(
                     SuperListItem::getIndexById(item, m_loot.id()));
         ui->radioButtonItem->setChecked(true);
         break;
     case LootKind::Weapon:
-        item = Wanok::get()->project()->gameDatas()->weaponsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
                 ->invisibleRootItem();
         ui->comboBoxWeapon->setCurrentIndex(
                     SuperListItem::getIndexById(item, m_loot.id()));
         ui->radioButtonWeapon->setChecked(true);
         break;
     case LootKind::Armor:
-        item = Wanok::get()->project()->gameDatas()->armorsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->armorsDatas()->model()
                 ->invisibleRootItem();
         ui->comboBoxArmor->setCurrentIndex(
                     SuperListItem::getIndexById(item, m_loot.id()));
@@ -117,15 +117,15 @@ void DialogSystemLoot::radioChanged(bool checked, LootKind kind){
     switch (kind){
     case LootKind::Item:
         combo = ui->comboBoxItem;
-        model = Wanok::get()->project()->gameDatas()->itemsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->itemsDatas()->model();
         break;
     case LootKind::Weapon:
         combo = ui->comboBoxWeapon;
-        model = Wanok::get()->project()->gameDatas()->weaponsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->weaponsDatas()->model();
         break;
     case LootKind::Armor:
         combo = ui->comboBoxArmor;
-        model = Wanok::get()->project()->gameDatas()->armorsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->armorsDatas()->model();
         break;
     }
 

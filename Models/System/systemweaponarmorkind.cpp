@@ -19,7 +19,7 @@
 
 #include "systemweaponarmorkind.h"
 #include "dialogsystemweaponarmorkind.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -53,7 +53,7 @@ SystemWeaponArmorKind::~SystemWeaponArmorKind(){
 
 QStandardItemModel* SystemWeaponArmorKind::getEquipmentModel() const{
     QStandardItemModel* model = new QStandardItemModel;
-    QStandardItemModel* equipmentModel = Wanok::get()->project()->gameDatas()
+    QStandardItemModel* equipmentModel = RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelCommonEquipment();
     SystemLang* equipment;
     QStandardItem* item;
@@ -77,7 +77,7 @@ QStandardItemModel* SystemWeaponArmorKind::getEquipmentModel() const{
 // -------------------------------------------------------
 
 void SystemWeaponArmorKind::updateEquipment(){
-    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
+    QStandardItemModel* model = RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelCommonEquipment();
     QList<bool> previousEquipment = m_equipment;
     SystemLang* equipment;

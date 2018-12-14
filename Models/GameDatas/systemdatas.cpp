@@ -18,7 +18,7 @@
 */
 
 #include "systemdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include "systemcurrency.h"
 #include <QDir>
@@ -45,7 +45,7 @@ SystemDatas::~SystemDatas(){
 }
 
 void SystemDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathSystem), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathSystem), *this);
 }
 
 int SystemDatas::portionsRay() const { return m_portionsRay; }
@@ -95,7 +95,7 @@ void SystemDatas::setDefault(){
     m_framesAnimation = 4;
 
     // Path BR
-    m_pathBR = Common::pathCombine(QDir::currentPath(), Wanok::pathBR);
+    m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::pathBR);
 
     // Currencies
     SystemCurrency* currency;

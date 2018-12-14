@@ -23,7 +23,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include "mainwindow.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 //-------------------------------------------------
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
     #ifdef Q_OS_WIN
         QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-        Wanok::shadersExtension = "";
+        RPM::shadersExtension = "";
     #endif
 
     QApplication a(argc, argv);
@@ -79,14 +79,14 @@ int main(int argc, char *argv[])
     // Load engine settings
     EngineSettings *engineSettings = new EngineSettings;
     QFile fileSettings(Common::pathCombine(QDir::currentPath(),
-        Wanok::pathEngineSettings));
+        RPM::pathEngineSettings));
     if (fileSettings.exists()) {
         engineSettings->read();
     } else {
         engineSettings->setDefault();
         engineSettings->write();
     }
-    Wanok::get()->setEngineSettings(engineSettings);
+    RPM::get()->setEngineSettings(engineSettings);
 
     // General stylesheet configuration
     engineSettings->updateTheme();
@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
         QStandardPaths::StandardLocation::DocumentsLocation);
     QDir dirDocuments(documentsPath);
     if (dirDocuments.exists()) {
-        QString gamesPath = Wanok::dirGames;
+        QString gamesPath = RPM::dirGames;
         QDir dirGames(gamesPath);
         if (!dirGames.exists()) {
-            dirDocuments.mkdir(Wanok::gamesFolderName);
+            dirDocuments.mkdir(RPM::gamesFolderName);
         }
 
     }

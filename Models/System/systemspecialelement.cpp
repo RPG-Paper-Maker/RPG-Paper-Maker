@@ -18,7 +18,7 @@
 */
 
 #include "systemspecialelement.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -76,7 +76,7 @@ void SystemSpecialElement::setCopy(const SystemSpecialElement& super){
 
 SystemPicture* SystemSpecialElement::pictureByKind(PictureKind kind) const {
     return (SystemPicture*) SuperListItem::getById(
-                Wanok::get()->project()->picturesDatas()->model(kind)
+                RPM::get()->project()->picturesDatas()->model(kind)
                 ->invisibleRootItem(), m_pictureID);
 }
 

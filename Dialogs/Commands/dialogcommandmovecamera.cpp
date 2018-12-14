@@ -19,7 +19,7 @@
 
 #include "dialogcommandmovecamera.h"
 #include "ui_dialogcommandmovecamera.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -37,12 +37,12 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
 {
     ui->setupUi(this);
 
-    if (Wanok::isInConfig){
+    if (RPM::isInConfig){
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
     else{
-        m_modelObjects = Wanok::get()->project()->currentMap()->modelObjects();
+        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
                                                              parameters,
@@ -62,7 +62,7 @@ DialogCommandMoveCamera::~DialogCommandMoveCamera()
 {
     delete ui;
 
-    if (Wanok::isInConfig)
+    if (RPM::isInConfig)
         SuperListItem::deleteModel(m_modelObjects);
 }
 

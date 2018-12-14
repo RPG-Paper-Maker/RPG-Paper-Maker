@@ -18,7 +18,7 @@
 */
 
 #include "controlmapeditor.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "dialogobject.h"
 
 // -------------------------------------------------------
@@ -59,10 +59,10 @@ void ControlMapEditor::showObjectMenuContext(){
 // -------------------------------------------------------
 
 void ControlMapEditor::defineAsHero(){
-    SystemDatas *datas = Wanok::get()->project()->gameDatas()->systemDatas();
+    SystemDatas *datas = RPM::get()->project()->gameDatas()->systemDatas();
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
-    Wanok::get()->project()->writeGameDatas();
+    RPM::get()->project()->writeGameDatas();
 }
 
 // -------------------------------------------------------
@@ -80,10 +80,10 @@ void ControlMapEditor::addObject(Position &p){
     }
 
     // Open the dialog box
-    Wanok::isInConfig = true;
+    RPM::isInConfig = true;
     DialogObject dialog(object);
     int result = dialog.exec();
-    Wanok::isInConfig = false;
+    RPM::isInConfig = false;
     if (result == QDialog::Accepted) {
         stockObject(p, object);
         m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);

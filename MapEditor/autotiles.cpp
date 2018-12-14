@@ -18,7 +18,7 @@
 */
 
 #include "autotiles.h"
-#include "wanok.h"
+#include "rpm.h"
 
 QHash<QString, int> Autotiles::initializeAutotileBorder() {
     QHash<QString, int> hash;
@@ -164,7 +164,7 @@ bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
                                    Position &finalPosition, QRay3D& ray)
 {
     float newDistance = autotile->intersection(squareSize, ray, position);
-    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }
@@ -195,12 +195,12 @@ AutotileDatas* Autotiles::tileExisting(Position& position, Portion& portion,
                                        QHash<Position, AutotileDatas*> &preview)
 {
     Portion newPortion;
-    Wanok::get()->project()->currentMap()->getLocalPortion(position,
+    RPM::get()->project()->currentMap()->getLocalPortion(position,
                                                            newPortion);
     if (portion == newPortion)
         return (AutotileDatas*) preview.value(position);
     else { // If out of current portion
-        MapPortion* mapPortion = Wanok::get()->project()->currentMap()
+        MapPortion* mapPortion = RPM::get()->project()->currentMap()
                 ->mapPortion(newPortion);
 
         return (mapPortion == nullptr) ? nullptr : (AutotileDatas*) mapPortion
@@ -317,7 +317,7 @@ void Autotiles::updateAround(Position& position,
                              QSet<MapPortion *> *previousPreview)
 {
     Portion portion;
-    Wanok::get()->project()->currentMap()->getLocalPortion(position, portion);
+    RPM::get()->project()->currentMap()->getLocalPortion(position, portion);
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             Position newPosition(position.x() + i, position.y(),
@@ -347,12 +347,12 @@ void Autotiles::updateAround(Position& position,
 
                 if (changed) {
                     Portion newPortion;
-                    Wanok::get()->project()->currentMap()->getLocalPortion(
+                    RPM::get()->project()->currentMap()->getLocalPortion(
                                 newPosition, newPortion);
 
                     // Update view in different portion
                     if (portion != newPortion) {
-                        MapPortion* mapPortion = Wanok::get()->project()
+                        MapPortion* mapPortion = RPM::get()->project()
                                 ->currentMap()->mapPortion(newPortion);
                         update += mapPortion;
                         if (previousPreview == nullptr)
@@ -363,7 +363,7 @@ void Autotiles::updateAround(Position& position,
 
                     // If preview, add the autotile to it
                     if (previousPreview != nullptr) {
-                        Wanok::get()->project()->currentMap()
+                        RPM::get()->project()->currentMap()
                                 ->mapPortion(newPortion)
                                 ->addPreview(newPosition, previewAutotile);
                     }

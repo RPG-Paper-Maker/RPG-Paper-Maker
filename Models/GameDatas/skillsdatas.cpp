@@ -19,7 +19,7 @@
 
 #include "skillsdatas.h"
 #include "systemskill.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -39,7 +39,7 @@ SkillsDatas::~SkillsDatas()
 }
 
 void SkillsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathSkills), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathSkills), *this);
 }
 
 QStandardItemModel* SkillsDatas::model() const { return m_model; }

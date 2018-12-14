@@ -18,7 +18,7 @@
 */
 
 #include "mapproperties.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -29,7 +29,7 @@
 
 MapProperties::MapProperties() :
     MapProperties(1,
-                  new LangsTranslation(Wanok::generateMapName(1)),
+                  new LangsTranslation(RPM::generateMapName(1)),
                   16, 16, 16, 0, 1)
 {
 
@@ -37,7 +37,7 @@ MapProperties::MapProperties() :
 
 MapProperties::MapProperties(QString path)
 {
-    Wanok::readJSON(Common::pathCombine(path, Wanok::fileMapInfos), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::fileMapInfos), *this);
 }
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
@@ -68,7 +68,7 @@ MapProperties::~MapProperties()
 }
 
 QString MapProperties::realName() const {
-    return Wanok::generateMapName(id());
+    return RPM::generateMapName(id());
 }
 
 int MapProperties::length() const { return m_length; }
@@ -81,7 +81,7 @@ int MapProperties::depth() const { return m_depth; }
 
 SystemTileset* MapProperties::tileset() const {
     return (SystemTileset*) SuperListItem::getById(
-                Wanok::get()->project()->gameDatas()->tilesetsDatas()
+                RPM::get()->project()->gameDatas()->tilesetsDatas()
                 ->model()->invisibleRootItem(), m_tilesetID);
 }
 
@@ -155,9 +155,9 @@ const
 // -------------------------------------------------------
 
 void MapProperties::getPortionsNumber(int& lx, int& ly, int& lz) {
-    lx = (length() - 1) / Wanok::portionSize;
-    ly = (depth() + height() - 1) / Wanok::portionSize;;
-    lz = (width() - 1) / Wanok::portionSize;
+    lx = (length() - 1) / RPM::portionSize;
+    ly = (depth() + height() - 1) / RPM::portionSize;;
+    lz = (width() - 1) / RPM::portionSize;
 }
 
 // -------------------------------------------------------
@@ -175,8 +175,8 @@ void MapProperties::setCopy(const MapProperties& super){
 
 void MapProperties::save(QString path, bool temp){
     if (temp)
-        path = Common::pathCombine(path, Wanok::TEMP_MAP_FOLDER_NAME);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::fileMapInfos), *this);
+        path = Common::pathCombine(path, RPM::TEMP_MAP_FOLDER_NAME);
+    RPM::writeJSON(Common::pathCombine(path, RPM::fileMapInfos), *this);
 }
 
 // -------------------------------------------------------
@@ -187,7 +187,7 @@ void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
                                                     QRay3D& ray,
                                                     double cameraHAngle)
 {
-    Map* map = Wanok::get()->project()->currentMap();
+    Map* map = RPM::get()->project()->currentMap();
     QSet<Position>* positions = m_outOverflowSprites.value(portion);
     if (positions != nullptr) {
         QSet<Position>::iterator i;

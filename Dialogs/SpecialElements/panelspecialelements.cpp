@@ -19,7 +19,7 @@
 
 #include "panelspecialelements.h"
 #include "ui_panelspecialelements.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //

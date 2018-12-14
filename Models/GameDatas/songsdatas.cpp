@@ -18,7 +18,7 @@
 */
 
 #include "songsdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -40,7 +40,7 @@ SongsDatas::~SongsDatas()
 }
 
 void SongsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathSongsDatas), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathSongsDatas), *this);
 }
 
 QStandardItemModel* SongsDatas::model(SongKind kind) const {

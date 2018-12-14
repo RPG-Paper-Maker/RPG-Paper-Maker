@@ -19,7 +19,7 @@
 
 #include <widgetcomboboxoperation.h>
 #include "eventcommand.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "widgetcomboboxteam.h"
 #include "primitivevaluekind.h"
 #include "systemobjectevent.h"
@@ -204,7 +204,7 @@ QString EventCommand::strNumberVariable(int &i) const{
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
-        return "Variable " + Wanok::get()->project()->gameDatas()
+        return "Variable " + RPM::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(value)->toString();
     default:
         return "";
@@ -224,7 +224,7 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel* dataBase,
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
-        return "Variable " + Wanok::get()->project()->gameDatas()
+        return "Variable " + RPM::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(value)->toString();
     case PrimitiveValueKind::DataBase:
         return SuperListItem::getById(dataBase->invisibleRootItem(), value)
@@ -250,7 +250,7 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const{
     case PrimitiveValueKind::NumberDouble:
         return QString::number(value.toDouble());
     case PrimitiveValueKind::Variable:
-        return "Variable " + Wanok::get()->project()->gameDatas()
+        return "Variable " + RPM::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(value.toInt())->toString();
     case PrimitiveValueKind::Parameter:
         return SuperListItem::getById(parameters->invisibleRootItem(),
@@ -288,7 +288,7 @@ QString EventCommand::strChangeVariablesSelection(int& i,
     QString selection = p_listCommand.at(i++);
     QString str = "";
     if (selection == "0"){
-        str += Wanok::get()->project()->gameDatas()->variablesDatas()
+        str += RPM::get()->project()->gameDatas()->variablesDatas()
                 ->getVariableById(p_listCommand.at(i++).toInt())->toString();
     }
     else{
@@ -335,7 +335,7 @@ QString EventCommand::strChangeVariablesValue(int &i) const{
 // -------------------------------------------------------
 
 QString EventCommand::strInputNumber() const{
-    QString variable = Wanok::get()->project()->gameDatas()->variablesDatas()
+    QString variable = RPM::get()->project()->gameDatas()->variablesDatas()
             ->getVariableById(p_listCommand.at(0).toInt())->toString();
     return "Input number in variable " + variable;
 }
@@ -362,7 +362,7 @@ QString EventCommand::strConditionPageVariables(int &i) const{
     int variable = p_listCommand.at(i++).toInt();
     QString operation = WidgetComboBoxOperation::toString(p_listCommand.at(i++)
                                                           .toInt());
-    condition += Wanok::get()->project()->gameDatas()
+    condition += RPM::get()->project()->gameDatas()
             ->variablesDatas()->getVariableById(variable)->toString();
     condition += " " + operation + " ";
     condition += strNumberVariable(i);
@@ -403,15 +403,15 @@ QString EventCommand::strModifyInventorySelection(int &i) const{
     QStandardItem* item = nullptr;
     switch(objectType){
     case 0:
-        item = Wanok::get()->project()->gameDatas()->itemsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
                 ->invisibleRootItem();
         break;
     case 1:
-        item = Wanok::get()->project()->gameDatas()->weaponsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
                 ->invisibleRootItem();
         break;
     case 2:
-        item = Wanok::get()->project()->gameDatas()->armorsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->armorsDatas()->model()
                 ->invisibleRootItem();
         break;
     }
@@ -438,7 +438,7 @@ QString EventCommand::strModifyTeamInstance(int &i) const{
     QString level = p_listCommand.at(i++);
     QString teamNew = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
                                                    .toInt());
-    QString stockVariable = Wanok::get()->project()->gameDatas()
+    QString stockVariable = RPM::get()->project()->gameDatas()
             ->variablesDatas()->getVariableById(p_listCommand.at(i++)
                                                       .toInt())->toString();
     QString character = "";
@@ -446,7 +446,7 @@ QString EventCommand::strModifyTeamInstance(int &i) const{
     int idNew = p_listCommand.at(i++).toInt();
     if (kindNew == 0){
         character += "hero " +
-                SuperListItem::getById(Wanok::get()->project()->gameDatas()
+                SuperListItem::getById(RPM::get()->project()->gameDatas()
                                        ->heroesDatas()->model()
                                        ->invisibleRootItem(), idNew)
                 ->toString();
@@ -492,7 +492,7 @@ QString EventCommand::strStartBattleTroop(QStandardItemModel* parameters,
     int kind = p_listCommand.at(i++).toInt();
     switch(kind){
     case 0:
-        return "with ID " + strDataBaseId(i, Wanok::get()->project()
+        return "with ID " + strDataBaseId(i, RPM::get()->project()
             ->gameDatas()->troopsDatas()->model(), parameters);
     case 1:
         return "random (in map property)";
@@ -510,7 +510,7 @@ QString EventCommand::strStartBattleMap(QStandardItemModel* parameters,
     QString id, x, y, yPlus, z;
     switch (kind){
     case 0:
-        return strDataBaseId(i, Wanok::get()->project()->gameDatas()
+        return strDataBaseId(i, RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelBattleMaps(), parameters);
     case 1:
         id = p_listCommand.at(i++);
@@ -594,9 +594,9 @@ QString EventCommand::strSendEvent() const{
     QString target = strSendEventTarget(i);
     SystemObjectEvent* e = SystemObjectEvent::getCommandEvent(this, i);
     QStandardItemModel* model = e->isSystem() ?
-                Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                RPM::get()->project()->gameDatas()->commonEventsDatas()
                 ->modelEventsSystem() :
-                Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                RPM::get()->project()->gameDatas()->commonEventsDatas()
                 ->modelEventsUser();
     e->setName(SuperListItem::getById(model->invisibleRootItem(),
                                       e->id())->name());
@@ -741,16 +741,16 @@ QString EventCommand::strMoveObjectID(QStandardItemModel* parameters,
                                       int& i) const
 {
     QStandardItemModel* modelObjects;
-    if (Wanok::isInConfig){
+    if (RPM::isInConfig){
         modelObjects = new QStandardItemModel;
         Map::setModelObjects(modelObjects);
     }
     else{
-        modelObjects = Wanok::get()->project()->currentMap()->modelObjects();
+        modelObjects = RPM::get()->project()->currentMap()->modelObjects();
     }
     QString strObj = strDataBaseId(i, modelObjects, parameters);
 
-    if (Wanok::isInConfig)
+    if (RPM::isInConfig)
         SuperListItem::deleteModel(modelObjects);
 
     return strObj;
@@ -907,7 +907,7 @@ QString EventCommand::strPlaySong(SystemCommonObject*,
 
     bool isIDNumber = p_listCommand.at(i++) == "1";
     QString idNumber = strNumber(i, parameters);
-    QString id = SuperListItem::getById(Wanok::get()->project()->songsDatas()
+    QString id = SuperListItem::getById(RPM::get()->project()->songsDatas()
         ->model(kind)->invisibleRootItem(), p_listCommand.at(i++)
         .toInt())->toString();
     QString volume = strNumber(i, parameters);

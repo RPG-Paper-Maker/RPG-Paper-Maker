@@ -20,7 +20,7 @@
 #include "systemobjectevent.h"
 #include "dialogsystemobjectevent.h"
 #include "systemstate.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -184,10 +184,10 @@ void SystemObjectEvent::updateReactions(QStandardItemModel* modelStates){
 void SystemObjectEvent::updateParameters()
 {
     QStandardItemModel* modelEventsSystem =
-            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            RPM::get()->project()->gameDatas()->commonEventsDatas()
             ->modelEventsSystem();
     QStandardItemModel* modelEventsUser =
-            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            RPM::get()->project()->gameDatas()->commonEventsDatas()
             ->modelEventsUser();
 
     QStandardItemModel* newModel = new QStandardItemModel;

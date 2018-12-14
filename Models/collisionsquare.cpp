@@ -18,7 +18,7 @@
 */
 
 #include "collisionsquare.h"
-#include "wanok.h"
+#include "rpm.h"
 
 const QString CollisionSquare::JSON_RECT = "rec";
 const QString CollisionSquare::JSON_LEFT = "l";

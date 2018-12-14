@@ -22,7 +22,7 @@
 #include <QMessageBox>
 #include "panelpicturepreview.h"
 #include "ui_panelpicturepreview.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -111,7 +111,7 @@ void PanelPicturePreview::setPictureKind(PictureKind kind) {
     showPictures(!isNone);
 
     if (!isNone) {
-        ui->widgetPanelIDs->initializeModel(Wanok::get()->project()
+        ui->widgetPanelIDs->initializeModel(RPM::get()->project()
             ->picturesDatas()->model(kind));
 
         // Connection of list

@@ -18,7 +18,7 @@
 */
 
 #include "treemaptag.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include "camera.h"
 #include <QDir>
@@ -62,7 +62,7 @@ TreeMapTag::~TreeMapTag(){
 bool TreeMapTag::isDir() const { return p_id == -1; }
 
 QString TreeMapTag::realName() const {
-    return Wanok::generateMapName(id());
+    return RPM::generateMapName(id());
 }
 
 QVector3D* TreeMapTag::position() const { return m_position; }
@@ -121,12 +121,12 @@ void TreeMapTag::copyItem(const QStandardItem* from,
 
         if (!copyTag->isDir()){
             QString mapName =
-                    Wanok::generateMapName(copyTag->id());
+                    RPM::generateMapName(copyTag->id());
             QString pathMaps = Common::pathCombine(
-                        Wanok::get()->project()->pathCurrentProject(),
-                        Wanok::pathMaps);
+                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::pathMaps);
             QString pathMapsTemp = Common::pathCombine(
-                        pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
+                        pathMaps, RPM::TEMP_MAP_FOLDER_NAME);
             QString pathMapSource = Common::pathCombine(pathMaps, mapName);
             QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
             QDir(pathMapsTemp).mkdir(mapName);
@@ -137,12 +137,12 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             // Remove temp
             QDir(Common::pathCombine(
                      pathMapTarget,
-                     Wanok::TEMP_MAP_FOLDER_NAME)).removeRecursively();
+                     RPM::TEMP_MAP_FOLDER_NAME)).removeRecursively();
             QDir(Common::pathCombine(
                      pathMapTarget,
-                     Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME)).removeRecursively();
-            QDir(pathMapTarget).mkdir(Wanok::TEMP_MAP_FOLDER_NAME);
-            QDir(pathMapTarget).mkdir(Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+                     RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME)).removeRecursively();
+            QDir(pathMapTarget).mkdir(RPM::TEMP_MAP_FOLDER_NAME);
+            QDir(pathMapTarget).mkdir(RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME);
         }
     }
 
@@ -171,24 +171,24 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
         // Paste content
         if (!copyTag->isDir()){
             QString pathMaps = Common::pathCombine(
-                        Wanok::get()->project()->pathCurrentProject(),
-                        Wanok::pathMaps);
+                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::pathMaps);
             QString pathMapsTemp =
-                    Common::pathCombine(pathMaps, Wanok::TEMP_MAP_FOLDER_NAME);
+                    Common::pathCombine(pathMaps, RPM::TEMP_MAP_FOLDER_NAME);
             QString pathMap =
                     Common::pathCombine(pathMapsTemp,
-                                       Wanok::generateMapName(
+                                       RPM::generateMapName(
                                            copyTag->id()));
-            int newId = Wanok::generateMapId();
-            QString newMapName = Wanok::generateMapName(newId);
+            int newId = RPM::generateMapId();
+            QString newMapName = RPM::generateMapName(newId);
             MapProperties properties(pathMap);
             properties.setId(newId);
             QDir(pathMaps).mkdir(newMapName);
             copyTag->setId(newId);
             QString newPathMap = Common::pathCombine(pathMaps, newMapName);
             Common::copyPath(pathMap, newPathMap);
-            Wanok::writeJSON(Common::pathCombine(newPathMap,
-                                                Wanok::fileMapInfos),
+            RPM::writeJSON(Common::pathCombine(newPathMap,
+                                                RPM::fileMapInfos),
                              properties);
         }
     }

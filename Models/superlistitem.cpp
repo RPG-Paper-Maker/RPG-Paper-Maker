@@ -18,7 +18,7 @@
 */
 
 #include "superlistitem.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include "dialogsystemname.h"
 #include "systemautotile.h"

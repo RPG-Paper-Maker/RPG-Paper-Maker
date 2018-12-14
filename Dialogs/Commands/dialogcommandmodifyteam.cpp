@@ -19,7 +19,7 @@
 
 #include "dialogcommandmodifyteam.h"
 #include "ui_dialogcommandmodifyteam.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -35,7 +35,7 @@ DialogCommandModifyTeam::DialogCommandModifyTeam(EventCommand *command,
     ui->setupUi(this);
     
 
-    SuperListItem::fillComboBox(ui->comboBoxHero, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxHero, RPM::get()->project()
                                 ->gameDatas()->heroesDatas()->model());
     ui->widgetVariableStock->initialize();
     ui->widgetVariableConstantAddRemove->initializeNumberVariable();
@@ -71,7 +71,7 @@ void DialogCommandModifyTeam::initialize(EventCommand* command){
         if (typeCharacter == 0){
             ui->radioButtonHero->setChecked(true);
             ui->comboBoxHero->setCurrentIndex(SuperListItem::getIndexById(
-                    Wanok::get()->project()->gameDatas()->heroesDatas()
+                    RPM::get()->project()->gameDatas()->heroesDatas()
                     ->model()->invisibleRootItem(),
                     command->valueCommandAt(i++).toInt()));
         }
@@ -113,7 +113,7 @@ void DialogCommandModifyTeam::getNewInstance(QVector<QString> &command) const{
     command.append(QString::number(ui->widgetVariableStock->currentId()));
     if (ui->radioButtonHero->isChecked()){
         command.append("0");
-        QStandardItem* model = Wanok::get()->project()->gameDatas()
+        QStandardItem* model = RPM::get()->project()->gameDatas()
                 ->heroesDatas()->model()->item(ui->comboBoxHero
                                                ->currentIndex());
         command.append(QString::number(((SuperListItem*)model->data()

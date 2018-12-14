@@ -18,7 +18,7 @@
 */
 
 #include "map.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 
@@ -173,7 +173,7 @@ void Map::updateGLFace(QOpenGLBuffer &vertexBuffer,
 
 QOpenGLShaderProgram* Map::createProgram(QString shaderName) {
     QOpenGLShaderProgram* program = new QOpenGLShaderProgram;
-    QString path = ":/Shaders/" + shaderName + Wanok::shadersExtension;
+    QString path = ":/Shaders/" + shaderName + RPM::shadersExtension;
     program->addShaderFromSourceFile(QOpenGLShader::Vertex, path + ".vert");
     program->addShaderFromSourceFile(QOpenGLShader::Fragment, path + ".frag");
     program->link();

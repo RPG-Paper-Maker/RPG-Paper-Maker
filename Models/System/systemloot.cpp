@@ -19,7 +19,7 @@
 
 #include "systemloot.h"
 #include "dialogsystemloot.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -114,13 +114,13 @@ void SystemLoot::updateName(){
     QStandardItemModel* model = nullptr;
     switch (kind()){
     case LootKind::Item:
-        model = Wanok::get()->project()->gameDatas()->itemsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->itemsDatas()->model();
         break;
     case LootKind::Weapon:
-        model = Wanok::get()->project()->gameDatas()->weaponsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->weaponsDatas()->model();
         break;
     case LootKind::Armor:
-        model = Wanok::get()->project()->gameDatas()->armorsDatas()->model();
+        model = RPM::get()->project()->gameDatas()->armorsDatas()->model();
         break;
     }
 

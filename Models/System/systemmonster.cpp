@@ -18,7 +18,7 @@
 */
 
 #include "systemmonster.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemcurrency.h"
 #include "systemloot.h"
 
@@ -160,7 +160,7 @@ void SystemMonster::read(const QJsonObject &json){
         id = jsonRow[0].toInt();
         nb = jsonRow[1].toInt();
         sys = SuperListItem::getById(
-                    Wanok::get()->project()->gameDatas()->systemDatas()
+                    RPM::get()->project()->gameDatas()->systemDatas()
                     ->modelCurrencies()->invisibleRootItem(),
                     id);
         itemSys = new QStandardItem;

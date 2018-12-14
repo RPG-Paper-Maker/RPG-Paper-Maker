@@ -19,7 +19,7 @@
 
 #include "dialogsystemstate.h"
 #include "ui_dialogsystemstate.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -51,10 +51,10 @@ DialogSystemState::~DialogSystemState()
 
 void DialogSystemState::initialize(){
     int stateIndex = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                RPM::get()->project()->gameDatas()->commonEventsDatas()
                 ->modelStates()->invisibleRootItem(),
                 m_state.id());
-    SuperListItem::fillComboBox(ui->comboBox, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBox, RPM::get()->project()
                                 ->gameDatas()->commonEventsDatas()
                                 ->modelStates());
     ui->comboBox->setCurrentIndex(stateIndex);
@@ -68,7 +68,7 @@ void DialogSystemState::initialize(){
 
 void DialogSystemState::on_comboBox_currentIndexChanged(int index){
     SuperListItem* state = (SystemState*)
-            Wanok::get()->project()->gameDatas()->commonEventsDatas()
+            RPM::get()->project()->gameDatas()->commonEventsDatas()
             ->modelStates()->item(index)->data().value<qintptr>();
     m_state.setState(state);
 }

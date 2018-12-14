@@ -18,7 +18,7 @@
 */
 
 #include "systemspecialelement.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -48,7 +48,7 @@ SystemTileset::~SystemTileset(){
 
 SystemPicture* SystemTileset::picture() const {
     return (SystemPicture*) SuperListItem::getById(
-                Wanok::get()->project()->picturesDatas()
+                RPM::get()->project()->picturesDatas()
                 ->model(PictureKind::Tilesets)->invisibleRootItem(),
                 m_pictureID);
 }
@@ -115,28 +115,28 @@ void SystemTileset::addSpecial(SuperListItem* special, PictureKind kind)
 // -------------------------------------------------------
 
 void SystemTileset::updateModelAutotiles() {
-    updateModel(m_modelAutotiles, Wanok::get()->project()
+    updateModel(m_modelAutotiles, RPM::get()->project()
                 ->specialElementsDatas()->modelAutotiles());
 }
 
 // -------------------------------------------------------
 
 void SystemTileset::updateModelSpriteWalls() {
-    updateModel(m_modelSpriteWalls, Wanok::get()->project()
+    updateModel(m_modelSpriteWalls, RPM::get()->project()
                 ->specialElementsDatas()->modelSpriteWalls());
 }
 
 // -------------------------------------------------------
 
 void SystemTileset::updateModel3DObjects() {
-    updateModel(m_model3DObjects, Wanok::get()->project()
+    updateModel(m_model3DObjects, RPM::get()->project()
                 ->specialElementsDatas()->model3DObjects());
 }
 
 // -------------------------------------------------------
 
 void SystemTileset::updateModelReliefs() {
-    updateModel(m_modelReliefs, Wanok::get()->project()
+    updateModel(m_modelReliefs, RPM::get()->project()
                 ->specialElementsDatas()->modelReliefs());
 }
 

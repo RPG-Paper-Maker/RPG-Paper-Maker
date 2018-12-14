@@ -20,7 +20,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include "commoneventsdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include "systemevent.h"
 #include "systemcommonreaction.h"
@@ -51,7 +51,7 @@ CommonEventsDatas::~CommonEventsDatas()
 }
 
 void CommonEventsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathCommonEvents), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathCommonEvents), *this);
 }
 
 QStandardItemModel* CommonEventsDatas::modelEventsSystem() const {

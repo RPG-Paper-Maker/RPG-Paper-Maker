@@ -19,7 +19,7 @@
 
 #include "keyboarddatas.h"
 #include "superlistitem.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -40,7 +40,7 @@ KeyBoardDatas::~KeyBoardDatas()
 }
 
 void KeyBoardDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathKeyBoard), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathKeyBoard), *this);
 }
 
 QStandardItemModel* KeyBoardDatas::model() const { return m_model; }

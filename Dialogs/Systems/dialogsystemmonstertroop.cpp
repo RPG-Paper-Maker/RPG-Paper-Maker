@@ -19,7 +19,7 @@
 
 #include "dialogsystemmonstertroop.h"
 #include "ui_dialogsystemmonstertroop.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -52,11 +52,11 @@ DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
 // -------------------------------------------------------
 
 void DialogSystemMonsterTroop::initialize(){
-    SuperListItem::fillComboBox(ui->comboBoxMonster, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxMonster, RPM::get()->project()
                                 ->gameDatas()->monstersDatas()->model());
 
     ui->comboBoxMonster->setCurrentIndex(
-                SuperListItem::getIndexById(Wanok::get()->project()
+                SuperListItem::getIndexById(RPM::get()->project()
                                             ->gameDatas()->monstersDatas()
                                             ->model()->invisibleRootItem(),
                                             m_monsterTroop.id()));

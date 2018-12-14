@@ -19,7 +19,7 @@
 
 #include "widgettilesetsettings.h"
 #include "ui_widgettilesetsettings.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -34,7 +34,7 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->checkBoxRepeat->hide();
-    updateZoom(Wanok::get()->engineSettings()->zoomPictures());
+    updateZoom(RPM::get()->engineSettings()->zoomPictures());
 }
 
 WidgetTilesetSettings::~WidgetTilesetSettings()
@@ -132,7 +132,7 @@ void WidgetTilesetSettings::disableNone(bool b) {
 // -------------------------------------------------------
 
 void WidgetTilesetSettings::showEvent(QShowEvent *event) {
-    updateZoom(Wanok::get()->engineSettings()->zoomPictures());
+    updateZoom(RPM::get()->engineSettings()->zoomPictures());
     QWidget::showEvent(event);
 }
 
@@ -146,7 +146,7 @@ void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
     updateZoom(value);
 
     // Update in the settings
-    Wanok::get()->engineSettings()->setZoomPictures(value);
+    RPM::get()->engineSettings()->setZoomPictures(value);
 }
 
 // -------------------------------------------------------

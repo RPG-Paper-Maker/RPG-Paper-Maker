@@ -20,7 +20,7 @@
 #include <cmath>
 #include <QTime>
 #include "controlmapeditor.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "qbox3d.h"
 
 // -------------------------------------------------------
@@ -124,8 +124,8 @@ void ControlMapEditor::getPortionsInRay(QList<Portion> &portions) {
             leftBotPortion.z());
         QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
             rightTopPortion.z());
-        leftBotCorner *= Wanok::portionSize * m_map->squareSize();
-        rightTopCorner *= Wanok::portionSize * m_map->squareSize();
+        leftBotCorner *= RPM::portionSize * m_map->squareSize();
+        rightTopCorner *= RPM::portionSize * m_map->squareSize();
         rightTopCorner.setX(rightTopCorner.x() - 1);
         rightTopCorner.setY(rightTopCorner.y() - 1);
         rightTopCorner.setZ(rightTopCorner.z() - 1);
@@ -186,8 +186,8 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion> &portions,
                 leftBotPortion.z());
             QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
                 rightTopPortion.z());
-            leftBotCorner *= Wanok::portionSize * m_map->squareSize();
-            rightTopCorner *= Wanok::portionSize * m_map->squareSize();
+            leftBotCorner *= RPM::portionSize * m_map->squareSize();
+            rightTopCorner *= RPM::portionSize * m_map->squareSize();
             rightTopCorner.setX(rightTopCorner.x() - 1);
             rightTopCorner.setY(rightTopCorner.y() - 1);
             rightTopCorner.setZ(rightTopCorner.z() - 1);

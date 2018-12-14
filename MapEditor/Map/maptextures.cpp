@@ -19,7 +19,7 @@
 
 #include "map.h"
 #include "systemautotile.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "autotiles.h"
 
 // -------------------------------------------------------
@@ -85,7 +85,7 @@ void Map::loadPictures(PictureKind kind,
                                  QHash<int, QOpenGLTexture*>& textures)
 {
     SystemPicture* picture;
-    QStandardItemModel* model = Wanok::get()->project()->picturesDatas()
+    QStandardItemModel* model = RPM::get()->project()->picturesDatas()
             ->model(kind);
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
         picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
@@ -110,7 +110,7 @@ void Map::loadSpecialPictures(PictureKind kind,
     SystemSpecialElement* special;
     SystemTileset* tileset = m_mapProperties->tileset();
     QStandardItemModel* model = tileset->model(kind);
-    QStandardItemModel* modelSpecials = Wanok::get()->project()
+    QStandardItemModel* modelSpecials = RPM::get()->project()
             ->specialElementsDatas()->model(kind);
     int id;
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
@@ -155,10 +155,10 @@ void Map::loadAutotiles() {
     SystemSpecialElement* special;
     SystemTileset* tileset = m_mapProperties->tileset();
     QStandardItemModel* model = tileset->model(PictureKind::Autotiles);
-    QStandardItemModel* modelSpecials = Wanok::get()->project()
+    QStandardItemModel* modelSpecials = RPM::get()->project()
             ->specialElementsDatas()->model(PictureKind::Autotiles);
     int id;
-    QImage newImage(64 * m_squareSize, Wanok::MAX_PIXEL_SIZE,
+    QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE,
                     QImage::Format_ARGB32);
     QPainter painter;
     painter.begin(&newImage);
@@ -204,18 +204,18 @@ TextureAutotile* Map::loadPictureAutotile(
 // -------------------------------------------------------
 
 void Map::editPictureWall(QImage& image, QImage& refImage) {
-    QImage newImage(image.width() + Wanok::get()->getSquareSize(),
+    QImage newImage(image.width() + RPM::get()->getSquareSize(),
                     image.height(), QImage::Format_ARGB32);
     QImage borderLeft =
-            image.copy(0, 0, Wanok::get()->getSquareSize() / 2, image.height());
+            image.copy(0, 0, RPM::get()->getSquareSize() / 2, image.height());
     QImage borderRight =
-            image.copy(image.width() - (Wanok::get()->getSquareSize() / 2), 0,
-                       Wanok::get()->getSquareSize() / 2, image.height());
+            image.copy(image.width() - (RPM::get()->getSquareSize() / 2), 0,
+                       RPM::get()->getSquareSize() / 2, image.height());
     QPainter paint;
     paint.begin(&newImage);
     paint.drawImage(0, 0, image);
     paint.drawImage(image.width(), 0, borderLeft);
-    paint.drawImage(image.width() + Wanok::get()->getSquareSize() / 2, 0,
+    paint.drawImage(image.width() + RPM::get()->getSquareSize() / 2, 0,
                     borderRight);
     paint.end();
     refImage = newImage;
@@ -246,7 +246,7 @@ TextureAutotile* Map::editPictureAutotile(
             painter.end();
             textureAutotile->setTexture(createTexture(newImage));
             m_texturesAutotiles.append(textureAutotile);
-            newImage = QImage(64 * m_squareSize, Wanok::MAX_PIXEL_SIZE,
+            newImage = QImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE,
                               QImage::Format_ARGB32);
             painter.begin(&newImage);
             textureAutotile = nullptr;
@@ -321,16 +321,16 @@ void Map::editPictureAutotilePreview(QImage& image, QImage& refImage) {
 
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
-            QRect out(i * Wanok::get()->getSquareSize(),
-                      j * Wanok::get()->getSquareSize(),
-                      Wanok::get()->getSquareSize(),
-                      Wanok::get()->getSquareSize());
+            QRect out(i * RPM::get()->getSquareSize(),
+                      j * RPM::get()->getSquareSize(),
+                      RPM::get()->getSquareSize(),
+                      RPM::get()->getSquareSize());
             QRect in(i * SystemAutotile::NUMBER_COLUMNS *
-                     Wanok::get()->getSquareSize(),
+                     RPM::get()->getSquareSize(),
                      j * SystemAutotile::NUMBER_ROWS *
-                     Wanok::get()->getSquareSize(),
-                     Wanok::get()->getSquareSize(),
-                     Wanok::get()->getSquareSize());
+                     RPM::get()->getSquareSize(),
+                     RPM::get()->getSquareSize(),
+                     RPM::get()->getSquareSize());
             paint.drawImage(out, image, in);
         }
     }

@@ -19,7 +19,7 @@
 
 #include "dialogdebugoptions.h"
 #include "ui_dialogdebugoptions.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -49,7 +49,7 @@ DialogDebugOptions::~DialogDebugOptions()
 // -------------------------------------------------------
 
 void DialogDebugOptions::initialize() {
-    ui->checkBoxBB->setChecked(Wanok::get()->project()->gameDatas()
+    ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()
                                ->systemDatas()->showBB());
 }
 
@@ -60,5 +60,5 @@ void DialogDebugOptions::initialize() {
 // -------------------------------------------------------
 
 void DialogDebugOptions::on_checkBoxBB_toggled(bool checked) {
-    Wanok::get()->project()->gameDatas()->systemDatas()->setShowBB(checked);
+    RPM::get()->project()->gameDatas()->systemDatas()->setShowBB(checked);
 }

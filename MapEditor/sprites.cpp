@@ -19,7 +19,7 @@
 
 #include "sprites.h"
 #include "map.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -211,7 +211,7 @@ void Sprites::getSetPortionsOverflow(QSet<Portion>& portionsOverflow,
 void Sprites::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
                                 bool add)
 {
-    Map* map = Wanok::get()->project()->currentMap();
+    Map* map = RPM::get()->project()->currentMap();
     for (QSet<Portion>::iterator i = portionsOverflow.begin();
          i != portionsOverflow.end(); i++)
     {
@@ -477,7 +477,7 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
     }
 
     // Overflow
-    Map* map = Wanok::get()->project()->currentMap();
+    Map* map = RPM::get()->project()->currentMap();
     for (QSet<Position>::iterator i = m_overflow.begin();
          i != m_overflow.end(); i++)
     {
@@ -519,7 +519,7 @@ bool Sprites::updateRaycastingAt(
 {
     float newDistance = sprite->intersection(squareSize, ray, position,
                                              cameraHAngle);
-    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }
@@ -534,7 +534,7 @@ bool Sprites::updateRaycastingWallAt(
         Position &finalPosition, QRay3D& ray)
 {
     float newDistance = wall->intersection(ray);
-    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

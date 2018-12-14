@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WANOK_H
-#define WANOK_H
+#ifndef RPM_H
+#define RPM_H
 
 #include <QString>
 #include <QKeyEvent>
@@ -31,18 +31,18 @@
 
 // -------------------------------------------------------
 //
-//  CLASS Wanok
+//  CLASS RPM
 //
-//  Wanok is a special class (singleton) containing the current project,
+//  RPM is a special class (singleton) containing the current project,
 //  and also a set of static functions (utils).
 //
 // -------------------------------------------------------
 
-class Wanok : public Singleton<Wanok>
+class RPM : public Singleton<RPM>
 {
 public:
-    Wanok();
-    virtual ~Wanok();
+    RPM();
+    virtual ~RPM();
     Project* project() const;
     EngineSettings* engineSettings() const;
     void setProject(Project* p);
@@ -151,4 +151,4 @@ protected:
     EngineSettings* m_engineSettings;
 };
 
-#endif // WANOK_H
+#endif // RPM_H

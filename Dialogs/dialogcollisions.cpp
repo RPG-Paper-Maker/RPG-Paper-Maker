@@ -19,7 +19,7 @@
 
 #include "dialogcollisions.h"
 #include "ui_dialogcollisions.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -65,7 +65,7 @@ void DialogCollisions::initializeTilesets() {
     // Initialize name & pictures
     ui->panelSuperListTilesets->list()->initializeNewItemInstance(
                 new SystemTileset);
-    ui->panelSuperListTilesets->initializeModel(Wanok::get()->project()
+    ui->panelSuperListTilesets->initializeModel(RPM::get()->project()
                                                 ->gameDatas()->tilesetsDatas()
                                                 ->model());
     connect(ui->panelSuperListTilesets->list()->selectionModel(),
@@ -96,7 +96,7 @@ void DialogCollisions::initializeCharacters() {
     // Initialize name & pictures
     ui->panelSuperListCharacters->list()->initializeNewItemInstance(
                 new SystemPicture);
-    ui->panelSuperListCharacters->initializeModel(Wanok::get()->project()
+    ui->panelSuperListCharacters->initializeModel(RPM::get()->project()
                                               ->picturesDatas()
                                               ->model(PictureKind::Characters));
     connect(ui->panelSuperListCharacters->list()->selectionModel(),
@@ -129,7 +129,7 @@ void DialogCollisions::initializeAutotiles() {
     // Initialize name & pictures
     ui->panelSuperListAutotiles->list()->initializeNewItemInstance(
                 new SystemAutotile);
-    ui->panelSuperListAutotiles->initializeModel(Wanok::get()->project()
+    ui->panelSuperListAutotiles->initializeModel(RPM::get()->project()
                                                  ->specialElementsDatas()
                                                  ->modelAutotiles());
     connect(ui->panelSuperListAutotiles->list()->selectionModel(),
@@ -160,7 +160,7 @@ void DialogCollisions::initializeWalls() {
     // Initialize name & pictures
     ui->panelSuperListWalls->list()->initializeNewItemInstance(
                 new SystemSpriteWall);
-    ui->panelSuperListWalls->initializeModel(Wanok::get()->project()
+    ui->panelSuperListWalls->initializeModel(RPM::get()->project()
                                              ->specialElementsDatas()
                                              ->modelSpriteWalls());
     connect(ui->panelSuperListWalls->list()->selectionModel(),

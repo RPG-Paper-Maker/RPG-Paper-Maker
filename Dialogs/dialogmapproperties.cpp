@@ -19,7 +19,7 @@
 
 #include "dialogmapproperties.h"
 #include "ui_dialogmapproperties.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -53,12 +53,12 @@ DialogMapProperties::~DialogMapProperties()
 void DialogMapProperties::initialize(){
 
     // Tileset
-    SuperListItem::fillComboBox(ui->comboBoxTileset, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxTileset, RPM::get()->project()
         ->gameDatas()->tilesetsDatas()->model());
     connect(ui->comboBoxTileset, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxTilesetCurrentIndexChanged(int)));
     ui->comboBoxTileset->setCurrentIndex(SuperListItem::getIndexById(
-        Wanok::get()->project()->gameDatas()->tilesetsDatas()->model()
+        RPM::get()->project()->gameDatas()->tilesetsDatas()->model()
         ->invisibleRootItem(), m_mapProperties.tileset()->id()));
 
     ui->widgetLangName->initializeNames(&m_mapProperties);
@@ -116,7 +116,7 @@ void DialogMapProperties::on_spinBoxDepth_valueChanged(int i){
 // -------------------------------------------------------
 
 void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
-    m_mapProperties.setTilesetID(reinterpret_cast<SystemTileset*>(Wanok::get()
+    m_mapProperties.setTilesetID(reinterpret_cast<SystemTileset*>(RPM::get()
         ->project()->gameDatas()->tilesetsDatas()->model()->item(index)->data()
         .value<qintptr>())->id());
 }

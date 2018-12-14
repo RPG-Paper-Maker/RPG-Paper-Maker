@@ -18,7 +18,7 @@
 */
 
 #include "gamedatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -197,26 +197,26 @@ void GameDatas::readSkills(QString path) {
 // -------------------------------------------------------
 
 void GameDatas::write(QString path){
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathCommonEvents),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathCommonEvents),
                      *m_commonEventsDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathVariables),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathVariables),
                      *m_variablesDatas);
     writeSystem(path);
     writeBattleSystem(path);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathItems),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathItems),
                      *m_itemsDatas);
     writeSkills(path);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathWeapons),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathWeapons),
                      *m_weaponsDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathArmors),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathArmors),
                      *m_armorsDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathHeroes),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathHeroes),
                      *m_heroesDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathMonsters),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathMonsters),
                      *m_monstersDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathTroops),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathTroops),
                      *m_troopsDatas);
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathClasses),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathClasses),
                      *m_classesDatas);
     writeTilesets(path);
 }
@@ -224,27 +224,27 @@ void GameDatas::write(QString path){
 // -------------------------------------------------------
 
 void GameDatas::writeTilesets(QString path) {
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::PATH_TILESETS),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TILESETS),
         *m_tilesetsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSystem(QString path){
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSystem),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathSystem),
         *m_systemDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeBattleSystem(QString path) {
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathBattleSystem),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathBattleSystem),
         *m_battleSystemDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSkills(QString path) {
-    Wanok::writeJSON(Common::pathCombine(path, Wanok::pathSkills),
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathSkills),
         *m_skillsDatas);
 }

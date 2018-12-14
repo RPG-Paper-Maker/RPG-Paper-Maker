@@ -23,7 +23,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "controlnewproject.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "map.h"
 #include "gamedatas.h"
 #include "common.h"
@@ -97,24 +97,24 @@ QString ControlNewproject::createNewProject(QString dirName, QString location) {
     }
 
     // Create folders
-    QDir(pathDir).mkpath(Wanok::pathBars);
-    QDir(pathDir).mkpath(Wanok::pathIcons);
-    QDir(pathDir).mkpath(Wanok::pathAutotiles);
-    QDir(pathDir).mkpath(Wanok::pathCharacters);
-    QDir(pathDir).mkpath(Wanok::pathReliefs);
-    QDir(pathDir).mkpath(Wanok::pathTilesets);
-    QDir(pathDir).mkpath(Wanok::PATH_SPRITE_WALLS);
-    QDir(pathDir).mkpath(Wanok::PATH_BATTLERS);
-    QDir(pathDir).mkpath(Wanok::PATH_SONGS);
-    QDir(pathDir).mkpath(Wanok::PATH_MUSICS);
-    QDir(pathDir).mkpath(Wanok::PATH_BACKGROUND_SOUNDS);
-    QDir(pathDir).mkpath(Wanok::PATH_SOUNDS);
-    QDir(pathDir).mkpath(Wanok::PATH_MUSIC_EFFECTS);
+    QDir(pathDir).mkpath(RPM::pathBars);
+    QDir(pathDir).mkpath(RPM::pathIcons);
+    QDir(pathDir).mkpath(RPM::pathAutotiles);
+    QDir(pathDir).mkpath(RPM::pathCharacters);
+    QDir(pathDir).mkpath(RPM::pathReliefs);
+    QDir(pathDir).mkpath(RPM::pathTilesets);
+    QDir(pathDir).mkpath(RPM::PATH_SPRITE_WALLS);
+    QDir(pathDir).mkpath(RPM::PATH_BATTLERS);
+    QDir(pathDir).mkpath(RPM::PATH_SONGS);
+    QDir(pathDir).mkpath(RPM::PATH_MUSICS);
+    QDir(pathDir).mkpath(RPM::PATH_BACKGROUND_SOUNDS);
+    QDir(pathDir).mkpath(RPM::PATH_SOUNDS);
+    QDir(pathDir).mkpath(RPM::PATH_MUSIC_EFFECTS);
 
     // Create the default datas
-    Project *previousProject = Wanok::get()->project();
+    Project *previousProject = RPM::get()->project();
     Project *project = new Project;
-    Wanok::get()->setProject(project);
+    RPM::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
     QString error = project->createRPMFile();
@@ -133,17 +133,17 @@ QString ControlNewproject::createNewProject(QString dirName, QString location) {
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
-    Common::writeArrayJSON(Common::pathCombine(pathDir, Wanok::pathSaves), tab);
+    Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::pathSaves), tab);
 
     // Creating first empty map
-    QDir(pathDir).mkdir(Wanok::pathMaps);
-    QDir(pathDir).mkdir(Common::pathCombine(Wanok::pathMaps,
-        Wanok::TEMP_MAP_FOLDER_NAME));
+    QDir(pathDir).mkdir(RPM::pathMaps);
+    QDir(pathDir).mkdir(Common::pathCombine(RPM::pathMaps,
+        RPM::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
     Map::writeDefaultBattleMap(pathDir);
 
     // Restoring project
-    Wanok::get()->setProject(previousProject);
+    RPM::get()->setProject(previousProject);
     delete project;
 
     return nullptr; // return NULL for no errors

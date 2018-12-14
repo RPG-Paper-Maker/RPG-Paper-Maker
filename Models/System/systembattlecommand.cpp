@@ -19,7 +19,7 @@
 
 #include "systembattlecommand.h"
 #include "dialogsystembattlecommand.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -57,7 +57,7 @@ void SystemBattleCommand::setIdSkill(int i) { m_idSkill = i; }
 
 void SystemBattleCommand::updateName(){
     p_name = SuperListItem::getById(
-                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+                RPM::get()->project()->gameDatas()->skillsDatas()->model()
                 ->invisibleRootItem(),
                 m_idSkill)->name();
 }

@@ -18,7 +18,7 @@
 */
 
 #include "widgetautotilesselector.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -54,7 +54,7 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
     QString path = autotile->picture()->getPath(PictureKind::Autotiles);
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
-    float coef = Wanok::coefReverseSquareSize();
+    float coef = RPM::coefReverseSquareSize();
     if (!image.isNull()) {
         Map::editPictureAutotilePreview(image, m_texture);
         m_texture = m_texture.scaled(static_cast<int>(m_texture.width() * coef),
@@ -73,8 +73,8 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
     QRect cursorRect;
     m_selectionRectangle->getCoefRect(cursorRect);
     QRect newTextureRect(0, 0, SystemAutotile::getPreviewWidth(m_texture) /
-        Wanok::get()->getSquareSize(), SystemAutotile::getPreviewHeight(
-        m_texture) / Wanok::get()->getSquareSize());
+        RPM::get()->getSquareSize(), SystemAutotile::getPreviewHeight(
+        m_texture) / RPM::get()->getSquareSize());
     if (!newTextureRect.contains(cursorRect)) {
         makeSelection(0, 0);
         this->repaint();
@@ -111,13 +111,13 @@ void WidgetAutotilesSelector::paintEvent(QPaintEvent *) {
 
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
-            QRect out(i * Wanok::BASIC_SQUARE_SIZE,
-                      j * Wanok::BASIC_SQUARE_SIZE,
-                      Wanok::BASIC_SQUARE_SIZE, Wanok::BASIC_SQUARE_SIZE);
+            QRect out(i * RPM::BASIC_SQUARE_SIZE,
+                      j * RPM::BASIC_SQUARE_SIZE,
+                      RPM::BASIC_SQUARE_SIZE, RPM::BASIC_SQUARE_SIZE);
             QRect in(i * SystemAutotile::NUMBER_COLUMNS *
-                     Wanok::BASIC_SQUARE_SIZE,
-                     j * SystemAutotile::NUMBER_ROWS * Wanok::BASIC_SQUARE_SIZE,
-                     Wanok::BASIC_SQUARE_SIZE, Wanok::BASIC_SQUARE_SIZE);
+                     RPM::BASIC_SQUARE_SIZE,
+                     j * SystemAutotile::NUMBER_ROWS * RPM::BASIC_SQUARE_SIZE,
+                     RPM::BASIC_SQUARE_SIZE, RPM::BASIC_SQUARE_SIZE);
             painter.drawImage(out, m_texture, in);
         }
     }*/

@@ -18,7 +18,7 @@
 */
 
 #include "widgetselectionrectangle.h"
-#include "wanok.h"
+#include "rpm.h"
 
 const int WidgetSelectionRectangle::BORDER_SIZE = 4;
 
@@ -33,12 +33,12 @@ WidgetSelectionRectangle::WidgetSelectionRectangle(QWidget *parent) :
 {
     m_textureCursor = QImage(":/textures/Ressources/tileset_cursor.png");
     m_rect.setCoords(0, 0,
-                     Wanok::BASIC_SQUARE_SIZE - 1,
-                     Wanok::BASIC_SQUARE_SIZE - 1);
+                     RPM::BASIC_SQUARE_SIZE - 1,
+                     RPM::BASIC_SQUARE_SIZE - 1);
     m_realX = 0;
     m_realY = 0;
-    m_squareWidth = Wanok::BASIC_SQUARE_SIZE;
-    m_squareHeight = Wanok::BASIC_SQUARE_SIZE;
+    m_squareWidth = RPM::BASIC_SQUARE_SIZE;
+    m_squareHeight = RPM::BASIC_SQUARE_SIZE;
 }
 
 WidgetSelectionRectangle::~WidgetSelectionRectangle()

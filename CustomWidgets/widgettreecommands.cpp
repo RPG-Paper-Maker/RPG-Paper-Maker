@@ -20,7 +20,7 @@
 #include "widgettreecommands.h"
 #include "dialogcommands.h"
 #include "eventcommand.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemcommonreaction.h"
 #include <QDebug>
 
@@ -572,18 +572,18 @@ int WidgetTreeCommands::getInsertionRow(const QStandardItem* selected, const QSt
 //  keyPressEvent: force shortcuts
 
 void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
-    QKeySequence seq = Wanok::getKeySequence(event);
+    QKeySequence seq = RPM::getKeySequence(event);
     QList<QAction*> actions = m_contextMenuCommonCommands->actions();
     QAction* action;
 
     // Forcing shortcuts
     action = actions.at(1);
-    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+    if (RPM::isPressingEnter(event) && action->isEnabled()) {
         contextEdit();
         return;
     }
     action = actions.at(0);
-    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+    if (RPM::isPressingEnter(event) && action->isEnabled()) {
         contextNew();
         return;
     }

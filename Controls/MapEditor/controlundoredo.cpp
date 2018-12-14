@@ -19,7 +19,7 @@
 
 #include <QFile>
 #include "controlundoredo.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 const QString ControlUndoRedo::JSON_BEFORE = "before";
@@ -82,7 +82,7 @@ void ControlUndoRedo::addState(int idMap, QJsonArray &tab) {
     int state;
 
     // Add to undeoRedo idMaps in project
-    Wanok::mapsUndoRedo += idMap;
+    RPM::mapsUndoRedo += idMap;
 
     // If max size reached, remove the first state and move the others
     QString path = getTempFile(idMap, currentState - 1);
@@ -147,10 +147,10 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
 
 QString ControlUndoRedo::getTempDir(int idMap) const {
     return Common::pathCombine(Common::pathCombine(Common::pathCombine(
-        Wanok::get()->project()->pathCurrentProject(),
-        Wanok::pathMaps),
-        Wanok::generateMapName(idMap)),
-        Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+        RPM::get()->project()->pathCurrentProject(),
+        RPM::pathMaps),
+        RPM::generateMapName(idMap)),
+        RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME);
 }
 
 // -------------------------------------------------------

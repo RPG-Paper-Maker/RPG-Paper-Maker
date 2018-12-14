@@ -19,7 +19,7 @@
 
 #include "dialogpicturespreview.h"
 #include "ui_dialogpicturespreview.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -86,17 +86,17 @@ void DialogPicturesPreview::closeEvent(QCloseEvent *){
 // -------------------------------------------------------
 
 void DialogPicturesPreview::on_accepted(){
-    Wanok::get()->project()->writePicturesDatas();
+    RPM::get()->project()->writePicturesDatas();
 }
 
 // -------------------------------------------------------
 
 void DialogPicturesPreview::on_rejected(){
-    Wanok::get()->project()->readPicturesDatas();
+    RPM::get()->project()->readPicturesDatas();
 
     // Update new picture adress
     ui->widget->setPicture((SystemPicture*)
-                SuperListItem::getById(Wanok::get()->project()->picturesDatas()
+                SuperListItem::getById(RPM::get()->project()->picturesDatas()
                                        ->model(m_kind)->invisibleRootItem(),
                                        m_initialPictureID));
 }

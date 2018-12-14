@@ -24,7 +24,7 @@
 #include "systemstatistic.h"
 #include "systembattlecommand.h"
 #include "systembattlemap.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 const QString BattleSystemDatas::jsonWeaponsKind = "weaponsKind";
@@ -64,7 +64,7 @@ BattleSystemDatas::~BattleSystemDatas()
 }
 
 void BattleSystemDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathBattleSystem), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathBattleSystem), *this);
 }
 
 int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }

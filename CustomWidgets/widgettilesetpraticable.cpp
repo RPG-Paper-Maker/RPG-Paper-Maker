@@ -18,7 +18,7 @@
 */
 
 #include "widgettilesetpraticable.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "dialogrect.h"
 #include <QPainter>
 #include <QtMath>
@@ -165,7 +165,7 @@ void WidgetTilesetPraticable::getRectRepeatBot(QRect& rect) const {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) const {
-    int w = qCeil(m_image.width() / ((float) Wanok::get()->project()
+    int w = qCeil(m_image.width() / ((float) RPM::get()->project()
                                      ->gameDatas()->systemDatas()
                                      ->framesAnimation()));
     rect.setX(w);
@@ -340,29 +340,29 @@ void WidgetTilesetPraticable::updateRect(QRect &rect, QPoint& mousePoint,
     float h = rect.height() / getSquareProportion() * 100.0f;
 
     // But round for adapting to the square size
-    int i_x = qCeil((x / 100.0f) * Wanok::get()->getSquareSize());
-    int i_y = qCeil((y / 100.0f) * Wanok::get()->getSquareSize());
-    int i_w = qFloor((w / 100.0f) * Wanok::get()->getSquareSize());
-    int i_h = qFloor((h / 100.0f) * Wanok::get()->getSquareSize());
+    int i_x = qCeil((x / 100.0f) * RPM::get()->getSquareSize());
+    int i_y = qCeil((y / 100.0f) * RPM::get()->getSquareSize());
+    int i_w = qFloor((w / 100.0f) * RPM::get()->getSquareSize());
+    int i_h = qFloor((h / 100.0f) * RPM::get()->getSquareSize());
     if (i_w < 1) {
-        if (i_x >= Wanok::get()->getSquareSize())
+        if (i_x >= RPM::get()->getSquareSize())
             i_x -= 1;
         i_w = 1;
     }
     if (i_h < 1) {
-        if (i_y >= Wanok::get()->getSquareSize())
+        if (i_y >= RPM::get()->getSquareSize())
             i_y -= 1;
         i_h = 1;
     }
 
     // Update collision rect with rounded values
-    collision->rect()->setX((i_x / (float) Wanok::get()->getSquareSize()) *
+    collision->rect()->setX((i_x / (float) RPM::get()->getSquareSize()) *
                             100.0f);
-    collision->rect()->setY((i_y / (float) Wanok::get()->getSquareSize()) *
+    collision->rect()->setY((i_y / (float) RPM::get()->getSquareSize()) *
                             100.0f);
-    collision->rect()->setWidth((i_w / (float) Wanok::get()->getSquareSize()) *
+    collision->rect()->setWidth((i_w / (float) RPM::get()->getSquareSize()) *
                                 100.0f);
-    collision->rect()->setHeight((i_h / (float) Wanok::get()->getSquareSize()) *
+    collision->rect()->setHeight((i_h / (float) RPM::get()->getSquareSize()) *
                                  100.0f);
 
     // Update the fake rect (no rounded values)
@@ -476,7 +476,7 @@ void WidgetTilesetPraticable::deleteCollision() {
 // -------------------------------------------------------
 
 float WidgetTilesetPraticable::getSquareProportion() const {
-    return Wanok::get()->getSquareSize() * m_zoom;
+    return RPM::get()->getSquareSize() * m_zoom;
 }
 
 // -------------------------------------------------------
@@ -497,13 +497,13 @@ bool WidgetTilesetPraticable::canDraw(QPoint& mousePoint) const {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::keyPressEvent(QKeyEvent *event){
-    QKeySequence seq = Wanok::getKeySequence(event);
+    QKeySequence seq = RPM::getKeySequence(event);
     QList<QAction*> actions = m_contextMenu->actions();
     QAction* action;
 
     // Forcing shortcuts
     action = actions.at(0);
-    if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+    if (RPM::isPressingEnter(event) && action->isEnabled()) {
         contextEdit();
         return;
     }
@@ -602,7 +602,7 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
 
     // Draw background
     painter.fillRect(0, 0, m_image.width(), m_image.height(),
-                     Wanok::colorAlmostTransparent);
+                     RPM::colorAlmostTransparent);
 
     // Draw image
     if (!m_image.isNull()) {
@@ -613,44 +613,44 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         return;
 
     // Draw all the collisions
-    painter.setPen(Wanok::get()->engineSettings()->theme() == ThemeKind::Dark ?
-        Wanok::colorAlmostWhite : Wanok::colorFortyTransparent);
+    painter.setPen(RPM::get()->engineSettings()->theme() == ThemeKind::Dark ?
+        RPM::colorAlmostWhite : RPM::colorFortyTransparent);
     for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
          i != m_squares->end(); i++)
     {
         drawCollision(painter, i.key(), i.value(),
-                      Wanok::colorFortyTransparent);
+                      RPM::colorFortyTransparent);
     }
 
     // Draw another layer for the selected collision
     CollisionSquare* collision = m_squares->value(m_selectedPoint);
     if (collision != nullptr) {
-        painter.setPen(Wanok::colorPurpleSelection);
+        painter.setPen(RPM::colorPurpleSelection);
         drawCollision(painter, m_selectedPoint, collision,
-                      Wanok::colorPurpleSelectionBackground);
+                      RPM::colorPurpleSelectionBackground);
     }
 
     // Draw hovered layer
     collision = m_squares->value(m_hoveredPoint);
     if (collision != nullptr) {
         drawCollision(painter, m_hoveredPoint, collision,
-                      Wanok::colorGrayHoverBackground, false);
+                      RPM::colorGrayHoverBackground, false);
     }
 
     // For repeat option :
     if (m_picture->repeatCollisions()) {
         QRect rect;
         getRectRepeatBot(rect);
-        painter.fillRect(rect, Wanok::colorFortyTransparent);
+        painter.fillRect(rect, RPM::colorFortyTransparent);
         getRectRepeatTop(rect);
-        painter.fillRect(rect, Wanok::colorFortyTransparent);
+        painter.fillRect(rect, RPM::colorFortyTransparent);
         QHash<QPoint, CollisionSquare*> list;
         getPointsRepeat(list);
         for (QHash<QPoint, CollisionSquare*>::iterator i = list.begin();
              i != list.end(); i++)
         {
             drawCollision(painter, i.key(), i.value(),
-                          Wanok::colorFortyTransparent, true);
+                          RPM::colorFortyTransparent, true);
         }
     }
 }

@@ -19,7 +19,7 @@
 
 #include "dialogspecialelements.h"
 #include "ui_dialogspecialelements.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -37,7 +37,7 @@ DialogSpecialElements::DialogSpecialElements(PictureKind kind,
 
     setWindowTitle(SystemPicture::getPictureTitle(kind));
     ui->widget->initialize(
-                Wanok::get()->project()->specialElementsDatas()->model(kind),
+                RPM::get()->project()->specialElementsDatas()->model(kind),
                 kind);
 }
 

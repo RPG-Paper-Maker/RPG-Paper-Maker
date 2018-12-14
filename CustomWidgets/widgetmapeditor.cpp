@@ -23,7 +23,7 @@
 #include <QHashIterator>
 #include <QTime>
 #include "widgetmapeditor.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QMessageBox>
 
 // -------------------------------------------------------
@@ -162,12 +162,12 @@ void WidgetMapEditor::paintGL() {
             layerOn = m_menuBar->layerOn();
         }
 
-        if (!Wanok::isInConfig || m_menuBar == nullptr) {
+        if (!RPM::isInConfig || m_menuBar == nullptr) {
 
             // Key press
             if (!m_firstPressure) {
                 double speed = (QTime::currentTime().msecsSinceStartOfDay() -
-                    m_elapsedTime) * 0.04666 * Wanok::get()->getSquareSize();
+                    m_elapsedTime) * 0.04666 * RPM::get()->getSquareSize();
 
                 // Multi keys
                 QSet<int>::iterator i;
@@ -517,7 +517,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
         // Move
         int key = event->key();
         if (!m_keysPressed.contains(key)) {
-            KeyBoardDatas *keyBoardDatas = Wanok::get()->engineSettings()
+            KeyBoardDatas *keyBoardDatas = RPM::get()->engineSettings()
                 ->keyBoardDatas();
             if ((keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp) &&
                 keyBoardDatas->contains(m_keysPressed,
@@ -551,17 +551,17 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
         if (m_menuBar != nullptr && m_menuBar->selectionKind() ==
             MapEditorSelectionKind::Objects)
         {
-            QKeySequence seq = Wanok::getKeySequence(event);
+            QKeySequence seq = RPM::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
             QAction* action;
 
             action = actions.at(0);
-            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+            if (RPM::isPressingEnter(event) && action->isEnabled()) {
                 contextNew();
                 return;
             }
             action = actions.at(1);
-            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+            if (RPM::isPressingEnter(event) && action->isEnabled()) {
                 contextEdit();
                 return;
             }

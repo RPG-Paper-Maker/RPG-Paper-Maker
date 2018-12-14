@@ -19,7 +19,7 @@
 
 #include "panelprimitivevalue.h"
 #include "ui_panelprimitivevalue.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -194,7 +194,7 @@ void PanelPrimitiveValue::setNumberValue(int n) {
         break;
     case PrimitiveValueKind::KeyBoard:
         ui->comboBoxKeyBoard->setCurrentIndex(SuperListItem::getIndexById(
-            Wanok::get()->project()->keyBoardDatas()->model()
+            RPM::get()->project()->keyBoardDatas()->model()
             ->invisibleRootItem(), n));
         break;
     default:
@@ -263,7 +263,7 @@ void PanelPrimitiveValue::updateValue() {
         setSwitchValue(ui->comboBoxSwitch->currentIndex() == 0);
         break;
     case PrimitiveValueKind::KeyBoard:
-        setNumberValue(SuperListItem::getIdByIndex(Wanok::get()->project()
+        setNumberValue(SuperListItem::getIdByIndex(RPM::get()->project()
             ->keyBoardDatas()->model(), ui->comboBoxKeyBoard->currentIndex()));
         break;
     case PrimitiveValueKind::NumberDouble:
@@ -396,7 +396,7 @@ void PanelPrimitiveValue::addSwitch() {
 void PanelPrimitiveValue::addKeyBoard() {
     ui->comboBoxChoice->addItem("Keyboard", static_cast<int>(
         PrimitiveValueKind::KeyBoard));
-    SuperListItem::fillComboBox(ui->comboBoxKeyBoard, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxKeyBoard, RPM::get()->project()
         ->keyBoardDatas()->model());
     connect(ui->comboBoxKeyBoard, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxKeyBoardCurrentIndexChanged(int)));
@@ -634,7 +634,7 @@ void PanelPrimitiveValue::on_comboBoxDataBaseCurrentIndexChanged(int index){
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::on_comboBoxKeyBoardCurrentIndexChanged(int index) {
-    setNumberValue(SuperListItem::getIdByIndex(Wanok::get()->project()
+    setNumberValue(SuperListItem::getIdByIndex(RPM::get()->project()
         ->keyBoardDatas()->model(), index));
 }
 

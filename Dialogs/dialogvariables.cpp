@@ -20,7 +20,7 @@
 #include "dialogvariables.h"
 #include "systemvariables.h"
 #include "ui_dialogvariables.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -93,17 +93,17 @@ void DialogVariables::on_pageSelected(QModelIndex index, QModelIndex){
 
 void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     if((QPushButton*)button == ui->buttonBox->button(QDialogButtonBox::Ok)){
-        Wanok::writeJSON(Common::pathCombine(Wanok::get()->project()
+        RPM::writeJSON(Common::pathCombine(RPM::get()->project()
                                             ->pathCurrentProject(),
-                                            Wanok::pathVariables),
-                         *(Wanok::get()->project()->gameDatas()
+                                            RPM::pathVariables),
+                         *(RPM::get()->project()->gameDatas()
                            ->variablesDatas()));
     }
     else if ((QPushButton*)button == ui->buttonBox
              ->button(QDialogButtonBox::Cancel))
     {
-        Wanok::get()->project()->gameDatas()
-                ->readVariablesSwitches(Wanok::get()->project()
+        RPM::get()->project()->gameDatas()
+                ->readVariablesSwitches(RPM::get()->project()
                                         ->pathCurrentProject());
     }
 }

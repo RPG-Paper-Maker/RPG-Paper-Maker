@@ -18,7 +18,7 @@
 */
 
 #include "projectupdater.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include <QDirIterator>
 
@@ -82,7 +82,7 @@ void ProjectUpdater::copyPreviousProject() {
 void ProjectUpdater::getAllPathsMapsPortions()
 {
     QString pathMaps = Common::pathCombine(m_project->pathCurrentProject(),
-                                          Wanok::pathMaps);
+                                          RPM::pathMaps);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Clear
@@ -157,10 +157,10 @@ void ProjectUpdater::copySystemScripts() {
     QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
     QString pathBasic = Common::pathCombine(pathContent, "basic");
     QString pathScripts = Common::pathCombine(pathBasic,
-                                             Wanok::pathScriptsSystemDir);
+                                             RPM::pathScriptsSystemDir);
     QString pathProjectScripts =
             Common::pathCombine(m_project->pathCurrentProject(),
-                               Wanok::pathScriptsSystemDir);
+                               RPM::pathScriptsSystemDir);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();
     dir.cdUp();
@@ -207,7 +207,7 @@ void ProjectUpdater::check() {
     m_project->readLangsDatas();
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setPathBR(
-                Common::pathCombine(QDir::currentPath(), Wanok::pathBR));
+                Common::pathCombine(QDir::currentPath(), RPM::pathBR));
     m_project->writeSystemDatas();
     emit progress(100, "");
     QThread::sleep(1);
@@ -256,7 +256,7 @@ void ProjectUpdater::updateVersion_0_3_1() {
 void ProjectUpdater::updateVersion_0_4_0() {
 
     // Create walls directory
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SPRITE_WALLS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_SPRITE_WALLS);
 
     for (int i = 0; i < m_listMapPortions.size(); i++) {
         QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
@@ -302,9 +302,9 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Adding a default special elements datas to the project
     SpecialElementsDatas specialElementsDatas;
     specialElementsDatas.setDefault();
-    Wanok::writeJSON(Common::pathCombine(
+    RPM::writeJSON(Common::pathCombine(
                          m_project->pathCurrentProject(),
-                         Wanok::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
+                         RPM::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
 
     // Adding walls into pictures.json
     m_project->readPicturesDatas();
@@ -342,11 +342,11 @@ void ProjectUpdater::updateVersion_0_5_2() {
     // Adding default songs
     m_project->songsDatas()->setDefault();
     m_project->writeSongsDatas();;
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SONGS);
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_MUSICS);
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_BACKGROUND_SOUNDS);
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_SOUNDS);
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_MUSIC_EFFECTS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_SONGS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_MUSICS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BACKGROUND_SOUNDS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_SOUNDS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_MUSIC_EFFECTS);
 }
 
 // -------------------------------------------------------
@@ -365,7 +365,7 @@ void ProjectUpdater::updateVersion_0_6_0() {
 
     // Battlers
     QList<QString> names;
-    QDir(m_project->pathCurrentProject()).mkpath(Wanok::PATH_BATTLERS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BATTLERS);
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultBattlers(names);
     m_project->writePicturesDatas();

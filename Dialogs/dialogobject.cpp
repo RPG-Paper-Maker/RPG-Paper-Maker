@@ -19,7 +19,7 @@
 
 #include "dialogobject.h"
 #include "ui_dialogobject.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -33,7 +33,7 @@ DialogObject::DialogObject(SystemCommonObject *object, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->widget->initializeList(Wanok::get()->project()->gameDatas()
+    ui->widget->initializeList(RPM::get()->project()->gameDatas()
                                ->commonEventsDatas()->modelCommonObjects());
     ui->widget->initializeModel(object);
     ui->widget->updateModel();

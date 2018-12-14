@@ -20,7 +20,7 @@
 #include "widgetpicture.h"
 #include "ui_widgetpicture.h"
 #include "picturesdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "dialogpicturespreview.h"
 
 // -------------------------------------------------------
@@ -63,7 +63,7 @@ void WidgetPicture::setPicture(SystemPicture* picture) {
 void WidgetPicture::initialize(int i){
     if (i < 1) i = 1;
 
-    PicturesDatas* datas = Wanok::get()->project()->picturesDatas();
+    PicturesDatas* datas = RPM::get()->project()->picturesDatas();
 
     // Graphic update
     m_picture = (SystemPicture*) SuperListItem::getById(datas->model(m_kind)

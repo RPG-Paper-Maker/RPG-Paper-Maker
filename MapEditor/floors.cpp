@@ -18,7 +18,7 @@
 */
 
 #include "floors.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -123,7 +123,7 @@ bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
                                 Position &finalPosition, QRay3D& ray)
 {
     float newDistance = floor->intersection(squareSize, ray, position);
-    if (Wanok::getMinDistance(finalDistance, newDistance)) {
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

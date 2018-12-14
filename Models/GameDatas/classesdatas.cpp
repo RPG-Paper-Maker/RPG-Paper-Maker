@@ -21,7 +21,7 @@
 #include "systemclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -41,7 +41,7 @@ ClassesDatas::~ClassesDatas()
 }
 
 void ClassesDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathClasses), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathClasses), *this);
 }
 
 QStandardItemModel* ClassesDatas::model() const { return m_model; }

@@ -18,7 +18,7 @@
 */
 
 #include "systemsong.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -55,9 +55,9 @@ void SystemSong::setIsBR(bool b) { m_isBR = b; }
 // -------------------------------------------------------
 
 QString SystemSong::getFolder(SongKind kind, bool isBR) {
-    QString folder = isBR ? Wanok::get()->project()->gameDatas()->systemDatas()
+    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : Wanok::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProject();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }
@@ -67,13 +67,13 @@ QString SystemSong::getFolder(SongKind kind, bool isBR) {
 QString SystemSong::getLocalFolder(SongKind kind){
     switch (kind){
     case SongKind::Music:
-        return Wanok::PATH_MUSICS;
+        return RPM::PATH_MUSICS;
     case SongKind::BackgroundSound:
-        return Wanok::PATH_BACKGROUND_SOUNDS;
+        return RPM::PATH_BACKGROUND_SOUNDS;
     case SongKind::Sound:
-        return Wanok::PATH_SOUNDS;
+        return RPM::PATH_SOUNDS;
     case SongKind::MusicEffect:
-        return Wanok::PATH_MUSIC_EFFECTS;
+        return RPM::PATH_MUSIC_EFFECTS;
     default:
         throw std::invalid_argument("Kind of song path not implemented");
     }

@@ -19,7 +19,7 @@
 
 #include "dialogcommandplaysong.h"
 #include "ui_dialogcommandplaysong.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -100,14 +100,14 @@ EventCommand* DialogCommandPlaySong::getCommand() const {
 // -------------------------------------------------------
 
 void DialogCommandPlaySong::accept() {
-    Wanok::get()->project()->writeSongsDatas();
+    RPM::get()->project()->writeSongsDatas();
     QDialog::accept();
 }
 
 // -------------------------------------------------------
 
 void DialogCommandPlaySong::reject() {
-    Wanok::get()->project()->readSongsDatas();
+    RPM::get()->project()->readSongsDatas();
     QDialog::reject();
 }
 

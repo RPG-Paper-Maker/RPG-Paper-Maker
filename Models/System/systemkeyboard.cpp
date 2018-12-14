@@ -19,7 +19,7 @@
 
 #include "systemkeyboard.h"
 #include "dialogsystemkeyboardgeneral.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -87,7 +87,7 @@ QString SystemKeyBoard::shortCutString() const{
         listAND.clear();
         for (j = 0, ll = m_shortcuts[i].size(); j < ll; j++){
             int shortCut = m_shortcuts[i][j];
-            listAND.append(Wanok::keyToString(shortCut));
+            listAND.append(RPM::keyToString(shortCut));
         }
         strAND = listAND.join(" + ");
         listOR.append(strAND);

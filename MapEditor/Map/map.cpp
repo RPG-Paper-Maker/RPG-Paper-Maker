@@ -18,7 +18,7 @@
 */
 
 #include "map.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemmapobject.h"
 #include "common.h"
 
@@ -51,30 +51,30 @@ Map::Map(int id) :
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr)
 {
-    QString realName = Wanok::generateMapName(id);
-    QString pathMaps = Common::pathCombine(Wanok::get()->project()
+    QString realName = RPM::generateMapName(id);
+    QString pathMaps = Common::pathCombine(RPM::get()->project()
                                           ->pathCurrentProject(),
-                                          Wanok::pathMaps);
+                                          RPM::pathMaps);
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
     // Temp map files
-    if (!Wanok::mapsToSave.contains(id)) {
+    if (!RPM::mapsToSave.contains(id)) {
         QString pathTemp = Common::pathCombine(m_pathMap,
-                                              Wanok::TEMP_MAP_FOLDER_NAME);
+                                              RPM::TEMP_MAP_FOLDER_NAME);
         Common::deleteAllFiles(pathTemp);
-        QFile(Common::pathCombine(m_pathMap, Wanok::fileMapObjects)).copy(
-                    Common::pathCombine(pathTemp, Wanok::fileMapObjects));
+        QFile(Common::pathCombine(m_pathMap, RPM::fileMapObjects)).copy(
+                    Common::pathCombine(pathTemp, RPM::fileMapObjects));
     }
-    if (!Wanok::mapsUndoRedo.contains(id)) {
+    if (!RPM::mapsUndoRedo.contains(id)) {
         Common::deleteAllFiles(
-           Common::pathCombine(m_pathMap, Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME));
+           Common::pathCombine(m_pathMap, RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME));
     }
 
     m_mapProperties = new MapProperties(m_pathMap);
     readObjects();
-    m_saved = !Wanok::mapsToSave.contains(id);
-    m_portionsRay = Wanok::get()->getPortionsRay() + 1;
-    m_squareSize = Wanok::get()->getSquareSize();
+    m_saved = !RPM::mapsToSave.contains(id);
+    m_portionsRay = RPM::get()->getPortionsRay() + 1;
+    m_squareSize = RPM::get()->getSquareSize();
 
     // Loading textures
     loadTextures();
@@ -223,7 +223,7 @@ QString Map::getPortionPath(int i, int j, int k) {
 
 QString Map::getPortionPathTemp(int i, int j, int k) {
     return Common::pathCombine(m_pathMap, Common::pathCombine(
-                                  Wanok::TEMP_MAP_FOLDER_NAME,
+                                  RPM::TEMP_MAP_FOLDER_NAME,
                                   getPortionPathMap(i, j, k)));
 }
 
@@ -250,16 +250,16 @@ void Map::setModelObjects(QStandardItemModel* model){
 
 MapPortion* Map::loadPortionMap(int i, int j, int k, bool force){
 
-    int lx = (m_mapProperties->length() - 1) / Wanok::portionSize;
+    int lx = (m_mapProperties->length() - 1) / RPM::portionSize;
     int ly = (m_mapProperties->depth() + m_mapProperties->height() - 1) /
-            Wanok::portionSize;;
-    int lz = (m_mapProperties->width() - 1) / Wanok::portionSize;
+            RPM::portionSize;;
+    int lz = (m_mapProperties->width() - 1) / RPM::portionSize;
 
     if (force || (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz)){
         Portion portion(i, j, k);
         QString path = getPortionPath(i, j, k);
         MapPortion* mapPortion = new MapPortion(portion);
-        Wanok::readJSON(path, *mapPortion);
+        RPM::readJSON(path, *mapPortion);
         mapPortion->setIsLoaded(false);
         /*
         ThreadMapPortionLoader thread(this, portion);
@@ -285,7 +285,7 @@ void Map::savePortionMap(MapPortion* mapPortion){
         Common::writeOtherJSON(path, obj);
     }
     else
-        Wanok::writeJSON(path, *mapPortion);
+        RPM::writeJSON(path, *mapPortion);
 }
 
 // -------------------------------------------------------
@@ -297,15 +297,15 @@ void Map::saveMapProperties() {
 // -------------------------------------------------------
 
 QString Map::getMapInfosPath() const{
-    return Common::pathCombine(m_pathMap, Wanok::fileMapInfos);
+    return Common::pathCombine(m_pathMap, RPM::fileMapInfos);
 }
 
 // -------------------------------------------------------
 
 QString Map::getMapObjectsPath() const{
     return Common::pathCombine(m_pathMap,
-                              Common::pathCombine(Wanok::TEMP_MAP_FOLDER_NAME,
-                                                 Wanok::fileMapObjects));
+                              Common::pathCombine(RPM::TEMP_MAP_FOLDER_NAME,
+                                                 RPM::fileMapObjects));
 }
 
 // -------------------------------------------------------
@@ -451,10 +451,10 @@ bool Map::isInGrid(Position3D &position, int offset) const {
 // -------------------------------------------------------
 
 bool Map::isPortionInGrid(Portion& portion) const {
-    int l = m_mapProperties->length() / Wanok::portionSize;
-    int w = m_mapProperties->width() / Wanok::portionSize;
-    int d = m_mapProperties->depth() / Wanok::portionSize;
-    int h = m_mapProperties->height() / Wanok::portionSize;
+    int l = m_mapProperties->length() / RPM::portionSize;
+    int w = m_mapProperties->width() / RPM::portionSize;
+    int d = m_mapProperties->depth() / RPM::portionSize;
+    int h = m_mapProperties->height() / RPM::portionSize;
 
     return (portion.x() >= 0 && portion.x() < l && portion.y() >= -d &&
             portion.y() < h && portion.z() >= 0 && portion.z() < w);
@@ -482,9 +482,9 @@ bool Map::isInSomething(Position3D& position, Portion& portion,
 // -------------------------------------------------------
 
 void Map::getGlobalPortion(Position3D& position, Portion &portion){
-    portion.setX(position.x() / Wanok::portionSize);
-    portion.setY(position.y() / Wanok::portionSize);
-    portion.setZ(position.z() / Wanok::portionSize);
+    portion.setX(position.x() / RPM::portionSize);
+    portion.setY(position.y() / RPM::portionSize);
+    portion.setZ(position.z() / RPM::portionSize);
 
     if (position.x() < 0)
         portion.addX(-1);
@@ -497,30 +497,30 @@ void Map::getGlobalPortion(Position3D& position, Portion &portion){
 // -------------------------------------------------------
 
 void Map::getLocalPortion(Position3D& position, Portion& portion) const{
-    portion.setX((position.x() / Wanok::portionSize) -
-                 (m_cursor->getSquareX() / Wanok::portionSize));
-    portion.setY((position.y() / Wanok::portionSize) -
-                 (m_cursor->getSquareY() / Wanok::portionSize));
-    portion.setZ((position.z() / Wanok::portionSize) -
-                 (m_cursor->getSquareZ() / Wanok::portionSize));
+    portion.setX((position.x() / RPM::portionSize) -
+                 (m_cursor->getSquareX() / RPM::portionSize));
+    portion.setY((position.y() / RPM::portionSize) -
+                 (m_cursor->getSquareY() / RPM::portionSize));
+    portion.setZ((position.z() / RPM::portionSize) -
+                 (m_cursor->getSquareZ() / RPM::portionSize));
 }
 
 // -------------------------------------------------------
 
 Portion Map::getGlobalFromLocalPortion(Portion& portion) const{
     return Portion(
-                portion.x() + (cursor()->getSquareX() / Wanok::portionSize),
-                portion.y() + (cursor()->getSquareY() / Wanok::portionSize),
-                portion.z() + (cursor()->getSquareZ() / Wanok::portionSize));
+                portion.x() + (cursor()->getSquareX() / RPM::portionSize),
+                portion.y() + (cursor()->getSquareY() / RPM::portionSize),
+                portion.z() + (cursor()->getSquareZ() / RPM::portionSize));
 }
 
 // -------------------------------------------------------
 
 Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
     return Portion(
-                portion.x() - (cursor()->getSquareX() / Wanok::portionSize),
-                portion.y() - (cursor()->getSquareY() / Wanok::portionSize),
-                portion.z() - (cursor()->getSquareZ() / Wanok::portionSize));
+                portion.x() - (cursor()->getSquareX() / RPM::portionSize),
+                portion.y() - (cursor()->getSquareY() / RPM::portionSize),
+                portion.z() - (cursor()->getSquareZ() / RPM::portionSize));
 }
 
 // -------------------------------------------------------

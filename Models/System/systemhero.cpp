@@ -18,7 +18,7 @@
 */
 
 #include "systemhero.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "superlistitem.h"
 
 const QString SystemHero::jsonClass = "class";
@@ -55,7 +55,7 @@ int SystemHero::idBattlerPicture() const { return m_idBattlerPicture; }
 void SystemHero::setIdBattlerPicture(int id) { m_idBattlerPicture = id; }
 
 SystemPicture* SystemHero::getPictureBattler() const {
-    return reinterpret_cast<SystemPicture*>(SuperListItem::getById(Wanok::get()
+    return reinterpret_cast<SystemPicture*>(SuperListItem::getById(RPM::get()
         ->project()->picturesDatas()->model(PictureKind::Battlers)
         ->invisibleRootItem(), m_idBattlerPicture));
 }

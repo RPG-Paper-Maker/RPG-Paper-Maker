@@ -19,7 +19,7 @@
 
 #include "dialogsystemstatisticprogression.h"
 #include "ui_dialogsystemstatisticprogression.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -55,10 +55,10 @@ void DialogSystemStatisticProgression::initialize(){
 
     // Stat
     int statIndex = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->battleSystemDatas()
+                RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->modelCommonStatistics()->invisibleRootItem(),
                 m_statisticProgression.id());
-    SuperListItem::fillComboBox(ui->comboBoxStatistic, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxStatistic, RPM::get()->project()
                                 ->gameDatas()->battleSystemDatas()
                                 ->modelCommonStatistics());
     ui->comboBoxStatistic->setCurrentIndex(statIndex);
@@ -85,7 +85,7 @@ void DialogSystemStatisticProgression::on_comboBoxStatistic_currentIndexChanged
 (int index)
 {
     SystemStatisticProgression* prog = (SystemStatisticProgression*)
-            Wanok::get()->project()->gameDatas()->battleSystemDatas()
+            RPM::get()->project()->gameDatas()->battleSystemDatas()
             ->modelCommonStatistics()->item(index)->data().value<qintptr>();
     m_statisticProgression.setId(prog->id());
     m_statisticProgression.setName(prog->name());

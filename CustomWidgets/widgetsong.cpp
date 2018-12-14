@@ -20,7 +20,7 @@
 #include "widgetsong.h"
 #include "ui_widgetsong.h"
 #include "dialogcommandplaysong.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -73,7 +73,7 @@ void WidgetSong::update() {
         ui->listWidget->item(0)->setText("<None>");
     }
     else {
-        ui->listWidget->item(0)->setText(SuperListItem::getById(Wanok::get()
+        ui->listWidget->item(0)->setText(SuperListItem::getById(RPM::get()
             ->project()->songsDatas()->model(m_kind)->invisibleRootItem(),
             m_command->getSongID(m_parameters))->toString());
     }

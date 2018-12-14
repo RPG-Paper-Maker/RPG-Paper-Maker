@@ -19,7 +19,7 @@
 
 #include "widgetsupertree.h"
 #include "superlistitem.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -241,14 +241,14 @@ void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
 // -------------------------------------------------------
 
 void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
-    if (Wanok::isPressingEnter(event)) {
+    if (RPM::isPressingEnter(event)) {
         emit tryingEdit();
     }
 
     if (m_hasContextMenu || !m_canBeControled){
 
         // Forcing shortcuts
-        QKeySequence seq = Wanok::getKeySequence(event);
+        QKeySequence seq = RPM::getKeySequence(event);
         QList<QAction*> actions = m_contextMenuCommonCommands->actions();
         QAction* action;
 
@@ -260,12 +260,12 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
 
         if (m_canBeControled){
             action = actions.at(1);
-            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+            if (RPM::isPressingEnter(event) && action->isEnabled()) {
                 contextEdit();
                 return;
             }
             action = actions.at(0);
-            if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+            if (RPM::isPressingEnter(event) && action->isEnabled()) {
                 contextNew();
                 return;
             }

@@ -19,7 +19,7 @@
 
 #include "dialogsystembattlecommand.h"
 #include "ui_dialogsystembattlecommand.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -57,9 +57,9 @@ SystemBattleCommand& DialogSystemBattleCommand::battleCommand() const {
 
 void DialogSystemBattleCommand::initialize(){
     int index = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+                RPM::get()->project()->gameDatas()->skillsDatas()->model()
                 ->invisibleRootItem(), m_battleCommand.idSkill());
-    SuperListItem::fillComboBox(ui->comboBoxSkill, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxSkill, RPM::get()->project()
                                 ->gameDatas()->skillsDatas()->model());
     ui->comboBoxSkill->setCurrentIndex(index);
 }
@@ -73,7 +73,7 @@ void DialogSystemBattleCommand::initialize(){
 void DialogSystemBattleCommand::on_comboBoxSkill_currentIndexChanged(int index)
 {
     m_battleCommand.setIdSkill(SuperListItem::getIdByIndex(
-                                   Wanok::get()->project()->gameDatas()
+                                   RPM::get()->project()->gameDatas()
                                    ->skillsDatas()->model(), index));
     m_battleCommand.updateName();
 }

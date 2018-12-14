@@ -19,7 +19,7 @@
 
 #include "sprite.h"
 #include "map.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "qbox3d.h"
 #include "qplane3d.h"
 
@@ -356,7 +356,7 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
                       vecC = m_vertices.at(i++);
             box = QBox3D(vecA, vecC);
             distance = box.intersection(ray);
-            Wanok::getMinDistance(minDistance, distance);
+            RPM::getMinDistance(minDistance, distance);
         }
     }
 
@@ -625,7 +625,7 @@ SpriteWallKind SpriteWallDatas::addKind(SpriteWallKind kA, SpriteWallKind kB) {
 // -------------------------------------------------------
 
 SpriteWallDatas* SpriteWallDatas::getWall(Position& position) {
-    Map* map = Wanok::get()->project()->currentMap();
+    Map* map = RPM::get()->project()->currentMap();
     Portion portion;
     map->getLocalPortion(position, portion);
     MapPortion* mapPortion = map->mapPortion(portion);

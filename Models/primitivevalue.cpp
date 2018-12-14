@@ -18,7 +18,7 @@
 */
 
 #include "primitivevalue.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -110,7 +110,7 @@ QString PrimitiveValue::toString() const{
     case PrimitiveValueKind::NumberDouble:
         return QString::number(m_numberDoubleValue);
     case PrimitiveValueKind::Variable:
-        return "Variable: " + Wanok::get()->project()->gameDatas()
+        return "Variable: " + RPM::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(m_numberValue)
                 ->toString();
     case PrimitiveValueKind::Parameter:
@@ -127,7 +127,7 @@ QString PrimitiveValue::toString() const{
         return (m_switchValue ? "ON" : "OFF");
     case PrimitiveValueKind::KeyBoard:
         SystemKeyBoard* k = (SystemKeyBoard*) SuperListItem::getById(
-                    Wanok::get()->project()->keyBoardDatas()->model()
+                    RPM::get()->project()->keyBoardDatas()->model()
                     ->invisibleRootItem(), m_numberValue);
         return "Kb:" + k->toString();
     }
@@ -153,7 +153,7 @@ void PrimitiveValue::labelTab(QString& str) const{
         str += QString::number(m_numberDoubleValue);
         break;
     case PrimitiveValueKind::Variable:
-        str += "V>" + Wanok::get()->project()->gameDatas()
+        str += "V>" + RPM::get()->project()->gameDatas()
                 ->variablesDatas()->getVariableById(m_numberValue)
                 ->name();
         break;
@@ -169,7 +169,7 @@ void PrimitiveValue::labelTab(QString& str) const{
     case PrimitiveValueKind::KeyBoard:
         SystemKeyBoard* k =
                 (SystemKeyBoard*) SuperListItem::getById(
-                    Wanok::get()->project()->keyBoardDatas()->model()
+                    RPM::get()->project()->keyBoardDatas()->model()
                     ->invisibleRootItem(), m_numberValue);
         str += "KB>" + k->abbreviation();
         break;

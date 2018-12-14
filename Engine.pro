@@ -44,7 +44,6 @@ HEADERS += \
     Dialogs/dialognewproject.h \
     CustomWidgets/panelmainmenu.h \
     Controls/controlnewproject.h \
-    Singletons/wanok.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
     MapEditor/Map/map.h \
@@ -256,7 +255,8 @@ HEADERS += \
     Dialogs/dialoggeneraloptions.h \
     CustomWidgets/widgetsong.h \
     Models/System/systembattlemap.h \
-    CustomWidgets/panelselectposition.h
+    CustomWidgets/panelselectposition.h \
+    Singletons/rpm.h
 
 SOURCES += \
     main.cpp \
@@ -264,7 +264,6 @@ SOURCES += \
     Dialogs/dialognewproject.cpp \
     CustomWidgets/panelmainmenu.cpp \
     Controls/controlnewproject.cpp \
-    Singletons/wanok.cpp \
     CustomWidgets/widgetmapeditor.cpp \
     CustomWidgets/panelproject.cpp \
     MapEditor/Map/map.cpp \
@@ -460,7 +459,8 @@ SOURCES += \
     Dialogs/dialoggeneraloptions.cpp \
     CustomWidgets/widgetsong.cpp \
     Models/System/systembattlemap.cpp \
-    CustomWidgets/panelselectposition.cpp
+    CustomWidgets/panelselectposition.cpp \
+    Singletons/rpm.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

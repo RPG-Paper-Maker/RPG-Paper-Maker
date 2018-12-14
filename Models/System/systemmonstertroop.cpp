@@ -18,7 +18,7 @@
 */
 
 #include "systemmonstertroop.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "dialogsystemmonstertroop.h"
 
 // -------------------------------------------------------
@@ -78,7 +78,7 @@ void SystemMonsterTroop::setCopy(const SystemMonsterTroop& monsterTroop){
 void SystemMonsterTroop::read(const QJsonObject &json){
     p_id = json["id"].toInt();
     p_name = SuperListItem::getById(
-                Wanok::get()->project()->gameDatas()->monstersDatas()->model()
+                RPM::get()->project()->gameDatas()->monstersDatas()->model()
                 ->invisibleRootItem(),
                 p_id)->name();
     m_level = json["l"].toInt();

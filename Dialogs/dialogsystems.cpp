@@ -23,7 +23,7 @@
 #include "systemitem.h"
 #include "systemstatistic.h"
 #include "systemcurrency.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemcreateparameter.h"
 #include "systemweaponarmorkind.h"
 #include "systemelement.h"
@@ -86,7 +86,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListParticules->list()->setCanEdit(true);
 
     // Integers
-    ui->spinBoxSquareSize->setValue(Wanok::get()->project()->gameDatas()
+    ui->spinBoxSquareSize->setValue(RPM::get()->project()->gameDatas()
                                     ->systemDatas()->squareSize());
 
     // Initializing all the models
@@ -167,7 +167,7 @@ void DialogSystems::updateStatisticsBase(){
     ui->comboBoxBattleExp->clear();
 
     // Update
-    GameDatas* gameDatas = Wanok::get()->project()->gameDatas();
+    GameDatas* gameDatas = RPM::get()->project()->gameDatas();
     QVector<SystemStatistic*> level, exp;
     int index, id;
     gameDatas->battleSystemDatas()->getSortedStatistics(level, exp);
@@ -323,7 +323,7 @@ void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject){
 // -------------------------------------------------------
 
 void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
-    Wanok::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
+    RPM::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
 }
 
 // -------------------------------------------------------
@@ -332,7 +332,7 @@ void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index){
     if (index != -1) {
         SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleLevel
                 ->itemData(index).value<qintptr>();
-        Wanok::get()->project()->gameDatas()->battleSystemDatas()
+        RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->setIdStatisticLevel(statistic->id());
     }
 }
@@ -343,7 +343,7 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
     if (index != -1) {
         SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleExp
                 ->itemData(index).value<qintptr>();
-        Wanok::get()->project()->gameDatas()->battleSystemDatas()
+        RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->setIdStatisticExp(statistic->id());
     }
 }
@@ -357,7 +357,7 @@ void DialogSystems::on_statisticsUpdated(){
 // -------------------------------------------------------
 
 void DialogSystems::on_equipmentUpdated(){
-    Wanok::get()->project()->gameDatas()->battleSystemDatas()
+    RPM::get()->project()->gameDatas()->battleSystemDatas()
             ->updateEquipments();
 }
 
@@ -413,7 +413,7 @@ void DialogSystems::on_commonObjectNameChanged(QString){
 
 void DialogSystems::on_commonObjectMaximumChanged(){
     ui->widgetCommonObject->initializeList(
-                Wanok::get()->project()->gameDatas()->commonEventsDatas()
+                RPM::get()->project()->gameDatas()->commonEventsDatas()
                 ->modelCommonObjects());
     ui->widgetCommonObject->initializeCommonInheritance();
 }

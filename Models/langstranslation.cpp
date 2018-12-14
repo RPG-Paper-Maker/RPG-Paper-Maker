@@ -18,7 +18,7 @@
 */
 
 #include "langstranslation.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -51,10 +51,10 @@ LangsTranslation::~LangsTranslation()
 
 int LangsTranslation::mainId() const{
     int i;
-    if (Wanok::get()->project() == nullptr)
+    if (RPM::get()->project() == nullptr)
         i = 1;
     else
-        i = Wanok::get()->project()->langsDatas()->mainLang();
+        i = RPM::get()->project()->langsDatas()->mainLang();
 
     return i;
 }
@@ -85,7 +85,7 @@ void LangsTranslation::setCopy(const LangsTranslation& super){
 
 void LangsTranslation::updateNames(){
     QHash<int,QString> names = m_names;
-    LangsDatas* datas = Wanok::get()->project()->langsDatas();
+    LangsDatas* datas = RPM::get()->project()->langsDatas();
     int l;
 
     l = datas->model()->invisibleRootItem()->rowCount();

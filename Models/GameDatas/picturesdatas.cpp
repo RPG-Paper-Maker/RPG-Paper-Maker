@@ -18,7 +18,7 @@
 */
 
 #include "picturesdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -40,7 +40,7 @@ PicturesDatas::~PicturesDatas()
 }
 
 void PicturesDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathPicturesDatas), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathPicturesDatas), *this);
 }
 
 QStandardItemModel* PicturesDatas::model(PictureKind kind) const {

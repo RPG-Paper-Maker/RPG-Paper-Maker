@@ -18,7 +18,7 @@
 */
 
 #include "mapobjects.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemstate.h"
 
 // -------------------------------------------------------
@@ -188,7 +188,7 @@ void MapObjects::initializeVertices(int squareSize,
             }
 
             // Create the sprite geometry
-            int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+            int frames = RPM::get()->project()->gameDatas()->systemDatas()
                     ->framesAnimation();
             int width = texture->width() / frames / squareSize;
             int height = texture->height() / frames / squareSize;

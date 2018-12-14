@@ -20,7 +20,7 @@
 #include "specialelementsdatas.h"
 #include "systemspritewall.h"
 #include "systemautotile.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 const QString SpecialElementsDatas::JSON_WALLS = "walls";
@@ -49,7 +49,7 @@ SpecialElementsDatas::~SpecialElementsDatas()
 }
 
 void SpecialElementsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::PATH_SPECIAL_ELEMENTS),
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SPECIAL_ELEMENTS),
                     *this);
 }
 

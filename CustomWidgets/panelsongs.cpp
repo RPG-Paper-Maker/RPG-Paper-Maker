@@ -19,7 +19,7 @@
 
 #include "panelsongs.h"
 #include "ui_panelsongs.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include <QDirIterator>
 #include <QFileDialog>
@@ -171,7 +171,7 @@ void PanelSongs::setSongKind(SongKind kind) {
     showSongs(!isNone);
 
     if (!isNone) {
-        ui->widgetPanelIDs->initializeModel(Wanok::get()->project()
+        ui->widgetPanelIDs->initializeModel(RPM::get()->project()
             ->songsDatas()->model(kind));
 
         // Connection of list
@@ -268,7 +268,7 @@ void PanelSongs::changeSong(SystemSong *song) {
 
 void PanelSongs::initialize(EventCommand *command, int &i) {
     changeSong(reinterpret_cast<SystemSong *>(SuperListItem::getById(
-        Wanok::get()->project()->songsDatas()->model(m_songKind)
+        RPM::get()->project()->songsDatas()->model(m_songKind)
         ->invisibleRootItem(), command->valueCommandAt(i++).toInt())));
     ui->panelPrimitiveValueVolume->initializeCommand(command, i);
     ui->checkBoxStart->setChecked(command->valueCommandAt(i++) == "1");

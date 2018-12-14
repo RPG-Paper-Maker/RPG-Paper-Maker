@@ -18,7 +18,7 @@
 */
 
 #include "scriptsdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include <QDir>
 
@@ -42,7 +42,7 @@ ScriptsDatas::~ScriptsDatas()
 }
 
 void ScriptsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathScripts), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathScripts), *this);
 }
 
 QStandardItemModel* ScriptsDatas::modelSystem() const { return m_modelSystem; }
@@ -59,7 +59,7 @@ QStandardItemModel* ScriptsDatas::modelPlugins() const {
 
 void ScriptsDatas::setDefault(){
     QVector<QString> list({
-                          "wanok",
+                          "RPM",
                           "utilities",
                           "datas-game",
                           "datas-common-events",
@@ -197,9 +197,9 @@ void ScriptsDatas::write(QJsonObject &json) const{
 // -------------------------------------------------------
 
 void ScriptsDatas::writeDesktop(QString path) const{
-    path = Common::pathCombine(path, Wanok::pathScriptsDir);
-    QDir(path).mkdir(Wanok::dirDesktop);
-    path = Common::pathCombine(path, Common::pathCombine(Wanok::dirDesktop,
+    path = Common::pathCombine(path, RPM::pathScriptsDir);
+    QDir(path).mkdir(RPM::dirDesktop);
+    path = Common::pathCombine(path, Common::pathCombine(RPM::dirDesktop,
                                                        "includes.js"));
 
     QFile writeInfos(path);

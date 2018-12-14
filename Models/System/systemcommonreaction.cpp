@@ -19,7 +19,7 @@
 
 #include "systemcommonreaction.h"
 #include "widgettreecommands.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "systemcreateparameter.h"
 #include "widgetsupertree.h"
 

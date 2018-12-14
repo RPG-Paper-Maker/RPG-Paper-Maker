@@ -18,7 +18,7 @@
 */
 
 #include "widgettilesetselector.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -67,7 +67,7 @@ void WidgetTilesetSelector::setImageNone(){
 
 void WidgetTilesetSelector::updateImage(){
     if (!m_textureTileset.isNull()){
-        float coef = Wanok::coefReverseSquareSize();
+        float coef = RPM::coefReverseSquareSize();
         m_textureTileset = m_textureTileset.scaled(
                     m_textureTileset.width() * coef,
                     m_textureTileset.height() * coef);
@@ -81,16 +81,16 @@ void WidgetTilesetSelector::updateImage(){
     QRect cursorRect;
     m_selectionRectangle->getCoefRect(cursorRect);
     QRect newTextureRect(0, 0,
-                         m_textureTileset.width() / Wanok::BASIC_SQUARE_SIZE,
-                         m_textureTileset.height() / Wanok::BASIC_SQUARE_SIZE);
+                         m_textureTileset.width() / RPM::BASIC_SQUARE_SIZE,
+                         m_textureTileset.height() / RPM::BASIC_SQUARE_SIZE);
     if (!newTextureRect.contains(cursorRect)) {
         makeFirstSelection(0, 0);
         this->repaint();
     }
 
     // If < 32 x 32
-    if (m_textureTileset.width() < Wanok::BASIC_SQUARE_SIZE ||
-        m_textureTileset.height() < Wanok::BASIC_SQUARE_SIZE)
+    if (m_textureTileset.width() < RPM::BASIC_SQUARE_SIZE ||
+        m_textureTileset.height() < RPM::BASIC_SQUARE_SIZE)
         selectNone();
 }
 

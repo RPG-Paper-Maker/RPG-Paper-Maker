@@ -19,7 +19,7 @@
 
 #include "dialoggeneraloptions.h"
 #include "ui_dialoggeneraloptions.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -55,7 +55,7 @@ void DialogGeneralOptions::initialize() {
 
     connect(ui->comboBoxTheme, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxThemeCurrentIndexChanged(int)));
-    ui->comboBoxTheme->setCurrentIndex(static_cast<int>(Wanok::get()
+    ui->comboBoxTheme->setCurrentIndex(static_cast<int>(RPM::get()
         ->engineSettings()->theme()));
 }
 
@@ -66,20 +66,20 @@ void DialogGeneralOptions::initialize() {
 // -------------------------------------------------------
 
 void DialogGeneralOptions::accept() {
-    Wanok::get()->engineSettings()->write();
+    RPM::get()->engineSettings()->write();
     QDialog::accept();
 }
 
 // -------------------------------------------------------
 
 void DialogGeneralOptions::reject() {
-    Wanok::get()->engineSettings()->read();
-    Wanok::get()->engineSettings()->updateTheme();
+    RPM::get()->engineSettings()->read();
+    RPM::get()->engineSettings()->updateTheme();
     QDialog::reject();
 }
 
 // -------------------------------------------------------
 
 void DialogGeneralOptions::on_comboBoxThemeCurrentIndexChanged(int index) {
-    Wanok::get()->engineSettings()->setTheme(static_cast<ThemeKind>(index));
+    RPM::get()->engineSettings()->setTheme(static_cast<ThemeKind>(index));
 }

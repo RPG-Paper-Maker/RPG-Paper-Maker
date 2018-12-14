@@ -18,7 +18,7 @@
 */
 
 #include "mapportion.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -182,8 +182,8 @@ void MapPortion::fillWithFloor() {
     QRect rect(0, 0, 1, 1);
     Position p;
 
-    for (int i = 0; i < Wanok::portionSize; i++) {
-        for (int j = 0; j < Wanok::portionSize; j++) {
+    for (int i = 0; i < RPM::portionSize; i++) {
+        for (int j = 0; j < RPM::portionSize; j++) {
             p.setCoords(i, 0, 0, j);
             m_lands->setLand(p, new FloorDatas(new QRect(rect)));
         }

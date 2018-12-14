@@ -19,7 +19,7 @@
 
 #include "dialogtilesetspecialelements.h"
 #include "ui_dialogtilesetspecialelements.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -39,7 +39,7 @@ DialogTilesetSpecialElements::DialogTilesetSpecialElements(
 
     setWindowTitle(SystemPicture::getPictureTitle(kind));
     ui->widget->initialize(
-                Wanok::get()->project()->specialElementsDatas()->model(kind),
+                RPM::get()->project()->specialElementsDatas()->model(kind),
                 kind);
     initialize();
 }
@@ -86,7 +86,7 @@ void DialogTilesetSpecialElements::move() {
     int index = ui->widget->currentIndex();
     QStandardItemModel* model = this->model();
 
-    SystemTileset::moveModel(model, Wanok::get()->project()
+    SystemTileset::moveModel(model, RPM::get()->project()
                              ->specialElementsDatas()->model(m_kind), index);
 }
 
@@ -121,7 +121,7 @@ void DialogTilesetSpecialElements::on_deletingIDs() {
     // When deleting IDs, we need to update the list and also delete these
     // removed IDs in the tileset list
     SystemTileset::updateModel(ui->panelSuperList->list()->getModel(),
-                               Wanok::get()->project()->specialElementsDatas()
+                               RPM::get()->project()->specialElementsDatas()
                                ->model(m_kind));
 }
 

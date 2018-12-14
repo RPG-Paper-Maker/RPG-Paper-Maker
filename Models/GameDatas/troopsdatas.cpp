@@ -18,7 +18,7 @@
 */
 
 #include "troopsdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include "systemtroop.h"
 #include "systemmonstertroop.h"
@@ -40,7 +40,7 @@ TroopsDatas::~TroopsDatas()
 }
 
 void TroopsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathTroops), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathTroops), *this);
 }
 
 QStandardItemModel* TroopsDatas::model() const { return m_model; }

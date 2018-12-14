@@ -20,7 +20,7 @@
 #include "dialogcommandteleportobject.h"
 #include "ui_dialogcommandteleportobject.h"
 #include "dialogselectposition.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -43,12 +43,12 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
     if (object != nullptr){
 
     }
-    if (Wanok::isInConfig){
+    if (RPM::isInConfig){
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
     else{
-        m_modelObjects = Wanok::get()->project()->currentMap()->modelObjects();
+        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
     }
 
     ui->widgetObjectID->initializeDataBaseCommandId(m_modelObjects, parameters,

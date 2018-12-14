@@ -18,7 +18,7 @@
 */
 
 #include "tilesetsdatas.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -38,7 +38,7 @@ TilesetsDatas::~TilesetsDatas()
 }
 
 void TilesetsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::PATH_TILESETS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TILESETS), *this);
 }
 
 QStandardItemModel* TilesetsDatas::model() const { return m_model; }

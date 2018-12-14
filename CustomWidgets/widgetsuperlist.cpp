@@ -19,7 +19,7 @@
 
 #include "widgetsuperlist.h"
 #include "widgetsupertree.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QListWidgetItem>
 #include <QMimeData>
 
@@ -178,19 +178,19 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 // -------------------------------------------------------
 
 void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
-    if (Wanok::isPressingEnter(event)) {
+    if (RPM::isPressingEnter(event)) {
         emit tryingEdit();
     }
 
     if (m_hasContextMenu || m_canBrutRemove){
 
-        QKeySequence seq = Wanok::getKeySequence(event);
+        QKeySequence seq = RPM::getKeySequence(event);
         QList<QAction*> actions = m_contextMenu->actions();
         QAction* action;
 
         // Forcing shortcuts
         action = actions.at(0);
-        if (Wanok::isPressingEnter(event) && action->isEnabled()) {
+        if (RPM::isPressingEnter(event) && action->isEnabled()) {
             contextEdit();
             return;
         }

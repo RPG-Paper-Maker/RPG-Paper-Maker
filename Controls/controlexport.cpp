@@ -19,7 +19,7 @@
 
 #include <QDirIterator>
 #include "controlexport.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -117,10 +117,10 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
+    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Common::pathCombine(path, Wanok::pathScriptsSystemDir);
+    QString pathScripts = Common::pathCombine(path, RPM::pathScriptsSystemDir);
     QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
@@ -130,7 +130,7 @@ void ControlExport::removeWebNoNeed(QString path) {
 void ControlExport::removeDesktopNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
+    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
@@ -254,7 +254,7 @@ void ControlExport::copyBRPictures(QString path) {
     }
 
     // Copy the new picutres datas without BR
-    QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
-    Wanok::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
+    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
+    RPM::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
         newPicturesDatas);
 }

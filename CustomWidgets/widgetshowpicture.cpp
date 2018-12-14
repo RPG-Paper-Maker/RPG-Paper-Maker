@@ -18,7 +18,7 @@
 */
 
 #include "widgetshowpicture.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -43,7 +43,7 @@ void WidgetShowPicture::updatePicture(SystemPicture* picture, PictureKind kind)
     m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     if (!m_image.isNull()){
-        float coef = Wanok::coefReverseSquareSize();
+        float coef = RPM::coefReverseSquareSize();
         m_image = m_image.scaled(m_image.width() * coef,
                                  m_image.height() * coef);
     }

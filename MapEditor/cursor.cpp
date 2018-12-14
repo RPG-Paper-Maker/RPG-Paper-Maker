@@ -20,7 +20,7 @@
 #include "cursor.h"
 #include <QtMath>
 #include <QDateTime>
-#include "wanok.h"
+#include "rpm.h"
 #include "floors.h"
 #include "keyboardenginekind.h"
 
@@ -109,9 +109,9 @@ QVector3D* Cursor::position() const { return m_positionSquare; }
 // -------------------------------------------------------
 
 Portion Cursor::getPortion() const{
-    return Portion(getSquareX() / Wanok::portionSize,
-                   getSquareY()/ Wanok::portionSize,
-                   getSquareZ() / Wanok::portionSize);
+    return Portion(getSquareX() / RPM::portionSize,
+                   getSquareY()/ RPM::portionSize,
+                   getSquareZ() / RPM::portionSize);
 }
 
 // -------------------------------------------------------
@@ -143,7 +143,7 @@ void Cursor::centerInSquare(int offset) {
 
 void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     int xPlus, zPlus, res;
-    KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
+    KeyBoardDatas* keyBoardDatas = RPM::get()->engineSettings()
             ->keyBoardDatas();
     w *= m_squareSize;
     h *= m_squareSize;

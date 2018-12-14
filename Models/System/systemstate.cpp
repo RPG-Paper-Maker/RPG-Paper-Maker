@@ -22,7 +22,7 @@
 #include "systemobjectevent.h"
 #include "systemcommonreaction.h"
 #include "dialogsystemstate.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -31,7 +31,7 @@
 // -------------------------------------------------------
 
 SystemState::SystemState() :
-    SystemState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
+    SystemState(SuperListItem::getById(RPM::get()->project()->gameDatas()
                                        ->commonEventsDatas()->modelStates()
                                        ->invisibleRootItem(), 1),
                 MapEditorSubSelectionKind::None, -1, 0, 0, false, false, false,
@@ -182,7 +182,7 @@ void SystemState::setCopy(const SystemState& state){
 void SystemState::read(const QJsonObject &json){
     SuperListItem::read(json);
 
-    setState(SuperListItem::getById(Wanok::get()->project()->gameDatas()
+    setState(SuperListItem::getById(RPM::get()->project()->gameDatas()
                                     ->commonEventsDatas()->modelStates()
                                     ->invisibleRootItem(), id()));
     m_graphicsKind = static_cast<MapEditorSubSelectionKind>(json["gk"].toInt());

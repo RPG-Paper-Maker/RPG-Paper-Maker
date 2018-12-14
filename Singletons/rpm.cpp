@@ -24,102 +24,102 @@
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <cmath>
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
-QSet<int> Wanok::mapsToSave;
-QSet<int> Wanok::mapsUndoRedo;
+QSet<int> RPM::mapsToSave;
+QSet<int> RPM::mapsUndoRedo;
 
-QString Wanok::shadersExtension = "-3.0";
+QString RPM::shadersExtension = "-3.0";
 
 // COLORS
-const QColor Wanok::colorGraySelection = QColor(80, 80, 80);
-const QColor Wanok::colorGraySelectionBackground = QColor(80, 80, 80, 75);
-const QColor Wanok::colorPurpleSelection = QColor(134, 29, 226);
-const QColor Wanok::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);
-const QColor Wanok::colorGrayHoverBackground = QColor(50, 50, 50, 75);
-const QColor Wanok::colorAlmostWhite = QColor(245, 245, 245);
-const QColor Wanok::colorAlmostBlack = QColor(25, 25, 25);
-const QColor Wanok::colorAlmostTransparent = QColor(0, 0, 0, 20);
-const QColor Wanok::colorFortyTransparent = QColor(0, 0, 0, 40);
-const QColor Wanok::colorGrey = QColor(90, 90, 90);
+const QColor RPM::colorGraySelection = QColor(80, 80, 80);
+const QColor RPM::colorGraySelectionBackground = QColor(80, 80, 80, 75);
+const QColor RPM::colorPurpleSelection = QColor(134, 29, 226);
+const QColor RPM::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);
+const QColor RPM::colorGrayHoverBackground = QColor(50, 50, 50, 75);
+const QColor RPM::colorAlmostWhite = QColor(245, 245, 245);
+const QColor RPM::colorAlmostBlack = QColor(25, 25, 25);
+const QColor RPM::colorAlmostTransparent = QColor(0, 0, 0, 20);
+const QColor RPM::colorFortyTransparent = QColor(0, 0, 0, 40);
+const QColor RPM::colorGrey = QColor(90, 90, 90);
 
 // PATHS DATAS
-const QString Wanok::pathBasic = Common::pathCombine("Content", "basic");
-const QString Wanok::pathBR = Common::pathCombine("Content", "BR");
-const QString Wanok::pathDatas = Common::pathCombine("Content", "Datas");
-const QString Wanok::pathMaps = Common::pathCombine(pathDatas, "Maps");
-const QString Wanok::pathScriptsDir = Common::pathCombine(pathDatas, "Scripts");
-const QString Wanok::pathScriptsSystemDir =
+const QString RPM::pathBasic = Common::pathCombine("Content", "basic");
+const QString RPM::pathBR = Common::pathCombine("Content", "BR");
+const QString RPM::pathDatas = Common::pathCombine("Content", "Datas");
+const QString RPM::pathMaps = Common::pathCombine(pathDatas, "Maps");
+const QString RPM::pathScriptsDir = Common::pathCombine(pathDatas, "Scripts");
+const QString RPM::pathScriptsSystemDir =
         Common::pathCombine(pathScriptsDir, "System");
-const QString Wanok::pathScriptsPluginsDir =
+const QString RPM::pathScriptsPluginsDir =
         Common::pathCombine(pathScriptsDir, "Plugins");
-const QString Wanok::pathCommonEvents =
+const QString RPM::pathCommonEvents =
         Common::pathCombine(pathDatas, "commonEvents.json");
-const QString Wanok::pathVariables =
+const QString RPM::pathVariables =
         Common::pathCombine(pathDatas, "variables.json");
-const QString Wanok::pathSystem = Common::pathCombine(pathDatas, "system.json");
-const QString Wanok::pathBattleSystem =
+const QString RPM::pathSystem = Common::pathCombine(pathDatas, "system.json");
+const QString RPM::pathBattleSystem =
         Common::pathCombine(pathDatas, "battleSystem.json");
-const QString Wanok::pathItems = Common::pathCombine(pathDatas, "items.json");
-const QString Wanok::pathSkills = Common::pathCombine(pathDatas, "skills.json");
-const QString Wanok::pathWeapons = Common::pathCombine(pathDatas, "weapons.json");
-const QString Wanok::pathArmors = Common::pathCombine(pathDatas, "armors.json");
-const QString Wanok::pathHeroes = Common::pathCombine(pathDatas, "heroes.json");
-const QString Wanok::pathMonsters = Common::pathCombine(pathDatas, "monsters.json");
-const QString Wanok::pathTroops = Common::pathCombine(pathDatas, "troops.json");
-const QString Wanok::pathClasses = Common::pathCombine(pathDatas, "classes.json");
-const QString Wanok::PATH_TILESETS = Common::pathCombine(pathDatas, "tilesets.json");
-const QString Wanok::PATH_SPECIAL_ELEMENTS =
+const QString RPM::pathItems = Common::pathCombine(pathDatas, "items.json");
+const QString RPM::pathSkills = Common::pathCombine(pathDatas, "skills.json");
+const QString RPM::pathWeapons = Common::pathCombine(pathDatas, "weapons.json");
+const QString RPM::pathArmors = Common::pathCombine(pathDatas, "armors.json");
+const QString RPM::pathHeroes = Common::pathCombine(pathDatas, "heroes.json");
+const QString RPM::pathMonsters = Common::pathCombine(pathDatas, "monsters.json");
+const QString RPM::pathTroops = Common::pathCombine(pathDatas, "troops.json");
+const QString RPM::pathClasses = Common::pathCombine(pathDatas, "classes.json");
+const QString RPM::PATH_TILESETS = Common::pathCombine(pathDatas, "tilesets.json");
+const QString RPM::PATH_SPECIAL_ELEMENTS =
         Common::pathCombine(pathDatas, "specialElements.json");
-const QString Wanok::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");
-const QString Wanok::pathLangs = Common::pathCombine(pathDatas, "langs.json");
-const QString Wanok::pathScripts = Common::pathCombine(pathDatas, "scripts.json");
-const QString Wanok::pathKeyBoard = Common::pathCombine(pathDatas, "keyBoard.json");
-const QString Wanok::pathPicturesDatas =
+const QString RPM::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");
+const QString RPM::pathLangs = Common::pathCombine(pathDatas, "langs.json");
+const QString RPM::pathScripts = Common::pathCombine(pathDatas, "scripts.json");
+const QString RPM::pathKeyBoard = Common::pathCombine(pathDatas, "keyBoard.json");
+const QString RPM::pathPicturesDatas =
         Common::pathCombine(pathDatas, "pictures.json");
-const QString Wanok::pathSongsDatas =
+const QString RPM::pathSongsDatas =
         Common::pathCombine(pathDatas, "songs.json");
-const QString Wanok::pathSaves = Common::pathCombine(pathDatas, "saves.json");
+const QString RPM::pathSaves = Common::pathCombine(pathDatas, "saves.json");
 
 // PATHS PICTURES
-const QString Wanok::pathPictures = Common::pathCombine("Content", "Pictures");
-const QString Wanok::pathHUD = Common::pathCombine(pathPictures, "HUD");
-const QString Wanok::pathTextures2D = Common::pathCombine(pathPictures, "Textures2D");
-const QString Wanok::pathBars = Common::pathCombine(pathHUD, "Bars");
-const QString Wanok::pathIcons = Common::pathCombine(pathHUD, "Icons");
-const QString Wanok::pathAutotiles = Common::pathCombine(pathTextures2D, "Autotiles");
-const QString Wanok::pathCharacters = Common::pathCombine(pathTextures2D, "Characters");
-const QString Wanok::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
-const QString Wanok::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
-const QString Wanok::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
-const QString Wanok::PATH_3D_OBJECT = Common::pathCombine(pathTextures2D, "3DObjects");
-const QString Wanok::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
-const QString Wanok::PATH_BATTLERS = Common::pathCombine(pathTextures2D, "Battlers");
-const QString Wanok::PATH_SONGS = Common::pathCombine("Content", "Songs");
-const QString Wanok::PATH_MUSICS = Common::pathCombine(PATH_SONGS, "Musics");
-const QString Wanok::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS, "BackgroundSounds");
-const QString Wanok::PATH_SOUNDS = Common::pathCombine(PATH_SONGS, "Sounds");
-const QString Wanok::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEffects");
+const QString RPM::pathPictures = Common::pathCombine("Content", "Pictures");
+const QString RPM::pathHUD = Common::pathCombine(pathPictures, "HUD");
+const QString RPM::pathTextures2D = Common::pathCombine(pathPictures, "Textures2D");
+const QString RPM::pathBars = Common::pathCombine(pathHUD, "Bars");
+const QString RPM::pathIcons = Common::pathCombine(pathHUD, "Icons");
+const QString RPM::pathAutotiles = Common::pathCombine(pathTextures2D, "Autotiles");
+const QString RPM::pathCharacters = Common::pathCombine(pathTextures2D, "Characters");
+const QString RPM::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString RPM::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
+const QString RPM::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
+const QString RPM::PATH_3D_OBJECT = Common::pathCombine(pathTextures2D, "3DObjects");
+const QString RPM::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString RPM::PATH_BATTLERS = Common::pathCombine(pathTextures2D, "Battlers");
+const QString RPM::PATH_SONGS = Common::pathCombine("Content", "Songs");
+const QString RPM::PATH_MUSICS = Common::pathCombine(PATH_SONGS, "Musics");
+const QString RPM::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS, "BackgroundSounds");
+const QString RPM::PATH_SOUNDS = Common::pathCombine(PATH_SONGS, "Sounds");
+const QString RPM::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEffects");
 
-const QString Wanok::pathEngineSettings =
+const QString RPM::pathEngineSettings =
         Common::pathCombine("Content", "engineSettings.json");
-const QString Wanok::fileMapInfos = "infos.json";
-const QString Wanok::fileMapObjects = "objects.json";
-const QString Wanok::gamesFolderName = "RPG Paper Maker Games";
-const QString Wanok::TEMP_MAP_FOLDER_NAME = "temp";
-const QString Wanok::TEMP_UNDOREDO_MAP_FOLDER_NAME = "tempUndoRedo";
-const QString Wanok::dirGames = Common::pathCombine(
+const QString RPM::fileMapInfos = "infos.json";
+const QString RPM::fileMapObjects = "objects.json";
+const QString RPM::gamesFolderName = "RPG Paper Maker Games";
+const QString RPM::TEMP_MAP_FOLDER_NAME = "temp";
+const QString RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME = "tempUndoRedo";
+const QString RPM::dirGames = Common::pathCombine(
             QStandardPaths::writableLocation(
                 QStandardPaths::StandardLocation::DocumentsLocation),
             gamesFolderName);
-const QString Wanok::dirDesktop = "desktop";
+const QString RPM::dirDesktop = "desktop";
 
-const int Wanok::portionSize = 16;
-const int Wanok::BASIC_SQUARE_SIZE = 32;
-const int Wanok::MAX_PIXEL_SIZE = 4096;
+const int RPM::portionSize = 16;
+const int RPM::BASIC_SQUARE_SIZE = 32;
+const int RPM::MAX_PIXEL_SIZE = 4096;
 
-bool Wanok::isInConfig = false;
+bool RPM::isInConfig = false;
 
 // -------------------------------------------------------
 //
@@ -127,14 +127,14 @@ bool Wanok::isInConfig = false;
 //
 // -------------------------------------------------------
 
-Wanok::Wanok() :
+RPM::RPM() :
     p_project(nullptr),
     m_engineSettings(nullptr)
 {
 
 }
 
-Wanok::~Wanok()
+RPM::~RPM()
 {
     if (p_project != nullptr){
         delete p_project;
@@ -144,27 +144,27 @@ Wanok::~Wanok()
     delete m_engineSettings;
 }
 
-Project* Wanok::project() const { return p_project; }
+Project* RPM::project() const { return p_project; }
 
-EngineSettings* Wanok::engineSettings() const { return m_engineSettings; }
+EngineSettings* RPM::engineSettings() const { return m_engineSettings; }
 
-int Wanok::getPortionsRay() const {
+int RPM::getPortionsRay() const {
     return project()->gameDatas()->systemDatas()->portionsRay();
 }
 
-int Wanok::getSquareSize() const {
+int RPM::getSquareSize() const {
     return project()->gameDatas()->systemDatas()->squareSize();
 }
 
-void Wanok::setProject(Project* p) { p_project = p; }
+void RPM::setProject(Project* p) { p_project = p; }
 
-void Wanok::setEngineSettings(EngineSettings* e) { m_engineSettings = e; }
+void RPM::setEngineSettings(EngineSettings* e) { m_engineSettings = e; }
 
-void Wanok::saveEngineSettings() const{
+void RPM::saveEngineSettings() const{
     m_engineSettings->write();
 }
 
-void Wanok::loadEngineSettings(){
+void RPM::loadEngineSettings(){
     delete m_engineSettings;
 
     m_engineSettings = new EngineSettings;
@@ -177,7 +177,7 @@ void Wanok::loadEngineSettings(){
 //
 // -------------------------------------------------------
 
-void Wanok::writeJSON(QString path, const Serializable &obj){
+void RPM::writeJSON(QString path, const Serializable &obj){
     QJsonObject gameObject;
     obj.write(gameObject);
     Common::writeOtherJSON(path, gameObject);
@@ -185,7 +185,7 @@ void Wanok::writeJSON(QString path, const Serializable &obj){
 
 // -------------------------------------------------------
 
-void Wanok::readJSON(QString path, Serializable &obj){
+void RPM::readJSON(QString path, Serializable &obj){
     QJsonDocument loadDoc;
     Common::readOtherJSON(path, loadDoc);
     obj.read(loadDoc.object());
@@ -193,7 +193,7 @@ void Wanok::readJSON(QString path, Serializable &obj){
 
 // -------------------------------------------------------
 
-QKeySequence Wanok::getKeySequence(QKeyEvent *event){
+QKeySequence RPM::getKeySequence(QKeyEvent *event){
     int keyInt = event->key();
     Qt::Key key = static_cast<Qt::Key>(keyInt);
 
@@ -226,7 +226,7 @@ QKeySequence Wanok::getKeySequence(QKeyEvent *event){
 
 // -------------------------------------------------------
 
-QString Wanok::keyToString(int keyInt){
+QString RPM::keyToString(int keyInt){
     QKeySequence seq(keyInt);
     Qt::Key key = static_cast<Qt::Key>(keyInt);
 
@@ -252,26 +252,26 @@ QString Wanok::keyToString(int keyInt){
 
 // -------------------------------------------------------
 
-int Wanok::mod(int x, int m) {
+int RPM::mod(int x, int m) {
     int r = x % m;
     return r < 0 ? r + m : r;
 }
 
 // -------------------------------------------------------
 
-float Wanok::coefSquareSize() {
-    return Wanok::get()->getSquareSize() / ((float) Wanok::BASIC_SQUARE_SIZE);
+float RPM::coefSquareSize() {
+    return RPM::get()->getSquareSize() / ((float) RPM::BASIC_SQUARE_SIZE);
 }
 
 // -------------------------------------------------------
 
-float Wanok::coefReverseSquareSize() {
-    return ((float) Wanok::BASIC_SQUARE_SIZE) / Wanok::get()->getSquareSize();
+float RPM::coefReverseSquareSize() {
+    return ((float) RPM::BASIC_SQUARE_SIZE) / RPM::get()->getSquareSize();
 }
 
 // -------------------------------------------------------
 
-QString Wanok::osToString(OSKind os) {
+QString RPM::osToString(OSKind os) {
     switch (os) {
     case OSKind::Window:
         return "Window";
@@ -286,7 +286,7 @@ QString Wanok::osToString(OSKind os) {
 
 // -------------------------------------------------------
 
-bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
+bool RPM::getMinDistance(float& finalDistance, float newDistance) {
     if (std::isnan(finalDistance))
         finalDistance = 0;
     if (std::isnan(newDistance))
@@ -313,10 +313,10 @@ bool Wanok::getMinDistance(float& finalDistance, float newDistance) {
 // -------------------------------------------------------
 // check if a directory with that id in Maps folder already exists
 
-bool Wanok::isMapIdExisting(int id){
-    QDirIterator directories(Common::pathCombine(Wanok::get()->project()
+bool RPM::isMapIdExisting(int id){
+    QDirIterator directories(Common::pathCombine(RPM::get()->project()
                                                 ->pathCurrentProject(),
-                                                Wanok::pathMaps),
+                                                RPM::pathMaps),
                              QDir::Dirs | QDir::NoDotAndDotDot);
 
     while (directories.hasNext()){
@@ -332,10 +332,10 @@ bool Wanok::isMapIdExisting(int id){
 // generate an id for a new map according to the ids of the already existing
 // maps
 
-int Wanok::generateMapId(){
+int RPM::generateMapId(){
     int id;
-    QDir dir(Common::pathCombine(Wanok::get()->project()->pathCurrentProject(),
-                                Wanok::pathMaps));
+    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+                                RPM::pathMaps));
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     int nbMaps = dir.count();
 
@@ -347,21 +347,21 @@ int Wanok::generateMapId(){
 
 // -------------------------------------------------------
 
-QString Wanok::generateMapName(int id){
+QString RPM::generateMapName(int id){
     return "MAP" + Common::getFormatNumber(id);
 }
 
 
 // -------------------------------------------------------
 
-bool Wanok::isPressingEnter(QKeyEvent* event) {
+bool RPM::isPressingEnter(QKeyEvent* event) {
     return event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
            event->key() == Qt::Key_Return;
 }
 
 // -------------------------------------------------------
 
-PictureKind Wanok::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
+PictureKind RPM::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
 {
     switch (subKind) {
     case MapEditorSubSelectionKind::Autotiles:

@@ -28,7 +28,7 @@
 //  CLASS Serializable
 //
 //  All the classes that can be written/read with json should
-//  inherit this class in order to call Wanok::read and Wanok::write
+//  inherit this class in order to call RPM::read and RPM::write
 //  methods.
 //
 // -------------------------------------------------------

@@ -19,7 +19,7 @@
 
 #include "dialogrect.h"
 #include "ui_dialogrect.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -35,7 +35,7 @@ DialogRect::DialogRect(QRectF *rect, QWidget *parent) :
     ui->setupUi(this);
     
 
-    int squareSize = Wanok::get()->getSquareSize();
+    int squareSize = RPM::get()->getSquareSize();
     int two = getTwo();
 
     ui->spinBoxX->setMinimum(0);
@@ -74,25 +74,25 @@ void DialogRect::updateValues() {
 // -------------------------------------------------------
 
 int DialogRect::translateToSpinValue(float percent) {
-    return qRound((percent / 100.0f) * Wanok::get()->getSquareSize());
+    return qRound((percent / 100.0f) * RPM::get()->getSquareSize());
 }
 
 // -------------------------------------------------------
 
 float DialogRect::translateFromSpinValue(int px) {
-    return (px / (float) Wanok::get()->getSquareSize()) * 100.0f;
+    return (px / (float) RPM::get()->getSquareSize()) * 100.0f;
 }
 
 // -------------------------------------------------------
 
 int DialogRect::getOne() {
-    return Wanok::coefSquareSize() * 1;
+    return RPM::coefSquareSize() * 1;
 }
 
 // -------------------------------------------------------
 
 int DialogRect::getTwo() {
-    return Wanok::coefSquareSize() * 2;
+    return RPM::coefSquareSize() * 2;
 }
 
 // -------------------------------------------------------
@@ -131,9 +131,9 @@ void DialogRect::on_spinBoxWidth_valueChanged(int i) {
     m_rect->setWidth(translateFromSpinValue(i));
     if (m_rect->right() >= 100) {
         m_rect->setRight(translateFromSpinValue(
-                             Wanok::get()->project()->gameDatas()->systemDatas()
+                             RPM::get()->project()->gameDatas()->systemDatas()
                              ->squareSize()));
-        ui->spinBoxX->setValue(Wanok::get()->project()->gameDatas()
+        ui->spinBoxX->setValue(RPM::get()->project()->gameDatas()
                                ->systemDatas()->squareSize() - i);
     }
     updateValues();
@@ -145,9 +145,9 @@ void DialogRect::on_spinBoxHeight_valueChanged(int i) {
     m_rect->setHeight(translateFromSpinValue(i));
     if (m_rect->bottom() >= 100) {
         m_rect->setBottom(translateFromSpinValue(
-                             Wanok::get()->project()->gameDatas()->systemDatas()
+                             RPM::get()->project()->gameDatas()->systemDatas()
                              ->squareSize()));
-        ui->spinBoxY->setValue(Wanok::get()->project()->gameDatas()
+        ui->spinBoxY->setValue(RPM::get()->project()->gameDatas()
                                ->systemDatas()->squareSize() - i);
     }
     updateValues();

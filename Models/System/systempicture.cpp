@@ -18,7 +18,7 @@
 */
 
 #include "systempicture.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -66,9 +66,9 @@ void SystemPicture::setRepeatCollisions(bool b, PictureKind kind) {
 
     // Clear collisions
     QImage image(this->getPath(kind));
-    int xOffset = image.width() / Wanok::get()->project()->gameDatas()
-            ->systemDatas()->framesAnimation() / Wanok::get()->getSquareSize();
-    int yOffset = image.height() / 4 / Wanok::get()->getSquareSize();
+    int xOffset = image.width() / RPM::get()->project()->gameDatas()
+            ->systemDatas()->framesAnimation() / RPM::get()->getSquareSize();
+    int yOffset = image.height() / 4 / RPM::get()->getSquareSize();
     QHash<QPoint, CollisionSquare*> colCopy(m_collisions);
     if (b) {
         for (QHash<QPoint, CollisionSquare*>::iterator k = colCopy.begin();
@@ -92,9 +92,9 @@ void SystemPicture::setRepeatCollisions(bool b, PictureKind kind) {
 // -------------------------------------------------------
 
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
-    QString folder = isBR ? Wanok::get()->project()->gameDatas()->systemDatas()
+    QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : Wanok::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProject();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }
@@ -104,21 +104,21 @@ QString SystemPicture::getFolder(PictureKind kind, bool isBR){
 QString SystemPicture::getLocalFolder(PictureKind kind){
     switch (kind){
     case PictureKind::Bars:
-        return Wanok::pathBars;
+        return RPM::pathBars;
     case PictureKind::Icons:
-        return Wanok::pathIcons;
+        return RPM::pathIcons;
     case PictureKind::Autotiles:
-        return Wanok::pathAutotiles;
+        return RPM::pathAutotiles;
     case PictureKind::Characters:
-        return Wanok::pathCharacters;
+        return RPM::pathCharacters;
     case PictureKind::Reliefs:
-        return Wanok::pathReliefs;
+        return RPM::pathReliefs;
     case PictureKind::Tilesets:
-        return Wanok::pathTilesets;
+        return RPM::pathTilesets;
     case PictureKind::Walls:
-        return Wanok::PATH_SPRITE_WALLS;
+        return RPM::PATH_SPRITE_WALLS;
     case PictureKind::Battlers:
-        return Wanok::PATH_BATTLERS;
+        return RPM::PATH_BATTLERS;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }
@@ -199,14 +199,14 @@ void SystemPicture::getRepeatList(QImage& image,
                                   QHash<QPoint, CollisionSquare*>& list,
                                   bool needsCopy) const
 {
-    int xOffset = image.width() / Wanok::get()->project()->gameDatas()
-            ->systemDatas()->framesAnimation() / Wanok::get()->getSquareSize();
-    int yOffset = image.height() / 4 / Wanok::get()->getSquareSize();
+    int xOffset = image.width() / RPM::get()->project()->gameDatas()
+            ->systemDatas()->framesAnimation() / RPM::get()->getSquareSize();
+    int yOffset = image.height() / 4 / RPM::get()->getSquareSize();
     for (QHash<QPoint, CollisionSquare*>::iterator k = squares.begin();
          k != squares.end(); k++)
     {
         QPoint p = k.key();
-        for (int i = 0; i < Wanok::get()->project()->gameDatas()
+        for (int i = 0; i < RPM::get()->project()->gameDatas()
              ->systemDatas()->framesAnimation(); i++)
         {
             for (int j = 0; j < 4; j++) {

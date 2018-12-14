@@ -18,7 +18,7 @@
 */
 
 #include "widgetpicturepreview.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QPainter>
 
 // -------------------------------------------------------
@@ -49,7 +49,7 @@ void WidgetPicturePreview::setChooseRect(bool b) { m_chooseRect = b; }
 int WidgetPicturePreview::indexX() const { return m_indexX; }
 
 void WidgetPicturePreview::setIndexX(int i) {
-    int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+    int frames = RPM::get()->project()->gameDatas()->systemDatas()
             ->framesAnimation();
     if (i >= frames)
         i = frames - 1;
@@ -62,7 +62,7 @@ void WidgetPicturePreview::setIndexX(int i) {
 int WidgetPicturePreview::indexY() const { return m_indexY; }
 
 void WidgetPicturePreview::setIndexY(int i) {
-    int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+    int frames = RPM::get()->project()->gameDatas()->systemDatas()
             ->framesAnimation();
     if (i >= frames)
         i = frames - 1;
@@ -94,11 +94,11 @@ void WidgetPicturePreview::setNoneImage(){
 
 void WidgetPicturePreview::updateImageSize(){
 
-    float coef = Wanok::coefReverseSquareSize();
+    float coef = RPM::coefReverseSquareSize();
 
     // Set selector
     if (m_chooseRect && !m_image.isNull()){
-        int frames = Wanok::get()->project()->gameDatas()->systemDatas()
+        int frames = RPM::get()->project()->gameDatas()->systemDatas()
                 ->framesAnimation();
 
         switch (m_kind){
@@ -167,7 +167,7 @@ void WidgetPicturePreview::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     painter.fillRect(QRect(0, 0, m_image.width(), m_image.height()),
-                     Wanok::colorAlmostTransparent);
+                     RPM::colorAlmostTransparent);
     painter.drawImage(0, 0, m_image);
 
     if (m_chooseRect && m_kind == PictureKind::Characters)

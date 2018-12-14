@@ -20,7 +20,7 @@
 #include "dialogcommandmodifyinventory.h"
 #include "ui_dialogcommandmodifyinventory.h"
 #include "superlistitem.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -39,11 +39,11 @@ DialogCommandModifyInventory::DialogCommandModifyInventory(
     ui->widgetNumber->initializeNumberVariable();
 
     // Initilize comboBoxes
-    SuperListItem::fillComboBox(ui->comboBoxItem, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
                                 ->gameDatas()->itemsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxWeapon, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxWeapon, RPM::get()->project()
                                 ->gameDatas()->weaponsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxArmor, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxArmor, RPM::get()->project()
                                 ->gameDatas()->armorsDatas()->model());
 
     if (command != nullptr) initialize(command);
@@ -70,21 +70,21 @@ void DialogCommandModifyInventory::initialize(EventCommand* command){
     switch(type){
     case 0:
         ui->radioButtonItem->setChecked(true);
-        item = Wanok::get()->project()->gameDatas()->itemsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
                ->invisibleRootItem();
         ui->comboBoxItem->setCurrentIndex(SuperListItem::getIndexById(item,
                                                                       id));
         break;
     case 1:
         ui->radioButtonWeapon->setChecked(true);
-        item = Wanok::get()->project()->gameDatas()->weaponsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
                ->invisibleRootItem();
         ui->comboBoxWeapon->setCurrentIndex(SuperListItem::getIndexById(item,
                                                                         id));
         break;
     case 2:
         ui->radioButtonArmor->setChecked(true);
-        item = Wanok::get()->project()->gameDatas()->weaponsDatas()->model()
+        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
                ->invisibleRootItem();
         ui->comboBoxWeapon->setCurrentIndex(SuperListItem::getIndexById(item,
                                                                         id));
@@ -122,7 +122,7 @@ void DialogCommandModifyInventory::selection(QVector<QString>& command) const{
     if (ui->radioButtonItem->isChecked()){
         command.append("0");
         int index = ui->comboBoxItem->currentIndex();
-        QStandardItem* item = Wanok::get()->project()->gameDatas()
+        QStandardItem* item = RPM::get()->project()->gameDatas()
                               ->itemsDatas()->model()->item(index);
         command.append(QString::number(((SuperListItem*)item->data()
                                         .value<quintptr>())->id()));
@@ -130,7 +130,7 @@ void DialogCommandModifyInventory::selection(QVector<QString>& command) const{
     else if (ui->radioButtonWeapon->isChecked()){
         command.append("1");
         int index = ui->comboBoxWeapon->currentIndex();
-        QStandardItem* item = Wanok::get()->project()->gameDatas()
+        QStandardItem* item = RPM::get()->project()->gameDatas()
                               ->weaponsDatas()->model()->item(index);
         command.append(QString::number(((SuperListItem*)item->data()
                                         .value<quintptr>())->id()));
@@ -138,7 +138,7 @@ void DialogCommandModifyInventory::selection(QVector<QString>& command) const{
     else if (ui->radioButtonArmor->isChecked()){
         command.append("2");
         int index = ui->comboBoxArmor->currentIndex();
-        QStandardItem* item = Wanok::get()->project()->gameDatas()
+        QStandardItem* item = RPM::get()->project()->gameDatas()
                               ->armorsDatas()->model()->item(index);
         command.append(QString::number(((SuperListItem*)item->data()
                                         .value<quintptr>())->id()));

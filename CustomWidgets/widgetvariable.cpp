@@ -21,7 +21,7 @@
 #include "ui_widgetvariable.h"
 #include "superlistitem.h"
 #include "dialogvariables.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -52,7 +52,7 @@ void WidgetVariable::setCurrentId(int i) {
     if (i < 1) i = 1;
     p_currentId = i;
 
-    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
+    VariablesDatas* datas = RPM::get()->project()->gameDatas()
                                     ->variablesDatas();
 
     // Graphic update
@@ -79,7 +79,7 @@ void WidgetVariable::initialize(int i){
 
 void WidgetVariable::openDialog(){
     DialogVariables dialog;
-    VariablesDatas* datas = Wanok::get()->project()->gameDatas()
+    VariablesDatas* datas = RPM::get()->project()->gameDatas()
                                     ->variablesDatas();
     QStandardItemModel* m = datas->model();
 

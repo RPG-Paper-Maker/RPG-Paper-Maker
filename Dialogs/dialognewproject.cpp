@@ -20,7 +20,7 @@
 #include "dialognewproject.h"
 #include "ui_dialognewproject.h"
 #include "mainwindow.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QKeyEvent>
 #include <QDir>
 #include <QFileDialog>
@@ -41,7 +41,7 @@ DialogNewProject::DialogNewProject(QWidget *parent) :
     
 
     ui->lineEditProjectName->setFocus();
-    ui->lineEditLocation->setText(Wanok::dirGames);
+    ui->lineEditLocation->setText(RPM::dirGames);
     ui->lineEditLocation->setCursorPosition(0);
     //setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 }

@@ -19,7 +19,7 @@
 
 #include "itemsdatas.h"
 #include "systemitem.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -39,7 +39,7 @@ ItemsDatas::~ItemsDatas()
 }
 
 void ItemsDatas::read(QString path){
-    Wanok::readJSON(Common::pathCombine(path, Wanok::pathItems), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::pathItems), *this);
 }
 
 QStandardItemModel* ItemsDatas::model() const { return m_model; }

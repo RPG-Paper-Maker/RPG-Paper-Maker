@@ -34,7 +34,7 @@
 #include "dialogexport.h"
 #include "panelmainmenu.h"
 #include "panelproject.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "widgettreelocalmaps.h"
 #include "dialoglocation.h"
 #include "dialogprogress.h"
@@ -77,7 +77,7 @@ MainWindow::~MainWindow()
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
-    Wanok::kill();
+    RPM::kill();
 }
 
 QString MainWindow::appName() const{ return p_appName; }
@@ -127,7 +127,7 @@ void MainWindow::newProject(){
 
 void MainWindow::openExistingProject(){
     QString file = QFileDialog::getOpenFileName(this, "Open a project",
-                                                Wanok::dirGames,
+                                                RPM::dirGames,
                                                 "RPG Paper Maker (*.rpm)");
     if (file.count() > 0) openProject(Common::getDirectoryPath(file));
 }
@@ -137,7 +137,7 @@ void MainWindow::openExistingProject(){
 void MainWindow::openProject(QString pathProject) {
     if ((project != nullptr && closeProject()) || project == nullptr){
         project = new Project;
-        Wanok::get()->setProject(project);
+        RPM::get()->setProject(project);
 
         if (project->read(pathProject)) {
             enableGame();
@@ -146,7 +146,7 @@ void MainWindow::openProject(QString pathProject) {
         else {
             delete project;
             project = nullptr;
-            Wanok::get()->setProject(nullptr);
+            RPM::get()->setProject(nullptr);
         }
     }
 }
@@ -157,12 +157,12 @@ bool MainWindow::closeProject(){
     if (!close())
         return false;
 
-    Wanok::mapsToSave.clear();
-    Wanok::mapsUndoRedo.clear();
+    RPM::mapsToSave.clear();
+    RPM::mapsUndoRedo.clear();
     enableNoGame();
     delete project;
     project = nullptr;
-    Wanok::get()->setProject(nullptr);
+    RPM::get()->setProject(nullptr);
     WidgetMapEditor* mapEditor = ((PanelProject*)mainPanel)->widgetMapEditor();
     mapEditor->setVisible(false);
     replaceMainPanel(new PanelMainMenu(this));
@@ -250,13 +250,13 @@ void MainWindow::saveAllMaps(){
 
     // Save all the maps
     QSet<int>::iterator i;
-    for (i = Wanok::mapsToSave.begin(); i != Wanok::mapsToSave.end(); i++){
+    for (i = RPM::mapsToSave.begin(); i != RPM::mapsToSave.end(); i++){
         Map map(*i);
         map.save();
     }
     if (project->currentMap() != nullptr)
         project->currentMap()->setSaved(true);
-    Wanok::mapsToSave.clear();
+    RPM::mapsToSave.clear();
 
     // Remove *
     ((PanelProject*)mainPanel)->widgetTreeLocalMaps()->updateAllNodesSaved();
@@ -281,7 +281,7 @@ void MainWindow::updateTextures(){
 
 bool MainWindow::close() {
     if (project != nullptr) {
-        if (Wanok::mapsToSave.count() > 0){
+        if (RPM::mapsToSave.count() > 0){
             QMessageBox::StandardButton box =
                     QMessageBox::question(this, "Quit",
                                           "You have some maps that are not "
@@ -325,7 +325,7 @@ void MainWindow::on_actionBrowse_triggered(){
 void MainWindow::on_actionSave_triggered(){
     if (project->currentMap() != nullptr) {
         project->saveCurrentMap();
-        Wanok::mapsToSave.remove(project->currentMap()->mapProperties()->id());
+        RPM::mapsToSave.remove(project->currentMap()->mapProperties()->id());
         ((PanelProject*)mainPanel)->widgetMapEditor()->save();
     }
 }
@@ -373,7 +373,7 @@ void MainWindow::on_actionRedo_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionDatas_manager_triggered(){
-    Wanok::isInConfig = true;
+    RPM::isInConfig = true;
     DialogDatas dialog(project->gameDatas());
     if (openDialog(dialog) == QDialog::Accepted) {
         project->writeGameDatas();
@@ -383,7 +383,7 @@ void MainWindow::on_actionDatas_manager_triggered(){
         project->readGameDatas();
         project->readPicturesDatas();
     }
-    Wanok::isInConfig = false;
+    RPM::isInConfig = false;
 
     updateTextures();
 }
@@ -391,7 +391,7 @@ void MainWindow::on_actionDatas_manager_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionSystems_manager_triggered(){
-    Wanok::isInConfig = true;
+    RPM::isInConfig = true;
     DialogSystems dialog(project->gameDatas());
     int oldSquareSize = project->gameDatas()->systemDatas()->squareSize();
     if (openDialog(dialog) == QDialog::Accepted) {
@@ -404,7 +404,7 @@ void MainWindow::on_actionSystems_manager_triggered(){
     }
     else
         project->readGameDatas();
-    Wanok::isInConfig = false;
+    RPM::isInConfig = false;
 
     updateTextures();
 }
@@ -442,14 +442,14 @@ void MainWindow::on_actionPictures_manager_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionKeyboard_controls_triggered(){
-    DialogKeyBoardControls dialog(project, Wanok::get()->engineSettings());
+    DialogKeyBoardControls dialog(project, RPM::get()->engineSettings());
     if (openDialog(dialog) == QDialog::Accepted){
-        Wanok::get()->saveEngineSettings();
+        RPM::get()->saveEngineSettings();
         project->writeKeyBoardDatas();
         project->readKeyBoardDatas();
     }
     else{
-        Wanok::get()->loadEngineSettings();
+        RPM::get()->loadEngineSettings();
         project->readKeyBoardDatas();
     }
 }
@@ -530,7 +530,7 @@ void MainWindow::on_actionShow_Hide_square_informations_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionPlay_triggered(){
-    if (Wanok::mapsToSave.count() > 0) {
+    if (RPM::mapsToSave.count() > 0) {
         QMessageBox::StandardButton box =
                 QMessageBox::question(this, "Save",
                                       "You have some maps that are not saved. "

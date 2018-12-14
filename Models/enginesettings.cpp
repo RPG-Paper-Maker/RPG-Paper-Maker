@@ -18,7 +18,7 @@
 */
 
 #include "enginesettings.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 #include <QDir>
 #include <QApplication>
@@ -44,13 +44,13 @@ EngineSettings::~EngineSettings()
 }
 
 void EngineSettings::read(){
-    Wanok::readJSON(Common::pathCombine(QDir::currentPath(),
-                                       Wanok::pathEngineSettings), *this);
+    RPM::readJSON(Common::pathCombine(QDir::currentPath(),
+                                       RPM::pathEngineSettings), *this);
 }
 
 void EngineSettings::write(){
-    Wanok::writeJSON(Common::pathCombine(QDir::currentPath(),
-                                        Wanok::pathEngineSettings), *this);
+    RPM::writeJSON(Common::pathCombine(QDir::currentPath(),
+                                        RPM::pathEngineSettings), *this);
 }
 
 KeyBoardDatas* EngineSettings::keyBoardDatas() const {

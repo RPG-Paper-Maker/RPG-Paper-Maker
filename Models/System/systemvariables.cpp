@@ -18,7 +18,7 @@
 */
 
 #include "systemvariables.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "common.h"
 
 int SystemVariables::variablesPerPage = 25;

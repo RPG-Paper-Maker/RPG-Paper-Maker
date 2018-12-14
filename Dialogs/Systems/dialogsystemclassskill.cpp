@@ -19,7 +19,7 @@
 
 #include "dialogsystemclassskill.h"
 #include "ui_dialogsystemclassskill.h"
-#include "wanok.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -54,10 +54,10 @@ void DialogSystemClassSkill::initialize(){
 
     // Skill
     int skillIndex = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+                RPM::get()->project()->gameDatas()->skillsDatas()->model()
                 ->invisibleRootItem(),
                 m_skill.id());
-    SuperListItem::fillComboBox(ui->comboBoxSkill, Wanok::get()->project()
+    SuperListItem::fillComboBox(ui->comboBoxSkill, RPM::get()->project()
                                 ->gameDatas()->skillsDatas()->model());
     ui->comboBoxSkill->setCurrentIndex(skillIndex);
 
@@ -73,7 +73,7 @@ void DialogSystemClassSkill::initialize(){
 
 void DialogSystemClassSkill::on_comboBoxSkill_currentIndexChanged(int index){
     SystemClassSkill* skill = (SystemClassSkill*)
-            Wanok::get()->project()->gameDatas()->skillsDatas()->model()
+            RPM::get()->project()->gameDatas()->skillsDatas()->model()
             ->item(index)->data().value<qintptr>();
     m_skill.setId(skill->id());
     m_skill.setName(skill->name());

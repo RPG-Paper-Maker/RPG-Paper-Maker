@@ -22,7 +22,7 @@
 #include "ui_dialogdatas.h"
 #include "datastabkind.h"
 #include "superlistitem.h"
-#include "wanok.h"
+#include "rpm.h"
 #include "dialogdatasmonsterrewards.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
@@ -78,7 +78,7 @@ void DialogDatas::initializeItems(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateItem(SystemItem* sysItem){
-    int i = SuperListItem::getIndexById(Wanok::get()->project()->gameDatas()
+    int i = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
                                         ->systemDatas()->modelItemsTypes()
                                         ->invisibleRootItem(),
                            sysItem->idType());
@@ -119,7 +119,7 @@ void DialogDatas::initializeWeapons(GameDatas *gameDatas){
 
 void DialogDatas::updateWeapon(SystemWeapon *sysWeapon){
     int i = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->battleSystemDatas()
+                RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->modelWeaponsKind()->invisibleRootItem(),
                 sysWeapon->idKind());
     ui->comboBoxWeaponKind->setCurrentIndex(i);
@@ -148,7 +148,7 @@ void DialogDatas::initializeArmors(GameDatas *gameDatas){
 
 void DialogDatas::updateArmor(SystemArmor *sysArmor){
     int i = SuperListItem::getIndexById(
-                Wanok::get()->project()->gameDatas()->battleSystemDatas()
+                RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->modelArmorsKind()->invisibleRootItem(),
                 sysArmor->idKind());
     ui->comboBoxArmorKind->setCurrentIndex(i);
@@ -354,9 +354,9 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
 
     DialogTilesetSpecialElements dialog(tileset, kind);
     if (dialog.exec() == QDialog::Accepted)
-        Wanok::get()->project()->writeSpecialsDatas();
+        RPM::get()->project()->writeSpecialsDatas();
     else
-        Wanok::get()->project()->readSpecialsDatas();
+        RPM::get()->project()->readSpecialsDatas();
 }
 
 // -------------------------------------------------------
@@ -368,7 +368,7 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
 void DialogDatas::on_comboBoxItemType_currentIndexChanged(int index){
     QStandardItem* item;
     if (index != 0){
-        item = Wanok::get()->project()->gameDatas()->systemDatas()
+        item = RPM::get()->project()->gameDatas()->systemDatas()
                 ->modelItemsTypes()->item(index-1);
         index = ((SystemItem*)item->data().value<quintptr>())->id();
     }

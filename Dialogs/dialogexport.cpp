@@ -19,7 +19,7 @@
 
 #include "dialogexport.h"
 #include "ui_dialogexport.h"
-#include "wanok.h"
+#include "rpm.h"
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -37,7 +37,7 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
     ui->setupUi(this);
     
 
-    ui->lineEditLocation->setText(Wanok::dirGames);
+    ui->lineEditLocation->setText(RPM::dirGames);
     ui->lineEditLocation->setCursorPosition(0);
 }
 
