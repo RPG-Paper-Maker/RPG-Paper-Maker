@@ -37,8 +37,9 @@ class WidgetGraphics : public QFrame
 {
     Q_OBJECT
 public:
-    explicit WidgetGraphics(QWidget *parent = 0);
-    void setState(SystemState* s);
+    explicit WidgetGraphics(QWidget *parent = nullptr);
+    void setState(SystemState *s);
+
     SystemPicture* getPicture();
     PictureKind getPictureKind();
 

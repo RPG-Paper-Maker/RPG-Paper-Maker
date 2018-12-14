@@ -32,7 +32,7 @@ WidgetConditionsList::WidgetConditionsList(QWidget *parent) :
 
 }
 
-void WidgetConditionsList::initializeModel(QStandardItemModel* m){
+void WidgetConditionsList::initializeModel(QStandardItemModel *m) {
     m_model = m;
     this->setModel(m_model);
 }
@@ -43,10 +43,10 @@ void WidgetConditionsList::initializeModel(QStandardItemModel* m){
 //
 // -------------------------------------------------------
 
-void WidgetConditionsList::updateAllNodesString(){
-    for (int i = 0; i < m_model->rowCount(); i++){
-        EventCommand* command = (EventCommand*) m_model->item(i)->data()
-                                .value<quintptr>();
+void WidgetConditionsList::updateAllNodesString() {
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        EventCommand *command = reinterpret_cast<EventCommand *>(m_model->item(i)
+            ->data().value<quintptr>());
         m_model->item(i)->setText(command->toString());
     }
 }
@@ -56,22 +56,21 @@ void WidgetConditionsList::updateAllNodesString(){
 //
 // -------------------------------------------------------
 
-void WidgetConditionsList::mouseDoubleClickEvent(QMouseEvent* event){
-    if (event->button() == Qt::MouseButton::LeftButton){
-        QStandardItem* selected = m_model->itemFromIndex(this->selectionModel()
-                                                         ->currentIndex());
-        if (selected != nullptr){
-            if (!selected->data().isNull()){
+void WidgetConditionsList::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (event->button() == Qt::MouseButton::LeftButton) {
+        QStandardItem *selected = m_model->itemFromIndex(this->selectionModel()
+            ->currentIndex());
+        if (selected != nullptr) {
+            if (!selected->data().isNull()) {
                 DialogCommandConditions dialog(nullptr, true);
-                if (dialog.exec() == QDialog::Accepted){
+                if (dialog.exec() == QDialog::Accepted) {
                     // Ading condition to list
-                    EventCommand* command = dialog.getCommand();
-                    QStandardItem* item = new QStandardItem();
-                    item->setData(QVariant::fromValue(
-                                      reinterpret_cast<quintptr>(command)));
+                    EventCommand *command = dialog.getCommand();
+                    QStandardItem *item = new QStandardItem();
+                    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>
+                        (command)));
                     item->setText(command->toString());
-                    m_model->invisibleRootItem()->insertRow(selected->row(),
-                                                            item);
+                    m_model->invisibleRootItem()->insertRow(selected->row(), item);
 
                     // Update text in nodes
                     updateAllNodesString();

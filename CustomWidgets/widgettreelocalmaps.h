@@ -24,8 +24,9 @@
 #include <QStandardItemModel>
 #include "contextmenulist.h"
 #include "mapproperties.h"
-#include "panelproject.h"
 #include "widgettilesetselector.h"
+#include "project.h"
+#include "widgetmapeditor.h"
 
 // -------------------------------------------------------
 //

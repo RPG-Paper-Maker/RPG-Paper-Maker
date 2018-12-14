@@ -26,6 +26,14 @@
 #include "widgettilesetselector.h"
 #include "mapeditorsubselectionkind.h"
 
+// -------------------------------------------------------
+//
+//  CLASS PanelTextures
+//
+//  A panel for displaying all the different textures selections.
+//
+// -------------------------------------------------------
+
 namespace Ui {
 class PanelTextures;
 }
@@ -35,22 +43,23 @@ class PanelTextures : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelTextures(QWidget *parent = 0);
+    explicit PanelTextures(QWidget *parent = nullptr);
     ~PanelTextures();
+
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);
     void setTilesetImageNone();
     void showTileset();
     int getID() const;
-    QWidget *getSpecialWidget() const;
+    QWidget * getSpecialWidget() const;
     void hideAll();
     void showComboBox();
     void showWidgetSpecial();
     void updateComboBoxSize();
     void updateLabelSize();
     QString createlabelText();
-    void showAutotiles(SystemTileset* tileset);
-    void showSpriteWalls(SystemTileset* tileset);
+    void showAutotiles(SystemTileset *tileset);
+    void showSpriteWalls(SystemTileset *tileset);
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
 
 private:

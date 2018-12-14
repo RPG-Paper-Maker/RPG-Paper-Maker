@@ -43,6 +43,7 @@ class PanelSelectPosition : public QWidget
 public:
     explicit PanelSelectPosition(QWidget *parent = nullptr);
     ~PanelSelectPosition();
+
     void getCommand(QVector<QString> &command) const;
     virtual void initialize(EventCommand* command, int &i);
     virtual void setEnabled(bool checked);

@@ -32,11 +32,14 @@
 //
 // -------------------------------------------------------
 
-class ControlNewproject{
+class ControlNewproject
+{
 public:
     ControlNewproject();
+
     static QChar forbiddenSymbols[];
-    QString filterDirectoryName(const QString & s);
+
+    QString filterDirectoryName(const QString &s);
     QString createNewProject(QString dirName, QString location);
 };
 

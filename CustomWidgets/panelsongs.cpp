@@ -53,8 +53,8 @@ PanelSongs::PanelSongs(QWidget *parent) :
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
     ui->widgetPanelIDs->list()->setHasContextMenu(false);
-    connect(ui->checkBoxContent, SIGNAL(toggled(bool)),
-            this, SLOT(showAvailableContent(bool)));
+    connect(ui->checkBoxContent, SIGNAL(toggled(bool)), this, SLOT(
+        showAvailableContent(bool)));
 
     // Available content
     ui->treeViewAvailableContent->initializeModel(new QStandardItemModel);
@@ -82,61 +82,55 @@ PanelSongs::PanelSongs(QWidget *parent) :
     m_end[SongKind::MusicEffect] = 0;
 
     // Connections
-    connect(ui->treeViewAvailableContent,
-            SIGNAL(deletingItem(SuperListItem*, int)),
-            this,
-            SLOT(deletingContent(SuperListItem*, int)));
-    connect(ui->treeViewAvailableContent,
-            SIGNAL(doubleClicked(QModelIndex)),
-            this,
-            SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
-    connect(ui->widgetPanelIDs->list(), SIGNAL(tryingEdit()),
-            this, SLOT(on_widgetPanelIDPressEnter()));
-    connect(ui->treeViewAvailableContent, SIGNAL(tryingEdit()),
-            this, SLOT(on_treeViewAvailableContentPressEnter()));
-    connect(m_mediaPlayerMusic,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerBackgroundSound,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerMusicEffect,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerMusicTemp,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerBackgroundSoundTemp,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusBackgroundChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerMusicEffectTemp,
-            SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this,
-            SLOT(on_mediaStatusMusicEffectChanged(QMediaPlayer::MediaStatus)));
-    connect(m_mediaPlayerMusic, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionMusicChanged(qint64)));
-    connect(m_mediaPlayerMusicTemp, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionMusicChanged(qint64)));
+    connect(ui->treeViewAvailableContent, SIGNAL(deletingItem(SuperListItem *,
+        int)), this, SLOT(deletingContent(SuperListItem *, int)));
+    connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
+        this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+    connect(ui->widgetPanelIDs->list(), SIGNAL(tryingEdit()), this, SLOT(
+        on_widgetPanelIDPressEnter()));
+    connect(ui->treeViewAvailableContent, SIGNAL(tryingEdit()), this, SLOT(
+        on_treeViewAvailableContentPressEnter()));
+    connect(m_mediaPlayerMusic, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerBackgroundSound, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusBackgroundChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerMusicEffect, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusMusicEffectChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerMusicTemp, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerBackgroundSoundTemp, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusBackgroundChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerMusicEffectTemp, SIGNAL(mediaStatusChanged(
+        QMediaPlayer::MediaStatus)), this, SLOT(on_mediaStatusMusicEffectChanged(
+        QMediaPlayer::MediaStatus)));
+    connect(m_mediaPlayerMusic, SIGNAL(positionChanged(qint64)), this, SLOT(
+        positionMusicChanged(qint64)));
+    connect(m_mediaPlayerMusicTemp, SIGNAL(positionChanged(qint64)), this, SLOT(
+        positionMusicChanged(qint64)));
     connect(m_mediaPlayerBackgroundSound, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionBackgroundSoundChanged(qint64)));
-    connect(m_mediaPlayerBackgroundSoundTemp, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionBackgroundSoundChanged(qint64)));
-    connect(m_mediaPlayerSound, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionSoundChanged(qint64)));
+        SLOT(positionBackgroundSoundChanged(qint64)));
+    connect(m_mediaPlayerBackgroundSoundTemp, SIGNAL(positionChanged(qint64)),
+        this, SLOT(positionBackgroundSoundChanged(qint64)));
+    connect(m_mediaPlayerSound, SIGNAL(positionChanged(qint64)), this, SLOT(
+        positionSoundChanged(qint64)));
     connect(m_mediaPlayerSoundTemp, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionSoundChanged(qint64)));
+        SLOT(positionSoundChanged(qint64)));
     connect(m_mediaPlayerMusicEffect, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionMusicEffectChanged(qint64)));
+        SLOT(positionMusicEffectChanged(qint64)));
     connect(m_mediaPlayerMusicEffectTemp, SIGNAL(positionChanged(qint64)), this,
-            SLOT(positionMusicEffectChanged(qint64)));
-    connect(ui->panelPrimitiveValueVolume->spinBoxNumber(),
-            SIGNAL(valueChanged(int)), this,
-            SLOT(on_spinBoxVolumeValueChanged(int)));
-    connect(ui->panelPrimitiveValueStart->doubleSpinBoxNumber(),
-            SIGNAL(valueChanged(double)), this,
-            SLOT(on_doubleSpinBoxStartValueChanged(double)));
-    connect(ui->panelPrimitiveValueEnd->doubleSpinBoxNumber(),
-            SIGNAL(valueChanged(double)), this,
-            SLOT(on_doubleSpinBoxEndValueChanged(double)));
+        SLOT(positionMusicEffectChanged(qint64)));
+    connect(ui->panelPrimitiveValueVolume->spinBoxNumber(), SIGNAL(valueChanged(
+        int)), this, SLOT(on_spinBoxVolumeValueChanged(int)));
+    connect(ui->panelPrimitiveValueStart->doubleSpinBoxNumber(), SIGNAL(
+        valueChanged(double)), this, SLOT(on_doubleSpinBoxStartValueChanged(
+        double)));
+    connect(ui->panelPrimitiveValueEnd->doubleSpinBoxNumber(), SIGNAL(
+        valueChanged(double)), this, SLOT(on_doubleSpinBoxEndValueChanged(double)));
 }
 
 PanelSongs::~PanelSongs()
@@ -145,9 +139,11 @@ PanelSongs::~PanelSongs()
     delete ui;
 }
 
-SystemSong* PanelSongs::song() const { return m_song; }
+SystemSong* PanelSongs::song() const {
+    return m_song;
+}
 
-void PanelSongs::setSong(SystemSong* song) {
+void PanelSongs::setSong(SystemSong *song) {
     m_song = song;
 }
 
@@ -157,32 +153,31 @@ void PanelSongs::setSong(SystemSong* song) {
 //
 // -------------------------------------------------------
 
-void PanelSongs::initializePrimitives(QStandardItemModel* parameters,
-                                      QStandardItemModel* properties)
+void PanelSongs::initializePrimitives(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
 {
     ui->panelPrimitiveValueVolume->initializeNumber(parameters, properties);
     ui->panelPrimitiveValueVolume->setNumberValue(100);
-    ui->panelPrimitiveValueStart->initializeNumber(parameters, properties,
-                                                   false);
+    ui->panelPrimitiveValueStart->initializeNumber(parameters, properties, false);
     ui->panelPrimitiveValueEnd->initializeNumber(parameters, properties, false);
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::setSongKind(SongKind kind){
+void PanelSongs::setSongKind(SongKind kind) {
     bool isNone = kind == SongKind::None;
     m_songKind = kind;
 
     showSongs(!isNone);
 
-    if (!isNone){
-        ui->widgetPanelIDs->initializeModel(
-                    Wanok::get()->project()->songsDatas()->model(kind));
+    if (!isNone) {
+        ui->widgetPanelIDs->initializeModel(Wanok::get()->project()
+            ->songsDatas()->model(kind));
 
         // Connection of list
-        connect(ui->widgetPanelIDs->list()->selectionModel(),
-                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(on_listIDsIndexChanged(QModelIndex,QModelIndex)));
+        connect(ui->widgetPanelIDs->list()->selectionModel(), SIGNAL(
+            currentChanged(QModelIndex,QModelIndex)), this, SLOT(
+            on_listIDsIndexChanged(QModelIndex,QModelIndex)));
 
         QModelIndex index = ui->widgetPanelIDs->list()->getModel()->index(0, 0);
         ui->widgetPanelIDs->list()->setCurrentIndex(index);
@@ -191,13 +186,13 @@ void PanelSongs::setSongKind(SongKind kind){
         // Loading first available content
         loadAvailableContent(-2);
 
-        connect(ui->treeViewAvailableContent->selectionModel(),
-                SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
+        connect(ui->treeViewAvailableContent->selectionModel(), SIGNAL(
+            currentChanged(QModelIndex,QModelIndex)), this, SLOT(
+            on_listIndexChanged(QModelIndex,QModelIndex)));
 
         // Update checkBox
         ui->checkBoxContent->setText("Show available content of " +
-                                     SystemSong::getLocalFolder(kind));
+            SystemSong::getLocalFolder(kind));
 
         // Buttons & volume according to state of song
         ui->pushButtonPlay->show();
@@ -250,32 +245,31 @@ void PanelSongs::setSongKind(SongKind kind){
         ui->horizontalSliderVolume->setValue(volume);
         ui->checkBoxStart->setChecked(m_startBool[m_songKind]);
         ui->checkBoxEnd->setChecked(m_endBool[m_songKind]);
-        ui->panelPrimitiveValueStart->doubleSpinBoxNumber()
-            ->setValue(m_start[m_songKind] / 1000.0);
-        ui->panelPrimitiveValueEnd->doubleSpinBoxNumber()
-            ->setValue(m_end[m_songKind] / 1000.0);
+        ui->panelPrimitiveValueStart->doubleSpinBoxNumber()->setValue(m_start[
+            m_songKind] / 1000.0);
+        ui->panelPrimitiveValueEnd->doubleSpinBoxNumber()->setValue(m_end[
+            m_songKind] / 1000.0);
     }
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::changeSong(SystemSong* song){
+void PanelSongs::changeSong(SystemSong *song) {
     setSong(song);
 
     int index = SuperListItem::getIndexById(ui->widgetPanelIDs->list()
-                                            ->getModel()->invisibleRootItem(),
-                                            song->id());
-    QModelIndex indexModel = ui->widgetPanelIDs->list()->getModel()
-            ->index(index, 0);
+        ->getModel()->invisibleRootItem(), song->id());
+    QModelIndex indexModel = ui->widgetPanelIDs->list()->getModel()->index(
+        index, 0);
     ui->widgetPanelIDs->list()->setCurrentIndex(indexModel);
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::initialize(EventCommand* command, int& i) {
-    changeSong((SystemSong*) SuperListItem::getById(Wanok::get()->project()
-        ->songsDatas()->model(m_songKind)->invisibleRootItem(), command
-        ->valueCommandAt(i++).toInt()));
+void PanelSongs::initialize(EventCommand *command, int &i) {
+    changeSong(reinterpret_cast<SystemSong *>(SuperListItem::getById(
+        Wanok::get()->project()->songsDatas()->model(m_songKind)
+        ->invisibleRootItem(), command->valueCommandAt(i++).toInt())));
     ui->panelPrimitiveValueVolume->initializeCommand(command, i);
     ui->checkBoxStart->setChecked(command->valueCommandAt(i++) == "1");
     ui->panelPrimitiveValueStart->initializeCommand(command, i);
@@ -285,7 +279,7 @@ void PanelSongs::initialize(EventCommand* command, int& i) {
 
 // -------------------------------------------------------
 
-void PanelSongs::getCommand(QVector<QString>& command) const {
+void PanelSongs::getCommand(QVector<QString> &command) const {
     command.append(QString::number(m_song->id()));
     ui->panelPrimitiveValueVolume->getCommand(command);
     command.append(ui->checkBoxStart->isChecked() ? "1" : "0");
@@ -302,9 +296,9 @@ void PanelSongs::showSongs(bool b) {
 
 // -------------------------------------------------------
 
-void PanelSongs::updateSong(QStandardItem* item) {
+void PanelSongs::updateSong(QStandardItem *item) {
     if (item != nullptr) {
-        m_song = (SystemSong*) item->data().value<qintptr>();
+        m_song = reinterpret_cast<SystemSong *>(item->data().value<qintptr>());
         if (m_song != nullptr) {
             if (m_song->id() != -1) {
                 QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
@@ -332,9 +326,9 @@ void PanelSongs::updateSong(QStandardItem* item) {
 
 // -------------------------------------------------------
 
-void PanelSongs::loadAvailableContent(int row){
-    if (row == -1){
-        QStandardItem* item = ui->treeViewAvailableContent->getSelected();
+void PanelSongs::loadAvailableContent(int row) {
+    if (row == -1) {
+        QStandardItem *item = ui->treeViewAvailableContent->getSelected();
         if (item != nullptr)
             row = item->row();
     }
@@ -344,34 +338,31 @@ void PanelSongs::loadAvailableContent(int row){
     ui->treeViewAvailableContent->getModel()->clear();
 
     // Load content from folders
-    loadContentFromFolder(SystemSong::getFolder(m_songKind, false),
-                          false);
-    loadContentFromFolder(SystemSong::getFolder(m_songKind, true),
-                          true);
+    loadContentFromFolder(SystemSong::getFolder(m_songKind, false), false);
+    loadContentFromFolder(SystemSong::getFolder(m_songKind, true), true);
 
     // Reselect index
-    if (row != -1 && row != -2){
+    if (row != -1 && row != -2) {
         QModelIndex index = ui->treeViewAvailableContent->getModel()->index(row,
-                                                                            0);
+            0);
         ui->treeViewAvailableContent->setCurrentIndex(index);
     }
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::loadContentFromFolder(QString path, bool isBR){
+void PanelSongs::loadContentFromFolder(QString path, bool isBR) {
     QDir dir(path);
     QStringList files = dir.entryList(QDir::Files);
-    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue)
-                      : QIcon(SuperListItem::pathIconRed);
-    QStandardItem* item;
-    SystemSong* super;
+    QIcon icon = isBR ? QIcon(SuperListItem::pathIconBlue) : QIcon(
+        SuperListItem::pathIconRed);
+    QStandardItem *item;
+    SystemSong *super;
 
-    for (int i = 0; i < files.size(); i++){
+    for (int i = 0; i < files.size(); i++) {
         super = new SystemSong(1, files.at(i), isBR);
         item = new QStandardItem;
-        item->setData(
-                    QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
         item->setIcon(icon);
         item->setText(super->name());
         ui->treeViewAvailableContent->getModel()->appendRow(item);
@@ -380,30 +371,28 @@ void PanelSongs::loadContentFromFolder(QString path, bool isBR){
 
 // -------------------------------------------------------
 
-void PanelSongs::deleteContent(QString path){
-    if (!QFile(path).remove()){
-        QMessageBox::warning(this,
-                             "Warning", "Could not delete file at " + path);
-    }
+void PanelSongs::deleteContent(QString path) {
+    if (!QFile(path).remove())
+        QMessageBox::warning(this, "Warning", "Could not delete file at " + path);
 }
 
 // -------------------------------------------------------
 
 void PanelSongs::moveContent(){
-    QStandardItem* selected = ui->treeViewAvailableContent->getSelected();
-    SystemSong* super;
+    QStandardItem *selected = ui->treeViewAvailableContent->getSelected();
+    SystemSong *super;
 
-    if (selected != nullptr){
-        super = (SystemSong*) selected->data().value<qintptr>();
+    if (selected != nullptr) {
+        super = reinterpret_cast<SystemSong *>(selected->data().value<qintptr>());
         ui->widgetPanelIDs->list()->addNewItem(super);
     }
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::updateSongs(){
-    m_song = (SystemSong*) ui->widgetPanelIDs->list()->getSelected()
-            ->data().value<qintptr>();
+void PanelSongs::updateSongs() {
+    m_song = reinterpret_cast<SystemSong *>(ui->widgetPanelIDs->list()
+        ->getSelected()->data().value<qintptr>());
 }
 
 // -------------------------------------------------------
@@ -433,10 +422,9 @@ void PanelSongs::updateVolume(int volume) {
 
 // -------------------------------------------------------
 
-void PanelSongs::stopOnEnd(int end, qint64 pos, QMediaPlayer* player) {
-    if (end > 0 && pos >= end) {
+void PanelSongs::stopOnEnd(int end, qint64 pos, QMediaPlayer *player) {
+    if (end > 0 && pos >= end)
         player->stop();
-    }
 }
 
 // -------------------------------------------------------
@@ -456,7 +444,7 @@ void PanelSongs::setVisibleStartEnd(bool b) {
 //
 // -------------------------------------------------------
 
-void PanelSongs::showAvailableContent(bool b){
+void PanelSongs::showAvailableContent(bool b) {
     ui->checkBoxContent->setChecked(b);
     ui->treeViewAvailableContent->setVisible(b);
     ui->pushButtonMove->setVisible(b);
@@ -467,25 +455,24 @@ void PanelSongs::showAvailableContent(bool b){
 // -------------------------------------------------------
 
 void PanelSongs::play() {
-    if (m_song->id() == -1) {
+    if (m_song->id() == -1)
         return;
-    }
-    QMediaPlayer* temp = nullptr;
+
+    QMediaPlayer *temp = nullptr;
     QUrl path = QUrl::fromLocalFile(m_song->getPath(m_songKind));
     int start = m_start[m_songKind];
     bool isStart = m_startBool[m_songKind];
     switch (m_songKind) {
     case SongKind::Music:
         m_needRestartMusic = false;
-        if (m_playedMusic != m_song ||
-            m_mediaPlayerMusic->state() != QMediaPlayer::PausedState)
+        if (m_playedMusic != m_song || m_mediaPlayerMusic->state() !=
+            QMediaPlayer::PausedState)
         {
             temp = m_mediaPlayerMusic;
             m_mediaPlayerMusic = m_mediaPlayerMusicTemp;
             m_mediaPlayerMusicTemp = temp;
-            if (isStart) {
+            if (isStart)
                 m_mediaPlayerMusic->setPosition(start);
-            }
         }
         m_playedMusic = m_song;
         m_mediaPlayerMusicTemp->stop();
@@ -493,15 +480,14 @@ void PanelSongs::play() {
         m_mediaPlayerMusicTemp->setMedia(path);
         break;
     case SongKind::BackgroundSound:
-        if (m_playedBackgoundSound != m_song ||
-            m_mediaPlayerBackgroundSound->state() != QMediaPlayer::PausedState)
+        if (m_playedBackgoundSound != m_song || m_mediaPlayerBackgroundSound
+            ->state() != QMediaPlayer::PausedState)
         {
             temp = m_mediaPlayerBackgroundSound;
             m_mediaPlayerBackgroundSound = m_mediaPlayerBackgroundSoundTemp;
             m_mediaPlayerBackgroundSoundTemp = temp;
-            if (isStart) {
+            if (isStart)
                 m_mediaPlayerBackgroundSound->setPosition(start);
-            }
         }
         m_playedBackgoundSound = m_song;
         m_mediaPlayerBackgroundSoundTemp->stop();
@@ -513,9 +499,8 @@ void PanelSongs::play() {
         m_mediaPlayerSound = m_mediaPlayerSoundTemp;
         m_mediaPlayerSoundTemp = temp;
         m_mediaPlayerSoundTemp->stop();
-        if (isStart) {
+        if (isStart)
             m_mediaPlayerSound->setPosition(start);
-        }
         m_mediaPlayerSound->play();
         m_mediaPlayerSoundTemp->setMedia(path);
         break;
@@ -527,9 +512,8 @@ void PanelSongs::play() {
         m_mediaPlayerMusicEffect = m_mediaPlayerMusicEffectTemp;
         m_mediaPlayerMusicEffectTemp = temp;
         m_mediaPlayerMusicEffectTemp->stop();
-        if (isStart) {
+        if (isStart)
             m_mediaPlayerMusicEffect->setPosition(start);
-        }
         m_mediaPlayerMusicEffect->play();
         m_mediaPlayerMusicEffectTemp->setMedia(path);
         break;
@@ -611,35 +595,33 @@ void PanelSongs::on_listIndexChanged(QModelIndex index, QModelIndex)
 
 // -------------------------------------------------------
 
-void PanelSongs::on_pushButtonMove_clicked(){
+void PanelSongs::on_pushButtonMove_clicked() {
     moveContent();
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_pushButtonRefresh_clicked(){
+void PanelSongs::on_pushButtonRefresh_clicked() {
     loadAvailableContent();
 }
 
 // -------------------------------------------------------
 
-void PanelSongs::on_pushButtonAdd_clicked(){
+void PanelSongs::on_pushButtonAdd_clicked() {
 
     // Open dialog box
-    QStringList files = QFileDialog::getOpenFileNames(
-                this, "Add new contents", "", "Music (*.mp3 *.ogg, *.wav)");
+    QStringList files = QFileDialog::getOpenFileNames(this, "Add new contents",
+        "", "Music (*.mp3 *.ogg, *.wav)");
     QString path;
 
     // Copy all the selected files
-    for (int i = 0; i < files.size(); i++){
+    for (int i = 0; i < files.size(); i++) {
         path = files.at(i);
-        if (!QFile::copy(path,
-                    Common::pathCombine(
-                        SystemSong::getFolder(m_songKind, false),
-                        QFileInfo(path).fileName())))
+        if (!QFile::copy(path, Common::pathCombine(SystemSong::getFolder(
+            m_songKind, false), QFileInfo(path).fileName())))
         {
-            QMessageBox::warning(this,
-                                 "Warning", "Could not copy file at " + path);
+            QMessageBox::warning(this, "Warning", "Could not copy file at " +
+                path);
         }
     }
 
@@ -649,24 +631,21 @@ void PanelSongs::on_pushButtonAdd_clicked(){
 
 // -------------------------------------------------------
 
-void PanelSongs::deletingContent(SuperListItem* super, int row){
-    QString path = ((SystemSong*) super)->getPath(m_songKind);
+void PanelSongs::deletingContent(SuperListItem *super, int row) {
+    QString path = reinterpret_cast<SystemSong *>(super)->getPath(m_songKind);
 
     // If is BR, ask if sure action before
-    if (((SystemSong*) super)->isBR()){
+    if (reinterpret_cast<SystemSong *>(super)->isBR()) {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box =
-                QMessageBox::question(this, "Deleting song",
-                                      "You are trying to remove a BR song. "
-                                      "Are you sure you want to do it?",
-                                      QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(this,
+            "Deleting song", "You are trying to remove a BR song. Are you sure "
+            "you want to do it?", QMessageBox::Yes | QMessageBox::No);
 
-        if (box == QMessageBox::Yes){
+        if (box == QMessageBox::Yes) {
             deleteContent(path);
             loadAvailableContent();
         }
-    }
-    else
+    } else
         deleteContent(path);
 }
 
@@ -714,13 +693,13 @@ void PanelSongs::on_spinBoxVolumeValueChanged(int value) {
 // -------------------------------------------------------
 
 void PanelSongs::on_doubleSpinBoxStartValueChanged(double value) {
-    m_start[m_songKind] = value * 1000;
+    m_start[m_songKind] = static_cast<int>(value * 1000);
 }
 
 // -------------------------------------------------------
 
 void PanelSongs::on_doubleSpinBoxEndValueChanged(double value) {
-    m_end[m_songKind] = value * 1000;
+    m_end[m_songKind] = static_cast<int>(value * 1000);
 }
 
 // -------------------------------------------------------
@@ -751,9 +730,8 @@ void PanelSongs::on_pushButtonPause_clicked() {
 // -------------------------------------------------------
 
 void PanelSongs::on_mediaStatusChanged(QMediaPlayer::MediaStatus) {
-    if (m_mediaPlayerMusic->mediaStatus() == QMediaPlayer::EndOfMedia) {
+    if (m_mediaPlayerMusic->mediaStatus() == QMediaPlayer::EndOfMedia)
         m_mediaPlayerMusic->play();
-    }
 }
 
 // -------------------------------------------------------

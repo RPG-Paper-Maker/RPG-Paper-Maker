@@ -34,12 +34,9 @@ class WidgetComboBoxTeam : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit WidgetComboBoxTeam(QWidget *parent = 0);
+    explicit WidgetComboBoxTeam(QWidget *parent = nullptr);
+
     static QString toString(int operation);
-
-signals:
-
-public slots:
 };
 
 #endif // WIDGETCOMBOBOXTEAM_H

@@ -40,11 +40,11 @@ ControlExport::ControlExport(Project *project) :
 //
 // -------------------------------------------------------
 
-QString ControlExport::createDesktop(QString location, OSKind os, bool){
+QString ControlExport::createDesktop(QString location, OSKind os, bool) {
     QString message;
     QString osMessage;
 
-    switch(os){
+    switch(os) {
     case OSKind::Window:
         osMessage = "WINDOWS"; break;
     case OSKind::Linux:
@@ -55,12 +55,12 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool){
 
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
-                          osMessage;
+        osMessage;
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(location, projectName, path, dirLocation);
-    if (message != NULL)
+    if (message != nullptr)
         return message;
 
     // Remove all the files that are no longer needed here
@@ -71,16 +71,16 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool){
 
 // -------------------------------------------------------
 
-QString ControlExport::createBrowser(QString location){
+QString ControlExport::createBrowser(QString location) {
     QString message;
     QDir dirLocation(location);
     QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
-                          "BROWSER";
+        "BROWSER";
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(location, projectName, path, dirLocation);
-    if (message != NULL)
+    if (message != nullptr)
         return message;
 
     // Remove all the files that are no longer needed here
@@ -92,7 +92,8 @@ QString ControlExport::createBrowser(QString location){
 // -------------------------------------------------------
 
 QString ControlExport::copyAllProject(QString location, QString projectName,
-                                      QString path, QDir dirLocation){
+    QString path, QDir dirLocation)
+{
     if (!QDir::isAbsolutePath(location))
         return "The path location needs to be absolute.";
     if (!dirLocation.exists())
@@ -102,18 +103,18 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 
     // Copy Content
     QDir(m_project->pathCurrentProject()).mkdir("Content");
-    QString pathContentProject =
-            Common::pathCombine(m_project->pathCurrentProject(), "Content");
+    QString pathContentProject = Common::pathCombine(m_project
+        ->pathCurrentProject(), "Content");
     QString pathContent = Common::pathCombine(path, "Content");
     if (!Common::copyPath(pathContentProject, pathContent))
         return "Error while copying Content directory. Please retry.";
 
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------------------------
 
-void ControlExport::removeWebNoNeed(QString path){
+void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
     QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
@@ -126,7 +127,7 @@ void ControlExport::removeWebNoNeed(QString path){
 
 // -------------------------------------------------------
 
-void ControlExport::removeDesktopNoNeed(QString path){
+void ControlExport::removeDesktopNoNeed(QString path) {
 
     // Remove useless datas
     QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
@@ -138,12 +139,12 @@ void ControlExport::removeDesktopNoNeed(QString path){
 
 // -------------------------------------------------------
 
-QString ControlExport::generateWebStuff(QString path){
+QString ControlExport::generateWebStuff(QString path) {
     QString pathWeb = Common::pathCombine("Content", "web");
 
     // Write index.php
-    QFile::copy(Common::pathCombine(pathWeb, "index.php"),
-                Common::pathCombine(path, "index.php"));
+    QFile::copy(Common::pathCombine(pathWeb, "index.php"), Common::pathCombine(
+        path, "index.php"));
 
     // Write include.html
     m_project->scriptsDatas()->writeBrowser(path);
@@ -153,27 +154,27 @@ QString ControlExport::generateWebStuff(QString path){
     if (!dir.mkdir("js"))
         return "The directory js already exists.";
     QString pathJS = Common::pathCombine(path, "js");
-    QFile::copy(Common::pathCombine(pathWeb, "three.js"),
-                Common::pathCombine(pathJS, "three.js"));
-    QFile::copy(Common::pathCombine(pathWeb, "index.js"),
-                Common::pathCombine(pathJS, "index.js"));
+    QFile::copy(Common::pathCombine(pathWeb, "three.js"), Common::pathCombine(
+        pathJS, "three.js"));
+    QFile::copy(Common::pathCombine(pathWeb, "index.js"), Common::pathCombine(
+        pathJS, "index.js"));
     QFile::copy(Common::pathCombine(pathWeb, "utilities.js"),
-                Common::pathCombine(pathJS, "utilities.js"));
+        Common::pathCombine(pathJS, "utilities.js"));
 
     // Pictures
     copyBRPictures(path);
 
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------------------------
 
-QString ControlExport::generateDesktopStuff(QString path, OSKind os){
+QString ControlExport::generateDesktopStuff(QString path, OSKind os) {
 
     // Copy excecutable folder
     QString executableFolder;
 
-    switch(os){
+    switch(os) {
     case OSKind::Window:
         executableFolder = "win32";
         break;
@@ -192,59 +193,59 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os){
     // Pictures
     copyBRPictures(path);
 
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------------------------
 
-void ControlExport::removeMapsTemp(QString pathDatas){
+void ControlExport::removeMapsTemp(QString pathDatas) {
     QString pathMaps = Common::pathCombine(pathDatas, "Maps");
 
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
-    while (directories.hasNext()){
+    while (directories.hasNext()) {
         directories.next();
-        QDir(Common::pathCombine(Common::pathCombine(pathMaps,
-                                                   directories.fileName()),
-                                "temp")).removeRecursively();
+        QDir(Common::pathCombine(Common::pathCombine(pathMaps, directories
+            .fileName()), "temp")).removeRecursively();
     }
 }
 
 // -------------------------------------------------------
 
-void ControlExport::copyBRPictures(QString path){
+void ControlExport::copyBRPictures(QString path) {
     PictureKind kind;
-    QStandardItemModel* model, *newModel;
-    SystemPicture* picture, *newPicture;
+    QStandardItemModel *model, *newModel;
+    SystemPicture *picture, *newPicture;
     PicturesDatas newPicturesDatas;
 
     // Iterate all the pictures kind
-    for (int k = (int) PictureKind::Bars; k != (int) PictureKind::Last; k++)
+    for (int k = static_cast<int>(PictureKind::Bars); k != static_cast<int>(
+         PictureKind::Last); k++)
     {
        kind = static_cast<PictureKind>(k);
        model = m_project->picturesDatas()->model(kind);
        newModel = new QStandardItemModel;
        newPicturesDatas.setModel(kind, newModel);
        for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-           picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+           picture = reinterpret_cast<SystemPicture *>(model->item(i)->data()
+               .value<qintptr>());
            newPicture = new SystemPicture;
            newPicture->setCopy(*picture);
            newPicture->setId(picture->id());
 
            // If the picture is from BR, we need to copy it in the project
-           if (picture->isBR()){
+           if (picture->isBR()) {
                 QString pathBR = picture->getPath(kind);
-                QString pathProject =
-                        Common::pathCombine(path, picture->getLocalPath(kind));
+                QString pathProject = Common::pathCombine(path, picture
+                    ->getLocalPath(kind));
                 if (QFile(pathProject).exists()) {
                     QFileInfo fileInfo(picture->name());
                     QString extension = fileInfo.completeSuffix();
                     QString baseName = fileInfo.baseName();
                     newPicture->setName(baseName + "_br" + extension);
-                    pathProject =
-                       Common::pathCombine(path, newPicture->getLocalPath(kind));
+                    pathProject = Common::pathCombine(path, newPicture
+                        ->getLocalPath(kind));
                 }
-
                 QFile::copy(pathBR, pathProject);
                 newPicture->setIsBR(false);
            }
@@ -255,5 +256,5 @@ void ControlExport::copyBRPictures(QString path){
     // Copy the new picutres datas without BR
     QString pathDatas = Common::pathCombine(path, Wanok::pathDatas);
     Wanok::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
-                     newPicturesDatas);
+        newPicturesDatas);
 }

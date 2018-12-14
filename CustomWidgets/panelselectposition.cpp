@@ -21,6 +21,12 @@
 #include "ui_panelselectposition.h"
 #include "dialogselectposition.h"
 
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
 PanelSelectPosition::PanelSelectPosition(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelSelectPosition)
@@ -39,7 +45,7 @@ PanelSelectPosition::~PanelSelectPosition()
 //
 // -------------------------------------------------------
 
-void PanelSelectPosition::initialize(EventCommand* command, int& i){
+void PanelSelectPosition::initialize(EventCommand *command, int &i) {
     ui->labelIDMap->setText(command->valueCommandAt(i++));
     ui->labelX->setText(command->valueCommandAt(i++));
     ui->labelY->setText(command->valueCommandAt(i++));
@@ -49,7 +55,7 @@ void PanelSelectPosition::initialize(EventCommand* command, int& i){
 
 // -------------------------------------------------------
 
-void PanelSelectPosition::getCommand(QVector<QString>& command) const{
+void PanelSelectPosition::getCommand(QVector<QString> &command) const {
     command.append(ui->labelIDMap->text());
     command.append(ui->labelX->text());
     command.append(ui->labelY->text());
@@ -79,12 +85,12 @@ void PanelSelectPosition::setEnabled(bool checked) {
 //
 //--------------------------------------------
 
-void PanelSelectPosition::on_pushButtonSelect_clicked(){
+void PanelSelectPosition::on_pushButtonSelect_clicked() {
     DialogSelectPosition dialog(ui->labelIDMap->text().toInt(),
         ui->labelX->text().toInt(), ui->labelY->text().toInt(),
         ui->labelYPlus->text().toInt(), ui->labelZ->text().toInt());
 
-    if (dialog.exec() == QDialog::Accepted){
+    if (dialog.exec() == QDialog::Accepted) {
         ui->labelIDMap->setText(QString::number(dialog.idMap()));
         ui->labelX->setText(QString::number(dialog.x()));
         ui->labelY->setText(QString::number(dialog.y()));

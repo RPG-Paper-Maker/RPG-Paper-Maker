@@ -34,13 +34,10 @@ class WidgetComboBoxOperation : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit WidgetComboBoxOperation(QWidget *parent = 0);
+    explicit WidgetComboBoxOperation(QWidget *parent = nullptr);
+
     static QString toString(int operation);
     QString operation() const;
-
-signals:
-
-public slots:
 };
 
 #endif // WIDGETCOMBOBOXOPERATION_H

@@ -31,8 +31,7 @@ QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
 //
 // -------------------------------------------------------
 
-WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
-                                               bool selection) :
+WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent, bool selection) :
     QMenuBar(parent),
     ui(new Ui::WidgetMenuBarMapEditor),
     m_selectionKind(MapEditorSelectionKind::Land),
@@ -45,10 +44,11 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent,
 {
     ui->setupUi(this);
 
-    if (m_selection){
+    if (m_selection) {
         for (int i = 0; i < this->actions().size(); i++)
             actions().at(i)->setProperty("selection", false);
-        actions().at((int) m_selectionKind)->setProperty("selection",true);
+        actions().at(static_cast<int>(m_selectionKind))->setProperty("selection",
+            true);
     }
 }
 
@@ -73,9 +73,10 @@ MapEditorSelectionKind WidgetMenuBarMapEditor::selectionKind() const {
 }
 
 MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() {
-    WidgetMenuBarMapEditor* bar = (m_selection)
-            ? this : (WidgetMenuBarMapEditor*) this->parent();
-    QString text = bar->actions().at((int) bar->selectionKind())->text();
+    WidgetMenuBarMapEditor *bar = (m_selection) ? this : reinterpret_cast<
+        WidgetMenuBarMapEditor *>(this->parent());
+    QString text = bar->actions().at(static_cast<int>(bar->selectionKind()))
+        ->text();
 
     if (text == bar->actionFloors()->text())
         return MapEditorSubSelectionKind::Floors;
@@ -98,9 +99,9 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() {
 }
 
 DrawKind WidgetMenuBarMapEditor::drawKind() {
-    WidgetMenuBarMapEditor* bar = (m_selection) ?
-            (WidgetMenuBarMapEditor*) this->cornerWidget() : this;
-    int index = (int) MapEditorModesKind::DrawPencil;
+    WidgetMenuBarMapEditor *bar = (m_selection) ? reinterpret_cast<
+        WidgetMenuBarMapEditor *>(this->cornerWidget()) : this;
+    int index = static_cast<int>(MapEditorModesKind::DrawPencil);
 
     if (bar->actions().at(index++)->property("selection") == true)
         return DrawKind::Pencil;
@@ -113,9 +114,9 @@ DrawKind WidgetMenuBarMapEditor::drawKind() {
 }
 
 bool WidgetMenuBarMapEditor::layerOn() const {
-    WidgetMenuBarMapEditor* bar =
-            (WidgetMenuBarMapEditor*) this->cornerWidget();
-    int index = (int) MapEditorModesKind::LayerNone;
+    WidgetMenuBarMapEditor *bar = reinterpret_cast<WidgetMenuBarMapEditor *>(
+        this->cornerWidget());
+    int index = static_cast<int>(MapEditorModesKind::LayerNone);
 
     if (bar->actions().at(index++)->property("selection") == true)
         return false;
@@ -125,55 +126,55 @@ bool WidgetMenuBarMapEditor::layerOn() const {
     return false;
 }
 
-QAction* WidgetMenuBarMapEditor::actionFloors() const {
+QAction * WidgetMenuBarMapEditor::actionFloors() const {
     return ui->actionFloors;
 }
 
-QAction* WidgetMenuBarMapEditor::actionAutotiles() const {
+QAction * WidgetMenuBarMapEditor::actionAutotiles() const {
     return ui->actionAutotile;
 }
 
-QAction* WidgetMenuBarMapEditor::actionFaceSprite() const {
+QAction * WidgetMenuBarMapEditor::actionFaceSprite() const {
     return ui->actionFace_Sprite;
 }
 
-QAction* WidgetMenuBarMapEditor::actionFixSprite() const {
+QAction * WidgetMenuBarMapEditor::actionFixSprite() const {
     return ui->actionFix_Sprite;
 }
 
-QAction* WidgetMenuBarMapEditor::actionDoubleSprite() const {
+QAction * WidgetMenuBarMapEditor::actionDoubleSprite() const {
     return ui->actionDouble_Sprite;
 }
 
-QAction* WidgetMenuBarMapEditor::actionQuadraSprite() const {
+QAction * WidgetMenuBarMapEditor::actionQuadraSprite() const {
     return ui->actionQuadra_Sprite;
 }
 
-QAction* WidgetMenuBarMapEditor::actionWallSprite() const {
+QAction * WidgetMenuBarMapEditor::actionWallSprite() const {
     return ui->actionWall_Sprite;
 }
 
-QAction* WidgetMenuBarMapEditor::actionEvents() const {
+QAction * WidgetMenuBarMapEditor::actionEvents() const {
     return ui->actionEvents;
 }
 
-QAction* WidgetMenuBarMapEditor::actionPencil() const {
+QAction * WidgetMenuBarMapEditor::actionPencil() const {
     return m_actionPencil;
 }
 
-QAction* WidgetMenuBarMapEditor::actionRectangle() const {
+QAction * WidgetMenuBarMapEditor::actionRectangle() const {
     return m_actionRectangle;
 }
 
-QAction* WidgetMenuBarMapEditor::actionPin() const {
+QAction * WidgetMenuBarMapEditor::actionPin() const {
     return m_actionPin;
 }
 
-QAction* WidgetMenuBarMapEditor::actionLayerNone() const {
+QAction * WidgetMenuBarMapEditor::actionLayerNone() const {
     return m_actionLayerNone;
 }
 
-QAction* WidgetMenuBarMapEditor::actionLayerOn() const {
+QAction * WidgetMenuBarMapEditor::actionLayerOn() const {
     return m_actionLayerOn;
 }
 
@@ -184,11 +185,11 @@ QAction* WidgetMenuBarMapEditor::actionLayerOn() const {
 //
 // -------------------------------------------------------
 
-bool WidgetMenuBarMapEditor::containsMenu() const{
-    QAction* action = this->activeAction();
+bool WidgetMenuBarMapEditor::containsMenu() const {
+    QAction * action = this->activeAction();
     if (action != nullptr && action->menu() != nullptr) {
-        return action->menu()->rect().contains(
-                    action->menu()->mapFromGlobal(QCursor::pos()));
+        return action->menu()->rect().contains(action->menu()->mapFromGlobal(
+            QCursor::pos()));
     }
 
     return false;
@@ -196,20 +197,18 @@ bool WidgetMenuBarMapEditor::containsMenu() const{
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::initializeRightMenu(){
+void WidgetMenuBarMapEditor::initializeRightMenu() {
     WidgetMenuBarMapEditor *bar = new WidgetMenuBarMapEditor(this, false);
     bar->clear();
 
     // Draw mode
-    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"),
-                                 "Pencil");
+    m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
     m_actionPencil->setProperty("selection", true);
     m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
-                         "Rectangle");
+        "Rectangle");
     m_actionRectangle->setEnabled(false);
     m_actionRectangle->setProperty("selection", false);
-    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"),
-                              "Pin of paint");
+    m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
     m_actionPin->setProperty("selection", false);
     bar->addAction(m_actionPencil);
     bar->addAction(m_actionRectangle);
@@ -218,10 +217,10 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
 
     // Layer
     m_actionLayerNone = new QAction(QIcon(":/icons/Ressources/layer_none.png"),
-                                    "Normal");
+        "Normal");
     m_actionLayerNone->setProperty("selection", true);
     m_actionLayerOn = new QAction(QIcon(":/icons/Ressources/layer_on.png"),
-                         "On top");
+        "On top");
     m_actionLayerOn->setProperty("selection", false);
     bar->addAction(m_actionLayerNone);
     bar->addAction(m_actionLayerOn);
@@ -231,15 +230,16 @@ void WidgetMenuBarMapEditor::initializeRightMenu(){
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::updateSelection(QAction* action){
+void WidgetMenuBarMapEditor::updateSelection(QAction *action) {
     MapEditorSubSelectionKind subSelectionBefore = subSelectionKind();
 
     // Deselect previous selected action
-    actions().at((int) m_selectionKind)->setProperty("selection", false);
+    actions().at(static_cast<int>(m_selectionKind))->setProperty("selection",
+        false);
 
     // Select the pressed action
-    m_selectionKind =
-         static_cast<MapEditorSelectionKind>(actions().indexOf(action));
+    m_selectionKind = static_cast<MapEditorSelectionKind>(actions().indexOf(
+        action));
 
     action->setProperty("selection", true);
 
@@ -263,15 +263,14 @@ void WidgetMenuBarMapEditor::updateSelection(QAction* action){
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::updateMenutext(QMenu* menu, QAction *action){
+void WidgetMenuBarMapEditor::updateMenutext(QMenu *menu, QAction *action) {
     menu->setTitle(action->text());
 }
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu,
-                                                QAction* menuAction,
-                                                QAction* action)
+void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
+    *menuAction, QAction *action)
 {
     updateMenutext(menu, action);
     updateSelection(menuAction);
@@ -288,16 +287,16 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu,
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::updateRight(QAction* action)
+void WidgetMenuBarMapEditor::updateRight(QAction *action)
 {
-    WidgetMenuBarMapEditor* bar = getBarRight();
+    WidgetMenuBarMapEditor *bar = getBarRight();
 
     int index = bar->actions().indexOf(action);
     QList<int> list;
-    list << (int) MapEditorModesKind::DrawPencil
-         << (int) MapEditorModesKind::DrawPin
-         << (int) MapEditorModesKind::LayerNone
-         << (int) MapEditorModesKind::LayerOn;
+    list << static_cast<int>(MapEditorModesKind::DrawPencil) << static_cast<int>
+        (MapEditorModesKind::DrawPin) << static_cast<int>(
+        MapEditorModesKind::LayerNone)<< static_cast<int>(
+        MapEditorModesKind::LayerOn);
 
     // Deselect previous selected action
     for (int i = 0; i < list.size() / 2; i++) {
@@ -319,8 +318,8 @@ void WidgetMenuBarMapEditor::updateRight(QAction* action)
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::forceNoneLayer() {
-    WidgetMenuBarMapEditor* bar = getBarRight();
-    QAction* action = bar->actions().at(5);
+    WidgetMenuBarMapEditor *bar = getBarRight();
+    QAction *action = bar->actions().at(5);
     forceRight(4);
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/layer_on_disable.png"));
@@ -329,8 +328,8 @@ void WidgetMenuBarMapEditor::forceNoneLayer() {
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::forcePencil() {
-    WidgetMenuBarMapEditor* bar = getBarRight();
-    QAction* action = bar->actions().at(2);
+    WidgetMenuBarMapEditor *bar = getBarRight();
+    QAction *action = bar->actions().at(2);
     forceRight(0);
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
@@ -339,15 +338,16 @@ void WidgetMenuBarMapEditor::forcePencil() {
 // -------------------------------------------------------
 
 void WidgetMenuBarMapEditor::forceRight(int i) {
-    WidgetMenuBarMapEditor* bar = getBarRight();
-    QAction* action = bar->actions().at(i);
+    WidgetMenuBarMapEditor *bar = getBarRight();
+    QAction *action = bar->actions().at(i);
     updateRight(action);
 }
 
 // -------------------------------------------------------
 
-WidgetMenuBarMapEditor* WidgetMenuBarMapEditor::getBarRight() {
-    return (m_selection) ? (WidgetMenuBarMapEditor*)this->cornerWidget() : this;
+WidgetMenuBarMapEditor * WidgetMenuBarMapEditor::getBarRight() {
+    return (m_selection) ? reinterpret_cast<WidgetMenuBarMapEditor *>(this
+        ->cornerWidget()) : this;
 }
 
 // -------------------------------------------------------
@@ -361,18 +361,18 @@ void WidgetMenuBarMapEditor::enableAllRight() {
 
 // -------------------------------------------------------
 //
-//  EVENTS
+//  VIRTUAL METHODS
 //
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::mouseMoveEvent(QMouseEvent* event){
+void WidgetMenuBarMapEditor::mouseMoveEvent(QMouseEvent *event) {
     this->setActiveAction(this->actionAt(event->pos()));
 }
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
-    QAction* action = this->actionAt(event->pos());
+void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent *event) {
+    QAction *action = this->actionAt(event->pos());
     if (m_selection) {
         if (action != nullptr && action->isEnabled()) {
             updateSelection(action);
@@ -390,7 +390,7 @@ void WidgetMenuBarMapEditor::mousePressEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
+void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e) {
     QPainter p(this);
 
     // Draw the items
@@ -437,24 +437,21 @@ void WidgetMenuBarMapEditor::paintEvent(QPaintEvent *e){
 //
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction* action){
-    updateSubSelection(ui->menuFloors,
-                       this->actions().at((int)MapEditorSelectionKind::Land),
-                       action);
+void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction *action) {
+    updateSubSelection(ui->menuFloors, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::Land)), action);
 }
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction* action){
-    updateSubSelection(ui->menuFace_Sprite,
-                       this->actions().at((int)MapEditorSelectionKind::Sprites),
-                       action);
+void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction *action) {
+    updateSubSelection(ui->menuFace_Sprite, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::Sprites)), action);
 }
 
 // -------------------------------------------------------
 
-void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction* action) {
-    updateSubSelection(ui->menuEvents,
-                       this->actions().at((int)MapEditorSelectionKind::Objects),
-                       action);
+void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction *action) {
+    updateSubSelection(ui->menuEvents, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::Objects)), action);
 }

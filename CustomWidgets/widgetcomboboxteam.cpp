@@ -35,7 +35,13 @@ WidgetComboBoxTeam::WidgetComboBoxTeam(QWidget *parent) : QComboBox(parent)
     this->setMaximumSize(size);
 }
 
-QString WidgetComboBoxTeam::toString(int operation){
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QString WidgetComboBoxTeam::toString(int operation) {
     switch(operation){
     case 0:
         return "team";

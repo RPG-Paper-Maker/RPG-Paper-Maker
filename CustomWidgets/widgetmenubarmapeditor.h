@@ -46,59 +46,63 @@ class WidgetMenuBarMapEditor : public QMenuBar
     Q_OBJECT
 
 public:
-    explicit WidgetMenuBarMapEditor(QWidget *parent = 0, bool selection = true);
-    ~WidgetMenuBarMapEditor();
     static QColor colorBackgroundSelected;
     static QColor colorBackgroundRightSelected;
+
+    explicit WidgetMenuBarMapEditor(QWidget *parent = nullptr, bool selection =
+        true);
+    ~WidgetMenuBarMapEditor();
+
     MapEditorSelectionKind selectionKind() const;
     MapEditorSubSelectionKind subSelectionKind();
     DrawKind drawKind();
     bool layerOn() const;
+    QAction * actionFloors() const;
+    QAction * actionAutotiles() const;
+    QAction * actionFaceSprite() const;
+    QAction * actionFixSprite() const;
+    QAction * actionDoubleSprite() const;
+    QAction * actionQuadraSprite() const;
+    QAction * actionWallSprite() const;
+    QAction * actionEvents() const;
+    QAction * actionPencil() const;
+    QAction * actionRectangle() const;
+    QAction * actionPin() const;
+    QAction * actionLayerNone() const;
+    QAction * actionLayerOn() const;
+
     bool containsMenu() const;
-    QAction* actionFloors() const;
-    QAction* actionAutotiles() const;
-    QAction* actionFaceSprite() const;
-    QAction* actionFixSprite() const;
-    QAction* actionDoubleSprite() const;
-    QAction* actionQuadraSprite() const;
-    QAction* actionWallSprite() const;
-    QAction* actionEvents() const;
-    QAction* actionPencil() const;
-    QAction* actionRectangle() const;
-    QAction* actionPin() const;
-    QAction* actionLayerNone() const;
-    QAction* actionLayerOn() const;
     void initializeRightMenu();
 
 private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
     bool m_selection;
-    QAction* m_actionPencil;
-    QAction* m_actionRectangle;
-    QAction* m_actionPin;
-    QAction* m_actionLayerNone;
-    QAction* m_actionLayerOn;
+    QAction *m_actionPencil;
+    QAction *m_actionRectangle;
+    QAction *m_actionPin;
+    QAction *m_actionLayerNone;
+    QAction *m_actionLayerOn;
 
 protected:
-    void mouseMoveEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *e);
 
-    void updateSelection(QAction* action);
-    void updateMenutext(QMenu* menu, QAction *action);
-    void updateSubSelection(QMenu* menu, QAction* menuAction, QAction *action);
-    void updateRight(QAction* action);
+    void updateSelection(QAction *action);
+    void updateMenutext(QMenu *menu, QAction *action);
+    void updateSubSelection(QMenu *menu, QAction *menuAction, QAction *action);
+    void updateRight(QAction *action);
     void forceNoneLayer();
     void forcePencil();
     void forceRight(int i);
     void enableAllRight();
-    WidgetMenuBarMapEditor* getBarRight();
+    WidgetMenuBarMapEditor * getBarRight();
 
 private slots:
-    void on_menuFloors_triggered(QAction* action);
-    void on_menuFace_Sprite_triggered(QAction* action);
-    void on_menuEvents_triggered(QAction* action);
+    void on_menuFloors_triggered(QAction *action);
+    void on_menuFace_Sprite_triggered(QAction *action);
+    void on_menuEvents_triggered(QAction *action);
 
 signals:
     void selectionChanged();

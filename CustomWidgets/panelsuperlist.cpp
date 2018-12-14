@@ -40,11 +40,15 @@ PanelSuperList::~PanelSuperList()
     delete ui;
 }
 
-WidgetSuperList* PanelSuperList::list() const { return ui->widgetList; }
+WidgetSuperList * PanelSuperList::list() const {
+    return ui->widgetList;
+}
 
-QLineEdit* PanelSuperList::lineEditName() const { return ui->lineEditName; }
+QLineEdit * PanelSuperList::lineEditName() const {
+    return ui->lineEditName;
+}
 
-QPushButton* PanelSuperList::buttonMaximum() const{
+QPushButton * PanelSuperList::buttonMaximum() const {
     return ui->pushButtonMaximum;
 }
 
@@ -54,34 +58,34 @@ QPushButton* PanelSuperList::buttonMaximum() const{
 //
 // -------------------------------------------------------
 
-void PanelSuperList::initializeModel(QStandardItemModel* m){
+void PanelSuperList::initializeModel(QStandardItemModel *m) {
     list()->initializeModel(m);
-    connect(list()->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(on_listIndexChanged(QModelIndex,QModelIndex)));
+    connect(list()->selectionModel(), SIGNAL(currentChanged(QModelIndex,
+        QModelIndex)), this, SLOT(on_listIndexChanged(QModelIndex, QModelIndex)));
 }
 
 // -------------------------------------------------------
 
-void PanelSuperList::showButtonMax(bool b){
-    if (b) ui->pushButtonMaximum->show();
-    else ui->pushButtonMaximum->hide();
+void PanelSuperList::showButtonMax(bool b) {
+    if (b)
+        ui->pushButtonMaximum->show();
+    else
+        ui->pushButtonMaximum->hide();
 }
 
 // -------------------------------------------------------
 
-void PanelSuperList::setMaximumLimit(int max){
+void PanelSuperList::setMaximumLimit(int max) {
     m_maximum = max;
 }
 
 // -------------------------------------------------------
 
-void PanelSuperList::showEditName(bool b){
-    if (b){
+void PanelSuperList::showEditName(bool b) {
+    if (b) {
         ui->label->show();
         ui->lineEditName->show();
-    }
-    else{
+    } else {
         ui->label->hide();
         ui->lineEditName->hide();
     }
@@ -93,7 +97,7 @@ void PanelSuperList::showEditName(bool b){
 //
 // -------------------------------------------------------
 
-void PanelSuperList::on_lineEditName_textChanged(const QString & s){
+void PanelSuperList::on_lineEditName_textChanged(const QString &s) {
     ui->widgetList->setName(s);
 
     emit nameChanged(ui->widgetList->getSelected());
@@ -101,9 +105,9 @@ void PanelSuperList::on_lineEditName_textChanged(const QString & s){
 
 // -------------------------------------------------------
 
-void PanelSuperList::on_pushButtonMaximum_pressed(){
+void PanelSuperList::on_pushButtonMaximum_pressed() {
     DialogSetMaximum dialog(list()->getModel(), m_maximum);
-    if (dialog.exec() == QDialog::Accepted){
+    if (dialog.exec() == QDialog::Accepted) {
         int newSize = dialog.maximum();
         list()->setMaximum(newSize);
         emit maximumChanged();
@@ -112,12 +116,12 @@ void PanelSuperList::on_pushButtonMaximum_pressed(){
 
 // -------------------------------------------------------
 
-void PanelSuperList::on_listIndexChanged(QModelIndex index ,QModelIndex){
-    QStandardItem* selected = list()->getModel()->itemFromIndex(index);
+void PanelSuperList::on_listIndexChanged(QModelIndex index, QModelIndex) {
+    QStandardItem *selected = list()->getModel()->itemFromIndex(index);
 
-    if (selected != nullptr){
-        SuperListItem* super = (SuperListItem*) selected
-                               ->data().value<quintptr>();
+    if (selected != nullptr) {
+        SuperListItem *super = reinterpret_cast<SuperListItem *>(selected
+            ->data().value<quintptr>());
         ui->lineEditName->blockSignals(true);
         ui->lineEditName->setText(super->name());
         ui->lineEditName->blockSignals(false);

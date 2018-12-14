@@ -39,11 +39,17 @@ WidgetComboBoxOperation::WidgetComboBoxOperation(QWidget *parent)
     this->setMaximumSize(size);
 }
 
-QString WidgetComboBoxOperation::operation() const{
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+QString WidgetComboBoxOperation::operation() const {
     return QString::number(this->currentIndex());
 }
 
-QString WidgetComboBoxOperation::toString(int operation){
+QString WidgetComboBoxOperation::toString(int operation) {
     switch(operation){
     case 0:
         return "=";

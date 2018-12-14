@@ -39,7 +39,7 @@ class PanelMainMenu : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelMainMenu(QWidget *parent = 0);
+    explicit PanelMainMenu(QWidget *parent = nullptr);
     ~PanelMainMenu();
 
 private:

@@ -49,7 +49,7 @@ PanelTextures::~PanelTextures()
 //
 // -------------------------------------------------------
 
-void PanelTextures::getTilesetTexture(QRect& rect) const{
+void PanelTextures::getTilesetTexture(QRect &rect) const{
     switch (m_kind) {
     case PictureKind::Autotiles:
         ui->widgetAutotilesSelector->currentTexture(rect); break;
@@ -60,26 +60,25 @@ void PanelTextures::getTilesetTexture(QRect& rect) const{
 
 // -------------------------------------------------------
 
-void PanelTextures::setTilesetImage(QString path){
+void PanelTextures::setTilesetImage(QString path) {
     ui->widgetTilesetSelector->setImage(path);
     updateTilesetImage();
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::setTilesetImageNone(){
+void PanelTextures::setTilesetImageNone() {
     ui->widgetTilesetSelector->setImageNone();
     updateTilesetImage();
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::updateTilesetImage(){
-    this->setGeometry(0, 0,
-                      ui->widgetTilesetSelector->width(),
-                      ui->widgetTilesetSelector->height());
-    setFixedSize(ui->widgetTilesetSelector->width(),
-                 ui->widgetTilesetSelector->height());
+void PanelTextures::updateTilesetImage() {
+    this->setGeometry(0, 0, ui->widgetTilesetSelector->width(), ui
+        ->widgetTilesetSelector->height());
+    setFixedSize(ui->widgetTilesetSelector->width(), ui->widgetTilesetSelector
+        ->height());
 }
 
 // -------------------------------------------------------
@@ -106,8 +105,8 @@ void PanelTextures::showTileset() {
 
 int PanelTextures::getID() const {
     if (m_kind != PictureKind::None) {
-        SystemTileset* tileset = Wanok::get()->project()->currentMap()
-                ->mapProperties()->tileset();
+        SystemTileset *tileset = Wanok::get()->project()->currentMap()
+            ->mapProperties()->tileset();
         int index = ui->comboBox->currentIndex();
 
         return SuperListItem::getIdByIndex(tileset->model(m_kind), index);
@@ -118,7 +117,7 @@ int PanelTextures::getID() const {
 
 // -------------------------------------------------------
 
-QWidget* PanelTextures::getSpecialWidget() const {
+QWidget * PanelTextures::getSpecialWidget() const {
     switch (m_kind) {
     case PictureKind::Autotiles:
         return ui->widgetAutotilesSelector;
@@ -140,8 +139,7 @@ void PanelTextures::showComboBox() {
         ui->labelInformation->setText(createlabelText());
         updateLabelSize();
         ui->comboBox->hide();
-    }
-    else {
+    } else {
         ui->labelInformation->hide();
         ui->comboBox->show();
         showWidgetSpecial();
@@ -166,11 +164,11 @@ void PanelTextures::showWidgetSpecial() {
 // -------------------------------------------------------
 
 void PanelTextures::updateComboBoxSize() {
-    QWidget* currentSpecial = getSpecialWidget();
-    ui->comboBox->setGeometry(0, 0, this->parentWidget()->width(),
-                              ui->comboBox->height());
-    ui->comboBox->setFixedSize(this->parentWidget()->width(),
-                               ui->comboBox->height());
+    QWidget *currentSpecial = getSpecialWidget();
+    ui->comboBox->setGeometry(0, 0, this->parentWidget()->width(), ui->comboBox
+        ->height());
+    ui->comboBox->setFixedSize(this->parentWidget()->width(), ui->comboBox
+        ->height());
 
     int width = qMax(currentSpecial->width(), this->parentWidget()->width());
     int height = ui->comboBox->height() + 6 + currentSpecial->height();
@@ -181,17 +179,13 @@ void PanelTextures::updateComboBoxSize() {
 // -------------------------------------------------------
 
 void PanelTextures::updateLabelSize() {
-    ui->labelInformation->setGeometry(
-                0, 0, this->parentWidget()->width(),
-                this->parentWidget()->height());
-    ui->labelInformation->setFixedSize(
-                this->parentWidget()->width(),
-                this->parentWidget()->height());
-    this->setGeometry(0, 0,
-                      this->parentWidget()->width(),
-                      this->parentWidget()->height());
-    setFixedSize(this->parentWidget()->width(),
-                 this->parentWidget()->height());
+    ui->labelInformation->setGeometry(0, 0, this->parentWidget()->width(), this
+        ->parentWidget()->height());
+    ui->labelInformation->setFixedSize(this->parentWidget()->width(), this
+        ->parentWidget()->height());
+    this->setGeometry(0, 0, this->parentWidget()->width(), this->parentWidget()
+        ->height());
+    setFixedSize(this->parentWidget()->width(), this->parentWidget()->height());
 }
 
 // -------------------------------------------------------
@@ -210,49 +204,47 @@ QString PanelTextures::createlabelText() {
     }
 
     return "You don't have any " + kindText + " in this tileset. You can add "
-           "it in the tileset tab in the datas manager.";
+        "it in the tileset tab in the datas manager.";
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::showAutotiles(SystemTileset* tileset) {
+void PanelTextures::showAutotiles(SystemTileset *tileset) {
     tileset->updateModelAutotiles();
     fillComboBox(tileset, PictureKind::Autotiles);
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::showSpriteWalls(SystemTileset* tileset) {
+void PanelTextures::showSpriteWalls(SystemTileset *tileset) {
     tileset->updateModelSpriteWalls();
     fillComboBox(tileset, PictureKind::Walls);
 }
 
 // -------------------------------------------------------
 
-void PanelTextures::fillComboBox(SystemTileset* tileset, PictureKind kind) {
+void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
     m_kind = kind;
 
-    QStandardItemModel* model = tileset->model(kind);
-    QStandardItemModel* modelComplete = Wanok::get()->project()
-            ->specialElementsDatas()->model(kind);
+    QStandardItemModel *model = tileset->model(kind);
+    QStandardItemModel *modelComplete = Wanok::get()->project()
+        ->specialElementsDatas()->model(kind);
 
     // ComboBox filling
     ui->comboBox->clear();
     SuperListItem::fillComboBox(ui->comboBox, model);
     for (int i = 0; i < ui->comboBox->count(); i++) {
-        SuperListItem* super = (SuperListItem*) model->item(i)->data()
-                .value<quintptr>();
-        SystemSpecialElement* special =
-                (SystemSpecialElement*) SuperListItem::getById(
-                    modelComplete->invisibleRootItem(), super->id());
-
-        ui->comboBox->setItemIcon(
-                    i, QIcon(special->picture()->getPath(m_kind)));
+        SuperListItem *super = reinterpret_cast<SuperListItem *>(model->item(i)
+            ->data().value<quintptr>());
+        SystemSpecialElement *special = reinterpret_cast<SystemSpecialElement *>
+            (SuperListItem::getById(modelComplete->invisibleRootItem(), super
+            ->id()));
+        ui->comboBox->setItemIcon(i, QIcon(special->picture()->getPath(m_kind)));
     }
 
     // Select current ID
     int index = SuperListItem::getIndexById(modelComplete->invisibleRootItem(),
-                                            getCurrentID());
+        getCurrentID());
     if (index > 0)
         ui->comboBox->setCurrentIndex(index);
 
@@ -291,11 +283,12 @@ void PanelTextures::updateCurrentID(int id) {
 
 // -------------------------------------------------------
 
-void PanelTextures::updateImageSpecial(SystemSpecialElement* special)
+void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
 {
     switch (m_kind) {
     case PictureKind::Autotiles:
-        ui->widgetAutotilesSelector->setImage((SystemAutotile*) special);
+        ui->widgetAutotilesSelector->setImage(reinterpret_cast<SystemAutotile *>
+            (special));
         break;
     case PictureKind::Walls:
         ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
@@ -332,10 +325,9 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
         updateCurrentID(id);
 
     // Update picture preview
-    SystemSpecialElement* special =
-            (SystemSpecialElement*) SuperListItem::getById(
-                Wanok::get()->project()->specialElementsDatas()->model(m_kind)
-                ->invisibleRootItem(), id);
+    SystemSpecialElement* special = reinterpret_cast<SystemSpecialElement *>(
+        SuperListItem::getById(Wanok::get()->project()->specialElementsDatas()
+        ->model(m_kind)->invisibleRootItem(), id));
 
     // Updating image on preview
     updateImageSpecial(special);

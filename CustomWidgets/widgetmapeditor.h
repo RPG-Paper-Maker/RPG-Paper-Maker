@@ -37,28 +37,27 @@
 //
 // -------------------------------------------------------
 
-class WidgetMapEditor : public QOpenGLWidget,
-                        protected QOpenGLFunctions
+class WidgetMapEditor : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit WidgetMapEditor(QWidget *parent = 0);
+    explicit WidgetMapEditor(QWidget *parent = nullptr);
     ~WidgetMapEditor();
-    void setMenuBar(WidgetMenuBarMapEditor* m);
-    void setPanelTextures(PanelTextures* m);
-    void setTreeMapNode(QStandardItem* item);
-    Map* loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
-                 int cameraDistance, double cameraHorizontalAngle,
-                 double cameraVerticalAngle);
+    void setMenuBar(WidgetMenuBarMapEditor *m);
+    void setPanelTextures(PanelTextures *m);
+    void setTreeMapNode(QStandardItem *item);
+    Map * getMap() const;
+
+    Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
+        int cameraDistance, double cameraHorizontalAngle, double
+        cameraVerticalAngle);
     void deleteMap();
-    void initializeSpinBoxesCoords(QSpinBox* x, QSpinBox* z);
+    void initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *z);
     void resizeGL(int width, int height);
     void initializeGL();
     void paintGL();
-    void needUpdateMap(int idMap, QVector3D *position,
-                       QVector3D *positionObject, int cameraDistance,
-                       double cameraHorizontalAngle,
-                       double cameraVerticalAngle);
+    void needUpdateMap(int idMap, QVector3D *position, QVector3D *positionObject,
+        int cameraDistance, double cameraHorizontalAngle, double cameraVerticalAngle);
     void updateCameraDistance(float coef);
     void initializeMap();
     void save();
@@ -67,38 +66,36 @@ public:
     void setCursorY(int y);
     void setCursorYplus(int yPlus);
     void setCursorZ(int z);
-    Map* getMap() const;
     void updateSpinBoxes();
     void addObject();
     void deleteObject();
     void removePreviewElements();
-    void renderText(QPainter& p, double x, double y, const QString &text,
-                    const QFont& font = QFont(),
-                    const QColor& fontColor = QColor(),
-                    const QColor& outlineColor = QColor());
+    void renderText(QPainter &p, double x, double y, const QString &text,
+        const QFont& font = QFont(), const QColor& fontColor = QColor(),
+        const QColor& outlineColor = QColor());
     void showHideGrid();
     void showHideSquareInformations();
     void undo();
     void redo();
 
 private:
-    WidgetMenuBarMapEditor* m_menuBar;
-    PanelTextures* m_panelTextures;
+    WidgetMenuBarMapEditor *m_menuBar;
+    PanelTextures *m_panelTextures;
     ControlMapEditor m_control;
     bool m_needUpdateMap;
     bool isGLInitialized;
     int m_idMap;
     QSet<int> m_keysPressed;
-    QTimer* m_timerFirstPressure;
+    QTimer *m_timerFirstPressure;
     bool m_firstPressure;
-    QSpinBox* m_spinBoxX;
-    QSpinBox* m_spinBoxZ;
-    QVector3D* m_position;
-    QVector3D* m_positionObject;
+    QSpinBox *m_spinBoxX;
+    QSpinBox *m_spinBoxZ;
+    QVector3D *m_position;
+    QVector3D *m_positionObject;
     int m_cameraDistance;
     double m_cameraHorizontalAngle;
     double m_cameraVerticalAngle;
-    ContextMenuList* m_contextMenu;
+    ContextMenuList *m_contextMenu;
     long m_elapsedTime;
 
 public slots:
@@ -107,13 +104,13 @@ public slots:
 
 protected slots:
     void focusOutEvent(QFocusEvent*);
-    void wheelEvent(QWheelEvent* event);
+    void wheelEvent(QWheelEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent*);
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
     void contextNew();
     void contextEdit();

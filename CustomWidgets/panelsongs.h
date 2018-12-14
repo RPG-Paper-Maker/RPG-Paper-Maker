@@ -31,6 +31,14 @@
 #include "systemsong.h"
 #include "eventcommand.h"
 
+// -------------------------------------------------------
+//
+//  CLASS PanelSongs
+//
+//  Panel used for songs selection.
+//
+// -------------------------------------------------------
+
 namespace Ui {
 class PanelSongs;
 }
@@ -40,21 +48,23 @@ class PanelSongs : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelSongs(QWidget *parent = 0);
+    explicit PanelSongs(QWidget *parent = nullptr);
     ~PanelSongs();
-    SystemSong* song() const;
-    void setSong(SystemSong* song);
-    void initializePrimitives(QStandardItemModel* parameters,
-                              QStandardItemModel* properties);
+
+    SystemSong * song() const;
+    void setSong(SystemSong *song);
+
+    void initializePrimitives(QStandardItemModel *parameters, QStandardItemModel
+        *properties);
     void setSongKind(SongKind kind);
-    void changeSong(SystemSong* song);
-    void initialize(EventCommand* command, int &i);
-    void getCommand(QVector<QString>& command) const;
+    void changeSong(SystemSong *song);
+    void initialize(EventCommand *command, int &i);
+    void getCommand(QVector<QString> &command) const;
 
 private:
     Ui::PanelSongs *ui;
     SongKind m_songKind;
-    SystemSong* m_song;
+    SystemSong *m_song;
     QMediaPlayer *m_mediaPlayerMusic, *m_mediaPlayerBackgroundSound,
                  *m_mediaPlayerSound, *m_mediaPlayerMusicEffect;
     QMediaPlayer *m_mediaPlayerMusicTemp, *m_mediaPlayerBackgroundSoundTemp,
@@ -64,7 +74,7 @@ private:
                  m_mediaPlayerMusic2, m_mediaPlayerBackgroundSound2,
                  m_mediaPlayerSound2, m_mediaPlayerMusicEffect2;
     QTimer m_timer;
-    SystemSong* m_playedMusic, *m_playedBackgoundSound;
+    SystemSong *m_playedMusic, *m_playedBackgoundSound;
     bool m_needRestartMusic;
     QHash<SongKind, bool> m_startBool;
     QHash<SongKind, int> m_start;
@@ -72,14 +82,14 @@ private:
     QHash<SongKind, int> m_end;
 
     void showSongs(bool b);
-    void updateSong(QStandardItem* item);
+    void updateSong(QStandardItem *item);
     void loadAvailableContent(int row = -1);
     void loadContentFromFolder(QString path, bool isBR);
     void deleteContent(QString path);
     void moveContent();
     void updateSongs();
     void updateVolume(int volume);
-    void stopOnEnd(int end, qint64 pos, QMediaPlayer* player);
+    void stopOnEnd(int end, qint64 pos, QMediaPlayer *player);
     void setVisibleStartEnd(bool b);
 
 public slots:
@@ -96,7 +106,7 @@ private slots:
     void on_pushButtonMove_clicked();
     void on_pushButtonRefresh_clicked();
     void on_pushButtonAdd_clicked();
-    void deletingContent(SuperListItem* super, int row);
+    void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
     void on_widgetPanelIDPressEnter();
     void on_treeViewAvailableContentPressEnter();

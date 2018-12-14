@@ -44,8 +44,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
 {
     // Timers
     m_timerFirstPressure->setSingleShot(true);
-    connect(m_timerFirstPressure, SIGNAL(timeout()),
-            this, SLOT(onFirstPressure()));
+    connect(m_timerFirstPressure, SIGNAL(timeout()), this, SLOT(onFirstPressure()));
 
     m_contextMenu = ContextMenuList::createContextObject(this);
     m_control.setContextMenu(m_contextMenu);
@@ -59,15 +58,21 @@ WidgetMapEditor::~WidgetMapEditor()
     delete m_timerFirstPressure;
 }
 
-void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor* m){ m_menuBar = m; }
+void WidgetMapEditor::setMenuBar(WidgetMenuBarMapEditor *m) {
+    m_menuBar = m;
+}
 
-void WidgetMapEditor::setPanelTextures(PanelTextures* m){ m_panelTextures = m; }
+void WidgetMapEditor::setPanelTextures(PanelTextures *m){
+    m_panelTextures = m;
+}
 
-void WidgetMapEditor::setTreeMapNode(QStandardItem* item) {
+void WidgetMapEditor::setTreeMapNode(QStandardItem *item) {
     m_control.setTreeMapNode(item);
 }
 
-Map* WidgetMapEditor::getMap() const { return m_control.map(); }
+Map * WidgetMapEditor::getMap() const {
+    return m_control.map();
+}
 
 // -------------------------------------------------------
 //
@@ -75,10 +80,9 @@ Map* WidgetMapEditor::getMap() const { return m_control.map(); }
 //
 // -------------------------------------------------------
 
-Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position,
-                              QVector3D *positionObject, int cameraDistance,
-                              double cameraHorizontalAngle,
-                              double cameraVerticalAngle)
+Map *WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
+    *positionObject, int cameraDistance, double cameraHorizontalAngle,
+    double cameraVerticalAngle)
 {
     m_idMap = idMap;
     m_position = position;
@@ -88,26 +92,26 @@ Map *WidgetMapEditor::loadMap(int idMap, QVector3D* position,
     m_cameraVerticalAngle = cameraVerticalAngle;
 
     return m_control.loadMap(idMap, position, positionObject, cameraDistance,
-                             cameraHorizontalAngle, cameraVerticalAngle);
+        cameraHorizontalAngle, cameraVerticalAngle);
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::deleteMap(){
+void WidgetMapEditor::deleteMap() {
     makeCurrent();
     m_control.deleteMap();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox* x, QSpinBox* z){
+void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *z) {
     m_spinBoxX = x;
     m_spinBoxZ = z;
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeGL(){
+void WidgetMapEditor::initializeGL() {
 
     // Initialize OpenGL Backend
     initializeOpenGLFunctions();
@@ -120,7 +124,7 @@ void WidgetMapEditor::initializeGL(){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::resizeGL(int width, int height){
+void WidgetMapEditor::resizeGL(int width, int height) {
     m_control.onResize(width, height);
 }
 
@@ -163,8 +167,7 @@ void WidgetMapEditor::paintGL() {
             // Key press
             if (!m_firstPressure) {
                 double speed = (QTime::currentTime().msecsSinceStartOfDay() -
-                                m_elapsedTime) * 0.04666 *
-                        Wanok::get()->getSquareSize();
+                    m_elapsedTime) * 0.04666 * Wanok::get()->getSquareSize();
 
                 // Multi keys
                 QSet<int>::iterator i;
@@ -185,8 +188,7 @@ void WidgetMapEditor::paintGL() {
                 m_control.updateWallIndicator();
                 if (mousePosChanged && this->hasFocus()) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
-                                                    layerOn, tileset,
-                                                    specialID);
+                        layerOn, tileset, specialID);
                 }
             }
         }
@@ -197,32 +199,28 @@ void WidgetMapEditor::paintGL() {
         QMatrix4x4 modelviewProjection = projectionMatrix * viewMatrix;
 
         // Calculate camera worldSpace
-        QVector3D cameraRightWorldSpace(viewMatrix.row(0).x(),
-                                        viewMatrix.row(0).y(),
-                                        viewMatrix.row(0).z());
-        QVector3D cameraUpWorldSpace(viewMatrix.row(1).x(),
-                                     viewMatrix.row(1).y(),
-                                     viewMatrix.row(1).z());
-        QVector3D cameraDeepWorldSpace(viewMatrix.row(2).x(),
-                                       viewMatrix.row(2).y(),
-                                       viewMatrix.row(2).z());
+        QVector3D cameraRightWorldSpace(viewMatrix.row(0).x(), viewMatrix.row(0)
+            .y(), viewMatrix.row(0).z());
+        QVector3D cameraUpWorldSpace(viewMatrix.row(1).x(), viewMatrix.row(1)
+            .y(), viewMatrix.row(1).z());
+        QVector3D cameraDeepWorldSpace(viewMatrix.row(2).x(), viewMatrix.row(2)
+            .y(), viewMatrix.row(2).z());
 
         // Paint
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
-                          cameraUpWorldSpace, cameraDeepWorldSpace, kind,
-                          subKind, drawKind);
+            cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind);
         p.endNativePainting();
         p.end();
 
         // Draw additional text informations
         if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
-                                                     this->hasFocus());
+                this->hasFocus());
             QStringList listInfos = infos.split("\n");
             p.begin(this);
             for (int i = 0; i < listInfos.size(); i++) {
-                renderText(p, 20, 20 * (listInfos.size() - i),
-                           listInfos.at(i), QFont(), QColor(255, 255, 255));
+                renderText(p, 20, 20 * (listInfos.size() - i), listInfos.at(i),
+                    QFont(), QColor(255, 255, 255));
             }
             p.end();
         }
@@ -236,17 +234,15 @@ void WidgetMapEditor::paintGL() {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::update(){
+void WidgetMapEditor::update() {
     QOpenGLWidget::update();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
-                                    QVector3D *positionObject,
-                                    int cameraDistance,
-                                    double cameraHorizontalAngle,
-                                    double cameraVerticalAngle)
+void WidgetMapEditor::needUpdateMap(int idMap, QVector3D *position, QVector3D
+    *positionObject, int cameraDistance, double cameraHorizontalAngle,
+    double cameraVerticalAngle)
 {
     m_needUpdateMap = true;
     m_idMap = idMap;
@@ -263,15 +259,16 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D* position,
 // -------------------------------------------------------
 
 void WidgetMapEditor::updateCameraDistance(float coef) {
-    m_control.camera()->setDistance(m_control.camera()->distance() * coef);
+    m_control.camera()->setDistance(static_cast<int>(m_control.camera()
+        ->distance() * coef));
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeMap(){
+void WidgetMapEditor::initializeMap() {
     makeCurrent();
     loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
-            m_cameraHorizontalAngle, m_cameraVerticalAngle);
+        m_cameraHorizontalAngle, m_cameraVerticalAngle);
     if (m_menuBar != nullptr)
         m_menuBar->show();
 
@@ -282,40 +279,40 @@ void WidgetMapEditor::initializeMap(){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::save(){
+void WidgetMapEditor::save() {
     m_control.save();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::setCursorX(int x){
+void WidgetMapEditor::setCursorX(int x) {
     if (m_control.map() != nullptr)
         m_control.cursor()->setX(x);
 }
 
-void WidgetMapEditor::setCursorY(int y){
+void WidgetMapEditor::setCursorY(int y) {
     if (m_control.map() != nullptr)
         m_control.cursor()->setY(y);
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::setCursorYplus(int yPlus){
+void WidgetMapEditor::setCursorYplus(int yPlus) {
     if (m_control.map() != nullptr)
         m_control.cursor()->setYplus(yPlus);
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::setCursorZ(int z){
+void WidgetMapEditor::setCursorZ(int z) {
     if (m_control.map() != nullptr)
         m_control.cursor()->setZ(z);
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::updateSpinBoxes(){
-    if (m_spinBoxX != nullptr){
+void WidgetMapEditor::updateSpinBoxes() {
+    if (m_spinBoxX != nullptr) {
         m_spinBoxX->setValue(m_control.cursor()->getSquareX());
         m_spinBoxZ->setValue(m_control.cursor()->getSquareZ());
     }
@@ -323,7 +320,7 @@ void WidgetMapEditor::updateSpinBoxes(){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::addObject(){
+void WidgetMapEditor::addObject() {
     Position p;
     m_control.setObjectPosition(p);
     if (m_control.isVisible(p))
@@ -347,10 +344,8 @@ void WidgetMapEditor::removePreviewElements() {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::renderText(QPainter &p, double x, double y,
-                                 const QString &text, const QFont& font,
-                                 const QColor& fontColor,
-                                 const QColor &outlineColor)
+void WidgetMapEditor::renderText(QPainter &p, double x, double y, const QString
+    &text, const QFont &font, const QColor &fontColor, const QColor &outlineColor)
 {
 
     // Identify x and y locations to render text within widget
@@ -361,14 +356,14 @@ void WidgetMapEditor::renderText(QPainter &p, double x, double y,
     // Render outline
     p.setFont(font);
     p.setPen(outlineColor);
-    p.drawText(textPosX + 1, textPosY, text);
-    p.drawText(textPosX, textPosY + 1, text);
-    p.drawText(textPosX - 1, textPosY, text);
-    p.drawText(textPosX, textPosY - 1, text);
+    p.drawText(static_cast<int>(textPosX + 1), static_cast<int>(textPosY), text);
+    p.drawText(static_cast<int>(textPosX), static_cast<int>(textPosY + 1), text);
+    p.drawText(static_cast<int>(textPosX - 1), static_cast<int>(textPosY), text);
+    p.drawText(static_cast<int>(textPosX), static_cast<int>(textPosY - 1), text);
 
     // Render text
     p.setPen(fontColor);
-    p.drawText(textPosX, textPosY, text);
+    p.drawText(static_cast<int>(textPosX), static_cast<int>(textPosY), text);
 }
 
 // -------------------------------------------------------
@@ -401,22 +396,22 @@ void WidgetMapEditor::redo() {
 //
 // -------------------------------------------------------
 
-void WidgetMapEditor::focusOutEvent(QFocusEvent*){
+void WidgetMapEditor::focusOutEvent(QFocusEvent *) {
     m_keysPressed.clear();
     this->setFocus();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::wheelEvent(QWheelEvent* event){
-    if (m_control.map() != nullptr){
+void WidgetMapEditor::wheelEvent(QWheelEvent *event) {
+    if (m_control.map() != nullptr) {
         m_control.onMouseWheelMove(event);
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
+void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
     if (m_control.map() != nullptr) {
 
         // Multi keys
@@ -430,21 +425,19 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
         QSet<Qt::MouseButton>::iterator i;
         for (i = buttons.begin(); i != buttons.end(); i++) {
             Qt::MouseButton button = *i;
-            m_control.onMouseMove(event->pos(), button,
-                                  m_menuBar != nullptr);
+            m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
 
             if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton
                 && !m_control.isCtrlPressed())
             {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
-                MapEditorSubSelectionKind subSelection =
-                        m_menuBar->subSelectionKind();
+                MapEditorSubSelectionKind subSelection = m_menuBar
+                    ->subSelectionKind();
                 int specialID = m_panelTextures->getID();
                 bool layerOn = m_menuBar->layerOn();
-                m_control.addRemove(m_menuBar->selectionKind(),
-                                    subSelection, m_menuBar->drawKind(),
-                                    layerOn, tileset, specialID);
+                m_control.addRemove(m_menuBar->selectionKind(), subSelection,
+                    m_menuBar->drawKind(), layerOn, tileset, specialID);
             }
         }
     }
@@ -452,30 +445,25 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
+void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
     this->setFocus();
-    if (m_control.map() != nullptr){
+    if (m_control.map() != nullptr) {
         Qt::MouseButton button = event->button();
-        if (m_menuBar != nullptr){
+        if (m_menuBar != nullptr) {
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
-            MapEditorSubSelectionKind subSelection =
-                    m_menuBar->subSelectionKind();
+            MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             DrawKind drawKind = m_menuBar->drawKind();
             bool layerOn = m_menuBar->layerOn();
             QRect tileset;
             m_panelTextures->getTilesetTexture(tileset);
             int specialID = m_panelTextures->getID();
-            m_control.onMousePressed(selection, subSelection, drawKind,
-                                     layerOn, tileset, specialID,
-                                     event->pos(), button);
-        }
-        // If in teleport command
-        else{
-            if (button != Qt::MouseButton::MiddleButton){
+            m_control.onMousePressed(selection, subSelection, drawKind, layerOn,
+                tileset, specialID, event->pos(), button);
+        } else{
+            if (button != Qt::MouseButton::MiddleButton) {
                 m_control.moveCursorToMousePosition(event->pos());
                 updateSpinBoxes();
-            }
-            else{
+            } else{
                 m_control.updateMouseMove(event->pos());
                 m_control.update(false);
             }
@@ -485,27 +473,25 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseReleaseEvent(QMouseEvent* event){
+void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
     this->setFocus();
-    if (m_control.map() != nullptr && m_menuBar != nullptr){
+    if (m_control.map() != nullptr && m_menuBar != nullptr) {
         Qt::MouseButton button = event->button();
         QRect tileset;
         m_panelTextures->getTilesetTexture(tileset);
-        MapEditorSubSelectionKind subSelection =
-                m_menuBar->subSelectionKind();
+        MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
         int specialID = m_panelTextures->getID();
-        m_control.onMouseReleased(m_menuBar->selectionKind(),
-                                  subSelection, m_menuBar->drawKind(), tileset,
-                                  specialID, event->pos(), button);
+        m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
+            m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
     }
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent*){
+void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *) {
     this->setFocus();
-    if (m_control.map() != nullptr){
-        if (m_menuBar != nullptr){
+    if (m_control.map() != nullptr) {
+        if (m_menuBar != nullptr) {
             if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
                 addObject();
         }
@@ -514,9 +500,9 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent*){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
-    if (m_control.map() != nullptr){
-        if (m_keysPressed.isEmpty()){
+void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
+    if (m_control.map() != nullptr) {
+        if (m_keysPressed.isEmpty()) {
             m_firstPressure = true;
             m_timerFirstPressure->start(35);
             onKeyPress(event->key(), -1);
@@ -531,52 +517,39 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
         // Move
         int key = event->key();
         if (!m_keysPressed.contains(key)) {
-            KeyBoardDatas* keyBoardDatas = Wanok::get()->engineSettings()
-                    ->keyBoardDatas();
-            if ((keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorUp) &&
+            KeyBoardDatas *keyBoardDatas = Wanok::get()->engineSettings()
+                ->keyBoardDatas();
+            if ((keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp) &&
                 keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorLeft)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorLeft) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorUp)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorDown) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorRight)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorRight) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorDown)))
+                KeyBoardEngineKind::MoveCursorLeft)) || (keyBoardDatas->isEqual(
+                key, KeyBoardEngineKind::MoveCursorLeft) && keyBoardDatas
+                ->contains(m_keysPressed, KeyBoardEngineKind::MoveCursorUp)) ||
+                (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorDown)
+                && keyBoardDatas->contains(m_keysPressed,
+                KeyBoardEngineKind::MoveCursorRight)) || (keyBoardDatas->isEqual
+                (key, KeyBoardEngineKind::MoveCursorRight) && keyBoardDatas
+                ->contains(m_keysPressed, KeyBoardEngineKind::MoveCursorDown)))
             {
                 m_control.cursor()->centerInSquare(1);
-            }
-            else if ((
-                keyBoardDatas->isEqual(key,
-                                       KeyBoardEngineKind::MoveCursorUp) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorRight)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorRight) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorUp)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorDown) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorLeft)) ||
-                (keyBoardDatas->isEqual(key,
-                                        KeyBoardEngineKind::MoveCursorLeft) &&
-                keyBoardDatas->contains(m_keysPressed,
-                                        KeyBoardEngineKind::MoveCursorDown)))
+            } else if ((keyBoardDatas->isEqual(key,
+                KeyBoardEngineKind::MoveCursorUp) && keyBoardDatas->contains(
+                m_keysPressed, KeyBoardEngineKind::MoveCursorRight)) ||
+                (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorRight
+                ) && keyBoardDatas->contains(m_keysPressed,
+                KeyBoardEngineKind::MoveCursorUp)) || (keyBoardDatas->isEqual(
+                key, KeyBoardEngineKind::MoveCursorDown) && keyBoardDatas
+                ->contains(m_keysPressed, KeyBoardEngineKind::MoveCursorLeft))
+                || (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorLeft)
+                && keyBoardDatas->contains(m_keysPressed,
+                KeyBoardEngineKind::MoveCursorDown)))
             {
                 m_control.cursor()->centerInSquare(0);
             }
         }
 
         // Shortcut
-        if (m_menuBar != nullptr &&
-            m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
+        if (m_menuBar != nullptr && m_menuBar->selectionKind() ==
+            MapEditorSelectionKind::Objects)
         {
             QKeySequence seq = Wanok::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
@@ -620,9 +593,9 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::keyReleaseEvent(QKeyEvent* event){
-    if (m_control.map() != nullptr){
-        if (!event->isAutoRepeat()){
+void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event) {
+    if (m_control.map() != nullptr) {
+        if (!event->isAutoRepeat()) {
             m_keysPressed -= event->key();
             m_control.onKeyReleased(event->key());
 
@@ -634,13 +607,13 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent* event){
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onFirstPressure(){
+void WidgetMapEditor::onFirstPressure() {
     m_firstPressure = false;
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::onKeyPress(int k, double speed){
+void WidgetMapEditor::onKeyPress(int k, double speed) {
     m_control.onKeyPressed(k, speed);
     updateSpinBoxes();
 }
@@ -651,37 +624,37 @@ void WidgetMapEditor::onKeyPress(int k, double speed){
 //
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextNew(){
+void WidgetMapEditor::contextNew() {
     addObject();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextEdit(){
+void WidgetMapEditor::contextEdit() {
     addObject();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextCopy(){
+void WidgetMapEditor::contextCopy() {
 
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextPaste(){
+void WidgetMapEditor::contextPaste() {
 
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextDelete(){
+void WidgetMapEditor::contextDelete() {
     deleteObject();
 }
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::contextHero(){
+void WidgetMapEditor::contextHero() {
     if (m_control.isCursorObjectVisible())
         m_control.defineAsHero();
 }

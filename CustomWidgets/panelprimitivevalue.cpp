@@ -42,15 +42,17 @@ PanelPrimitiveValue::~PanelPrimitiveValue()
     delete ui;
 }
 
-QSpinBox* PanelPrimitiveValue::spinBoxNumber() const {
+QSpinBox * PanelPrimitiveValue::spinBoxNumber() const {
     return ui->spinBoxNumber;
 }
 
-QDoubleSpinBox* PanelPrimitiveValue::doubleSpinBoxNumber() const {
+QDoubleSpinBox * PanelPrimitiveValue::doubleSpinBoxNumber() const {
     return ui->doubleSpinBoxNumber;
 }
 
-PrimitiveValue* PanelPrimitiveValue::model() const { return m_model; }
+PrimitiveValue * PanelPrimitiveValue::model() const {
+    return m_model;
+}
 
 // -------------------------------------------------------
 //
@@ -58,7 +60,7 @@ PrimitiveValue* PanelPrimitiveValue::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializePrimitives(){
+void PanelPrimitiveValue::initializePrimitives() {
     m_kind = PanelPrimitiveValueKind::Primitives;
     addAnything();
     addNone();
@@ -74,7 +76,7 @@ void PanelPrimitiveValue::initializePrimitives(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeParameterEvent(){
+void PanelPrimitiveValue::initializeParameterEvent() {
     m_kind = PanelPrimitiveValueKind::ParameterEvent;
     addDefault();
     addAnything();
@@ -91,7 +93,7 @@ void PanelPrimitiveValue::initializeParameterEvent(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeNumberVariable(){
+void PanelPrimitiveValue::initializeNumberVariable() {
     m_kind = PanelPrimitiveValueKind::ConstantVariable;
     addNumber();
     addVariable();
@@ -102,9 +104,8 @@ void PanelPrimitiveValue::initializeNumberVariable(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeNumber(QStandardItemModel* parameters,
-                                           QStandardItemModel* properties,
-                                           bool isInteger)
+void PanelPrimitiveValue::initializeNumber(QStandardItemModel *parameters,
+    QStandardItemModel *properties, bool isInteger)
 {
     m_kind = PanelPrimitiveValueKind::Number;
     addParameter(parameters);
@@ -119,8 +120,7 @@ void PanelPrimitiveValue::initializeNumber(QStandardItemModel* parameters,
     if (isInteger) {
         showNumber();
         setNumberValue(m_model->numberValue());
-    }
-    else {
+    } else {
         showNumberDouble();
         setNumberDoubleValue(m_model->numberDoubleValue());
     }
@@ -128,9 +128,8 @@ void PanelPrimitiveValue::initializeNumber(QStandardItemModel* parameters,
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeDataBaseCommandId(
-        QStandardItemModel* dataBase, QStandardItemModel *parameters,
-        QStandardItemModel *properties)
+void PanelPrimitiveValue::initializeDataBaseCommandId(QStandardItemModel
+    *dataBase, QStandardItemModel *parameters, QStandardItemModel *properties)
 {
     m_kind = PanelPrimitiveValueKind::DataBaseCommandId;
     addDataBase(dataBase);
@@ -148,16 +147,16 @@ void PanelPrimitiveValue::initializeDataBaseCommandId(
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initialize(){
+void PanelPrimitiveValue::initialize() {
     hideAll();
-    connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxChoiceCurrentIndexChanged(int)));
+    connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this, SLOT(
+        on_comboBoxChoiceCurrentIndexChanged(int)));
     setKind(m_model->kind());
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeModel(PrimitiveValue* m){
+void PanelPrimitiveValue::initializeModel(PrimitiveValue *m) {
     delete m_model;
     m_model = m;
     m_modelNeedDelete = false;
@@ -165,7 +164,7 @@ void PanelPrimitiveValue::initializeModel(PrimitiveValue* m){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::setKind(PrimitiveValueKind kind){
+void PanelPrimitiveValue::setKind(PrimitiveValueKind kind) {
     m_model->setKind(kind);
     ui->comboBoxChoice->setCurrentIndex(getKindIndex(kind));
     updateValue();
@@ -173,34 +172,30 @@ void PanelPrimitiveValue::setKind(PrimitiveValueKind kind){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::setNumberValue(int n){
+void PanelPrimitiveValue::setNumberValue(int n) {
     m_model->setNumberValue(n);
 
-    switch(m_model->kind()){
+    switch(m_model->kind()) {
     case PrimitiveValueKind::Number:
         ui->spinBoxNumber->setValue(n); break;
     case PrimitiveValueKind::Variable:
         ui->widgetVariable->setCurrentId(n); break;
     case PrimitiveValueKind::Parameter:
         ui->comboBoxParameter->setCurrentIndex(SuperListItem::getIndexById(
-                                                   m_model->modelParameter()
-                                                   ->invisibleRootItem(), n));
+            m_model->modelParameter()->invisibleRootItem(), n));
         break;
     case PrimitiveValueKind::Property:
         ui->comboBoxProperty->setCurrentIndex(SuperListItem::getIndexById(
-                                                  m_model->modelProperties()
-                                                  ->invisibleRootItem(), n));
+            m_model->modelProperties()->invisibleRootItem(), n));
         break;
     case PrimitiveValueKind::DataBase:
         ui->comboBoxDataBase->setCurrentIndex(SuperListItem::getIndexById(
-                                                  m_model->modelDataBase()
-                                                  ->invisibleRootItem(), n));
+            m_model->modelDataBase()->invisibleRootItem(), n));
         break;
     case PrimitiveValueKind::KeyBoard:
-        ui->comboBoxKeyBoard->setCurrentIndex(
-                    SuperListItem::getIndexById(Wanok::get()->project()
-                                                ->keyBoardDatas()->model()
-                                                ->invisibleRootItem(), n));
+        ui->comboBoxKeyBoard->setCurrentIndex(SuperListItem::getIndexById(
+            Wanok::get()->project()->keyBoardDatas()->model()
+            ->invisibleRootItem(), n));
         break;
     default:
         break;
@@ -216,10 +211,10 @@ void PanelPrimitiveValue::setNumberDoubleValue(double n) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::setMessageValue(QString m){
+void PanelPrimitiveValue::setMessageValue(QString m) {
     m_model->setMessageValue(m);
 
-    switch(m_model->kind()){
+    switch(m_model->kind()) {
     case PrimitiveValueKind::Message:
         ui->lineEditMessage->setText(m); break;
     case PrimitiveValueKind::Script:
@@ -231,15 +226,15 @@ void PanelPrimitiveValue::setMessageValue(QString m){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::setSwitchValue(bool s){
+void PanelPrimitiveValue::setSwitchValue(bool s) {
     m_model->setSwitchValue(s);
     ui->comboBoxSwitch->setCurrentIndex(s ? 0 : 1);
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::updateValue(){
-    switch(m_model->kind()){
+void PanelPrimitiveValue::updateValue() {
+    switch(m_model->kind()) {
     case PrimitiveValueKind::None:
     case PrimitiveValueKind::Default:
     case PrimitiveValueKind::Anything:
@@ -250,18 +245,15 @@ void PanelPrimitiveValue::updateValue(){
         setNumberValue(ui->widgetVariable->currentId()); break;
     case PrimitiveValueKind::Parameter:
         setNumberValue(SuperListItem::getIdByIndex(m_model->modelParameter(),
-                                                   ui->comboBoxParameter
-                                                   ->currentIndex()));
+            ui->comboBoxParameter->currentIndex()));
         break;
     case PrimitiveValueKind::Property:
         setNumberValue(SuperListItem::getIdByIndex(m_model->modelProperties(),
-                                                   ui->comboBoxProperty
-                                                   ->currentIndex()));
+            ui->comboBoxProperty->currentIndex()));
         break;
     case PrimitiveValueKind::DataBase:
         setNumberValue(SuperListItem::getIdByIndex(m_model->modelDataBase(),
-                                                   ui->comboBoxDataBase
-                                                   ->currentIndex()));
+            ui->comboBoxDataBase->currentIndex()));
         break;
     case PrimitiveValueKind::Message:
         setMessageValue(ui->lineEditMessage->text()); break;
@@ -271,9 +263,8 @@ void PanelPrimitiveValue::updateValue(){
         setSwitchValue(ui->comboBoxSwitch->currentIndex() == 0);
         break;
     case PrimitiveValueKind::KeyBoard:
-        setNumberValue(SuperListItem::getIdByIndex(
-                           Wanok::get()->project()->keyBoardDatas()->model(),
-                           ui->comboBoxKeyBoard->currentIndex()));
+        setNumberValue(SuperListItem::getIdByIndex(Wanok::get()->project()
+            ->keyBoardDatas()->model(), ui->comboBoxKeyBoard->currentIndex()));
         break;
     case PrimitiveValueKind::NumberDouble:
         setNumberDoubleValue(ui->doubleSpinBoxNumber->value()); break;
@@ -282,7 +273,7 @@ void PanelPrimitiveValue::updateValue(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::hideAll(){
+void PanelPrimitiveValue::hideAll() {
     ui->spinBoxNumber->hide();
     ui->widgetVariable->hide();
     ui->comboBoxParameter->hide();
@@ -297,135 +288,144 @@ void PanelPrimitiveValue::hideAll(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addDefault(){
-    ui->comboBoxChoice->addItem("Default", (int)PrimitiveValueKind::Default);
+void PanelPrimitiveValue::addDefault() {
+    ui->comboBoxChoice->addItem("Default", static_cast<int>(
+        PrimitiveValueKind::Default));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addAnything(){
-    ui->comboBoxChoice->addItem("Anything", (int)PrimitiveValueKind::Anything);
+void PanelPrimitiveValue::addAnything() {
+    ui->comboBoxChoice->addItem("Anything", static_cast<int>(
+        PrimitiveValueKind::Anything));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addNone(){
-    ui->comboBoxChoice->addItem("None", (int)PrimitiveValueKind::None);
+void PanelPrimitiveValue::addNone() {
+    ui->comboBoxChoice->addItem("None", static_cast<int>(
+        PrimitiveValueKind::None));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addNumber(){
-    ui->comboBoxChoice->addItem("Number", (int)PrimitiveValueKind::Number);
+void PanelPrimitiveValue::addNumber() {
+    ui->comboBoxChoice->addItem("Number", static_cast<int>(
+        PrimitiveValueKind::Number));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addNumberDouble() {
-    ui->comboBoxChoice->addItem("Number",
-                                (int)PrimitiveValueKind::NumberDouble);
+    ui->comboBoxChoice->addItem("Number", static_cast<int>(
+        PrimitiveValueKind::NumberDouble));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addVariable(){
-    ui->comboBoxChoice->addItem("Variable", (int)PrimitiveValueKind::Variable);
+void PanelPrimitiveValue::addVariable() {
+    ui->comboBoxChoice->addItem("Variable", static_cast<int>(
+        PrimitiveValueKind::Variable));
     ui->widgetVariable->initialize(1);
-    connect(ui->widgetVariable->list(), SIGNAL(itemChanged(QListWidgetItem*)),
-            this, SLOT(on_variableChanged(QListWidgetItem*)));
+    connect(ui->widgetVariable->list(), SIGNAL(itemChanged(QListWidgetItem *)),
+        this, SLOT(on_variableChanged(QListWidgetItem *)));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addParameter(QStandardItemModel *model){
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0){
-        ui->comboBoxChoice->addItem("Parameter",
-                                    (int) PrimitiveValueKind::Parameter);
+void PanelPrimitiveValue::addParameter(QStandardItemModel *model) {
+    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
+        ui->comboBoxChoice->addItem("Parameter", static_cast<int>(
+            PrimitiveValueKind::Parameter));
         m_model->setModelParameter(model);
         SuperListItem::fillComboBox(ui->comboBoxParameter, model);
         connect(ui->comboBoxParameter, SIGNAL(currentIndexChanged(int)), this,
-                SLOT(on_comboBoxParameterCurrentIndexChanged(int)));
+            SLOT(on_comboBoxParameterCurrentIndexChanged(int)));
     }
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addProperty(QStandardItemModel* model){
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0){
-        ui->comboBoxChoice->addItem("Property",
-                                    (int) PrimitiveValueKind::Property);
+void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
+    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
+        ui->comboBoxChoice->addItem("Property", static_cast<int>(
+            PrimitiveValueKind::Property));
         m_model->setModelProperties(model);
         SuperListItem::fillComboBox(ui->comboBoxProperty, model);
         connect(ui->comboBoxProperty, SIGNAL(currentIndexChanged(int)), this,
-                SLOT(on_comboBoxPropertyCurrentIndexChanged(int)));
+            SLOT(on_comboBoxPropertyCurrentIndexChanged(int)));
     }
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addDataBase(QStandardItemModel *model){
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0){
-        ui->comboBoxChoice->addItem("Selection",
-                                    (int) PrimitiveValueKind::DataBase);
+void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
+    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
+        ui->comboBoxChoice->addItem("Selection", static_cast<int>(
+            PrimitiveValueKind::DataBase));
         m_model->setModelDataBase(model);
         SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
         connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
-                SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
+            SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
     }
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addMessage(){
-    ui->comboBoxChoice->addItem("Message", (int) PrimitiveValueKind::Message);
+void PanelPrimitiveValue::addMessage() {
+    ui->comboBoxChoice->addItem("Message", static_cast<int>(
+        PrimitiveValueKind::Message));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addScript(){
-    ui->comboBoxChoice->addItem("Script", (int) PrimitiveValueKind::Script);
+void PanelPrimitiveValue::addScript() {
+    ui->comboBoxChoice->addItem("Script", static_cast<int>(
+        PrimitiveValueKind::Script));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addSwitch(){
-    ui->comboBoxChoice->addItem("Switch", (int) PrimitiveValueKind::Switch);
+void PanelPrimitiveValue::addSwitch() {
+    ui->comboBoxChoice->addItem("Switch", static_cast<int>(
+        PrimitiveValueKind::Switch));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addKeyBoard(){
-    ui->comboBoxChoice->addItem("Keyboard", (int) PrimitiveValueKind::KeyBoard);
+void PanelPrimitiveValue::addKeyBoard() {
+    ui->comboBoxChoice->addItem("Keyboard", static_cast<int>(
+        PrimitiveValueKind::KeyBoard));
     SuperListItem::fillComboBox(ui->comboBoxKeyBoard, Wanok::get()->project()
-                                ->keyBoardDatas()->model());
+        ->keyBoardDatas()->model());
     connect(ui->comboBoxKeyBoard, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxKeyBoardCurrentIndexChanged(int)));
+        SLOT(on_comboBoxKeyBoardCurrentIndexChanged(int)));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showDefault(){
+void PanelPrimitiveValue::showDefault() {
     setKind(PrimitiveValueKind::Default);
     hideAll();
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showAnything(){
+void PanelPrimitiveValue::showAnything() {
     setKind(PrimitiveValueKind::Anything);
     hideAll();
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showNone(){
+void PanelPrimitiveValue::showNone() {
     setKind(PrimitiveValueKind::None);
     hideAll();
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showNumber(){
+void PanelPrimitiveValue::showNumber() {
     setKind(PrimitiveValueKind::Number);
     hideAll();
     ui->spinBoxNumber->show();
@@ -433,7 +433,7 @@ void PanelPrimitiveValue::showNumber(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showNumberDouble(){
+void PanelPrimitiveValue::showNumberDouble() {
     setKind(PrimitiveValueKind::NumberDouble);
     hideAll();
     ui->doubleSpinBoxNumber->show();
@@ -442,7 +442,7 @@ void PanelPrimitiveValue::showNumberDouble(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showVariable(){
+void PanelPrimitiveValue::showVariable() {
     setKind(PrimitiveValueKind::Variable);
     hideAll();
     ui->widgetVariable->show();
@@ -450,7 +450,7 @@ void PanelPrimitiveValue::showVariable(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showParameter(){
+void PanelPrimitiveValue::showParameter() {
     setKind(PrimitiveValueKind::Parameter);
     hideAll();
     ui->comboBoxParameter->show();
@@ -458,7 +458,7 @@ void PanelPrimitiveValue::showParameter(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showProperty(){
+void PanelPrimitiveValue::showProperty() {
     setKind(PrimitiveValueKind::Property);
     hideAll();
     ui->comboBoxProperty->show();
@@ -466,7 +466,7 @@ void PanelPrimitiveValue::showProperty(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showDataBase(){
+void PanelPrimitiveValue::showDataBase() {
     setKind(PrimitiveValueKind::DataBase);
     hideAll();
     ui->comboBoxDataBase->show();
@@ -474,7 +474,7 @@ void PanelPrimitiveValue::showDataBase(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showMessage(){
+void PanelPrimitiveValue::showMessage() {
     setKind(PrimitiveValueKind::Message);
     hideAll();
     ui->lineEditMessage->show();
@@ -482,7 +482,7 @@ void PanelPrimitiveValue::showMessage(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showScript(){
+void PanelPrimitiveValue::showScript() {
     setKind(PrimitiveValueKind::Script);
     hideAll();
     ui->lineEditScript->show();
@@ -490,7 +490,7 @@ void PanelPrimitiveValue::showScript(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showSwitch(){
+void PanelPrimitiveValue::showSwitch() {
     setKind(PrimitiveValueKind::Switch);
     hideAll();
     ui->comboBoxSwitch->show();
@@ -498,7 +498,7 @@ void PanelPrimitiveValue::showSwitch(){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::showKeyBoard(){
+void PanelPrimitiveValue::showKeyBoard() {
     setKind(PrimitiveValueKind::KeyBoard);
     hideAll();
     ui->comboBoxKeyBoard->show();
@@ -506,9 +506,9 @@ void PanelPrimitiveValue::showKeyBoard(){
 
 // -------------------------------------------------------
 
-int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind){
-    for (int i = 0; i < ui->comboBoxChoice->count(); i++){
-        if (ui->comboBoxChoice->itemData(i).toInt() == (int) kind)
+int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind) {
+    for (int i = 0; i < ui->comboBoxChoice->count(); i++) {
+        if (ui->comboBoxChoice->itemData(i).toInt() == static_cast<int>(kind))
             return i;
     }
 
@@ -517,7 +517,7 @@ int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeCommand(EventCommand* command, int &i){
+void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
     switch (m_kind) {
     case PanelPrimitiveValueKind::Primitives:
     case PanelPrimitiveValueKind::ParameterEvent:
@@ -525,8 +525,8 @@ void PanelPrimitiveValue::initializeCommand(EventCommand* command, int &i){
     case PanelPrimitiveValueKind::ConstantVariable:
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
-        setKind(static_cast<PrimitiveValueKind>(command
-                                                ->valueCommandAt(i++).toInt()));
+        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
+            .toInt()));
         if (m_model->kind() == PrimitiveValueKind::NumberDouble)
             setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
         else
@@ -537,7 +537,7 @@ void PanelPrimitiveValue::initializeCommand(EventCommand* command, int &i){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::getCommand(QVector<QString> &command){
+void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
     switch (m_kind) {
     case PanelPrimitiveValueKind::Primitives:
     case PanelPrimitiveValueKind::ParameterEvent:
@@ -545,7 +545,7 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command){
     case PanelPrimitiveValueKind::ConstantVariable:
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
-        command.append(QString::number((int)m_model->kind()));
+        command.append(QString::number(static_cast<int>(m_model->kind())));
 
         if (m_model->kind() == PrimitiveValueKind::NumberDouble)
             command.append(QString::number(m_model->numberDoubleValue()));
@@ -563,12 +563,11 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command){
 //
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index){
+void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
     PrimitiveValueKind kind = static_cast<PrimitiveValueKind>(ui->comboBoxChoice
-                                                              ->itemData(index)
-                                                              .toInt());
+        ->itemData(index).toInt());
 
-    switch(kind){
+    switch(kind) {
     case PrimitiveValueKind::Default:
         showDefault(); break;
     case PrimitiveValueKind::Anything:
@@ -600,7 +599,7 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index){
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_spinBoxNumber_valueChanged(int i){
+void PanelPrimitiveValue::on_spinBoxNumber_valueChanged(int i) {
     setNumberValue(i);
 }
 
@@ -610,53 +609,49 @@ void PanelPrimitiveValue::on_doubleSpinBoxNumber_valueChanged(double i) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_variableChanged(QListWidgetItem*){
+void PanelPrimitiveValue::on_variableChanged(QListWidgetItem *) {
     setNumberValue(ui->widgetVariable->currentId());
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_comboBoxParameterCurrentIndexChanged(int index){
-    setNumberValue(SuperListItem::getIdByIndex(m_model->modelParameter(),
-                                               index));
+void PanelPrimitiveValue::on_comboBoxParameterCurrentIndexChanged(int index) {
+    setNumberValue(SuperListItem::getIdByIndex(m_model->modelParameter(), index));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_comboBoxPropertyCurrentIndexChanged(int index){
-    setNumberValue(SuperListItem::getIdByIndex(m_model->modelProperties(),
-                                               index));
+void PanelPrimitiveValue::on_comboBoxPropertyCurrentIndexChanged(int index) {
+    setNumberValue(SuperListItem::getIdByIndex(m_model->modelProperties(), index));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::on_comboBoxDataBaseCurrentIndexChanged(int index){
-    setNumberValue(SuperListItem::getIdByIndex(m_model->modelDataBase(),
-                                               index));
+    setNumberValue(SuperListItem::getIdByIndex(m_model->modelDataBase(), index));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_comboBoxKeyBoardCurrentIndexChanged(int index){
+void PanelPrimitiveValue::on_comboBoxKeyBoardCurrentIndexChanged(int index) {
     setNumberValue(SuperListItem::getIdByIndex(Wanok::get()->project()
-                                               ->keyBoardDatas()->model(),
-                                               index));
+        ->keyBoardDatas()->model(), index));
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_lineEditMessage_textChanged(const QString &text){
+void PanelPrimitiveValue::on_lineEditMessage_textChanged(const QString &text) {
     setMessageValue(text);
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_lineEditScript_textChanged(const QString &text){
+void PanelPrimitiveValue::on_lineEditScript_textChanged(const QString &text) {
     setMessageValue(text);
 }
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::on_comboBoxSwitch_currentIndexChanged(int index){
+void PanelPrimitiveValue::on_comboBoxSwitch_currentIndexChanged(int index) {
     setSwitchValue(index == 0);
 }

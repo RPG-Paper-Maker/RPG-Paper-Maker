@@ -44,17 +44,18 @@ class PanelProject : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelProject(QWidget *parent = 0);
-    PanelProject(QWidget *parent, Project* p);
+    explicit PanelProject(QWidget *parent = nullptr);
+    PanelProject(QWidget *parent, Project *p);
     ~PanelProject();
+
     Project* project() const;
-    WidgetMapEditor* widgetMapEditor() const;
-    WidgetTreeLocalMaps* widgetTreeLocalMaps() const;
+    WidgetMapEditor * widgetMapEditor() const;
+    WidgetTreeLocalMaps * widgetTreeLocalMaps() const;
 
 private:
     Ui::PanelProject *ui;
-    Project* m_project;
-    QTimer* m_timerUpdate;
+    Project *m_project;
+    QTimer *m_timerUpdate;
 
 public slots:
     void updateMenu();

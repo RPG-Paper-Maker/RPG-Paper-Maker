@@ -46,21 +46,21 @@ class PanelPrimitiveValue : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelPrimitiveValue(QWidget *parent = 0);
+    explicit PanelPrimitiveValue(QWidget *parent = nullptr);
     ~PanelPrimitiveValue();
-    QSpinBox* spinBoxNumber() const;
-    QDoubleSpinBox* doubleSpinBoxNumber() const;
+
+    QSpinBox * spinBoxNumber() const;
+    QDoubleSpinBox * doubleSpinBoxNumber() const;
+    PrimitiveValue * model() const;
+
     void initializePrimitives();
     void initializeParameterEvent();
     void initializeNumberVariable();
-    void initializeNumber(QStandardItemModel* parameters,
-                          QStandardItemModel* properties,
-                          bool isInteger = true);
-    void initializeDataBaseCommandId(QStandardItemModel* dataBase,
-                                     QStandardItemModel* parameters,
-                                     QStandardItemModel* properties);
-    void initializeModel(PrimitiveValue* m);
-    PrimitiveValue* model() const;
+    void initializeNumber(QStandardItemModel *parameters, QStandardItemModel
+        *properties, bool isInteger = true);
+    void initializeDataBaseCommandId(QStandardItemModel *dataBase,
+        QStandardItemModel *parameters, QStandardItemModel *properties);
+    void initializeModel(PrimitiveValue *m);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
     void setNumberDoubleValue(double n);
@@ -74,9 +74,9 @@ public:
     void addNumber();
     void addNumberDouble();
     void addVariable();
-    void addParameter(QStandardItemModel* model);
-    void addProperty(QStandardItemModel* model);
-    void addDataBase(QStandardItemModel* model);
+    void addParameter(QStandardItemModel *model);
+    void addProperty(QStandardItemModel *model);
+    void addDataBase(QStandardItemModel *model);
     void addMessage();
     void addScript();
     void addSwitch();
@@ -100,7 +100,7 @@ public:
 
 private:
     Ui::PanelPrimitiveValue *ui;
-    PrimitiveValue* m_model;
+    PrimitiveValue *m_model;
     bool m_modelNeedDelete;
     PanelPrimitiveValueKind m_kind;
 
@@ -110,7 +110,7 @@ private slots:
     void on_comboBoxChoiceCurrentIndexChanged(int index);
     void on_spinBoxNumber_valueChanged(int i);
     void on_doubleSpinBoxNumber_valueChanged(double i);
-    void on_variableChanged(QListWidgetItem*);
+    void on_variableChanged(QListWidgetItem *);
     void on_comboBoxParameterCurrentIndexChanged(int index);
     void on_comboBoxPropertyCurrentIndexChanged(int index);
     void on_comboBoxDataBaseCurrentIndexChanged(int index);

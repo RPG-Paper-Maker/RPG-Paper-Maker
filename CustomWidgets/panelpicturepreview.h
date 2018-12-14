@@ -27,6 +27,14 @@
 #include "superlistitem.h"
 #include "systempicture.h"
 
+// -------------------------------------------------------
+//
+//  CLASS PanelPicturePreview
+//
+//  The picture preview panel for selecting a picture with a particular kind.
+//
+// -------------------------------------------------------
+
 namespace Ui {
 class PanelPicturePreview;
 }
@@ -36,25 +44,27 @@ class PanelPicturePreview : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelPicturePreview(QWidget *parent = 0);
+    explicit PanelPicturePreview(QWidget *parent = nullptr);
     ~PanelPicturePreview();
-    SystemPicture* picture() const;
-    void setPicture(SystemPicture* picture);
+
+    SystemPicture * picture() const;
+    void setPicture(SystemPicture *picture);
     int indexX() const;
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
     void setPictureKind(PictureKind kind);
-    void changePicture(SystemPicture* picture);
+
+    void changePicture(SystemPicture *picture);
     void setChooseRect(bool b);
 
 private:
     Ui::PanelPicturePreview *ui;
     PictureKind m_pictureKind;
-    SystemPicture* m_picture;
+    SystemPicture *m_picture;
 
     void showPictures(bool b);
-    void updateImage(QStandardItem* item);
+    void updateImage(QStandardItem *item);
     void loadAvailableContent(int row = -1);
     void loadContentFromFolder(QString path, bool isBR);
     void deleteContent(QString path);
@@ -70,7 +80,7 @@ private slots:
     void on_pushButtonMove_clicked();
     void on_pushButtonRefresh_clicked();
     void on_pushButtonAdd_clicked();
-    void deletingContent(SuperListItem* super, int row);
+    void deletingContent(SuperListItem *super, int row);
     void on_treeViewAvailableContentDoubleClicked(QModelIndex);
 };
 

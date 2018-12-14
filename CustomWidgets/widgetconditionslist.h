@@ -37,15 +37,15 @@ class WidgetConditionsList : public QListView
 {
     Q_OBJECT
 public:
-    explicit WidgetConditionsList(QWidget *parent = 0);
-    void initializeModel(QStandardItemModel* m);
+    explicit WidgetConditionsList(QWidget *parent = nullptr);
+    void initializeModel(QStandardItemModel *m);
 
 protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent * event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
     void updateAllNodesString();
 
 private:
-    QStandardItemModel* m_model;
+    QStandardItemModel *m_model;
 };
 
 #endif // WIDGETCONDITIONSLIST_H

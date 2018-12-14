@@ -67,23 +67,22 @@ int main(int argc, char *argv[])
 
     if (currentApplicationName != realApplicationName) {
         QString pathReal = Common::pathCombine(QDir::currentPath(),
-                                              realApplicationName);
+            realApplicationName);
         QFile fileReal(pathReal);
         if (fileReal.exists()) {
             while (!fileReal.remove()) {}
         }
         QFile(Common::pathCombine(QDir::currentPath(), currentApplicationName))
-                .rename(realApplicationName);
+            .rename(realApplicationName);
     }
 
     // Load engine settings
-    EngineSettings* engineSettings = new EngineSettings;
+    EngineSettings *engineSettings = new EngineSettings;
     QFile fileSettings(Common::pathCombine(QDir::currentPath(),
-                                          Wanok::pathEngineSettings));
-    if (fileSettings.exists()){
+        Wanok::pathEngineSettings));
+    if (fileSettings.exists()) {
         engineSettings->read();
-    }
-    else{
+    } else {
         engineSettings->setDefault();
         engineSettings->write();
     }
@@ -94,14 +93,13 @@ int main(int argc, char *argv[])
     qApp->setWindowIcon(QIcon(":/icons/Ressources/icon.ico"));
 
     // Create document folder for games if not existing
-    QString documentsPath =
-            QStandardPaths::writableLocation(
-                QStandardPaths::StandardLocation::DocumentsLocation);
+    QString documentsPath = QStandardPaths::writableLocation(
+        QStandardPaths::StandardLocation::DocumentsLocation);
     QDir dirDocuments(documentsPath);
-    if (dirDocuments.exists()){
+    if (dirDocuments.exists()) {
         QString gamesPath = Wanok::dirGames;
         QDir dirGames(gamesPath);
-        if (!dirGames.exists()){
+        if (!dirGames.exists()) {
             dirDocuments.mkdir(Wanok::gamesFolderName);
         }
 

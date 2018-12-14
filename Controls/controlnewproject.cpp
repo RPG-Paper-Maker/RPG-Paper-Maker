@@ -30,7 +30,7 @@
 
 // All the forbidden symbols in a folder name
 QChar ControlNewproject::forbiddenSymbols[10]{'/', '\\', ':', '?', '*', '|',
-                                              '<', '>', '"', '.'};
+    '<', '>', '"', '.'};
 
 // -------------------------------------------------------
 //
@@ -38,7 +38,9 @@ QChar ControlNewproject::forbiddenSymbols[10]{'/', '\\', ':', '?', '*', '|',
 //
 // -------------------------------------------------------
 
-ControlNewproject::ControlNewproject(){}
+ControlNewproject::ControlNewproject() {
+
+}
 
 // -------------------------------------------------------
 //
@@ -46,16 +48,16 @@ ControlNewproject::ControlNewproject(){}
 //
 // -------------------------------------------------------
 
-// -------------------------------------------------------
-//  check if the given string contains forbidden symbols
+QString ControlNewproject::filterDirectoryName(const QString &s) {
 
-QString ControlNewproject::filterDirectoryName(const QString & s){
+    //  check if the given string contains forbidden symbols
     QString directory = "";
 
     // Setting entered value for directory name and escaping forbidden symbols
-    for (int i = 0; i < s.size(); i++){
+    for (int i = 0; i < s.size(); i++) {
         if (std::find(std::begin(forbiddenSymbols), std::end(forbiddenSymbols),
-                      s[i]) == std::end(forbiddenSymbols)){
+            s[i]) == std::end(forbiddenSymbols))
+        {
             directory += (s[i] == ' ') ? '-' : s[i]; // Don't accept spaces
         }
     }
@@ -64,9 +66,10 @@ QString ControlNewproject::filterDirectoryName(const QString & s){
 }
 
 // -------------------------------------------------------
-//  main function generating project folder. Returns a string if errors.
 
-QString ControlNewproject::createNewProject(QString dirName, QString location){
+QString ControlNewproject::createNewProject(QString dirName, QString location) {
+
+    //  main function generating project folder. Returns a string if errors.
     QDir pathLocation(location);
     QString pathDir(Common::pathCombine(location, dirName));
 
@@ -84,13 +87,13 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
 
     // Copying a basic project content
     QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
-    QString pathBasicContent = Common::pathCombine(
-                Common::pathCombine(pathContent, "basic"), "Content");
-    if (!Common::copyPath(pathBasicContent,
-                         Common::pathCombine(pathDir, "Content")))
+    QString pathBasicContent = Common::pathCombine( Common::pathCombine(
+        pathContent, "basic"), "Content");
+    if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathDir,
+        "Content")))
     {
         return "Error while copying Content directory. Please verify if " +
-               pathBasicContent + " folder exists.";
+            pathBasicContent + " folder exists.";
     }
 
     // Create folders
@@ -109,19 +112,19 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     QDir(pathDir).mkpath(Wanok::PATH_MUSIC_EFFECTS);
 
     // Create the default datas
-    Project* previousProject = Wanok::get()->project();
-    Project* project = new Project;
+    Project *previousProject = Wanok::get()->project();
+    Project *project = new Project;
     Wanok::get()->setProject(project);
     project->setDefault();
     project->write(pathDir);
     QString error = project->createRPMFile();
-    if (error != NULL)
+    if (error != nullptr)
         return error;
 
     // Copying a basic project content
     if (!project->copyOSFiles()) {
         return "Error while copying excecutable and libraries. "
-               "Please retry with a new project.";
+            "Please retry with a new project.";
     }
 
     // Create saves
@@ -135,7 +138,7 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     // Creating first empty map
     QDir(pathDir).mkdir(Wanok::pathMaps);
     QDir(pathDir).mkdir(Common::pathCombine(Wanok::pathMaps,
-                                           Wanok::TEMP_MAP_FOLDER_NAME));
+        Wanok::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
     Map::writeDefaultBattleMap(pathDir);
 
@@ -143,5 +146,5 @@ QString ControlNewproject::createNewProject(QString dirName, QString location){
     Wanok::get()->setProject(previousProject);
     delete project;
 
-    return NULL; // return NULL for no errors
+    return nullptr; // return NULL for no errors
 }

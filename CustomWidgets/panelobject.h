@@ -43,12 +43,13 @@ class PanelObject : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelObject(QWidget *parent = 0);
+    explicit PanelObject(QWidget *parent = nullptr);
     virtual ~PanelObject();
+
     void deleteStateModel();
-    void initializeList(QStandardItemModel* list);
+    void initializeList(QStandardItemModel *list);
     void updateList();
-    void initializeModel(SystemCommonObject* object);
+    void initializeModel(SystemCommonObject *object);
     void updateModel();
     void clear();
     void setInheritanceName(int index, QString name);
@@ -57,25 +58,25 @@ public:
     void showName(bool b);
     void updateReactions();
     void updateReactionsWidgets();
-    SystemState* getSelectedState() const;
-    void updateStateOptions(SystemState* state);
+    SystemState * getSelectedState() const;
+    void updateStateOptions(SystemState *state);
     void passToSprite();
     void passToNone();
 
 private:
     Ui::PanelObject *ui;
-    SystemCommonObject* m_model;
-    QStandardItemModel* m_list;
-    QVector<WidgetTreeCommands*> m_reactions;
-    QVector<QCheckBox*> m_checkBoxes;
-    QVector<QPushButton*> m_pushButtons;
-    SystemReaction* m_copiedReaction;
+    SystemCommonObject *m_model;
+    QStandardItemModel *m_list;
+    QVector<WidgetTreeCommands *> m_reactions;
+    QVector<QCheckBox *> m_checkBoxes;
+    QVector<QPushButton *> m_pushButtons;
+    SystemReaction *m_copiedReaction;
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);
     void on_comboBoxInheritance_currentIndexChanged(int index);
-    void on_updateJsonStates(SuperListItem*);
-    void on_updateJsonEvents(SuperListItem*);
+    void on_updateJsonStates(SuperListItem *);
+    void on_updateJsonEvents(SuperListItem *);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_tabWidgetCommands_currentChanged(int index);

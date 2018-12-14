@@ -1,6 +1,3 @@
-#ifndef PANELSUPERLIST_H
-#define PANELSUPERLIST_H
-
 /*
     RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
 
@@ -20,9 +17,12 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef PANELSUPERLIST_H
+#define PANELSUPERLIST_H
+
 #include <QWidget>
 #include <QPushButton>
-#include <widgetsuperlist.h>
+#include "widgetsuperlist.h"
 
 // -------------------------------------------------------
 //
@@ -42,12 +42,14 @@ class PanelSuperList : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelSuperList(QWidget *parent = 0);
+    explicit PanelSuperList(QWidget *parent = nullptr);
     ~PanelSuperList();
-    void initializeModel(QStandardItemModel* m);
-    WidgetSuperList* list() const;
-    QLineEdit* lineEditName() const;
-    QPushButton* buttonMaximum() const;
+
+    WidgetSuperList * list() const;
+    QLineEdit * lineEditName() const;
+    QPushButton * buttonMaximum() const;
+
+    void initializeModel(QStandardItemModel *m);
     void showEditName(bool b);
     void showButtonMax(bool b);
     void setMaximumLimit(int max);
@@ -57,13 +59,13 @@ private:
     int m_maximum;
 
 private slots:
-    void on_lineEditName_textChanged(const QString & s);
+    void on_lineEditName_textChanged(const QString &s);
     void on_pushButtonMaximum_pressed();
     void on_listIndexChanged(QModelIndex index, QModelIndex);
 
 signals:
     void maximumChanged();
-    void nameChanged(QStandardItem*);
+    void nameChanged(QStandardItem *);
 };
 
 #endif // PANELSUPERLIST_H

@@ -38,12 +38,10 @@ PanelObjectEvent::PanelObjectEvent(QWidget *parent) :
     ui->treeViewParameters->setCanMove(false);
 
     // Initilize comboBoxes
-    SuperListItem::fillComboBox(ui->comboBoxEventsSystem,
-                                Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsSystem());
-    SuperListItem::fillComboBox(ui->comboBoxEventsUser,
-                                Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsUser());
+    SuperListItem::fillComboBox(ui->comboBoxEventsSystem, Wanok::get()
+        ->project()->gameDatas()->commonEventsDatas()->modelEventsSystem());
+    SuperListItem::fillComboBox(ui->comboBoxEventsUser, Wanok::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelEventsUser());
 }
 
 PanelObjectEvent::~PanelObjectEvent()
@@ -57,30 +55,30 @@ PanelObjectEvent::~PanelObjectEvent()
 //
 // -------------------------------------------------------
 
-void PanelObjectEvent::initialize(SystemObjectEvent* event){
+void PanelObjectEvent::initialize(SystemObjectEvent *event) {
     m_event = event;
 
     ui->comboBoxEventsSystem->setCurrentIndex(-1);
     ui->comboBoxEventsUser->setCurrentIndex(-1);
     connect(ui->comboBoxEventsSystem, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxEventsSystemCurrentIndexChanged(int)));
+        SLOT(on_comboBoxEventsSystemCurrentIndexChanged(int)));
     connect(ui->comboBoxEventsUser, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxEventsUserCurrentIndexChanged(int)));
+        SLOT(on_comboBoxEventsUserCurrentIndexChanged(int)));
 
-    QStandardItem* item;
+    QStandardItem *item;
     if (m_event->isSystem()){
         item = Wanok::get()->project()->gameDatas()->commonEventsDatas()
-               ->modelEventsSystem()->invisibleRootItem();
-        ui->comboBoxEventsSystem->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_event->id()));
+            ->modelEventsSystem()->invisibleRootItem();
+        ui->comboBoxEventsSystem->setCurrentIndex(SuperListItem::getIndexById(
+            item, m_event->id()));
         ui->comboBoxEventsUser->setCurrentIndex(0);
         ui->radioButtonEventSystem->setChecked(true);
     }
     else{
         item = Wanok::get()->project()->gameDatas()->commonEventsDatas()
-               ->modelEventsUser()->invisibleRootItem();
-        ui->comboBoxEventsUser->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_event->id()));
+            ->modelEventsUser()->invisibleRootItem();
+        ui->comboBoxEventsUser->setCurrentIndex(SuperListItem::getIndexById(
+            item, m_event->id()));
         ui->comboBoxEventsSystem->setCurrentIndex(0);
         ui->radioButtonEventUser->setChecked(true);
     }
@@ -93,7 +91,7 @@ void PanelObjectEvent::initialize(SystemObjectEvent* event){
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::updateEvent(SystemEvent* ev){
+void PanelObjectEvent::updateEvent(SystemEvent *ev) {
     if (m_event->id() != ev->id())
         m_event->clearParameters();
 
@@ -103,15 +101,15 @@ void PanelObjectEvent::updateEvent(SystemEvent* ev){
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::updateParameters(SystemEvent*){
+void PanelObjectEvent::updateParameters(SystemEvent *) {
     m_event->updateParameters();
     ui->treeViewParameters->initializeModel(m_event->modelParameters());
 }
 
 // -------------------------------------------------------
 
-SystemObjectEvent *PanelObjectEvent::initializeCommand(const EventCommand*
-                                                       command, int& i)
+SystemObjectEvent * PanelObjectEvent::initializeCommand(const EventCommand
+    *command, int &i)
 {
     m_event = SystemObjectEvent::getCommandEvent(command, i);
     initialize(m_event);
@@ -121,35 +119,32 @@ SystemObjectEvent *PanelObjectEvent::initializeCommand(const EventCommand*
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::getCommandObjectEvent(QVector<QString>& command) const{
+void PanelObjectEvent::getCommandObjectEvent(QVector<QString> &command) const {
 
     // Event
-    QStandardItemModel* model = nullptr;
-    SystemEvent* event = nullptr;
-    if (ui->radioButtonEventSystem->isChecked()){
+    QStandardItemModel *model = nullptr;
+    SystemEvent *event = nullptr;
+    if (ui->radioButtonEventSystem->isChecked()) {
         command.append("0");
         model = Wanok::get()->project()->gameDatas()->commonEventsDatas()
-                ->modelEventsSystem();
-        event = (SystemEvent*) model->item(ui->comboBoxEventsSystem
-                                           ->currentIndex())
-                ->data().value<quintptr>();
-    }
-    else if (ui->radioButtonEventUser->isChecked()){
+            ->modelEventsSystem();
+        event = reinterpret_cast<SystemEvent *>(model->item(ui
+            ->comboBoxEventsSystem->currentIndex())->data().value<quintptr>());
+    } else if (ui->radioButtonEventUser->isChecked()){
         command.append("1");
         model = Wanok::get()->project()->gameDatas()->commonEventsDatas()
-                ->modelEventsUser();
-        event = (SystemEvent*) model->item(ui->comboBoxEventsUser
-                                           ->currentIndex())
-                ->data().value<quintptr>();
+            ->modelEventsUser();
+        event = reinterpret_cast<SystemEvent *>(model->item(ui
+            ->comboBoxEventsUser->currentIndex())->data().value<quintptr>());
     }
     command.append(QString::number(event->id()));
 
     // Parameters
-    QStandardItemModel* modelParameters = ui->treeViewParameters->getModel();
-    SystemParameter* param;
-    for (int i = 0; i < modelParameters->invisibleRootItem()->rowCount(); i++){
-        param = (SystemParameter*) modelParameters->item(i)
-                ->data().value<quintptr>();
+    QStandardItemModel *modelParameters = ui->treeViewParameters->getModel();
+    SystemParameter *param;
+    for (int i = 0; i < modelParameters->invisibleRootItem()->rowCount(); i++) {
+        param = reinterpret_cast<SystemParameter *>(modelParameters->item(i)
+            ->data().value<quintptr>());
         command.append(QString::number(param->id()));
         param->value()->getCommandParameter(command);
     }
@@ -161,12 +156,12 @@ void PanelObjectEvent::getCommandObjectEvent(QVector<QString>& command) const{
 //
 // -------------------------------------------------------
 
-void PanelObjectEvent::on_comboBoxEventsSystemCurrentIndexChanged(int index){
-    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsSystem();
-    SystemEvent* super = (SystemEvent*) model->item(index)
-                         ->data().value<quintptr>();
-    if (m_event->isSystem()){
+void PanelObjectEvent::on_comboBoxEventsSystemCurrentIndexChanged(int index) {
+    QStandardItemModel *model = Wanok::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelEventsSystem();
+    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(index)
+        ->data().value<quintptr>());
+    if (m_event->isSystem()) {
         updateEvent(super);
         updateParameters(super);
     }
@@ -174,12 +169,12 @@ void PanelObjectEvent::on_comboBoxEventsSystemCurrentIndexChanged(int index){
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::on_comboBoxEventsUserCurrentIndexChanged(int index){
-    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsUser();
-    SystemEvent* super = (SystemEvent*) model->item(index)
-                         ->data().value<quintptr>();
-    if (!m_event->isSystem()){
+void PanelObjectEvent::on_comboBoxEventsUserCurrentIndexChanged(int index) {
+    QStandardItemModel *model = Wanok::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelEventsUser();
+    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(index)
+        ->data().value<quintptr>());
+    if (!m_event->isSystem()) {
         updateEvent(super);
         updateParameters(super);
     }
@@ -187,28 +182,26 @@ void PanelObjectEvent::on_comboBoxEventsUserCurrentIndexChanged(int index){
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::on_radioButtonEventSystem_toggled(bool checked){
+void PanelObjectEvent::on_radioButtonEventSystem_toggled(bool checked) {
     ui->comboBoxEventsSystem->setEnabled(checked);
     m_event->setIsSystem(true);
-    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsSystem();
-    SystemEvent* super = (SystemEvent*) model->item(ui->comboBoxEventsSystem
-                                                    ->currentIndex())
-                         ->data().value<quintptr>();
+    QStandardItemModel *model = Wanok::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelEventsSystem();
+    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
+        ->comboBoxEventsSystem->currentIndex())->data().value<quintptr>());
     updateEvent(super);
     updateParameters(super);
 }
 
 // -------------------------------------------------------
 
-void PanelObjectEvent::on_radioButtonEventUser_toggled(bool checked){
+void PanelObjectEvent::on_radioButtonEventUser_toggled(bool checked) {
     ui->comboBoxEventsUser->setEnabled(checked);
     m_event->setIsSystem(false);
-    QStandardItemModel* model = Wanok::get()->project()->gameDatas()
-                                ->commonEventsDatas()->modelEventsUser();
-    SystemEvent* super = (SystemEvent*) model->item(ui->comboBoxEventsUser
-                                                    ->currentIndex())
-                         ->data().value<quintptr>();
+    QStandardItemModel *model = Wanok::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelEventsUser();
+    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
+        ->comboBoxEventsUser->currentIndex())->data().value<quintptr>());
     updateEvent(super);
     updateParameters(super);
 }

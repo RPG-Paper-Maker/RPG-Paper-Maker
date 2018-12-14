@@ -46,14 +46,12 @@ PanelMainMenu::~PanelMainMenu()
 //
 // -------------------------------------------------------
 
-void PanelMainMenu::on_pushButtonNewProject_clicked()
-{
-    ((MainWindow*)parent()->parent())->newProject();
+void PanelMainMenu::on_pushButtonNewProject_clicked() {
+    reinterpret_cast<MainWindow *>(parent()->parent())->newProject();
 }
 
 // -------------------------------------------------------
 
-void PanelMainMenu::on_pushButtonOpenProject_clicked()
-{
-    ((MainWindow*)parent()->parent())->openExistingProject();
+void PanelMainMenu::on_pushButtonOpenProject_clicked() {
+    reinterpret_cast<MainWindow *>(parent()->parent())->openExistingProject();
 }

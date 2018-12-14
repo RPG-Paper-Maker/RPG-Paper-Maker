@@ -41,18 +41,19 @@ class PanelObjectEvent : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelObjectEvent(QWidget *parent = 0);
+    explicit PanelObjectEvent(QWidget *parent = nullptr);
     virtual ~PanelObjectEvent();
+
     void initialize(SystemObjectEvent *event);
-    SystemObjectEvent* initializeCommand(const EventCommand* command, int& i);
-    void getCommandObjectEvent(QVector<QString>& command) const;
+    SystemObjectEvent * initializeCommand(const EventCommand *command, int &i);
+    void getCommandObjectEvent(QVector<QString> &command) const;
 
 private:
     Ui::PanelObjectEvent *ui;
-    SystemObjectEvent* m_event;
+    SystemObjectEvent *m_event;
 
-    void updateEvent(SystemEvent* ev);
-    void updateParameters(SystemEvent*);
+    void updateEvent(SystemEvent *ev);
+    void updateParameters(SystemEvent *);
 
 private slots:
     void on_comboBoxEventsSystemCurrentIndexChanged(int index);

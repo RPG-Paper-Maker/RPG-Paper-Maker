@@ -38,8 +38,9 @@ class WidgetAutotilesSelector : public QWidget
 public:
     explicit WidgetAutotilesSelector(QWidget *parent = nullptr);
     ~WidgetAutotilesSelector();
-    void currentTexture(QRect& rect) const;
-    void setImage(SystemAutotile* autotile);
+
+    void currentTexture(QRect &rect) const;
+    void setImage(SystemAutotile *autotile);
     int getPreviewWidth() const;
     int getPreviewHeight() const;
     int getPreviewColumns() const;
@@ -47,16 +48,13 @@ public:
 
 protected:
     QImage m_texture;
-    WidgetSelectionRectangle* m_selectionRectangle;
+    WidgetSelectionRectangle *m_selectionRectangle;
 
     void makeSelection(int x, int y, float zoom = 1.0f);
     int getPreviewSize(int size) const;
 
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
-signals:
-
-public slots:
 };
 
 #endif // WIDGETAUTOTILESSELECTOR_H
