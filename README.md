@@ -78,7 +78,7 @@ RPG Paper Maker has a `master` branch for stable releases and a `develop` branch
 
 ### Code style
 
-Try to respect the code style as much as possible. See the wiki page for code style rules soon.
+Try to respect the code style as much as possible. See the wiki page for code style [here](https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/wiki/Coding-style).
 
 ### Documentation
 Always check out our [documentation](http://rpg-paper-maker.com/index.php/documentation) here.
