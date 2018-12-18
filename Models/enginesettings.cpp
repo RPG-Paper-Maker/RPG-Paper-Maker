@@ -100,7 +100,7 @@ QString EngineSettings::getThemeContent() const {
 // -------------------------------------------------------
 
 QString EngineSettings::readContent(QString name) const {
-    QFile file(":/stylesheets/" + name + ".qss");
+    QFile file(":/stylesheets/Themes/" + name + ".qss");
     if (file.open(QFile::ReadOnly)) {
        return QLatin1String(file.readAll());
     }
