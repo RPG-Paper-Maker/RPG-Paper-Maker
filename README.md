@@ -45,6 +45,59 @@ Windows:
 
 If you are having any error that means that you are missing a package. Check the error and try to find out what's missing. Please report any kind of error at Wanok.rpm@gmail.com to help other contributors.
 
+## Project structure
+
+### Tree
+
+    --- RPG-Paper-Maker
+      |--- Engine.pro                     <- The .pro for opening the project with Qt Ctreator
+      |--- update-mods / update.mods      <- Script for copying dev changes done in other git repos
+      |--- versions.json / trees.json     <- Json used by the updater for checking files to update
+      |--- .appveyor.yml / .travis.yml    <- Automated build tests
+      |--- ressources.qrc                 <- Linking all the ressources (shaders, images...) used in the engine
+      |--- main.cpp / main.h              <- The main function instructions
+      |--- Content                        <- Content is a folder that will contains all the stuff that needs to be copied in the build folder
+        |--- basic                        <- The basic Content folder to copy when creating a new project
+      |--- Controls                       <- Controlers used for complex dialog boxes or widgets / panels. Should contain all the actions to do on the dialog model
+        |--- MapEditor                    <- The map editor controler separated in several files
+      |--- CustomWidgets                  <- All the common custom widgets that can be re-used often are here. These components inherit from QWidget classes.
+      |--- Dialogs                        <- All the dialog boxes
+        |--- Commands                     <- All the dialog boxes used for object event commands
+        |--- SpecialElements              <- All the dialog boxes used for special elements (autotiles, walls, 3D objects)
+        |--- Systems                      <- All the dialog boxes used for system elements (SuperListItem classes)
+      |--- Enums                          <- All the enumerations
+      |--- MapEditor                      <- All the map editor models (sprite, floor, etc.)
+        |--- Map                          <- The map model (seprated in several files)
+      |--- MathUtils                      <- Copy of math utils from an old Qt version for 3D drawings
+      |--- Models                         <- All the models used for the database
+        |--- GameDatas                    <- All the gamedatas files models
+        |--- System                       <- All the models used for system elements (SuperListItem classes)
+      |--- Ressources                     <- All the images (icons) used for the engine
+      |--- Shaders                        <- All the shaders programs
+      |--- Singletons                     <- Contains RPM singleton
+      |--- Themes                         <- All the themes of the engine
+
+### RPM Singleton
+
+`RPM` singleton is used for storing constants such as fix paths, integer values, etc. It also stores pointers to the current opened project and engine settings in order to have an access to it at any time in the program. Common functions are also available. For example, a function to write a `Serializable` class in a .json file is available.
+
+### UI design
+
+We are using the Qt creator designer for generating XML files for all the widgets. These files have a .ui extension.
+
+### SuperListItem
+
+The `SuperListItem` class is used for being displayed with `PanelSuperList` or `WidgetSuperTree`, and stored easily in .json files. It has at least an ID and a name. For example, a monster in a game is a `SuperListItem` (`SystemMonster` class).
+
+A list of `SuperListItem` will be stored in a `QStandardItemModel` model class. Here is a common way to add a `SuperListItem` to a model list:
+
+    QStandardItem * item = new QStandardItem();
+    SuperListItem* super = new SuperListItem(i, "My item"); // COuld be SystemItem class for example
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(super->toString());
+    model->invisibleRootItem()->appendRow(item);
+
 ## Contribute to the project
 
 You can help by contributing on the engine or/and the game engine. First, be sure to be familiar with **git**, how to **fork a project** and how to **submit a pull request**.
