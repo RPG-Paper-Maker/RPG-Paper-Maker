@@ -17,11 +17,14 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QDir>
 #include "systemdatas.h"
 #include "rpm.h"
 #include "common.h"
 #include "systemcurrency.h"
-#include <QDir>
+#include "systemcolor.h"
+
+const QString SystemDatas::JSON_COLORS = "colors";
 
 // -------------------------------------------------------
 //
@@ -33,18 +36,20 @@ SystemDatas::SystemDatas() :
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
+    m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel)
 {
 
 }
 
-SystemDatas::~SystemDatas(){
+SystemDatas::~SystemDatas() {
+    SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
 }
 
-void SystemDatas::read(QString path){
+void SystemDatas::read(QString path) {
     RPM::readJSON(Common::pathCombine(path, RPM::pathSystem), *this);
 }
 
@@ -72,11 +77,15 @@ bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
 
-QStandardItemModel* SystemDatas::modelCurrencies() const {
+QStandardItemModel * SystemDatas::modelColors() const {
+    return m_modelColors;
+}
+
+QStandardItemModel * SystemDatas::modelCurrencies() const {
     return m_modelCurrencies;
 }
 
-QStandardItemModel* SystemDatas::modelItemsTypes() const {
+QStandardItemModel * SystemDatas::modelItemsTypes() const {
     return m_modelItemsTypes;
 }
 
@@ -86,21 +95,45 @@ QStandardItemModel* SystemDatas::modelItemsTypes() const {
 //
 // -------------------------------------------------------
 
-void SystemDatas::setDefault(){
-    int length;
-    QStandardItem* item;
-
+void SystemDatas::setDefault() {
     m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
-
-    // Path BR
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::pathBR);
 
-    // Currencies
-    SystemCurrency* currency;
+    setDefaultColors();
+    setDefaultCurrencies();
+    setDefaultItemsTypes();
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultColors() {
+    QStandardItem *item;
+    SystemColor *color;
+    QString namesColors[] = {"Black", "White", "BlueSky"};
+    int r[] = {0, 255, 199};
+    int g[] = {0, 255, 224};
+    int b[] = {0, 255, 221};
+    int length = (sizeof(namesColors)/sizeof(*namesColors));
+
+    for (int i = 0; i < length; i++) {
+        item = new QStandardItem;
+        color = new SystemColor(i + 1, namesColors[i], r[i], g[i], b[i], 255);
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(color)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(color->toString());
+        m_modelColors->appendRow(item);
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultCurrencies() {
+    QStandardItem *item;
+    SystemCurrency *currency;
     QString namesCurrencies[] = {"G"};
-    length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
+    int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
         currency = new SystemCurrency(i+1,
@@ -111,11 +144,15 @@ void SystemDatas::setDefault(){
         item->setText(currency->toString());
         m_modelCurrencies->appendRow(item);
     }
+}
 
-    // Items kind
-    SuperListItem* sys;
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultItemsTypes() {
+    QStandardItem *item;
+    SuperListItem *sys;
     QString namesItemsKind[] = {"ingredient", "key items"};
-    length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
+    int length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
         sys = new SuperListItem(i+1, namesItemsKind[i]);
@@ -124,7 +161,6 @@ void SystemDatas::setDefault(){
         item->setText(sys->toString());
         m_modelItemsTypes->appendRow(item);
     }
-
 }
 
 // -------------------------------------------------------
@@ -135,8 +171,10 @@ void SystemDatas::setDefault(){
 
 void SystemDatas::read(const QJsonObject &json){
     QJsonArray jsonList;
+    QStandardItem *item;
 
     // Clear
+    SuperListItem::deleteModel(m_modelColors, false);
     SuperListItem::deleteModel(m_modelCurrencies, false);
     SuperListItem::deleteModel(m_modelItemsTypes, false);
 
@@ -148,6 +186,18 @@ void SystemDatas::read(const QJsonObject &json){
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
     m_showBB = json.contains("bb");
+
+    // Colors
+    jsonList = json[JSON_COLORS].toArray();
+    for (int i = 0; i < jsonList.size(); i++) {
+        item = new QStandardItem;
+        SystemColor *sys = new SystemColor;
+        sys->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sys->toString());
+        m_modelColors->appendRow(item);
+    }
 
     // Currencies
     jsonList = json["currencies"].toArray();
@@ -189,6 +239,18 @@ void SystemDatas::write(QJsonObject &json) const{
     json["frames"] = m_framesAnimation;
     if (m_showBB)
         json["bb"] = m_showBB;
+
+    // Colors
+    jsonArray = QJsonArray();
+    l = m_modelColors->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemColor *sys = reinterpret_cast<SystemColor *>(m_modelColors
+            ->item(i)->data().value<quintptr>());
+        sys->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_COLORS] = jsonArray;
 
     // Currencies
     jsonArray = QJsonArray();

@@ -17,42 +17,46 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogsystemelement.h"
-#include "ui_dialogsystemelement.h"
+#ifndef SYSTEMCOLOR_H
+#define SYSTEMCOLOR_H
+
+#include <QStandardItemModel>
+#include <QMetaType>
+#include "superlistitem.h"
 
 // -------------------------------------------------------
 //
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//  CLASS SystemColor
+//
+//  A particulary color (datas).
 //
 // -------------------------------------------------------
 
-DialogSystemElement::DialogSystemElement(SystemElement& element,
-                                         QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogSystemElement),
-    m_element(element)
+class SystemColor : public SuperListItem
 {
-    ui->setupUi(this);
-    
-    initialize();
-}
+public:
+    static const QString JSON_R;
+    static const QString JSON_G;
+    static const QString JSON_B;
+    static const QString JSON_A;
 
-DialogSystemElement::~DialogSystemElement()
-{
-    delete ui;
-}
+    SystemColor();
+    SystemColor(int i, QString n, int r, int g, int b, int a);
+    virtual ~SystemColor();
 
-SystemElement& DialogSystemElement::element() const { return m_element; }
+    QColor color() const;
+    void setColor(QColor& color);
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
+    virtual bool openDialog();
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SystemColor &color);
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
-void DialogSystemElement::initialize(){
-    ui->widgetTxtLangName->initializeNames(&m_element);
+protected:
+    QColor m_color;
+};
 
-    ui->treeViewEfficiency->setModel(m_element.efficiency());
-    ui->treeViewEfficiency->setColumnWidth(0,250);
-}
+Q_DECLARE_METATYPE(SystemColor)
+
+#endif // SYSTEMCOLOR_H

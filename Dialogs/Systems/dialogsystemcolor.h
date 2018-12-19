@@ -17,42 +17,44 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogsystemelement.h"
-#include "ui_dialogsystemelement.h"
+#ifndef DIALOGSYSTEMCOLOR_H
+#define DIALOGSYSTEMCOLOR_H
+
+#include <QDialog>
+#include "systemcolor.h"
 
 // -------------------------------------------------------
 //
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//  CLASS DialogSystemColor
+//
+//  A dialog used for editing the model of a system color.
 //
 // -------------------------------------------------------
 
-DialogSystemElement::DialogSystemElement(SystemElement& element,
-                                         QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogSystemElement),
-    m_element(element)
+namespace Ui {
+class DialogSystemColor;
+}
+
+class DialogSystemColor : public QDialog
 {
-    ui->setupUi(this);
-    
-    initialize();
-}
+    Q_OBJECT
 
-DialogSystemElement::~DialogSystemElement()
-{
-    delete ui;
-}
+public:
+    explicit DialogSystemColor(SystemColor& color, QWidget *parent = nullptr);
+    ~DialogSystemColor();
 
-SystemElement& DialogSystemElement::element() const { return m_element; }
+    SystemColor& color() const;
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
+    void setBackgroundColor(QColor& color);
 
-void DialogSystemElement::initialize(){
-    ui->widgetTxtLangName->initializeNames(&m_element);
+private:
+    Ui::DialogSystemColor *ui;
+    SystemColor& m_color;
+    void initialize();
 
-    ui->treeViewEfficiency->setModel(m_element.efficiency());
-    ui->treeViewEfficiency->setColumnWidth(0,250);
-}
+private slots:
+    void on_lineEditColor_textChanged(const QString &text);
+    void on_pushButtonColor_clicked(bool = false);
+};
+
+#endif // DIALOGSYSTEMCOLOR_H

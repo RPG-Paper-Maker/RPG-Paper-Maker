@@ -326,6 +326,7 @@ void ProjectUpdater::updateVersion_0_4_0() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_4_3() {
+
     // Adding default autotiles
     QList<QString> names;
     m_project->readPicturesDatas();
@@ -339,6 +340,7 @@ void ProjectUpdater::updateVersion_0_4_3() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_5_2() {
+
     // Adding default songs
     m_project->songsDatas()->setDefault();
     m_project->writeSongsDatas();;
@@ -352,6 +354,7 @@ void ProjectUpdater::updateVersion_0_5_2() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_6_0() {
+
     // Write default battle map
     Map::writeDefaultBattleMap(m_project->pathCurrentProject());
     m_project->readLangsDatas();
@@ -369,4 +372,9 @@ void ProjectUpdater::updateVersion_0_6_0() {
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultBattlers(names);
     m_project->writePicturesDatas();
+
+    // System colors
+    m_project->readSystemDatas();
+    m_project->gameDatas()->systemDatas()->setDefaultColors();
+    m_project->writeSystemDatas();
 }

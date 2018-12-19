@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>851</width>
-    <height>642</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -335,7 +335,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_4">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Colors</string>
@@ -344,7 +344,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListColors" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>

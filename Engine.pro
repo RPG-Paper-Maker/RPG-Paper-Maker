@@ -256,7 +256,9 @@ HEADERS += \
     CustomWidgets/widgetsong.h \
     Models/System/systembattlemap.h \
     CustomWidgets/panelselectposition.h \
-    Singletons/rpm.h
+    Singletons/rpm.h \
+    Models/System/systemcolor.h \
+    Dialogs/Systems/dialogsystemcolor.h
 
 SOURCES += \
     main.cpp \
@@ -460,7 +462,9 @@ SOURCES += \
     CustomWidgets/widgetsong.cpp \
     Models/System/systembattlemap.cpp \
     CustomWidgets/panelselectposition.cpp \
-    Singletons/rpm.cpp
+    Singletons/rpm.cpp \
+    Models/System/systemcolor.cpp \
+    Dialogs/Systems/dialogsystemcolor.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -535,7 +539,8 @@ FORMS += \
     Dialogs/dialoggeneraloptions.ui \
     CustomWidgets/widgetsong.ui \
     Dialogs/dialogselectposition.ui \
-    CustomWidgets/panelselectposition.ui
+    CustomWidgets/panelselectposition.ui \
+    Dialogs/Systems/dialogsystemcolor.ui
 
 OTHER_FILES +=
 

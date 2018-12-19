@@ -29,6 +29,7 @@
 #include "systemelement.h"
 #include "systembattlecommand.h"
 #include "systembattlemap.h"
+#include "systemcolor.h"
 
 // -------------------------------------------------------
 //
@@ -70,11 +71,11 @@ int DialogSystems::getSquareSize() const {
 void DialogSystems::initializeSystem(GameDatas *gameDatas){
 
     // Don't show edit name
+    ui->panelSuperListColors->showEditName(false);
+    ui->panelSuperListCurrencies->showEditName(false);
     ui->panelSuperListCameraMovements->showEditName(false);
     ui->panelSuperListCameraProperties->showEditName(false);
-    ui->panelSuperListColors->showEditName(false);
     ui->panelSuperListDetections->showEditName(false);
-    ui->panelSuperListCurrencies->showEditName(false);
     ui->panelSuperListParticules->showEditName(false);
 
     // Allow editions
@@ -90,10 +91,13 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
                                     ->systemDatas()->squareSize());
 
     // Initializing all the models
-    ui->panelSuperListCurrencies->list()
-            ->initializeNewItemInstance(new SystemCurrency);
-    ui->panelSuperListCurrencies->list()
-            ->initializeModel(gameDatas->systemDatas()->modelCurrencies());
+    ui->panelSuperListColors->list()->initializeNewItemInstance(new SystemColor);
+    ui->panelSuperListColors->initializeModel(gameDatas->systemDatas()
+        ->modelColors());
+    ui->panelSuperListCurrencies->list()->initializeNewItemInstance(new
+        SystemCurrency);
+    ui->panelSuperListCurrencies->initializeModel(gameDatas->systemDatas()
+        ->modelCurrencies());
 }
 
 // -------------------------------------------------------
