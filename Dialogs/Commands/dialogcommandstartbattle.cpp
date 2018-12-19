@@ -48,6 +48,14 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
     ui->widgetY->initializeNumber(parameters, nullptr);
     ui->widgetYplus->initializeNumber(parameters, nullptr);
     ui->widgetZ->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueTransitionColorStart->initializeDataBaseCommandId(
+        RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
+        m_parameters, nullptr);
+    ui->panelPrimitiveValueTransitionColorStart->showDataBase();
+    ui->panelPrimitiveValueTransitionColorEnd->initializeDataBaseCommandId(
+        RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
+        m_parameters, nullptr);
+    ui->panelPrimitiveValueTransitionColorEnd->showDataBase();
 
     if (command != nullptr) initialize(command);
 }
@@ -106,8 +114,12 @@ void DialogCommandStartBattle::initialize(EventCommand* command){
     // Transition
     type = command->valueCommandAt(i++).toInt();
     ui->comboBoxTransitionStart->setCurrentIndex(type);
+    if (type == 1)
+        ui->panelPrimitiveValueTransitionColorStart->initializeCommand(command, i);
     type = command->valueCommandAt(i++).toInt();
     ui->comboBoxTransitionEnd->setCurrentIndex(type);
+    if (type == 1)
+        ui->panelPrimitiveValueTransitionColorEnd->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
@@ -150,8 +162,12 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
     // Transition
     index = ui->comboBoxTransitionStart->currentIndex();
     command.append(QString::number(index));
+    if (index == 1)
+        ui->panelPrimitiveValueTransitionColorStart->getCommand(command);
     index = ui->comboBoxTransitionEnd->currentIndex();
     command.append(QString::number(index));
+    if (index == 1)
+        ui->panelPrimitiveValueTransitionColorEnd->getCommand(command);
 
     return new EventCommand(EventCommandKind::StartBattle, command);
 }
@@ -162,7 +178,8 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
 //
 // -------------------------------------------------------
 
-void DialogCommandStartBattle::on_radioButtonVariableConstant_toggled(bool checked)
+void DialogCommandStartBattle::on_radioButtonVariableConstant_toggled(bool
+    checked)
 {
     ui->widgetVariableConstant->setEnabled(checked);
 }
@@ -197,11 +214,11 @@ void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
 void DialogCommandStartBattle::on_comboBoxTransitionStart_currentIndexChanged(
     int index)
 {
-
+    ui->panelPrimitiveValueTransitionColorStart->setEnabled(index == 1);
 }
 
 void DialogCommandStartBattle::on_comboBoxTransitionEnd_currentIndexChanged(
     int index)
 {
-
+    ui->panelPrimitiveValueTransitionColorEnd->setEnabled(index == 1);
 }

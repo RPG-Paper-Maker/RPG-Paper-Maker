@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>618</height>
+    <width>502</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,9 +40,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-147</y>
-          <width>404</width>
-          <height>701</height>
+          <y>0</y>
+          <width>454</width>
+          <height>703</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
@@ -468,7 +468,7 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_6">
               <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,1">
+               <layout class="QGridLayout" name="gridLayout_5">
                 <item row="0" column="0">
                  <widget class="QLabel" name="label">
                   <property name="text">
@@ -480,9 +480,12 @@
                  <widget class="QComboBox" name="comboBoxTransitionStart">
                   <property name="minimumSize">
                    <size>
-                    <width>150</width>
+                    <width>100</width>
                     <height>0</height>
                    </size>
+                  </property>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
@@ -501,14 +504,14 @@
                   </item>
                  </widget>
                 </item>
-                <item row="0" column="2" rowspan="2">
+                <item row="0" column="3" rowspan="2">
                  <spacer name="horizontalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>128</width>
+                    <width>38</width>
                     <height>58</height>
                    </size>
                   </property>
@@ -538,6 +541,44 @@
                     <string>Zoom out</string>
                    </property>
                   </item>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTransitionColorStart" native="true">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTransitionColorEnd" native="true">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>27</height>
+                   </size>
+                  </property>
                  </widget>
                 </item>
                </layout>

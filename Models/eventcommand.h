@@ -86,6 +86,9 @@ private:
     QString strStartBattleTroop(QStandardItemModel* parameters, int& i) const;
     QString strStartBattleMap(QStandardItemModel* parameters, int& i) const;
     QString strStartBattleOptions(int& i) const;
+    QString strStartBattleTransition(QStandardItemModel* parameters, int& i) const;
+    QString strStartBattleTransitionType(QStandardItemModel* parameters, int& i,
+        int type, QString name) const;
     QString strChangeState(SystemCommonObject* object,
                            QStandardItemModel* parameters) const;
     QString strChangeStateOperation(int& i) const;

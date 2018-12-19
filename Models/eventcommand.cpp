@@ -479,9 +479,10 @@ QString EventCommand::strStartBattle(QStandardItemModel* parameters) const{
     QString options = strStartBattleOptions(i);
     QString troop = strStartBattleTroop(parameters, i);
     QString battleMap = strStartBattleMap(parameters, i);
+    QString transition = strStartBattleTransition(parameters, i);
 
     return "Start battle: troop " + troop + " with battle map " + battleMap +
-        "\n\n" + options;
+        transition + "\n\n" + options;
 }
 
 // -------------------------------------------------------
@@ -550,6 +551,41 @@ QString EventCommand::strStartBattleOptions(int& i) const {
     strOptions += "]";
 
     return strOptions;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartBattleTransition(QStandardItemModel* parameters,
+    int& i) const
+{
+    QString transition = " with transition: ";
+    int type = p_listCommand.at(i++).toInt();
+    transition += strStartBattleTransitionType(parameters, i, type, "in");
+    transition += " and then ";
+    type = p_listCommand.at(i++).toInt();
+    transition += strStartBattleTransitionType(parameters, i, type, "out");
+
+    return transition;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStartBattleTransitionType(QStandardItemModel* parameters,
+    int& i, int type, QString name) const
+{
+    QString transition;
+    switch (type) {
+    case 0:
+        transition += "none"; break;
+    case 1:
+        transition += "fade " + name + " " + strDataBaseId(i, RPM::get()
+            ->project()->gameDatas()->systemDatas()->modelColors(), parameters);
+        break;
+    case 2:
+        transition += "zoom " + name; break;
+    }
+
+    return transition;
 }
 
 // -------------------------------------------------------
