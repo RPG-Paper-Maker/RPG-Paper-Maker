@@ -59,6 +59,8 @@ private slots:
     void on_radioButtonID_toggled(bool checked);
     void on_radioButtonSelect_toggled(bool checked);
     void on_radioButtonNumber_toggled(bool checked);
+    void on_comboBoxTransitionStart_currentIndexChanged(int index);
+    void on_comboBoxTransitionEnd_currentIndexChanged(int index);
 };
 
 #endif // DIALOGCOMMANDSTARTBATTLE_H

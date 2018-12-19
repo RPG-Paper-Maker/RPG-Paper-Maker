@@ -102,12 +102,19 @@ void DialogCommandStartBattle::initialize(EventCommand* command){
         ui->widgetZ->initializeCommand(command, i);
         break;
     }
+
+    // Transition
+    type = command->valueCommandAt(i++).toInt();
+    ui->comboBoxTransitionStart->setCurrentIndex(type);
+    type = command->valueCommandAt(i++).toInt();
+    ui->comboBoxTransitionEnd->setCurrentIndex(type);
 }
 
 // -------------------------------------------------------
 
 EventCommand* DialogCommandStartBattle::getCommand() const{
     QVector<QString> command;
+    int index;
 
     // Options
     command.append(ui->checkBoxEscape->isChecked() ? "1" : "0");
@@ -139,6 +146,12 @@ EventCommand* DialogCommandStartBattle::getCommand() const{
         ui->widgetYplus->getCommand(command);
         ui->widgetZ->getCommand(command);
     }
+
+    // Transition
+    index = ui->comboBoxTransitionStart->currentIndex();
+    command.append(QString::number(index));
+    index = ui->comboBoxTransitionEnd->currentIndex();
+    command.append(QString::number(index));
 
     return new EventCommand(EventCommandKind::StartBattle, command);
 }
@@ -179,4 +192,16 @@ void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
     ui->widgetY->setEnabled(checked);
     ui->widgetYplus->setEnabled(checked);
     ui->widgetZ->setEnabled(checked);
+}
+
+void DialogCommandStartBattle::on_comboBoxTransitionStart_currentIndexChanged(
+    int index)
+{
+
+}
+
+void DialogCommandStartBattle::on_comboBoxTransitionEnd_currentIndexChanged(
+    int index)
+{
+
 }
