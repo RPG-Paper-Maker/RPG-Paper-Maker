@@ -97,6 +97,7 @@ private:
     double m_cameraVerticalAngle;
     ContextMenuList *m_contextMenu;
     long m_elapsedTime;
+    QColor m_backgroundColor;
 
 public slots:
     void update();

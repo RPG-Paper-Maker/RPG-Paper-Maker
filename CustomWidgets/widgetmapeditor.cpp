@@ -22,9 +22,10 @@
 #include <QHash>
 #include <QHashIterator>
 #include <QTime>
+#include <QMessageBox>
 #include "widgetmapeditor.h"
 #include "rpm.h"
-#include <QMessageBox>
+#include "systemcolor.h"
 
 // -------------------------------------------------------
 //
@@ -91,8 +92,15 @@ Map *WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
     m_cameraHorizontalAngle = cameraHorizontalAngle;
     m_cameraVerticalAngle = cameraVerticalAngle;
 
-    return m_control.loadMap(idMap, position, positionObject, cameraDistance,
+    Map *map = m_control.loadMap(idMap, position, positionObject, cameraDistance,
         cameraHorizontalAngle, cameraVerticalAngle);
+    m_backgroundColor = (map->mapProperties()->skyColorID()->kind() ==
+        PrimitiveValueKind::Variable) ? Qt::black : reinterpret_cast<
+        SystemColor *>(SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelColors()->invisibleRootItem(), map
+        ->mapProperties()->skyColorID()->numberValue()))->color();
+
+    return map;
 }
 
 // -------------------------------------------------------
@@ -135,6 +143,10 @@ void WidgetMapEditor::paintGL() {
 
     // Clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glClearColor(m_backgroundColor.red() / 255.0f, m_backgroundColor.green() /
+        255.0f, m_backgroundColor.blue() / 255.0f, m_backgroundColor.alpha() /
+        255.0f);
 
     if (m_control.map() != nullptr) {
         p.beginNativePainting();
