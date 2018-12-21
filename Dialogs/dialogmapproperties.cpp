@@ -34,7 +34,6 @@ DialogMapProperties::DialogMapProperties(MapProperties &properties,
     m_mapProperties(properties)
 {
     ui->setupUi(this);
-    
 
     initialize();
 }
@@ -80,6 +79,13 @@ void DialogMapProperties::initialize(){
     ui->spinBoxWidth->setValue(m_mapProperties.width());
     ui->spinBoxHeight->setValue(m_mapProperties.height());
     ui->spinBoxDepth->setValue(m_mapProperties.depth());
+
+    // Sky
+    ui->panelPrimitiveValueSkyColor->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelColors(), nullptr,
+        nullptr);
+    ui->panelPrimitiveValueSkyColor->initializeModel(m_mapProperties.skyColorID());
+    ui->panelPrimitiveValueSkyColor->sync();
 
     ui->widgetConstantVariableSteps->initializeNumberVariable();
     ui->widgetConstantVariableStepsVariation->initializeNumberVariable();

@@ -49,7 +49,9 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_height(h),
     m_depth(d),
     m_music(nullptr),
-    m_backgroundSound(nullptr)
+    m_backgroundSound(nullptr),
+    m_skyColorID(nullptr),
+    m_isSkyColor(true)
 {
 
 }
@@ -64,6 +66,9 @@ MapProperties::~MapProperties()
     }
     if (m_backgroundSound != nullptr) {
         delete m_backgroundSound;
+    }
+    if (m_skyColorID != nullptr) {
+        delete m_skyColorID;
     }
 }
 
@@ -109,6 +114,14 @@ EventCommand* MapProperties::backgroundSound() const {
 
 void MapProperties::setBackgroundSound(EventCommand* command) {
     m_backgroundSound = command;
+}
+
+PrimitiveValue * MapProperties::skyColorID() const {
+    return m_skyColorID;
+}
+
+void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
+    m_skyColorID = skyColorID;
 }
 
 void MapProperties::addOverflow(Position& p, Portion& portion) {
@@ -236,6 +249,17 @@ void MapProperties::read(const QJsonObject &json){
         m_backgroundSound->read(obj);
     }
 
+    // Sky
+    m_skyColorID = new PrimitiveValue;
+    m_isSkyColor = json.contains("isky") ? json["isky"].toBool() : true;
+    if (json.contains("sky")) {
+        m_skyColorID->read(json["sky"].toObject());
+    } else {
+        m_skyColorID->setKind(PrimitiveValueKind::DataBase);
+    }
+    m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelColors());
+
     // Overflow
     QJsonArray tabOverflow = json["ofsprites"].toArray();
     for (int i = 0; i < tabOverflow.size(); i++) {
@@ -271,6 +295,12 @@ void MapProperties::write(QJsonObject &json) const{
     }
     if (m_backgroundSound != nullptr) {
         json["bgs"] = m_backgroundSound->getJSON();
+    }
+    json["isky"] = m_isSkyColor;
+    if (m_skyColorID != nullptr && m_isSkyColor) {
+        QJsonObject jsonObj;
+        m_skyColorID->write(jsonObj);
+        json["sky"] = jsonObj;
     }
 
     // Overflow

@@ -233,42 +233,64 @@ void PanelPrimitiveValue::setSwitchValue(bool s) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::updateValue() {
+void PanelPrimitiveValue::updateValue(bool update) {
     switch(m_model->kind()) {
     case PrimitiveValueKind::None:
     case PrimitiveValueKind::Default:
     case PrimitiveValueKind::Anything:
         break;
     case PrimitiveValueKind::Number:
-        setNumberValue(ui->spinBoxNumber->value()); break;
+        setNumberValue(update ? m_model->numberValue() : ui->spinBoxNumber->
+            value());
+        break;
     case PrimitiveValueKind::Variable:
-        setNumberValue(ui->widgetVariable->currentId()); break;
+        setNumberValue(update ? m_model->numberValue() : ui->widgetVariable
+            ->currentId());
+        break;
     case PrimitiveValueKind::Parameter:
-        setNumberValue(SuperListItem::getIdByIndex(m_model->modelParameter(),
-            ui->comboBoxParameter->currentIndex()));
+        setNumberValue(update ? m_model->numberValue() :
+            SuperListItem::getIdByIndex(m_model->modelParameter(), ui
+            ->comboBoxParameter->currentIndex()));
         break;
     case PrimitiveValueKind::Property:
-        setNumberValue(SuperListItem::getIdByIndex(m_model->modelProperties(),
-            ui->comboBoxProperty->currentIndex()));
+        setNumberValue(update ? m_model->numberValue() :
+            SuperListItem::getIdByIndex(m_model->modelProperties(), ui
+            ->comboBoxProperty->currentIndex()));
         break;
     case PrimitiveValueKind::DataBase:
-        setNumberValue(SuperListItem::getIdByIndex(m_model->modelDataBase(),
-            ui->comboBoxDataBase->currentIndex()));
+        setNumberValue(update ? m_model->numberValue() :
+            SuperListItem::getIdByIndex(m_model->modelDataBase(), ui
+            ->comboBoxDataBase->currentIndex()));
         break;
     case PrimitiveValueKind::Message:
-        setMessageValue(ui->lineEditMessage->text()); break;
+        setMessageValue(update ? m_model->messageValue() : ui->lineEditMessage
+            ->text());
+        break;
     case PrimitiveValueKind::Script:
-        setMessageValue(ui->lineEditScript->text()); break;
+        setMessageValue(update ? m_model->messageValue() : ui->lineEditScript
+            ->text());
+        break;
     case PrimitiveValueKind::Switch:
-        setSwitchValue(ui->comboBoxSwitch->currentIndex() == 0);
+        setSwitchValue(update ? m_model->switchValue() : ui->comboBoxSwitch
+            ->currentIndex() == 0);
         break;
     case PrimitiveValueKind::KeyBoard:
-        setNumberValue(SuperListItem::getIdByIndex(RPM::get()->project()
-            ->keyBoardDatas()->model(), ui->comboBoxKeyBoard->currentIndex()));
+        setNumberValue(update ? m_model->numberValue() : SuperListItem
+            ::getIdByIndex(RPM::get()->project()->keyBoardDatas()->model(),
+            ui->comboBoxKeyBoard->currentIndex()));
         break;
     case PrimitiveValueKind::NumberDouble:
-        setNumberDoubleValue(ui->doubleSpinBoxNumber->value()); break;
+        setNumberDoubleValue(update ? m_model->numberDoubleValue() : ui
+            ->doubleSpinBoxNumber->value());
+        break;
     }
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::sync() {
+    updateValue(true);
+    ui->comboBoxChoice->setCurrentIndex(getKindIndex(m_model->kind()));
 }
 
 // -------------------------------------------------------

@@ -66,7 +66,8 @@ public:
     void setNumberDoubleValue(double n);
     void setMessageValue(QString m);
     void setSwitchValue(bool s);
-    void updateValue();
+    void updateValue(bool update = false);
+    void sync();
     void hideAll();
     void addDefault();
     void addAnything();
