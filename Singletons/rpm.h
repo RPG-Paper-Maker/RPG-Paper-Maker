@@ -102,6 +102,7 @@ public:
     const static QString pathTextures2D;
     const static QString pathBars;
     const static QString pathIcons;
+    const static QString PATH_FACESETS;
     const static QString pathAutotiles;
     const static QString pathCharacters;
     const static QString pathReliefs;

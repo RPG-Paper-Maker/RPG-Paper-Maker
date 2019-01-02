@@ -47,6 +47,7 @@ public:
     void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
     void setDefaultPictures(QList<QString>& names, PictureKind kind);
     void setDefaultBars(QList<QString>& names);
+    void setDefaultFacesets(QList<QString>& names);
     void setDefaultIcons(QList<QString>& names);
     void setDefaultAutotiles(QList<QString>& names);
     void setDefaultBattlers(QList<QString>& names);

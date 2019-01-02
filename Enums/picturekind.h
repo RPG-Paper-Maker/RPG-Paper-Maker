@@ -40,6 +40,7 @@ enum class PictureKind {
     Tilesets,
     Walls,
     Battlers,
+    Facesets,
     Last
 };
 

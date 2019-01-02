@@ -23,6 +23,7 @@
 
 const QString SystemHero::jsonClass = "class";
 const QString SystemHero::jsonBattler = "bid";
+const QString SystemHero::jsonFaceset = "fid";
 
 // -------------------------------------------------------
 //
@@ -36,10 +37,11 @@ SystemHero::SystemHero() : SystemLang()
 }
 
 SystemHero::SystemHero(int i, LangsTranslation* names, int idClass,
-    int idBattler) :
+    int idBattler, int idFaceset) :
     SystemLang(i, names),
     m_idClass(idClass),
-    m_idBattlerPicture(idBattler)
+    m_idBattlerPicture(idBattler),
+    m_idFacesetPicture(idFaceset)
 {
 
 }
@@ -50,14 +52,32 @@ SystemHero::~SystemHero(){
 
 int SystemHero::idClass() const { return m_idClass;}
 
-int SystemHero::idBattlerPicture() const { return m_idBattlerPicture; }
+int SystemHero::idBattlerPicture() const {
+    return m_idBattlerPicture;
+}
 
-void SystemHero::setIdBattlerPicture(int id) { m_idBattlerPicture = id; }
+void SystemHero::setIdBattlerPicture(int id) {
+    m_idBattlerPicture = id;
+}
+
+int SystemHero::idFacesetPicture() const {
+    return m_idFacesetPicture;
+}
+
+void SystemHero::setIdFacesetPicture(int id) {
+    m_idFacesetPicture = id;
+}
 
 SystemPicture* SystemHero::getPictureBattler() const {
     return reinterpret_cast<SystemPicture*>(SuperListItem::getById(RPM::get()
         ->project()->picturesDatas()->model(PictureKind::Battlers)
         ->invisibleRootItem(), m_idBattlerPicture));
+}
+
+SystemPicture* SystemHero::getPictureFaceset() const {
+    return reinterpret_cast<SystemPicture*>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(PictureKind::Facesets)
+        ->invisibleRootItem(), m_idFacesetPicture));
 }
 
 // -------------------------------------------------------
@@ -68,8 +88,9 @@ SystemPicture* SystemHero::getPictureBattler() const {
 
 void SystemHero::setCopy(const SystemHero& hero){
     SystemLang::setCopy(hero);
-    m_idClass = hero.idClass();
-    m_idBattlerPicture = hero.idBattlerPicture();
+    m_idClass = hero.m_idClass;
+    m_idBattlerPicture = hero.m_idBattlerPicture;
+    m_idFacesetPicture = hero.m_idFacesetPicture;
 }
 
 // -------------------------------------------------------
@@ -82,10 +103,12 @@ void SystemHero::read(const QJsonObject &json){
     SystemLang::read(json);
     m_idClass = json[jsonClass].toInt();
     m_idBattlerPicture = json[jsonBattler].toInt();
+    m_idFacesetPicture = json[jsonFaceset].toInt();
 }
 
 void SystemHero::write(QJsonObject &json) const{
     SystemLang::write(json);
     json[jsonClass] = m_idClass;
     json[jsonBattler] = m_idBattlerPicture;
+    json[jsonFaceset] = m_idFacesetPicture;
 }

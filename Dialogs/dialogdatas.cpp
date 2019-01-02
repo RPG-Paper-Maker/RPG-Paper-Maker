@@ -171,10 +171,15 @@ void DialogDatas::initializeHeroes(GameDatas *gameDatas){
     QModelIndex index = ui->panelSuperListHeroes->list()->getModel()
             ->index(0,0);
 
-    // Battlers
+    // Battler
     ui->widgetPictureBattlerHero->setKind(PictureKind::Battlers);
     connect(ui->widgetPictureBattlerHero, SIGNAL(pictureChanged(SystemPicture*)),
-            this, SLOT(on_battlerHeroPictureChanged(SystemPicture*)));
+        this, SLOT(on_battlerHeroPictureChanged(SystemPicture*)));
+
+    // Faceset
+    ui->widgetPictureFacesetHero->setKind(PictureKind::Facesets);
+    connect(ui->widgetPictureFacesetHero, SIGNAL(pictureChanged(SystemPicture*)),
+        this, SLOT(on_facesetHeroPictureChanged(SystemPicture*)));
 
     ui->panelSuperListHeroes->list()->setIndex(0);
     on_pageHeroSelected(index,index);
@@ -188,6 +193,7 @@ void DialogDatas::updateHero(SystemHero* sysHero){
                            sysHero->idClass());
     ui->comboBoxHeroClass->setCurrentIndex(i);
     ui->widgetPictureBattlerHero->setPicture(sysHero->getPictureBattler());
+    ui->widgetPictureFacesetHero->setPicture(sysHero->getPictureFaceset());
 }
 
 // -------------------------------------------------------
@@ -212,6 +218,11 @@ void DialogDatas::initializeMonsters(GameDatas *gameDatas){
     connect(ui->widgetPictureBattlerMonster, SIGNAL(pictureChanged(SystemPicture*)),
         this, SLOT(on_battlerMonsterPictureChanged(SystemPicture*)));
 
+    // Faceset
+    ui->widgetPictureFacesetMonster->setKind(PictureKind::Facesets);
+    connect(ui->widgetPictureFacesetMonster, SIGNAL(pictureChanged(SystemPicture*)),
+        this, SLOT(on_facesetMonsterPictureChanged(SystemPicture*)));
+
     ui->panelSuperListMonsters->list()->setIndex(0);
     on_pageMonsterSelected(index,index);
 }
@@ -224,6 +235,7 @@ void DialogDatas::updateMonster(SystemMonster *sysMonster){
                            sysMonster->idClass());
     ui->comboBoxMonsterClass->setCurrentIndex(i);
     ui->widgetPictureBattlerMonster->setPicture(sysMonster->getPictureBattler());
+    ui->widgetPictureFacesetMonster->setPicture(sysMonster->getPictureFaceset());
 }
 
 // -------------------------------------------------------
@@ -476,6 +488,24 @@ void DialogDatas::on_battlerMonsterPictureChanged(SystemPicture* picture) {
             ->getSelected()->data().value<quintptr>();
 
     monster->setIdBattlerPicture(picture->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_facesetHeroPictureChanged(SystemPicture* picture) {
+    SystemHero* hero = (SystemHero*) ui->panelSuperListHeroes->list()
+            ->getSelected()->data().value<quintptr>();
+
+    hero->setIdFacesetPicture(picture->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_facesetMonsterPictureChanged(SystemPicture* picture) {
+    SystemMonster* monster = (SystemMonster*) ui->panelSuperListMonsters->list()
+            ->getSelected()->data().value<quintptr>();
+
+    monster->setIdFacesetPicture(picture->id());
 }
 
 // -------------------------------------------------------

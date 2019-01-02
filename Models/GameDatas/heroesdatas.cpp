@@ -52,10 +52,10 @@ QStandardItemModel* HeroesDatas::model() const { return m_model; }
 
 void HeroesDatas::setDefault(){
     SystemHero* heroes[] = {
-        new SystemHero(1, new LangsTranslation("Lucas"), 1, 1),
-        new SystemHero(2, new LangsTranslation("Kate"), 2, 2),
-        new SystemHero(3, new LangsTranslation("Bibi"), 3, 3),
-        new SystemHero(4, new LangsTranslation("Shana"), 4, 4)
+        new SystemHero(1, new LangsTranslation("Lucas"), 1, 1, 1),
+        new SystemHero(2, new LangsTranslation("Kate"), 2, 2, 2),
+        new SystemHero(3, new LangsTranslation("Bibi"), 3, 3, 3),
+        new SystemHero(4, new LangsTranslation("Shana"), 4, 4, 4)
     };
     int length = (sizeof(heroes)/sizeof(*heroes));
     QStandardItem* item;

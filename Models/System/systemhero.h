@@ -35,17 +35,22 @@ class SystemHero : public SystemLang
 {
 public:
     SystemHero();
-    SystemHero(int i, LangsTranslation* names, int idClass, int idBattler);
+    SystemHero(int i, LangsTranslation* names, int idClass, int idBattler, int
+        idFaceset);
     virtual ~SystemHero();
     int idClass() const;
     int idBattlerPicture() const;
     void setIdBattlerPicture(int id);
+    int idFacesetPicture() const;
+    void setIdFacesetPicture(int id);
     SystemPicture* getPictureBattler() const;
+    SystemPicture* getPictureFaceset() const;
 
     void setCopy(const SystemHero& hero);
 
     static const QString jsonClass;
     static const QString jsonBattler;
+    static const QString jsonFaceset;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -53,6 +58,7 @@ public:
 protected:
     int m_idClass;
     int m_idBattlerPicture;
+    int m_idFacesetPicture;
 };
 
 Q_DECLARE_METATYPE(SystemHero)

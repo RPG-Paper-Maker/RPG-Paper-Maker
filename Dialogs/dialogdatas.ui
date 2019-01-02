@@ -343,9 +343,9 @@
              <widget class="QWidget" name="">
               <property name="geometry">
                <rect>
-                <x>12</x>
-                <y>11</y>
-                <width>692</width>
+                <x>13</x>
+                <y>10</y>
+                <width>711</width>
                 <height>52</height>
                </rect>
               </property>
@@ -364,14 +364,21 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2" rowspan="2">
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Faceset:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3" rowspan="2">
                 <spacer name="horizontalSpacer_3">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>328</width>
+                   <width>78</width>
                    <height>48</height>
                   </size>
                  </property>
@@ -389,6 +396,22 @@
                </item>
                <item row="1" column="1">
                 <widget class="WidgetPicture" name="widgetPictureBattlerHero" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="WidgetPicture" name="widgetPictureFacesetHero" native="true">
                  <property name="minimumSize">
                   <size>
                    <width>200</width>
@@ -460,9 +483,9 @@
              <widget class="QWidget" name="">
               <property name="geometry">
                <rect>
-                <x>11</x>
+                <x>12</x>
                 <y>10</y>
-                <width>711</width>
+                <width>702</width>
                 <height>52</height>
                </rect>
               </property>
@@ -481,18 +504,12 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2" rowspan="2">
-                <spacer name="horizontalSpacer_4">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Faceset:</string>
                  </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>118</width>
-                   <height>38</height>
-                  </size>
-                 </property>
-                </spacer>
+                </widget>
                </item>
                <item row="0" column="3" rowspan="2">
                 <widget class="QPushButton" name="pushButtonMonsterbattleRewards">
@@ -516,6 +533,22 @@
                </item>
                <item row="1" column="1">
                 <widget class="WidgetPicture" name="widgetPictureBattlerMonster" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="WidgetPicture" name="widgetPictureFacesetMonster" native="true">
                  <property name="minimumSize">
                   <size>
                    <width>200</width>

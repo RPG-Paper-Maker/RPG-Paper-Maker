@@ -35,8 +35,8 @@ class SystemMonster : public SystemHero
 public:
     SystemMonster();
     SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
-        int exp, QStandardItemModel *currencies, QStandardItemModel *loots,
-        QStandardItemModel *actions);
+        int idFaceset, int exp, QStandardItemModel *currencies,
+        QStandardItemModel *loots, QStandardItemModel *actions);
     virtual ~SystemMonster();
     int exp() const;
     void setExp(int i);

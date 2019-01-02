@@ -61,6 +61,7 @@ void PicturesDatas::setDefault(){
     QList<QString> names;
 
     setDefaultBars(names);
+    setDefaultFacesets(names);
     setDefaultIcons(names);
     setDefaultAutotiles(names);
     setDefaultBattlers(names);
@@ -75,6 +76,13 @@ void PicturesDatas::setDefault(){
 void PicturesDatas::setDefaultBars(QList<QString>& names) {
     names << "hpBar" << "mpBar" << "spBar";
     setDefaultPictures(names, PictureKind::Bars);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultFacesets(QList<QString>& names) {
+    names << "lucas" << "kate" << "bibi" << "shana" << "wooly";
+    setDefaultPictures(names, PictureKind::Facesets);
 }
 
 // -------------------------------------------------------

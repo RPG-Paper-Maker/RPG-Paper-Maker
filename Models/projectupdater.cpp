@@ -377,4 +377,7 @@ void ProjectUpdater::updateVersion_0_6_0() {
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setDefaultColors();
     m_project->writeSystemDatas();
+
+    // Facesets
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_FACESETS);
 }
