@@ -83,7 +83,7 @@ protected:
     int m_depth;
     EventCommand* m_music;
     EventCommand* m_backgroundSound;
-    PrimitiveValue* m_skyColorID;
+    PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
     QHash<Portion, QSet<Position>*> m_outOverflowSprites;
 };

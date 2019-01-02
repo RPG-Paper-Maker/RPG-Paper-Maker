@@ -50,7 +50,7 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_depth(d),
     m_music(nullptr),
     m_backgroundSound(nullptr),
-    m_skyColorID(nullptr),
+    m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true)
 {
 
@@ -67,9 +67,7 @@ MapProperties::~MapProperties()
     if (m_backgroundSound != nullptr) {
         delete m_backgroundSound;
     }
-    if (m_skyColorID != nullptr) {
-        delete m_skyColorID;
-    }
+    delete m_skyColorID;
 }
 
 QString MapProperties::realName() const {
@@ -250,12 +248,10 @@ void MapProperties::read(const QJsonObject &json){
     }
 
     // Sky
-    m_skyColorID = new PrimitiveValue;
+    m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     m_isSkyColor = json.contains("isky") ? json["isky"].toBool() : true;
-    if (json.contains("sky")) {
+    if (m_isSkyColor) {
         m_skyColorID->read(json["sky"].toObject());
-    } else {
-        m_skyColorID->setKind(PrimitiveValueKind::DataBase);
     }
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
@@ -297,7 +293,7 @@ void MapProperties::write(QJsonObject &json) const{
         json["bgs"] = m_backgroundSound->getJSON();
     }
     json["isky"] = m_isSkyColor;
-    if (m_skyColorID != nullptr && m_isSkyColor) {
+    if (m_isSkyColor) {
         QJsonObject jsonObj;
         m_skyColorID->write(jsonObj);
         json["sky"] = jsonObj;

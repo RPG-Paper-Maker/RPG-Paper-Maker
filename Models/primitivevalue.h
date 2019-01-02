@@ -43,6 +43,7 @@ public:
     PrimitiveValue(QString m);
     PrimitiveValue(bool s);
     PrimitiveValue(PrimitiveValueKind kind);
+    PrimitiveValue(PrimitiveValueKind kind, int n);
     static PrimitiveValue* createKeyBoard(int id);
     QStandardItemModel* modelParameter() const;
     void setModelParameter(QStandardItemModel* model);

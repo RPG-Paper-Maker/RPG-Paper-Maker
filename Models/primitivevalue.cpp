@@ -73,6 +73,12 @@ PrimitiveValue::PrimitiveValue(PrimitiveValueKind kind) :
     m_kind = kind;
 }
 
+PrimitiveValue::PrimitiveValue(PrimitiveValueKind kind, int n) :
+    PrimitiveValue(kind)
+{
+    m_numberValue = n;
+}
+
 QStandardItemModel* PrimitiveValue::modelParameter() const {
     return m_modelParameter;
 }
