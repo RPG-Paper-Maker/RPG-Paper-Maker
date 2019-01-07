@@ -17,39 +17,44 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETSHOWPICTURE_H
-#define WIDGETSHOWPICTURE_H
+#ifndef PANELDATASCHARACTER_H
+#define PANELDATASCHARACTER_H
 
 #include <QWidget>
-#include <QPainter>
-#include "systempicture.h"
+#include "systemhero.h"
+#include "panelsuperlist.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetShowPicture
+//  CLASS PanelDatasCharacter
 //
-//  A widget that just shows a picture.
+//  The panel for heroes and monsters datas.
 //
 // -------------------------------------------------------
 
-class WidgetShowPicture : public QWidget
+namespace Ui {
+class PanelDatasCharacter;
+}
+
+class PanelDatasCharacter : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit WidgetShowPicture(QWidget *parent = nullptr);
-    void setActivateCoef(bool b);
-    void setCover(bool b);
-    void setCoef(float coef);
+    explicit PanelDatasCharacter(QWidget *parent = nullptr);
+    ~PanelDatasCharacter();
+    void setPanelSuperList(PanelSuperList *list);
 
-    void updatePicture(SystemPicture* picture, PictureKind kind);
+    void initialize();
+    void update(SystemHero *hero, int classIndex);
 
-protected:
-    QImage m_image;
-    bool m_activateCoef;
-    bool m_cover;
-    float m_coef;
+private:
+    Ui::PanelDatasCharacter *ui;
+    PanelSuperList *m_panelSuperList;
 
-    virtual void paintEvent(QPaintEvent *);
+private slots:
+    void on_battlerPictureChanged(SystemPicture *picture);
+    void on_facesetPictureChanged(SystemPicture* picture);
 };
 
-#endif // WIDGETSHOWPICTURE_H
+#endif // PANELDATASCHARACTER_H

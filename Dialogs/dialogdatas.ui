@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -339,96 +339,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget" native="true">
-             <widget class="QWidget" name="">
-              <property name="geometry">
-               <rect>
-                <x>13</x>
-                <y>10</y>
-                <width>711</width>
-                <height>52</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_16">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_13">
-                 <property name="text">
-                  <string>Class:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_5">
-                 <property name="text">
-                  <string>Battler:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_7">
-                 <property name="text">
-                  <string>Faceset:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3" rowspan="2">
-                <spacer name="horizontalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>78</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="0">
-                <widget class="QComboBox" name="comboBoxHeroClass">
-                 <property name="minimumSize">
-                  <size>
-                   <width>150</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="WidgetPicture" name="widgetPictureBattlerHero" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="WidgetPicture" name="widgetPictureFacesetHero" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </widget>
+            <widget class="PanelDatasCharacter" name="panelDatasHero" native="true"/>
            </item>
           </layout>
          </item>
@@ -479,39 +390,10 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_2" native="true">
-             <widget class="QWidget" name="">
-              <property name="geometry">
-               <rect>
-                <x>12</x>
-                <y>10</y>
-                <width>702</width>
-                <height>52</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_30">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_18">
-                 <property name="text">
-                  <string>Class:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_6">
-                 <property name="text">
-                  <string>Battler:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_8">
-                 <property name="text">
-                  <string>Faceset:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3" rowspan="2">
+            <layout class="QVBoxLayout" name="verticalLayout_12" stretch="0,1">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,1">
+               <item>
                 <widget class="QPushButton" name="pushButtonMonsterbattleRewards">
                  <property name="enabled">
                   <bool>false</bool>
@@ -521,51 +403,25 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QComboBox" name="comboBoxMonsterClass">
-                 <property name="minimumSize">
+               <item>
+                <spacer name="horizontalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
                   <size>
-                   <width>150</width>
-                   <height>0</height>
+                   <width>468</width>
+                   <height>20</height>
                   </size>
                  </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="WidgetPicture" name="widgetPictureBattlerMonster" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="WidgetPicture" name="widgetPictureFacesetMonster" native="true">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>200</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
-             </widget>
-            </widget>
+             </item>
+             <item>
+              <widget class="PanelDatasCharacter" name="panelDatasMonster" native="true"/>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>
@@ -1363,6 +1219,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1374,15 +1236,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetTilesetSettings</class>
    <extends>QWidget</extends>
    <header>widgettilesetsettings.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDatasCharacter</class>
+   <extends>QWidget</extends>
+   <header>paneldatascharacter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

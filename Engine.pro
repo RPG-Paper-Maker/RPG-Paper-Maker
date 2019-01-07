@@ -258,7 +258,8 @@ HEADERS += \
     CustomWidgets/panelselectposition.h \
     Singletons/rpm.h \
     Models/System/systemcolor.h \
-    Dialogs/Systems/dialogsystemcolor.h
+    Dialogs/Systems/dialogsystemcolor.h \
+    CustomWidgets/paneldatascharacter.h
 
 SOURCES += \
     main.cpp \
@@ -464,7 +465,8 @@ SOURCES += \
     CustomWidgets/panelselectposition.cpp \
     Singletons/rpm.cpp \
     Models/System/systemcolor.cpp \
-    Dialogs/Systems/dialogsystemcolor.cpp
+    Dialogs/Systems/dialogsystemcolor.cpp \
+    CustomWidgets/paneldatascharacter.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -540,7 +542,8 @@ FORMS += \
     CustomWidgets/widgetsong.ui \
     Dialogs/dialogselectposition.ui \
     CustomWidgets/panelselectposition.ui \
-    Dialogs/Systems/dialogsystemcolor.ui
+    Dialogs/Systems/dialogsystemcolor.ui \
+    CustomWidgets/paneldatascharacter.ui
 
 OTHER_FILES +=
 

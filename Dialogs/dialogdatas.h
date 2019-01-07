@@ -87,10 +87,6 @@ private slots:
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
-    void on_battlerHeroPictureChanged(SystemPicture* picture);
-    void on_battlerMonsterPictureChanged(SystemPicture* picture);
-    void on_facesetHeroPictureChanged(SystemPicture* picture);
-    void on_facesetMonsterPictureChanged(SystemPicture* picture);
     void on_tilesetPictureChanged(SystemPicture* picture);
     void on_pushButtonMonsterbattleRewards_clicked();
 };

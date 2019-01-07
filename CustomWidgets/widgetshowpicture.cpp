@@ -26,9 +26,25 @@
 //
 // -------------------------------------------------------
 
-WidgetShowPicture::WidgetShowPicture(QWidget *parent) : QWidget(parent)
+WidgetShowPicture::WidgetShowPicture(QWidget *parent) :
+    QWidget(parent),
+    m_activateCoef(true),
+    m_cover(false),
+    m_coef(1.0f)
 {
 
+}
+
+void WidgetShowPicture::setActivateCoef(bool b) {
+    m_activateCoef = b;
+}
+
+void WidgetShowPicture::setCover(bool b) {
+    m_cover = b;
+}
+
+void WidgetShowPicture::setCoef(float coef) {
+    m_coef = coef;
 }
 
 // -------------------------------------------------------
@@ -42,14 +58,22 @@ void WidgetShowPicture::updatePicture(SystemPicture* picture, PictureKind kind)
     QString path = picture->getPath(kind);
     m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
-    if (!m_image.isNull()){
-        float coef = RPM::coefReverseSquareSize();
-        m_image = m_image.scaled(m_image.width() * coef,
-                                 m_image.height() * coef);
+    if (!m_image.isNull()) {
+        if (m_activateCoef) {
+            float coef = RPM::coefReverseSquareSize();
+            m_image = m_image.scaled(static_cast<int>(m_image.width() * coef),
+                static_cast<int>(m_image.height() * coef));
+        } else {
+            m_image = m_image.scaled(static_cast<int>(m_image.width() * m_coef),
+                static_cast<int>(m_image.height() * m_coef));
+        }
     }
-    this->setGeometry(this->geometry().x(), this->geometry().y(),
-                      m_image.width(), m_image.height());
-    setFixedSize(m_image.width(), m_image.height());
+    if (!m_cover) {
+        this->setGeometry(this->geometry().x(), this->geometry().y(), m_image
+            .width(), m_image.height());
+        setFixedSize(m_image.width(), m_image.height());
+    }
+
     this->repaint();
 }
 
