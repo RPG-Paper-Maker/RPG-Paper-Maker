@@ -17,49 +17,38 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIALOGRECT_H
-#define DIALOGRECT_H
+#ifndef DIALOGSYSTEMWINDOWSKIN_H
+#define DIALOGSYSTEMWINDOWSKIN_H
 
 #include <QDialog>
-#include <QLabel>
+#include "systemwindowskin.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogRect
+//  CLASS DialogSystemWindowSkin
 //
-//  Dialog for direct redimension a rectangle.
+//  A dialog used for editing the model of a system window skin.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogRect;
+class DialogSystemWindowSkin;
 }
 
-class DialogRect : public QDialog
+class DialogSystemWindowSkin : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogRect(QRectF *rect, bool controlSquare = true, QWidget *parent
-        = nullptr);
-    ~DialogRect();
+    explicit DialogSystemWindowSkin(SystemWindowSkin &windowSkin, QWidget
+        *parent = nullptr);
+    ~DialogSystemWindowSkin();
 
 private:
-    Ui::DialogRect *ui;
-    QRectF *m_rect;
-    bool m_controlSquare;
+    Ui::DialogSystemWindowSkin *ui;
+    SystemWindowSkin& m_windowSkin;
 
-    void updateValues();
-    int translateToSpinValue(float percent);
-    float translateFromSpinValue(int px);
-    int getOne();
-    int getTwo();
-
-private slots:
-    void on_spinBoxX_valueChanged(int i);
-    void on_spinBoxY_valueChanged(int i);
-    void on_spinBoxWidth_valueChanged(int i);
-    void on_spinBoxHeight_valueChanged(int i);
+    void initialize();
 };
 
-#endif // DIALOGRECT_H
+#endif // DIALOGSYSTEMWINDOWSKIN_H

@@ -30,6 +30,7 @@
 #include "systembattlecommand.h"
 #include "systembattlemap.h"
 #include "systemcolor.h"
+#include "systemwindowskin.h"
 
 // -------------------------------------------------------
 //
@@ -73,13 +74,13 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     // Don't show edit name
     ui->panelSuperListColors->showEditName(false);
     ui->panelSuperListCurrencies->showEditName(false);
-    ui->panelSuperListCameraMovements->showEditName(false);
+    ui->panelSuperListWindowSkins->showEditName(false);
     ui->panelSuperListCameraProperties->showEditName(false);
     ui->panelSuperListDetections->showEditName(false);
     ui->panelSuperListParticules->showEditName(false);
 
     // Allow editions
-    ui->panelSuperListCameraMovements->list()->setCanEdit(true);
+    ui->panelSuperListWindowSkins->list()->setCanEdit(true);
     ui->panelSuperListCameraProperties->list()->setCanEdit(true);
     ui->panelSuperListColors->list()->setCanEdit(true);
     ui->panelSuperListDetections->list()->setCanEdit(true);
@@ -98,6 +99,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
         SystemCurrency);
     ui->panelSuperListCurrencies->initializeModel(gameDatas->systemDatas()
         ->modelCurrencies());
+    ui->panelSuperListWindowSkins->list()->initializeNewItemInstance(new
+        SystemWindowSkin);
+    ui->panelSuperListWindowSkins->initializeModel(gameDatas->systemDatas()
+        ->modelWindowSkins());
 }
 
 // -------------------------------------------------------

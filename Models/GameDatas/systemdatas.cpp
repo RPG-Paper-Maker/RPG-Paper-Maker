@@ -23,8 +23,10 @@
 #include "common.h"
 #include "systemcurrency.h"
 #include "systemcolor.h"
+#include "systemwindowskin.h"
 
 const QString SystemDatas::JSON_COLORS = "colors";
+const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 
 // -------------------------------------------------------
 //
@@ -38,7 +40,8 @@ SystemDatas::SystemDatas() :
     m_showBB(false),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
-    m_modelItemsTypes(new QStandardItemModel)
+    m_modelItemsTypes(new QStandardItemModel),
+    m_modelWindowSkins(new QStandardItemModel)
 {
 
 }
@@ -47,6 +50,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
+    SuperListItem::deleteModel(m_modelWindowSkins);
 }
 
 void SystemDatas::read(QString path) {
@@ -89,6 +93,10 @@ QStandardItemModel * SystemDatas::modelItemsTypes() const {
     return m_modelItemsTypes;
 }
 
+QStandardItemModel * SystemDatas::modelWindowSkins() const {
+    return m_modelWindowSkins;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -104,6 +112,7 @@ void SystemDatas::setDefault() {
     setDefaultColors();
     setDefaultCurrencies();
     setDefaultItemsTypes();
+    setDefaultWindowSkins();
 }
 
 // -------------------------------------------------------
@@ -164,6 +173,17 @@ void SystemDatas::setDefaultItemsTypes() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultWindowSkins() {
+    QStandardItem *item = new QStandardItem;
+    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default");
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(sys->toString());
+    m_modelWindowSkins->appendRow(item);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -177,6 +197,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelColors, false);
     SuperListItem::deleteModel(m_modelCurrencies, false);
     SuperListItem::deleteModel(m_modelItemsTypes, false);
+    SuperListItem::deleteModel(m_modelWindowSkins, false);
 
     // Other options
     m_portionsRay = json["pr"].toInt();
@@ -221,6 +242,18 @@ void SystemDatas::read(const QJsonObject &json){
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
         item->setText(sys->toString());
         m_modelItemsTypes->appendRow(item);
+    }
+
+    // Window skins
+    jsonList = json[JSON_WINDOW_SKINS].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        QStandardItem *item = new QStandardItem;
+        SystemWindowSkin *sys = new SystemWindowSkin;
+        sys->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+        item->setText(sys->toString());
+        m_modelWindowSkins->appendRow(item);
     }
 }
 
@@ -275,4 +308,16 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json["itemsTypes"] = jsonArray;
+
+    // Window skins
+    jsonArray = QJsonArray();
+    l = m_modelWindowSkins->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++){
+        QJsonObject jsonCommon;
+        SystemWindowSkin *sys = reinterpret_cast<SystemWindowSkin *>(
+            m_modelWindowSkins->item(i)->data().value<quintptr>());
+        sys->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_WINDOW_SKINS] = jsonArray;
 }

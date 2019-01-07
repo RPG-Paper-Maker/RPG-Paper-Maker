@@ -41,12 +41,13 @@ enum class PictureKind {
     Walls,
     Battlers,
     Facesets,
+    WindowSkins,
     Last
 };
 
 inline uint qHash(PictureKind pos)
 {
-   return (int) pos;
+   return static_cast<uint>(pos);
 }
 
 Q_DECLARE_METATYPE(PictureKind)

@@ -27,32 +27,39 @@
 //
 // -------------------------------------------------------
 
-DialogRect::DialogRect(QRectF *rect, QWidget *parent) :
+DialogRect::DialogRect(QRectF *rect, bool controlSquare, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogRect),
-    m_rect(rect)
+    m_rect(rect),
+    m_controlSquare(controlSquare)
 {
     ui->setupUi(this);
     
+    if (m_controlSquare) {
+        int squareSize = RPM::get()->getSquareSize();
+        int two = getTwo();
 
-    int squareSize = RPM::get()->getSquareSize();
-    int two = getTwo();
+        ui->spinBoxX->setMinimum(0);
+        ui->spinBoxX->setMaximum(squareSize - two);
+        ui->spinBoxX->setValue(translateToSpinValue(m_rect->x()));
 
-    ui->spinBoxX->setMinimum(0);
-    ui->spinBoxX->setMaximum(squareSize - two);
-    ui->spinBoxX->setValue(translateToSpinValue(m_rect->x()));
+        ui->spinBoxY->setMinimum(0);
+        ui->spinBoxY->setMaximum(squareSize - two);
+        ui->spinBoxY->setValue(translateToSpinValue(m_rect->y()));
 
-    ui->spinBoxY->setMinimum(0);
-    ui->spinBoxY->setMaximum(squareSize - two);
-    ui->spinBoxY->setValue(translateToSpinValue(m_rect->y()));
+        ui->spinBoxWidth->setMinimum(two);
+        ui->spinBoxWidth->setMaximum(squareSize);
+        ui->spinBoxWidth->setValue(translateToSpinValue(m_rect->width()));
 
-    ui->spinBoxWidth->setMinimum(two);
-    ui->spinBoxWidth->setMaximum(squareSize);
-    ui->spinBoxWidth->setValue(translateToSpinValue(m_rect->width()));
-
-    ui->spinBoxHeight->setMinimum(two);
-    ui->spinBoxHeight->setMaximum(squareSize);
-    ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
+        ui->spinBoxHeight->setMinimum(two);
+        ui->spinBoxHeight->setMaximum(squareSize);
+        ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
+    } else {
+        ui->spinBoxX->setMinimum(static_cast<int>(rect->x()));
+        ui->spinBoxY->setMinimum(static_cast<int>(rect->y()));
+        ui->spinBoxWidth->setMinimum(static_cast<int>(rect->width()));
+        ui->spinBoxHeight->setMinimum(static_cast<int>(rect->height()));
+    }
 }
 
 DialogRect::~DialogRect()
@@ -67,8 +74,9 @@ DialogRect::~DialogRect()
 // -------------------------------------------------------
 
 void DialogRect::updateValues() {
-    if (this->parent() != nullptr)
-        ((QWidget*) this->parent())->repaint();
+    if (this->parent() != nullptr) {
+        reinterpret_cast<QWidget *>(this->parent())->repaint();
+    }
 }
 
 // -------------------------------------------------------
@@ -102,53 +110,73 @@ int DialogRect::getTwo() {
 // -------------------------------------------------------
 
 void DialogRect::on_spinBoxX_valueChanged(int i) {
-    m_rect->setX(translateFromSpinValue(i));
-    if (translateToSpinValue(m_rect->width()) == getOne()) {
-        m_rect->setWidth(translateFromSpinValue(getTwo()));
-        ui->spinBoxWidth->setValue(getTwo());
+    if (m_controlSquare) {
+        m_rect->setX(translateFromSpinValue(i));
+        if (translateToSpinValue(m_rect->width()) == getOne()) {
+            m_rect->setWidth(translateFromSpinValue(getTwo()));
+            ui->spinBoxWidth->setValue(getTwo());
+        }
+        else
+            ui->spinBoxWidth->setValue(translateToSpinValue(m_rect->width()));
+    } else {
+        m_rect->setX(i);
     }
-    else
-        ui->spinBoxWidth->setValue(translateToSpinValue(m_rect->width()));
+
     updateValues();
 }
 
 // -------------------------------------------------------
 
 void DialogRect::on_spinBoxY_valueChanged(int i) {
-    m_rect->setY(translateFromSpinValue(i));
-    if (translateToSpinValue(m_rect->height()) == getOne()) {
-        m_rect->setHeight(translateFromSpinValue(getTwo()));
-        ui->spinBoxHeight->setValue(getTwo());
+    if (m_controlSquare) {
+        m_rect->setY(translateFromSpinValue(i));
+        if (translateToSpinValue(m_rect->height()) == getOne()) {
+            m_rect->setHeight(translateFromSpinValue(getTwo()));
+            ui->spinBoxHeight->setValue(getTwo());
+        }
+        else
+            ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
+    } else {
+        m_rect->setY(i);
     }
-    else
-        ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
+
     updateValues();
 }
 
 // -------------------------------------------------------
 
 void DialogRect::on_spinBoxWidth_valueChanged(int i) {
-    m_rect->setWidth(translateFromSpinValue(i));
-    if (m_rect->right() >= 100) {
-        m_rect->setRight(translateFromSpinValue(
-                             RPM::get()->project()->gameDatas()->systemDatas()
-                             ->squareSize()));
-        ui->spinBoxX->setValue(RPM::get()->project()->gameDatas()
-                               ->systemDatas()->squareSize() - i);
+    if (m_controlSquare) {
+        m_rect->setWidth(translateFromSpinValue(i));
+        if (m_rect->right() >= 100) {
+            m_rect->setRight(translateFromSpinValue(
+                                 RPM::get()->project()->gameDatas()->systemDatas()
+                                 ->squareSize()));
+            ui->spinBoxX->setValue(RPM::get()->project()->gameDatas()
+                                   ->systemDatas()->squareSize() - i);
+        }
+    } else {
+        m_rect->setWidth(i);
     }
+
     updateValues();
 }
 
 // -------------------------------------------------------
 
 void DialogRect::on_spinBoxHeight_valueChanged(int i) {
-    m_rect->setHeight(translateFromSpinValue(i));
-    if (m_rect->bottom() >= 100) {
-        m_rect->setBottom(translateFromSpinValue(
-                             RPM::get()->project()->gameDatas()->systemDatas()
-                             ->squareSize()));
-        ui->spinBoxY->setValue(RPM::get()->project()->gameDatas()
-                               ->systemDatas()->squareSize() - i);
+    if (m_controlSquare) {
+        m_rect->setHeight(translateFromSpinValue(i));
+        if (m_rect->bottom() >= 100) {
+            m_rect->setBottom(translateFromSpinValue(
+                                 RPM::get()->project()->gameDatas()->systemDatas()
+                                 ->squareSize()));
+            ui->spinBoxY->setValue(RPM::get()->project()->gameDatas()
+                                   ->systemDatas()->squareSize() - i);
+        }
+    } else {
+        m_rect->setHeight(i);
     }
+
     updateValues();
 }

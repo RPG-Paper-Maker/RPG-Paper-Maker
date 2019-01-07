@@ -416,16 +416,16 @@
              <item>
               <widget class="QGroupBox" name="groupBox_6">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
-                <string>Camera propertie</string>
+                <string>Window Skins</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_9">
                 <item row="0" column="0">
-                 <widget class="PanelSuperList" name="panelSuperListCameraProperties" native="true">
+                 <widget class="PanelSuperList" name="panelSuperListWindowSkins" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -438,11 +438,11 @@
                 <bool>false</bool>
                </property>
                <property name="title">
-                <string>Camera movements</string>
+                <string>Camera property</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_12">
                 <item row="0" column="0">
-                 <widget class="PanelSuperList" name="panelSuperListCameraMovements" native="true">
+                 <widget class="PanelSuperList" name="panelSuperListCameraProperties" native="true">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>

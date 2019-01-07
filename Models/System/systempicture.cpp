@@ -121,6 +121,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind){
         return RPM::PATH_BATTLERS;
     case PictureKind::Facesets:
         return RPM::PATH_FACESETS;
+    case PictureKind::WindowSkins:
+        return RPM::PATH_WINDOW_SKINS;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }

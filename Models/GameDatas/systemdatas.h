@@ -38,6 +38,7 @@ class SystemDatas : public Serializable
 {
 public:
     static const QString JSON_COLORS;
+    static const QString JSON_WINDOW_SKINS;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -56,14 +57,17 @@ public:
     void setFramesAnimation(int f);
     bool showBB() const;
     void setShowBB(bool b);
-
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
+    QStandardItemModel * modelWindowSkins() const;
+
     void setDefault();
     void setDefaultColors();
     void setDefaultCurrencies();
     void setDefaultItemsTypes();
+    void setDefaultWindowSkins();
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
@@ -78,6 +82,7 @@ private:
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
+    QStandardItemModel *m_modelWindowSkins;
 };
 
 #endif // SYSTEMDATAS_H

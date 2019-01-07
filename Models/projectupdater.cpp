@@ -373,11 +373,11 @@ void ProjectUpdater::updateVersion_0_6_0() {
     m_project->picturesDatas()->setDefaultBattlers(names);
     m_project->writePicturesDatas();
 
-    // System colors
+    // System update
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_FACESETS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_WINDOW_SKINS);
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setDefaultColors();
+    m_project->gameDatas()->systemDatas()->setDefaultWindowSkins();
     m_project->writeSystemDatas();
-
-    // Facesets
-    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_FACESETS);
 }

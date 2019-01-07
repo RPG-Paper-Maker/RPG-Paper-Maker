@@ -259,7 +259,9 @@ HEADERS += \
     Singletons/rpm.h \
     Models/System/systemcolor.h \
     Dialogs/Systems/dialogsystemcolor.h \
-    CustomWidgets/paneldatascharacter.h
+    CustomWidgets/paneldatascharacter.h \
+    Models/System/systemwindowskin.h \
+    Dialogs/Systems/dialogsystemwindowskin.h
 
 SOURCES += \
     main.cpp \
@@ -466,7 +468,9 @@ SOURCES += \
     Singletons/rpm.cpp \
     Models/System/systemcolor.cpp \
     Dialogs/Systems/dialogsystemcolor.cpp \
-    CustomWidgets/paneldatascharacter.cpp
+    CustomWidgets/paneldatascharacter.cpp \
+    Models/System/systemwindowskin.cpp \
+    Dialogs/Systems/dialogsystemwindowskin.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -543,7 +547,8 @@ FORMS += \
     Dialogs/dialogselectposition.ui \
     CustomWidgets/panelselectposition.ui \
     Dialogs/Systems/dialogsystemcolor.ui \
-    CustomWidgets/paneldatascharacter.ui
+    CustomWidgets/paneldatascharacter.ui \
+    Dialogs/Systems/dialogsystemwindowskin.ui
 
 OTHER_FILES +=
 

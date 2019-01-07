@@ -103,6 +103,7 @@ public:
     const static QString pathBars;
     const static QString pathIcons;
     const static QString PATH_FACESETS;
+    const static QString PATH_WINDOW_SKINS;
     const static QString pathAutotiles;
     const static QString pathCharacters;
     const static QString pathReliefs;
