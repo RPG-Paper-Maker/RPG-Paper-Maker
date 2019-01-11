@@ -32,7 +32,8 @@ WidgetShowPicture::WidgetShowPicture(QWidget *parent) :
     m_cover(false),
     m_coef(1.0f),
     m_rect(nullptr),
-    m_canDrawRect(false)
+    m_canDrawRect(false),
+    m_firstPresure(false)
 {
     this->setMouseTracking(true);
 }
@@ -48,6 +49,10 @@ void WidgetShowPicture::setCover(bool b) {
 void WidgetShowPicture::setCoef(float coef) {
     m_coef = coef;
     updatePictureSize();
+}
+
+void WidgetShowPicture::setRect(QRectF *rect) {
+    m_rect = rect;
 }
 
 // -------------------------------------------------------
@@ -105,7 +110,10 @@ void WidgetShowPicture::paintEvent(QPaintEvent *){
 
     if (m_rect != nullptr) {
         painter.setPen(Qt::red);
-        painter.drawRect(*m_rect);
+        painter.drawRect(static_cast<int>(static_cast<float>(m_rect->x()) *
+            m_coef), static_cast<int>(static_cast<float>(m_rect->y()) * m_coef),
+            static_cast<int>(static_cast<float>(m_rect->width()) * m_coef),
+            static_cast<int>(static_cast<float>(m_rect->height()) * m_coef));
     }
 }
 

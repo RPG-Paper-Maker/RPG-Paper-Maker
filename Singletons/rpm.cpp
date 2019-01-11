@@ -195,6 +195,42 @@ void RPM::readJSON(QString path, Serializable &obj){
 
 // -------------------------------------------------------
 
+void RPM::writeRect(QJsonArray &json, const QRect &rect) {
+    json.append(rect.x());
+    json.append(rect.y());
+    json.append(rect.width());
+    json.append(rect.height());
+}
+
+// -------------------------------------------------------
+
+void RPM::readRect(QJsonArray&json, QRect& rect) {
+    rect.setX(json[0].toInt());
+    rect.setY(json[1].toInt());
+    rect.setWidth(json[2].toInt());
+    rect.setHeight(json[3].toInt());
+}
+
+// -------------------------------------------------------
+
+void RPM::writeRectF(QJsonArray &json, const QRectF &rect) {
+    json.append(rect.x());
+    json.append(rect.y());
+    json.append(rect.width());
+    json.append(rect.height());
+}
+
+// -------------------------------------------------------
+
+void RPM::readRectF(QJsonArray&json, QRectF& rect) {
+    rect.setX(json[0].toDouble());
+    rect.setY(json[1].toDouble());
+    rect.setWidth(json[2].toDouble());
+    rect.setHeight(json[3].toDouble());
+}
+
+// -------------------------------------------------------
+
 QKeySequence RPM::getKeySequence(QKeyEvent *event){
     int keyInt = event->key();
     Qt::Key key = static_cast<Qt::Key>(keyInt);

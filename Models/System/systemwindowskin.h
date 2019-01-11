@@ -34,12 +34,14 @@ class SystemWindowSkin : public SuperListItem
 {
 public:
     static const QString JSON_PICTURE_ID;
+    static const QString JSON_TOP_LEFT;
 
     SystemWindowSkin();
-    SystemWindowSkin(int i, QString n, int pictureID);
+    SystemWindowSkin(int i, QString n, int pictureID, QRectF topLeft);
     virtual ~SystemWindowSkin();
     int pictureID() const;
     void setPictureID(int id);
+    QRectF * topLeft();
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

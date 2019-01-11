@@ -18,8 +18,10 @@
 */
 
 #include "dialogsystemwindowskin.h"
+#include "rpm.h"
 
 const QString SystemWindowSkin::JSON_PICTURE_ID = "pid";
+const QString SystemWindowSkin::JSON_TOP_LEFT = "tl";
 
 // -------------------------------------------------------
 //
@@ -29,14 +31,16 @@ const QString SystemWindowSkin::JSON_PICTURE_ID = "pid";
 
 
 SystemWindowSkin::SystemWindowSkin() :
-    SystemWindowSkin(-1, "", -1)
+    SystemWindowSkin(-1, "", -1, QRect(0, 0, 1, 1))
 {
 
 }
 
-SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID) :
+SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID, QRectF
+    topLeft) :
     SuperListItem (i, n),
-    m_pictureID(pictureID)
+    m_pictureID(pictureID),
+    m_topLeft(topLeft)
 {
 
 }
@@ -52,6 +56,10 @@ int SystemWindowSkin::pictureID() const {
 
 void SystemWindowSkin::setPictureID(int id) {
     m_pictureID = id;
+}
+
+QRectF * SystemWindowSkin::topLeft() {
+    return &m_topLeft;
 }
 
 // -------------------------------------------------------
@@ -85,20 +93,30 @@ void SystemWindowSkin::setCopy(const SystemWindowSkin& super) {
     SuperListItem::setCopy(super);
 
     m_pictureID = super.m_pictureID;
+    m_topLeft = super.m_topLeft;
 }
 
 // -------------------------------------------------------
 
 void SystemWindowSkin::read(const QJsonObject &json) {
     SuperListItem::read(json);
+    QJsonArray tab;
 
     m_pictureID = json[JSON_PICTURE_ID].toInt();
+
+    tab = json[JSON_TOP_LEFT].toArray();
+    RPM::readRectF(tab, m_topLeft);
 }
 
 // -------------------------------------------------------
 
 void SystemWindowSkin::write(QJsonObject &json) const {
     SuperListItem::write(json);
+    QJsonArray tab;
 
     json[JSON_PICTURE_ID] = m_pictureID;
+
+    RPM::writeRectF(tab, m_topLeft);
+    json[JSON_TOP_LEFT] = tab;
+    tab = QJsonArray();
 }

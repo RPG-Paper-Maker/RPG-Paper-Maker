@@ -43,6 +43,11 @@ void DialogSystemWindowSkin::initialize() {
     ui->widgetPicture->setPicture(picture);
     on_pictureChanged(picture);
     updateZoom(RPM::get()->engineSettings()->zoomPictures());
+
+    // Rect selectors
+    ui->widgetSelectRectTopLeft->updateLabel("Top-Left");
+    ui->widgetSelectRectTopLeft->setWidgetShowPicture(ui->widgetShowPicture);
+    ui->widgetSelectRectTopLeft->setRect(m_windowSkin.topLeft());
 }
 
 // -------------------------------------------------------

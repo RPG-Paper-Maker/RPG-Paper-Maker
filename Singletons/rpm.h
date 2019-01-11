@@ -134,6 +134,10 @@ public:
     // METHODS
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
+    static void writeRect(QJsonArray &json, const QRect& rect);
+    static void readRect(QJsonArray &json, QRect& rect);
+    static void writeRectF(QJsonArray &json, const QRectF& rect);
+    static void readRectF(QJsonArray &json, QRectF &rect);
     static QKeySequence getKeySequence(QKeyEvent *event);
     static QString keyToString(int keyInt);
     static int mod(int x, int m);

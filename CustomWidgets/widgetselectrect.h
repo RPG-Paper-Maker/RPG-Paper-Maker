@@ -17,50 +17,45 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETSHOWPICTURE_H
-#define WIDGETSHOWPICTURE_H
+#ifndef WIDGETSELECTRECT_H
+#define WIDGETSELECTRECT_H
 
-#include <QWidget>
-#include <QPainter>
-#include "systempicture.h"
+#include "widgetshowpicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetShowPicture
+//  CLASS WidgetSelectRect
 //
-//  A widget that just shows a picture.
+//  Widget used for choosing a rect on a picture (ex: windowSkins).
 //
 // -------------------------------------------------------
 
-class WidgetShowPicture : public QWidget
+namespace Ui {
+class WidgetSelectRect;
+}
+
+class WidgetSelectRect : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit WidgetShowPicture(QWidget *parent = nullptr);
-    void setActivateCoef(bool b);
-    void setCover(bool b);
-    void setCoef(float coef);
+    explicit WidgetSelectRect(QWidget *parent = nullptr);
+    ~WidgetSelectRect();
+    void setWidgetShowPicture(WidgetShowPicture *w);
     void setRect(QRectF *rect);
 
-    void updatePicture(SystemPicture* picture, PictureKind kind);
-    void updatePictureSize();
+    void updateLabel(QString label);
 
-protected:
-    QImage m_image;
-    QImage m_baseImage;
-    bool m_activateCoef;
-    bool m_cover;
-    float m_coef;
-    QRectF* m_rect;
-    bool m_canDrawRect;
-    bool m_firstPresure;
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
 
-    virtual void paintEvent(QPaintEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void leaveEvent(QEvent *);
+private:
+    Ui::WidgetSelectRect *ui;
+    WidgetShowPicture *m_widgetShowPicture;
+    QRectF *m_rect;
 
-signals:
-    void rectDrawn();
+public slots:
+    void on_pushButtonEnter_clicked();
 };
 
-#endif // WIDGETSHOWPICTURE_H
+#endif // WIDGETSELECTRECT_H
