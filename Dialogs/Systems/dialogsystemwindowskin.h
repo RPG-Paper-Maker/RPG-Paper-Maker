@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include "systemwindowskin.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -47,8 +48,14 @@ public:
 private:
     Ui::DialogSystemWindowSkin *ui;
     SystemWindowSkin& m_windowSkin;
+    float m_zoom;
 
     void initialize();
+    void updateZoom(int zoom);
+
+public slots:
+    void on_pictureChanged(SystemPicture *picture);
+    void on_horizontalSlider_valueChanged(int value);
 };
 
 #endif // DIALOGSYSTEMWINDOWSKIN_H

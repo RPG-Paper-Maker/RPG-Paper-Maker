@@ -69,6 +69,7 @@ void PicturesDatas::setDefault(){
     setDefaultReliefs(names);
     setDefaultTilesets(names);
     setDefaultWalls(names);
+    setDefaultWindowSkins(names);
 }
 
 // -------------------------------------------------------
@@ -90,6 +91,13 @@ void PicturesDatas::setDefaultFacesets(QList<QString>& names) {
 void PicturesDatas::setDefaultIcons(QList<QString>& names) {
     names << "darkness" << "fire" << "grass" << "light" << "water" << "wind";
     setDefaultPictures(names, PictureKind::Icons);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultWindowSkins(QList<QString>& names) {
+    names << "default";
+    setDefaultPictures(names, PictureKind::WindowSkins);
 }
 
 // -------------------------------------------------------

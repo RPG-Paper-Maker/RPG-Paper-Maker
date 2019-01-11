@@ -19,6 +19,8 @@
 
 #include "dialogsystemwindowskin.h"
 
+const QString SystemWindowSkin::JSON_PICTURE_ID = "pid";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -27,13 +29,14 @@
 
 
 SystemWindowSkin::SystemWindowSkin() :
-    SystemWindowSkin(-1, "")
+    SystemWindowSkin(-1, "", -1)
 {
 
 }
 
-SystemWindowSkin::SystemWindowSkin(int i, QString n) :
-    SuperListItem (i, n)
+SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID) :
+    SuperListItem (i, n),
+    m_pictureID(pictureID)
 {
 
 }
@@ -41,6 +44,14 @@ SystemWindowSkin::SystemWindowSkin(int i, QString n) :
 SystemWindowSkin::~SystemWindowSkin()
 {
 
+}
+
+int SystemWindowSkin::pictureID() const {
+    return m_pictureID;
+}
+
+void SystemWindowSkin::setPictureID(int id) {
+    m_pictureID = id;
 }
 
 // -------------------------------------------------------
@@ -72,16 +83,22 @@ SuperListItem* SystemWindowSkin::createCopy() const {
 
 void SystemWindowSkin::setCopy(const SystemWindowSkin& super) {
     SuperListItem::setCopy(super);
+
+    m_pictureID = super.m_pictureID;
 }
 
 // -------------------------------------------------------
 
 void SystemWindowSkin::read(const QJsonObject &json) {
     SuperListItem::read(json);
+
+    m_pictureID = json[JSON_PICTURE_ID].toInt();
 }
 
 // -------------------------------------------------------
 
 void SystemWindowSkin::write(QJsonObject &json) const {
     SuperListItem::write(json);
+
+    json[JSON_PICTURE_ID] = m_pictureID;
 }

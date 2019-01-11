@@ -82,8 +82,9 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     itemHUD->setIcon(icon);
     itemHUD->setText("HUD");
     itemPictures->appendRow(itemHUD);
-    listNames << "Bars" << "Facesets" << "Icons";
-    listEnums << PictureKind::Bars << PictureKind::Facesets << PictureKind::Icons;
+    listNames << "Bars" << "Facesets" << "Icons" << "WindowSkins";
+    listEnums << PictureKind::Bars << PictureKind::Facesets <<
+        PictureKind::Icons << PictureKind::WindowSkins;
     addfolders(icon, itemHUD, listNames, listEnums);
 
     // Textures 2D

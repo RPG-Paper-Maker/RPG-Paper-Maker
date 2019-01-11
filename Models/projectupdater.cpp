@@ -371,6 +371,7 @@ void ProjectUpdater::updateVersion_0_6_0() {
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BATTLERS);
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultBattlers(names);
+    m_project->picturesDatas()->setDefaultWindowSkins(names);
     m_project->writePicturesDatas();
 
     // System update

@@ -42,14 +42,23 @@ public:
     void setCoef(float coef);
 
     void updatePicture(SystemPicture* picture, PictureKind kind);
+    void updatePictureSize();
 
 protected:
     QImage m_image;
+    QImage m_baseImage;
     bool m_activateCoef;
     bool m_cover;
     float m_coef;
+    QRectF* m_rect;
+    bool m_canDrawRect;
 
     virtual void paintEvent(QPaintEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void leaveEvent(QEvent *);
+
+signals:
+    void rectDrawn();
 };
 
 #endif // WIDGETSHOWPICTURE_H

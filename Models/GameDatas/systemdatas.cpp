@@ -176,7 +176,7 @@ void SystemDatas::setDefaultItemsTypes() {
 
 void SystemDatas::setDefaultWindowSkins() {
     QStandardItem *item = new QStandardItem;
-    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default");
+    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default", 1);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(sys->toString());
