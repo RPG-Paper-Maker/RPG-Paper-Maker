@@ -171,17 +171,8 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected){
     if (dialog.exec() == QDialog::Accepted){
         EventCommand* command = dialog.getCommand();
         QStandardItem* root = getRootOfCommand(selected);
-        int insertionRow;
-        if (selected != nullptr){
-            // Insert pasted command just above selection
-            insertionRow = selected->row();
-        }
-        else{
-            // No selection, insert pasted command one row before the end
-            // (to preserve None command at the end)
-            insertionRow = root->rowCount() - 1;
-        }
-        // post-increment insertionRow to insert command below the initial command row
+        int insertionRow = getInsertionRow(selected, root);
+        // post-increment insertionRow to prepare possible extra row, depending on command kind
         QStandardItem* item = insertCommand(command, root, insertionRow++);
 
         // If event command block, more commands to add...
@@ -304,16 +295,7 @@ void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
         copiedCommand = m_copiedCommands.at(i);
         copy = new QStandardItem;
         SystemCommonReaction::copyCommandsItem(copiedCommand, copy);
-        int insertionRow;
-        if (selected != nullptr){
-            // Insert pasted command just above selection
-            insertionRow = selected->row();
-        }
-        else{
-            // No selection, insert pasted command one row before the end
-            // (to preserve None command at the end)
-            insertionRow = root->rowCount() - 1;
-        }
+        int insertionRow = getInsertionRow(selected, root);
         root->insertRow(insertionRow, copy);
         expand(copy->index());
         updateAllNodesString(copy);
@@ -566,6 +548,18 @@ bool WidgetTreeCommands::itemLessThan(const QStandardItem* item1,
                                       const QStandardItem* item2)
 {
     return item1->row() < item2->row();
+}
+
+int WidgetTreeCommands::getInsertionRow(const QStandardItem* selected, const QStandardItem* root)
+{
+    if (selected != nullptr){
+        // Some rows are selected, new commands should be inserted above
+        return selected->row();
+    }
+    else{
+        // No selection, new commands should be inserted just above the None command at the end
+        return root->rowCount() - 1;
+    }
 }
 
 // -------------------------------------------------------

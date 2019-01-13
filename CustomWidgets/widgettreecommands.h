@@ -80,6 +80,9 @@ protected:
     void selectChildrenOnly(QStandardItem* item);
     static bool itemLessThan(const QStandardItem* item1,
                              const QStandardItem* item2);
+    /// Return the index of the row above current selection.
+    /// If there is no selection, return the index of the last row.
+    static int getInsertionRow(const QStandardItem* selected, const QStandardItem* root);
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
