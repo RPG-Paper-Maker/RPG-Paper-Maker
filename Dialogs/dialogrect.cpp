@@ -55,10 +55,10 @@ DialogRect::DialogRect(QRectF *rect, bool controlSquare, QWidget *parent) :
         ui->spinBoxHeight->setMaximum(squareSize);
         ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
     } else {
-        ui->spinBoxX->setMinimum(static_cast<int>(rect->x()));
-        ui->spinBoxY->setMinimum(static_cast<int>(rect->y()));
-        ui->spinBoxWidth->setMinimum(static_cast<int>(rect->width()));
-        ui->spinBoxHeight->setMinimum(static_cast<int>(rect->height()));
+        ui->spinBoxWidth->setValue(static_cast<int>(rect->width()));
+        ui->spinBoxHeight->setValue(static_cast<int>(rect->height()));
+        ui->spinBoxX->setValue(static_cast<int>(rect->x()));
+        ui->spinBoxY->setValue(static_cast<int>(rect->y()));
     }
 }
 
@@ -120,6 +120,7 @@ void DialogRect::on_spinBoxX_valueChanged(int i) {
             ui->spinBoxWidth->setValue(translateToSpinValue(m_rect->width()));
     } else {
         m_rect->setX(i);
+        m_rect->setWidth(ui->spinBoxWidth->value());
     }
 
     updateValues();
@@ -138,6 +139,7 @@ void DialogRect::on_spinBoxY_valueChanged(int i) {
             ui->spinBoxHeight->setValue(translateToSpinValue(m_rect->height()));
     } else {
         m_rect->setY(i);
+        m_rect->setHeight(ui->spinBoxHeight->value());
     }
 
     updateValues();

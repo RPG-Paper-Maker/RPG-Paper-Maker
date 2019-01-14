@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>171</width>
+    <width>176</width>
     <height>198</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Collision square</string>
+   <string>Select rect...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">

@@ -52,10 +52,15 @@ private:
 
     void initialize();
     void updateZoom(int zoom);
+    void enableAll(bool b);
+
+    virtual void closeEvent(QCloseEvent *event);
 
 public slots:
     void on_pictureChanged(SystemPicture *picture);
     void on_horizontalSlider_valueChanged(int value);
+    void on_selecting();
+    void on_rectDrawn();
 };
 
 #endif // DIALOGSYSTEMWINDOWSKIN_H

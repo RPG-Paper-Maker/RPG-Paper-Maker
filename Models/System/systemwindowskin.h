@@ -35,13 +35,49 @@ class SystemWindowSkin : public SuperListItem
 public:
     static const QString JSON_PICTURE_ID;
     static const QString JSON_TOP_LEFT;
+    static const QString JSON_TOP_RIGHT;
+    static const QString JSON_BOT_LEFT;
+    static const QString JSON_BOT_RIGHT;
+    static const QString JSON_LEFT;
+    static const QString JSON_RIGHT;
+    static const QString JSON_TOP;
+    static const QString JSON_BOT;
+    static const QString JSON_BACKGROUND;
+    static const QString JSON_BACKGROUND_REPEAT;
+    static const QString JSON_ARROW_END_MESSAGE;
+    static const QString JSON_ARROW_TARGET_SELECTION;
+    static const QString JSON_ARROW_UP_DOWN;
+    static const QString JSON_TEXT_NORMAL;
+    static const QString JSON_TEXT_CRITICAL;
+    static const QString JSON_TEXT_HEAL;
+    static const QString JSON_TEXT_MISS;
 
     SystemWindowSkin();
-    SystemWindowSkin(int i, QString n, int pictureID, QRectF topLeft);
+    SystemWindowSkin(int i, QString n, int pictureID, QRectF topLeft, QRectF
+        topRight, QRectF botLeft, QRectF botRight, QRectF left, QRectF right,
+        QRectF top, QRectF bot, QRectF background, bool backgroundRepeat, QRectF
+        arrowEndMessage, QRectF arrowTargetSelection, QRectF arrowUpDown, QRectF
+        textNormal, QRectF textCritical, QRectF textHeal, QRectF textMiss);
     virtual ~SystemWindowSkin();
     int pictureID() const;
     void setPictureID(int id);
     QRectF * topLeft();
+    QRectF * topRight();
+    QRectF * botLeft();
+    QRectF * botRight();
+    QRectF * left();
+    QRectF * right();
+    QRectF * top();
+    QRectF * bot();
+    QRectF * background();
+    bool backgroudRepeat();
+    QRectF * arrowEndMessage();
+    QRectF * arrowTargetSelection();
+    QRectF * arrowUpDown();
+    QRectF * textNormal();
+    QRectF * textCritical();
+    QRectF * textHeal();
+    QRectF * textMiss();
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

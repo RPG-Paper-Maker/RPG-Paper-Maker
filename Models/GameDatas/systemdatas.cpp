@@ -176,8 +176,12 @@ void SystemDatas::setDefaultItemsTypes() {
 
 void SystemDatas::setDefaultWindowSkins() {
     QStandardItem *item = new QStandardItem;
-    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default", 1, QRect(0, 0, 8,
-        8));
+    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default", 1, QRectF(0, 0, 8,
+        8), QRectF(8, 0, 8, 8), QRectF(0, 8, 8, 8), QRectF(8, 8, 8, 8), QRectF(
+        16, 8, 8, 2), QRectF(16, 10, 8, 2), QRectF(16, 0, 2, 8), QRectF(18, 0,
+        2, 8), QRectF(0, 17, 72, 50), true, QRectF(24, 0, 40, 8), QRectF(24, 8,
+        32, 9), QRectF(64, 0, 8, 11), QRectF(0, 67, 60, 9), QRectF(0, 76, 60, 9)
+        , QRectF(0, 85, 60, 9), QRectF(0, 94, 19, 7));
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(sys->toString());

@@ -46,16 +46,22 @@ public:
 
     void updateLabel(QString label);
 
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
+    virtual void enterEvent(QEvent *);
 
 private:
     Ui::WidgetSelectRect *ui;
     WidgetShowPicture *m_widgetShowPicture;
     QRectF *m_rect;
+    bool m_dialogOpened;
+    bool m_selecting;
 
 public slots:
     void on_pushButtonEnter_clicked();
+    void on_pushButtonSelect_clicked();
+    void on_rectDrawn();
+
+signals:
+    void selecting();
 };
 
 #endif // WIDGETSELECTRECT_H

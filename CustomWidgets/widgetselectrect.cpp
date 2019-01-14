@@ -19,6 +19,7 @@
 
 #include "widgetselectrect.h"
 #include "ui_widgetselectrect.h"
+#include "dialogrect.h"
 
 // -------------------------------------------------------
 //
@@ -28,7 +29,9 @@
 
 WidgetSelectRect::WidgetSelectRect(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetSelectRect)
+    ui(new Ui::WidgetSelectRect),
+    m_dialogOpened(false),
+    m_selecting(false)
 {
     ui->setupUi(this);
 }
@@ -40,6 +43,8 @@ WidgetSelectRect::~WidgetSelectRect()
 
 void WidgetSelectRect::setWidgetShowPicture(WidgetShowPicture *w) {
     m_widgetShowPicture = w;
+
+    connect(w, SIGNAL(rectDrawn()), this, SLOT(on_rectDrawn()));
 }
 
 void WidgetSelectRect::setRect(QRectF *rect) {
@@ -62,16 +67,11 @@ void WidgetSelectRect::updateLabel(QString label) {
 //
 // -------------------------------------------------------
 
-void WidgetSelectRect::enterEvent(QEvent *event) {
-    m_widgetShowPicture->setRect(m_rect);
-    m_widgetShowPicture->repaint();
-}
-
-// -------------------------------------------------------
-
-void WidgetSelectRect::leaveEvent(QEvent *event) {
-    m_widgetShowPicture->setRect(nullptr);
-    m_widgetShowPicture->repaint();
+void WidgetSelectRect::enterEvent(QEvent *) {
+    if (!m_selecting && this->isEnabled()) {
+        m_widgetShowPicture->setRect(m_rect);
+        m_widgetShowPicture->repaint();
+    }
 }
 
 // -------------------------------------------------------
@@ -81,5 +81,22 @@ void WidgetSelectRect::leaveEvent(QEvent *event) {
 // -------------------------------------------------------
 
 void WidgetSelectRect::on_pushButtonEnter_clicked() {
+    DialogRect dialog(m_rect, false, m_widgetShowPicture);
+    m_dialogOpened = true;
+    dialog.exec();
+    m_dialogOpened = false;
+}
 
+// -------------------------------------------------------
+
+void WidgetSelectRect::on_pushButtonSelect_clicked() {
+    m_selecting = true;
+    m_widgetShowPicture->activateCanDrawRect();
+    emit selecting();
+}
+
+// -------------------------------------------------------
+
+void WidgetSelectRect::on_rectDrawn() {
+    m_selecting = false;
 }

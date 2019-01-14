@@ -44,6 +44,10 @@ public:
 
     void updatePicture(SystemPicture* picture, PictureKind kind);
     void updatePictureSize();
+    void activateCanDrawRect();
+    bool isInsideImage(QPoint& pos) const;
+    void updateToRectBefore();
+    void updateSizePosition();
 
 protected:
     QImage m_image;
@@ -52,11 +56,15 @@ protected:
     bool m_cover;
     float m_coef;
     QRectF* m_rect;
+    QRectF m_rectBefore;
     bool m_canDrawRect;
     bool m_firstPresure;
+    int m_width;
+    int m_height;
 
     virtual void paintEvent(QPaintEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void leaveEvent(QEvent *);
 
 signals:
