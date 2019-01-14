@@ -38,6 +38,7 @@ SystemDatas::SystemDatas() :
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
+    m_idWindowSkin(1),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
@@ -81,6 +82,14 @@ bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
 
+int SystemDatas::idWindowSkin() const {
+    return m_idWindowSkin;
+}
+
+void SystemDatas::setIdWindowSkin(int i) {
+    m_idWindowSkin = i;
+}
+
 QStandardItemModel * SystemDatas::modelColors() const {
     return m_modelColors;
 }
@@ -107,6 +116,7 @@ void SystemDatas::setDefault() {
     m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
+    m_idWindowSkin = 1;
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::pathBR);
 
     setDefaultColors();
@@ -212,6 +222,7 @@ void SystemDatas::read(const QJsonObject &json){
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
     m_showBB = json.contains("bb");
+    m_idWindowSkin = json["wskin"].toInt();
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -277,6 +288,7 @@ void SystemDatas::write(QJsonObject &json) const{
     json["frames"] = m_framesAnimation;
     if (m_showBB)
         json["bb"] = m_showBB;
+    json["wskin"] = m_idWindowSkin;
 
     // Colors
     jsonArray = QJsonArray();

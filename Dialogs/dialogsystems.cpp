@@ -103,6 +103,12 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
         SystemWindowSkin);
     ui->panelSuperListWindowSkins->initializeModel(gameDatas->systemDatas()
         ->modelWindowSkins());
+    int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
+    SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
+        ->gameDatas()->systemDatas()->modelWindowSkins());
+    ui->comboBoxWindowSkin->setCurrentIndex(SuperListItem::getIndexById(RPM
+        ::get()->project()->gameDatas()->systemDatas()->modelWindowSkins()
+        ->invisibleRootItem(), id));
 }
 
 // -------------------------------------------------------
@@ -354,6 +360,16 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
                 ->itemData(index).value<qintptr>();
         RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->setIdStatisticExp(statistic->id());
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_comboBoxWindowSkin_currentIndexChanged(int index) {
+    if (index != -1) {
+        int id = SuperListItem::getIdByIndex(RPM::get()->project()->gameDatas()
+            ->systemDatas()->modelWindowSkins(), index);
+        RPM::get()->project()->gameDatas()->systemDatas()->setIdWindowSkin(id);
     }
 }
 

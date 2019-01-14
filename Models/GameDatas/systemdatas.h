@@ -57,6 +57,8 @@ public:
     void setFramesAnimation(int f);
     bool showBB() const;
     void setShowBB(bool b);
+    int idWindowSkin() const;
+    void setIdWindowSkin(int i);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
@@ -79,6 +81,7 @@ private:
     QString m_pathBR;
     int m_framesAnimation;
     bool m_showBB;
+    int m_idWindowSkin;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;

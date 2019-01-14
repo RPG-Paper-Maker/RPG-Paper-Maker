@@ -255,7 +255,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_3">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Other options</string>
@@ -267,19 +267,36 @@
                    <number>10</number>
                   </property>
                   <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
+                   <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,1">
                     <property name="spacing">
                      <number>0</number>
                     </property>
                     <item>
+                     <widget class="QLabel" name="label_10">
+                      <property name="text">
+                       <string>Window skin:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="comboBoxWindowSkin"/>
+                    </item>
+                    <item>
                      <widget class="QLabel" name="label_5">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Max number of save slots:</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_4"/>
+                     <widget class="QSpinBox" name="spinBox_4">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -293,16 +310,26 @@
                     </property>
                     <item row="0" column="0" colspan="2">
                      <widget class="QLabel" name="label_7">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>Price of sold item:</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QSpinBox" name="spinBox_6"/>
+                     <widget class="QSpinBox" name="spinBox_6">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
                     </item>
                     <item row="1" column="1">
                      <widget class="QLabel" name="label_8">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="text">
                        <string>% of default price</string>
                       </property>
