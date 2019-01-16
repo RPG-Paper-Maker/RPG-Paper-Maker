@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>987</width>
-    <height>490</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
               <x>0</x>
               <y>0</y>
               <width>593</width>
-              <height>352</height>
+              <height>362</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_9">
@@ -184,9 +184,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-304</y>
             <width>334</width>
-            <height>861</height>
+            <height>894</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_8">
@@ -394,6 +394,22 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="WidgetSelectRect" name="widgetSelectRectBackgroundSelection" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
                     <item>
                      <widget class="QLabel" name="label_2">
@@ -403,7 +419,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QComboBox" name="comboBox">
+                     <widget class="QComboBox" name="comboBoxOptionBackground">
                       <item>
                        <property name="text">
                         <string>Stretch</string>

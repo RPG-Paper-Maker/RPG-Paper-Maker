@@ -22,22 +22,23 @@
 
 const QString SystemWindowSkin::JSON_PICTURE_ID = "pid";
 const QString SystemWindowSkin::JSON_TOP_LEFT = "tl";
-const QString SystemWindowSkin::JSON_TOP_RIGHT= "tr";
-const QString SystemWindowSkin::JSON_BOT_LEFT= "bl";
-const QString SystemWindowSkin::JSON_BOT_RIGHT= "br";
-const QString SystemWindowSkin::JSON_LEFT= "l";
-const QString SystemWindowSkin::JSON_RIGHT= "r";
-const QString SystemWindowSkin::JSON_TOP= "t";
-const QString SystemWindowSkin::JSON_BOT= "b";
-const QString SystemWindowSkin::JSON_BACKGROUND= "back";
-const QString SystemWindowSkin::JSON_BACKGROUND_REPEAT= "backr";
-const QString SystemWindowSkin::JSON_ARROW_END_MESSAGE= "aem";
-const QString SystemWindowSkin::JSON_ARROW_TARGET_SELECTION= "ats";
-const QString SystemWindowSkin::JSON_ARROW_UP_DOWN= "aud";
-const QString SystemWindowSkin::JSON_TEXT_NORMAL= "tn";
-const QString SystemWindowSkin::JSON_TEXT_CRITICAL= "tc";
-const QString SystemWindowSkin::JSON_TEXT_HEAL= "th";
-const QString SystemWindowSkin::JSON_TEXT_MISS= "tm";
+const QString SystemWindowSkin::JSON_TOP_RIGHT = "tr";
+const QString SystemWindowSkin::JSON_BOT_LEFT = "bl";
+const QString SystemWindowSkin::JSON_BOT_RIGHT = "br";
+const QString SystemWindowSkin::JSON_LEFT = "l";
+const QString SystemWindowSkin::JSON_RIGHT = "r";
+const QString SystemWindowSkin::JSON_TOP = "t";
+const QString SystemWindowSkin::JSON_BOT = "b";
+const QString SystemWindowSkin::JSON_BACKGROUND = "back";
+const QString SystemWindowSkin::JSON_BACKGROUND_SELECTION = "backs";
+const QString SystemWindowSkin::JSON_BACKGROUND_REPEAT = "backr";
+const QString SystemWindowSkin::JSON_ARROW_END_MESSAGE = "aem";
+const QString SystemWindowSkin::JSON_ARROW_TARGET_SELECTION = "ats";
+const QString SystemWindowSkin::JSON_ARROW_UP_DOWN = "aud";
+const QString SystemWindowSkin::JSON_TEXT_NORMAL = "tn";
+const QString SystemWindowSkin::JSON_TEXT_CRITICAL = "tc";
+const QString SystemWindowSkin::JSON_TEXT_HEAL = "th";
+const QString SystemWindowSkin::JSON_TEXT_MISS = "tm";
 
 // -------------------------------------------------------
 //
@@ -49,19 +50,19 @@ const QString SystemWindowSkin::JSON_TEXT_MISS= "tm";
 SystemWindowSkin::SystemWindowSkin() :
     SystemWindowSkin(-1, "", -1, QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0,
     0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0,
-    0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), true, QRect(0, 0, 1, 1),
+    0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), true,
     QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1),
-    QRect(0, 0, 1, 1), QRect(0, 0, 1, 1))
+    QRect(0, 0, 1, 1), QRect(0, 0, 1, 1), QRect(0, 0, 1, 1))
 {
 
 }
 
 SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID, QRectF
     topLeft, QRectF topRight, QRectF botLeft, QRectF botRight, QRectF left,
-    QRectF right, QRectF top, QRectF bot, QRectF background, bool
-    backgroundRepeat, QRectF arrowEndMessage, QRectF arrowTargetSelection,
-    QRectF arrowUpDown, QRectF textNormal, QRectF textCritical, QRectF textHeal,
-    QRectF textMiss) :
+    QRectF right, QRectF top, QRectF bot, QRectF background, QRectF
+    backgroundSelection, bool backgroundRepeat, QRectF arrowEndMessage, QRectF
+    arrowTargetSelection, QRectF arrowUpDown, QRectF textNormal, QRectF
+    textCritical, QRectF textHeal, QRectF textMiss) :
     SuperListItem (i, n),
     m_pictureID(pictureID),
     m_topLeft(topLeft),
@@ -73,6 +74,7 @@ SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID, QRectF
     m_top(top),
     m_bot(bot),
     m_background(background),
+    m_backgroundSelection(backgroundSelection),
     m_backgroudRepeat(backgroundRepeat),
     m_arrowEndMessage(arrowEndMessage),
     m_arrowTargetSelection(arrowTargetSelection),
@@ -134,8 +136,16 @@ QRectF * SystemWindowSkin::background() {
     return &m_background;
 }
 
+QRectF * SystemWindowSkin::backgroundSelection() {
+    return &m_backgroundSelection;
+}
+
 bool SystemWindowSkin::backgroudRepeat() {
     return m_backgroudRepeat;
+}
+
+void SystemWindowSkin::setBackgroundRepeat(bool b) {
+    m_backgroudRepeat = b;
 }
 
 QRectF * SystemWindowSkin::arrowEndMessage() {
@@ -206,6 +216,7 @@ void SystemWindowSkin::setCopy(const SystemWindowSkin& super) {
     m_top = super.m_top;
     m_bot = super.m_bot;
     m_background = super.m_background;
+    m_backgroundSelection = super.m_backgroundSelection;
     m_backgroudRepeat = super.m_backgroudRepeat;
     m_arrowEndMessage = super.m_arrowEndMessage;
     m_arrowTargetSelection = super.m_arrowTargetSelection;
@@ -242,6 +253,8 @@ void SystemWindowSkin::read(const QJsonObject &json) {
     RPM::readRectF(tab, m_bot);
     tab = json[JSON_BACKGROUND].toArray();
     RPM::readRectF(tab, m_background);
+    tab = json[JSON_BACKGROUND_SELECTION].toArray();
+    RPM::readRectF(tab, m_backgroundSelection);
     m_backgroudRepeat = json[JSON_BACKGROUND_REPEAT].toBool();
     tab = json[JSON_ARROW_END_MESSAGE].toArray();
     RPM::readRectF(tab, m_arrowEndMessage);
@@ -293,6 +306,9 @@ void SystemWindowSkin::write(QJsonObject &json) const {
     tab = QJsonArray();
     RPM::writeRectF(tab, m_background);
     json[JSON_BACKGROUND] = tab;
+    tab = QJsonArray();
+    RPM::writeRectF(tab, m_backgroundSelection);
+    json[JSON_BACKGROUND_SELECTION] = tab;
     tab = QJsonArray();
     json[JSON_BACKGROUND_REPEAT] = m_backgroudRepeat;
     RPM::writeRectF(tab, m_arrowEndMessage);

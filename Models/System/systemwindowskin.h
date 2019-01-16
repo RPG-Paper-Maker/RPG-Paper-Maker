@@ -43,6 +43,7 @@ public:
     static const QString JSON_TOP;
     static const QString JSON_BOT;
     static const QString JSON_BACKGROUND;
+    static const QString JSON_BACKGROUND_SELECTION;
     static const QString JSON_BACKGROUND_REPEAT;
     static const QString JSON_ARROW_END_MESSAGE;
     static const QString JSON_ARROW_TARGET_SELECTION;
@@ -55,9 +56,10 @@ public:
     SystemWindowSkin();
     SystemWindowSkin(int i, QString n, int pictureID, QRectF topLeft, QRectF
         topRight, QRectF botLeft, QRectF botRight, QRectF left, QRectF right,
-        QRectF top, QRectF bot, QRectF background, bool backgroundRepeat, QRectF
-        arrowEndMessage, QRectF arrowTargetSelection, QRectF arrowUpDown, QRectF
-        textNormal, QRectF textCritical, QRectF textHeal, QRectF textMiss);
+        QRectF top, QRectF bot, QRectF background, QRectF backgroundSelection,
+        bool backgroundRepeat, QRectF arrowEndMessage, QRectF
+        arrowTargetSelection, QRectF arrowUpDown, QRectF textNormal, QRectF
+        textCritical, QRectF textHeal, QRectF textMiss);
     virtual ~SystemWindowSkin();
     int pictureID() const;
     void setPictureID(int id);
@@ -70,7 +72,9 @@ public:
     QRectF * top();
     QRectF * bot();
     QRectF * background();
+    QRectF * backgroundSelection();
     bool backgroudRepeat();
+    void setBackgroundRepeat(bool b);
     QRectF * arrowEndMessage();
     QRectF * arrowTargetSelection();
     QRectF * arrowUpDown();
@@ -96,6 +100,7 @@ protected:
     QRectF m_top;
     QRectF m_bot;
     QRectF m_background;
+    QRectF m_backgroundSelection;
     bool m_backgroudRepeat;
     QRectF m_arrowEndMessage;
     QRectF m_arrowTargetSelection;

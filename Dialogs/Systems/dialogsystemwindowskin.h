@@ -59,6 +59,7 @@ private:
 public slots:
     void on_pictureChanged(SystemPicture *picture);
     void on_horizontalSlider_valueChanged(int value);
+    void on_comboBoxOptionBackground_currentIndexChanged(int index);
     void on_selecting();
     void on_rectDrawn();
 };

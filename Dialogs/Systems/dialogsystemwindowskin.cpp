@@ -45,6 +45,8 @@ void DialogSystemWindowSkin::initialize() {
     updateZoom(RPM::get()->engineSettings()->zoomPictures());
     connect(ui->widgetShowPicture, SIGNAL(rectDrawn()), this, SLOT(
         on_rectDrawn()));
+    ui->comboBoxOptionBackground->setCurrentIndex(m_windowSkin.backgroudRepeat()
+        ? 1 : 0);
 
     // Rect selectors
     ui->widgetSelectRectTopLeft->updateLabel("Top-Left");
@@ -87,11 +89,18 @@ void DialogSystemWindowSkin::initialize() {
     ui->widgetSelectRectBot->setRect(m_windowSkin.bot());
     connect(ui->widgetSelectRectBot, SIGNAL(selecting()), this, SLOT(
         on_selecting()));
-    ui->widgetSelectRectBackground->updateLabel("Background");
+    ui->widgetSelectRectBackground->updateLabel("Normal");
     ui->widgetSelectRectBackground->setWidgetShowPicture(ui->widgetShowPicture);
     ui->widgetSelectRectBackground->setRect(m_windowSkin.background());
     connect(ui->widgetSelectRectBackground, SIGNAL(selecting()), this, SLOT(
         on_selecting()));
+    ui->widgetSelectRectBackgroundSelection->updateLabel("Selection");
+    ui->widgetSelectRectBackgroundSelection->setWidgetShowPicture(ui
+        ->widgetShowPicture);
+    ui->widgetSelectRectBackgroundSelection->setRect(m_windowSkin
+        .backgroundSelection());
+    connect(ui->widgetSelectRectBackgroundSelection, SIGNAL(selecting()), this,
+        SLOT(on_selecting()));
     ui->widgetSelectRectArrowEndMessage->updateLabel("End message");
     ui->widgetSelectRectArrowEndMessage->setWidgetShowPicture(ui->widgetShowPicture);
     ui->widgetSelectRectArrowEndMessage->setRect(m_windowSkin.arrowEndMessage());
@@ -184,6 +193,14 @@ void DialogSystemWindowSkin::on_horizontalSlider_valueChanged(int value) {
 
     // Update in the settings
     RPM::get()->engineSettings()->setZoomPictures(value);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemWindowSkin::on_comboBoxOptionBackground_currentIndexChanged(int
+    index)
+{
+    m_windowSkin.setBackgroundRepeat(index == 1);
 }
 
 // -------------------------------------------------------
