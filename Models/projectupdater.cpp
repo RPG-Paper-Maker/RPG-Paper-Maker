@@ -381,4 +381,9 @@ void ProjectUpdater::updateVersion_0_6_0() {
     m_project->gameDatas()->systemDatas()->setDefaultColors();
     m_project->gameDatas()->systemDatas()->setDefaultWindowSkins();
     m_project->writeSystemDatas();
+
+    // Keyboard
+    m_project->keyBoardDatas()->setDefaultGame();
+    m_project->writeKeyBoardDatas();
+
 }

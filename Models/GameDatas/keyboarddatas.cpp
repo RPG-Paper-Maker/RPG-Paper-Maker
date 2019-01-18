@@ -184,6 +184,7 @@ void KeyBoardDatas::setDefaultGame(){
                                new LangsTranslation("Cancel"),
                                "Cancel");
     super->appendShortCut(QVector<int>({88}));
+    super->appendShortCut(QVector<int>({16777216}));
     list.append(super);
     super = new SystemKeyBoard(i++,
                                new LangsTranslation("Open / Close main menu"),
