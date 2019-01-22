@@ -50,14 +50,43 @@ QStandardItemModel* SystemTroop::monstersList() const { return m_monstersList; }
 //
 // -------------------------------------------------------
 
+SuperListItem * SystemTroop::createCopy() const {
+    SystemTroop* super = new SystemTroop;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemTroop::setCopy(const SystemTroop &troop) {
+    SuperListItem::setCopy(troop);
+
+    // Currencies
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+    SystemMonsterTroop *sys;
+    m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
+    for (int i = 0, l = troop.m_monstersList->invisibleRootItem()->rowCount();
+         i < l - 1; i++)
+    {
+        sys = reinterpret_cast<SystemMonsterTroop *>(troop.m_monstersList->item(
+            i)->data().value<quintptr>());
+        row = sys->createCopy()->getModelRow();
+        m_monstersList->appendRow(row);
+    }
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_monstersList->appendRow(item);
+}
+
+// -------------------------------------------------------
+
 void SystemTroop::read(const QJsonObject &json){
     SuperListItem::read(json);
     QJsonArray tab;
 
     // Monsters list
     m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
-    QStandardItem* itemMonster;
-    QStandardItem* itemLevel;
     QStandardItem* item;
     SystemMonsterTroop* monsterTroop;
     QList<QStandardItem *> row;
@@ -65,22 +94,15 @@ void SystemTroop::read(const QJsonObject &json){
     for (int i = 0; i < tab.size(); i++){
         monsterTroop = new SystemMonsterTroop;
         monsterTroop->read(tab[i].toObject());
-        row = QList<QStandardItem*>();
-        itemMonster = new QStandardItem;
-        itemMonster->setData(QVariant::fromValue(
-                                 reinterpret_cast<quintptr>(monsterTroop)));
-        itemMonster->setText(monsterTroop->toString());
-        itemLevel = new QStandardItem;
-        itemLevel->setData(QVariant::fromValue(monsterTroop->level()));
-        itemLevel->setText(QString::number(monsterTroop->level()));
-        row.append(itemMonster);
-        row.append(itemLevel);
+        row = monsterTroop->getModelRow();
         m_monstersList->appendRow(row);
     }
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_monstersList->appendRow(item);
 }
+
+// -------------------------------------------------------
 
 void SystemTroop::write(QJsonObject &json) const{
     SuperListItem::write(json);

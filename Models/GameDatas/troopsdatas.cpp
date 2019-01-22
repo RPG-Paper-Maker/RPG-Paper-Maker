@@ -62,9 +62,11 @@ void TroopsDatas::setDefault(QStandardItem *modelMonsters){
     int level;
     QList<QStandardItem *> row;
     QStandardItemModel* monsters;
-    QString names[] = {"Wooly-1"};
-    QVector<int> idsMonsters[] = {QVector<int>({1})};
-    QVector<int> levels[] = {QVector<int>({1})};
+    QString names[] = {"Wooly[1]", "Wooly[1][1]", "Wooly[5]"};
+    QVector<int> idsMonsters[] = {QVector<int>({1}), QVector<int>({1, 1}),
+        QVector<int>({1})};
+    QVector<int> levels[] = {QVector<int>({1}), QVector<int>({1, 1}),
+        QVector<int>({5})};
 
     int length = (sizeof(names)/sizeof(*names));
 

@@ -31,7 +31,8 @@ const QString SystemHero::jsonFaceset = "fid";
 //
 // -------------------------------------------------------
 
-SystemHero::SystemHero() : SystemLang()
+SystemHero::SystemHero() :
+    SystemHero(1, new LangsTranslation, 1, -1, -1)
 {
 
 }
@@ -46,11 +47,17 @@ SystemHero::SystemHero(int i, LangsTranslation* names, int idClass,
 
 }
 
-SystemHero::~SystemHero(){
+SystemHero::~SystemHero() {
 
 }
 
-int SystemHero::idClass() const { return m_idClass;}
+int SystemHero::idClass() const {
+    return m_idClass;
+}
+
+void SystemHero::setIdClass(int id) {
+    m_idClass = id;
+}
 
 int SystemHero::idBattlerPicture() const {
     return m_idBattlerPicture;
@@ -84,6 +91,14 @@ SystemPicture* SystemHero::getPictureFaceset() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+SuperListItem* SystemHero::createCopy() const {
+    SystemHero *super = new SystemHero;
+    super->setCopy(*this);
+    return super;
+}
+
 // -------------------------------------------------------
 
 void SystemHero::setCopy(const SystemHero& hero){

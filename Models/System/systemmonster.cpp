@@ -75,6 +75,14 @@ QStandardItemModel* SystemMonster::modelActions() const {
 //
 // -------------------------------------------------------
 
+SuperListItem* SystemMonster::createCopy() const {
+    SystemMonster* super = new SystemMonster;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemMonster::setCopy(const SystemMonster& monster){
     SystemHero::setCopy(monster);
     QStandardItem* item;

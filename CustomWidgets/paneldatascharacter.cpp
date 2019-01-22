@@ -30,7 +30,8 @@
 
 PanelDatasCharacter::PanelDatasCharacter(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelDatasCharacter)
+    ui(new Ui::PanelDatasCharacter),
+    m_panelSuperList(nullptr)
 {
     ui->setupUi(this);
 
@@ -85,15 +86,29 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
 }
 
 // -------------------------------------------------------
+
+SystemHero * PanelDatasCharacter::currentHero() {
+    return reinterpret_cast<SystemHero *>(m_panelSuperList->list()
+        ->getSelected()->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
 // -------------------------------------------------------
 
+void PanelDatasCharacter::on_comboBoxClass_currentIndexChanged(int index) {
+    if (m_panelSuperList != nullptr) {
+        currentHero()->setIdClass(SuperListItem::getIdByIndex(RPM::get()
+            ->project()->gameDatas()->classesDatas()->model(), index));
+    }
+}
+
+// -------------------------------------------------------
+
 void PanelDatasCharacter::on_battlerPictureChanged(SystemPicture *picture) {
-    SystemHero *hero = reinterpret_cast<SystemHero *>(m_panelSuperList->list()
-        ->getSelected()->data().value<quintptr>());
-    hero->setIdBattlerPicture(picture->id());
+    currentHero()->setIdBattlerPicture(picture->id());
     ui->widgetImageBattler->updatePicture(picture, PictureKind::Battlers);
 }
 
@@ -101,8 +116,6 @@ void PanelDatasCharacter::on_battlerPictureChanged(SystemPicture *picture) {
 // -------------------------------------------------------
 
 void PanelDatasCharacter::on_facesetPictureChanged(SystemPicture *picture) {
-    SystemHero *hero = reinterpret_cast<SystemHero *>(m_panelSuperList->list()
-        ->getSelected()->data().value<quintptr>());
-    hero->setIdFacesetPicture(picture->id());
+    currentHero()->setIdFacesetPicture(picture->id());
     ui->widgetImageFaceset->updatePicture(picture, PictureKind::Facesets);
 }

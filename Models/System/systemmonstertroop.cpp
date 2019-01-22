@@ -27,7 +27,8 @@
 //
 // -------------------------------------------------------
 
-SystemMonsterTroop::SystemMonsterTroop() : SuperListItem()
+SystemMonsterTroop::SystemMonsterTroop() :
+    SystemMonsterTroop(1, "", 1)
 {
 
 }
@@ -39,17 +40,31 @@ SystemMonsterTroop::SystemMonsterTroop(int i, QString n, int level) :
 
 }
 
-SystemMonsterTroop::~SystemMonsterTroop(){
+SystemMonsterTroop::~SystemMonsterTroop() {
 
 }
 
-int SystemMonsterTroop::level() const { return m_level; }
+int SystemMonsterTroop::level() const {
+    return m_level;
+}
+
+void SystemMonsterTroop::setLevel(int l) {
+    m_level = l;
+}
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+void SystemMonsterTroop::updateName() {
+    p_name = SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->monstersDatas()->model()->invisibleRootItem(), p_id)->name();
+}
+
+// -------------------------------------------------------
+
 
 bool SystemMonsterTroop::openDialog(){
     SystemMonsterTroop monsterTroop;
@@ -64,9 +79,33 @@ bool SystemMonsterTroop::openDialog(){
 
 // -------------------------------------------------------
 
+SuperListItem* SystemMonsterTroop::createCopy() const {
+    SystemMonsterTroop* super = new SystemMonsterTroop;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
 void SystemMonsterTroop::setCopy(const SystemMonsterTroop& monsterTroop){
-    SuperListItem::setCopy(monsterTroop);
-    m_level = monsterTroop.level();
+    p_id = monsterTroop.p_id;
+    updateName();
+    m_level = monsterTroop.m_level;
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem *> SystemMonsterTroop::getModelRow() const{
+    QList<QStandardItem*> row = QList<QStandardItem*>();
+    QStandardItem* itemID = new QStandardItem;
+    QStandardItem* itemLevel = new QStandardItem;
+    itemID->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemID->setText(toString());
+    itemLevel->setText(QString::number(m_level));
+    row.append(itemID);
+    row.append(itemLevel);
+
+    return row;
 }
 
 // -------------------------------------------------------
@@ -77,12 +116,11 @@ void SystemMonsterTroop::setCopy(const SystemMonsterTroop& monsterTroop){
 
 void SystemMonsterTroop::read(const QJsonObject &json){
     p_id = json["id"].toInt();
-    p_name = SuperListItem::getById(
-                RPM::get()->project()->gameDatas()->monstersDatas()->model()
-                ->invisibleRootItem(),
-                p_id)->name();
+    updateName();
     m_level = json["l"].toInt();
 }
+
+// -------------------------------------------------------
 
 void SystemMonsterTroop::write(QJsonObject &json) const{
     json["id"] = id();

@@ -39,6 +39,7 @@ public:
         idFaceset);
     virtual ~SystemHero();
     int idClass() const;
+    void setIdClass(int id);
     int idBattlerPicture() const;
     void setIdBattlerPicture(int id);
     int idFacesetPicture() const;
@@ -46,6 +47,7 @@ public:
     SystemPicture* getPictureBattler() const;
     SystemPicture* getPictureFaceset() const;
 
+    virtual SuperListItem* createCopy() const;
     void setCopy(const SystemHero& hero);
 
     static const QString jsonClass;

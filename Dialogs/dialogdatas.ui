@@ -437,7 +437,7 @@
            <item>
             <widget class="QGroupBox" name="groupBox_19">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
@@ -482,35 +482,6 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
-                <widget class="QLabel" name="label_3">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Battle map:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBox">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>160</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>160</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <spacer name="horizontalSpacer">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -540,7 +511,7 @@
                <item>
                 <widget class="QGroupBox" name="groupBox_3">
                  <property name="enabled">
-                  <bool>false</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="title">
                   <string>Monsters list</string>
@@ -1219,14 +1190,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTilesetSettings</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetsettings.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1236,10 +1208,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetTilesetSettings</class>
-   <extends>QWidget</extends>
-   <header>widgettilesetsettings.h</header>
-   <container>1</container>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>PanelDatasCharacter</class>

@@ -38,9 +38,14 @@ public:
     SystemMonsterTroop(int i, QString n, int level);
     virtual ~SystemMonsterTroop();
     int level() const;
-    virtual bool openDialog();
-    virtual void setCopy(const SystemMonsterTroop &monsterTroop);
+    void setLevel(int l);
 
+    void updateName();
+
+    virtual bool openDialog();
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemMonsterTroop &monsterTroop);
+    virtual QList<QStandardItem*> getModelRow() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

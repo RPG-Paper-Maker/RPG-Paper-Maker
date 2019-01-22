@@ -43,8 +43,9 @@ public:
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelLoots() const;
     QStandardItemModel* modelActions() const;
-    void setCopy(const SystemMonster& monster);
 
+    virtual SuperListItem* createCopy() const;
+    void setCopy(const SystemMonster& monster);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

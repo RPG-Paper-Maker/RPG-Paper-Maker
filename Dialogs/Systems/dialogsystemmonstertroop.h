@@ -40,14 +40,19 @@ class DialogSystemMonsterTroop : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSystemMonsterTroop(SystemMonsterTroop& monsterTroop,
-                                      QWidget *parent = 0);
+    explicit DialogSystemMonsterTroop(SystemMonsterTroop& monsterTroop, QWidget
+        *parent = nullptr);
     ~DialogSystemMonsterTroop();
 
 private:
     Ui::DialogSystemMonsterTroop *ui;
     SystemMonsterTroop& m_monsterTroop;
+
     void initialize();
+
+private slots:
+    void on_comboBoxMonster_currentIndexChanged(int index);
+    void on_spinBoxLevel_valueChanged(int i);
 };
 
 #endif // DIALOGSYSTEMMONSTERTROOP_H

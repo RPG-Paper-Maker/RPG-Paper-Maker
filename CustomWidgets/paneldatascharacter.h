@@ -47,12 +47,14 @@ public:
 
     void initialize();
     void update(SystemHero *hero, int classIndex);
+    SystemHero * currentHero();
 
 private:
     Ui::PanelDatasCharacter *ui;
     PanelSuperList *m_panelSuperList;
 
 private slots:
+    void on_comboBoxClass_currentIndexChanged(int index);
     void on_battlerPictureChanged(SystemPicture *picture);
     void on_facesetPictureChanged(SystemPicture* picture);
 };

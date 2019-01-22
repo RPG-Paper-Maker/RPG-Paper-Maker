@@ -26,6 +26,7 @@
 #include "dialogdatasmonsterrewards.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "systemmonstertroop.h"
 #include "dialogtilesetspecialelements.h"
 
 // -------------------------------------------------------
@@ -208,6 +209,7 @@ void DialogDatas::initializeTroops(GameDatas *gameDatas){
                 new SystemTroop);
     ui->panelSuperListTroops->initializeModel(gameDatas->troopsDatas()
                                               ->model());
+    ui->treeViewMonstersList->initializeNewItemInstance(new SystemMonsterTroop);
     connect(ui->panelSuperListTroops->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageTroopSelected(QModelIndex,QModelIndex)));

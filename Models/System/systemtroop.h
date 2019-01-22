@@ -40,11 +40,13 @@ public:
     virtual ~SystemTroop();
     QStandardItemModel* monstersList() const;
 
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SystemTroop &troop);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    QStandardItemModel* m_monstersList;
+    QStandardItemModel *m_monstersList;
 };
 
 Q_DECLARE_METATYPE(SystemTroop)
