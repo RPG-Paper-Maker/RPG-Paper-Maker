@@ -61,8 +61,8 @@ SystemWindowSkin::SystemWindowSkin(int i, QString n, int pictureID, QRectF
     topLeft, QRectF topRight, QRectF botLeft, QRectF botRight, QRectF left,
     QRectF right, QRectF top, QRectF bot, QRectF background, QRectF
     backgroundSelection, bool backgroundRepeat, QRectF arrowEndMessage, QRectF
-    arrowTargetSelection, QRectF arrowUpDown, QRectF textNormal, QRectF
-    textCritical, QRectF textHeal, QRectF textMiss) :
+    arrowTargetSelection, QRectF arrowUpDown, QRectF textNormal, QRectF textHeal
+    , QRectF textCritical, QRectF textMiss) :
     SuperListItem (i, n),
     m_pictureID(pictureID),
     m_topLeft(topLeft),

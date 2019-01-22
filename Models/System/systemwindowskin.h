@@ -59,7 +59,7 @@ public:
         QRectF top, QRectF bot, QRectF background, QRectF backgroundSelection,
         bool backgroundRepeat, QRectF arrowEndMessage, QRectF
         arrowTargetSelection, QRectF arrowUpDown, QRectF textNormal, QRectF
-        textCritical, QRectF textHeal, QRectF textMiss);
+        textHeal, QRectF textCritical, QRectF textMiss);
     virtual ~SystemWindowSkin();
     int pictureID() const;
     void setPictureID(int id);

@@ -184,7 +184,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-304</y>
+            <y>-427</y>
             <width>334</width>
             <height>894</height>
            </rect>
@@ -461,7 +461,7 @@
                 <item row="0" column="0">
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
-                   <widget class="WidgetSelectRect" name="widgetSelectRectArrowEndMessage" native="true">
+                   <widget class="WidgetSelectRect" name="widgetSelectRectArrowTargetSelection" native="true">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -477,7 +477,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="WidgetSelectRect" name="widgetSelectRectArrowTargetSelection" native="true">
+                   <widget class="WidgetSelectRect" name="widgetSelectRectArrowEndMessage" native="true">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -538,7 +538,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="WidgetSelectRect" name="widgetSelectRectTextCritical" native="true">
+                   <widget class="WidgetSelectRect" name="widgetSelectRectTextHeal" native="true">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -554,7 +554,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="WidgetSelectRect" name="widgetSelectRectTextHeal" native="true">
+                   <widget class="WidgetSelectRect" name="widgetSelectRectTextCritical" native="true">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
