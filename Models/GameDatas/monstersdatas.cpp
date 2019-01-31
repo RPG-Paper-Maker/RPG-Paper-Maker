@@ -138,7 +138,8 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
         // TODO
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
-            facesetsIds[i], experiences[i], currencies, loots, actions);
+            facesetsIds[i], SystemClass::createInheritanceClass(),
+            experiences[i], currencies, loots, actions);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

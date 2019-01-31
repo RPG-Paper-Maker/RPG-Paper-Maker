@@ -22,6 +22,7 @@
 
 #include "systemlang.h"
 #include "systempicture.h"
+#include "systemclass.h"
 
 // -------------------------------------------------------
 //
@@ -34,9 +35,14 @@
 class SystemHero : public SystemLang
 {
 public:
+    static const QString jsonClass;
+    static const QString jsonBattler;
+    static const QString jsonFaceset;
+    static const QString jsonClassInherit;
+
     SystemHero();
     SystemHero(int i, LangsTranslation* names, int idClass, int idBattler, int
-        idFaceset);
+        idFaceset, SystemClass *classInherit);
     virtual ~SystemHero();
     int idClass() const;
     void setIdClass(int id);
@@ -44,16 +50,13 @@ public:
     void setIdBattlerPicture(int id);
     int idFacesetPicture() const;
     void setIdFacesetPicture(int id);
+    SystemClass * classInherit() const;
     SystemPicture* getPictureBattler() const;
     SystemPicture* getPictureFaceset() const;
+    SystemClass * getClass() const;
 
     virtual SuperListItem* createCopy() const;
     void setCopy(const SystemHero& hero);
-
-    static const QString jsonClass;
-    static const QString jsonBattler;
-    static const QString jsonFaceset;
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
@@ -61,6 +64,7 @@ protected:
     int m_idClass;
     int m_idBattlerPicture;
     int m_idFacesetPicture;
+    SystemClass * m_classInherit;
 };
 
 Q_DECLARE_METATYPE(SystemHero)

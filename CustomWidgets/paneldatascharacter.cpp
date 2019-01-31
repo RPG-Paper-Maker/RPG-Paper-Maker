@@ -70,6 +70,9 @@ void PanelDatasCharacter::initialize() {
     ui->widgetPictureFaceset->setKind(PictureKind::Facesets);
     connect(ui->widgetPictureFaceset, SIGNAL(pictureChanged(SystemPicture *)),
         this, SLOT(on_facesetPictureChanged(SystemPicture *)));
+
+    // Class
+    ui->panelDatasClass->initialize();
 }
 
 // -------------------------------------------------------
@@ -83,6 +86,9 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
     picture = hero->getPictureFaceset();
     ui->widgetPictureFaceset->setPicture(picture);
     on_facesetPictureChanged(picture);
+
+    // Class
+    ui->panelDatasClass->update(hero->classInherit(), hero->getClass());
 }
 
 // -------------------------------------------------------

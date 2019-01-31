@@ -262,7 +262,8 @@ HEADERS += \
     CustomWidgets/paneldatascharacter.h \
     Models/System/systemwindowskin.h \
     Dialogs/Systems/dialogsystemwindowskin.h \
-    CustomWidgets/widgetselectrect.h
+    CustomWidgets/widgetselectrect.h \
+    CustomWidgets/paneldatasclass.h
 
 SOURCES += \
     main.cpp \
@@ -472,7 +473,8 @@ SOURCES += \
     CustomWidgets/paneldatascharacter.cpp \
     Models/System/systemwindowskin.cpp \
     Dialogs/Systems/dialogsystemwindowskin.cpp \
-    CustomWidgets/widgetselectrect.cpp
+    CustomWidgets/widgetselectrect.cpp \
+    CustomWidgets/paneldatasclass.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -551,7 +553,8 @@ FORMS += \
     Dialogs/Systems/dialogsystemcolor.ui \
     CustomWidgets/paneldatascharacter.ui \
     Dialogs/Systems/dialogsystemwindowskin.ui \
-    CustomWidgets/widgetselectrect.ui
+    CustomWidgets/widgetselectrect.ui \
+    CustomWidgets/paneldatasclass.ui
 
 OTHER_FILES +=
 

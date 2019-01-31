@@ -21,9 +21,16 @@
 #include "rpm.h"
 #include "superlistitem.h"
 
+// -------------------------------------------------------
+//
+//  STATIC / CONST VARIABLES
+//
+// -------------------------------------------------------
+
 const QString SystemHero::jsonClass = "class";
 const QString SystemHero::jsonBattler = "bid";
 const QString SystemHero::jsonFaceset = "fid";
+const QString SystemHero::jsonClassInherit = "ci";
 
 // -------------------------------------------------------
 //
@@ -32,23 +39,24 @@ const QString SystemHero::jsonFaceset = "fid";
 // -------------------------------------------------------
 
 SystemHero::SystemHero() :
-    SystemHero(1, new LangsTranslation, 1, -1, -1)
+    SystemHero(1, new LangsTranslation, 1, -1, -1, new SystemClass)
 {
 
 }
 
 SystemHero::SystemHero(int i, LangsTranslation* names, int idClass,
-    int idBattler, int idFaceset) :
+    int idBattler, int idFaceset, SystemClass *classInherit) :
     SystemLang(i, names),
     m_idClass(idClass),
     m_idBattlerPicture(idBattler),
-    m_idFacesetPicture(idFaceset)
+    m_idFacesetPicture(idFaceset),
+    m_classInherit(classInherit)
 {
 
 }
 
 SystemHero::~SystemHero() {
-
+    delete m_classInherit;
 }
 
 int SystemHero::idClass() const {
@@ -75,6 +83,10 @@ void SystemHero::setIdFacesetPicture(int id) {
     m_idFacesetPicture = id;
 }
 
+SystemClass * SystemHero::classInherit() const {
+    return m_classInherit;
+}
+
 SystemPicture* SystemHero::getPictureBattler() const {
     return reinterpret_cast<SystemPicture*>(SuperListItem::getById(RPM::get()
         ->project()->picturesDatas()->model(PictureKind::Battlers)
@@ -87,11 +99,19 @@ SystemPicture* SystemHero::getPictureFaceset() const {
         ->invisibleRootItem(), m_idFacesetPicture));
 }
 
+SystemClass * SystemHero::getClass() const {
+    return reinterpret_cast<SystemClass *>(SuperListItem::getById(RPM::get()
+        ->project()->gameDatas()->classesDatas()->model()->invisibleRootItem(),
+        m_idClass));
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+
 
 SuperListItem* SystemHero::createCopy() const {
     SystemHero *super = new SystemHero;
@@ -119,6 +139,7 @@ void SystemHero::read(const QJsonObject &json){
     m_idClass = json[jsonClass].toInt();
     m_idBattlerPicture = json[jsonBattler].toInt();
     m_idFacesetPicture = json[jsonFaceset].toInt();
+    m_classInherit->read(json[jsonClassInherit].toObject());
 }
 
 void SystemHero::write(QJsonObject &json) const{
@@ -126,4 +147,7 @@ void SystemHero::write(QJsonObject &json) const{
     json[jsonClass] = m_idClass;
     json[jsonBattler] = m_idBattlerPicture;
     json[jsonFaceset] = m_idFacesetPicture;
+    QJsonObject obj;
+    m_classInherit->write(obj);
+    json[jsonClassInherit] = obj;
 }

@@ -22,6 +22,13 @@
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 
+const QString SystemClass::jsonInitialLevel = "iniL";
+const QString SystemClass::jsonMaxLevel = "mxL";
+const QString SystemClass::jsonExpBase = "eB";
+const QString SystemClass::jsonExpInflation = "eI";
+const QString SystemClass::jsonStats = "stats";
+const QString SystemClass::jsonSkills = "skills";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -70,13 +77,41 @@ SystemClass::~SystemClass(){
     SuperListItem::deleteModel(m_skills);
 }
 
-int SystemClass::initialLevel() const { return m_initialLevel; }
+int SystemClass::initialLevel() const {
+    return m_initialLevel;
+}
 
-int SystemClass::maxLevel() const { return m_maxLevel; }
+void SystemClass::setInitialLevel(int i, SystemClass *originalClass) {
+    m_initialLevel = originalClass == nullptr || originalClass == this ||
+        (originalClass != this && originalClass->initialLevel() != i) ? i : -1;
+}
 
-int SystemClass::expBase() const { return m_expBase; }
+int SystemClass::maxLevel() const {
+    return m_maxLevel;
+}
 
-int SystemClass::expInflation() const { return m_expInflation; }
+void SystemClass::setMaxLevel(int i, SystemClass *originalClass) {
+    m_maxLevel = originalClass == nullptr || originalClass == this ||
+        (originalClass != this && originalClass->maxLevel() != i) ? i : -1;
+}
+
+int SystemClass::expBase() const {
+    return m_expBase;
+}
+
+void SystemClass::setExpBase(int i, SystemClass *originalClass) {
+    m_expBase = originalClass == nullptr || originalClass == this ||
+        (originalClass != this && originalClass->expBase() != i) ? i : -1;
+}
+
+int SystemClass::expInflation() const {
+    return m_expInflation;
+}
+
+void SystemClass::setExpInflation(int i, SystemClass *originalClass) {
+    m_expInflation = originalClass == nullptr || originalClass == this ||
+        (originalClass != this && originalClass->expInflation() != i) ? i : -1;
+}
 
 QStandardItemModel* SystemClass::statisticsProgression() const {
     return m_statisticsProgression;
@@ -90,6 +125,12 @@ QStandardItemModel* SystemClass::skills() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+SystemClass * SystemClass::createInheritanceClass() {
+    return new SystemClass(-1, "", -1, -1, -1, -1);
+}
+
 // -------------------------------------------------------
 
 SuperListItem* SystemClass::createCopy() const{
@@ -112,14 +153,25 @@ void SystemClass::read(const QJsonObject &json){
     SystemClassSkill* classSkill;
 
     // Experience
-    m_initialLevel = json["iniL"].toInt();
-    m_maxLevel = json["mxL"].toInt();
-    m_expBase = json["eB"].toInt();
-    m_expInflation = json["eI"].toInt();
-
+    m_initialLevel = -1;
+    m_maxLevel = -1;
+    m_expBase = -1;
+    m_expInflation = -1;
+    if (json.contains(jsonInitialLevel)) {
+        m_initialLevel = json[jsonInitialLevel].toInt();
+    }
+    if (json.contains(jsonMaxLevel)) {
+        m_maxLevel = json[jsonMaxLevel].toInt();
+    }
+    if (json.contains(jsonExpBase)) {
+        m_expBase = json[jsonExpBase].toInt();
+    }
+    if (json.contains(jsonExpInflation)) {
+        m_expInflation = json[jsonExpInflation].toInt();
+    }
 
     // Statistics
-    tab = json["stats"].toArray();
+    tab = json[jsonStats].toArray();
     for (int i = 0; i < tab.size(); i++){
         statisticProgression = new SystemStatisticProgression;
         statisticProgression->read(tab[i].toObject());
@@ -130,7 +182,7 @@ void SystemClass::read(const QJsonObject &json){
     }
 
     // Skills
-    tab = json["skills"].toArray();
+    tab = json[jsonSkills].toArray();
     for (int i = 0; i < tab.size(); i++){
         classSkill = new SystemClassSkill;
         classSkill->read(tab[i].toObject());
@@ -146,10 +198,18 @@ void SystemClass::write(QJsonObject &json) const{
     int l;
 
     // Experience
-    json["iniL"] = m_initialLevel;
-    json["mxL"] = m_maxLevel;
-    json["eB"] = m_expBase;
-    json["eI"] = m_expInflation;
+    if (m_initialLevel != -1) {
+        json[jsonInitialLevel] = m_initialLevel;
+    }
+    if (m_maxLevel != -1) {
+        json[jsonMaxLevel] = m_maxLevel;
+    }
+    if (m_expBase != -1) {
+        json[jsonExpBase] = m_expBase;
+    }
+    if (m_expInflation != -1) {
+        json[jsonExpInflation] = m_expInflation;
+    }
 
     // Statistics
     tab = QJsonArray();
@@ -162,7 +222,9 @@ void SystemClass::write(QJsonObject &json) const{
         statisticsProgression->write(obj);
         tab.append(obj);
     }
-    json["stats"] = tab;
+    if (!tab.isEmpty()) {
+        json[jsonStats] = tab;
+    }
 
     // Skills
     tab = QJsonArray();
@@ -174,5 +236,7 @@ void SystemClass::write(QJsonObject &json) const{
         classSkill->write(obj);
         tab.append(obj);
     }
-    json["skills"] = tab;
+    if (!tab.isEmpty()) {
+        json[jsonSkills] = tab;
+    }
 }

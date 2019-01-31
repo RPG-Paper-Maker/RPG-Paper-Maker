@@ -237,9 +237,7 @@ void DialogDatas::initializeClasses(GameDatas *gameDatas){
     connect(ui->panelSuperListClasses->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageClassesSelected(QModelIndex,QModelIndex)));
-    ui->treeViewStatisticsProgression->initializeNewItemInstance(
-                new SystemStatisticProgression);
-    ui->treeViewClassSkills->initializeNewItemInstance(new SystemClassSkill);
+    ui->panelDatasClass->initialize();
     QModelIndex index = ui->panelSuperListClasses->list()->getModel()
             ->index(0,0);
     ui->panelSuperListClasses->list()->setIndex(0);
@@ -248,18 +246,8 @@ void DialogDatas::initializeClasses(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogDatas::updateClass(SystemClass* sysClass){
-    ui->spinBoxClassInitialLevel->setValue(sysClass->initialLevel());
-    ui->spinBoxClassMaxLevel->setValue(sysClass->maxLevel());
-    ui->spinBoxClassBase->setValue(sysClass->expBase());
-    ui->spinBoxClassInflation->setValue(sysClass->expInflation());
-    ui->treeViewStatisticsProgression->initializeModel(
-                sysClass->statisticsProgression());
-    ui->treeViewStatisticsProgression->setColumnWidth(0,200);
-    ui->treeViewStatisticsProgression->setColumnWidth(1,50);
-    ui->treeViewStatisticsProgression->setColumnWidth(2,50);
-    ui->treeViewClassSkills->initializeModel(sysClass->skills());
-    ui->treeViewClassSkills->setColumnWidth(0,250);
+void DialogDatas::updateClass(SystemClass* sysClass) {
+    ui->panelDatasClass->update(sysClass, sysClass);
 }
 
 // -------------------------------------------------------

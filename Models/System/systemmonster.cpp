@@ -36,9 +36,10 @@ SystemMonster::SystemMonster() : SystemHero()
 }
 
 SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
-    idBattler, int idFaceset, int exp, QStandardItemModel *currencies,
-    QStandardItemModel *loots, QStandardItemModel *actions) :
-    SystemHero(i, names, idClass, idBattler, idFaceset),
+    idBattler, int idFaceset, SystemClass *classInherit, int exp,
+    QStandardItemModel *currencies, QStandardItemModel *loots,
+    QStandardItemModel *actions) :
+    SystemHero(i, names, idClass, idBattler, idFaceset, classInherit),
     m_exp(exp),
     m_modelCurrencies(currencies),
     m_modelLoots(loots),
@@ -47,7 +48,7 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
 
 }
 
-SystemMonster::~SystemMonster(){
+SystemMonster::~SystemMonster() {
     SuperListItem::deleteModel(m_modelLoots);
     delete m_modelCurrencies;
     delete m_modelActions;
