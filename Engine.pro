@@ -6,7 +6,7 @@
 
 CONFIG += c++11
 
-QT       += core gui opengl network multimedia
+QT       += core gui opengl network multimedia charts
 
 win32{
     LIBS += -lOpengl32

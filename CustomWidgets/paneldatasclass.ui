@@ -37,16 +37,81 @@
         <string>Experience</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_38">
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButtonSetClassValues">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Set to class values</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout_21" stretch="1,0">
+         <layout class="QVBoxLayout" name="verticalLayout_21" stretch="0,0">
           <item>
-           <widget class="QFrame" name="frame">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+           <widget class="QTabWidget" name="tabWidget">
+            <property name="currentIndex">
+             <number>0</number>
             </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
+            <widget class="QWidget" name="tab">
+             <attribute name="title">
+              <string>To next level</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QScrollArea" name="scrollArea">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>387</width>
+                   <height>133</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="0">
+                   <widget class="QTableWidget" name="tableWidgetNextLevel"/>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="title">
+              <string>Total</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="0">
+               <widget class="QScrollArea" name="scrollArea_2">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>387</width>
+                   <height>133</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <item row="0" column="0">
+                   <widget class="QTableWidget" name="tableWidgetTotalLevel"/>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
           <item>
@@ -60,7 +125,7 @@
                </size>
               </property>
               <property name="minimum">
-               <number>-999999999</number>
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>999999999</number>
@@ -90,10 +155,10 @@
                </size>
               </property>
               <property name="minimum">
-               <number>-999999999</number>
+               <number>0</number>
               </property>
               <property name="maximum">
-               <number>999999999</number>
+               <number>99999</number>
               </property>
              </widget>
             </item>
@@ -113,10 +178,10 @@
                </size>
               </property>
               <property name="minimum">
-               <number>-999999999</number>
+               <number>0</number>
               </property>
               <property name="maximum">
-               <number>999999999</number>
+               <number>99999</number>
               </property>
              </widget>
             </item>
@@ -129,7 +194,7 @@
                </size>
               </property>
               <property name="minimum">
-               <number>-999999999</number>
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>999999999</number>
@@ -146,16 +211,6 @@
            </layout>
           </item>
          </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="pushButtonSetClassValues">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>Set to class values</string>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>
