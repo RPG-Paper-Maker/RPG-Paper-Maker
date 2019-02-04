@@ -104,7 +104,7 @@ void PanelDatasClass::updateExperience() {
     int expBase = ui->spinBoxClassBase->value();
     int expInflation = ui->spinBoxClassInflation->value();
     int exp, total = 0;
-    qreal pow = static_cast<qreal>(2.4f + expInflation / 100.0f);
+    double pow = 2.4 + expInflation / 100.0;
 
     // Initialize
     m_completingTableExp = true;
