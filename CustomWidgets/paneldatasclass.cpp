@@ -98,13 +98,12 @@ int PanelDatasClass::getInheritValue(int v1, int v2) {
 // -------------------------------------------------------
 
 void PanelDatasClass::updateExperience() {
-    int initialLevel = ui->spinBoxClassInitialLevel->value();
     int maxLevel = ui->spinBoxClassMaxLevel->value();
     int expBase = ui->spinBoxClassBase->value();
     int expInflation = ui->spinBoxClassInflation->value();
 
     ui->tableWidgetNextLevel->clear();
-    ui->tableWidgetNextLevel->setRowCount(maxLevel);
+    ui->tableWidgetNextLevel->setRowCount(maxLevel - 1);
     ui->tableWidgetNextLevel->setColumnCount(2);
     ui->tableWidgetNextLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
         "Level"));
@@ -112,7 +111,7 @@ void PanelDatasClass::updateExperience() {
         "Experience"));
     ui->tableWidgetNextLevel->verticalHeader()->hide();
     ui->tableWidgetTotalLevel->clear();
-    ui->tableWidgetTotalLevel->setRowCount(maxLevel + 1);
+    ui->tableWidgetTotalLevel->setRowCount(maxLevel);
     ui->tableWidgetTotalLevel->setColumnCount(2);
     ui->tableWidgetTotalLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
         "Level"));
@@ -123,19 +122,19 @@ void PanelDatasClass::updateExperience() {
     int exp, total = 0;
     qreal pow = static_cast<qreal>(2.4f + expInflation / 100.0f);
     ui->tableWidgetTotalLevel->setItem(0, 0, new QTableWidgetItem(QString
-        ::number(0)));
+        ::number(1)));
     ui->tableWidgetTotalLevel->setItem(0, 1, new QTableWidgetItem(QString
         ::number(0)));
-    for (int i = 1; i <= maxLevel; i++) {
+    for (int i = 2; i <= maxLevel; i++) {
         exp = qFloor(expBase * (qPow(i + 3, pow) / qPow(5, pow)));
         total += exp;
-        ui->tableWidgetNextLevel->setItem(i - 1, 0, new QTableWidgetItem(QString
+        ui->tableWidgetNextLevel->setItem(i - 2, 0, new QTableWidgetItem(QString
             ::number(i - 1)));
-        ui->tableWidgetNextLevel->setItem(i - 1, 1, new QTableWidgetItem(QString
+        ui->tableWidgetNextLevel->setItem(i - 2, 1, new QTableWidgetItem(QString
             ::number(exp)));
-        ui->tableWidgetTotalLevel->setItem(i, 0, new QTableWidgetItem(QString
+        ui->tableWidgetTotalLevel->setItem(i - 1, 0, new QTableWidgetItem(QString
             ::number(i)));
-        ui->tableWidgetTotalLevel->setItem(i, 1, new QTableWidgetItem(QString
+        ui->tableWidgetTotalLevel->setItem(i - 1, 1, new QTableWidgetItem(QString
             ::number(total)));
     }
 
