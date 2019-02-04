@@ -40,6 +40,9 @@ class PanelDatasClass : public QWidget
     Q_OBJECT
 
 public:
+    static const QString NAME_LEVEL;
+    static const QString NAME_EXPERIENCE;
+
     explicit PanelDatasClass(QWidget *parent = nullptr);
     ~PanelDatasClass();
 
@@ -50,9 +53,11 @@ private:
     Ui::PanelDatasClass *ui;
     SystemClass *m_class;
     SystemClass *m_originalClass;
+    bool m_completingTableExp;
 
     int getInheritValue(int v1, int v2);
     void updateExperience();
+    void updateTotalExperience();
 
 public slots:
     void on_spinBoxClassInitialLevel_valueChanged(int i);
@@ -60,6 +65,7 @@ public slots:
     void on_spinBoxClassBase_valueChanged(int i);
     void on_spinBoxClassInflation_valueChanged(int i);
     void on_pushButtonSetClassValues_clicked();
+    void on_cellUpdateValueExp(int row, int column);
 };
 
 #endif // PANELDATASCLASS_H

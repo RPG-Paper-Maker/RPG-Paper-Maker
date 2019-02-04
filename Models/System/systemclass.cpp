@@ -26,6 +26,7 @@ const QString SystemClass::jsonInitialLevel = "iniL";
 const QString SystemClass::jsonMaxLevel = "mxL";
 const QString SystemClass::jsonExpBase = "eB";
 const QString SystemClass::jsonExpInflation = "eI";
+const QString SystemClass::jsonExpTable = "eT";
 const QString SystemClass::jsonStats = "stats";
 const QString SystemClass::jsonSkills = "skills";
 
@@ -113,6 +114,10 @@ void SystemClass::setExpInflation(int i, SystemClass *originalClass) {
         (originalClass != this && originalClass->expInflation() != i) ? i : -1;
 }
 
+QHash<int, int> * SystemClass::expTable() {
+    return &m_expTable;
+}
+
 QStandardItemModel* SystemClass::statisticsProgression() const {
     return m_statisticsProgression;
 }
@@ -170,6 +175,15 @@ void SystemClass::read(const QJsonObject &json){
         m_expInflation = json[jsonExpInflation].toInt();
     }
 
+    // Exp table
+    tab = json[jsonExpTable].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        QJsonObject obj = tab.at(i).toObject();
+        int level = obj["k"].toInt();
+        int value = obj["v"].toInt();
+        m_expTable[level] = value;
+    }
+
     // Statistics
     tab = json[jsonStats].toArray();
     for (int i = 0; i < tab.size(); i++){
@@ -191,6 +205,8 @@ void SystemClass::read(const QJsonObject &json){
     }
 }
 
+// -------------------------------------------------------
+
 void SystemClass::write(QJsonObject &json) const{
     SuperListItem::write(json);
     QJsonArray tab;
@@ -211,14 +227,30 @@ void SystemClass::write(QJsonObject &json) const{
         json[jsonExpInflation] = m_expInflation;
     }
 
+    // Exp table
+    tab = QJsonArray();
+    QHash<int, int>::const_iterator i;
+    for (i = m_expTable.begin(); i != m_expTable.end(); i++){
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        int level = i.key();
+        int value = i.value();
+        objHash["k"] = level;
+        objHash["v"] = value;
+        tab.append(objHash);
+    }
+    if (!tab.isEmpty()) {
+        json[jsonExpTable] = tab;
+    }
+
     // Statistics
     tab = QJsonArray();
     l = m_statisticsProgression->invisibleRootItem()->rowCount();
     for (int i = 0; i < l - 1; i++){
         obj = QJsonObject();
-        SystemStatisticProgression* statisticsProgression =
-                (SystemStatisticProgression*) m_statisticsProgression->item(i)
-                ->data().value<quintptr>();
+        SystemStatisticProgression *statisticsProgression = reinterpret_cast<
+            SystemStatisticProgression *>(m_statisticsProgression->item(i)
+            ->data().value<quintptr>());
         statisticsProgression->write(obj);
         tab.append(obj);
     }
@@ -231,8 +263,8 @@ void SystemClass::write(QJsonObject &json) const{
     l = m_skills->invisibleRootItem()->rowCount();
     for (int i = 0; i < l - 1; i++){
         obj = QJsonObject();
-        SystemClassSkill* classSkill = (SystemClassSkill*) m_skills->item(i)
-                ->data().value<quintptr>();
+        SystemClassSkill *classSkill = reinterpret_cast<SystemClassSkill*>(
+            m_skills->item(i)->data().value<quintptr>());
         classSkill->write(obj);
         tab.append(obj);
     }

@@ -59,7 +59,7 @@ public:
     virtual QList<QStandardItem*> getModelRow() const;
     static void deleteModel(QStandardItemModel* model, bool deleteModel = true);
     static void deleteModelTree(QStandardItem* item);
-    static int getIndexById(QStandardItem* item, int id);
+    static int getIndexById(QStandardItem* item, int id, bool first = false);
     static int getIdByIndex(QStandardItemModel* model, int index);
     static SuperListItem* getById(QStandardItem* item, int id,
                                   bool first = true);

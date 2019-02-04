@@ -48,6 +48,8 @@ public:
     void initialize();
     void update(SystemHero *hero, int classIndex);
     SystemHero * currentHero();
+    void updateClasses();
+    void updateClass();
 
 private:
     Ui::PanelDatasCharacter *ui;

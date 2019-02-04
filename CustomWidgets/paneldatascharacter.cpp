@@ -56,8 +56,7 @@ void PanelDatasCharacter::setPanelSuperList(PanelSuperList *list) {
 void PanelDatasCharacter::initialize() {
 
     // Class
-    SuperListItem::fillComboBox(ui->comboBoxClass, RPM::get()->project()
-        ->gameDatas()->classesDatas()->model());
+    updateClasses();
 
     // Battler
     ui->widgetPictureBattler->setKind(PictureKind::Battlers);
@@ -88,7 +87,7 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
     on_facesetPictureChanged(picture);
 
     // Class
-    ui->panelDatasClass->update(hero->classInherit(), hero->getClass());
+    updateClass();
 }
 
 // -------------------------------------------------------
@@ -96,6 +95,23 @@ void PanelDatasCharacter::update(SystemHero *hero, int classIndex) {
 SystemHero * PanelDatasCharacter::currentHero() {
     return reinterpret_cast<SystemHero *>(m_panelSuperList->list()
         ->getSelected()->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void PanelDatasCharacter::updateClasses() {
+    int index = ui->comboBoxClass->currentIndex();
+    ui->comboBoxClass->clear();
+    SuperListItem::fillComboBox(ui->comboBoxClass, RPM::get()->project()
+        ->gameDatas()->classesDatas()->model());
+    ui->comboBoxClass->setCurrentIndex(index);
+}
+
+// -------------------------------------------------------
+
+void PanelDatasCharacter::updateClass() {
+    SystemHero *hero = currentHero();
+    ui->panelDatasClass->update(hero->classInherit(), hero->getClass());
 }
 
 // -------------------------------------------------------
@@ -108,6 +124,7 @@ void PanelDatasCharacter::on_comboBoxClass_currentIndexChanged(int index) {
     if (m_panelSuperList != nullptr) {
         currentHero()->setIdClass(SuperListItem::getIdByIndex(RPM::get()
             ->project()->gameDatas()->classesDatas()->model(), index));
+        updateClass();
     }
 }
 

@@ -75,6 +75,7 @@ private:
     void openSpecialElementsDialog(PictureKind kind);
 
 private slots:
+    void on_tabWidget_currentChanged(int index);
     void on_comboBoxItemType_currentIndexChanged(int index);
     void on_checkBoxItemConsumable_toggled(bool checked);
     void on_pageItemsSelected(QModelIndex index, QModelIndex);

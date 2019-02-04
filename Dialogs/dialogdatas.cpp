@@ -173,7 +173,7 @@ void DialogDatas::initializeHeroes(GameDatas *gameDatas) {
 
 void DialogDatas::updateHero(SystemHero *sysHero) {
     int i = SuperListItem::getIndexById(ui->panelSuperListClasses->list()
-        ->getModel()->invisibleRootItem(), sysHero->idClass());
+        ->getModel()->invisibleRootItem(), sysHero->idClass(), true);
     ui->panelDatasHero->update(sysHero, i);
 }
 
@@ -328,6 +328,25 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogDatas::on_tabWidget_currentChanged(int index) {
+    switch (index) {
+    case 1:
+        ui->panelDatasHero->updateClasses();
+        updateHero(reinterpret_cast<SystemHero *>(ui->panelSuperListHeroes
+            ->list()->getSelected()->data().value<quintptr>()));
+        break;
+    case 2:
+        ui->panelDatasMonster->updateClasses();
+        updateMonster(reinterpret_cast<SystemMonster *>(ui->panelSuperListMonsters
+            ->list()->getSelected()->data().value<quintptr>()));
+        break;
+    default:
+        break;
+    }
+}
+
 // -------------------------------------------------------
 
 void DialogDatas::on_comboBoxItemType_currentIndexChanged(int index){

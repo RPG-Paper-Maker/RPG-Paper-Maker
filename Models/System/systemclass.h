@@ -39,6 +39,7 @@ public:
     static const QString jsonMaxLevel;
     static const QString jsonExpBase;
     static const QString jsonExpInflation;
+    static const QString jsonExpTable;
     static const QString jsonStats;
     static const QString jsonSkills;
 
@@ -57,6 +58,7 @@ public:
     void setExpBase(int i, SystemClass *originalClass = nullptr);
     int expInflation() const;
     void setExpInflation(int i, SystemClass *originalClass = nullptr);
+    QHash<int, int> * expTable();
     QStandardItemModel* statisticsProgression() const;
     QStandardItemModel* skills() const;
 
@@ -71,6 +73,7 @@ protected:
     int m_maxLevel;
     int m_expBase;
     int m_expInflation;
+    QHash<int, int> m_expTable;
     QStandardItemModel* m_statisticsProgression;
     QStandardItemModel* m_skills;
 };

@@ -129,7 +129,7 @@ void SuperListItem::deleteModelTree(QStandardItem* item){
 
 // -------------------------------------------------------
 
-int SuperListItem::getIndexById(QStandardItem* item, int id){
+int SuperListItem::getIndexById(QStandardItem* item, int id, bool first) {
     int l = item->rowCount()-1;
     SuperListItem* s;
 
@@ -149,7 +149,7 @@ int SuperListItem::getIndexById(QStandardItem* item, int id){
         }
     }
 
-    return -1;
+    return first ? 0 : -1;
 }
 
 // -------------------------------------------------------
