@@ -263,7 +263,9 @@ HEADERS += \
     Models/System/systemwindowskin.h \
     Dialogs/Systems/dialogsystemwindowskin.h \
     CustomWidgets/widgetselectrect.h \
-    CustomWidgets/paneldatasclass.h
+    CustomWidgets/paneldatasclass.h \
+    CustomWidgets/paneldatasmonster.h \
+    Models/System/systemrewardtable.h
 
 SOURCES += \
     main.cpp \
@@ -474,7 +476,9 @@ SOURCES += \
     Models/System/systemwindowskin.cpp \
     Dialogs/Systems/dialogsystemwindowskin.cpp \
     CustomWidgets/widgetselectrect.cpp \
-    CustomWidgets/paneldatasclass.cpp
+    CustomWidgets/paneldatasclass.cpp \
+    CustomWidgets/paneldatasmonster.cpp \
+    Models/System/systemrewardtable.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -554,7 +558,8 @@ FORMS += \
     CustomWidgets/paneldatascharacter.ui \
     Dialogs/Systems/dialogsystemwindowskin.ui \
     CustomWidgets/widgetselectrect.ui \
-    CustomWidgets/paneldatasclass.ui
+    CustomWidgets/paneldatasclass.ui \
+    CustomWidgets/paneldatasmonster.ui
 
 OTHER_FILES +=
 

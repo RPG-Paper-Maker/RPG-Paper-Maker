@@ -21,6 +21,7 @@
 #define SYSTEMMONSTER_H
 
 #include "systemhero.h"
+#include "systemrewardtable.h"
 
 // -------------------------------------------------------
 //
@@ -33,13 +34,15 @@
 class SystemMonster : public SystemHero
 {
 public:
+    static const QString JSON_EXPERIENCE;
+
     SystemMonster();
     SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
-        int idFaceset, SystemClass *classInherit, int exp, QStandardItemModel
-        *currencies, QStandardItemModel *loots, QStandardItemModel *actions);
+        int idFaceset, SystemClass *classInherit, SystemRewardTable *exp,
+        QStandardItemModel *currencies, QStandardItemModel *loots,
+        QStandardItemModel *actions);
     virtual ~SystemMonster();
-    int exp() const;
-    void setExp(int i);
+    SystemRewardTable * experience() const;
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelLoots() const;
     QStandardItemModel* modelActions() const;
@@ -50,10 +53,10 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_exp;
-    QStandardItemModel* m_modelCurrencies;
-    QStandardItemModel* m_modelLoots;
-    QStandardItemModel* m_modelActions;
+    SystemRewardTable *m_experience;
+    QStandardItemModel *m_modelCurrencies;
+    QStandardItemModel *m_modelLoots;
+    QStandardItemModel *m_modelActions;
 };
 
 Q_DECLARE_METATYPE(SystemMonster)

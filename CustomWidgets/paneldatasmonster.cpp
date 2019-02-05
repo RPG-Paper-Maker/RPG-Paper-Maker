@@ -17,11 +17,9 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "dialogdatasmonsterrewards.h"
-#include "ui_dialogdatasmonsterrewards.h"
-#include "systemcurrency.h"
-#include "systemloot.h"
-#include "main.h"
+#include "paneldatasmonster.h"
+#include "ui_paneldatasmonster.h"
+#include "paneldatascharacter.h"
 
 // -------------------------------------------------------
 //
@@ -29,21 +27,21 @@
 //
 // -------------------------------------------------------
 
-DialogDatasMonsterRewards::DialogDatasMonsterRewards(SystemMonster &monster,
-                                                     QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogDatasMonsterRewards),
-    m_monster(monster)
+PanelDatasMonster::PanelDatasMonster(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PanelDatasMonster)
 {
     ui->setupUi(this);
-    
-
-    initialize();
 }
 
-DialogDatasMonsterRewards::~DialogDatasMonsterRewards()
+PanelDatasMonster::~PanelDatasMonster()
 {
     delete ui;
+}
+
+void PanelDatasMonster::setPanelSuperList(PanelSuperList *list) {
+    m_panelSuperList = list;
+    ui->panelDatasCharacter->setPanelSuperList(list);
 }
 
 // -------------------------------------------------------
@@ -52,28 +50,30 @@ DialogDatasMonsterRewards::~DialogDatasMonsterRewards()
 //
 // -------------------------------------------------------
 
-void DialogDatasMonsterRewards::initialize(){
-    SystemLoot* loot = new SystemLoot;
-
-    ui->treeViewCurrencies->initializeNewItemInstance(new SystemCurrency);
-    loot->updateName();
-    ui->treeViewLoots->initializeNewItemInstance(loot);
-
-    //ui->spinBoxExp->setValue(m_monster.exp());
-    ui->treeViewCurrencies->initializeModel(m_monster.modelCurrencies());
-    ui->treeViewCurrencies->setColumnWidth(0,180);
-    ui->treeViewCurrencies->setColumnWidth(1,100);
-    ui->treeViewLoots->initializeModel(m_monster.modelLoots());
-    ui->treeViewLoots->setColumnWidth(0,180);
-    ui->treeViewLoots->setColumnWidth(1,100);
+void PanelDatasMonster::initialize() {
+    ui->panelDatasCharacter->initialize();
 }
 
 // -------------------------------------------------------
-//
-//  SLOTS
-//
+
+void PanelDatasMonster::update(SystemHero *hero, int classIndex) {
+    ui->panelDatasCharacter->update(hero, classIndex);
+}
+
 // -------------------------------------------------------
 
-void DialogDatasMonsterRewards::on_spinBoxExp_valueChanged(int i){
-    //m_monster.setExp(i);
+SystemHero * PanelDatasMonster::currentHero() {
+    return ui->panelDatasCharacter->currentHero();
+}
+
+// -------------------------------------------------------
+
+void PanelDatasMonster::updateClasses() {
+    ui->panelDatasCharacter->updateClasses();
+}
+
+// -------------------------------------------------------
+
+void PanelDatasMonster::updateClass() {
+    ui->panelDatasCharacter->updateClass();
 }

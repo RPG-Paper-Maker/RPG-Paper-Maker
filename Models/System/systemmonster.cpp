@@ -22,6 +22,8 @@
 #include "systemcurrency.h"
 #include "systemloot.h"
 
+const QString SystemMonster::JSON_EXPERIENCE = "xp";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -30,17 +32,18 @@
 
 SystemMonster::SystemMonster() : SystemHero()
 {
+    m_experience = new SystemRewardTable;
     m_modelCurrencies = new QStandardItemModel;
     m_modelLoots = new QStandardItemModel;
     m_modelActions = new QStandardItemModel;
 }
 
 SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
-    idBattler, int idFaceset, SystemClass *classInherit, int exp,
-    QStandardItemModel *currencies, QStandardItemModel *loots,
-    QStandardItemModel *actions) :
+    idBattler, int idFaceset, SystemClass *classInherit, SystemRewardTable *exp,
+    QStandardItemModel *currencies, QStandardItemModel *loots, QStandardItemModel
+    *actions) :
     SystemHero(i, names, idClass, idBattler, idFaceset, classInherit),
-    m_exp(exp),
+    m_experience(exp),
     m_modelCurrencies(currencies),
     m_modelLoots(loots),
     m_modelActions(actions)
@@ -49,14 +52,15 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
 }
 
 SystemMonster::~SystemMonster() {
+    delete m_experience;
     SuperListItem::deleteModel(m_modelLoots);
     delete m_modelCurrencies;
     delete m_modelActions;
 }
 
-int SystemMonster::exp() const { return m_exp; }
-
-void SystemMonster::setExp(int i) { m_exp = i; }
+SystemRewardTable * SystemMonster::experience() const {
+    return m_experience;
+}
 
 QStandardItemModel* SystemMonster::modelCurrencies() const {
     return m_modelCurrencies;
@@ -95,7 +99,7 @@ void SystemMonster::setCopy(const SystemMonster& monster){
     int l;
 
     // Experience
-    m_exp = monster.exp();
+    m_experience->setCopy(*monster.m_experience);
 
     // Currencies
     m_modelCurrencies->setHorizontalHeaderLabels(QStringList({"Currencies",
@@ -105,8 +109,8 @@ void SystemMonster::setCopy(const SystemMonster& monster){
         itemSys = new QStandardItem;
         itemNb = new QStandardItem;
         row = QList<QStandardItem*>();
-        sys = (SuperListItem*) monster.modelCurrencies()->item(i)->data()
-                .value<quintptr>();
+        sys = reinterpret_cast<SuperListItem *>(monster.modelCurrencies()->item(
+            i)->data().value<quintptr>());
         nb = monster.modelCurrencies()->item(i,1)->data().value<int>();
         itemSys->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
         itemSys->setText(sys->toString());
@@ -157,7 +161,7 @@ void SystemMonster::read(const QJsonObject &json){
     int nb;
 
     // Experience
-    m_exp = json["xp"].toInt();
+    m_experience->read(json[JSON_EXPERIENCE].toObject());
 
     // Currencies
     m_modelCurrencies->setHorizontalHeaderLabels(QStringList({"Currencies",
@@ -211,7 +215,8 @@ void SystemMonster::write(QJsonObject &json) const{
     int l;
 
     // Experience
-    json["xp"] = m_exp;
+    m_experience->write(obj);
+    json[JSON_EXPERIENCE] = obj;
 
     // Currencies
     tab = QJsonArray();

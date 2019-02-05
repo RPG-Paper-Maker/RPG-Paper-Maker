@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -109,7 +109,7 @@
         <attribute name="title">
          <string>Heroes</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_3">
+        <layout class="QGridLayout" name="gridLayout_25">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
            <item>
@@ -150,7 +150,26 @@
             </widget>
            </item>
            <item>
-            <widget class="PanelDatasCharacter" name="panelDatasHero" native="true"/>
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>737</width>
+                <height>544</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_3">
+               <item row="0" column="0">
+                <widget class="PanelDatasCharacter" name="panelDatasHero" native="true"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
            </item>
           </layout>
          </item>
@@ -160,7 +179,7 @@
         <attribute name="title">
          <string>Monsters</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_5">
+        <layout class="QGridLayout" name="gridLayout_26">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
            <item>
@@ -201,38 +220,26 @@
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_12" stretch="0,1">
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,1">
-               <item>
-                <widget class="QPushButton" name="pushButtonMonsterbattleRewards">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="text">
-                  <string>Configure battle...</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>468</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
+            <widget class="QScrollArea" name="scrollArea_2">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>737</width>
+                <height>544</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="0">
+                <widget class="PanelDatasMonster" name="panelDatasMonster" native="true"/>
                </item>
               </layout>
-             </item>
-             <item>
-              <widget class="PanelDatasCharacter" name="panelDatasMonster" native="true"/>
-             </item>
-            </layout>
+             </widget>
+            </widget>
            </item>
           </layout>
          </item>
@@ -1033,6 +1040,12 @@
    <class>PanelDatasClass</class>
    <extends>QWidget</extends>
    <header>paneldatasclass.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDatasMonster</class>
+   <extends>QWidget</extends>
+   <header>paneldatasmonster.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

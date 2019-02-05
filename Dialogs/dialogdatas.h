@@ -89,7 +89,6 @@ private slots:
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
     void on_tilesetPictureChanged(SystemPicture* picture);
-    void on_pushButtonMonsterbattleRewards_clicked();
 };
 
 #endif // DIALOGDATAS_H

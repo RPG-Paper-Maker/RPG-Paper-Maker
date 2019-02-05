@@ -465,18 +465,3 @@ void DialogDatas::on_pushButtonAutotiles_clicked() {
 void DialogDatas::on_pushButtonSpriteWalls_clicked() {
     openSpecialElementsDialog(PictureKind::Walls);
 }
-
-// -------------------------------------------------------
-
-void DialogDatas::on_pushButtonMonsterbattleRewards_clicked(){
-    QStandardItem* selected = ui->panelSuperListMonsters->list()
-            ->getSelected();
-    SystemMonster* monster = (SystemMonster*)selected->data()
-            .value<quintptr>();
-    SystemMonster monsterCopy;
-    monsterCopy.setCopy(*monster);
-    DialogDatasMonsterRewards dialog(monsterCopy);
-    if (dialog.exec() == QDialog::Accepted){
-        monster->setCopy(monsterCopy);
-    }
-}
