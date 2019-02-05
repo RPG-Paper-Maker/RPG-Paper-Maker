@@ -20,6 +20,8 @@
 #include "panelprogressiontable.h"
 #include "ui_panelprogressiontable.h"
 
+const QString PanelProgressionTable::NAME_EXPERIENCE = "Experience";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -28,7 +30,8 @@
 
 PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelProgressionTable)
+    ui(new Ui::PanelProgressionTable),
+    m_updating(false)
 {
     ui->setupUi(this);
 }
@@ -36,4 +39,68 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
 PanelProgressionTable::~PanelProgressionTable()
 {
     delete ui;
+}
+
+SystemRewardTable * PanelProgressionTable::reward() const {
+    return m_reward;
+}
+
+void PanelProgressionTable::setReward(SystemRewardTable *reward) {
+    m_reward = reward;
+}
+
+int PanelProgressionTable::maxLevel() const {
+    return m_maxLevel;
+}
+
+void PanelProgressionTable::setMaxLevel(int l) {
+    m_maxLevel = l;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelProgressionTable::updateProgress() {
+    if (!m_updating) {
+        m_updating = true;
+        ui->spinBoxBase->setValue(m_reward->base());
+        ui->spinBoxInflation->setValue(m_reward->inflation());
+        ui->tableWidget->setTable(reward()->table());
+        ui->tableWidget->initialize(m_maxLevel, NAME_EXPERIENCE);
+        ui->tableWidget->updateWithBaseInflation(reward()->base(), reward()
+            ->inflation(), m_maxLevel);
+        m_updating = false;
+    }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void PanelProgressionTable::on_spinBoxBase_valueChanged(int i) {
+    m_reward->setBase(i);
+    updateProgress();
+}
+
+// -------------------------------------------------------
+
+void PanelProgressionTable::on_spinBoxInflation_valueChanged(int i) {
+    m_reward->setInflation(i);
+    updateProgress();
+}
+
+// -------------------------------------------------------
+
+void PanelProgressionTable::on_pushButtonReset_clicked() {
+    m_reward->reset();
+    m_updating = true;
+    ui->spinBoxBase->setValue(m_reward->base());
+    ui->spinBoxInflation->setValue(m_reward->inflation());
+    m_updating = false;
+    updateProgress();
 }

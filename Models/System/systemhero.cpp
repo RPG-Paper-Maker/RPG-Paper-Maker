@@ -39,7 +39,7 @@ const QString SystemHero::jsonClassInherit = "ci";
 // -------------------------------------------------------
 
 SystemHero::SystemHero() :
-    SystemHero(1, new LangsTranslation, 1, -1, -1, new SystemClass)
+    SystemHero(1, new LangsTranslation, 1, 1, 1, new SystemClass)
 {
 
 }
@@ -105,6 +105,11 @@ SystemClass * SystemHero::getClass() const {
         m_idClass));
 }
 
+int SystemHero::maxLevel() const {
+    return m_classInherit->maxLevel() == -1 ? getClass()->maxLevel() :
+        m_classInherit->maxLevel();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -126,6 +131,7 @@ void SystemHero::setCopy(const SystemHero& hero){
     m_idClass = hero.m_idClass;
     m_idBattlerPicture = hero.m_idBattlerPicture;
     m_idFacesetPicture = hero.m_idFacesetPicture;
+    m_classInherit->setCopy(*hero.m_classInherit);
 }
 
 // -------------------------------------------------------

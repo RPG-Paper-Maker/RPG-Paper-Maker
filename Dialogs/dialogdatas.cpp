@@ -188,6 +188,7 @@ void DialogDatas::initializeMonsters(GameDatas *gameDatas){
     connect(ui->panelSuperListMonsters->list()->selectionModel(), SIGNAL(
         currentChanged(QModelIndex,QModelIndex)), this, SLOT(
         on_pageMonsterSelected(QModelIndex,QModelIndex)));
+    ui->panelDatasMonster->initialize();
     QModelIndex index = ui->panelSuperListMonsters->list()->getModel()->index(0,
         0);
     ui->panelSuperListMonsters->list()->setIndex(0);

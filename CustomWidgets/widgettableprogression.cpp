@@ -105,6 +105,11 @@ void WidgetTableProgression::updateWithBaseInflation(int base, int inflation,
         setItem(i - 2, 0, new QTableWidgetItem(QString::number(i - 1)));
         setItem(i - 2, 1, new QTableWidgetItem(QString::number(exp)));
     }
+    if (maxLevel >= rowCount()) {
+        exp = qFloor(base * (qPow(maxLevel + 4, pow) / qPow(5, pow)));
+        setItem(maxLevel - 1, 0, new QTableWidgetItem(QString::number(maxLevel)));
+        setItem(maxLevel - 1, 1, new QTableWidgetItem(QString::number(exp)));
+    }
 
     // Complete with exp table
     if (m_totalWidget != nullptr) {

@@ -54,6 +54,7 @@ public:
     SystemPicture* getPictureBattler() const;
     SystemPicture* getPictureFaceset() const;
     SystemClass * getClass() const;
+    int maxLevel() const;
 
     virtual SuperListItem* createCopy() const;
     void setCopy(const SystemHero& hero);

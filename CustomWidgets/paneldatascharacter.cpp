@@ -47,6 +47,10 @@ void PanelDatasCharacter::setPanelSuperList(PanelSuperList *list) {
     m_panelSuperList = list;
 }
 
+PanelDatasClass * PanelDatasCharacter::panelDatasClass() const {
+    return ui->panelDatasClass;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

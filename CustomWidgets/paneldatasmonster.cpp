@@ -51,51 +51,17 @@ void PanelDatasMonster::setPanelSuperList(PanelSuperList *list) {
 // -------------------------------------------------------
 
 void PanelDatasMonster::initialize() {
-    ui->panelDatasCharacter->initialize();
-
-    // Initialize
-    /*
-    m_completingTableExp = true;
-    ui->tableWidgetNextLevel->clear();
-    ui->tableWidgetNextLevel->setRowCount(maxLevel - 1);
-    ui->tableWidgetNextLevel->setColumnCount(2);
-    ui->tableWidgetNextLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
-        NAME_LEVEL));
-    ui->tableWidgetNextLevel->setHorizontalHeaderItem(1, new QTableWidgetItem(
-        NAME_EXPERIENCE));
-    ui->tableWidgetNextLevel->verticalHeader()->hide();
-    ui->tableWidgetTotalLevel->clear();
-    ui->tableWidgetTotalLevel->setRowCount(maxLevel);
-    ui->tableWidgetTotalLevel->setColumnCount(2);
-    ui->tableWidgetTotalLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
-        NAME_LEVEL));
-    ui->tableWidgetTotalLevel->setHorizontalHeaderItem(1, new QTableWidgetItem(
-        NAME_EXPERIENCE));
-    ui->tableWidgetTotalLevel->verticalHeader()->hide();
-
-    // Complete basic table
-    ui->tableWidgetTotalLevel->setItem(0, 0, new QTableWidgetItem(QString
-        ::number(1)));
-    ui->tableWidgetTotalLevel->setItem(0, 1, new QTableWidgetItem(QString
-        ::number(0)));
-    for (int i = 2; i <= maxLevel; i++) {
-        exp = qFloor(expBase * (qPow(i + 3, pow) / qPow(5, pow)));
-        total += exp;
-        ui->tableWidgetNextLevel->setItem(i - 2, 0, new QTableWidgetItem(QString
-            ::number(i - 1)));
-        ui->tableWidgetNextLevel->setItem(i - 2, 1, new QTableWidgetItem(QString
-            ::number(exp)));
-        ui->tableWidgetTotalLevel->setItem(i - 1, 0, new QTableWidgetItem(QString
-            ::number(i)));
-        ui->tableWidgetTotalLevel->setItem(i - 1, 1, new QTableWidgetItem(QString
-            ::number(total)));
-    }*/
+    connect(ui->panelDatasCharacter->panelDatasClass(), SIGNAL(maxLevelUpdated(
+        int)), this, SLOT(on_maxLevelChanged(int)));
 }
 
 // -------------------------------------------------------
 
-void PanelDatasMonster::update(SystemHero *hero, int classIndex) {
-    ui->panelDatasCharacter->update(hero, classIndex);
+void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
+    ui->panelDatasCharacter->update(monster, classIndex);
+    ui->panelProgressionTableRewardExp->setReward(monster->experience());
+    ui->panelProgressionTableRewardExp->setMaxLevel(monster->maxLevel());
+    ui->panelProgressionTableRewardExp->updateProgress();
 }
 
 // -------------------------------------------------------
@@ -114,4 +80,15 @@ void PanelDatasMonster::updateClasses() {
 
 void PanelDatasMonster::updateClass() {
     ui->panelDatasCharacter->updateClass();
+}
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+void PanelDatasMonster::on_maxLevelChanged(int lvl) {
+    ui->panelProgressionTableRewardExp->setMaxLevel(lvl);
+    ui->panelProgressionTableRewardExp->updateProgress();
 }

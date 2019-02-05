@@ -29,7 +29,7 @@ const QString SystemRewardTable::JSON_TABLE = "t";
 //
 // -------------------------------------------------------
 
-SystemRewardTable::SystemRewardTable() : SuperListItem () {
+SystemRewardTable::SystemRewardTable() : SystemRewardTable(0, 0) {
 
 }
 
@@ -62,6 +62,18 @@ void SystemRewardTable::setInflation(int i) {
 
 QHash<int, int> * SystemRewardTable::table() {
     return &m_table;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY METHODS
+//
+// -------------------------------------------------------
+
+void SystemRewardTable::reset() {
+    m_base = 0;
+    m_inflation = 0;
+    m_table.clear();
 }
 
 // -------------------------------------------------------

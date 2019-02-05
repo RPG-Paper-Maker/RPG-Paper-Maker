@@ -180,6 +180,9 @@ void PanelDatasClass::on_spinBoxClassInitialLevel_valueChanged(int i) {
 void PanelDatasClass::on_spinBoxClassMaxLevel_valueChanged(int i) {
     m_class->setMaxLevel(i, m_originalClass);
     updateExperience();
+    if (!m_updating) {
+        emit maxLevelUpdated(i);
+    }
 }
 
 // -------------------------------------------------------

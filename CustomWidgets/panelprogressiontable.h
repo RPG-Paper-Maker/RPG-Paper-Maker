@@ -40,12 +40,27 @@ class PanelProgressionTable : public QWidget
     Q_OBJECT
 
 public:
+    static const QString NAME_EXPERIENCE;
+
     explicit PanelProgressionTable(QWidget *parent = nullptr);
     ~PanelProgressionTable();
+    SystemRewardTable * reward() const;
+    void setReward(SystemRewardTable *reward);
+    int maxLevel() const;
+    void setMaxLevel(int l);
+
+    void updateProgress();
 
 private:
     Ui::PanelProgressionTable *ui;
     SystemRewardTable *m_reward;
+    bool m_updating;
+    int m_maxLevel;
+
+public slots:
+    void on_spinBoxBase_valueChanged(int i);
+    void on_spinBoxInflation_valueChanged(int i);
+    void on_pushButtonReset_clicked();
 };
 
 #endif // PANELPROGRESSIONTABLE_H

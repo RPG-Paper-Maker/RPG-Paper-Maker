@@ -64,6 +64,9 @@ public slots:
     void on_spinBoxClassInflation_valueChanged(int i);
     void on_pushButtonReset_clicked();
     void on_pushButtonSetClassValues_clicked();
+
+signals:
+    void maxLevelUpdated(int lvl);
 };
 
 #endif // PANELDATASCLASS_H

@@ -23,6 +23,7 @@
 #include <QWidget>
 #include "systemhero.h"
 #include "panelsuperlist.h"
+#include "paneldatasclass.h"
 
 // -------------------------------------------------------
 //
@@ -44,6 +45,7 @@ public:
     explicit PanelDatasCharacter(QWidget *parent = nullptr);
     ~PanelDatasCharacter();
     void setPanelSuperList(PanelSuperList *list);
+    PanelDatasClass * panelDatasClass() const;
 
     void initialize();
     void update(SystemHero *hero, int classIndex);

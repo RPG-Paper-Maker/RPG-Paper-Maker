@@ -28,7 +28,7 @@ public:
     void setPanelSuperList(PanelSuperList *list);
 
     void initialize();
-    void update(SystemHero *hero, int classIndex);
+    void update(SystemMonster *monster, int classIndex);
     SystemHero * currentHero();
     void updateClasses();
     void updateClass();
@@ -36,6 +36,9 @@ public:
 private:
     Ui::PanelDatasMonster *ui;
     PanelSuperList *m_panelSuperList;
+
+public slots:
+    void on_maxLevelChanged(int lvl);
 };
 
 #endif // PANELDATASMONSTER_H

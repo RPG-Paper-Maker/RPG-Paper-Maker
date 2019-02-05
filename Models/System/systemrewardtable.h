@@ -47,6 +47,8 @@ public:
     void setInflation(int i);
     QHash<int, int> * table();
 
+    void reset();
+
     void setCopy(const SystemRewardTable& reward);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
