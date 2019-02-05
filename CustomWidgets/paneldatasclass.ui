@@ -37,7 +37,7 @@
         <string>Experience</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_38">
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QPushButton" name="pushButtonSetClassValues">
           <property name="enabled">
            <bool>true</bool>
@@ -70,7 +70,7 @@
                    <x>0</x>
                    <y>0</y>
                    <width>387</width>
-                   <height>133</height>
+                   <height>102</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
@@ -106,7 +106,7 @@
                    <x>0</x>
                    <y>0</y>
                    <width>387</width>
-                   <height>133</height>
+                   <height>102</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_5">
@@ -189,7 +189,7 @@
                </size>
               </property>
               <property name="minimum">
-               <number>0</number>
+               <number>1</number>
               </property>
               <property name="maximum">
                <number>99999</number>
@@ -222,6 +222,13 @@
            </layout>
           </item>
          </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButtonReset">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

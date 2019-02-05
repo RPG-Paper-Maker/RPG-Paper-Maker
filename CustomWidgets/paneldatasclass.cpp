@@ -87,6 +87,8 @@ void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
 
     if (m_class == m_originalClass) {
         ui->pushButtonSetClassValues->setVisible(false);
+    } else {
+        ui->pushButtonReset->setVisible(false);
     }
     m_updating = false;
 
@@ -191,6 +193,19 @@ void PanelDatasClass::on_spinBoxClassBase_valueChanged(int i) {
 
 void PanelDatasClass::on_spinBoxClassInflation_valueChanged(int i) {
     m_class->setExpInflation(i, m_originalClass);
+    updateExperience();
+}
+
+// -------------------------------------------------------
+
+void PanelDatasClass::on_pushButtonReset_clicked() {
+    m_class->reset();
+    m_updating = true;
+    ui->spinBoxClassInitialLevel->setValue(m_class->initialLevel());
+    ui->spinBoxClassMaxLevel->setValue(m_class->maxLevel());
+    ui->spinBoxClassBase->setValue(m_class->expBase());
+    ui->spinBoxClassInflation->setValue(m_class->expInflation());
+    m_updating = false;
     updateExperience();
 }
 

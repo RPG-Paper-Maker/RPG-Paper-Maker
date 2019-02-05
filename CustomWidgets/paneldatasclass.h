@@ -62,6 +62,7 @@ public slots:
     void on_spinBoxClassMaxLevel_valueChanged(int i);
     void on_spinBoxClassBase_valueChanged(int i);
     void on_spinBoxClassInflation_valueChanged(int i);
+    void on_pushButtonReset_clicked();
     void on_pushButtonSetClassValues_clicked();
 };
 

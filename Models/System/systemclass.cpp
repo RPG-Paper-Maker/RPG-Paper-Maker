@@ -37,7 +37,7 @@ const QString SystemClass::jsonSkills = "skills";
 // -------------------------------------------------------
 
 SystemClass::SystemClass() :
-    SystemClass(1, "", 1, 99, 200, 2)
+    SystemClass(1, "", 1, 100, 5, 30)
 {
 
 }
@@ -136,6 +136,20 @@ SystemClass * SystemClass::createInheritanceClass() {
     return new SystemClass(-1, "", -1, -1, -1, -1);
 }
 
+// -------------------------------------------------------
+
+void SystemClass::reset() {
+    m_initialLevel = 1;
+    m_maxLevel = 1;
+    m_expBase = 0;
+    m_expInflation = 0;
+    m_expTable.clear();
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
 // -------------------------------------------------------
 
 SuperListItem* SystemClass::createCopy() const{

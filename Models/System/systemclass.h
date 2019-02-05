@@ -64,6 +64,8 @@ public:
 
     static SystemClass * createInheritanceClass();
 
+    void reset();
+
     virtual SuperListItem* createCopy() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
