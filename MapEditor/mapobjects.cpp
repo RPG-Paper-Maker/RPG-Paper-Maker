@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2018 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
 
     This file is part of RPG Paper Maker.
 
