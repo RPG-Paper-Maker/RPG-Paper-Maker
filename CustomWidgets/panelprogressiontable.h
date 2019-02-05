@@ -17,52 +17,35 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PANELDATASCLASS_H
-#define PANELDATASCLASS_H
+#ifndef PANELPROGRESSIONTABLE_H
+#define PANELPROGRESSIONTABLE_H
+
+// -------------------------------------------------------
+//
+//  CLASS PanelProgressionTable
+//
+//  A panel used for progression tables (monsters rewards).
+//
+// -------------------------------------------------------
 
 #include <QWidget>
-#include "systemclass.h"
-
-// -------------------------------------------------------
-//
-//  CLASS PanelDatasClass
-//
-//  A panel used for classes, heroes, and monsters.
-//
-// -------------------------------------------------------
+#include "systemrewardtable.h"
 
 namespace Ui {
-class PanelDatasClass;
+class PanelProgressionTable;
 }
 
-class PanelDatasClass : public QWidget
+class PanelProgressionTable : public QWidget
 {
     Q_OBJECT
 
 public:
-    static const QString NAME_EXPERIENCE;
-
-    explicit PanelDatasClass(QWidget *parent = nullptr);
-    ~PanelDatasClass();
-
-    void initialize();
-    void update(SystemClass *sysClass, SystemClass *originalClass);
+    explicit PanelProgressionTable(QWidget *parent = nullptr);
+    ~PanelProgressionTable();
 
 private:
-    Ui::PanelDatasClass *ui;
-    SystemClass *m_class;
-    SystemClass *m_originalClass;
-    bool m_updating;
-
-    int getInheritValue(int v1, int v2);
-    void updateExperience();
-
-public slots:
-    void on_spinBoxClassInitialLevel_valueChanged(int i);
-    void on_spinBoxClassMaxLevel_valueChanged(int i);
-    void on_spinBoxClassBase_valueChanged(int i);
-    void on_spinBoxClassInflation_valueChanged(int i);
-    void on_pushButtonSetClassValues_clicked();
+    Ui::PanelProgressionTable *ui;
+    SystemRewardTable *m_reward;
 };
 
-#endif // PANELDATASCLASS_H
+#endif // PANELPROGRESSIONTABLE_H

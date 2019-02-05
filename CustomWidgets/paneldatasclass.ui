@@ -75,7 +75,7 @@
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
                   <item row="0" column="0">
-                   <widget class="QTableWidget" name="tableWidgetNextLevel">
+                   <widget class="WidgetTableProgression" name="tableWidgetNextLevel">
                     <property name="cursor" stdset="0">
                      <cursorShape>PointingHandCursor</cursorShape>
                     </property>
@@ -111,7 +111,7 @@
                  </property>
                  <layout class="QGridLayout" name="gridLayout_5">
                   <item row="0" column="0">
-                   <widget class="QTableWidget" name="tableWidgetTotalLevel">
+                   <widget class="WidgetTableProgression" name="tableWidgetTotalLevel">
                     <property name="editTriggers">
                      <set>QAbstractItemView::NoEditTriggers</set>
                     </property>
@@ -301,6 +301,11 @@
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTableProgression</class>
+   <extends>QTableWidget</extends>
+   <header>widgettableprogression.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

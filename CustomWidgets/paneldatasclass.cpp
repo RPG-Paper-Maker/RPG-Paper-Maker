@@ -23,7 +23,6 @@
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 
-const QString PanelDatasClass::NAME_LEVEL = "Level";
 const QString PanelDatasClass::NAME_EXPERIENCE = "Experience";
 
 // -------------------------------------------------------
@@ -34,7 +33,8 @@ const QString PanelDatasClass::NAME_EXPERIENCE = "Experience";
 
 PanelDatasClass::PanelDatasClass(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelDatasClass)
+    ui(new Ui::PanelDatasClass),
+    m_updating(false)
 {
     ui->setupUi(this);
 }
@@ -54,14 +54,15 @@ void PanelDatasClass::initialize() {
     ui->treeViewStatisticsProgression->initializeNewItemInstance(new
         SystemStatisticProgression);
     ui->treeViewClassSkills->initializeNewItemInstance(new SystemClassSkill);
-    this->connect(ui->tableWidgetNextLevel, SIGNAL(cellChanged(int, int)), this,
-        SLOT(on_cellUpdateValueExp(int, int)));
+    ui->tableWidgetTotalLevel->setEditable(false);
+    ui->tableWidgetNextLevel->setTotalWidget(ui->tableWidgetTotalLevel);
 }
 
 // -------------------------------------------------------
 
 void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
 {
+    m_updating = true;
     m_class = sysClass;
     m_originalClass = originalClass;
     int initialLevel = getInheritValue(sysClass->initialLevel(), originalClass
@@ -87,6 +88,7 @@ void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
     if (m_class == m_originalClass) {
         ui->pushButtonSetClassValues->setVisible(false);
     }
+    m_updating = false;
 
     updateExperience();
 }
@@ -100,71 +102,16 @@ int PanelDatasClass::getInheritValue(int v1, int v2) {
 // -------------------------------------------------------
 
 void PanelDatasClass::updateExperience() {
-    int maxLevel = ui->spinBoxClassMaxLevel->value();
-    int expBase = ui->spinBoxClassBase->value();
-    int expInflation = ui->spinBoxClassInflation->value();
-    int exp, total = 0;
-    double pow = 2.4 + expInflation / 100.0;
+    if (!m_updating) {
+        int maxLevel = ui->spinBoxClassMaxLevel->value();
+        int expBase = ui->spinBoxClassBase->value();
+        int expInflation = ui->spinBoxClassInflation->value();
 
-    // Initialize
-    m_completingTableExp = true;
-    ui->tableWidgetNextLevel->clear();
-    ui->tableWidgetNextLevel->setRowCount(maxLevel - 1);
-    ui->tableWidgetNextLevel->setColumnCount(2);
-    ui->tableWidgetNextLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
-        NAME_LEVEL));
-    ui->tableWidgetNextLevel->setHorizontalHeaderItem(1, new QTableWidgetItem(
-        NAME_EXPERIENCE));
-    ui->tableWidgetNextLevel->verticalHeader()->hide();
-    ui->tableWidgetTotalLevel->clear();
-    ui->tableWidgetTotalLevel->setRowCount(maxLevel);
-    ui->tableWidgetTotalLevel->setColumnCount(2);
-    ui->tableWidgetTotalLevel->setHorizontalHeaderItem(0, new QTableWidgetItem(
-        NAME_LEVEL));
-    ui->tableWidgetTotalLevel->setHorizontalHeaderItem(1, new QTableWidgetItem(
-        NAME_EXPERIENCE));
-    ui->tableWidgetTotalLevel->verticalHeader()->hide();
-
-    // Complete basic table
-    ui->tableWidgetTotalLevel->setItem(0, 0, new QTableWidgetItem(QString
-        ::number(1)));
-    ui->tableWidgetTotalLevel->setItem(0, 1, new QTableWidgetItem(QString
-        ::number(0)));
-    for (int i = 2; i <= maxLevel; i++) {
-        exp = qFloor(expBase * (qPow(i + 3, pow) / qPow(5, pow)));
-        total += exp;
-        ui->tableWidgetNextLevel->setItem(i - 2, 0, new QTableWidgetItem(QString
-            ::number(i - 1)));
-        ui->tableWidgetNextLevel->setItem(i - 2, 1, new QTableWidgetItem(QString
-            ::number(exp)));
-        ui->tableWidgetTotalLevel->setItem(i - 1, 0, new QTableWidgetItem(QString
-            ::number(i)));
-        ui->tableWidgetTotalLevel->setItem(i - 1, 1, new QTableWidgetItem(QString
-            ::number(total)));
-    }
-
-    // Complete with exp table
-    QHash<int, int>::const_iterator i;
-    for (i = m_originalClass->expTable()->begin(); i != m_originalClass
-        ->expTable()->end(); i++)
-    {
-        ui->tableWidgetNextLevel->setItem(i.key() - 1, 0, new QTableWidgetItem(
-            QString::number(i.key())));
-        ui->tableWidgetNextLevel->setItem(i.key() - 1, 1, new QTableWidgetItem(
-            QString::number(i.value())));
-    }
-    for (i = m_class->expTable()->begin(); i != m_class->expTable()->end(); i++)
-    {
-        ui->tableWidgetNextLevel->setItem(i.key() - 1, 0, new QTableWidgetItem(
-            QString::number(i.key())));
-        ui->tableWidgetNextLevel->setItem(i.key() - 1, 1, new QTableWidgetItem(
-            QString::number(i.value())));
-    }
-    m_completingTableExp = false;
-    if (!m_class->expTable()->isEmpty() || !m_originalClass->expTable()
-        ->isEmpty())
-    {
-        updateTotalExperience();
+        ui->tableWidgetNextLevel->setTable(m_class->expTable());
+        ui->tableWidgetNextLevel->initialize(maxLevel - 1, NAME_EXPERIENCE);
+        ui->tableWidgetTotalLevel->initialize(maxLevel, NAME_EXPERIENCE);
+        ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
+            maxLevel, m_originalClass->expTable());
     }
 
     /*
@@ -216,17 +163,6 @@ void PanelDatasClass::updateExperience() {
 }
 
 // -------------------------------------------------------
-
-void PanelDatasClass::updateTotalExperience() {
-    int total = 0;
-    ui->tableWidgetTotalLevel->item(0, 1)->setText(QString::number(0));
-    for (int i = 1; i < ui->tableWidgetTotalLevel->rowCount(); i++) {
-        total += ui->tableWidgetNextLevel->item(i - 1, 1)->text().toInt();
-        ui->tableWidgetTotalLevel->item(i, 1)->setText(QString::number(total));
-    }
-}
-
-// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -265,22 +201,4 @@ void PanelDatasClass::on_pushButtonSetClassValues_clicked() {
     ui->spinBoxClassMaxLevel->setValue(m_originalClass->maxLevel());
     ui->spinBoxClassBase->setValue(m_originalClass->expBase());
     ui->spinBoxClassInflation->setValue(m_originalClass->expInflation());
-}
-
-// -------------------------------------------------------
-
-void PanelDatasClass::on_cellUpdateValueExp(int row, int column) {
-    if (!m_completingTableExp) {
-        if (column == 0) {
-            ui->tableWidgetNextLevel->item(row, column)->setText(QString::number(
-                row + 1));
-        } else {
-            QString value = ui->tableWidgetNextLevel->item(row, column)->text();
-            int correctedValue = value.toInt();
-            ui->tableWidgetNextLevel->item(row, column)->setText(QString::number(
-                correctedValue));
-            m_class->expTable()->insert(row + 1, correctedValue);
-            updateTotalExperience();
-        }
-    }
 }
