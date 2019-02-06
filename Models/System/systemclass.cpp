@@ -140,7 +140,7 @@ SystemClass * SystemClass::createInheritanceClass() {
 
 void SystemClass::reset() {
     m_initialLevel = 1;
-    m_maxLevel = 1;
+    m_maxLevel = 100;
     m_expBase = 0;
     m_expInflation = 0;
     m_expTable.clear();
