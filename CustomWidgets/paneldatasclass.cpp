@@ -79,12 +79,17 @@ void PanelDatasClass::update(SystemClass *sysClass, SystemClass *originalClass)
     ui->spinBoxClassInflation->setValue(expInflation);
     ui->treeViewStatisticsProgression->initializeModel(sysClass
         ->statisticsProgression());
-    ui->treeViewStatisticsProgression->setColumnWidth(0,200);
-    ui->treeViewStatisticsProgression->setColumnWidth(1,50);
-    ui->treeViewStatisticsProgression->setColumnWidth(2,50);
+    ui->treeViewStatisticsProgression->header()->setSectionResizeMode(0,
+        QHeaderView::Stretch);
+    ui->treeViewStatisticsProgression->header()->setSectionResizeMode(1,
+        QHeaderView::Interactive);
+    ui->treeViewStatisticsProgression->header()->setSectionResizeMode(2,
+        QHeaderView::Interactive);
     ui->treeViewClassSkills->initializeModel(sysClass->skills());
-    ui->treeViewClassSkills->setColumnWidth(0,250);
-
+    ui->treeViewClassSkills->header()->setSectionResizeMode(0,
+        QHeaderView::Stretch);
+    ui->treeViewClassSkills->header()->setSectionResizeMode(1,
+        QHeaderView::Interactive);
     if (m_class == m_originalClass) {
         ui->pushButtonSetClassValues->setVisible(false);
     } else {

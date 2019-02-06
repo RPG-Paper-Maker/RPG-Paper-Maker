@@ -71,8 +71,9 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     int classesIds[] = {5};
     int battlersIds[] = {5};
     int facesetsIds[] = {5};
-    int experiencesBase[] = {5};
-    int experiencesInflation[] = {15};
+    int experiencesInitial[] = {1};
+    int experiencesFinal[] = {5000};
+    int experiencesEquation[] = {0};
     QVector<int> currenciesIds[] = {QVector<int>({1})};
     QVector<int> currenciesNb[] = {QVector<int>({1})};
     QVector<LootKind> lootsKind[] = {QVector<LootKind>({LootKind::Item})};
@@ -140,8 +141,8 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
             facesetsIds[i], SystemClass::createInheritanceClass(),
-            new SystemRewardTable(experiencesBase[i], experiencesInflation[i]),
-            currencies, loots, actions);
+            new SystemProgressionTable(experiencesInitial[i], experiencesFinal
+            [i], experiencesEquation[i]), currencies, loots, actions);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

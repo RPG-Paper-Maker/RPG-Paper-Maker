@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMREWARDTABLE_H
-#define SYSTEMREWARDTABLE_H
+#ifndef SYSTEMPROGRESSIONTABLE_H
+#define SYSTEMPROGRESSIONTABLE_H
 
 #include <QMetaType>
 #include "superlistitem.h"
@@ -31,34 +31,38 @@
 //
 // -------------------------------------------------------
 
-class SystemRewardTable : public SuperListItem
+class SystemProgressionTable : public SuperListItem
 {
 public:
-    static const QString JSON_BASE;
-    static const QString JSON_INFLATION;
+    static const QString JSON_INITIAL_VALUE;
+    static const QString JSON_FINAL_VALUE;
+    static const QString JSON_EQUATION;
     static const QString JSON_TABLE;
 
-    SystemRewardTable();
-    SystemRewardTable(int base, int inflation);
-    virtual ~SystemRewardTable();
-    int base() const;
-    void setBase(int i);
-    int inflation() const;
-    void setInflation(int i);
+    SystemProgressionTable();
+    SystemProgressionTable(int initialValue, int finalValue, int equation);
+    virtual ~SystemProgressionTable();
+    int initialValue() const;
+    void setInitialValue(int i);
+    int finalValue() const;
+    void setFinalValue(int i);
+    int equation() const;
+    void setEquation(int i);
     QHash<int, int> * table();
 
     void reset();
 
-    void setCopy(const SystemRewardTable& reward);
+    void setCopy(const SystemProgressionTable& progression);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_base;
-    int m_inflation;
+    int m_initialValue;
+    int m_finalValue;
+    int m_equation;
     QHash<int, int> m_table;
 };
 
-Q_DECLARE_METATYPE(SystemRewardTable)
+Q_DECLARE_METATYPE(SystemProgressionTable)
 
-#endif // SYSTEMREWARDTABLE_H
+#endif // SYSTEMPROGRESSIONTABLE_H

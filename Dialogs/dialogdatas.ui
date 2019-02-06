@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1100</width>
     <height>650</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -159,7 +159,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>737</width>
+                <width>837</width>
                 <height>544</height>
                </rect>
               </property>
@@ -221,6 +221,12 @@
            </item>
            <item>
             <widget class="QScrollArea" name="scrollArea_2">
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QAbstractScrollArea::AdjustIgnored</enum>
+             </property>
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
@@ -229,7 +235,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>737</width>
+                <width>837</width>
                 <height>544</height>
                </rect>
               </property>
@@ -1008,6 +1014,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelDatasCharacter</class>
+   <extends>QWidget</extends>
+   <header>paneldatascharacter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1028,12 +1040,6 @@
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelDatasCharacter</class>
-   <extends>QWidget</extends>
-   <header>paneldatascharacter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -195,7 +195,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>198</width>
+                 <width>337</width>
                  <height>92</height>
                 </rect>
                </property>
@@ -218,7 +218,7 @@
       <widget class="PanelDatasClass" name="panelDatasClass" native="true">
        <property name="minimumSize">
         <size>
-         <width>739</width>
+         <width>600</width>
          <height>0</height>
         </size>
        </property>

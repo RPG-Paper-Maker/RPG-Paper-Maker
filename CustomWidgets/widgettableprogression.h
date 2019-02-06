@@ -21,6 +21,8 @@
 #define WIDGETTABLEPROGRESSION_H
 
 #include <QTableWidget>
+#include <QtCharts>
+#include "systemprogressiontable.h"
 
 class WidgetTableProgression : public QTableWidget
 {
@@ -37,8 +39,19 @@ public:
     void setTotalWidget(WidgetTableProgression *w);
 
     void initialize(int rows, QString progression);
-    void updateWithBaseInflation(int base, int inflation, int maxLevel,
+    void updateWithBaseInflation(int base, double inflation, int maxLevel,
         QHash<int, int> *subTable = nullptr);
+    void updateWithEasing(SystemProgressionTable* progression, QChartView *chart,
+        int finalLevel);
+    int easingLinear(int x, int start, int change, int duration);
+    int easingQuadraticIn(int x, int start, int change, int duration);
+    int easingQuadraticOut(int x, int start, int change, int duration);
+    int easingCubicIn(int x, int start, int change, int duration);
+    int easingCubicOut(int x, int start, int change, int duration);
+    int easingQuarticIn(int x, int start, int change, int duration);
+    int easingQuarticOut(int x, int start, int change, int duration);
+    int easingQuinticIn(int x, int start, int change, int duration);
+    int easingQuinticOut(int x, int start, int change, int duration);
     void updateTotal();
 
 protected:

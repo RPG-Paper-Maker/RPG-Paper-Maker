@@ -29,7 +29,7 @@
 // -------------------------------------------------------
 
 #include <QWidget>
-#include "systemrewardtable.h"
+#include "systemprogressiontable.h"
 
 namespace Ui {
 class PanelProgressionTable;
@@ -44,8 +44,8 @@ public:
 
     explicit PanelProgressionTable(QWidget *parent = nullptr);
     ~PanelProgressionTable();
-    SystemRewardTable * reward() const;
-    void setReward(SystemRewardTable *reward);
+    SystemProgressionTable * progression() const;
+    void setProgression(SystemProgressionTable *progression);
     int maxLevel() const;
     void setMaxLevel(int l);
 
@@ -53,13 +53,14 @@ public:
 
 private:
     Ui::PanelProgressionTable *ui;
-    SystemRewardTable *m_reward;
+    SystemProgressionTable *m_progression;
     bool m_updating;
     int m_maxLevel;
 
 public slots:
-    void on_spinBoxBase_valueChanged(int i);
-    void on_spinBoxInflation_valueChanged(int i);
+    void on_spinBoxInit_valueChanged(int i);
+    void on_spinBoxFinal_valueChanged(int i);
+    void on_horizontalSlider_valueChanged(int i);
     void on_pushButtonReset_clicked();
 };
 

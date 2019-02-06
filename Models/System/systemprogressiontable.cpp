@@ -17,11 +17,12 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemrewardtable.h"
+#include "systemprogressiontable.h"
 
-const QString SystemRewardTable::JSON_BASE = "b";
-const QString SystemRewardTable::JSON_INFLATION = "i";
-const QString SystemRewardTable::JSON_TABLE = "t";
+const QString SystemProgressionTable::JSON_INITIAL_VALUE = "i";
+const QString SystemProgressionTable::JSON_FINAL_VALUE = "f";
+const QString SystemProgressionTable::JSON_EQUATION = "e";
+const QString SystemProgressionTable::JSON_TABLE = "t";
 
 // -------------------------------------------------------
 //
@@ -29,38 +30,50 @@ const QString SystemRewardTable::JSON_TABLE = "t";
 //
 // -------------------------------------------------------
 
-SystemRewardTable::SystemRewardTable() : SystemRewardTable(0, 0) {
-
-}
-
-SystemRewardTable::SystemRewardTable(int base, int inflation) :
-    m_base(base),
-    m_inflation(inflation)
+SystemProgressionTable::SystemProgressionTable() : SystemProgressionTable(0, 0,
+    0)
 {
 
 }
 
-SystemRewardTable::~SystemRewardTable() {
+SystemProgressionTable::SystemProgressionTable(int initialValue, int finalValue,
+    int equation) :
+    m_initialValue(initialValue),
+    m_finalValue(finalValue),
+    m_equation(equation)
+{
 
 }
 
-int SystemRewardTable::base() const {
-    return m_base;
+SystemProgressionTable::~SystemProgressionTable() {
+
 }
 
-void SystemRewardTable::setBase(int i) {
-    m_base = i;
+int SystemProgressionTable::initialValue() const {
+    return m_initialValue;
 }
 
-int SystemRewardTable::inflation() const {
-    return m_inflation;
+void SystemProgressionTable::setInitialValue(int i) {
+    m_initialValue = i;
 }
 
-void SystemRewardTable::setInflation(int i) {
-    m_inflation = i;
+int SystemProgressionTable::finalValue() const {
+    return m_finalValue;
 }
 
-QHash<int, int> * SystemRewardTable::table() {
+void SystemProgressionTable::setFinalValue(int i) {
+    m_finalValue = i;
+}
+
+int SystemProgressionTable::equation() const {
+    return m_equation;
+}
+
+void SystemProgressionTable::setEquation(int i) {
+    m_equation = i;
+}
+
+QHash<int, int> * SystemProgressionTable::table() {
     return &m_table;
 }
 
@@ -70,9 +83,10 @@ QHash<int, int> * SystemRewardTable::table() {
 //
 // -------------------------------------------------------
 
-void SystemRewardTable::reset() {
-    m_base = 0;
-    m_inflation = 0;
+void SystemProgressionTable::reset() {
+    m_initialValue = 0;
+    m_finalValue = 0;
+    m_equation = 0;
     m_table.clear();
 }
 
@@ -82,21 +96,23 @@ void SystemRewardTable::reset() {
 //
 // -------------------------------------------------------
 
-void SystemRewardTable::setCopy(const SystemRewardTable& reward) {
-    m_base = reward.m_base;
-    m_inflation = reward.m_inflation;
+void SystemProgressionTable::setCopy(const SystemProgressionTable& progression) {
+    m_initialValue = progression.m_initialValue;
+    m_finalValue = progression.m_finalValue;
+    m_equation = progression.m_equation;
     m_table.clear();
     QHash<int, int>::const_iterator i;
-    for (i = reward.m_table.begin(); i != reward.m_table.end(); i++) {
+    for (i = progression.m_table.begin(); i != progression.m_table.end(); i++) {
         m_table.insert(i.key(), i.value());
     }
 }
 
 // -------------------------------------------------------
 
-void SystemRewardTable::read(const QJsonObject &json) {
-    m_base = json[JSON_BASE].toInt();
-    m_inflation = json[JSON_INFLATION].toInt();
+void SystemProgressionTable::read(const QJsonObject &json) {
+    m_initialValue = json[JSON_INITIAL_VALUE].toInt();
+    m_finalValue = json[JSON_FINAL_VALUE].toInt();
+    m_equation = json[JSON_EQUATION].toInt();
     m_table.clear();
     QJsonArray tab = json[JSON_TABLE].toArray();
     for (int i = 0; i < tab.size(); i++) {
@@ -109,9 +125,10 @@ void SystemRewardTable::read(const QJsonObject &json) {
 
 // -------------------------------------------------------
 
-void SystemRewardTable::write(QJsonObject &json) const {
-    json[JSON_BASE] = m_base;
-    json[JSON_INFLATION] = m_inflation;
+void SystemProgressionTable::write(QJsonObject &json) const {
+    json[JSON_INITIAL_VALUE] = m_initialValue;
+    json[JSON_FINAL_VALUE] = m_finalValue;
+    json[JSON_EQUATION] = m_equation;
     QJsonArray tab;
     QHash<int, int>::const_iterator i;
     for (i = m_table.begin(); i != m_table.end(); i++) {

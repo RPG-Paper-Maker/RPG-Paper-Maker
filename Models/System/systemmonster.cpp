@@ -31,16 +31,16 @@ const QString SystemMonster::JSON_EXPERIENCE = "xp";
 // -------------------------------------------------------
 
 SystemMonster::SystemMonster() : SystemMonster(1, new LangsTranslation, 1, 1,
-    1, new SystemClass, new SystemRewardTable, new QStandardItemModel, new
+    1, new SystemClass, new SystemProgressionTable, new QStandardItemModel, new
     QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
 SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
-    idBattler, int idFaceset, SystemClass *classInherit, SystemRewardTable *exp,
-    QStandardItemModel *currencies, QStandardItemModel *loots, QStandardItemModel
-    *actions) :
+    idBattler, int idFaceset, SystemClass *classInherit, SystemProgressionTable
+    *exp, QStandardItemModel *currencies, QStandardItemModel *loots,
+    QStandardItemModel *actions) :
     SystemHero(i, names, idClass, idBattler, idFaceset, classInherit),
     m_experience(exp),
     m_modelCurrencies(currencies),
@@ -57,7 +57,7 @@ SystemMonster::~SystemMonster() {
     delete m_modelActions;
 }
 
-SystemRewardTable * SystemMonster::experience() const {
+SystemProgressionTable *SystemMonster::experience() const {
     return m_experience;
 }
 

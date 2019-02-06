@@ -41,12 +41,12 @@ PanelProgressionTable::~PanelProgressionTable()
     delete ui;
 }
 
-SystemRewardTable * PanelProgressionTable::reward() const {
-    return m_reward;
+SystemProgressionTable * PanelProgressionTable::progression() const {
+    return m_progression;
 }
 
-void PanelProgressionTable::setReward(SystemRewardTable *reward) {
-    m_reward = reward;
+void PanelProgressionTable::setProgression(SystemProgressionTable *progression) {
+    m_progression = progression;
 }
 
 int PanelProgressionTable::maxLevel() const {
@@ -66,12 +66,12 @@ void PanelProgressionTable::setMaxLevel(int l) {
 void PanelProgressionTable::updateProgress() {
     if (!m_updating) {
         m_updating = true;
-        ui->spinBoxBase->setValue(m_reward->base());
-        ui->spinBoxInflation->setValue(m_reward->inflation());
-        ui->tableWidget->setTable(reward()->table());
+        ui->spinBoxInit->setValue(m_progression->initialValue());
+        ui->spinBoxFinal->setValue(m_progression->finalValue());
+        ui->tableWidget->setTable(m_progression->table());
         ui->tableWidget->initialize(m_maxLevel, NAME_EXPERIENCE);
-        ui->tableWidget->updateWithBaseInflation(reward()->base(), reward()
-            ->inflation(), m_maxLevel);
+        ui->tableWidget->updateWithEasing(m_progression, ui->graphicsView,
+            m_maxLevel);
         m_updating = false;
     }
 }
@@ -82,25 +82,33 @@ void PanelProgressionTable::updateProgress() {
 //
 // -------------------------------------------------------
 
-void PanelProgressionTable::on_spinBoxBase_valueChanged(int i) {
-    m_reward->setBase(i);
+void PanelProgressionTable::on_spinBoxInit_valueChanged(int i) {
+    m_progression->setInitialValue(i);
     updateProgress();
 }
 
 // -------------------------------------------------------
 
-void PanelProgressionTable::on_spinBoxInflation_valueChanged(int i) {
-    m_reward->setInflation(i);
+void PanelProgressionTable::on_spinBoxFinal_valueChanged(int i) {
+    m_progression->setFinalValue(i);
+    updateProgress();
+}
+
+// -------------------------------------------------------
+
+void PanelProgressionTable::on_horizontalSlider_valueChanged(int i) {
+    m_progression->setEquation(i);
     updateProgress();
 }
 
 // -------------------------------------------------------
 
 void PanelProgressionTable::on_pushButtonReset_clicked() {
-    m_reward->reset();
+    m_progression->reset();
     m_updating = true;
-    ui->spinBoxBase->setValue(m_reward->base());
-    ui->spinBoxInflation->setValue(m_reward->inflation());
+    ui->spinBoxInit->setValue(m_progression->initialValue());
+    ui->spinBoxFinal->setValue(m_progression->finalValue());
+    ui->horizontalSlider->setValue(m_progression->equation());
     m_updating = false;
     updateProgress();
 }

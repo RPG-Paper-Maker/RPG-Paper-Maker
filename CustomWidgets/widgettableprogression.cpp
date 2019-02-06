@@ -86,7 +86,7 @@ void WidgetTableProgression::initialize(int rows, QString progression) {
 
 // -------------------------------------------------------
 
-void WidgetTableProgression::updateWithBaseInflation(int base, int inflation,
+void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
     int maxLevel, QHash<int, int> *subTable)
 {
     int t = 0, exp;
@@ -130,6 +130,137 @@ void WidgetTableProgression::updateWithBaseInflation(int base, int inflation,
         }
     }
     m_completing = false;
+}
+
+// -------------------------------------------------------
+
+void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
+    progression, QChartView *chart, int finalLevel)
+{
+    int start = progression->initialValue();
+    int change = progression->finalValue() - progression->initialValue();
+    int value = 0, x;
+
+    // Update according to equation
+    for (int i = 0; i < finalLevel; i++) {
+        x = i + 1;
+        switch (progression->equation()) {
+        case 0:
+            value = easingLinear(x, start, change, finalLevel); break;
+        case 1:
+            value = easingQuadraticIn(x, start, change, finalLevel); break;
+        case -1:
+            value = easingQuadraticOut(x, start, change, finalLevel); break;
+        case 2:
+            value = easingCubicIn(x, start, change, finalLevel); break;
+        case -2:
+            value = easingCubicOut(x, start, change, finalLevel); break;
+        case 3:
+            value = easingQuarticIn(x, start, change, finalLevel); break;
+        case -3:
+            value = easingQuarticOut(x, start, change, finalLevel); break;
+        case 4:
+            value = easingQuinticIn(x, start, change, finalLevel); break;
+        case -4:
+            value = easingQuinticOut(x, start, change, finalLevel); break;
+        default:
+            value = 0;
+        }
+        setItem(0, 0, new QTableWidgetItem(QString::number(x)));
+        setItem(0, 1, new QTableWidgetItem(QString::number(value)));
+    }
+
+    // Complete with table
+    QHash<int, int>::const_iterator i;
+    for (i = m_table->begin(); i != m_table->end(); i++) {
+        setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
+        setItem(i.key() - 1, 1, new QTableWidgetItem(QString::number(i.value())));
+    }
+
+    m_completing = false;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingLinear(int x, int start, int change,
+    int duration)
+{
+    return change * x / duration + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuadraticIn(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return change * x * x + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuadraticOut(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return -change * x * (x - 2) + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingCubicIn(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return change * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingCubicOut(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x + 1) + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuarticIn(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return change * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuarticOut(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    x--;
+    return -change * (x * x * x * x - 1) + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuinticIn(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return change * x * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuinticOut(int x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x * x * x + 1) + start;
 }
 
 // -------------------------------------------------------

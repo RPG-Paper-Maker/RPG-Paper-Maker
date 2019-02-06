@@ -265,9 +265,9 @@ HEADERS += \
     CustomWidgets/widgetselectrect.h \
     CustomWidgets/paneldatasclass.h \
     CustomWidgets/paneldatasmonster.h \
-    Models/System/systemrewardtable.h \
     CustomWidgets/panelprogressiontable.h \
-    CustomWidgets/widgettableprogression.h
+    CustomWidgets/widgettableprogression.h \
+    Models/System/systemprogressiontable.h
 
 SOURCES += \
     main.cpp \
@@ -480,9 +480,9 @@ SOURCES += \
     CustomWidgets/widgetselectrect.cpp \
     CustomWidgets/paneldatasclass.cpp \
     CustomWidgets/paneldatasmonster.cpp \
-    Models/System/systemrewardtable.cpp \
     CustomWidgets/panelprogressiontable.cpp \
-    CustomWidgets/widgettableprogression.cpp
+    CustomWidgets/widgettableprogression.cpp \
+    Models/System/systemprogressiontable.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

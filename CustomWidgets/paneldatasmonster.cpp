@@ -59,7 +59,7 @@ void PanelDatasMonster::initialize() {
 
 void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
     ui->panelDatasCharacter->update(monster, classIndex);
-    ui->panelProgressionTableRewardExp->setReward(monster->experience());
+    ui->panelProgressionTableRewardExp->setProgression(monster->experience());
     ui->panelProgressionTableRewardExp->setMaxLevel(monster->maxLevel());
     ui->panelProgressionTableRewardExp->updateProgress();
 }

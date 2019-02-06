@@ -21,7 +21,7 @@
 #define SYSTEMMONSTER_H
 
 #include "systemhero.h"
-#include "systemrewardtable.h"
+#include "systemprogressiontable.h"
 
 // -------------------------------------------------------
 //
@@ -38,11 +38,11 @@ public:
 
     SystemMonster();
     SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
-        int idFaceset, SystemClass *classInherit, SystemRewardTable *exp,
+        int idFaceset, SystemClass *classInherit, SystemProgressionTable *exp,
         QStandardItemModel *currencies, QStandardItemModel *loots,
         QStandardItemModel *actions);
     virtual ~SystemMonster();
-    SystemRewardTable * experience() const;
+    SystemProgressionTable * experience() const;
     QStandardItemModel* modelCurrencies() const;
     QStandardItemModel* modelLoots() const;
     QStandardItemModel* modelActions() const;
@@ -53,7 +53,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    SystemRewardTable *m_experience;
+    SystemProgressionTable *m_experience;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelLoots;
     QStandardItemModel *m_modelActions;
