@@ -22,6 +22,8 @@
 #include "widgettableprogression.h"
 
 const QString WidgetTableProgression::NAME_LEVEL = "Level";
+const QColor WidgetTableProgression::EDITED_COLOR = Qt::green;
+const QColor WidgetTableProgression::SUB_EDITED_COLOR = Qt::cyan;
 
 // -------------------------------------------------------
 //
@@ -33,7 +35,8 @@ WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
     QTableWidget (parent),
     m_completing(false),
     m_table(nullptr),
-    m_totalWidget(nullptr)
+    m_totalWidget(nullptr),
+    m_editedColor(EDITED_COLOR)
 {
     connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(int,
         int)));
@@ -68,6 +71,10 @@ void WidgetTableProgression::setTotalWidget(WidgetTableProgression *w) {
     m_totalWidget = w;
 }
 
+void WidgetTableProgression::setEditedColor(const QColor &color) {
+    m_editedColor = color;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -91,6 +98,8 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
 {
     int t = 0, exp;
     double pow = 2.4 + inflation / 100.0;
+    QTableWidgetItem *item;
+
     if (m_totalWidget != nullptr) {
         m_totalWidget->setItem(0, 0, new QTableWidgetItem(QString::number(1)));
         m_totalWidget->setItem(0, 1, new QTableWidgetItem(QString::number(0)));
@@ -116,13 +125,17 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
         QHash<int, int>::const_iterator i;
         if (subTable != nullptr) {
             for (i = subTable->begin(); i != subTable->end(); i++) {
+                item = new QTableWidgetItem(QString::number(i.value()));
                 setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
-                setItem(i.key() - 1, 1, new QTableWidgetItem(QString::number(i.value())));
+                setItem(i.key() - 1, 1, item);
+                item->setForeground(SUB_EDITED_COLOR);
             }
         }
         for (i = m_table->begin(); i != m_table->end(); i++) {
+            item = new QTableWidgetItem(QString::number(i.value()));
             setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
-            setItem(i.key() - 1, 1, new QTableWidgetItem(QString::number(i.value())));
+            setItem(i.key() - 1, 1, item);
+            item->setForeground(m_editedColor);
         }
         if (!m_table->isEmpty() || (subTable != nullptr && !subTable->isEmpty()))
         {
@@ -142,6 +155,8 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     int duration = finalLevel - 1;
     int value = 0;
     double x;
+    bool specificValue;
+    QTableWidgetItem *itemLevel, * itemProgression;
 
     // Chart lines initialization
     QLineSeries *line = new QLineSeries();
@@ -153,7 +168,8 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     for (int i = 0; i < finalLevel; i++) {
         x = i;
         value = m_table->value(i + 1, -1);
-        if (value == -1) {
+        specificValue = value != -1;
+        if (!specificValue) {
             switch (progression->equation()) {
             case 0:
                 value = easingLinear(x, start, change, duration); break;
@@ -178,8 +194,14 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
             }
         }
 
-        setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
-        setItem(i, 1, new QTableWidgetItem(QString::number(value)));
+        itemLevel = new QTableWidgetItem(QString::number(i + 1));
+        itemProgression = new QTableWidgetItem(QString::number(value));
+        if (specificValue) {
+            itemProgression->setForeground(m_editedColor);
+        }
+
+        setItem(i, 0, itemLevel);
+        setItem(i, 1, itemProgression);
         *line << QPoint(i + 1, value);
     }
 
@@ -198,8 +220,10 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     chart->removeAllSeries();
     chart->addSeries(series);
     chart->createDefaultAxes();
-    QValueAxis *axisX = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Horizontal).first());
-    QValueAxis *axisY = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Vertical).first());
+    QValueAxis *axisX = reinterpret_cast<QValueAxis *>(chart->axes(Qt
+        ::Horizontal).first());
+    QValueAxis *axisY = reinterpret_cast<QValueAxis *>(chart->axes(Qt
+        ::Vertical).first());
     axisX->setRange(1, finalLevel);
     axisY->setRange(0, value);
     axisX->setTickCount(5);
@@ -321,7 +345,9 @@ void WidgetTableProgression::on_cellChanged(int row, int column) {
         } else {
             QString value = item(row, column)->text();
             int correctedValue = value.toInt();
-            item(row, column)->setText(QString::number(correctedValue));
+            QTableWidgetItem *itemProgression = item(row, 1);
+            itemProgression->setText(QString::number(correctedValue));
+            itemProgression->setForeground(m_editedColor);
             m_table->insert(row + 1, correctedValue);
             updateTotal();
         }

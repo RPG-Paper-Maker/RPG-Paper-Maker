@@ -147,6 +147,16 @@ void SystemClass::reset() {
 }
 
 // -------------------------------------------------------
+
+void SystemClass::setClassValues() {
+    m_initialLevel = -1;
+    m_maxLevel = -1;
+    m_expBase = -1;
+    m_expInflation = -1;
+    m_expTable.clear();
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //

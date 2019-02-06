@@ -50,12 +50,16 @@ PanelDatasClass::~PanelDatasClass()
 //
 // -------------------------------------------------------
 
-void PanelDatasClass::initialize() {
+void PanelDatasClass::initialize(bool isClass) {
     ui->treeViewStatisticsProgression->initializeNewItemInstance(new
         SystemStatisticProgression);
     ui->treeViewClassSkills->initializeNewItemInstance(new SystemClassSkill);
     ui->tableWidgetTotalLevel->setEditable(false);
     ui->tableWidgetNextLevel->setTotalWidget(ui->tableWidgetTotalLevel);
+    if (isClass) {
+        ui->tableWidgetNextLevel->setEditedColor(WidgetTableProgression
+            ::SUB_EDITED_COLOR);
+    }
 }
 
 // -------------------------------------------------------
@@ -120,53 +124,6 @@ void PanelDatasClass::updateExperience() {
         ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
             maxLevel, m_originalClass->expTable());
     }
-
-    /*
-    QLineSeries *expLine = new QLineSeries();
-    QLineSeries *horizontalLine = new QLineSeries();
-    QVector<QPointF> expList;
-    expList << QPointF(0, 0);
-    *expLine << QPointF(0, 0);
-    qreal pow = static_cast<qreal>(2.4f + expInflation / 100.0f);
-    int previousExp = 0, count = 1;
-
-    QPointF expPoint;
-    const int MAX_X_POINT = 100;
-    int freq = qFloor((maxLevel - initialLevel + 1) / static_cast<qreal>(MAX_X_POINT));
-    for (int i = 1; i < maxLevel; i++) {
-        expPoint = QPointF(i, previousExp + qFloor(expBase * (qPow(i + 3, pow) / qPow(
-            5, pow))));
-        previousExp = static_cast<int>(expPoint.y());
-        expList << expPoint;
-        if (count == freq) {
-            count = 1;
-            *expLine << QPoint(initialLevel + i - 1, previousExp);
-        }
-    }
-    *horizontalLine << QPointF(ui->spinBoxClassInitialLevel->value(), 0) << QPointF(ui->spinBoxClassMaxLevel->value(), 0);
-    QAreaSeries *series = new QAreaSeries(expLine, horizontalLine);
-    QPen pen(0x4f0a5b);
-    pen.setWidth(2);
-    series->setPen(pen);
-    QLinearGradient gradient(QPointF(0, 0), QPointF(0, 1));
-    gradient.setColorAt(0.0, 0x9234a3);
-    gradient.setColorAt(1.0, 0x9234a3);
-    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-    series->setBrush(gradient);
-    QChart *chart = ui->graphicsView->chart();
-    chart->removeAllSeries();
-    chart->addSeries(series);
-    chart->createDefaultAxes();
-    QValueAxis *axisX = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Horizontal).first());
-    QValueAxis *axisY = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Vertical).first());
-    axisX->setRange(initialLevel, maxLevel);
-    axisY->setRange(0, previousExp);
-    axisX->setTickCount(5);
-    axisX->setLabelFormat("%d");
-    axisY->setTickCount(5);
-    axisY->setLabelFormat("%d");
-    chart->legend()->setVisible(false);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);*/
 }
 
 // -------------------------------------------------------
@@ -220,8 +177,12 @@ void PanelDatasClass::on_pushButtonReset_clicked() {
 // -------------------------------------------------------
 
 void PanelDatasClass::on_pushButtonSetClassValues_clicked() {
+    m_class->setClassValues();
+    m_updating = true;
     ui->spinBoxClassInitialLevel->setValue(m_originalClass->initialLevel());
     ui->spinBoxClassMaxLevel->setValue(m_originalClass->maxLevel());
     ui->spinBoxClassBase->setValue(m_originalClass->expBase());
     ui->spinBoxClassInflation->setValue(m_originalClass->expInflation());
+    m_updating = false;
+    updateExperience();
 }

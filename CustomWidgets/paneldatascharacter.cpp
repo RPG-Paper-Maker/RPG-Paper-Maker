@@ -75,7 +75,7 @@ void PanelDatasCharacter::initialize() {
         this, SLOT(on_facesetPictureChanged(SystemPicture *)));
 
     // Class
-    ui->panelDatasClass->initialize();
+    ui->panelDatasClass->initialize(false);
 }
 
 // -------------------------------------------------------

@@ -29,6 +29,8 @@ class WidgetTableProgression : public QTableWidget
     Q_OBJECT
 public:
     static const QString NAME_LEVEL;
+    static const QColor EDITED_COLOR;
+    static const QColor SUB_EDITED_COLOR;
 
     explicit WidgetTableProgression(QWidget *parent = nullptr);
     ~WidgetTableProgression();
@@ -37,6 +39,7 @@ public:
     void setTable(QHash<int, int> *table);
     WidgetTableProgression * totalWidget() const;
     void setTotalWidget(WidgetTableProgression *w);
+    void setEditedColor(const QColor &color);
 
     void initialize(int rows, QString progression);
     void updateWithBaseInflation(int base, double inflation, int maxLevel,
@@ -58,6 +61,7 @@ protected:
     bool m_completing;
     QHash<int, int> *m_table;
     WidgetTableProgression *m_totalWidget;
+    QColor m_editedColor;
 
 public slots:
     void on_cellChanged(int row, int column);
