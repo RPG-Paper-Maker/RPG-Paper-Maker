@@ -82,6 +82,14 @@ void PanelProgressionTable::updateProgress() {
 //
 // -------------------------------------------------------
 
+void PanelProgressionTable::on_tabWidget_currentChanged(int index) {
+    if (index == 1) {
+        updateProgress();
+    }
+}
+
+// -------------------------------------------------------
+
 void PanelProgressionTable::on_spinBoxInit_valueChanged(int i) {
     m_progression->setInitialValue(i);
     updateProgress();

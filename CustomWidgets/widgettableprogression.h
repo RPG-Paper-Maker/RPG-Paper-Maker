@@ -41,17 +41,17 @@ public:
     void initialize(int rows, QString progression);
     void updateWithBaseInflation(int base, double inflation, int maxLevel,
         QHash<int, int> *subTable = nullptr);
-    void updateWithEasing(SystemProgressionTable* progression, QChartView *chart,
+    void updateWithEasing(SystemProgressionTable* progression, QChartView *chartView,
         int finalLevel);
-    int easingLinear(int x, int start, int change, int duration);
-    int easingQuadraticIn(int x, int start, int change, int duration);
-    int easingQuadraticOut(int x, int start, int change, int duration);
-    int easingCubicIn(int x, int start, int change, int duration);
-    int easingCubicOut(int x, int start, int change, int duration);
-    int easingQuarticIn(int x, int start, int change, int duration);
-    int easingQuarticOut(int x, int start, int change, int duration);
-    int easingQuinticIn(int x, int start, int change, int duration);
-    int easingQuinticOut(int x, int start, int change, int duration);
+    int easingLinear(double x, int start, int change, int duration);
+    int easingQuadraticIn(double x, int start, int change, int duration);
+    int easingQuadraticOut(double x, int start, int change, int duration);
+    int easingCubicIn(double x, int start, int change, int duration);
+    int easingCubicOut(double x, int start, int change, int duration);
+    int easingQuarticIn(double x, int start, int change, int duration);
+    int easingQuarticOut(double x, int start, int change, int duration);
+    int easingQuinticIn(double x, int start, int change, int duration);
+    int easingQuinticOut(double x, int start, int change, int duration);
     void updateTotal();
 
 protected:

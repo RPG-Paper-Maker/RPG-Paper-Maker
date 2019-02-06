@@ -58,6 +58,7 @@ private:
     int m_maxLevel;
 
 public slots:
+    void on_tabWidget_currentChanged(int index);
     void on_spinBoxInit_valueChanged(int i);
     void on_spinBoxFinal_valueChanged(int i);
     void on_horizontalSlider_valueChanged(int i);

@@ -71,7 +71,7 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     int classesIds[] = {5};
     int battlersIds[] = {5};
     int facesetsIds[] = {5};
-    int experiencesInitial[] = {1};
+    int experiencesInitial[] = {5};
     int experiencesFinal[] = {5000};
     int experiencesEquation[] = {0};
     QVector<int> currenciesIds[] = {QVector<int>({1})};

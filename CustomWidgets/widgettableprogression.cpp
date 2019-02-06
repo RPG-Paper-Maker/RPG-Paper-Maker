@@ -135,132 +135,164 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
 // -------------------------------------------------------
 
 void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
-    progression, QChartView *chart, int finalLevel)
+    progression, QChartView *chartView, int finalLevel)
 {
     int start = progression->initialValue();
     int change = progression->finalValue() - progression->initialValue();
-    int value = 0, x;
+    int duration = finalLevel - 1;
+    int value = 0;
+    double x;
+
+    // Chart lines initialization
+    QLineSeries *line = new QLineSeries();
+    QLineSeries *horizontalLine = new QLineSeries();
+    QVector<QPointF> expList;
+    *line<< QPointF(0, 0);
 
     // Update according to equation
     for (int i = 0; i < finalLevel; i++) {
-        x = i + 1;
-        switch (progression->equation()) {
-        case 0:
-            value = easingLinear(x, start, change, finalLevel); break;
-        case 1:
-            value = easingQuadraticIn(x, start, change, finalLevel); break;
-        case -1:
-            value = easingQuadraticOut(x, start, change, finalLevel); break;
-        case 2:
-            value = easingCubicIn(x, start, change, finalLevel); break;
-        case -2:
-            value = easingCubicOut(x, start, change, finalLevel); break;
-        case 3:
-            value = easingQuarticIn(x, start, change, finalLevel); break;
-        case -3:
-            value = easingQuarticOut(x, start, change, finalLevel); break;
-        case 4:
-            value = easingQuinticIn(x, start, change, finalLevel); break;
-        case -4:
-            value = easingQuinticOut(x, start, change, finalLevel); break;
-        default:
-            value = 0;
+        x = i;
+        value = m_table->value(i + 1, -1);
+        if (value == -1) {
+            switch (progression->equation()) {
+            case 0:
+                value = easingLinear(x, start, change, duration); break;
+            case -1:
+                value = easingQuadraticIn(x, start, change, duration); break;
+            case 1:
+                value = easingQuadraticOut(x, start, change, duration); break;
+            case -2:
+                value = easingCubicIn(x, start, change, duration); break;
+            case 2:
+                value = easingCubicOut(x, start, change, duration); break;
+            case -3:
+                value = easingQuarticIn(x, start, change, duration); break;
+            case 3:
+                value = easingQuarticOut(x, start, change, duration); break;
+            case -4:
+                value = easingQuinticIn(x, start, change, duration); break;
+            case 4:
+                value = easingQuinticOut(x, start, change, duration); break;
+            default:
+                value = 0;
+            }
         }
-        setItem(0, 0, new QTableWidgetItem(QString::number(x)));
-        setItem(0, 1, new QTableWidgetItem(QString::number(value)));
+
+        setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
+        setItem(i, 1, new QTableWidgetItem(QString::number(value)));
+        *line << QPoint(i + 1, value);
     }
 
-    // Complete with table
-    QHash<int, int>::const_iterator i;
-    for (i = m_table->begin(); i != m_table->end(); i++) {
-        setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
-        setItem(i.key() - 1, 1, new QTableWidgetItem(QString::number(i.value())));
-    }
+    // Chart config
+    *horizontalLine << QPointF(1, 0) << QPointF(finalLevel, 0);
+    QAreaSeries *series = new QAreaSeries(line, horizontalLine);
+    QPen pen(0x4f0a5b);
+    pen.setWidth(2);
+    series->setPen(pen);
+    QLinearGradient gradient(QPointF(0, 0), QPointF(0, 1));
+    gradient.setColorAt(0.0, 0x9234a3);
+    gradient.setColorAt(1.0, 0x9234a3);
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    series->setBrush(gradient);
+    QChart *chart = chartView->chart();
+    chart->removeAllSeries();
+    chart->addSeries(series);
+    chart->createDefaultAxes();
+    QValueAxis *axisX = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Horizontal).first());
+    QValueAxis *axisY = reinterpret_cast<QValueAxis *>(chart->axes(Qt::Vertical).first());
+    axisX->setRange(1, finalLevel);
+    axisY->setRange(0, value);
+    axisX->setTickCount(5);
+    axisX->setLabelFormat("%d");
+    axisY->setTickCount(5);
+    axisY->setLabelFormat("%d");
+    chart->legend()->setVisible(false);
+    chartView->setRenderHint(QPainter::Antialiasing);
 
     m_completing = false;
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingLinear(int x, int start, int change,
+int WidgetTableProgression::easingLinear(double x, int start, int change,
     int duration)
 {
-    return change * x / duration + start;
+    return qFloor(change * x / duration + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingQuadraticIn(int x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return change * x * x + start;
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuadraticOut(int x, int start, int change,
+int WidgetTableProgression::easingQuadraticIn(double x, int start, int change,
     int duration)
 {
     x /= duration;
-    return -change * x * (x - 2) + start;
+    return qFloor(change * x * x + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingCubicIn(int x, int start, int change,
+int WidgetTableProgression::easingQuadraticOut(double x, int start, int change,
     int duration)
 {
     x /= duration;
-    return change * x * x * x + start;
+    return qFloor(-change * x * (x - 2) + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingCubicOut(int x, int start, int change,
+int WidgetTableProgression::easingCubicIn(double x, int start, int change,
     int duration)
 {
     x /= duration;
-    x--;
-    return change * (x * x * x + 1) + start;
+    return qFloor(change * x * x * x + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingQuarticIn(int x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return change * x * x * x * x + start;
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuarticOut(int x, int start, int change,
+int WidgetTableProgression::easingCubicOut(double x, int start, int change,
     int duration)
 {
     x /= duration;
     x--;
-    return -change * (x * x * x * x - 1) + start;
+    return qFloor(change * (x * x * x + 1) + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingQuinticIn(int x, int start, int change,
+int WidgetTableProgression::easingQuarticIn(double x, int start, int change,
     int duration)
 {
     x /= duration;
-    return change * x * x * x * x * x + start;
+    return qFloor(change * x * x * x * x + start);
 }
 
 // -------------------------------------------------------
 
-int WidgetTableProgression::easingQuinticOut(int x, int start, int change,
+int WidgetTableProgression::easingQuarticOut(double x, int start, int change,
     int duration)
 {
     x /= duration;
     x--;
-    return change * (x * x * x * x * x + 1) + start;
+    return qFloor(-change * (x * x * x * x - 1) + start);
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuinticIn(double x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    return qFloor(change * x * x * x * x * x + start);
+}
+
+// -------------------------------------------------------
+
+int WidgetTableProgression::easingQuinticOut(double x, int start, int change,
+    int duration)
+{
+    x /= duration;
+    x--;
+    return qFloor(change * (x * x * x * x * x + 1) + start);
 }
 
 // -------------------------------------------------------
