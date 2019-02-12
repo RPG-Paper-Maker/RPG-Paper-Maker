@@ -52,6 +52,7 @@ class DialogDatas : public QDialog
 public:
     explicit DialogDatas(GameDatas* gameDatas, QWidget *parent = 0);
     ~DialogDatas();
+    int finalLevel() const;
 
 private:
     Ui::DialogDatas *ui;

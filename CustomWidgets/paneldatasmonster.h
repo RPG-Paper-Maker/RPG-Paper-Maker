@@ -26,6 +26,7 @@ public:
     explicit PanelDatasMonster(QWidget *parent = nullptr);
     ~PanelDatasMonster();
     void setPanelSuperList(PanelSuperList *list);
+    int finalLevel() const;
 
     void initialize();
     void update(SystemMonster *monster, int classIndex);

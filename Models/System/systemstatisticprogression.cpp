@@ -20,6 +20,12 @@
 #include "systemstatisticprogression.h"
 #include "dialogsystemstatisticprogression.h"
 
+const QString SystemStatisticProgression::JSON_MAX = "m";
+const QString SystemStatisticProgression::JSON_ISFIX = "if";
+const QString SystemStatisticProgression::JSON_TABLE = "t";
+const QString SystemStatisticProgression::JSON_RANDOM = "r";
+const QString SystemStatisticProgression::JSON_FORMULA = "f";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -27,43 +33,70 @@
 // -------------------------------------------------------
 
 SystemStatisticProgression::SystemStatisticProgression() :
-    SystemStatisticProgression(1, "", 1, 1, nullptr)
+    SystemStatisticProgression(1, "", 1, true, new SystemProgressionTable, 0, "")
 {
 
 }
 
-SystemStatisticProgression::SystemStatisticProgression(int i, QString n,
-                                                       int init, int final,
-                                                       QVector<int>* curve) :
-    SuperListItem(i,n),
-    m_initialValue(init),
-    m_finalValue(final),
-    m_curve(curve)
+SystemStatisticProgression::SystemStatisticProgression(int i, QString n, int max
+    , bool isFix, SystemProgressionTable *table, int random, QString formula) :
+    SuperListItem(i, n),
+    m_max(max),
+    m_isFix(isFix),
+    m_table(table),
+    m_random(random),
+    m_formula(formula)
 {
 
 }
 
-SystemStatisticProgression::~SystemStatisticProgression(){
-    if (m_curve != nullptr) delete m_curve;
+SystemStatisticProgression::~SystemStatisticProgression() {
+    delete m_table;
 }
 
-int SystemStatisticProgression::initialValue() const { return m_initialValue; }
+int SystemStatisticProgression::max() const {
+    return m_max;
+}
 
-void SystemStatisticProgression::setInitialValue(int i) { m_initialValue = i; }
+void SystemStatisticProgression::setMax(int m) {
+    m_max = m;
+}
 
-int SystemStatisticProgression::finalValue() const { return m_finalValue; }
+bool SystemStatisticProgression::isFix() const {
+    return m_isFix;
+}
 
-void SystemStatisticProgression::setFinalValue(int i) { m_finalValue = i; }
+void SystemStatisticProgression::setIsFix(bool f) {
+    m_isFix = f;
+}
 
-QVector<int>* SystemStatisticProgression::curve() const { return m_curve; }
+SystemProgressionTable * SystemStatisticProgression::table() const {
+    return m_table;
+}
+
+int SystemStatisticProgression::random() const {
+    return m_random;
+}
+
+void SystemStatisticProgression::setRandom(int r) {
+    m_random = r;
+}
+
+QString SystemStatisticProgression::formula() const {
+    return m_formula;
+}
+
+void SystemStatisticProgression::setFormula(QString f) {
+    m_formula = f;
+}
 
 // -------------------------------------------------------
 //
-//  INTERMEDIARY FUNCTIONS
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-bool SystemStatisticProgression::openDialog(){
+bool SystemStatisticProgression::openDialog() {
     SystemStatisticProgression statisticProgression;
     statisticProgression.setCopy(*this);
     DialogSystemStatisticProgression dialog(statisticProgression);
@@ -76,7 +109,7 @@ bool SystemStatisticProgression::openDialog(){
 
 // -------------------------------------------------------
 
-SuperListItem* SystemStatisticProgression::createCopy() const{
+SuperListItem* SystemStatisticProgression::createCopy() const {
     SystemStatisticProgression* super = new SystemStatisticProgression;
     super->setCopy(*this);
     return super;
@@ -90,18 +123,16 @@ void SystemStatisticProgression::setCopy(const SystemStatisticProgression&
     SuperListItem::setCopy(statisticProgression);
     p_id = statisticProgression.p_id;
 
-    m_initialValue = statisticProgression.initialValue();
-    m_finalValue = statisticProgression.finalValue();
-
-    if (m_curve != nullptr){
-        for (int i = 0; i < statisticProgression.m_curve->size(); i++)
-            m_curve->append(statisticProgression.m_curve->at(i));
-    }
+    m_max = statisticProgression.m_max;
+    m_isFix = statisticProgression.m_isFix;
+    m_table = statisticProgression.m_table;
+    m_random = statisticProgression.m_random;
+    m_formula = statisticProgression.m_formula;
 }
 
 // -------------------------------------------------------
 
-QList<QStandardItem *> SystemStatisticProgression::getModelRow() const{
+QList<QStandardItem *> SystemStatisticProgression::getModelRow() const {
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* itemStatistic = new QStandardItem;
     QStandardItem* itemInitial = new QStandardItem;
@@ -109,10 +140,10 @@ QList<QStandardItem *> SystemStatisticProgression::getModelRow() const{
     itemStatistic->setData(QVariant::fromValue(
                                reinterpret_cast<quintptr>(this)));
     itemStatistic->setText(toString());
-    itemInitial->setData(QVariant::fromValue(initialValue()));
-    itemInitial->setText(QString::number(initialValue()));
-    itemFinal->setData(QVariant::fromValue(finalValue()));
-    itemFinal->setText(QString::number(finalValue()));
+    itemInitial->setData(QVariant::fromValue(m_table->initialValue()));
+    itemInitial->setText(m_isFix ? QString::number(m_table->initialValue()) : "-");
+    itemFinal->setData(QVariant::fromValue(m_table->finalValue()));
+    itemFinal->setText(m_isFix ? QString::number(m_table->finalValue()) : "-");
     row.append(itemStatistic);
     row.append(itemInitial);
     row.append(itemFinal);
@@ -121,32 +152,29 @@ QList<QStandardItem *> SystemStatisticProgression::getModelRow() const{
 }
 
 // -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
 
-void SystemStatisticProgression::read(const QJsonObject &json){
+void SystemStatisticProgression::read(const QJsonObject &json) {
     SuperListItem::read(json);
-    m_initialValue = json["i"].toInt();
-    m_finalValue = json["f"].toInt();
+    QJsonObject obj;
 
-    if (json.contains("c")){
-        QJsonArray tab = json["c"].toArray();
-        for (int i = 0; i < tab.size(); i++)
-            m_curve->append(tab[i].toInt());
-    }
+    m_max = json[JSON_MAX].toInt();
+    m_isFix = json[JSON_ISFIX].toBool();
+    obj = json[JSON_TABLE].toObject();
+    m_table->read(obj);
+    m_random = json[JSON_RANDOM].toInt();
+    m_formula = json[JSON_FORMULA].toString();
 }
 
-void SystemStatisticProgression::write(QJsonObject &json) const{
-    SuperListItem::write(json);
-    json["i"] = initialValue();
-    json["f"] = finalValue();
+// -------------------------------------------------------
 
-    if (m_curve != nullptr){
-        QJsonArray tab;
-        for (int i = 0; i < m_curve->size(); i++)
-            tab.append(m_curve->at(i));
-        json["c"] = tab;
-    }
+void SystemStatisticProgression::write(QJsonObject &json) const {
+    SuperListItem::write(json);
+    QJsonObject obj;
+
+    json[JSON_MAX] = m_max;
+    json[JSON_ISFIX] = m_isFix;
+    obj = json[JSON_TABLE].toObject();
+    m_table->write(obj);
+    json[JSON_RANDOM] = m_random;
+    json[JSON_FORMULA] = m_formula;
 }

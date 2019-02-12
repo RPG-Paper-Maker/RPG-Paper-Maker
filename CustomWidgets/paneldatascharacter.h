@@ -46,6 +46,7 @@ public:
     ~PanelDatasCharacter();
     void setPanelSuperList(PanelSuperList *list);
     PanelDatasClass * panelDatasClass() const;
+    int finalLevel() const;
 
     void initialize();
     void update(SystemHero *hero, int classIndex);

@@ -22,6 +22,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "systemprogressiontable.h"
 
 // -------------------------------------------------------
 //
@@ -34,28 +35,40 @@
 class SystemStatisticProgression : public SuperListItem
 {
 public:
+    static const QString JSON_MAX;
+    static const QString JSON_ISFIX;
+    static const QString JSON_TABLE;
+    static const QString JSON_RANDOM;
+    static const QString JSON_FORMULA;
+
     SystemStatisticProgression();
-    SystemStatisticProgression(int i, QString n, int init, int final,
-                               QVector<int>* curve);
+    SystemStatisticProgression(int i, QString n, int max, bool isFix,
+        SystemProgressionTable *table, int random, QString formula);
     virtual ~SystemStatisticProgression();
-    int initialValue() const;
-    void setInitialValue(int i);
-    int finalValue() const;
-    void setFinalValue(int i);
-    QVector<int>* curve() const;
+    int max() const;
+    void setMax(int m);
+    bool isFix() const;
+    void setIsFix(bool f);
+    SystemProgressionTable * table() const;
+    int random() const;
+    void setRandom(int r);
+    QString formula() const;
+    void setFormula(QString f);
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemStatisticProgression &
                          statisticProgression);
     virtual QList<QStandardItem*> getModelRow() const;
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_initialValue;
-    int m_finalValue;
-    QVector<int>* m_curve;
+    int m_max;
+    bool m_isFix;
+    SystemProgressionTable *m_table;
+    int m_random;
+    QString m_formula;
 };
 
 Q_DECLARE_METATYPE(SystemStatisticProgression)

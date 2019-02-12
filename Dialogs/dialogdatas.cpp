@@ -57,6 +57,19 @@ DialogDatas::~DialogDatas()
     delete ui;
 }
 
+int DialogDatas::finalLevel() const {
+    switch (ui->tabWidget->currentIndex()) {
+    case 0:
+        return ui->panelDatasClass->finalLevel();
+    case 1:
+        return ui->panelDatasHero->finalLevel();
+    case 2:
+        return ui->panelDatasMonster->finalLevel();
+    default:
+        return 0;
+    }
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

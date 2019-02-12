@@ -76,6 +76,18 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
         QVector<int>({3,4,5,6,7,8,9,10,11,12}),
         QVector<int>({3,4,5,6,7,8,9,10,11,12})
     };
+    QVector<bool> isFix[] = {
+        QVector<bool>({true, true, true, true, true, true, true, true, true,
+            true}),
+        QVector<bool>({true, true, true, true, true, true, true, true, true,
+            true}),
+        QVector<bool>({true, true, true, true, true, true, true, true, true,
+            true}),
+        QVector<bool>({true, true, true, true, true, true, true, true, true,
+            true}),
+        QVector<bool>({true, true, true, true, true, true, true, true, true,
+            true})
+    };
     QVector<int> initialValue[] = {
         QVector<int>({20,10,10,1,1,1,1,1,1,1}),
         QVector<int>({20,10,10,1,1,1,1,1,1,1}),
@@ -111,14 +123,12 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
         // Statistics progression
         statisticsProgression = new QStandardItemModel;
         for (int j = 0; j < idsStatistics[i].size(); j++){
-            statistic = SuperListItem::getById(modelStatistics,
-                                               idsStatistics[i][j]);
-            statisticProgression =
-                    new SystemStatisticProgression(statistic->id(),
-                                                   statistic->name(),
-                                                   initialValue[i][j],
-                                                   finalValue[i][j],
-                                                   nullptr);
+            statistic = SuperListItem::getById(modelStatistics, idsStatistics[i]
+                [j]);
+            statisticProgression = new SystemStatisticProgression(statistic->id(),
+                statistic->name(), finalValue[i][j], isFix[i][j], new
+                SystemProgressionTable(initialValue[i][j], finalValue[i][j], 0),
+                0, "");
             row = statisticProgression->getModelRow();
             statisticsProgression->appendRow(row);
         }

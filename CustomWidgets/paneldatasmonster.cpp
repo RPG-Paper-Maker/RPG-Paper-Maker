@@ -44,6 +44,10 @@ void PanelDatasMonster::setPanelSuperList(PanelSuperList *list) {
     ui->panelDatasCharacter->setPanelSuperList(list);
 }
 
+int PanelDatasMonster::finalLevel() const {
+    return ui->panelDatasCharacter->finalLevel();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

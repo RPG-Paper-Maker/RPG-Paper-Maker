@@ -44,6 +44,10 @@ PanelDatasClass::~PanelDatasClass()
     delete ui;
 }
 
+int PanelDatasClass::finalLevel() const {
+    return ui->spinBoxClassMaxLevel->value();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

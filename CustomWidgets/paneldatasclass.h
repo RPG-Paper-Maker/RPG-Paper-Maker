@@ -44,6 +44,7 @@ public:
 
     explicit PanelDatasClass(QWidget *parent = nullptr);
     ~PanelDatasClass();
+    int finalLevel() const;
 
     void initialize(bool isClass = true);
     void update(SystemClass *sysClass, SystemClass *originalClass);

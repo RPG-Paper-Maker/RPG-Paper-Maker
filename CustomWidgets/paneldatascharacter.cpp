@@ -51,6 +51,10 @@ PanelDatasClass * PanelDatasCharacter::panelDatasClass() const {
     return ui->panelDatasClass;
 }
 
+int PanelDatasCharacter::finalLevel() const {
+    return panelDatasClass()->finalLevel();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

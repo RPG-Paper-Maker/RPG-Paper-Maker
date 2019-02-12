@@ -20,6 +20,7 @@
 #include "dialogsystemstatisticprogression.h"
 #include "ui_dialogsystemstatisticprogression.h"
 #include "rpm.h"
+#include "dialogdatas.h"
 
 // -------------------------------------------------------
 //
@@ -28,14 +29,12 @@
 // -------------------------------------------------------
 
 DialogSystemStatisticProgression::DialogSystemStatisticProgression(
-        SystemStatisticProgression &statisticProgression,
-        QWidget *parent) :
-    QDialog(parent),
+        SystemStatisticProgression &statisticProgression) :
+    QDialog(qApp->activeModalWidget()),
     ui(new Ui::DialogSystemStatisticProgression),
     m_statisticProgression(statisticProgression)
 {
     ui->setupUi(this);
-    
 
     initialize();
 }
@@ -51,28 +50,37 @@ DialogSystemStatisticProgression::~DialogSystemStatisticProgression()
 //
 // -------------------------------------------------------
 
-void DialogSystemStatisticProgression::initialize(){
+void DialogSystemStatisticProgression::initialize() {
+    // Statistic combobox
 
-    // Stat
-    int statIndex = SuperListItem::getIndexById(
-                RPM::get()->project()->gameDatas()->battleSystemDatas()
-                ->modelCommonStatistics()->invisibleRootItem(),
-                m_statisticProgression.id());
+    int statIndex = SuperListItem::getIndexById(RPM::get()->project()
+        ->gameDatas()->battleSystemDatas()->modelCommonStatistics()
+        ->invisibleRootItem(), m_statisticProgression.id());
     SuperListItem::fillComboBox(ui->comboBoxStatistic, RPM::get()->project()
-                                ->gameDatas()->battleSystemDatas()
-                                ->modelCommonStatistics());
+        ->gameDatas()->battleSystemDatas()->modelCommonStatistics());
     ui->comboBoxStatistic->setCurrentIndex(statIndex);
     on_comboBoxStatistic_currentIndexChanged(statIndex);
 
-    // Initial and final values
-    ui->spinBoxInitial->setValue(m_statisticProgression.initialValue());
-    ui->spinBoxFinal->setValue(m_statisticProgression.finalValue());
+    // Maximum
+    ui->spinBoxMaximum->setValue(m_statisticProgression.max());
 
-    // Kind of progression
-    if (m_statisticProgression.curve() == nullptr)
-        ui->radioButtonRandom->setChecked(true);
-    else
-        ui->radioButtonStatic->setChecked(true);
+    // Fix table progression
+    if (m_statisticProgression.isFix()) {
+        ui->radioButtonFix->setChecked(true);
+    } else {
+        ui->radioButtonFormula->setChecked(true);
+    }
+
+    ui->panelProgressionTable->setProgression(m_statisticProgression.table());
+    ui->panelProgressionTable->setMaxLevel(reinterpret_cast<DialogDatas *>(this
+        ->parentWidget())->finalLevel());
+    ui->panelProgressionTable->updateProgress();
+
+    // Random
+    ui->spinBoxRandom->setValue(m_statisticProgression.random());
+
+    // Formula
+    ui->lineEditFormula->setText(m_statisticProgression.formula());
 }
 
 // -------------------------------------------------------
@@ -84,21 +92,30 @@ void DialogSystemStatisticProgression::initialize(){
 void DialogSystemStatisticProgression::on_comboBoxStatistic_currentIndexChanged
 (int index)
 {
-    SystemStatisticProgression* prog = (SystemStatisticProgression*)
-            RPM::get()->project()->gameDatas()->battleSystemDatas()
-            ->modelCommonStatistics()->item(index)->data().value<qintptr>();
+    SystemStatisticProgression *prog = reinterpret_cast<
+        SystemStatisticProgression *>(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics()->item(index)->data()
+        .value<qintptr>());
     m_statisticProgression.setId(prog->id());
     m_statisticProgression.setName(prog->name());
 }
 
 // -------------------------------------------------------
 
-void DialogSystemStatisticProgression::on_spinBoxInitial_valueChanged(int i){
-    m_statisticProgression.setInitialValue(i);
+void DialogSystemStatisticProgression::on_spinBoxMaximum_valueChanged(int i) {
+
 }
 
 // -------------------------------------------------------
 
-void DialogSystemStatisticProgression::on_spinBoxFinal_valueChanged(int i){
-    m_statisticProgression.setFinalValue(i);
+void DialogSystemStatisticProgression::on_radioButtonFix_toggled(bool checked) {
+    ui->panelProgressionTable->setEnabled(checked);
+    ui->labelRandom->setEnabled(checked);
+    ui->lineEditFormula->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemStatisticProgression::on_radioButtonFormula_toggled(bool checked) {
+    ui->lineEditFormula->setEnabled(checked);
 }
