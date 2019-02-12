@@ -50,6 +50,10 @@ public:
     void setMaxLevel(int l);
 
     void updateProgress();
+    void gotoGraph();
+
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
 
 private:
     Ui::PanelProgressionTable *ui;
@@ -57,10 +61,13 @@ private:
     bool m_updating;
     int m_maxLevel;
 
+signals:
+    void finalValueUpdated(int f);
+
 public slots:
     void on_tabWidget_currentChanged(int index);
-    void on_spinBoxInit_valueChanged(int i);
-    void on_spinBoxFinal_valueChanged(int i);
+    void on_spinBoxInitValueChanged(int);
+    void on_spinBoxFinalValueChanged(int i);
     void on_horizontalSlider_valueChanged(int i);
     void on_pushButtonReset_clicked();
 };

@@ -60,6 +60,8 @@ public:
         *properties, bool isInteger = true);
     void initializeDataBaseCommandId(QStandardItemModel *dataBase,
         QStandardItemModel *parameters, QStandardItemModel *properties);
+    void initializeMessage(QStandardItemModel *parameters = nullptr,
+        QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
@@ -67,6 +69,7 @@ public:
     void setMessageValue(QString m);
     void setSwitchValue(bool s);
     void updateValue(bool update = false);
+    void updateKind();
     void sync();
     void hideAll();
     void addDefault();
@@ -99,6 +102,9 @@ public:
     void initializeCommand(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command);
 
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
+
 private:
     Ui::PanelPrimitiveValue *ui;
     PrimitiveValue *m_model;
@@ -106,6 +112,9 @@ private:
     PanelPrimitiveValueKind m_kind;
 
     void initialize();
+
+signals:
+    void numberUpdated(int i);
 
 private slots:
     void on_comboBoxChoiceCurrentIndexChanged(int index);

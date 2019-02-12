@@ -49,6 +49,9 @@ public:
     void initialize(bool isClass = true);
     void update(SystemClass *sysClass, SystemClass *originalClass);
 
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
+
 private:
     Ui::PanelDatasClass *ui;
     SystemClass *m_class;

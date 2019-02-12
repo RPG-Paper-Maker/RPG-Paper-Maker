@@ -65,42 +65,60 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
     QStandardItemModel* skills;
     QStandardItemModel* statisticsProgression;
     QString names[] = {"Knight", "Witch", "Mage", "Ninja", "Wooly"};
-    int initialLevels[] = {1,1,1,1,1};
-    int maxLevels[] = {100,100,100,100,100};
-    int expBases[] = {5,5,5,5,5};
-    int expInflations[] = {20,20,20,20,20};
+    int initialLevels[] = {1, 1, 1, 1, 1};
+    int maxLevels[] = {100, 100, 100, 100, 100};
+    int expBases[] = {5, 5, 5, 5, 5};
+    int expInflations[] = {20, 20, 20, 20, 20};
     QVector<int> idsStatistics[] = {
-        QVector<int>({3,4,5,6,7,8,9,10,11,12}),
-        QVector<int>({3,4,5,6,7,8,9,10,11,12}),
-        QVector<int>({3,4,5,6,7,8,9,10,11,12}),
-        QVector<int>({3,4,5,6,7,8,9,10,11,12}),
-        QVector<int>({3,4,5,6,7,8,9,10,11,12})
+        QVector<int>({3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}),
+        QVector<int>({3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}),
+        QVector<int>({3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}),
+        QVector<int>({3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}),
+        QVector<int>({3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13})
     };
     QVector<bool> isFix[] = {
-        QVector<bool>({true, true, true, true, true, true, true, true, true,
-            true}),
-        QVector<bool>({true, true, true, true, true, true, true, true, true,
-            true}),
-        QVector<bool>({true, true, true, true, true, true, true, true, true,
-            true}),
-        QVector<bool>({true, true, true, true, true, true, true, true, true,
-            true}),
-        QVector<bool>({true, true, true, true, true, true, true, true, true,
-            true})
+        QVector<bool>({true, true, true, false, false, true, true, true, true,
+            true, false}),
+        QVector<bool>({true, true, true, false, false, true, true, true, true,
+            true, false}),
+        QVector<bool>({true, true, true, false, false, true, true, true, true,
+            true, false}),
+        QVector<bool>({true, true, true, false, false, true, true, true, true,
+            true, false}),
+        QVector<bool>({true, true, true, false, false, true, true, true, true,
+            true, false})
     };
     QVector<int> initialValue[] = {
-        QVector<int>({20,10,10,1,1,1,1,1,1,1}),
-        QVector<int>({20,10,10,1,1,1,1,1,1,1}),
-        QVector<int>({20,10,10,1,1,1,1,1,1,1}),
-        QVector<int>({20,10,10,1,1,1,1,1,1,1}),
-        QVector<int>({5,5,5,1,1,1,1,1,1,1})
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1})
     };
     QVector<int> finalValue[] = {
-        QVector<int>({1000,500,100,1,1,200,200,200,200,200}),
-        QVector<int>({1000,500,100,1,1,200,200,200,200,200}),
-        QVector<int>({1000,500,100,1,1,200,200,200,200,200}),
-        QVector<int>({1000,500,100,1,1,200,200,200,200,200}),
-        QVector<int>({1000,500,100,1,1,200,200,200,200,200})
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200, 100}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200, 100}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200, 100}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200, 100}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200, 100})
+    };
+    QVector<QString> formula[] = {
+        QVector<QString>({"", "", "", "Math.round(u.str * 0.3)",
+            "Math.round(u.int * 0.3)", "", "", "", "", "",
+            "Math.floor(u.agi * 0.1)"}),
+        QVector<QString>({"", "", "", "Math.round(u.str * 0.3)",
+            "Math.round(u.int * 0.3)", "", "", "", "", "",
+            "Math.floor(u.agi * 0.1)"}),
+        QVector<QString>({"", "", "", "Math.round(u.str * 0.3)",
+            "Math.round(u.int * 0.3)", "", "", "", "", "",
+            "Math.floor(u.agi * 0.1)"}),
+        QVector<QString>({"", "", "", "Math.round(u.str * 0.3)",
+            "Math.round(u.int * 0.3)", "", "", "", "", "",
+            "Math.floor(u.agi * 0.1)"}),
+        QVector<QString>({"", "", "", "Math.round(u.str * 0.3)",
+            "Math.round(u.int * 0.3)", "", "", "", "", "",
+            "Math.floor(u.agi * 0.1)"})
+
     };
     QVector<int> skillIds[] = {
         QVector<int>({9,10}),
@@ -126,9 +144,10 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
             statistic = SuperListItem::getById(modelStatistics, idsStatistics[i]
                 [j]);
             statisticProgression = new SystemStatisticProgression(statistic->id(),
-                statistic->name(), finalValue[i][j], isFix[i][j], new
-                SystemProgressionTable(initialValue[i][j], finalValue[i][j], 0),
-                0, "");
+                statistic->name(), new PrimitiveValue(finalValue[i][j]), isFix
+                [i][j], new SystemProgressionTable(new PrimitiveValue(
+                initialValue[i][j]), new PrimitiveValue(finalValue[i][j]), 0),
+                new PrimitiveValue(0), new PrimitiveValue(formula[i][j]));
             row = statisticProgression->getModelRow();
             statisticsProgression->appendRow(row);
         }

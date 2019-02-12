@@ -33,13 +33,16 @@ const QString SystemStatisticProgression::JSON_FORMULA = "f";
 // -------------------------------------------------------
 
 SystemStatisticProgression::SystemStatisticProgression() :
-    SystemStatisticProgression(1, "", 1, true, new SystemProgressionTable, 0, "")
+    SystemStatisticProgression(1, "", new PrimitiveValue(1), true, new
+    SystemProgressionTable(new PrimitiveValue(1), new PrimitiveValue(1), 0),
+    new PrimitiveValue(0), new PrimitiveValue(QString()))
 {
 
 }
 
-SystemStatisticProgression::SystemStatisticProgression(int i, QString n, int max
-    , bool isFix, SystemProgressionTable *table, int random, QString formula) :
+SystemStatisticProgression::SystemStatisticProgression(int i, QString n,
+    PrimitiveValue *max, bool isFix, SystemProgressionTable *table,
+    PrimitiveValue *random, PrimitiveValue *formula) :
     SuperListItem(i, n),
     m_max(max),
     m_isFix(isFix),
@@ -51,15 +54,14 @@ SystemStatisticProgression::SystemStatisticProgression(int i, QString n, int max
 }
 
 SystemStatisticProgression::~SystemStatisticProgression() {
+    delete m_max;
     delete m_table;
+    delete m_random;
+    delete m_formula;
 }
 
-int SystemStatisticProgression::max() const {
+PrimitiveValue * SystemStatisticProgression::max() const {
     return m_max;
-}
-
-void SystemStatisticProgression::setMax(int m) {
-    m_max = m;
 }
 
 bool SystemStatisticProgression::isFix() const {
@@ -74,20 +76,12 @@ SystemProgressionTable * SystemStatisticProgression::table() const {
     return m_table;
 }
 
-int SystemStatisticProgression::random() const {
+PrimitiveValue * SystemStatisticProgression::random() const {
     return m_random;
 }
 
-void SystemStatisticProgression::setRandom(int r) {
-    m_random = r;
-}
-
-QString SystemStatisticProgression::formula() const {
+PrimitiveValue * SystemStatisticProgression::formula() const {
     return m_formula;
-}
-
-void SystemStatisticProgression::setFormula(QString f) {
-    m_formula = f;
 }
 
 // -------------------------------------------------------
@@ -123,11 +117,11 @@ void SystemStatisticProgression::setCopy(const SystemStatisticProgression&
     SuperListItem::setCopy(statisticProgression);
     p_id = statisticProgression.p_id;
 
-    m_max = statisticProgression.m_max;
+    m_max->setCopy(*statisticProgression.m_max);
     m_isFix = statisticProgression.m_isFix;
-    m_table = statisticProgression.m_table;
-    m_random = statisticProgression.m_random;
-    m_formula = statisticProgression.m_formula;
+    m_table->setCopy(*statisticProgression.m_table);
+    m_random->setCopy(*statisticProgression.m_random);
+    m_formula->setCopy(*statisticProgression.m_formula);
 }
 
 // -------------------------------------------------------
@@ -137,13 +131,12 @@ QList<QStandardItem *> SystemStatisticProgression::getModelRow() const {
     QStandardItem* itemStatistic = new QStandardItem;
     QStandardItem* itemInitial = new QStandardItem;
     QStandardItem* itemFinal = new QStandardItem;
-    itemStatistic->setData(QVariant::fromValue(
-                               reinterpret_cast<quintptr>(this)));
+    itemStatistic->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemStatistic->setText(toString());
-    itemInitial->setData(QVariant::fromValue(m_table->initialValue()));
-    itemInitial->setText(m_isFix ? QString::number(m_table->initialValue()) : "-");
-    itemFinal->setData(QVariant::fromValue(m_table->finalValue()));
-    itemFinal->setText(m_isFix ? QString::number(m_table->finalValue()) : "-");
+    itemInitial->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemInitial->setText(m_isFix ? m_table->initialValue()->toString() : "-");
+    itemFinal->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemFinal->setText(m_isFix ? m_table->finalValue()->toString() : "-");
     row.append(itemStatistic);
     row.append(itemInitial);
     row.append(itemFinal);
@@ -157,12 +150,19 @@ void SystemStatisticProgression::read(const QJsonObject &json) {
     SuperListItem::read(json);
     QJsonObject obj;
 
-    m_max = json[JSON_MAX].toInt();
+    obj = json[JSON_MAX].toObject();
+    m_max->read(obj);
     m_isFix = json[JSON_ISFIX].toBool();
-    obj = json[JSON_TABLE].toObject();
-    m_table->read(obj);
-    m_random = json[JSON_RANDOM].toInt();
-    m_formula = json[JSON_FORMULA].toString();
+
+    if (m_isFix) {
+        obj = json[JSON_TABLE].toObject();
+        m_table->read(obj);
+        obj = json[JSON_RANDOM].toObject();
+        m_random->read(obj);
+    } else {
+        obj = json[JSON_FORMULA].toObject();
+        m_formula->read(obj);
+    }
 }
 
 // -------------------------------------------------------
@@ -171,10 +171,21 @@ void SystemStatisticProgression::write(QJsonObject &json) const {
     SuperListItem::write(json);
     QJsonObject obj;
 
-    json[JSON_MAX] = m_max;
+    obj = QJsonObject();
+    m_max->write(obj);
+    json[JSON_MAX] = obj;
     json[JSON_ISFIX] = m_isFix;
-    obj = json[JSON_TABLE].toObject();
-    m_table->write(obj);
-    json[JSON_RANDOM] = m_random;
-    json[JSON_FORMULA] = m_formula;
+
+    if (m_isFix) {
+        obj = QJsonObject();
+        m_table->write(obj);
+        json[JSON_TABLE] = obj;
+        obj = QJsonObject();
+        m_random->write(obj);
+        json[JSON_RANDOM] = obj;
+    } else {
+        obj = QJsonObject();
+        m_formula->write(obj);
+        json[JSON_FORMULA] = obj;
+    }
 }

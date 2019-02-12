@@ -34,6 +34,10 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     m_modelNeedDelete(true)
 {
     ui->setupUi(this);
+
+    Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
+        sp->installEventFilter(this);
+    }
 }
 
 PanelPrimitiveValue::~PanelPrimitiveValue()
@@ -147,6 +151,21 @@ void PanelPrimitiveValue::initializeDataBaseCommandId(QStandardItemModel
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeMessage(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::Message;
+    addParameter(parameters);
+    addProperty(properties);
+    addMessage();
+    addVariable();
+    initialize();
+    showMessage();
+    setMessageValue(m_model->messageValue());
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initialize() {
     hideAll();
     connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this, SLOT(
@@ -157,7 +176,9 @@ void PanelPrimitiveValue::initialize() {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::initializeModel(PrimitiveValue *m) {
-    delete m_model;
+    if (m_modelNeedDelete) {
+        delete m_model;
+    }
     m_model = m;
     m_modelNeedDelete = false;
 }
@@ -284,6 +305,12 @@ void PanelPrimitiveValue::updateValue(bool update) {
             ->doubleSpinBoxNumber->value());
         break;
     }
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::updateKind() {
+    setKind(m_model->kind());
 }
 
 // -------------------------------------------------------
@@ -554,6 +581,15 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
         else
             setNumberValue(command->valueCommandAt(i++).toInt());
         break;
+    case PanelPrimitiveValueKind::Message:
+        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
+            .toInt()));
+        if (m_model->kind() == PrimitiveValueKind::Message) {
+            setMessageValue(command->valueCommandAt(i++));
+        } else {
+            setNumberValue(command->valueCommandAt(i++).toInt());
+        }
+        break;
     }
 }
 
@@ -575,9 +611,28 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
             command.append(QString::number(m_model->numberValue()));
 
         break;
+    case PanelPrimitiveValueKind::Message:
+        command.append(QString::number(static_cast<int>(m_model->kind())));
+
+        if (m_model->kind() == PrimitiveValueKind::Message)
+            command.append(m_model->messageValue());
+        else
+            command.append(QString::number(m_model->numberValue()));
+        break;
     }
 }
 
+// -------------------------------------------------------
+
+bool PanelPrimitiveValue::eventFilter(QObject *o, QEvent *e) {
+
+    if (e->type() == QEvent::Wheel && !reinterpret_cast<QWidget *>(o)->hasFocus())
+    {
+        e->ignore();
+        return true;
+    }
+    return QWidget::eventFilter(o, e);
+}
 
 // -------------------------------------------------------
 //
@@ -623,6 +678,8 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
 
 void PanelPrimitiveValue::on_spinBoxNumber_valueChanged(int i) {
     setNumberValue(i);
+
+    emit numberUpdated(i);
 }
 
 void PanelPrimitiveValue::on_doubleSpinBoxNumber_valueChanged(double i) {

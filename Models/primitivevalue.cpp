@@ -268,8 +268,10 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand* command,
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
         m_messageValue = command->valueCommandAt(i++);
+        break;
     case PrimitiveValueKind::Switch:
         m_switchValue = command->valueCommandAt(i++) == "1";
+        break;
     case PrimitiveValueKind::NumberDouble:
         m_numberDoubleValue = command->valueCommandAt(i++).toDouble();
     }

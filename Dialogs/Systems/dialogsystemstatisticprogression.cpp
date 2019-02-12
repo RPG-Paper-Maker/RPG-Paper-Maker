@@ -52,7 +52,6 @@ DialogSystemStatisticProgression::~DialogSystemStatisticProgression()
 
 void DialogSystemStatisticProgression::initialize() {
     // Statistic combobox
-
     int statIndex = SuperListItem::getIndexById(RPM::get()->project()
         ->gameDatas()->battleSystemDatas()->modelCommonStatistics()
         ->invisibleRootItem(), m_statisticProgression.id());
@@ -62,7 +61,10 @@ void DialogSystemStatisticProgression::initialize() {
     on_comboBoxStatistic_currentIndexChanged(statIndex);
 
     // Maximum
-    ui->spinBoxMaximum->setValue(m_statisticProgression.max());
+    ui->panelPrimitiveValueMax->initializeNumberVariable();
+    ui->panelPrimitiveValueMax->initializeModel(m_statisticProgression.max());
+    ui->panelPrimitiveValueMax->updateValue(true);
+    ui->panelPrimitiveValueMax->updateKind();
 
     // Fix table progression
     if (m_statisticProgression.isFix()) {
@@ -70,17 +72,27 @@ void DialogSystemStatisticProgression::initialize() {
     } else {
         ui->radioButtonFormula->setChecked(true);
     }
-
     ui->panelProgressionTable->setProgression(m_statisticProgression.table());
     ui->panelProgressionTable->setMaxLevel(reinterpret_cast<DialogDatas *>(this
         ->parentWidget())->finalLevel());
+    ui->panelProgressionTable->gotoGraph();
     ui->panelProgressionTable->updateProgress();
+    connect(ui->panelProgressionTable, SIGNAL(finalValueUpdated(int)), this,
+        SLOT(on_tableProgressionFinalValueUpdated(int)));
 
     // Random
-    ui->spinBoxRandom->setValue(m_statisticProgression.random());
+    ui->panelPrimitiveValueRandom->initializeNumberVariable();
+    ui->panelPrimitiveValueRandom->initializeModel(m_statisticProgression
+        .random());
+    ui->panelPrimitiveValueRandom->updateValue(true);
+    ui->panelPrimitiveValueRandom->updateKind();
 
     // Formula
-    ui->lineEditFormula->setText(m_statisticProgression.formula());
+    ui->panelPrimitiveValueFormula->initializeMessage();
+    ui->panelPrimitiveValueFormula->initializeModel(m_statisticProgression
+        .formula());
+    ui->panelPrimitiveValueFormula->updateValue(true);
+    ui->panelPrimitiveValueFormula->updateKind();
 }
 
 // -------------------------------------------------------
@@ -90,7 +102,7 @@ void DialogSystemStatisticProgression::initialize() {
 // -------------------------------------------------------
 
 void DialogSystemStatisticProgression::on_comboBoxStatistic_currentIndexChanged
-(int index)
+    (int index)
 {
     SystemStatisticProgression *prog = reinterpret_cast<
         SystemStatisticProgression *>(RPM::get()->project()->gameDatas()
@@ -102,20 +114,31 @@ void DialogSystemStatisticProgression::on_comboBoxStatistic_currentIndexChanged
 
 // -------------------------------------------------------
 
-void DialogSystemStatisticProgression::on_spinBoxMaximum_valueChanged(int i) {
-
-}
-
-// -------------------------------------------------------
-
 void DialogSystemStatisticProgression::on_radioButtonFix_toggled(bool checked) {
     ui->panelProgressionTable->setEnabled(checked);
     ui->labelRandom->setEnabled(checked);
-    ui->lineEditFormula->setEnabled(checked);
+    ui->panelPrimitiveValueRandom->setEnabled(checked);
+
+    m_statisticProgression.setIsFix(checked);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemStatisticProgression::on_radioButtonFormula_toggled(bool checked) {
-    ui->lineEditFormula->setEnabled(checked);
+void DialogSystemStatisticProgression::on_radioButtonFormula_toggled(bool checked)
+{
+    ui->panelPrimitiveValueFormula->setEnabled(checked);
+
+    m_statisticProgression.setIsFix(!checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemStatisticProgression::on_tableProgressionFinalValueUpdated(int
+    f)
+{
+    if (ui->panelPrimitiveValueMax->model()->kind() == PrimitiveValueKind
+        ::Number)
+    {
+        ui->panelPrimitiveValueMax->setNumberValue(f);
+    }
 }

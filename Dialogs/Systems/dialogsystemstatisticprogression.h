@@ -41,7 +41,7 @@ class DialogSystemStatisticProgression : public QDialog
 
 public:
     explicit DialogSystemStatisticProgression(SystemStatisticProgression&
-                                              statisticProgression);
+        statisticProgression);
     ~DialogSystemStatisticProgression();
 
 private:
@@ -51,9 +51,9 @@ private:
 
 private slots:
     void on_comboBoxStatistic_currentIndexChanged(int index);
-    void on_spinBoxMaximum_valueChanged(int i);
     void on_radioButtonFix_toggled(bool checked);
     void on_radioButtonFormula_toggled(bool checked);
+    void on_tableProgressionFinalValueUpdated(int f);
 };
 
 #endif // DIALOGSYSTEMSTATISTICPROGRESSION_H

@@ -22,6 +22,7 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -40,12 +41,11 @@ public:
     static const QString JSON_TABLE;
 
     SystemProgressionTable();
-    SystemProgressionTable(int initialValue, int finalValue, int equation);
+    SystemProgressionTable(PrimitiveValue *initialValue, PrimitiveValue
+        *finalValue, int equation);
     virtual ~SystemProgressionTable();
-    int initialValue() const;
-    void setInitialValue(int i);
-    int finalValue() const;
-    void setFinalValue(int i);
+    PrimitiveValue * initialValue() const;
+    PrimitiveValue * finalValue() const;
     int equation() const;
     void setEquation(int i);
     QHash<int, int> * table();
@@ -57,8 +57,8 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_initialValue;
-    int m_finalValue;
+    PrimitiveValue *m_initialValue;
+    PrimitiveValue *m_finalValue;
     int m_equation;
     QHash<int, int> m_table;
 };

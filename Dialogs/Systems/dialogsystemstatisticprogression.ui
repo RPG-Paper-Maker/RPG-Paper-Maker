@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>542</width>
-    <height>700</height>
+    <height>704</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,55 @@
      </property>
      <item>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="6" column="0" colspan="4">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>508</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="labelRandom">
+         <property name="text">
+          <string>Random variation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="4">
+        <widget class="PanelProgressionTable" name="panelProgressionTable" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>400</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>288</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="1" column="0" colspan="4">
         <widget class="QRadioButton" name="radioButtonFix">
          <property name="enabled">
@@ -53,31 +102,18 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="4">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>508</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0" colspan="4">
-        <widget class="PanelProgressionTable" name="panelProgressionTable" native="true">
+       <item row="3" column="2">
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveValueRandom" native="true">
          <property name="minimumSize">
           <size>
-           <width>0</width>
-           <height>400</height>
+           <width>250</width>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
-           <height>400</height>
+           <width>250</width>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -97,22 +133,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="comboBoxStatistic">
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="2" rowspan="2">
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
@@ -126,6 +146,22 @@
               </property>
              </spacer>
             </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="comboBoxStatistic">
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
@@ -134,24 +170,18 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBoxMaximum">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueMax" native="true">
               <property name="minimumSize">
                <size>
-                <width>150</width>
-                <height>0</height>
+                <width>250</width>
+                <height>27</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>150</width>
-                <height>16777215</height>
+                <width>250</width>
+                <height>27</height>
                </size>
-              </property>
-              <property name="minimum">
-               <number>-999999999</number>
-              </property>
-              <property name="maximum">
-               <number>999999999</number>
               </property>
              </widget>
             </item>
@@ -160,33 +190,22 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>288</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="2">
-        <widget class="QSpinBox" name="spinBoxRandom"/>
-       </item>
-       <item row="5" column="0" colspan="4">
-        <widget class="QLineEdit" name="lineEditFormula">
+       <item row="5" column="1" colspan="3">
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormula" native="true">
          <property name="enabled">
           <bool>false</bool>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="labelRandom">
-         <property name="text">
-          <string>Random influence:</string>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>27</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -208,6 +227,12 @@
    <class>PanelProgressionTable</class>
    <extends>QWidget</extends>
    <header>panelprogressiontable.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -141,8 +141,9 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
             facesetsIds[i], SystemClass::createInheritanceClass(),
-            new SystemProgressionTable(experiencesInitial[i], experiencesFinal
-            [i], experiencesEquation[i]), currencies, loots, actions);
+            new SystemProgressionTable(new PrimitiveValue(experiencesInitial[i])
+            , new PrimitiveValue(experiencesFinal[i]), experiencesEquation[i]),
+            currencies, loots, actions);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

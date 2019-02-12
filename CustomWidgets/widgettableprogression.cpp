@@ -150,8 +150,10 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
 void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     progression, QChartView *chartView, int finalLevel)
 {
-    int start = progression->initialValue();
-    int change = progression->finalValue() - progression->initialValue();
+    int start = progression->initialValue()->kind() == PrimitiveValueKind
+        ::Number ? progression->initialValue()->numberValue() : 0;
+    int change = (progression->finalValue()->kind() == PrimitiveValueKind
+        ::Number ? progression->finalValue()->numberValue() : 0) - start;
     int duration = finalLevel - 1;
     int value = 0;
     double x;

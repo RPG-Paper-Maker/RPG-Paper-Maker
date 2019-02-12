@@ -33,7 +33,8 @@ enum class PanelPrimitiveValueKind {
     ParameterEvent,
     ConstantVariable,
     DataBaseCommandId,
-    Number
+    Number,
+    Message
 };
 
 #endif // PANELPRIMITIVEVALUEKIND_H

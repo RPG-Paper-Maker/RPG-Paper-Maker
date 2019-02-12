@@ -61,6 +61,9 @@
              <layout class="QGridLayout" name="gridLayout_2">
               <item row="0" column="0">
                <widget class="QScrollArea" name="scrollArea">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="widgetResizable">
                  <bool>true</bool>
                 </property>
@@ -78,6 +81,9 @@
                    <widget class="WidgetTableProgression" name="tableWidgetNextLevel">
                     <property name="cursor" stdset="0">
                      <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="editTriggers">
                      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
@@ -135,6 +141,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="minimum">
                <number>0</number>
               </property>
@@ -165,6 +174,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -188,6 +200,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -203,6 +218,9 @@
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
               </property>
               <property name="minimum">
                <number>0</number>
@@ -248,7 +266,7 @@
            <number>0</number>
           </property>
           <attribute name="headerDefaultSectionSize">
-           <number>50</number>
+           <number>57</number>
           </attribute>
           <attribute name="headerMinimumSectionSize">
            <number>2</number>
@@ -304,7 +322,7 @@
            <number>0</number>
           </property>
           <attribute name="headerDefaultSectionSize">
-           <number>50</number>
+           <number>57</number>
           </attribute>
           <attribute name="headerMinimumSectionSize">
            <number>2</number>
@@ -323,14 +341,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>WidgetTableProgression</class>
    <extends>QTableWidget</extends>
    <header>widgettableprogression.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

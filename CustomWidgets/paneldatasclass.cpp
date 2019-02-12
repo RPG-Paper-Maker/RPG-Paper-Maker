@@ -37,6 +37,10 @@ PanelDatasClass::PanelDatasClass(QWidget *parent) :
     m_updating(false)
 {
     ui->setupUi(this);
+
+    Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
+        sp->installEventFilter(this);
+    }
 }
 
 PanelDatasClass::~PanelDatasClass()
@@ -128,6 +132,18 @@ void PanelDatasClass::updateExperience() {
         ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
             maxLevel, m_originalClass->expTable());
     }
+}
+
+// -------------------------------------------------------
+
+bool PanelDatasClass::eventFilter(QObject *o, QEvent *e) {
+
+    if (e->type() == QEvent::Wheel && !reinterpret_cast<QWidget *>(o)->hasFocus())
+    {
+        e->ignore();
+        return true;
+    }
+    return QWidget::eventFilter(o, e);
 }
 
 // -------------------------------------------------------

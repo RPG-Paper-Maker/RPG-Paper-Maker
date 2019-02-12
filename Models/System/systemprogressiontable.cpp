@@ -30,14 +30,14 @@ const QString SystemProgressionTable::JSON_TABLE = "t";
 //
 // -------------------------------------------------------
 
-SystemProgressionTable::SystemProgressionTable() : SystemProgressionTable(0, 0,
-    0)
+SystemProgressionTable::SystemProgressionTable() : SystemProgressionTable(new
+    PrimitiveValue(0), new PrimitiveValue(0), 0)
 {
 
 }
 
-SystemProgressionTable::SystemProgressionTable(int initialValue, int finalValue,
-    int equation) :
+SystemProgressionTable::SystemProgressionTable(PrimitiveValue *initialValue,
+    PrimitiveValue *finalValue, int equation) :
     m_initialValue(initialValue),
     m_finalValue(finalValue),
     m_equation(equation)
@@ -46,23 +46,16 @@ SystemProgressionTable::SystemProgressionTable(int initialValue, int finalValue,
 }
 
 SystemProgressionTable::~SystemProgressionTable() {
-
+    delete m_initialValue;
+    delete m_finalValue;
 }
 
-int SystemProgressionTable::initialValue() const {
+PrimitiveValue * SystemProgressionTable::initialValue() const {
     return m_initialValue;
 }
 
-void SystemProgressionTable::setInitialValue(int i) {
-    m_initialValue = i;
-}
-
-int SystemProgressionTable::finalValue() const {
+PrimitiveValue * SystemProgressionTable::finalValue() const {
     return m_finalValue;
-}
-
-void SystemProgressionTable::setFinalValue(int i) {
-    m_finalValue = i;
 }
 
 int SystemProgressionTable::equation() const {
@@ -84,8 +77,10 @@ QHash<int, int> * SystemProgressionTable::table() {
 // -------------------------------------------------------
 
 void SystemProgressionTable::reset() {
-    m_initialValue = 0;
-    m_finalValue = 0;
+    m_initialValue->setNumberValue(0);
+    m_initialValue->setKind(PrimitiveValueKind::Number);
+    m_finalValue->setNumberValue(0);
+    m_finalValue->setKind(PrimitiveValueKind::Number);
     m_equation = 0;
     m_table.clear();
 }
@@ -96,9 +91,10 @@ void SystemProgressionTable::reset() {
 //
 // -------------------------------------------------------
 
-void SystemProgressionTable::setCopy(const SystemProgressionTable& progression) {
-    m_initialValue = progression.m_initialValue;
-    m_finalValue = progression.m_finalValue;
+void SystemProgressionTable::setCopy(const SystemProgressionTable& progression)
+{
+    m_initialValue->setCopy(*progression.m_initialValue);
+    m_finalValue->setCopy(*progression.m_finalValue);
     m_equation = progression.m_equation;
     m_table.clear();
     QHash<int, int>::const_iterator i;
@@ -110,8 +106,12 @@ void SystemProgressionTable::setCopy(const SystemProgressionTable& progression) 
 // -------------------------------------------------------
 
 void SystemProgressionTable::read(const QJsonObject &json) {
-    m_initialValue = json[JSON_INITIAL_VALUE].toInt();
-    m_finalValue = json[JSON_FINAL_VALUE].toInt();
+    QJsonObject obj;
+
+    obj = json[JSON_INITIAL_VALUE].toObject();
+    m_initialValue->read(obj);
+    obj = json[JSON_FINAL_VALUE].toObject();
+    m_finalValue->read(obj);
     m_equation = json[JSON_EQUATION].toInt();
     m_table.clear();
     QJsonArray tab = json[JSON_TABLE].toArray();
@@ -126,8 +126,14 @@ void SystemProgressionTable::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemProgressionTable::write(QJsonObject &json) const {
-    json[JSON_INITIAL_VALUE] = m_initialValue;
-    json[JSON_FINAL_VALUE] = m_finalValue;
+    QJsonObject obj;
+
+    obj = QJsonObject();
+    m_initialValue->write(obj);
+    json[JSON_INITIAL_VALUE] = obj;
+    obj = QJsonObject();
+    m_finalValue->write(obj);
+    json[JSON_FINAL_VALUE] = obj;
     json[JSON_EQUATION] = m_equation;
     QJsonArray tab;
     QHash<int, int>::const_iterator i;

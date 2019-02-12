@@ -23,6 +23,7 @@
 #include <QMetaType>
 #include "superlistitem.h"
 #include "systemprogressiontable.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -42,18 +43,16 @@ public:
     static const QString JSON_FORMULA;
 
     SystemStatisticProgression();
-    SystemStatisticProgression(int i, QString n, int max, bool isFix,
-        SystemProgressionTable *table, int random, QString formula);
+    SystemStatisticProgression(int i, QString n, PrimitiveValue *max, bool isFix,
+        SystemProgressionTable *table, PrimitiveValue *random, PrimitiveValue
+        *formula);
     virtual ~SystemStatisticProgression();
-    int max() const;
-    void setMax(int m);
+    PrimitiveValue * max() const;
     bool isFix() const;
     void setIsFix(bool f);
     SystemProgressionTable * table() const;
-    int random() const;
-    void setRandom(int r);
-    QString formula() const;
-    void setFormula(QString f);
+    PrimitiveValue * random() const;
+    PrimitiveValue * formula() const;
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
@@ -64,11 +63,11 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_max;
+    PrimitiveValue *m_max;
     bool m_isFix;
     SystemProgressionTable *m_table;
-    int m_random;
-    QString m_formula;
+    PrimitiveValue *m_random;
+    PrimitiveValue *m_formula;
 };
 
 Q_DECLARE_METATYPE(SystemStatisticProgression)

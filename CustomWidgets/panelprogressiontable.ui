@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>444</width>
-    <height>433</height>
+    <width>258</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
    </property>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0" colspan="4">
+     <item row="0" column="0" colspan="2">
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
         <number>0</number>
@@ -48,8 +48,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>418</width>
-              <height>245</height>
+              <width>218</width>
+              <height>88</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -81,83 +81,100 @@
        </widget>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2">
+     <item row="1" column="0">
       <widget class="QLabel" name="label_16">
        <property name="text">
         <string>Initial value:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2" colspan="2">
+     <item row="1" column="1" rowspan="4">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>98</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="0">
+      <widget class="PanelPrimitiveValue" name="panelPrimitiveValueInitial" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>27</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>250</width>
+         <height>27</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
       <widget class="QLabel" name="label_17">
        <property name="text">
         <string>Final value:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QSpinBox" name="spinBoxInit">
-       <property name="maximumSize">
+     <item row="4" column="0">
+      <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFinal" native="true">
+       <property name="minimumSize">
         <size>
-         <width>16777215</width>
-         <height>16777215</height>
+         <width>250</width>
+         <height>27</height>
         </size>
        </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>999999999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2" colspan="2">
-      <widget class="QSpinBox" name="spinBoxFinal">
        <property name="maximumSize">
         <size>
-         <width>16777215</width>
-         <height>16777215</height>
+         <width>250</width>
+         <height>27</height>
         </size>
        </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>999999999</number>
-       </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Slow</string>
-       </property>
-      </widget>
+     <item row="5" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Slow</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Linear</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Fast</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Linear</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QLabel" name="label_3">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>Fast</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="4">
+     <item row="6" column="0" colspan="2">
       <widget class="QSlider" name="horizontalSlider">
        <property name="minimum">
         <number>-4</number>
@@ -173,7 +190,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="4">
+     <item row="7" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonReset">
        <property name="text">
         <string>Reset</string>
@@ -185,6 +202,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>WidgetTableProgression</class>
    <extends>QTableWidget</extends>
