@@ -79,9 +79,9 @@ private:
     QString strConditionPageVariables(int &i) const;
     QString strModifyInventory() const;
     QString strModifyInventorySelection(int &i) const;
-    QString strModifyTeam() const;
-    QString strModifyTeamInstance(int &i) const;
-    QString strModifyTeamMoveDelete(int &i) const;
+    QString strModifyTeam(QStandardItemModel* parameters) const;
+    QString strModifyTeamInstance(int &i, QStandardItemModel* parameters) const;
+    QString strModifyTeamMoveDelete(int &i, QStandardItemModel* parameters) const;
     QString strStartBattle(QStandardItemModel* parameters) const;
     QString strStartBattleTroop(QStandardItemModel* parameters, int& i) const;
     QString strStartBattleMap(QStandardItemModel* parameters, int& i) const;

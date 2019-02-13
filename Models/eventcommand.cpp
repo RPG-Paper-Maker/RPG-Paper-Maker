@@ -156,7 +156,7 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::ModifyInventory:
         str += strModifyInventory(); break;
     case EventCommandKind::ModifyTeam:
-        str += strModifyTeam(); break;
+        str += strModifyTeam(parameters); break;
     case EventCommandKind::StartBattle:
         str += strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
@@ -422,20 +422,22 @@ QString EventCommand::strModifyInventorySelection(int &i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyTeam() const{
+QString EventCommand::strModifyTeam(QStandardItemModel *parameters) const {
     int i = 0;
     QString operation = "";
     int kind = p_listCommand.at(i++).toInt();
-    if (kind == 0) operation += strModifyTeamInstance(i);
-    else if (kind == 1) operation += strModifyTeamMoveDelete(i);
+    if (kind == 0) operation += strModifyTeamInstance(i, parameters);
+    else if (kind == 1) operation += strModifyTeamMoveDelete(i, parameters);
 
     return "Modify team: " + operation;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyTeamInstance(int &i) const{
-    QString level = p_listCommand.at(i++);
+QString EventCommand::strModifyTeamInstance(int &i, QStandardItemModel
+    *parameters) const
+{
+    QString level = strNumber(i, parameters);
     QString teamNew = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
                                                    .toInt());
     QString stockVariable = RPM::get()->project()->gameDatas()
@@ -461,9 +463,11 @@ QString EventCommand::strModifyTeamInstance(int &i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyTeamMoveDelete(int &i) const{
+QString EventCommand::strModifyTeamMoveDelete(int &i, QStandardItemModel
+    *parameters) const
+{
     QString addRemove = p_listCommand.at(i++).toInt() == 0 ? "move" : "remove";
-    QString characterId = strNumberVariable(i);
+    QString characterId = strNumber(i, parameters);
     QString addRemoveTeam = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
                                                          .toInt());
 

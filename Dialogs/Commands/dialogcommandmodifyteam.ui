@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>259</height>
+    <width>575</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,7 +47,20 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBoxLevel"/>
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveValueLevel" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="labelInInstance">
@@ -423,7 +436,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

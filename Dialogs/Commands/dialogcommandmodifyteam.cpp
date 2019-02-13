@@ -38,7 +38,9 @@ DialogCommandModifyTeam::DialogCommandModifyTeam(EventCommand *command,
     SuperListItem::fillComboBox(ui->comboBoxHero, RPM::get()->project()
                                 ->gameDatas()->heroesDatas()->model());
     ui->widgetVariableStock->initialize();
-    ui->widgetVariableConstantAddRemove->initializeNumberVariable();
+    ui->widgetVariableConstantAddRemove->initializeNumber(nullptr, nullptr);
+    ui->panelPrimitiveValueLevel->initializeNumber(nullptr, nullptr);
+    ui->panelPrimitiveValueLevel->setNumberValue(1);
 
     if (command != nullptr) initialize(command);
 }
@@ -62,13 +64,13 @@ void DialogCommandModifyTeam::initialize(EventCommand* command){
     switch(type){
     case 0:
         ui->radioButtonNewInstance->setChecked(true);
-        ui->spinBoxLevel->setValue(command->valueCommandAt(i++).toInt());
+        ui->panelPrimitiveValueLevel->initializeCommand(command, i);
         ui->comboBoxInstanceTeam->setCurrentIndex(command->valueCommandAt(i++)
                                                   .toInt());
         ui->widgetVariableStock->setCurrentId(command->valueCommandAt(i++)
                                               .toInt());
         typeCharacter = command->valueCommandAt(i++).toInt();
-        if (typeCharacter == 0){
+        if (typeCharacter == 0) {
             ui->radioButtonHero->setChecked(true);
             ui->comboBoxHero->setCurrentIndex(SuperListItem::getIndexById(
                     RPM::get()->project()->gameDatas()->heroesDatas()
@@ -108,7 +110,7 @@ EventCommand* DialogCommandModifyTeam::getCommand() const{
 
 void DialogCommandModifyTeam::getNewInstance(QVector<QString> &command) const{
     command.append("0");
-    command.append(ui->spinBoxLevel->text());
+    ui->panelPrimitiveValueLevel->getCommand(command);
     command.append(QString::number(ui->comboBoxInstanceTeam->currentIndex()));
     command.append(QString::number(ui->widgetVariableStock->currentId()));
     if (ui->radioButtonHero->isChecked()){
@@ -141,7 +143,7 @@ void DialogCommandModifyTeam::getAddRemove(QVector<QString> &command) const{
 // -------------------------------------------------------
 
 void DialogCommandModifyTeam::on_radioButtonNewInstance_toggled(bool checked){
-    ui->spinBoxLevel->setEnabled(checked);
+    ui->panelPrimitiveValueLevel->setEnabled(checked);
     ui->labelInInstance->setEnabled(checked);
     ui->comboBoxInstanceTeam->setEnabled(checked);
     ui->labelOfInstance->setEnabled(checked);
