@@ -114,7 +114,7 @@ void SongsDatas::setDefaultBackgroundSounds(QList<QString>& names) {
 // -------------------------------------------------------
 
 void SongsDatas::setDefaultSounds(QList<QString>& names) {
-    names << "Cancel" << "Confirmation" << "Cursor";
+    names << "Cancel" << "Confirmation" << "Cursor" << "Levelup";
     setDefaultSongs(names, SongKind::Sound, "wav");
 }
 

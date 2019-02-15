@@ -148,7 +148,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     connect(ui->widgetChooseBattleMusic, SIGNAL(updated()), this,
         SLOT(on_battleMusicChanged()));
     ui->widgetChooseBattleLevelUp->initialize(gameDatas->battleSystemDatas()
-        ->levelup(), SongKind::MusicEffect, nullptr, nullptr);
+        ->levelup(), SongKind::Sound, nullptr, nullptr);
     connect(ui->widgetChooseBattleLevelUp, SIGNAL(updated()), this,
         SLOT(on_battleLevelupChanged()));
     ui->widgetChooseBattleVictory->initialize(gameDatas->battleSystemDatas()
