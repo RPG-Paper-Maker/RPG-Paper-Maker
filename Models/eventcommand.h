@@ -53,7 +53,8 @@ public:
     bool isEditable() const;
     bool isErasable() const;
     int getSongID(QStandardItemModel* parameters) const;
-    void initializePlaySong(int id);
+    void initializePlaySong(int id, bool isStart = false, double start = 0, bool
+        isEnd = false, double end = 0);
 
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;

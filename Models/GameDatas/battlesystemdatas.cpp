@@ -206,7 +206,7 @@ void BattleSystemDatas::setDefaultOptions(){
     if (m_music == nullptr) {
         m_music = new EventCommand(EventCommandKind::PlayMusic);
     }
-    m_music->initializePlaySong(2);
+    m_music->initializePlaySong(2, true, 6.4);
     if (m_levelup == nullptr) {
         m_levelup = new EventCommand(EventCommandKind::PlayMusicEffect);
     }

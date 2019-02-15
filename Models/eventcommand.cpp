@@ -112,9 +112,12 @@ int EventCommand::getSongID(QStandardItemModel *parameters) const
 
 // -------------------------------------------------------
 
-void EventCommand::initializePlaySong(int id) {
+void EventCommand::initializePlaySong(int id, bool isStart, double start, bool
+    isEnd, double end)
+{
     p_listCommand << "0" << "3" << "0" << QString::number(id) << "3" << "100" <<
-        "0" << "12" << "0" << "0" << "12" << "0";
+        (isStart ? "1" : "0") << "12" << QString::number(start) << (isEnd ? "1"
+        : "0") << "12" << QString::number(end);
 }
 
 // -------------------------------------------------------
