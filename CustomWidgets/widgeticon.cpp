@@ -17,8 +17,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemcurrency.h"
-#include "dialogsystemcurrency.h"
+#include "widgeticon.h"
+#include "ui_widgeticon.h"
 
 // -------------------------------------------------------
 //
@@ -26,58 +26,41 @@
 //
 // -------------------------------------------------------
 
-SystemCurrency::SystemCurrency() : SystemCurrency(1, new LangsTranslation, -1)
+WidgetIcon::WidgetIcon(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::WidgetIcon)
 {
-
+    ui->setupUi(this);
 }
 
-SystemCurrency::SystemCurrency(int i, LangsTranslation* names, int pictureID) :
-    SystemIcon(i, names, pictureID)
+WidgetIcon::~WidgetIcon()
 {
-
+    delete ui;
 }
 
 // -------------------------------------------------------
 //
-//  VIRTUAL FUNCTIONS
+//  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-bool SystemCurrency::openDialog() {
-    SystemCurrency currency;
-    currency.setCopy(*this);
-    DialogSystemCurrency dialog(currency);
+void WidgetIcon::initializeIcon(SystemIcon *icon) {
+    m_icon = icon;
 
-    if (dialog.exec() == QDialog::Accepted) {
-        setCopy(currency);
-        return true;
-    }
-
-    return false;
+    connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture *)),
+            this, SLOT(on_pictureChanged(SystemPicture *)));
+    ui->widgetShowPicture->setActivateCoef(false);
+    ui->widgetPicture->setKind(PictureKind::Icons);
+    ui->widgetPicture->initialize(m_icon->pictureID());
 }
 
 // -------------------------------------------------------
-
-SuperListItem* SystemCurrency::createCopy() const{
-    SystemCurrency* super = new SystemCurrency;
-    super->setCopy(*this);
-    return super;
-}
-
+//
+//  SLOTS
+//
 // -------------------------------------------------------
 
-void SystemCurrency::setCopy(const SystemCurrency& super){
-    SystemIcon::setCopy(super);
-}
-
-// -------------------------------------------------------
-
-void SystemCurrency::read(const QJsonObject &json){
-    SystemIcon::read(json);
-}
-
-// -------------------------------------------------------
-
-void SystemCurrency::write(QJsonObject &json) const{
-    SystemIcon::write(json);
+void WidgetIcon::on_pictureChanged(SystemPicture *picture) {
+    ui->widgetShowPicture->updatePicture(picture, PictureKind::Icons);
+    m_icon->setPictureID(picture->id());
 }

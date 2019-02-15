@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
-    <height>111</height>
+    <width>234</width>
+    <height>107</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,59 +45,19 @@
          <property name="minimumSize">
           <size>
            <width>150</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3" rowspan="2">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>68</width>
-           <height>45</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Icon:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="WidgetTextLang" name="widget_2" native="true">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QGraphicsView" name="graphicsViewIcon">
-         <property name="minimumSize">
-          <size>
-           <width>24</width>
-           <height>24</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>24</width>
-           <height>24</height>
+           <width>16777215</width>
+           <height>27</height>
           </size>
          </property>
         </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="WidgetIcon" name="widgetIcon" native="true"/>
        </item>
       </layout>
      </item>
@@ -120,6 +80,12 @@
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetIcon</class>
+   <extends>QWidget</extends>
+   <header>widgeticon.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

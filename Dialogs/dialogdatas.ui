@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -1014,12 +1014,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelDatasCharacter</class>
-   <extends>QWidget</extends>
-   <header>paneldatascharacter.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1031,15 +1025,21 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetTilesetSettings</class>
-   <extends>QWidget</extends>
-   <header>widgettilesetsettings.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDatasCharacter</class>
+   <extends>QWidget</extends>
+   <header>paneldatascharacter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTilesetSettings</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetsettings.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

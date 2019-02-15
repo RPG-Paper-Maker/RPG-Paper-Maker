@@ -77,6 +77,7 @@ void WidgetPicture::initialize(int i){
     }
 
     setPicture(m_picture);
+    emit pictureChanged(m_picture);
 }
 
 // -------------------------------------------------------

@@ -17,33 +17,43 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMCURRENCY_H
-#define SYSTEMCURRENCY_H
+#ifndef WIDGETICON_H
+#define WIDGETICON_H
 
-#include <QMetaType>
+#include <QWidget>
 #include "systemicon.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemCurrency
+//  CLASS WidgetIcon
 //
-//  A particulary currency (system).
+//  A widget used for updating an icon with a preview.
 //
 // -------------------------------------------------------
 
-class SystemCurrency : public SystemIcon
+namespace Ui {
+class WidgetIcon;
+}
+
+class WidgetIcon : public QWidget
 {
-public:
-    SystemCurrency();
-    SystemCurrency(int i, LangsTranslation *names, int pictureID);
+    Q_OBJECT
 
-    virtual bool openDialog();
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemCurrency& super);
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+public:
+    explicit WidgetIcon(QWidget *parent = nullptr);
+    ~WidgetIcon();
+
+    void initializeIcon(SystemIcon *icon);
+
+private:
+    Ui::WidgetIcon *ui;
+
+protected:
+    SystemIcon *m_icon;
+
+public slots:
+    void on_pictureChanged(SystemPicture *picture);
 };
 
-Q_DECLARE_METATYPE(SystemCurrency)
-
-#endif // SYSTEMCURRENCY_H
+#endif // WIDGETICON_H

@@ -267,7 +267,8 @@ HEADERS += \
     CustomWidgets/paneldatasmonster.h \
     CustomWidgets/panelprogressiontable.h \
     CustomWidgets/widgettableprogression.h \
-    Models/System/systemprogressiontable.h
+    Models/System/systemprogressiontable.h \
+    CustomWidgets/widgeticon.h
 
 SOURCES += \
     main.cpp \
@@ -482,7 +483,8 @@ SOURCES += \
     CustomWidgets/paneldatasmonster.cpp \
     CustomWidgets/panelprogressiontable.cpp \
     CustomWidgets/widgettableprogression.cpp \
-    Models/System/systemprogressiontable.cpp
+    Models/System/systemprogressiontable.cpp \
+    CustomWidgets/widgeticon.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -564,7 +566,8 @@ FORMS += \
     CustomWidgets/widgetselectrect.ui \
     CustomWidgets/paneldatasclass.ui \
     CustomWidgets/paneldatasmonster.ui \
-    CustomWidgets/panelprogressiontable.ui
+    CustomWidgets/panelprogressiontable.ui \
+    CustomWidgets/widgeticon.ui
 
 OTHER_FILES +=
 

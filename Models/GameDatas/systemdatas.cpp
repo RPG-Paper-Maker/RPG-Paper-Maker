@@ -151,12 +151,13 @@ void SystemDatas::setDefaultColors() {
 void SystemDatas::setDefaultCurrencies() {
     QStandardItem *item;
     SystemCurrency *currency;
-    QString namesCurrencies[] = {"G"};
+    QString namesCurrencies[] = {"G", "XCoin"};
+    int picCurrencies[] = {7, 8};
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
-        currency = new SystemCurrency(i+1,
-                                      new LangsTranslation(namesCurrencies[i]));
+        currency = new SystemCurrency(i + 1, new LangsTranslation(
+            namesCurrencies[i]), picCurrencies[i]);
         item->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(currency)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

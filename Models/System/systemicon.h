@@ -34,13 +34,20 @@
 class SystemIcon : public SystemLang
 {
 public:
-    SystemIcon();
-    SystemIcon(int i, LangsTranslation* names);
-    virtual ~SystemIcon();
-    virtual void setCopy(const SystemIcon& icon);
+    static const QString JSON_PICTURE_ID;
 
+    SystemIcon();
+    SystemIcon(int i, LangsTranslation* names, int pictureID);
+    virtual ~SystemIcon();
+    int pictureID() const;
+    void setPictureID(int id);
+
+    virtual void setCopy(const SystemIcon& icon);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+
+protected:
+    int m_pictureID;
 };
 
 Q_DECLARE_METATYPE(SystemIcon)

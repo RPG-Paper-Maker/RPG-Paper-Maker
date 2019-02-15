@@ -89,7 +89,8 @@ void PicturesDatas::setDefaultFacesets(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultIcons(QList<QString>& names) {
-    names << "darkness" << "fire" << "grass" << "light" << "water" << "wind";
+    names << "darkness" << "fire" << "grass" << "light" << "water" << "wind"
+        << "g" << "xcoin";
     setDefaultPictures(names, PictureKind::Icons);
 }
 
