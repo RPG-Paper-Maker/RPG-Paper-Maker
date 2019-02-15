@@ -24,6 +24,7 @@
 #include "serializable.h"
 #include "systemstatistic.h"
 #include "eventcommand.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
@@ -37,6 +38,7 @@
 class BattleSystemDatas : public Serializable
 {
 public:
+    static const QString JSON_FORMULA_IS_DEAD;
     static const QString JSON_BATLLE_MUSIC;
     static const QString JSON_BATLLE_LEVELUP;
     static const QString JSON_BATLLE_VICTORY;
@@ -55,6 +57,7 @@ public:
     int idStatisticExp() const;
     void setIdStatisticLevel(int i);
     void setIdStatisticExp(int i);
+    PrimitiveValue * formulaIsDead() const;
     EventCommand * music() const;
     void setMusic(EventCommand* command);
     EventCommand * levelup() const;
@@ -87,6 +90,7 @@ public:
 private:
     int m_idStatisticLevel;
     int m_idStatisticExp;
+    PrimitiveValue *m_formulaIsDead;
     EventCommand* m_music;
     EventCommand* m_levelup;
     EventCommand* m_victory;

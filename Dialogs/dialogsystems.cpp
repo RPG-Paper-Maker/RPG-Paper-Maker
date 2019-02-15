@@ -142,6 +142,13 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     connect(ui->panelSuperListCommonEquipments->list(), SIGNAL(updated()),
             this, SLOT(on_equipmentUpdated()));
 
+    // Formulas
+    ui->panelPrimitiveValueFormulaIsDead->initializeMessage();
+    ui->panelPrimitiveValueFormulaIsDead->initializeModel(gameDatas
+        ->battleSystemDatas()->formulaIsDead());
+    ui->panelPrimitiveValueFormulaIsDead->updateValue(true);
+    ui->panelPrimitiveValueFormulaIsDead->updateKind();
+
     // Initialize musics
     ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()->music(),
         SongKind::Music, nullptr, nullptr);

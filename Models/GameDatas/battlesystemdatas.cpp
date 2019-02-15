@@ -27,6 +27,7 @@
 #include "rpm.h"
 #include "common.h"
 
+const QString BattleSystemDatas::JSON_FORMULA_IS_DEAD = "fisdead";
 const QString BattleSystemDatas::JSON_BATLLE_MUSIC = "bmusic";
 const QString BattleSystemDatas::JSON_BATLLE_LEVELUP = "blevelup";
 const QString BattleSystemDatas::JSON_BATLLE_VICTORY = "bvictory";
@@ -45,6 +46,7 @@ const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 // -------------------------------------------------------
 
 BattleSystemDatas::BattleSystemDatas() :
+    m_formulaIsDead(new PrimitiveValue(QString())),
     m_music(nullptr),
     m_levelup(nullptr),
     m_victory(nullptr)
@@ -60,6 +62,7 @@ BattleSystemDatas::BattleSystemDatas() :
 
 BattleSystemDatas::~BattleSystemDatas()
 {
+    delete m_formulaIsDead;
     if (m_music != nullptr) {
         delete m_music;
     }
@@ -90,6 +93,10 @@ int BattleSystemDatas::idStatisticExp() const { return m_idStatisticExp; }
 void BattleSystemDatas::setIdStatisticLevel(int i) { m_idStatisticLevel = i; }
 
 void BattleSystemDatas::setIdStatisticExp(int i) { m_idStatisticExp = i; }
+
+PrimitiveValue * BattleSystemDatas::formulaIsDead() const {
+    return m_formulaIsDead;
+}
 
 EventCommand * BattleSystemDatas::music() const {
     return m_music;
@@ -201,6 +208,9 @@ void BattleSystemDatas::setDefault(){
 void BattleSystemDatas::setDefaultOptions(){
     m_idStatisticLevel = 1;
     m_idStatisticExp = 2;
+
+    // Formulas
+    m_formulaIsDead->setMessageValue("u.hp === 0");
 
     // Musics
     if (m_music == nullptr) {
@@ -452,6 +462,10 @@ void BattleSystemDatas::read(const QJsonObject &json){
     m_idStatisticLevel = json["lv"].toInt();
     m_idStatisticExp = json["xp"].toInt();
 
+    // Formulas
+    obj = json[JSON_FORMULA_IS_DEAD].toObject();
+    m_formulaIsDead->read(obj);
+
     // Musics
     m_music = nullptr;
     if (json.contains(JSON_BATLLE_MUSIC)) {
@@ -578,10 +592,16 @@ void BattleSystemDatas::read(const QJsonObject &json){
 void BattleSystemDatas::write(QJsonObject &json) const{
     int l;
     QJsonArray jsonArray;
+    QJsonObject obj;
 
     // Options
     json["lv"] = m_idStatisticLevel;
     json["xp"] = m_idStatisticExp;
+
+    // Formulas
+    obj = QJsonObject();
+    m_formulaIsDead->write(obj);
+    json[JSON_FORMULA_IS_DEAD] = obj;
 
     // Musics
     if (m_music != nullptr) {
