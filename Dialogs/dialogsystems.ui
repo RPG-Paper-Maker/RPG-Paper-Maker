@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>851</width>
-    <height>710</height>
+    <height>752</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -492,7 +492,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1,1">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,1">
+            <layout class="QVBoxLayout" name="verticalLayout_20" stretch="0,0,0,1">
              <property name="spacing">
               <number>20</number>
              </property>
@@ -531,6 +531,94 @@
                <property name="title">
                 <string>Formulas</string>
                </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_18">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="title">
+                <string>Musics</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_26">
+                <item row="0" column="0">
+                 <layout class="QVBoxLayout" name="verticalLayout_16">
+                  <item>
+                   <widget class="QLabel" name="label_11">
+                    <property name="text">
+                     <string>Battle:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetSong" name="widgetChooseBattleMusic" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_12">
+                    <property name="text">
+                     <string>Level up:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetSong" name="widgetChooseBattleLevelUp" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_13">
+                    <property name="text">
+                     <string>Victory:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetSong" name="widgetChooseBattleVictory" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
               </widget>
              </item>
              <item>
@@ -1064,6 +1152,12 @@
    <class>WidgetTreeCommands</class>
    <extends>QWidget</extends>
    <header>widgettreecommands.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSong</class>
+   <extends>QWidget</extends>
+   <header>widgetsong.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

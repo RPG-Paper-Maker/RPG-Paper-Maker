@@ -142,8 +142,21 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     connect(ui->panelSuperListCommonEquipments->list(), SIGNAL(updated()),
             this, SLOT(on_equipmentUpdated()));
 
-    // Initialize models
+    // Initialize musics
+    ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()->music(),
+        SongKind::Music, nullptr, nullptr);
+    connect(ui->widgetChooseBattleMusic, SIGNAL(updated()), this,
+        SLOT(on_battleMusicChanged()));
+    ui->widgetChooseBattleLevelUp->initialize(gameDatas->battleSystemDatas()
+        ->levelup(), SongKind::MusicEffect, nullptr, nullptr);
+    connect(ui->widgetChooseBattleLevelUp, SIGNAL(updated()), this,
+        SLOT(on_battleLevelupChanged()));
+    ui->widgetChooseBattleVictory->initialize(gameDatas->battleSystemDatas()
+        ->victory(), SongKind::Music, nullptr, nullptr);
+    connect(ui->widgetChooseBattleVictory, SIGNAL(updated()), this,
+        SLOT(on_battleVictoryChanged()));
 
+    // Initialize models
     ui->treeViewBattleMap->initializeModel(gameDatas->battleSystemDatas()
         ->modelBattleMaps());
     ui->treeViewBattleMap->initializeNewItemInstance(new SystemBattleMap);
@@ -361,6 +374,27 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
         RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->setIdStatisticExp(statistic->id());
     }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_battleMusicChanged() {
+    RPM::get()->project()->gameDatas()->battleSystemDatas()->setMusic(ui
+        ->widgetChooseBattleMusic->command());
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_battleLevelupChanged() {
+    RPM::get()->project()->gameDatas()->battleSystemDatas()->setLevelup(ui
+        ->widgetChooseBattleLevelUp->command());
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_battleVictoryChanged() {
+    RPM::get()->project()->gameDatas()->battleSystemDatas()->setVictory(ui
+        ->widgetChooseBattleVictory->command());
 }
 
 // -------------------------------------------------------

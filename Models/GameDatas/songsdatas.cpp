@@ -101,7 +101,7 @@ void SongsDatas::setDefaultSongs(QList<QString> &names, SongKind kind,
 // -------------------------------------------------------
 
 void SongsDatas::setDefaultMusics(QList<QString>& names) {
-    names << "Battle1" << "Field1";
+    names << "Theme1" << "Battle1";
     setDefaultSongs(names, SongKind::Music, "mp3");
 }
 

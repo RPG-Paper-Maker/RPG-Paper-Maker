@@ -27,6 +27,9 @@
 #include "rpm.h"
 #include "common.h"
 
+const QString BattleSystemDatas::JSON_BATLLE_MUSIC = "bmusic";
+const QString BattleSystemDatas::JSON_BATLLE_LEVELUP = "blevelup";
+const QString BattleSystemDatas::JSON_BATLLE_VICTORY = "bvictory";
 const QString BattleSystemDatas::jsonWeaponsKind = "weaponsKind";
 const QString BattleSystemDatas::jsonArmorsKind = "armorsKind";
 const QString BattleSystemDatas::jsonBattleMaps = "battleMaps";
@@ -41,7 +44,10 @@ const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 //
 // -------------------------------------------------------
 
-BattleSystemDatas::BattleSystemDatas()
+BattleSystemDatas::BattleSystemDatas() :
+    m_music(nullptr),
+    m_levelup(nullptr),
+    m_victory(nullptr)
 {
     m_modelCommonEquipment = new QStandardItemModel;
     m_modelWeaponsKind = new QStandardItemModel;
@@ -54,6 +60,16 @@ BattleSystemDatas::BattleSystemDatas()
 
 BattleSystemDatas::~BattleSystemDatas()
 {
+    if (m_music != nullptr) {
+        delete m_music;
+    }
+    if (m_levelup != nullptr) {
+        delete m_levelup;
+    }
+    if (m_victory != nullptr) {
+        delete m_victory;
+    }
+
     SuperListItem::deleteModel(m_modelCommonEquipment);
     SuperListItem::deleteModel(m_modelWeaponsKind);
     SuperListItem::deleteModel(m_modelArmorsKind);
@@ -74,6 +90,30 @@ int BattleSystemDatas::idStatisticExp() const { return m_idStatisticExp; }
 void BattleSystemDatas::setIdStatisticLevel(int i) { m_idStatisticLevel = i; }
 
 void BattleSystemDatas::setIdStatisticExp(int i) { m_idStatisticExp = i; }
+
+EventCommand * BattleSystemDatas::music() const {
+    return m_music;
+}
+
+void BattleSystemDatas::setMusic(EventCommand* command) {
+    m_music = command;
+}
+
+EventCommand * BattleSystemDatas::levelup() const {
+    return m_levelup;
+}
+
+void BattleSystemDatas::setLevelup(EventCommand* command) {
+    m_levelup = command;
+}
+
+EventCommand * BattleSystemDatas::victory() const {
+    return m_victory;
+}
+
+void BattleSystemDatas::setVictory(EventCommand* command) {
+    m_victory = command;
+}
 
 QStandardItemModel* BattleSystemDatas::modelWeaponsKind() const {
     return m_modelWeaponsKind;
@@ -161,6 +201,20 @@ void BattleSystemDatas::setDefault(){
 void BattleSystemDatas::setDefaultOptions(){
     m_idStatisticLevel = 1;
     m_idStatisticExp = 2;
+
+    // Musics
+    if (m_music == nullptr) {
+        m_music = new EventCommand(EventCommandKind::PlayMusic);
+    }
+    m_music->initializePlaySong(2);
+    if (m_levelup == nullptr) {
+        m_levelup = new EventCommand(EventCommandKind::PlayMusicEffect);
+    }
+    m_levelup->initializePlaySong(1);
+    if (m_victory == nullptr) {
+        m_victory = new EventCommand(EventCommandKind::PlayMusic);
+    }
+    m_victory->initializePlaySong(2);
 }
 
 // -------------------------------------------------------
@@ -333,8 +387,7 @@ void BattleSystemDatas::setDefaultCommonStatistics(){
         true),
         new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
         true),
-        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true),
-        new SystemStatistic(i++, new LangsTranslation("CC"), "cc", true)
+        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true)
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -383,6 +436,8 @@ void BattleSystemDatas::setDefaultCommonBattleCommand(){
 void BattleSystemDatas::read(const QJsonObject &json){
     QList<QStandardItem *> row;
     QStandardItem* item;
+    QJsonObject obj;
+    QJsonArray jsonList;
 
     // Clear
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
@@ -397,7 +452,25 @@ void BattleSystemDatas::read(const QJsonObject &json){
     m_idStatisticLevel = json["lv"].toInt();
     m_idStatisticExp = json["xp"].toInt();
 
-    QJsonArray jsonList;
+    // Musics
+    m_music = nullptr;
+    if (json.contains(JSON_BATLLE_MUSIC)) {
+        m_music = new EventCommand(EventCommandKind::PlayMusic);
+        obj = json[JSON_BATLLE_MUSIC].toObject();
+        m_music->read(obj);
+    }
+    m_levelup = nullptr;
+    if (json.contains(JSON_BATLLE_LEVELUP)) {
+        m_levelup = new EventCommand(EventCommandKind::PlayMusicEffect);
+        obj = json[JSON_BATLLE_LEVELUP].toObject();
+        m_levelup->read(obj);
+    }
+    m_victory = nullptr;
+    if (json.contains(JSON_BATLLE_VICTORY)) {
+        m_victory = new EventCommand(EventCommandKind::PlayMusic);
+        obj = json[JSON_BATLLE_VICTORY].toObject();
+        m_victory->read(obj);
+    }
 
     // Battle maps
     jsonList = json[jsonBattleMaps].toArray();
@@ -504,12 +577,22 @@ void BattleSystemDatas::read(const QJsonObject &json){
 
 void BattleSystemDatas::write(QJsonObject &json) const{
     int l;
+    QJsonArray jsonArray;
 
     // Options
     json["lv"] = m_idStatisticLevel;
     json["xp"] = m_idStatisticExp;
 
-    QJsonArray jsonArray;
+    // Musics
+    if (m_music != nullptr) {
+        json[JSON_BATLLE_MUSIC] = m_music->getJSON();
+    }
+    if (m_levelup != nullptr) {
+        json[JSON_BATLLE_LEVELUP] = m_levelup->getJSON();
+    }
+    if (m_victory != nullptr) {
+        json[JSON_BATLLE_VICTORY] = m_victory->getJSON();
+    }
 
     // Battle maps
     jsonArray = QJsonArray();

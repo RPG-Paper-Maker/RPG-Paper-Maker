@@ -67,6 +67,9 @@ private slots:
     void on_spinBoxSquareSize_valueChanged(int i);
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
+    void on_battleMusicChanged();
+    void on_battleLevelupChanged();
+    void on_battleVictoryChanged();
     void on_comboBoxWindowSkin_currentIndexChanged(int index);
     void on_statisticsUpdated();
     void on_equipmentUpdated();

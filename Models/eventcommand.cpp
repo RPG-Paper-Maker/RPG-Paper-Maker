@@ -112,6 +112,13 @@ int EventCommand::getSongID(QStandardItemModel *parameters) const
 
 // -------------------------------------------------------
 
+void EventCommand::initializePlaySong(int id) {
+    p_listCommand << "0" << "3" << "0" << QString::number(id) << "3" << "100" <<
+        "0" << "12" << "0" << "0" << "12" << "0";
+}
+
+// -------------------------------------------------------
+
 void EventCommand::setCopy(const EventCommand& copy){
     p_kind = copy.p_kind;
     p_listCommand = copy.p_listCommand;

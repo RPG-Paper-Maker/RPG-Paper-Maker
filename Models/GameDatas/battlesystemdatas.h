@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "systemstatistic.h"
+#include "eventcommand.h"
 
 // -------------------------------------------------------
 //
@@ -36,6 +37,17 @@
 class BattleSystemDatas : public Serializable
 {
 public:
+    static const QString JSON_BATLLE_MUSIC;
+    static const QString JSON_BATLLE_LEVELUP;
+    static const QString JSON_BATLLE_VICTORY;
+    static const QString jsonWeaponsKind;
+    static const QString jsonArmorsKind;
+    static const QString jsonBattleMaps;
+    static const QString jsonElements;
+    static const QString jsonCommonEquipment;
+    static const QString jsonCommonStatistics;
+    static const QString jsonCommonBattleCommand;
+
     BattleSystemDatas();
     virtual ~BattleSystemDatas();
     void read(QString path);
@@ -43,6 +55,12 @@ public:
     int idStatisticExp() const;
     void setIdStatisticLevel(int i);
     void setIdStatisticExp(int i);
+    EventCommand * music() const;
+    void setMusic(EventCommand* command);
+    EventCommand * levelup() const;
+    void setLevelup(EventCommand* command);
+    EventCommand * victory() const;
+    void setVictory(EventCommand* command);
     QStandardItemModel* modelWeaponsKind() const;
     QStandardItemModel* modelArmorsKind() const;
     QStandardItemModel* modelBattleMaps() const;
@@ -63,20 +81,15 @@ public:
     void setDefaultCommonStatistics();
     void setDefaultCommonBattleCommand();
 
-    static const QString jsonWeaponsKind;
-    static const QString jsonArmorsKind;
-    static const QString jsonBattleMaps;
-    static const QString jsonElements;
-    static const QString jsonCommonEquipment;
-    static const QString jsonCommonStatistics;
-    static const QString jsonCommonBattleCommand;
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 private:
     int m_idStatisticLevel;
     int m_idStatisticExp;
+    EventCommand* m_music;
+    EventCommand* m_levelup;
+    EventCommand* m_victory;
     QStandardItemModel* m_modelWeaponsKind;
     QStandardItemModel* m_modelArmorsKind;
     QStandardItemModel* m_modelBattleMaps;
