@@ -20,6 +20,8 @@
 #include "paneldatasmonster.h"
 #include "ui_paneldatasmonster.h"
 #include "paneldatascharacter.h"
+#include "rpm.h"
+#include "systemcurrency.h"
 
 // -------------------------------------------------------
 //
@@ -62,16 +64,47 @@ void PanelDatasMonster::initialize() {
 // -------------------------------------------------------
 
 void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
+    int i, l;
+
     ui->panelDatasCharacter->update(monster, classIndex);
     ui->panelProgressionTableRewardExp->setProgression(monster->experience());
     ui->panelProgressionTableRewardExp->setMaxLevel(monster->maxLevel());
     ui->panelProgressionTableRewardExp->updateProgress();
+
+    // Clear tabs currencies
+    for (i = 0, l = ui->tabWidgetCurrencies->count(); i < l; i++) {
+        delete reinterpret_cast<PanelProgressionTable *>(ui->tabWidgetCurrencies
+            ->widget(i));
+    }
+    ui->tabWidgetCurrencies->clear();
+
+    // Fill tabs currencies
+    QStandardItemModel *currencies = RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelCurrencies();
+    SystemProgressionTable *progression;
+    PanelProgressionTable *widget;
+    SystemCurrency *currency;
+    for (i = 0, l = currencies->invisibleRootItem()->rowCount(); i < l; i++) {
+        currency = reinterpret_cast<SystemCurrency *>(currencies->item(i)->data()
+            .value<quintptr>());
+        progression = monster->currencyProgressionAt(currency->id());
+        if (progression == nullptr) {
+            progression = new SystemProgressionTable;
+            monster->insertCurrency(currency->id(), progression);
+        }
+        widget = new PanelProgressionTable;
+        widget->setProgression(progression);
+        widget->setMaxLevel(monster->maxLevel());
+        widget->updateProgress();
+        ui->tabWidgetCurrencies->addTab(widget, currency->name());
+    }
 }
 
 // -------------------------------------------------------
 
-SystemHero * PanelDatasMonster::currentHero() {
-    return ui->panelDatasCharacter->currentHero();
+SystemMonster * PanelDatasMonster::currentMonster() {
+    return reinterpret_cast<SystemMonster *>(ui->panelDatasCharacter
+        ->currentHero());
 }
 
 // -------------------------------------------------------
@@ -88,7 +121,7 @@ void PanelDatasMonster::updateClass() {
 
 // -------------------------------------------------------
 //
-//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//  SLOTS
 //
 // -------------------------------------------------------
 

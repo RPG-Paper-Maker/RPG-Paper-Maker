@@ -23,7 +23,6 @@
 #include "datastabkind.h"
 #include "superlistitem.h"
 #include "rpm.h"
-#include "dialogdatasmonsterrewards.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 #include "systemmonstertroop.h"

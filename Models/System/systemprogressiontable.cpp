@@ -86,6 +86,15 @@ void SystemProgressionTable::reset() {
 }
 
 // -------------------------------------------------------
+
+bool SystemProgressionTable::isDefault() const {
+    return m_initialValue->kind() == PrimitiveValueKind::Number &&
+        m_initialValue->numberValue() == 0 && m_finalValue->kind() ==
+        PrimitiveValueKind::Number && m_finalValue->numberValue() == 0 &&
+        m_equation == 0 && m_table.isEmpty();
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL METHODS
 //

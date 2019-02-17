@@ -59,10 +59,7 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
 {
     SystemMonster* monster;
     QStandardItem* item;
-    QStandardItem* itemSys;
-    QStandardItem* itemNb;
     QList<QStandardItem *> row;
-    QStandardItemModel* currencies;
     QStandardItemModel* loots;
     QStandardItemModel* actions;
     SuperListItem* sys = nullptr;
@@ -86,32 +83,13 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
         {QVector<PrimitiveValue*>({
              new PrimitiveValue(50)})
         };
+    SystemProgressionTable *currenciesProgression[] = {
+        new SystemProgressionTable(new PrimitiveValue(5), new PrimitiveValue(
+            1500), 0)
+    };
     int length = (sizeof(names)/sizeof(*names));
-    int nb;
 
     for (int i = 0; i < length; i++) {
-
-        // Currencies
-        currencies = new QStandardItemModel;
-        for (int j = 0; j < currenciesIds[i].size(); j++){
-            row = QList<QStandardItem*>();
-            sys = SuperListItem::getById(modelCurrencies, currenciesIds[i][j]);
-            nb = currenciesNb[i][j];
-            itemSys = new QStandardItem;
-            itemSys->setData(QVariant::fromValue(
-                                 reinterpret_cast<quintptr>(sys)));
-            itemSys->setText(sys->toString());
-            itemNb= new QStandardItem;
-            itemNb->setData(QVariant::fromValue(nb));
-            itemNb->setText(QString::number(nb));
-            row.append(itemSys);
-            row.append(itemNb);
-            currencies->appendRow(row);
-        }
-        item = new QStandardItem();
-        item->setText(SuperListItem::beginningText);
-        currencies->appendRow(item);
-
         // Loots
         loots = new QStandardItemModel;
         for (int j = 0; j < lootsIds[i].size(); j++){
@@ -143,7 +121,8 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
             facesetsIds[i], SystemClass::createInheritanceClass(),
             new SystemProgressionTable(new PrimitiveValue(experiencesInitial[i])
             , new PrimitiveValue(experiencesFinal[i]), experiencesEquation[i]),
-            currencies, loots, actions);
+            loots, actions);
+        monster->insertCurrency(i + 1, currenciesProgression[i]);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

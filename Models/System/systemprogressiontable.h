@@ -51,6 +51,7 @@ public:
     QHash<int, int> * table();
 
     void reset();
+    bool isDefault() const;
 
     void setCopy(const SystemProgressionTable& progression);
     virtual void read(const QJsonObject &json);

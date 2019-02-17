@@ -193,6 +193,17 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
 
 // -------------------------------------------------------
 
+SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) {
+    SuperListItem* s = nullptr;
+
+    if (index >= 0 && index < model->invisibleRootItem()->rowCount())
+        s = (SuperListItem*) model->item(index)->data().value<qintptr>();
+
+    return (s != nullptr) ? s : nullptr;
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::fillComboBox(QComboBox* comboBox,
                                  QStandardItemModel* model)
 {

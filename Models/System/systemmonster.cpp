@@ -23,6 +23,7 @@
 #include "systemloot.h"
 
 const QString SystemMonster::JSON_EXPERIENCE = "xp";
+const QString SystemMonster::JSON_CURRENCIES = "cur";
 
 // -------------------------------------------------------
 //
@@ -32,18 +33,16 @@ const QString SystemMonster::JSON_EXPERIENCE = "xp";
 
 SystemMonster::SystemMonster() : SystemMonster(1, new LangsTranslation, 1, 1,
     1, new SystemClass, new SystemProgressionTable, new QStandardItemModel, new
-    QStandardItemModel, new QStandardItemModel)
+    QStandardItemModel)
 {
 
 }
 
 SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
     idBattler, int idFaceset, SystemClass *classInherit, SystemProgressionTable
-    *exp, QStandardItemModel *currencies, QStandardItemModel *loots,
-    QStandardItemModel *actions) :
+    *exp, QStandardItemModel *loots, QStandardItemModel *actions) :
     SystemHero(i, names, idClass, idBattler, idFaceset, classInherit),
     m_experience(exp),
-    m_modelCurrencies(currencies),
     m_modelLoots(loots),
     m_modelActions(actions)
 {
@@ -52,17 +51,17 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
 
 SystemMonster::~SystemMonster() {
     delete m_experience;
+    deleteCurrencies();
     SuperListItem::deleteModel(m_modelLoots);
-    delete m_modelCurrencies;
     delete m_modelActions;
 }
 
-SystemProgressionTable *SystemMonster::experience() const {
+SystemProgressionTable * SystemMonster::experience() const {
     return m_experience;
 }
 
-QStandardItemModel* SystemMonster::modelCurrencies() const {
-    return m_modelCurrencies;
+QHash<int, SystemProgressionTable *> * SystemMonster::currencies() {
+    return &m_currencies;
 }
 
 QStandardItemModel* SystemMonster::modelLoots() const {
@@ -79,6 +78,50 @@ QStandardItemModel* SystemMonster::modelActions() const {
 //
 // -------------------------------------------------------
 
+void SystemMonster::deleteCurrencies() {
+    QHash<int, SystemProgressionTable *>::iterator i;
+    for (i = m_currencies.begin(); i != m_currencies.end(); i++) {
+        delete i.value();
+    }
+    m_currencies.clear();
+}
+
+// -------------------------------------------------------
+
+void SystemMonster::insertCurrency(int id, SystemProgressionTable *table) {
+    if (!m_currencies.contains(id)) {
+        m_currencies.insert(id, table);
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemMonster::insertDefaultCurrency(int id) {
+    insertCurrency(id, new SystemProgressionTable);
+}
+
+// -------------------------------------------------------
+
+void SystemMonster::removeCurrency(int id) {
+    SystemProgressionTable *table = m_currencies.value(id);
+    if (table != nullptr) {
+        delete table;
+        m_currencies.remove(id);
+    }
+}
+
+// -------------------------------------------------------
+
+SystemProgressionTable * SystemMonster::currencyProgressionAt(int id) {
+    return m_currencies.value(id);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
 SuperListItem* SystemMonster::createCopy() const {
     SystemMonster* super = new SystemMonster;
     super->setCopy(*this);
@@ -90,39 +133,20 @@ SuperListItem* SystemMonster::createCopy() const {
 void SystemMonster::setCopy(const SystemMonster& monster){
     SystemHero::setCopy(monster);
     QStandardItem* item;
-    QStandardItem* itemSys;
-    QStandardItem* itemNb;
     QList<QStandardItem*> row;
-    SuperListItem* sys;
-    int nb;
     int l;
 
     // Experience
     m_experience->setCopy(*monster.m_experience);
 
     // Currencies
-    m_modelCurrencies->setHorizontalHeaderLabels(QStringList({"Currencies",
-                                                              "Nb"}));
-    l = monster.modelCurrencies()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        itemSys = new QStandardItem;
-        itemNb = new QStandardItem;
-        row = QList<QStandardItem*>();
-        sys = reinterpret_cast<SuperListItem *>(monster.modelCurrencies()->item(
-            i)->data().value<quintptr>());
-        nb = monster.modelCurrencies()->item(i,1)->data().value<int>();
-        itemSys->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-        itemSys->setText(sys->toString());
-        itemNb->setData(QVariant::fromValue(nb));
-        itemNb->setText(QString::number(nb));
-
-        row.append(itemSys);
-        row.append(itemNb);
-        m_modelCurrencies->appendRow(row);
+    deleteCurrencies();
+    QHash<int, SystemProgressionTable *>::const_iterator i;
+    for (i = monster.m_currencies.begin(); i != monster.m_currencies.end(); i++)
+    {
+        m_currencies.insert(i.key(), reinterpret_cast<SystemProgressionTable *>(
+            i.value()->createCopy()));
     }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelCurrencies->appendRow(item);
 
     // Loots
     m_modelLoots->setHorizontalHeaderLabels(QStringList({"Loots","Number",
@@ -150,45 +174,24 @@ void SystemMonster::setCopy(const SystemMonster& monster){
 void SystemMonster::read(const QJsonObject &json){
     SystemHero::read(json);
     QJsonArray tab;
+    QJsonObject obj, objHash;
     QStandardItem* item;
-    QStandardItem* itemSys;
-    QStandardItem* itemNb;
-    SuperListItem* sys;
     QJsonArray jsonRow;
     QList<QStandardItem *> row;
-    int id;
-    int nb;
+    SystemProgressionTable *table;
 
     // Experience
     m_experience->read(json[JSON_EXPERIENCE].toObject());
 
     // Currencies
-    m_modelCurrencies->setHorizontalHeaderLabels(QStringList({"Currencies",
-                                                              "Nb"}));
-    tab = json["currencies"].toArray();
-    for (int j = 0; j < tab.size(); j++){
-        row = QList<QStandardItem *>();
-        jsonRow = tab[j].toArray();
-        id = jsonRow[0].toInt();
-        nb = jsonRow[1].toInt();
-        sys = SuperListItem::getById(
-                    RPM::get()->project()->gameDatas()->systemDatas()
-                    ->modelCurrencies()->invisibleRootItem(),
-                    id);
-        itemSys = new QStandardItem;
-        itemSys->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-        itemSys->setText(sys->toString());
-        itemNb = new QStandardItem;
-        itemNb->setData(QVariant::fromValue(nb));
-        itemNb->setText(QString::number(nb));
-
-        row.append(itemSys);
-        row.append(itemNb);
-        m_modelCurrencies->appendRow(row);
+    tab = json[JSON_CURRENCIES].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        objHash = tab.at(i).toObject();
+        obj = objHash["v"].toObject();
+        table = new SystemProgressionTable;
+        table->read(obj);
+        m_currencies[objHash["k"].toInt()] = table;
     }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelCurrencies->appendRow(item);
 
     // Loots
     m_modelLoots->setHorizontalHeaderLabels(QStringList({"Loots", "Number",
@@ -205,11 +208,13 @@ void SystemMonster::read(const QJsonObject &json){
     m_modelLoots->appendRow(item);
 }
 
+// -------------------------------------------------------
+
 void SystemMonster::write(QJsonObject &json) const{
     SystemHero::write(json);
-    QJsonArray tab;
-    QJsonArray tabRow;
-    QJsonObject obj;
+    QJsonArray tab, tabRow;
+    QJsonObject obj, objHash;
+    SystemProgressionTable *table;
     SystemLoot* loot;
     int l;
 
@@ -218,16 +223,19 @@ void SystemMonster::write(QJsonObject &json) const{
     json[JSON_EXPERIENCE] = obj;
 
     // Currencies
-    tab = QJsonArray();
-    l = m_modelCurrencies->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        tabRow = QJsonArray();
-        tabRow.append(((SuperListItem*)(m_modelCurrencies->item(i)->data()
-                                        .value<quintptr>()))->id());
-        tabRow.append(m_modelCurrencies->item(i,1)->data().value<int>());
-        tab.append(tabRow);
+    QHash<int, SystemProgressionTable *>::const_iterator i;
+    for (i = m_currencies.begin(); i != m_currencies.end(); i++) {
+        table = i.value();
+        if (!table->isDefault()) {
+            objHash = QJsonObject();
+            obj = QJsonObject();
+            table->write(obj);
+            objHash["k"] = i.key();
+            objHash["v"] = obj;
+            tab.append(objHash);
+        }
     }
-    json["currencies"] = tab;
+    json[JSON_CURRENCIES] = tab;
 
     // Loots
     tab = QJsonArray();

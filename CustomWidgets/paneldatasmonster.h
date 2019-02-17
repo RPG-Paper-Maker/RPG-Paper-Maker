@@ -30,7 +30,7 @@ public:
 
     void initialize();
     void update(SystemMonster *monster, int classIndex);
-    SystemHero * currentHero();
+    SystemMonster * currentMonster();
     void updateClasses();
     void updateClass();
 

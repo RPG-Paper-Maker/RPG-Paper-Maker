@@ -35,17 +35,23 @@ class SystemMonster : public SystemHero
 {
 public:
     static const QString JSON_EXPERIENCE;
+    static const QString JSON_CURRENCIES;
 
     SystemMonster();
     SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,
         int idFaceset, SystemClass *classInherit, SystemProgressionTable *exp,
-        QStandardItemModel *currencies, QStandardItemModel *loots,
-        QStandardItemModel *actions);
+        QStandardItemModel *loots, QStandardItemModel *actions);
     virtual ~SystemMonster();
     SystemProgressionTable * experience() const;
-    QStandardItemModel* modelCurrencies() const;
+    QHash<int, SystemProgressionTable *> * currencies();
     QStandardItemModel* modelLoots() const;
     QStandardItemModel* modelActions() const;
+
+    void deleteCurrencies();
+    void insertCurrency(int id, SystemProgressionTable *table);
+    void insertDefaultCurrency(int id);
+    void removeCurrency(int id);
+    SystemProgressionTable *currencyProgressionAt(int id);
 
     virtual SuperListItem* createCopy() const;
     void setCopy(const SystemMonster& monster);
@@ -54,7 +60,7 @@ public:
 
 protected:
     SystemProgressionTable *m_experience;
-    QStandardItemModel *m_modelCurrencies;
+    QHash<int, SystemProgressionTable *> m_currencies;
     QStandardItemModel *m_modelLoots;
     QStandardItemModel *m_modelActions;
 };

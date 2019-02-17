@@ -117,7 +117,6 @@ HEADERS += \
     Models/System/systemmonstertroop.h \
     Dialogs/Systems/dialogsystemmonstertroop.h \
     Dialogs/Commands/dialogcommandstartbattle.h \
-    Dialogs/dialogdatasmonsterrewards.h \
     Models/System/systemicon.h \
     Models/System/systemcurrency.h \
     Dialogs/Systems/dialogsystemcurrency.h \
@@ -344,7 +343,6 @@ SOURCES += \
     Models/System/systemmonstertroop.cpp \
     Dialogs/Systems/dialogsystemmonstertroop.cpp \
     Dialogs/Commands/dialogcommandstartbattle.cpp \
-    Dialogs/dialogdatasmonsterrewards.cpp \
     Models/System/systemicon.cpp \
     Models/System/systemcurrency.cpp \
     Dialogs/Systems/dialogsystemcurrency.cpp \
@@ -511,7 +509,6 @@ FORMS += \
     Dialogs/Systems/dialogsystemstatisticprogression.ui \
     Dialogs/Systems/dialogsystemmonstertroop.ui \
     Dialogs/Commands/dialogcommandstartbattle.ui \
-    Dialogs/dialogdatasmonsterrewards.ui \
     Dialogs/Systems/dialogsystemcurrency.ui \
     CustomWidgets/panelobject.ui \
     Dialogs/Systems/dialogsystemclassskill.ui \
