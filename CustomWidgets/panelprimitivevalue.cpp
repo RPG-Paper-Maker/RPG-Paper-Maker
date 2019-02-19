@@ -64,6 +64,13 @@ PrimitiveValue * PanelPrimitiveValue::model() const {
 //
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::updateModel() {
+    updateValue(true);
+    updateKind();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initializePrimitives() {
     m_kind = PanelPrimitiveValueKind::Primitives;
     addAnything();

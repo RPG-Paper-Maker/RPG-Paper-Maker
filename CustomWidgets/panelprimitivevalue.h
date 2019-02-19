@@ -53,6 +53,7 @@ public:
     QDoubleSpinBox * doubleSpinBoxNumber() const;
     PrimitiveValue * model() const;
 
+    void updateModel();
     void initializePrimitives();
     void initializeParameterEvent();
     void initializeNumberVariable();

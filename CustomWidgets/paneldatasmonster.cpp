@@ -22,6 +22,7 @@
 #include "paneldatascharacter.h"
 #include "rpm.h"
 #include "systemcurrency.h"
+#include "systemloot.h"
 
 // -------------------------------------------------------
 //
@@ -59,6 +60,8 @@ int PanelDatasMonster::finalLevel() const {
 void PanelDatasMonster::initialize() {
     connect(ui->panelDatasCharacter->panelDatasClass(), SIGNAL(maxLevelUpdated(
         int)), this, SLOT(on_maxLevelChanged(int)));
+
+    ui->treeViewLoots->initializeNewItemInstance(new SystemLoot);
 }
 
 // -------------------------------------------------------
@@ -98,6 +101,14 @@ void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
         widget->updateProgress();
         ui->tabWidgetCurrencies->addTab(widget, currency->name());
     }
+
+    // Loots
+    ui->treeViewLoots->initializeModel(monster->modelLoots());
+    ui->treeViewLoots->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewLoots->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->treeViewLoots->header()->setSectionResizeMode(2, QHeaderView::Interactive);
+    ui->treeViewLoots->header()->setSectionResizeMode(3, QHeaderView::Interactive);
+    ui->treeViewLoots->header()->setSectionResizeMode(4, QHeaderView::Interactive);
 }
 
 // -------------------------------------------------------

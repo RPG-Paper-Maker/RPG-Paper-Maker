@@ -91,7 +91,7 @@
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout" stretch=""/>
+             <layout class="QHBoxLayout" name="horizontalLayout"/>
             </item>
             <item>
              <widget class="QTabWidget" name="tabWidgetCurrencies">
@@ -110,7 +110,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_3">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>Loots:</string>
@@ -118,10 +118,19 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QTreeView" name="treeViewLoots">
+             <widget class="WidgetSuperTree" name="treeViewLoots">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
+              <attribute name="headerDefaultSectionSize">
+               <number>35</number>
+              </attribute>
+              <attribute name="headerMinimumSectionSize">
+               <number>35</number>
+              </attribute>
+              <attribute name="headerStretchLastSection">
+               <bool>false</bool>
+              </attribute>
              </widget>
             </item>
            </layout>
@@ -154,6 +163,11 @@
    <extends>QWidget</extends>
    <header>panelprogressiontable.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

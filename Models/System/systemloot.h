@@ -36,27 +36,39 @@
 class SystemLoot : public SuperListItem
 {
 public:
+    static const QString JSON_KIND;
+    static const QString JSON_NUMBER;
+    static const QString JSON_PROBABILITY;
+    static const QString JSON_INITIAL;
+    static const QString JSON_FINAL;
+
     SystemLoot();
-    SystemLoot(int i, QString n, LootKind kind,
-               PrimitiveValue *nb, PrimitiveValue *probability);
+    SystemLoot(int i, QString n, LootKind kind, PrimitiveValue *number,
+        PrimitiveValue *probability, PrimitiveValue *initialLevel,
+        PrimitiveValue *finalLevel);
     virtual ~SystemLoot();
     LootKind kind() const;
     void setKind(LootKind k);
-    PrimitiveValue* number() const;
-    PrimitiveValue* probability() const;
+    PrimitiveValue * number() const;
+    PrimitiveValue * probability() const;
+    PrimitiveValue * initialLevel() const;
+    PrimitiveValue * finalLevel() const;
+
+    void updateName();
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemLoot &loot);
-    virtual QList<QStandardItem*> getModelRow() const;
-    void updateName();
-
+    virtual QList<QStandardItem *> getModelRow() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     LootKind m_kind;
-    PrimitiveValue* m_number;
-    PrimitiveValue* m_probability;
+    PrimitiveValue *m_number;
+    PrimitiveValue *m_probability;
+    PrimitiveValue *m_initialLevel;
+    PrimitiveValue *m_finalLevel;
 };
 
 Q_DECLARE_METATYPE(SystemLoot)

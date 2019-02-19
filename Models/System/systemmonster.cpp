@@ -24,6 +24,7 @@
 
 const QString SystemMonster::JSON_EXPERIENCE = "xp";
 const QString SystemMonster::JSON_CURRENCIES = "cur";
+const QString SystemMonster::JSON_LOOTS = "loots";
 
 // -------------------------------------------------------
 //
@@ -46,7 +47,8 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
     m_modelLoots(loots),
     m_modelActions(actions)
 {
-
+    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Name", "N", "P", "I",
+        "F"}));
 }
 
 SystemMonster::~SystemMonster() {
@@ -149,8 +151,6 @@ void SystemMonster::setCopy(const SystemMonster& monster){
     }
 
     // Loots
-    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Loots","Number",
-                                                         "Probability(%)"}));
     l = monster.modelLoots()->invisibleRootItem()->rowCount();
     for (int i = 0; i < l - 1; i++){
         SystemLoot* loot = new SystemLoot;
@@ -179,13 +179,14 @@ void SystemMonster::read(const QJsonObject &json){
     QJsonArray jsonRow;
     QList<QStandardItem *> row;
     SystemProgressionTable *table;
+    int i, l;
 
     // Experience
     m_experience->read(json[JSON_EXPERIENCE].toObject());
 
     // Currencies
     tab = json[JSON_CURRENCIES].toArray();
-    for (int i = 0; i < tab.size(); i++){
+    for (i = 0, l = tab.size(); i < l; i++) {
         objHash = tab.at(i).toObject();
         obj = objHash["v"].toObject();
         table = new SystemProgressionTable;
@@ -194,12 +195,10 @@ void SystemMonster::read(const QJsonObject &json){
     }
 
     // Loots
-    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Loots", "Number",
-                                                         "Probability(%)"}));
-    tab = json["loots"].toArray();
-    for (int j = 0; j < tab.size(); j++){
+    tab = json[JSON_LOOTS].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
         SystemLoot* loot = new SystemLoot;
-        loot->read(tab[j].toObject());
+        loot->read(tab[i].toObject());
         row = loot->getModelRow();
         m_modelLoots->appendRow(row);
     }
@@ -216,7 +215,7 @@ void SystemMonster::write(QJsonObject &json) const{
     QJsonObject obj, objHash;
     SystemProgressionTable *table;
     SystemLoot* loot;
-    int l;
+    int j, l;
 
     // Experience
     m_experience->write(obj);
@@ -240,11 +239,14 @@ void SystemMonster::write(QJsonObject &json) const{
     // Loots
     tab = QJsonArray();
     l = m_modelLoots->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
+    for (j = 0, l = m_modelLoots->invisibleRootItem()->rowCount(); j < l - 1;
+         j++)
+    {
         obj = QJsonObject();
-        loot = (SystemLoot*)(m_modelLoots->item(i)->data().value<quintptr>());
+        loot = reinterpret_cast<SystemLoot *>(m_modelLoots->item(j)->data()
+            .value<quintptr>());
         loot->write(obj);
         tab.append(obj);
     }
-    json["loots"] = tab;
+    json[JSON_LOOTS] = tab;
 }

@@ -34,28 +34,27 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     // Initilize comboBoxes
     SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
-                                ->gameDatas()->itemsDatas()->model());
+        ->gameDatas()->itemsDatas()->model());
     SuperListItem::fillComboBox(ui->comboBoxWeapon, RPM::get()->project()
-                                ->gameDatas()->weaponsDatas()->model());
+        ->gameDatas()->weaponsDatas()->model());
     SuperListItem::fillComboBox(ui->comboBoxArmor, RPM::get()->project()
-                                ->gameDatas()->armorsDatas()->model());
+        ->gameDatas()->armorsDatas()->model());
 
     // Connect
-    connect(ui->radioButtonItem, SIGNAL(toggled(bool)), this,
-            SLOT(on_radioButtonItemToggled(bool)));
-    connect(ui->radioButtonWeapon, SIGNAL(toggled(bool)), this,
-            SLOT(on_radioButtonWeaponToggled(bool)));
-    connect(ui->radioButtonArmor, SIGNAL(toggled(bool)), this,
-            SLOT(on_radioButtonArmorToggled(bool)));
-    connect(ui->comboBoxItem, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxItemCurrentIndexChanged(int)));
-    connect(ui->comboBoxWeapon, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxWeaponCurrentIndexChanged(int)));
-    connect(ui->comboBoxArmor, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(on_comboBoxArmorCurrentIndexChanged(int)));
+    connect(ui->radioButtonItem, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonItemToggled(bool)));
+    connect(ui->radioButtonWeapon, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonWeaponToggled(bool)));
+    connect(ui->radioButtonArmor, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonArmorToggled(bool)));
+    connect(ui->comboBoxItem, SIGNAL(currentIndexChanged(int)), this, SLOT(
+        on_comboBoxItemCurrentIndexChanged(int)));
+    connect(ui->comboBoxWeapon, SIGNAL(currentIndexChanged(int)), this, SLOT(
+        on_comboBoxWeaponCurrentIndexChanged(int)));
+    connect(ui->comboBoxArmor, SIGNAL(currentIndexChanged(int)), this, SLOT(
+        on_comboBoxArmorCurrentIndexChanged(int)));
 
     initialize();
 }
@@ -71,14 +70,21 @@ DialogSystemLoot::~DialogSystemLoot()
 //
 // -------------------------------------------------------
 
-void DialogSystemLoot::initialize(){
+void DialogSystemLoot::initialize() {
 
     // Numbers
-    ui->widgetVariableConstantNumber->initializeModel(m_loot.number());
     ui->widgetVariableConstantNumber->initializeNumberVariable();
-    ui->widgetVariableConstantProbability->initializeModel(m_loot
-                                                           .probability());
+    ui->widgetVariableConstantNumber->initializeModel(m_loot.number());
+    ui->widgetVariableConstantNumber->updateModel();
     ui->widgetVariableConstantProbability->initializeNumberVariable();
+    ui->widgetVariableConstantProbability->initializeModel(m_loot.probability());
+    ui->widgetVariableConstantProbability->updateModel();
+    ui->panelPrimitiveValueInit->initializeNumberVariable();
+    ui->panelPrimitiveValueInit->initializeModel(m_loot.initialLevel());
+    ui->panelPrimitiveValueInit->updateModel();
+    ui->panelPrimitiveValueFinal->initializeNumberVariable();
+    ui->panelPrimitiveValueFinal->initializeModel(m_loot.finalLevel());
+    ui->panelPrimitiveValueFinal->updateModel();
 
     // Loots
     QStandardItem* item;

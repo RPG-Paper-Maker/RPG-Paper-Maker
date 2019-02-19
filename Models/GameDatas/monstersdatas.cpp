@@ -83,6 +83,14 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
         {QVector<PrimitiveValue*>({
              new PrimitiveValue(50)})
         };
+    QVector<PrimitiveValue*> lootsInit[] =
+        {QVector<PrimitiveValue*>({
+             new PrimitiveValue(1)})
+        };
+    QVector<PrimitiveValue*> lootsFinal[] =
+        {QVector<PrimitiveValue*>({
+             new PrimitiveValue(100)})
+        };
     SystemProgressionTable *currenciesProgression[] = {
         new SystemProgressionTable(new PrimitiveValue(5), new PrimitiveValue(
             1500), 0)
@@ -105,7 +113,8 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
                 break;
             }
             loot = new SystemLoot(sys->id(), sys->name(), lootsKind[i][j],
-                                  lootsNb[i][j], lootsProba[i][j]);
+                lootsNb[i][j], lootsProba[i][j], lootsInit[i][j], lootsFinal[i]
+                [j]);
             row = loot->getModelRow();
             loots->appendRow(row);
         }
