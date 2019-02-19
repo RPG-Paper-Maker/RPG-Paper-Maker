@@ -34,8 +34,8 @@ const QString SystemLoot::JSON_FINAL = "f";
 // -------------------------------------------------------
 
 SystemLoot::SystemLoot() :
-    SystemLoot(1, "", LootKind::Item, new PrimitiveValue, new PrimitiveValue,
-    new PrimitiveValue(1), new PrimitiveValue(1))
+    SystemLoot(1, "", LootKind::Item, new PrimitiveValue(1), new PrimitiveValue(
+        100), new PrimitiveValue(1), new PrimitiveValue(1))
 {
 
 }
