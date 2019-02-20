@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>323</height>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -170,36 +170,7 @@
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="radioButtonItem">
-              <property name="text">
-               <string>Item:</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="comboBoxItem">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2" rowspan="3">
+            <item row="0" column="3" rowspan="3">
              <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -212,32 +183,6 @@
               </property>
              </spacer>
             </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButtonWeapon">
-              <property name="text">
-               <string>Weapon:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="comboBoxWeapon">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QRadioButton" name="radioButtonArmor">
               <property name="text">
@@ -245,21 +190,73 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="comboBoxArmor">
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButtonItem">
+              <property name="text">
+               <string>Item:</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButtonWeapon">
+              <property name="text">
+               <string>Weapon:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueItem" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueWeapon" native="true">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="minimumSize">
                <size>
-                <width>200</width>
-                <height>0</height>
+                <width>250</width>
+                <height>27</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>200</width>
-                <height>16777215</height>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueArmor" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
                </size>
               </property>
              </widget>

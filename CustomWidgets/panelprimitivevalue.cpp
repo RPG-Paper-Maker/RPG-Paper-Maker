@@ -316,8 +316,13 @@ void PanelPrimitiveValue::updateValue(bool update) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::updateKind() {
-    setKind(m_model->kind());
+void PanelPrimitiveValue::updateKind(bool update) {
+    if (update) {
+        m_model->setKind(static_cast<PrimitiveValueKind>(ui->comboBoxChoice
+            ->currentData().value<int>()));
+    } else {
+        setKind(m_model->kind());
+    }
 }
 
 // -------------------------------------------------------

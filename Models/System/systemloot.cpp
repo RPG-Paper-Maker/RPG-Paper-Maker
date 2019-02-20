@@ -22,6 +22,7 @@
 #include "rpm.h"
 
 const QString SystemLoot::JSON_KIND = "k";
+const QString SystemLoot::JSON_LOOT_ID = "lid";
 const QString SystemLoot::JSON_NUMBER = "n";
 const QString SystemLoot::JSON_PROBABILITY = "p";
 const QString SystemLoot::JSON_INITIAL = "i";
@@ -34,26 +35,29 @@ const QString SystemLoot::JSON_FINAL = "f";
 // -------------------------------------------------------
 
 SystemLoot::SystemLoot() :
-    SystemLoot(1, "", LootKind::Item, new PrimitiveValue(1), new PrimitiveValue(
-        100), new PrimitiveValue(1), new PrimitiveValue(1))
+    SystemLoot(1, "", LootKind::Item, new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 1), new PrimitiveValue(1), new PrimitiveValue(100), new
+        PrimitiveValue(1), new PrimitiveValue(1))
 {
 
 }
 
-SystemLoot::SystemLoot(int i, QString n, LootKind kind, PrimitiveValue *number,
-    PrimitiveValue *probability, PrimitiveValue *initialLevel, PrimitiveValue
-    *finalLevel) :
+SystemLoot::SystemLoot(int i, QString n, LootKind kind, PrimitiveValue *lootID,
+    PrimitiveValue *number, PrimitiveValue *probability, PrimitiveValue
+    *initialLevel, PrimitiveValue *finalLevel) :
     SuperListItem(i,n),
     m_kind(kind),
+    m_lootID(lootID),
     m_number(number),
     m_probability(probability),
     m_initialLevel(initialLevel),
     m_finalLevel(finalLevel)
 {
-
+    updateName();
 }
 
 SystemLoot::~SystemLoot() {
+    delete m_lootID;
     delete m_number;
     delete m_probability;
     delete m_initialLevel;
@@ -66,6 +70,10 @@ LootKind SystemLoot::kind() const {
 
 void SystemLoot::setKind(LootKind k) {
     m_kind = k;
+}
+
+PrimitiveValue * SystemLoot::lootID() const {
+    return m_lootID;
 }
 
 PrimitiveValue * SystemLoot::number() const {
@@ -104,7 +112,11 @@ void SystemLoot::updateName() {
         break;
     }
 
-    setName(SuperListItem::getById(model->invisibleRootItem(), id())->name());
+    if (m_lootID->kind() != PrimitiveValueKind::Variable) {
+        setId(m_lootID->numberValue());
+        setName(SuperListItem::getById(model->invisibleRootItem(),
+            id())->name());
+    }
 }
 
 // -------------------------------------------------------
@@ -137,12 +149,14 @@ SuperListItem* SystemLoot::createCopy() const {
 void SystemLoot::setCopy(const SystemLoot &loot) {
     SuperListItem::setCopy(loot);
 
-    p_id = loot.p_id;
     m_kind = loot.kind();
+    m_lootID->setCopy(*loot.m_lootID);
     m_number->setCopy(*loot.m_number);
     m_probability->setCopy(*loot.m_probability);
     m_initialLevel->setCopy(*loot.m_initialLevel);
     m_finalLevel->setCopy(*loot.m_finalLevel);
+
+    updateName();
 }
 
 // -------------------------------------------------------
@@ -171,10 +185,16 @@ QList<QStandardItem *> SystemLoot::getModelRow() const {
 
 // -------------------------------------------------------
 
-void SystemLoot::read(const QJsonObject &json) {
-    SuperListItem::read(json);
+QString SystemLoot::toString() const {
+    return m_lootID->kind() == PrimitiveValueKind::Variable ? m_lootID
+        ->toString() : SuperListItem::toString();
+}
 
+// -------------------------------------------------------
+
+void SystemLoot::read(const QJsonObject &json) {
     m_kind = static_cast<LootKind>(json[JSON_KIND].toInt());
+    m_lootID->read(json[JSON_LOOT_ID].toObject());
     m_number->read(json[JSON_NUMBER].toObject());
     m_probability->read(json[JSON_PROBABILITY].toObject());
     m_initialLevel->read(json[JSON_INITIAL].toObject());
@@ -184,13 +204,15 @@ void SystemLoot::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemLoot::write(QJsonObject &json) const {
-    SuperListItem::write(json);
     QJsonObject obj;
 
     json[JSON_KIND] = static_cast<int>(m_kind);
     obj = QJsonObject();
     m_number->write(obj);
     json[JSON_NUMBER] = obj;
+    obj = QJsonObject();
+    m_lootID->write(obj);
+    json[JSON_LOOT_ID] = obj;
     obj = QJsonObject();
     m_probability->write(obj);
     json[JSON_PROBABILITY] = obj;

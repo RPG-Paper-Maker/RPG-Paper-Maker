@@ -39,6 +39,9 @@
 class SuperListItem : public Serializable
 {
 public:
+    static const QString JSON_ID;
+    static const QString JSON_NAME;
+
     SuperListItem();
     virtual ~SuperListItem();
     SuperListItem(int i, QString n);

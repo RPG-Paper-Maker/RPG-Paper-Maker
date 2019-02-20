@@ -24,6 +24,8 @@
 #include "systemautotile.h"
 #include "systemspritewall.h"
 
+const QString SuperListItem::JSON_ID = "id";
+const QString SuperListItem::JSON_NAME = "name";
 QString SuperListItem::pathIconRed = ":/icons/Ressources/point_r.png";
 QString SuperListItem::pathIconBlue = ":/icons/Ressources/point_b.png";
 QString SuperListItem::beginningText = "<>";
@@ -88,10 +90,8 @@ void SuperListItem::setCopy(const SuperListItem& item){
 // -------------------------------------------------------
 
 QString SuperListItem::toString() const {
-    if (id() < 1)
-        return name();
-    else
-        return (QString(beginningText) + idToString() + QString(": ") + name());
+    return id() > 0 ? (QString(beginningText) + idToString() + QString(": ") +
+        name()) : "<None>";
 }
 
 // -------------------------------------------------------
@@ -278,13 +278,13 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
 void SuperListItem::read(const QJsonObject &json)
 {
     readId(json);
-    p_name = json["name"].toString();
+    p_name = json[JSON_NAME].toString();
 }
 
 // -------------------------------------------------------
 
 void SuperListItem::readId(const QJsonObject &json){
-    p_id = json["id"].toInt();
+    p_id = json[JSON_ID].toInt();
 }
 
 // -------------------------------------------------------
@@ -292,11 +292,11 @@ void SuperListItem::readId(const QJsonObject &json){
 void SuperListItem::write(QJsonObject &json) const
 {
     writeId(json);
-    json["name"] = name();
+    json[JSON_NAME] = name();
 }
 
 // -------------------------------------------------------
 
 void SuperListItem::writeId(QJsonObject &json) const{
-    json["id"] = id();
+    json[JSON_ID] = id();
 }

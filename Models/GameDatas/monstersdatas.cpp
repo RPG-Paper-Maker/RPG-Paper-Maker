@@ -75,21 +75,21 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
     QVector<int> currenciesNb[] = {QVector<int>({1})};
     QVector<LootKind> lootsKind[] = {QVector<LootKind>({LootKind::Item})};
     QVector<int> lootsIds[] = {QVector<int>({1})};
-    QVector<PrimitiveValue*> lootsNb[] =
-        {QVector<PrimitiveValue*>({
-             new PrimitiveValue(1)})
+    QVector<int> lootsNb[] =
+        {
+            QVector<int>({1})
         };
-    QVector<PrimitiveValue*> lootsProba[] =
-        {QVector<PrimitiveValue*>({
-             new PrimitiveValue(50)})
+    QVector<int> lootsProba[] =
+        {
+            QVector<int>({50})
         };
-    QVector<PrimitiveValue*> lootsInit[] =
-        {QVector<PrimitiveValue*>({
-             new PrimitiveValue(1)})
+    QVector<int> lootsInit[] =
+        {
+            QVector<int>({1})
         };
-    QVector<PrimitiveValue*> lootsFinal[] =
-        {QVector<PrimitiveValue*>({
-             new PrimitiveValue(100)})
+    QVector<int> lootsFinal[] =
+        {
+            QVector<int>({100})
         };
     SystemProgressionTable *currenciesProgression[] = {
         new SystemProgressionTable(new PrimitiveValue(5), new PrimitiveValue(
@@ -113,8 +113,10 @@ void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
                 break;
             }
             loot = new SystemLoot(sys->id(), sys->name(), lootsKind[i][j],
-                lootsNb[i][j], lootsProba[i][j], lootsInit[i][j], lootsFinal[i]
-                [j]);
+                new PrimitiveValue(PrimitiveValueKind::DataBase, sys->id()), new
+                PrimitiveValue(lootsNb[i][j]), new PrimitiveValue(lootsProba[i]
+                [j]), new PrimitiveValue(lootsInit[i][j]), new PrimitiveValue(
+                lootsFinal[i][j]));
             row = loot->getModelRow();
             loots->appendRow(row);
         }

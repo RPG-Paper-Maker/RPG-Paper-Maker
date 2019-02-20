@@ -33,34 +33,11 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
     m_loot(loot)
 {
     ui->setupUi(this);
-    
-    // Initilize comboBoxes
-    SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
-        ->gameDatas()->itemsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxWeapon, RPM::get()->project()
-        ->gameDatas()->weaponsDatas()->model());
-    SuperListItem::fillComboBox(ui->comboBoxArmor, RPM::get()->project()
-        ->gameDatas()->armorsDatas()->model());
-
-    // Connect
-    connect(ui->radioButtonItem, SIGNAL(toggled(bool)), this, SLOT(
-        on_radioButtonItemToggled(bool)));
-    connect(ui->radioButtonWeapon, SIGNAL(toggled(bool)), this, SLOT(
-        on_radioButtonWeaponToggled(bool)));
-    connect(ui->radioButtonArmor, SIGNAL(toggled(bool)), this, SLOT(
-        on_radioButtonArmorToggled(bool)));
-    connect(ui->comboBoxItem, SIGNAL(currentIndexChanged(int)), this, SLOT(
-        on_comboBoxItemCurrentIndexChanged(int)));
-    connect(ui->comboBoxWeapon, SIGNAL(currentIndexChanged(int)), this, SLOT(
-        on_comboBoxWeaponCurrentIndexChanged(int)));
-    connect(ui->comboBoxArmor, SIGNAL(currentIndexChanged(int)), this, SLOT(
-        on_comboBoxArmorCurrentIndexChanged(int)));
 
     initialize();
 }
 
-DialogSystemLoot::~DialogSystemLoot()
-{
+DialogSystemLoot::~DialogSystemLoot() {
     delete ui;
 }
 
@@ -71,6 +48,13 @@ DialogSystemLoot::~DialogSystemLoot()
 // -------------------------------------------------------
 
 void DialogSystemLoot::initialize() {
+    // Connect
+    connect(ui->radioButtonItem, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonItemToggled(bool)));
+    connect(ui->radioButtonWeapon, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonWeaponToggled(bool)));
+    connect(ui->radioButtonArmor, SIGNAL(toggled(bool)), this, SLOT(
+        on_radioButtonArmorToggled(bool)));
 
     // Numbers
     ui->widgetVariableConstantNumber->initializeNumberVariable();
@@ -87,62 +71,71 @@ void DialogSystemLoot::initialize() {
     ui->panelPrimitiveValueFinal->updateModel();
 
     // Loots
-    QStandardItem* item;
-    switch(m_loot.kind()){
+    ui->panelPrimitiveValueItem->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->itemsDatas()->model(), nullptr, nullptr);
+    ui->panelPrimitiveValueWeapon->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->weaponsDatas()->model(), nullptr, nullptr);
+    ui->panelPrimitiveValueArmor->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->armorsDatas()->model(), nullptr, nullptr);
+    PanelPrimitiveValue *panel = nullptr;
+    switch(m_loot.kind()) {
     case LootKind::Item:
-        item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
-                ->invisibleRootItem();
-        ui->comboBoxItem->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_loot.id()));
+        m_loot.lootID()->setModelDataBase(RPM::get()->project()->gameDatas()
+            ->itemsDatas()->model());
+        panel = ui->panelPrimitiveValueItem;
         ui->radioButtonItem->setChecked(true);
         break;
     case LootKind::Weapon:
-        item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
-                ->invisibleRootItem();
-        ui->comboBoxWeapon->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_loot.id()));
+        m_loot.lootID()->setModelDataBase(RPM::get()->project()->gameDatas()
+            ->weaponsDatas()->model());
+        panel = ui->panelPrimitiveValueWeapon;
         ui->radioButtonWeapon->setChecked(true);
         break;
     case LootKind::Armor:
-        item = RPM::get()->project()->gameDatas()->armorsDatas()->model()
-                ->invisibleRootItem();
-        ui->comboBoxArmor->setCurrentIndex(
-                    SuperListItem::getIndexById(item, m_loot.id()));
+        m_loot.lootID()->setModelDataBase(RPM::get()->project()->gameDatas()
+            ->armorsDatas()->model());
+        panel = ui->panelPrimitiveValueArmor;
         ui->radioButtonArmor->setChecked(true);
         break;
     }
+    ui->panelPrimitiveValueItem->initializeModel(m_loot.lootID());
+    ui->panelPrimitiveValueWeapon->initializeModel(m_loot.lootID());
+    ui->panelPrimitiveValueArmor->initializeModel(m_loot.lootID());
+    panel->updateModel();
 }
 
 // -------------------------------------------------------
 
-void DialogSystemLoot::radioChanged(bool checked, LootKind kind){
+void DialogSystemLoot::radioChanged(bool checked, LootKind kind) {
 
     // Getting all the informations according to loot kind
-    QStandardItemModel* model = nullptr;
-    QComboBox* combo = nullptr;
+    QStandardItemModel *model = nullptr;
+    PanelPrimitiveValue *panel = nullptr;
     switch (kind){
     case LootKind::Item:
-        combo = ui->comboBoxItem;
         model = RPM::get()->project()->gameDatas()->itemsDatas()->model();
+        panel = ui->panelPrimitiveValueItem;
+        //ui->radioButtonItem->setChecked(checked);
         break;
     case LootKind::Weapon:
-        combo = ui->comboBoxWeapon;
         model = RPM::get()->project()->gameDatas()->weaponsDatas()->model();
+        panel = ui->panelPrimitiveValueWeapon;
+        //ui->radioButtonWeapon->setChecked(true);
         break;
     case LootKind::Armor:
-        combo = ui->comboBoxArmor;
         model = RPM::get()->project()->gameDatas()->armorsDatas()->model();
+        panel = ui->panelPrimitiveValueArmor;
+        //ui->radioButtonArmor->setChecked(true);
         break;
     }
 
-    // Modifying loot properties
-    combo->setEnabled(checked);
-    if (checked){
+    panel->setEnabled(checked);
+    if (checked) {
+        m_loot.lootID()->setModelDataBase(model);
         m_loot.setKind(kind);
-        SuperListItem* super = (SuperListItem*)model
-                ->item(combo->currentIndex())->data().value<quintptr>();
-        m_loot.setId(super->id());
-        m_loot.setName(super->name());
+        panel->updateKind(true);
+        panel->updateValue();
+        m_loot.updateName();
     }
 }
 
@@ -152,36 +145,18 @@ void DialogSystemLoot::radioChanged(bool checked, LootKind kind){
 //
 // -------------------------------------------------------
 
-void DialogSystemLoot::on_radioButtonItemToggled(bool checked){
+void DialogSystemLoot::on_radioButtonItemToggled(bool checked) {
     radioChanged(checked, LootKind::Item);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemLoot::on_radioButtonWeaponToggled(bool checked){
+void DialogSystemLoot::on_radioButtonWeaponToggled(bool checked) {
     radioChanged(checked, LootKind::Weapon);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemLoot::on_radioButtonArmorToggled(bool checked){
+void DialogSystemLoot::on_radioButtonArmorToggled(bool checked) {
     radioChanged(checked, LootKind::Armor);
-}
-
-// -------------------------------------------------------
-
-void DialogSystemLoot::on_comboBoxItemCurrentIndexChanged(int){
-    radioChanged(true, LootKind::Item);
-}
-
-// -------------------------------------------------------
-
-void DialogSystemLoot::on_comboBoxWeaponCurrentIndexChanged(int){
-    radioChanged(true, LootKind::Weapon);
-}
-
-// -------------------------------------------------------
-
-void DialogSystemLoot::on_comboBoxArmorCurrentIndexChanged(int){
-    radioChanged(true, LootKind::Armor);
 }

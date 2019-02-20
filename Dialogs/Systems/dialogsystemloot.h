@@ -53,9 +53,6 @@ private slots:
     void on_radioButtonItemToggled(bool checked);
     void on_radioButtonWeaponToggled(bool checked);
     void on_radioButtonArmorToggled(bool checked);
-    void on_comboBoxItemCurrentIndexChanged(int);
-    void on_comboBoxWeaponCurrentIndexChanged(int);
-    void on_comboBoxArmorCurrentIndexChanged(int);
 };
 
 #endif // DIALOGSYSTEMLOOT_H

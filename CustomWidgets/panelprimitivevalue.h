@@ -70,7 +70,7 @@ public:
     void setMessageValue(QString m);
     void setSwitchValue(bool s);
     void updateValue(bool update = false);
-    void updateKind();
+    void updateKind(bool update = false);
     void sync();
     void hideAll();
     void addDefault();
