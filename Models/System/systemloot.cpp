@@ -199,6 +199,8 @@ void SystemLoot::read(const QJsonObject &json) {
     m_probability->read(json[JSON_PROBABILITY].toObject());
     m_initialLevel->read(json[JSON_INITIAL].toObject());
     m_finalLevel->read(json[JSON_FINAL].toObject());
+
+    updateName();
 }
 
 // -------------------------------------------------------
