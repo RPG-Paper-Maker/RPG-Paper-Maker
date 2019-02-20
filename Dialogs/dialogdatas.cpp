@@ -76,8 +76,10 @@ int DialogDatas::finalLevel() const {
 // -------------------------------------------------------
 
 void DialogDatas::initializeItems(GameDatas *gameDatas){
+    ui->panelSuperListItems->setIsLang(true);
     ui->panelSuperListItems->list()->initializeNewItemInstance(new SystemItem);
     ui->panelSuperListItems->initializeModel(gameDatas->itemsDatas()->model());
+    ui->panelSuperListItems->showEditName(true);
     connect(ui->panelSuperListItems->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageItemsSelected(QModelIndex,QModelIndex)));
@@ -102,20 +104,24 @@ void DialogDatas::updateItem(SystemItem* sysItem){
 // -------------------------------------------------------
 
 void DialogDatas::initializeSkills(GameDatas *gameDatas){
+    ui->panelSuperListSkills->setIsLang(true);
     ui->panelSuperListSkills->list()->initializeNewItemInstance(
                 new SystemSkill);
     ui->panelSuperListSkills->initializeModel(gameDatas->skillsDatas()
                                               ->model());
+    ui->panelSuperListSkills->showEditName(true);
     ui->panelSuperListSkills->list()->setIndex(0);
 }
 
 // -------------------------------------------------------
 
 void DialogDatas::initializeWeapons(GameDatas *gameDatas){
+    ui->panelSuperListWeapons->setIsLang(true);
     ui->panelSuperListWeapons->list()->initializeNewItemInstance(
                 new SystemWeapon);
     ui->panelSuperListWeapons->initializeModel(gameDatas->weaponsDatas()
                                                ->model());
+    ui->panelSuperListWeapons->showEditName(true);
     connect(ui->panelSuperListWeapons->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageWeaponsSelected(QModelIndex,QModelIndex)));
@@ -141,10 +147,12 @@ void DialogDatas::updateWeapon(SystemWeapon *sysWeapon){
 // -------------------------------------------------------
 
 void DialogDatas::initializeArmors(GameDatas *gameDatas){
+    ui->panelSuperListArmors->setIsLang(true);
     ui->panelSuperListArmors->list()->initializeNewItemInstance(
                 new SystemArmor);
     ui->panelSuperListArmors->initializeModel(gameDatas->armorsDatas()
                                               ->model());
+    ui->panelSuperListArmors->showEditName(true);
     connect(ui->panelSuperListArmors->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageArmorsSelected(QModelIndex,QModelIndex)));
@@ -170,8 +178,10 @@ void DialogDatas::updateArmor(SystemArmor *sysArmor){
 // -------------------------------------------------------
 
 void DialogDatas::initializeHeroes(GameDatas *gameDatas) {
+    ui->panelSuperListHeroes->setIsLang(true);
     ui->panelSuperListHeroes->list()->initializeNewItemInstance(new SystemHero);
     ui->panelSuperListHeroes->initializeModel(gameDatas->heroesDatas()->model());
+    ui->panelSuperListHeroes->showEditName(true);
     ui->panelDatasHero->setPanelSuperList(ui->panelSuperListHeroes);
     connect(ui->panelSuperListHeroes->list()->selectionModel(), SIGNAL(
         currentChanged(QModelIndex,QModelIndex)), this, SLOT(
@@ -192,10 +202,12 @@ void DialogDatas::updateHero(SystemHero *sysHero) {
 // -------------------------------------------------------
 
 void DialogDatas::initializeMonsters(GameDatas *gameDatas){
+    ui->panelSuperListMonsters->setIsLang(true);
     ui->panelSuperListMonsters->list()->initializeNewItemInstance(new
         SystemMonster);
     ui->panelSuperListMonsters->initializeModel(gameDatas->monstersDatas()
         ->model());
+    ui->panelSuperListMonsters->showEditName(true);
     ui->panelDatasMonster->setPanelSuperList(ui->panelSuperListMonsters);
     connect(ui->panelSuperListMonsters->list()->selectionModel(), SIGNAL(
         currentChanged(QModelIndex,QModelIndex)), this, SLOT(
@@ -243,10 +255,12 @@ void DialogDatas::updateTroop(SystemTroop *sysTroop){
 // -------------------------------------------------------
 
 void DialogDatas::initializeClasses(GameDatas *gameDatas){
+    ui->panelSuperListClasses->setIsLang(true);
     ui->panelSuperListClasses->list()->initializeNewItemInstance(
                 new SystemClass);
     ui->panelSuperListClasses->initializeModel(gameDatas->classesDatas()
                                                ->model());
+    ui->panelSuperListClasses->showEditName(true);
     connect(ui->panelSuperListClasses->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageClassesSelected(QModelIndex,QModelIndex)));
@@ -260,6 +274,7 @@ void DialogDatas::initializeClasses(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateClass(SystemClass* sysClass) {
+
     ui->panelDatasClass->update(sysClass, sysClass);
 }
 

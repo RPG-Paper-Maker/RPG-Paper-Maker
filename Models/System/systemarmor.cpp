@@ -25,23 +25,26 @@
 //
 // -------------------------------------------------------
 
-SystemArmor::SystemArmor() : SystemLang()
+SystemArmor::SystemArmor() :
+    SystemArmor(1, new LangsTranslation, 1)
 {
 
 }
 
 SystemArmor::SystemArmor(int i, LangsTranslation* names, int k) :
-    SystemLang(i,names),
+    SystemItem(i, names, 1, false),
     m_idKind(k)
 {
 
 }
 
-SystemArmor::~SystemArmor(){
+SystemArmor::~SystemArmor() {
 
 }
 
-int SystemArmor::idKind() const { return m_idKind; }
+int SystemArmor::idKind() const {
+    return m_idKind;
+}
 
 // -------------------------------------------------------
 //
@@ -50,11 +53,11 @@ int SystemArmor::idKind() const { return m_idKind; }
 // -------------------------------------------------------
 
 void SystemArmor::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemItem::read(json);
     m_idKind = json["k"].toInt();
 }
 
 void SystemArmor::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemItem::write(json);
     json["k"] = m_idKind;
 }

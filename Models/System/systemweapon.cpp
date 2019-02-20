@@ -25,18 +25,19 @@
 //
 // -------------------------------------------------------
 
-SystemWeapon::SystemWeapon() : SystemArmor()
+SystemWeapon::SystemWeapon() :
+    SystemWeapon(1, new LangsTranslation, 1)
 {
 
 }
 
 SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int k) :
-    SystemArmor(i,names, k)
+    SystemArmor(i, names, k)
 {
 
 }
 
-SystemWeapon::~SystemWeapon(){
+SystemWeapon::~SystemWeapon() {
 
 }
 
@@ -46,10 +47,10 @@ SystemWeapon::~SystemWeapon(){
 //
 // -------------------------------------------------------
 
-void SystemWeapon::read(const QJsonObject &json){
+void SystemWeapon::read(const QJsonObject &json) {
     SystemArmor::read(json);
 }
 
-void SystemWeapon::write(QJsonObject &json) const{
+void SystemWeapon::write(QJsonObject &json) const {
     SystemArmor::write(json);
 }

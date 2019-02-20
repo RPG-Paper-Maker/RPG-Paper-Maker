@@ -25,18 +25,18 @@
 //
 // -------------------------------------------------------
 
-SystemSkill::SystemSkill() : SuperListItem()
+SystemSkill::SystemSkill() : SystemSkill(1, new LangsTranslation)
 {
 
 }
 
-SystemSkill::SystemSkill(int i, QString n) :
-    SuperListItem(i,n)
+SystemSkill::SystemSkill(int i, LangsTranslation *names) :
+    SystemLang(i, names)
 {
 
 }
 
-SystemSkill::~SystemSkill(){
+SystemSkill::~SystemSkill() {
 
 }
 
@@ -47,9 +47,9 @@ SystemSkill::~SystemSkill(){
 // -------------------------------------------------------
 
 void SystemSkill::read(const QJsonObject &json){
-    SuperListItem::read(json);
+    SystemLang::read(json);
 }
 
 void SystemSkill::write(QJsonObject &json) const{
-    SuperListItem::write(json);
+    SystemLang::write(json);
 }

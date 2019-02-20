@@ -52,6 +52,9 @@ private:
 
 private slots:
     void on_lineEdit_textChanged(const QString &text);
+
+signals:
+    void mainChanged(const QString &name);
 };
 
 #endif // WIDGETTEXTLANG_H

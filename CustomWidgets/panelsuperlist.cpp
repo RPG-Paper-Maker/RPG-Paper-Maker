@@ -30,9 +30,11 @@
 PanelSuperList::PanelSuperList(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelSuperList),
-    m_maximum(9999)
+    m_maximum(9999),
+    m_isLang(false)
 {
     ui->setupUi(this);
+    ui->widgetTextLang->hide();
 }
 
 PanelSuperList::~PanelSuperList()
@@ -52,6 +54,10 @@ QPushButton * PanelSuperList::buttonMaximum() const {
     return ui->pushButtonMaximum;
 }
 
+void PanelSuperList::setIsLang(bool lang) {
+    m_isLang = lang;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -62,6 +68,8 @@ void PanelSuperList::initializeModel(QStandardItemModel *m) {
     list()->initializeModel(m);
     connect(list()->selectionModel(), SIGNAL(currentChanged(QModelIndex,
         QModelIndex)), this, SLOT(on_listIndexChanged(QModelIndex, QModelIndex)));
+    connect(ui->widgetTextLang, SIGNAL(mainChanged(const QString &)), this,
+        SLOT(onlangTextChanged(const QString &)));
 }
 
 // -------------------------------------------------------
@@ -84,7 +92,12 @@ void PanelSuperList::setMaximumLimit(int max) {
 void PanelSuperList::showEditName(bool b) {
     if (b) {
         ui->label->show();
-        ui->lineEditName->show();
+        if (m_isLang) {
+            ui->widgetTextLang->show();
+            ui->lineEditName->hide();
+        } else {
+            ui->lineEditName->show();
+        }
     } else {
         ui->label->hide();
         ui->lineEditName->hide();
@@ -101,6 +114,12 @@ void PanelSuperList::on_lineEditName_textChanged(const QString &s) {
     ui->widgetList->setName(s);
 
     emit nameChanged(ui->widgetList->getSelected());
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::onlangTextChanged(const QString &s) {
+    ui->widgetList->setName(s);
 }
 
 // -------------------------------------------------------
@@ -122,14 +141,22 @@ void PanelSuperList::on_listIndexChanged(QModelIndex index, QModelIndex) {
     if (selected != nullptr) {
         SuperListItem *super = reinterpret_cast<SuperListItem *>(selected
             ->data().value<quintptr>());
-        ui->lineEditName->blockSignals(true);
-        ui->lineEditName->setText(super->name());
-        ui->lineEditName->blockSignals(false);
+
+        if (m_isLang) {
+            SystemLang *lang = reinterpret_cast<SystemLang *>(selected
+                ->data().value<quintptr>());
+            ui->widgetTextLang->initializeNames(lang);
+        } else {
+            ui->lineEditName->blockSignals(true);
+            ui->lineEditName->setText(super->name());
+            ui->lineEditName->blockSignals(false);
+        }
 
         // If ID == -1, can't edit the name
-        if (super->id() == -1)
+        if (super->id() == -1) {
             ui->lineEditName->setEnabled(false);
-        else
-            ui->lineEditName->setEnabled(true);
+        } else {
+             ui->lineEditName->setEnabled(true);
+        }
     }
 }

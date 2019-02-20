@@ -37,15 +37,15 @@ const QString SystemClass::jsonSkills = "skills";
 // -------------------------------------------------------
 
 SystemClass::SystemClass() :
-    SystemClass(1, "", 1, 100, 5, 30)
+    SystemClass(1, new LangsTranslation, 1, 100, 5, 30)
 {
 
 }
 
-SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
-                         int expBase, int expInflation) :
-    SystemClass(i, n, initialLevel, maxLevel, expBase, expInflation,
-                new QStandardItemModel, new QStandardItemModel)
+SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
+    maxLevel, int expBase, int expInflation) :
+    SystemClass(i, names, initialLevel, maxLevel, expBase, expInflation, new
+        QStandardItemModel, new QStandardItemModel)
 {
     QStandardItem* item;
     item = new QStandardItem();
@@ -56,10 +56,10 @@ SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
     m_skills->appendRow(item);
 }
 
-SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
-                         int expBase, int expInflation,
-                         QStandardItemModel *stat, QStandardItemModel *s) :
-    SuperListItem(i,n),
+SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
+    maxLevel, int expBase, int expInflation, QStandardItemModel *stat,
+    QStandardItemModel *s) :
+    SystemLang(i, names),
     m_initialLevel(initialLevel),
     m_maxLevel(maxLevel),
     m_expBase(expBase),
@@ -73,7 +73,7 @@ SystemClass::SystemClass(int i, QString n, int initialLevel, int maxLevel,
 
 }
 
-SystemClass::~SystemClass(){
+SystemClass::~SystemClass() {
     SuperListItem::deleteModel(m_statisticsProgression);
     SuperListItem::deleteModel(m_skills);
 }
@@ -133,7 +133,7 @@ QStandardItemModel* SystemClass::skills() const {
 // -------------------------------------------------------
 
 SystemClass * SystemClass::createInheritanceClass() {
-    return new SystemClass(-1, "", -1, -1, -1, -1);
+    return new SystemClass(-1, new LangsTranslation, -1, -1, -1, -1);
 }
 
 // -------------------------------------------------------
@@ -175,7 +175,7 @@ SuperListItem* SystemClass::createCopy() const{
 // -------------------------------------------------------
 
 void SystemClass::read(const QJsonObject &json){
-    SuperListItem::read(json);
+    SystemLang::read(json);
     QJsonArray tab;
     QList<QStandardItem *> row;
     SystemStatisticProgression* statisticProgression;
@@ -232,7 +232,7 @@ void SystemClass::read(const QJsonObject &json){
 // -------------------------------------------------------
 
 void SystemClass::write(QJsonObject &json) const{
-    SuperListItem::write(json);
+    SystemLang::write(json);
     QJsonArray tab;
     QJsonObject obj;
     int l;

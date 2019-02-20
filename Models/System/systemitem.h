@@ -21,7 +21,7 @@
 #define SYSTEMITEM_H
 
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemskill.h"
 
 // -------------------------------------------------------
 //
@@ -31,11 +31,11 @@
 //
 // -------------------------------------------------------
 
-class SystemItem : public SuperListItem
+class SystemItem : public SystemSkill
 {
 public:
     SystemItem();
-    SystemItem(int i, QString n, int idType, bool consumable);
+    SystemItem(int i, LangsTranslation *names, int idType, bool consumable);
     virtual ~SystemItem();
     bool consumable() const;
     void setConsumable(bool consumable);

@@ -25,20 +25,21 @@
 //
 // -------------------------------------------------------
 
-SystemItem::SystemItem() : SuperListItem()
+SystemItem::SystemItem() : SystemItem(1, new LangsTranslation, 1, false)
 {
 
 }
 
-SystemItem::SystemItem(int i, QString n, int idType, bool consumable) :
-    SuperListItem(i,n),
+SystemItem::SystemItem(int i, LangsTranslation *names, int idType, bool
+    consumable) :
+    SystemSkill(i, names),
     m_idType(idType),
     m_consumable(consumable)
 {
 
 }
 
-SystemItem::~SystemItem(){
+SystemItem::~SystemItem() {
 
 }
 
@@ -57,13 +58,13 @@ void SystemItem::setIdType(int t){ m_idType = t; }
 // -------------------------------------------------------
 
 void SystemItem::read(const QJsonObject &json){
-    SuperListItem::read(json);
+    SystemSkill::read(json);
     m_idType = json["t"].toInt();
     m_consumable= json["cons"].toBool();
 }
 
 void SystemItem::write(QJsonObject &json) const{
-    SuperListItem::write(json);
+    SystemSkill::write(json);
     json["t"] = m_idType;
     json["cons"] = m_consumable;
 }

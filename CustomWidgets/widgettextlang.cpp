@@ -59,4 +59,6 @@ void WidgetTextLang::initializeNames(SystemLang* l){
 
 void WidgetTextLang::on_lineEdit_textChanged(const QString &text){
     m_lang->setName(text);
+
+    emit mainChanged(text);
 }

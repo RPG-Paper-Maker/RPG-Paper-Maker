@@ -32,7 +32,7 @@
       <widget class="WidgetSuperList" name="widgetList" native="true"/>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="layoutName">
+      <layout class="QHBoxLayout" name="layoutName" stretch="0,1,1">
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
@@ -45,6 +45,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lineEditName"/>
+       </item>
+       <item>
+        <widget class="WidgetTextLang" name="widgetTextLang" native="true"/>
        </item>
       </layout>
      </item>
@@ -64,6 +67,12 @@
    <class>WidgetSuperList</class>
    <extends>QWidget</extends>
    <header>widgetsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

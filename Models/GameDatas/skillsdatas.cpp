@@ -51,28 +51,22 @@ QStandardItemModel* SkillsDatas::model() const { return m_model; }
 // -------------------------------------------------------
 
 void SkillsDatas::setDefault(){
-    int i = 1;
-    SystemSkill* skills[] = {new SystemSkill(i++, "Attack"),
-                             new SystemSkill(i++, "Skill"),
-                             new SystemSkill(i++, "Item"),
-                             new SystemSkill(i++, "Escape"),
-                             new SystemSkill(i++, "Fire"),
-                             new SystemSkill(i++, "Water"),
-                             new SystemSkill(i++, "Wind"),
-                             new SystemSkill(i++, "Shadow"),
-                             new SystemSkill(i++, "Blazing sword"),
-                             new SystemSkill(i++, "Bandage"),
-                             new SystemSkill(i++, "Concentration")};
-
-    int length = (sizeof(skills)/sizeof(*skills));
+    int i, length;
     QStandardItem* item;
+    SystemSkill *skill;
 
-    for (i = 0; i < length; i++){
+    QString names[] = {
+        "Attack", "Skill", "Item", "Escape", "Fire", "Water", "Wind", "Shadow",
+        "Blazing sword", "Bandage", "Concentration"
+    };
+    length = (sizeof(names)/sizeof(*names));
+
+    for (i = 0; i < length; i++) {
+        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]));
         item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(skills[i])));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(skill)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(skills[i]->toString());
+        item->setText(skill->toString());
         m_model->appendRow(item);
     }
 }

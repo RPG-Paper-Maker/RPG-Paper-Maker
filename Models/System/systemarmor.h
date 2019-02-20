@@ -22,7 +22,7 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "systemlang.h"
+#include "systemitem.h"
 
 // -------------------------------------------------------
 //
@@ -32,7 +32,7 @@
 //
 // -------------------------------------------------------
 
-class SystemArmor : public SystemLang
+class SystemArmor : public SystemItem
 {
 public:
     SystemArmor();

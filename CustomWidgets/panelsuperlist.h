@@ -53,13 +53,16 @@ public:
     void showEditName(bool b);
     void showButtonMax(bool b);
     void setMaximumLimit(int max);
+    void setIsLang(bool lang);
 
 private:
     Ui::PanelSuperList *ui;
     int m_maximum;
+    bool m_isLang;
 
 private slots:
     void on_lineEditName_textChanged(const QString &s);
+    void onlangTextChanged(const QString &s);
     void on_pushButtonMaximum_pressed();
     void on_listIndexChanged(QModelIndex index, QModelIndex);
 

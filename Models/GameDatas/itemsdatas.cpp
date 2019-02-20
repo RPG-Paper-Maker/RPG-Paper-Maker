@@ -50,28 +50,31 @@ QStandardItemModel* ItemsDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void ItemsDatas::setDefault(){
-    int i = 1;
-    SystemItem* items[] = {new SystemItem(i++, "HP potion", 0, true),
-                           new SystemItem(i++, "Super HP potion", 0, true),
-                           new SystemItem(i++, "Mega HP potion", 0, true),
-                           new SystemItem(i++, "MP potion", 0, true),
-                           new SystemItem(i++, "Super MP potion", 0, true),
-                           new SystemItem(i++, "Mega MP potion", 0, true),
-                           new SystemItem(i++, "TP potion", 0, true),
-                           new SystemItem(i++, "Super TP potion", 0, true),
-                           new SystemItem(i++, "Mega TP potion", 0, true),
-                           new SystemItem(i++, "key", 2, false),};
-
-    int length = (sizeof(items)/sizeof(*items));
+void ItemsDatas::setDefault() {
+    int i, length;
     QStandardItem* item;
+    SystemItem *sys;
 
-    for (i = 0; i < length; i++){
+    QString names[] = {
+        "HP potion", "Super HP potion", "Mega HP potion", "MP potion",
+        "Super MP potion", "Mega MP potion", "TP potion", "Super TP potion",
+        "Mega TP potion", "key"
+    };
+    int types[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+    };
+    bool consumables[] = {
+        true, true, true, true, true, true, true, true, true, false
+    };
+    length = (sizeof(names)/sizeof(*names));
+
+    for (i = 0; i < length; i++) {
+        sys = new SystemItem(i + 1, new LangsTranslation(names[i]), types[i],
+            consumables[i]);
         item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(items[i])));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
+        item->setText(sys->toString());
         m_model->appendRow(item);
     }
 }

@@ -22,7 +22,7 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemlang.h"
 
 // -------------------------------------------------------
 //
@@ -32,7 +32,7 @@
 //
 // -------------------------------------------------------
 
-class SystemClass : public SuperListItem
+class SystemClass : public SystemLang
 {
 public:
     static const QString jsonInitialLevel;
@@ -44,11 +44,11 @@ public:
     static const QString jsonSkills;
 
     SystemClass();
-    SystemClass(int i, QString n, int initialLevel, int maxLevel, int expBase,
-                int expInflation);
-    SystemClass(int i, QString n, int initialLevel, int maxLevel, int expBase,
-                int expInflation,
-                QStandardItemModel *stat, QStandardItemModel *s);
+    SystemClass(int i, LangsTranslation *names, int initialLevel, int maxLevel,
+        int expBase, int expInflation);
+    SystemClass(int i, LangsTranslation *names, int initialLevel, int maxLevel,
+        int expBase, int expInflation, QStandardItemModel *stat,
+        QStandardItemModel *s);
     virtual ~SystemClass();
     int initialLevel() const;
     void setInitialLevel(int i, SystemClass *originalClass = nullptr);

@@ -22,7 +22,7 @@
 
 #include <QStandardItemModel>
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemlang.h"
 
 // -------------------------------------------------------
 //
@@ -32,11 +32,11 @@
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SuperListItem
+class SystemSkill : public SystemLang
 {
 public:
     SystemSkill();
-    SystemSkill(int i, QString n);
+    SystemSkill(int i, LangsTranslation *names);
     virtual ~SystemSkill();
 
     virtual void read(const QJsonObject &json);
