@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>7</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -695,7 +695,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_6" native="true"/>
+            <widget class="PanelDatasSkill" name="panelDatasSkill" native="true"/>
            </item>
           </layout>
          </item>
@@ -1052,6 +1052,12 @@
    <class>PanelDatasMonster</class>
    <extends>QWidget</extends>
    <header>paneldatasmonster.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDatasSkill</class>
+   <extends>QWidget</extends>
+   <header>paneldatasskill.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

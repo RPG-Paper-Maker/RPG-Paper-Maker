@@ -17,32 +17,22 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSKILLS_H
-#define SYSTEMSKILLS_H
-
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemicon.h"
+#ifndef AVAILABLEKIND_H
+#define AVAILABLEKIND_H
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  ENUM AvailableKind
 //
-//  A particulary skill (datas).
+//  All the possible way for a skill to be available.
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
-{
-public:
-    SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
-    virtual ~SystemSkill();
-
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+enum class AvailableKind {
+    Battle,
+    MainMenu,
+    Always,
+    Never
 };
 
-Q_DECLARE_METATYPE(SystemSkill)
-
-#endif // SYSTEMSKILLS_H
+#endif // AVAILABLEKIND_H

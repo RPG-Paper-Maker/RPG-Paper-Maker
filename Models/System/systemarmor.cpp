@@ -26,13 +26,13 @@
 // -------------------------------------------------------
 
 SystemArmor::SystemArmor() :
-    SystemArmor(1, new LangsTranslation, 1)
+    SystemArmor(1, new LangsTranslation, -1, 1)
 {
 
 }
 
-SystemArmor::SystemArmor(int i, LangsTranslation* names, int k) :
-    SystemItem(i, names, 1, false),
+SystemArmor::SystemArmor(int i, LangsTranslation* names, int pictureID, int k) :
+    SystemItem(i, names, pictureID, 1, false),
     m_idKind(k)
 {
 

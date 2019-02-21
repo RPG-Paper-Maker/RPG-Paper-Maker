@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -17,32 +17,36 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSKILLS_H
-#define SYSTEMSKILLS_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemicon.h"
+#ifndef PANELDATASSKILL_H
+#define PANELDATASSKILL_H
+
+#include <QWidget>
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  CLASS PanelDatasSkill
 //
-//  A particulary skill (datas).
+//  A panel used for skills, items, weapons, armors,...
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
+namespace Ui {
+class PanelDatasSkill;
+}
+
+class PanelDatasSkill : public QWidget
 {
-public:
-    SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
-    virtual ~SystemSkill();
+    Q_OBJECT
 
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+public:
+    explicit PanelDatasSkill(QWidget *parent = nullptr);
+    ~PanelDatasSkill();
+
+    void initialize();
+
+private:
+    Ui::PanelDatasSkill *ui;
 };
 
-Q_DECLARE_METATYPE(SystemSkill)
-
-#endif // SYSTEMSKILLS_H
+#endif // PANELDATASSKILL_H

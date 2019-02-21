@@ -26,13 +26,13 @@
 // -------------------------------------------------------
 
 SystemWeapon::SystemWeapon() :
-    SystemWeapon(1, new LangsTranslation, 1)
+    SystemWeapon(1, new LangsTranslation, -1, 1)
 {
 
 }
 
-SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int k) :
-    SystemArmor(i, names, k)
+SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int pictureID, int k) :
+    SystemArmor(i, names, pictureID, k)
 {
 
 }

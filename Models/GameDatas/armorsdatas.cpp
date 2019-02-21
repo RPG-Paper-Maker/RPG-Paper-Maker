@@ -28,8 +28,7 @@
 //
 // -------------------------------------------------------
 
-ArmorsDatas::ArmorsDatas()
-{
+ArmorsDatas::ArmorsDatas() {
     m_model = new QStandardItemModel;
 }
 
@@ -50,20 +49,29 @@ QStandardItemModel* ArmorsDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void ArmorsDatas::setDefault(){
-    int i = 1;
-    SystemArmor* items[] = {new SystemArmor(i++, new LangsTranslation("Dress"),
-                            4)};
-
-    int length = (sizeof(items)/sizeof(*items));
+void ArmorsDatas::setDefault() {
+    int i, length;
     QStandardItem* item;
+    SystemArmor *armor;
 
-    for (i = 0; i < length; i++){
+    QString names[] = {
+        "Dress"
+    };
+    int iconsID[] = {
+        -1
+    };
+    int types[] = {
+        4
+    };
+    length = (sizeof(names)/sizeof(*names));
+
+    for (i = 0; i < length; i++) {
+        armor = new SystemArmor(i + 1, new LangsTranslation(names[i]), iconsID
+            [i], types[i]);
         item = new QStandardItem;
-        item->setData(
-                    QVariant::fromValue(reinterpret_cast<quintptr>(items[i])));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(armor)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
+        item->setText(armor->toString());
         m_model->appendRow(item);
     }
 }

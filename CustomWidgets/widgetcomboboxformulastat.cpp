@@ -17,7 +17,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemitem.h"
+#include "widgetcomboboxformulastat.h"
 
 // -------------------------------------------------------
 //
@@ -25,46 +25,28 @@
 //
 // -------------------------------------------------------
 
-SystemItem::SystemItem() : SystemItem(1, new LangsTranslation, -1, 1, false)
+WidgetComboBoxFormulaStat::WidgetComboBoxFormulaStat(QWidget *parent) :
+    QComboBox(parent)
 {
-
+    this->addItem("Statistic");
+    this->addItem("Currency");
+    this->addItem("variable");
 }
-
-SystemItem::SystemItem(int i, LangsTranslation *names, int pictureID, int
-    idType, bool consumable) :
-    SystemSkill(i, names, pictureID),
-    m_idType(idType),
-    m_consumable(consumable)
-{
-
-}
-
-SystemItem::~SystemItem() {
-
-}
-
-bool SystemItem::consumable() const { return m_consumable; }
-
-void SystemItem::setConsumable(bool consumable){ m_consumable = consumable; }
-
-int SystemItem::idType() const { return m_idType; }
-
-void SystemItem::setIdType(int t){ m_idType = t; }
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-void SystemItem::read(const QJsonObject &json){
-    SystemSkill::read(json);
-    m_idType = json["t"].toInt();
-    m_consumable= json["cons"].toBool();
-}
-
-void SystemItem::write(QJsonObject &json) const{
-    SystemSkill::write(json);
-    json["t"] = m_idType;
-    json["cons"] = m_consumable;
+QString WidgetComboBoxFormulaStat::toString(int i) {
+    switch(i){
+    case 0:
+        return "statistic";
+    case 1:
+        return "currency";
+    case 2:
+        return "variable";
+    }
+    return "";
 }

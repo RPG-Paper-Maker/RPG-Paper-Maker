@@ -17,10 +17,12 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "itemsdatas.h"
-#include "systemitem.h"
+#include "animationsdatas.h"
+#include "systemanimation.h"
 #include "rpm.h"
 #include "common.h"
+
+const QString AnimationsDatas::JSON_ANIMATIONS = "animations";
 
 // -------------------------------------------------------
 //
@@ -28,21 +30,22 @@
 //
 // -------------------------------------------------------
 
-ItemsDatas::ItemsDatas()
-{
+AnimationsDatas::AnimationsDatas() {
     m_model = new QStandardItemModel;
 }
 
-ItemsDatas::~ItemsDatas()
+AnimationsDatas::~AnimationsDatas()
 {
     SuperListItem::deleteModel(m_model);
 }
 
-void ItemsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathItems), *this);
+void AnimationsDatas::read(QString path){
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS), *this);
 }
 
-QStandardItemModel* ItemsDatas::model() const { return m_model; }
+QStandardItemModel* AnimationsDatas::model() const {
+    return m_model;
+}
 
 // -------------------------------------------------------
 //
@@ -50,72 +53,66 @@ QStandardItemModel* ItemsDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void ItemsDatas::setDefault() {
+void AnimationsDatas::setDefault(){
     int i, length;
-    QStandardItem* item;
-    SystemItem *sys;
+    SystemAnimation *animation;
+    QStandardItem *item;
 
     QString names[] = {
-        "HP potion", "Super HP potion", "Mega HP potion", "MP potion",
-        "Super MP potion", "Mega MP potion", "TP potion", "Super TP potion",
-        "Mega TP potion", "key"
-    };
-    int iconsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-    };
-    int types[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 2
-    };
-    bool consumables[] = {
-        true, true, true, true, true, true, true, true, true, false
+        "Attack"
     };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
-        sys = new SystemItem(i + 1, new LangsTranslation(names[i]), iconsID[i],
-            types[i], consumables[i]);
+        animation = new SystemAnimation(i + 1, names[i]);
         item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(animation)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sys->toString());
+        item->setText(animation->toString());
         m_model->appendRow(item);
     }
 }
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-void ItemsDatas::read(const QJsonObject &json){
+void AnimationsDatas::read(const QJsonObject &json) {
+    SystemAnimation *animation;
+    QStandardItem *item;
 
     // Clear
     SuperListItem::deleteModel(m_model, false);
 
     // Read
-    QJsonArray jsonList = json["items"].toArray();
-    for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
-        SystemItem* sysItem = new SystemItem;
-        sysItem->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sysItem)));
+    QJsonArray jsonList = json[JSON_ANIMATIONS].toArray();
+    for (int i = 0; i < jsonList.size(); i++) {
+        item = new QStandardItem;
+        animation = new SystemAnimation;
+        animation->read(jsonList[i].toObject());
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(animation)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysItem->toString());
+        item->setText(animation->toString());
         m_model->appendRow(item);
     }
 }
 
 // -------------------------------------------------------
 
-void ItemsDatas::write(QJsonObject &json) const{
-    QJsonArray jsonArray;
-    for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
-        QJsonObject jsonCommon;
-        SystemItem* sysItem = ((SystemItem*)m_model->item(i)->data()
-                               .value<quintptr>());
-        sysItem->write(jsonCommon);
-        jsonArray.append(jsonCommon);
+void AnimationsDatas::write(QJsonObject &json) const {
+    int i, l;
+    QJsonArray tab;
+    QJsonObject obj;
+    SystemAnimation *animation;
+
+    for (i = 0, l = m_model->invisibleRootItem()->rowCount(); i < l; i++) {
+        obj = QJsonObject();
+        animation = reinterpret_cast<SystemAnimation *>(m_model->item(i)->data()
+            .value<quintptr>());
+        animation->write(obj);
+        tab.append(obj);
     }
-    json["items"] = jsonArray;
+    json[JSON_ANIMATIONS] = tab;
 }

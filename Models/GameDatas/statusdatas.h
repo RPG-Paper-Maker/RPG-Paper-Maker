@@ -17,32 +17,37 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSKILLS_H
-#define SYSTEMSKILLS_H
+#ifndef STATUSDATAS_H
+#define STATUSDATAS_H
 
 #include <QStandardItemModel>
-#include <QMetaType>
-#include "systemicon.h"
+#include "serializable.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  CLASS StatusDatas
 //
-//  A particulary skill (datas).
+//  Contains all the possible status of a game. The data file is located in
+//  Content/Datas/status.json.
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
+class StatusDatas : public Serializable
 {
 public:
-    SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
-    virtual ~SystemSkill();
+    static const QString JSON_STATUS;
+
+    StatusDatas();
+    virtual ~StatusDatas();
+    void read(QString path);
+    QStandardItemModel* model() const;
+    void setDefault();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+
+private:
+    QStandardItemModel* m_model;
 };
 
-Q_DECLARE_METATYPE(SystemSkill)
-
-#endif // SYSTEMSKILLS_H
+#endif // STATUSDATAS_H

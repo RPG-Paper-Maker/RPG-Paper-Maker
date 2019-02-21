@@ -36,7 +36,7 @@ class SystemArmor : public SystemItem
 {
 public:
     SystemArmor();
-    SystemArmor(int i, LangsTranslation *names, int k);
+    SystemArmor(int i, LangsTranslation *names, int pictureID, int k);
     virtual ~SystemArmor();
     int idKind() const;
 

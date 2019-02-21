@@ -40,7 +40,9 @@ GameDatas::GameDatas() :
     m_monstersDatas(new MonstersDatas),
     m_troopsDatas(new TroopsDatas),
     m_classesDatas(new ClassesDatas),
-    m_tilesetsDatas(new TilesetsDatas)
+    m_tilesetsDatas(new TilesetsDatas),
+    m_animationsDatas(new AnimationsDatas),
+    m_statusDatas(new StatusDatas)
 {
 
 }
@@ -60,6 +62,8 @@ GameDatas::~GameDatas()
     delete m_troopsDatas;
     delete m_classesDatas;
     delete m_tilesetsDatas;
+    delete m_animationsDatas;
+    delete m_statusDatas;
 }
 
 CommonEventsDatas* GameDatas::commonEventsDatas() const {
@@ -114,6 +118,14 @@ TilesetsDatas* GameDatas::tilesetsDatas() const {
     return m_tilesetsDatas;
 }
 
+AnimationsDatas* GameDatas::animationsDatas() const {
+    return m_animationsDatas;
+}
+
+StatusDatas* GameDatas::statusDatas() const {
+    return m_statusDatas;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -140,6 +152,8 @@ void GameDatas::setDefault(){
                                m_battleSystemDatas->modelCommonStatistics()
                                ->invisibleRootItem());
     m_tilesetsDatas->setDefault();
+    m_animationsDatas->setDefault();
+    m_statusDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -162,6 +176,8 @@ void GameDatas::read(QString path){
     m_troopsDatas->read(path);
     m_classesDatas->read(path);
     readTilesets(path);
+    readAnimations(path);
+    readStatus(path);
 }
 
 // -------------------------------------------------------
@@ -196,6 +212,18 @@ void GameDatas::readSkills(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::readAnimations(QString path) {
+    m_animationsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readStatus(QString path) {
+    m_statusDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::write(QString path){
     RPM::writeJSON(Common::pathCombine(path, RPM::pathCommonEvents),
                      *m_commonEventsDatas);
@@ -219,6 +247,8 @@ void GameDatas::write(QString path){
     RPM::writeJSON(Common::pathCombine(path, RPM::pathClasses),
                      *m_classesDatas);
     writeTilesets(path);
+    writeAnimations(path);
+    writeStatus(path);
 }
 
 // -------------------------------------------------------
@@ -247,4 +277,18 @@ void GameDatas::writeBattleSystem(QString path) {
 void GameDatas::writeSkills(QString path) {
     RPM::writeJSON(Common::pathCombine(path, RPM::pathSkills),
         *m_skillsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeAnimations(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS),
+        *m_animationsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeStatus(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_STATUS),
+        *m_statusDatas);
 }

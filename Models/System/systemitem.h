@@ -35,7 +35,8 @@ class SystemItem : public SystemSkill
 {
 public:
     SystemItem();
-    SystemItem(int i, LangsTranslation *names, int idType, bool consumable);
+    SystemItem(int i, LangsTranslation *names, int pictureID, int idType,
+        bool consumable);
     virtual ~SystemItem();
     bool consumable() const;
     void setConsumable(bool consumable);

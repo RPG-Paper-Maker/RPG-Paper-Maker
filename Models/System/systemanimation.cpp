@@ -17,7 +17,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemitem.h"
+#include "systemanimation.h"
 
 // -------------------------------------------------------
 //
@@ -25,46 +25,33 @@
 //
 // -------------------------------------------------------
 
-SystemItem::SystemItem() : SystemItem(1, new LangsTranslation, -1, 1, false)
+SystemAnimation::SystemAnimation()
 {
 
 }
 
-SystemItem::SystemItem(int i, LangsTranslation *names, int pictureID, int
-    idType, bool consumable) :
-    SystemSkill(i, names, pictureID),
-    m_idType(idType),
-    m_consumable(consumable)
+SystemAnimation::SystemAnimation(int i, QString n) :
+    SuperListItem(i, n)
 {
 
 }
 
-SystemItem::~SystemItem() {
+SystemAnimation::~SystemAnimation() {
 
 }
 
-bool SystemItem::consumable() const { return m_consumable; }
-
-void SystemItem::setConsumable(bool consumable){ m_consumable = consumable; }
-
-int SystemItem::idType() const { return m_idType; }
-
-void SystemItem::setIdType(int t){ m_idType = t; }
-
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-void SystemItem::read(const QJsonObject &json){
-    SystemSkill::read(json);
-    m_idType = json["t"].toInt();
-    m_consumable= json["cons"].toBool();
+void SystemAnimation::read(const QJsonObject &json) {
+    SuperListItem::read(json);
 }
 
-void SystemItem::write(QJsonObject &json) const{
-    SystemSkill::write(json);
-    json["t"] = m_idType;
-    json["cons"] = m_consumable;
+// -------------------------------------------------------
+
+void SystemAnimation::write(QJsonObject &json) const {
+    SuperListItem::write(json);
 }

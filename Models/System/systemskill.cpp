@@ -25,13 +25,13 @@
 //
 // -------------------------------------------------------
 
-SystemSkill::SystemSkill() : SystemSkill(1, new LangsTranslation)
+SystemSkill::SystemSkill() : SystemSkill(1, new LangsTranslation, -1)
 {
 
 }
 
-SystemSkill::SystemSkill(int i, LangsTranslation *names) :
-    SystemLang(i, names)
+SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID) :
+    SystemIcon(i, names, pictureID)
 {
 
 }

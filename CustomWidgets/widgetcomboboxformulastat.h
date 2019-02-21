@@ -17,32 +17,26 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSKILLS_H
-#define SYSTEMSKILLS_H
+#ifndef WIDGETCOMBOBOXFORMULASTAT_H
+#define WIDGETCOMBOBOXFORMULASTAT_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemicon.h"
+#include <QComboBox>
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  CLASS WidgetComboBoxFormulaStat
 //
-//  A particulary skill (datas).
+//  A comboBox used for formula stat.
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
+class WidgetComboBoxFormulaStat : public QComboBox
 {
+    Q_OBJECT
 public:
-    SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
-    virtual ~SystemSkill();
+    explicit WidgetComboBoxFormulaStat(QWidget *parent = nullptr);
 
-    virtual void read(const QJsonObject &json);
-    virtual void write(QJsonObject &json) const;
+    static QString toString(int i);
 };
 
-Q_DECLARE_METATYPE(SystemSkill)
-
-#endif // SYSTEMSKILLS_H
+#endif // WIDGETCOMBOBOXFORMULASTAT_H

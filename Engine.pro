@@ -267,7 +267,15 @@ HEADERS += \
     CustomWidgets/panelprogressiontable.h \
     CustomWidgets/widgettableprogression.h \
     Models/System/systemprogressiontable.h \
-    CustomWidgets/widgeticon.h
+    CustomWidgets/widgeticon.h \
+    CustomWidgets/paneldatasskill.h \
+    CustomWidgets/widgetcomboboxformulastat.h \
+    Enums/targetkind.h \
+    Enums/availablekind.h \
+    Models/GameDatas/animationsdatas.h \
+    Models/System/systemanimation.h \
+    Models/GameDatas/statusdatas.h \
+    Models/System/systemstatus.h
 
 SOURCES += \
     main.cpp \
@@ -482,7 +490,13 @@ SOURCES += \
     CustomWidgets/panelprogressiontable.cpp \
     CustomWidgets/widgettableprogression.cpp \
     Models/System/systemprogressiontable.cpp \
-    CustomWidgets/widgeticon.cpp
+    CustomWidgets/widgeticon.cpp \
+    CustomWidgets/paneldatasskill.cpp \
+    CustomWidgets/widgetcomboboxformulastat.cpp \
+    Models/GameDatas/animationsdatas.cpp \
+    Models/System/systemanimation.cpp \
+    Models/GameDatas/statusdatas.cpp \
+    Models/System/systemstatus.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -564,7 +578,8 @@ FORMS += \
     CustomWidgets/paneldatasclass.ui \
     CustomWidgets/paneldatasmonster.ui \
     CustomWidgets/panelprogressiontable.ui \
-    CustomWidgets/widgeticon.ui
+    CustomWidgets/widgeticon.ui \
+    CustomWidgets/paneldatasskill.ui
 
 OTHER_FILES +=
 

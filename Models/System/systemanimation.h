@@ -17,32 +17,31 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SYSTEMSKILLS_H
-#define SYSTEMSKILLS_H
+#ifndef SYSTEMANIMATION_H
+#define SYSTEMANIMATION_H
 
-#include <QStandardItemModel>
 #include <QMetaType>
-#include "systemicon.h"
+#include "superlistitem.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemSkill
+//  CLASS SystemAnimation
 //
-//  A particulary skill (datas).
+//  A particulary animation (datas).
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
+class SystemAnimation : public SuperListItem
 {
 public:
-    SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
-    virtual ~SystemSkill();
+    SystemAnimation();
+    SystemAnimation(int i, QString n);
+    virtual ~SystemAnimation();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 };
 
-Q_DECLARE_METATYPE(SystemSkill)
+Q_DECLARE_METATYPE(SystemAnimation)
 
-#endif // SYSTEMSKILLS_H
+#endif // SYSTEMANIMATION_H

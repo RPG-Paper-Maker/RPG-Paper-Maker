@@ -89,6 +89,8 @@ public:
     const static QString pathTroops;
     const static QString pathClasses;
     const static QString PATH_TILESETS;
+    const static QString PATH_ANIMATIONS;
+    const static QString PATH_STATUS;
     const static QString PATH_SPECIAL_ELEMENTS;
     const static QString pathTreeMap;
     const static QString pathLangs;

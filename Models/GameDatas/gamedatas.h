@@ -33,6 +33,8 @@
 #include "troopsdatas.h"
 #include "classesdatas.h"
 #include "tilesetsdatas.h"
+#include "animationsdatas.h"
+#include "statusdatas.h"
 
 // -------------------------------------------------------
 //
@@ -62,17 +64,23 @@ public:
     MonstersDatas* monstersDatas() const;
     ClassesDatas* classesDatas() const;
     TilesetsDatas* tilesetsDatas() const;
+    AnimationsDatas* animationsDatas() const;
+    StatusDatas* statusDatas() const;
     void read(QString path);
     void readVariablesSwitches(QString path);
     void readTilesets(QString path);
     void readSystem(QString path);
     void readBattleSystem(QString path);
     void readSkills(QString path);
+    void readAnimations(QString path);
+    void readStatus(QString path);
     void write(QString path);
     void writeTilesets(QString path);
     void writeSystem(QString path);
     void writeBattleSystem(QString path);
     void writeSkills(QString path);
+    void writeAnimations(QString path);
+    void writeStatus(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;
@@ -88,6 +96,8 @@ private:
     TroopsDatas* m_troopsDatas;
     ClassesDatas* m_classesDatas;
     TilesetsDatas* m_tilesetsDatas;
+    AnimationsDatas* m_animationsDatas;
+    StatusDatas* m_statusDatas;
 };
 
 #endif // GAMEDATAS_H

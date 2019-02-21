@@ -36,7 +36,7 @@ class SystemWeapon : public SystemArmor
 {
 public:
     SystemWeapon();
-    SystemWeapon(int i, LangsTranslation* names, int k);
+    SystemWeapon(int i, LangsTranslation* names, int pictureID, int k);
     virtual ~SystemWeapon();
 
     virtual void read(const QJsonObject &json);

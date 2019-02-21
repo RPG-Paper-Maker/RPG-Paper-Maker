@@ -50,22 +50,29 @@ QStandardItemModel* WeaponsDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void WeaponsDatas::setDefault(){
-    int i = 1;
-    SystemWeapon* items[] = {new SystemWeapon(i++,
-                             new LangsTranslation("Wooden sword"), 1),
-                             new SystemWeapon(i++,
-                             new LangsTranslation("Wooden axe"), 2)};
-
-    int length = (sizeof(items)/sizeof(*items));
+void WeaponsDatas::setDefault() {
+    int i, length;
     QStandardItem* item;
+    SystemWeapon *weapon;
 
-    for (i = 0; i < length; i++){
+    QString names[] = {
+        "Wooden sword", "Wooden axe"
+    };
+    int iconsID[] = {
+        -1, -1
+    };
+    int types[] = {
+        1, 2
+    };
+    length = (sizeof(names)/sizeof(*names));
+
+    for (i = 0; i < length; i++) {
+        weapon = new SystemWeapon(i + 1, new LangsTranslation(names[i]), iconsID
+            [i], types[i]);
         item = new QStandardItem;
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(items[i])));
+        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(weapon)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(items[i]->toString());
+        item->setText(weapon->toString());
         m_model->appendRow(item);
     }
 }

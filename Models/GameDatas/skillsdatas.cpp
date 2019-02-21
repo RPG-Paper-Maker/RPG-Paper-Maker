@@ -59,10 +59,13 @@ void SkillsDatas::setDefault(){
         "Attack", "Skill", "Item", "Escape", "Fire", "Water", "Wind", "Shadow",
         "Blazing sword", "Bandage", "Concentration"
     };
+    int iconsID[] = {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
-        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]));
+        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID[i]);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(skill)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

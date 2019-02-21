@@ -70,6 +70,8 @@ const QString RPM::pathMonsters = Common::pathCombine(pathDatas, "monsters.json"
 const QString RPM::pathTroops = Common::pathCombine(pathDatas, "troops.json");
 const QString RPM::pathClasses = Common::pathCombine(pathDatas, "classes.json");
 const QString RPM::PATH_TILESETS = Common::pathCombine(pathDatas, "tilesets.json");
+const QString RPM::PATH_ANIMATIONS = Common::pathCombine(pathDatas, "animations.json");
+const QString RPM::PATH_STATUS = Common::pathCombine(pathDatas, "status.json");
 const QString RPM::PATH_SPECIAL_ELEMENTS =
         Common::pathCombine(pathDatas, "specialElements.json");
 const QString RPM::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");

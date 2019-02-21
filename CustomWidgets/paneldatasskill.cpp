@@ -17,7 +17,9 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemitem.h"
+
+#include "paneldatasskill.h"
+#include "ui_paneldatasskill.h"
 
 // -------------------------------------------------------
 //
@@ -25,46 +27,27 @@
 //
 // -------------------------------------------------------
 
-SystemItem::SystemItem() : SystemItem(1, new LangsTranslation, -1, 1, false)
+PanelDatasSkill::PanelDatasSkill(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PanelDatasSkill)
 {
-
+    ui->setupUi(this);
 }
 
-SystemItem::SystemItem(int i, LangsTranslation *names, int pictureID, int
-    idType, bool consumable) :
-    SystemSkill(i, names, pictureID),
-    m_idType(idType),
-    m_consumable(consumable)
+PanelDatasSkill::~PanelDatasSkill()
 {
-
+    delete ui;
 }
 
-SystemItem::~SystemItem() {
-
-}
-
-bool SystemItem::consumable() const { return m_consumable; }
-
-void SystemItem::setConsumable(bool consumable){ m_consumable = consumable; }
-
-int SystemItem::idType() const { return m_idType; }
-
-void SystemItem::setIdType(int t){ m_idType = t; }
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-void SystemItem::read(const QJsonObject &json){
-    SystemSkill::read(json);
-    m_idType = json["t"].toInt();
-    m_consumable= json["cons"].toBool();
-}
-
-void SystemItem::write(QJsonObject &json) const{
-    SystemSkill::write(json);
-    json["t"] = m_idType;
-    json["cons"] = m_consumable;
+void PanelDatasSkill::initialize() {
+    ui->panelPrimitiveValueTargetConditions->initializeMessage();
+    ui->panelPrimitiveValueAnimation->initializeDataBaseCommandId(nullptr,
+        nullptr, nullptr);
 }
