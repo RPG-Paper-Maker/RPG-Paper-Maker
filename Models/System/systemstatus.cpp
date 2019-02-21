@@ -25,13 +25,14 @@
 //
 // -------------------------------------------------------
 
-SystemStatus::SystemStatus()
+SystemStatus::SystemStatus() :
+    SystemStatus(1, new LangsTranslation, -1)
 {
 
 }
 
-SystemStatus::SystemStatus(int i, QString n) :
-    SuperListItem(i, n)
+SystemStatus::SystemStatus(int i, LangsTranslation *names, int pictureID) :
+    SystemIcon(i, names, pictureID)
 {
 
 }
@@ -47,11 +48,11 @@ SystemStatus::~SystemStatus() {
 // -------------------------------------------------------
 
 void SystemStatus::read(const QJsonObject &json) {
-    SuperListItem::read(json);
+    SystemIcon::read(json);
 }
 
 // -------------------------------------------------------
 
 void SystemStatus::write(QJsonObject &json) const {
-    SuperListItem::write(json);
+    SystemIcon::write(json);
 }

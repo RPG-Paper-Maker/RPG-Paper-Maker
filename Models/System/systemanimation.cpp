@@ -25,7 +25,8 @@
 //
 // -------------------------------------------------------
 
-SystemAnimation::SystemAnimation()
+SystemAnimation::SystemAnimation() :
+    SystemAnimation(1, "")
 {
 
 }

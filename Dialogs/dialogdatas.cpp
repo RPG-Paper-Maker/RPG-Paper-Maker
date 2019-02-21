@@ -49,6 +49,8 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     initializeMonsters(gameDatas);
     initializeTroops(gameDatas);
     initializeTilesets(gameDatas);
+    initializeAnimations(gameDatas);
+    initializeStatus(gameDatas);
 }
 
 DialogDatas::~DialogDatas()
@@ -280,6 +282,52 @@ void DialogDatas::updateClass(SystemClass* sysClass) {
 
 // -------------------------------------------------------
 
+void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
+    ui->panelSuperListAnimations->list()->initializeNewItemInstance(new
+        SystemAnimation);
+    ui->panelSuperListAnimations->initializeModel(gameDatas->animationsDatas()
+        ->model());
+    connect(ui->panelSuperListAnimations->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageAnimationsSelected(QModelIndex, QModelIndex)));
+    QModelIndex index = ui->panelSuperListAnimations->list()->getModel()->index(
+        0, 0);
+    ui->panelSuperListAnimations->list()->setIndex(0);
+    on_pageAnimationsSelected(index, index);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::updateAnimation(SystemAnimation *sysAnimation) {
+
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::initializeStatus(GameDatas *gameDatas) {
+    ui->panelSuperListStatus->setIsLang(true);
+    ui->panelSuperListStatus->list()->initializeNewItemInstance(new
+        SystemStatus);
+    ui->panelSuperListStatus->initializeModel(gameDatas->statusDatas()
+        ->model());
+    ui->panelSuperListStatus->showEditName(true);
+    connect(ui->panelSuperListStatus->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageStatusSelected(QModelIndex, QModelIndex)));
+    QModelIndex index = ui->panelSuperListStatus->list()->getModel()->index(
+        0, 0);
+    ui->panelSuperListStatus->list()->setIndex(0);
+    on_pageStatusSelected(index, index);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::updateStatus(SystemStatus *sysStatus) {
+
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::initializeTilesets(GameDatas *gameDatas){
 
     // Initialize name & pictures
@@ -470,6 +518,28 @@ void DialogDatas::on_pageTilesetSelected(QModelIndex index, QModelIndex){
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateTileset((SystemTileset*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pageAnimationsSelected(QModelIndex index, QModelIndex){
+    QStandardItem* selected = ui->panelSuperListAnimations->list()->getModel()
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        updateAnimation(reinterpret_cast<SystemAnimation *>(selected->data()
+            .value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
+    QStandardItem* selected = ui->panelSuperListStatus->list()->getModel()
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        updateStatus(reinterpret_cast<SystemStatus *>(selected->data()
+            .value<quintptr>()));
+    }
 }
 
 // -------------------------------------------------------

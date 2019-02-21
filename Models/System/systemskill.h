@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include <QMetaType>
 #include "systemicon.h"
+#include "eventcommand.h"
 
 // -------------------------------------------------------
 //

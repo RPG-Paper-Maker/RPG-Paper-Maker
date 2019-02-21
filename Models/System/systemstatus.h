@@ -21,7 +21,7 @@
 #define SYSTEMSTATUS_H
 
 #include <QMetaType>
-#include "superlistitem.h"
+#include "systemicon.h"
 
 // -------------------------------------------------------
 //
@@ -31,11 +31,11 @@
 //
 // -------------------------------------------------------
 
-class SystemStatus : public SuperListItem
+class SystemStatus : public SystemIcon
 {
 public:
     SystemStatus();
-    SystemStatus(int i, QString n);
+    SystemStatus(int i, LangsTranslation *names, int pictureID);
     virtual ~SystemStatus();
 
     virtual void read(const QJsonObject &json);

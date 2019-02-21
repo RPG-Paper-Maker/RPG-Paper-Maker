@@ -32,6 +32,8 @@
 #include "systemtroop.h"
 #include "systemskill.h"
 #include "systemtileset.h"
+#include "systemanimation.h"
+#include "systemstatus.h"
 
 // -------------------------------------------------------
 //
@@ -50,7 +52,7 @@ class DialogDatas : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogDatas(GameDatas* gameDatas, QWidget *parent = 0);
+    explicit DialogDatas(GameDatas* gameDatas, QWidget *parent = nullptr);
     ~DialogDatas();
     int finalLevel() const;
 
@@ -71,6 +73,10 @@ private:
     void updateTroop(SystemTroop *sysTroop);
     void initializeClasses(GameDatas *gameDatas);
     void updateClass(SystemClass *sysClass);
+    void initializeAnimations(GameDatas *gameDatas);
+    void updateAnimation(SystemAnimation *sysAnimation);
+    void initializeStatus(GameDatas *gameDatas);
+    void updateStatus(SystemStatus *sysStatus);
     void initializeTilesets(GameDatas *gameDatas);
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
@@ -87,6 +93,8 @@ private slots:
     void on_pageMonsterSelected(QModelIndex index, QModelIndex);
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
+    void on_pageAnimationsSelected(QModelIndex index, QModelIndex);
+    void on_pageStatusSelected(QModelIndex index, QModelIndex);
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
     void on_tilesetPictureChanged(SystemPicture* picture);

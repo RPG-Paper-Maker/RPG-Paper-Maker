@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>7</number>
+        <number>9</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -705,6 +705,123 @@
         <attribute name="title">
          <string>Animations</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_28">
+         <item row="0" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,1">
+           <item>
+            <widget class="QGroupBox" name="groupBox_20">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Animations</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_27">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListAnimations" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>175</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>175</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget" native="true">
+             <layout class="QGridLayout" name="gridLayout_30">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>This option is not available yet</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_9">
+        <attribute name="title">
+         <string>Status</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_33">
+         <item row="0" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,1">
+           <item>
+            <widget class="QGroupBox" name="groupBox_21">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Status</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_31">
+              <item row="0" column="0">
+               <widget class="PanelSuperList" name="panelSuperListStatus" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>175</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>175</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>This option is not available yet</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_7">
         <attribute name="title">
@@ -990,11 +1107,6 @@
           </layout>
          </item>
         </layout>
-       </widget>
-       <widget class="QWidget" name="tab_9">
-        <attribute name="title">
-         <string>Status</string>
-        </attribute>
        </widget>
       </widget>
      </item>
