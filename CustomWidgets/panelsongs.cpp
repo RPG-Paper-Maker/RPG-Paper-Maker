@@ -290,6 +290,17 @@ void PanelSongs::getCommand(QVector<QString> &command) const {
 
 // -------------------------------------------------------
 
+void PanelSongs::updatePlaySong(SystemPlaySong *song) {
+    song->setId(song->isSelectedByID() ? -1 : m_song->id());
+    song->volume()->setCopy(*ui->panelPrimitiveValueVolume->model());
+    song->setIsStart(ui->checkBoxStart->isChecked());
+    song->start()->setCopy(*ui->panelPrimitiveValueStart->model());
+    song->setIsEnd(ui->checkBoxEnd->isChecked());
+    song->end()->setCopy(*ui->panelPrimitiveValueEnd->model());
+}
+
+// -------------------------------------------------------
+
 void PanelSongs::showSongs(bool b) {
     this->setVisible(b);
 }

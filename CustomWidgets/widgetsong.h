@@ -30,7 +30,7 @@
 
 #include <QWidget>
 #include <QListWidget>
-#include "eventcommand.h"
+#include "systemplaysong.h"
 #include "systemcommonobject.h"
 
 namespace Ui {
@@ -44,15 +44,13 @@ class WidgetSong : public QWidget
 public:
     explicit WidgetSong(QWidget *parent = nullptr);
     ~WidgetSong();
-    EventCommand* command() const;
-    void initialize(EventCommand *command, SongKind kind,
-                    SystemCommonObject* object, QStandardItemModel* parameters);
+    void initialize(SystemPlaySong* song);
     void update();
     void openDialog();
 
 private:
     Ui::WidgetSong *ui;
-    EventCommand* m_command;
+    SystemPlaySong* m_song;
     SongKind m_kind;
     SystemCommonObject* m_object;
     QStandardItemModel* m_parameters;
@@ -60,9 +58,6 @@ private:
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);
     void on_pushButton_clicked();
-
-signals:
-    void updated();
 };
 
 #endif // WIDGETSONG_H

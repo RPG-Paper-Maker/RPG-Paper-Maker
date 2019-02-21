@@ -28,12 +28,11 @@
 // -------------------------------------------------------
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
-                                             EventCommand *command,
-                                             SystemCommonObject *object,
-                                             QStandardItemModel *parameters,
-                                             QWidget *parent) :
+    EventCommand *command, SystemCommonObject *object, QStandardItemModel
+    *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_kind(kind),
+    m_song(nullptr),
     ui(new Ui::DialogCommandPlaySong)
 {
     ui->setupUi(this);
@@ -43,11 +42,41 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     ui->widget->initializePrimitives(parameters, nullptr);
     ui->panelPrimitiveValueSongID->initializeNumber(parameters, nullptr);
 
-    if (command != nullptr) initialize(command);
+    if (command != nullptr) {
+        initialize(command);
+    }
 }
 
-DialogCommandPlaySong::~DialogCommandPlaySong()
+DialogCommandPlaySong::DialogCommandPlaySong(QString title, SystemPlaySong
+    *song) :
+    DialogCommandPlaySong(title, song->kind())
 {
+    EventCommand command;
+    EventCommandKind commandKind;
+
+    m_song = song;
+    switch (m_kind) {
+    case SongKind::Music:
+        commandKind = EventCommandKind::PlayMusic;
+        break;
+    case SongKind::BackgroundSound:
+        commandKind = EventCommandKind::PlayBackgroundSound;
+        break;
+    case SongKind::Sound:
+        commandKind = EventCommandKind::PlayASound;
+        break;
+    case SongKind::MusicEffect:
+        commandKind = EventCommandKind::PlayMusicEffect;
+        break;
+    default:
+        commandKind = EventCommandKind::None;
+    }
+
+    song->toEventCommand(command, commandKind);
+    initialize(&command);
+}
+
+DialogCommandPlaySong::~DialogCommandPlaySong() {
     delete ui;
 }
 
@@ -101,6 +130,14 @@ EventCommand* DialogCommandPlaySong::getCommand() const {
 
 void DialogCommandPlaySong::accept() {
     RPM::get()->project()->writeSongsDatas();
+
+    if (m_song != nullptr) {
+        m_song->setIsSelectedByID(ui->checkBoxSongID->isChecked());
+        m_song->valueID()->setCopy(*ui->panelPrimitiveValueSongID->model());
+        ui->widget->updatePlaySong(m_song);
+        m_song->updateName();
+    }
+
     QDialog::accept();
 }
 

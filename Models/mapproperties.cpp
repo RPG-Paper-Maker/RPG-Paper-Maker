@@ -48,8 +48,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_width(w),
     m_height(h),
     m_depth(d),
-    m_music(nullptr),
-    m_backgroundSound(nullptr),
+    m_music(new SystemPlaySong(-1, SongKind::Music)),
+    m_backgroundSound(new SystemPlaySong(-1, SongKind::BackgroundSound)),
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true)
 {
@@ -61,12 +61,8 @@ MapProperties::~MapProperties()
     QHash<Portion, QSet<Position>*>::iterator i;
     for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
         delete *i;
-    if (m_music != nullptr) {
-        delete m_music;
-    }
-    if (m_backgroundSound != nullptr) {
-        delete m_backgroundSound;
-    }
+    delete m_music;
+    delete m_backgroundSound;
     delete m_skyColorID;
 }
 
@@ -83,9 +79,9 @@ int MapProperties::height() const { return m_height; }
 int MapProperties::depth() const { return m_depth; }
 
 SystemTileset* MapProperties::tileset() const {
-    return (SystemTileset*) SuperListItem::getById(
-                RPM::get()->project()->gameDatas()->tilesetsDatas()
-                ->model()->invisibleRootItem(), m_tilesetID);
+    return reinterpret_cast<SystemTileset *>(SuperListItem::getById(RPM::get()
+        ->project()->gameDatas()->tilesetsDatas()->model()->invisibleRootItem(),
+        m_tilesetID));
 }
 
 void MapProperties::setTilesetID(int id) {
@@ -100,18 +96,18 @@ void MapProperties::setHeight(int h) { m_height = h; }
 
 void MapProperties::setDepth(int d) { m_depth = d; }
 
-EventCommand* MapProperties::music() const { return m_music; }
+SystemPlaySong* MapProperties::music() const { return m_music; }
 
-void MapProperties::setMusic(EventCommand* command) {
-    m_music = command;
+void MapProperties::setMusic(SystemPlaySong* song) {
+    m_music = song;
 }
 
-EventCommand* MapProperties::backgroundSound() const {
+SystemPlaySong* MapProperties::backgroundSound() const {
     return m_backgroundSound;
 }
 
-void MapProperties::setBackgroundSound(EventCommand* command) {
-    m_backgroundSound = command;
+void MapProperties::setBackgroundSound(SystemPlaySong* song) {
+    m_backgroundSound = song;
 }
 
 PrimitiveValue * MapProperties::skyColorID() const {
@@ -233,19 +229,12 @@ void MapProperties::read(const QJsonObject &json){
     m_width = json["w"].toInt();
     m_height = json["h"].toInt();
     m_depth = json["d"].toInt();
-    m_music = nullptr;
-    if (json.contains("music")) {
-        m_music = new EventCommand(EventCommandKind::PlayMusic);
-        obj = json["music"].toObject();
-        m_music->read(obj);
-    }
-    m_backgroundSound = nullptr;
-    if (json.contains("bgs")) {
-        m_backgroundSound = new EventCommand(
-            EventCommandKind::PlayBackgroundSound);
-        obj = json["bgs"].toObject();
-        m_backgroundSound->read(obj);
-    }
+
+    // Musics
+    m_music = new SystemPlaySong(-1, SongKind::Music);
+    m_music->read(json["music"].toObject());
+    m_backgroundSound = new SystemPlaySong(-1, SongKind::BackgroundSound);
+    m_backgroundSound->read(json["bgs"].toObject());
 
     // Sky
     m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
@@ -280,18 +269,23 @@ void MapProperties::read(const QJsonObject &json){
 
 void MapProperties::write(QJsonObject &json) const{
     SystemLang::write(json);
+    QJsonObject obj;
 
     json["tileset"] = m_tilesetID;
     json["l"] = m_length;
     json["w"] = m_width;
     json["h"] = m_height;
     json["d"] = m_depth;
-    if (m_music != nullptr) {
-        json["music"] = m_music->getJSON();
-    }
-    if (m_backgroundSound != nullptr) {
-        json["bgs"] = m_backgroundSound->getJSON();
-    }
+
+    // Musics
+    obj = QJsonObject();
+    m_music->write(obj);
+    json["music"] = obj;
+    obj = QJsonObject();
+    m_backgroundSound->write(obj);
+    json["bgs"] = obj;
+
+    // Sky
     json["isky"] = m_isSkyColor;
     if (m_isSkyColor) {
         QJsonObject jsonObj;

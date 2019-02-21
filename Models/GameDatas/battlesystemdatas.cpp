@@ -47,9 +47,9 @@ const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 
 BattleSystemDatas::BattleSystemDatas() :
     m_formulaIsDead(new PrimitiveValue(QString())),
-    m_music(nullptr),
-    m_levelup(nullptr),
-    m_victory(nullptr)
+    m_music(new SystemPlaySong(-1, SongKind::Music)),
+    m_levelup(new SystemPlaySong(-1, SongKind::Sound)),
+    m_victory(new SystemPlaySong(-1, SongKind::Music))
 {
     m_modelCommonEquipment = new QStandardItemModel;
     m_modelWeaponsKind = new QStandardItemModel;
@@ -98,28 +98,28 @@ PrimitiveValue * BattleSystemDatas::formulaIsDead() const {
     return m_formulaIsDead;
 }
 
-EventCommand * BattleSystemDatas::music() const {
+SystemPlaySong * BattleSystemDatas::music() const {
     return m_music;
 }
 
-void BattleSystemDatas::setMusic(EventCommand* command) {
-    m_music = command;
+void BattleSystemDatas::setMusic(SystemPlaySong *song) {
+    m_music = song;
 }
 
-EventCommand * BattleSystemDatas::levelup() const {
+SystemPlaySong * BattleSystemDatas::levelup() const {
     return m_levelup;
 }
 
-void BattleSystemDatas::setLevelup(EventCommand* command) {
-    m_levelup = command;
+void BattleSystemDatas::setLevelup(SystemPlaySong *song) {
+    m_levelup = song;
 }
 
-EventCommand * BattleSystemDatas::victory() const {
+SystemPlaySong * BattleSystemDatas::victory() const {
     return m_victory;
 }
 
-void BattleSystemDatas::setVictory(EventCommand* command) {
-    m_victory = command;
+void BattleSystemDatas::setVictory(SystemPlaySong *song) {
+    m_victory = song;
 }
 
 QStandardItemModel* BattleSystemDatas::modelWeaponsKind() const {
@@ -205,7 +205,7 @@ void BattleSystemDatas::setDefault(){
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultOptions(){
+void BattleSystemDatas::setDefaultOptions() {
     m_idStatisticLevel = 1;
     m_idStatisticExp = 2;
 
@@ -213,23 +213,18 @@ void BattleSystemDatas::setDefaultOptions(){
     m_formulaIsDead->setMessageValue("u.hp === 0");
 
     // Musics
-    if (m_music == nullptr) {
-        m_music = new EventCommand(EventCommandKind::PlayMusic);
-    }
-    m_music->initializePlaySong(2, true, 6.4);
-    if (m_levelup == nullptr) {
-        m_levelup = new EventCommand(EventCommandKind::PlayASound);
-    }
-    m_levelup->initializePlaySong(4);
-    if (m_victory == nullptr) {
-        m_victory = new EventCommand(EventCommandKind::PlayMusic);
-    }
-    m_victory->initializePlaySong(2, true, 6.4);
+    m_music->setId(2);
+    m_music->setIsStart(true);
+    m_music->start()->setNumberDoubleValue(6.4);
+    m_levelup->setId(4);
+    m_victory->setId(2);
+    m_victory->setIsStart(true);
+    m_victory->start()->setNumberDoubleValue(6.4);
 }
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultWeaponsKind(){
+void BattleSystemDatas::setDefaultWeaponsKind() {
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
     QString names[] = {"Sword", "Axe", "Spear", "Tome", "Staff", "Bow",
@@ -467,24 +462,9 @@ void BattleSystemDatas::read(const QJsonObject &json){
     m_formulaIsDead->read(obj);
 
     // Musics
-    m_music = nullptr;
-    if (json.contains(JSON_BATLLE_MUSIC)) {
-        m_music = new EventCommand(EventCommandKind::PlayMusic);
-        obj = json[JSON_BATLLE_MUSIC].toObject();
-        m_music->read(obj);
-    }
-    m_levelup = nullptr;
-    if (json.contains(JSON_BATLLE_LEVELUP)) {
-        m_levelup = new EventCommand(EventCommandKind::PlayMusicEffect);
-        obj = json[JSON_BATLLE_LEVELUP].toObject();
-        m_levelup->read(obj);
-    }
-    m_victory = nullptr;
-    if (json.contains(JSON_BATLLE_VICTORY)) {
-        m_victory = new EventCommand(EventCommandKind::PlayMusic);
-        obj = json[JSON_BATLLE_VICTORY].toObject();
-        m_victory->read(obj);
-    }
+    m_music->read(json[JSON_BATLLE_MUSIC].toObject());
+    m_levelup->read(json[JSON_BATLLE_LEVELUP].toObject());
+    m_victory->read(json[JSON_BATLLE_VICTORY].toObject());
 
     // Battle maps
     jsonList = json[jsonBattleMaps].toArray();
@@ -604,15 +584,15 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     json[JSON_FORMULA_IS_DEAD] = obj;
 
     // Musics
-    if (m_music != nullptr) {
-        json[JSON_BATLLE_MUSIC] = m_music->getJSON();
-    }
-    if (m_levelup != nullptr) {
-        json[JSON_BATLLE_LEVELUP] = m_levelup->getJSON();
-    }
-    if (m_victory != nullptr) {
-        json[JSON_BATLLE_VICTORY] = m_victory->getJSON();
-    }
+    obj = QJsonObject();
+    m_music->write(obj);
+    json[JSON_BATLLE_MUSIC] = obj;
+    obj = QJsonObject();
+    m_levelup->write(obj);
+    json[JSON_BATLLE_LEVELUP] = obj;
+    obj = QJsonObject();
+    m_victory->write(obj);
+    json[JSON_BATLLE_VICTORY] = obj;
 
     // Battle maps
     jsonArray = QJsonArray();

@@ -23,7 +23,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "systemstatistic.h"
-#include "eventcommand.h"
+#include "systemplaysong.h"
 #include "primitivevalue.h"
 
 // -------------------------------------------------------
@@ -58,19 +58,19 @@ public:
     void setIdStatisticLevel(int i);
     void setIdStatisticExp(int i);
     PrimitiveValue * formulaIsDead() const;
-    EventCommand * music() const;
-    void setMusic(EventCommand* command);
-    EventCommand * levelup() const;
-    void setLevelup(EventCommand* command);
-    EventCommand * victory() const;
-    void setVictory(EventCommand* command);
-    QStandardItemModel* modelWeaponsKind() const;
-    QStandardItemModel* modelArmorsKind() const;
-    QStandardItemModel* modelBattleMaps() const;
-    QStandardItemModel* modelElements() const;
-    QStandardItemModel* modelCommonEquipment() const;
-    QStandardItemModel* modelCommonStatistics() const;
-    QStandardItemModel* modelCommonBattleCommand() const;
+    SystemPlaySong * music() const;
+    void setMusic(SystemPlaySong *song);
+    SystemPlaySong * levelup() const;
+    void setLevelup(SystemPlaySong *song);
+    SystemPlaySong * victory() const;
+    void setVictory(SystemPlaySong *song);
+    QStandardItemModel * modelWeaponsKind() const;
+    QStandardItemModel * modelArmorsKind() const;
+    QStandardItemModel * modelBattleMaps() const;
+    QStandardItemModel * modelElements() const;
+    QStandardItemModel * modelCommonEquipment() const;
+    QStandardItemModel * modelCommonStatistics() const;
+    QStandardItemModel * modelCommonBattleCommand() const;
     void getSortedStatistics(QVector<SystemStatistic*>& fixes,
                              QVector<SystemStatistic*>& bars) const;
     void updateEquipments();
@@ -91,17 +91,17 @@ private:
     int m_idStatisticLevel;
     int m_idStatisticExp;
     PrimitiveValue *m_formulaIsDead;
-    EventCommand* m_music;
-    EventCommand* m_levelup;
-    EventCommand* m_victory;
-    QStandardItemModel* m_modelWeaponsKind;
-    QStandardItemModel* m_modelArmorsKind;
-    QStandardItemModel* m_modelBattleMaps;
-    QStandardItemModel* m_modelElements;
-    QStandardItemModel* m_modelCommonEquipment;
-    QStandardItemModel* m_modelCommonStatistics;
-    QStandardItemModel* m_modelCommonBattleCommand;
-    void updateEquipmentsKind(QStandardItemModel* model);
+    SystemPlaySong *m_music;
+    SystemPlaySong *m_levelup;
+    SystemPlaySong *m_victory;
+    QStandardItemModel *m_modelWeaponsKind;
+    QStandardItemModel *m_modelArmorsKind;
+    QStandardItemModel *m_modelBattleMaps;
+    QStandardItemModel *m_modelElements;
+    QStandardItemModel *m_modelCommonEquipment;
+    QStandardItemModel *m_modelCommonStatistics;
+    QStandardItemModel *m_modelCommonBattleCommand;
+    void updateEquipmentsKind(QStandardItemModel *model);
 };
 
 #endif // BATTLESYSTEMDATAS_H

@@ -46,15 +46,15 @@ public:
     virtual ~EventCommand();
     static QVector<QString> emptyCommandList;
     EventCommandKind kind() const;
+    void setKind(EventCommandKind k);
     int commandsCount() const;
     QString valueCommandAt(int index) const;
+    void setCommands(QVector<QString>& commands);
     bool hasElse() const;
     bool isBattleWithoutGameOver() const;
     bool isEditable() const;
     bool isErasable() const;
     int getSongID(QStandardItemModel* parameters) const;
-    void initializePlaySong(int id, bool isStart = false, double start = 0, bool
-        isEnd = false, double end = 0);
 
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;

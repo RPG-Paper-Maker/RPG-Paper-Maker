@@ -150,18 +150,12 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->panelPrimitiveValueFormulaIsDead->updateKind();
 
     // Initialize musics
-    ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()->music(),
-        SongKind::Music, nullptr, nullptr);
-    connect(ui->widgetChooseBattleMusic, SIGNAL(updated()), this,
-        SLOT(on_battleMusicChanged()));
+    ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()
+        ->music());
     ui->widgetChooseBattleLevelUp->initialize(gameDatas->battleSystemDatas()
-        ->levelup(), SongKind::Sound, nullptr, nullptr);
-    connect(ui->widgetChooseBattleLevelUp, SIGNAL(updated()), this,
-        SLOT(on_battleLevelupChanged()));
+        ->levelup());
     ui->widgetChooseBattleVictory->initialize(gameDatas->battleSystemDatas()
-        ->victory(), SongKind::Music, nullptr, nullptr);
-    connect(ui->widgetChooseBattleVictory, SIGNAL(updated()), this,
-        SLOT(on_battleVictoryChanged()));
+        ->victory());
 
     // Initialize models
     ui->treeViewBattleMap->initializeModel(gameDatas->battleSystemDatas()
@@ -381,27 +375,6 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
         RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->setIdStatisticExp(statistic->id());
     }
-}
-
-// -------------------------------------------------------
-
-void DialogSystems::on_battleMusicChanged() {
-    RPM::get()->project()->gameDatas()->battleSystemDatas()->setMusic(ui
-        ->widgetChooseBattleMusic->command());
-}
-
-// -------------------------------------------------------
-
-void DialogSystems::on_battleLevelupChanged() {
-    RPM::get()->project()->gameDatas()->battleSystemDatas()->setLevelup(ui
-        ->widgetChooseBattleLevelUp->command());
-}
-
-// -------------------------------------------------------
-
-void DialogSystems::on_battleVictoryChanged() {
-    RPM::get()->project()->gameDatas()->battleSystemDatas()->setVictory(ui
-        ->widgetChooseBattleVictory->command());
 }
 
 // -------------------------------------------------------

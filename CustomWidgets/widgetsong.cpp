@@ -45,23 +45,15 @@ WidgetSong::~WidgetSong()
     delete ui;
 }
 
-EventCommand* WidgetSong::command() const {
-    return m_command;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
 
-void WidgetSong::initialize(EventCommand* command, SongKind kind,
-    SystemCommonObject* object, QStandardItemModel* parameters)
+void WidgetSong::initialize(SystemPlaySong *song)
 {
-    m_command = command;
-    m_kind = kind;
-    m_object = object;
-    m_parameters = parameters;
+    m_song = song;
 
     update();
 }
@@ -69,31 +61,15 @@ void WidgetSong::initialize(EventCommand* command, SongKind kind,
 // -------------------------------------------------------
 
 void WidgetSong::update() {
-    if (m_command == nullptr) {
-        ui->listWidget->item(0)->setText("<None>");
-    }
-    else {
-        ui->listWidget->item(0)->setText(SuperListItem::getById(RPM::get()
-            ->project()->songsDatas()->model(m_kind)->invisibleRootItem(),
-            m_command->getSongID(m_parameters))->toString());
-    }
-    emit updated();
+    ui->listWidget->item(0)->setText(m_song->isSelectedByID() ? "By ID: " +
+        m_song->valueID()->toString() : m_song->toString());
 }
 
 // -------------------------------------------------------
 
-void WidgetSong::openDialog(){
-    DialogCommandPlaySong dialog("Choose a song", m_kind, m_command, m_object,
-        m_parameters, this);
+void WidgetSong::openDialog() {
+    DialogCommandPlaySong dialog("Choose a song", m_song);
     if (dialog.exec() == QDialog::Accepted) {
-        if (m_command != nullptr) {
-            delete m_command;
-        }
-        m_command = dialog.getCommand();
-        if (m_command->getSongID(m_parameters) == -1) {
-            delete m_command;
-            m_command = nullptr;
-        }
         update();
     }
 }

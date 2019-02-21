@@ -63,16 +63,10 @@ void DialogMapProperties::initialize(){
     ui->widgetLangName->initializeNames(&m_mapProperties);
 
     // Music
-    ui->widgetChooseMusic->initialize(m_mapProperties.music(), SongKind::Music,
-    nullptr, nullptr);
-    connect(ui->widgetChooseMusic, SIGNAL(updated()), this,
-        SLOT(on_musicChanged()));
+    ui->widgetChooseMusic->initialize(m_mapProperties.music());
 
     // Background sound
-    ui->widgetChooseBackgroundSound->initialize(m_mapProperties
-        .backgroundSound(), SongKind::BackgroundSound, nullptr, nullptr);
-    connect(ui->widgetChooseBackgroundSound, SIGNAL(updated()), this,
-        SLOT(on_backgroundSoundChanged()));
+    ui->widgetChooseBackgroundSound->initialize(m_mapProperties.backgroundSound());
 
     // Sizes
     ui->spinBoxLength->setValue(m_mapProperties.length());
@@ -125,17 +119,4 @@ void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
     m_mapProperties.setTilesetID(reinterpret_cast<SystemTileset*>(RPM::get()
         ->project()->gameDatas()->tilesetsDatas()->model()->item(index)->data()
         .value<qintptr>())->id());
-}
-
-// -------------------------------------------------------
-
-void DialogMapProperties::on_musicChanged() {
-    m_mapProperties.setMusic(ui->widgetChooseMusic->command());
-}
-
-// -------------------------------------------------------
-
-void DialogMapProperties::on_backgroundSoundChanged() {
-    m_mapProperties.setBackgroundSound(ui->widgetChooseBackgroundSound
-        ->command());
 }

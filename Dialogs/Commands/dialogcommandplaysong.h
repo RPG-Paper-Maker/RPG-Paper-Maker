@@ -29,7 +29,7 @@
 // -------------------------------------------------------
 
 #include "dialogcommand.h"
-#include "songkind.h"
+#include "systemplaysong.h"
 
 namespace Ui {
 class DialogCommandPlaySong;
@@ -40,19 +40,19 @@ class DialogCommandPlaySong : public DialogCommand
     Q_OBJECT
 
 public:
-    explicit DialogCommandPlaySong(QString title, SongKind kind,
-                                   EventCommand *command = nullptr,
-                                   SystemCommonObject *object = nullptr,
-                                   QStandardItemModel* parameters = nullptr,
-                                   QWidget *parent = 0);
+    explicit DialogCommandPlaySong(QString title, SongKind kind, EventCommand
+        *command = nullptr, SystemCommonObject *object = nullptr,
+        QStandardItemModel *parameters = nullptr, QWidget *parent = nullptr);
+    explicit DialogCommandPlaySong(QString title, SystemPlaySong *song);
     ~DialogCommandPlaySong();
     EventCommandKind getCommandKind() const;
     EventCommand* getCommand() const;
 
 protected:
     SongKind m_kind;
+    SystemPlaySong *m_song;
 
-    virtual void initialize(EventCommand* command);
+    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandPlaySong *ui;

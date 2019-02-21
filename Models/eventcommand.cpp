@@ -45,17 +45,28 @@ EventCommand::EventCommand(EventCommandKind k, QVector<QString> &l) :
 
 }
 
-EventCommand::~EventCommand()
-{
+EventCommand::~EventCommand() {
 
 }
 
-EventCommandKind EventCommand::kind() const { return p_kind; }
+EventCommandKind EventCommand::kind() const {
+    return p_kind;
+}
 
-int EventCommand::commandsCount() const { return p_listCommand.size(); }
+void  EventCommand::setKind(EventCommandKind k) {
+    p_kind = k;
+}
 
-QString EventCommand::valueCommandAt(int index) const{
+int EventCommand::commandsCount() const {
+    return p_listCommand.size();
+}
+
+QString EventCommand::valueCommandAt(int index) const {
     return p_listCommand.at(index);
+}
+
+void EventCommand::setCommands(QVector<QString>& commands) {
+    p_listCommand = commands;
 }
 
 // -------------------------------------------------------
@@ -108,16 +119,6 @@ int EventCommand::getSongID(QStandardItemModel *parameters) const
     int id = p_listCommand.at(i++).toInt();
 
     return isIDNumber ? idNumber.toInt() : id;
-}
-
-// -------------------------------------------------------
-
-void EventCommand::initializePlaySong(int id, bool isStart, double start, bool
-    isEnd, double end)
-{
-    p_listCommand << "0" << "3" << "0" << QString::number(id) << "3" << "100" <<
-        (isStart ? "1" : "0") << "12" << QString::number(start) << (isEnd ? "1"
-        : "0") << "12" << QString::number(end);
 }
 
 // -------------------------------------------------------

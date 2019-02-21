@@ -26,10 +26,10 @@
 #include <QMediaPlayer>
 #include <QSound>
 #include <QTimer>
-#include "songkind.h"
 #include "superlistitem.h"
 #include "systemsong.h"
 #include "eventcommand.h"
+#include "systemplaysong.h"
 
 // -------------------------------------------------------
 //
@@ -60,6 +60,7 @@ public:
     void changeSong(SystemSong *song);
     void initialize(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command) const;
+    void updatePlaySong(SystemPlaySong *song);
 
 private:
     Ui::PanelSongs *ui;

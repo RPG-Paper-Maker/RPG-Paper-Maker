@@ -25,7 +25,7 @@
 #include "systemtileset.h"
 #include "position.h"
 #include "qray3d.h"
-#include "eventcommand.h"
+#include "systemplaysong.h"
 #include "panelprimitivevalue.h"
 
 // -------------------------------------------------------
@@ -55,12 +55,12 @@ public:
     void setWidth(int w);
     void setHeight(int h);
     void setDepth(int d);
-    EventCommand * music() const;
-    void setMusic(EventCommand* command);
-    EventCommand * backgroundSound() const;
+    SystemPlaySong * music() const;
+    void setMusic(SystemPlaySong* song);
+    SystemPlaySong * backgroundSound() const;
     PrimitiveValue * skyColorID() const;
     void setSkyColorID(PrimitiveValue *skyColorID);
-    void setBackgroundSound(EventCommand* command);
+    void setBackgroundSound(SystemPlaySong* song);
     void addOverflow(Position& p, Portion& portion);
     void removeOverflow(Position& p, Portion& portion);
 
@@ -81,8 +81,8 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
-    EventCommand* m_music;
-    EventCommand* m_backgroundSound;
+    SystemPlaySong* m_music;
+    SystemPlaySong* m_backgroundSound;
     PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
     QHash<Portion, QSet<Position>*> m_outOverflowSprites;

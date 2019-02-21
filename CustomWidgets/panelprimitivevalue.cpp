@@ -42,7 +42,10 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
 
 PanelPrimitiveValue::~PanelPrimitiveValue()
 {
-    if (m_modelNeedDelete) delete m_model;
+    if (m_modelNeedDelete) {
+        delete m_model;
+    }
+
     delete ui;
 }
 
