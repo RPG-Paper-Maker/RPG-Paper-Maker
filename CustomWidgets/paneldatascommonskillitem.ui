@@ -54,7 +54,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBoxConsomable">
+        <widget class="QCheckBox" name="checkBoxConsumable">
          <property name="text">
           <string>Consomable</string>
          </property>

@@ -47,6 +47,8 @@ public:
 
     void initialize(CommonSkillItemKind kind);
     void update(SystemCommonSkillItem *model);
+    void initializeCommonSkill();
+    void updateCommonSkill();
     QStandardItemModel* getTypeModel();
 
 private:
@@ -58,8 +60,8 @@ protected:
 
 public slots:
     void on_comboBoxType_currentIndexChanged(int index);
-    void on_checkBoxConsumable_stateChanged(int state);
-    void on_checkBoxOneHand_stateChanged(int state);
+    void on_checkBoxConsumable_toggled(bool checked);
+    void on_checkBoxOneHand_toggled(bool checked);
     void on_comboBoxTarget_currentIndexChanged(int index);
     void on_comboBoxAvailable_currentIndexChanged(int index);
 };

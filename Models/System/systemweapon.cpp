@@ -26,12 +26,7 @@
 // -------------------------------------------------------
 
 SystemWeapon::SystemWeapon() :
-    SystemWeapon(1, new LangsTranslation, -1, 1, true, new LangsTranslation,
-        TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
-        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
-        PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None),
-        new PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel,
-        new QStandardItemModel)
+    SystemCommonSkillItem()
 {
 
 }

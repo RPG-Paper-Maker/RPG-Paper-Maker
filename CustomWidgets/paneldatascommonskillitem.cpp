@@ -54,8 +54,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     // Retain size when hidden (because of widget icon having weird behaviors)
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList = QList<QWidget*>({
-        ui->labelType, ui->comboBoxType, ui->checkBoxConsomable,
-        ui->checkBoxOneHand
+        ui->labelType, ui->comboBoxType, ui->checkBoxConsumable,
+        ui->checkBoxOneHand, ui->groupBoxCosts
     });
     for (int i = 0; i < widgetList.size(); i++) {
         sp_retain = widgetList[i]->sizePolicy();
@@ -63,30 +63,25 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         widgetList[i]->setSizePolicy(sp_retain);
     }
 
+    ui->panelPrimitiveValueConditions->addNone();
+    ui->panelPrimitiveValueConditions->initializeMessage();
+
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
-        // Hide useless parameters
+        initializeCommonSkill();
+
         ui->labelType->hide();
         ui->comboBoxType->hide();
-        ui->checkBoxConsomable->hide();
-        ui->checkBoxOneHand->hide();
+        ui->checkBoxConsumable->hide();
         ui->labelPrice->hide();
         ui->panelPrimitiveValuePrice->hide();
-        ui->groupBoxCaracteristics->hide();
+        break;
+    case CommonSkillItemKind::Item:
+        initializeCommonSkill();
 
-        // Initialize widgets
-        ui->panelPrimitiveValueConditions->addNone();
-        ui->panelPrimitiveValueConditions->initializeMessage();
-        ui->panelPrimitiveValueTargetConditions->addNone();
-        ui->panelPrimitiveValueTargetConditions->initializeMessage();
-        ui->panelPrimitiveValueAnimationUser->addNone();
-        ui->panelPrimitiveValueAnimationUser->initializeDataBaseCommandId(RPM
-            ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr
-            , nullptr);
-        ui->panelPrimitiveValueAnimationTarget->addNone();
-        ui->panelPrimitiveValueAnimationTarget->initializeDataBaseCommandId(RPM
-            ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr
-            , nullptr);
+        SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
+        ui->groupBoxCosts->hide();
+        ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     default:
         break;
@@ -100,26 +95,21 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
 
     ui->widgetIcon->initializeIcon(m_model);
     ui->widgetTextLangDescription->initializeNamesTrans(m_model->description());
+    ui->panelPrimitiveValueConditions->initializeModel(m_model
+        ->conditionFormula());
+    ui->panelPrimitiveValueConditions->updateModel();
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
-        ui->comboBoxTarget->setCurrentIndex(static_cast<int>(m_model
-            ->targetKind()));
-        ui->panelPrimitiveValueConditions->initializeModel(m_model
-            ->conditionFormula());
-        ui->panelPrimitiveValueConditions->updateModel();
-        ui->panelPrimitiveValueTargetConditions->initializeModel(m_model
-            ->targetConditionFormula());
-        ui->panelPrimitiveValueTargetConditions->updateModel();
-        ui->comboBoxAvailable->setCurrentIndex(static_cast<int>(m_model
-            ->availableKind()));
-        ui->panelPrimitiveValueAnimationUser->initializeModel(m_model
-            ->animationUserID());
-        ui->panelPrimitiveValueAnimationUser->updateModel();
-        ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
-            ->animationTargetID());
-        ui->panelPrimitiveValueAnimationTarget->updateModel();
-        ui->widgetSongSound->initialize(m_model->sound());
+        updateCommonSkill();
+        break;
+    case CommonSkillItemKind::Item:
+        updateCommonSkill();
+        ui->comboBoxType->setCurrentIndex(SuperListItem::getIndexById(
+            getTypeModel()->invisibleRootItem(), m_model->type()));
+        ui->checkBoxConsumable->setChecked(m_model->consumable());
+        ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
+        ui->panelPrimitiveValuePrice->updateModel();
         break;
     default:
         break;
@@ -128,8 +118,50 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
 
 // -------------------------------------------------------
 
+void PanelDatasCommonSkillItem::initializeCommonSkill() {
+    // Hide useless parameters
+    ui->checkBoxOneHand->hide();
+    ui->groupBoxCaracteristics->hide();
+
+    // Initialize widgets
+    ui->panelPrimitiveValueTargetConditions->addNone();
+    ui->panelPrimitiveValueTargetConditions->initializeMessage();
+    ui->panelPrimitiveValueAnimationUser->addNone();
+    ui->panelPrimitiveValueAnimationUser->initializeDataBaseCommandId(RPM
+        ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr
+        , nullptr);
+    ui->panelPrimitiveValueAnimationTarget->addNone();
+    ui->panelPrimitiveValueAnimationTarget->initializeDataBaseCommandId(RPM
+        ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr
+        , nullptr);
+}
+
+// -------------------------------------------------------
+
+void PanelDatasCommonSkillItem::updateCommonSkill() {
+    ui->comboBoxTarget->setCurrentIndex(static_cast<int>(m_model
+        ->targetKind()));
+    ui->panelPrimitiveValueTargetConditions->initializeModel(m_model
+        ->targetConditionFormula());
+    ui->panelPrimitiveValueTargetConditions->updateModel();
+    ui->comboBoxAvailable->setCurrentIndex(static_cast<int>(m_model
+        ->availableKind()));
+    ui->panelPrimitiveValueAnimationUser->initializeModel(m_model
+        ->animationUserID());
+    ui->panelPrimitiveValueAnimationUser->updateModel();
+    ui->widgetSongSound->initialize(m_model->sound());
+    ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
+        ->animationTargetID());
+    ui->panelPrimitiveValueAnimationTarget->updateModel();
+}
+
+// -------------------------------------------------------
+
 QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
     switch (m_kind) {
+    case CommonSkillItemKind::Item:
+        return RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelItemsTypes();
     default:
         return nullptr;
     }
@@ -142,26 +174,34 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
 // -------------------------------------------------------
 
 void PanelDatasCommonSkillItem::on_comboBoxType_currentIndexChanged(int index) {
-    m_model->setType(SuperListItem::getIdByIndex(getTypeModel(), index));
+    if (m_model != nullptr) {
+        m_model->setType(SuperListItem::getIdByIndex(getTypeModel(), index));
+    }
 }
 
 // -------------------------------------------------------
 
-void PanelDatasCommonSkillItem::on_checkBoxConsumable_stateChanged(int state) {
-    m_model->setConsumable(state == Qt::Checked);
+void PanelDatasCommonSkillItem::on_checkBoxConsumable_toggled(bool checked) {
+    if (m_model != nullptr) {
+        m_model->setConsumable(checked);
+    }
 }
 
 // -------------------------------------------------------
 
-void PanelDatasCommonSkillItem::on_checkBoxOneHand_stateChanged(int state) {
-    m_model->setOneHand(state == Qt::Checked);
+void PanelDatasCommonSkillItem::on_checkBoxOneHand_toggled(bool checked) {
+    if (m_model != nullptr) {
+        m_model->setOneHand(checked);
+    }
 }
 
 // -------------------------------------------------------
 
 void PanelDatasCommonSkillItem::on_comboBoxTarget_currentIndexChanged(int index)
 {
-    m_model->setTargetKind(static_cast<TargetKind>(index));
+    if (m_model != nullptr) {
+        m_model->setTargetKind(static_cast<TargetKind>(index));
+    }
 }
 
 // -------------------------------------------------------
@@ -169,5 +209,7 @@ void PanelDatasCommonSkillItem::on_comboBoxTarget_currentIndexChanged(int index)
 void PanelDatasCommonSkillItem::on_comboBoxAvailable_currentIndexChanged(int
     index)
 {
-    m_model->setAvailableKind(static_cast<AvailableKind>(index));
+    if (m_model != nullptr) {
+        m_model->setAvailableKind(static_cast<AvailableKind>(index));
+    }
 }

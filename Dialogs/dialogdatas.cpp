@@ -77,17 +77,16 @@ int DialogDatas::finalLevel() const {
 //
 // -------------------------------------------------------
 
-void DialogDatas::initializeItems(GameDatas *gameDatas){
+void DialogDatas::initializeItems(GameDatas *gameDatas) {
     ui->panelSuperListItems->setIsLang(true);
     ui->panelSuperListItems->list()->initializeNewItemInstance(new SystemItem);
     ui->panelSuperListItems->initializeModel(gameDatas->itemsDatas()->model());
     ui->panelSuperListItems->showEditName(true);
+    ui->panelDatasItems->initialize(CommonSkillItemKind::Item);
 
-    connect(ui->panelSuperListItems->list()->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(on_pageItemsSelected(QModelIndex,QModelIndex)));
-    SuperListItem::fillComboBox(ui->comboBoxItemType, gameDatas->systemDatas()
-                                ->modelItemsTypes());
+    connect(ui->panelSuperListItems->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex,QModelIndex)), this, SLOT(
+        on_pageItemsSelected(QModelIndex,QModelIndex)));
     QModelIndex index = ui->panelSuperListItems->list()->getModel()->index(0,0);
     ui->panelSuperListItems->list()->setCurrentIndex(index);
     on_pageItemsSelected(index, index);
@@ -95,13 +94,8 @@ void DialogDatas::initializeItems(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogDatas::updateItem(SystemItem* sysItem){
-    int i = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
-                                        ->systemDatas()->modelItemsTypes()
-                                        ->invisibleRootItem(),
-                           sysItem->type());
-    ui->comboBoxItemType->setCurrentIndex(i+1);
-    ui->checkBoxItemConsumable->setChecked(sysItem->consumable());
+void DialogDatas::updateItem(SystemItem *sysItem) {
+    ui->panelDatasItems->update(sysItem);
 }
 
 // -------------------------------------------------------
@@ -439,36 +433,13 @@ void DialogDatas::on_tabWidget_currentChanged(int index) {
 
 // -------------------------------------------------------
 
-void DialogDatas::on_comboBoxItemType_currentIndexChanged(int index){
-    QStandardItem* item;
-    if (index != 0){
-        item = RPM::get()->project()->gameDatas()->systemDatas()
-                ->modelItemsTypes()->item(index-1);
-        index = ((SystemItem*)item->data().value<quintptr>())->id();
-    }
-
-    int i = ui->panelSuperListItems->list()->getIndex();
-    item = ui->panelSuperListItems->list()->getModel()->item(i);
-    SystemItem* sysItem = ((SystemItem*)item->data().value<quintptr>());
-    sysItem->setType(index);
-}
-
-// -------------------------------------------------------
-
-void DialogDatas::on_checkBoxItemConsumable_toggled(bool checked){
-    QStandardItem* selected = ui->panelSuperListItems->list()
-            ->getSelected();
-    SystemItem* sysItem = ((SystemItem*)selected->data().value<quintptr>());
-    sysItem->setConsumable(checked);
-}
-
-// -------------------------------------------------------
-
 void DialogDatas::on_pageItemsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListItems->list()->getModel()
             ->itemFromIndex(index);
-    if (selected != nullptr)
-        updateItem((SystemItem*)selected->data().value<quintptr>());
+    if (selected != nullptr) {
+        updateItem(reinterpret_cast<SystemItem *>(selected->data().value<
+            quintptr>()));
+    }
 }
 
 // -------------------------------------------------------

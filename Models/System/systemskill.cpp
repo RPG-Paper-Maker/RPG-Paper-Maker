@@ -26,12 +26,7 @@
 // -------------------------------------------------------
 
 SystemSkill::SystemSkill() :
-    SystemSkill(1, new LangsTranslation, -1, new LangsTranslation, TargetKind
-    ::Enemy, new PrimitiveValue(QString("t.hp > 0")), new PrimitiveValue(
-    PrimitiveValueKind::None), AvailableKind::Battle, new SystemPlaySong(-1,
-    SongKind::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
-    PrimitiveValue(PrimitiveValueKind::None), new QStandardItemModel, new
-    QStandardItemModel)
+    SystemCommonSkillItem()
 {
 
 }

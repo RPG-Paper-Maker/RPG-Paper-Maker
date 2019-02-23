@@ -26,11 +26,7 @@
 // -------------------------------------------------------
 
 SystemItem::SystemItem() :
-    SystemItem(1, new LangsTranslation, -1, 1, true, new LangsTranslation,
-    TargetKind::Ally, new PrimitiveValue(QString("t.hp > 0")), AvailableKind
-    ::Always, new SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
-    PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None), new
-    PrimitiveValue(0), new QStandardItemModel)
+    SystemCommonSkillItem()
 {
 
 }

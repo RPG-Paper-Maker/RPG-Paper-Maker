@@ -26,9 +26,7 @@
 // -------------------------------------------------------
 
 SystemArmor::SystemArmor() :
-    SystemArmor(1, new LangsTranslation, -1, 1, new LangsTranslation, new
-        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(0), new
-        QStandardItemModel)
+    SystemCommonSkillItem()
 {
 
 }

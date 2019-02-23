@@ -84,8 +84,6 @@ private:
 
 private slots:
     void on_tabWidget_currentChanged(int index);
-    void on_comboBoxItemType_currentIndexChanged(int index);
-    void on_checkBoxItemConsumable_toggled(bool checked);
     void on_pageItemsSelected(QModelIndex index, QModelIndex);
     void on_pageSkillsSelected(QModelIndex index, QModelIndex);
     void on_pageWeaponsSelected(QModelIndex index, QModelIndex);
