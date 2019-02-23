@@ -79,8 +79,30 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     case CommonSkillItemKind::Item:
         initializeCommonSkill();
 
-        SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->groupBoxCosts->hide();
+        SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
+        ui->panelPrimitiveValuePrice->initializeNumberVariable();
+        break;
+    case CommonSkillItemKind::Armor:
+        ui->checkBoxConsumable->hide();
+        ui->checkBoxOneHand->hide();
+        ui->groupBoxCosts->hide();
+        ui->groupBoxEffects->hide();
+        ui->labelTarget->hide();
+        ui->comboBoxTarget->hide();
+        ui->labelTargetConditions->hide();
+        ui->panelPrimitiveValueTargetConditions->hide();
+        ui->labelAvailable->hide();
+        ui->comboBoxAvailable->hide();
+        ui->labelUserAnimation->hide();
+        ui->panelPrimitiveValueAnimationUser->hide();
+        ui->labelTargetAnimation->hide();
+        ui->panelPrimitiveValueAnimationTarget->hide();
+        ui->labelSound->hide();
+        ui->widgetSongSound->hide();
+
+        // Initialize widgets
+        SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     default:
@@ -111,8 +133,27 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
         ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
         ui->panelPrimitiveValuePrice->updateModel();
         break;
+    case CommonSkillItemKind::Armor:
+        ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
+        ui->panelPrimitiveValuePrice->updateModel();
+        break;
     default:
         break;
+    }
+}
+
+// -------------------------------------------------------
+
+QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
+    switch (m_kind) {
+    case CommonSkillItemKind::Item:
+        return RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelItemsTypes();
+    case CommonSkillItemKind::Armor:
+        return RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelArmorsKind();
+    default:
+        return nullptr;
     }
 }
 
@@ -153,18 +194,6 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();
-}
-
-// -------------------------------------------------------
-
-QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
-    switch (m_kind) {
-    case CommonSkillItemKind::Item:
-        return RPM::get()->project()->gameDatas()->systemDatas()
-            ->modelItemsTypes();
-    default:
-        return nullptr;
-    }
 }
 
 // -------------------------------------------------------

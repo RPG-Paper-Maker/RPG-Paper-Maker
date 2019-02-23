@@ -47,12 +47,13 @@ public:
 
     void initialize(CommonSkillItemKind kind);
     void update(SystemCommonSkillItem *model);
-    void initializeCommonSkill();
-    void updateCommonSkill();
     QStandardItemModel* getTypeModel();
 
 private:
     Ui::PanelDatasCommonSkillItem *ui;
+
+    void initializeCommonSkill();
+    void updateCommonSkill();
 
 protected:
     SystemCommonSkillItem *m_model;

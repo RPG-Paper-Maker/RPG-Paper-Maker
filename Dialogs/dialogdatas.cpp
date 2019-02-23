@@ -156,33 +156,25 @@ void DialogDatas::updateWeapon(SystemWeapon *sysWeapon){
 
 // -------------------------------------------------------
 
-void DialogDatas::initializeArmors(GameDatas *gameDatas){
+void DialogDatas::initializeArmors(GameDatas *gameDatas) {
     ui->panelSuperListArmors->setIsLang(true);
-    ui->panelSuperListArmors->list()->initializeNewItemInstance(
-                new SystemArmor);
-    ui->panelSuperListArmors->initializeModel(gameDatas->armorsDatas()
-                                              ->model());
+    ui->panelSuperListArmors->list()->initializeNewItemInstance(new SystemArmor);
+    ui->panelSuperListArmors->initializeModel(gameDatas->armorsDatas()->model());
     ui->panelSuperListArmors->showEditName(true);
-    connect(ui->panelSuperListArmors->list()->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(on_pageArmorsSelected(QModelIndex,QModelIndex)));
-    SuperListItem::fillComboBox(ui->comboBoxArmorKind,
-                                gameDatas->battleSystemDatas()
-                                ->modelArmorsKind());
-    QModelIndex index = ui->panelSuperListArmors->list()->getModel()
-            ->index(0,0);
+    ui->panelDatasArmors->initialize(CommonSkillItemKind::Armor);
+
+    connect(ui->panelSuperListArmors->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageArmorsSelected(QModelIndex, QModelIndex)));
+    QModelIndex index = ui->panelSuperListArmors->list()->getModel()->index(0,0);
     ui->panelSuperListArmors->list()->setCurrentIndex(index);
     on_pageArmorsSelected(index,index);
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::updateArmor(SystemArmor *sysArmor){
-    int i = SuperListItem::getIndexById(
-                RPM::get()->project()->gameDatas()->battleSystemDatas()
-                ->modelArmorsKind()->invisibleRootItem(),
-                sysArmor->type());
-    ui->comboBoxArmorKind->setCurrentIndex(i);
+void DialogDatas::updateArmor(SystemArmor *sysArmor) {
+    ui->panelDatasArmors->update(sysArmor);
 }
 
 // -------------------------------------------------------
@@ -466,9 +458,11 @@ void DialogDatas::on_pageWeaponsSelected(QModelIndex index, QModelIndex){
 
 void DialogDatas::on_pageArmorsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListArmors->list()->getModel()
-            ->itemFromIndex(index);
-    if (selected != nullptr)
-        updateArmor((SystemArmor*)selected->data().value<quintptr>());
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        updateArmor(reinterpret_cast<SystemArmor *>(selected->data().value<
+            quintptr>()));
+    }
 }
 
 // -------------------------------------------------------
