@@ -60,9 +60,7 @@ void WidgetPicture::setPicture(SystemPicture* picture) {
     ui->listWidget->item(0)->setText(m_picture->toString());
 }
 
-void WidgetPicture::initialize(int i){
-    if (i < 1) i = 1;
-
+void WidgetPicture::initialize(int i) {
     PicturesDatas* datas = RPM::get()->project()->picturesDatas();
 
     // Graphic update

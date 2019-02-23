@@ -60,7 +60,7 @@ void DialogMapProperties::initialize(){
         RPM::get()->project()->gameDatas()->tilesetsDatas()->model()
         ->invisibleRootItem(), m_mapProperties.tileset()->id()));
 
-    ui->widgetLangName->initializeNames(&m_mapProperties);
+    ui->widgetLangName->initializeNamesLang(&m_mapProperties);
 
     // Music
     ui->widgetChooseMusic->initialize(m_mapProperties.music());

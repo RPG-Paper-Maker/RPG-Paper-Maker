@@ -36,10 +36,10 @@ public:
     SystemSkill();
     SystemSkill(int i, LangsTranslation *names, int pictureID, LangsTranslation
         *description, TargetKind targetKind, PrimitiveValue
-        *targetConditionFormula, AvailableKind availableKind, SystemPlaySong
-        *sound, PrimitiveValue *animationUserID, PrimitiveValue
-        *animationTargetID, QStandardItemModel *modelCosts, QStandardItemModel
-        *modelEffects);
+        *targetConditionFormula, PrimitiveValue *conditionFormula, AvailableKind
+        availableKind, SystemPlaySong *sound, PrimitiveValue *animationUserID,
+        PrimitiveValue *animationTargetID, QStandardItemModel *modelCosts,
+        QStandardItemModel *modelEffects);
     virtual ~SystemSkill();
 
     virtual void read(const QJsonObject &json);

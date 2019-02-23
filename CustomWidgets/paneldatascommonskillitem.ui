@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PanelDatasCommonSkillItem</class>
+ <widget class="QWidget" name="PanelDatasCommonSkillItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>766</width>
+    <height>495</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,1,0">
+       <item>
+        <widget class="QLabel" name="labelType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBoxType">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxConsomable">
+         <property name="text">
+          <string>Consomable</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxOneHand">
+         <property name="text">
+          <string>One hand</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>38</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="WidgetIcon" name="widgetIcon" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Description:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" rowspan="2" colspan="3">
+            <widget class="WidgetTextLang" name="widgetTextLangDescription" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="labelConditions">
+             <property name="text">
+              <string>Conditions:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="labelTarget">
+             <property name="text">
+              <string>Target:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1" colspan="2">
+            <widget class="QComboBox" name="comboBoxTarget">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>The user</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>An enemy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>An ally</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>All enemies</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>All allies</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="labelTargetConditions">
+             <property name="text">
+              <string>Target conditions:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" colspan="2">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTargetConditions" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="labelAvailable">
+             <property name="text">
+              <string>Available:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="2">
+            <widget class="QComboBox" name="comboBoxAvailable">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>Battle only</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Main menu only</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Always</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Never</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="labelSound">
+             <property name="text">
+              <string>Sound (main menu):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1" colspan="2">
+            <widget class="WidgetSong" name="widgetSongSound" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="labelUserAnimation">
+             <property name="text">
+              <string>User animation ID:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1" colspan="2">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationUser" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="labelTargetAnimation">
+             <property name="text">
+              <string>Target animation ID:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1" colspan="2">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationTarget" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="labelPrice">
+             <property name="text">
+              <string>Price:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1" colspan="2">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValuePrice" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveValueConditions" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxCosts">
+           <property name="title">
+            <string>Costs</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QTreeView" name="treeViewCost"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1">
+         <item>
+          <widget class="QGroupBox" name="groupBoxEffects">
+           <property name="title">
+            <string>Effects</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QTreeView" name="treeViewEffects"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxCaracteristics">
+           <property name="title">
+            <string>Caracteristics</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QTreeView" name="treeViewCaracteristics"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetIcon</class>
+   <extends>QWidget</extends>
+   <header>widgeticon.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSong</class>
+   <extends>QWidget</extends>
+   <header>widgetsong.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -52,7 +52,7 @@ DialogSystemWeaponArmorKind::~DialogSystemWeaponArmorKind()
 // -------------------------------------------------------
 
 void DialogSystemWeaponArmorKind::initialize(){
-    ui->widgetName->initializeNames(&m_weaponArmorKind);
+    ui->widgetName->initializeNamesLang(&m_weaponArmorKind);
     ui->treeViewEquipment->setModel(m_weaponArmorKind.getEquipmentModel());
 }
 

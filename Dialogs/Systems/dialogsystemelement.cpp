@@ -51,7 +51,7 @@ SystemElement& DialogSystemElement::element() const { return m_element; }
 // -------------------------------------------------------
 
 void DialogSystemElement::initialize(){
-    ui->widgetTxtLangName->initializeNames(&m_element);
+    ui->widgetTxtLangName->initializeNamesLang(&m_element);
 
     ui->treeViewEfficiency->setModel(m_element.efficiency());
     ui->treeViewEfficiency->setColumnWidth(0,250);

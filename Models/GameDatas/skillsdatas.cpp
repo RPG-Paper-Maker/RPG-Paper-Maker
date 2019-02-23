@@ -63,7 +63,7 @@ void SkillsDatas::setDefault(){
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     QString descriptions[] = {
-        "A basic attack.",
+        "A basic attack (use the current weapon(s).",
         "Use a skill.",
         "Use an item.",
         "Escape from the battle.",
@@ -89,15 +89,21 @@ void SkillsDatas::setDefault(){
         AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle
     };
     int songsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    };
+    QString targetConditions[] {
+        "t.hp > 0", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
+        "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0"
     };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
         skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID
-            [i], new LangsTranslation(descriptions[i]), targetsKind[i], new
-            PrimitiveValue(QString("t.hp > 0")), availablesKind[i],
-            new SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
+            [i], new LangsTranslation(descriptions[i]), targetsKind[i],
+            targetConditions[i].isEmpty() ? new PrimitiveValue(
+            PrimitiveValueKind::None) : new PrimitiveValue(targetConditions[i]),
+            new PrimitiveValue(PrimitiveValueKind::None), availablesKind[i], new
+            SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
             ::None), new QStandardItemModel, new QStandardItemModel);
         item = new QStandardItem;

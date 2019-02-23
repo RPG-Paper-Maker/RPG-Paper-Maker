@@ -49,6 +49,6 @@ DialogSystemCurrency::~DialogSystemCurrency()
 // -------------------------------------------------------
 
 void DialogSystemCurrency::initialize(){
-    ui->widgetName->initializeNames(&m_currency);
+    ui->widgetName->initializeNamesLang(&m_currency);
     ui->widgetIcon->initializeIcon(&m_currency);
 }

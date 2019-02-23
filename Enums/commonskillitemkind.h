@@ -1,4 +1,4 @@
-﻿/*
+/*
     RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
 
     This file is part of RPG Paper Maker.
@@ -17,41 +17,22 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef PANELDATASSKILL_H
-#define PANELDATASSKILL_H
-
-#include <QWidget>
-#include "systemskill.h"
+#ifndef COMMONSKILLITEMKIND_H
+#define COMMONSKILLITEMKIND_H
 
 // -------------------------------------------------------
 //
-//  CLASS PanelDatasSkill
+//  ENUM CommonSkillItemKind
 //
-//  A panel used for skills, items, weapons, armors,...
+//  All the possible kind of system for SystemCommonSkillItem.
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class PanelDatasSkill;
-}
-
-class PanelDatasSkill : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit PanelDatasSkill(QWidget *parent = nullptr);
-    ~PanelDatasSkill();
-
-    void initialize();
-    void update(SystemSkill *skill);
-
-private:
-    Ui::PanelDatasSkill *ui;
-
-protected:
-    SystemSkill *m_skill;
+enum class CommonSkillItemKind {
+    Skill,
+    Item,
+    Armor,
+    Weapon
 };
 
-#endif // PANELDATASSKILL_H
+#endif // COMMONSKILLITEMKIND_H

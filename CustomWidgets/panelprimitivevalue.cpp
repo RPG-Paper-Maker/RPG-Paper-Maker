@@ -348,6 +348,7 @@ void PanelPrimitiveValue::hideAll() {
     ui->comboBoxSwitch->hide();
     ui->comboBoxKeyBoard->hide();
     ui->doubleSpinBoxNumber->hide();
+    ui->horizontalSpacer->changeSize(0, 0);
 }
 
 // -------------------------------------------------------
@@ -485,6 +486,7 @@ void PanelPrimitiveValue::showAnything() {
 void PanelPrimitiveValue::showNone() {
     setKind(PrimitiveValueKind::None);
     hideAll();
+    ui->horizontalSpacer->changeSize(10, 0);
 }
 
 // -------------------------------------------------------

@@ -27,10 +27,11 @@
 
 SystemWeapon::SystemWeapon() :
     SystemWeapon(1, new LangsTranslation, -1, 1, true, new LangsTranslation,
-        TargetKind::Enemy, new PrimitiveValue(QString()), new PrimitiveValue(
-        QString()), new PrimitiveValue(PrimitiveValueKind::None), new
-        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(0),
-        new QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
+        TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
+        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+        PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None),
+        new PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel,
+        new QStandardItemModel)
 {
 
 }
@@ -56,13 +57,15 @@ SystemWeapon::~SystemWeapon() {
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
 void SystemWeapon::read(const QJsonObject &json) {
     SystemCommonSkillItem::read(json);
 }
+
+// -------------------------------------------------------
 
 void SystemWeapon::write(QJsonObject &json) const {
     SystemCommonSkillItem::write(json);

@@ -145,7 +145,7 @@ void PanelSuperList::on_listIndexChanged(QModelIndex index, QModelIndex) {
         if (m_isLang) {
             SystemLang *lang = reinterpret_cast<SystemLang *>(selected
                 ->data().value<quintptr>());
-            ui->widgetTextLang->initializeNames(lang);
+            ui->widgetTextLang->initializeNamesLang(lang);
         } else {
             ui->lineEditName->blockSignals(true);
             ui->lineEditName->setText(super->name());

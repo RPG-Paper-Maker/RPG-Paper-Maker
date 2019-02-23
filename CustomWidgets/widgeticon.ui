@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -55,14 +55,14 @@
       <widget class="WidgetShowPicture" name="widgetShowPicture" native="true">
        <property name="minimumSize">
         <size>
-         <width>27</width>
-         <height>27</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>27</width>
-         <height>27</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>

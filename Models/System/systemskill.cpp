@@ -27,24 +27,26 @@
 
 SystemSkill::SystemSkill() :
     SystemSkill(1, new LangsTranslation, -1, new LangsTranslation, TargetKind
-    ::Enemy, new PrimitiveValue(QString("t.hp > 0")), AvailableKind::Battle, new
-    SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(PrimitiveValueKind
-    ::None), new PrimitiveValue(PrimitiveValueKind::None), new
-    QStandardItemModel, new QStandardItemModel)
+    ::Enemy, new PrimitiveValue(QString("t.hp > 0")), new PrimitiveValue(
+    PrimitiveValueKind::None), AvailableKind::Battle, new SystemPlaySong(-1,
+    SongKind::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
+    PrimitiveValue(PrimitiveValueKind::None), new QStandardItemModel, new
+    QStandardItemModel)
 {
 
 }
 
 SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID,
-    LangsTranslation *description, TargetKind targetKind, PrimitiveValue
-    *targetConditionFormula, AvailableKind availableKind, SystemPlaySong
-    *sound, PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
+    LangsTranslation *description, TargetKind
+    targetKind, PrimitiveValue *targetConditionFormula, PrimitiveValue
+    *conditionFormula, AvailableKind availableKind, SystemPlaySong *sound,
+    PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
     QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
     SystemCommonSkillItem(i, names, pictureID, 1, false, true, description,
-        targetKind, targetConditionFormula, new PrimitiveValue(QString()),
-        availableKind, sound, animationUserID, animationTargetID, new
-        PrimitiveValue(PrimitiveValueKind::Number, 0), modelCosts, modelEffects,
-        new QStandardItemModel)
+        targetKind, targetConditionFormula, conditionFormula, availableKind,
+        sound, animationUserID, animationTargetID, new PrimitiveValue(
+        PrimitiveValueKind::Number, 0), modelCosts, modelEffects, new
+        QStandardItemModel)
 {
 
 }

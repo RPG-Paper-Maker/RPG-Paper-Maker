@@ -33,7 +33,6 @@ DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     initialize();
 }
 
@@ -49,5 +48,5 @@ DialogSystemLang::~DialogSystemLang()
 // -------------------------------------------------------
 
 void DialogSystemLang::initialize(){
-    ui->widgetName->initializeNames(&m_model);
+    ui->widgetName->initializeNamesLang(&m_model);
 }

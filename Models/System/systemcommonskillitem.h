@@ -74,9 +74,11 @@ public:
     void setOneHand(bool b);
     LangsTranslation * description() const;
     TargetKind targetKind() const;
+    void setTargetKind(TargetKind k);
     PrimitiveValue * targetConditionFormula() const;
     PrimitiveValue * conditionFormula() const;
     AvailableKind availableKind() const;
+    void setAvailableKind(AvailableKind k);
     SystemPlaySong * sound() const;
     PrimitiveValue * animationUserID() const;
     PrimitiveValue * animationTargetID() const;

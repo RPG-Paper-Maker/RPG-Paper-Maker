@@ -18,6 +18,7 @@
 */
 
 #include "systemcommonskillitem.h"
+#include "rpm.h"
 
 const QString SystemCommonSkillItem::JSON_TYPE = "t";
 const QString SystemCommonSkillItem::JSON_CONSUMABLE = "con";
@@ -43,11 +44,12 @@ const QString SystemCommonSkillItem::JSON_CARACTERISTICS = "car";
 
 SystemCommonSkillItem::SystemCommonSkillItem() :
     SystemCommonSkillItem(1, new LangsTranslation, -1, 1, false, true, new
-    LangsTranslation, TargetKind::None, new PrimitiveValue(QString()), new
-    PrimitiveValue(QString()), AvailableKind::Never, new SystemPlaySong(-1,
-    SongKind::Sound), new PrimitiveValue(PrimitiveValueKind::None), new
-    PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(0), new
-    QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
+    LangsTranslation, TargetKind::None, new PrimitiveValue(PrimitiveValueKind
+    ::None), new PrimitiveValue(PrimitiveValueKind::None), AvailableKind::Never,
+    new SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
+    PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None), new
+    PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
+    QStandardItemModel)
 {
 
 }
@@ -123,6 +125,10 @@ TargetKind SystemCommonSkillItem::targetKind() const {
     return m_targetKind;
 }
 
+void SystemCommonSkillItem::setTargetKind(TargetKind k) {
+    m_targetKind = k;
+}
+
 PrimitiveValue * SystemCommonSkillItem::targetConditionFormula() const {
     return m_targetConditionFormula;
 }
@@ -133,6 +139,10 @@ PrimitiveValue * SystemCommonSkillItem::conditionFormula() const {
 
 AvailableKind SystemCommonSkillItem::availableKind() const {
     return m_availableKind;
+}
+
+void SystemCommonSkillItem::setAvailableKind(AvailableKind k) {
+    m_availableKind = k;
 }
 
 SystemPlaySong * SystemCommonSkillItem::sound() const {
@@ -206,9 +216,13 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     if (json.contains(JSON_ANIMATION_USER_ID)) {
         m_animationUserID->read(json[JSON_ANIMATION_USER_ID].toObject());
     }
+    m_animationUserID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model());
     if (json.contains(JSON_ANIMATION_TARGET_ID)) {
         m_animationTargetID->read(json[JSON_ANIMATION_TARGET_ID].toObject());
     }
+    m_animationTargetID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->animationsDatas()->model());
     if (json.contains(JSON_PRICE)) {
         m_price->read(json[JSON_PRICE].toObject());
     }
@@ -257,16 +271,12 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     if (m_targetKind != TargetKind::None) {
         json[JSON_TARGET_KIND] = static_cast<int>(m_targetKind);
     }
-    if (m_targetConditionFormula->kind() != PrimitiveValueKind::Message ||
-        !m_targetConditionFormula->messageValue().isEmpty())
-    {
+    if (m_targetConditionFormula->kind() != PrimitiveValueKind::None) {
         obj = QJsonObject();
         m_targetConditionFormula->write(obj);
         json[JSON_TARGET_CONDITION_FORMULA] = obj;
     }
-    if (m_conditionFormula->kind() != PrimitiveValueKind::Message ||
-        !m_conditionFormula->messageValue().isEmpty())
-    {
+    if (m_conditionFormula->kind() != PrimitiveValueKind::None) {
         obj = QJsonObject();
         m_conditionFormula->write(obj);
         json[JSON_CONDITION_FORMULA] = obj;

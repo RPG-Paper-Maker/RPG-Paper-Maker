@@ -61,6 +61,7 @@ private:
     void initializeItems(GameDatas *gameDatas);
     void updateItem(SystemItem *sysItem);
     void initializeSkills(GameDatas *gameDatas);
+    void updateSkill(SystemSkill *sysSkill);
     void initializeWeapons(GameDatas *gameDatas);
     void updateWeapon(SystemWeapon *sysWeapon);
     void initializeArmors(GameDatas *gameDatas);
@@ -86,6 +87,7 @@ private slots:
     void on_comboBoxItemType_currentIndexChanged(int index);
     void on_checkBoxItemConsumable_toggled(bool checked);
     void on_pageItemsSelected(QModelIndex index, QModelIndex);
+    void on_pageSkillsSelected(QModelIndex index, QModelIndex);
     void on_pageWeaponsSelected(QModelIndex index, QModelIndex);
     void on_pageArmorsSelected(QModelIndex index, QModelIndex);
     void on_pageClassesSelected(QModelIndex index, QModelIndex);

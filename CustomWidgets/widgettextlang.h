@@ -40,15 +40,18 @@ class WidgetTextLang : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetTextLang(QWidget *parent = 0);
+    explicit WidgetTextLang(QWidget *parent = nullptr);
     ~WidgetTextLang();
     QLineEdit* lineEdit() const;
-    SystemLang* lang() const;
-    void initializeNames(SystemLang *l);
+    void initializeNamesTrans(LangsTranslation *l);
+    void initializeNamesLang(SystemLang *lang);
 
 private:
     Ui::WidgetTextLang *ui;
-    SystemLang* m_lang;
+    LangsTranslation *m_l;
+    SystemLang *m_lang;
+
+    void initializeNames();
 
 private slots:
     void on_lineEdit_textChanged(const QString &text);

@@ -38,13 +38,9 @@ public:
         LangsTranslation *description, PrimitiveValue *conditionFormula,
         PrimitiveValue *price, QStandardItemModel *modelCaracteristics);
     virtual ~SystemArmor();
-    int idKind() const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-
-protected:
-    int m_idKind;
 };
 
 Q_DECLARE_METATYPE(SystemArmor)

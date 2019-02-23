@@ -82,6 +82,7 @@ void DialogDatas::initializeItems(GameDatas *gameDatas){
     ui->panelSuperListItems->list()->initializeNewItemInstance(new SystemItem);
     ui->panelSuperListItems->initializeModel(gameDatas->itemsDatas()->model());
     ui->panelSuperListItems->showEditName(true);
+
     connect(ui->panelSuperListItems->list()->selectionModel(),
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageItemsSelected(QModelIndex,QModelIndex)));
@@ -112,7 +113,20 @@ void DialogDatas::initializeSkills(GameDatas *gameDatas){
     ui->panelSuperListSkills->initializeModel(gameDatas->skillsDatas()
                                               ->model());
     ui->panelSuperListSkills->showEditName(true);
-    ui->panelSuperListSkills->list()->setIndex(0);
+    ui->panelDatasSkill->initialize(CommonSkillItemKind::Skill);
+
+    connect(ui->panelSuperListSkills->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageSkillsSelected(QModelIndex, QModelIndex)));
+    QModelIndex index = ui->panelSuperListSkills->list()->getModel()->index(0,0);
+    ui->panelSuperListSkills->list()->setCurrentIndex(index);
+    on_pageSkillsSelected(index, index);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::updateSkill(SystemSkill *sysSkill) {
+    ui->panelDatasSkill->update(sysSkill);
 }
 
 // -------------------------------------------------------
@@ -173,7 +187,7 @@ void DialogDatas::updateArmor(SystemArmor *sysArmor){
     int i = SuperListItem::getIndexById(
                 RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->modelArmorsKind()->invisibleRootItem(),
-                sysArmor->idKind());
+                sysArmor->type());
     ui->comboBoxArmorKind->setCurrentIndex(i);
 }
 
@@ -455,6 +469,17 @@ void DialogDatas::on_pageItemsSelected(QModelIndex index, QModelIndex){
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateItem((SystemItem*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pageSkillsSelected(QModelIndex index, QModelIndex){
+    QStandardItem* selected = ui->panelSuperListSkills->list()->getModel()
+            ->itemFromIndex(index);
+    if (selected != nullptr) {
+        updateSkill(reinterpret_cast<SystemSkill *>(selected->data().value<
+            quintptr>()));
+    }
 }
 
 // -------------------------------------------------------

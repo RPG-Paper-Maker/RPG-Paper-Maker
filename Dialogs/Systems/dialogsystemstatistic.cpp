@@ -54,7 +54,7 @@ SystemStatistic& DialogSystemStatistic::statistic() const {
 // -------------------------------------------------------
 
 void DialogSystemStatistic::initialize(){
-    ui->widgetName->initializeNames(&m_statistic);
+    ui->widgetName->initializeNamesLang(&m_statistic);
     ui->lineEditAbbrevation->setText(m_statistic.abbreviation());
 
     if (m_statistic.isFix())
