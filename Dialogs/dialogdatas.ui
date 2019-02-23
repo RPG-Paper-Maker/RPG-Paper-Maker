@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>6</number>
+        <number>5</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -496,33 +496,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget_4" native="true">
-             <widget class="QWidget" name="layoutWidget_1">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>161</width>
-                <height>50</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>Kind:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBoxWeaponKind"/>
-               </item>
-              </layout>
-             </widget>
-            </widget>
+            <widget class="PanelDatasCommonSkillItem" name="panelDatasWeapons" native="true"/>
            </item>
           </layout>
          </item>

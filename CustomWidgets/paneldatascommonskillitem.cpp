@@ -54,7 +54,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     // Retain size when hidden (because of widget icon having weird behaviors)
     QSizePolicy sp_retain;
     QList<QWidget *> widgetList = QList<QWidget*>({
-        ui->labelType, ui->comboBoxType, ui->checkBoxConsumable,
+        ui->labelType, ui->comboBoxType,
         ui->checkBoxOneHand, ui->groupBoxCosts
     });
     for (int i = 0; i < widgetList.size(); i++) {
@@ -70,6 +70,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     case CommonSkillItemKind::Skill:
         initializeCommonSkill();
 
+        ui->checkBoxOneHand->hide();
+        ui->groupBoxCaracteristics->hide();
         ui->labelType->hide();
         ui->comboBoxType->hide();
         ui->checkBoxConsumable->hide();
@@ -79,6 +81,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     case CommonSkillItemKind::Item:
         initializeCommonSkill();
 
+        ui->checkBoxOneHand->hide();
+        ui->groupBoxCaracteristics->hide();
         ui->groupBoxCosts->hide();
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
@@ -105,7 +109,16 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
-    default:
+    case CommonSkillItemKind::Weapon:
+        initializeCommonSkill();
+
+        SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
+        ui->checkBoxConsumable->hide();
+        ui->labelAvailable->hide();
+        ui->comboBoxAvailable->hide();
+        ui->labelSound->hide();
+        ui->widgetSongSound->hide();
+        ui->panelPrimitiveValuePrice->initializeNumberVariable();
         break;
     }
 }
@@ -115,31 +128,35 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
 void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     m_model = model;
 
+    QStandardItemModel *itemModel = getTypeModel();
+
+    if (itemModel != nullptr) {
+        ui->comboBoxType->setCurrentIndex(SuperListItem::getIndexById(
+            getTypeModel()->invisibleRootItem(), m_model->type()));
+    }
+    ui->checkBoxConsumable->setChecked(m_model->consumable());
+    ui->checkBoxOneHand->setChecked(m_model->oneHand());
     ui->widgetIcon->initializeIcon(m_model);
     ui->widgetTextLangDescription->initializeNamesTrans(m_model->description());
     ui->panelPrimitiveValueConditions->initializeModel(m_model
         ->conditionFormula());
     ui->panelPrimitiveValueConditions->updateModel();
-
-    switch (m_kind) {
-    case CommonSkillItemKind::Skill:
-        updateCommonSkill();
-        break;
-    case CommonSkillItemKind::Item:
-        updateCommonSkill();
-        ui->comboBoxType->setCurrentIndex(SuperListItem::getIndexById(
-            getTypeModel()->invisibleRootItem(), m_model->type()));
-        ui->checkBoxConsumable->setChecked(m_model->consumable());
-        ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
-        ui->panelPrimitiveValuePrice->updateModel();
-        break;
-    case CommonSkillItemKind::Armor:
-        ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
-        ui->panelPrimitiveValuePrice->updateModel();
-        break;
-    default:
-        break;
-    }
+    ui->comboBoxTarget->setCurrentIndex(static_cast<int>(m_model
+        ->targetKind()));
+    ui->panelPrimitiveValueTargetConditions->initializeModel(m_model
+        ->targetConditionFormula());
+    ui->panelPrimitiveValueTargetConditions->updateModel();
+    ui->comboBoxAvailable->setCurrentIndex(static_cast<int>(m_model
+        ->availableKind()));
+    ui->widgetSongSound->initialize(m_model->sound());
+    ui->panelPrimitiveValueAnimationUser->initializeModel(m_model
+        ->animationUserID());
+    ui->panelPrimitiveValueAnimationUser->updateModel();
+    ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
+        ->animationTargetID());
+    ui->panelPrimitiveValueAnimationTarget->updateModel();
+    ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
+    ui->panelPrimitiveValuePrice->updateModel();
 }
 
 // -------------------------------------------------------
@@ -152,6 +169,9 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
     case CommonSkillItemKind::Armor:
         return RPM::get()->project()->gameDatas()->battleSystemDatas()
             ->modelArmorsKind();
+    case CommonSkillItemKind::Weapon:
+        return RPM::get()->project()->gameDatas()->battleSystemDatas()
+            ->modelWeaponsKind();
     default:
         return nullptr;
     }
@@ -160,10 +180,6 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
 // -------------------------------------------------------
 
 void PanelDatasCommonSkillItem::initializeCommonSkill() {
-    // Hide useless parameters
-    ui->checkBoxOneHand->hide();
-    ui->groupBoxCaracteristics->hide();
-
     // Initialize widgets
     ui->panelPrimitiveValueTargetConditions->addNone();
     ui->panelPrimitiveValueTargetConditions->initializeMessage();
@@ -190,7 +206,6 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
     ui->panelPrimitiveValueAnimationUser->initializeModel(m_model
         ->animationUserID());
     ui->panelPrimitiveValueAnimationUser->updateModel();
-    ui->widgetSongSound->initialize(m_model->sound());
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();

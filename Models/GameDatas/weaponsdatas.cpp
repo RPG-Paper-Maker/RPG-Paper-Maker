@@ -79,10 +79,10 @@ void WeaponsDatas::setDefault() {
     for (i = 0; i < length; i++) {
         weapon = new SystemWeapon(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], oneHands[i], new LangsTranslation(descriptions[i]),
-            TargetKind::Enemy, new PrimitiveValue(QString()), new
-            PrimitiveValue(QString()), new PrimitiveValue(PrimitiveValueKind
-            ::None), new PrimitiveValue(PrimitiveValueKind::None), new
-            PrimitiveValue(prices[i]), new QStandardItemModel, new
+            TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
+            PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
+            ::None), new PrimitiveValue(prices[i]), new QStandardItemModel, new
             QStandardItemModel, new QStandardItemModel);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(weapon)));

@@ -125,33 +125,25 @@ void DialogDatas::updateSkill(SystemSkill *sysSkill) {
 
 // -------------------------------------------------------
 
-void DialogDatas::initializeWeapons(GameDatas *gameDatas){
+void DialogDatas::initializeWeapons(GameDatas *gameDatas) {
     ui->panelSuperListWeapons->setIsLang(true);
-    ui->panelSuperListWeapons->list()->initializeNewItemInstance(
-                new SystemWeapon);
-    ui->panelSuperListWeapons->initializeModel(gameDatas->weaponsDatas()
-                                               ->model());
+    ui->panelSuperListWeapons->list()->initializeNewItemInstance(new SystemWeapon);
+    ui->panelSuperListWeapons->initializeModel(gameDatas->weaponsDatas()->model());
     ui->panelSuperListWeapons->showEditName(true);
-    connect(ui->panelSuperListWeapons->list()->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
-            SLOT(on_pageWeaponsSelected(QModelIndex,QModelIndex)));
-    SuperListItem::fillComboBox(ui->comboBoxWeaponKind,
-                                gameDatas->battleSystemDatas()
-                                ->modelWeaponsKind());
-    QModelIndex index = ui->panelSuperListWeapons->list()->getModel()
-            ->index(0,0);
+    ui->panelDatasWeapons->initialize(CommonSkillItemKind::Weapon);
+
+    connect(ui->panelSuperListWeapons->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageWeaponsSelected(QModelIndex, QModelIndex)));
+    QModelIndex index = ui->panelSuperListWeapons->list()->getModel()->index(0,0);
     ui->panelSuperListWeapons->list()->setCurrentIndex(index);
     on_pageWeaponsSelected(index,index);
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::updateWeapon(SystemWeapon *sysWeapon){
-    int i = SuperListItem::getIndexById(
-                RPM::get()->project()->gameDatas()->battleSystemDatas()
-                ->modelWeaponsKind()->invisibleRootItem(),
-                sysWeapon->type());
-    ui->comboBoxWeaponKind->setCurrentIndex(i);
+void DialogDatas::updateWeapon(SystemWeapon *sysWeapon) {
+    ui->panelDatasWeapons->update(sysWeapon);
 }
 
 // -------------------------------------------------------
@@ -449,9 +441,11 @@ void DialogDatas::on_pageSkillsSelected(QModelIndex index, QModelIndex){
 
 void DialogDatas::on_pageWeaponsSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListWeapons->list()->getModel()
-            ->itemFromIndex(index);
-    if (selected != nullptr)
-        updateWeapon((SystemWeapon*)selected->data().value<quintptr>());
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        updateWeapon(reinterpret_cast<SystemWeapon *>(selected->data().value<
+            quintptr>()));
+    }
 }
 
 // -------------------------------------------------------

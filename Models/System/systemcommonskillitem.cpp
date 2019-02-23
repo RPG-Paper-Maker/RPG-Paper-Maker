@@ -254,7 +254,7 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     QJsonArray tab;
     int i, l;
 
-    if (m_type == 1) {
+    if (m_type != 1) {
         json[JSON_TYPE] = m_type;
     }
     if (m_consumable) {

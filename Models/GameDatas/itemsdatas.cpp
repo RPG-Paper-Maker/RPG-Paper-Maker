@@ -64,7 +64,7 @@ void ItemsDatas::setDefault() {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     int types[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 2
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 2
     };
     bool consumables[] = {
         true, true, true, true, true, true, true, true, true, false
