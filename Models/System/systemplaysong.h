@@ -58,6 +58,7 @@ public:
     void updateName();
     EventCommand * createEventCommand(EventCommandKind kind);
     void toEventCommand(EventCommand& command, EventCommandKind kind);
+    bool isNone() const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPlaySong &super);

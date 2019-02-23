@@ -20,8 +20,7 @@
 #ifndef SYSTEMITEM_H
 #define SYSTEMITEM_H
 
-#include <QMetaType>
-#include "systemskill.h"
+#include "systemcommonskillitem.h"
 
 // -------------------------------------------------------
 //
@@ -31,24 +30,20 @@
 //
 // -------------------------------------------------------
 
-class SystemItem : public SystemSkill
+class SystemItem : public SystemCommonSkillItem
 {
 public:
     SystemItem();
-    SystemItem(int i, LangsTranslation *names, int pictureID, int idType,
-        bool consumable);
+    SystemItem(int i, LangsTranslation *names, int pictureID, int type, bool
+        consumable, LangsTranslation *description, TargetKind targetKind,
+        PrimitiveValue *conditionFormula, AvailableKind availableKind,
+        SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
+        *animationTargetID, PrimitiveValue *price, QStandardItemModel
+        *modelEffects);
     virtual ~SystemItem();
-    bool consumable() const;
-    void setConsumable(bool consumable);
-    int idType() const;
-    void setIdType(int t);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
-
-protected:
-    int m_idType;
-    bool m_consumable;
 };
 
 Q_DECLARE_METATYPE(SystemItem)

@@ -22,6 +22,7 @@
 #define PANELDATASSKILL_H
 
 #include <QWidget>
+#include "systemskill.h"
 
 // -------------------------------------------------------
 //
@@ -44,9 +45,13 @@ public:
     ~PanelDatasSkill();
 
     void initialize();
+    void update(SystemSkill *skill);
 
 private:
     Ui::PanelDatasSkill *ui;
+
+protected:
+    SystemSkill *m_skill;
 };
 
 #endif // PANELDATASSKILL_H

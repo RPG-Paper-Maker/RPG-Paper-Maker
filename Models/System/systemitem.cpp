@@ -25,16 +25,25 @@
 //
 // -------------------------------------------------------
 
-SystemItem::SystemItem() : SystemItem(1, new LangsTranslation, -1, 1, false)
+SystemItem::SystemItem() :
+    SystemItem(1, new LangsTranslation, -1, 1, true, new LangsTranslation,
+    TargetKind::Ally, new PrimitiveValue(QString("t.hp > 0")), AvailableKind
+    ::Always, new SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(
+    PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind::None), new
+    PrimitiveValue(0), new QStandardItemModel)
 {
 
 }
 
-SystemItem::SystemItem(int i, LangsTranslation *names, int pictureID, int
-    idType, bool consumable) :
-    SystemSkill(i, names, pictureID),
-    m_idType(idType),
-    m_consumable(consumable)
+SystemItem::SystemItem(int i, LangsTranslation *names, int pictureID, int type,
+    bool consumable, LangsTranslation *description, TargetKind targetKind,
+    PrimitiveValue *targetConditionFormula, AvailableKind availableKind,
+    SystemPlaySong *sound,  PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID, PrimitiveValue *price,
+    QStandardItemModel *modelEffects) :
+    SystemCommonSkillItem (i, names, pictureID, type, consumable, true,
+        description, targetKind, targetConditionFormula, new PrimitiveValue(
+        QString()), availableKind, sound, animationUserID, animationTargetID,
+        price, new QStandardItemModel, modelEffects, new QStandardItemModel)
 {
 
 }
@@ -43,28 +52,18 @@ SystemItem::~SystemItem() {
 
 }
 
-bool SystemItem::consumable() const { return m_consumable; }
-
-void SystemItem::setConsumable(bool consumable){ m_consumable = consumable; }
-
-int SystemItem::idType() const { return m_idType; }
-
-void SystemItem::setIdType(int t){ m_idType = t; }
-
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
 void SystemItem::read(const QJsonObject &json){
-    SystemSkill::read(json);
-    m_idType = json["t"].toInt();
-    m_consumable= json["cons"].toBool();
+    SystemCommonSkillItem::read(json);
 }
 
+// -------------------------------------------------------
+
 void SystemItem::write(QJsonObject &json) const{
-    SystemSkill::write(json);
-    json["t"] = m_idType;
-    json["cons"] = m_consumable;
+    SystemCommonSkillItem::write(json);
 }

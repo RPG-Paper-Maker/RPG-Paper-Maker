@@ -106,6 +106,20 @@ void LangsTranslation::setAllNames(QString n){
 }
 
 // -------------------------------------------------------
+
+bool LangsTranslation::isEmpty() const {
+    QHash<int, QString>::const_iterator i;
+
+    for (i = m_names.begin(); i != m_names.end(); i++){
+        if (!i.value().isEmpty()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

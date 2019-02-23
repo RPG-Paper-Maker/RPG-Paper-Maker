@@ -151,6 +151,12 @@ void SystemPlaySong::toEventCommand(EventCommand& command, EventCommandKind kind
 }
 
 // -------------------------------------------------------
+
+bool SystemPlaySong::isNone() const {
+    return p_id == -1 && !m_isSelectedByID;
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -192,11 +198,15 @@ void SystemPlaySong::read(const QJsonObject &json) {
     obj = json[JSON_VOLUME].toObject();
     m_volume->read(obj);
     m_isStart = json[JSON_IS_START].toBool();
-    obj = json[JSON_START].toObject();
-    m_start->read(obj);
+    if (m_isStart) {
+        obj = json[JSON_START].toObject();
+        m_start->read(obj);
+    }
     m_isEnd = json[JSON_IS_END].toBool();
-    obj = json[JSON_END].toObject();
-    m_end->read(obj);
+    if (m_isEnd) {
+        obj = json[JSON_END].toObject();
+        m_end->read(obj);
+    }
 
     updateName();
 }
@@ -218,11 +228,15 @@ void SystemPlaySong::write(QJsonObject &json) const {
     m_volume->write(obj);
     json[JSON_VOLUME] = obj;
     json[JSON_IS_START] = m_isStart;
-    obj = QJsonObject();
-    m_start->write(obj);
-    json[JSON_START] = obj;
+    if (m_isStart) {
+        obj = QJsonObject();
+        m_start->write(obj);
+        json[JSON_START] = obj;
+    }
     json[JSON_IS_END] = m_isEnd;
-    obj = QJsonObject();
-    m_end->write(obj);
-    json[JSON_END] = obj;
+    if (m_isEnd) {
+        obj = QJsonObject();
+        m_end->write(obj);
+        json[JSON_END] = obj;
+    }
 }

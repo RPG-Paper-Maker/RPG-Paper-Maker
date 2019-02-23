@@ -98,7 +98,7 @@ void DialogDatas::updateItem(SystemItem* sysItem){
     int i = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
                                         ->systemDatas()->modelItemsTypes()
                                         ->invisibleRootItem(),
-                           sysItem->idType());
+                           sysItem->type());
     ui->comboBoxItemType->setCurrentIndex(i+1);
     ui->checkBoxItemConsumable->setChecked(sysItem->consumable());
 }
@@ -142,7 +142,7 @@ void DialogDatas::updateWeapon(SystemWeapon *sysWeapon){
     int i = SuperListItem::getIndexById(
                 RPM::get()->project()->gameDatas()->battleSystemDatas()
                 ->modelWeaponsKind()->invisibleRootItem(),
-                sysWeapon->idKind());
+                sysWeapon->type());
     ui->comboBoxWeaponKind->setCurrentIndex(i);
 }
 
@@ -436,7 +436,7 @@ void DialogDatas::on_comboBoxItemType_currentIndexChanged(int index){
     int i = ui->panelSuperListItems->list()->getIndex();
     item = ui->panelSuperListItems->list()->getModel()->item(i);
     SystemItem* sysItem = ((SystemItem*)item->data().value<quintptr>());
-    sysItem->setIdType(index);
+    sysItem->setType(index);
 }
 
 // -------------------------------------------------------

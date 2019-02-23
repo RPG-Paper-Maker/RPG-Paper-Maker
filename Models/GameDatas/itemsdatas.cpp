@@ -69,11 +69,49 @@ void ItemsDatas::setDefault() {
     bool consumables[] = {
         true, true, true, true, true, true, true, true, true, false
     };
+    QString descriptions[] = {
+        "A small potion recovering your HP.",
+        "A medium potion recovering your HP.",
+        "A large potion recovering your HP.",
+        "A small potion recovering your MP.",
+        "A medium potion recovering your MP.",
+        "A large potion recovering your MP.",
+        "A small potion recovering your TP.",
+        "A medium potion recovering your TP.",
+        "A large potion recovering your TP.",
+        "A key that can be used for opening a closed door."
+    };
+    TargetKind targetsKind[] = {
+        TargetKind::Ally, TargetKind::Ally, TargetKind::Ally, TargetKind::Ally,
+        TargetKind::Ally, TargetKind::Ally, TargetKind::Ally, TargetKind::Ally,
+        TargetKind::Ally, TargetKind::None
+    };
+    QString targetConditionsFormulas[] = {
+        "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
+        "t.hp > 0", "t.hp > 0", "t.hp > 0", ""
+    };
+    AvailableKind availablesKind[] = {
+        AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
+        AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
+        AvailableKind::Always, AvailableKind::Always, AvailableKind::Always,
+        AvailableKind::Never
+    };
+    int songsID[] = {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    };
+    int prices[] = {
+        10, 100, 500, 20, 200, 600, 20, 200, 600, 0
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
         sys = new SystemItem(i + 1, new LangsTranslation(names[i]), iconsID[i],
-            types[i], consumables[i]);
+            types[i], consumables[i], new LangsTranslation(descriptions[i]),
+            targetsKind[i], new PrimitiveValue(targetConditionsFormulas[i]),
+            availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
+            new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+            PrimitiveValueKind::None), new PrimitiveValue(prices[i]), new
+            QStandardItemModel);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

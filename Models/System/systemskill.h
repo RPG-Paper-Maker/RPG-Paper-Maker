@@ -20,10 +20,7 @@
 #ifndef SYSTEMSKILLS_H
 #define SYSTEMSKILLS_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemicon.h"
-#include "eventcommand.h"
+#include "systemcommonskillitem.h"
 
 // -------------------------------------------------------
 //
@@ -33,11 +30,16 @@
 //
 // -------------------------------------------------------
 
-class SystemSkill : public SystemIcon
+class SystemSkill : public SystemCommonSkillItem
 {
 public:
     SystemSkill();
-    SystemSkill(int i, LangsTranslation *names, int pictureID);
+    SystemSkill(int i, LangsTranslation *names, int pictureID, LangsTranslation
+        *description, TargetKind targetKind, PrimitiveValue
+        *targetConditionFormula, AvailableKind availableKind, SystemPlaySong
+        *sound, PrimitiveValue *animationUserID, PrimitiveValue
+        *animationTargetID, QStandardItemModel *modelCosts, QStandardItemModel
+        *modelEffects);
     virtual ~SystemSkill();
 
     virtual void read(const QJsonObject &json);

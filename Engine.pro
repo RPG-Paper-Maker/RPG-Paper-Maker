@@ -276,7 +276,8 @@ HEADERS += \
     Models/System/systemanimation.h \
     Models/GameDatas/statusdatas.h \
     Models/System/systemstatus.h \
-    Models/System/systemplaysong.h
+    Models/System/systemplaysong.h \
+    Models/System/systemcommonskillitem.h
 
 SOURCES += \
     main.cpp \
@@ -498,7 +499,8 @@ SOURCES += \
     Models/System/systemanimation.cpp \
     Models/GameDatas/statusdatas.cpp \
     Models/System/systemstatus.cpp \
-    Models/System/systemplaysong.cpp
+    Models/System/systemplaysong.cpp \
+    Models/System/systemcommonskillitem.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

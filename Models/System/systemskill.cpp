@@ -25,13 +25,26 @@
 //
 // -------------------------------------------------------
 
-SystemSkill::SystemSkill() : SystemSkill(1, new LangsTranslation, -1)
+SystemSkill::SystemSkill() :
+    SystemSkill(1, new LangsTranslation, -1, new LangsTranslation, TargetKind
+    ::Enemy, new PrimitiveValue(QString("t.hp > 0")), AvailableKind::Battle, new
+    SystemPlaySong(-1, SongKind::Sound), new PrimitiveValue(PrimitiveValueKind
+    ::None), new PrimitiveValue(PrimitiveValueKind::None), new
+    QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
-SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID) :
-    SystemIcon(i, names, pictureID)
+SystemSkill::SystemSkill(int i, LangsTranslation *names, int pictureID,
+    LangsTranslation *description, TargetKind targetKind, PrimitiveValue
+    *targetConditionFormula, AvailableKind availableKind, SystemPlaySong
+    *sound, PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
+    QStandardItemModel *modelCosts, QStandardItemModel *modelEffects) :
+    SystemCommonSkillItem(i, names, pictureID, 1, false, true, description,
+        targetKind, targetConditionFormula, new PrimitiveValue(QString()),
+        availableKind, sound, animationUserID, animationTargetID, new
+        PrimitiveValue(PrimitiveValueKind::Number, 0), modelCosts, modelEffects,
+        new QStandardItemModel)
 {
 
 }
@@ -42,14 +55,16 @@ SystemSkill::~SystemSkill() {
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
 void SystemSkill::read(const QJsonObject &json){
-    SystemLang::read(json);
+    SystemCommonSkillItem::read(json);
 }
 
+// -------------------------------------------------------
+
 void SystemSkill::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemCommonSkillItem::write(json);
 }

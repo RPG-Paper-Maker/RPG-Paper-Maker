@@ -20,9 +20,7 @@
 #ifndef SYSTEMARMORS_H
 #define SYSTEMARMORS_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemitem.h"
+#include "systemcommonskillitem.h"
 
 // -------------------------------------------------------
 //
@@ -32,11 +30,13 @@
 //
 // -------------------------------------------------------
 
-class SystemArmor : public SystemItem
+class SystemArmor : public SystemCommonSkillItem
 {
 public:
     SystemArmor();
-    SystemArmor(int i, LangsTranslation *names, int pictureID, int k);
+    SystemArmor(int i, LangsTranslation *names, int pictureID, int type,
+        LangsTranslation *description, PrimitiveValue *conditionFormula,
+        PrimitiveValue *price, QStandardItemModel *modelCaracteristics);
     virtual ~SystemArmor();
     int idKind() const;
 

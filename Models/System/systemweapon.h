@@ -20,9 +20,7 @@
 #ifndef SYSTEMWEAPONS_H
 #define SYSTEMWEAPONS_H
 
-#include <QStandardItemModel>
-#include <QMetaType>
-#include "systemarmor.h"
+#include "systemcommonskillitem.h"
 
 // -------------------------------------------------------
 //
@@ -32,11 +30,17 @@
 //
 // -------------------------------------------------------
 
-class SystemWeapon : public SystemArmor
+class SystemWeapon : public SystemCommonSkillItem
 {
 public:
     SystemWeapon();
-    SystemWeapon(int i, LangsTranslation* names, int pictureID, int k);
+    SystemWeapon(int i, LangsTranslation* names, int pictureID, int type, bool
+        oneHand, LangsTranslation *description, TargetKind targetKind,
+        PrimitiveValue *targetConditionFormula, PrimitiveValue
+        *conditionFormula, PrimitiveValue *animationUserID, PrimitiveValue
+        *animationTargetID, PrimitiveValue *price, QStandardItemModel
+        *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
+        *modelCaracteristics);
     virtual ~SystemWeapon();
 
     virtual void read(const QJsonObject &json);

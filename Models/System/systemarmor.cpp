@@ -26,14 +26,22 @@
 // -------------------------------------------------------
 
 SystemArmor::SystemArmor() :
-    SystemArmor(1, new LangsTranslation, -1, 1)
+    SystemArmor(1, new LangsTranslation, -1, 1, new LangsTranslation, new
+        PrimitiveValue(QString()), new PrimitiveValue(0), new
+        QStandardItemModel)
 {
 
 }
 
-SystemArmor::SystemArmor(int i, LangsTranslation* names, int pictureID, int k) :
-    SystemItem(i, names, pictureID, 1, false),
-    m_idKind(k)
+SystemArmor::SystemArmor(int i, LangsTranslation *names, int pictureID, int
+    type, LangsTranslation *description, PrimitiveValue *conditionFormula,
+    PrimitiveValue *price, QStandardItemModel *modelCaracteristics) :
+    SystemCommonSkillItem(i, names, pictureID, type, false, true, description,
+        TargetKind::None, new PrimitiveValue(QString()), conditionFormula,
+        AvailableKind::Never, new SystemPlaySong(-1, SongKind::Sound), new
+        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
+        PrimitiveValueKind::None), price, new QStandardItemModel, new
+        QStandardItemModel, modelCaracteristics)
 {
 
 }
@@ -53,11 +61,9 @@ int SystemArmor::idKind() const {
 // -------------------------------------------------------
 
 void SystemArmor::read(const QJsonObject &json){
-    SystemItem::read(json);
-    m_idKind = json["k"].toInt();
+    SystemCommonSkillItem::read(json);
 }
 
 void SystemArmor::write(QJsonObject &json) const{
-    SystemItem::write(json);
-    json["k"] = m_idKind;
+    SystemCommonSkillItem::write(json);
 }

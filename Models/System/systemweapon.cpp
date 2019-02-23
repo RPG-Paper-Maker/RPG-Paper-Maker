@@ -26,13 +26,26 @@
 // -------------------------------------------------------
 
 SystemWeapon::SystemWeapon() :
-    SystemWeapon(1, new LangsTranslation, -1, 1)
+    SystemWeapon(1, new LangsTranslation, -1, 1, true, new LangsTranslation,
+        TargetKind::Enemy, new PrimitiveValue(QString()), new PrimitiveValue(
+        QString()), new PrimitiveValue(PrimitiveValueKind::None), new
+        PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(0),
+        new QStandardItemModel, new QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
-SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int pictureID, int k) :
-    SystemArmor(i, names, pictureID, k)
+SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int pictureID, int
+    type, bool oneHand, LangsTranslation *description, TargetKind targetKind,
+    PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
+    PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
+    PrimitiveValue *price, QStandardItemModel *modelCosts, QStandardItemModel
+    *modelEffects, QStandardItemModel *modelCaracteristics) :
+    SystemCommonSkillItem(i, names, pictureID, type, false, oneHand,
+        description, targetKind, targetConditionFormula, conditionFormula,
+        AvailableKind::Never, new SystemPlaySong(-1, SongKind::Sound),
+        animationUserID, animationTargetID, price, modelCosts, modelEffects,
+        modelCaracteristics)
 {
 
 }
@@ -48,9 +61,9 @@ SystemWeapon::~SystemWeapon() {
 // -------------------------------------------------------
 
 void SystemWeapon::read(const QJsonObject &json) {
-    SystemArmor::read(json);
+    SystemCommonSkillItem::read(json);
 }
 
 void SystemWeapon::write(QJsonObject &json) const {
-    SystemArmor::write(json);
+    SystemCommonSkillItem::write(json);
 }

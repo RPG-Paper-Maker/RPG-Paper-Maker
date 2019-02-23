@@ -20,6 +20,7 @@
 
 #include "paneldatasskill.h"
 #include "ui_paneldatasskill.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,9 +30,12 @@
 
 PanelDatasSkill::PanelDatasSkill(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelDatasSkill)
+    ui(new Ui::PanelDatasSkill),
+    m_skill(nullptr)
 {
     ui->setupUi(this);
+
+    initialize();
 }
 
 PanelDatasSkill::~PanelDatasSkill()
@@ -48,6 +52,15 @@ PanelDatasSkill::~PanelDatasSkill()
 
 void PanelDatasSkill::initialize() {
     ui->panelPrimitiveValueTargetConditions->initializeMessage();
-    ui->panelPrimitiveValueAnimation->initializeDataBaseCommandId(nullptr,
-        nullptr, nullptr);
+    ui->panelPrimitiveValueAnimation->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->animationsDatas()->model(), nullptr, nullptr);
+}
+
+// -------------------------------------------------------
+
+void PanelDatasSkill::update(SystemSkill *skill) {
+    m_skill = skill;
+
+    ui->widgetSongSound->initialize(skill->sound());
+
 }

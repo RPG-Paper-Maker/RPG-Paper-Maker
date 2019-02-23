@@ -56,16 +56,50 @@ void SkillsDatas::setDefault(){
     SystemSkill *skill;
 
     QString names[] = {
-        "Attack", "Skill", "Item", "Escape", "Fire", "Water", "Wind", "Shadow",
-        "Blazing sword", "Bandage", "Concentration"
+        "Attack", "Skill", "Item", "Escape", "Heal", "Fire", "Water", "Wind",
+        "Shadow", "Blazing sword", "Bandage", "Concentration"
     };
     int iconsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    };
+    QString descriptions[] = {
+        "A basic attack.",
+        "Use a skill.",
+        "Use an item.",
+        "Escape from the battle.",
+        "Heal one ally.",
+        "A fire attack on one enemy.",
+        "A water attack on one enemy.",
+        "A wind attack on one enemy.",
+        "A darkness attack on one ennemy.",
+        "An amazing fire sword attack on all the ennemies.",
+        "Heal yourself with bandages.",
+        "Increase your strength for the next attacks."
+    };
+    TargetKind targetsKind[] = {
+        TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
+        TargetKind::Ally, TargetKind::Enemy, TargetKind::Enemy,
+        TargetKind::Enemy, TargetKind::Enemy, TargetKind::AllEnemies,
+        TargetKind::User, TargetKind::User
+    };
+    AvailableKind availablesKind[] = {
+        AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
+        AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle,
+        AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
+        AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle
+    };
+    int songsID[] = {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
-        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID[i]);
+        skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID
+            [i], new LangsTranslation(descriptions[i]), targetsKind[i], new
+            PrimitiveValue(QString("t.hp > 0")), availablesKind[i],
+            new SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
+            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
+            ::None), new QStandardItemModel, new QStandardItemModel);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(skill)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

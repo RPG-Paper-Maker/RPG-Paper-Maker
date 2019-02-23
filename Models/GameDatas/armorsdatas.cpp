@@ -63,11 +63,19 @@ void ArmorsDatas::setDefault() {
     int types[] = {
         4
     };
+    QString descriptions[] = {
+        "A thin dress."
+    };
+    int prices[] = {
+        30
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
         armor = new SystemArmor(i + 1, new LangsTranslation(names[i]), iconsID
-            [i], types[i]);
+            [i], types[i], new LangsTranslation(descriptions[i]), new
+            PrimitiveValue(QString()), new PrimitiveValue(prices[i]), new
+            QStandardItemModel);
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(armor)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));

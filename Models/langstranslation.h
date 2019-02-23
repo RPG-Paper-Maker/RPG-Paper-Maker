@@ -46,12 +46,13 @@ public:
     void setCopy(const LangsTranslation& super);
     void updateNames();
     void setAllNames(QString n);
+    bool isEmpty() const;
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
 
 protected:
-    QHash<int,QString> m_names;
+    QHash<int, QString> m_names;
 };
 
 #endif // LANGSTRANSLATION_H
