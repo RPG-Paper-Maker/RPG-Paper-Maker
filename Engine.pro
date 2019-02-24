@@ -278,7 +278,11 @@ HEADERS += \
     Models/System/systemplaysong.h \
     Models/System/systemcommonskillitem.h \
     CustomWidgets/paneldatascommonskillitem.h \
-    Enums/commonskillitemkind.h
+    Enums/commonskillitemkind.h \
+    Models/System/systemeffect.h \
+    Enums/effectkind.h \
+    Enums/damageskind.h \
+    Enums/effectspecialacionkind.h
 
 SOURCES += \
     main.cpp \
@@ -501,7 +505,8 @@ SOURCES += \
     Models/System/systemstatus.cpp \
     Models/System/systemplaysong.cpp \
     Models/System/systemcommonskillitem.cpp \
-    CustomWidgets/paneldatascommonskillitem.cpp
+    CustomWidgets/paneldatascommonskillitem.cpp \
+    Models/System/systemeffect.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

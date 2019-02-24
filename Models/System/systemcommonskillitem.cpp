@@ -19,6 +19,7 @@
 
 #include "systemcommonskillitem.h"
 #include "rpm.h"
+#include "systemeffect.h"
 
 const QString SystemCommonSkillItem::JSON_TYPE = "t";
 const QString SystemCommonSkillItem::JSON_CONSUMABLE = "con";
@@ -51,7 +52,10 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
-
+    QStandardItem *item;
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_modelEffects->appendRow(item);
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -91,6 +95,7 @@ SystemCommonSkillItem::~SystemCommonSkillItem() {
     delete m_price;
     SuperListItem::deleteModel(m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects);
+    SuperListItem::deleteModel(m_modelCaracteristics);
 }
 
 int SystemCommonSkillItem::type() const {
@@ -182,6 +187,8 @@ QStandardItemModel * SystemCommonSkillItem::modelCaracteristics() const {
 void SystemCommonSkillItem::read(const QJsonObject &json){
     SystemIcon::read(json);
     QJsonArray tab;
+    QList<QStandardItem *> row;
+    SystemEffect *effect;
     int i, l;
 
     if (json.contains(JSON_TYPE)) {
@@ -236,7 +243,10 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     // Effects
     tab = json[JSON_EFFECTS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        // TODO
+        effect = new SystemEffect;
+        effect->read(tab[i].toObject());
+        row = effect->getModelRow();
+        m_modelEffects->insertRow(i, row);
     }
 
     // Caracteristics
@@ -326,7 +336,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
          i++)
     {
         obj = QJsonObject();
-        //TODO
+        SystemEffect *effect = reinterpret_cast<SystemEffect *>(m_modelEffects
+            ->item(i)->data().value<quintptr>());
+        effect->write(obj);
         tab.append(obj);
     }
     if (!tab.isEmpty()) {

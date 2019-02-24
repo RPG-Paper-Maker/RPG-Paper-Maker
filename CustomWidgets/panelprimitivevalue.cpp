@@ -438,7 +438,7 @@ void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addMessage() {
-    ui->comboBoxChoice->addItem("Message", static_cast<int>(
+    ui->comboBoxChoice->addItem("Formula", static_cast<int>(
         PrimitiveValueKind::Message));
 }
 
