@@ -31,7 +31,8 @@
 
 WidgetVariable::WidgetVariable(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetVariable)
+    ui(new Ui::WidgetVariable),
+    m_super(nullptr)
 {
     ui->setupUi(this);
 
@@ -63,18 +64,32 @@ void WidgetVariable::setCurrentId(int i) {
         s = datas->getVariableById(p_currentId);
     }
     ui->listWidget->item(0)->setText(s->toString());
+
+    // Super
+    if (m_super != nullptr) {
+        m_super->setId(p_currentId);
+    }
 }
 
 QListWidget* WidgetVariable::list() const { return ui->listWidget; }
-
-void WidgetVariable::initialize(int i){
-    setCurrentId(i);
-}
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetVariable::initialize(int i) {
+    setCurrentId(i);
+}
+
+// -------------------------------------------------------
+
+void WidgetVariable::initializeSuper(SuperListItem *super) {
+    m_super = super;
+    initialize(super->id());
+}
+
 // -------------------------------------------------------
 
 void WidgetVariable::openDialog(){

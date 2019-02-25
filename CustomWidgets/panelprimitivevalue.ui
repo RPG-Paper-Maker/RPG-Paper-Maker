@@ -45,13 +45,13 @@
        <property name="minimumSize">
         <size>
          <width>90</width>
-         <height>23</height>
+         <height>27</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>90</width>
-         <height>23</height>
+         <height>27</height>
         </size>
        </property>
        <property name="currentText">
@@ -72,13 +72,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
          <property name="focusPolicy">
@@ -97,13 +97,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -113,32 +113,45 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBoxKeyBoard"/>
+        <widget class="QComboBox" name="comboBoxKeyBoard">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>27</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QComboBox" name="comboBoxDataBase">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -148,13 +161,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
          <property name="decimals">
@@ -173,13 +186,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -189,13 +202,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -205,13 +218,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
         </widget>
@@ -221,13 +234,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>0</height>
+           <height>27</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>27</height>
           </size>
          </property>
          <item>

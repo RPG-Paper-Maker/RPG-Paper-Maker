@@ -17,47 +17,42 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETVARIABLE_H
-#define WIDGETVARIABLE_H
-
-#include <QWidget>
-#include <QListWidget>
-#include "variablesdatas.h"
+#include <QGridLayout>
+#include "dialogsystemeffect.h"
+#include "ui_dialogsystemeffect.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetVariable
-//
-//  Widget used for choosing a variable existing in the database.
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
 //
 // -------------------------------------------------------
 
-namespace Ui {
-class WidgetVariable;
+DialogSystemEffect::DialogSystemEffect(SystemEffect &effect, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogSystemEffect),
+    m_effect(effect)
+{
+    ui->setupUi(this);
+
+    initialize();
 }
 
-class WidgetVariable : public QWidget
-{
-    Q_OBJECT
+DialogSystemEffect::~DialogSystemEffect() {
+    delete ui;
+}
 
-public:
-    explicit WidgetVariable(QWidget *parent = nullptr);
-    ~WidgetVariable();
-    int currentId() const;
-    void setCurrentId(int i);
-    QListWidget* list() const;
-    void initialize(int i = 1);
-    void initializeSuper(SuperListItem *super);
-    void openDialog();
+SystemEffect & DialogSystemEffect::effect() const {
+    return m_effect;
+}
 
-private:
-    Ui::WidgetVariable *ui;
-    int p_currentId;
-    SuperListItem *m_super;
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
 
-private slots:
-    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
-    void on_pushButton_clicked();
-};
-
-#endif // WIDGETVARIABLE_H
+void DialogSystemEffect::initialize() {
+    ui->panelDamagesKind->initialize(m_effect.damagesStatisticID(), m_effect
+        .damagesCurrencyID(), m_effect.damagesVariableID(), m_effect
+        .damagesKind());
+}

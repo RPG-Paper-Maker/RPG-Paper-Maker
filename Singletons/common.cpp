@@ -20,6 +20,21 @@
 #include "common.h"
 #include <QDirIterator>
 
+const QStringList Common::enumToStringDamagesKind = {
+    "Statistic", "Currency", "Variable"
+};
+
+const QStringList Common::enumToStringEffectSpecialActionKind = {
+    "Apply weapon(s) effects and properties", "Open skills choice",
+    "Open items choice", "Escape", "End turn"
+};
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
 Common::Common()
 {
 

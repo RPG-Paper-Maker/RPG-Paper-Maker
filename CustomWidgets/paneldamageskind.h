@@ -17,47 +17,46 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETVARIABLE_H
-#define WIDGETVARIABLE_H
+#ifndef PANELDAMAGESKIND_H
+#define PANELDAMAGESKIND_H
 
 #include <QWidget>
-#include <QListWidget>
-#include "variablesdatas.h"
+#include "primitivevalue.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetVariable
+//  CLASS PanelDamagesKind
 //
-//  Widget used for choosing a variable existing in the database.
+//  The panel for damages and costs.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class WidgetVariable;
+class PanelDamagesKind;
 }
 
-class WidgetVariable : public QWidget
+class PanelDamagesKind : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WidgetVariable(QWidget *parent = nullptr);
-    ~WidgetVariable();
-    int currentId() const;
-    void setCurrentId(int i);
-    QListWidget* list() const;
-    void initialize(int i = 1);
-    void initializeSuper(SuperListItem *super);
-    void openDialog();
+    explicit PanelDamagesKind(QWidget *parent = nullptr);
+    ~PanelDamagesKind();
+
+    void initialize(PrimitiveValue *statisticID, PrimitiveValue *currencyID,
+        SuperListItem *variableID, SuperListItem *kind);
+    void hideAll();
+    void showElement();
 
 private:
-    Ui::WidgetVariable *ui;
-    int p_currentId;
-    SuperListItem *m_super;
+    Ui::PanelDamagesKind *ui;
+    PrimitiveValue *m_statisticID;
+    PrimitiveValue *m_currencyID;
+    SuperListItem *m_variableID;
+    SuperListItem *m_kind;
 
-private slots:
-    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
-    void on_pushButton_clicked();
+public slots:
+    void on_comboBoxChoice_currentIndexChanged(int index);
 };
 
-#endif // WIDGETVARIABLE_H
+#endif // PANELDAMAGESKIND_H

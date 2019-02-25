@@ -282,7 +282,9 @@ HEADERS += \
     Models/System/systemeffect.h \
     Enums/effectkind.h \
     Enums/damageskind.h \
-    Enums/effectspecialacionkind.h
+    Enums/effectspecialacionkind.h \
+    Dialogs/Systems/dialogsystemeffect.h \
+    CustomWidgets/paneldamageskind.h
 
 SOURCES += \
     main.cpp \
@@ -506,7 +508,9 @@ SOURCES += \
     Models/System/systemplaysong.cpp \
     Models/System/systemcommonskillitem.cpp \
     CustomWidgets/paneldatascommonskillitem.cpp \
-    Models/System/systemeffect.cpp
+    Models/System/systemeffect.cpp \
+    Dialogs/Systems/dialogsystemeffect.cpp \
+    CustomWidgets/paneldamageskind.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -589,7 +593,9 @@ FORMS += \
     CustomWidgets/paneldatasmonster.ui \
     CustomWidgets/panelprogressiontable.ui \
     CustomWidgets/widgeticon.ui \
-    CustomWidgets/paneldatascommonskillitem.ui
+    CustomWidgets/paneldatascommonskillitem.ui \
+    Dialogs/Systems/dialogsystemeffect.ui \
+    CustomWidgets/paneldamageskind.ui
 
 OTHER_FILES +=
 

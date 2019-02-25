@@ -82,7 +82,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_modelEffects(modelEffects),
     m_modelCaracteristics(modelCaracteristics)
 {
-
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
 }
 
 SystemCommonSkillItem::~SystemCommonSkillItem() {

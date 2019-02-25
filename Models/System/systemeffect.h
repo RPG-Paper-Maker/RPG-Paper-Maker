@@ -40,7 +40,9 @@ class SystemEffect : public SuperListItem
 public:
     static const QString JSON_KIND;
     static const QString JSON_DAMAGES_KIND;
-    static const QString JSON_DAMAGES_KIND_ID;
+    static const QString JSON_DAMAGES_STATISTIC_ID;
+    static const QString JSON_DAMAGES_CURRENCY_ID;
+    static const QString JSON_DAMAGES_VARIABLE_ID;
     static const QString JSON_DAMAGES_FORMULA;
     static const QString JSON_IS_DAMAGE_ELEMENT;
     static const QString JSON_DAMAGE_ELEMENT_ID;
@@ -62,7 +64,8 @@ public:
 
     SystemEffect();
     SystemEffect(int id, EffectKind kind, DamagesKind damageKind, PrimitiveValue
-        *damagesKindID, PrimitiveValue *damagesFormula, bool isDamageElement,
+        *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
+        damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
         PrimitiveValue *damagesElementID, bool isDamageVariance,
         PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
         PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
@@ -71,18 +74,26 @@ public:
         isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
         PrimitiveValue *commonReactionID, EffectSpecialActionKind
         specialActionKind, PrimitiveValue *scriptFormula);
+    virtual ~SystemEffect();
+    SuperListItem * damagesKind() const;
+    PrimitiveValue * damagesStatisticID() const;
+    PrimitiveValue * damagesCurrencyID() const;
+    SuperListItem * damagesVariableID() const;
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemEffect &effect);
     virtual QList<QStandardItem*> getModelRow() const;
+    virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     EffectKind m_kind;
-    DamagesKind m_damagesKind;
-    PrimitiveValue *m_damagesKindID;
+    SuperListItem *m_damagesKind;
+    PrimitiveValue *m_damagesStatisticID;
+    PrimitiveValue *m_damagesCurrencyID;
+    SuperListItem *m_damagesVariableID;
     PrimitiveValue *m_damagesFormula;
     bool m_isDamageElement;
     PrimitiveValue *m_damagesElementID;

@@ -27,6 +27,10 @@ class Common
 public:
     Common();
 
+    // Enums to QString
+    static const QStringList enumToStringDamagesKind;
+    static const QStringList enumToStringEffectSpecialActionKind;
+
     // METHODS
     static QString pathCombine(const QString& p1, const QString& p2);
     static void writeOtherJSON(QString path, const QJsonObject &obj,

@@ -17,47 +17,39 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WIDGETVARIABLE_H
-#define WIDGETVARIABLE_H
+#ifndef DIALOGSYSTEMEFFECT_H
+#define DIALOGSYSTEMEFFECT_H
 
-#include <QWidget>
-#include <QListWidget>
-#include "variablesdatas.h"
+#include <QDialog>
+#include "systemeffect.h"
+#include "paneldamageskind.h"
 
 // -------------------------------------------------------
 //
-//  CLASS WidgetVariable
+//  CLASS DialogSystemEffect
 //
-//  Widget used for choosing a variable existing in the database.
+//  A dialog used for editing the model of a system effect.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class WidgetVariable;
+class DialogSystemEffect;
 }
 
-class WidgetVariable : public QWidget
+class DialogSystemEffect : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit WidgetVariable(QWidget *parent = nullptr);
-    ~WidgetVariable();
-    int currentId() const;
-    void setCurrentId(int i);
-    QListWidget* list() const;
-    void initialize(int i = 1);
-    void initializeSuper(SuperListItem *super);
-    void openDialog();
+    explicit DialogSystemEffect(SystemEffect &effect, QWidget *parent = nullptr);
+    ~DialogSystemEffect();
+    SystemEffect & effect() const;
 
 private:
-    Ui::WidgetVariable *ui;
-    int p_currentId;
-    SuperListItem *m_super;
+    Ui::DialogSystemEffect *ui;
+    SystemEffect &m_effect;
 
-private slots:
-    void on_listWidget_itemDoubleClicked(QListWidgetItem*);
-    void on_pushButton_clicked();
+    void initialize();
 };
 
-#endif // WIDGETVARIABLE_H
+#endif // DIALOGSYSTEMEFFECT_H

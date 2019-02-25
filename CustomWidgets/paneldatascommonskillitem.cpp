@@ -21,6 +21,7 @@
 #include "paneldatascommonskillitem.h"
 #include "ui_paneldatascommonskillitem.h"
 #include "rpm.h"
+#include "systemeffect.h"
 
 // -------------------------------------------------------
 //
@@ -65,6 +66,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
 
     ui->panelPrimitiveValueConditions->addNone();
     ui->panelPrimitiveValueConditions->initializeMessage();
+    ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
@@ -157,6 +159,7 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValueAnimationTarget->updateModel();
     ui->panelPrimitiveValuePrice->initializeModel(m_model->price());
     ui->panelPrimitiveValuePrice->updateModel();
+    ui->treeViewEffects->initializeModel(m_model->modelEffects());
 }
 
 // -------------------------------------------------------

@@ -370,7 +370,7 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="0" column="0">
-             <widget class="QTreeView" name="treeViewCost"/>
+             <widget class="WidgetSuperTree" name="treeViewCost"/>
             </item>
            </layout>
           </widget>
@@ -386,7 +386,7 @@
            </property>
            <layout class="QGridLayout" name="gridLayout">
             <item row="0" column="0">
-             <widget class="QTreeView" name="treeViewEffects"/>
+             <widget class="WidgetSuperTree" name="treeViewEffects"/>
             </item>
            </layout>
           </widget>
@@ -398,7 +398,7 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
-             <widget class="QTreeView" name="treeViewCaracteristics"/>
+             <widget class="WidgetSuperTree" name="treeViewCaracteristics"/>
             </item>
            </layout>
           </widget>
@@ -435,6 +435,11 @@
    <extends>QWidget</extends>
    <header>widgetsong.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

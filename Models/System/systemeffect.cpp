@@ -17,11 +17,15 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "systemeffect.h"
+#include "dialogsystemeffect.h"
+#include "common.h"
+#include "rpm.h"
 
 const QString SystemEffect::JSON_KIND = "k";
 const QString SystemEffect::JSON_DAMAGES_KIND = "dk";
-const QString SystemEffect::JSON_DAMAGES_KIND_ID = "dkid";
+const QString SystemEffect::JSON_DAMAGES_STATISTIC_ID = "dsid";
+const QString SystemEffect::JSON_DAMAGES_CURRENCY_ID = "dcid";
+const QString SystemEffect::JSON_DAMAGES_VARIABLE_ID = "dvid";
 const QString SystemEffect::JSON_DAMAGES_FORMULA = "df";
 const QString SystemEffect::JSON_IS_DAMAGE_ELEMENT = "ide";
 const QString SystemEffect::JSON_DAMAGE_ELEMENT_ID = "deid";
@@ -49,8 +53,9 @@ const QString SystemEffect::JSON_SCRIPT_FORMULA = "sf";
 
 SystemEffect::SystemEffect() :
     SystemEffect(1, EffectKind::Damages, DamagesKind::Stat, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(QString()),
-        false, new PrimitiveValue(PrimitiveValueKind::DataBase, 1), false, new
+        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 1), 1, new PrimitiveValue(QString()), false, new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 1), false, new
         PrimitiveValue(QString("0")), false, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("100")), true, new PrimitiveValue(
         PrimitiveValueKind::DataBase, 1), new PrimitiveValue(QString("100")),
@@ -59,23 +64,39 @@ SystemEffect::SystemEffect() :
         PrimitiveValueKind::DataBase, 1), EffectSpecialActionKind::ApplyWeapons,
         new PrimitiveValue(QString()))
 {
-
+    m_damagesStatisticID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics());
+    m_damagesCurrencyID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelCurrencies());
+    m_damagesElementID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelElements());
+    m_statusID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->statusDatas()->model());
+    m_addSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->skillsDatas()->model());
+    m_performSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->skillsDatas()->model());
+    m_commonReactionID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelCommonReactors());
 }
 
 SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
-    PrimitiveValue *damagesKindID, PrimitiveValue *damagesFormula, bool
-    isDamageElement, PrimitiveValue *damagesElementID, bool isDamageVariance,
-    PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
-    PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
-    PrimitiveValue *damagesPrecisionFormula, bool isAddStatus,
-    PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
-    isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
-    PrimitiveValue *commonReactionID, EffectSpecialActionKind specialActionKind,
-    PrimitiveValue *scriptFormula) :
+    PrimitiveValue *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
+    damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
+    PrimitiveValue *damagesElementID, bool isDamageVariance, PrimitiveValue
+    *damagesVarianceFormula, bool isDamageCritical, PrimitiveValue
+    *damagesCriticalFormula, bool isDamagePrecision, PrimitiveValue
+    *damagesPrecisionFormula, bool isAddStatus, PrimitiveValue *statusID,
+    PrimitiveValue *statusPrecisionFormula, bool isAddSkill, PrimitiveValue
+    *addSkillID, PrimitiveValue *performSkillID, PrimitiveValue
+    *commonReactionID, EffectSpecialActionKind specialActionKind, PrimitiveValue
+    *scriptFormula) :
     SuperListItem (id, ""),
     m_kind(kind),
-    m_damagesKind(damageKind),
-    m_damagesKindID(damagesKindID),
+    m_damagesKind(new SuperListItem(static_cast<int>(damageKind), "")),
+    m_damagesStatisticID(damagesStatisticID),
+    m_damagesCurrencyID(damagesCurrencyID),
+    m_damagesVariableID(new SuperListItem(damagesVariableID, "")),
     m_damagesFormula(damagesFormula),
     m_isDamageElement(isDamageElement),
     m_damagesElementID(damagesElementID),
@@ -98,6 +119,40 @@ SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
 
 }
 
+SystemEffect::~SystemEffect() {
+    delete m_damagesKind;
+    delete m_damagesStatisticID;
+    delete m_damagesCurrencyID;
+    delete m_damagesVariableID;
+    delete m_damagesFormula;
+    delete m_damagesElementID;
+    delete m_damagesVarianceFormula;
+    delete m_damagesCriticalFormula;
+    delete m_damagesPrecisionFormula;
+    delete m_statusID;
+    delete m_statusPrecisionFormula;
+    delete m_addSkillID;
+    delete m_performSkillID;
+    delete m_commonReactionID;
+    delete m_scriptFormula;
+}
+
+SuperListItem * SystemEffect::damagesKind() const {
+    return m_damagesKind;
+}
+
+PrimitiveValue * SystemEffect::damagesStatisticID() const {
+    return m_damagesStatisticID;
+}
+
+PrimitiveValue * SystemEffect::damagesCurrencyID() const {
+    return m_damagesCurrencyID;
+}
+
+SuperListItem * SystemEffect::damagesVariableID() const {
+    return m_damagesVariableID;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -105,7 +160,6 @@ SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
 // -------------------------------------------------------
 
 bool SystemEffect::openDialog() {
-    /*
     SystemEffect effect;
     effect.setCopy(*this);
     DialogSystemEffect dialog(effect);
@@ -113,7 +167,7 @@ bool SystemEffect::openDialog() {
         setCopy(effect);
         return true;
     }
-    */
+
     return false;
 }
 
@@ -129,6 +183,30 @@ SuperListItem* SystemEffect::createCopy() const {
 
 void SystemEffect::setCopy(const SystemEffect& effect) {
     SuperListItem::setCopy(effect);
+
+    m_kind = effect.m_kind;
+    m_damagesKind->setId(effect.m_damagesKind->id());
+    m_damagesStatisticID->setCopy(*effect.m_damagesStatisticID);
+    m_damagesCurrencyID->setCopy(*effect.m_damagesCurrencyID);
+    m_damagesVariableID->setId(effect.m_damagesVariableID->id());
+    m_damagesFormula->setCopy(*effect.m_damagesFormula);
+    m_isDamageElement = effect.m_isDamageElement;
+    m_damagesElementID->setCopy(*effect.m_damagesElementID);
+    m_isDamageVariance = effect.m_isDamageVariance;
+    m_damagesVarianceFormula->setCopy(*effect.m_damagesCriticalFormula);
+    m_isDamageCritical = effect.m_isDamageCritical;
+    m_damagesCriticalFormula->setCopy(*effect.m_damagesCriticalFormula);
+    m_isDamagePrecision = effect.m_isDamagePrecision;
+    m_damagesPrecisionFormula->setCopy(*effect.m_damagesPrecisionFormula);
+    m_isAddStatus = effect.m_isAddStatus;
+    m_statusID->setCopy(*effect.m_statusID);
+    m_statusPrecisionFormula->setCopy(*effect.m_statusPrecisionFormula);
+    m_isAddSkill = effect.m_isAddSkill;
+    m_addSkillID->setCopy(*effect.m_addSkillID);
+    m_performSkillID->setCopy(*effect.m_performSkillID);
+    m_commonReactionID->setCopy(*effect.m_commonReactionID);
+    m_specialActionKind = effect.m_specialActionKind;
+    m_scriptFormula->setCopy(effect.m_scriptFormula);
 }
 
 // -------------------------------------------------------
@@ -136,11 +214,58 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
 QList<QStandardItem *> SystemEffect::getModelRow() const {
     QList<QStandardItem*> row = QList<QStandardItem* >();
     QStandardItem* itemEffect = new QStandardItem;
+    QString text;
     itemEffect->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemEffect->setText(toString());
     row.append(itemEffect);
 
     return row;
+}
+
+// -------------------------------------------------------
+
+QString SystemEffect::toString() const {
+    switch (m_kind) {
+    case EffectKind::Damages:
+    {
+        QString textDamages;
+        switch (static_cast<DamagesKind>(m_damagesKind->id())) {
+        case DamagesKind::Stat:
+            textDamages = m_damagesStatisticID->toString();
+            break;
+        case DamagesKind::Currency:
+            textDamages = m_damagesCurrencyID->toString();
+            break;
+        case DamagesKind::Variable:
+            textDamages = QString::number(m_damagesVariableID->id());
+            break;
+        }
+        return "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
+            ->id()) + textDamages +  "with <" + m_damagesFormula->toString() +
+            "> " + (m_isDamageElement ? "[Element: " + m_damagesElementID
+            ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
+            m_damagesVarianceFormula->toString() + "%]" : "") + (
+            m_isDamageCritical ? "[Critical : " + m_damagesCriticalFormula
+            ->toString() + "%]" : "") + (m_isDamagePrecision ? "[Precision: " +
+            m_damagesPrecisionFormula->toString() + "%]" : "");
+    }
+    case EffectKind::Status:
+        return QString(m_isAddStatus ? "Add" : "Remove") + " status " +
+            m_statusID->toString() + " with precision " +
+            m_statusPrecisionFormula->toString() + "%";
+    case EffectKind::AddRemoveSkill:
+        return QString(m_isAddSkill ? "Add" : "Remove") + " skill " +
+            m_addSkillID->toString();
+    case EffectKind::PerformSkill:
+        return "Perform skill " + m_performSkillID->toString();
+    case EffectKind::CommonReaction:
+        return "Call common reaction " + m_commonReactionID->toString();
+    case EffectKind::SpecialActions:
+        return "Special action:" + Common::enumToStringEffectSpecialActionKind
+            .at(static_cast<int>(m_specialActionKind));
+    case EffectKind::Script:
+        return "Script: " + m_scriptFormula->toString();
+    }
 }
 
 // -------------------------------------------------------
@@ -155,11 +280,27 @@ void SystemEffect::read(const QJsonObject &json) {
     switch (m_kind) {
     case EffectKind::Damages:
         if (json.contains(JSON_DAMAGES_KIND)) {
-            m_damagesKind = static_cast<DamagesKind>(json[JSON_DAMAGES_KIND]
-                .toInt());
+            m_damagesKind->setId(json[JSON_DAMAGES_KIND].toInt());
         }
-        if (json.contains(JSON_DAMAGES_KIND_ID)) {
-            m_damagesKindID->read(json[JSON_DAMAGES_KIND_ID].toObject());
+        switch (static_cast<DamagesKind>(m_damagesKind->id())) {
+        case DamagesKind::Stat:
+            if (json.contains(JSON_DAMAGES_STATISTIC_ID)) {
+                m_damagesStatisticID->read(json[JSON_DAMAGES_STATISTIC_ID]
+                    .toObject());
+            }
+            break;
+        case DamagesKind::Currency:
+            if (json.contains(JSON_DAMAGES_CURRENCY_ID)) {
+                m_damagesCurrencyID->read(json[JSON_DAMAGES_CURRENCY_ID]
+                    .toObject());
+            }
+            break;
+        case DamagesKind::Variable:
+            if (json.contains(JSON_DAMAGES_VARIABLE_ID)) {
+                m_damagesVariableID->setId(json[JSON_DAMAGES_VARIABLE_ID]
+                    .toInt());
+            }
+            break;
         }
         if (json.contains(JSON_DAMAGES_FORMULA)) {
             m_damagesFormula->read(json[JSON_DAMAGES_FORMULA].toObject());
@@ -247,18 +388,37 @@ void SystemEffect::write(QJsonObject &json) const {
     }
     switch (m_kind) {
     case EffectKind::Damages:
-        if (m_damagesKind != DamagesKind::Stat) {
-            json[JSON_DAMAGES_KIND] = static_cast<int>(m_damagesKind);
+    {
+        if (m_damagesKind->id() != 0) {
+            json[JSON_DAMAGES_KIND] = m_damagesKind->id();
         }
-        if (m_damagesKindID->kind() != PrimitiveValueKind::DataBase ||
-            m_damagesKindID->numberValue() != 1)
-        {
-            obj = QJsonObject();
-            m_damagesKindID->write(obj);
-            json[JSON_DAMAGES_KIND_ID] = obj;
+        switch (static_cast<DamagesKind>(m_damagesKind->id())) {
+        case DamagesKind::Stat:
+            if (m_damagesStatisticID->kind() != PrimitiveValueKind::DataBase ||
+                m_damagesStatisticID->numberValue() != 1)
+            {
+                obj = QJsonObject();
+                m_damagesStatisticID->write(obj);
+                json[JSON_DAMAGES_STATISTIC_ID] = obj;
+            }
+            break;
+        case DamagesKind::Currency:
+            if (m_damagesCurrencyID->kind() != PrimitiveValueKind::DataBase ||
+                m_damagesCurrencyID->numberValue() != 1)
+            {
+                obj = QJsonObject();
+                m_damagesCurrencyID->write(obj);
+                json[JSON_DAMAGES_CURRENCY_ID] = obj;
+            }
+            break;
+        case DamagesKind::Variable:
+            if (m_damagesVariableID->id() != 1) {
+                json[JSON_DAMAGES_VARIABLE_ID] = m_damagesVariableID->id();
+            }
+            break;
         }
         if (m_damagesFormula->kind() != PrimitiveValueKind::Message ||
-            !m_damagesKindID->messageValue().isEmpty())
+            !m_damagesFormula->messageValue().isEmpty())
         {
             obj = QJsonObject();
             m_damagesFormula->write(obj);
@@ -267,7 +427,7 @@ void SystemEffect::write(QJsonObject &json) const {
         if (m_isDamageElement) {
             json[JSON_IS_DAMAGE_ELEMENT] = m_isDamageElement;
             if (m_damagesElementID->kind() != PrimitiveValueKind::DataBase ||
-                m_damagesKindID->numberValue() != 1)
+                m_damagesElementID->numberValue() != 1)
             {
                 obj = QJsonObject();
                 m_damagesElementID->write(obj);
@@ -305,6 +465,7 @@ void SystemEffect::write(QJsonObject &json) const {
             }
         }
         break;
+    }
     case EffectKind::Status:
         if (!m_isAddStatus) {
             json[JSON_IS_ADD_STATUS] = m_isAddStatus;
