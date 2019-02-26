@@ -85,6 +85,20 @@ void WidgetSuperTree::initializeNewItemInstance(SuperListItem* item){
 }
 
 // -------------------------------------------------------
+
+void WidgetSuperTree::updateAllModelRow() {
+    QStandardItemModel *model = getModel();
+    int i, l;
+
+    if (model != nullptr) {
+        for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l - 1; i++) {
+            reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+                quintptr>())->updateModelRow(model, i);
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU
 //

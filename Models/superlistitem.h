@@ -60,6 +60,7 @@ public:
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem& item);
     virtual QList<QStandardItem*> getModelRow() const;
+    virtual void updateModelRow(QStandardItemModel* model, int row);
     static void deleteModel(QStandardItemModel* model, bool deleteModel = true);
     static void deleteModelTree(QStandardItem* item);
     static int getIndexById(QStandardItem* item, int id, bool first = false);

@@ -50,9 +50,11 @@ public:
     void setCanBeEmpty(bool b);
     void setCanBeControled(bool b);
     void setCanMove(bool b);
+
     static int getNewId(QStandardItemModel* model, int offset = 1);
     QStandardItem* getSelected() const;
     void addNewItem(SuperListItem* super, QStandardItem* root, int index);
+    void updateAllModelRow();
 
     static void copy(QStandardItemModel *model,
                      QStandardItemModel *modelToCopy);
@@ -77,6 +79,7 @@ private:
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
     void setItem(QStandardItem *selected, SuperListItem* super);
+
     virtual void newItem(QStandardItem *selected);
     virtual void editItem(QStandardItem *selected);
     virtual void copyItem(QStandardItem *selected);

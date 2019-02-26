@@ -48,6 +48,7 @@ public:
     void initialize(CommonSkillItemKind kind);
     void update(SystemCommonSkillItem *model);
     QStandardItemModel* getTypeModel();
+    void updateAllModelsRow();
 
 private:
     Ui::PanelDatasCommonSkillItem *ui;

@@ -323,8 +323,6 @@ QList<QStandardItem *> SystemEffect::getModelRow() const {
     QList<QStandardItem*> row = QList<QStandardItem* >();
     QStandardItem* itemEffect = new QStandardItem;
     itemEffect->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    //itemEffect->setText(text);
-    //itemEffect->setToolTip(text);
     row.append(itemEffect);
 
     return row;
@@ -333,6 +331,7 @@ QList<QStandardItem *> SystemEffect::getModelRow() const {
 // -------------------------------------------------------
 
 QString SystemEffect::toString() const {
+    QString text = SuperListItem::beginningText;
     switch (m_kind) {
     case EffectKind::Damages:
     {
@@ -348,7 +347,7 @@ QString SystemEffect::toString() const {
             textDamages = QString::number(m_damagesVariableID->id());
             break;
         }
-        return "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
+        text += "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
             ->id()) + " " + textDamages + " with <" + m_damagesFormula->toString()
             + "> " + (m_isDamageElement ? "[Element: " + m_damagesElementID
             ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
@@ -356,26 +355,33 @@ QString SystemEffect::toString() const {
             m_isDamageCritical ? "[Critical : " + m_damagesCriticalFormula
             ->toString() + "%]" : "") + (m_isDamagePrecision ? "[Precision: " +
             m_damagesPrecisionFormula->toString() + "%]" : "");
+        break;
     }
     case EffectKind::Status:
-        return QString(m_isAddStatus ? "Add" : "Remove") + " status " +
+        text += QString(m_isAddStatus ? "Add" : "Remove") + " status " +
             m_statusID->toString() + " with precision " +
             m_statusPrecisionFormula->toString() + "%";
+        break;
     case EffectKind::AddRemoveSkill:
-        return QString(m_isAddSkill ? "Add" : "Remove") + " skill " +
+        text += QString(m_isAddSkill ? "Add" : "Remove") + " skill " +
             m_addSkillID->toString();
+        break;
     case EffectKind::PerformSkill:
-        return "Perform skill " + m_performSkillID->toString();
+        text += "Perform skill " + m_performSkillID->toString();
+        break;
     case EffectKind::CommonReaction:
-        return "Call common reaction " + m_commonReactionID->toString();
+        text += "Call common reaction " + m_commonReactionID->toString();
+        break;
     case EffectKind::SpecialActions:
-        return "Special action: " + Common::enumToStringEffectSpecialActionKind
+        text += "Special action: " + Common::enumToStringEffectSpecialActionKind
             .at(static_cast<int>(m_specialActionKind));
+        break;
     case EffectKind::Script:
-        return "Script: " + m_scriptFormula->toString();
+        text += "Script: " + m_scriptFormula->toString();
+        break;
     }
 
-    return "";
+    return text;
 }
 
 // -------------------------------------------------------

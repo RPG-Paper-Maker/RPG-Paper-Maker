@@ -410,6 +410,18 @@ void DialogDatas::on_tabWidget_currentChanged(int index) {
         updateMonster(reinterpret_cast<SystemMonster *>(ui->panelSuperListMonsters
             ->list()->getSelected()->data().value<quintptr>()));
         break;
+    case 4:
+        ui->panelDatasItems->updateAllModelsRow();
+        break;
+    case 5:
+        ui->panelDatasWeapons->updateAllModelsRow();
+        break;
+    case 6:
+        ui->panelDatasArmors->updateAllModelsRow();
+        break;
+    case 7:
+        ui->panelDatasSkill->updateAllModelsRow();
+        break;
     default:
         break;
     }

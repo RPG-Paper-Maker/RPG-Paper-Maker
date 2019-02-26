@@ -270,6 +270,12 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
 }
 
 // -------------------------------------------------------
+
+void SuperListItem::updateModelRow(QStandardItemModel* model, int row) {
+    model->item(row, 0)->setText(toString());
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

@@ -182,6 +182,14 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
 
 // -------------------------------------------------------
 
+void PanelDatasCommonSkillItem::updateAllModelsRow() {
+    ui->treeViewCost->updateAllModelRow();
+    ui->treeViewEffects->updateAllModelRow();
+    ui->treeViewCaracteristics->updateAllModelRow();
+}
+
+// -------------------------------------------------------
+
 void PanelDatasCommonSkillItem::initializeCommonSkill() {
     // Initialize widgets
     ui->panelPrimitiveValueTargetConditions->addNone();
