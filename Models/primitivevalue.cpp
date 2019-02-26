@@ -124,7 +124,8 @@ QString PrimitiveValue::toString() const{
     case PrimitiveValueKind::Property:
         return "Property:";
     case PrimitiveValueKind::DataBase:
-        return "";
+        return modelDataBase() == nullptr ? "" : SuperListItem::getById(
+            modelDataBase()->invisibleRootItem(), m_numberValue)->toString();
     case PrimitiveValueKind::Message:
         return m_messageValue;
     case PrimitiveValueKind::Script:

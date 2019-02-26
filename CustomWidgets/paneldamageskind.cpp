@@ -58,14 +58,12 @@ void PanelDamagesKind::initialize(PrimitiveValue *statisticID, PrimitiveValue
 
     ui->comboBoxChoice->addItems(Common::enumToStringDamagesKind);
     ui->comboBoxChoice->setCurrentIndex(index);
-    ui->panelPrimitiveValueStatistic->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
-        nullptr, nullptr);
+    ui->panelPrimitiveValueStatistic->initializeDataBaseCommandId(m_statisticID
+        ->modelDataBase());
     ui->panelPrimitiveValueStatistic->initializeModel(m_statisticID);
     ui->panelPrimitiveValueStatistic->updateModel();
-    ui->panelPrimitiveValueCurrency->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelCurrencies(), nullptr,
-        nullptr);
+    ui->panelPrimitiveValueCurrency->initializeDataBaseCommandId(m_currencyID
+        ->modelDataBase());
     ui->panelPrimitiveValueCurrency->initializeModel(m_currencyID);
     ui->panelPrimitiveValueCurrency->updateModel();
     ui->widgetVariable->initializeSuper(m_variableID);

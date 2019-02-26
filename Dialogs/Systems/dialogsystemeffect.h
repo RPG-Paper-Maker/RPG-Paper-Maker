@@ -50,6 +50,26 @@ private:
     SystemEffect &m_effect;
 
     void initialize();
+    void setElementEnabled(bool checked);
+    void setVarianceEnabled(bool checked);
+    void setCriticalEnabled(bool checked);
+    void setPrecisionEnabled(bool checked);
+
+public slots:
+    void on_radioButtonDamages_toggled(bool checked);
+    void on_radioButtonStatus_toggled(bool checked);
+    void on_radioButtonAddRemoveSkill_toggled(bool checked);
+    void on_radioButtonPerformSkill_toggled(bool checked);
+    void on_radioButtonCallCommonReaction_toggled(bool checked);
+    void on_radioButtonSpecialAction_toggled(bool checked);
+    void on_radioButtonScript_toggled(bool checked);
+    void on_checkBoxElementID_toggled(bool checked);
+    void on_checkBoxVariance_toggled(bool checked);
+    void on_checkBoxCritical_toggled(bool checked);
+    void on_checkBoxPrecision_toggled(bool checked);
+    void on_comboBoxAddRemoveStatus_currentIndexChanged(int index);
+    void on_comboBoxAddRemoveSkill_currentIndexChanged(int index);
+    void on_comboBoxSpecialAction_currentIndexChanged(int index);
 };
 
 #endif // DIALOGSYSTEMEFFECT_H

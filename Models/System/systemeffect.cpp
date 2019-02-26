@@ -137,6 +137,14 @@ SystemEffect::~SystemEffect() {
     delete m_scriptFormula;
 }
 
+EffectKind SystemEffect::kind() const {
+    return m_kind;
+}
+
+void SystemEffect::setKind(EffectKind k) {
+    m_kind = k;
+}
+
 SuperListItem * SystemEffect::damagesKind() const {
     return m_damagesKind;
 }
@@ -151,6 +159,106 @@ PrimitiveValue * SystemEffect::damagesCurrencyID() const {
 
 SuperListItem * SystemEffect::damagesVariableID() const {
     return m_damagesVariableID;
+}
+
+PrimitiveValue * SystemEffect::damagesFormula() const {
+    return m_damagesFormula;
+}
+
+bool SystemEffect::isDamageElement() const {
+    return m_isDamageElement;
+}
+
+void SystemEffect::setIsDamageElement(bool b) {
+    m_isDamageElement = b;
+}
+
+PrimitiveValue * SystemEffect::damagesElementID() const {
+    return m_damagesElementID;
+}
+
+bool SystemEffect::isDamageVariance() const {
+    return m_isDamageVariance;
+}
+
+void SystemEffect::setIsDamageVariance(bool b) {
+    m_isDamageVariance = b;
+}
+
+PrimitiveValue * SystemEffect::damagesVarianceFormula() const {
+    return m_damagesVarianceFormula;
+}
+
+bool SystemEffect::isDamageCritical() const {
+    return m_isDamageCritical;
+}
+
+void SystemEffect::setIsDamageCritical(bool b) {
+    m_isDamageCritical = b;
+}
+
+PrimitiveValue * SystemEffect::damagesCriticalFormula() const {
+    return m_damagesCriticalFormula;
+}
+
+bool SystemEffect::isDamagePrecision() const {
+    return m_isDamagePrecision;
+}
+
+void SystemEffect::setIsDamagePrecision(bool b) {
+    m_isDamagePrecision = b;
+}
+
+PrimitiveValue * SystemEffect::damagesPrecisionFormula() const {
+    return m_damagesPrecisionFormula;
+}
+
+bool SystemEffect::isAddStatus() const {
+    return m_isAddStatus;
+}
+
+void SystemEffect::setIsAddStatus(bool b) {
+    m_isAddStatus = b;
+}
+
+PrimitiveValue * SystemEffect::statusID() const {
+    return m_statusID;
+}
+
+PrimitiveValue * SystemEffect::statusPrecisionFormula() const {
+    return m_statusPrecisionFormula;
+}
+
+bool SystemEffect::isAddSkill() const {
+    return m_isAddSkill;
+}
+
+void SystemEffect::setIsAddSkill(bool b) {
+    m_isAddSkill = b;
+}
+
+PrimitiveValue * SystemEffect::addSkillID() const {
+    return m_addSkillID;
+}
+
+PrimitiveValue * SystemEffect::performSkillID() const {
+    return m_performSkillID;
+}
+
+PrimitiveValue * SystemEffect::commonReactionID() const {
+    return m_commonReactionID;
+}
+
+EffectSpecialActionKind SystemEffect::specialActionKind() const {
+    return m_specialActionKind;
+}
+
+void SystemEffect::setSpecialActionKind(EffectSpecialActionKind k) {
+    m_specialActionKind = k;
+}
+
+PrimitiveValue * SystemEffect::scriptFormula() const {
+    return m_scriptFormula;
 }
 
 // -------------------------------------------------------
@@ -206,7 +314,7 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
     m_performSkillID->setCopy(*effect.m_performSkillID);
     m_commonReactionID->setCopy(*effect.m_commonReactionID);
     m_specialActionKind = effect.m_specialActionKind;
-    m_scriptFormula->setCopy(effect.m_scriptFormula);
+    m_scriptFormula->setCopy(*effect.m_scriptFormula);
 }
 
 // -------------------------------------------------------
@@ -214,9 +322,9 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
 QList<QStandardItem *> SystemEffect::getModelRow() const {
     QList<QStandardItem*> row = QList<QStandardItem* >();
     QStandardItem* itemEffect = new QStandardItem;
-    QString text;
     itemEffect->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemEffect->setText(toString());
+    //itemEffect->setText(text);
+    //itemEffect->setToolTip(text);
     row.append(itemEffect);
 
     return row;
@@ -241,8 +349,8 @@ QString SystemEffect::toString() const {
             break;
         }
         return "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
-            ->id()) + textDamages +  "with <" + m_damagesFormula->toString() +
-            "> " + (m_isDamageElement ? "[Element: " + m_damagesElementID
+            ->id()) + " " + textDamages + " with <" + m_damagesFormula->toString()
+            + "> " + (m_isDamageElement ? "[Element: " + m_damagesElementID
             ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
             m_damagesVarianceFormula->toString() + "%]" : "") + (
             m_isDamageCritical ? "[Critical : " + m_damagesCriticalFormula
@@ -261,11 +369,13 @@ QString SystemEffect::toString() const {
     case EffectKind::CommonReaction:
         return "Call common reaction " + m_commonReactionID->toString();
     case EffectKind::SpecialActions:
-        return "Special action:" + Common::enumToStringEffectSpecialActionKind
+        return "Special action: " + Common::enumToStringEffectSpecialActionKind
             .at(static_cast<int>(m_specialActionKind));
     case EffectKind::Script:
         return "Script: " + m_scriptFormula->toString();
     }
+
+    return "";
 }
 
 // -------------------------------------------------------

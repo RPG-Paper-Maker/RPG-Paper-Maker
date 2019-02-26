@@ -75,10 +75,37 @@ public:
         PrimitiveValue *commonReactionID, EffectSpecialActionKind
         specialActionKind, PrimitiveValue *scriptFormula);
     virtual ~SystemEffect();
+    EffectKind kind() const;
+    void setKind(EffectKind k);
     SuperListItem * damagesKind() const;
     PrimitiveValue * damagesStatisticID() const;
     PrimitiveValue * damagesCurrencyID() const;
     SuperListItem * damagesVariableID() const;
+    PrimitiveValue * damagesFormula() const;
+    bool isDamageElement() const;
+    void setIsDamageElement(bool b);
+    PrimitiveValue * damagesElementID() const;
+    bool isDamageVariance() const;
+    void setIsDamageVariance(bool b);
+    PrimitiveValue * damagesVarianceFormula() const;
+    bool isDamageCritical() const;
+    void setIsDamageCritical(bool b);
+    PrimitiveValue * damagesCriticalFormula() const;
+    bool isDamagePrecision() const;
+    void setIsDamagePrecision(bool b);
+    PrimitiveValue * damagesPrecisionFormula() const;
+    bool isAddStatus() const;
+    void setIsAddStatus(bool b);
+    PrimitiveValue * statusID() const;
+    PrimitiveValue * statusPrecisionFormula() const;
+    bool isAddSkill() const;
+    void setIsAddSkill(bool b);
+    PrimitiveValue * addSkillID() const;
+    PrimitiveValue * performSkillID() const;
+    PrimitiveValue * commonReactionID() const;
+    EffectSpecialActionKind specialActionKind() const;
+    void setSpecialActionKind(EffectSpecialActionKind k);
+    PrimitiveValue * scriptFormula() const;
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

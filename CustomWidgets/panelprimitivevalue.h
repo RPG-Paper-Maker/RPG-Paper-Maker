@@ -60,7 +60,8 @@ public:
     void initializeNumber(QStandardItemModel *parameters, QStandardItemModel
         *properties, bool isInteger = true);
     void initializeDataBaseCommandId(QStandardItemModel *dataBase,
-        QStandardItemModel *parameters, QStandardItemModel *properties);
+        QStandardItemModel *parameters = nullptr, QStandardItemModel
+        *properties = nullptr);
     void initializeMessage(QStandardItemModel *parameters = nullptr,
         QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
