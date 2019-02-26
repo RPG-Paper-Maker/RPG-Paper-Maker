@@ -20,6 +20,7 @@
 #include "systemcost.h"
 #include "rpm.h"
 #include "common.h"
+#include "dialogsystemcost.h"
 
 const QString SystemCost::JSON_KIND = "k";
 const QString SystemCost::JSON_STATISTIC_ID = "sid";
@@ -57,7 +58,6 @@ SystemCost::SystemCost(DamagesKind kind, PrimitiveValue *statisticID,
 
 }
 
-
 SystemCost::~SystemCost() {
     delete m_kind;
     delete m_statisticID;
@@ -92,7 +92,6 @@ PrimitiveValue * SystemCost::valueFormula() const {
 // -------------------------------------------------------
 
 bool SystemCost::openDialog() {
-    /*
     SystemCost effect;
     effect.setCopy(*this);
     DialogSystemCost dialog(effect);
@@ -100,7 +99,6 @@ bool SystemCost::openDialog() {
         setCopy(effect);
         return true;
     }
-    */
 
     return false;
 }

@@ -22,7 +22,6 @@
 
 #include <QDialog>
 #include "systemeffect.h"
-#include "paneldamageskind.h"
 
 // -------------------------------------------------------
 //

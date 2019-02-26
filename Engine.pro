@@ -285,7 +285,8 @@ HEADERS += \
     Enums/effectspecialacionkind.h \
     Dialogs/Systems/dialogsystemeffect.h \
     CustomWidgets/paneldamageskind.h \
-    Models/System/systemcost.h
+    Models/System/systemcost.h \
+    Dialogs/Systems/dialogsystemcost.h
 
 SOURCES += \
     main.cpp \
@@ -512,7 +513,8 @@ SOURCES += \
     Models/System/systemeffect.cpp \
     Dialogs/Systems/dialogsystemeffect.cpp \
     CustomWidgets/paneldamageskind.cpp \
-    Models/System/systemcost.cpp
+    Models/System/systemcost.cpp \
+    Dialogs/Systems/dialogsystemcost.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -597,7 +599,8 @@ FORMS += \
     CustomWidgets/widgeticon.ui \
     CustomWidgets/paneldatascommonskillitem.ui \
     Dialogs/Systems/dialogsystemeffect.ui \
-    CustomWidgets/paneldamageskind.ui
+    CustomWidgets/paneldamageskind.ui \
+    Dialogs/Systems/dialogsystemcost.ui
 
 OTHER_FILES +=
 
