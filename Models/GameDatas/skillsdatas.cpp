@@ -60,7 +60,7 @@ void SkillsDatas::setDefault(){
         "Shadow", "Blazing sword", "Bandage", "Concentration"
     };
     int iconsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     };
     QString descriptions[] = {
         "A basic attack (use the current weapon(s).",

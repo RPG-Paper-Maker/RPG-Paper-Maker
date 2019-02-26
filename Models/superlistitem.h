@@ -44,7 +44,7 @@ public:
 
     SuperListItem();
     virtual ~SuperListItem();
-    SuperListItem(int i, QString n);
+    SuperListItem(int i, QString n = QString(), bool datas = false);
     int id() const;
     virtual void setId(int i);
     virtual QString name() const;
@@ -81,6 +81,7 @@ public:
 protected:
     int p_id;
     QString p_name;
+    bool m_containsDatas;
 };
 
 Q_DECLARE_METATYPE(SuperListItem)

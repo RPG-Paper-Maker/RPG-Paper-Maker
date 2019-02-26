@@ -36,11 +36,17 @@ QString SuperListItem::beginningText = "<>";
 //
 // -------------------------------------------------------
 
-SuperListItem::SuperListItem() : SuperListItem(-1,"") {}
+SuperListItem::SuperListItem() : SuperListItem(-1) {}
 
 SuperListItem::~SuperListItem() {}
 
-SuperListItem::SuperListItem(int i, QString n) : p_id(i), p_name(n) {}
+SuperListItem::SuperListItem(int i, QString n, bool datas) :
+    p_id(i),
+    p_name(n),
+    m_containsDatas(datas)
+{
+
+}
 
 int SuperListItem::id() const { return p_id; }
 
@@ -263,8 +269,11 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(toString());
+    if (RPM::get()->project()->gameDatas()->isDatasRead()) {
+        item->setText(toString());
+    }
     row.append(item);
+    RPM::get()->project();
 
     return row;
 }

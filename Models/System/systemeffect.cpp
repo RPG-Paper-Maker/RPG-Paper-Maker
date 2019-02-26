@@ -319,17 +319,6 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
 
 // -------------------------------------------------------
 
-QList<QStandardItem *> SystemEffect::getModelRow() const {
-    QList<QStandardItem*> row = QList<QStandardItem* >();
-    QStandardItem* itemEffect = new QStandardItem;
-    itemEffect->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    row.append(itemEffect);
-
-    return row;
-}
-
-// -------------------------------------------------------
-
 QString SystemEffect::toString() const {
     QString text = SuperListItem::beginningText;
     switch (m_kind) {

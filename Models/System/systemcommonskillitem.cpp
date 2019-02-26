@@ -20,6 +20,7 @@
 #include "systemcommonskillitem.h"
 #include "rpm.h"
 #include "systemeffect.h"
+#include "systemcost.h"
 
 const QString SystemCommonSkillItem::JSON_TYPE = "t";
 const QString SystemCommonSkillItem::JSON_CONSUMABLE = "con";
@@ -52,10 +53,8 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
-    QStandardItem *item;
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelEffects->appendRow(item);
+    m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
+    m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -82,6 +81,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_modelEffects(modelEffects),
     m_modelCaracteristics(modelCaracteristics)
 {
+    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
 }
 
@@ -189,6 +189,7 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     QJsonArray tab;
     QList<QStandardItem *> row;
     SystemEffect *effect;
+    SystemCost *cost;
     int i, l;
 
     if (json.contains(JSON_TYPE)) {
@@ -237,7 +238,10 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     // Costs
     tab = json[JSON_COSTS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        // TODO
+        cost = new SystemCost;
+        cost->read(tab[i].toObject());
+        row = cost->getModelRow();
+        m_modelCosts->insertRow(i, row);
     }
 
     // Effects
@@ -262,6 +266,8 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     SystemIcon::write(json);
     QJsonObject obj;
     QJsonArray tab;
+    SystemEffect *effect;
+    SystemCost *cost;
     int i, l;
 
     if (m_type != 1) {
@@ -323,7 +329,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
          i++)
     {
         obj = QJsonObject();
-        //TODO
+        cost = reinterpret_cast<SystemCost *>(m_modelCosts->item(i)->data()
+            .value<quintptr>());
+        cost->write(obj);
         tab.append(obj);
     }
     if (!tab.isEmpty()) {
@@ -336,8 +344,8 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
          i++)
     {
         obj = QJsonObject();
-        SystemEffect *effect = reinterpret_cast<SystemEffect *>(m_modelEffects
-            ->item(i)->data().value<quintptr>());
+        effect = reinterpret_cast<SystemEffect *>(m_modelEffects->item(i)
+            ->data().value<quintptr>());
         effect->write(obj);
         tab.append(obj);
     }
@@ -351,7 +359,7 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
          l - 1; i++)
     {
         obj = QJsonObject();
-        //TODO
+        // TODO
         tab.append(obj);
     }
     if (!tab.isEmpty()) {

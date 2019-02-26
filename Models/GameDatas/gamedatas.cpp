@@ -42,7 +42,8 @@ GameDatas::GameDatas() :
     m_classesDatas(new ClassesDatas),
     m_tilesetsDatas(new TilesetsDatas),
     m_animationsDatas(new AnimationsDatas),
-    m_statusDatas(new StatusDatas)
+    m_statusDatas(new StatusDatas),
+    m_isDatasRead(false)
 {
 
 }
@@ -126,6 +127,10 @@ StatusDatas* GameDatas::statusDatas() const {
     return m_statusDatas;
 }
 
+bool GameDatas::isDatasRead() const {
+    return m_isDatasRead;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -178,6 +183,8 @@ void GameDatas::read(QString path){
     readTilesets(path);
     readAnimations(path);
     readStatus(path);
+
+    m_isDatasRead = true;
 }
 
 // -------------------------------------------------------

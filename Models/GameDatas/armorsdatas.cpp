@@ -58,7 +58,7 @@ void ArmorsDatas::setDefault() {
         "Dress"
     };
     int iconsID[] = {
-        -1
+        1
     };
     int types[] = {
         4

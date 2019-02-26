@@ -61,7 +61,7 @@ void ItemsDatas::setDefault() {
         "Mega TP potion", "key"
     };
     int iconsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     };
     int types[] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 2

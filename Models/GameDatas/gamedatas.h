@@ -66,6 +66,8 @@ public:
     TilesetsDatas* tilesetsDatas() const;
     AnimationsDatas* animationsDatas() const;
     StatusDatas* statusDatas() const;
+    bool isDatasRead() const;
+
     void read(QString path);
     void readVariablesSwitches(QString path);
     void readTilesets(QString path);
@@ -98,6 +100,7 @@ private:
     TilesetsDatas* m_tilesetsDatas;
     AnimationsDatas* m_animationsDatas;
     StatusDatas* m_statusDatas;
+    bool m_isDatasRead;
 };
 
 #endif // GAMEDATAS_H

@@ -59,7 +59,7 @@ void WeaponsDatas::setDefault() {
         "Wooden sword", "Wooden axe"
     };
     int iconsID[] = {
-        -1, -1
+        1, 1
     };
     int types[] = {
         1, 2
