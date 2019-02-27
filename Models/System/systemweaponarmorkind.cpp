@@ -76,6 +76,12 @@ QStandardItemModel* SystemWeaponArmorKind::getEquipmentModel() const{
 
 // -------------------------------------------------------
 
+bool SystemWeaponArmorKind::getEquipmenAt(int id) const {
+    return m_equipment.at(id - 1);
+}
+
+// -------------------------------------------------------
+
 void SystemWeaponArmorKind::updateEquipment(){
     QStandardItemModel* model = RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelCommonEquipment();

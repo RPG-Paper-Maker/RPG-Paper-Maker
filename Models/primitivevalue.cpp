@@ -308,6 +308,24 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command){
 }
 
 // -------------------------------------------------------
+
+bool PrimitiveValue::isDefaultDataBaseValue() const {
+    return m_kind == PrimitiveValueKind::DataBase && m_numberValue == 1;
+}
+
+// -------------------------------------------------------
+
+bool PrimitiveValue::isDefaultNumberValue() const {
+    return m_kind == PrimitiveValueKind::Number && m_numberValue == 0;
+}
+
+// -------------------------------------------------------
+
+bool PrimitiveValue::isDefaultMessageValue() const {
+    return m_kind == PrimitiveValueKind::Message && m_messageValue.isEmpty();
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

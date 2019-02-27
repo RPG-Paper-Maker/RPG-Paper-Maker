@@ -66,6 +66,9 @@ public:
     void setCopy(const PrimitiveValue &prim);
     void initializeCommandParameter(const EventCommand *command, int& i);
     void getCommandParameter(QVector<QString> &command);
+    bool isDefaultDataBaseValue() const;
+    bool isDefaultNumberValue() const;
+    bool isDefaultMessageValue() const;
 
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;

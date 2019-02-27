@@ -30,6 +30,7 @@ public:
     // Enums to QString
     static const QStringList enumToStringDamagesKind;
     static const QStringList enumToStringEffectSpecialActionKind;
+    static const QStringList enumToStringIncreaseDecreaseKind;
 
     // METHODS
     static QString pathCombine(const QString& p1, const QString& p2);

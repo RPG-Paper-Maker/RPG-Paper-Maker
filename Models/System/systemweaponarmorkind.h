@@ -40,6 +40,8 @@ public:
                           QList<bool> equipment);
     virtual ~SystemWeaponArmorKind();
     QStandardItemModel* getEquipmentModel() const;
+    bool getEquipmenAt(int id) const;
+
     void updateEquipment();
     void updateByModel(QStandardItemModel *model);
     void setDefault();
