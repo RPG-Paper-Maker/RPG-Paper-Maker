@@ -30,9 +30,8 @@ const QStringList Common::enumToStringEffectSpecialActionKind = {
 };
 
 const QStringList Common::enumToStringIncreaseDecreaseKind = {
-    "Statistic value", "Statistic resistance", "Element resistance",
-    "Status resistance", "Experience gain", "Currency gain", "Skill cost",
-    "Variable"
+    "Statistic value", "Element resistance", "Status resistance",
+    "Experience gain", "Currency gain", "Skill cost", "Variable"
 };
 
 // -------------------------------------------------------

@@ -289,7 +289,8 @@ HEADERS += \
     Dialogs/Systems/dialogsystemcost.h \
     Models/System/systemcaracteristic.h \
     Enums/caracteristickind.h \
-    Enums/increasedecreasekind.h
+    Enums/increasedecreasekind.h \
+    Dialogs/Systems/dialogsystemcaracteristic.h
 
 SOURCES += \
     main.cpp \
@@ -518,7 +519,8 @@ SOURCES += \
     CustomWidgets/paneldamageskind.cpp \
     Models/System/systemcost.cpp \
     Dialogs/Systems/dialogsystemcost.cpp \
-    Models/System/systemcaracteristic.cpp
+    Models/System/systemcaracteristic.cpp \
+    Dialogs/Systems/dialogsystemcaracteristic.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -604,7 +606,8 @@ FORMS += \
     CustomWidgets/paneldatascommonskillitem.ui \
     Dialogs/Systems/dialogsystemeffect.ui \
     CustomWidgets/paneldamageskind.ui \
-    Dialogs/Systems/dialogsystemcost.ui
+    Dialogs/Systems/dialogsystemcost.ui \
+    Dialogs/Systems/dialogsystemcaracteristic.ui
 
 OTHER_FILES +=
 

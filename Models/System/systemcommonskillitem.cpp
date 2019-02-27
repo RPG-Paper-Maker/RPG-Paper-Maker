@@ -55,6 +55,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
 {
     m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
     m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
+    m_modelCaracteristics->appendRow(new QStandardItem(SuperListItem::beginningText));
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -83,6 +84,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
 {
     m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
+    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({"Caracteristic"}));
 }
 
 SystemCommonSkillItem::~SystemCommonSkillItem() {

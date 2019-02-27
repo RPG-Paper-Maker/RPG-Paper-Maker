@@ -23,6 +23,7 @@
 #include "rpm.h"
 #include "systemeffect.h"
 #include "systemcost.h"
+#include "systemcaracteristic.h"
 
 // -------------------------------------------------------
 //
@@ -69,6 +70,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     ui->panelPrimitiveValueConditions->initializeMessage();
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
+    ui->treeViewCaracteristics->initializeNewItemInstance(new SystemCaracteristic);
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
@@ -163,6 +165,7 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValuePrice->updateModel();
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
+    ui->treeViewCaracteristics->initializeModel(m_model->modelCaracteristics());
 }
 
 // -------------------------------------------------------

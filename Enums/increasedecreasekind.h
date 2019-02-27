@@ -30,7 +30,6 @@
 
 enum class IncreaseDecreaseKind {
     StatValue,
-    StatRes,
     ElementRes,
     StatusRes,
     ExperienceGain,

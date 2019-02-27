@@ -22,12 +22,12 @@
 #include "common.h"
 #include "systemweaponarmorkind.h"
 #include "systemcommonskillitem.h"
+#include "dialogsystemcaracteristic.h"
 
 const QString SystemCaracteristic::JSON_KIND = "k";
 const QString SystemCaracteristic::JSON_IS_INCREASE_DESCREASE = "iid";
 const QString SystemCaracteristic::JSON_INCREASE_DESCREASE_KIND = "idk";
 const QString SystemCaracteristic::JSON_STAT_VALUE_ID = "svid";
-const QString SystemCaracteristic::JSON_STAT_RES_ID = "srid";
 const QString SystemCaracteristic::JSON_ELEMENT_RES_ID = "erid";
 const QString SystemCaracteristic::JSON_STATUS_RES_ID = "strid";
 const QString SystemCaracteristic::JSON_CURRENCY_GAIN_ID = "cgid";
@@ -58,37 +58,34 @@ SystemCaracteristic::SystemCaracteristic() :
     SystemCaracteristic(CaracteristicKind::IncreaseDecrease, true,
         IncreaseDecreaseKind::StatValue, new PrimitiveValue(PrimitiveValueKind
         ::DataBase, 1), new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
-        new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue
-        (PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
-        true, 1, true, new PrimitiveValue(0), true, new PrimitiveValue(QString()
-        ), true, true, new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1), true, new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), true, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1))
+        new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
+        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 1), true, 1, true, new PrimitiveValue(0), true, new
+        PrimitiveValue(QString()), true, true, new PrimitiveValue(
+        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
+        ::DataBase, 1), true, new PrimitiveValue(PrimitiveValueKind::DataBase, 1
+        ), new PrimitiveValue(PrimitiveValueKind::DataBase, 1), true, new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 1))
 {
 
 }
 
 SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
     isIncreaseDecrease, IncreaseDecreaseKind increaseDecreaseKind,
-    PrimitiveValue *statValueID, PrimitiveValue *statResID, PrimitiveValue
-    *elementResID, PrimitiveValue *statusResID, PrimitiveValue
-    *currencyGainID, PrimitiveValue *skillCostID, bool isAllSkillCost, int
-    variableID, bool operation, PrimitiveValue *value, bool unit, PrimitiveValue
-    *script, bool isAllowEquip, bool isAllowEquipWeapon, PrimitiveValue
-    *equipWeaponTypeID, PrimitiveValue *equipArmorTypeID, bool
-    isAllowChangeEquipment, PrimitiveValue *changeEquipmentID,
-    PrimitiveValue *beginEquipmentID, bool isBeginWeapon, PrimitiveValue
-    *beginWeaponArmorID) :
+    PrimitiveValue *statValueID, PrimitiveValue *elementResID, PrimitiveValue
+    *statusResID, PrimitiveValue *currencyGainID, PrimitiveValue *skillCostID,
+    bool isAllSkillCost, int variableID, bool operation, PrimitiveValue *value,
+    bool unit, PrimitiveValue *script, bool isAllowEquip, bool
+    isAllowEquipWeapon, PrimitiveValue *equipWeaponTypeID, PrimitiveValue
+    *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
+    *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon,
+    PrimitiveValue *beginWeaponArmorID) :
     SuperListItem(),
     m_kind(kind),
     m_isIncreaseDecrease(isIncreaseDecrease),
     m_increaseDecreaseKind(new SuperListItem(static_cast<int>(
         increaseDecreaseKind))),
     m_statValueID(statValueID),
-    m_statResID(statResID),
     m_elementResID(elementResID),
     m_statusResID(statusResID),
     m_currencyGainID(currencyGainID),
@@ -112,8 +109,6 @@ SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
 {
     m_statValueID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelCommonStatistics());
-    m_statResID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->battleSystemDatas()->modelCommonStatistics());
     m_elementResID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelElements());
     m_statusResID->setModelDataBase(RPM::get()->project()->gameDatas()
@@ -136,7 +131,6 @@ SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
 SystemCaracteristic::~SystemCaracteristic() {
     delete m_increaseDecreaseKind;
     delete m_statValueID;
-    delete m_statResID;
     delete m_elementResID;
     delete m_statusResID;
     delete m_currencyGainID;
@@ -170,10 +164,6 @@ SuperListItem * SystemCaracteristic::increaseDecreaseKind() const {
 
 PrimitiveValue * SystemCaracteristic::statValueID() const {
     return m_statValueID;
-}
-
-PrimitiveValue * SystemCaracteristic::statResID() const {
-    return m_statResID;
 }
 
 PrimitiveValue * SystemCaracteristic::elementResID() const {
@@ -342,7 +332,6 @@ void SystemCaracteristic::updateModelBeginSpecific(QStandardItemModel *modelKind
 // -------------------------------------------------------
 
 bool SystemCaracteristic::openDialog() {
-    /*
     SystemCaracteristic caracteristic;
     caracteristic.setCopy(*this);
     DialogSystemCaracteristic dialog(caracteristic);
@@ -350,7 +339,7 @@ bool SystemCaracteristic::openDialog() {
         setCopy(caracteristic);
         return true;
     }
-    */
+
     return false;
 }
 
@@ -372,7 +361,6 @@ void SystemCaracteristic::setCopy(const SystemCaracteristic& caracteristic) {
     m_isIncreaseDecrease = caracteristic.m_isIncreaseDecrease;
     m_increaseDecreaseKind->setId(caracteristic.m_increaseDecreaseKind->id());
     m_statValueID->setCopy(*caracteristic.m_statValueID);
-    m_statResID->setCopy(*caracteristic.m_statResID);
     m_elementResID->setCopy(*caracteristic.m_elementResID);
     m_statusResID->setCopy(*caracteristic.m_statusResID);
     m_currencyGainID->setCopy(*caracteristic.m_currencyGainID);
@@ -417,9 +405,6 @@ QString SystemCaracteristic::toString() const {
         {
         case IncreaseDecreaseKind::StatValue:
             text += m_statValueID->toString();
-            break;
-        case IncreaseDecreaseKind::StatRes:
-            text += m_statResID->toString();
             break;
         case IncreaseDecreaseKind::ElementRes:
             text += m_elementResID->toString();
@@ -489,11 +474,6 @@ void SystemCaracteristic::read(const QJsonObject &json) {
         case IncreaseDecreaseKind::StatValue:
             if (json.contains(JSON_STAT_VALUE_ID)) {
                 m_statValueID->read(json[JSON_STAT_VALUE_ID].toObject());
-            }
-            break;
-        case IncreaseDecreaseKind::StatRes:
-            if (json.contains(JSON_STAT_RES_ID)) {
-                m_statResID->read(json[JSON_STAT_RES_ID].toObject());
             }
             break;
         case IncreaseDecreaseKind::ElementRes:
@@ -608,13 +588,6 @@ void SystemCaracteristic::write(QJsonObject &json) const {
                 obj = QJsonObject();
                 m_statValueID->write(obj);
                 json[JSON_STAT_VALUE_ID] = obj;
-            }
-            break;
-        case IncreaseDecreaseKind::StatRes:
-            if (!m_statResID->isDefaultDataBaseValue()) {
-                obj = QJsonObject();
-                m_statResID->write(obj);
-                json[JSON_STAT_RES_ID] = obj;
             }
             break;
         case IncreaseDecreaseKind::ElementRes:

@@ -40,7 +40,6 @@ public:
     static const QString JSON_IS_INCREASE_DESCREASE;
     static const QString JSON_INCREASE_DESCREASE_KIND;
     static const QString JSON_STAT_VALUE_ID;
-    static const QString JSON_STAT_RES_ID;
     static const QString JSON_ELEMENT_RES_ID;
     static const QString JSON_STATUS_RES_ID;
     static const QString JSON_CURRENCY_GAIN_ID;
@@ -64,22 +63,20 @@ public:
     SystemCaracteristic();
     SystemCaracteristic(CaracteristicKind kind, bool isIncreaseDecrease,
         IncreaseDecreaseKind increaseDecreaseKind, PrimitiveValue
-        *statValueID, PrimitiveValue *statResID, PrimitiveValue *elementResID,
-        PrimitiveValue *statusResID, PrimitiveValue *currencyGainID,
-        PrimitiveValue *skillCostID, bool m_isAllSkillCost, int variableID, bool
-        operation, PrimitiveValue *value, bool unit, PrimitiveValue *script,
-        bool isAllowEquip, bool isAllowEquipWeapon, PrimitiveValue
-        *equipWeaponTypeID, PrimitiveValue *equipArmorTypeID, bool
-        isAllowChangeEquipment, PrimitiveValue *changeEquipmentID,
-        PrimitiveValue *beginEquipmentID, bool isBeginWeapon, PrimitiveValue
-        *beginWeaponArmorID);
+        *statValueID, PrimitiveValue *elementResID, PrimitiveValue *statusResID,
+        PrimitiveValue *currencyGainID, PrimitiveValue *skillCostID, bool
+        m_isAllSkillCost, int variableID, bool operation, PrimitiveValue *value,
+        bool unit, PrimitiveValue *script, bool isAllowEquip, bool
+        isAllowEquipWeapon, PrimitiveValue *equipWeaponTypeID, PrimitiveValue
+        *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
+        *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon
+        , PrimitiveValue *beginWeaponArmorID);
     virtual ~SystemCaracteristic();
     CaracteristicKind kind() const;
     bool isIncreaseDecrease() const;
     void setIsIncreaseDecrease(bool b);
     SuperListItem * increaseDecreaseKind() const;
     PrimitiveValue * statValueID() const;
-    PrimitiveValue * statResID() const;
     PrimitiveValue * elementResID() const;
     PrimitiveValue * statusResID() const;
     PrimitiveValue * currencyGainID() const;
@@ -122,7 +119,6 @@ protected:
     bool m_isIncreaseDecrease;
     SuperListItem *m_increaseDecreaseKind;
     PrimitiveValue *m_statValueID;
-    PrimitiveValue *m_statResID;
     PrimitiveValue *m_elementResID;
     PrimitiveValue *m_statusResID;
     PrimitiveValue *m_currencyGainID;
