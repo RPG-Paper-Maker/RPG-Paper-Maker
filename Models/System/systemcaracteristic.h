@@ -73,6 +73,7 @@ public:
         , PrimitiveValue *beginWeaponArmorID);
     virtual ~SystemCaracteristic();
     CaracteristicKind kind() const;
+    void setKind(CaracteristicKind k);
     bool isIncreaseDecrease() const;
     void setIsIncreaseDecrease(bool b);
     SuperListItem * increaseDecreaseKind() const;

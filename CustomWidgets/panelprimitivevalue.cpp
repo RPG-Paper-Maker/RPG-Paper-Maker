@@ -195,6 +195,33 @@ void PanelPrimitiveValue::initializeModel(PrimitiveValue *m) {
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeNumberVariableAndUpdate(PrimitiveValue *m)
+{
+    initializeNumberVariable();
+    initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeDataBaseAndUpdate(PrimitiveValue *m)
+{
+    initializeDataBaseCommandId(m->modelDataBase());
+    initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeMessageAndUpdate(PrimitiveValue *m)
+{
+    initializeMessage();
+    initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::setKind(PrimitiveValueKind kind) {
     m_model->setKind(kind);
     ui->comboBoxChoice->setCurrentIndex(getKindIndex(kind));
@@ -426,12 +453,13 @@ void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
 
 void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
     if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
-        ui->comboBoxChoice->addItem("Selection", static_cast<int>(
+        ui->comboBoxChoice->insertItem(0, "Selection", static_cast<int>(
             PrimitiveValueKind::DataBase));
         m_model->setModelDataBase(model);
         SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
         connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
             SLOT(on_comboBoxDataBaseCurrentIndexChanged(int)));
+        ui->comboBoxChoice->setCurrentIndex(0);
     }
 }
 
@@ -536,6 +564,15 @@ void PanelPrimitiveValue::showDataBase() {
     setKind(PrimitiveValueKind::DataBase);
     hideAll();
     ui->comboBoxDataBase->show();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::clearDataBase() {
+    ui->comboBoxDataBase->clear();
+    ui->comboBoxChoice->removeItem(ui->comboBoxChoice->findData(static_cast<
+        QVariant>(static_cast<int>(PrimitiveValueKind::DataBase))));
+    addDataBase(m_model->modelDataBase());
 }
 
 // -------------------------------------------------------
@@ -707,6 +744,8 @@ void PanelPrimitiveValue::on_doubleSpinBoxNumber_valueChanged(double i) {
 
 void PanelPrimitiveValue::on_variableChanged(QListWidgetItem *) {
     setNumberValue(ui->widgetVariable->currentId());
+
+    emit numberUpdated(-1);
 }
 
 // -------------------------------------------------------
@@ -724,7 +763,11 @@ void PanelPrimitiveValue::on_comboBoxPropertyCurrentIndexChanged(int index) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::on_comboBoxDataBaseCurrentIndexChanged(int index){
-    setNumberValue(SuperListItem::getIdByIndex(m_model->modelDataBase(), index));
+    int id = SuperListItem::getIdByIndex(m_model->modelDataBase(), index);
+
+    setNumberValue(id);
+
+    emit numberUpdated(id);
 }
 
 // -------------------------------------------------------

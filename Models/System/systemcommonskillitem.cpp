@@ -21,6 +21,7 @@
 #include "rpm.h"
 #include "systemeffect.h"
 #include "systemcost.h"
+#include "systemcaracteristic.h"
 
 const QString SystemCommonSkillItem::JSON_TYPE = "t";
 const QString SystemCommonSkillItem::JSON_CONSUMABLE = "con";
@@ -192,6 +193,7 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     QList<QStandardItem *> row;
     SystemEffect *effect;
     SystemCost *cost;
+    SystemCaracteristic *caracteristic;
     int i, l;
 
     if (json.contains(JSON_TYPE)) {
@@ -258,7 +260,10 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     // Caracteristics
     tab = json[JSON_CARACTERISTICS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        // TODO
+        caracteristic = new SystemCaracteristic;
+        caracteristic->read(tab[i].toObject());
+        row = caracteristic->getModelRow();
+        m_modelCaracteristics->insertRow(i, row);
     }
 }
 
@@ -270,6 +275,7 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     QJsonArray tab;
     SystemEffect *effect;
     SystemCost *cost;
+    SystemCaracteristic *caracteristic;
     int i, l;
 
     if (m_type != 1) {
@@ -361,7 +367,9 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
          l - 1; i++)
     {
         obj = QJsonObject();
-        // TODO
+        caracteristic = reinterpret_cast<SystemCaracteristic *>(
+            m_modelCaracteristics->item(i)->data().value<quintptr>());
+        caracteristic->write(obj);
         tab.append(obj);
     }
     if (!tab.isEmpty()) {

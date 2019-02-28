@@ -150,6 +150,10 @@ CaracteristicKind SystemCaracteristic::kind() const {
     return m_kind;
 }
 
+void SystemCaracteristic::setKind(CaracteristicKind k) {
+    m_kind = k;
+}
+
 bool SystemCaracteristic::isIncreaseDecrease() const {
     return m_isIncreaseDecrease;
 }
@@ -320,7 +324,7 @@ void SystemCaracteristic::updateModelBeginSpecific(QStandardItemModel *modelKind
         sys = reinterpret_cast<SystemCommonSkillItem *>(item->data().value<
             quintptr>());
         if (id == -1 || possibleKind.contains(sys->type())) {
-            m_modelBeginWeaponArmor->appendRow(item);
+            m_modelBeginWeaponArmor->appendRow(sys->getModelRow());
         }
     }
 }
@@ -380,14 +384,16 @@ void SystemCaracteristic::setCopy(const SystemCaracteristic& caracteristic) {
     m_beginEquipmentID->setCopy(*caracteristic.m_beginEquipmentID);
     m_isBeginWeapon = caracteristic.m_isBeginWeapon;
     m_beginWeaponArmorID->setCopy(*caracteristic.m_beginWeaponArmorID);
+    m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
 
     // Model weapon armor (begin)
     m_modelBeginWeaponArmor->clear();
     for (i = 0, l = caracteristic.m_modelBeginWeaponArmor->invisibleRootItem()
         ->rowCount(); i < l; i++)
     {
-        m_modelBeginWeaponArmor->insertRow(i, caracteristic
-            .m_modelBeginWeaponArmor->item(i));
+        m_modelBeginWeaponArmor->insertRow(i, reinterpret_cast<
+            SystemCommonSkillItem *>(caracteristic.m_modelBeginWeaponArmor->item
+            (i)->data().value<quintptr>())->getModelRow());
     }
 }
 
@@ -428,9 +434,6 @@ QString SystemCaracteristic::toString() const {
             ->toString() + " " + (m_unit ? "%" : "");
         break;
     }
-    case CaracteristicKind::Script:
-        text += "Script: " + m_script->toString();
-        break;
     case CaracteristicKind::AllowForbidEquip:
         text += (m_isAllowEquip ? "Allow" : "Forbid") + QString(" equip ") + (
             m_isAllowEquipWeapon ? "weapon " + m_equipWeaponTypeID->toString() :
@@ -444,6 +447,9 @@ QString SystemCaracteristic::toString() const {
         text += "Begin equiment " + m_beginEquipmentID->toString() + " with " +
             (m_isBeginWeapon ? "weapon" : "armor") + " " + m_beginWeaponArmorID
             ->toString();
+        break;
+    case CaracteristicKind::Script:
+        text += "Script: " + m_script->toString();
         break;
     }
 

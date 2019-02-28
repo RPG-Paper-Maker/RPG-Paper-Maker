@@ -60,57 +60,69 @@ void DialogSystemCaracteristic::initialize() {
     switch(m_caracteristic.kind()) {
     case CaracteristicKind::IncreaseDecrease:
         ui->radioButtonBuff->setChecked(true);
-        ui->comboBoxIncreaseDecrease->setCurrentIndex(m_caracteristic
-            .isIncreaseDecrease() ? 0 : 1);
-        ui->comboBoxIncreaseDecreaseKind->setCurrentIndex(index);
         break;
     case CaracteristicKind::AllowForbidEquip:
-
+        ui->radioButtonEquip->setChecked(true);
         break;
     case CaracteristicKind::AllowForbidChange:
+        ui->radioButtonEquipmentChange->setChecked(true);
         break;
     case CaracteristicKind::BeginEquipment:
+        ui->radioButtonBeginEquipment->setChecked(true);
         break;
     case CaracteristicKind::Script:
+        ui->radioButtonScript->setChecked(true);
         break;
     }
 
-    ui->panelPrimitiveValueStatValue->initializeDataBaseCommandId(
-        m_caracteristic.statValueID()->modelDataBase());
-    ui->panelPrimitiveValueStatValue->initializeModel(m_caracteristic
-        .statValueID());
-    ui->panelPrimitiveValueStatValue->updateModel();
-
-    ui->panelPrimitiveValueElementRes->initializeDataBaseCommandId(
-        m_caracteristic.elementResID()->modelDataBase());
-    ui->panelPrimitiveValueElementRes->initializeModel(m_caracteristic
-        .elementResID());
-    ui->panelPrimitiveValueElementRes->updateModel();
-
-    ui->panelPrimitiveValueStatusRes->initializeDataBaseCommandId(
-        m_caracteristic.statusResID()->modelDataBase());
-    ui->panelPrimitiveValueStatusRes->initializeModel(m_caracteristic
-        .statusResID());
-    ui->panelPrimitiveValueStatusRes->updateModel();
-
-    ui->panelPrimitiveValueCurrencyGain->initializeDataBaseCommandId(
-        m_caracteristic.currencyGainID()->modelDataBase());
-    ui->panelPrimitiveValueCurrencyGain->initializeModel(m_caracteristic
-        .currencyGainID());
-    ui->panelPrimitiveValueCurrencyGain->updateModel();
-
-    ui->panelPrimitiveValueSkillCost->initializeDataBaseCommandId(
-        m_caracteristic.skillCostID()->modelDataBase());
-    ui->panelPrimitiveValueSkillCost->initializeModel(m_caracteristic
-        .skillCostID());
-    ui->panelPrimitiveValueSkillCost->updateModel();
-
+    // Buff
+    ui->comboBoxIncreaseDecrease->setCurrentIndex(m_caracteristic
+        .isIncreaseDecrease() ? 0 : 1);
+    ui->comboBoxIncreaseDecreaseKind->setCurrentIndex(index);
+    ui->panelPrimitiveValueStatValue->initializeDataBaseAndUpdate(
+        m_caracteristic.statValueID());
+    ui->panelPrimitiveValueElementRes->initializeDataBaseAndUpdate(
+        m_caracteristic.elementResID());
+    ui->panelPrimitiveValueStatusRes->initializeDataBaseAndUpdate(
+        m_caracteristic.statusResID());
+    ui->panelPrimitiveValueCurrencyGain->initializeDataBaseAndUpdate(
+        m_caracteristic.currencyGainID());
+    ui->panelPrimitiveValueSkillCost->initializeDataBaseAndUpdate(
+        m_caracteristic.skillCostID());
     ui->widgetVariable->initializeSuper(m_caracteristic.variableID());
-
-    ui->panelPrimitiveValue->initializeNumberVariable();
-    ui->panelPrimitiveValue->initializeModel(m_caracteristic
+    ui->comboBoxOperation->setCurrentIndex(m_caracteristic.operation() ? 0 :
+        1);
+    ui->panelPrimitiveValue->initializeNumberVariableAndUpdate(m_caracteristic
         .value());
-    ui->panelPrimitiveValue->updateModel();
+    ui->comboBoxUnit->setCurrentIndex(m_caracteristic.unit() ? 0 : 1);
+
+    // Character
+    ui->comboBoxEquipAllowForbid->setCurrentIndex(m_caracteristic
+        .isAllowEquip() ? 0 : 1);
+    ui->panelPrimitiveValueArmorKindID->hide();
+    ui->comboBoxEquipWeaponArmor->setCurrentIndex(m_caracteristic
+        .isAllowEquipWeapon() ? 0 : 1);
+    ui->panelPrimitiveValueWeaponKindID->initializeDataBaseAndUpdate(
+        m_caracteristic.equipWeaponTypeID());
+    ui->panelPrimitiveValueArmorKindID->initializeDataBaseAndUpdate(
+        m_caracteristic.equipArmorTypeID());
+    ui->comboBoxEquipmentChange->setCurrentIndex(m_caracteristic
+        .isAllowChangeEquipment() ? 0 : 1);
+    ui->panelPrimitiveValueEquipmentChangeID->initializeDataBaseAndUpdate(
+        m_caracteristic.changeEquipmentID());
+    ui->panelPrimitiveValueBeginEquipmentID->initializeDataBaseAndUpdate(
+        m_caracteristic.beginEquipmentID());
+    ui->comboBoxBeginWeaponArmor->setCurrentIndex(m_caracteristic
+        .isBeginWeapon() ? 0 : 1);
+    m_caracteristic.updateModelBeginWeaponArmor();
+    ui->panelPrimitiveValueBeginWeaponArmorID->initializeDataBaseAndUpdate(
+        m_caracteristic.beginWeaponArmorID());
+    connect(ui->panelPrimitiveValueBeginEquipmentID, SIGNAL(numberUpdated(int)),
+        this, SLOT(on_beginWeaponArmorNumberChanged(int)));
+
+    // Script
+    ui->panelPrimitiveValueScript->initializeMessageAndUpdate(m_caracteristic
+        .script());
 }
 
 // -------------------------------------------------------
@@ -121,6 +133,20 @@ void DialogSystemCaracteristic::setRadioCharacters() {
 }
 
 // -------------------------------------------------------
+
+void DialogSystemCaracteristic::uncheckAllRadiosCharacters() {
+    ui->radioButtonEquip->setAutoExclusive(false);
+    ui->radioButtonEquipmentChange->setAutoExclusive(false);
+    ui->radioButtonBeginEquipment->setAutoExclusive(false);
+    ui->radioButtonEquip->setChecked(false);
+    ui->radioButtonEquipmentChange->setChecked(false);
+    ui->radioButtonBeginEquipment->setChecked(false);
+    ui->radioButtonEquip->setAutoExclusive(true);
+    ui->radioButtonEquipmentChange->setAutoExclusive(true);
+    ui->radioButtonBeginEquipment->setAutoExclusive(true);
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -128,19 +154,40 @@ void DialogSystemCaracteristic::setRadioCharacters() {
 
 void DialogSystemCaracteristic::on_radioButtonBuff_toggled(bool checked) {
     if (checked) {
-        ui->radioButtonEquip->setChecked(false);
-        ui->radioButtonEquipmentChange->setChecked(false);
-        ui->radioButtonBeginEquipment->setChecked(false);
+        m_caracteristic.setKind(CaracteristicKind::IncreaseDecrease);
+        uncheckAllRadiosCharacters();
         ui->radioButtonScript->setChecked(false);
     }
+
+    // Enable
+    ui->comboBoxIncreaseDecrease->setEnabled(checked);
+    ui->comboBoxIncreaseDecreaseKind->setEnabled(checked);
+    ui->panelPrimitiveValueStatValue->setEnabled(checked);
+    ui->panelPrimitiveValueElementRes->setEnabled(checked);
+    ui->panelPrimitiveValueStatusRes->setEnabled(checked);
+    ui->panelPrimitiveValueCurrencyGain->setEnabled(checked);
+    ui->panelPrimitiveValueSkillCost->setEnabled(checked);
+    ui->comboBoxSkillCostAll->setEnabled(checked);
+    ui->widgetVariable->setEnabled(checked);
+    ui->comboBoxOperation->setEnabled(checked);
+    ui->panelPrimitiveValue->setEnabled(checked);
+    ui->comboBoxUnit->setEnabled(checked);
 }
 
 // -------------------------------------------------------
 
 void DialogSystemCaracteristic::on_radioButtonEquip_toggled(bool checked) {
+    m_caracteristic.setKind(CaracteristicKind::AllowForbidEquip);
+
     if (checked) {
         setRadioCharacters();
     }
+
+    // Enable
+    ui->comboBoxEquipAllowForbid->setEnabled(checked);
+    ui->comboBoxEquipWeaponArmor->setEnabled(checked);
+    ui->panelPrimitiveValueWeaponKindID->setEnabled(checked);
+    ui->panelPrimitiveValueArmorKindID->setEnabled(checked);
 }
 
 // -------------------------------------------------------
@@ -149,8 +196,13 @@ void DialogSystemCaracteristic::on_radioButtonEquipmentChange_toggled(bool
     checked)
 {
     if (checked) {
+        m_caracteristic.setKind(CaracteristicKind::AllowForbidChange);
         setRadioCharacters();
     }
+
+    // Enable
+    ui->comboBoxEquipmentChange->setEnabled(checked);
+    ui->panelPrimitiveValueEquipmentChangeID->setEnabled(checked);
 }
 
 // -------------------------------------------------------
@@ -159,19 +211,28 @@ void DialogSystemCaracteristic::on_radioButtonBeginEquipment_toggled(bool
     checked)
 {
     if (checked) {
+        m_caracteristic.setKind(CaracteristicKind::BeginEquipment);
         setRadioCharacters();
     }
+
+    // Enable
+    ui->panelPrimitiveValueBeginEquipmentID->setEnabled(checked);
+    ui->labelWith->setEnabled(checked);
+    ui->comboBoxBeginWeaponArmor->setEnabled(checked);
+    ui->panelPrimitiveValueBeginWeaponArmorID->setEnabled(checked);
 }
 
 // -------------------------------------------------------
 
 void DialogSystemCaracteristic::on_radioButtonScript_toggled(bool checked) {
     if (checked) {
+        m_caracteristic.setKind(CaracteristicKind::Script);
         ui->radioButtonBuff->setChecked(false);
-        ui->radioButtonEquip->setChecked(false);
-        ui->radioButtonEquipmentChange->setChecked(false);
-        ui->radioButtonBeginEquipment->setChecked(false);
+        uncheckAllRadiosCharacters();
     }
+
+    // Enable
+    ui->panelPrimitiveValueScript->setEnabled(checked);
 }
 
 // -------------------------------------------------------
@@ -250,4 +311,53 @@ void DialogSystemCaracteristic::on_comboBoxOperation_currentIndexChanged(int
 
 void DialogSystemCaracteristic::on_comboBoxUnit_currentIndexChanged(int index) {
     m_caracteristic.setUnit(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCaracteristic::on_comboBoxEquipAllowForbid_currentIndexChanged(
+    int index)
+{
+    m_caracteristic.setIsAllowEquip(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCaracteristic::on_comboBoxEquipWeaponArmor_currentIndexChanged(
+    int index)
+{
+    m_caracteristic.setIsAllowEquipWeapon(index == 0);
+
+    ui->panelPrimitiveValueWeaponKindID->hide();
+    ui->panelPrimitiveValueArmorKindID->hide();
+    if (index == 0) {
+        ui->panelPrimitiveValueWeaponKindID->show();
+    } else {
+        ui->panelPrimitiveValueArmorKindID->show();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCaracteristic::on_comboBoxEquipmentChange_currentIndexChanged(
+    int index)
+{
+    m_caracteristic.setIsAllowChangeEquipment(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCaracteristic::on_comboBoxBeginWeaponArmor_currentIndexChanged(
+    int index)
+{
+    m_caracteristic.setIsBeginWeapon(index == 0);
+    m_caracteristic.updateModelBeginWeaponArmor();
+    ui->panelPrimitiveValueBeginWeaponArmorID->clearDataBase();
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCaracteristic::on_beginWeaponArmorNumberChanged(int) {
+    m_caracteristic.updateModelBeginWeaponArmor();
+    ui->panelPrimitiveValueBeginWeaponArmorID->clearDataBase();
 }

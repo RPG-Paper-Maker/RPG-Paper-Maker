@@ -51,6 +51,7 @@ private:
 
     void initialize();
     void setRadioCharacters();
+    void uncheckAllRadiosCharacters();
 
 public slots:
     void on_radioButtonBuff_toggled(bool checked);
@@ -63,6 +64,11 @@ public slots:
     void on_comboBoxSkillCostAll_currentIndexChanged(int index);
     void on_comboBoxOperation_currentIndexChanged(int index);
     void on_comboBoxUnit_currentIndexChanged(int index);
+    void on_comboBoxEquipAllowForbid_currentIndexChanged(int index);
+    void on_comboBoxEquipWeaponArmor_currentIndexChanged(int index);
+    void on_comboBoxEquipmentChange_currentIndexChanged(int index);
+    void on_comboBoxBeginWeaponArmor_currentIndexChanged(int index);
+    void on_beginWeaponArmorNumberChanged(int);
 };
 
 #endif // DIALOGSYSTEMCARACTERISTIC_H

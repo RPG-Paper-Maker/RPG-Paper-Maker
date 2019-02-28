@@ -65,6 +65,9 @@ public:
     void initializeMessage(QStandardItemModel *parameters = nullptr,
         QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
+    void initializeNumberVariableAndUpdate(PrimitiveValue *m);
+    void initializeDataBaseAndUpdate(PrimitiveValue *m);
+    void initializeMessageAndUpdate(PrimitiveValue *m);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
     void setNumberDoubleValue(double n);
@@ -96,6 +99,7 @@ public:
     void showParameter();
     void showProperty();
     void showDataBase();
+    void clearDataBase();
     void showMessage();
     void showScript();
     void showSwitch();
