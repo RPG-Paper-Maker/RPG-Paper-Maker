@@ -166,6 +166,8 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
     ui->treeViewCaracteristics->initializeModel(m_model->modelCaracteristics());
+
+    updateAllModelsRow();
 }
 
 // -------------------------------------------------------

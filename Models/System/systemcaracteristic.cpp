@@ -56,16 +56,19 @@ const QString SystemCaracteristic::JSON_BEGIN_WEAPON_ARMOR_ID = "bwaid";
 
 SystemCaracteristic::SystemCaracteristic() :
     SystemCaracteristic(CaracteristicKind::IncreaseDecrease, true,
-        IncreaseDecreaseKind::StatValue, new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
-        new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), true, 1, true, new PrimitiveValue(0), true, new
-        PrimitiveValue(QString()), true, true, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), true, new PrimitiveValue(PrimitiveValueKind::DataBase, 1
-        ), new PrimitiveValue(PrimitiveValueKind::DataBase, 1), true, new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1))
+        IncreaseDecreaseKind::StatValue, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), true, 1, true, PrimitiveValue
+        ::createDefaultNumberValue(), true, PrimitiveValue
+        ::createDefaultMessageValue(), true, true, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), true, PrimitiveValue
+        ::createDefaultDataBaseValue())
 {
 
 }
@@ -282,6 +285,25 @@ PrimitiveValue * SystemCaracteristic::beginWeaponArmorID() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+SystemCaracteristic * SystemCaracteristic::createBuff(int stat, int value, bool
+    operation, bool unit)
+{
+    return new SystemCaracteristic(CaracteristicKind::IncreaseDecrease, true,
+       IncreaseDecreaseKind::StatValue, new PrimitiveValue(PrimitiveValueKind
+       ::DataBase, stat), PrimitiveValue::createDefaultDataBaseValue(),
+       PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
+       ::createDefaultDataBaseValue(), PrimitiveValue
+       ::createDefaultDataBaseValue(), true, 1, operation, new PrimitiveValue(
+       value), unit, PrimitiveValue::createDefaultMessageValue(), true, true,
+       PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
+       ::createDefaultDataBaseValue(), true, PrimitiveValue
+       ::createDefaultDataBaseValue(), PrimitiveValue
+       ::createDefaultDataBaseValue(), true, PrimitiveValue
+       ::createDefaultDataBaseValue());
+}
+
 // -------------------------------------------------------
 
 void SystemCaracteristic::updateModelBeginWeaponArmor() {

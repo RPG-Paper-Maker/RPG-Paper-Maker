@@ -21,6 +21,7 @@
 #include "systemweapon.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemeffect.h"
 
 // -------------------------------------------------------
 //
@@ -51,8 +52,8 @@ QStandardItemModel* WeaponsDatas::model() const { return m_model; }
 // -------------------------------------------------------
 
 void WeaponsDatas::setDefault() {
-    int i, length;
-    QStandardItem* item;
+    int i, j, length, l;
+    QStandardItemModel *modelEffects;
     SystemWeapon *weapon;
 
     QString names[] = {
@@ -74,21 +75,26 @@ void WeaponsDatas::setDefault() {
     int prices[] = {
         40, 50
     };
+    QVector<SystemEffect *> effects[] = {
+        {SystemEffect::createDamage("u.atk", -1, "1")}, {SystemEffect
+        ::createDamage("u.atk", -1, "1")}
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
+        modelEffects = new QStandardItemModel;
+        for (j = 0, l = effects[i].length(); j < l; j++) {
+            modelEffects->appendRow(effects[i][j]->getModelRow());
+        }
+        modelEffects->appendRow(new QStandardItem);
         weapon = new SystemWeapon(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], oneHands[i], new LangsTranslation(descriptions[i]),
             TargetKind::Enemy, new PrimitiveValue(PrimitiveValueKind::None), new
             PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), new PrimitiveValue(prices[i]), new QStandardItemModel, new
-            QStandardItemModel, new QStandardItemModel);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(weapon)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(weapon->toString());
-        m_model->appendRow(item);
+            ::None), new PrimitiveValue(prices[i]), new QStandardItemModel,
+            modelEffects, new QStandardItemModel);
+        m_model->appendRow(weapon->getModelRow());
     }
 }
 

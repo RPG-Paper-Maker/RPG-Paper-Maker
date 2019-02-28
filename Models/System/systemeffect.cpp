@@ -52,35 +52,23 @@ const QString SystemEffect::JSON_SCRIPT_FORMULA = "sf";
 // -------------------------------------------------------
 
 SystemEffect::SystemEffect() :
-    SystemEffect(1, EffectKind::Damages, DamagesKind::Stat, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(PrimitiveValueKind
-        ::DataBase, 1), 1, new PrimitiveValue(QString()), false, new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1), false, new
-        PrimitiveValue(QString("0")), false, new PrimitiveValue(QString("0")),
-        false, new PrimitiveValue(QString("100")), true, new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), new PrimitiveValue(QString("100")),
-        true, new PrimitiveValue(PrimitiveValueKind::DataBase, 1), new
-        PrimitiveValue(PrimitiveValueKind::DataBase, 1), new PrimitiveValue(
-        PrimitiveValueKind::DataBase, 1), EffectSpecialActionKind::ApplyWeapons,
-        new PrimitiveValue(QString()))
+    SystemEffect(EffectKind::Damages, DamagesKind::Stat, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), 1, PrimitiveValue
+        ::createDefaultMessageValue(), false, PrimitiveValue
+        ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
+        false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
+        QString("100")), true, PrimitiveValue::createDefaultDataBaseValue(), new
+        PrimitiveValue(QString("100")), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
+        PrimitiveValue::createDefaultMessageValue())
 {
-    m_damagesStatisticID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->battleSystemDatas()->modelCommonStatistics());
-    m_damagesCurrencyID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelCurrencies());
-    m_damagesElementID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->battleSystemDatas()->modelElements());
-    m_statusID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->statusDatas()->model());
-    m_addSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->skillsDatas()->model());
-    m_performSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->skillsDatas()->model());
-    m_commonReactionID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->commonEventsDatas()->modelCommonReactors());
+
 }
 
-SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
+SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     PrimitiveValue *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
     damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
     PrimitiveValue *damagesElementID, bool isDamageVariance, PrimitiveValue
@@ -91,7 +79,7 @@ SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
     *addSkillID, PrimitiveValue *performSkillID, PrimitiveValue
     *commonReactionID, EffectSpecialActionKind specialActionKind, PrimitiveValue
     *scriptFormula) :
-    SuperListItem (id, ""),
+    SuperListItem (),
     m_kind(kind),
     m_damagesKind(new SuperListItem(static_cast<int>(damageKind), "")),
     m_damagesStatisticID(damagesStatisticID),
@@ -116,7 +104,20 @@ SystemEffect::SystemEffect(int id, EffectKind kind, DamagesKind damageKind,
     m_specialActionKind(specialActionKind),
     m_scriptFormula(scriptFormula)
 {
-
+    m_damagesStatisticID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics());
+    m_damagesCurrencyID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelCurrencies());
+    m_damagesElementID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelElements());
+    m_statusID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->statusDatas()->model());
+    m_addSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->skillsDatas()->model());
+    m_performSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->skillsDatas()->model());
+    m_commonReactionID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelCommonReactors());
 }
 
 SystemEffect::~SystemEffect() {
@@ -263,6 +264,73 @@ PrimitiveValue * SystemEffect::scriptFormula() const {
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
+{
+    return new SystemEffect(EffectKind::SpecialActions, DamagesKind::Stat,
+        PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), 1, PrimitiveValue
+        ::createDefaultMessageValue(), false, PrimitiveValue
+        ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
+        false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
+        QString("100")), true, PrimitiveValue::createDefaultDataBaseValue(), new
+        PrimitiveValue(QString("100")), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), action, PrimitiveValue
+        ::createDefaultMessageValue());
+}
+
+// -------------------------------------------------------
+
+SystemEffect * SystemEffect::createStat(int stat, QString formula, int element,
+    QString variance, QString critical, QString precision)
+{
+    return new SystemEffect(EffectKind::Damages, DamagesKind::Stat, new
+        PrimitiveValue(PrimitiveValueKind::DataBase, stat), PrimitiveValue
+        ::createDefaultDataBaseValue(), 1, new PrimitiveValue(formula), element
+        != -1, element == -1 ? PrimitiveValue::createDefaultDataBaseValue() :
+        new PrimitiveValue(PrimitiveValueKind::DataBase, element), !variance
+        .isEmpty(), new PrimitiveValue(variance.isEmpty() ? QString("0") :
+        variance), !critical.isEmpty(), new PrimitiveValue(critical.isEmpty() ?
+        QString("0") : critical), !precision.isEmpty(), new PrimitiveValue(
+        precision.isEmpty() ? QString("100") : precision), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
+        , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), PrimitiveValue
+        ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
+        PrimitiveValue::createDefaultMessageValue());
+}
+
+// -------------------------------------------------------
+
+SystemEffect * SystemEffect::createDamage(QString formula, int element, QString
+    variance, QString critical, QString precision)
+{
+    return createStat(3, formula, element, variance, critical, precision);
+}
+
+// -------------------------------------------------------
+
+SystemEffect * SystemEffect::createDamageMP(QString formula, int element, QString
+    variance, QString critical, QString precision)
+{
+    return createStat(4, formula, element, variance, critical, precision);
+}
+
+// -------------------------------------------------------
+
+SystemEffect * SystemEffect::createDamageTP(QString formula, int element, QString
+    variance, QString critical, QString precision)
+{
+    return createStat(5, formula, element, variance, critical, precision);
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
@@ -301,7 +369,7 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
     m_isDamageElement = effect.m_isDamageElement;
     m_damagesElementID->setCopy(*effect.m_damagesElementID);
     m_isDamageVariance = effect.m_isDamageVariance;
-    m_damagesVarianceFormula->setCopy(*effect.m_damagesCriticalFormula);
+    m_damagesVarianceFormula->setCopy(*effect.m_damagesVarianceFormula);
     m_isDamageCritical = effect.m_isDamageCritical;
     m_damagesCriticalFormula->setCopy(*effect.m_damagesCriticalFormula);
     m_isDamagePrecision = effect.m_isDamagePrecision;
@@ -337,8 +405,8 @@ QString SystemEffect::toString() const {
             break;
         }
         text += "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
-            ->id()) + " " + textDamages + " with <" + m_damagesFormula->toString()
-            + "> " + (m_isDamageElement ? "[Element: " + m_damagesElementID
+            ->id()) + " " + textDamages + " with " + m_damagesFormula->toString()
+            + " " + (m_isDamageElement ? "[Element: " + m_damagesElementID
             ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
             m_damagesVarianceFormula->toString() + "%]" : "") + (
             m_isDamageCritical ? "[Critical : " + m_damagesCriticalFormula

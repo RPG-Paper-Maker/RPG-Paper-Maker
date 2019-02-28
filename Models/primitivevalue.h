@@ -44,7 +44,12 @@ public:
     PrimitiveValue(bool s);
     PrimitiveValue(PrimitiveValueKind kind);
     PrimitiveValue(PrimitiveValueKind kind, int n);
-    static PrimitiveValue* createKeyBoard(int id);
+
+    static PrimitiveValue * createKeyBoard(int id);
+    static PrimitiveValue * createDefaultDataBaseValue();
+    static PrimitiveValue * createDefaultNumberValue();
+    static PrimitiveValue * createDefaultMessageValue();
+
     QStandardItemModel* modelParameter() const;
     void setModelParameter(QStandardItemModel* model);
     QStandardItemModel* modelProperties() const;

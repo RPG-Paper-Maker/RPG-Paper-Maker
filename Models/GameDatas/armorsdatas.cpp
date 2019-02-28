@@ -21,6 +21,7 @@
 #include "systemarmor.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemcaracteristic.h"
 
 // -------------------------------------------------------
 //
@@ -50,8 +51,8 @@ QStandardItemModel* ArmorsDatas::model() const { return m_model; }
 // -------------------------------------------------------
 
 void ArmorsDatas::setDefault() {
-    int i, length;
-    QStandardItem* item;
+    int i, j, length, l;
+    QStandardItemModel * modelCaracteristics;
     SystemArmor *armor;
 
     QString names[] = {
@@ -69,18 +70,22 @@ void ArmorsDatas::setDefault() {
     int prices[] = {
         30
     };
+    QVector<SystemCaracteristic *> caracteristics[] = {
+        {SystemCaracteristic::createBuff(10, 5, false, false)}
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
+        modelCaracteristics = new QStandardItemModel;
+        for (j = 0, l = caracteristics[i].length(); j < l; j++) {
+            modelCaracteristics->appendRow(caracteristics[i][j]->getModelRow());
+        }
+        modelCaracteristics->appendRow(new QStandardItem);
         armor = new SystemArmor(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], new LangsTranslation(descriptions[i]), new
             PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(prices
-            [i]), new QStandardItemModel);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(armor)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(armor->toString());
-        m_model->appendRow(item);
+            [i]), modelCaracteristics);
+        m_model->appendRow(armor->getModelRow());
     }
 }
 

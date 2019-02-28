@@ -106,6 +106,8 @@ public:
     QStandardItemModel * modelBeginWeaponArmor() const;
     PrimitiveValue * beginWeaponArmorID() const;
 
+    static SystemCaracteristic * createBuff(int stat, int value, bool operation,
+        bool unit);
     void updateModelBeginWeaponArmor();
 
     virtual bool openDialog();

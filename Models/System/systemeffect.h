@@ -63,7 +63,7 @@ public:
     static const QString JSON_SCRIPT_FORMULA;
 
     SystemEffect();
-    SystemEffect(int id, EffectKind kind, DamagesKind damageKind, PrimitiveValue
+    SystemEffect(EffectKind kind, DamagesKind damageKind, PrimitiveValue
         *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
         damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
         PrimitiveValue *damagesElementID, bool isDamageVariance,
@@ -106,6 +106,21 @@ public:
     EffectSpecialActionKind specialActionKind() const;
     void setSpecialActionKind(EffectSpecialActionKind k);
     PrimitiveValue * scriptFormula() const;
+
+    static SystemEffect * createSpecialAction(EffectSpecialActionKind action);
+    static SystemEffect * createStat(int stat, QString formula, int element,
+        QString variance, QString critical, QString precision);
+    static SystemEffect * createDamage(QString formula, int element = -1,
+        QString variance = QString(), QString critical = QString(), QString
+        precision = QString());
+    static SystemEffect * createDamageMP(QString formula, int element = -1,
+        QString variance = QString(), QString critical = QString(), QString
+        precision = QString());
+
+    static SystemEffect * createDamageTP(QString formula, int element = -1,
+        QString variance = QString(), QString critical = QString(), QString
+        precision = QString());
+
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;

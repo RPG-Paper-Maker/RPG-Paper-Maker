@@ -21,6 +21,8 @@
 #include "systemskill.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemcost.h"
+#include "systemeffect.h"
 
 // -------------------------------------------------------
 //
@@ -51,9 +53,9 @@ QStandardItemModel* SkillsDatas::model() const { return m_model; }
 // -------------------------------------------------------
 
 void SkillsDatas::setDefault(){
-    int i, length;
-    QStandardItem* item;
+    int i, j, length, l;
     SystemSkill *skill;
+    QStandardItemModel *modelCosts, *modelEffects;
 
     QString names[] = {
         "Attack", "Skill", "Item", "Escape", "Heal", "Fire", "Water", "Wind",
@@ -77,27 +79,55 @@ void SkillsDatas::setDefault(){
         "Increase your strength for the next attacks."
     };
     TargetKind targetsKind[] = {
-        TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
+        TargetKind::None, TargetKind::None, TargetKind::None, TargetKind::None,
         TargetKind::Ally, TargetKind::Enemy, TargetKind::Enemy,
         TargetKind::Enemy, TargetKind::Enemy, TargetKind::AllEnemies,
         TargetKind::User, TargetKind::User
     };
     AvailableKind availablesKind[] = {
-        AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
-        AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle,
+        AvailableKind::Never, AvailableKind::Never, AvailableKind::Never,
+        AvailableKind::Never, AvailableKind::Always, AvailableKind::Battle,
         AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
         AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle
     };
     int songsID[] = {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
-    QString targetConditions[] {
-        "t.hp > 0", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
+    QString targetConditions[] = {
+        "", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
         "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0"
+    };
+    QVector<SystemCost *> costs[] = {
+        {}, {}, {}, {}, {SystemCost::createMP(5)}, {SystemCost::createMP(3)},
+        {SystemCost::createMP(3)}, {SystemCost::createMP(3)}, {SystemCost
+        ::createMP(3)}, {SystemCost::createMP(4)}, {SystemCost::createTP(3)},
+        {SystemCost::createTP(2)}
+    };
+    QVector<SystemEffect *> effects[] = {
+        {SystemEffect::createSpecialAction(EffectSpecialActionKind::ApplyWeapons
+        )}, {SystemEffect::createSpecialAction(EffectSpecialActionKind
+        ::OpenSkills)}, {SystemEffect::createSpecialAction(
+        EffectSpecialActionKind::OpenItems)}, {SystemEffect::createSpecialAction
+        (EffectSpecialActionKind::Escape)}, {SystemEffect::createDamage("-u.mag"
+        , -1, "1")}, {SystemEffect::createDamage("u.mag", 1, "1")}, {
+        SystemEffect::createDamage("u.mag", 2, "1")}, {SystemEffect
+        ::createDamage("u.mag", 3, "1")}, {SystemEffect::createDamage("u.mag",
+        -1, "1")}, {SystemEffect::createDamage("u.mag", 1, "1")}, {SystemEffect
+        ::createDamage("-u.mag", -1, "1")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
+        modelCosts = new QStandardItemModel;
+        for (j = 0, l = costs[i].length(); j < l; j++) {
+            modelCosts->appendRow(costs[i][j]->getModelRow());
+        }
+        modelCosts->appendRow(new QStandardItem);
+        modelEffects = new QStandardItemModel;
+        for (j = 0, l = effects[i].length(); j < l; j++) {
+            modelEffects->appendRow(effects[i][j]->getModelRow());
+        }
+        modelEffects->appendRow(new QStandardItem);
         skill = new SystemSkill(i + 1, new LangsTranslation(names[i]), iconsID
             [i], new LangsTranslation(descriptions[i]), targetsKind[i],
             targetConditions[i].isEmpty() ? new PrimitiveValue(
@@ -105,12 +135,8 @@ void SkillsDatas::setDefault(){
             new PrimitiveValue(PrimitiveValueKind::None), availablesKind[i], new
             SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
             PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), new QStandardItemModel, new QStandardItemModel);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(skill)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(skill->toString());
-        m_model->appendRow(item);
+            ::None), modelCosts, modelEffects);
+        m_model->appendRow(skill->getModelRow());
     }
 }
 

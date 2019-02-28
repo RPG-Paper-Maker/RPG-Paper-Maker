@@ -21,6 +21,7 @@
 #include "systemitem.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemeffect.h"
 
 // -------------------------------------------------------
 //
@@ -51,8 +52,8 @@ QStandardItemModel* ItemsDatas::model() const { return m_model; }
 // -------------------------------------------------------
 
 void ItemsDatas::setDefault() {
-    int i, length;
-    QStandardItem* item;
+    int i, j, length, l;
+    QStandardItemModel *modelEffects;
     SystemItem *sys;
 
     QString names[] = {
@@ -102,21 +103,30 @@ void ItemsDatas::setDefault() {
     int prices[] = {
         10, 100, 500, 20, 200, 600, 20, 200, 600, 0
     };
+    QVector<SystemEffect *> effects[] = {
+        {SystemEffect::createDamage("-10")}, {SystemEffect::createDamage("-100")
+        }, {SystemEffect::createDamage("-2000")}, {SystemEffect::createDamageMP(
+        "-10")}, {SystemEffect::createDamageMP("-100")}, {SystemEffect
+        ::createDamageMP("-2000")}, {SystemEffect::createDamageTP("-10")}, {
+        SystemEffect::createDamageTP("-100")}, {SystemEffect::createDamageTP(
+        "-2000")}, {}
+    };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
+        modelEffects = new QStandardItemModel;
+        for (j = 0, l = effects[i].length(); j < l; j++) {
+            modelEffects->appendRow(effects[i][j]->getModelRow());
+        }
+        modelEffects->appendRow(new QStandardItem);
         sys = new SystemItem(i + 1, new LangsTranslation(names[i]), iconsID[i],
             types[i], consumables[i], new LangsTranslation(descriptions[i]),
             targetsKind[i], new PrimitiveValue(targetConditionsFormulas[i]),
             availablesKind[i], new SystemPlaySong(songsID[i], SongKind::Sound),
             new PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(prices[i]), new
-            QStandardItemModel);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sys->toString());
-        m_model->appendRow(item);
+            PrimitiveValueKind::None), new PrimitiveValue(prices[i]),
+            modelEffects);
+        m_model->appendRow(sys->getModelRow());
     }
 }
 

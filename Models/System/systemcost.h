@@ -51,6 +51,10 @@ public:
     SuperListItem * variableID() const;
     PrimitiveValue * valueFormula() const;
 
+    static SystemCost * createStat(int stat, int nb);
+    static SystemCost * createMP(int nb);
+    static SystemCost * createTP(int nb);
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemCost &cost);

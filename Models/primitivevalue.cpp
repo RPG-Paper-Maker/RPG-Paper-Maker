@@ -218,6 +218,24 @@ PrimitiveValue* PrimitiveValue::createKeyBoard(int id){
 
 // -------------------------------------------------------
 
+PrimitiveValue * PrimitiveValue::createDefaultDataBaseValue() {
+    return new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
+}
+
+// -------------------------------------------------------
+
+PrimitiveValue * PrimitiveValue::createDefaultNumberValue() {
+    return new PrimitiveValue(0);
+}
+
+// -------------------------------------------------------
+
+PrimitiveValue * PrimitiveValue::createDefaultMessageValue() {
+    return new PrimitiveValue(QString());
+}
+
+// -------------------------------------------------------
+
 void PrimitiveValue::setCopy(const PrimitiveValue &prim){
     m_kind = prim.kind();
 

@@ -40,10 +40,7 @@ SystemCost::SystemCost() :
         1, new PrimitiveValue(QString()))
 
 {
-    m_statisticID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->battleSystemDatas()->modelCommonStatistics());
-    m_currencyID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelCurrencies());
+
 }
 
 SystemCost::SystemCost(DamagesKind kind, PrimitiveValue *statisticID,
@@ -55,7 +52,10 @@ SystemCost::SystemCost(DamagesKind kind, PrimitiveValue *statisticID,
     m_variableID(new SuperListItem(variableID)),
     m_valueFormula(valueFormula)
 {
-
+    m_statisticID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->battleSystemDatas()->modelCommonStatistics());
+    m_currencyID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelCurrencies());
 }
 
 SystemCost::~SystemCost() {
@@ -83,6 +83,31 @@ SuperListItem * SystemCost::variableID() const {
 
 PrimitiveValue * SystemCost::valueFormula() const {
     return  m_valueFormula;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+SystemCost * SystemCost::createStat(int stat, int nb) {
+    return new SystemCost(DamagesKind::Stat, new PrimitiveValue(
+        PrimitiveValueKind::DataBase, stat), PrimitiveValue
+        ::createDefaultDataBaseValue(), 1, new PrimitiveValue(QString::number(
+        nb)));
+}
+
+// -------------------------------------------------------
+
+SystemCost * SystemCost::createMP(int nb) {
+    return SystemCost::createStat(4, nb);
+}
+
+// -------------------------------------------------------
+
+SystemCost * SystemCost::createTP(int nb) {
+    return SystemCost::createStat(5, nb);
 }
 
 // -------------------------------------------------------
