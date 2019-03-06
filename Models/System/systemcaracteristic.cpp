@@ -481,8 +481,6 @@ QString SystemCaracteristic::toString() const {
 // -------------------------------------------------------
 
 void SystemCaracteristic::read(const QJsonObject &json) {
-    SuperListItem::read(json);
-
     if (json.contains(JSON_KIND)) {
         m_kind = static_cast<CaracteristicKind>(json[JSON_KIND].toInt());
     }
@@ -594,7 +592,6 @@ void SystemCaracteristic::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemCaracteristic::write(QJsonObject &json) const {
-    SuperListItem::write(json);
     QJsonObject obj;
 
     if (m_kind != CaracteristicKind::IncreaseDecrease) {

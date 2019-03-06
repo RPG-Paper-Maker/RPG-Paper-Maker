@@ -79,13 +79,13 @@ void SkillsDatas::setDefault(){
         "Increase your strength for the next attacks."
     };
     TargetKind targetsKind[] = {
-        TargetKind::None, TargetKind::None, TargetKind::None, TargetKind::None,
+        TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
         TargetKind::Ally, TargetKind::Enemy, TargetKind::Enemy,
         TargetKind::Enemy, TargetKind::Enemy, TargetKind::AllEnemies,
         TargetKind::User, TargetKind::User
     };
     AvailableKind availablesKind[] = {
-        AvailableKind::Never, AvailableKind::Never, AvailableKind::Never,
+        AvailableKind::Battle, AvailableKind::Never, AvailableKind::Never,
         AvailableKind::Never, AvailableKind::Always, AvailableKind::Battle,
         AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
         AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle
@@ -94,7 +94,7 @@ void SkillsDatas::setDefault(){
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     QString targetConditions[] = {
-        "", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
+        "t.hp > 0", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
         "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0"
     };
     QVector<SystemCost *> costs[] = {
@@ -105,15 +105,15 @@ void SkillsDatas::setDefault(){
     };
     QVector<SystemEffect *> effects[] = {
         {SystemEffect::createSpecialAction(EffectSpecialActionKind::ApplyWeapons
-        )}, {SystemEffect::createSpecialAction(EffectSpecialActionKind
-        ::OpenSkills)}, {SystemEffect::createSpecialAction(
-        EffectSpecialActionKind::OpenItems)}, {SystemEffect::createSpecialAction
-        (EffectSpecialActionKind::Escape)}, {SystemEffect::createDamage("-u.mag"
-        , -1, "1")}, {SystemEffect::createDamage("u.mag", 1, "1")}, {
-        SystemEffect::createDamage("u.mag", 2, "1")}, {SystemEffect
-        ::createDamage("u.mag", 3, "1")}, {SystemEffect::createDamage("u.mag",
-        -1, "1")}, {SystemEffect::createDamage("u.mag", 1, "1")}, {SystemEffect
-        ::createDamage("-u.mag", -1, "1")}, {}
+        ), SystemEffect::createDamage("u.atk")}, {SystemEffect
+        ::createSpecialAction(EffectSpecialActionKind::OpenSkills)}, {
+        SystemEffect::createSpecialAction(EffectSpecialActionKind::OpenItems)},
+        {SystemEffect::createSpecialAction(EffectSpecialActionKind::Escape)},
+        {SystemEffect::createDamage("-u.mag", -1, "1")}, {SystemEffect
+        ::createDamage("u.mag", 1, "1")}, {SystemEffect::createDamage("u.mag", 2
+        , "1")}, {SystemEffect::createDamage("u.mag", 3, "1")}, {SystemEffect
+        ::createDamage("u.mag", -1, "1")}, {SystemEffect::createDamage("u.mag",
+        1, "1")}, {SystemEffect::createDamage("-u.mag", -1, "1")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
 

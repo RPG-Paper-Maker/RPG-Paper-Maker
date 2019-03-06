@@ -57,6 +57,9 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
     m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
     m_modelCaracteristics->appendRow(new QStandardItem(SuperListItem::beginningText));
+    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
+    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({"Caracteristic"}));
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -83,9 +86,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_modelEffects(modelEffects),
     m_modelCaracteristics(modelCaracteristics)
 {
-    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
-    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({"Caracteristic"}));
+
 }
 
 SystemCommonSkillItem::~SystemCommonSkillItem() {
@@ -185,6 +186,67 @@ QStandardItemModel * SystemCommonSkillItem::modelCaracteristics() const {
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+SuperListItem* SystemCommonSkillItem::createCopy() const {
+    SystemCommonSkillItem* super = new SystemCommonSkillItem;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemCommonSkillItem::setCopy(const SystemCommonSkillItem &skillItem) {
+    SystemIcon::setCopy(skillItem);
+    int i, l;
+
+    m_type = skillItem.m_type;
+    m_consumable = skillItem.m_consumable;
+    m_oneHand = skillItem.m_oneHand;
+    m_description->setCopy(*skillItem.m_description);
+    m_targetKind = skillItem.m_targetKind;
+    m_targetConditionFormula->setCopy(*skillItem.m_targetConditionFormula);
+    m_conditionFormula->setCopy(*skillItem.m_conditionFormula);
+    m_availableKind = skillItem.m_availableKind;
+    m_sound->setCopy(*skillItem.m_sound);
+    m_animationUserID->setCopy(*skillItem.m_animationUserID);
+    m_animationTargetID->setCopy(*skillItem.m_animationTargetID);
+    m_price->setCopy(*skillItem.m_price);
+
+    SuperListItem::deleteModel(m_modelCosts, false);
+    for (i = 0, l = skillItem.m_modelCosts->invisibleRootItem()->rowCount(); i
+        < l - 1; i++)
+    {
+        m_modelCosts->insertRow(i, reinterpret_cast<SystemCost *>(skillItem
+            .m_modelCosts->item(i)->data().value<quintptr>())->createCopy()
+            ->getModelRow());
+    }
+    m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
+    SuperListItem::deleteModel(m_modelEffects, false);
+    for (i = 0, l = skillItem.m_modelEffects->invisibleRootItem()->rowCount(); i
+        < l - 1; i++)
+    {
+        m_modelEffects->insertRow(i, reinterpret_cast<SystemEffect *>(skillItem
+            .m_modelEffects->item(i)->data().value<quintptr>())->createCopy()
+            ->getModelRow());
+    }
+    m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
+    SuperListItem::deleteModel(m_modelCaracteristics, false);
+    for (i = 0, l = skillItem.m_modelCaracteristics->invisibleRootItem()
+        ->rowCount(); i < l - 1; i++)
+    {
+        m_modelCaracteristics->insertRow(i, reinterpret_cast<SystemCaracteristic
+             *>(skillItem.m_modelCaracteristics->item(i)->data().value<quintptr>
+            ())->createCopy()->getModelRow());
+    }
+    m_modelCaracteristics->appendRow(new QStandardItem(SuperListItem
+        ::beginningText));
+    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
+    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({
+        "Caracteristic"}));
+}
+
 // -------------------------------------------------------
 
 void SystemCommonSkillItem::read(const QJsonObject &json){

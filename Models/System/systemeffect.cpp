@@ -444,8 +444,6 @@ QString SystemEffect::toString() const {
 // -------------------------------------------------------
 
 void SystemEffect::read(const QJsonObject &json) {
-    SuperListItem::read(json);
-
     if (json.contains(JSON_KIND)) {
         m_kind = static_cast<EffectKind>(json[JSON_KIND].toInt());
     }
@@ -553,7 +551,6 @@ void SystemEffect::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemEffect::write(QJsonObject &json) const {
-    SuperListItem::write(json);
     QJsonObject obj;
 
     if (m_kind != EffectKind::Damages) {

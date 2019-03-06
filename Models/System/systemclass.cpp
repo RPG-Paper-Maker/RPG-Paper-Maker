@@ -70,7 +70,6 @@ SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
     m_statisticsProgression->setHorizontalHeaderLabels(
                 QStringList({"Statistic","Initial","Final"}));
     m_skills->setHorizontalHeaderLabels(QStringList({"Skills","Levels"}));
-
 }
 
 SystemClass::~SystemClass() {

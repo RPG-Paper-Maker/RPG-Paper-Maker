@@ -174,8 +174,6 @@ QString SystemCost::toString() const {
 // -------------------------------------------------------
 
 void SystemCost::read(const QJsonObject &json) {
-    SuperListItem::read(json);
-
     if (json.contains(JSON_KIND)) {
         m_kind->setId(json[JSON_KIND].toInt());
     }
@@ -204,7 +202,6 @@ void SystemCost::read(const QJsonObject &json) {
 // -------------------------------------------------------
 
 void SystemCost::write(QJsonObject &json) const {
-    SuperListItem::write(json);
     QJsonObject obj;
 
     if (m_kind->id() != 0) {
