@@ -147,4 +147,6 @@ protected:
         QStandardItemModel *model);
 };
 
+Q_DECLARE_METATYPE(SystemCaracteristic)
+
 #endif // SYSTEMCARACTERISTIC_H

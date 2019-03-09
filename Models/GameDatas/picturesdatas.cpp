@@ -89,8 +89,13 @@ void PicturesDatas::setDefaultFacesets(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultIcons(QList<QString>& names) {
-    names << "darkness" << "fire" << "grass" << "light" << "water" << "wind"
-        << "g" << "xcoin";
+    names << "g" << "xcoin" << "attack" << "skill" << "item" << "escape" <<
+        "endTurn" << "blazingSword" << "darkness" << "heal" << "fire" << "water"
+        << "wind" << "bandage" << "concentration" << "HPPotion" <<
+        "superHPPotion" << "megaHPPotion" << "MPPotion" << "superMPPotion" <<
+        "megaMPPotion" << "TPPotion" << "superTPPotion" << "megaTPPotion" <<
+        "key" << "woodenSword" << "ironAxe" << "bronzeHelmet" << "bronzeMail" <<
+        "bronzeVambraces" << "bronzeGreaves" << "saphirRing" << "saphirNecklace";
     setDefaultPictures(names, PictureKind::Icons);
 }
 

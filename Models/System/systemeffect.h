@@ -155,4 +155,6 @@ protected:
     PrimitiveValue *m_scriptFormula;
 };
 
+Q_DECLARE_METATYPE(SystemEffect)
+
 #endif // SYSTEMEFFECT_H

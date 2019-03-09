@@ -152,7 +152,7 @@ void SystemDatas::setDefaultCurrencies() {
     QStandardItem *item;
     SystemCurrency *currency;
     QString namesCurrencies[] = {"G", "XCoin"};
-    int picCurrencies[] = {7, 8};
+    int picCurrencies[] = {1, 2};
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;

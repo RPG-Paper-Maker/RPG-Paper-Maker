@@ -36,7 +36,9 @@ WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
     m_completing(false),
     m_table(nullptr),
     m_totalWidget(nullptr),
-    m_editedColor(EDITED_COLOR)
+    m_editedColor(EDITED_COLOR),
+    m_line(nullptr),
+    m_horizontalLine(nullptr)
 {
     connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(int,
         int)));
@@ -44,7 +46,7 @@ WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
 }
 
 WidgetTableProgression::~WidgetTableProgression() {
-
+    deleteLines();
 }
 
 void WidgetTableProgression::setEditable(bool b) {
@@ -83,7 +85,6 @@ void WidgetTableProgression::setEditedColor(const QColor &color) {
 
 void WidgetTableProgression::initialize(int rows, QString progression) {
     m_completing = true;
-    clear();
     setRowCount(rows);
     setColumnCount(2);
     setHorizontalHeaderItem(0, new QTableWidgetItem(NAME_LEVEL));
@@ -114,27 +115,22 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
         setItem(i - 2, 0, new QTableWidgetItem(QString::number(i - 1)));
         setItem(i - 2, 1, new QTableWidgetItem(QString::number(exp)));
     }
-    if (maxLevel >= rowCount()) {
-        exp = qFloor(base * (qPow(maxLevel + 4, pow) / qPow(5, pow)));
-        setItem(maxLevel - 1, 0, new QTableWidgetItem(QString::number(maxLevel)));
-        setItem(maxLevel - 1, 1, new QTableWidgetItem(QString::number(exp)));
-    }
 
     // Complete with exp table
     if (m_totalWidget != nullptr) {
         QHash<int, int>::const_iterator i;
         if (subTable != nullptr) {
             for (i = subTable->begin(); i != subTable->end(); i++) {
-                item = new QTableWidgetItem(QString::number(i.value()));
-                setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
-                setItem(i.key() - 1, 1, item);
+                this->item(i.key() - 1, 0)->setText(QString::number(i.value()));
+                item = this->item(i.key() - 1, 1);
+                item->setText(QString::number(i.value()));
                 item->setForeground(SUB_EDITED_COLOR);
             }
         }
         for (i = m_table->begin(); i != m_table->end(); i++) {
-            item = new QTableWidgetItem(QString::number(i.value()));
-            setItem(i.key() - 1, 0, new QTableWidgetItem(QString::number(i.key())));
-            setItem(i.key() - 1, 1, item);
+            this->item(i.key() - 1, 0)->setText(QString::number(i.value()));
+            item = this->item(i.key() - 1, 1);
+            item->setText(QString::number(i.value()));
             item->setForeground(m_editedColor);
         }
         if (!m_table->isEmpty() || (subTable != nullptr && !subTable->isEmpty()))
@@ -161,10 +157,11 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     QTableWidgetItem *itemLevel, * itemProgression;
 
     // Chart lines initialization
-    QLineSeries *line = new QLineSeries();
-    QLineSeries *horizontalLine = new QLineSeries();
+    deleteLines();
+    m_line = new QLineSeries();
+    m_horizontalLine = new QLineSeries();
     QVector<QPointF> expList;
-    *line<< QPointF(0, 0);
+    *m_line<< QPointF(0, 0);
 
     // Update according to equation
     for (int i = 0; i < finalLevel; i++) {
@@ -204,12 +201,12 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
 
         setItem(i, 0, itemLevel);
         setItem(i, 1, itemProgression);
-        *line << QPoint(i + 1, value);
+        *m_line << QPoint(i + 1, value);
     }
 
     // Chart config
-    *horizontalLine << QPointF(1, 0) << QPointF(finalLevel, 0);
-    QAreaSeries *series = new QAreaSeries(line, horizontalLine);
+    *m_horizontalLine << QPointF(1, 0) << QPointF(finalLevel, 0);
+    QAreaSeries *series = new QAreaSeries(m_line, m_horizontalLine);
     QPen pen(0x4f0a5b);
     pen.setWidth(2);
     series->setPen(pen);
@@ -331,6 +328,17 @@ void WidgetTableProgression::updateTotal() {
             total += item(i - 1, 1)->text().toInt();
             m_totalWidget->item(i, 1)->setText(QString::number(total));
         }
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTableProgression::deleteLines() {
+    if (m_line != nullptr) {
+        delete m_line;
+    }
+    if (m_horizontalLine != nullptr) {
+        delete m_horizontalLine;
     }
 }
 

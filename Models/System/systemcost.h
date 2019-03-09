@@ -20,6 +20,7 @@
 #ifndef SYSTEMCOST_H
 #define SYSTEMCOST_H
 
+#include <QMetaType>
 #include "superlistitem.h"
 #include "primitivevalue.h"
 #include "damageskind.h"
@@ -69,5 +70,7 @@ protected:
     SuperListItem *m_variableID;
     PrimitiveValue *m_valueFormula;
 };
+
+Q_DECLARE_METATYPE(SystemCost)
 
 #endif // SYSTEMCOST_H

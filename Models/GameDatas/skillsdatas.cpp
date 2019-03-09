@@ -58,49 +58,51 @@ void SkillsDatas::setDefault(){
     QStandardItemModel *modelCosts, *modelEffects;
 
     QString names[] = {
-        "Attack", "Skill", "Item", "Escape", "Heal", "Fire", "Water", "Wind",
-        "Shadow", "Blazing sword", "Bandage", "Concentration"
+        "Attack", "Skill", "Item", "Escape", "End turn", "Blazing sword",
+        "Shadow", "Heal", "Fire", "Water", "Wind", "Bandage", "Concentration"
     };
     int iconsID[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
     };
     QString descriptions[] = {
         "A basic attack (use the current weapon(s).",
         "Use a skill.",
         "Use an item.",
         "Escape from the battle.",
+        "End a complete turn.",
+        "An amazing fire sword attack on all the ennemies.",
+        "A darkness attack on one ennemy.",
         "Heal one ally.",
         "A fire attack on one enemy.",
         "A water attack on one enemy.",
         "A wind attack on one enemy.",
-        "A darkness attack on one ennemy.",
-        "An amazing fire sword attack on all the ennemies.",
         "Heal yourself with bandages.",
         "Increase your strength for the next attacks."
     };
     TargetKind targetsKind[] = {
         TargetKind::Enemy, TargetKind::None, TargetKind::None, TargetKind::None,
-        TargetKind::Ally, TargetKind::Enemy, TargetKind::Enemy,
-        TargetKind::Enemy, TargetKind::Enemy, TargetKind::AllEnemies,
+        TargetKind::None, TargetKind::AllEnemies, TargetKind::Enemy, TargetKind
+        ::Ally, TargetKind::Enemy, TargetKind::Enemy, TargetKind::Enemy,
         TargetKind::User, TargetKind::User
     };
     AvailableKind availablesKind[] = {
         AvailableKind::Battle, AvailableKind::Never, AvailableKind::Never,
-        AvailableKind::Never, AvailableKind::Always, AvailableKind::Battle,
+        AvailableKind::Never, AvailableKind::Never, AvailableKind::Battle,
+        AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle,
         AvailableKind::Battle, AvailableKind::Battle, AvailableKind::Battle,
-        AvailableKind::Battle, AvailableKind::Always, AvailableKind::Battle
+        AvailableKind::Battle
     };
     int songsID[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
     QString targetConditions[] = {
-        "t.hp > 0", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0",
-        "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0"
+        "t.hp > 0", "", "", "", "", "t.hp > 0", "t.hp > 0", "t.hp > 0",
+        "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0", "t.hp > 0"
     };
     QVector<SystemCost *> costs[] = {
-        {}, {}, {}, {}, {SystemCost::createMP(5)}, {SystemCost::createMP(3)},
-        {SystemCost::createMP(3)}, {SystemCost::createMP(3)}, {SystemCost
-        ::createMP(3)}, {SystemCost::createMP(4)}, {SystemCost::createTP(3)},
+        {}, {}, {}, {}, {}, {SystemCost::createMP(5)}, {SystemCost::createMP(3)},
+        {SystemCost::createMP(5)}, {SystemCost::createMP(3)}, {SystemCost
+        ::createMP(3)}, {SystemCost::createMP(3)}, {SystemCost::createTP(3)},
         {SystemCost::createTP(2)}
     };
     QVector<SystemEffect *> effects[] = {
@@ -109,11 +111,13 @@ void SkillsDatas::setDefault(){
         ::createSpecialAction(EffectSpecialActionKind::OpenSkills)}, {
         SystemEffect::createSpecialAction(EffectSpecialActionKind::OpenItems)},
         {SystemEffect::createSpecialAction(EffectSpecialActionKind::Escape)},
-        {SystemEffect::createDamage("-u.mag", -1, "1")}, {SystemEffect
-        ::createDamage("u.mag", 1, "1")}, {SystemEffect::createDamage("u.mag", 2
-        , "1")}, {SystemEffect::createDamage("u.mag", 3, "1")}, {SystemEffect
-        ::createDamage("u.mag", -1, "1")}, {SystemEffect::createDamage("u.mag",
-        1, "1")}, {SystemEffect::createDamage("-u.mag", -1, "1")}, {}
+        {SystemEffect::createSpecialAction(EffectSpecialActionKind::EndTurn)},
+        {SystemEffect::createDamage("5 + u.mag", 1, "1")}, {SystemEffect
+        ::createDamage("3 + u.mag", -1, "1")}, {SystemEffect::createDamage(
+        "-5 - u.mag", -1, "1")}, {SystemEffect::createDamage("3 + u.mag", -1,
+        "1")}, {SystemEffect::createDamage("3 + u.mag", -1, "1")}, {SystemEffect
+        ::createDamage("3 + u.mag", -1, "1")}, {SystemEffect::createDamage(
+        "-3 - u.mag", -1, "1")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
 

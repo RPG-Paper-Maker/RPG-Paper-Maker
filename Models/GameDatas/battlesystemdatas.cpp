@@ -416,7 +416,8 @@ void BattleSystemDatas::setDefaultCommonBattleCommand(){
         new SystemBattleCommand(i++, new LangsTranslation("Attack"), 1),
         new SystemBattleCommand(i++, new LangsTranslation("Skill"), 2),
         new SystemBattleCommand(i++, new LangsTranslation("Item"), 3),
-        new SystemBattleCommand(i++, new LangsTranslation("Escape"), 4)
+        new SystemBattleCommand(i++, new LangsTranslation("Escape"), 4),
+        new SystemBattleCommand(i++, new LangsTranslation("End turn"), 5),
     };
 
     int length = (sizeof(items)/sizeof(*items));

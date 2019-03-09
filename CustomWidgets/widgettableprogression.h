@@ -56,12 +56,15 @@ public:
     int easingQuinticIn(double x, int start, int change, int duration);
     int easingQuinticOut(double x, int start, int change, int duration);
     void updateTotal();
+    void deleteLines();
 
 protected:
     bool m_completing;
     QHash<int, int> *m_table;
     WidgetTableProgression *m_totalWidget;
     QColor m_editedColor;
+    QLineSeries *m_line;
+    QLineSeries *m_horizontalLine;
 
 public slots:
     void on_cellChanged(int row, int column);

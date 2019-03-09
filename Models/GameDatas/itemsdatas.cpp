@@ -59,10 +59,10 @@ void ItemsDatas::setDefault() {
     QString names[] = {
         "HP potion", "Super HP potion", "Mega HP potion", "MP potion",
         "Super MP potion", "Mega MP potion", "TP potion", "Super TP potion",
-        "Mega TP potion", "key"
+        "Mega TP potion", "Key"
     };
     int iconsID[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        16, 17, 18, 19, 20, 21, 22, 23, 24, 25
     };
     int types[] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 2

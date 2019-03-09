@@ -89,18 +89,18 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
             true})
     };
     QVector<int> initialValue[] = {
-        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1}),
-        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1}),
-        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1}),
-        QVector<int>({20, 10, 10, 1, 1, 1, 1, 1, 1, 1}),
-        QVector<int>({5, 10, 10, 1, 1, 1, 1, 1, 1, 1})
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 0, 0, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 0, 0, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 0, 0, 1}),
+        QVector<int>({20, 10, 10, 1, 1, 1, 1, 0, 0, 1}),
+        QVector<int>({5, 10, 10, 1, 1, 1, 1, 0, 0, 1})
     };
     QVector<int> finalValue[] = {
-        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200}),
-        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200}),
-        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200}),
-        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200}),
-        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 200, 200, 200})
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 50, 50, 200}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 50, 50, 200}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 50, 50, 200}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 50, 50, 200}),
+        QVector<int>({1000, 500, 100, 999, 999, 200, 200, 50, 50, 200})
     };
     QVector<QString> formula[] = {
         QVector<QString>({"", "", "", "Math.ceil(u.str * 0.3)",
@@ -115,17 +115,17 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
             "Math.ceil(u.int * 0.3)", "", "", "", "", ""})
     };
     QVector<int> skillIds[] = {
-        QVector<int>({10,11}),
-        QVector<int>({9}),
-        QVector<int>({5,6,7,8}),
-        QVector<int>({12}),
+        QVector<int>({6}),
+        QVector<int>({7}),
+        QVector<int>({8, 9, 10, 11}),
+        QVector<int>({12, 13}),
         QVector<int>({})
     };
     QVector<int> skillLevels[] = {
-        QVector<int>({1,5}),
+        QVector<int>({1}),
         QVector<int>({1}),
         QVector<int>({1,1,5,10}),
-        QVector<int>({1}),
+        QVector<int>({1, 5}),
         QVector<int>({})
     };
 

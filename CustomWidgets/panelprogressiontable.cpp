@@ -49,6 +49,7 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
 
 PanelProgressionTable::~PanelProgressionTable()
 {
+    ui->graphicsView->chart()->removeAllSeries();
     delete ui;
 }
 

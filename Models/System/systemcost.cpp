@@ -38,7 +38,6 @@ SystemCost::SystemCost() :
     SystemCost(DamagesKind::Stat, new PrimitiveValue(PrimitiveValueKind
         ::DataBase, 1), new PrimitiveValue(PrimitiveValueKind::DataBase, 1),
         1, new PrimitiveValue(QString()))
-
 {
 
 }
@@ -62,6 +61,7 @@ SystemCost::~SystemCost() {
     delete m_kind;
     delete m_statisticID;
     delete m_currencyID;
+    delete m_variableID;
     delete m_valueFormula;
 }
 
@@ -117,11 +117,11 @@ SystemCost * SystemCost::createTP(int nb) {
 // -------------------------------------------------------
 
 bool SystemCost::openDialog() {
-    SystemCost effect;
-    effect.setCopy(*this);
-    DialogSystemCost dialog(effect);
+    SystemCost cost;
+    cost.setCopy(*this);
+    DialogSystemCost dialog(cost);
     if (dialog.exec() == QDialog::Accepted) {
-        setCopy(effect);
+        setCopy(cost);
         return true;
     }
 

@@ -56,22 +56,31 @@ void ArmorsDatas::setDefault() {
     SystemArmor *armor;
 
     QString names[] = {
-        "Dress"
+        "Bronze Helmet", "Bronze Mail", "Bronze Vambraces", "Bronze Greaves",
+        "Saphir Ring", "Saphir Necklace"
     };
     int iconsID[] = {
-        1
+        28, 29, 30, 31, 32, 33
     };
     int types[] = {
-        4
+        1, 3, 5, 7, 9, 10
     };
     QString descriptions[] = {
-        "A thin dress."
+        "A bronze helmet.", "A bronze mail.", "A bronze vambraces.",
+        "A bronze greaves.",
+        "A beautiful saphir ring, the best color for a jewel.",
+        "A beautiful saphir necklace, the best color for a jewel."
     };
     int prices[] = {
-        30
+        10, 50, 40, 30, 200, 150
     };
     QVector<SystemCaracteristic *> caracteristics[] = {
-        {SystemCaracteristic::createBuff(10, 5, false, false)}
+        {SystemCaracteristic::createBuff(10, 2, false, false)},
+        {SystemCaracteristic::createBuff(10, 3, false, false)},
+        {SystemCaracteristic::createBuff(10, 2, false, false)},
+        {SystemCaracteristic::createBuff(10, 2, false, false)},
+        {SystemCaracteristic::createBuff(9, 15, false, false)},
+        {SystemCaracteristic::createBuff(9, 10, false, false)},
     };
     length = (sizeof(names)/sizeof(*names));
 

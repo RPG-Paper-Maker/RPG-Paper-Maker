@@ -57,10 +57,10 @@ void WeaponsDatas::setDefault() {
     SystemWeapon *weapon;
 
     QString names[] = {
-        "Wooden sword", "Wooden axe"
+        "Wooden sword", "Iron axe"
     };
     int iconsID[] = {
-        1, 1
+        26, 27
     };
     int types[] = {
         1, 2
@@ -76,8 +76,8 @@ void WeaponsDatas::setDefault() {
         40, 50
     };
     QVector<SystemEffect *> effects[] = {
-        {SystemEffect::createDamage("u.atk", -1, "1")}, {SystemEffect
-        ::createDamage("u.atk", -1, "1")}
+        {SystemEffect::createDamage("1 + u.atk - t.pdef", -1, "1")}, {SystemEffect
+        ::createDamage("2 + u.atk - t.pdef", -1, "1")}
     };
     length = (sizeof(names)/sizeof(*names));
 
