@@ -324,6 +324,9 @@
           <layout class="QGridLayout" name="gridLayout_7">
            <item row="0" column="0" colspan="2">
             <widget class="QRadioButton" name="radioButtonEquip">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Equip:</string>
              </property>
@@ -422,6 +425,9 @@
            </item>
            <item row="1" column="0" colspan="4">
             <widget class="QRadioButton" name="radioButtonEquipmentChange">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Equipment change:</string>
              </property>
@@ -478,6 +484,9 @@
            </item>
            <item row="2" column="0" colspan="4">
             <widget class="QRadioButton" name="radioButtonBeginEquipment">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Begin equipment:</string>
              </property>
@@ -613,6 +622,9 @@
           <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,1">
            <item row="0" column="0">
             <widget class="QRadioButton" name="radioButtonScript">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Script:</string>
              </property>

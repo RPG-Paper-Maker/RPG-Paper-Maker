@@ -38,6 +38,12 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
         sp->installEventFilter(this);
     }
+    Q_FOREACH(QDoubleSpinBox * sp, findChildren<QDoubleSpinBox*>()) {
+        sp->installEventFilter(this);
+    }
+    Q_FOREACH(QComboBox * sp, findChildren<QComboBox*>()) {
+        sp->installEventFilter(this);
+    }
 }
 
 PanelPrimitiveValue::~PanelPrimitiveValue()

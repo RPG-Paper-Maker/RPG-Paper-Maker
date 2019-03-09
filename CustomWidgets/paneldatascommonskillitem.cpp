@@ -125,6 +125,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         ui->labelSound->hide();
         ui->widgetSongSound->hide();
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
+        ui->groupBoxCosts->hide();
         break;
     }
 }

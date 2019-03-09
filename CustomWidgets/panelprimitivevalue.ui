@@ -54,6 +54,9 @@
          <height>27</height>
         </size>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <property name="currentText">
         <string/>
        </property>
@@ -138,6 +141,9 @@
            <height>27</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -154,6 +160,9 @@
            <height>27</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -169,6 +178,9 @@
            <width>16777215</width>
            <height>27</height>
           </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
          </property>
          <property name="decimals">
           <number>3</number>
@@ -211,6 +223,9 @@
            <height>27</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -227,6 +242,9 @@
            <height>27</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
         </widget>
        </item>
        <item>
@@ -242,6 +260,9 @@
            <width>16777215</width>
            <height>27</height>
           </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
          </property>
          <item>
           <property name="text">

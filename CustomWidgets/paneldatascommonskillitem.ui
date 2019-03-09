@@ -62,6 +62,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="checkBoxOneHand">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>One hand</string>
          </property>
@@ -129,6 +132,9 @@
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="labelConditions">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Conditions formula:</string>
              </property>
@@ -189,6 +195,9 @@
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="labelTargetConditions">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Target conditions formula:</string>
              </property>
@@ -196,6 +205,9 @@
            </item>
            <item row="5" column="1" colspan="2">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTargetConditions" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -255,6 +267,9 @@
            </item>
            <item row="7" column="0">
             <widget class="QLabel" name="labelSound">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Sound (main menu):</string>
              </property>
@@ -262,6 +277,9 @@
            </item>
            <item row="7" column="1" colspan="2">
             <widget class="WidgetSong" name="widgetSongSound" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -278,6 +296,9 @@
            </item>
            <item row="8" column="0">
             <widget class="QLabel" name="labelUserAnimation">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>User animation ID:</string>
              </property>
@@ -285,6 +306,9 @@
            </item>
            <item row="8" column="1" colspan="2">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationUser" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -301,6 +325,9 @@
            </item>
            <item row="9" column="0">
             <widget class="QLabel" name="labelTargetAnimation">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Target animation ID:</string>
              </property>
@@ -308,6 +335,9 @@
            </item>
            <item row="9" column="1" colspan="2">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationTarget" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>250</width>
@@ -347,6 +377,9 @@
            </item>
            <item row="3" column="1">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueConditions" native="true">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>250</width>
