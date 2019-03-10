@@ -74,7 +74,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::ShowText:
         return new DialogCommandShowText(command);
     case EventCommandKind::ChangeVariables:
-        return new DialogCommandChangeVariables(command);
+        return new DialogCommandChangeVariables(command, object, parameters);
     case EventCommandKind::InputNumber:
         return new DialogCommandInputNumber(command);
     case EventCommandKind::If:

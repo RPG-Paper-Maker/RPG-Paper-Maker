@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>647</width>
-    <height>468</height>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,26 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_2" columnminimumwidth="0,0,0,0,1">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="1" colspan="3">
+           <widget class="WidgetVariable" name="widgetVariableOne" native="true">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>27</height>
+             </size>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="4" rowspan="2">
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -48,32 +67,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButtonRange">
-            <property name="text">
-             <string>Range:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBoxRange1">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="radioButtonOneVariable">
@@ -95,6 +88,13 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioButtonRange">
+            <property name="text">
+             <string>Range:</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="3">
            <widget class="QSpinBox" name="spinBoxRange2">
             <property name="enabled">
@@ -102,27 +102,33 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>60</width>
-              <height>0</height>
+              <width>75</width>
+              <height>27</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>60</width>
-              <height>16777215</height>
+              <height>27</height>
              </size>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="3">
-           <widget class="WidgetVariable" name="widgetVariableOne" native="true">
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinBoxRange1">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>75</width>
+              <height>27</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>175</width>
-              <height>16777215</height>
+              <width>60</width>
+              <height>27</height>
              </size>
             </property>
            </widget>
@@ -192,73 +198,722 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_3">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="title">
         <string>Value</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_6">
+       <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButtonRandom">
-            <property name="text">
-             <string>Random:</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButtonNumber">
+              <property name="text">
+               <string>Number:</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueNumber" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="2">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>208</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButtonRandom">
+              <property name="text">
+               <string>Random:</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueRandom1" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="labelRandom">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>to</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>178</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>78</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueRandom2" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2" colspan="2">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>208</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="spinBoxRandom1">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>-999999999</number>
-            </property>
-            <property name="maximum">
-             <number>999999999</number>
-            </property>
-           </widget>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="radioButtonNumberItem">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Number of </string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_5">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>Weapon</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Armor</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Item</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueNumberItem" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>in inventory</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>18</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="labelRandom">
-            <property name="text">
-             <string>to</string>
-            </property>
-           </widget>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QRadioButton" name="radioButtonNumberItem_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Total currency </string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>now</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>earned</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>used</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>with ID</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTotalCurrency" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_12">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>38</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="3">
-           <widget class="QSpinBox" name="spinBoxRandom2">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>-999999999</number>
-            </property>
-            <property name="maximum">
-             <number>999999999</number>
-            </property>
-           </widget>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0" colspan="2">
+             <widget class="QRadioButton" name="radioButtonNumberStat">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>An </string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="2">
+             <widget class="QComboBox" name="comboBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>ally</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>enemy</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QLabel" name="label_3">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>with instance ID</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5" colspan="2">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueInstanceID" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="7">
+             <spacer name="horizontalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>38</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>27</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1" colspan="2">
+             <widget class="QLabel" name="label_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>statistic ID</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3" colspan="3">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueStatisticID" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6" colspan="2">
+             <spacer name="horizontalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>208</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="4">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0" colspan="3">
+             <widget class="QRadioButton" name="radioButtonNumberStat_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>An object in the map</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" colspan="2">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueObjectsMap" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>108</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>27</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>caracteristic:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" colspan="2">
+             <widget class="QComboBox" name="comboBox_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>X square position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Y square position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Z square position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>X pixel position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Y pixel position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Z pixel position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Orientation</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Ground level</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="4" colspan="2">
+             <spacer name="horizontalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>278</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,1">
+            <item>
+             <widget class="QRadioButton" name="radioButtonNumberStat_3">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Other caracteristics:</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_3">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Current map ID</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Number in team</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total number of steps</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total number of seconds</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total number saves done</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total number of battles</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Camera X position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Camera Y position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Camera Z position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total seconds played of the current music </string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total seconds played of the current background music </string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>48</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -293,6 +948,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>WidgetVariable</class>
    <extends>QWidget</extends>

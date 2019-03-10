@@ -19,6 +19,7 @@
 
 #include "dialogcommandchangevariables.h"
 #include "ui_dialogcommandchangevariables.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@
 
 DialogCommandChangeVariables::DialogCommandChangeVariables(
         EventCommand *command,
+        SystemCommonObject* object,
+        QStandardItemModel* parameters,
         QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandChangeVariables)
@@ -35,6 +38,27 @@ DialogCommandChangeVariables::DialogCommandChangeVariables(
     ui->setupUi(this);
 
     ui->widgetVariableOne->initialize();
+    ui->panelPrimitiveValueNumber->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueRandom1->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueRandom2->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueInstanceID->initializeNumber(parameters, nullptr);
+    ui->panelPrimitiveValueNumberItem->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->weaponsDatas()->model(), parameters, nullptr);
+    ui->panelPrimitiveValueStatisticID->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
+        parameters, nullptr);
+    ui->panelPrimitiveValueTotalCurrency->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelCurrencies(), parameters,
+        nullptr);
+    if (RPM::isInConfig){
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    }
+    else{
+        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
+    }
+    ui->panelPrimitiveValueObjectsMap->initializeDataBaseCommandId(
+        m_modelObjects, parameters, nullptr);
 
     if (command != nullptr) initialize(command);
 }
@@ -42,6 +66,10 @@ DialogCommandChangeVariables::DialogCommandChangeVariables(
 DialogCommandChangeVariables::~DialogCommandChangeVariables()
 {
     delete ui;
+
+    if (RPM::isInConfig) {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------
@@ -50,7 +78,7 @@ DialogCommandChangeVariables::~DialogCommandChangeVariables()
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeVariables::initialize(EventCommand* command){
+void DialogCommandChangeVariables::initialize(EventCommand* command) {
     int i = 0;
 
     // Selection
@@ -78,11 +106,15 @@ void DialogCommandChangeVariables::initialize(EventCommand* command){
     }
 
     // Value
-    switch(command->valueCommandAt(i++).toInt()){
+    switch(command->valueCommandAt(i++).toInt()) {
     case 0:
+        ui->radioButtonNumber->setChecked(true);
+        ui->panelPrimitiveValueNumber->initializeCommand(command, i);
+        break;
+    case 1:
         ui->radioButtonRandom->setChecked(true);
-        ui->spinBoxRandom1->setValue(command->valueCommandAt(i++).toInt());
-        ui->spinBoxRandom2->setValue(command->valueCommandAt(i++).toInt());
+        ui->panelPrimitiveValueRandom1->initializeCommand(command, i);
+        ui->panelPrimitiveValueRandom2->initializeCommand(command, i);
         break;
     }
 }
@@ -127,11 +159,14 @@ void DialogCommandChangeVariables::operation(QVector<QString>& command) const{
 
 // -------------------------------------------------------
 
-void DialogCommandChangeVariables::value(QVector<QString> &command) const{
-    if (ui->radioButtonRandom->isChecked()){
+void DialogCommandChangeVariables::value(QVector<QString> &command) const {
+    if (ui->radioButtonNumber->isChecked()) {
         command.append("0");
-        command.append(ui->spinBoxRandom1->text());
-        command.append(ui->spinBoxRandom2->text());
+        ui->panelPrimitiveValueNumber->getCommand(command);
+    } else if (ui->radioButtonRandom->isChecked()) {
+        command.append("1");
+        ui->panelPrimitiveValueRandom1->getCommand(command);
+        ui->panelPrimitiveValueRandom2->getCommand(command);
     }
 }
 
@@ -149,8 +184,22 @@ void DialogCommandChangeVariables::on_radioButtonOneVariable_toggled(
 
 // -------------------------------------------------------
 
-void DialogCommandChangeVariables::on_radioButtonRange_toggled(bool checked){
+void DialogCommandChangeVariables::on_radioButtonRange_toggled(bool checked) {
     ui->spinBoxRange1->setEnabled(checked);
     ui->labelRange->setEnabled(checked);
     ui->spinBoxRange2->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::on_radioButtonNumber_toggled(bool checked) {
+    ui->panelPrimitiveValueNumber->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::on_radioButtonRandom_toggled(bool checked) {
+    ui->panelPrimitiveValueRandom1->setEnabled(checked);
+    ui->labelRandom->setEnabled(checked);
+    ui->panelPrimitiveValueRandom2->setEnabled(checked);
 }

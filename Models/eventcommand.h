@@ -73,10 +73,12 @@ private:
                           QStandardItemModel *parameters = nullptr) const;
     QString strNumber(int &i, QStandardItemModel *parameters = nullptr) const;
     QString strShowText() const;
-    QString strChangeVariables() const;
+    QString strChangeVariables(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
     QString strChangeVariablesSelection(int &i, QString& several) const;
     QString strChangeVariablesOperation(int &i) const;
-    QString strChangeVariablesValue(int &i) const;
+    QString strChangeVariablesValue(int &i, SystemCommonObject *object,
+        QStandardItemModel *parameters) const;
     QString strInputNumber() const;
     QString strCondition() const;
     QString strConditionPageVariables(int &i) const;

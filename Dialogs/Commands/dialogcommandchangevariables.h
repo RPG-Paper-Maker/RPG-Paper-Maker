@@ -42,7 +42,8 @@ class DialogCommandChangeVariables : public DialogCommand
 
 public:
     explicit DialogCommandChangeVariables(EventCommand *command = nullptr,
-                                          QWidget *parent = 0);
+        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandChangeVariables();
     EventCommand* getCommand() const;
 
@@ -51,6 +52,8 @@ protected:
 
 private:
     Ui::DialogCommandChangeVariables *ui;
+    QStandardItemModel* m_modelObjects;
+
     void selection(QVector<QString> &command) const;
     void operation(QVector<QString>& command) const;
     void value(QVector<QString>& command) const;
@@ -58,6 +61,8 @@ private:
 private slots:
     void on_radioButtonOneVariable_toggled(bool checked);
     void on_radioButtonRange_toggled(bool checked);
+    void on_radioButtonNumber_toggled(bool checked);
+    void on_radioButtonRandom_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCHANGEVARIABLES_H

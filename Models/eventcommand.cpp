@@ -143,7 +143,7 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::ShowText:
         str += strShowText(); break;
     case EventCommandKind::ChangeVariables:
-        str += strChangeVariables(); break;
+        str += strChangeVariables(object, parameters); break;
     case EventCommandKind::EndGame:
         str += "Game Over"; break;
     case EventCommandKind::While:
@@ -280,12 +280,14 @@ QString EventCommand::strShowText() const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeVariables() const{
+QString EventCommand::strChangeVariables(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     int i = 0;
     QString several = "";
     QString selection = strChangeVariablesSelection(i, several);
     QString operation = strChangeVariablesOperation(i);
-    QString value = strChangeVariablesValue(i);
+    QString value = strChangeVariablesValue(i, object, parameters);
 
     return "Change variable" + several + ": " + selection + " " + operation +
             " " + value;
@@ -329,18 +331,22 @@ QString EventCommand::strChangeVariablesOperation(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeVariablesValue(int &i) const{
+QString EventCommand::strChangeVariablesValue(int &i, SystemCommonObject *
+    , QStandardItemModel *parameters) const
+{
     QString value = p_listCommand.at(i++);
     QString str = "";
-    if (value == "0"){
+
+    if (value == "0") {
+        str += strNumber(i, parameters);
+    } else if (value == "1") {
         str += "random number between ";
-        str += p_listCommand.at(i++);
+        str += strNumber(i, parameters);
         str += " and ";
-        str += p_listCommand.at(i++);
+        str += strNumber(i, parameters);
     }
 
     return str;
-
 }
 
 // -------------------------------------------------------
