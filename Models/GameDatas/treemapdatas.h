@@ -42,6 +42,7 @@ public:
     QStandardItemModel* model() const;
     QStandardItem* root() const;
     void setDefault();
+    void addDefaultBattleMap(int mapID);
     void addMapSelectorDir();
     void clearModel();
     static QStandardItem* add(QStandardItem *root, int i, TreeMapTag *tag,

@@ -55,9 +55,11 @@ public:
     void setIsSelectedByID(bool b);
     PrimitiveValue * valueID() const;
 
+    void setDefault();
     void updateName();
     EventCommand * createEventCommand(EventCommandKind kind);
     void toEventCommand(EventCommand& command, EventCommandKind kind);
+    void fromEventCommand(EventCommand& command);
     bool isNone() const;
 
     virtual SuperListItem* createCopy() const;

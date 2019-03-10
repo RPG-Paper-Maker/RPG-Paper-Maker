@@ -51,7 +51,6 @@ class GameDatas
 public:
     GameDatas();
     virtual ~GameDatas();
-    void setDefault();
     CommonEventsDatas * commonEventsDatas() const;
     VariablesDatas * variablesDatas() const;
     SystemDatas * systemDatas() const;
@@ -70,12 +69,21 @@ public:
     TitleScreenGameOverDatas * titleScreenGameOverDatas() const;
     bool isDatasRead() const;
 
+    void setDefault();
+    void setDefaultItemsCharacters();
     void read(QString path);
     void readVariablesSwitches(QString path);
     void readTilesets(QString path);
     void readSystem(QString path);
     void readBattleSystem(QString path);
+    void readItems(QString path);
     void readSkills(QString path);
+    void readWeapons(QString path);
+    void readArmors(QString path);
+    void readHeroes(QString path);
+    void readMonsters(QString path);
+    void readTroops(QString path);
+    void readClasses(QString path);
     void readAnimations(QString path);
     void readStatus(QString path);
     void readTitleScreenGameOver(QString path);
@@ -83,7 +91,14 @@ public:
     void writeTilesets(QString path);
     void writeSystem(QString path);
     void writeBattleSystem(QString path);
+    void writeItems(QString path);
     void writeSkills(QString path);
+    void writeWeapons(QString path);
+    void writeArmors(QString path);
+    void writeHeroes(QString path);
+    void writeMonsters(QString path);
+    void writeTroops(QString path);
+    void writeClasses(QString path);
     void writeAnimations(QString path);
     void writeStatus(QString path);
     void writeTitleScreenGameOver(QString path);

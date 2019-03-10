@@ -117,6 +117,21 @@ PrimitiveValue * SystemPlaySong::valueID() const {
 //
 // -------------------------------------------------------
 
+void SystemPlaySong::setDefault() {
+    p_id = -1;
+    m_isSelectedByID = false;
+    m_volume->setKind(PrimitiveValueKind::Number);
+    m_volume->setNumberValue(100);
+    m_isStart = false;
+    m_start->setKind(PrimitiveValueKind::Number);
+    m_start->setNumberValue(0);
+    m_isEnd = false;
+    m_end->setKind(PrimitiveValueKind::Number);
+    m_end->setNumberValue(0);
+}
+
+// -------------------------------------------------------
+
 void SystemPlaySong::updateName() {
     if (!m_isSelectedByID) {
         p_name = SuperListItem::getById(RPM::get()->project()->songsDatas()
@@ -148,6 +163,22 @@ void SystemPlaySong::toEventCommand(EventCommand& command, EventCommandKind kind
 
     command.setKind(kind);
     command.setCommands(list);
+}
+
+// -------------------------------------------------------
+
+void SystemPlaySong::fromEventCommand(EventCommand& command)
+{
+    int i = 0;
+
+    m_isSelectedByID = command.valueCommandAt(i++) == "1";
+    m_valueID->initializeCommandParameter(&command, i);
+    p_id = command.valueCommandAt(i++).toInt();
+    m_volume->initializeCommandParameter(&command, i);
+    m_isStart = command.valueCommandAt(i++) == "1";
+    m_start->initializeCommandParameter(&command, i);
+    m_isEnd = command.valueCommandAt(i++) == "1";
+    m_end->initializeCommandParameter(&command, i);
 }
 
 // -------------------------------------------------------

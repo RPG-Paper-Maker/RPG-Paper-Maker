@@ -25,7 +25,7 @@
 const int ProjectUpdater::incompatibleVersionsCount = 5;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "0.6.0"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0"};
 
 // -------------------------------------------------------
 //
@@ -218,7 +218,6 @@ void ProjectUpdater::check() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_0_3_1() {
-
     for (int i = 0; i < m_listMapPortions.size(); i++) {
         QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
         QList<QString>* paths = m_listMapPortionsPaths.at(i);
@@ -353,37 +352,96 @@ void ProjectUpdater::updateVersion_0_5_2() {
 
 // -------------------------------------------------------
 
-void ProjectUpdater::updateVersion_0_6_0() {
+void ProjectUpdater::updateVersion_1_0_0() {
+    QJsonObject obj, objRes;
+    EventCommand eventCommand;
+    SystemPlaySong song;
+    PrimitiveValue primitiveValue;
+    int i, l, mapID;
 
     // Write default battle map
-    Map::writeDefaultBattleMap(m_project->pathCurrentProject());
+    mapID = Map::writeDefaultBattleMap(m_project->pathCurrentProject());
     m_project->readLangsDatas();
-    m_project->gameDatas()->readSkills(m_project->pathCurrentProject());
+    m_project->readSongsDatas();
+    m_project->songsDatas()->setDefault();
+    m_project->writeSongsDatas();
+    m_project->gameDatas()->setDefaultItemsCharacters();
+    m_project->gameDatas()->writeItems(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeSkills(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeWeapons(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeArmors(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeHeroes(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeMonsters(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeTroops(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeClasses(m_project->pathCurrentProject());
     m_project->gameDatas()->readBattleSystem(m_project->pathCurrentProject());
     m_project->gameDatas()->battleSystemDatas()->setDefaultBattleMaps();
+    m_project->gameDatas()->battleSystemDatas()->setDefaultOptions();
     m_project->gameDatas()->writeBattleSystem(m_project->pathCurrentProject());
     m_project->readTreeMapDatas();
-    m_project->treeMapDatas()->setDefault();
+    m_project->treeMapDatas()->addDefaultBattleMap(mapID);
     m_project->writeTreeMapDatas();
 
-    // Battlers
+    // Battlers, windowskins, titlescreen
     QList<QString> names;
-    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BATTLERS);
     m_project->readPicturesDatas();
     m_project->picturesDatas()->setDefaultBattlers(names);
+    m_project->picturesDatas()->setDefaultFacesets(names);
     m_project->picturesDatas()->setDefaultWindowSkins(names);
+    m_project->picturesDatas()->setDefaultTitleScreen(names);
+    m_project->picturesDatas()->setDefaultIcons(names);
     m_project->writePicturesDatas();
 
     // System update
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BATTLERS);
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_FACESETS);
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_WINDOW_SKINS);
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_TITLE_SCREEN);
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setDefaultColors();
     m_project->gameDatas()->systemDatas()->setDefaultWindowSkins();
+    m_project->gameDatas()->systemDatas()->setIdWindowSkin(1);
     m_project->writeSystemDatas();
 
     // Keyboard
     m_project->keyBoardDatas()->setDefaultGame();
     m_project->writeKeyBoardDatas();
 
+    // Map properties songs
+    for (i = 0, l = m_listMapProperties.length(); i < l; i++) {
+        obj = m_listMapProperties.at(i);
+        if (obj.contains("music")) {
+            eventCommand.read(obj["music"].toObject());
+            song.fromEventCommand(eventCommand);
+        } else {
+            song.setDefault();
+        }
+        objRes = QJsonObject();
+        song.write(objRes);
+        obj["music"] = objRes;
+        if (obj.contains("bgs")) {
+            eventCommand.read(obj["bgs"].toObject());
+            song.fromEventCommand(eventCommand);
+        } else {
+            song.setDefault();
+        }
+        objRes = QJsonObject();
+        song.write(objRes);
+        obj["bgs"] = objRes;
+        obj["isky"] = true;
+        primitiveValue = PrimitiveValue(PrimitiveValueKind::DataBase, 1);
+        objRes = QJsonObject();
+        primitiveValue.write(objRes);
+        obj["sky"] = objRes;
+        Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), obj);
+    }
+
+    // Animations & status
+    m_project->gameDatas()->writeAnimations(m_project->pathCurrentProject());
+    m_project->gameDatas()->writeStatus(m_project->pathCurrentProject());
+
+    // TitleScreen
+    m_project->gameDatas()->titleScreenGameOverDatas()->setDefault();
+    m_project->gameDatas()->writeTitleScreenGameOver(m_project
+        ->pathCurrentProject());
 }

@@ -467,16 +467,23 @@ void BattleSystemDatas::read(const QJsonObject &json){
     m_idStatisticExp = json["xp"].toInt();
 
     // Formulas
-    obj = json[JSON_FORMULA_IS_DEAD].toObject();
-    m_formulaIsDead->read(obj);
+    if (json.contains(JSON_FORMULA_IS_DEAD)) {
+        m_formulaIsDead->read(json[JSON_FORMULA_IS_DEAD].toObject());
+    }
     if (json.contains(JSON_FORMULA_CRIT)) {
         m_formulaCrit->read(json[JSON_FORMULA_CRIT].toObject());
     }
 
     // Musics
-    m_music->read(json[JSON_BATLLE_MUSIC].toObject());
-    m_levelup->read(json[JSON_BATLLE_LEVELUP].toObject());
-    m_victory->read(json[JSON_BATLLE_VICTORY].toObject());
+    if (json.contains(JSON_BATLLE_MUSIC)) {
+        m_music->read(json[JSON_BATLLE_MUSIC].toObject());
+    }
+    if (json.contains(JSON_BATLLE_LEVELUP)) {
+        m_levelup->read(json[JSON_BATLLE_LEVELUP].toObject());
+    }
+    if (json.contains(JSON_BATLLE_VICTORY)) {
+        m_victory->read(json[JSON_BATLLE_VICTORY].toObject());
+    }
 
     // Battle maps
     jsonList = json[jsonBattleMaps].toArray();

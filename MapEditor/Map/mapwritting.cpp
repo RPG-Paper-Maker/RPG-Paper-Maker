@@ -67,7 +67,7 @@ void Map::writeDefaultMap(QString path){
 
 // -------------------------------------------------------
 
-void Map::writeDefaultBattleMap(QString path){
+int Map::writeDefaultBattleMap(QString path) {
     MapProperties properties;
     properties.setId(RPM::generateMapId());
     QJsonArray jsonObject;
@@ -77,6 +77,8 @@ void Map::writeDefaultBattleMap(QString path){
     mapPortion.fillWithFloor();
     RPM::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
         mapPortion);
+
+    return properties.id();
 }
 
 // -------------------------------------------------------

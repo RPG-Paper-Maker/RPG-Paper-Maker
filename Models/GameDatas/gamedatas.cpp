@@ -147,9 +147,19 @@ void GameDatas::setDefault(){
     m_commonEventsDatas->setDefault();
     m_variablesDatas->setDefault();
     m_systemDatas->setDefault();
-    m_battleSystemDatas->setDefault();
+    setDefaultItemsCharacters();
+    m_tilesetsDatas->setDefault();
+    m_animationsDatas->setDefault();
+    m_statusDatas->setDefault();
+    m_titleScreenGameOverDatas->setDefault();
+}
+
+// -------------------------------------------------------
+
+void GameDatas::setDefaultItemsCharacters() {
     m_itemsDatas->setDefault();
     m_skillsDatas->setDefault();
+    m_battleSystemDatas->setDefault();
     m_weaponsDatas->setDefault();
     m_armorsDatas->setDefault();
     m_heroesDatas->setDefault();
@@ -162,10 +172,6 @@ void GameDatas::setDefault(){
     m_classesDatas->setDefault(m_skillsDatas->model()->invisibleRootItem(),
                                m_battleSystemDatas->modelCommonStatistics()
                                ->invisibleRootItem());
-    m_tilesetsDatas->setDefault();
-    m_animationsDatas->setDefault();
-    m_statusDatas->setDefault();
-    m_titleScreenGameOverDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -178,15 +184,15 @@ void GameDatas::read(QString path){
     readVariablesSwitches(path);
     m_commonEventsDatas->read(path);
     readSystem(path);
-    m_itemsDatas->read(path);
-    m_skillsDatas->read(path);
-    m_battleSystemDatas->read(path);
-    m_weaponsDatas->read(path);
-    m_armorsDatas->read(path);
-    m_heroesDatas->read(path);
-    m_monstersDatas->read(path);
-    m_troopsDatas->read(path);
-    m_classesDatas->read(path);
+    readItems(path);
+    readSkills(path);
+    readBattleSystem(path);
+    readWeapons(path);
+    readArmors(path);
+    readHeroes(path);
+    readMonsters(path);
+    readTroops(path);
+    readClasses(path);
     readTilesets(path);
     readAnimations(path);
     readStatus(path);
@@ -221,8 +227,50 @@ void GameDatas::readBattleSystem(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::readItems(QString path) {
+    m_itemsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::readSkills(QString path) {
     m_skillsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readWeapons(QString path) {
+    m_weaponsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readArmors(QString path) {
+    m_armorsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readHeroes(QString path) {
+    m_heroesDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readMonsters(QString path) {
+    m_monstersDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readTroops(QString path) {
+    m_troopsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::readClasses(QString path) {
+    m_classesDatas->read(path);
 }
 
 // -------------------------------------------------------
@@ -252,21 +300,14 @@ void GameDatas::write(QString path){
                      *m_variablesDatas);
     writeSystem(path);
     writeBattleSystem(path);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathItems),
-                     *m_itemsDatas);
+    writeItems(path);
     writeSkills(path);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathWeapons),
-                     *m_weaponsDatas);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathArmors),
-                     *m_armorsDatas);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathHeroes),
-                     *m_heroesDatas);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathMonsters),
-                     *m_monstersDatas);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathTroops),
-                     *m_troopsDatas);
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathClasses),
-                     *m_classesDatas);
+    writeWeapons(path);
+    writeArmors(path);
+    writeHeroes(path);
+    writeMonsters(path);
+    writeTroops(path);
+    writeClasses(path);
     writeTilesets(path);
     writeAnimations(path);
     writeStatus(path);
@@ -296,9 +337,50 @@ void GameDatas::writeBattleSystem(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::writeItems(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathItems), *m_itemsDatas);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::writeSkills(QString path) {
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathSkills),
-        *m_skillsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathSkills), *m_skillsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeWeapons(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathWeapons), *m_weaponsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeArmors(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathArmors), *m_armorsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeHeroes(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathHeroes), *m_heroesDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeMonsters(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathMonsters), *m_monstersDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeTroops(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathTroops), *m_troopsDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeClasses(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathClasses), *m_classesDatas);
 }
 
 // -------------------------------------------------------

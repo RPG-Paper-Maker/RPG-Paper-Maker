@@ -1545,6 +1545,293 @@
 				"Small correction (but not concrete) for object detection hero",
 				"Dependencies problem playing sound effect engine on linux"
 			]
+		},
+		{
+			"v": "1.0.0",
+			"add": [
+				{
+					"files": [
+	                    {
+	                        "repo": "Basic-Ressources",
+	                        "source": "Content/Songs/Sounds/Levelup.wav",
+	                        "target": "Engine/Content/BR/Content/Songs/Sounds/Levelup.wav"
+	                    }
+	                ]
+		        },
+		        {
+                    "files": [
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/lucas.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/lucas.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/kate.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/kate.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/shana.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/shana.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/template.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/template.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/bibi.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/bibi.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/Textures2D/Battlers/wooly.png",
+                            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/wooly.png"
+                        }
+                    ],
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Facesets/lucas.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/lucas.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Facesets/kate.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/kate.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Facesets/shana.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/shana.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Facesets/bibi.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/bibi.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Facesets/wooly.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/wooly.png"
+                        }
+                    ],
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/superHPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superHPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/MPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/MPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/superTPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superTPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/g.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/g.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/woodenSword.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/woodenSword.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/heal.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/heal.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/TPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/TPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/escape.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/escape.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/HPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/HPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/megaMPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaMPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/ironAxe.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/ironAxe.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/bronzeGreaves.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeGreaves.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/saphirNecklace.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/saphirNecklace.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/endTurn.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/endTurn.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/bronzeHelmet.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeHelmet.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/megaHPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaHPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/attack.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/attack.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/bandage.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bandage.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/bronzeMail.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeMail.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/superMPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superMPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/concentration.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/concentration.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/saphirRing.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/saphirRing.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/bronzeVambraces.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeVambraces.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/skill.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/skill.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/xcoin.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/xcoin.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/key.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/key.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/blazingSword.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/blazingSword.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/megaTPPotion.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaTPPotion.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/Icons/item.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/item.png"
+                        }
+                    ],
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/TitleScreen/logo.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/logo.png"
+                        },
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/TitleScreen/background.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/background.png"
+                        }
+                    ],
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen"
+                },
+                {
+                    "files": [
+                        {
+                            "repo": "Basic-Ressources",
+                            "source": "Content/Pictures/HUD/WindowSkins/default.png",
+                            "target": "Engine/Content/BR/Content/Pictures/HUD/WindowSkins/default.png"
+                        }
+                    ],
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/WindowSkins"
+                }
+			],
+			"remove": [],
+			"replace": [
+				{
+					"files": {
+                        "repo": "Basic-Ressources",
+                        "source": "Content/Pictures/HUD/Icons/light.png",
+                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/light.png"
+                    }
+				}
+			],
+			"features": [
+				"Battle basics: battle maps, battlers, facesets, level, exp, rewards, classes, heroes, monsters, troops, items, skills, weapons, armors, battle commands...",
+				"WindowSkins: window box, damages, arrows...",
+				"Colors, skycolor for maps"
+				"Title screen background, logo, and song selection",
+				"New icons",
+				"Currencies",
+				"Event command variables: can select a number value",
+				"Open project directly open the first map",
+				"Windows 10 UI adaptation",
+				"New project create a folder battle maps with one default",
+				"Default floor filling in new maps",
+				"About selction added",
+				"Ingame: Loading screen message",
+				"Ingame: Loading all tileset (autotiles + walls) at the beginning (title screen)",
+				"Ingame: Improve HUD perf",
+				"Ingame: Window choice / tabs scrolling (but no bar yet)"
+			],
+			"bugs": [
+				"Ingame: correction of saves issues",
+				"Crashed when paste event command after removing in object command",
+				"Song widget now displaying the ID if selected by ID"
+			]
 		}
 	]
 }
