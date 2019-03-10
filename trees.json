@@ -595,6 +595,11 @@
                     },
                     {
                         "repo": "Dependencies",
+                        "source": "Engine/linux/libraries/libQt5Charts.so.5",
+                        "target": "Engine/libraries/libQt5Charts.so.5"
+                    },
+                    {
+                        "repo": "Dependencies",
                         "source": "Engine/linux/libraries/libicuuc.so.56",
                         "target": "Engine/libraries/libicuuc.so.56"
                     },
@@ -791,6 +796,11 @@
                     }
                 ],
                 "target": "Engine/mediaservice"
+            },
+            {
+                "repo": "Dependencies",
+                "source": "Engine/win32/Qt5Charts.dll",
+                "target": "Engine/Qt5Charts.dll"
             },
             {
                 "files": [
