@@ -98,6 +98,7 @@ private slots:
     void on_actionShow_Hide_grid_triggered();
     void on_actionShow_Hide_square_informations_triggered();
     void on_actionPlay_triggered();
+    void on_actionAbout_triggered();
     void checkUpdate();
     void closeEvent(QCloseEvent *event);
 };

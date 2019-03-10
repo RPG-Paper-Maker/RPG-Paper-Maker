@@ -95,12 +95,10 @@ void WidgetPicture::openDialog(){
     int previousPictureID = m_picture;
     SystemPicture *pic;
 
-    int result = dialog.exec();
+    dialog.exec();
     pic = dialog.picture();
     setPicture(pic);
-    if (result == QDialog::Rejected || (result == QDialog::Accepted &&
-        previousPictureID != m_picture))
-    {
+    if (previousPictureID != m_picture) {
         emit pictureChanged(pic);
     }
 }

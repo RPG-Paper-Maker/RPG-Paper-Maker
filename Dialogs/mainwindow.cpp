@@ -562,8 +562,33 @@ void MainWindow::on_actionPlay_triggered(){
 
 // -------------------------------------------------------
 
-void MainWindow::checkUpdate() {
+void MainWindow::on_actionAbout_triggered() {
+    QString name, website, buildDate, copyright;
+    QStringList patreonThanks;
+    patreonThanks << "Utrano" << "Florian Dufour";
 
+    name = "RPG Paper Maker";
+    website = "http://rpg-paper-maker.com/";
+    buildDate = "March 10 2019";
+    copyright = "RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte\n\n"
+        "RPG Paper Maker is free software: you can redistribute it and/or modify"
+        "it under the terms of the GNU General Public License as published by"
+        "the Free Software Foundation, either version 3 of the License, or"
+        "(at your option) any later version.\n\n"
+        "RPG Paper Maker is distributed in the hope that it will be useful,"
+        "but WITHOUT ANY WARRANTY; without even the implied warranty of"
+        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
+        "GNU General Public License for more details.";
+
+    QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
+        "\n" + website + "\n\nBuilt on " + buildDate +
+        "\n\nPatreon special thanks: " + patreonThanks.join(", ") + "\n\n" +
+        copyright);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::checkUpdate() {
     QMessageBox::information(this, "Restart",
                              "The engine is going to be restarted.");
 

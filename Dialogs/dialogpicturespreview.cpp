@@ -95,8 +95,7 @@ void DialogPicturesPreview::on_rejected(){
     RPM::get()->project()->readPicturesDatas();
 
     // Update new picture adress
-    ui->widget->setPicture((SystemPicture*)
-                SuperListItem::getById(RPM::get()->project()->picturesDatas()
-                                       ->model(m_kind)->invisibleRootItem(),
-                                       m_initialPictureID));
+    ui->widget->setPicture(reinterpret_cast<SystemPicture *>(SuperListItem
+        ::getById(RPM::get()->project()->picturesDatas()->model(m_kind)
+        ->invisibleRootItem(), m_initialPictureID)));
 }
