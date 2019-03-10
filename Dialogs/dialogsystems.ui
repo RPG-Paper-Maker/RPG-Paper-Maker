@@ -563,6 +563,29 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>Critical influence:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFormulaCrit" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>250</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>250</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                </layout>

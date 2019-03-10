@@ -44,7 +44,6 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     initializeSystem(gameDatas);
     initializeBattleSystem(gameDatas);
     initializeMainMenu(gameDatas);
@@ -143,11 +142,10 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
             this, SLOT(on_equipmentUpdated()));
 
     // Formulas
-    ui->panelPrimitiveValueFormulaIsDead->initializeMessage();
-    ui->panelPrimitiveValueFormulaIsDead->initializeModel(gameDatas
+    ui->panelPrimitiveValueFormulaIsDead->initializeMessageAndUpdate(gameDatas
         ->battleSystemDatas()->formulaIsDead());
-    ui->panelPrimitiveValueFormulaIsDead->updateValue(true);
-    ui->panelPrimitiveValueFormulaIsDead->updateKind();
+    ui->panelPrimitiveValueFormulaCrit->initializeMessageAndUpdate(gameDatas
+        ->battleSystemDatas()->formulaCrit());
 
     // Initialize musics
     ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()

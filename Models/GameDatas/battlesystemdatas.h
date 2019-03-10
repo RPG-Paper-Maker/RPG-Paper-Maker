@@ -39,6 +39,7 @@ class BattleSystemDatas : public Serializable
 {
 public:
     static const QString JSON_FORMULA_IS_DEAD;
+    static const QString JSON_FORMULA_CRIT;
     static const QString JSON_BATLLE_MUSIC;
     static const QString JSON_BATLLE_LEVELUP;
     static const QString JSON_BATLLE_VICTORY;
@@ -58,6 +59,7 @@ public:
     void setIdStatisticLevel(int i);
     void setIdStatisticExp(int i);
     PrimitiveValue * formulaIsDead() const;
+    PrimitiveValue * formulaCrit() const;
     SystemPlaySong * music() const;
     void setMusic(SystemPlaySong *song);
     SystemPlaySong * levelup() const;
@@ -91,6 +93,7 @@ private:
     int m_idStatisticLevel;
     int m_idStatisticExp;
     PrimitiveValue *m_formulaIsDead;
+    PrimitiveValue *m_formulaCrit;
     SystemPlaySong *m_music;
     SystemPlaySong *m_levelup;
     SystemPlaySong *m_victory;

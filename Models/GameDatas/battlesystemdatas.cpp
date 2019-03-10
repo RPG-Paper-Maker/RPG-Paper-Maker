@@ -28,6 +28,7 @@
 #include "common.h"
 
 const QString BattleSystemDatas::JSON_FORMULA_IS_DEAD = "fisdead";
+const QString BattleSystemDatas::JSON_FORMULA_CRIT = "fc";
 const QString BattleSystemDatas::JSON_BATLLE_MUSIC = "bmusic";
 const QString BattleSystemDatas::JSON_BATLLE_LEVELUP = "blevelup";
 const QString BattleSystemDatas::JSON_BATLLE_VICTORY = "bvictory";
@@ -47,6 +48,7 @@ const QString BattleSystemDatas::jsonCommonBattleCommand = "battleCommands";
 
 BattleSystemDatas::BattleSystemDatas() :
     m_formulaIsDead(new PrimitiveValue(QString())),
+    m_formulaCrit(new PrimitiveValue(QString())),
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_levelup(new SystemPlaySong(-1, SongKind::Sound)),
     m_victory(new SystemPlaySong(-1, SongKind::Music))
@@ -63,6 +65,7 @@ BattleSystemDatas::BattleSystemDatas() :
 BattleSystemDatas::~BattleSystemDatas()
 {
     delete m_formulaIsDead;
+    delete m_formulaCrit;
     if (m_music != nullptr) {
         delete m_music;
     }
@@ -96,6 +99,10 @@ void BattleSystemDatas::setIdStatisticExp(int i) { m_idStatisticExp = i; }
 
 PrimitiveValue * BattleSystemDatas::formulaIsDead() const {
     return m_formulaIsDead;
+}
+
+PrimitiveValue * BattleSystemDatas::formulaCrit() const {
+    return m_formulaCrit;
 }
 
 SystemPlaySong * BattleSystemDatas::music() const {
@@ -211,6 +218,7 @@ void BattleSystemDatas::setDefaultOptions() {
 
     // Formulas
     m_formulaIsDead->setMessageValue("u.hp === 0");
+    m_formulaCrit->setMessageValue("damage * 2");
 
     // Musics
     m_music->setId(2);
@@ -461,6 +469,9 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Formulas
     obj = json[JSON_FORMULA_IS_DEAD].toObject();
     m_formulaIsDead->read(obj);
+    if (json.contains(JSON_FORMULA_CRIT)) {
+        m_formulaCrit->read(json[JSON_FORMULA_CRIT].toObject());
+    }
 
     // Musics
     m_music->read(json[JSON_BATLLE_MUSIC].toObject());
@@ -583,6 +594,11 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     obj = QJsonObject();
     m_formulaIsDead->write(obj);
     json[JSON_FORMULA_IS_DEAD] = obj;
+    if (!m_formulaCrit->isDefaultMessageValue()) {
+        obj = QJsonObject();
+        m_formulaCrit->write(obj);
+        json[JSON_FORMULA_CRIT] = obj;
+    }
 
     // Musics
     obj = QJsonObject();
