@@ -83,7 +83,7 @@ SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
     *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
     *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon,
     PrimitiveValue *beginWeaponArmorID) :
-    SuperListItem(),
+    SuperListItem(-1, "", true),
     m_kind(kind),
     m_isIncreaseDecrease(isIncreaseDecrease),
     m_increaseDecreaseKind(new SuperListItem(static_cast<int>(

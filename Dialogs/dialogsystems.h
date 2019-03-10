@@ -54,6 +54,7 @@ private:
     void initializeSystem(GameDatas *gameDatas);
     void initializeBattleSystem(GameDatas *gameDatas);
     void updateStatisticsBase();
+    void initializeTitleScreenGameOver(GameDatas *gameDatas);
     void initializeMainMenu(GameDatas *gameDatas);
     void initializeEvents(GameDatas *gameDatas);
     void updateEvents(SystemEvent *sysEvent);

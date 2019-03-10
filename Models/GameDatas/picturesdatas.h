@@ -50,6 +50,7 @@ public:
     void setDefaultFacesets(QList<QString>& names);
     void setDefaultIcons(QList<QString>& names);
     void setDefaultWindowSkins(QList<QString>& names);
+    void setDefaultTitleScreen(QList<QString>& names);
     void setDefaultAutotiles(QList<QString>& names);
     void setDefaultBattlers(QList<QString>& names);
     void setDefaultCharacters(QList<QString>& names);

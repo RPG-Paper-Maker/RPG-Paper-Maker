@@ -62,6 +62,12 @@ void SuperListItem::setName(QString n){ p_name = n; }
 //
 // -------------------------------------------------------
 
+bool SuperListItem::isDefault() {
+    return p_id == -1;
+}
+
+// -------------------------------------------------------
+
 void SuperListItem::setDefault(){
 
 }
@@ -269,7 +275,7 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    if (RPM::get()->project()->gameDatas()->isDatasRead()) {
+    if (!m_containsDatas || RPM::get()->project()->gameDatas()->isDatasRead()) {
         item->setText(toString());
     }
     row.append(item);

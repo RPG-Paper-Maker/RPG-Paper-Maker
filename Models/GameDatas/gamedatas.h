@@ -35,6 +35,7 @@
 #include "tilesetsdatas.h"
 #include "animationsdatas.h"
 #include "statusdatas.h"
+#include "titlescreengameoverdatas.h"
 
 // -------------------------------------------------------
 //
@@ -51,21 +52,22 @@ public:
     GameDatas();
     virtual ~GameDatas();
     void setDefault();
-    CommonEventsDatas* commonEventsDatas() const;
-    VariablesDatas* variablesDatas() const;
-    SystemDatas* systemDatas() const;
-    BattleSystemDatas* battleSystemDatas() const;
-    ItemsDatas* itemsDatas() const;
-    SkillsDatas* skillsDatas() const;
-    WeaponsDatas* weaponsDatas() const;
-    ArmorsDatas* armorsDatas() const;
-    HeroesDatas* heroesDatas() const;
-    TroopsDatas* troopsDatas() const;
-    MonstersDatas* monstersDatas() const;
-    ClassesDatas* classesDatas() const;
-    TilesetsDatas* tilesetsDatas() const;
-    AnimationsDatas* animationsDatas() const;
-    StatusDatas* statusDatas() const;
+    CommonEventsDatas * commonEventsDatas() const;
+    VariablesDatas * variablesDatas() const;
+    SystemDatas * systemDatas() const;
+    BattleSystemDatas * battleSystemDatas() const;
+    ItemsDatas * itemsDatas() const;
+    SkillsDatas * skillsDatas() const;
+    WeaponsDatas * weaponsDatas() const;
+    ArmorsDatas * armorsDatas() const;
+    HeroesDatas * heroesDatas() const;
+    TroopsDatas * troopsDatas() const;
+    MonstersDatas * monstersDatas() const;
+    ClassesDatas * classesDatas() const;
+    TilesetsDatas * tilesetsDatas() const;
+    AnimationsDatas * animationsDatas() const;
+    StatusDatas * statusDatas() const;
+    TitleScreenGameOverDatas * titleScreenGameOverDatas() const;
     bool isDatasRead() const;
 
     void read(QString path);
@@ -76,6 +78,7 @@ public:
     void readSkills(QString path);
     void readAnimations(QString path);
     void readStatus(QString path);
+    void readTitleScreenGameOver(QString path);
     void write(QString path);
     void writeTilesets(QString path);
     void writeSystem(QString path);
@@ -83,6 +86,7 @@ public:
     void writeSkills(QString path);
     void writeAnimations(QString path);
     void writeStatus(QString path);
+    void writeTitleScreenGameOver(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;
@@ -100,6 +104,7 @@ private:
     TilesetsDatas* m_tilesetsDatas;
     AnimationsDatas* m_animationsDatas;
     StatusDatas* m_statusDatas;
+    TitleScreenGameOverDatas *m_titleScreenGameOverDatas;
     bool m_isDatasRead;
 };
 

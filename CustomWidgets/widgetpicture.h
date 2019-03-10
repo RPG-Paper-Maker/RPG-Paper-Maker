@@ -41,19 +41,21 @@ class WidgetPicture : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetPicture(QWidget *parent = 0);
+    explicit WidgetPicture(QWidget *parent = nullptr);
     ~WidgetPicture();
     QListWidget* list() const;
     SystemPicture* picture() const;
     void setKind(PictureKind kind);
     void setPicture(SystemPicture* picture);
     void initialize(int i = 1);
+    void initializeSuper(SuperListItem *super);
     void openDialog();
 
 private:
     Ui::WidgetPicture *ui;
     PictureKind m_kind;
-    SystemPicture* m_picture;
+    int m_picture;
+    SuperListItem *m_pictureID;
 
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);

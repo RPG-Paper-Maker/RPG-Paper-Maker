@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>857</width>
-    <height>752</height>
+    <height>753</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -848,8 +848,140 @@
        </widget>
        <widget class="QWidget" name="tab_5">
         <attribute name="title">
-         <string>Title screen</string>
+         <string>Title screen / Game over</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_28">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_23" stretch="1,0,1">
+           <item>
+            <widget class="QGroupBox" name="groupBox_20">
+             <property name="title">
+              <string>Title screen</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_35">
+              <item row="0" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_24" stretch="0,0,0,0,0,0,1">
+                  <item>
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>Logo:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetPicture" name="widgetPictureTitleLogo" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_16">
+                    <property name="text">
+                     <string>Background:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetPicture" name="widgetPictureTitleBackground" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_22">
+                    <property name="text">
+                     <string>Music:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="WidgetSong" name="widgetChooseMusicTitle" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>27</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>188</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>278</width>
+                    <height>248</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_21">
+             <property name="title">
+              <string>Game over</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
@@ -1235,6 +1367,12 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

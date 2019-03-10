@@ -33,7 +33,7 @@ SystemClassSkill::SystemClassSkill() :
 }
 
 SystemClassSkill::SystemClassSkill(int i, QString n, int l) :
-    SuperListItem(i,n),
+    SuperListItem(i, n, true),
     m_level(l)
 {
 

@@ -44,7 +44,7 @@ SystemCost::SystemCost() :
 
 SystemCost::SystemCost(DamagesKind kind, PrimitiveValue *statisticID,
     PrimitiveValue *currencyID, int variableID, PrimitiveValue *valueFormula) :
-    SuperListItem(),
+    SuperListItem(-1, "", true),
     m_kind(new SuperListItem(static_cast<int>(kind))),
     m_statisticID(statisticID),
     m_currencyID(currencyID),

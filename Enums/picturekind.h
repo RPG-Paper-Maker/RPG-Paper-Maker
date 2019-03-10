@@ -42,6 +42,7 @@ enum class PictureKind {
     Battlers,
     Facesets,
     WindowSkins,
+    TitleScreen,
     Last
 };
 

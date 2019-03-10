@@ -101,7 +101,7 @@ QString SystemPicture::getFolder(PictureKind kind, bool isBR){
 
 // -------------------------------------------------------
 
-QString SystemPicture::getLocalFolder(PictureKind kind){
+QString SystemPicture::getLocalFolder(PictureKind kind) {
     switch (kind){
     case PictureKind::Bars:
         return RPM::pathBars;
@@ -123,6 +123,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind){
         return RPM::PATH_FACESETS;
     case PictureKind::WindowSkins:
         return RPM::PATH_WINDOW_SKINS;
+    case PictureKind::TitleScreen:
+        return RPM::PATH_TITLE_SCREEN;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }

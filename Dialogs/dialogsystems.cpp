@@ -46,6 +46,7 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     
     initializeSystem(gameDatas);
     initializeBattleSystem(gameDatas);
+    initializeTitleScreenGameOver(gameDatas);
     initializeMainMenu(gameDatas);
     initializeEvents(gameDatas);
     initializeStates(gameDatas);
@@ -220,6 +221,19 @@ void DialogSystems::updateStatisticsBase(){
             index = i;
     }
     ui->comboBoxBattleExp->setCurrentIndex(index);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
+    ui->widgetPictureTitleLogo->setKind(PictureKind::TitleScreen);
+    ui->widgetPictureTitleLogo->initializeSuper(gameDatas
+        ->titleScreenGameOverDatas()->titleLogoID());
+    ui->widgetPictureTitleBackground->setKind(PictureKind::TitleScreen);
+    ui->widgetPictureTitleBackground->initializeSuper(gameDatas
+        ->titleScreenGameOverDatas()->titleBackgroundID());
+    ui->widgetChooseMusicTitle->initialize(gameDatas->titleScreenGameOverDatas()
+        ->titleMusic());
 }
 
 // -------------------------------------------------------

@@ -74,6 +74,8 @@ const QString RPM::PATH_ANIMATIONS = Common::pathCombine(pathDatas, "animations.
 const QString RPM::PATH_STATUS = Common::pathCombine(pathDatas, "status.json");
 const QString RPM::PATH_SPECIAL_ELEMENTS =
         Common::pathCombine(pathDatas, "specialElements.json");
+const QString RPM::PATH_TITLE_SCREEN_GAME_OVER = Common::pathCombine(pathDatas,
+    "titlescreenGameover.json");
 const QString RPM::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");
 const QString RPM::pathLangs = Common::pathCombine(pathDatas, "langs.json");
 const QString RPM::pathScripts = Common::pathCombine(pathDatas, "scripts.json");
@@ -92,6 +94,7 @@ const QString RPM::pathBars = Common::pathCombine(pathHUD, "Bars");
 const QString RPM::pathIcons = Common::pathCombine(pathHUD, "Icons");
 const QString RPM::PATH_FACESETS = Common::pathCombine(pathHUD, "Facesets");
 const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(pathHUD, "WindowSkins");
+const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(pathHUD, "TitleScreen");
 const QString RPM::pathAutotiles = Common::pathCombine(pathTextures2D, "Autotiles");
 const QString RPM::pathCharacters = Common::pathCombine(pathTextures2D, "Characters");
 const QString RPM::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");

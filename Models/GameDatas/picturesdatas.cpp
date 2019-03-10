@@ -70,6 +70,7 @@ void PicturesDatas::setDefault(){
     setDefaultTilesets(names);
     setDefaultWalls(names);
     setDefaultWindowSkins(names);
+    setDefaultTitleScreen(names);
 }
 
 // -------------------------------------------------------
@@ -104,6 +105,13 @@ void PicturesDatas::setDefaultIcons(QList<QString>& names) {
 void PicturesDatas::setDefaultWindowSkins(QList<QString>& names) {
     names << "default";
     setDefaultPictures(names, PictureKind::WindowSkins);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultTitleScreen(QList<QString>& names) {
+    names << "logo" << "background";
+    setDefaultPictures(names, PictureKind::TitleScreen);
 }
 
 // -------------------------------------------------------

@@ -101,6 +101,7 @@ QString ControlNewproject::createNewProject(QString dirName, QString location) {
     QDir(pathDir).mkpath(RPM::pathIcons);
     QDir(pathDir).mkpath(RPM::PATH_FACESETS);
     QDir(pathDir).mkpath(RPM::PATH_WINDOW_SKINS);
+    QDir(pathDir).mkpath(RPM::PATH_TITLE_SCREEN);
     QDir(pathDir).mkpath(RPM::pathAutotiles);
     QDir(pathDir).mkpath(RPM::pathCharacters);
     QDir(pathDir).mkpath(RPM::pathReliefs);

@@ -31,7 +31,8 @@
 
 WidgetPicture::WidgetPicture(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetPicture)
+    ui(new Ui::WidgetPicture),
+    m_pictureID(nullptr)
 {
     ui->setupUi(this);
 
@@ -46,7 +47,11 @@ WidgetPicture::~WidgetPicture()
     delete ui;
 }
 
-SystemPicture* WidgetPicture::picture() const { return m_picture; }
+SystemPicture* WidgetPicture::picture() const {
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(m_kind)->invisibleRootItem(),
+        m_picture));
+}
 
 QListWidget* WidgetPicture::list() const { return ui->listWidget; }
 
@@ -55,27 +60,28 @@ void WidgetPicture::setKind(PictureKind kind){
 }
 
 void WidgetPicture::setPicture(SystemPicture* picture) {
-    m_picture = picture;
+    m_picture = picture->id();
+    if (m_pictureID != nullptr) {
+        m_pictureID->setId(picture->id());
+    }
 
-    ui->listWidget->item(0)->setText(m_picture->toString());
+    ui->listWidget->item(0)->setText(picture->toString());
 }
 
 void WidgetPicture::initialize(int i) {
-    PicturesDatas* datas = RPM::get()->project()->picturesDatas();
+    SystemPicture *pic;
 
     // Graphic update
-    m_picture = (SystemPicture*) SuperListItem::getById(datas->model(m_kind)
-                                                        ->invisibleRootItem(),
-                                                        i);
+    m_picture = i;
+    pic = this->picture();
+    setPicture(pic);
 
-    if (m_picture == nullptr){
-        m_picture = (SystemPicture*)
-                SuperListItem::getById(datas->model(m_kind)
-                                       ->invisibleRootItem(), 1);
-    }
+    emit pictureChanged(pic);
+}
 
-    setPicture(m_picture);
-    emit pictureChanged(m_picture);
+void WidgetPicture::initializeSuper(SuperListItem *super) {
+    m_pictureID = super;
+    initialize(m_pictureID->id());
 }
 
 // -------------------------------------------------------
@@ -85,13 +91,18 @@ void WidgetPicture::initialize(int i) {
 // -------------------------------------------------------
 
 void WidgetPicture::openDialog(){
-    DialogPicturesPreview dialog(m_picture, m_kind);
-    SystemPicture* previousPicture = m_picture;
+    DialogPicturesPreview dialog(this->picture(), m_kind);
+    int previousPictureID = m_picture;
+    SystemPicture *pic;
 
     int result = dialog.exec();
-    setPicture(dialog.picture());
-    if (result == QDialog::Accepted && previousPicture != m_picture)
-        emit pictureChanged(m_picture);
+    pic = dialog.picture();
+    setPicture(pic);
+    if (result == QDialog::Rejected || (result == QDialog::Accepted &&
+        previousPictureID != m_picture))
+    {
+        emit pictureChanged(pic);
+    }
 }
 
 // -------------------------------------------------------
@@ -100,12 +111,12 @@ void WidgetPicture::openDialog(){
 //
 // -------------------------------------------------------
 
-void WidgetPicture::on_listWidget_itemDoubleClicked(QListWidgetItem*){
+void WidgetPicture::on_listWidget_itemDoubleClicked(QListWidgetItem*) {
     openDialog();
 }
 
 // -------------------------------------------------------
 
-void WidgetPicture::on_pushButton_clicked(){
+void WidgetPicture::on_pushButton_clicked() {
     openDialog();
 }

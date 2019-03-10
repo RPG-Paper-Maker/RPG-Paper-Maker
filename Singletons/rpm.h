@@ -92,6 +92,7 @@ public:
     const static QString PATH_ANIMATIONS;
     const static QString PATH_STATUS;
     const static QString PATH_SPECIAL_ELEMENTS;
+    const static QString PATH_TITLE_SCREEN_GAME_OVER;
     const static QString pathTreeMap;
     const static QString pathLangs;
     const static QString pathScripts;
@@ -106,6 +107,7 @@ public:
     const static QString pathIcons;
     const static QString PATH_FACESETS;
     const static QString PATH_WINDOW_SKINS;
+    const static QString PATH_TITLE_SCREEN;
     const static QString pathAutotiles;
     const static QString pathCharacters;
     const static QString pathReliefs;

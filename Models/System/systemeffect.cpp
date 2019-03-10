@@ -79,7 +79,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     *addSkillID, PrimitiveValue *performSkillID, PrimitiveValue
     *commonReactionID, EffectSpecialActionKind specialActionKind, PrimitiveValue
     *scriptFormula) :
-    SuperListItem (),
+    SuperListItem(-1, "", true),
     m_kind(kind),
     m_damagesKind(new SuperListItem(static_cast<int>(damageKind), "")),
     m_damagesStatisticID(damagesStatisticID),

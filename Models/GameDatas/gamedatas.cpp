@@ -43,6 +43,7 @@ GameDatas::GameDatas() :
     m_tilesetsDatas(new TilesetsDatas),
     m_animationsDatas(new AnimationsDatas),
     m_statusDatas(new StatusDatas),
+    m_titleScreenGameOverDatas(new TitleScreenGameOverDatas),
     m_isDatasRead(false)
 {
 
@@ -65,66 +66,71 @@ GameDatas::~GameDatas()
     delete m_tilesetsDatas;
     delete m_animationsDatas;
     delete m_statusDatas;
+    delete m_titleScreenGameOverDatas;
 }
 
-CommonEventsDatas* GameDatas::commonEventsDatas() const {
+CommonEventsDatas * GameDatas::commonEventsDatas() const {
     return m_commonEventsDatas;
 }
 
-VariablesDatas* GameDatas::variablesDatas() const {
+VariablesDatas * GameDatas::variablesDatas() const {
     return m_variablesDatas;
 }
 
-SystemDatas* GameDatas::systemDatas() const {
+SystemDatas * GameDatas::systemDatas() const {
     return m_systemDatas;
 }
 
-BattleSystemDatas* GameDatas::battleSystemDatas() const {
+BattleSystemDatas * GameDatas::battleSystemDatas() const {
     return m_battleSystemDatas;
 }
 
-ItemsDatas* GameDatas::itemsDatas() const {
+ItemsDatas * GameDatas::itemsDatas() const {
     return m_itemsDatas;
 }
 
-SkillsDatas* GameDatas::skillsDatas() const {
+SkillsDatas * GameDatas::skillsDatas() const {
     return m_skillsDatas;
 }
 
-WeaponsDatas* GameDatas::weaponsDatas() const {
+WeaponsDatas * GameDatas::weaponsDatas() const {
     return m_weaponsDatas;
 }
 
-ArmorsDatas* GameDatas::armorsDatas() const {
+ArmorsDatas * GameDatas::armorsDatas() const {
     return m_armorsDatas;
 }
 
-HeroesDatas* GameDatas::heroesDatas() const {
+HeroesDatas * GameDatas::heroesDatas() const {
     return m_heroesDatas;
 }
 
-MonstersDatas* GameDatas::monstersDatas() const {
+MonstersDatas * GameDatas::monstersDatas() const {
     return m_monstersDatas;
 }
 
-TroopsDatas* GameDatas::troopsDatas() const {
+TroopsDatas * GameDatas::troopsDatas() const {
     return m_troopsDatas;
 }
 
-ClassesDatas* GameDatas::classesDatas() const {
+ClassesDatas * GameDatas::classesDatas() const {
     return m_classesDatas;
 }
 
-TilesetsDatas* GameDatas::tilesetsDatas() const {
+TilesetsDatas * GameDatas::tilesetsDatas() const {
     return m_tilesetsDatas;
 }
 
-AnimationsDatas* GameDatas::animationsDatas() const {
+AnimationsDatas * GameDatas::animationsDatas() const {
     return m_animationsDatas;
 }
 
-StatusDatas* GameDatas::statusDatas() const {
+StatusDatas * GameDatas::statusDatas() const {
     return m_statusDatas;
+}
+
+TitleScreenGameOverDatas * GameDatas::titleScreenGameOverDatas() const {
+    return m_titleScreenGameOverDatas;
 }
 
 bool GameDatas::isDatasRead() const {
@@ -159,6 +165,7 @@ void GameDatas::setDefault(){
     m_tilesetsDatas->setDefault();
     m_animationsDatas->setDefault();
     m_statusDatas->setDefault();
+    m_titleScreenGameOverDatas->setDefault();
 }
 
 // -------------------------------------------------------
@@ -183,6 +190,7 @@ void GameDatas::read(QString path){
     readTilesets(path);
     readAnimations(path);
     readStatus(path);
+    readTitleScreenGameOver(path);
 
     m_isDatasRead = true;
 }
@@ -231,6 +239,12 @@ void GameDatas::readStatus(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::readTitleScreenGameOver(QString path) {
+    m_titleScreenGameOverDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::write(QString path){
     RPM::writeJSON(Common::pathCombine(path, RPM::pathCommonEvents),
                      *m_commonEventsDatas);
@@ -256,6 +270,7 @@ void GameDatas::write(QString path){
     writeTilesets(path);
     writeAnimations(path);
     writeStatus(path);
+    writeTitleScreenGameOver(path);
 }
 
 // -------------------------------------------------------
@@ -298,4 +313,11 @@ void GameDatas::writeAnimations(QString path) {
 void GameDatas::writeStatus(QString path) {
     RPM::writeJSON(Common::pathCombine(path, RPM::PATH_STATUS),
         *m_statusDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeTitleScreenGameOver(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
+        *m_titleScreenGameOverDatas);
 }
