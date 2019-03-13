@@ -1834,6 +1834,49 @@
 				"Crashed when paste event command after removing in object command",
 				"Song widget now displaying the ID if selected by ID"
 			]
+		},
+		{
+			"v": "1.0.1",
+			"add": [
+				{
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Characters/wooly.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/wooly.png"
+                }
+			],
+			"remove": [],
+			"replace": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/HUD/Icons/grass.png",
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/grass.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/HUD/Icons/water.png",
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/water.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/HUD/Icons/wind.png",
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/wind.png"
+                }
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/HUD/Icons/fire.png",
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/fire.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/HUD/Icons/darkness.png",
+                    "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/darkness.png"
+                }
+			],
+			"features": [],
+			"bugs": [
+				"Wooly character is now in Basic Ressources",
+				"Correcting elements icons size"
+			]
 		}
 	]
 }
