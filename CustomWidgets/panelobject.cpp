@@ -160,8 +160,9 @@ void PanelObject::initializeCommonInheritance() {
     // Select the current selected inheritance
     int index = 0;
     int id = m_model->inheritanceId();
-    if (id != -1)
-        index = SuperListItem::getIndexById(m_list->invisibleRootItem(), id + 1);
+    if (id != -1) {
+        index = SuperListItem::getIndexById(m_list->invisibleRootItem(), id) + 1;
+    }
 
     ui->comboBoxInheritance->setCurrentIndex(index);
 }

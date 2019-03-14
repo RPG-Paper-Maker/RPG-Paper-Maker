@@ -1876,7 +1876,8 @@
 			"bugs": [
 				"Wooly character is now in Basic Ressources",
 				"Correcting elements icons size",
-				"Creating a new map was crashing"
+				"Creating a new map was crashing",
+				"Object edition: combobox was selecting wrong model index"
 			]
 		}
 	]
