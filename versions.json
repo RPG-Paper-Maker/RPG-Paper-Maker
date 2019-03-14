@@ -1877,7 +1877,8 @@
 				"Wooly character is now in Basic Ressources",
 				"Correcting elements icons size",
 				"Creating a new map was crashing",
-				"Object edition: combobox was selecting wrong model index"
+				"Object edition: combobox was selecting wrong model index",
+				"Title screen and Battle music was still played if there was no music in the map"
 			]
 		}
 	]
