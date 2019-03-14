@@ -75,11 +75,8 @@ void DialogMapProperties::initialize(){
     ui->spinBoxDepth->setValue(m_mapProperties.depth());
 
     // Sky
-    ui->panelPrimitiveValueSkyColor->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelColors(), nullptr,
-        nullptr);
-    ui->panelPrimitiveValueSkyColor->initializeModel(m_mapProperties.skyColorID());
-    ui->panelPrimitiveValueSkyColor->sync();
+    ui->panelPrimitiveValueSkyColor->initializeDataBaseAndUpdate(m_mapProperties
+        .skyColorID());
 
     ui->widgetConstantVariableSteps->initializeNumberVariable();
     ui->widgetConstantVariableStepsVariation->initializeNumberVariable();

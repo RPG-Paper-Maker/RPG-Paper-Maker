@@ -1875,7 +1875,8 @@
 			"features": [],
 			"bugs": [
 				"Wooly character is now in Basic Ressources",
-				"Correcting elements icons size"
+				"Correcting elements icons size",
+				"Creating a new map was crashing"
 			]
 		}
 	]

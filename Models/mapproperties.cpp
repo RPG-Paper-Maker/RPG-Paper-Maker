@@ -53,7 +53,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true)
 {
-
+    m_skyColorID->setModelDataBase(RPM::get()
+                                   ->project()->gameDatas()->systemDatas()->modelColors());
 }
 
 MapProperties::~MapProperties()
