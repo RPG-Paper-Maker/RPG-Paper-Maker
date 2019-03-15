@@ -1,5 +1,5 @@
 {
-    "lastVersion": "1.0.0",
+    "lastVersion": "1.0.1",
     "uversion": "2.0",
     "versions": [
     	{
@@ -1860,7 +1860,7 @@
                     "repo": "Basic-Ressources",
                     "source": "Content/Pictures/HUD/Icons/wind.png",
                     "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/wind.png"
-                }
+                },
                 {
                     "repo": "Basic-Ressources",
                     "source": "Content/Pictures/HUD/Icons/fire.png",
