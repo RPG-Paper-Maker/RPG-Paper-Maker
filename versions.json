@@ -1878,7 +1878,8 @@
 				"Correcting elements icons size",
 				"Creating a new map was crashing",
 				"Object edition: combobox was selecting wrong model index",
-				"Title screen and Battle music was still played if there was no music in the map"
+				"Title screen and Battle music was still played if there was no music in the map",
+				"Fix ingame message error when having walls inside map (https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/48)"
 			]
 		}
 	]
