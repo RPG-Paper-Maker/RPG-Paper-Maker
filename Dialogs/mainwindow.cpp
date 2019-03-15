@@ -569,7 +569,7 @@ void MainWindow::on_actionAbout_triggered() {
 
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
-    buildDate = "March 10 2019";
+    buildDate = Project::LAST_BUILD_DATE;
     copyright = "RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte\n\n"
         "RPG Paper Maker is free software: you can redistribute it and/or modify"
         "it under the terms of the GNU General Public License as published by"

@@ -26,7 +26,8 @@
 #include <QMessageBox>
 #include <QApplication>
 
-const QString Project::ENGINE_VERSION = "1.0.0";
+const QString Project::ENGINE_VERSION = "1.0.1";
+const QString Project::LAST_BUILD_DATE = "March 15 2019";
 
 // -------------------------------------------------------
 //
