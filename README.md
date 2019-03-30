@@ -138,7 +138,7 @@ Always check out our [documentation](http://rpg-paper-maker.com/index.php/docume
 
 ## License
 
-RPG Paper Maker is a free software under GNU GPLv.3 license. See LICENSE.txt.
+RPG Paper Maker is a free software under GNU LGPLv.3 license. See LICENSE.txt. However, the games output are not also under LGPL license so you need to pay fees to commercialize your games made by the engine.
 
 ## Feature requests
 
