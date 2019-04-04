@@ -35,7 +35,10 @@ EngineSettings::EngineSettings() :
     m_zoomPictures(0),
     m_theme(ThemeKind::Dark)
 {
-
+    // Default mac theme should be white
+    #ifdef Q_OS_MAC
+        m_theme = ThemeKind::White;
+    #endif
 }
 
 EngineSettings::~EngineSettings()

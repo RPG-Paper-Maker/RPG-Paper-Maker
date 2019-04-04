@@ -40,6 +40,13 @@ int main(int argc, char *argv[])
         QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
         RPM::shadersExtension = "";
     #endif
+    #ifdef Q_OS_MAC
+        RPM::shadersExtension = "-3.3";
+        QSurfaceFormat glFormat;
+        glFormat.setVersion(3, 3);
+        glFormat.setProfile(QSurfaceFormat::CoreProfile);
+        QSurfaceFormat::setDefaultFormat(glFormat);
+    #endif
 
     QApplication a(argc, argv);
 
@@ -56,10 +63,8 @@ int main(int argc, char *argv[])
     QString realApplicationName;
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker.exe";
-    #elif __linux__
-        realApplicationName = "RPG-Paper-Maker";
     #else
-        realApplicationName = "RPG-Paper-Maker.app";
+        realApplicationName = "RPG-Paper-Maker";
     #endif
     QString currentApplicationName = QFileInfo(qApp->arguments()[0]).fileName();
 
@@ -100,7 +105,6 @@ int main(int argc, char *argv[])
         if (!dirGames.exists()) {
             dirDocuments.mkdir(RPM::gamesFolderName);
         }
-
     }
 
     // Opening window
