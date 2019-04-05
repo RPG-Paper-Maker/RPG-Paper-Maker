@@ -563,14 +563,10 @@ void MainWindow::on_actionAbout_triggered() {
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
     copyright = "RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte\n\n"
-        "RPG Paper Maker is free software: you can redistribute it and/or modify"
-        "it under the terms of the GNU General Public License as published by"
-        "the Free Software Foundation, either version 3 of the License, or"
-        "(at your option) any later version.\n\n"
-        "RPG Paper Maker is distributed in the hope that it will be useful,"
-        "but WITHOUT ANY WARRANTY; without even the implied warranty of"
-        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
-        "GNU General Public License for more details.";
+        "RPG Paper Maker software is licensed under LGPL-3 license.\n\nRPG Paper Maker games are licensed "
+        "under Creative Commons Attribution-NonCommercial 4.0 license. You are free to use RPG Paper Maker "
+        "for your personal or non-profit games. You can get the author's permission to use RPG Paper Maker "
+        "for commercial games by paying a fee.";
 
     QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
         "\n" + website + "\n\nBuilt on " + buildDate +
