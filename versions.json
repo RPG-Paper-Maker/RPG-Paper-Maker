@@ -1,5 +1,5 @@
 {
-    "lastVersion": "1.0.1",
+    "lastVersion": "1.1.0",
     "uversion": "2.0",
     "versions": [
     	{
@@ -1881,6 +1881,22 @@
 				"Title screen and Battle music was still played if there was no music in the map",
 				"Fix ingame message error when having walls inside map (https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/48)"
 			]
+		},
+		{
+			"v": "1.1.0",
+			"add": [],
+			"remove": [],
+			"replace": [
+                {
+                	"source": "games",
+                    "tree": true
+                }
+			],
+			"features": [
+				"RPG Paper Maker is avilable for MacOSX!",
+				"Export standalone Game for MacOSX"
+			],
+			"bugs": []
 		}
 	]
 }
