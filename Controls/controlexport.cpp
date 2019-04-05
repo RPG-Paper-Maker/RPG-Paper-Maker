@@ -174,7 +174,7 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os) {
         executableFolder = "linux";
         break;
     case OSKind::Mac:
-        executableFolder = "mac";
+        executableFolder = "osx";
         break;
     }
     QString pathExecutable = Common::pathCombine("Content", executableFolder);
