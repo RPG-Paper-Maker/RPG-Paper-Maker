@@ -19,7 +19,7 @@
 #include <QApplication>
 
 const QString Project::ENGINE_VERSION = "1.1.0";
-const QString Project::LAST_BUILD_DATE = "April 5 2019";
+const QString Project::LAST_BUILD_DATE = "April 10 2019";
 
 // -------------------------------------------------------
 //
