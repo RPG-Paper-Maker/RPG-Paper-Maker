@@ -1,7 +1,20 @@
 {
 	"add": [],
 	"remove": [],
-	"replace": [],
-	"features": [],
+	"replace": [
+        {
+            "source": "games",
+            "tree": true
+        },
+        {
+            "source": "engineOsx",
+            "tree": true,
+            "os": ["m"]
+        },
+    ],
+	"features": [
+        "RPG Paper Maker is avaialble on Mac OSX",
+        "Export standalone for Mac now avaialble"
+    ],
 	"bugs": []
 }
