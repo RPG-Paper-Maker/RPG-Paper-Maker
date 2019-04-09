@@ -14,6 +14,7 @@ win32{
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+RC_ICONS = icon.ico
 TARGET = RPG-Paper-Maker
 win32{
     TARGET = "RPG Paper Maker"

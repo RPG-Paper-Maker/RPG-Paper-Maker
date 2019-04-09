@@ -28,7 +28,6 @@
         <file>Ressources/picture.png</file>
         <file>Ressources/floor.png</file>
         <file>Ressources/sprite_fix.png</file>
-        <file>Ressources/icon.ico</file>
         <file>Ressources/delete.png</file>
         <file>Ressources/layer_none.png</file>
         <file>Ressources/layer_on.png</file>
@@ -58,6 +57,7 @@
         <file>Ressources/pause_song.png</file>
         <file>Ressources/play_song.png</file>
         <file>Ressources/stop_song.png</file>
+        <file>icon.ico</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

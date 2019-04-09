@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     // General stylesheet configuration
     engineSettings->updateTheme();
-    qApp->setWindowIcon(QIcon(":/icons/Ressources/icon.ico"));
+    qApp->setWindowIcon(QIcon(":/icons/icon.ico"));
 
     // Create document folder for games if not existing
     QString documentsPath = QStandardPaths::writableLocation(
