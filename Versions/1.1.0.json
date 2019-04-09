@@ -10,7 +10,7 @@
             "source": "engineOsx",
             "tree": true,
             "os": ["m"]
-        },
+        }
     ],
 	"features": [
         "RPG Paper Maker is avaialble on Mac OSX",
