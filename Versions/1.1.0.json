@@ -1,11 +1,16 @@
 {
-	"add": [],
-	"remove": [],
-	"replace": [
+	"add": [
         {
             "source": "games",
             "tree": true
-        },
+        }
+    ],
+	"remove": [
+        {
+            "target": "Engine/Content/osx/Game.app"
+        }
+    ],
+	"replace": [
         {
             "source": "engineOsx",
             "tree": true,
