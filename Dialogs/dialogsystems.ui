@@ -75,7 +75,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_2">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Game native resolution</string>
@@ -102,7 +102,14 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox"/>
+                     <widget class="QSpinBox" name="spinBoxScreenWidth">
+                      <property name="minimum">
+                       <number>100</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -125,12 +132,19 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox_2"/>
+                     <widget class="QSpinBox" name="spinBoxScreenHeight">
+                      <property name="minimum">
+                       <number>100</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
                   <item row="1" column="0" colspan="2">
-                   <widget class="QComboBox" name="comboBox">
+                   <widget class="QComboBox" name="comboBoxScreenWindow">
                     <item>
                      <property name="text">
                       <string>Window</string>
@@ -147,6 +161,9 @@
                 </item>
                 <item row="1" column="0">
                  <widget class="QCheckBox" name="checkBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Display console</string>
                   </property>

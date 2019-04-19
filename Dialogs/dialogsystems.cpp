@@ -80,6 +80,16 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListParticules->list()->setCanEdit(true);
 
     // Integers
+    ui->spinBoxScreenWidth->setValue(RPM::get()->project()->gameDatas()
+        ->systemDatas()->screenWidth());
+    ui->spinBoxScreenHeight->setValue(RPM::get()->project()->gameDatas()
+        ->systemDatas()->screenHeight());
+    ui->spinBoxScreenWidth->setEnabled(RPM::get()->project()->gameDatas()
+        ->systemDatas()->isScreenWindow());
+    ui->spinBoxScreenHeight->setEnabled(RPM::get()->project()->gameDatas()
+        ->systemDatas()->isScreenWindow());
+    ui->comboBoxScreenWindow->setCurrentIndex(RPM::get()->project()->gameDatas()
+        ->systemDatas()->isScreenWindow() ? 0 : 1);
     ui->spinBoxSquareSize->setValue(RPM::get()->project()->gameDatas()
                                     ->systemDatas()->squareSize());
 
@@ -353,6 +363,29 @@ void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject){
 //
 //  SLOTS
 //
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxScreenWidth_valueChanged(int i) {
+    RPM::get()->project()->gameDatas()->systemDatas()->setScreenWidth(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxScreenHeight_valueChanged(int i) {
+    RPM::get()->project()->gameDatas()->systemDatas()->setScreenHeight(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_comboBoxScreenWindow_currentIndexChanged(int index) {
+    bool isScreenWindow = index == 0;
+
+    RPM::get()->project()->gameDatas()->systemDatas()->setIsScreenWinow(
+        isScreenWindow);
+    ui->spinBoxScreenWidth->setEnabled(isScreenWindow);
+    ui->spinBoxScreenHeight->setEnabled(isScreenWindow);
+}
+
 // -------------------------------------------------------
 
 void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {

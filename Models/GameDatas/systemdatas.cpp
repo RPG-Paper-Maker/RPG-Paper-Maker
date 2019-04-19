@@ -17,6 +17,9 @@
 #include "systemcolor.h"
 #include "systemwindowskin.h"
 
+const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
+const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
+const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
 const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 
@@ -48,6 +51,30 @@ SystemDatas::~SystemDatas() {
 
 void SystemDatas::read(QString path) {
     RPM::readJSON(Common::pathCombine(path, RPM::pathSystem), *this);
+}
+
+int SystemDatas::screenWidth() const {
+    return m_screenWidth;
+}
+
+void SystemDatas::setScreenWidth(int w) {
+    m_screenWidth = w;
+}
+
+int SystemDatas::screenHeight() const {
+    return m_screenHeight;
+}
+
+void SystemDatas::setScreenHeight(int h) {
+    m_screenHeight = h;
+}
+
+bool SystemDatas::isScreenWindow() const {
+    return m_isScreenWindow;
+}
+
+void SystemDatas::setIsScreenWinow(bool b) {
+    m_isScreenWindow = b;
 }
 
 int SystemDatas::portionsRay() const { return m_portionsRay; }
@@ -105,6 +132,9 @@ QStandardItemModel * SystemDatas::modelWindowSkins() const {
 // -------------------------------------------------------
 
 void SystemDatas::setDefault() {
+    m_screenWidth = 640;
+    m_screenHeight = 480;
+    m_isScreenWindow = true;
     m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
@@ -209,6 +239,9 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelWindowSkins, false);
 
     // Other options
+    m_screenWidth = json[JSON_SCREEN_WIDTH].toInt();
+    m_screenHeight = json[JSON_SCREEN_HEIGHT].toInt();
+    m_isScreenWindow = json[JSON_IS_SCREEN_WINDOW].toBool();
     m_portionsRay = json["pr"].toInt();
     m_squareSize = json["ss"].toInt();
     m_idMapHero = json["idMapHero"].toInt();
@@ -274,6 +307,9 @@ void SystemDatas::write(QJsonObject &json) const{
     int l;
 
     // Other options
+    json[JSON_SCREEN_WIDTH] = m_screenWidth;
+    json[JSON_SCREEN_HEIGHT] = m_screenHeight;
+    json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
     json["pr"] = m_portionsRay;
     json["ss"] = m_squareSize;
     json["idMapHero"] = m_idMapHero;

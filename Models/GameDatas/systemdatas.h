@@ -29,6 +29,9 @@
 class SystemDatas : public Serializable
 {
 public:
+    static const QString JSON_SCREEN_WIDTH;
+    static const QString JSON_SCREEN_HEIGHT;
+    static const QString JSON_IS_SCREEN_WINDOW;
     static const QString JSON_COLORS;
     static const QString JSON_WINDOW_SKINS;
 
@@ -37,6 +40,12 @@ public:
 
     void read(QString path);
     SystemDatas(QString path);
+    int screenWidth() const;
+    void setScreenWidth(int w);
+    int screenHeight() const;
+    void setScreenHeight(int h);
+    bool isScreenWindow() const;
+    void setIsScreenWinow(bool b);
     int portionsRay() const;
     void setPortionRay(int p);
     int squareSize() const;
@@ -66,6 +75,9 @@ public:
     virtual void write(QJsonObject &json) const;
 
 private:
+    int m_screenWidth;
+    int m_screenHeight;
+    bool m_isScreenWindow;
     int m_portionsRay;
     int m_squareSize;
     int m_idMapHero;

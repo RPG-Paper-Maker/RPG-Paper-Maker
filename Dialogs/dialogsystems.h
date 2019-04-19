@@ -57,6 +57,9 @@ private:
     void updateCommonObjects(SystemCommonObject *sysCommonObject);
 
 private slots:
+    void on_spinBoxScreenWidth_valueChanged(int i);
+    void on_spinBoxScreenHeight_valueChanged(int i);
+    void on_comboBoxScreenWindow_currentIndexChanged(int index);
     void on_spinBoxSquareSize_valueChanged(int i);
     void on_comboBoxBattleLevel_currentIndexChanged(int index);
     void on_comboBoxBattleExp_currentIndexChanged(int index);
