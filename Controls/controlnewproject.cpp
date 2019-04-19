@@ -59,8 +59,9 @@ QString ControlNewproject::filterDirectoryName(const QString &s) {
 
 // -------------------------------------------------------
 
-QString ControlNewproject::createNewProject(QString dirName, QString location) {
-
+QString ControlNewproject::createNewProject(QString projectName, QString dirName,
+    QString location)
+{
     //  main function generating project folder. Returns a string if errors.
     QDir pathLocation(location);
     QString pathDir(Common::pathCombine(location, dirName));
@@ -108,9 +109,10 @@ QString ControlNewproject::createNewProject(QString dirName, QString location) {
 
     // Create the default datas
     Project *previousProject = RPM::get()->project();
-    Project *project = new Project;
+    Project *project = new Project();
     RPM::get()->setProject(project);
     project->setDefault();
+    project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->write(pathDir);
     QString error = project->createRPMFile();
     if (error != nullptr)

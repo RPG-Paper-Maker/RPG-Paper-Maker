@@ -96,9 +96,8 @@ void DialogNewProject::on_pushButtonLocation_clicked(){
 // -------------------------------------------------------
 
 void DialogNewProject::accept(){
-    QString message = m_control.createNewProject(ui->lineEditDirectoryName
-                                                 ->text(),
-                                                 ui->lineEditLocation->text());
+    QString message = m_control.createNewProject(ui->lineEditProjectName->text(),
+        ui->lineEditDirectoryName->text(), ui->lineEditLocation->text());
     if (message != NULL) QMessageBox::critical(this,"Error",message);
     else{
         QDialog::accept();

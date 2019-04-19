@@ -15,6 +15,7 @@
 #include <QStandardItemModel>
 #include "serializable.h"
 #include "primitivevalue.h"
+#include "langstranslation.h"
 
 // -------------------------------------------------------
 //
@@ -29,6 +30,7 @@
 class SystemDatas : public Serializable
 {
 public:
+    static const QString JSON_PROJECT_NAME;
     static const QString JSON_SCREEN_WIDTH;
     static const QString JSON_SCREEN_HEIGHT;
     static const QString JSON_IS_SCREEN_WINDOW;
@@ -40,6 +42,7 @@ public:
 
     void read(QString path);
     SystemDatas(QString path);
+    LangsTranslation * projectName() const;
     int screenWidth() const;
     void setScreenWidth(int w);
     int screenHeight() const;
@@ -75,6 +78,7 @@ public:
     virtual void write(QJsonObject &json) const;
 
 private:
+    LangsTranslation *m_projectName;
     int m_screenWidth;
     int m_screenHeight;
     bool m_isScreenWindow;

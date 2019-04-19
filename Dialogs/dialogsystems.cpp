@@ -79,7 +79,9 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListCurrencies->list()->setCanEdit(true);
     ui->panelSuperListParticules->list()->setCanEdit(true);
 
-    // Integers
+    // Values
+    ui->widgetGameName->initializeNamesTrans(RPM::get()->project()->gameDatas()
+        ->systemDatas()->projectName());
     ui->spinBoxScreenWidth->setValue(RPM::get()->project()->gameDatas()
         ->systemDatas()->screenWidth());
     ui->spinBoxScreenHeight->setValue(RPM::get()->project()->gameDatas()

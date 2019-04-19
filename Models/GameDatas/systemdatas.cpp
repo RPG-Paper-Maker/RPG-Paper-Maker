@@ -17,6 +17,7 @@
 #include "systemcolor.h"
 #include "systemwindowskin.h"
 
+const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
 const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
 const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
@@ -30,6 +31,7 @@ const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
+    m_projectName(new LangsTranslation("Project without name")),
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
@@ -43,6 +45,7 @@ SystemDatas::SystemDatas() :
 }
 
 SystemDatas::~SystemDatas() {
+    delete m_projectName;
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
@@ -51,6 +54,10 @@ SystemDatas::~SystemDatas() {
 
 void SystemDatas::read(QString path) {
     RPM::readJSON(Common::pathCombine(path, RPM::pathSystem), *this);
+}
+
+LangsTranslation * SystemDatas::projectName() const {
+    return m_projectName;
 }
 
 int SystemDatas::screenWidth() const {
@@ -239,6 +246,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelWindowSkins, false);
 
     // Other options
+    m_projectName->read(json[JSON_PROJECT_NAME].toObject());
     m_screenWidth = json[JSON_SCREEN_WIDTH].toInt();
     m_screenHeight = json[JSON_SCREEN_HEIGHT].toInt();
     m_isScreenWindow = json[JSON_IS_SCREEN_WINDOW].toBool();
@@ -304,9 +312,12 @@ void SystemDatas::read(const QJsonObject &json){
 
 void SystemDatas::write(QJsonObject &json) const{
     QJsonArray jsonArray;
+    QJsonObject obj;
     int l;
 
     // Other options
+    m_projectName->write(obj);
+    json[JSON_PROJECT_NAME] = obj;
     json[JSON_SCREEN_WIDTH] = m_screenWidth;
     json[JSON_SCREEN_HEIGHT] = m_screenHeight;
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
