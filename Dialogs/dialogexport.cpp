@@ -28,9 +28,12 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     ui->lineEditLocation->setText(RPM::dirGames);
     ui->lineEditLocation->setCursorPosition(0);
+    ui->spinBoxMajorVersion->setValue(project->gameDatas()->systemDatas()
+        ->lastMajorVersion());
+    ui->spinBoxMinorVersion->setValue(project->gameDatas()->systemDatas()
+        ->lastMinorVersion());
 }
 
 DialogExport::~DialogExport()
@@ -60,23 +63,27 @@ void DialogExport::on_pushButtonLocation_clicked(){
 // -------------------------------------------------------
 
 void DialogExport::accept(){
-    QString message = NULL;
+    QString message = nullptr;
     OSKind osKind;
     QString location = ui->lineEditLocation->text();
 
     if (ui->radioButtonDesktop->isChecked()){
         osKind = static_cast<OSKind>(ui->comboBoxOSDeploy->currentIndex());
         message = m_control.createDesktop(location, osKind, ui->checkBoxProtect
-                                          ->isChecked());
+            ->isChecked(), ui->spinBoxMajorVersion->value(), ui
+            ->spinBoxMinorVersion->value());
     }
     else if (ui->radioButtonBrowser->isChecked()){
         message = m_control.createBrowser(location);
     }
 
-    if (message != NULL)
-        QMessageBox::critical(this, "Error", message);
-    else
+    if (message != nullptr) {
+        if (message != "-") {
+            QMessageBox::critical(this, "Error", message);
+        }
+    } else {
         QDialog::accept();
+    }
 }
 
 // -------------------------------------------------------

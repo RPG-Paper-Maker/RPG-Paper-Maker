@@ -36,6 +36,8 @@ public:
     static const QString JSON_IS_SCREEN_WINDOW;
     static const QString JSON_COLORS;
     static const QString JSON_WINDOW_SKINS;
+    static const QString JSON_LAST_MAJOR_VERSION;
+    static const QString JSON_LAST_MINOR_VERSION;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -67,6 +69,10 @@ public:
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
     QStandardItemModel * modelWindowSkins() const;
+    int lastMajorVersion() const;
+    void setLastMajorVersion(int v);
+    int lastMinorVersion() const;
+    void setLastMinorVersion(int v);
 
     void setDefault();
     void setDefaultColors();
@@ -94,6 +100,8 @@ private:
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
     QStandardItemModel *m_modelWindowSkins;
+    int m_lastMajorVersion;
+    int m_lastMinorVersion;
 };
 
 #endif // SYSTEMDATAS_H

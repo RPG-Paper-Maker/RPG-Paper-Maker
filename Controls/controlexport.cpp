@@ -10,6 +10,7 @@
 */
 
 #include <QDirIterator>
+#include <QMessageBox>
 #include "controlexport.h"
 #include "rpm.h"
 #include "common.h"
@@ -32,7 +33,9 @@ ControlExport::ControlExport(Project *project) :
 //
 // -------------------------------------------------------
 
-QString ControlExport::createDesktop(QString location, OSKind os, bool) {
+QString ControlExport::createDesktop(QString location, OSKind os, bool, int
+    major, int minor)
+{
     QString message;
     QString osMessage;
 
@@ -46,19 +49,20 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool) {
     }
 
     QDir dirLocation(location);
-    QString projectName = QDir(m_project->pathCurrentProject()).dirName() +
-        osMessage;
+    QString projectName = QDir(m_project->pathCurrentProject()).dirName() + "-" +
+        osMessage + "-v" + QString::number(major) + "." + QString::number(minor);
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
     message = copyAllProject(location, projectName, path, dirLocation);
-    if (message != nullptr)
+    if (message != nullptr || message == "-") {
         return message;
+    }
 
     // Remove all the files that are no longer needed here
     removeDesktopNoNeed(path);
 
-    return generateDesktopStuff(path, os);
+    return generateDesktopStuff(path, os, major, minor);
 }
 
 // -------------------------------------------------------
@@ -90,8 +94,18 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
         return "The path location needs to be absolute.";
     if (!dirLocation.exists())
         return "The path location doesn't exists.";
-    if (!dirLocation.mkdir(projectName))
-        return "The directory " + projectName + " already exists.";
+    if (!dirLocation.mkdir(projectName)) {
+        QMessageBox::StandardButton box = QMessageBox::question(nullptr,
+            "Existing folder", "The directory " + projectName + " already "
+            "exists.\nWould you like to overwrite the existing folder?",
+            QMessageBox::Yes | QMessageBox::No);
+        if (box == QMessageBox::Yes) {
+            QDir(path).removeRecursively();
+            dirLocation.mkdir(projectName);
+        } else {
+            return "-";
+        }
+    }
 
     // Copy Content
     QDir(m_project->pathCurrentProject()).mkdir("Content");
@@ -161,8 +175,9 @@ QString ControlExport::generateWebStuff(QString path) {
 
 // -------------------------------------------------------
 
-QString ControlExport::generateDesktopStuff(QString path, OSKind os) {
-
+QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
+    int minor)
+{
     // Copy excecutable folder
     QString executableFolder;
 
@@ -184,6 +199,11 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os) {
 
     // Pictures
     copyBRPictures(path);
+
+    // Save last version
+    RPM::get()->project()->gameDatas()->systemDatas()->setLastMajorVersion(major);
+    RPM::get()->project()->gameDatas()->systemDatas()->setLastMinorVersion(minor);
+    RPM::get()->project()->writeSystemDatas();
 
     return nullptr;
 }

@@ -23,6 +23,8 @@ const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
 const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
 const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
+const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
+const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 
 // -------------------------------------------------------
 //
@@ -39,7 +41,9 @@ SystemDatas::SystemDatas() :
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
-    m_modelWindowSkins(new QStandardItemModel)
+    m_modelWindowSkins(new QStandardItemModel),
+    m_lastMajorVersion(1),
+    m_lastMinorVersion(0)
 {
 
 }
@@ -132,6 +136,22 @@ QStandardItemModel * SystemDatas::modelWindowSkins() const {
     return m_modelWindowSkins;
 }
 
+int SystemDatas::lastMajorVersion() const {
+    return m_lastMajorVersion;
+}
+
+void SystemDatas::setLastMajorVersion(int v) {
+    m_lastMajorVersion = v;
+}
+
+int SystemDatas::lastMinorVersion() const {
+    return m_lastMinorVersion;
+}
+
+void SystemDatas::setLastMinorVersion(int v) {
+    m_lastMinorVersion = v;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -152,6 +172,9 @@ void SystemDatas::setDefault() {
     setDefaultCurrencies();
     setDefaultItemsTypes();
     setDefaultWindowSkins();
+
+    m_lastMajorVersion = 1;
+    m_lastMinorVersion = 0;
 }
 
 // -------------------------------------------------------
@@ -306,6 +329,10 @@ void SystemDatas::read(const QJsonObject &json){
         item->setText(sys->toString());
         m_modelWindowSkins->appendRow(item);
     }
+
+    // Version
+    m_lastMajorVersion = json[JSON_LAST_MAJOR_VERSION].toInt();
+    m_lastMinorVersion = json[JSON_LAST_MINOR_VERSION].toInt();
 }
 
 // -------------------------------------------------------
@@ -378,4 +405,8 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_WINDOW_SKINS] = jsonArray;
+
+    // Version
+    json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;
+    json[JSON_LAST_MINOR_VERSION] = m_lastMinorVersion;
 }

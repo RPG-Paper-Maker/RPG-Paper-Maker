@@ -1,0 +1,11 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Change game resolution and fullscreen mode",
+        "Change game name (displayed on window game title)",
+        "Export standalone: major and minor version selection / overwrite existing folder"
+    ],
+	"bugs": []
+}
