@@ -33,9 +33,8 @@ class WidgetTilesetSettings : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetTilesetSettings(QWidget *parent = 0);
+    explicit WidgetTilesetSettings(QWidget *parent = nullptr);
     ~WidgetTilesetSettings();
-    void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture);
     void updateImageSpecial(QImage& editedImage, SystemPicture* picture);
     void updateImageAutotile(SystemPicture* picture);
@@ -48,7 +47,7 @@ public:
 
 private:
     Ui::WidgetTilesetSettings *ui;
-    SystemPicture* m_picture;
+    int m_pictureID;
     PictureKind m_kind;
     float m_zoom;
 

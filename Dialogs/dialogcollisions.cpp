@@ -77,7 +77,6 @@ void DialogCollisions::initializeTilesets() {
 
 void DialogCollisions::updateTileset(SystemTileset* tileset) {
     SystemPicture* picture = tileset->picture();
-    ui->widgetTilesetPictureSettings->setSquares(picture->collisions());
     ui->widgetTilesetPictureSettings->updateImage(picture);
 }
 
@@ -109,7 +108,6 @@ void DialogCollisions::initializeCharacters() {
 // -------------------------------------------------------
 
 void DialogCollisions::updateCharacter(SystemPicture* picture) {
-    ui->widgetCharacterPraticable->setSquares(picture->collisions());
     ui->widgetCharacterPraticable->updateImage(picture);
     ui->widgetCharacterPraticable->disableNone(picture->id() == -1);
 }
@@ -141,7 +139,6 @@ void DialogCollisions::initializeAutotiles() {
 
 void DialogCollisions::updateAutotile(SystemAutotile* autotile) {
     SystemPicture* picture = autotile->picture();
-    ui->widgetAutotilePictureSettings->setSquares(picture->collisions());
     ui->widgetAutotilePictureSettings->updateImageAutotile(picture);
 }
 
@@ -173,7 +170,6 @@ void DialogCollisions::initializeWalls() {
 
 void DialogCollisions::updateWall(SystemSpriteWall *wall) {
     SystemPicture* picture = wall->picture();
-    ui->widgetWallPraticable->setSquares(picture->collisions());
     ui->widgetWallPraticable->updateImage(picture);
     ui->widgetWallPraticable->disableNone(picture->id() == -1);
 }

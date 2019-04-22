@@ -22,7 +22,8 @@ WidgetTilesetDirection::WidgetTilesetDirection(QWidget *parent) :
     QWidget(parent),
     m_imageArrow(":/icons/Ressources/direction.png"),
     m_imageArrowHover(":/icons/Ressources/direction_hover.png"),
-    m_squares(nullptr),
+    m_pictureID(-1),
+    m_kind(PictureKind::Tilesets),
     m_hoveredPoint(-1, -1),
     m_hoveredLeft(-1, -1),
     m_hoveredRight(-1, -1),
@@ -34,11 +35,6 @@ WidgetTilesetDirection::WidgetTilesetDirection(QWidget *parent) :
                                        m_imageArrow.height() * 2);
     m_imageArrowHover = m_imageArrowHover.scaled(m_imageArrowHover.width()*2,
                                                  m_imageArrowHover.height()*2);
-}
-
-void WidgetTilesetDirection::setSquares(QHash<QPoint, CollisionSquare*>*squares)
-{
-    m_squares = squares;
 }
 
 // -------------------------------------------------------
@@ -53,12 +49,17 @@ void WidgetTilesetDirection::updateImage(SystemPicture* picture,
     QString path = picture->getPath(kind);
     m_image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
+    m_pictureID = picture->id();
+    m_kind = kind;
     updateImageGeneral();
 }
 
-void WidgetTilesetDirection::updateImageSpecial(QImage& editedImage)
+void WidgetTilesetDirection::updateImageSpecial(QImage& editedImage,
+    SystemPicture* picture, PictureKind kind)
 {
     m_image = editedImage;
+    m_pictureID = picture->id();
+    m_kind = kind;
     updateImageGeneral();
 }
 
@@ -121,10 +122,12 @@ void WidgetTilesetDirection::updateHovered(QPoint& hovered, QPoint& point,
 
 CollisionSquare* WidgetTilesetDirection::activateHovered(QPoint& hovered) {
     if (hovered.x() != -1 && hovered.y() != -1) {
-        CollisionSquare* collision = m_squares->value(hovered);
+        QHash<QPoint, CollisionSquare*>* squares = SystemPicture::getByID(
+            m_pictureID, m_kind)->collisions();
+        CollisionSquare* collision = squares->value(hovered);
         if (collision == nullptr) {
             collision = new CollisionSquare;
-            m_squares->insert(hovered, collision);
+            squares->insert(hovered, collision);
         }
         return collision;
     }
@@ -139,7 +142,7 @@ void WidgetTilesetDirection::checkStillExisting(QPoint& hovered,
 {
     if (collision->hasAllDirections() && collision->rect() == nullptr) {
         delete collision;
-        m_squares->remove(hovered);
+        SystemPicture::getByID(m_pictureID, m_kind)->collisions()->remove(hovered);
     }
 }
 
@@ -234,13 +237,15 @@ void WidgetTilesetDirection::mouseMoveEvent(QMouseEvent *event) {
 
 void WidgetTilesetDirection::paintEvent(QPaintEvent *){
     QPainter painter(this);
+    QHash<QPoint, CollisionSquare*>* squares = SystemPicture::getByID(
+        m_pictureID, m_kind)->collisions();
 
     // Draw image
     if (!m_image.isNull()) {
         painter.drawImage(0, 0, m_image);
     }
 
-    if (m_squares == nullptr)
+    if (squares == nullptr)
         return;
 
     // Draw arrows
@@ -249,7 +254,7 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
         for (int j = 0; j < m_image.height() / RPM::BASIC_SQUARE_SIZE; j++) {
 
             // Get collision setting
-            CollisionSquare* collision = m_squares->value(QPoint(i, j));
+            CollisionSquare* collision = squares->value(QPoint(i, j));
             bool left = true, right = true, top = true, bot = true;
             if (collision != nullptr) {
                 left = collision->left();

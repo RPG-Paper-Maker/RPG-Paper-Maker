@@ -36,6 +36,7 @@ public:
     QHash<QPoint, CollisionSquare*> *collisions();
     bool repeatCollisions() const;
     void setRepeatCollisions(bool b, PictureKind kind);
+    static SystemPicture * getByID(int id, PictureKind kind);
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);

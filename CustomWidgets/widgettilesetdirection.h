@@ -29,9 +29,9 @@ class WidgetTilesetDirection : public QWidget
     Q_OBJECT
 public:
     explicit WidgetTilesetDirection(QWidget *parent = nullptr);
-    void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
-    void updateImageSpecial(QImage& editedImage);
+    void updateImageSpecial(QImage& editedImage, SystemPicture *picture,
+        PictureKind kind);
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getCenterRect(QRect& rect, int i, int j);
     bool isInsideRect(int dx, int dy, int x, int y, QPoint& mousePoint) const;
@@ -46,7 +46,8 @@ protected:
     QImage m_image;
     QImage m_imageArrow;
     QImage m_imageArrowHover;
-    QHash<QPoint, CollisionSquare*>* m_squares;
+    int m_pictureID;
+    PictureKind m_kind;
     QPoint m_hoveredPoint;
     QPoint m_hoveredLeft;
     QPoint m_hoveredRight;

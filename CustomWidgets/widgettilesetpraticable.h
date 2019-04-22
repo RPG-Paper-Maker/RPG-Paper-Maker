@@ -30,18 +30,19 @@ class WidgetTilesetPraticable : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WidgetTilesetPraticable(QWidget *parent = 0);
+    explicit WidgetTilesetPraticable(QWidget *parent = nullptr);
     virtual ~WidgetTilesetPraticable();
     const static int OFFSET;
-    void setSquares(QHash<QPoint, CollisionSquare*>* squares);
     void updateImage(SystemPicture* picture, PictureKind kind);
-    void updateImageSpecial(QImage& editedImage, SystemPicture* picture);
+    void updateImageSpecial(QImage& editedImage, SystemPicture* picture,
+        PictureKind kind);
     void updateZoom(float zoom);
     void updateImageSize();
 
 protected:
     QImage m_image;
-    QHash<QPoint, CollisionSquare*>* m_squares;
+    int m_pictureID;
+    PictureKind m_kind;
     QPoint m_selectedPoint;
     QPoint m_hoveredPoint;
     CollisionResizeKind m_resizeKind;
@@ -52,10 +53,9 @@ protected:
     QImage m_baseImage;
     QRectF m_fakeRect;
     bool m_firstResize;
-    SystemPicture* m_picture;
     Qt::CursorShape m_lastCursorShape;
 
-    void updateImageGeneral(SystemPicture* picture);
+    void updateImageGeneral(SystemPicture* picture, PictureKind kind);
     void getMousePoint(QPoint& point, QMouseEvent *event);
     void getRectCollision(QRect& rect, const QPoint& localPoint,
                           CollisionSquare* collision);

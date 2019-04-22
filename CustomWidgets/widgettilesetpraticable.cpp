@@ -25,7 +25,8 @@ const int WidgetTilesetPraticable::OFFSET = 5;
 
 WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     QWidget(parent),
-    m_squares(nullptr),
+    m_pictureID(-1),
+    m_kind(PictureKind::Tilesets),
     m_selectedPoint(-1, -1),
     m_hoveredPoint(-1, -1),
     m_resizeKind(CollisionResizeKind::None),
@@ -33,7 +34,6 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_isCreating(false),
     m_zoom(1.0f),
     m_firstResize(false),
-    m_picture(nullptr),
     m_lastCursorShape(Qt::ArrowCursor)
 {
     this->setMouseTracking(true);
@@ -51,12 +51,6 @@ WidgetTilesetPraticable::~WidgetTilesetPraticable() {
     delete m_contextMenu;
 }
 
-void WidgetTilesetPraticable::setSquares(QHash<QPoint, CollisionSquare*>*
-                                         squares)
-{
-    m_squares = squares;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -69,23 +63,25 @@ void WidgetTilesetPraticable::updateImage(SystemPicture* picture,
     QString path = picture->getPath(kind);
     m_baseImage = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
-    updateImageGeneral(picture);
+    updateImageGeneral(picture, kind);
 }
 
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::updateImageSpecial(QImage& editedImage,
-                                                 SystemPicture* picture)
+    SystemPicture* picture, PictureKind kind)
 {
     m_baseImage = editedImage;
-    updateImageGeneral(picture);
+    updateImageGeneral(picture, kind);
 }
 
 // -------------------------------------------------------
 
-void WidgetTilesetPraticable::updateImageGeneral(SystemPicture* picture)
+void WidgetTilesetPraticable::updateImageGeneral(SystemPicture* picture,
+    PictureKind kind)
 {
-    m_picture = picture;
+    m_pictureID = picture->id();
+    m_kind = kind;
     m_image = m_baseImage;
     updateImageSize();
 }
@@ -171,7 +167,8 @@ void WidgetTilesetPraticable::getRectRepeatTop(QRect& rect) const {
 void WidgetTilesetPraticable::getPointsRepeat(QHash<QPoint, CollisionSquare *>&
                                               list)
 {
-    m_picture->getRepeatList(m_baseImage, *m_squares, list);
+    SystemPicture *picture = SystemPicture::getByID(m_pictureID, m_kind);
+    picture->getRepeatList(m_baseImage, *picture->collisions(), list);
 }
 
 // -------------------------------------------------------
@@ -457,7 +454,8 @@ void WidgetTilesetPraticable::editCollision() {
 void WidgetTilesetPraticable::deleteCollision() {
     if (m_selectedCollision->hasAllDirections()) {
         delete m_selectedCollision;
-        m_squares->remove(m_selectedPoint);
+        SystemPicture::getByID(m_pictureID, m_kind)->collisions()->remove(
+            m_selectedPoint);
         m_selectedCollision = nullptr;
         m_selectedPoint = QPoint(-1, -1);
     }
@@ -478,7 +476,7 @@ bool WidgetTilesetPraticable::canDraw(QPoint& mousePoint) const {
     getRectRepeatBot(rectBot);
     getRectRepeatTop(rectTop);
 
-    return (!m_picture->repeatCollisions() ||
+    return (!SystemPicture::getByID(m_pictureID, m_kind)->repeatCollisions() ||
         (!rectBot.contains(mousePoint) && !rectTop.contains(mousePoint)));
 }
 
@@ -516,11 +514,13 @@ void WidgetTilesetPraticable::mousePressEvent(QMouseEvent *event) {
         getMousePoint(point, event);
 
         // Update collisions
-        CollisionSquare* collision = m_squares->value(point);
+        QHash<QPoint, CollisionSquare*>* squares = SystemPicture::getByID(
+            m_pictureID, m_kind)->collisions();
+        CollisionSquare* collision = squares->value(point);
         if (collision == nullptr) {
             collision = new CollisionSquare;
             collision->setDefaultPraticable();
-            m_squares->insert(point, collision);
+            squares->insert(point, collision);
             m_isCreating = true;
         }
         else if (collision->rect() == nullptr) {
@@ -561,7 +561,8 @@ void WidgetTilesetPraticable::mouseMoveEvent(QMouseEvent *event) {
             this->setCursor(QCursor(m_lastCursorShape));
         }
         else {
-            CollisionSquare* collision = m_squares->value(point);
+            CollisionSquare* collision = SystemPicture::getByID(m_pictureID,
+                m_kind)->collisions()->value(point);
             if (collision == nullptr) {
                 this->setCursor(QCursor(Qt::ArrowCursor));
                 m_lastCursorShape = Qt::ArrowCursor;
@@ -591,6 +592,8 @@ void WidgetTilesetPraticable::mouseReleaseEvent(QMouseEvent*) {
 
 void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     QPainter painter(this);
+    SystemPicture *picture = SystemPicture::getByID(m_pictureID, m_kind);
+    QHash<QPoint, CollisionSquare*>* squares = picture->collisions();
 
     // Draw background
     painter.fillRect(0, 0, m_image.width(), m_image.height(),
@@ -601,21 +604,21 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
         painter.drawImage(0, 0, m_image);
     }
 
-    if (m_squares == nullptr)
+    if (squares == nullptr)
         return;
 
     // Draw all the collisions
     painter.setPen(RPM::get()->engineSettings()->theme() == ThemeKind::Dark ?
         RPM::colorAlmostWhite : RPM::colorFortyTransparent);
-    for (QHash<QPoint, CollisionSquare*>::iterator i = m_squares->begin();
-         i != m_squares->end(); i++)
+    for (QHash<QPoint, CollisionSquare*>::iterator i = squares->begin();
+         i != squares->end(); i++)
     {
         drawCollision(painter, i.key(), i.value(),
                       RPM::colorFortyTransparent);
     }
 
     // Draw another layer for the selected collision
-    CollisionSquare* collision = m_squares->value(m_selectedPoint);
+    CollisionSquare* collision = squares->value(m_selectedPoint);
     if (collision != nullptr) {
         painter.setPen(RPM::colorPurpleSelection);
         drawCollision(painter, m_selectedPoint, collision,
@@ -623,14 +626,14 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
     }
 
     // Draw hovered layer
-    collision = m_squares->value(m_hoveredPoint);
+    collision = squares->value(m_hoveredPoint);
     if (collision != nullptr) {
         drawCollision(painter, m_hoveredPoint, collision,
                       RPM::colorGrayHoverBackground, false);
     }
 
     // For repeat option :
-    if (m_picture->repeatCollisions()) {
+    if (picture->repeatCollisions()) {
         QRect rect;
         getRectRepeatBot(rect);
         painter.fillRect(rect, RPM::colorFortyTransparent);

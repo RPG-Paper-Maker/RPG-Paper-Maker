@@ -74,7 +74,6 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
 void PanelSpecialElements::update(SystemSpecialElement* sys) {
     SystemPicture* picture = sys->picture();
     ui->widgetPicture->setPicture(picture);
-    ui->widgetTilesetSettings->setSquares(picture->collisions());
     if (m_kind == PictureKind::Autotiles)
         ui->widgetTilesetSettings->updateImageAutotile(picture);
     else

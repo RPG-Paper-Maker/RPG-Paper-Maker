@@ -83,6 +83,13 @@ void SystemPicture::setRepeatCollisions(bool b, PictureKind kind) {
 //
 // -------------------------------------------------------
 
+SystemPicture * SystemPicture::getByID(int id, PictureKind kind) {
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(kind)->invisibleRootItem(), id));
+}
+
+// -------------------------------------------------------
+
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()

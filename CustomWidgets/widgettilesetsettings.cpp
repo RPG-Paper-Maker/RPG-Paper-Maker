@@ -22,7 +22,7 @@
 WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetTilesetSettings),
-    m_picture(nullptr)
+    m_pictureID(-1)
 {
     ui->setupUi(this);
     ui->checkBoxRepeat->hide();
@@ -32,12 +32,6 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
 WidgetTilesetSettings::~WidgetTilesetSettings()
 {
     delete ui;
-}
-
-void WidgetTilesetSettings::setSquares(QHash<QPoint, CollisionSquare*>* squares)
-{
-    ui->widgetTilesetPraticable->setSquares(squares);
-    ui->widgetTilesetDirection->setSquares(squares);
 }
 
 PictureKind WidgetTilesetSettings::kind() const {
@@ -54,8 +48,8 @@ void WidgetTilesetSettings::setKind(PictureKind kind) {
 //
 // -------------------------------------------------------
 
-void WidgetTilesetSettings::updateImage(SystemPicture* picture){
-    m_picture = picture;
+void WidgetTilesetSettings::updateImage(SystemPicture* picture) {
+    m_pictureID = picture->id();
     ui->widgetTilesetPraticable->updateImage(picture, m_kind);
     ui->widgetTilesetDirection->updateImage(picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
@@ -66,9 +60,9 @@ void WidgetTilesetSettings::updateImage(SystemPicture* picture){
 void WidgetTilesetSettings::updateImageSpecial(QImage& editedImage,
                                                SystemPicture* picture)
 {
-    m_picture = picture;
-    ui->widgetTilesetPraticable->updateImageSpecial(editedImage, picture);
-    ui->widgetTilesetDirection->updateImageSpecial(editedImage);
+    m_pictureID = picture->id();
+    ui->widgetTilesetPraticable->updateImageSpecial(editedImage, picture, m_kind);
+    ui->widgetTilesetDirection->updateImageSpecial(editedImage, picture, m_kind);
     ui->checkBoxRepeat->setChecked(picture->repeatCollisions());
 }
 
@@ -144,6 +138,7 @@ void WidgetTilesetSettings::on_horizontalSlider_valueChanged(int value) {
 // -------------------------------------------------------
 
 void WidgetTilesetSettings::on_checkBoxRepeat_toggled(bool checked) {
-    m_picture->setRepeatCollisions(checked, m_kind);
+    SystemPicture::getByID(m_pictureID, m_kind)->setRepeatCollisions(checked,
+        m_kind);
     ui->widgetTilesetPraticable->repaint();
 }
