@@ -41,6 +41,7 @@ public:
     static QString getFormatNumber(int number, int format = 4, int type = 10);
     static bool getSubVersions(QString& version, int& m, int& f, int& b);
     static int versionDifferent(QString projectVersion, QString otherVersion);
+    static int modulo(int x, int m);
 };
 
 #endif // COMMON_H

@@ -207,3 +207,11 @@ int Common::versionDifferent(QString projectVersion, QString otherVersion)
         }
     }
 }
+
+// -------------------------------------------------------
+
+int Common::modulo(int x, int m) {
+    int r = x % m;
+
+    return r < 0 ? r + m : r;
+}

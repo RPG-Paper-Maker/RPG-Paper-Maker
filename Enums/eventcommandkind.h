@@ -51,7 +51,8 @@ enum class EventCommandKind {
     PlayBackgroundSound,
     StopBackgroundSound,
     PlayASound,
-    PlayMusicEffect
+    PlayMusicEffect,
+    Last
 };
 
 #endif // EVENTCOMMANDKIND_H

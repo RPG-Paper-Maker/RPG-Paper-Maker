@@ -48,6 +48,10 @@ public:
     bool isErasable() const;
     int getSongID(QStandardItemModel* parameters) const;
 
+    static QString kindToString(EventCommandKind kind);
+    static bool eventCommandKindLessThan(const EventCommandKind &v1, const
+        EventCommandKind &v2);
+
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
     void setCopy(const EventCommand& copy);

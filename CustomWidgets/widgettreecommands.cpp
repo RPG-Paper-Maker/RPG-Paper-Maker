@@ -14,7 +14,12 @@
 #include "eventcommand.h"
 #include "rpm.h"
 #include "systemcommonreaction.h"
+#include "common.h"
 #include <QDebug>
+#include <algorithm>
+
+int WidgetTreeCommands::rectHeight = 17;
+int WidgetTreeCommands::rectXOffset = 20;
 
 // -------------------------------------------------------
 //
@@ -26,8 +31,11 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     QTreeView(parent),
     p_model(nullptr),
     m_linkedObject(nullptr),
-    m_parameters(nullptr)
+    m_parameters(nullptr),
+    m_displayEnterBar(true)
 {
+    this->setMouseTracking(true);
+    this->setFocus();
     this->setWordWrap(true);
     this->setHeaderHidden(true);
     this->setIndentation(15);
@@ -43,6 +51,17 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
     m_contextMenuCommonCommands = ContextMenuList::createContextCommand(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
+
+    // Timer
+    connect(&m_timerEnterCommand, SIGNAL(timeout()), this, SLOT(
+        onTimerEnteredCommand()));
+    m_timerEnterCommand.setInterval(350);
+    m_timerEnterCommand.setSingleShot(false);
+    m_timerEnterCommand.start();
+    m_enteredCommand = "";
+
+    // Commands list
+    initializeCommandsList();
 }
 
 WidgetTreeCommands::~WidgetTreeCommands()
@@ -105,7 +124,11 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
     QList<QStandardItem*> list;
     QStandardItem* item;
     EventCommand* command;
-    QModelIndexList indexes = this->selectionModel()->selectedRows();
+    QItemSelectionModel *selection = this->selectionModel();
+    if (selection == nullptr) {
+        return QList<QStandardItem *>();
+    }
+    QModelIndexList indexes = selection->selectedRows();
 
     if (!indexes.isEmpty()){
         item = p_model->itemFromIndex(indexes.at(0));
@@ -158,10 +181,28 @@ QStandardItemModel *WidgetTreeCommands::getModel() const { return p_model; }
 // -------------------------------------------------------
 //  newCommand: open dialog commands for creating a new one
 
-void WidgetTreeCommands::newCommand(QStandardItem* selected){
-    DialogCommands dialog(m_linkedObject, m_parameters);
-    if (dialog.exec() == QDialog::Accepted){
-        EventCommand* command = dialog.getCommand();
+void WidgetTreeCommands::newCommand(QStandardItem* selected) {
+    EventCommand *command;
+    int result = QDialog::Accepted;
+
+    if (m_enteredCommand.isEmpty()) {
+        DialogCommands dialog(m_linkedObject, m_parameters);
+        result = dialog.exec();
+        command = dialog.getCommand();
+    } else {
+        EventCommandKind kind = m_availableCommands.at(m_indexSelectedCommand);
+        DialogCommand *dialogCommand = DialogCommands::getDialogCommand(kind,
+            nullptr, m_linkedObject, m_parameters);
+        m_enteredCommand = "";
+        updateEnteredCommandText();
+        if (dialogCommand == nullptr) {
+            command = new EventCommand(kind);
+        } else {
+            result = dialogCommand->exec();
+            command = dialogCommand->getCommand();
+        }
+    }
+    if (result == QDialog::Accepted) {
         QStandardItem* root = getRootOfCommand(selected);
         int insertionRow = getInsertionRow(selected, root);
         // post-increment insertionRow to prepare possible extra row, depending on command kind
@@ -189,6 +230,7 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected){
 
         // Update text in nodes
         updateAllNodesString(p_model->invisibleRootItem());
+        selected->setText("> |");
     }
 }
 
@@ -542,6 +584,8 @@ bool WidgetTreeCommands::itemLessThan(const QStandardItem* item1,
     return item1->row() < item2->row();
 }
 
+// -------------------------------------------------------
+
 int WidgetTreeCommands::getInsertionRow(const QStandardItem* selected, const QStandardItem* root)
 {
     if (selected != nullptr){
@@ -552,6 +596,109 @@ int WidgetTreeCommands::getInsertionRow(const QStandardItem* selected, const QSt
         // No selection, new commands should be inserted just above the None command at the end
         return root->rowCount() - 1;
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::updateEnteredCommandText(bool updateCommands) {
+    QStandardItem *item = getSelected();
+    EventCommand *command;
+
+    if (item != nullptr) {
+        command = reinterpret_cast<EventCommand *>(item->data().value<quintptr>());
+        if (command->kind() == EventCommandKind::None) {
+            item->setText("> " + m_enteredCommand + (m_displayEnterBar ? "|" : ""));
+            if (updateCommands) {
+                updateAvailableCommands();
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::initializeCommandsList() {
+    EventCommandKind kind;
+
+    for (int i = static_cast<int>(EventCommandKind::ShowText); i != static_cast<
+        int>(EventCommandKind::Last); i++)
+    {
+        kind = static_cast<EventCommandKind>(i);
+        if (!EventCommand::kindToString(kind).isEmpty()) {
+            m_listCommands << kind;
+        }
+    }
+
+    std::sort(m_listCommands.begin(), m_listCommands.end(), EventCommand
+        ::eventCommandKindLessThan);
+    m_indexSelectedCommand = 0;
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::updateAvailableCommands() {
+    EventCommandKind kind;
+    int i, j, k;
+
+    m_availableCommands = QList<EventCommandKind>();
+    for (i = 0; i < m_listCommands.length(); i++) {
+        kind = m_listCommands.at(i);
+        QString command = EventCommand::kindToString(kind).toLower();
+        QString currentCommand = m_enteredCommand.toLower();
+        QStringList split1 = command.split(' ');
+        QStringList split2 = currentCommand.split(' ');
+        if (currentCommand == "") {
+            split2 = QStringList();
+            split2 << "";
+        }
+        QStringList grp1 = split1;
+        QStringList grp2 = split2;
+
+        for (j = 0; j < split1.length(); j++) {
+            for (k = 0; k < split2.length(); k++) {
+                if (split2.at(k) != "" && split1.at(j).contains(split2.at(k))) {
+                    grp2.removeAt(k);
+                }
+            }
+        }
+
+        if (grp2.length() == 0) {
+            m_availableCommands.append(kind);
+        }
+    }
+    m_indexSelectedCommand = 0;
+
+    repaint();
+}
+
+// -------------------------------------------------------
+
+bool WidgetTreeCommands::isMouseSelectingCommand(const QPoint &pos) {
+    int x;
+    QStandardItem *item;
+    QRect rect;
+    QRect rectAll;
+    bool isContaining;
+
+    item = getSelected();
+    if (item != nullptr) {
+        rect = this->visualRect(item->index());
+        x = rect.x() + WidgetTreeCommands::rectXOffset;
+        rectAll.setX(x);
+        rectAll.setY(rect.y() + WidgetTreeCommands::rectHeight);
+        rectAll.setWidth(this->width() - x);
+        rectAll.setHeight(m_availableCommands.length() * WidgetTreeCommands
+            ::rectHeight);
+        isContaining = rectAll.contains(pos);
+        if (isContaining) {
+            m_indexSelectedCommand = (pos.y() - rectAll.y()) / WidgetTreeCommands
+                ::rectHeight;
+            repaint();
+        }
+        return isContaining;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------
@@ -567,6 +714,7 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
     QKeySequence seq = RPM::getKeySequence(event);
     QList<QAction*> actions = m_contextMenuCommonCommands->actions();
     QAction* action;
+    int key;
 
     // Forcing shortcuts
     action = actions.at(1);
@@ -594,15 +742,93 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
         contextDelete();
         return;
     }
+
+    // Alphabet for entering command
+    key = event->key();
+    if (key >= Qt::Key_A && key <= Qt::Key_Z) {
+        m_enteredCommand += event->text();
+        m_enteredCommand.replace(0, 1, m_enteredCommand.at(0).toUpper());
+        updateEnteredCommandText();
+        return;
+    }
+    if (key == Qt::Key_Up) {
+        if (m_availableCommands.length() > 0) {
+            m_indexSelectedCommand--;
+            m_indexSelectedCommand = Common::modulo(m_indexSelectedCommand,
+                m_availableCommands.length());
+            repaint();
+            return;
+        }
+    }
+    if (key == Qt::Key_Down) {
+        if (m_availableCommands.length() > 0) {
+            m_indexSelectedCommand++;
+            m_indexSelectedCommand = Common::modulo(m_indexSelectedCommand,
+                m_availableCommands.length());
+            repaint();
+            return;
+        }
+    }
+    if (key == Qt::Key_Backspace) {
+        m_enteredCommand = m_enteredCommand.left(m_enteredCommand.length() - 1);
+        updateEnteredCommandText();
+        return;
+    }
 }
 
 // -------------------------------------------------------
-//  mouseDoubleClickEvent: when double clicking, edit if existing command,
-//  if not create a new one
+
+void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
+    QPoint pos = event->pos();
+    if (isMouseSelectingCommand(pos)) {
+        contextNew();
+    } else {
+        QTreeView::mousePressEvent(event);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::mouseMoveEvent(QMouseEvent *event) {
+    QPoint pos = event->pos();
+    isMouseSelectingCommand(pos);
+    QTreeView::mouseMoveEvent(event);
+}
+
+// -------------------------------------------------------
 
 void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
-    if (event->button() == Qt::MouseButton::LeftButton)
+    if (event->button() == Qt::MouseButton::LeftButton) {
         openCommand();
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::paintEvent(QPaintEvent *event) {
+    QTreeView::paintEvent(event);
+    QPainter painter(viewport());
+    QStandardItem *item;
+    QRect rect;
+    int i, x, y, w;
+    bool isSelected;
+
+    item = getSelected();
+    if (item != nullptr) {
+        rect = this->visualRect(item->index());
+        for (i = 0; i < m_availableCommands.length(); i++) {
+            isSelected = i == m_indexSelectedCommand;
+            x = rect.x() + WidgetTreeCommands::rectXOffset;
+            y = rect.y() + ((i + 1) * WidgetTreeCommands::rectHeight);
+            w = this->width() - x;
+            painter.fillRect(x, y, w, WidgetTreeCommands::rectHeight, isSelected ? RPM::colorAlmostWhite : RPM::colorGrey);
+            painter.setPen(isSelected ? RPM::colorAlmostBlack : RPM::colorAlmostWhite);
+            painter.drawText(x, y + WidgetTreeCommands::rectHeight - 4, EventCommand::kindToString(m_availableCommands.at(i)));
+            painter.setPen(RPM::colorGraySelection);
+            painter.drawLine(x, y + WidgetTreeCommands::rectHeight - 1, x + w, y +
+                WidgetTreeCommands::rectHeight - 1);
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -611,11 +837,28 @@ void WidgetTreeCommands::mouseDoubleClickEvent(QMouseEvent* event){
 //
 // -------------------------------------------------------
 
-void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex) {
+void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
+    indexBefore)
+{
     QStandardItem* selected = p_model->itemFromIndex(index);
+    QStandardItem* selectedBefore = p_model->itemFromIndex(indexBefore);
     EventCommand* command = nullptr;
-    if (selected != nullptr)
-        command = (EventCommand*)selected->data().value<quintptr>();
+
+    m_enteredCommand = "";
+    if (selected != nullptr) {
+        command = reinterpret_cast<EventCommand *>(selected->data().value<
+            quintptr>());
+        if (command->kind() == EventCommandKind::None) {
+            m_displayEnterBar = true;
+            m_timerEnterCommand.start();
+            selected->setText("> |");
+            updateEnteredCommandText();
+        }
+    }
+    if (selectedBefore != nullptr) {
+        selectedBefore->setText(reinterpret_cast<EventCommand *>(selectedBefore
+            ->data().value<quintptr>())->toString(m_linkedObject, m_parameters));
+    }
 
     m_contextMenuCommonCommands->canEdit(command != nullptr &&
                                          command->isEditable());
@@ -628,6 +871,13 @@ void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &){
 
     for (int i = 0; i < l.size(); i++)
         selectChildren(p_model->itemFromIndex(l.at(i)));
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::onTimerEnteredCommand() {
+    m_displayEnterBar = !m_displayEnterBar;
+    updateEnteredCommandText(false);
 }
 
 // -------------------------------------------------------

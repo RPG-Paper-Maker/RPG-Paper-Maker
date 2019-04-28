@@ -15,6 +15,7 @@
 #include <QTreeView>
 #include <QMouseEvent>
 #include <QStandardItemModel>
+#include <QTimer>
 #include "gamedatas.h"
 #include "contextmenulist.h"
 #include "eventcommand.h"
@@ -33,7 +34,10 @@ class WidgetTreeCommands : public QTreeView
     Q_OBJECT
 
 public:
-    explicit WidgetTreeCommands(QWidget *parent = 0);
+    static int rectHeight;
+    static int rectXOffset;
+
+    explicit WidgetTreeCommands(QWidget *parent = nullptr);
     ~WidgetTreeCommands();
     void initializeModel(QStandardItemModel* m);
     void initializeLinkedObject(SystemCommonObject* object);
@@ -42,15 +46,20 @@ public:
     QStandardItemModel* getModel() const;
     QList<QStandardItem*> getAllSelected() const;
 
-private:
+protected:
     QStandardItemModel* p_model;
     GameDatas* p_gameDatas;
     ContextMenuList* m_contextMenuCommonCommands;
     QList<QStandardItem*> m_copiedCommands;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
+    QString m_enteredCommand;
+    QTimer m_timerEnterCommand;
+    bool m_displayEnterBar;
+    QList<EventCommandKind> m_listCommands;
+    QList<EventCommandKind> m_availableCommands;
+    int m_indexSelectedCommand;
 
-protected:
     QStandardItem* getRootOfCommand(QStandardItem* selected) const;
     void newCommand(QStandardItem *selected);
     void editCommand(QStandardItem *selected, EventCommand *command);
@@ -75,13 +84,21 @@ protected:
     /// Return the index of the row above current selection.
     /// If there is no selection, return the index of the last row.
     static int getInsertionRow(const QStandardItem* selected, const QStandardItem* root);
+    void updateEnteredCommandText(bool updateCommands = true);
+    void initializeCommandsList();
+    void updateAvailableCommands();
+    bool isMouseSelectingCommand(const QPoint &pos);
 
     virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
+    void paintEvent(QPaintEvent *event);
 
 private slots:
-    void onSelectionChanged(QModelIndex index, QModelIndex);
+    void onSelectionChanged(QModelIndex index, QModelIndex indexBefore);
     void onTreeViewClicked(const QModelIndex &);
+    void onTimerEnteredCommand();
     void showContextMenu(const QPoint & p);
     void contextNew();
     void contextEdit();

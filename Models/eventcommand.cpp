@@ -102,6 +102,76 @@ bool EventCommand::isErasable() const{
 
 // -------------------------------------------------------
 
+QString EventCommand::kindToString(EventCommandKind kind) {
+    switch (kind) {
+    case EventCommandKind::ShowText:
+        return "Show text...";
+    case EventCommandKind::ChangeVariables:
+        return "Change variables...";
+    case EventCommandKind::EndGame:
+        return "Game Over";
+    case EventCommandKind::While:
+        return "Loop";
+    case EventCommandKind::WhileBreak:
+        return "Break loop";
+    case EventCommandKind::If:
+        return "Condition....";
+    case EventCommandKind::OpenMainMenu:
+        return "Open main menu";
+    case EventCommandKind::OpenSavesMenu:
+        return "Open saves menu";
+    case EventCommandKind::ModifyInventory:
+        return "Modify inventory...";
+    case EventCommandKind::ModifyTeam:
+        return "Modify team...";
+    case EventCommandKind::StartBattle:
+        return "Start a battle...";
+    case EventCommandKind::ChangeState:
+        return "Change state...";
+    case EventCommandKind::SendEvent:
+        return "Send event...";
+    case EventCommandKind::TeleportObject:
+        return "Teleport object...";
+    case EventCommandKind::MoveObject:
+        return "Move object...";
+    case EventCommandKind::Wait:
+        return "Wait...";
+    case EventCommandKind::MoveCamera:
+        return "Move camera...";
+    case EventCommandKind::PlayMusic:
+        return "Play a music...";
+    case EventCommandKind::StopMusic:
+        return "Stop music...";
+    case EventCommandKind::PlayBackgroundSound:
+        return "Play a background sound...";
+    case EventCommandKind::StopBackgroundSound:
+        return "Stop background sound...";
+    case EventCommandKind::PlayASound:
+        return "Play a sound...";
+    case EventCommandKind::PlayMusicEffect:
+        return "Play a music effect...";
+    case EventCommandKind::None:
+    case EventCommandKind::EndWhile:
+        case EventCommandKind::InputNumber:
+    case EventCommandKind::Else:
+    case EventCommandKind::EndIf:
+    case EventCommandKind::IfWin:
+    case EventCommandKind::IfLose:
+    case EventCommandKind::Last:
+        return "";
+    }
+}
+
+// -------------------------------------------------------
+
+bool EventCommand::eventCommandKindLessThan(const EventCommandKind &v1, const
+    EventCommandKind &v2)
+{
+    return EventCommand::kindToString(v1) < EventCommand::kindToString(v2);
+}
+
+// -------------------------------------------------------
+
 int EventCommand::getSongID(QStandardItemModel *parameters) const
 {
     int i = 0;
@@ -129,7 +199,7 @@ void EventCommand::setCopy(const EventCommand& copy){
 QString EventCommand::toString(SystemCommonObject* object,
                                QStandardItemModel* parameters) const
 {
-    QString str = ">";
+    QString str = "> ";
 
     switch (p_kind) {
     case EventCommandKind::ShowText:

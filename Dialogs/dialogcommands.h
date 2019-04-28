@@ -37,7 +37,7 @@ class DialogCommands : public QDialog
 public:
     explicit DialogCommands(SystemCommonObject* object = nullptr,
                             QStandardItemModel* parameters = nullptr,
-                            QWidget *parent = 0);
+                            QWidget *parent = nullptr);
     ~DialogCommands();
     static DialogCommand* getDialogCommand(EventCommandKind kind,
                                            EventCommand *command,
