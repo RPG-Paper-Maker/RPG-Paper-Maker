@@ -175,6 +175,11 @@ void SystemPicture::setCopy(const SystemPicture& super){
     SuperListItem::setCopy(super);
 
     m_isBR = super.m_isBR;
+    QHash<QPoint, CollisionSquare*>::const_iterator i;
+    for (i = super.m_collisions.begin(); i != super.m_collisions.end(); i++) {
+        m_collisions.insert(i.key(), i.value()->createCopy());
+    }
+    m_repeatCollisions = super.m_repeatCollisions;
 }
 
 // -------------------------------------------------------
