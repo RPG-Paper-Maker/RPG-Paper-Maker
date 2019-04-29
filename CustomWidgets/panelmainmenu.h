@@ -37,9 +37,13 @@ public:
 private:
     Ui::PanelMainMenu *ui;
 
+signals:
+    void openingProject(QString path);
+
 private slots:
     void on_pushButtonNewProject_clicked();
     void on_pushButtonOpenProject_clicked();
+    void openRecentProject(QString path);
 };
 
 #endif // PANELMAINMENU_H

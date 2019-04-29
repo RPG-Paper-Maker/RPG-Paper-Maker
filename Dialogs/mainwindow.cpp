@@ -58,6 +58,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // Update main panel
     mainPanel = new PanelMainMenu(this);
     ui->centralWidget->layout()->addWidget(mainPanel);
+    connect(mainPanel, SIGNAL(openingProject(QString)), this, SLOT(
+        openRecentProject(QString)));
+
+    // Add actions for recent projects
+    updateMenuRecentProjects();
 
     // Menu bar enabled actions
     enableNoGame();
@@ -69,6 +74,7 @@ MainWindow::~MainWindow()
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
+    cleanRecentProjectsActions();
     RPM::kill();
 }
 
@@ -132,6 +138,8 @@ void MainWindow::openProject(QString pathProject) {
         RPM::get()->setProject(project);
 
         if (project->read(pathProject)) {
+            updateRecentProjects(project->gameDatas()->systemDatas()
+                ->projectName()->mainName(), pathProject);
             enableGame();
             replaceMainPanel(new PanelProject(this, project));
         }
@@ -157,7 +165,10 @@ bool MainWindow::closeProject(){
     RPM::get()->setProject(nullptr);
     WidgetMapEditor* mapEditor = ((PanelProject*)mainPanel)->widgetMapEditor();
     mapEditor->setVisible(false);
-    replaceMainPanel(new PanelMainMenu(this));
+    PanelMainMenu * panel = new PanelMainMenu(this);
+    connect(panel, SIGNAL(openingProject(QString)), this, SLOT(
+        openRecentProject(QString)));
+    replaceMainPanel(panel);
 
     return true;
 }
@@ -172,6 +183,7 @@ void MainWindow::replaceMainPanel(QWidget* replacement){
     layout->addWidget(mainPanel);
     mainPanel->setFocus();
     mainPanel->update();
+    updateMenuRecentProjects();
 }
 
 // -------------------------------------------------------
@@ -294,6 +306,46 @@ bool MainWindow::close() {
     }
 
     return true;
+}
+
+// -------------------------------------------------------
+
+void MainWindow::updateRecentProjects(QString projectName, QString path) {
+    RPM::get()->engineSettings()->updateProject(projectName, path);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::updateMenuRecentProjects() {
+    QAction *action;
+    QString path;
+    int i, l;
+
+    // Clean menus
+    cleanRecentProjectsActions();
+
+    // Add menus
+    for (i = 0, l = RPM::get()->engineSettings()->projectNumber(); i < l; i++) {
+        action = new QAction(RPM::get()->engineSettings()->projectAtName(i));
+        path = RPM::get()->engineSettings()->projectAtLink(i);
+        connect(action, &QAction::triggered, [this, path]() {
+            this->openProject(path);
+        });
+        ui->menuOpen_project->addAction(action);
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::cleanRecentProjectsActions() {
+    QAction *action;
+    int i;
+
+    for (i = ui->menuOpen_project->actions().length() - 1; i >= 1; i--) {
+        action = ui->menuOpen_project->actions().at(i);
+        ui->menuOpen_project->removeAction(action);
+        delete action;
+    }
 }
 
 // -------------------------------------------------------
@@ -594,6 +646,12 @@ void MainWindow::checkUpdate() {
 
     qApp->quit();
     QProcess::startDetached(path, arguments);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::openRecentProject(QString path) {
+    this->openProject(path);
 }
 
 // -------------------------------------------------------

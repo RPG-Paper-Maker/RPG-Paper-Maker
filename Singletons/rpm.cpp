@@ -25,7 +25,9 @@ QSet<int> RPM::mapsUndoRedo;
 QString RPM::shadersExtension = "-3.0";
 
 // COLORS
+const QColor RPM::colorGraySelectionDarker = QColor(60, 60, 60);
 const QColor RPM::colorGraySelection = QColor(80, 80, 80);
+const QColor RPM::colorGraySelectionLighter = QColor(220, 220, 220);
 const QColor RPM::colorGraySelectionBackground = QColor(80, 80, 80, 75);
 const QColor RPM::colorPurpleSelection = QColor(134, 29, 226);
 const QColor RPM::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);

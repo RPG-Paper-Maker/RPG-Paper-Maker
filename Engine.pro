@@ -292,7 +292,8 @@ HEADERS += \
     Enums/caracteristickind.h \
     Enums/increasedecreasekind.h \
     Dialogs/Systems/dialogsystemcaracteristic.h \
-    Models/GameDatas/titlescreengameoverdatas.h
+    Models/GameDatas/titlescreengameoverdatas.h \
+    CustomWidgets/panelrecentprojects.h
 
 SOURCES += \
     main.cpp \
@@ -523,7 +524,8 @@ SOURCES += \
     Dialogs/Systems/dialogsystemcost.cpp \
     Models/System/systemcaracteristic.cpp \
     Dialogs/Systems/dialogsystemcaracteristic.cpp \
-    Models/GameDatas/titlescreengameoverdatas.cpp
+    Models/GameDatas/titlescreengameoverdatas.cpp \
+    CustomWidgets/panelrecentprojects.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

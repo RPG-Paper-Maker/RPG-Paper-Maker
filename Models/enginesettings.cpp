@@ -16,6 +16,10 @@
 #include <QApplication>
 #include <QStyleFactory>
 
+const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
+const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
+const int EngineSettings::MAX_PROJECTS_NUMBER = 6;
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -67,6 +71,18 @@ ThemeKind EngineSettings::theme() const {
 
 void EngineSettings::setTheme(ThemeKind t) {
     m_theme = t;
+}
+
+int EngineSettings::projectNumber() const {
+    return m_projectNames.length();
+}
+
+QString EngineSettings::projectAtName(int i) const {
+    return m_projectNames.at(i);
+}
+
+QString EngineSettings::projectAtLink(int i) const {
+    return m_projectLinks.at(i);
 }
 
 // -------------------------------------------------------
@@ -150,12 +166,37 @@ void EngineSettings::setDefault(){
 }
 
 // -------------------------------------------------------
+
+void EngineSettings::updateProject(QString name, QString link) {
+    int index = m_projectLinks.indexOf(link);
+    int number;
+    if (index != -1) {
+        m_projectNames.removeAt(index);
+        m_projectLinks.removeAt(index);
+    }
+
+    m_projectNames.insert(0, name);
+    m_projectLinks.insert(0, link);
+
+    number = projectNumber();
+    if (number > MAX_PROJECTS_NUMBER) {
+        m_projectNames.removeAt(number - 1);
+        m_projectLinks.removeAt(number - 1);
+    }
+
+    write();
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
 // -------------------------------------------------------
 
-void EngineSettings::read(const QJsonObject &json){
+void EngineSettings::read(const QJsonObject &json) {
+    QJsonArray tab;
+    int i;
+
     m_keyBoardDatas->read(json["kb"].toObject());
 
     if (json.contains("zp")) {
@@ -163,12 +204,23 @@ void EngineSettings::read(const QJsonObject &json){
     }
     m_theme = json.contains("theme") ? static_cast<ThemeKind>(
         json["theme"].toInt()) : ThemeKind::Dark;
+
+    tab = json[JSON_PROJECT_NAMES].toArray();
+    for (i = 0; i < tab.size(); i++) {
+        m_projectNames.append(tab.at(i).toString());
+    }
+    tab = json[JSON_PROJECT_LINKS].toArray();
+    for (i = 0; i < tab.size(); i++) {
+        m_projectLinks.append(tab.at(i).toString());
+    }
 }
 
 // -------------------------------------------------------
 
-void EngineSettings::write(QJsonObject &json) const{
+void EngineSettings::write(QJsonObject &json) const {
     QJsonObject obj;
+    QJsonArray tab;
+    int i;
 
     m_keyBoardDatas->write(obj);
     json["kb"] = obj;
@@ -176,4 +228,13 @@ void EngineSettings::write(QJsonObject &json) const{
     if (m_theme != ThemeKind::Dark) {
         json["theme"] = static_cast<int>(m_theme);
     }
+    for (i = 0; i < m_projectNames.length(); i++) {
+        tab.append(m_projectNames.at(i));
+    }
+    json[JSON_PROJECT_NAMES] = tab;
+    tab = QJsonArray();
+    for (i = 0; i < m_projectLinks.length(); i++) {
+        tab.append(m_projectLinks.at(i));
+    }
+    json[JSON_PROJECT_LINKS] = tab;
 }

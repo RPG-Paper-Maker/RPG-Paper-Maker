@@ -7,7 +7,8 @@
         "Change game name (displayed on window game title)",
         "Export standalone: major and minor version selection / overwrite existing folder : https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/44",
         "Keyboard option for entering object commands",
-        "Multiline for show text command: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/23"
+        "Multiline for show text command: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/23",
+        "Ecentprojects available on beginning screen and menu bar Open project"
     ],
 	"bugs": [
         "Correcting crashes when canceling picture change in tilesets menus: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/39",

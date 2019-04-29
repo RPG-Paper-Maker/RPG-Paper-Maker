@@ -26,6 +26,10 @@
 class EngineSettings : public Serializable
 {
 public:
+    static const QString JSON_PROJECT_NAMES;
+    static const QString JSON_PROJECT_LINKS;
+    static const int MAX_PROJECTS_NUMBER;
+
     EngineSettings();
     virtual ~EngineSettings();
     void read();
@@ -35,10 +39,14 @@ public:
     void setZoomPictures(int z);
     ThemeKind theme() const;
     void setTheme(ThemeKind t);
+    int projectNumber() const;
+    QString projectAtName(int i) const;
+    QString projectAtLink(int i) const;
 
     QString getThemeContent() const;
     void updateTheme();
     void setDefault();
+    void updateProject(QString name, QString link);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -47,6 +55,8 @@ protected:
     KeyBoardDatas* m_keyBoardDatas;
     int m_zoomPictures;
     ThemeKind m_theme;
+    QStringList m_projectNames;
+    QStringList m_projectLinks;
 
     QString readContent(QString name) const;
 };

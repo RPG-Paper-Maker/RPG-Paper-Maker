@@ -25,6 +25,9 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pushButtonNewProject->setAutoFillBackground(true);
+
+    connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this,
+        SLOT(openRecentProject(QString)));
 }
 
 PanelMainMenu::~PanelMainMenu()
@@ -46,4 +49,10 @@ void PanelMainMenu::on_pushButtonNewProject_clicked() {
 
 void PanelMainMenu::on_pushButtonOpenProject_clicked() {
     reinterpret_cast<MainWindow *>(parent()->parent())->openExistingProject();
+}
+
+// -------------------------------------------------------
+
+void PanelMainMenu::openRecentProject(QString path) {
+    emit openingProject(path);
 }

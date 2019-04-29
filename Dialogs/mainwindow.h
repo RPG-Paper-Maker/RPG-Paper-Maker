@@ -53,6 +53,9 @@ public:
     void saveAllMaps();
     void deleteTempMaps();
     bool close();
+    void updateRecentProjects(QString projectName, QString path);
+    void updateMenuRecentProjects();
+    void cleanRecentProjectsActions();
 
 private:
     Ui::MainWindow *ui;
@@ -92,6 +95,7 @@ private slots:
     void on_actionPlay_triggered();
     void on_actionAbout_triggered();
     void checkUpdate();
+    void openRecentProject(QString path);
     void closeEvent(QCloseEvent *event);
 };
 
