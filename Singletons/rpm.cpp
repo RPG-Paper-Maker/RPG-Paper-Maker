@@ -35,6 +35,7 @@ const QColor RPM::colorAlmostBlack = QColor(25, 25, 25);
 const QColor RPM::colorAlmostTransparent = QColor(0, 0, 0, 20);
 const QColor RPM::colorFortyTransparent = QColor(0, 0, 0, 40);
 const QColor RPM::colorGrey = QColor(90, 90, 90);
+const QColor RPM::colorMenuSelectionBlue = QColor(47, 139, 196);
 
 // PATHS DATAS
 const QString RPM::pathBasic = Common::pathCombine("Content", "basic");

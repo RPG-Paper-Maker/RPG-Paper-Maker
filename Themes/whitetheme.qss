@@ -17,6 +17,11 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+QWidget {
+    background-color: white;
+    color: black;
+}
+
 QGroupBox {
     border: 1px solid silver;
     border-radius: 3px;

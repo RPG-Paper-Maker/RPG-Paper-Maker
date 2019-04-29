@@ -59,6 +59,7 @@ public:
     const static QColor colorAlmostTransparent;
     const static QColor colorFortyTransparent;
     const static QColor colorGrey;
+    const static QColor colorMenuSelectionBlue;
 
     // PATHS
     const static QString pathBasic;

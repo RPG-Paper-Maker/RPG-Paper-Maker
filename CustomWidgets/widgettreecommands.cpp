@@ -812,21 +812,27 @@ void WidgetTreeCommands::paintEvent(QPaintEvent *event) {
     QRect rect;
     int i, x, y, w;
     bool isSelected;
+    ThemeKind themeKind;
 
     item = getSelected();
     if (item != nullptr) {
         rect = this->visualRect(item->index());
+        themeKind = RPM::get()->engineSettings()->theme();
         for (i = 0; i < m_availableCommands.length(); i++) {
             isSelected = i == m_indexSelectedCommand;
             x = rect.x() + WidgetTreeCommands::rectXOffset;
             y = rect.y() + ((i + 1) * WidgetTreeCommands::rectHeight);
             w = this->width() - x;
-            painter.fillRect(x, y, w, WidgetTreeCommands::rectHeight, isSelected ? RPM::colorAlmostWhite : RPM::colorGrey);
-            painter.setPen(isSelected ? RPM::colorAlmostBlack : RPM::colorAlmostWhite);
-            painter.drawText(x, y + WidgetTreeCommands::rectHeight - 4, EventCommand::kindToString(m_availableCommands.at(i)));
+            painter.fillRect(x, y, w, WidgetTreeCommands::rectHeight, isSelected
+                ? RPM::colorMenuSelectionBlue : (themeKind == ThemeKind::Dark ?
+                RPM::colorGrey : RPM::colorAlmostWhite));
+            painter.setPen(isSelected ? RPM::colorAlmostWhite : (themeKind ==
+                ThemeKind::Dark ? RPM::colorAlmostWhite : RPM::colorAlmostBlack));
+            painter.drawText(x, y + WidgetTreeCommands::rectHeight - 4,
+                EventCommand::kindToString(m_availableCommands.at(i)));
             painter.setPen(RPM::colorGraySelection);
-            painter.drawLine(x, y + WidgetTreeCommands::rectHeight - 1, x + w, y +
-                WidgetTreeCommands::rectHeight - 1);
+            painter.drawLine(x, y + WidgetTreeCommands::rectHeight - 1, x + w, y
+                + WidgetTreeCommands::rectHeight - 1);
         }
     }
 }
