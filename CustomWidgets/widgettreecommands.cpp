@@ -230,7 +230,11 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected) {
 
         // Update text in nodes
         updateAllNodesString(p_model->invisibleRootItem());
-        selected->setText("> |");
+        if (reinterpret_cast<EventCommand *>(selected->data().value<quintptr>())
+            ->kind() == EventCommandKind::None)
+        {
+            selected->setText("> |");
+        }
     }
 }
 
