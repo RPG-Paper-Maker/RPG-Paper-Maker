@@ -38,10 +38,13 @@ public:
 private:
     Ui::DialogSystemState *ui;
     SystemState& m_state;
+    bool m_needUpdate;
+
     void initialize();
 
 private slots:
     void on_comboBox_currentIndexChanged(int index);
+    void on_pushButtonStates_clicked();
 };
 
 #endif // DIALOGSYSTEMSTATE_H

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogSystemState</class>
- <widget class="QDialog" name="DialogSystemState">
+ <class>DialogCompleteListStates</class>
+ <widget class="QDialog" name="DialogCompleteListStates">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
-    <height>122</height>
+    <width>231</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Select a state...</string>
+   <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -27,41 +27,46 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>State:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox">
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonStates">
-         <property name="text">
-          <string>Update complete list...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QGroupBox" name="groupBox_15">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>States</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_20">
+        <item row="0" column="0">
+         <widget class="PanelSuperList" name="panelSuperListStates" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>175</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>175</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
@@ -77,12 +82,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogSystemState</receiver>
+   <receiver>DialogCompleteListStates</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -98,7 +111,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogSystemState</receiver>
+   <receiver>DialogCompleteListStates</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

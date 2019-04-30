@@ -382,6 +382,12 @@ void Project::readTilesetsDatas() {
 
 // -------------------------------------------------------
 
+void Project::readCommonEvents() {
+    p_gameDatas->readCommonEvents(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::write(QString path){
     setPathCurrentProject(path);
     writeLangsDatas();
@@ -462,6 +468,12 @@ void Project::writeSystemDatas(){
 
 void Project::writeTilesetsDatas() {
     p_gameDatas->writeTilesets(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::writeCommonEvents() {
+    p_gameDatas->writeCommonEvents(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------

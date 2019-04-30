@@ -12,6 +12,7 @@
 #include "dialogsystemstate.h"
 #include "ui_dialogsystemstate.h"
 #include "rpm.h"
+#include "dialogcompleteliststates.h"
 
 // -------------------------------------------------------
 //
@@ -22,11 +23,11 @@
 DialogSystemState::DialogSystemState(SystemState& state, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSystemState),
-    m_state(state)
+    m_state(state),
+    m_needUpdate(true)
 {
     ui->setupUi(this);
     
-
     initialize();
 }
 
@@ -58,9 +59,27 @@ void DialogSystemState::initialize(){
 //
 // -------------------------------------------------------
 
-void DialogSystemState::on_comboBox_currentIndexChanged(int index){
-    SuperListItem* state = (SystemState*)
-            RPM::get()->project()->gameDatas()->commonEventsDatas()
-            ->modelStates()->item(index)->data().value<qintptr>();
-    m_state.setState(state);
+void DialogSystemState::on_comboBox_currentIndexChanged(int index) {
+    if (m_needUpdate) {
+        SuperListItem* state = reinterpret_cast<SystemState *>(RPM::get()
+            ->project()->gameDatas()->commonEventsDatas()->modelStates()->item(
+            index)->data().value<qintptr>());
+        m_state.setState(state);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystemState::on_pushButtonStates_clicked() {
+    DialogCompleteListStates dialog;
+
+    if (dialog.exec() == QDialog::Accepted) {
+        m_needUpdate = false;
+        RPM::get()->project()->writeCommonEvents();
+        ui->comboBox->clear();
+        m_needUpdate = true;
+        initialize();
+    } else {
+        RPM::get()->project()->readCommonEvents();
+    }
 }

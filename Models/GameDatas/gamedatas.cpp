@@ -174,7 +174,7 @@ void GameDatas::setDefaultItemsCharacters() {
 
 void GameDatas::read(QString path){
     readVariablesSwitches(path);
-    m_commonEventsDatas->read(path);
+    readCommonEvents(path);
     readSystem(path);
     readItems(path);
     readSkills(path);
@@ -285,9 +285,14 @@ void GameDatas::readTitleScreenGameOver(QString path) {
 
 // -------------------------------------------------------
 
+void GameDatas::readCommonEvents(QString path) {
+    m_commonEventsDatas->read(path);
+}
+
+// -------------------------------------------------------
+
 void GameDatas::write(QString path){
-    RPM::writeJSON(Common::pathCombine(path, RPM::pathCommonEvents),
-                     *m_commonEventsDatas);
+    writeCommonEvents(path);
     RPM::writeJSON(Common::pathCombine(path, RPM::pathVariables),
                      *m_variablesDatas);
     writeSystem(path);
@@ -394,4 +399,11 @@ void GameDatas::writeStatus(QString path) {
 void GameDatas::writeTitleScreenGameOver(QString path) {
     RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
         *m_titleScreenGameOverDatas);
+}
+
+// -------------------------------------------------------
+
+void GameDatas::writeCommonEvents(QString path) {
+    RPM::writeJSON(Common::pathCombine(path, RPM::pathCommonEvents),
+        *m_commonEventsDatas);
 }

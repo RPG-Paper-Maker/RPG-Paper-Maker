@@ -79,6 +79,7 @@ public:
     void readAnimations(QString path);
     void readStatus(QString path);
     void readTitleScreenGameOver(QString path);
+    void readCommonEvents(QString path);
     void write(QString path);
     void writeTilesets(QString path);
     void writeSystem(QString path);
@@ -94,6 +95,7 @@ public:
     void writeAnimations(QString path);
     void writeStatus(QString path);
     void writeTitleScreenGameOver(QString path);
+    void writeCommonEvents(QString path);
 
 private:
     CommonEventsDatas* m_commonEventsDatas;
