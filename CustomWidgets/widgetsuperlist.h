@@ -45,6 +45,7 @@ public:
     int getIndex();
     void setMaximum(int newSize);
     void addNewItem(SuperListItem* super);
+    void updateKeyboardUpDown(int offset);
 
 protected:
     void keyPressEvent(QKeyEvent *event);

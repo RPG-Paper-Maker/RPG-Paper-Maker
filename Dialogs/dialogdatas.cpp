@@ -43,6 +43,8 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     initializeTilesets(gameDatas);
     initializeAnimations(gameDatas);
     initializeStatus(gameDatas);
+
+    ui->panelSuperListClasses->list()->setFocus(Qt::FocusReason::MouseFocusReason);
 }
 
 DialogDatas::~DialogDatas()

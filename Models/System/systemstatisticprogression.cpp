@@ -129,6 +129,9 @@ QList<QStandardItem *> SystemStatisticProgression::getModelRow() const {
     itemInitial->setText(m_isFix ? m_table->initialValue()->toString() : "-");
     itemFinal->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemFinal->setText(m_isFix ? m_table->finalValue()->toString() : "-");
+    itemStatistic->setFlags(itemStatistic->flags() ^ (Qt::ItemIsDropEnabled));
+    itemInitial->setFlags(itemInitial->flags() ^ (Qt::ItemIsDropEnabled));
+    itemFinal->setFlags(itemFinal->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(itemStatistic);
     row.append(itemInitial);
     row.append(itemFinal);

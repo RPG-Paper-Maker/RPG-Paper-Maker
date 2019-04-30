@@ -81,8 +81,10 @@ QList<QStandardItem *> SystemClassSkill::getModelRow() const{
     QStandardItem* itemLevel = new QStandardItem;
     itemSkill->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemSkill->setText(toString());
+    itemSkill->setFlags(itemSkill->flags() ^ (Qt::ItemIsDropEnabled));
     itemLevel->setData(QVariant::fromValue(level()));
     itemLevel->setText(QString::number(level()));
+    itemLevel->setFlags(itemLevel->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(itemSkill);
     row.append(itemLevel);
 

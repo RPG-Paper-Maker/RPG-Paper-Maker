@@ -45,9 +45,7 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
     connect(ui->treeViewGame,
             SIGNAL(needsUpdateJson(SuperListItem*)), this,
             SLOT(on_updateJsonGame(SuperListItem*)));
-    QStandardItem* item = new QStandardItem;
-    item->setText(SuperListItem::beginningText);
-    m_gameKeyBoardDatas->model()->appendRow(item);
+    m_gameKeyBoardDatas->model()->appendRow(SuperListItem::getEmptyItem());
 
     // Menu controls
     updateMenuControls();

@@ -76,8 +76,12 @@ void PanelRecentProjects::leaveEvent(QEvent *) {
 // -------------------------------------------------------
 
 void PanelRecentProjects::mousePressEvent(QMouseEvent *) {
-    emit openingProject(RPM::get()->engineSettings()->projectAtLink(
-        m_indexSelectedProject));
+    if (m_indexSelectedProject >= 0 && m_indexSelectedProject < RPM::get()
+        ->engineSettings()->projectNumber())
+    {
+        emit openingProject(RPM::get()->engineSettings()->projectAtLink(
+            m_indexSelectedProject));
+    }
 }
 
 // -------------------------------------------------------

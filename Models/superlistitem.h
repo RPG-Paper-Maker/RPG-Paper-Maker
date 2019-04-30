@@ -65,6 +65,12 @@ public:
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
     static SuperListItem* getnewInstance(PictureKind kind);
+    static QStandardItem * getEmptyItem();
+    static void copy(QStandardItemModel *model, QStandardItemModel *modelToCopy);
+    static void readTree(QStandardItemModel *model, SuperListItem *newInstance,
+        const QJsonObject &json, const QString &name);
+    static void writeTree(QStandardItemModel *model, QJsonObject &json, const
+        QString &name);
 
     virtual void read(const QJsonObject &json);
     void readId(const QJsonObject &json);

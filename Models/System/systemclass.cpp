@@ -39,13 +39,7 @@ SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
     SystemClass(i, names, initialLevel, maxLevel, expBase, expInflation, new
         QStandardItemModel, new QStandardItemModel)
 {
-    QStandardItem* item;
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_statisticsProgression->appendRow(item);
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_skills->appendRow(item);
+
 }
 
 SystemClass::SystemClass(int i, LangsTranslation *names, int initialLevel, int
@@ -169,8 +163,6 @@ void SystemClass::read(const QJsonObject &json){
     SystemLang::read(json);
     QJsonArray tab;
     QList<QStandardItem *> row;
-    SystemStatisticProgression* statisticProgression;
-    SystemClassSkill* classSkill;
 
     // Experience
     m_initialLevel = -1;
@@ -200,24 +192,11 @@ void SystemClass::read(const QJsonObject &json){
     }
 
     // Statistics
-    tab = json[jsonStats].toArray();
-    for (int i = 0; i < tab.size(); i++){
-        statisticProgression = new SystemStatisticProgression;
-        statisticProgression->read(tab[i].toObject());
-        row = statisticProgression->getModelRow();
-        m_statisticsProgression->insertRow(
-                    m_statisticsProgression->invisibleRootItem()->rowCount()-1,
-                    row);
-    }
+    SuperListItem::readTree(m_statisticsProgression, new
+        SystemStatisticProgression, json, jsonStats);
 
     // Skills
-    tab = json[jsonSkills].toArray();
-    for (int i = 0; i < tab.size(); i++){
-        classSkill = new SystemClassSkill;
-        classSkill->read(tab[i].toObject());
-        row = classSkill->getModelRow();
-        m_skills->insertRow(m_skills->invisibleRootItem()->rowCount()-1, row);
-    }
+    SuperListItem::readTree(m_skills, new SystemClassSkill, json, jsonSkills);
 }
 
 // -------------------------------------------------------
@@ -226,7 +205,6 @@ void SystemClass::write(QJsonObject &json) const{
     SystemLang::write(json);
     QJsonArray tab;
     QJsonObject obj;
-    int l;
 
     // Experience
     if (m_initialLevel != -1) {
@@ -259,31 +237,8 @@ void SystemClass::write(QJsonObject &json) const{
     }
 
     // Statistics
-    tab = QJsonArray();
-    l = m_statisticsProgression->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        obj = QJsonObject();
-        SystemStatisticProgression *statisticsProgression = reinterpret_cast<
-            SystemStatisticProgression *>(m_statisticsProgression->item(i)
-            ->data().value<quintptr>());
-        statisticsProgression->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[jsonStats] = tab;
-    }
+    SuperListItem::writeTree(m_statisticsProgression, json, jsonStats);
 
     // Skills
-    tab = QJsonArray();
-    l = m_skills->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        obj = QJsonObject();
-        SystemClassSkill *classSkill = reinterpret_cast<SystemClassSkill*>(
-            m_skills->item(i)->data().value<quintptr>());
-        classSkill->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[jsonSkills] = tab;
-    }
+    SuperListItem::writeTree(m_skills, json, jsonSkills);
 }

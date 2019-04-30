@@ -47,16 +47,15 @@ public:
     QStandardItem* getSelected() const;
     void addNewItem(SuperListItem* super, QStandardItem* root, int index);
     void updateAllModelRow();
+    void updateKeyboardUpDown(int offset);
 
     static void copy(QStandardItemModel *model,
                      QStandardItemModel *modelToCopy);
-    static void read(QStandardItemModel *model, SuperListItem &newInstance,
-                     const QJsonArray &json);
-    static void write(QStandardItemModel *model, QJsonArray &json);
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent * event);
+    virtual void dropEvent(QDropEvent *event);
 
 private:
     QStandardItemModel* p_model;

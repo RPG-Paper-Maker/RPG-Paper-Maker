@@ -262,6 +262,16 @@ SuperListItem* SuperListItem::getnewInstance(PictureKind kind) {
 
 // -------------------------------------------------------
 
+QStandardItem * SuperListItem::getEmptyItem() {
+    QStandardItem *item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+
+    return item;
+}
+
+// -------------------------------------------------------
+
 QList<QStandardItem *> SuperListItem::getModelRow() const{
     QList<QStandardItem*> row = QList<QStandardItem*>();
     QStandardItem* item = new QStandardItem;
@@ -281,6 +291,71 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
 void SuperListItem::updateModelRow(QStandardItemModel* model, int row) {
     model->item(row, 0)->setText(toString());
 }
+
+// -------------------------------------------------------
+
+void SuperListItem::copy(QStandardItemModel *model,
+                           QStandardItemModel *modelToCopy)
+{
+    QList<QStandardItem*> row;
+    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount()-1; i++){
+        SuperListItem* super = reinterpret_cast<SuperListItem *>(modelToCopy
+            ->item(i)->data().value<quintptr>());
+        SuperListItem* newSuper = super->createCopy();
+        row = newSuper->getModelRow();
+        model->appendRow(row);
+    }
+    model->appendRow(SuperListItem::getEmptyItem());
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::readTree(QStandardItemModel *model, SuperListItem
+    *newInstance, const QJsonObject &json, const QString &name)
+{
+    QList<QStandardItem*> row;
+    SuperListItem *super;
+    QJsonArray tab;
+
+    tab = json[name].toArray();
+    for (int i = 0; i < tab.size(); i++) {
+        super = newInstance->createCopy();
+        super->read(tab.at(i).toObject());
+        row = super->getModelRow();
+        model->appendRow(row);
+    }
+    model->appendRow(SuperListItem::getEmptyItem());
+
+    delete newInstance;
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::writeTree(QStandardItemModel *model, QJsonObject &json,
+    const QString &name)
+{
+    SuperListItem *super;
+    QJsonArray tab;
+    QJsonObject obj;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        obj = QJsonObject();
+        super = reinterpret_cast<SuperListItem *>(model->item(i)
+            ->data().value<quintptr>());
+        if (super != nullptr) {
+            super->write(obj);
+            tab.append(obj);
+        } else {
+            model->removeRow(i--);
+        }
+    }
+    model->appendRow(SuperListItem::getEmptyItem());
+
+    if (!tab.isEmpty()) {
+        json[name] = tab;
+    }
+}
+
 
 // -------------------------------------------------------
 //

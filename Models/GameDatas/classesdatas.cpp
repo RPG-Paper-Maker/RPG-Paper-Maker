@@ -137,9 +137,7 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
             row = statisticProgression->getModelRow();
             statisticsProgression->appendRow(row);
         }
-        item = new QStandardItem();
-        item->setText(SuperListItem::beginningText);
-        statisticsProgression->appendRow(item);
+        statisticsProgression->appendRow(SuperListItem::getEmptyItem());
 
         // Skills
         skills = new QStandardItemModel;
@@ -150,9 +148,7 @@ void ClassesDatas::setDefault(QStandardItem *modelSkills,
             row = classSkill->getModelRow();
             skills->appendRow(row);
         }
-        item = new QStandardItem();
-        item->setText(SuperListItem::beginningText);
-        skills->appendRow(item);
+        skills->appendRow(SuperListItem::getEmptyItem());
 
         sysClass = new SystemClass(i + 1, new LangsTranslation(names[i]),
             initialLevels[i], maxLevels[i], expBases[i], expInflations[i],

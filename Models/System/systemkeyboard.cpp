@@ -178,12 +178,15 @@ QList<QStandardItem *> SystemKeyBoard::getModelRow() const{
     itemAbbreviation->setData(QVariant::fromValue(
                                  reinterpret_cast<quintptr>(this)));
     itemAbbreviation->setText(toString());
+    itemAbbreviation->setFlags(itemAbbreviation->flags() ^ (Qt::ItemIsDropEnabled));
     itemDescription->setData(QVariant::fromValue(
                                  reinterpret_cast<quintptr>(this)));
     itemDescription->setText(name());
+    itemDescription->setFlags(itemDescription->flags() ^ (Qt::ItemIsDropEnabled));
     itemShortCut->setData(QVariant::fromValue(
                                  reinterpret_cast<quintptr>(this)));
     itemShortCut->setText(shortCutString());
+    itemShortCut->setFlags(itemShortCut->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(itemAbbreviation);
     row.append(itemDescription);
     row.append(itemShortCut);

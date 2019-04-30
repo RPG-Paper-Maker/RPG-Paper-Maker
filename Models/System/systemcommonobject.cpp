@@ -307,10 +307,10 @@ void SystemCommonObject::setCopy(const SystemCommonObject& item){
     m_inheritanceId = item.inheritanceId();
 
     // Events
-    WidgetSuperTree::copy(m_events, item.m_events);
+    SuperListItem::copy(m_events, item.m_events);
 
     // States
-    WidgetSuperTree::copy(m_states, item.m_states);
+    SuperListItem::copy(m_states, item.m_states);
 }
 
 // -------------------------------------------------------
@@ -324,15 +324,11 @@ void SystemCommonObject::read(const QJsonObject &json){
     m_inheritanceId = json[strInheritance].toInt();
 
     // Events
-    QJsonArray tab = json[strEvents].toArray();
-    SystemObjectEvent newInstanceEvent;
-    WidgetSuperTree::read(m_events, newInstanceEvent, tab);
+    SuperListItem::readTree(m_events, new SystemObjectEvent, json, strEvents);
     updateModelEvents();
 
     // States
-    tab = json[strStates].toArray();
-    SystemState newInstanceState;
-    WidgetSuperTree::read(m_states, newInstanceState, tab);
+    SuperListItem::readTree(m_states, new SystemState, json, strStates);
 }
 
 // -------------------------------------------------------
@@ -343,11 +339,8 @@ void SystemCommonObject::write(QJsonObject &json) const{
 
     // Events
     QJsonArray tab;
-    WidgetSuperTree::write(m_events, tab);
-    json[strEvents] = tab;
+    SuperListItem::writeTree(m_events, json, strEvents);
 
     // States
-    tab = QJsonArray();
-    WidgetSuperTree::write(m_states, tab);
-    json[strStates] = tab;
+    SuperListItem::writeTree(m_states, json, strStates);
 }

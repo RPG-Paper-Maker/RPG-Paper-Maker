@@ -46,9 +46,6 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
     PrimitiveValue(0), new QStandardItemModel, new QStandardItemModel, new
     QStandardItemModel)
 {
-    m_modelCosts->appendRow(new QStandardItem(SuperListItem::beginningText));
-    m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
-    m_modelCaracteristics->appendRow(new QStandardItem(SuperListItem::beginningText));
     m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
     m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({"Caracteristic"}));
@@ -245,10 +242,6 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     SystemIcon::read(json);
     QJsonArray tab;
     QList<QStandardItem *> row;
-    SystemEffect *effect;
-    SystemCost *cost;
-    SystemCaracteristic *caracteristic;
-    int i, l;
 
     if (json.contains(JSON_TYPE)) {
         m_type = json[JSON_TYPE].toInt();
@@ -294,31 +287,14 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     }
 
     // Costs
-    tab = json[JSON_COSTS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        cost = new SystemCost;
-        cost->read(tab[i].toObject());
-        row = cost->getModelRow();
-        m_modelCosts->insertRow(i, row);
-    }
+    SuperListItem::readTree(m_modelCosts, new SystemCost, json, JSON_COSTS);
 
     // Effects
-    tab = json[JSON_EFFECTS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        effect = new SystemEffect;
-        effect->read(tab[i].toObject());
-        row = effect->getModelRow();
-        m_modelEffects->insertRow(i, row);
-    }
+    SuperListItem::readTree(m_modelEffects, new SystemEffect, json, JSON_EFFECTS);
 
     // Caracteristics
-    tab = json[JSON_CARACTERISTICS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        caracteristic = new SystemCaracteristic;
-        caracteristic->read(tab[i].toObject());
-        row = caracteristic->getModelRow();
-        m_modelCaracteristics->insertRow(i, row);
-    }
+    SuperListItem::readTree(m_modelCaracteristics, new SystemCaracteristic,
+        json, JSON_CARACTERISTICS);
 }
 
 // -------------------------------------------------------
@@ -327,10 +303,6 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     SystemIcon::write(json);
     QJsonObject obj;
     QJsonArray tab;
-    SystemEffect *effect;
-    SystemCost *cost;
-    SystemCaracteristic *caracteristic;
-    int i, l;
 
     if (m_type != 1) {
         json[JSON_TYPE] = m_type;
@@ -386,47 +358,11 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     }
 
     // Costs
-    tab = QJsonArray();
-    for (i = 0, l = m_modelCosts->invisibleRootItem()->rowCount(); i < l - 1;
-         i++)
-    {
-        obj = QJsonObject();
-        cost = reinterpret_cast<SystemCost *>(m_modelCosts->item(i)->data()
-            .value<quintptr>());
-        cost->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[JSON_COSTS] = tab;
-    }
+    SuperListItem::writeTree(m_modelCosts, json, JSON_COSTS);
 
     // Effects
-    tab = QJsonArray();
-    for (i = 0, l = m_modelEffects->invisibleRootItem()->rowCount(); i < l - 1;
-         i++)
-    {
-        obj = QJsonObject();
-        effect = reinterpret_cast<SystemEffect *>(m_modelEffects->item(i)
-            ->data().value<quintptr>());
-        effect->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[JSON_EFFECTS] = tab;
-    }
+    SuperListItem::writeTree(m_modelEffects, json, JSON_EFFECTS);
 
     // Caracteristics
-    tab = QJsonArray();
-    for (i = 0, l = m_modelCaracteristics->invisibleRootItem()->rowCount(); i <
-         l - 1; i++)
-    {
-        obj = QJsonObject();
-        caracteristic = reinterpret_cast<SystemCaracteristic *>(
-            m_modelCaracteristics->item(i)->data().value<quintptr>());
-        caracteristic->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[JSON_CARACTERISTICS] = tab;
-    }
+    SuperListItem::writeTree(m_modelCaracteristics, json, JSON_CARACTERISTICS);
 }

@@ -152,6 +152,20 @@ void WidgetSuperList::addNewItem(SuperListItem* super){
 
 // -------------------------------------------------------
 
+void WidgetSuperList::updateKeyboardUpDown(int offset) {
+    QStandardItem *item;
+    item = getSelected();
+    if (item != nullptr) {
+        item = this->getModel()->item(item->row() + offset, item->column());
+        if (item != nullptr) {
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(item->index(), QItemSelectionModel::Select);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
 void WidgetSuperList::brutDelete(QStandardItem* item){
     SuperListItem* super = (SuperListItem*) item->data().value<qintptr>();
 
@@ -170,6 +184,8 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 // -------------------------------------------------------
 
 void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
+    int key;
+
     if (RPM::isPressingEnter(event)) {
         emit tryingEdit();
     }
@@ -201,6 +217,14 @@ void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
             contextDelete();
             return;
         }
+    }
+
+    key = event->key();
+    if (key == Qt::Key_Up) {
+        updateKeyboardUpDown(-1);
+    }
+    if (key == Qt::Key_Down) {
+        updateKeyboardUpDown(1);
     }
 }
 

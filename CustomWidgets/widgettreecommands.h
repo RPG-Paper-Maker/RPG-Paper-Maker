@@ -88,6 +88,7 @@ protected:
     void initializeCommandsList();
     void updateAvailableCommands();
     bool isMouseSelectingCommand(const QPoint &pos);
+    void updateKeyboardUpDown(int offset);
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

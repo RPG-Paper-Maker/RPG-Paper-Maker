@@ -79,19 +79,7 @@ void SystemTroop::read(const QJsonObject &json){
 
     // Monsters list
     m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
-    QStandardItem* item;
-    SystemMonsterTroop* monsterTroop;
-    QList<QStandardItem *> row;
-    tab = json["l"].toArray();
-    for (int i = 0; i < tab.size(); i++){
-        monsterTroop = new SystemMonsterTroop;
-        monsterTroop->read(tab[i].toObject());
-        row = monsterTroop->getModelRow();
-        m_monstersList->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_monstersList->appendRow(item);
+    SuperListItem::readTree(m_monstersList, new SystemMonsterTroop, json, "l");
 }
 
 // -------------------------------------------------------
@@ -103,15 +91,5 @@ void SystemTroop::write(QJsonObject &json) const{
     int l;
 
     // Monsters list
-    tab = QJsonArray();
-    l = m_monstersList->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        obj = QJsonObject();
-        SystemMonsterTroop* monsterTroop =
-                (SystemMonsterTroop*) m_monstersList->item(i)->data()
-                .value<quintptr>();
-        monsterTroop->write(obj);
-        tab.append(obj);
-    }
-    json["l"] = tab;
+    SuperListItem::writeTree(m_monstersList, json, "l");
 }

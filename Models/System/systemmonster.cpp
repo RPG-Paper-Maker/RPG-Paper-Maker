@@ -187,16 +187,7 @@ void SystemMonster::read(const QJsonObject &json){
     }
 
     // Loots
-    tab = json[JSON_LOOTS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        SystemLoot* loot = new SystemLoot;
-        loot->read(tab[i].toObject());
-        row = loot->getModelRow();
-        m_modelLoots->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelLoots->appendRow(item);
+    SuperListItem::readTree(m_modelLoots, new SystemLoot, json, JSON_LOOTS);
 }
 
 // -------------------------------------------------------
@@ -229,16 +220,5 @@ void SystemMonster::write(QJsonObject &json) const{
     json[JSON_CURRENCIES] = tab;
 
     // Loots
-    tab = QJsonArray();
-    l = m_modelLoots->invisibleRootItem()->rowCount();
-    for (j = 0, l = m_modelLoots->invisibleRootItem()->rowCount(); j < l - 1;
-         j++)
-    {
-        obj = QJsonObject();
-        loot = reinterpret_cast<SystemLoot *>(m_modelLoots->item(j)->data()
-            .value<quintptr>());
-        loot->write(obj);
-        tab.append(obj);
-    }
-    json[JSON_LOOTS] = tab;
+    SuperListItem::writeTree(m_modelLoots, json, JSON_LOOTS);
 }

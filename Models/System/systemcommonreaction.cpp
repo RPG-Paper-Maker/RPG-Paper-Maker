@@ -67,7 +67,7 @@ void SystemCommonReaction::setCopy(const SystemCommonReaction& copy){
     p_id = copy.p_id;
 
     // parameters
-    WidgetSuperTree::copy(m_modelParameters, copy.m_modelParameters);
+    SuperListItem::copy(m_modelParameters, copy.m_modelParameters);
 }
 
 // -------------------------------------------------------
@@ -76,44 +76,21 @@ void SystemCommonReaction::setCopy(const SystemCommonReaction& copy){
 //
 // -------------------------------------------------------
 
-void SystemCommonReaction::read(const QJsonObject &json){
+void SystemCommonReaction::read(const QJsonObject &json) {
     SuperListItem::read(json);
     SystemReaction::read(json);
-    QList<QStandardItem *> row;
-    SystemCreateParameter* param;
-    QStandardItem* item;
 
     // Parameters
-    QJsonArray jsonParameters = json["p"].toArray();
-    for (int i = 0; i < jsonParameters.size(); i++){
-        param = new SystemCreateParameter;
-        param->read(jsonParameters.at(i).toObject());
-        row = param->getModelRow();
-        m_modelParameters->appendRow(row);
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelParameters->appendRow(item);
+    SuperListItem::readTree(m_modelParameters, new SystemCreateParameter, json,
+        "p");
 }
 
 // -------------------------------------------------------
 
-void SystemCommonReaction::write(QJsonObject & json) const{
+void SystemCommonReaction::write(QJsonObject & json) const {
     SuperListItem::write(json);
     SystemReaction::write(json);
-    SystemCreateParameter* param;
-    QJsonArray jsonParameters;
-    QJsonObject obj;
-    int l;
 
     // Parameters
-    l = m_modelParameters->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        obj = QJsonObject();
-        param = (SystemCreateParameter*) m_modelParameters->item(i)->data()
-                .value<quintptr>();
-        param->write(obj);
-        jsonParameters.append(obj);
-    }
-    json["p"] = jsonParameters;
+    SuperListItem::writeTree(m_modelParameters, json, "p");
 }

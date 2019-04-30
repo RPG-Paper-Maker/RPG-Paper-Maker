@@ -706,6 +706,31 @@ bool WidgetTreeCommands::isMouseSelectingCommand(const QPoint &pos) {
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
+    QStandardItem *item, *newItem;
+
+    if (m_availableCommands.length() > 0) {
+        m_indexSelectedCommand += offset;
+        m_indexSelectedCommand = Common::modulo(m_indexSelectedCommand,
+            m_availableCommands.length());
+        repaint();
+        return;
+    } else {
+        item = getSelected();
+        if (item != nullptr) {
+            newItem = this->getModel()->item(item->row() + offset, item->column());
+            if (newItem != nullptr) {
+                this->selectionModel()->clear();
+                this->selectionModel()->select(newItem->index(),
+                    QItemSelectionModel::SelectCurrent);
+                onSelectionChanged(newItem->index(), item->index());
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -756,22 +781,10 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
         return;
     }
     if (key == Qt::Key_Up) {
-        if (m_availableCommands.length() > 0) {
-            m_indexSelectedCommand--;
-            m_indexSelectedCommand = Common::modulo(m_indexSelectedCommand,
-                m_availableCommands.length());
-            repaint();
-            return;
-        }
+        updateKeyboardUpDown(-1);
     }
     if (key == Qt::Key_Down) {
-        if (m_availableCommands.length() > 0) {
-            m_indexSelectedCommand++;
-            m_indexSelectedCommand = Common::modulo(m_indexSelectedCommand,
-                m_availableCommands.length());
-            repaint();
-            return;
-        }
+        updateKeyboardUpDown(1);
     }
     if (key == Qt::Key_Backspace) {
         m_enteredCommand = m_enteredCommand.left(m_enteredCommand.length() - 1);
@@ -784,9 +797,19 @@ void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
 
 void WidgetTreeCommands::mousePressEvent(QMouseEvent *event) {
     QPoint pos = event->pos();
+    QStandardItem *item;
+
     if (isMouseSelectingCommand(pos)) {
         contextNew();
     } else {
+        item = getSelected();
+        if (item != nullptr && reinterpret_cast<EventCommand *>(item->data()
+            .value<quintptr>())->kind() == EventCommandKind::None)
+        {
+            item->setText(">");
+        }
+        m_availableCommands = QList<EventCommandKind>();
+        repaint();
         QTreeView::mousePressEvent(event);
     }
 }
@@ -855,6 +878,7 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
     EventCommand* command = nullptr;
 
     m_enteredCommand = "";
+    m_availableCommands = QList<EventCommandKind>();
     if (selected != nullptr) {
         command = reinterpret_cast<EventCommand *>(selected->data().value<
             quintptr>());
@@ -872,15 +896,17 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
 
     m_contextMenuCommonCommands->canEdit(command != nullptr &&
                                          command->isEditable());
+    repaint();
 }
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &){
+void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &index) {
     QModelIndexList l = this->selectionModel()->selectedIndexes();
 
-    for (int i = 0; i < l.size(); i++)
+    for (int i = 0; i < l.size(); i++) {
         selectChildren(p_model->itemFromIndex(l.at(i)));
+    }
 }
 
 // -------------------------------------------------------

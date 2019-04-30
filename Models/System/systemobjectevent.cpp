@@ -304,6 +304,7 @@ QList<QStandardItem *> SystemObjectEvent::getModelRow() const{
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setText(SuperListItem::beginningText + getLabelTab());
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(item);
     return row;
 }

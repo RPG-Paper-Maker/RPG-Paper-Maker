@@ -93,7 +93,10 @@ QList<QStandardItem *> SystemMonsterTroop::getModelRow() const{
     QStandardItem* itemLevel = new QStandardItem;
     itemID->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemID->setText(toString());
+    itemID->setFlags(itemID->flags() ^ (Qt::ItemIsDropEnabled));
     itemLevel->setText(QString::number(m_level));
+    itemLevel->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemLevel->setFlags(itemLevel->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(itemID);
     row.append(itemLevel);
 

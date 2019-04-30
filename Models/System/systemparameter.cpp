@@ -89,8 +89,13 @@ QList<QStandardItem *> SystemParameter::getModelRow() const{
     QStandardItem* itemDefault = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setText(toStringName());
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     itemValue->setText(m_value->toString());
+    itemValue->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemValue->setFlags(itemValue->flags() ^ (Qt::ItemIsDropEnabled));
     itemDefault->setText(m_parameter->defaultValue()->toString());
+    itemDefault->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    itemDefault->setFlags(itemDefault->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(item);
     row.append(itemValue);
     row.append(itemDefault);

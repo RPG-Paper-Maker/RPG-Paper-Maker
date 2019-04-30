@@ -33,6 +33,9 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     this->setIndentation(0);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setDragDropMode(QAbstractItemView::InternalMove);
+    this->setDefaultDropAction(Qt::CopyAction);
+    setCanMove(true);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     m_contextMenuCommonCommands = ContextMenuList::createContextCommand(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -59,7 +62,12 @@ void WidgetSuperTree::setHasContextMenu(bool b) { m_hasContextMenu = b; }
 
 void WidgetSuperTree::setCanBeControled(bool b) { m_canBeControled = b; }
 
-void WidgetSuperTree::setCanMove(bool b) { m_canMove = b; }
+void WidgetSuperTree::setCanMove(bool b) {
+    m_canMove = b;
+    this->setAcceptDrops(b);
+    this->setDragEnabled(b);
+    this->setDropIndicatorShown(b);
+}
 
 void WidgetSuperTree::initializeModel(QStandardItemModel* m){
     p_model = m;
@@ -241,12 +249,33 @@ void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
 }
 
 // -------------------------------------------------------
+
+void WidgetSuperTree::updateKeyboardUpDown(int offset) {
+    QStandardItem *item;
+    int row, column;
+
+    item = getSelected();
+    if (item != nullptr) {
+        row = item->row();
+        column = item->column();
+        item = this->getModel()->item(row + offset, column);
+        if (item != nullptr) {
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(item->index(),
+                QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
 // -------------------------------------------------------
 
-void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
+void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
+    int key;
+
     if (RPM::isPressingEnter(event)) {
         emit tryingEdit();
     }
@@ -288,37 +317,12 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event){
         }
     }
 
-    if (m_canMove){
-        // Moving items
-        int moving = 0;
-        if (event->key() == Qt::Key_Up)
-            moving = 1;
-        else if (event->key() == Qt::Key_Down)
-            moving = 2;
-
-        if (moving != 0){
-            QStandardItem* selected = getSelected();
-            SuperListItem* super = (SuperListItem*)(selected->data()
-                                                    .value<quintptr>());
-            // Last empty node can't be moved
-            if (super != nullptr){
-                QStandardItem* root = getRootOfItem(selected);
-                int index = selected->row();
-                int newIndex = index;
-                newIndex += (moving == 1) ? -1 : 1;
-                // Always have the last node empty
-                if (newIndex >= 0 && newIndex < p_model->invisibleRootItem()
-                                                ->rowCount() - 1)
-                {
-                    root->removeRow(index);
-                    QList<QStandardItem*> row = super->getModelRow();
-                    root->insertRow(newIndex, row);
-                    QModelIndex modelIndex = p_model->index(newIndex,0);
-                    setCurrentIndex(modelIndex);
-                    emit needsUpdateJson(nullptr);
-                }
-            }
-        }
+    key = event->key();
+    if (key == Qt::Key_Up) {
+        updateKeyboardUpDown(-1);
+    }
+    if (key == Qt::Key_Down) {
+        updateKeyboardUpDown(1);
     }
 }
 
@@ -349,6 +353,33 @@ void WidgetSuperTree::mouseDoubleClickEvent(QMouseEvent* event){
         }
     }
     QTreeView::mouseDoubleClickEvent(event);
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperTree::dropEvent(QDropEvent *event) {
+    QPoint pos = event->pos();
+    QModelIndex index = this->indexAt(pos);
+    QStandardItem *item = this->getModel()->itemFromIndex(index);
+    QStandardItem *selected = this->getSelected();
+    QList<QStandardItem *> newItems;
+    SuperListItem *super;
+
+    if (item == nullptr) {
+        item = this->getModel()->item(this->getModel()->rowCount() - 1);
+    }
+    if (item->column() == 0) {
+        QTreeView::dropEvent(event);
+    } else {
+        super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
+        this->getModel()->removeRow(selected->row());
+        if (super == nullptr) {
+            selected = SuperListItem::getEmptyItem();
+            this->getModel()->insertRow(item->row() + 1, selected);
+        } else {
+            this->getModel()->insertRow(item->row() + 1, super->getModelRow());
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -408,55 +439,4 @@ void WidgetSuperTree::contextPaste(){
 
 void WidgetSuperTree::contextDelete(){
     deleteItem(getSelected());
-}
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
-void WidgetSuperTree::copy(QStandardItemModel *model,
-                           QStandardItemModel *modelToCopy)
-{
-    QList<QStandardItem*> row;
-    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount()-1; i++){
-        SuperListItem* super = (SuperListItem*) modelToCopy->item(i)->data()
-                .value<quintptr>();
-        SuperListItem* newSuper = super->createCopy();
-        row = newSuper->getModelRow();
-        model->appendRow(row);
-    }
-    QStandardItem* item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    model->appendRow(item);
-}
-
-// -------------------------------------------------------
-
-void WidgetSuperTree::read(QStandardItemModel* model,
-                           SuperListItem& newInstance,
-                           const QJsonArray &json)
-{
-    for (int i = 0; i < json.size(); i++){
-        SuperListItem* super = newInstance.createCopy();
-        super->read(json.at(i).toObject());
-        QList<QStandardItem*> row = super->getModelRow();
-        model->appendRow(row);
-    }
-    QStandardItem* item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    model->appendRow(item);
-}
-
-// -------------------------------------------------------
-
-void WidgetSuperTree::write(QStandardItemModel *model, QJsonArray &json){
-    for (int i = 0; i < model->invisibleRootItem()->rowCount() - 1; i++){
-        QJsonObject obj;
-        SuperListItem* super = (SuperListItem*) model->item(i)->data()
-                               .value<quintptr>();
-        super->write(obj);
-        json.append(obj);
-    }
 }
