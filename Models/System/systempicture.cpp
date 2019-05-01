@@ -192,8 +192,9 @@ QList<QStandardItem *> SystemPicture::getModelRow() const{
 
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
 
-    if (id() != -1)
+    if (id() > 0) {
         item->setIcon(icon);
+    }
 
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(toString());
@@ -301,6 +302,13 @@ void SystemPicture::setDefaultWallInside() {
                         new CollisionSquare(new QRectF(0, 0, 100, 100)));
     m_collisions.insert(QPoint(2, 2),
                         new CollisionSquare(new QRectF(0, 0, 100, 100)));
+}
+
+// -------------------------------------------------------
+
+void SystemPicture::setDefaultCharacterTileset() {
+    p_id = 0;
+    p_name = "Tileset";
 }
 
 // -------------------------------------------------------

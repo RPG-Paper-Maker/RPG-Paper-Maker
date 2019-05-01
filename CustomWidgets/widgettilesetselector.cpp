@@ -36,6 +36,11 @@ WidgetTilesetSelector::~WidgetTilesetSelector()
 //
 // -------------------------------------------------------
 
+void WidgetTilesetSelector::setCurrentTexture(QRect& rect) {
+    m_selectionRectangle->setRectangle(rect.x(), rect.y(), rect.width(), rect
+        .height());
+}
+
 void WidgetTilesetSelector::currentTexture(QRect& rect) const{
     m_selectionRectangle->getCoefRect(rect);
 }

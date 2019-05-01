@@ -26,7 +26,8 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     m_newItemInstance(nullptr),
     m_canBrutRemove(false),
     m_hasContextMenu(true),
-    m_canEdit(false)
+    m_canEdit(false),
+    m_areNegIDsEnabled(true)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setDragDropMode(QAbstractItemView::InternalMove);
@@ -63,6 +64,10 @@ void WidgetSuperList::setCanDragAndDrop(bool b) {
     this->setDropIndicatorShown(b);
 }
 
+void WidgetSuperList::setAreNegIDsEnabled(bool b) {
+    m_areNegIDsEnabled = b;
+}
+
 QStandardItemModel *WidgetSuperList::getModel() const { return p_model; }
 
 void WidgetSuperList::setName(const QString &s){
@@ -75,9 +80,21 @@ void WidgetSuperList::setName(const QString &s){
     }
 }
 
-void WidgetSuperList::initializeModel(QStandardItemModel* m){
+void WidgetSuperList::initializeModel(QStandardItemModel* m) {
+    QStandardItem *item;
+    int i;
+
     p_model = m;
     this->setModel(m);
+
+    for (i = 0; i < p_model->invisibleRootItem()->rowCount(); i++) {
+        item = p_model->item(i);
+        if (reinterpret_cast<SuperListItem *>(item->data().value<quintptr>()
+            )->id() < 1)
+        {
+            item->setEnabled(m_areNegIDsEnabled);
+        }
+    }
 }
 
 void WidgetSuperList::initializeNewItemInstance(SuperListItem* item){
@@ -169,7 +186,7 @@ void WidgetSuperList::updateKeyboardUpDown(int offset) {
 void WidgetSuperList::brutDelete(QStandardItem* item){
     SuperListItem* super = (SuperListItem*) item->data().value<qintptr>();
 
-    if (super->id() != -1){
+    if (super->id() > 0) {
         delete ((SuperListItem*) item->data().value<qintptr>());
         p_model->removeRow(item->row());
 

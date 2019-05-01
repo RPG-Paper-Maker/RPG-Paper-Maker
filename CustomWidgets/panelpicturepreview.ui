@@ -127,7 +127,7 @@
            <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <widget class="WidgetPicturePreview" name="widgetPreview">
+           <widget class="QWidget" name="widgetContent">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -136,6 +136,56 @@
               <height>372</height>
              </rect>
             </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,1" columnstretch="0,1">
+               <item row="0" column="0">
+                <widget class="WidgetPicturePreview" name="widgetPreview" native="true"/>
+               </item>
+               <item row="0" column="1" rowspan="2">
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="0">
+                <widget class="WidgetTilesetSelector" name="widgetTileset" native="true"/>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>58</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
@@ -156,6 +206,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
@@ -168,9 +223,10 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
+   <class>WidgetTilesetSelector</class>
+   <extends>QWidget</extends>
+   <header>widgettilesetselector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

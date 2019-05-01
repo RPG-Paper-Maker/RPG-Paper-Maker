@@ -27,7 +27,8 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelPicturePreview),
     m_pictureKind(PictureKind::None),
-    m_picture(nullptr)
+    m_picture(nullptr),
+    m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
     ui->groupBox->hide();
@@ -81,6 +82,18 @@ void PanelPicturePreview::setIndexY(int i) {
     ui->widgetPreview->setIndexY(i);
 }
 
+void PanelPicturePreview::setCurrentTexture(QRect& rect) {
+    ui->widgetTileset->setCurrentTexture(rect);
+}
+
+void PanelPicturePreview::currentTexture(QRect& rect) const{
+    ui->widgetTileset->currentTexture(rect);
+}
+
+void PanelPicturePreview::setAreNegIDsEnabled(bool b) {
+    m_areNegIDsEnabled = b;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -103,6 +116,7 @@ void PanelPicturePreview::setPictureKind(PictureKind kind) {
     showPictures(!isNone);
 
     if (!isNone) {
+        ui->widgetPanelIDs->list()->setAreNegIDsEnabled(m_areNegIDsEnabled);
         ui->widgetPanelIDs->initializeModel(RPM::get()->project()
             ->picturesDatas()->model(kind));
 
@@ -153,9 +167,17 @@ void PanelPicturePreview::updateImage(QStandardItem *item) {
         m_picture = reinterpret_cast<SystemPicture *>(item->data()
             .value<qintptr>());
         if (m_picture != nullptr) {
-            if (m_picture->id() == -1){
+            if (m_picture->id() == -1) {
+                showPictureWidget(true);
                 ui->widgetPreview->setNoneImage();
-            } else{
+            } else if (m_picture->id() == 0) {
+                showPictureWidget(false);
+                ui->widgetTileset->setImage(RPM::get()->project()->currentMap(
+                    true)->mapProperties()->tileset()->picture()->getPath(
+                    PictureKind::Tilesets));
+            }
+            else {
+                showPictureWidget(true);
                 ui->widgetPreview->setImage(m_picture->getPath(m_pictureKind));
             }
             ui->widgetPreview->repaint();
@@ -237,6 +259,13 @@ void PanelPicturePreview::moveContent() {
 void PanelPicturePreview::updatePicture() {
     m_picture = reinterpret_cast<SystemPicture *>(ui->widgetPanelIDs->list()
         ->getSelected()->data().value<qintptr>());
+}
+
+// -------------------------------------------------------
+
+void PanelPicturePreview::showPictureWidget(bool b) {
+    ui->widgetPreview->setVisible(b);
+    ui->widgetTileset->setVisible(!b);
 }
 
 // -------------------------------------------------------

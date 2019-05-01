@@ -154,7 +154,8 @@ void MapObjects::clearSprites(){
 // -------------------------------------------------------
 
 void MapObjects::initializeVertices(int squareSize,
-                                    QHash<int, QOpenGLTexture *> &characters)
+                                    QHash<int, QOpenGLTexture *> &characters,
+                                    QOpenGLTexture *tileset)
 {
     clearSprites();
     m_vertices.clear();
@@ -171,24 +172,38 @@ void MapObjects::initializeVertices(int squareSize,
         // Draw the first state graphics of the object
         if (state != nullptr) {
             int graphicsId = state->graphicsId();
-            QOpenGLTexture* texture = characters[graphicsId];
+            int x, y, width, height;
+            QOpenGLTexture *texture;
+            QRect rect;
 
-            // If texture ID doesn't exist, load empty texture
-            if (texture == nullptr){
-                graphicsId = -1;
+            if (graphicsId == 0) {
+                texture = tileset;
+                rect = state->rectTileset();
+                width = rect.width();
+                height = rect.height();
+                x = rect.x();
+                y = rect.y();
+            } else {
                 texture = characters[graphicsId];
+
+                // If texture ID doesn't exist, load empty texture
+                if (texture == nullptr){
+                    graphicsId = -1;
+                    texture = characters[graphicsId];
+                }
+
+                int frames = RPM::get()->project()->gameDatas()->systemDatas()
+                        ->framesAnimation();
+                width = texture->width() / frames / squareSize;
+                height = texture->height() / frames / squareSize;
+                x = state->indexX() * width;
+                y = state->indexY() * height;
             }
 
             // Create the sprite geometry
-            int frames = RPM::get()->project()->gameDatas()->systemDatas()
-                    ->framesAnimation();
-            int width = texture->width() / frames / squareSize;
-            int height = texture->height() / frames / squareSize;
             SpriteDatas sprite(
                         state->graphicsKind(),
-                        new QRect(state->indexX() * width,
-                                  state->indexY() * height,
-                                  width, height));
+                        new QRect(x, y, width, height));
             SpriteObject* spriteObject = new SpriteObject(sprite, texture);
             spriteObject->initializeVertices(squareSize, position);
 

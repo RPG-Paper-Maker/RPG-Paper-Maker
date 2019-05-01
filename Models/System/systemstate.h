@@ -44,6 +44,8 @@ public:
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
+    QRect rectTileset() const;
+    void setRectTileset(QRect rect);
     bool moveAnimation() const;
     bool stopAnimation() const;
     bool climbAnimation() const;
@@ -74,6 +76,7 @@ protected:
     int m_graphicsId;
     int m_indexX;
     int m_indexY;
+    QRect m_rectTileset;
     bool m_moveAnimation;
     bool m_stopAnimation;
     bool m_climbAnimation;

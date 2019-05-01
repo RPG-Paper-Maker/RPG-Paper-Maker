@@ -50,6 +50,7 @@ public:
     void setDefaultTilesetPlains();
     void setDefaultAutotiles();
     void setDefaultWallInside();
+    void setDefaultCharacterTileset();
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemPicture &super);

@@ -87,6 +87,7 @@ void DialogCollisions::initializeCharacters() {
     // Initialize name & pictures
     ui->panelSuperListCharacters->list()->initializeNewItemInstance(
                 new SystemPicture);
+    ui->panelSuperListCharacters->list()->setAreNegIDsEnabled(false);
     ui->panelSuperListCharacters->initializeModel(RPM::get()->project()
                                               ->picturesDatas()
                                               ->model(PictureKind::Characters));

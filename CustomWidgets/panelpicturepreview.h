@@ -45,7 +45,10 @@ public:
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
+    void setCurrentTexture(QRect& rect);
+    void currentTexture(QRect &rect) const;
     void setPictureKind(PictureKind kind);
+    void setAreNegIDsEnabled(bool b);
 
     void changePicture(SystemPicture *picture);
     void setChooseRect(bool b);
@@ -54,6 +57,7 @@ private:
     Ui::PanelPicturePreview *ui;
     PictureKind m_pictureKind;
     SystemPicture *m_picture;
+    bool m_areNegIDsEnabled;
 
     void showPictures(bool b);
     void updateImage(QStandardItem *item);
@@ -62,6 +66,7 @@ private:
     void deleteContent(QString path);
     void moveContent();
     void updatePicture();
+    void showPictureWidget(bool b);
 
 public slots:
     void showAvailableContent(bool b);

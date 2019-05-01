@@ -128,11 +128,18 @@ void PicturesDatas::setDefaultBattlers(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
+    SystemPicture *picture;
+
     names << "lucas";
     setDefaultPictures(names, PictureKind::Characters);
-    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Characters]
-            ->item(1)->data().value<quintptr>();
+    picture = reinterpret_cast<SystemPicture *>(m_models[PictureKind::Characters]
+        ->item(1)->data().value<quintptr>());
     picture->setDefaultLucas();
+
+    // Insert tileset
+    picture = new SystemPicture;
+    picture->setDefaultCharacterTileset();
+    m_models[PictureKind::Characters]->insertRow(1, picture->getModelRow());
 }
 
 // -------------------------------------------------------

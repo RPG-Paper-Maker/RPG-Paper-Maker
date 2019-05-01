@@ -32,8 +32,8 @@ public:
     explicit WidgetGraphics(QWidget *parent = nullptr);
     void setState(SystemState *s);
 
-    SystemPicture* getPicture();
-    PictureKind getPictureKind();
+    SystemPicture* getPicture(bool check = false);
+    PictureKind getPictureKind(bool check = false);
 
 protected:
     SystemState* m_state;

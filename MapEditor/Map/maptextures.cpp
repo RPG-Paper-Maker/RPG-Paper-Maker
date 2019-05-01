@@ -66,7 +66,9 @@ void Map::deleteCharactersTextures() {
     for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesCharacters.begin();
          i != m_texturesCharacters.end(); i++)
     {
-        delete *i;
+        if (i.key() != 0) {
+            delete *i;
+        }
     }
     m_texturesCharacters.clear();
 }
@@ -92,6 +94,7 @@ void Map::loadPictures(PictureKind kind,
 void Map::loadCharactersTextures()
 {
     loadPictures(PictureKind::Characters, m_texturesCharacters);
+    m_texturesCharacters.insert(0, m_textureTileset);
 }
 
 // -------------------------------------------------------

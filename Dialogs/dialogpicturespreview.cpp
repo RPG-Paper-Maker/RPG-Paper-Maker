@@ -29,6 +29,7 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
 {
     ui->setupUi(this);
     
+    ui->widget->setAreNegIDsEnabled(RPM::isInObjectConfig);
 
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
@@ -63,6 +64,14 @@ int DialogPicturesPreview::indexY() const {
 
 void DialogPicturesPreview::setIndexY(int i) {
     ui->widget->setIndexY(i);
+}
+
+void DialogPicturesPreview::setCurrentTexture(QRect rect) {
+    ui->widget->setCurrentTexture(rect);
+}
+
+void DialogPicturesPreview::currentTexture(QRect& rect) const{
+    ui->widget->currentTexture(rect);
 }
 
 // -------------------------------------------------------

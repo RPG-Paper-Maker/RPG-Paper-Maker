@@ -14,10 +14,10 @@
 #include "common.h"
 #include <QDirIterator>
 
-const int ProjectUpdater::incompatibleVersionsCount = 5;
+const int ProjectUpdater::incompatibleVersionsCount = 6;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1"};
 
 // -------------------------------------------------------
 //
@@ -436,4 +436,16 @@ void ProjectUpdater::updateVersion_1_0_0() {
     m_project->gameDatas()->titleScreenGameOverDatas()->setDefault();
     m_project->gameDatas()->writeTitleScreenGameOver(m_project
         ->pathCurrentProject());
+}
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_1_1() {
+    SystemPicture *picture;
+
+    m_project->readPicturesDatas();
+    picture = new SystemPicture;
+    picture->setDefaultCharacterTileset();
+    m_project->picturesDatas()->model(PictureKind::Characters)->insertRow(1,
+        picture->getModelRow());
+    m_project->writePicturesDatas();
 }

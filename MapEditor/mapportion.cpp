@@ -344,16 +344,16 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
                                   squareSize, tileset->width(),
                                   tileset->height());
-    m_mapObjects->initializeVertices(squareSize, characters);
+    m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
 
 // -------------------------------------------------------
 
 void MapPortion::initializeVerticesObjects(int squareSize,
                                            QHash<int, QOpenGLTexture*>&
-                                           characters)
+                                           characters, QOpenGLTexture *tileset)
 {
-    m_mapObjects->initializeVertices(squareSize, characters);
+    m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
 
 // -------------------------------------------------------

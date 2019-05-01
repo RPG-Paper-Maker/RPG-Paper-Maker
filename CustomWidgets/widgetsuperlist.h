@@ -30,11 +30,12 @@ class WidgetSuperList : public QListView
 {
     Q_OBJECT
 public:
-    explicit WidgetSuperList(QWidget *parent = 0);
+    explicit WidgetSuperList(QWidget *parent = nullptr);
     virtual ~WidgetSuperList();
     void setCanBrutRemove(bool b);
     void setHasContextMenu(bool b);
     void setCanEdit(bool b);
+    void setAreNegIDsEnabled(bool b);
     void setCanDragAndDrop(bool b);
     void initializeModel(QStandardItemModel* m);
     void initializeNewItemInstance(SuperListItem *item);
@@ -57,6 +58,7 @@ private:
     bool m_canBrutRemove;
     bool m_hasContextMenu;
     bool m_canEdit;
+    bool m_areNegIDsEnabled;
 
     void brutDelete(QStandardItem* item);
 

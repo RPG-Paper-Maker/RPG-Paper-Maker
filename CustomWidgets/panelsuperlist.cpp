@@ -68,10 +68,9 @@ void PanelSuperList::initializeModel(QStandardItemModel *m) {
 // -------------------------------------------------------
 
 void PanelSuperList::showButtonMax(bool b) {
-    if (b)
-        ui->pushButtonMaximum->show();
-    else
-        ui->pushButtonMaximum->hide();
+    ui->pushButtonMaximum->setVisible(b);
+    ui->pushButtonPlus->setVisible(b);
+    ui->pushButtonMinus->setVisible(b);
 }
 
 // -------------------------------------------------------
@@ -169,7 +168,7 @@ void PanelSuperList::on_listIndexChanged(QModelIndex index, QModelIndex) {
         }
 
         // If ID == -1, can't edit the name
-        if (super->id() == -1) {
+        if (super->id() < 1) {
             ui->lineEditName->setEnabled(false);
         } else {
              ui->lineEditName->setEnabled(true);

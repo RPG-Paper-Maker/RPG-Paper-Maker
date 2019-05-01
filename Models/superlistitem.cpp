@@ -95,7 +95,7 @@ void SuperListItem::setCopy(const SuperListItem& item){
 
 QString SuperListItem::toString() const {
     return id() > 0 ? (QString(beginningText) + idToString() + QString(": ") +
-        name()) : "<None>";
+        name()) : name();
 }
 
 // -------------------------------------------------------

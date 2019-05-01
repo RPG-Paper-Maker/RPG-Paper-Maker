@@ -42,6 +42,8 @@ public:
     void setIndexX(int i);
     int indexY() const;
     void setIndexY(int i);
+    void setCurrentTexture(QRect rect);
+    void currentTexture(QRect &rect) const;
 
 protected:
     virtual void closeEvent(QCloseEvent *);

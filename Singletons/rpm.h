@@ -46,6 +46,7 @@ public:
     static QSet<int> mapsToSave;
     static QSet<int> mapsUndoRedo;
     static bool isInConfig;
+    static bool isInObjectConfig;
     static QString shadersExtension;
 
     // COLORS

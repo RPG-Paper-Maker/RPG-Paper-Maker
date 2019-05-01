@@ -39,21 +39,24 @@ void WidgetGraphics::setState(SystemState* s) {
 //
 // -------------------------------------------------------
 
-SystemPicture* WidgetGraphics::getPicture() {
+SystemPicture* WidgetGraphics::getPicture(bool check) {
     PictureKind kind = getPictureKind();
 
-    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
-        ->project()->picturesDatas()->model(kind)->invisibleRootItem(), m_state
+    return m_state->graphicsId() == 0 && check ? RPM::get()->project()->currentMap(true)
+        ->mapProperties()->tileset()->picture() : reinterpret_cast<
+        SystemPicture *>(SuperListItem::getById(RPM::get()->project()
+        ->picturesDatas()->model(kind)->invisibleRootItem(), m_state
         ->graphicsId()));
 }
 
 // -------------------------------------------------------
 
-PictureKind WidgetGraphics::getPictureKind() {
+PictureKind WidgetGraphics::getPictureKind(bool check) {
     switch (m_state->graphicsKind()) {
     case MapEditorSubSelectionKind::SpritesFix:
     case MapEditorSubSelectionKind::SpritesFace:
-        return PictureKind::Characters;
+        return m_state->graphicsId() == 0 && check ? PictureKind::Tilesets :
+            PictureKind::Characters;
     default:
         return PictureKind::None;
     }
@@ -89,14 +92,21 @@ void WidgetGraphics::mouseDoubleClickEvent(QMouseEvent *) {
 
     // Open dialog preview
     DialogPicturesPreview dialog(picture, kind);
-    dialog.setIndexX(m_state->indexX());
-    dialog.setIndexY(m_state->indexY());
+    if (m_state->graphicsId() == 0) {
+        dialog.setCurrentTexture(m_state->rectTileset());
+    } else {
+        dialog.setIndexX(m_state->indexX());
+        dialog.setIndexY(m_state->indexY());
+    }
 
     if (dialog.exec() == QDialog::Accepted) {
         RPM::get()->project()->writePicturesDatas();
         m_state->setGraphicsId(dialog.picture()->id());
         m_state->setIndexX(dialog.indexX());
         m_state->setIndexY(dialog.indexY());
+        QRect rect;
+        dialog.currentTexture(rect);
+        m_state->setRectTileset(rect);
     } else {
         RPM::get()->project()->readPicturesDatas();
         if (wasNone)
@@ -120,21 +130,36 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
     // Draw image
     if (m_state->graphicsKind() != MapEditorSubSelectionKind::None) {
         if (m_state->graphicsId() != -1) {
-            PictureKind kind = getPictureKind();
-            SystemPicture* picture = getPicture();
+            PictureKind kind = getPictureKind(true);
+            SystemPicture* picture = getPicture(true);
             QImage image(picture->getPath(kind));
             float coef = RPM::coefReverseSquareSize();
-            int width = image.width() / RPM::get()->project()->gameDatas()
-                ->systemDatas()->framesAnimation();
-            int height = image.height() / RPM::get()->project()->gameDatas()
-                ->systemDatas()->framesAnimation();
-            int newWidth = static_cast<int>(width * coef), newHeight =
-                static_cast<int>(height * coef);
-            int x = (this->rect().width() - newWidth) / 2;
-            int y = (this->rect().height() - newHeight) / 2;
+            int x, y, newX, newY, width, height, newWidth, newHeight;
+            QRect rect;
+            int squareSize = RPM::get()->getSquareSize();
+
+            if (m_state->graphicsId() == 0) {
+                rect = m_state->rectTileset();
+                width = rect.width() * squareSize;
+                height = rect.height() * squareSize;
+                newX = rect.x() * squareSize;
+                newY = rect.y() * squareSize;
+            } else {
+                width = image.width() / RPM::get()->project()->gameDatas()
+                    ->systemDatas()->framesAnimation();
+                height = image.height() / RPM::get()->project()->gameDatas()
+                    ->systemDatas()->framesAnimation();
+                newX = m_state->indexX() * width;
+                newY = m_state->indexY() * height;
+            }
+
+            newWidth = static_cast<int>(width * coef);
+            newHeight = static_cast<int>(height * coef);
+            x = (this->rect().width() - newWidth) / 2;
+            y = (this->rect().height() - newHeight) / 2;
+
             painter.drawImage(QRect(x, y, newWidth, newHeight), image, QRect(
-                m_state->indexX() * width, m_state->indexY() * height, width,
-                height));
+                newX, newY, width, height));
         }
     }
 

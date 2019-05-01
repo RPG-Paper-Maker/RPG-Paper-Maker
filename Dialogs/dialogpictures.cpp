@@ -24,6 +24,7 @@ DialogPictures::DialogPictures(QWidget *parent) :
 {
     ui->setupUi(this);
     
+    ui->widgetPicturePreview->setAreNegIDsEnabled(false);
 
     // Tree model
     ui->treeView->setModel(createFoldersModel());

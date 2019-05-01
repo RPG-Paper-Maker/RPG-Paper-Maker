@@ -60,8 +60,8 @@ QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
 
 void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
 
-Map* Project::currentMap() const {
-    return RPM::isInConfig ? p_currentMapConfig : p_currentMap;
+Map* Project::currentMap(bool force) const {
+    return RPM::isInConfig && !force ? p_currentMapConfig : p_currentMap;
 }
 
 void Project::setCurrentMap(Map* m) {

@@ -122,6 +122,7 @@ const int RPM::BASIC_SQUARE_SIZE = 32;
 const int RPM::MAX_PIXEL_SIZE = 4096;
 
 bool RPM::isInConfig = false;
+bool RPM::isInObjectConfig = false;
 
 // -------------------------------------------------------
 //

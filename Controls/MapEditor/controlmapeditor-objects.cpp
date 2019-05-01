@@ -73,8 +73,10 @@ void ControlMapEditor::addObject(Position &p){
 
     // Open the dialog box
     RPM::isInConfig = true;
+    RPM::isInObjectConfig = true;
     DialogObject dialog(object);
     int result = dialog.exec();
+    RPM::isInObjectConfig = false;
     RPM::isInConfig = false;
     if (result == QDialog::Accepted) {
         stockObject(p, object);

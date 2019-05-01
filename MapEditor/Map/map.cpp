@@ -363,7 +363,7 @@ void Map::updateMapObjects() {
         mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr) {
             mapPortion->initializeVerticesObjects(m_squareSize,
-                                                  m_texturesCharacters);
+                m_texturesCharacters, m_textureTileset);
             mapPortion->initializeGLObjects(m_programStatic,
                                             m_programFaceSprite);
             mapPortion->updateGLObjects();

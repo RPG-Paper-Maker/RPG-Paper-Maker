@@ -87,6 +87,14 @@ int SystemState::indexY() const { return m_indexY; }
 
 void SystemState::setIndexY(int i) { m_indexY = i; }
 
+QRect SystemState::rectTileset() const {
+    return m_rectTileset;
+}
+
+void SystemState::setRectTileset(QRect rect) {
+    m_rectTileset = rect;
+}
+
 bool SystemState::moveAnimation() const { return m_moveAnimation; }
 
 bool SystemState::stopAnimation() const { return m_stopAnimation; }
@@ -155,6 +163,7 @@ void SystemState::setCopy(const SystemState& state){
     m_graphicsKind = state.m_graphicsKind;
     m_indexX = state.m_indexX;
     m_indexY = state.m_indexY;
+    m_rectTileset = state.m_rectTileset;
     m_moveAnimation = state.m_moveAnimation;
     m_stopAnimation = state.m_stopAnimation;
     m_climbAnimation = state.m_climbAnimation;
@@ -173,6 +182,7 @@ void SystemState::setCopy(const SystemState& state){
 
 void SystemState::read(const QJsonObject &json){
     SuperListItem::read(json);
+    QJsonArray tab;
 
     setState(SuperListItem::getById(RPM::get()->project()->gameDatas()
                                     ->commonEventsDatas()->modelStates()
@@ -181,6 +191,9 @@ void SystemState::read(const QJsonObject &json){
     m_graphicsId = json["gid"].toInt();
     m_indexX = json["x"].toInt();
     m_indexY = json["y"].toInt();
+    tab = json["rt"].toArray();
+    m_rectTileset = QRect(tab[0].toInt(), tab[1].toInt(), tab[2].toInt(), tab[3]
+        .toInt());
     m_moveAnimation = json["move"].toBool();
     m_stopAnimation = json["stop"].toBool();
     m_climbAnimation = json["climb"].toBool();
@@ -195,11 +208,17 @@ void SystemState::read(const QJsonObject &json){
 
 void SystemState::write(QJsonObject &json) const{
     SuperListItem::write(json);
+    QJsonArray tab;
 
     json["gk"] = (int) m_graphicsKind;
     json["gid"] = m_graphicsId;
     json["x"] = m_indexX;
     json["y"] = m_indexY;
+    tab.append(m_rectTileset.x());
+    tab.append(m_rectTileset.y());
+    tab.append(m_rectTileset.width());
+    tab.append(m_rectTileset.height());
+    json["rt"] = tab;
     json["move"] = m_moveAnimation;
     json["stop"] = m_stopAnimation;
     json["climb"] = m_climbAnimation;

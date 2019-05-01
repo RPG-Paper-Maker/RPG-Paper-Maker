@@ -42,7 +42,7 @@ public:
     void setDefault();
     QString pathCurrentProject() const;
     void setPathCurrentProject(QString s);
-    Map* currentMap() const;
+    Map* currentMap(bool force = false) const;
     void setCurrentMap(Map* m);
     GameDatas* gameDatas() const;
     TreeMapDatas* treeMapDatas() const;
