@@ -9,6 +9,7 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
+#include <QMessageBox>
 #include "panelsuperlist.h"
 #include "ui_panelsuperlist.h"
 #include "dialogsetmaximum.h"
@@ -97,6 +98,13 @@ void PanelSuperList::showEditName(bool b) {
 }
 
 // -------------------------------------------------------
+
+void PanelSuperList::updateMaximum(int max) {
+    list()->setMaximum(max);
+    emit maximumChanged();
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -119,9 +127,25 @@ void PanelSuperList::onlangTextChanged(const QString &s) {
 void PanelSuperList::on_pushButtonMaximum_pressed() {
     DialogSetMaximum dialog(list()->getModel(), m_maximum);
     if (dialog.exec() == QDialog::Accepted) {
-        int newSize = dialog.maximum();
-        list()->setMaximum(newSize);
-        emit maximumChanged();
+        updateMaximum(dialog.maximum());
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::on_pushButtonPlus_pressed() {
+    updateMaximum(this->list()->getModel()->rowCount() + 1);
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::on_pushButtonMinus_pressed() {
+    int value = this->list()->getModel()->rowCount() - 1;
+
+    if (DialogSetMaximum::isOrderedMax(list()->getModel(), value)) {
+        updateMaximum(value);
+    } else {
+        QMessageBox::information(this, "Warning", DialogSetMaximum::STR_WARNING);
     }
 }
 

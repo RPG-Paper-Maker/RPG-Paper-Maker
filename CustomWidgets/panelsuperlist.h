@@ -46,6 +46,7 @@ public:
     void showButtonMax(bool b);
     void setMaximumLimit(int max);
     void setIsLang(bool lang);
+    void updateMaximum(int max);
 
 private:
     Ui::PanelSuperList *ui;
@@ -56,6 +57,8 @@ private slots:
     void on_lineEditName_textChanged(const QString &s);
     void onlangTextChanged(const QString &s);
     void on_pushButtonMaximum_pressed();
+    void on_pushButtonPlus_pressed();
+    void on_pushButtonMinus_pressed();
     void on_listIndexChanged(QModelIndex index, QModelIndex);
 
 signals:

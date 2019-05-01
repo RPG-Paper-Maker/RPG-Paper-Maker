@@ -9,7 +9,9 @@
         "Keyboard option for entering object commands",
         "Multiline for show text command: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/23",
         "Recent projects available on beginning screen and menu bar Open project",
-        "Lists and object commands: use keyboard up / down to change selection"
+        "Lists and object commands: use keyboard up / down to change selection",
+        "Selecting object state: button for updating the complete list",
+        "List with set maximum now contains plus and minus buttons"
     ],
 	"bugs": [
         "Correcting crashes when canceling picture change in tilesets menus: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/39",

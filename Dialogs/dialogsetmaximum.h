@@ -33,10 +33,14 @@ class DialogSetMaximum : public QDialog
     Q_OBJECT
 
 public:
+    static const QString STR_WARNING;
+
     explicit DialogSetMaximum(QStandardItemModel* model, int max,
-                              QWidget *parent = 0);
+                              QWidget *parent = nullptr);
     ~DialogSetMaximum();
     int maximum() const;
+
+    static bool isOrderedMax(QStandardItemModel* model, int limit);
 
 private:
     Ui::DialogSetMaximum *ui;

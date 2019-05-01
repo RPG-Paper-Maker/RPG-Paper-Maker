@@ -14,6 +14,9 @@
 #include "superlistitem.h"
 #include <QMessageBox>
 
+const QString DialogSetMaximum::STR_WARNING = "This maximum is incorrect "
+    "because it will delete IDs. Please reorder your stuff properly.";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -27,7 +30,6 @@ DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, int max,
     m_model(model)
 {
     ui->setupUi(this);
-    
 
     ui->spinBoxMaximum->setMaximum(max);
     ui->spinBoxMaximum->setValue(model->invisibleRootItem()->rowCount());
@@ -46,14 +48,15 @@ int DialogSetMaximum::maximum() const { return ui->spinBoxMaximum->value(); }
 //
 // -------------------------------------------------------
 
-bool DialogSetMaximum::isOrdered(int limit) const{
-
+bool DialogSetMaximum::isOrderedMax(QStandardItemModel* model, int limit) {
     // If deleting stuff...
-    if (limit < m_model->invisibleRootItem()->rowCount()){
+    if (limit < model->invisibleRootItem()->rowCount()){
         for (int i = 0; i < limit; i++){
-            int id = ((SuperListItem*) m_model->item(i)->data()
-                      .value<quintptr>())->id();
-            if (id > limit) return false;
+            int id = reinterpret_cast<SuperListItem *>(model->item(i)->data()
+                .value<quintptr>())->id();
+            if (id > limit) {
+                return false;
+            }
         }
 
     }
@@ -63,12 +66,15 @@ bool DialogSetMaximum::isOrdered(int limit) const{
 
 // -------------------------------------------------------
 
+bool DialogSetMaximum::isOrdered(int limit) const{
+    return isOrderedMax(m_model, limit);
+}
+
+// -------------------------------------------------------
+
 void DialogSetMaximum::accept(){
     if (isOrdered(maximum()))
         QDialog::accept();
     else
-        QMessageBox::information(this, "Warning",
-                                 "This maximum is incorrect because it will "
-                                 "delete IDs. Please reorder your stuff "
-                                 "properly.");
+        QMessageBox::information(this, "Warning", STR_WARNING);
 }
