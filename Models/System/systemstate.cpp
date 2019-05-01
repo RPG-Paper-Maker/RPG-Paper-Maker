@@ -189,11 +189,14 @@ void SystemState::read(const QJsonObject &json){
                                     ->invisibleRootItem(), id()));
     m_graphicsKind = static_cast<MapEditorSubSelectionKind>(json["gk"].toInt());
     m_graphicsId = json["gid"].toInt();
-    m_indexX = json["x"].toInt();
-    m_indexY = json["y"].toInt();
-    tab = json["rt"].toArray();
-    m_rectTileset = QRect(tab[0].toInt(), tab[1].toInt(), tab[2].toInt(), tab[3]
-        .toInt());
+    if (m_graphicsId == 0) {
+        tab = json["rt"].toArray();
+        m_rectTileset = QRect(tab[0].toInt(), tab[1].toInt(), tab[2].toInt(), tab[3]
+            .toInt());
+    } else {
+        m_indexX = json["x"].toInt();
+        m_indexY = json["y"].toInt();
+    }
     m_moveAnimation = json["move"].toBool();
     m_stopAnimation = json["stop"].toBool();
     m_climbAnimation = json["climb"].toBool();
@@ -212,13 +215,16 @@ void SystemState::write(QJsonObject &json) const{
 
     json["gk"] = (int) m_graphicsKind;
     json["gid"] = m_graphicsId;
-    json["x"] = m_indexX;
-    json["y"] = m_indexY;
-    tab.append(m_rectTileset.x());
-    tab.append(m_rectTileset.y());
-    tab.append(m_rectTileset.width());
-    tab.append(m_rectTileset.height());
-    json["rt"] = tab;
+    if (m_graphicsId == 0) {
+        tab.append(m_rectTileset.x());
+        tab.append(m_rectTileset.y());
+        tab.append(m_rectTileset.width());
+        tab.append(m_rectTileset.height());
+        json["rt"] = tab;
+    } else {
+        json["x"] = m_indexX;
+        json["y"] = m_indexY;
+    }
     json["move"] = m_moveAnimation;
     json["stop"] = m_stopAnimation;
     json["climb"] = m_climbAnimation;

@@ -408,7 +408,11 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
 
 void PanelObject::on_eventChanged(QModelIndex index, QModelIndex) {
     QStandardItem *selected = ui->treeViewEvents->getModel()->itemFromIndex(index);
-    ui->tabWidgetCommands->setCurrentIndex(selected->row());
+    if (selected != nullptr) {
+        ui->tabWidgetCommands->setCurrentIndex(selected->row());
+    } else {
+        ui->tabWidgetCommands->setCurrentIndex(-1);
+    }
 }
 
 // -------------------------------------------------------
