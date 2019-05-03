@@ -425,13 +425,13 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBoxCaracteristics">
+          <widget class="QGroupBox" name="groupBoxCharacteristics">
            <property name="title">
-            <string>Caracteristics</string>
+            <string>Characteristics</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
-             <widget class="WidgetSuperTree" name="treeViewCaracteristics"/>
+             <widget class="WidgetSuperTree" name="treeViewCharacteristics"/>
             </item>
            </layout>
           </widget>
@@ -446,21 +446,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
-   <container>1</container>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetIcon</class>
-   <extends>QWidget</extends>
-   <header>widgeticon.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -470,9 +463,16 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetIcon</class>
+   <extends>QWidget</extends>
+   <header>widgeticon.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

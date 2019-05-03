@@ -285,11 +285,11 @@
         <bool>false</bool>
        </property>
        <property name="title">
-        <string>Caracteristics</string>
+        <string>Characteristics</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_27">
         <item row="0" column="0">
-         <widget class="QTreeView" name="treeView_2">
+         <widget class="QTreeView" name="treeViewCharacteristic">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>

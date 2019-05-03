@@ -32,7 +32,7 @@ public:
         *conditionFormula, PrimitiveValue *animationUserID, PrimitiveValue
         *animationTargetID, PrimitiveValue *price, QStandardItemModel
         *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
-        *modelCaracteristics);
+        *modelCharacteristics);
     virtual ~SystemWeapon();
 
     virtual void read(const QJsonObject &json);

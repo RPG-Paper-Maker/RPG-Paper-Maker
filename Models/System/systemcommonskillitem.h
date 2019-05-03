@@ -46,7 +46,7 @@ public:
     static const QString JSON_PRICE;
     static const QString JSON_COSTS;
     static const QString JSON_EFFECTS;
-    static const QString JSON_CARACTERISTICS;
+    static const QString JSON_CHARACTERISTICS;
 
     SystemCommonSkillItem();
     SystemCommonSkillItem(int i, LangsTranslation *names, int pictureID, int
@@ -56,7 +56,7 @@ public:
         SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
         *animationTargetID, PrimitiveValue *price, QStandardItemModel
         *modelCosts, QStandardItemModel *modelEffects, QStandardItemModel
-        *modelCaracteristics);
+        *modelCharacteristics);
     virtual ~SystemCommonSkillItem();
     int type() const;
     void setType(int t);
@@ -77,7 +77,7 @@ public:
     PrimitiveValue * price() const;
     QStandardItemModel * modelCosts() const;
     QStandardItemModel * modelEffects() const;
-    QStandardItemModel * modelCaracteristics() const;
+    QStandardItemModel * modelCharacteristics() const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemCommonSkillItem &skillItem);
@@ -99,7 +99,7 @@ protected:
     PrimitiveValue *m_price;
     QStandardItemModel *m_modelCosts;
     QStandardItemModel *m_modelEffects;
-    QStandardItemModel *m_modelCaracteristics;
+    QStandardItemModel *m_modelCharacteristics;
 };
 
 Q_DECLARE_METATYPE(SystemCommonSkillItem)

@@ -28,12 +28,12 @@ SystemWeapon::SystemWeapon(int i, LangsTranslation* names, int pictureID, int
     PrimitiveValue *targetConditionFormula, PrimitiveValue *conditionFormula,
     PrimitiveValue *animationUserID, PrimitiveValue *animationTargetID,
     PrimitiveValue *price, QStandardItemModel *modelCosts, QStandardItemModel
-    *modelEffects, QStandardItemModel *modelCaracteristics) :
+    *modelEffects, QStandardItemModel *modelCharacteristics) :
     SystemCommonSkillItem(i, names, pictureID, type, false, oneHand,
         description, targetKind, targetConditionFormula, conditionFormula,
         AvailableKind::Never, new SystemPlaySong(-1, SongKind::Sound),
         animationUserID, animationTargetID, price, modelCosts, modelEffects,
-        modelCaracteristics)
+        modelCharacteristics)
 {
 
 }

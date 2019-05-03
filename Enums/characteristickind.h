@@ -9,18 +9,18 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef CARACTERISTICKIND_H
-#define CARACTERISTICKIND_H
+#ifndef CHARACTERISTICKIND_H
+#define CHARACTERISTICKIND_H
 
 // -------------------------------------------------------
 //
-//  ENUM CaracteristicKind
+//  ENUM CharacteristicKind
 //
-//  All the possible caracteristics kind.
+//  All the possible characteristics kind.
 //
 // -------------------------------------------------------
 
-enum class CaracteristicKind {
+enum class CharacteristicKind {
     IncreaseDecrease,
     Script,
     AllowForbidEquip,
@@ -28,4 +28,4 @@ enum class CaracteristicKind {
     BeginEquipment
 };
 
-#endif // CARACTERISTICKIND_H
+#endif // CHARACTERISTICKIND_H

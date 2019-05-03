@@ -13,7 +13,7 @@
 #include "systemarmor.h"
 #include "rpm.h"
 #include "common.h"
-#include "systemcaracteristic.h"
+#include "systemcharacteristic.h"
 
 // -------------------------------------------------------
 //
@@ -44,7 +44,7 @@ QStandardItemModel* ArmorsDatas::model() const { return m_model; }
 
 void ArmorsDatas::setDefault() {
     int i, j, length, l;
-    QStandardItemModel * modelCaracteristics;
+    QStandardItemModel * modelCharacteristics;
     SystemArmor *armor;
 
     QString names[] = {
@@ -66,26 +66,26 @@ void ArmorsDatas::setDefault() {
     int prices[] = {
         10, 50, 40, 30, 200, 150
     };
-    QVector<SystemCaracteristic *> caracteristics[] = {
-        {SystemCaracteristic::createBuff(10, 2, false, false)},
-        {SystemCaracteristic::createBuff(10, 3, false, false)},
-        {SystemCaracteristic::createBuff(10, 2, false, false)},
-        {SystemCaracteristic::createBuff(10, 2, false, false)},
-        {SystemCaracteristic::createBuff(9, 15, false, false)},
-        {SystemCaracteristic::createBuff(9, 10, false, false)},
+    QVector<SystemCharacteristic *> characteristics[] = {
+        {SystemCharacteristic::createBuff(10, 2, false, false)},
+        {SystemCharacteristic::createBuff(10, 3, false, false)},
+        {SystemCharacteristic::createBuff(10, 2, false, false)},
+        {SystemCharacteristic::createBuff(10, 2, false, false)},
+        {SystemCharacteristic::createBuff(9, 15, false, false)},
+        {SystemCharacteristic::createBuff(9, 10, false, false)},
     };
     length = (sizeof(names)/sizeof(*names));
 
     for (i = 0; i < length; i++) {
-        modelCaracteristics = new QStandardItemModel;
-        for (j = 0, l = caracteristics[i].length(); j < l; j++) {
-            modelCaracteristics->appendRow(caracteristics[i][j]->getModelRow());
+        modelCharacteristics = new QStandardItemModel;
+        for (j = 0, l = characteristics[i].length(); j < l; j++) {
+            modelCharacteristics->appendRow(characteristics[i][j]->getModelRow());
         }
-        modelCaracteristics->appendRow(new QStandardItem);
+        modelCharacteristics->appendRow(new QStandardItem);
         armor = new SystemArmor(i + 1, new LangsTranslation(names[i]), iconsID
             [i], types[i], new LangsTranslation(descriptions[i]), new
             PrimitiveValue(PrimitiveValueKind::None), new PrimitiveValue(prices
-            [i]), modelCaracteristics);
+            [i]), modelCharacteristics);
         m_model->appendRow(armor->getModelRow());
     }
 }

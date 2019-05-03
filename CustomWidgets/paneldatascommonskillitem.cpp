@@ -15,7 +15,7 @@
 #include "rpm.h"
 #include "systemeffect.h"
 #include "systemcost.h"
-#include "systemcaracteristic.h"
+#include "systemcharacteristic.h"
 
 // -------------------------------------------------------
 //
@@ -62,14 +62,14 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     ui->panelPrimitiveValueConditions->initializeMessage();
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
-    ui->treeViewCaracteristics->initializeNewItemInstance(new SystemCaracteristic);
+    ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:
         initializeCommonSkill();
 
         ui->checkBoxOneHand->hide();
-        ui->groupBoxCaracteristics->hide();
+        ui->groupBoxCharacteristics->hide();
         ui->labelType->hide();
         ui->comboBoxType->hide();
         ui->checkBoxConsumable->hide();
@@ -80,7 +80,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
         initializeCommonSkill();
 
         ui->checkBoxOneHand->hide();
-        ui->groupBoxCaracteristics->hide();
+        ui->groupBoxCharacteristics->hide();
         ui->groupBoxCosts->hide();
         SuperListItem::fillComboBox(ui->comboBoxType, getTypeModel());
         ui->panelPrimitiveValuePrice->initializeNumberVariable();
@@ -158,7 +158,7 @@ void PanelDatasCommonSkillItem::update(SystemCommonSkillItem *model) {
     ui->panelPrimitiveValuePrice->updateModel();
     ui->treeViewCost->initializeModel(m_model->modelCosts());
     ui->treeViewEffects->initializeModel(m_model->modelEffects());
-    ui->treeViewCaracteristics->initializeModel(m_model->modelCaracteristics());
+    ui->treeViewCharacteristics->initializeModel(m_model->modelCharacteristics());
 
     updateAllModelsRow();
 }
@@ -186,7 +186,7 @@ QStandardItemModel* PanelDatasCommonSkillItem::getTypeModel() {
 void PanelDatasCommonSkillItem::updateAllModelsRow() {
     ui->treeViewCost->updateAllModelRow();
     ui->treeViewEffects->updateAllModelRow();
-    ui->treeViewCaracteristics->updateAllModelRow();
+    ui->treeViewCharacteristics->updateAllModelRow();
 }
 
 // -------------------------------------------------------

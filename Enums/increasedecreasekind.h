@@ -16,7 +16,7 @@
 //
 //  ENUM IncreaseDecreaseKind
 //
-//  All the possible increase / decrease kind for caracteristics.
+//  All the possible increase / decrease kind for characteristics.
 //
 // -------------------------------------------------------
 

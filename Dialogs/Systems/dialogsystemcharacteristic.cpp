@@ -9,8 +9,8 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#include "dialogsystemcaracteristic.h"
-#include "ui_dialogsystemcaracteristic.h"
+#include "dialogsystemcharacteristic.h"
+#include "ui_dialogsystemcharacteristic.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -19,23 +19,23 @@
 //
 // -------------------------------------------------------
 
-DialogSystemCaracteristic::DialogSystemCaracteristic(SystemCaracteristic
-    &caracteristic, QWidget *parent) :
+DialogSystemCharacteristic::DialogSystemCharacteristic(SystemCharacteristic
+    &characteristic, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSystemCaracteristic),
-    m_caracteristic(caracteristic)
+    ui(new Ui::DialogSystemCharacteristic),
+    m_characteristic(characteristic)
 {
     ui->setupUi(this);
 
     initialize();
 }
 
-DialogSystemCaracteristic::~DialogSystemCaracteristic() {
+DialogSystemCharacteristic::~DialogSystemCharacteristic() {
     delete ui;
 }
 
-SystemCaracteristic & DialogSystemCaracteristic::caracteristic() const {
-    return m_caracteristic;
+SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
+    return m_characteristic;
 }
 
 // -------------------------------------------------------
@@ -44,8 +44,8 @@ SystemCaracteristic & DialogSystemCaracteristic::caracteristic() const {
 //
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::initialize() {
-    int index = m_caracteristic.increaseDecreaseKind()->id();
+void DialogSystemCharacteristic::initialize() {
+    int index = m_characteristic.increaseDecreaseKind()->id();
     ui->comboBoxIncreaseDecreaseKind->addItems(Common
         ::enumToStringIncreaseDecreaseKind);
 
@@ -59,84 +59,84 @@ void DialogSystemCaracteristic::initialize() {
             ::UserRole - 1);
     }
 
-    switch(m_caracteristic.kind()) {
-    case CaracteristicKind::IncreaseDecrease:
+    switch(m_characteristic.kind()) {
+    case CharacteristicKind::IncreaseDecrease:
         ui->radioButtonBuff->setChecked(true);
         break;
-    case CaracteristicKind::AllowForbidEquip:
+    case CharacteristicKind::AllowForbidEquip:
         ui->radioButtonEquip->setChecked(true);
         break;
-    case CaracteristicKind::AllowForbidChange:
+    case CharacteristicKind::AllowForbidChange:
         ui->radioButtonEquipmentChange->setChecked(true);
         break;
-    case CaracteristicKind::BeginEquipment:
+    case CharacteristicKind::BeginEquipment:
         ui->radioButtonBeginEquipment->setChecked(true);
         break;
-    case CaracteristicKind::Script:
+    case CharacteristicKind::Script:
         ui->radioButtonScript->setChecked(true);
         break;
     }
 
     // Buff
-    ui->comboBoxIncreaseDecrease->setCurrentIndex(m_caracteristic
+    ui->comboBoxIncreaseDecrease->setCurrentIndex(m_characteristic
         .isIncreaseDecrease() ? 0 : 1);
     ui->comboBoxIncreaseDecreaseKind->setCurrentIndex(index);
     ui->panelPrimitiveValueStatValue->initializeDataBaseAndUpdate(
-        m_caracteristic.statValueID());
+        m_characteristic.statValueID());
     ui->panelPrimitiveValueElementRes->initializeDataBaseAndUpdate(
-        m_caracteristic.elementResID());
+        m_characteristic.elementResID());
     ui->panelPrimitiveValueStatusRes->initializeDataBaseAndUpdate(
-        m_caracteristic.statusResID());
+        m_characteristic.statusResID());
     ui->panelPrimitiveValueCurrencyGain->initializeDataBaseAndUpdate(
-        m_caracteristic.currencyGainID());
+        m_characteristic.currencyGainID());
     ui->panelPrimitiveValueSkillCost->initializeDataBaseAndUpdate(
-        m_caracteristic.skillCostID());
-    ui->widgetVariable->initializeSuper(m_caracteristic.variableID());
-    ui->comboBoxOperation->setCurrentIndex(m_caracteristic.operation() ? 0 :
+        m_characteristic.skillCostID());
+    ui->widgetVariable->initializeSuper(m_characteristic.variableID());
+    ui->comboBoxOperation->setCurrentIndex(m_characteristic.operation() ? 0 :
         1);
-    ui->panelPrimitiveValue->initializeNumberVariableAndUpdate(m_caracteristic
+    ui->panelPrimitiveValue->initializeNumberVariableAndUpdate(m_characteristic
         .value());
-    ui->comboBoxUnit->setCurrentIndex(m_caracteristic.unit() ? 0 : 1);
+    ui->comboBoxUnit->setCurrentIndex(m_characteristic.unit() ? 0 : 1);
 
     // Character
-    ui->comboBoxEquipAllowForbid->setCurrentIndex(m_caracteristic
+    ui->comboBoxEquipAllowForbid->setCurrentIndex(m_characteristic
         .isAllowEquip() ? 0 : 1);
     ui->panelPrimitiveValueArmorKindID->hide();
-    ui->comboBoxEquipWeaponArmor->setCurrentIndex(m_caracteristic
+    ui->comboBoxEquipWeaponArmor->setCurrentIndex(m_characteristic
         .isAllowEquipWeapon() ? 0 : 1);
     ui->panelPrimitiveValueWeaponKindID->initializeDataBaseAndUpdate(
-        m_caracteristic.equipWeaponTypeID());
+        m_characteristic.equipWeaponTypeID());
     ui->panelPrimitiveValueArmorKindID->initializeDataBaseAndUpdate(
-        m_caracteristic.equipArmorTypeID());
-    ui->comboBoxEquipmentChange->setCurrentIndex(m_caracteristic
+        m_characteristic.equipArmorTypeID());
+    ui->comboBoxEquipmentChange->setCurrentIndex(m_characteristic
         .isAllowChangeEquipment() ? 0 : 1);
     ui->panelPrimitiveValueEquipmentChangeID->initializeDataBaseAndUpdate(
-        m_caracteristic.changeEquipmentID());
+        m_characteristic.changeEquipmentID());
     ui->panelPrimitiveValueBeginEquipmentID->initializeDataBaseAndUpdate(
-        m_caracteristic.beginEquipmentID());
-    ui->comboBoxBeginWeaponArmor->setCurrentIndex(m_caracteristic
+        m_characteristic.beginEquipmentID());
+    ui->comboBoxBeginWeaponArmor->setCurrentIndex(m_characteristic
         .isBeginWeapon() ? 0 : 1);
-    m_caracteristic.updateModelBeginWeaponArmor();
+    m_characteristic.updateModelBeginWeaponArmor();
     ui->panelPrimitiveValueBeginWeaponArmorID->initializeDataBaseAndUpdate(
-        m_caracteristic.beginWeaponArmorID());
+        m_characteristic.beginWeaponArmorID());
     connect(ui->panelPrimitiveValueBeginEquipmentID, SIGNAL(numberUpdated(int)),
         this, SLOT(on_beginWeaponArmorNumberChanged(int)));
 
     // Script
-    ui->panelPrimitiveValueScript->initializeMessageAndUpdate(m_caracteristic
+    ui->panelPrimitiveValueScript->initializeMessageAndUpdate(m_characteristic
         .script());
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::setRadioCharacters() {
+void DialogSystemCharacteristic::setRadioCharacters() {
     ui->radioButtonBuff->setChecked(false);
     ui->radioButtonScript->setChecked(false);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::uncheckAllRadiosCharacters() {
+void DialogSystemCharacteristic::uncheckAllRadiosCharacters() {
     ui->radioButtonEquip->setAutoExclusive(false);
     ui->radioButtonEquipmentChange->setAutoExclusive(false);
     ui->radioButtonBeginEquipment->setAutoExclusive(false);
@@ -154,9 +154,9 @@ void DialogSystemCaracteristic::uncheckAllRadiosCharacters() {
 //
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_radioButtonBuff_toggled(bool checked) {
+void DialogSystemCharacteristic::on_radioButtonBuff_toggled(bool checked) {
     if (checked) {
-        m_caracteristic.setKind(CaracteristicKind::IncreaseDecrease);
+        m_characteristic.setKind(CharacteristicKind::IncreaseDecrease);
         uncheckAllRadiosCharacters();
         ui->radioButtonScript->setChecked(false);
     }
@@ -178,8 +178,8 @@ void DialogSystemCaracteristic::on_radioButtonBuff_toggled(bool checked) {
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_radioButtonEquip_toggled(bool checked) {
-    m_caracteristic.setKind(CaracteristicKind::AllowForbidEquip);
+void DialogSystemCharacteristic::on_radioButtonEquip_toggled(bool checked) {
+    m_characteristic.setKind(CharacteristicKind::AllowForbidEquip);
 
     if (checked) {
         setRadioCharacters();
@@ -194,11 +194,11 @@ void DialogSystemCaracteristic::on_radioButtonEquip_toggled(bool checked) {
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_radioButtonEquipmentChange_toggled(bool
+void DialogSystemCharacteristic::on_radioButtonEquipmentChange_toggled(bool
     checked)
 {
     if (checked) {
-        m_caracteristic.setKind(CaracteristicKind::AllowForbidChange);
+        m_characteristic.setKind(CharacteristicKind::AllowForbidChange);
         setRadioCharacters();
     }
 
@@ -209,11 +209,11 @@ void DialogSystemCaracteristic::on_radioButtonEquipmentChange_toggled(bool
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_radioButtonBeginEquipment_toggled(bool
+void DialogSystemCharacteristic::on_radioButtonBeginEquipment_toggled(bool
     checked)
 {
     if (checked) {
-        m_caracteristic.setKind(CaracteristicKind::BeginEquipment);
+        m_characteristic.setKind(CharacteristicKind::BeginEquipment);
         setRadioCharacters();
     }
 
@@ -226,9 +226,9 @@ void DialogSystemCaracteristic::on_radioButtonBeginEquipment_toggled(bool
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_radioButtonScript_toggled(bool checked) {
+void DialogSystemCharacteristic::on_radioButtonScript_toggled(bool checked) {
     if (checked) {
-        m_caracteristic.setKind(CaracteristicKind::Script);
+        m_characteristic.setKind(CharacteristicKind::Script);
         ui->radioButtonBuff->setChecked(false);
         uncheckAllRadiosCharacters();
     }
@@ -239,18 +239,18 @@ void DialogSystemCaracteristic::on_radioButtonScript_toggled(bool checked) {
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxIncreaseDecrease_currentIndexChanged(
+void DialogSystemCharacteristic::on_comboBoxIncreaseDecrease_currentIndexChanged(
     int index)
 {
-    m_caracteristic.setIsIncreaseDecrease(index == 0);
+    m_characteristic.setIsIncreaseDecrease(index == 0);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::
+void DialogSystemCharacteristic::
     on_comboBoxIncreaseDecreaseKind_currentIndexChanged(int index)
 {
-    m_caracteristic.increaseDecreaseKind()->setId(index);
+    m_characteristic.increaseDecreaseKind()->setId(index);
 
     ui->panelPrimitiveValueStatValue->hide();
     ui->panelPrimitiveValueElementRes->hide();
@@ -275,7 +275,7 @@ void DialogSystemCaracteristic::
         break;
     case IncreaseDecreaseKind::SkillCost:
         ui->comboBoxSkillCostAll->show();
-        if (!m_caracteristic.isAllSkillCost()) {
+        if (!m_characteristic.isAllSkillCost()) {
             ui->panelPrimitiveValueSkillCost->show();
         }
         break;
@@ -289,10 +289,10 @@ void DialogSystemCaracteristic::
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxSkillCostAll_currentIndexChanged(int
+void DialogSystemCharacteristic::on_comboBoxSkillCostAll_currentIndexChanged(int
     index)
 {
-    m_caracteristic.setIsAllSkillCost(index == 0);
+    m_characteristic.setIsAllSkillCost(index == 0);
 
     if (index == 0) {
         ui->panelPrimitiveValueSkillCost->hide();
@@ -303,32 +303,32 @@ void DialogSystemCaracteristic::on_comboBoxSkillCostAll_currentIndexChanged(int
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxOperation_currentIndexChanged(int
+void DialogSystemCharacteristic::on_comboBoxOperation_currentIndexChanged(int
     index)
 {
-    m_caracteristic.setOperation(index == 0);
+    m_characteristic.setOperation(index == 0);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxUnit_currentIndexChanged(int index) {
-    m_caracteristic.setUnit(index == 0);
+void DialogSystemCharacteristic::on_comboBoxUnit_currentIndexChanged(int index) {
+    m_characteristic.setUnit(index == 0);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxEquipAllowForbid_currentIndexChanged(
+void DialogSystemCharacteristic::on_comboBoxEquipAllowForbid_currentIndexChanged(
     int index)
 {
-    m_caracteristic.setIsAllowEquip(index == 0);
+    m_characteristic.setIsAllowEquip(index == 0);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxEquipWeaponArmor_currentIndexChanged(
+void DialogSystemCharacteristic::on_comboBoxEquipWeaponArmor_currentIndexChanged(
     int index)
 {
-    m_caracteristic.setIsAllowEquipWeapon(index == 0);
+    m_characteristic.setIsAllowEquipWeapon(index == 0);
 
     ui->panelPrimitiveValueWeaponKindID->hide();
     ui->panelPrimitiveValueArmorKindID->hide();
@@ -341,25 +341,25 @@ void DialogSystemCaracteristic::on_comboBoxEquipWeaponArmor_currentIndexChanged(
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxEquipmentChange_currentIndexChanged(
+void DialogSystemCharacteristic::on_comboBoxEquipmentChange_currentIndexChanged(
     int index)
 {
-    m_caracteristic.setIsAllowChangeEquipment(index == 0);
+    m_characteristic.setIsAllowChangeEquipment(index == 0);
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_comboBoxBeginWeaponArmor_currentIndexChanged(
+void DialogSystemCharacteristic::on_comboBoxBeginWeaponArmor_currentIndexChanged(
     int index)
 {
-    m_caracteristic.setIsBeginWeapon(index == 0);
-    m_caracteristic.updateModelBeginWeaponArmor();
+    m_characteristic.setIsBeginWeapon(index == 0);
+    m_characteristic.updateModelBeginWeaponArmor();
     ui->panelPrimitiveValueBeginWeaponArmorID->clearDataBase();
 }
 
 // -------------------------------------------------------
 
-void DialogSystemCaracteristic::on_beginWeaponArmorNumberChanged(int) {
-    m_caracteristic.updateModelBeginWeaponArmor();
+void DialogSystemCharacteristic::on_beginWeaponArmorNumberChanged(int) {
+    m_characteristic.updateModelBeginWeaponArmor();
     ui->panelPrimitiveValueBeginWeaponArmorID->clearDataBase();
 }

@@ -13,7 +13,7 @@
 #include "rpm.h"
 #include "systemeffect.h"
 #include "systemcost.h"
-#include "systemcaracteristic.h"
+#include "systemcharacteristic.h"
 
 const QString SystemCommonSkillItem::JSON_TYPE = "t";
 const QString SystemCommonSkillItem::JSON_CONSUMABLE = "con";
@@ -29,7 +29,7 @@ const QString SystemCommonSkillItem::JSON_ANIMATION_TARGET_ID = "atid";
 const QString SystemCommonSkillItem::JSON_PRICE = "p";
 const QString SystemCommonSkillItem::JSON_COSTS = "cos";
 const QString SystemCommonSkillItem::JSON_EFFECTS = "e";
-const QString SystemCommonSkillItem::JSON_CARACTERISTICS = "car";
+const QString SystemCommonSkillItem::JSON_CHARACTERISTICS = "car";
 
 // -------------------------------------------------------
 //
@@ -48,7 +48,7 @@ SystemCommonSkillItem::SystemCommonSkillItem() :
 {
     m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({"Caracteristic"}));
+    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({"Characteristic"}));
 }
 
 SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
@@ -57,7 +57,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     PrimitiveValue *conditionFormula, AvailableKind availableKind,
     SystemPlaySong *sound, PrimitiveValue *animationUserID, PrimitiveValue
     *animationTargetID, PrimitiveValue *price, QStandardItemModel *modelCosts,
-    QStandardItemModel*modelEffects, QStandardItemModel *modelCaracteristics) :
+    QStandardItemModel*modelEffects, QStandardItemModel *modelCharacteristics) :
     SystemIcon(i, names, pictureID),
     m_type(type),
     m_consumable(consumable),
@@ -73,7 +73,7 @@ SystemCommonSkillItem::SystemCommonSkillItem(int i, LangsTranslation *names, int
     m_price(price),
     m_modelCosts(modelCosts),
     m_modelEffects(modelEffects),
-    m_modelCaracteristics(modelCaracteristics)
+    m_modelCharacteristics(modelCharacteristics)
 {
 
 }
@@ -88,7 +88,7 @@ SystemCommonSkillItem::~SystemCommonSkillItem() {
     delete m_price;
     SuperListItem::deleteModel(m_modelCosts);
     SuperListItem::deleteModel(m_modelEffects);
-    SuperListItem::deleteModel(m_modelCaracteristics);
+    SuperListItem::deleteModel(m_modelCharacteristics);
 }
 
 int SystemCommonSkillItem::type() const {
@@ -167,8 +167,8 @@ QStandardItemModel * SystemCommonSkillItem::modelEffects() const {
     return m_modelEffects;
 }
 
-QStandardItemModel * SystemCommonSkillItem::modelCaracteristics() const {
-    return m_modelCaracteristics;
+QStandardItemModel * SystemCommonSkillItem::modelCharacteristics() const {
+    return m_modelCharacteristics;
 }
 
 // -------------------------------------------------------
@@ -220,20 +220,20 @@ void SystemCommonSkillItem::setCopy(const SystemCommonSkillItem &skillItem) {
             ->getModelRow());
     }
     m_modelEffects->appendRow(new QStandardItem(SuperListItem::beginningText));
-    SuperListItem::deleteModel(m_modelCaracteristics, false);
-    for (i = 0, l = skillItem.m_modelCaracteristics->invisibleRootItem()
+    SuperListItem::deleteModel(m_modelCharacteristics, false);
+    for (i = 0, l = skillItem.m_modelCharacteristics->invisibleRootItem()
         ->rowCount(); i < l - 1; i++)
     {
-        m_modelCaracteristics->insertRow(i, reinterpret_cast<SystemCaracteristic
-             *>(skillItem.m_modelCaracteristics->item(i)->data().value<quintptr>
+        m_modelCharacteristics->insertRow(i, reinterpret_cast<SystemCharacteristic
+             *>(skillItem.m_modelCharacteristics->item(i)->data().value<quintptr>
             ())->createCopy()->getModelRow());
     }
-    m_modelCaracteristics->appendRow(new QStandardItem(SuperListItem
+    m_modelCharacteristics->appendRow(new QStandardItem(SuperListItem
         ::beginningText));
     m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
     m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCaracteristics->setHorizontalHeaderLabels(QStringList({
-        "Caracteristic"}));
+    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({
+        "Characteristic"}));
 }
 
 // -------------------------------------------------------
@@ -292,9 +292,9 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     // Effects
     SuperListItem::readTree(m_modelEffects, new SystemEffect, json, JSON_EFFECTS);
 
-    // Caracteristics
-    SuperListItem::readTree(m_modelCaracteristics, new SystemCaracteristic,
-        json, JSON_CARACTERISTICS);
+    // Characteristics
+    SuperListItem::readTree(m_modelCharacteristics, new SystemCharacteristic,
+        json, JSON_CHARACTERISTICS);
 }
 
 // -------------------------------------------------------
@@ -363,6 +363,6 @@ void SystemCommonSkillItem::write(QJsonObject &json) const{
     // Effects
     SuperListItem::writeTree(m_modelEffects, json, JSON_EFFECTS);
 
-    // Caracteristics
-    SuperListItem::writeTree(m_modelCaracteristics, json, JSON_CARACTERISTICS);
+    // Characteristics
+    SuperListItem::writeTree(m_modelCharacteristics, json, JSON_CHARACTERISTICS);
 }

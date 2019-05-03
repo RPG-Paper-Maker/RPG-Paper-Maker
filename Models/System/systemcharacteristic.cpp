@@ -9,36 +9,36 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#include "systemcaracteristic.h"
+#include "systemcharacteristic.h"
 #include "rpm.h"
 #include "common.h"
 #include "systemweaponarmorkind.h"
 #include "systemcommonskillitem.h"
-#include "dialogsystemcaracteristic.h"
+#include "dialogsystemcharacteristic.h"
 
-const QString SystemCaracteristic::JSON_KIND = "k";
-const QString SystemCaracteristic::JSON_IS_INCREASE_DESCREASE = "iid";
-const QString SystemCaracteristic::JSON_INCREASE_DESCREASE_KIND = "idk";
-const QString SystemCaracteristic::JSON_STAT_VALUE_ID = "svid";
-const QString SystemCaracteristic::JSON_ELEMENT_RES_ID = "erid";
-const QString SystemCaracteristic::JSON_STATUS_RES_ID = "strid";
-const QString SystemCaracteristic::JSON_CURRENCY_GAIN_ID = "cgid";
-const QString SystemCaracteristic::JSON_SKILL_COST_ID = "scid";
-const QString SystemCaracteristic::JSON_IS_ALL_SKILL_COST = "iasc";
-const QString SystemCaracteristic::JSON_VARIABLE_ID = "vid";
-const QString SystemCaracteristic::JSON_OPERATION = "o";
-const QString SystemCaracteristic::JSON_VALUE = "v";
-const QString SystemCaracteristic::JSON_UNIT = "u";
-const QString SystemCaracteristic::JSON_SCRIPT = "s";
-const QString SystemCaracteristic::JSON_IS_ALLOW_EQUIP = "iae";
-const QString SystemCaracteristic::JSON_IS_ALLOW_EQUIP_WEAPON = "iaew";
-const QString SystemCaracteristic::JSON_EQUIP_WEAPON_TYPE_ID = "ewtid";
-const QString SystemCaracteristic::JSON_EQUIP_ARMOR_TYPE_ID = "eatid";
-const QString SystemCaracteristic::JSON_IS_ALLOW_CHANGE_EQUIPMENT= "iace";
-const QString SystemCaracteristic::JSON_CHANGE_EQUIPMENT_ID = "ceid";
-const QString SystemCaracteristic::JSON_BEGIN_EQUIPMENT_ID = "beid";
-const QString SystemCaracteristic::JSON_IS_BEGIN_WEAPON = "ibw";
-const QString SystemCaracteristic::JSON_BEGIN_WEAPON_ARMOR_ID = "bwaid";
+const QString SystemCharacteristic::JSON_KIND = "k";
+const QString SystemCharacteristic::JSON_IS_INCREASE_DESCREASE = "iid";
+const QString SystemCharacteristic::JSON_INCREASE_DESCREASE_KIND = "idk";
+const QString SystemCharacteristic::JSON_STAT_VALUE_ID = "svid";
+const QString SystemCharacteristic::JSON_ELEMENT_RES_ID = "erid";
+const QString SystemCharacteristic::JSON_STATUS_RES_ID = "strid";
+const QString SystemCharacteristic::JSON_CURRENCY_GAIN_ID = "cgid";
+const QString SystemCharacteristic::JSON_SKILL_COST_ID = "scid";
+const QString SystemCharacteristic::JSON_IS_ALL_SKILL_COST = "iasc";
+const QString SystemCharacteristic::JSON_VARIABLE_ID = "vid";
+const QString SystemCharacteristic::JSON_OPERATION = "o";
+const QString SystemCharacteristic::JSON_VALUE = "v";
+const QString SystemCharacteristic::JSON_UNIT = "u";
+const QString SystemCharacteristic::JSON_SCRIPT = "s";
+const QString SystemCharacteristic::JSON_IS_ALLOW_EQUIP = "iae";
+const QString SystemCharacteristic::JSON_IS_ALLOW_EQUIP_WEAPON = "iaew";
+const QString SystemCharacteristic::JSON_EQUIP_WEAPON_TYPE_ID = "ewtid";
+const QString SystemCharacteristic::JSON_EQUIP_ARMOR_TYPE_ID = "eatid";
+const QString SystemCharacteristic::JSON_IS_ALLOW_CHANGE_EQUIPMENT= "iace";
+const QString SystemCharacteristic::JSON_CHANGE_EQUIPMENT_ID = "ceid";
+const QString SystemCharacteristic::JSON_BEGIN_EQUIPMENT_ID = "beid";
+const QString SystemCharacteristic::JSON_IS_BEGIN_WEAPON = "ibw";
+const QString SystemCharacteristic::JSON_BEGIN_WEAPON_ARMOR_ID = "bwaid";
 
 // -------------------------------------------------------
 //
@@ -46,8 +46,8 @@ const QString SystemCaracteristic::JSON_BEGIN_WEAPON_ARMOR_ID = "bwaid";
 //
 // -------------------------------------------------------
 
-SystemCaracteristic::SystemCaracteristic() :
-    SystemCaracteristic(CaracteristicKind::IncreaseDecrease, true,
+SystemCharacteristic::SystemCharacteristic() :
+    SystemCharacteristic(CharacteristicKind::IncreaseDecrease, true,
         IncreaseDecreaseKind::StatValue, PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
@@ -65,7 +65,7 @@ SystemCaracteristic::SystemCaracteristic() :
 
 }
 
-SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
+SystemCharacteristic::SystemCharacteristic(CharacteristicKind kind, bool
     isIncreaseDecrease, IncreaseDecreaseKind increaseDecreaseKind,
     PrimitiveValue *statValueID, PrimitiveValue *elementResID, PrimitiveValue
     *statusResID, PrimitiveValue *currencyGainID, PrimitiveValue *skillCostID,
@@ -123,7 +123,7 @@ SystemCaracteristic::SystemCaracteristic(CaracteristicKind kind, bool
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
 }
 
-SystemCaracteristic::~SystemCaracteristic() {
+SystemCharacteristic::~SystemCharacteristic() {
     delete m_increaseDecreaseKind;
     delete m_statValueID;
     delete m_elementResID;
@@ -141,135 +141,135 @@ SystemCaracteristic::~SystemCaracteristic() {
     delete m_beginWeaponArmorID;
 }
 
-CaracteristicKind SystemCaracteristic::kind() const {
+CharacteristicKind SystemCharacteristic::kind() const {
     return m_kind;
 }
 
-void SystemCaracteristic::setKind(CaracteristicKind k) {
+void SystemCharacteristic::setKind(CharacteristicKind k) {
     m_kind = k;
 }
 
-bool SystemCaracteristic::isIncreaseDecrease() const {
+bool SystemCharacteristic::isIncreaseDecrease() const {
     return m_isIncreaseDecrease;
 }
 
-void SystemCaracteristic::setIsIncreaseDecrease(bool b) {
+void SystemCharacteristic::setIsIncreaseDecrease(bool b) {
     m_isIncreaseDecrease = b;
 }
 
-SuperListItem * SystemCaracteristic::increaseDecreaseKind() const {
+SuperListItem * SystemCharacteristic::increaseDecreaseKind() const {
     return m_increaseDecreaseKind;
 }
 
-PrimitiveValue * SystemCaracteristic::statValueID() const {
+PrimitiveValue * SystemCharacteristic::statValueID() const {
     return m_statValueID;
 }
 
-PrimitiveValue * SystemCaracteristic::elementResID() const {
+PrimitiveValue * SystemCharacteristic::elementResID() const {
     return m_elementResID;
 }
 
-PrimitiveValue * SystemCaracteristic::statusResID() const {
+PrimitiveValue * SystemCharacteristic::statusResID() const {
     return m_statusResID;
 }
 
-PrimitiveValue * SystemCaracteristic::currencyGainID() const {
+PrimitiveValue * SystemCharacteristic::currencyGainID() const {
     return m_currencyGainID;
 }
 
-PrimitiveValue * SystemCaracteristic::skillCostID() const {
+PrimitiveValue * SystemCharacteristic::skillCostID() const {
     return m_skillCostID;
 }
 
-bool SystemCaracteristic::isAllSkillCost() const {
+bool SystemCharacteristic::isAllSkillCost() const {
     return m_isAllSkillCost;
 }
 
-void SystemCaracteristic::setIsAllSkillCost(bool b) {
+void SystemCharacteristic::setIsAllSkillCost(bool b) {
     m_isAllSkillCost = b;
 }
 
-SuperListItem * SystemCaracteristic::variableID() const {
+SuperListItem * SystemCharacteristic::variableID() const {
     return m_variableID;
 }
 
-bool SystemCaracteristic::operation() const {
+bool SystemCharacteristic::operation() const {
     return m_operation;
 }
 
-void SystemCaracteristic::setOperation(bool b) {
+void SystemCharacteristic::setOperation(bool b) {
     m_operation = b;
 }
 
-PrimitiveValue * SystemCaracteristic::value() const {
+PrimitiveValue * SystemCharacteristic::value() const {
     return m_value;
 }
 
-bool SystemCaracteristic::unit() const {
+bool SystemCharacteristic::unit() const {
     return m_unit;
 }
 
-void SystemCaracteristic::setUnit(bool b) {
+void SystemCharacteristic::setUnit(bool b) {
     m_unit = b;
 }
 
-PrimitiveValue * SystemCaracteristic::script() const {
+PrimitiveValue * SystemCharacteristic::script() const {
     return m_script;
 }
 
-bool SystemCaracteristic::isAllowEquip() const {
+bool SystemCharacteristic::isAllowEquip() const {
     return m_isAllowEquip;
 }
 
-void SystemCaracteristic::setIsAllowEquip(bool b) {
+void SystemCharacteristic::setIsAllowEquip(bool b) {
     m_isAllowEquip = b;
 }
 
-bool SystemCaracteristic::isAllowEquipWeapon() const {
+bool SystemCharacteristic::isAllowEquipWeapon() const {
     return m_isAllowEquipWeapon;
 }
 
-void SystemCaracteristic::setIsAllowEquipWeapon(bool b) {
+void SystemCharacteristic::setIsAllowEquipWeapon(bool b) {
     m_isAllowEquipWeapon = b;
 }
 
-PrimitiveValue * SystemCaracteristic::equipWeaponTypeID() const {
+PrimitiveValue * SystemCharacteristic::equipWeaponTypeID() const {
     return m_equipWeaponTypeID;
 }
 
-PrimitiveValue * SystemCaracteristic::equipArmorTypeID() const {
+PrimitiveValue * SystemCharacteristic::equipArmorTypeID() const {
     return m_equipArmorTypeID;
 }
 
-bool SystemCaracteristic::isAllowChangeEquipment() const {
+bool SystemCharacteristic::isAllowChangeEquipment() const {
     return m_isAllowChangeEquipment;
 }
 
-void SystemCaracteristic::setIsAllowChangeEquipment(bool b) {
+void SystemCharacteristic::setIsAllowChangeEquipment(bool b) {
     m_isAllowChangeEquipment = b;
 }
 
-PrimitiveValue * SystemCaracteristic::changeEquipmentID() const {
+PrimitiveValue * SystemCharacteristic::changeEquipmentID() const {
     return m_changeEquipmentID;
 }
 
-PrimitiveValue * SystemCaracteristic::beginEquipmentID() const {
+PrimitiveValue * SystemCharacteristic::beginEquipmentID() const {
     return m_beginEquipmentID;
 }
 
-bool SystemCaracteristic::isBeginWeapon() const {
+bool SystemCharacteristic::isBeginWeapon() const {
     return  m_isBeginWeapon;
 }
 
-void SystemCaracteristic::setIsBeginWeapon(bool b) {
+void SystemCharacteristic::setIsBeginWeapon(bool b) {
     m_isBeginWeapon = b;
 }
 
-QStandardItemModel * SystemCaracteristic::modelBeginWeaponArmor() const {
+QStandardItemModel * SystemCharacteristic::modelBeginWeaponArmor() const {
     return m_modelBeginWeaponArmor;
 }
 
-PrimitiveValue * SystemCaracteristic::beginWeaponArmorID() const {
+PrimitiveValue * SystemCharacteristic::beginWeaponArmorID() const {
     return m_beginWeaponArmorID;
 }
 
@@ -279,10 +279,10 @@ PrimitiveValue * SystemCaracteristic::beginWeaponArmorID() const {
 //
 // -------------------------------------------------------
 
-SystemCaracteristic * SystemCaracteristic::createBuff(int stat, int value, bool
+SystemCharacteristic * SystemCharacteristic::createBuff(int stat, int value, bool
     operation, bool unit)
 {
-    return new SystemCaracteristic(CaracteristicKind::IncreaseDecrease, true,
+    return new SystemCharacteristic(CharacteristicKind::IncreaseDecrease, true,
        IncreaseDecreaseKind::StatValue, new PrimitiveValue(PrimitiveValueKind
        ::DataBase, stat), PrimitiveValue::createDefaultDataBaseValue(),
        PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
@@ -298,7 +298,7 @@ SystemCaracteristic * SystemCaracteristic::createBuff(int stat, int value, bool
 
 // -------------------------------------------------------
 
-void SystemCaracteristic::updateModelBeginWeaponArmor() {
+void SystemCharacteristic::updateModelBeginWeaponArmor() {
     if (m_isBeginWeapon) {
         updateModelBeginSpecific(RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelWeaponsKind(), RPM::get()->project()
@@ -312,7 +312,7 @@ void SystemCaracteristic::updateModelBeginWeaponArmor() {
 
 // -------------------------------------------------------
 
-void SystemCaracteristic::updateModelBeginSpecific(QStandardItemModel *modelKind
+void SystemCharacteristic::updateModelBeginSpecific(QStandardItemModel *modelKind
     , QStandardItemModel *model)
 {
     QVector<int> possibleKind;
@@ -349,12 +349,12 @@ void SystemCaracteristic::updateModelBeginSpecific(QStandardItemModel *modelKind
 //
 // -------------------------------------------------------
 
-bool SystemCaracteristic::openDialog() {
-    SystemCaracteristic caracteristic;
-    caracteristic.setCopy(*this);
-    DialogSystemCaracteristic dialog(caracteristic);
+bool SystemCharacteristic::openDialog() {
+    SystemCharacteristic characteristic;
+    characteristic.setCopy(*this);
+    DialogSystemCharacteristic dialog(characteristic);
     if (dialog.exec() == QDialog::Accepted) {
-        setCopy(caracteristic);
+        setCopy(characteristic);
         return true;
     }
 
@@ -363,60 +363,60 @@ bool SystemCaracteristic::openDialog() {
 
 // -------------------------------------------------------
 
-SuperListItem* SystemCaracteristic::createCopy() const {
-    SystemCaracteristic* super = new SystemCaracteristic;
+SuperListItem* SystemCharacteristic::createCopy() const {
+    SystemCharacteristic* super = new SystemCharacteristic;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemCaracteristic::setCopy(const SystemCaracteristic& caracteristic) {
-    SuperListItem::setCopy(caracteristic);
+void SystemCharacteristic::setCopy(const SystemCharacteristic& characteristic) {
+    SuperListItem::setCopy(characteristic);
     int i, l;
 
-    m_kind = caracteristic.m_kind;
-    m_isIncreaseDecrease = caracteristic.m_isIncreaseDecrease;
-    m_increaseDecreaseKind->setId(caracteristic.m_increaseDecreaseKind->id());
-    m_statValueID->setCopy(*caracteristic.m_statValueID);
-    m_elementResID->setCopy(*caracteristic.m_elementResID);
-    m_statusResID->setCopy(*caracteristic.m_statusResID);
-    m_currencyGainID->setCopy(*caracteristic.m_currencyGainID);
-    m_skillCostID->setCopy(*caracteristic.m_skillCostID);
-    m_isAllSkillCost = caracteristic.m_isAllSkillCost;
-    m_variableID->setId(caracteristic.m_variableID->id());
-    m_operation = caracteristic.m_operation;
-    m_value->setCopy(*caracteristic.m_value);
-    m_unit = caracteristic.m_unit;
-    m_script->setCopy(*caracteristic.m_script);
-    m_isAllowEquip = caracteristic.m_isAllowEquip;
-    m_isAllowEquipWeapon = caracteristic.m_isAllowEquipWeapon;
-    m_equipWeaponTypeID->setCopy(*caracteristic.m_equipWeaponTypeID);
-    m_equipArmorTypeID->setCopy(*caracteristic.m_equipArmorTypeID);
-    m_isAllowChangeEquipment = caracteristic.m_isAllowChangeEquipment;
-    m_changeEquipmentID->setCopy(*caracteristic.m_changeEquipmentID);
-    m_beginEquipmentID->setCopy(*caracteristic.m_beginEquipmentID);
-    m_isBeginWeapon = caracteristic.m_isBeginWeapon;
-    m_beginWeaponArmorID->setCopy(*caracteristic.m_beginWeaponArmorID);
+    m_kind = characteristic.m_kind;
+    m_isIncreaseDecrease = characteristic.m_isIncreaseDecrease;
+    m_increaseDecreaseKind->setId(characteristic.m_increaseDecreaseKind->id());
+    m_statValueID->setCopy(*characteristic.m_statValueID);
+    m_elementResID->setCopy(*characteristic.m_elementResID);
+    m_statusResID->setCopy(*characteristic.m_statusResID);
+    m_currencyGainID->setCopy(*characteristic.m_currencyGainID);
+    m_skillCostID->setCopy(*characteristic.m_skillCostID);
+    m_isAllSkillCost = characteristic.m_isAllSkillCost;
+    m_variableID->setId(characteristic.m_variableID->id());
+    m_operation = characteristic.m_operation;
+    m_value->setCopy(*characteristic.m_value);
+    m_unit = characteristic.m_unit;
+    m_script->setCopy(*characteristic.m_script);
+    m_isAllowEquip = characteristic.m_isAllowEquip;
+    m_isAllowEquipWeapon = characteristic.m_isAllowEquipWeapon;
+    m_equipWeaponTypeID->setCopy(*characteristic.m_equipWeaponTypeID);
+    m_equipArmorTypeID->setCopy(*characteristic.m_equipArmorTypeID);
+    m_isAllowChangeEquipment = characteristic.m_isAllowChangeEquipment;
+    m_changeEquipmentID->setCopy(*characteristic.m_changeEquipmentID);
+    m_beginEquipmentID->setCopy(*characteristic.m_beginEquipmentID);
+    m_isBeginWeapon = characteristic.m_isBeginWeapon;
+    m_beginWeaponArmorID->setCopy(*characteristic.m_beginWeaponArmorID);
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
 
     // Model weapon armor (begin)
     m_modelBeginWeaponArmor->clear();
-    for (i = 0, l = caracteristic.m_modelBeginWeaponArmor->invisibleRootItem()
+    for (i = 0, l = characteristic.m_modelBeginWeaponArmor->invisibleRootItem()
         ->rowCount(); i < l; i++)
     {
         m_modelBeginWeaponArmor->insertRow(i, reinterpret_cast<
-            SystemCommonSkillItem *>(caracteristic.m_modelBeginWeaponArmor->item
+            SystemCommonSkillItem *>(characteristic.m_modelBeginWeaponArmor->item
             (i)->data().value<quintptr>())->getModelRow());
     }
 }
 
 // -------------------------------------------------------
 
-QString SystemCaracteristic::toString() const {
+QString SystemCharacteristic::toString() const {
     QString text = SuperListItem::beginningText;
     switch (m_kind) {
-    case CaracteristicKind::IncreaseDecrease:
+    case CharacteristicKind::IncreaseDecrease:
     {
         text += QString(m_isIncreaseDecrease ? "Increase" : "Decrease") + " " +
             Common::enumToStringIncreaseDecreaseKind.at(m_increaseDecreaseKind
@@ -448,21 +448,21 @@ QString SystemCaracteristic::toString() const {
             ->toString() + " " + (m_unit ? "%" : "");
         break;
     }
-    case CaracteristicKind::AllowForbidEquip:
+    case CharacteristicKind::AllowForbidEquip:
         text += (m_isAllowEquip ? "Allow" : "Forbid") + QString(" equip ") + (
             m_isAllowEquipWeapon ? "weapon " + m_equipWeaponTypeID->toString() :
             "armor " + m_equipArmorTypeID->toString());
         break;
-    case CaracteristicKind::AllowForbidChange:
+    case CharacteristicKind::AllowForbidChange:
         text += (m_isAllowChangeEquipment ? "Allow" : "Forbid") + QString(
             " change equipment ") + m_changeEquipmentID->toString();
         break;
-    case CaracteristicKind::BeginEquipment:
+    case CharacteristicKind::BeginEquipment:
         text += "Begin equiment " + m_beginEquipmentID->toString() + " with " +
             (m_isBeginWeapon ? "weapon" : "armor") + " " + m_beginWeaponArmorID
             ->toString();
         break;
-    case CaracteristicKind::Script:
+    case CharacteristicKind::Script:
         text += "Script: " + m_script->toString();
         break;
     }
@@ -472,13 +472,13 @@ QString SystemCaracteristic::toString() const {
 
 // -------------------------------------------------------
 
-void SystemCaracteristic::read(const QJsonObject &json) {
+void SystemCharacteristic::read(const QJsonObject &json) {
     if (json.contains(JSON_KIND)) {
-        m_kind = static_cast<CaracteristicKind>(json[JSON_KIND].toInt());
+        m_kind = static_cast<CharacteristicKind>(json[JSON_KIND].toInt());
     }
 
     switch (m_kind) {
-    case CaracteristicKind::IncreaseDecrease:
+    case CharacteristicKind::IncreaseDecrease:
     {
         if (json.contains(JSON_IS_INCREASE_DESCREASE)) {
             m_isIncreaseDecrease = json[JSON_IS_INCREASE_DESCREASE].toBool();
@@ -533,12 +533,12 @@ void SystemCaracteristic::read(const QJsonObject &json) {
         }
         break;
     }
-    case CaracteristicKind::Script:
+    case CharacteristicKind::Script:
         if (json.contains(JSON_SCRIPT)) {
             m_script->read(json[JSON_SCRIPT].toObject());
         }
         break;
-    case CaracteristicKind::AllowForbidEquip:
+    case CharacteristicKind::AllowForbidEquip:
         if (json.contains(JSON_IS_ALLOW_EQUIP)) {
             m_isAllowEquip = json[JSON_IS_ALLOW_EQUIP].toBool();
         }
@@ -557,7 +557,7 @@ void SystemCaracteristic::read(const QJsonObject &json) {
             }
         }
         break;
-    case CaracteristicKind::AllowForbidChange:
+    case CharacteristicKind::AllowForbidChange:
         if (json.contains(JSON_IS_ALLOW_CHANGE_EQUIPMENT)) {
             m_isAllowChangeEquipment = json[JSON_IS_ALLOW_CHANGE_EQUIPMENT]
                 .toBool();
@@ -566,7 +566,7 @@ void SystemCaracteristic::read(const QJsonObject &json) {
             m_changeEquipmentID->read(json[JSON_CHANGE_EQUIPMENT_ID].toObject());
         }
         break;
-    case CaracteristicKind::BeginEquipment:
+    case CharacteristicKind::BeginEquipment:
         if (json.contains(JSON_BEGIN_EQUIPMENT_ID)) {
             m_beginEquipmentID->read(json[JSON_BEGIN_EQUIPMENT_ID].toObject());
         }
@@ -583,14 +583,14 @@ void SystemCaracteristic::read(const QJsonObject &json) {
 
 // -------------------------------------------------------
 
-void SystemCaracteristic::write(QJsonObject &json) const {
+void SystemCharacteristic::write(QJsonObject &json) const {
     QJsonObject obj;
 
-    if (m_kind != CaracteristicKind::IncreaseDecrease) {
+    if (m_kind != CharacteristicKind::IncreaseDecrease) {
         json[JSON_KIND] = static_cast<int>(m_kind);
     }
     switch (m_kind) {
-    case CaracteristicKind::IncreaseDecrease:
+    case CharacteristicKind::IncreaseDecrease:
     {
         if (!m_isIncreaseDecrease) {
             json[JSON_IS_INCREASE_DESCREASE] = m_isIncreaseDecrease;
@@ -659,14 +659,14 @@ void SystemCaracteristic::write(QJsonObject &json) const {
         }
         break;
     }
-    case CaracteristicKind::Script:
+    case CharacteristicKind::Script:
         if (!m_script->isDefaultMessageValue()) {
             obj = QJsonObject();
             m_script->write(obj);
             json[JSON_SCRIPT] = obj;
         }
         break;
-    case CaracteristicKind::AllowForbidEquip:
+    case CharacteristicKind::AllowForbidEquip:
         if (!m_isAllowEquip) {
             json[JSON_IS_ALLOW_EQUIP] = m_isAllowEquip;
         }
@@ -685,7 +685,7 @@ void SystemCaracteristic::write(QJsonObject &json) const {
             }
         }
         break;
-    case CaracteristicKind::AllowForbidChange:
+    case CharacteristicKind::AllowForbidChange:
         if (!m_isAllowChangeEquipment) {
             json[JSON_IS_ALLOW_CHANGE_EQUIPMENT] = m_isAllowChangeEquipment;
         }
@@ -695,7 +695,7 @@ void SystemCaracteristic::write(QJsonObject &json) const {
             json[JSON_CHANGE_EQUIPMENT_ID] = obj;
         }
         break;
-    case CaracteristicKind::BeginEquipment:
+    case CharacteristicKind::BeginEquipment:
         if (!m_beginEquipmentID->isDefaultDataBaseValue()) {
             obj = QJsonObject();
             m_beginEquipmentID->write(obj);

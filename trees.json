@@ -14305,8 +14305,8 @@
             },
             {
                 "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/system-caracteristic.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-caracteristic.js"
+                "source": "Content/Datas/Scripts/System/system-characteristic.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-characteristic.js"
             },
             {
                 "repo": "Game-Scripts",

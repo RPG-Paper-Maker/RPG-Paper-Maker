@@ -288,13 +288,13 @@ HEADERS += \
     CustomWidgets/paneldamageskind.h \
     Models/System/systemcost.h \
     Dialogs/Systems/dialogsystemcost.h \
-    Models/System/systemcaracteristic.h \
-    Enums/caracteristickind.h \
     Enums/increasedecreasekind.h \
-    Dialogs/Systems/dialogsystemcaracteristic.h \
     Models/GameDatas/titlescreengameoverdatas.h \
     CustomWidgets/panelrecentprojects.h \
-    Dialogs/dialogcompleteliststates.h
+    Dialogs/dialogcompleteliststates.h \
+    Models/System/systemcharacteristic.h \
+    Dialogs/Systems/dialogsystemcharacteristic.h \
+    Enums/characteristickind.h
 
 SOURCES += \
     main.cpp \
@@ -523,11 +523,11 @@ SOURCES += \
     CustomWidgets/paneldamageskind.cpp \
     Models/System/systemcost.cpp \
     Dialogs/Systems/dialogsystemcost.cpp \
-    Models/System/systemcaracteristic.cpp \
-    Dialogs/Systems/dialogsystemcaracteristic.cpp \
     Models/GameDatas/titlescreengameoverdatas.cpp \
     CustomWidgets/panelrecentprojects.cpp \
-    Dialogs/dialogcompleteliststates.cpp
+    Dialogs/dialogcompleteliststates.cpp \
+    Models/System/systemcharacteristic.cpp \
+    Dialogs/Systems/dialogsystemcharacteristic.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -614,7 +614,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemeffect.ui \
     CustomWidgets/paneldamageskind.ui \
     Dialogs/Systems/dialogsystemcost.ui \
-    Dialogs/Systems/dialogsystemcaracteristic.ui \
+    Dialogs/Systems/dialogsystemcharacteristic.ui \
     Dialogs/dialogcompleteliststates.ui
 
 OTHER_FILES +=

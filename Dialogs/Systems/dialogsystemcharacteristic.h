@@ -9,37 +9,37 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef DIALOGSYSTEMCARACTERISTIC_H
-#define DIALOGSYSTEMCARACTERISTIC_H
+#ifndef DIALOGSYSTEMCHARACTERISTIC_H
+#define DIALOGSYSTEMCHARACTERISTIC_H
 
 #include <QDialog>
-#include "systemcaracteristic.h"
+#include "systemcharacteristic.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogSystemCaracteristic
+//  CLASS DialogSystemCharacteristic
 //
-//  A dialog used for editing the model of a system caracteristic.
+//  A dialog used for editing the model of a system characteristic.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogSystemCaracteristic;
+class DialogSystemCharacteristic;
 }
 
-class DialogSystemCaracteristic : public QDialog
+class DialogSystemCharacteristic : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogSystemCaracteristic(SystemCaracteristic &caracteristic,
+    explicit DialogSystemCharacteristic(SystemCharacteristic &characteristic,
         QWidget *parent = nullptr);
-    ~DialogSystemCaracteristic();
-    SystemCaracteristic & caracteristic() const;
+    ~DialogSystemCharacteristic();
+    SystemCharacteristic & characteristic() const;
 
 private:
-    Ui::DialogSystemCaracteristic *ui;
-    SystemCaracteristic &m_caracteristic;
+    Ui::DialogSystemCharacteristic *ui;
+    SystemCharacteristic &m_characteristic;
 
     void initialize();
     void setRadioCharacters();
@@ -63,4 +63,4 @@ public slots:
     void on_beginWeaponArmorNumberChanged(int);
 };
 
-#endif // DIALOGSYSTEMCARACTERISTIC_H
+#endif // DIALOGSYSTEMCHARACTERISTIC_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogSystemCaracteristic</class>
- <widget class="QDialog" name="DialogSystemCaracteristic">
+ <class>DialogSystemCharacteristic</class>
+ <widget class="QDialog" name="DialogSystemCharacteristic">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Caracteristic...</string>
+   <string>Characteristic...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_9">
    <property name="leftMargin">
@@ -714,7 +714,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogSystemCaracteristic</receiver>
+   <receiver>DialogSystemCharacteristic</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -730,7 +730,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogSystemCaracteristic</receiver>
+   <receiver>DialogSystemCharacteristic</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

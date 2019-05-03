@@ -9,23 +9,23 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef SYSTEMCARACTERISTIC_H
-#define SYSTEMCARACTERISTIC_H
+#ifndef SYSTEMCHARACTERISTIC_H
+#define SYSTEMCHARACTERISTIC_H
 
 #include "superlistitem.h"
-#include "caracteristickind.h"
+#include "characteristickind.h"
 #include "primitivevalue.h"
 #include "increasedecreasekind.h"
 
 // -------------------------------------------------------
 //
-//  CLASS SystemCaracteristic
+//  CLASS SystemCharacteristic
 //
-//  A particulary cost (datas).
+//  A particulary characteristic (datas).
 //
 // -------------------------------------------------------
 
-class SystemCaracteristic : public SuperListItem
+class SystemCharacteristic : public SuperListItem
 {
 public:
     static const QString JSON_KIND;
@@ -52,8 +52,8 @@ public:
     static const QString JSON_IS_BEGIN_WEAPON;
     static const QString JSON_BEGIN_WEAPON_ARMOR_ID;
 
-    SystemCaracteristic();
-    SystemCaracteristic(CaracteristicKind kind, bool isIncreaseDecrease,
+    SystemCharacteristic();
+    SystemCharacteristic(CharacteristicKind kind, bool isIncreaseDecrease,
         IncreaseDecreaseKind increaseDecreaseKind, PrimitiveValue
         *statValueID, PrimitiveValue *elementResID, PrimitiveValue *statusResID,
         PrimitiveValue *currencyGainID, PrimitiveValue *skillCostID, bool
@@ -63,9 +63,9 @@ public:
         *equipArmorTypeID, bool isAllowChangeEquipment, PrimitiveValue
         *changeEquipmentID, PrimitiveValue *beginEquipmentID, bool isBeginWeapon
         , PrimitiveValue *beginWeaponArmorID);
-    virtual ~SystemCaracteristic();
-    CaracteristicKind kind() const;
-    void setKind(CaracteristicKind k);
+    virtual ~SystemCharacteristic();
+    CharacteristicKind kind() const;
+    void setKind(CharacteristicKind k);
     bool isIncreaseDecrease() const;
     void setIsIncreaseDecrease(bool b);
     SuperListItem * increaseDecreaseKind() const;
@@ -98,19 +98,19 @@ public:
     QStandardItemModel * modelBeginWeaponArmor() const;
     PrimitiveValue * beginWeaponArmorID() const;
 
-    static SystemCaracteristic * createBuff(int stat, int value, bool operation,
+    static SystemCharacteristic * createBuff(int stat, int value, bool operation,
         bool unit);
     void updateModelBeginWeaponArmor();
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemCaracteristic &caracteristic);
+    virtual void setCopy(const SystemCharacteristic &caracteristic);
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    CaracteristicKind m_kind;
+    CharacteristicKind m_kind;
     bool m_isIncreaseDecrease;
     SuperListItem *m_increaseDecreaseKind;
     PrimitiveValue *m_statValueID;
@@ -139,6 +139,6 @@ protected:
         QStandardItemModel *model);
 };
 
-Q_DECLARE_METATYPE(SystemCaracteristic)
+Q_DECLARE_METATYPE(SystemCharacteristic)
 
-#endif // SYSTEMCARACTERISTIC_H
+#endif // SYSTEMCHARACTERISTIC_H

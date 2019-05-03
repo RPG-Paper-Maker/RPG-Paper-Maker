@@ -733,7 +733,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>caracteristic:</string>
+               <string>characteristic:</string>
               </property>
              </widget>
             </item>
@@ -819,7 +819,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Other caracteristics:</string>
+               <string>Other characteristics:</string>
               </property>
               <property name="checked">
                <bool>false</bool>
