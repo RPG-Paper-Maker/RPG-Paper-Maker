@@ -96,6 +96,7 @@ public slots:
     void onFirstPressure();
 
 protected slots:
+    bool focusNextPrevChild(bool);
     void focusOutEvent(QFocusEvent*);
     void wheelEvent(QWheelEvent *event);
     void mouseMoveEvent(QMouseEvent *event);

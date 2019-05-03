@@ -400,6 +400,12 @@ void WidgetMapEditor::redo() {
 //
 // -------------------------------------------------------
 
+bool WidgetMapEditor::focusNextPrevChild(bool) {
+    return false;
+}
+
+// -------------------------------------------------------
+
 void WidgetMapEditor::focusOutEvent(QFocusEvent *) {
     m_keysPressed.clear();
     this->setFocus();
@@ -518,8 +524,13 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
             m_control.removePreviewElements();
         }
 
-        // Move
+        // Tab
         int key = event->key();
+        if (key == Qt::Key_Tab) {
+            m_menuBar->toggleSelection();
+        }
+
+        // Move
         if (!m_keysPressed.contains(key)) {
             KeyBoardDatas *keyBoardDatas = RPM::get()->engineSettings()
                 ->keyBoardDatas();

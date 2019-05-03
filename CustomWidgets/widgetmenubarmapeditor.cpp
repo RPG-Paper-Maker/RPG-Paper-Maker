@@ -13,6 +13,7 @@
 #include <QStyleOptionMenuItem>
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
+#include "common.h"
 
 QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
 QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
@@ -218,6 +219,37 @@ void WidgetMenuBarMapEditor::initializeRightMenu() {
     bar->addAction(m_actionLayerOn);
 
     this->setCornerWidget(bar);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::toggleSelection() {
+    QAction *action;
+    int index, count;
+
+    count = this->countSelectionKind();
+    index = static_cast<int>(m_selectionKind);
+
+    do {
+        index = Common::modulo(index + 1, count);
+        action = actions().at(index);
+    } while(!action->isEnabled());
+
+    this->updateSelection(action);
+}
+
+// -------------------------------------------------------
+
+int WidgetMenuBarMapEditor::countSelectionKind() const {
+    int nb = 0;
+
+    for (int i = static_cast<int>(MapEditorSelectionKind::Land); i != static_cast<
+        int>(MapEditorSelectionKind::None); i++)
+    {
+        nb++;
+    }
+
+    return nb;
 }
 
 // -------------------------------------------------------

@@ -253,6 +253,9 @@
    <property name="toolTip">
     <string>Play your game!</string>
    </property>
+   <property name="shortcut">
+    <string>P</string>
+   </property>
   </action>
   <action name="actionDatas_manager">
    <property name="icon">
@@ -268,6 +271,9 @@
    <property name="toolTip">
     <string>Datas manager of your project</string>
    </property>
+   <property name="shortcut">
+    <string>1</string>
+   </property>
   </action>
   <action name="actionVariables_manager">
    <property name="icon">
@@ -279,6 +285,9 @@
    </property>
    <property name="iconText">
     <string>Variables</string>
+   </property>
+   <property name="shortcut">
+    <string>3</string>
    </property>
   </action>
   <action name="actionSystems_manager">
@@ -292,6 +301,9 @@
    <property name="iconText">
     <string>Systems</string>
    </property>
+   <property name="shortcut">
+    <string>2</string>
+   </property>
   </action>
   <action name="actionKeyboard_controls">
    <property name="icon">
@@ -303,6 +315,9 @@
    </property>
    <property name="iconText">
     <string>Keyboard</string>
+   </property>
+   <property name="shortcut">
+    <string>6</string>
    </property>
   </action>
   <action name="actionSave_all">
@@ -324,6 +339,9 @@
    <property name="text">
     <string>Export standalone...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
   <action name="actionPictures_manager">
    <property name="icon">
@@ -336,10 +354,16 @@
    <property name="iconText">
     <string>Pictures</string>
    </property>
+   <property name="shortcut">
+    <string>4</string>
+   </property>
   </action>
   <action name="actionSet_BR_path_folder">
    <property name="text">
     <string>Set BR path folder...</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+U</string>
    </property>
   </action>
   <action name="actionAutotiles">
@@ -352,6 +376,9 @@
    </property>
    <property name="text">
     <string>Autotiles</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
    </property>
   </action>
   <action name="actionSprite_walls">
@@ -368,6 +395,9 @@
    <property name="iconText">
     <string>Walls</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
   </action>
   <action name="action3D_objects">
    <property name="enabled">
@@ -383,6 +413,9 @@
    <property name="iconText">
     <string>3D objects</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
   </action>
   <action name="actionReliefs">
    <property name="enabled">
@@ -394,6 +427,9 @@
    </property>
    <property name="text">
     <string>Reliefs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionShow_Hide_grid">
@@ -442,6 +478,9 @@
    <property name="iconText">
     <string>! Autotiles</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
   </action>
   <action name="actionSongs_manager">
    <property name="enabled">
@@ -457,6 +496,9 @@
    <property name="iconText">
     <string>Songs</string>
    </property>
+   <property name="shortcut">
+    <string>5</string>
+   </property>
   </action>
   <action name="actionCollisions_manager">
    <property name="icon">
@@ -468,6 +510,9 @@
    </property>
    <property name="iconText">
     <string>Collisions</string>
+   </property>
+   <property name="shortcut">
+    <string>7</string>
    </property>
   </action>
   <action name="actionScripts_manager">
@@ -481,20 +526,32 @@
    <property name="iconText">
     <string>Scripts</string>
    </property>
+   <property name="shortcut">
+    <string>8</string>
+   </property>
   </action>
   <action name="actionDebug_options">
    <property name="text">
     <string>Debug options...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionGeneral_options">
    <property name="text">
     <string>General options...</string>
    </property>
+   <property name="shortcut">
+    <string>U</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>H</string>
    </property>
   </action>
  </widget>

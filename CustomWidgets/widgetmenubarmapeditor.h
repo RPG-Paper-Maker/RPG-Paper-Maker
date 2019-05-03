@@ -65,6 +65,8 @@ public:
 
     bool containsMenu() const;
     void initializeRightMenu();
+    void toggleSelection();
+    int countSelectionKind() const;
 
 private:
     Ui::WidgetMenuBarMapEditor *ui;
@@ -77,9 +79,9 @@ private:
     QAction *m_actionLayerOn;
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void paintEvent(QPaintEvent *e);
 
     void updateSelection(QAction *action);
     void updateMenutext(QMenu *menu, QAction *action);
