@@ -732,7 +732,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,1">
            <item>
             <widget class="QGroupBox" name="groupBox_22">
              <property name="minimumSize">
@@ -771,241 +771,218 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Picture:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="WidgetPicture" name="widgetPictureTileset" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>27</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0,1,0,1,0,1,0,1">
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>Autotiles:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,0">
                  <item>
-                  <widget class="QLabel" name="label_4">
-                   <property name="text">
-                    <string>Picture:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="WidgetPicture" name="widgetPictureTileset" native="true">
+                  <widget class="PanelSuperList" name="panelSuperListTilesetAutotiles" native="true">
                    <property name="minimumSize">
                     <size>
-                     <width>200</width>
-                     <height>27</height>
+                     <width>0</width>
+                     <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>200</width>
-                     <height>27</height>
+                     <width>16777215</width>
+                     <height>16777215</height>
                     </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButtonAutotiles">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Choose...</string>
                    </property>
                   </widget>
                  </item>
                 </layout>
                </item>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,1,1,1,1">
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>Animated autotiles:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_11" stretch="1,0">
                  <item>
-                  <widget class="QGroupBox" name="groupBox_4">
-                   <property name="enabled">
-                    <bool>true</bool>
+                  <widget class="PanelSuperList" name="panelSuperListTilesetAnimatedAutotiles" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>230</width>
+                     <height>0</height>
+                    </size>
                    </property>
-                   <property name="title">
-                    <string>Autotiles</string>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout_11">
-                    <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,0">
-                      <item>
-                       <widget class="PanelSuperList" name="panelSuperListTilesetAutotiles" native="true">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonAutotiles">
-                        <property name="text">
-                         <string>Choose...</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_7">
-                   <property name="enabled">
-                    <bool>false</bool>
+                  <widget class="QPushButton" name="pushButtonAnimatedAutotiles">
+                   <property name="text">
+                    <string>Choose...</string>
                    </property>
-                   <property name="title">
-                    <string>Animated autotiles</string>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Sprite walls:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,0">
+                 <item>
+                  <widget class="PanelSuperList" name="panelSuperListTilesetSpriteWalls" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout_15">
-                    <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_11" stretch="1,0">
-                      <item>
-                       <widget class="PanelSuperList" name="panelSuperListTilesetAnimatedAutotiles" native="true">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonAnimatedAutotiles">
-                        <property name="text">
-                         <string>Choose...</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox">
-                   <property name="enabled">
-                    <bool>true</bool>
+                  <widget class="QPushButton" name="pushButtonSpriteWalls">
+                   <property name="text">
+                    <string>Choose...</string>
                    </property>
-                   <property name="title">
-                    <string>Sprite walls</string>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>3D objects:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,0">
+                 <item>
+                  <widget class="PanelSuperList" name="panelSuperListTileset3DObjects" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout_10">
-                    <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,0">
-                      <item>
-                       <widget class="PanelSuperList" name="panelSuperListTilesetSpriteWalls" native="true">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonSpriteWalls">
-                        <property name="text">
-                         <string>Choose...</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_6">
-                   <property name="enabled">
-                    <bool>false</bool>
+                  <widget class="QPushButton" name="pushButton3DObjects">
+                   <property name="text">
+                    <string>Choose...</string>
                    </property>
-                   <property name="title">
-                    <string>3D objects</string>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Reliefs:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,0">
+                 <item>
+                  <widget class="PanelSuperList" name="panelSuperListTilesetReliefs" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout_12">
-                    <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,0">
-                      <item>
-                       <widget class="PanelSuperList" name="panelSuperListTileset3DObjects" native="true">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton3DObjects">
-                        <property name="text">
-                         <string>Choose...</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_5">
-                   <property name="enabled">
-                    <bool>false</bool>
+                  <widget class="QPushButton" name="pushButtonReliefs">
+                   <property name="text">
+                    <string>Choose...</string>
                    </property>
-                   <property name="title">
-                    <string>Reliefs</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_13">
-                    <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,0">
-                      <item>
-                       <widget class="PanelSuperList" name="panelSuperListTilesetReliefs" native="true">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonReliefs">
-                        <property name="text">
-                         <string>Choose...</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
                 </layout>
                </item>
               </layout>
              </item>
-             <item>
-              <widget class="WidgetTilesetSettings" name="widgetTilesetPictureSettings" native="true"/>
-             </item>
             </layout>
+           </item>
+           <item>
+            <widget class="WidgetTilesetSettings" name="widgetTilesetPictureSettings" native="true"/>
            </item>
           </layout>
          </item>
