@@ -81,11 +81,16 @@ void Map::loadPictures(PictureKind kind,
     SystemPicture* picture;
     QStandardItemModel* model = RPM::get()->project()->picturesDatas()
             ->model(kind);
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++){
+    int id;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
-        QImage image;
-        loadPicture(picture, kind, image);
-        textures[picture->id()] = createTexture(image);
+        id = picture->id();
+        if (id != 0) {
+            QImage image;
+            loadPicture(picture, kind, image);
+            textures[id] = createTexture(image);
+        }
     }
 }
 

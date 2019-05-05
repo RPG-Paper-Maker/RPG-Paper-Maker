@@ -35,12 +35,12 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
     if (object != nullptr){
 
     }
-    if (RPM::isInConfig){
+    if (RPM::isInConfig && !RPM::isInObjectConfig){
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
     else{
-        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
 
     ui->widgetObjectID->initializeDataBaseCommandId(m_modelObjects, parameters,
@@ -61,6 +61,10 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
 DialogCommandTeleportObject::~DialogCommandTeleportObject()
 {
     delete ui;
+
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------

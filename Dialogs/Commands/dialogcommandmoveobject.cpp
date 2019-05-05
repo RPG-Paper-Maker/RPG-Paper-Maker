@@ -30,12 +30,12 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
 {
     ui->setupUi(this);
     
-    if (RPM::isInConfig){
+    if (RPM::isInConfig && !RPM::isInObjectConfig){
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
     else{
-        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
                                                              parameters,
@@ -62,7 +62,7 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
 
     delete ui;
 
-    if (RPM::isInConfig) {
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(m_modelObjects);
     }
 }
