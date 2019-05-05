@@ -347,6 +347,7 @@ void WidgetTreeCommands::deleteCommand(){
     QStandardItem* selected;
     EventCommand* command;
     QStandardItem* root;
+    int row = -1;
 
     for (int i = 0; i < list.size(); i++){
         selected = list.at(i);
@@ -357,8 +358,15 @@ void WidgetTreeCommands::deleteCommand(){
 
             // Delete selected command
             SystemCommonReaction::deleteCommands(selected);
-            root->removeRow(selected->row());
+            row = selected->row();
+            root->removeRow(row);
         }
+    }
+
+    // Select node below
+    if (row != -1) {
+        this->selectionModel()->select(this->getModel()->item(row)->index(),
+            QItemSelectionModel::SelectCurrent);
     }
 }
 
