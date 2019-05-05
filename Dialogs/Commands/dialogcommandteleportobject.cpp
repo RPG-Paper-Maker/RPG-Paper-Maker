@@ -45,6 +45,7 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
 
     ui->widgetObjectID->initializeDataBaseCommandId(m_modelObjects, parameters,
                                                     nullptr);
+    ui->widgetObjectID->setNumberValue(0);
     ui->widgetIdMap->initializeNumber(parameters, nullptr);
     ui->widgetX->initializeNumber(parameters, nullptr);
     ui->widgetY->initializeNumber(parameters, nullptr);
