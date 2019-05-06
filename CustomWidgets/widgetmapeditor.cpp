@@ -239,7 +239,9 @@ void WidgetMapEditor::paintGL() {
                         QFont(), QColor(255, 255, 255));
                 }
             }
-            if (m_menuBar->layerOn()) {
+            if (m_menuBar->layerOn() && m_menuBar->selectionKind() !=
+                MapEditorSelectionKind::Objects)
+            {
                 p.drawImage(point.x() + 10, point.y() - 10, m_imageLayerOn);
             }
             p.end();
@@ -415,7 +417,9 @@ void WidgetMapEditor::redo() {
 void WidgetMapEditor::updateCursor() {
     QCursor *cursor;
 
-    if (m_menuBar == nullptr) {
+    if (m_menuBar == nullptr || m_menuBar->selectionKind() ==
+        MapEditorSelectionKind::Objects)
+    {
         setCursor(Qt::ArrowCursor);
     } else {
         switch (m_menuBar->drawKind()) {
