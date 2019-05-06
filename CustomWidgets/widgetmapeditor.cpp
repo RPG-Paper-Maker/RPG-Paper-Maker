@@ -35,6 +35,17 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_spinBoxX(nullptr),
     m_spinBoxZ(nullptr)
 {
+    QPixmap cursorPixmap;
+
+    // Initialize cursors
+    cursorPixmap = QPixmap(":/icons/Ressources/pencil_cursor.png");
+    m_cursorPencil = QCursor(cursorPixmap, 4, 27);
+    cursorPixmap = QPixmap(":/icons/Ressources/rectangle_cursor.png");
+    m_cursorRectangle = QCursor(cursorPixmap, 2, 4);
+    cursorPixmap = QPixmap(":/icons/Ressources/pin_cursor.png");
+    m_cursorPinPaint = QCursor(cursorPixmap, 0, 29);
+    m_imageLayerOn = QImage(":/icons/Ressources/layer_on_cursor.png");
+
     // Timers
     m_timerFirstPressure->setSingleShot(true);
     connect(m_timerFirstPressure, SIGNAL(timeout()), this, SLOT(onFirstPressure()));
@@ -166,6 +177,7 @@ void WidgetMapEditor::paintGL() {
             layerOn = m_menuBar->layerOn();
         }
 
+        QPoint point = mapFromGlobal(QCursor::pos());
         if (!RPM::isInConfig || m_menuBar == nullptr) {
 
             // Key press
@@ -181,7 +193,6 @@ void WidgetMapEditor::paintGL() {
             }
 
             // Update control
-            QPoint point = mapFromGlobal(QCursor::pos());
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
             m_control.update(layerOn);
@@ -217,14 +228,19 @@ void WidgetMapEditor::paintGL() {
         p.end();
 
         // Draw additional text informations
-        if (m_menuBar != nullptr && m_control.displaySquareInformations()) {
+        if (m_menuBar != nullptr) {
             QString infos = m_control.getSquareInfos(kind, subKind, layerOn,
                 this->hasFocus());
             QStringList listInfos = infos.split("\n");
             p.begin(this);
-            for (int i = 0; i < listInfos.size(); i++) {
-                renderText(p, 20, 20 * (listInfos.size() - i), listInfos.at(i),
-                    QFont(), QColor(255, 255, 255));
+            if (m_control.displaySquareInformations()) {
+                for (int i = 0; i < listInfos.size(); i++) {
+                    renderText(p, 20, 20 * (listInfos.size() - i), listInfos.at(i),
+                        QFont(), QColor(255, 255, 255));
+                }
+            }
+            if (m_menuBar->layerOn()) {
+                p.drawImage(point.x() + 10, point.y() - 10, m_imageLayerOn);
             }
             p.end();
         }
@@ -395,6 +411,26 @@ void WidgetMapEditor::redo() {
 }
 
 // -------------------------------------------------------
+
+void WidgetMapEditor::updateCursor() {
+    QCursor *cursor;
+
+    switch (m_menuBar->drawKind()) {
+    case DrawKind::Pencil:
+        cursor = &m_cursorPencil;
+        break;
+    case DrawKind::Rectangle:
+        cursor = &m_cursorRectangle;
+        break;
+    case DrawKind::Pin:
+        cursor = &m_cursorPinPaint;
+        break;
+    }
+
+    setCursor(*cursor);
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -417,6 +453,18 @@ void WidgetMapEditor::wheelEvent(QWheelEvent *event) {
     if (m_control.map() != nullptr) {
         m_control.onMouseWheelMove(event);
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::enterEvent(QEvent *) {
+    updateCursor();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::leaveEvent(QEvent *) {
+    setCursor(Qt::ArrowCursor);
 }
 
 // -------------------------------------------------------

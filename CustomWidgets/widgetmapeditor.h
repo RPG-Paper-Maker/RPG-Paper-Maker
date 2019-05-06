@@ -69,6 +69,7 @@ public:
     void showHideSquareInformations();
     void undo();
     void redo();
+    void updateCursor();
 
 private:
     WidgetMenuBarMapEditor *m_menuBar;
@@ -90,6 +91,10 @@ private:
     ContextMenuList *m_contextMenu;
     long m_elapsedTime;
     QColor m_backgroundColor;
+    QCursor m_cursorPencil;
+    QCursor m_cursorRectangle;
+    QCursor m_cursorPinPaint;
+    QImage m_imageLayerOn;
 
 public slots:
     void update();
@@ -99,6 +104,8 @@ protected slots:
     bool focusNextPrevChild(bool);
     void focusOutEvent(QFocusEvent*);
     void wheelEvent(QWheelEvent *event);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

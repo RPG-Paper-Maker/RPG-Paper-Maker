@@ -58,6 +58,10 @@
         <file>Ressources/play_song.png</file>
         <file>Ressources/stop_song.png</file>
         <file>icon.ico</file>
+        <file>Ressources/pencil_cursor.png</file>
+        <file>Ressources/pin_cursor.png</file>
+        <file>Ressources/rectangle_cursor.png</file>
+        <file>Ressources/layer_on_cursor.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>
