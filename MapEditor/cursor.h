@@ -47,6 +47,7 @@ public:
     void setFrameDuration(int i);
     void setFrameNumber(int i);
     QVector3D* position() const;
+    void getPosition3D(Position3D& position) const;
     Portion getPortion() const;
     void loadTexture(QString path);
     void updatePositionSquare();

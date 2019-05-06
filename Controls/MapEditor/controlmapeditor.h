@@ -43,6 +43,7 @@ public:
     Grid * grid() const;
     Cursor * cursor() const;
     Cursor * cursorObject() const;
+    Cursor * cursorStart() const;
     Camera * camera() const;
     bool isCtrlPressed() const;
     void setIsCtrlPressed(bool b);
@@ -158,6 +159,7 @@ public:
     void moveObject(Position &p);
     void updateMapObjects();
     void setObjectPosition(Position &position);
+    void setStartPosition(Position3D &p);
     bool isCursorObjectVisible();
     bool isObjectInCursor(Position3D &p);
     void updateObjectEdition(MapPortion *mapPortion);
@@ -202,6 +204,7 @@ protected:
     WallIndicator *m_beginWallIndicator;
     WallIndicator *m_endWallIndicator;
     Cursor *m_cursorObject;
+    Cursor *m_cursorStart;
     Camera *m_camera;
 
     // Others
@@ -216,6 +219,7 @@ protected:
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;
+    QVector3D *m_positionStart;
     MapElement *m_elementOnLand;
     MapElement *m_elementOnSprite;
     float m_distancePlane;

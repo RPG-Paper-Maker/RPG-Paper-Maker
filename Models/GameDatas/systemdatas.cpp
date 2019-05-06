@@ -96,7 +96,15 @@ int SystemDatas::squareSize() const { return m_squareSize; }
 
 void SystemDatas::setSquareSize(int i) { m_squareSize = i; }
 
+int SystemDatas::idMapHero() const {
+    return m_idMapHero;
+}
+
 void SystemDatas::setIdMapHero(int i) { m_idMapHero = i; }
+
+int SystemDatas::idObjectHero() const {
+    return m_idObjectHero;
+}
 
 void SystemDatas::setIdObjectHero(int i) { m_idObjectHero = i; }
 

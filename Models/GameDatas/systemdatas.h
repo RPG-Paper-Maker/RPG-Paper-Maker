@@ -55,7 +55,9 @@ public:
     void setPortionRay(int p);
     int squareSize() const;
     void setSquareSize(int i);
+    int idMapHero() const;
     void setIdMapHero(int i);
+    int idObjectHero() const;
     void setIdObjectHero(int i);
     QString pathBR() const;
     void setPathBR(QString p);

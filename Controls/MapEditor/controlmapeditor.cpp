@@ -14,6 +14,7 @@
 #include "controlmapeditor.h"
 #include "dialogobject.h"
 #include "rpm.h"
+#include "systemmapobject.h"
 
 // -------------------------------------------------------
 
@@ -34,7 +35,9 @@ ControlMapEditor::ControlMapEditor() :
     m_beginWallIndicator(nullptr),
     m_endWallIndicator(nullptr),
     m_cursorObject(nullptr),
+    m_cursorStart(nullptr),
     m_camera(new Camera),
+    m_positionStart(nullptr),
     m_elementOnLand(nullptr),
     m_elementOnSprite(nullptr),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
@@ -72,6 +75,10 @@ Cursor * ControlMapEditor::cursor() const {
 
 Cursor * ControlMapEditor::cursorObject() const {
     return m_cursorObject;
+}
+
+Cursor * ControlMapEditor::cursorStart() const {
+    return m_cursorStart;
 }
 
 Camera * ControlMapEditor::camera() const {
@@ -124,6 +131,10 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     QVector3D *positionObject, int cameraDistance, double cameraHorizontalAngle,
     double cameraVerticalAngle)
 {
+    SystemMapObject *mapObject;
+    Position3D heroPosition;
+    int i, l;
+
     clearPortionsToUpdate();
 
     // Map & cursor
@@ -151,6 +162,35 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     m_cursorObject->setFrameNumber(1);
     m_cursorObject->loadTexture(":/textures/Ressources/object_square_cursor.png");
     m_cursorObject->initialize();
+
+    // Cursor start
+    if (m_map->mapProperties()->id() == RPM::get()->project()->gameDatas()
+        ->systemDatas()->idMapHero())
+    {
+
+        for (i = 2, l = m_map->modelObjects()->invisibleRootItem()->rowCount();
+            i < l; i++)
+        {
+            mapObject = reinterpret_cast<SystemMapObject *>(m_map->modelObjects()
+                ->item(i)->data().value<quintptr>());
+            if (mapObject->id() == RPM::get()->project()->gameDatas()
+                ->systemDatas()->idObjectHero())
+            {
+                heroPosition = mapObject->position();
+                break;
+            }
+        }
+
+        m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
+            0, heroPosition.z() * m_map->squareSize());
+        m_cursorStart = new Cursor(m_positionStart);
+        m_cursorStart->initializeSquareSize(m_map->squareSize());
+        m_cursorStart->setX(m_cursorStart->getSquareX());
+        m_cursorStart->setZ(m_cursorStart->getSquareZ());
+        m_cursorStart->setFrameNumber(1);
+        m_cursorStart->loadTexture(":/textures/Ressources/start.png");
+        m_cursorStart->initialize();
+    }
 
     // Wall indicator
     m_beginWallIndicator = new WallIndicator;
@@ -183,6 +223,10 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
         delete m_cursorObject;
         m_cursorObject = nullptr;
     }
+    if (m_cursorStart != nullptr) {
+        delete m_cursorStart;
+        m_cursorStart = nullptr;
+    }
     if (m_beginWallIndicator != nullptr) {
         delete m_beginWallIndicator;
         m_beginWallIndicator = nullptr;
@@ -190,6 +234,10 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
     if (m_endWallIndicator != nullptr) {
         delete m_endWallIndicator;
         m_endWallIndicator = nullptr;
+    }
+    if (m_positionStart != nullptr) {
+        delete m_positionStart;
+        m_positionStart = nullptr;
     }
 
     // Grid
@@ -1008,17 +1056,28 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     QVector3D &cameraDeepWorldSpace, MapEditorSelectionKind selectionKind,
     MapEditorSubSelectionKind subSelectionKind, DrawKind drawKind)
 {
+    Position3D position;
+
     // Drawing floors
     m_map->paintFloors(modelviewProjection);
 
     // Drawing object cursor
     if (selectionKind == MapEditorSelectionKind::Objects) {
-        if (isCursorObjectVisible())
+        if (isCursorObjectVisible()) {
             m_cursorObject->paintGL(modelviewProjection);
+        }
     }
 
     // Drawing user cursor
     m_map->cursor()->paintGL(modelviewProjection);
+
+    // Drawing start cursor
+    if (m_cursorStart != nullptr) {
+        m_cursorStart->getPosition3D(position);
+        if (isVisible(position)) {
+            m_cursorStart->paintGL(modelviewProjection);
+        }
+    }
 
     // Drawing grid
     if (m_displayGrid){

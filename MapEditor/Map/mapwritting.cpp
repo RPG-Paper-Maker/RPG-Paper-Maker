@@ -311,15 +311,27 @@ void Map::saveObjects(QStandardItemModel* model, QString pathMap, bool temp) {
 void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
     QStandardItem* item;
     SystemMapObject* super;
+    QHash<int, SystemMapObject *> objects;
+    int i, l, max;
 
     Map::setModelObjects(model);
-    for (int i = 0; i < tab.size(); i++){
-        item = new QStandardItem;
+    max = 1;
+    for (i = 0, l = tab.size(); i < l; i++) {
         super = new SystemMapObject;
         super->read(tab.at(i).toObject());
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
-        item->setText(super->toString());
-        model->appendRow(item);
+        if (max < super->id()) {
+            max = super->id();
+        }
+        objects.insert(super->id(), super);
+    }
+    for (i = 1; i <= max; i++) {
+        item = new QStandardItem;
+        super = objects.value(i);
+        if (super != nullptr) {
+            item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+            item->setText(super->toString());
+            model->appendRow(item);
+        }
     }
 }
 

@@ -96,6 +96,7 @@
         <file>Ressources/object_square.png</file>
         <file>Ressources/object_square_cursor.png</file>
         <file>Ressources/tileset_cursor.png</file>
+        <file>Ressources/start.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>Themes/darktheme.qss</file>

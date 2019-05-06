@@ -26,9 +26,17 @@ void ControlMapEditor::setCursorObjectPosition(Position &p){
         MapObjects *mapObjects = m_map->objectsPortion(portion);
 
         // Generate object informations
-        if (mapObjects != nullptr)
+        if (mapObjects != nullptr) {
             m_selectedObject = mapObjects->getObjectAt(p);
+        }
     }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::setStartPosition(Position3D &p) {
+    m_cursorStart->setX(p.x());
+    m_cursorStart->setZ(p.z());
 }
 
 // -------------------------------------------------------
@@ -55,6 +63,11 @@ void ControlMapEditor::defineAsHero(){
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
     RPM::get()->project()->writeGameDatas();
+
+    // Update cursor position
+    Position3D position;
+    m_cursorObject->getPosition3D(position);
+    setStartPosition(position);
 }
 
 // -------------------------------------------------------
@@ -178,6 +191,11 @@ void ControlMapEditor::moveObject(Position &p) {
             stockObject(p, object, false, true);
 
             m_previousMouseCoords = p;
+            if (object->id() == RPM::get()->project()->gameDatas()
+                ->systemDatas()->idObjectHero())
+            {
+                setStartPosition(p);
+            }
         }
     }
 }
