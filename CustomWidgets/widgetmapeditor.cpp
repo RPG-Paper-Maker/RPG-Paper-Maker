@@ -415,19 +415,22 @@ void WidgetMapEditor::redo() {
 void WidgetMapEditor::updateCursor() {
     QCursor *cursor;
 
-    switch (m_menuBar->drawKind()) {
-    case DrawKind::Pencil:
-        cursor = &m_cursorPencil;
-        break;
-    case DrawKind::Rectangle:
-        cursor = &m_cursorRectangle;
-        break;
-    case DrawKind::Pin:
-        cursor = &m_cursorPinPaint;
-        break;
+    if (m_menuBar == nullptr) {
+        setCursor(Qt::ArrowCursor);
+    } else {
+        switch (m_menuBar->drawKind()) {
+        case DrawKind::Pencil:
+            cursor = &m_cursorPencil;
+            break;
+        case DrawKind::Rectangle:
+            cursor = &m_cursorRectangle;
+            break;
+        case DrawKind::Pin:
+            cursor = &m_cursorPinPaint;
+            break;
+        }
+        setCursor(*cursor);
     }
-
-    setCursor(*cursor);
 }
 
 // -------------------------------------------------------

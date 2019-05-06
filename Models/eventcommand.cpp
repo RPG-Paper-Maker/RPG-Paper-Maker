@@ -860,17 +860,18 @@ QString EventCommand::strMoveObjectID(QStandardItemModel* parameters,
                                       int& i) const
 {
     QStandardItemModel* modelObjects;
-    if (RPM::isInConfig){
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
         modelObjects = new QStandardItemModel;
         Map::setModelObjects(modelObjects);
     }
     else{
-        modelObjects = RPM::get()->project()->currentMap()->modelObjects();
+        modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     QString strObj = strDataBaseId(i, modelObjects, parameters);
 
-    if (RPM::isInConfig)
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(modelObjects);
+    }
 
     return strObj;
 }

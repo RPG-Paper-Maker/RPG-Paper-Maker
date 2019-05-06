@@ -30,7 +30,7 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
 {
     ui->setupUi(this);
     
-    if (RPM::isInConfig && !RPM::isInObjectConfig){
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
     }
