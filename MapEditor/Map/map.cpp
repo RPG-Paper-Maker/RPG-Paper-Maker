@@ -488,13 +488,11 @@ void Map::getGlobalPortion(Position3D& position, Portion &portion){
 
 // -------------------------------------------------------
 
-void Map::getLocalPortion(Position3D& position, Portion& portion) const{
-    portion.setX((position.x() / RPM::portionSize) -
-                 (m_cursor->getSquareX() / RPM::portionSize));
-    portion.setY((position.y() / RPM::portionSize) -
-                 (m_cursor->getSquareY() / RPM::portionSize));
-    portion.setZ((position.z() / RPM::portionSize) -
-                 (m_cursor->getSquareZ() / RPM::portionSize));
+void Map::getLocalPortion(Position3D& position, Portion& portion) const {
+    portion.setCoords((position.x() / RPM::portionSize) - (m_cursor
+        ->getSquareX() / RPM::portionSize), (position.y() / RPM::portionSize
+        ) - (m_cursor->getSquareY() / RPM::portionSize), (position.z() / RPM
+        ::portionSize) - (m_cursor->getSquareZ() / RPM::portionSize));
 }
 
 // -------------------------------------------------------

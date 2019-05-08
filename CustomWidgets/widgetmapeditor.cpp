@@ -549,6 +549,7 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
         m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
             m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
     }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
@@ -695,36 +696,53 @@ void WidgetMapEditor::onKeyPress(int k, double speed) {
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextNew() {
-    addObject();
+    if (m_control.isCursorObjectVisible()) {
+        addObject();
+    }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextEdit() {
-    addObject();
+    if (m_control.isCursorObjectVisible()) {
+        addObject();
+    }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextCopy() {
-
+    if (m_control.isCursorObjectVisible()) {
+        m_control.copyObject();
+    }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextPaste() {
-
+    if (m_control.isCursorObjectVisible()) {
+        m_control.pasteObject();
+    }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextDelete() {
-    deleteObject();
+    if (m_control.isCursorObjectVisible()) {
+        deleteObject();
+    }
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::contextHero() {
-    if (m_control.isCursorObjectVisible())
+    if (m_control.isCursorObjectVisible()) {
         m_control.defineAsHero();
+    }
+    this->setFocus();
 }

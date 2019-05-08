@@ -329,13 +329,18 @@ void MapObjects::paintSquares(){
 
 void MapObjects::read(const QJsonObject & json){
     QJsonArray tab = json["list"].toArray();
+    bool isMapHero = RPM::get()->project()->gameDatas()->systemDatas()
+        ->idMapHero() == RPM::get()->project()->currentMap()->mapProperties()
+        ->id();
 
-    for (int i = 0; i < tab.size(); i++){
+    for (int i = 0; i < tab.size(); i++) {
         QJsonObject objHash = tab.at(i).toObject();
         Position p;
         p.read(objHash["k"].toArray());
         SystemCommonObject* o = new SystemCommonObject;
         o->read(objHash["v"].toObject());
+        o->setIsHero(isMapHero && o->id() == RPM::get()->project()->gameDatas()
+            ->systemDatas()->idObjectHero());
         m_all.insert(p, o);
     }
 }

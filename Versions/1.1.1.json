@@ -18,7 +18,8 @@
         "Object commands: deleting a row will select the row below",
         "Teleport object hero by default",
         "Square indication where the hero is",
-        "Cursor show when using pin, pencil, layer on"
+        "Cursor show when using pin, pencil, layer on",
+        "Copy / Paste objects in map (and between maps)"
     ],
 	"bugs": [
         "Correcting crashes when canceling picture change in tilesets menus: https://github.com/RPG-Paper-Maker/RPG-Paper-Maker/issues/39",

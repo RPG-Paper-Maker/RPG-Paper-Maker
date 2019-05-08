@@ -19,6 +19,7 @@
 QString SystemCommonObject::strInheritance = "hId";
 QString SystemCommonObject::strStates = "states";
 QString SystemCommonObject::strEvents = "events";
+QString SystemCommonObject::strIsHero = "ih";
 
 // -------------------------------------------------------
 //
@@ -38,7 +39,8 @@ SystemCommonObject::SystemCommonObject(int i, QString n, int id,
     SuperListItem(i,n),
     m_inheritanceId(id),
     m_states(states),
-    m_events(events)
+    m_events(events),
+    m_isHero(false)
 {
 
 }
@@ -55,6 +57,14 @@ void SystemCommonObject::setInheritance(int id) { m_inheritanceId = id; }
 QStandardItemModel* SystemCommonObject::modelStates() const { return m_states; }
 
 QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
+
+bool SystemCommonObject::isHero() const {
+    return m_isHero;
+}
+
+void SystemCommonObject::setIsHero(bool b) {
+    m_isHero = b;
+}
 
 // -------------------------------------------------------
 //
@@ -322,6 +332,9 @@ void SystemCommonObject::setCopy(const SystemCommonObject& item){
 void SystemCommonObject::read(const QJsonObject &json){
     SuperListItem::read(json);
     m_inheritanceId = json[strInheritance].toInt();
+    if (json.contains(strIsHero)) {
+        m_isHero = true;
+    }
 
     // Events
     SuperListItem::readTree(m_events, new SystemObjectEvent, json, strEvents);
@@ -336,6 +349,9 @@ void SystemCommonObject::read(const QJsonObject &json){
 void SystemCommonObject::write(QJsonObject &json) const{
     SuperListItem::write(json);
     json[strInheritance] = m_inheritanceId;
+    if (m_isHero) {
+        json[strIsHero] = true;
+    }
 
     // Events
     QJsonArray tab;

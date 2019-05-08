@@ -151,6 +151,10 @@ public:
     void setCursorObjectPosition(Position &p);
     void showObjectMenuContext();
     void defineAsHero();
+    void addHero(SystemCommonObject *object, Position3D &position);
+    void removeHero(SystemCommonObject *object);
+    void copyObject();
+    void pasteObject();
     void addObject(Position &p);
     void stockObject(Position &p, SystemCommonObject *object,
         bool undoRedo = false, bool move = false);
@@ -247,6 +251,7 @@ protected:
     bool m_isMovingObject;
     int m_currentLayer = -1;
     QString m_lastSquareInfos;
+    SystemCommonObject *m_copiedObject;
 };
 
 #endif // CONTROLMAPEDITOR_H

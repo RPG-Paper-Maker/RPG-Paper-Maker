@@ -47,8 +47,8 @@ void ControlMapEditor::showObjectMenuContext(){
     // Edit possible actions
     m_contextMenu->canNew(isEmpty);
     m_contextMenu->canEdit(!isEmpty);
-    m_contextMenu->canCopy(false);
-    m_contextMenu->canPaste(false);
+    m_contextMenu->canCopy(!isEmpty);
+    m_contextMenu->canPaste(m_copiedObject != nullptr);
     m_contextMenu->canDelete(!isEmpty);
     m_contextMenu->canHero(!isEmpty);
 
@@ -58,11 +58,12 @@ void ControlMapEditor::showObjectMenuContext(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::defineAsHero(){
+void ControlMapEditor::defineAsHero() {
     SystemDatas *datas = RPM::get()->project()->gameDatas()->systemDatas();
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
-    RPM::get()->project()->writeGameDatas();
+    m_selectedObject->setIsHero(true);
+    RPM::get()->project()->writeSystemDatas();
 
     // Update cursor position
     Position3D position;
@@ -72,7 +73,76 @@ void ControlMapEditor::defineAsHero(){
 
 // -------------------------------------------------------
 
-void ControlMapEditor::addObject(Position &p){
+void ControlMapEditor::addHero(SystemCommonObject *object, Position3D &position)
+{
+    SystemDatas *datas;
+
+    datas = RPM::get()->project()->gameDatas()->systemDatas();
+
+    // If hero, remove start cursor
+    if (object->isHero()) {
+        datas->setIdMapHero(m_map->mapProperties()->id());
+        datas->setIdObjectHero(object->id());
+        RPM::get()->project()->writeSystemDatas();
+        setStartPosition(position);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::removeHero(SystemCommonObject *object) {
+    SystemDatas *datas;
+
+    datas = RPM::get()->project()->gameDatas()->systemDatas();
+
+    // If hero, remove start cursor
+    if (object->isHero()) {
+        Position3D position(-1, 0, 0, -1);
+        datas->setIdMapHero(-1);
+        datas->setIdObjectHero(-1);
+        RPM::get()->project()->writeSystemDatas();
+        setStartPosition(position);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::copyObject() {
+    if (m_selectedObject != nullptr) {
+        if (m_copiedObject != nullptr) {
+            delete m_copiedObject;
+        }
+        m_copiedObject = new SystemCommonObject;
+        m_copiedObject->setCopy(*m_selectedObject);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::pasteObject() {
+    if (m_copiedObject != nullptr) {
+        Position position;
+
+        // If paste on hero, remove start cursor
+        if (m_selectedObject != nullptr) {
+            removeHero(m_selectedObject);
+        }
+
+        // Copy object
+        m_selectedObject = new SystemCommonObject;
+        m_selectedObject->setCopy(*m_copiedObject);
+        m_selectedObject->setId(m_map->generateObjectId());
+
+        // Add the object on the map
+        m_cursorObject->getPosition3D(position);
+        stockObject(position, m_selectedObject);
+        m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
+    }
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::addObject(Position &p) {
     SystemCommonObject *object = new SystemCommonObject;
 
     if (m_selectedObject != nullptr)
@@ -106,6 +176,8 @@ void ControlMapEditor::stockObject(Position &p, SystemCommonObject *object,
     Portion portion;
     m_map->getLocalPortion(p, portion);
     MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+
+    addHero(object, p);
 
     if (mapPortion != nullptr) {
         QJsonObject previous;
@@ -153,6 +225,11 @@ void ControlMapEditor::eraseObject(Position &p, bool undoRedo, bool move) {
         SystemCommonObject *object = mapObjects->getObjectAt(p);
 
         if (object != nullptr) {
+            // If hero, update start cursor position
+            if (!move) {
+                removeHero(object);
+            }
+
             QJsonObject previous;
             MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind::None;
             if (m_map->deleteObject(p, mapPortion, previous, previousType) &&
@@ -187,12 +264,14 @@ void ControlMapEditor::moveObject(Position &p) {
         {
             SystemCommonObject *object = reinterpret_cast<SystemCommonObject *>(
                 m_selectedObject->createCopy());
+            object->setIsHero(m_selectedObject->isHero());
             eraseObject(m_previousMouseCoords, false, true);
             stockObject(p, object, false, true);
 
             m_previousMouseCoords = p;
-            if (object->id() == RPM::get()->project()->gameDatas()
-                ->systemDatas()->idObjectHero())
+            if (m_map->mapProperties()->id() == RPM::get()->project()
+                ->gameDatas()->systemDatas()->idMapHero() && object->id() == RPM
+                ::get()->project()->gameDatas()->systemDatas()->idObjectHero())
             {
                 setStartPosition(p);
             }

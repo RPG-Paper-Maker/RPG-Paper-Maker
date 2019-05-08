@@ -51,14 +51,19 @@ ControlMapEditor::ControlMapEditor() :
     m_isDeletingWall(false),
     m_isDeleting(false),
     m_isCtrlPressed(false),
-    m_isMovingObject(false)
+    m_isMovingObject(false),
+    m_copiedObject(nullptr)
 {
 
 }
 
-ControlMapEditor::~ControlMapEditor(){
+ControlMapEditor::~ControlMapEditor() {
     deleteMap(false);
+
     delete m_camera;
+    if (m_copiedObject != nullptr) {
+        delete m_copiedObject;
+    }
 }
 
 Map * ControlMapEditor::map() const {
@@ -164,6 +169,7 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     m_cursorObject->initialize();
 
     // Cursor start
+    heroPosition = Position3D(-1, 0, 0, -1);
     if (m_map->mapProperties()->id() == RPM::get()->project()->gameDatas()
         ->systemDatas()->idMapHero())
     {
@@ -180,17 +186,14 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
                 break;
             }
         }
-
-        m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
-            0, heroPosition.z() * m_map->squareSize());
-        m_cursorStart = new Cursor(m_positionStart);
-        m_cursorStart->initializeSquareSize(m_map->squareSize());
-        m_cursorStart->setX(m_cursorStart->getSquareX());
-        m_cursorStart->setZ(m_cursorStart->getSquareZ());
-        m_cursorStart->setFrameNumber(1);
-        m_cursorStart->loadTexture(":/textures/Ressources/start.png");
-        m_cursorStart->initialize();
     }
+    m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
+        0, heroPosition.z() * m_map->squareSize());
+    m_cursorStart = new Cursor(m_positionStart);
+    m_cursorStart->initializeSquareSize(m_map->squareSize());
+    m_cursorStart->setFrameNumber(1);
+    m_cursorStart->loadTexture(":/textures/Ressources/start.png");
+    m_cursorStart->initialize();
 
     // Wall indicator
     m_beginWallIndicator = new WallIndicator;
@@ -365,9 +368,12 @@ void ControlMapEditor::updateMovingPortions() {
     if (qAbs(m_currentPortion.x() - newPortion.x()) < m_map->getMapPortionSize()
         && qAbs(m_currentPortion.z() - newPortion.z()) < m_map->getMapPortionSize())
     {
-        updateMovingPortionsEastWest(newPortion);
-        updateMovingPortionsNorthSouth(newPortion);
-        updateMovingPortionsUpDown(newPortion);
+        if (m_currentPortion != newPortion) {
+            removePreviewElements();
+            updateMovingPortionsEastWest(newPortion);
+            updateMovingPortionsNorthSouth(newPortion);
+            updateMovingPortionsUpDown(newPortion);
+        }
     }
     else {
         m_map->loadPortions(newPortion);
@@ -961,7 +967,10 @@ void ControlMapEditor::redo() {
 // -------------------------------------------------------
 
 void ControlMapEditor::undoRedo(QJsonArray &states, bool reverseAction) {
-    for (int i = 0; i < states.size(); i++) {
+    int init = reverseAction ? states.size() : 0;
+    int incr = reverseAction ? -1 : 1;
+
+    for (int i = init; reverseAction ? i >= 0 : i < states.size(); i += incr) {
         QJsonObject objState = states.at(i).toObject(), objBefore, objAfter;
         MapEditorSubSelectionKind kindBefore, kindAfter;
         Position position;
@@ -1072,11 +1081,9 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     m_map->cursor()->paintGL(modelviewProjection);
 
     // Drawing start cursor
-    if (m_cursorStart != nullptr) {
-        m_cursorStart->getPosition3D(position);
-        if (isVisible(position)) {
-            m_cursorStart->paintGL(modelviewProjection);
-        }
+    m_cursorStart->getPosition3D(position);
+    if (isVisible(position) && position.x() >= 0 && position.z() >= 0) {
+        m_cursorStart->paintGL(modelviewProjection);
     }
 
     // Drawing grid

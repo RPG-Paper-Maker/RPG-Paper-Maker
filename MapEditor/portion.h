@@ -35,6 +35,7 @@ public:
     int x() const;
     int y() const;
     int z() const;
+    void setCoords(int x, int y, int z);
     void setX(int x);
     void setY(int y);
     void setZ(int z);

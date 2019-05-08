@@ -51,10 +51,8 @@ int Position3D::getYpx(int squareSize) const {
 }
 
 void Position3D::setCoords(int x, int y, int yPlus, int z) {
-    m_x = x;
-    m_y = y;
-    m_y_plus = yPlus;
-    m_z = z;
+    Portion::setCoords(x, y, z);
+    setYPlus(yPlus);
 }
 
 void Position3D::setInGrid(Position3D& p, int w, int h) {
