@@ -442,10 +442,19 @@ void ProjectUpdater::updateVersion_1_0_0() {
 void ProjectUpdater::updateVersion_1_1_1() {
     SystemPicture *picture;
 
+    // Tileset
     m_project->readPicturesDatas();
     picture = new SystemPicture;
     picture->setDefaultCharacterTileset();
     m_project->picturesDatas()->model(PictureKind::Characters)->insertRow(1,
         picture->getModelRow());
     m_project->writePicturesDatas();
+
+    // Screen size
+    m_project->readLangsDatas();
+    m_project->readSystemDatas();
+    m_project->gameDatas()->systemDatas()->setScreenWidth(640);
+    m_project->gameDatas()->systemDatas()->setScreenHeight(480);
+    m_project->gameDatas()->systemDatas()->setIsScreenWinow(true);
+    m_project->writeSystemDatas();
 }
