@@ -154,7 +154,11 @@ void EngineSettings::updateTheme() {
         break;
     }
     case ThemeKind::White:
-        qApp->setStyleSheet(readContent("whitetheme"));
+        #ifdef  Q_OS_MAC
+
+        #else
+            qApp->setStyleSheet(readContent("whitetheme"));
+        #endif
         break;
     }
 }
