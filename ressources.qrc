@@ -106,5 +106,6 @@
         <file>Themes/darktheme.qss</file>
         <file>Themes/whitetheme.qss</file>
         <file>Themes/defaulttheme.qss</file>
+        <file>Themes/whitemactheme.qss</file>
     </qresource>
 </RCC>

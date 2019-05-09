@@ -155,7 +155,7 @@ void EngineSettings::updateTheme() {
     }
     case ThemeKind::White:
         #ifdef  Q_OS_MAC
-
+            qApp->setStyleSheet(readContent("whitemactheme"));
         #else
             qApp->setStyleSheet(readContent("whitetheme"));
         #endif
