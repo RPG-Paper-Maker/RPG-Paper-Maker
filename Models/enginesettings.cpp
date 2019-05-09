@@ -125,7 +125,7 @@ void EngineSettings::updateTheme() {
     case ThemeKind::Dark:
     {
         #ifdef Q_OS_WIN
-            qApp->setStyleSheet(readContent("whitetheme"));
+            qApp->setStyleSheet(readContent("defaulttheme"));
             qApp->setStyle(QStyleFactory::create("Fusion"));
             QPalette darkPalette;
             darkPalette.setColor(QPalette::Window, QColor(53,53,53));

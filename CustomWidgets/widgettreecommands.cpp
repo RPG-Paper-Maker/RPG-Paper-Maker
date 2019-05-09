@@ -663,18 +663,18 @@ void WidgetTreeCommands::updateAvailableCommands() {
             split2 = QStringList();
             split2 << "";
         }
-        QStringList grp1 = split1;
-        QStringList grp2 = split2;
+        QStringList group1 = split1;
+        QStringList group2 = split2;
 
         for (j = 0; j < split1.length(); j++) {
             for (k = 0; k < split2.length(); k++) {
                 if (split2.at(k) != "" && split1.at(j).contains(split2.at(k))) {
-                    grp2.removeAt(k);
+                    group2.removeAt(k);
                 }
             }
         }
 
-        if (grp2.length() == 0) {
+        if (group2.length() == 0) {
             m_availableCommands.append(kind);
         }
     }

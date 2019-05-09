@@ -1,0 +1,72 @@
+/*
+    RPG Paper Maker Copyright (C) 2017 Marie Laporte
+
+    This file is part of RPG Paper Maker.
+
+    RPG Paper Maker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPG Paper Maker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+WidgetTreeCommands {
+    background-color: rgb(25,25,25);
+    color: white;
+}
+
+QGroupBox {
+    border: 1px solid silver;
+    border-radius: 3px;
+    margin-top: 0.5em;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+QGroupBox::disabled {
+    border: 1px solid grey;
+}
+
+QMenuBar {
+     background: #333333;
+     color:white;
+}
+
+QMenu{
+     background: #333333;
+     color:white;
+}
+
+QMenu::item:disabled{
+     color:silver;
+}
+
+QMenu::item:selected {
+     background-color: CadetBlue;
+}
+
+WidgetMenuBarMapEditor{
+    spacing: 0;
+}
+
+WidgetMenuBarMapEditor::item{
+     padding: 10px;
+     background: transparent;
+}
+
+WidgetMenuBarMapEditor > QMenu::item:selected{
+     background-color: #8c8c8c;
+}
+
+QToolButton::disabled {
+    color: #474747;
+}

@@ -105,5 +105,6 @@
     <qresource prefix="/stylesheets">
         <file>Themes/darktheme.qss</file>
         <file>Themes/whitetheme.qss</file>
+        <file>Themes/defaulttheme.qss</file>
     </qresource>
 </RCC>
