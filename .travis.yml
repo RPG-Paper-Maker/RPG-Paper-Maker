@@ -73,6 +73,7 @@ install:
     if [ "$CXX" = "clang++" ]; then
       brew link --force qt${QT_MAJOR}
     fi
+  - ./update-mods
 
 script:
   - qmake -v
