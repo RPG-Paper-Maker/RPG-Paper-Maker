@@ -4,43 +4,22 @@
 #
 #-------------------------------------------------
 
-CONFIG += c++11
+include(../Common.pri)
 
-QT       += core gui opengl network multimedia charts
-
-win32{
+win32 {
     LIBS += -lOpengl32
 }
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-RC_ICONS = icon.ico
+# Engine static library
+TEMPLATE = lib
+CONFIG += staticlib
 TARGET = RPG-Paper-Maker
-win32{
-    TARGET = "RPG Paper Maker"
-}
 
-TEMPLATE = app
-
-INCLUDEPATH += \
-    Dialogs \
-    Dialogs/Commands \
-    Dialogs/Systems \
-    Dialogs/SpecialElements \
-    CustomWidgets \
-    Controls \
-    Controls/MapEditor \
-    MapEditor \
-    MapEditor/Map \
-    Singletons \
-    Models \
-    Models/GameDatas \
-    Models/System \
-    Enums \
-    MathUtils
+# Library output path
+# Ex: path/to/RPG-Paper-Maker/Build/debug/Engine
+DESTDIR = $$ROOT_DESTDIR/Engine
 
 HEADERS += \
-    main.h \
     Dialogs/mainwindow.h \
     Dialogs/dialognewproject.h \
     CustomWidgets/panelmainmenu.h \
@@ -297,7 +276,6 @@ HEADERS += \
     Enums/characteristickind.h
 
 SOURCES += \
-    main.cpp \
     Dialogs/mainwindow.cpp \
     Dialogs/dialognewproject.cpp \
     CustomWidgets/panelmainmenu.cpp \
@@ -617,71 +595,85 @@ FORMS += \
     Dialogs/Systems/dialogsystemcharacteristic.ui \
     Dialogs/dialogcompleteliststates.ui
 
-OTHER_FILES +=
-
+# Resources are currently part of the Engine, not the Editor. Editor's main function will require Q_INIT_RESOURCE.
 RESOURCES += \
-    ressources.qrc
+    $$PWD/ressources.qrc
+
+DISTFILES += \
+    darktheme.qss \
+    whitetheme.qss
+
+OTHER_FILES +=
 
 #-------------------------------------------------
 # Copy Content directory in build folder
 #-------------------------------------------------
 
-FROM = \"$$shell_path($$PWD\\Content)\"
-DEST = \"$$shell_path($$OUT_PWD)\"
-win32{
-    CONFIG(debug, debug|release) {
-        VARIANT = debug
-    } else {
-        VARIANT = release
-    }
-    DEST = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content)\"
-    DESTDIR = $$OUT_PWD\\$$VARIANT
-}
+# Content used by built engine
+# Ex: path/to/RPG-Paper-Maker/Build/debug/Content
+DEST_CONTENT_DIR = $$DESTDIR/Content
 
-FROMSCRIPTS= \"$$shell_path($$PWD\\mods\\Scripts)\"
-DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
-win32{
-    DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
-}
+# Mods downloaded with update_mods
+# Ex: path/to/RPG-Paper-Maker/mods
+MODS_PATH = $$MAIN_PROJECT_DIR/mods
 
-FROMBR= \"$$shell_path($$PWD\\mods\\BR)\"
-DESTBR = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTBR = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\BR)\"
-}
+# Use shell_path to generate paths compatible with target platform for usage in shell commands (e.g. "/" -> "\\" on Windows)
+# Those paths are used directly in commands, so escaped quotes \" are needed
+# Trailing slash may help make it clear we want to copy *inside* the target folder
 
-FROMWIN= \"$$shell_path($$PWD\\mods\\Game\\win32)\"
-DESTWIN = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTWIN = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\win32)\"
-}
+FROM_CONTENT = \"$$shell_path($$PWD/Content)\"
+DEST_CONTENT = \"$$shell_path($$DESTDIR/)\"
 
-FROMLINUX= \"$$shell_path($$PWD\\mods\\Game\\linux)\"
-DESTLINUX = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTLINUX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\linux)\"
-}
+FROMSCRIPTS= \"$$shell_path($$MODS_PATH/Scripts)\"
+DESTSCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/)\"
 
-FROMOSX= \"$$shell_path($$PWD\\mods\\Game\\osx)\"
-DESTOSX = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTOSX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\osx)\"
-}
+FROMBR= \"$$shell_path($$MODS_PATH/BR)\"
+DESTBR = \"$$shell_path($$DEST_CONTENT_DIR/)\"
 
-FROMWEB= \"$$shell_path($$PWD\\mods\\Game\\web)\"
-DESTWEB = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTWEB = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\web)\"
-}
+FROMWIN= \"$$shell_path($$MODS_PATH/Game/win32)\"
+DESTWIN = \"$$shell_path($$DEST_CONTENT_DIR/)\"
 
-!equals(PWD, $${OUT_PWD}) {
-    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMSCRIPTS $$DESTSCRIPTS $$escape_expand(\n\t) $(COPY_DIR) $$FROMBR $$DESTBR $$escape_expand(\n\t) $(COPY_DIR) $$FROMWIN $$DESTWIN $$escape_expand(\n\t) $(COPY_DIR) $$FROMLINUX $$DESTLINUX $$escape_expand(\n\t) $(COPY_DIR) $$FROMOSX $$DESTOSX $$escape_expand(\n\t) $(COPY_DIR) $$FROMWEB $$DESTWEB
-    first.depends = $(first) copyBR
-    export(first.depends)
-    export(copyBR.commands)
-    QMAKE_EXTRA_TARGETS += first copyBR
-}
+FROMLINUX= \"$$shell_path($$MODS_PATH/Game/linux)\"
+DESTLINUX = \"$$shell_path($$DEST_CONTENT_DIR/)\"
 
-DISTFILES += \
-    darktheme.qss \
-    whitetheme.qss
+FROMOSX= \"$$shell_path($$MODS_PATH/Game/osx)\"
+DESTOSX = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+
+FROMWEB= \"$$shell_path($$MODS_PATH/Game/web)\"
+DESTWEB = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+
+# Create build Engine directory in case it wasn't created for the target yet
+# We make our own mkdir command, as $(MKDIR_CMD) seems unreliable
+win32: MK_DIR_CMD = mkdir
+unix: MK_DIR_CMD = mkdir -p
+makeTargetDir.commands = $$MK_DIR_CMD $$DESTDIR
+
+# Copy all content after making sure the target directory exists
+copyBR.commands = \
+    $(COPY_DIR)  $$FROM_CONTENT $$DEST_CONTENT $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMSCRIPTS  $$DESTSCRIPTS  $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMBR       $$DESTBR       $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMWIN      $$DESTWIN      $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMLINUX    $$DESTLINUX    $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMOSX      $$DESTOSX      $$escape_expand(\n\t) \
+    $(COPY_DIR)  $$FROMWEB      $$DESTWEB
+copyBR.depends = makeTargetDir
+
+# Setup all those extra commands
+first.depends = $(first) copyBR
+export(first.depends)
+export(copyBR.commands)
+QMAKE_EXTRA_TARGETS += first makeTargetDir copyBR
+
+# Clean target explicitly (custom build paths are not included in the default clean)
+# We need to find the exact library name depending on the platform
+# If you don't care preserving the destination folder, you can also delete DESTDIR entirely (in the custom clean command below)
+win32: LIB_FILENAME = "$${TARGET}.$$QMAKE_EXTENSION_STATICLIB"   # Ex: RPG-Paper-Maker.lib
+unix: LIB_FILENAME = "lib$${TARGET}.$$QMAKE_EXTENSION_STATICLIB" # Ex: libRPG-Paper-Maker.a
+QMAKE_CLEAN += "$$DESTDIR/$$LIB_FILENAME"
+
+# Also add a custom clean command to remove the copied Content directory
+# (QMAKE_CLEAN only supports files)
+extraclean.commands = $$DEL_DIR_CMD $$DEST_CONTENT_DIR
+clean.depends = extraclean
+QMAKE_EXTRA_TARGETS += clean extraclean

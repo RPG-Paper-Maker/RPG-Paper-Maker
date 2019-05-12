@@ -10,7 +10,6 @@
 */
 
 #include "systemstate.h"
-#include "main.h"
 #include "systemobjectevent.h"
 #include "systemcommonreaction.h"
 #include "dialogsystemstate.h"

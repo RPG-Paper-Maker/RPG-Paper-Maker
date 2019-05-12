@@ -11,7 +11,6 @@
 
 #include "systemelement.h"
 #include "dialogsystemelement.h"
-#include "main.h"
 
 // -------------------------------------------------------
 //

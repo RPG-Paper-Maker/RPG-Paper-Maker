@@ -11,7 +11,6 @@
 
 #include "dialogcommandchangestate.h"
 #include "ui_dialogcommandchangestate.h"
-#include "main.h"
 
 // -------------------------------------------------------
 //
