@@ -609,6 +609,9 @@ OTHER_FILES +=
 # Copy Content directory in build folder
 #-------------------------------------------------
 
+
+# Define source and target paths
+
 # Content used by built engine
 # Ex: path/to/RPG-Paper-Maker/Build/debug/Content
 DEST_CONTENT_DIR = $$DESTDIR/Content
@@ -619,51 +622,73 @@ MODS_PATH = $$MAIN_PROJECT_DIR/mods
 
 # Use shell_path to generate paths compatible with target platform for usage in shell commands (e.g. "/" -> "\\" on Windows)
 # Those paths are used directly in commands, so escaped quotes \" are needed
-# Trailing slash may help make it clear we want to copy *inside* the target folder
+# Trailing slash is important on Unix to indicate that we want to copy the source *content* and not the source folder itself
+# (it is optional in the target path)
 
-FROM_CONTENT = \"$$shell_path($$PWD/Content)\"
-DEST_CONTENT = \"$$shell_path($$DESTDIR/)\"
+FROM_CONTENT = \"$$shell_path($$PWD/Content/)\"
+DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR/)\"
 
-FROMSCRIPTS= \"$$shell_path($$MODS_PATH/Scripts)\"
-DESTSCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/)\"
+FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts/)\"
+DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts/)\"
 
-FROMBR= \"$$shell_path($$MODS_PATH/BR)\"
-DESTBR = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_BR= \"$$shell_path($$MODS_PATH/BR/)\"
+DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR/)\"
 
-FROMWIN= \"$$shell_path($$MODS_PATH/Game/win32)\"
-DESTWIN = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32/)\"
+DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32/)\"
 
-FROMLINUX= \"$$shell_path($$MODS_PATH/Game/linux)\"
-DESTLINUX = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux/)\"
+DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux/)\"
 
-FROMOSX= \"$$shell_path($$MODS_PATH/Game/osx)\"
-DESTOSX = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx/)\"
+DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx/)\"
 
-FROMWEB= \"$$shell_path($$MODS_PATH/Game/web)\"
-DESTWEB = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web/)\"
+DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web/)\"
+
+
+# Define custom commands
 
 # Create build Engine directory in case it wasn't created for the target yet
 # We make our own mkdir command, as $(MKDIR_CMD) seems unreliable
 win32: MK_DIR_CMD = mkdir
 unix: MK_DIR_CMD = mkdir -p
-makeTargetDir.commands = $$MK_DIR_CMD $$DESTDIR
+
+# We do not want to copy all those subfolders every time we `make` or `make check`, so we only copy when needed, following one of 2 methods at:
+# https://stackoverflow.com/questions/18488154/how-to-get-qmake-to-copy-large-data-files-only-if-they-are-updated
+# A. Adding an extra compiler whose role is to copy files (https://doc.qt.io/qt-5/qmake-advanced-usage.html#adding-compilers)
+# while checking if input files have changed. Unfortunately, the undocumented ${QMAKE_FILE_NAME} is always empty, so we couldn't use this.
+# B. Use platform-specific commands to synchronize source and target folders. We chose this solution.
+
+# In addition, we define two variants of the synchronization command because some destination folders are overlapping and we don't want one sync to break another one.
+win32 {
+    # On Windows, please try it and if it fails, add dash to ignore errors: "-robocopy"
+    SYNC_PURGE_CMD = robocopy /mir /xo  # Mirror folders, removing files/folders that are not in source anymore (/mir ~= /e + /purge)
+    SYNC_PRESERVE_CMD = robocopy /e /xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
+}
+unix {
+    SYNC_PURGE_CMD = rsync -rul --del   # Preserve symlinks with -l, crucial with OSX Frameworks, and removing files/folders that are not in source anymore
+    SYNC_PRESERVE_CMD = rsync -rul      # Preserve symlinks
+}
 
 # Copy all content after making sure the target directory exists
-copyBR.commands = \
-    $(COPY_DIR)  $$FROM_CONTENT $$DEST_CONTENT $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMSCRIPTS  $$DESTSCRIPTS  $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMBR       $$DESTBR       $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMWIN      $$DESTWIN      $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMLINUX    $$DESTLINUX    $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMOSX      $$DESTOSX      $$escape_expand(\n\t) \
-    $(COPY_DIR)  $$FROMWEB      $$DESTWEB
-copyBR.depends = makeTargetDir
+copyGameResources.commands = \
+    $$MK_DIR_CMD        $$DEST_CONTENT                  $$escape_expand(\n\t) \ # folder should have been created for built library, but safer (no order dependency)
+    $$MK_DIR_CMD        $$DEST_SCRIPTS                  $$escape_expand(\n\t) \ # optional since FROM_CONTENT already has basic/Content/Datas/Scripts, but safer
+    # preserve existing files when copying to DEST_CONTENT to avoid deleting DEST_SCRIPTS which is under the former (you must manually remove files not in FROM_CONTENT anymore)
+    $$SYNC_PRESERVE_CMD $$FROM_CONTENT  $$DEST_CONTENT  $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_SCRIPTS  $$DEST_SCRIPTS  $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_BR       $$DEST_BR       $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_WIN      $$DEST_WIN      $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_LINUX    $$DEST_LINUX    $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_OSX      $$DEST_OSX      $$escape_expand(\n\t) \
+    $$SYNC_PURGE_CMD    $$FROM_WEB      $$DEST_WEB
 
 # Setup all those extra commands
-first.depends = $(first) copyBR
+first.depends = $(first) copyGameResources
 export(first.depends)
 export(copyBR.commands)
-QMAKE_EXTRA_TARGETS += first makeTargetDir copyBR
+QMAKE_EXTRA_TARGETS += first copyGameResources
 
 # Clean target explicitly (custom build paths are not included in the default clean)
 # We need to find the exact library name depending on the platform
