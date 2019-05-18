@@ -2,6 +2,10 @@ language: cpp
 
 osx_image: xcode10.1
 
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
 matrix:
   include:
     - os: linux
@@ -54,4 +58,10 @@ script:
   - qmake -v
   - qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
   - make
-  - make -k check
+  # Run with X11 display on Linux as some tests require a Qt app
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      xvfb-run make -k check
+    else
+      make -k check
+    fi
