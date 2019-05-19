@@ -32,16 +32,17 @@ Linux:
 
         ./update-mods
 
-Windows:        
+Windows:
 
         ./update-mods.bat
 
 **You should run this script when you want to update the recent dev changes for Basic Ressources and Game Scripts. This will first search your local changes, and then module github repo if you didn't clone it.**
 
 * Open QtCreator
-* Open the `engine.pro` file.
+* Open the `RPG-Paper-Maker.pro` file.
 * Run qmake (right click on project root).
-* Build and run the project.
+* Select the project to run (EditorApp or Test) in the bottom-left configuration pop-up
+* Build and run the project
 
 If you are having any error that means that you are missing a package. Check the error and try to find out what's missing. Please report any kind of error at Wanok.rpm@gmail.com to help other contributors.
 
@@ -55,11 +56,8 @@ If you are having any error that means that you are missing a package. Check the
       |--- versions.json / trees.json     <- Json used by the updater for checking files to update
       |--- .appveyor.yml / .travis.yml    <- Automated build tests
       |--- Editor
-        |--- Editor.pro                   <- The sub-project to build the editor executable
-        |--- main.cpp                     <- The main function instructions
-      |--- Engine
-        |--- Engine.pro                   <- The sub-project to build the engine library
-        |--- ressources.qrc               <- Linking all the ressources (shaders, images...) used in the engine
+        |--- Editor.pro                   <- The sub-project to build the editor library
+        |--- ressources.qrc               <- Linking all the ressources (shaders, images...) used in the editor
         |--- Content                      <- Content is a folder that will contain all the stuff that needs to be copied in the build folder
           |--- basic                      <- The basic Content folder to copy when creating a new project
         |--- Controls                     <- Controllers used for complex dialog boxes or widgets / panels. Should contain all the actions to do on the dialog model
@@ -76,10 +74,13 @@ If you are having any error that means that you are missing a package. Check the
         |--- Models                       <- All the models used for the database
           |--- GameDatas                  <- All the gamedata files models
           |--- System                     <- All the models used for system elements (SuperListItem classes)
-        |--- Ressources                   <- All the images (icons) used for the engine
+        |--- Ressources                   <- All the images (icons) used for the editor
         |--- Shaders                      <- All the shaders programs
         |--- Singletons                   <- Contains RPM singleton
-        |--- Themes                       <- All the themes of the engine
+        |--- Themes                       <- All the themes of the editor
+      |--- EditorApp
+        |--- EditorApp.pro                <- The sub-project to build the editor executable
+        |--- main.cpp                     <- The main function instructions
       |--- Test
         |--- Test.pro                     <- The sub-project to build the test executable
 

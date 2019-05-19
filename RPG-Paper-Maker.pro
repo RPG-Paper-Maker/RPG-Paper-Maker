@@ -2,10 +2,10 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS =  \
-    Engine \
-    Editor \
+SUBDIRS =     \
+    Editor    \
+    EditorApp \
     Test
 
-Editor.depends = Engine
-Test.depends = Engine
+EditorApp.depends = Editor
+Test.depends = Editor
