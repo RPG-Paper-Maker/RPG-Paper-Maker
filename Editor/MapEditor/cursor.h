@@ -35,6 +35,7 @@ public:
     ~Cursor();
     int getSquareX() const;
     int getSquareY() const;
+    int getYPlus() const;
     int getSquareZ() const;
     void setX(int x, bool withReal = true);
     void setY(int y);

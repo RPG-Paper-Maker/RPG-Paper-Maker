@@ -149,7 +149,8 @@ void ControlMapEditor::addLand(Position &p, MapEditorSubSelectionKind kind,
                 if (p.z() + j > m_map->mapProperties()->width())
                     break;
 
-                Position shortPosition(p.x() + i, 0, 0, p.z() + j, p.layer());
+                Position shortPosition(p.x() + i, p.y(), p.yPlus(), p.z() + j, p
+                    .layer());
                 shortTexture = new QRect(tileset.x() + i, tileset.y() + j, 1, 1);
                 switch (kind) {
                 case MapEditorSubSelectionKind::Floors:

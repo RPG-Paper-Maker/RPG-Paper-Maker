@@ -579,8 +579,7 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
             position = m_positionOnSprite;
             return m_elementOnSprite;
         }
-
-        position = m_positionOnPlane;
+        position = m_positionOnLand;
         return nullptr;
     case MapEditorSelectionKind::Objects:
         position = m_positionOnPlane;

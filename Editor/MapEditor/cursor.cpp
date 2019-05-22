@@ -52,6 +52,10 @@ int Cursor::getSquareY() const{
     return (int)((m_positionSquare->y() + 1) / m_squareSize);
 }
 
+int Cursor::getYPlus() const {
+   return Common::modulo(static_cast<int>(m_positionSquare->y()), m_squareSize);
+}
+
 int Cursor::getSquareZ() const{
     return (int)((m_positionSquare->z() + 1) / m_squareSize);
 }

@@ -11,9 +11,11 @@
 
 #include <cmath>
 #include <QTime>
+#include <QtMath>
 #include "controlmapeditor.h"
 #include "rpm.h"
 #include "qbox3d.h"
+#include "common.h"
 
 // -------------------------------------------------------
 
@@ -24,12 +26,11 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     QMatrix4x4 projection = m_camera->projection();
     QMatrix4x4 view = m_camera->view();
     QVector3D rayDirection = getRayWorld(m_mouse, projection, view);
-    int height = 0;
+    int height = static_cast<int>(this->cursor()->getY());
+    int yGrid;
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, static_cast<int>(
         m_distancePlane));
-    getCorrectPositionOnRay(m_positionOnPlaneWallIndicator, rayDirection,
-        static_cast<int>(m_distancePlane), true);
     QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
         m_camera->positionZ());
     m_ray.setOrigin(cameraPosition);
@@ -51,21 +52,30 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
                 m_camera->horizontalAngle());
         }
         else {
-            if (m_elementOnLand == nullptr)
+            if (m_elementOnLand == nullptr) {
                 updateRaycastingLand(mapPortion);
-            if (m_elementOnSprite == nullptr)
+            }
+            if (m_elementOnSprite == nullptr) {
                 updateRaycastingSprites(mapPortion, layerOn);
+            }
         }
     }
 
-    if (m_distanceLand == 0.0f)
+    yGrid = m_positionOnPlane.getY(RPM::get()->getSquareSize());
+    if (m_distanceLand == 0.0f || m_positionOnLand.getY(RPM::get()
+        ->getSquareSize()) < yGrid)
+    {
         m_positionOnLand = m_positionOnPlane;
-
-    if (m_distanceSprite == 0.0f) {
-        m_positionOnSprite = m_positionOnPlane;
-        m_positionRealOnSprite = m_positionOnPlane;
+        m_elementOnLand = nullptr;
     }
-    else {
+
+    if (m_distanceSprite == 0.0f || m_positionOnSprite.getY(RPM::get()
+        ->getSquareSize()) < yGrid)
+    {
+        m_positionOnSprite = m_positionOnLand;
+        m_positionRealOnSprite = m_positionOnLand;
+        m_elementOnSprite = nullptr;
+    } else {
         Position positionLayerZero(m_positionOnSprite);
         Portion portion;
         m_map->getLocalPortion(positionLayerZero, portion);
@@ -88,6 +98,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
         getCorrectPositionOnRay(m_positionRealOnSprite, rayDirection,
             static_cast<int>(m_distanceSprite));
     }
+
+    m_positionOnPlaneWallIndicator = m_positionOnLand;
 }
 
 // -------------------------------------------------------
@@ -276,9 +288,9 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
 {
     QVector3D point = getPositionOnRay(ray, distance);
     int x, z;
-    int y = (static_cast<int>(point.y()) - 1) / m_map->squareSize();
-    int yPlus = (static_cast<int>(point.y()) % m_map->squareSize() /
-        m_map->squareSize()) * 100;
+    int y = static_cast<int>(point.y()) / m_map->squareSize();
+    int yPlus = qCeil(static_cast<qreal>(Common::modulo(static_cast<int>(point
+        .y()), m_map->squareSize()) * 100.f / (m_map->squareSize())));
 
     if (accurate) {
         x = qRound((point.x() + 1) / m_map->squareSize());

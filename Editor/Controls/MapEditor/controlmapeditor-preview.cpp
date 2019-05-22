@@ -10,6 +10,7 @@
 */
 
 #include "controlmapeditor.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 
@@ -77,8 +78,8 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
             if (position.z() + j > m_map->mapProperties()->width())
                 break;
 
-            Position shortPosition(position.x() + i, 0, 0, position.z() + j,
-                position.layer());
+            Position shortPosition(position.x() + i, position.y(), position
+                .yPlus(), position.z() + j, position.layer());
             Portion shortPortion;
             m_map->getLocalPortion(shortPosition, shortPortion);
             if (m_map->isInGrid(shortPosition) && m_map->isInPortion(shortPortion)) {
@@ -147,7 +148,8 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     MapElement *element = nullptr;
     Portion portion;
     m_map->getLocalPortion(m_positionPreviousPreview, portion);
-    if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(portion)) {
+    if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(portion))
+    {
         int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
             m_positionPreviousPreview, layerOn, kind);
         m_positionPreviousPreview.setLayer(layer);
