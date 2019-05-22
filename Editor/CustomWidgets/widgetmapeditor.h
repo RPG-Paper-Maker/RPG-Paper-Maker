@@ -64,11 +64,15 @@ public:
     void removePreviewElements();
     void renderText(QPainter &p, double x, double y, const QString &text,
         const QFont& font = QFont(), const QColor& fontColor = QColor(),
-        const QColor& outlineColor = QColor());
+        const QColor& outlineColor = QColor(), bool isBottom = true);
     void showHideGrid();
     void showHideSquareInformations();
     void undo();
     void redo();
+    void heightUp();
+    void heightPlusUp();
+    void heightDown();
+    void heightPlusDown();
     void updateCursor();
 
 private:
@@ -95,6 +99,8 @@ private:
     QCursor m_cursorRectangle;
     QCursor m_cursorPinPaint;
     QImage m_imageLayerOn;
+    QImage m_imageHeight;
+    QImage m_imageHeightPlus;
 
 public slots:
     void update();

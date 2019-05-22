@@ -29,6 +29,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent, bool selection) 
     ui(new Ui::WidgetMenuBarMapEditor),
     m_selectionKind(MapEditorSelectionKind::Land),
     m_selection(selection),
+    m_actionHeight(nullptr),
+    m_actionHeightPlus(nullptr),
     m_actionPencil(nullptr),
     m_actionRectangle(nullptr),
     m_actionPin(nullptr),
@@ -51,6 +53,8 @@ WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
         delete this->cornerWidget();
 
     if (m_actionPencil != nullptr) {
+        delete m_actionHeight;
+        delete m_actionHeightPlus;
         delete m_actionPencil;
         delete m_actionRectangle;
         delete m_actionPin;

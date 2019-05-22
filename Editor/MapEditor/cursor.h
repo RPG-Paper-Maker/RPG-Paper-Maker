@@ -56,6 +56,7 @@ public:
     void initializeVertices();
     void initializeSquareSize(int s);
     void initialize();
+    void addHeight(int h, int hp);
     void paintGL(QMatrix4x4& modelviewProjection);
     void onKeyPressed(int key, double angle, int w, int h, double speed);
 

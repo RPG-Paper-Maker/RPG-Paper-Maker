@@ -117,6 +117,10 @@
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="actionHeight_up"/>
+    <addaction name="actionHeight_plus_up"/>
+    <addaction name="actionHeight_down"/>
+    <addaction name="actionHeight_plus_down"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -552,6 +556,54 @@
    </property>
    <property name="shortcut">
     <string>H</string>
+   </property>
+  </action>
+  <action name="actionHeight_up">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/height.png</normaloff>:/icons/Ressources/height.png</iconset>
+   </property>
+   <property name="text">
+    <string>Height up</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="actionHeight_plus_up">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/height_plus.png</normaloff>:/icons/Ressources/height_plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Height plus up</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Up</string>
+   </property>
+  </action>
+  <action name="actionHeight_down">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/height_down.png</normaloff>:/icons/Ressources/height_down.png</iconset>
+   </property>
+   <property name="text">
+    <string>Height down</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="actionHeight_plus_down">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/height_down_plus.png</normaloff>:/icons/Ressources/height_down_plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Height plus down</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Down</string>
    </property>
   </action>
  </widget>

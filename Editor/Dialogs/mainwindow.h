@@ -78,6 +78,10 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
+    void on_actionHeight_up_triggered();
+    void on_actionHeight_plus_up_triggered();
+    void on_actionHeight_down_triggered();
+    void on_actionHeight_plus_down_triggered();
     void on_actionDatas_manager_triggered();
     void on_actionSystems_manager_triggered();
     void on_actionVariables_manager_triggered();

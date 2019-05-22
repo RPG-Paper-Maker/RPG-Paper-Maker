@@ -47,6 +47,8 @@ public:
     Camera * camera() const;
     bool isCtrlPressed() const;
     void setIsCtrlPressed(bool b);
+    bool isShiftPressed() const;
+    void setIsShiftPressed(bool b);
     bool displaySquareInformations() const;
 
     void setContextMenu(ContextMenuList *m);
@@ -179,6 +181,10 @@ public:
     void undo();
     void redo();
     void undoRedo(QJsonArray &states, bool reverseAction);
+    void heightUp();
+    void heightPlusUp();
+    void heightDown();
+    void heightPlusDown();
     void performUndoRedoAction(MapEditorSubSelectionKind kind, bool before,
         QJsonObject &obj, Position &position);
     QString getSquareInfos(MapEditorSelectionKind kind,
@@ -248,6 +254,7 @@ protected:
     bool m_isDeletingWall;
     bool m_isDeleting;
     bool m_isCtrlPressed;
+    bool m_isShiftPressed;
     bool m_isMovingObject;
     int m_currentLayer = -1;
     QString m_lastSquareInfos;

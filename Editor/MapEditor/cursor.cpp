@@ -15,6 +15,7 @@
 #include "rpm.h"
 #include "floors.h"
 #include "keyboardenginekind.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -203,6 +204,17 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
 void Cursor::initialize(){
     initializeVertices();
     initializeGL();
+}
+
+// -------------------------------------------------------
+
+void Cursor::addHeight(int h, int hp) {
+    int y = (((static_cast<int>(m_positionReal.y()) / m_squareSize) + h) *
+        m_squareSize) + Common::modulo(static_cast<int>(m_positionReal.y()) +
+        hp, m_squareSize);
+
+    m_positionSquare->setY(y);
+    m_positionReal.setY(y);
 }
 
 // -------------------------------------------------------

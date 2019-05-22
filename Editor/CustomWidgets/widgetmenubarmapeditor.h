@@ -72,6 +72,8 @@ private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
     bool m_selection;
+    QAction *m_actionHeight;
+    QAction *m_actionHeightPlus;
     QAction *m_actionPencil;
     QAction *m_actionRectangle;
     QAction *m_actionPin;

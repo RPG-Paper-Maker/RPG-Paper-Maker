@@ -15,9 +15,11 @@
 #include <QHashIterator>
 #include <QTime>
 #include <QMessageBox>
+#include <QToolTip>
 #include "widgetmapeditor.h"
 #include "rpm.h"
 #include "systemcolor.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -37,6 +39,10 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
 {
     QPixmap cursorPixmap;
 
+    // Mouse tracking
+    this->setMouseTracking(true);
+    this->setFocus();
+
     // Initialize cursors
     cursorPixmap = QPixmap(":/icons/Ressources/pencil_cursor.png");
     m_cursorPencil = QCursor(cursorPixmap, 4, 27);
@@ -45,6 +51,10 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     cursorPixmap = QPixmap(":/icons/Ressources/pin_cursor.png");
     m_cursorPinPaint = QCursor(cursorPixmap, 0, 29);
     m_imageLayerOn = QImage(":/icons/Ressources/layer_on_cursor.png");
+
+    // Height images
+    m_imageHeight = QImage(":/icons/Ressources/height.png");
+    m_imageHeightPlus = QImage(":/icons/Ressources/height_plus.png");
 
     // Timers
     m_timerFirstPressure->setSingleShot(true);
@@ -234,6 +244,15 @@ void WidgetMapEditor::paintGL() {
             QStringList listInfos = infos.split("\n");
             p.begin(this);
             if (m_control.displaySquareInformations()) {
+                p.drawImage(QRect(10, 10, 16, 16), m_imageHeight);
+                renderText(p, 32, 23, QString::number(static_cast<int>(m_control
+                    .cursor()->getY()) / RPM::get()->getSquareSize()), QFont(),
+                    QColor(255, 255, 255), QColor(), false);
+                p.drawImage(QRect(10, 34, 16, 16), m_imageHeightPlus);
+                renderText(p, 32, 47, QString::number(Common::modulo(static_cast
+                    <int>(m_control.cursor()->getY()), RPM::get()
+                    ->getSquareSize())), QFont(), QColor(255, 255, 255),
+                    QColor(), false);
                 for (int i = 0; i < listInfos.size(); i++) {
                     renderText(p, 20, 20 * (listInfos.size() - i), listInfos.at(i),
                         QFont(), QColor(255, 255, 255));
@@ -367,13 +386,14 @@ void WidgetMapEditor::removePreviewElements() {
 // -------------------------------------------------------
 
 void WidgetMapEditor::renderText(QPainter &p, double x, double y, const QString
-    &text, const QFont &font, const QColor &fontColor, const QColor &outlineColor)
+    &text, const QFont &font, const QColor &fontColor, const QColor &outlineColor,
+    bool isBottom)
 {
 
     // Identify x and y locations to render text within widget
     int height = this->height();
     GLdouble textPosX = x, textPosY = y;
-    textPosY = height - textPosY; // y is inverted
+    textPosY = isBottom ? height - textPosY : textPosY; // y is inverted
 
     // Render outline
     p.setFont(font);
@@ -410,6 +430,30 @@ void WidgetMapEditor::undo() {
 
 void WidgetMapEditor::redo() {
     m_control.redo();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::heightUp() {
+    m_control.heightUp();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::heightPlusUp() {
+    m_control.heightPlusUp();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::heightDown() {
+    m_control.heightDown();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::heightPlusDown() {
+    m_control.heightPlusDown();
 }
 
 // -------------------------------------------------------
@@ -478,6 +522,16 @@ void WidgetMapEditor::leaveEvent(QEvent *) {
 
 void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
     if (m_control.map() != nullptr) {
+
+        // Tooltip for height
+        if (event->pos().x() <= 50 && event->pos().y() <= 50) {
+            QToolTip::showText(this->mapToGlobal(event->pos()), "To change "
+                "height square, use CTRL+mousewheel or CTRL+arrowUpDown.\nTo "
+                "change height plus, use CTRL+SHIFT+mousewheel or "
+                "CTRL+SHIFT+arrowUpDown");
+        } else {
+            QToolTip::hideText();
+        }
 
         // Multi keys
         QSet<Qt::MouseButton> buttons;
@@ -579,6 +633,9 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
             m_control.setIsCtrlPressed(true);
             m_control.removePreviewElements();
         }
+        if (event->modifiers() & Qt::ShiftModifier) {
+            m_control.setIsShiftPressed(true);
+        }
 
         // Tab
         int key = event->key();
@@ -670,8 +727,12 @@ void WidgetMapEditor::keyReleaseEvent(QKeyEvent *event) {
             m_keysPressed -= event->key();
             m_control.onKeyReleased(event->key());
 
-            if (!(event->modifiers() & Qt::ControlModifier))
+            if (!(event->modifiers() & Qt::ControlModifier)) {
                 m_control.setIsCtrlPressed(false);
+            }
+            if (!(event->modifiers() & Qt::ShiftModifier)) {
+                m_control.setIsShiftPressed(false);
+            }
         }
     }
 }

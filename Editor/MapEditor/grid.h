@@ -37,7 +37,7 @@ public:
     ~Grid();
     void initializeVertices(int w, int h, int squareSize);
     void initializeGL();
-    void paintGL(QMatrix4x4 &modelviewProjection);
+    void paintGL(QMatrix4x4 &modelviewProjection, int y);
 
 private:
     // OpenGL informations
@@ -45,7 +45,9 @@ private:
     QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram *m_program;
     QVector<QVector3D> m_vertices;
+
     int u_modelviewProjection;
+    int u_yPosition;
 };
 
 #endif // GRID_H

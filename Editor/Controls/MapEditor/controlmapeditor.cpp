@@ -51,6 +51,7 @@ ControlMapEditor::ControlMapEditor() :
     m_isDeletingWall(false),
     m_isDeleting(false),
     m_isCtrlPressed(false),
+    m_isShiftPressed(false),
     m_isMovingObject(false),
     m_copiedObject(nullptr)
 {
@@ -96,6 +97,14 @@ bool ControlMapEditor::isCtrlPressed() const {
 
 void ControlMapEditor::setIsCtrlPressed(bool b) {
     m_isCtrlPressed = b;
+}
+
+bool ControlMapEditor::isShiftPressed() const {
+    return m_isShiftPressed;
+}
+
+void ControlMapEditor::setIsShiftPressed(bool b) {
+    m_isShiftPressed = b;
 }
 
 bool ControlMapEditor::displaySquareInformations() const {
@@ -966,6 +975,30 @@ void ControlMapEditor::redo() {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::heightUp() {
+    this->cursor()->addHeight(1, 0);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::heightPlusUp() {
+    this->cursor()->addHeight(0, 1);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::heightDown() {
+    this->cursor()->addHeight(-1, 0);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::heightPlusDown() {
+    this->cursor()->addHeight(0, -1);
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::undoRedo(QJsonArray &states, bool reverseAction) {
     int init = reverseAction ? states.size() : 0;
     int incr = reverseAction ? -1 : 1;
@@ -1088,7 +1121,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
     // Drawing grid
     if (m_displayGrid){
-        m_grid->paintGL(modelviewProjection);
+        m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()->getY()));
     }
 
     // Drawing other stuff
@@ -1152,13 +1185,23 @@ bool ControlMapEditor::isVisible(Position3D &position) {
 // -------------------------------------------------------
 
 void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
-    if (event->delta() > 0)
-        m_camera->zoomPlus(m_map->squareSize());
-    else
-        m_camera->zoomLess(m_map->squareSize());
+    if (m_isCtrlPressed) {
+        int value;
 
-    if (updateTree)
+        value = event->delta() > 0 ? 1 : -1;
+        this->cursor()->addHeight(m_isShiftPressed ? 0 : value, m_isShiftPressed
+            ? value : 0);
+    } else {
+        if (event->delta() > 0) {
+            m_camera->zoomPlus(m_map->squareSize());
+        } else {
+            m_camera->zoomLess(m_map->squareSize());
+        }
+    }
+
+    if (updateTree) {
         updateCameraTreeNode();
+    }
 }
 
 // -------------------------------------------------------

@@ -403,15 +403,49 @@ void MainWindow::on_actionQuit_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionUndo_triggered() {
-    if (project->currentMap() != nullptr)
-        ((PanelProject*)mainPanel)->widgetMapEditor()->undo();
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->undo();
+    }
 }
 
 // -------------------------------------------------------
 
 void MainWindow::on_actionRedo_triggered() {
-    if (project->currentMap() != nullptr)
-        ((PanelProject*)mainPanel)->widgetMapEditor()->redo();
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->redo();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionHeight_up_triggered() {
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->heightUp();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionHeight_plus_up_triggered() {
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->heightPlusUp();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionHeight_down_triggered() {
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->heightDown();
+    }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionHeight_plus_down_triggered() {
+    if (project->currentMap() != nullptr) {
+        reinterpret_cast<PanelProject *>(mainPanel)->widgetMapEditor()->heightPlusDown();
+    }
 }
 
 // -------------------------------------------------------

@@ -36,7 +36,7 @@ Grid::~Grid()
 //
 // -------------------------------------------------------
 
-void Grid::initializeVertices(int w, int h, int squareSize){
+void Grid::initializeVertices(int w, int h, int squareSize) {
     m_vertices.clear();
 
     float w_f = (float)w, h_f = (float)h, squareSize_f = (float)squareSize;
@@ -62,6 +62,7 @@ void Grid::initializeGL(){
 
     // Uniform location of camera
     u_modelviewProjection = m_program->uniformLocation("modelviewProjection");
+    u_yPosition = m_program->uniformLocation("yPosition");
 
     // Create Buffer (Do not release until VAO is created)
     m_vertexBuffer.create();
@@ -84,10 +85,11 @@ void Grid::initializeGL(){
 
 // -------------------------------------------------------
 
-void Grid::paintGL(QMatrix4x4& modelviewProjection){
+void Grid::paintGL(QMatrix4x4& modelviewProjection, int y) {
     glDisable(GL_DEPTH_TEST);
     m_program->bind();
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
+    m_program->setUniformValue(u_yPosition, y);
     {
       m_vao.bind();
       glDrawArrays(GL_LINES, 0, m_vertices.size());

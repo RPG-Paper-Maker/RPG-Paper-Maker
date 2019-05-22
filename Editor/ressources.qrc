@@ -61,6 +61,9 @@
         <file>Ressources/pin_cursor.png</file>
         <file>Ressources/rectangle_cursor.png</file>
         <file>Ressources/layer_on_cursor.png</file>
+        <file>Ressources/height_plus.png</file>
+        <file>Ressources/height_down.png</file>
+        <file>Ressources/height_down_plus.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>
