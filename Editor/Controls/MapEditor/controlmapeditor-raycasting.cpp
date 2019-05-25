@@ -287,10 +287,11 @@ void ControlMapEditor::getCorrectPositionOnRay(Position &position,
     QVector3D &ray, int distance,  bool accurate)
 {
     QVector3D point = getPositionOnRay(ray, distance);
-    int x, z;
-    int y = static_cast<int>(point.y()) / m_map->squareSize();
-    int yPlus = qCeil(static_cast<qreal>(Common::modulo(static_cast<int>(point
-        .y()), m_map->squareSize()) * 100.f / (m_map->squareSize())));
+    int x, y, z;
+    double yPlus;
+    y = qFloor(static_cast<qreal>(point.y()) / m_map->squareSize());
+    yPlus = Common::modulo(qFloor(static_cast<qreal>(point.y())), m_map
+        ->squareSize()) * 100.0 / m_map->squareSize();
 
     if (accurate) {
         x = qRound((point.x() + 1) / m_map->squareSize());

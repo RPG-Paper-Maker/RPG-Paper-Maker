@@ -19,13 +19,13 @@
 
 Position::Position() : Position(0, 0, 0, 0, 0) {}
 
-Position::Position(int x, int y, int y_plus, int z, int layer) :
+Position::Position(int x, int y, double y_plus, int z, int layer) :
     Position(x, y, y_plus, z, layer, 50, 50, 0)
 {
 
 }
 
-Position::Position(int x, int y, int y_plus, int z, int layer, int centerX,
+Position::Position(int x, int y, double y_plus, int z, int layer, int centerX,
                    int centerZ, int angle) :
     Position3D(x, y, y_plus, z),
     m_layer(layer),
@@ -41,10 +41,10 @@ Position::~Position() {
 }
 
 bool Position::operator==(const Position& other) const{
-    return m_x == other.x() && m_y == other.y() && m_y_plus == other.yPlus()
-           && m_z == other.z() && m_layer == other.layer() && m_centerX ==
-           other.centerX() && m_centerZ == other.centerZ() && m_angle ==
-           other.angle();
+    return m_x == other.x() && m_y == other.y() && qFuzzyCompare(m_y_plus, other
+        .yPlus()) && m_z == other.z() && m_layer == other.layer() && m_centerX
+        == other.centerX() && m_centerZ == other.centerZ() && m_angle ==
+        other.angle();
 }
 
 bool Position::operator!=(const Position& other) const{
@@ -59,7 +59,7 @@ void Position::setZ(int z){
     m_z = z;
 }
 
-void Position::setCoords(int x, int y, int y_plus, int z){
+void Position::setCoords(int x, int y, double y_plus, int z) {
     m_x = x;
     m_y = y;
     m_y_plus = y_plus;

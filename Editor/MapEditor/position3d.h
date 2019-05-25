@@ -26,16 +26,16 @@ class Position3D : public Portion
 {
 public:
     Position3D();
-    Position3D(int x, int y, int yPlus, int z);
+    Position3D(int x, int y, double yPlus, int z);
     virtual ~Position3D();
 
     bool operator==(const Position3D& other) const;
     bool operator!=(const Position3D& other) const;
-    int yPlus() const;
-    void setYPlus(int yPlus);
+    double yPlus() const;
+    void setYPlus(double yPlus);
     int getY(int squareSize) const;
     int getYpx(int squareSize) const;
-    void setCoords(int x, int y, int yPlus, int z);
+    void setCoords(int x, int y, double yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
 
     virtual QString toString() const;
@@ -44,12 +44,12 @@ public:
     void write(QJsonArray & json) const;
 
 protected:
-    int m_y_plus;
+    double m_y_plus;
 };
 
 inline uint qHash(const Position3D& pos)
 {
-   return (pos.x() + pos.y() + pos.yPlus() + pos.z());
+   return static_cast<uint>(pos.x() + pos.y() + pos.yPlus() + pos.z());
 }
 
 #endif // POSITION3D_H

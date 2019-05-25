@@ -245,14 +245,13 @@ void WidgetMapEditor::paintGL() {
             p.begin(this);
             if (m_control.displaySquareInformations()) {
                 p.drawImage(QRect(10, 10, 16, 16), m_imageHeight);
-                renderText(p, 32, 23, QString::number(static_cast<int>(m_control
-                    .cursor()->getY()) / RPM::get()->getSquareSize()), QFont(),
-                    QColor(255, 255, 255), QColor(), false);
+                renderText(p, 32, 23, QString::number(m_control.cursor()
+                    ->getSquareY()), QFont(), QColor(255, 255, 255), QColor(),
+                    false);
                 p.drawImage(QRect(10, 34, 16, 16), m_imageHeightPlus);
-                renderText(p, 32, 47, QString::number(Common::modulo(static_cast
-                    <int>(m_control.cursor()->getY()), RPM::get()
-                    ->getSquareSize())), QFont(), QColor(255, 255, 255),
-                    QColor(), false);
+                renderText(p, 32, 47, QString::number(m_control.cursor()
+                    ->getYPlus()), QFont(), QColor(255, 255, 255), QColor(),
+                    false);
                 for (int i = 0; i < listInfos.size(); i++) {
                     renderText(p, 20, 20 * (listInfos.size() - i), listInfos.at(i),
                         QFont(), QColor(255, 255, 255));

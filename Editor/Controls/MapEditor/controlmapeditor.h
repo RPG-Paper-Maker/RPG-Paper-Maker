@@ -101,7 +101,7 @@ public:
     void updateMovingPortions();
     void updateMovingPortionsEastWest(Portion &newPortion);
     void updateMovingPortionsNorthSouth(Portion &newPortion);
-    void updateMovingPortionsUpDown(Portion &);
+    void updateMovingPortionsUpDown(Portion &newPortion);
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(int a, int b, int c, int i, int j, int k);

@@ -375,6 +375,7 @@ void ControlMapEditor::updateMovingPortions() {
     // Move portions
     Portion newPortion = cursor()->getPortion();
     if (qAbs(m_currentPortion.x() - newPortion.x()) < m_map->getMapPortionSize()
+        && qAbs(m_currentPortion.y() - newPortion.y()) < m_map->getMapPortionSize()
         && qAbs(m_currentPortion.z() - newPortion.z()) < m_map->getMapPortionSize())
     {
         if (m_currentPortion != newPortion) {
@@ -398,18 +399,19 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion &newPortion) {
         int dif = newPortion.x() - m_currentPortion.x();
         int state = 1;
         while (state <= dif) {
-            int k = 0;
-            for (int j = -r; j <= r; j++) {
-                bool visible = j != -r && j != r;
-                int i = -r;
-                removePortion(i, k, j);
-                setPortion(i, k, j, i + 1, k, j, false);
-                i++;
-                for (; i < r; i++)
-                    setPortion(i, k, j, i + 1, k, j, visible);
+            for (int k = -r; k <= r; k++) {
+                for (int j = -r; j <= r; j++) {
+                    bool visible = j != -r && j != r && k != -r && k != r;
+                    int i = -r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i + 1, k, j, false);
+                    i++;
+                    for (; i < r; i++)
+                        setPortion(i, k, j, i + 1, k, j, visible);
 
-                loadPortion(m_currentPortion.x() + state, m_currentPortion.y(),
-                    m_currentPortion.z(), r, k, j);
+                    loadPortion(m_currentPortion.x() + state, m_currentPortion.y(),
+                        m_currentPortion.z(), r, k, j);
+                }
             }
             state++;
         }
@@ -418,18 +420,19 @@ void ControlMapEditor::updateMovingPortionsEastWest(Portion &newPortion) {
         int dif = m_currentPortion.x() - newPortion.x();
         int state = 1;
         while (state <= dif) {
-            int k = 0;
-            for (int j = -r; j <= r; j++) {
-                bool visible = j != -r && j != r;
-                int i = r;
-                removePortion(i, k, j);
-                setPortion(i, k, j, i - 1, k, j, false);
-                i--;
-                for (; i > -r; i--)
-                    setPortion(i, k, j, i - 1, k, j, visible);
+            for (int k = -r; k <= r; k++) {
+                for (int j = -r; j <= r; j++) {
+                    bool visible = j != -r && j != r && k != -r && k != r;
+                    int i = r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i - 1, k, j, false);
+                    i--;
+                    for (; i > -r; i--)
+                        setPortion(i, k, j, i - 1, k, j, visible);
 
-                loadPortion(m_currentPortion.x() - state, m_currentPortion.y(),
-                    m_currentPortion.z(), -r, k, j);
+                    loadPortion(m_currentPortion.x() - state, m_currentPortion.y(),
+                        m_currentPortion.z(), -r, k, j);
+                }
             }
             state++;
         }
@@ -445,18 +448,19 @@ void ControlMapEditor::updateMovingPortionsNorthSouth(Portion &newPortion) {
         int dif = newPortion.z() - m_currentPortion.z();
         int state = 1;
         while (state <= dif) {
-            int k = 0;
-            for (int i = -r; i <= r; i++) {
-                bool visible = i != -r && i != r;
-                int j = -r;
-                removePortion(i, k, j);
-                setPortion(i, k, j, i, k, j + 1, false);
-                j++;
-                for (; j < r; j++)
-                    setPortion(i, k, j, i, k, j + 1, visible);
+            for (int k = -r; k <= r; k++) {
+                for (int i = -r; i <= r; i++) {
+                    bool visible = i != -r && i != r && k != -r && k != r;
+                    int j = -r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i, k, j + 1, false);
+                    j++;
+                    for (; j < r; j++)
+                        setPortion(i, k, j, i, k, j + 1, visible);
 
-                loadPortion(m_currentPortion.x(), m_currentPortion.y(),
-                    m_currentPortion.z() + state, i, k, r);
+                    loadPortion(m_currentPortion.x(), m_currentPortion.y(),
+                        m_currentPortion.z() + state, i, k, r);
+                }
             }
             state++;
         }
@@ -466,18 +470,19 @@ void ControlMapEditor::updateMovingPortionsNorthSouth(Portion &newPortion) {
         int dif = m_currentPortion.z() - newPortion.z();
         int state = 1;
         while (state <= dif) {
-            int k = 0;
-            for (int i = -r; i <= r; i++) {
-                bool visible = i != -r && i != r;
-                int j = r;
-                removePortion(i, k, j);
-                setPortion(i, k, j, i, k, j - 1, false);
-                j--;
-                for (; j > -r; j--)
-                    setPortion(i, k, j, i, k, j - 1, visible);
+            for (int k = -r; k <= r; k++) {
+                for (int i = -r; i <= r; i++) {
+                    bool visible = i != -r && i != r && k != -r && k != r;
+                    int j = r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i, k, j - 1, false);
+                    j--;
+                    for (; j > -r; j--)
+                        setPortion(i, k, j, i, k, j - 1, visible);
 
-                loadPortion(m_currentPortion.x(), m_currentPortion.y(),
-                    m_currentPortion.z() - state, i, k, -r);
+                    loadPortion(m_currentPortion.x(), m_currentPortion.y(),
+                        m_currentPortion.z() - state, i, k, -r);
+                }
             }
             state++;
         }
@@ -487,8 +492,52 @@ void ControlMapEditor::updateMovingPortionsNorthSouth(Portion &newPortion) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMovingPortionsUpDown(Portion &) {
-    // TODO
+void ControlMapEditor::updateMovingPortionsUpDown(Portion &newPortion) {
+    int r = m_map->portionsRay();
+    if (newPortion.y() > m_currentPortion.y()) {
+        int dif = newPortion.y() - m_currentPortion.y();
+        int state = 1;
+        while (state <= dif) {
+            for (int i = -r; i <= r; i++) {
+                for (int j = -r; j <= r; j++) {
+                    bool visible = i != -r && i != r && j != -r && j != r;
+                    int k = -r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i, k + 1, j, false);
+                    k++;
+                    for (; k < r; k++)
+                        setPortion(i, k, j, i, k + 1, j, visible);
+
+                    loadPortion(m_currentPortion.x(), m_currentPortion.y() + state,
+                        m_currentPortion.z(), i, r, j);
+                }
+            }
+            state++;
+        }
+        m_currentPortion.setY(m_currentPortion.y() + dif);
+    }
+    else if (newPortion.y() < m_currentPortion.y()) {
+        int dif = m_currentPortion.y() - newPortion.y();
+        int state = 1;
+        while (state <= dif) {
+            for (int i = -r; i <= r; i++) {
+                for (int j = -r; j <= r; j++) {
+                    bool visible = i != -r && i != r && j != -r && j != r;
+                    int k = r;
+                    removePortion(i, k, j);
+                    setPortion(i, k, j, i, k - 1, j, false);
+                    k--;
+                    for (; k > -r; k--)
+                        setPortion(i, k, j, i, k - 1, j, visible);
+
+                    loadPortion(m_currentPortion.x(), m_currentPortion.y() -
+                        state, m_currentPortion.z(), i, -r, j);
+                }
+            }
+            state++;
+        }
+        m_currentPortion.setY(m_currentPortion.y() - dif);
+    }
 }
 
 // -------------------------------------------------------
@@ -1120,7 +1169,8 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
 
     // Drawing grid
     if (m_displayGrid){
-        m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()->getY()));
+        m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()
+            ->getY()));
     }
 
     // Drawing other stuff

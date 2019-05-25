@@ -19,7 +19,7 @@
 
 Position3D::Position3D() : Position3D(0,0,0,0) {}
 
-Position3D::Position3D(int x, int y, int y_plus, int z) :
+Position3D::Position3D(int x, int y, double y_plus, int z) :
     Portion(x, y, z),
     m_y_plus(y_plus)
 {
@@ -31,26 +31,26 @@ Position3D::~Position3D() {
 }
 
 bool Position3D::operator==(const Position3D& other) const{
-    return m_x == other.x() && m_y == other.y() && m_y_plus == other.yPlus() &&
-            m_z == other.z();
+    return m_x == other.x() && m_y == other.y() && qFuzzyCompare(m_y_plus, other
+        .yPlus()) && m_z == other.z();
 }
 bool Position3D::operator!=(const Position3D& other) const{
     return !operator==(other);
 }
 
-int Position3D::yPlus() const { return m_y_plus; }
+double Position3D::yPlus() const { return m_y_plus; }
 
-void Position3D::setYPlus(int yPlus) { m_y_plus = yPlus; }
+void Position3D::setYPlus(double yPlus) { m_y_plus = yPlus; }
 
 int Position3D::getY(int squareSize) const {
     return (m_y * squareSize) + getYpx(squareSize);
 }
 
 int Position3D::getYpx(int squareSize) const {
-    return m_y_plus * squareSize / 100;
+    return static_cast<int>(m_y_plus * squareSize / 100);
 }
 
-void Position3D::setCoords(int x, int y, int yPlus, int z) {
+void Position3D::setCoords(int x, int y, double yPlus, int z) {
     Portion::setCoords(x, y, z);
     setYPlus(yPlus);
 }
@@ -87,7 +87,7 @@ QString Position3D::toString() const {
 void Position3D::read(const QJsonArray & json){
     m_x = json[0].toInt();
     m_y = json[1].toInt();
-    m_y_plus = json[2].toInt();
+    m_y_plus = json[2].toDouble();
     m_z = json[3].toInt();
 }
 

@@ -57,7 +57,7 @@ public:
     void removeOverflow(Position& p, Portion& portion);
 
     bool isInGrid(Position3D& position, int squareSize, int offset) const;
-    void getPortionsNumber(int& lx, int& ly, int& lz);
+    void getPortionsNumber(int& lx, int& ld, int &lh, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path, bool temp = false);
     void updateRaycastingOverflowSprites(Portion& portion, float &finalDistance,

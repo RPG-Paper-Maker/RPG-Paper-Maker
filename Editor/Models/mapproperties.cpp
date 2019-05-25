@@ -154,9 +154,13 @@ const
 
 // -------------------------------------------------------
 
-void MapProperties::getPortionsNumber(int& lx, int& ly, int& lz) {
+void MapProperties::getPortionsNumber(int& lx, int& ld, int& lh, int& lz) {
     lx = (length() - 1) / RPM::portionSize;
-    ly = (depth() + height() - 1) / RPM::portionSize;;
+    ld = (depth() - 1) / RPM::portionSize;
+    if (depth() > 0) {
+        ld++;
+    }
+    lh = (height() - 1) / RPM::portionSize;
     lz = (width() - 1) / RPM::portionSize;
 }
 

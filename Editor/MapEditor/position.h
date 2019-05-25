@@ -27,8 +27,8 @@ class Position : public Position3D
 {
 public:
     Position();
-    Position(int x, int y, int y_plus, int z, int layer = 0);
-    Position(int x, int y, int y_plus, int z, int layer, int centerX,
+    Position(int x, int y, double y_plus, int z, int layer = 0);
+    Position(int x, int y, double y_plus, int z, int layer, int centerX,
              int centerZ, int angle);
     virtual ~Position();
 
@@ -36,7 +36,7 @@ public:
     bool operator!=(const Position& other) const;
     void setX(int x);
     void setZ(int z);
-    void setCoords(int x, int y, int y_plus, int z);
+    void setCoords(int x, int y, double y_plus, int z);
     int layer() const;
     void setLayer(int l);
     int centerX() const;

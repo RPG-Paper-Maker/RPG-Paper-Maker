@@ -45,11 +45,11 @@ void Cursor::initializeSquareSize(int s){
 }
 
 int Cursor::getSquareX() const{
-    return (int)((m_positionSquare->x() + 1) / m_squareSize);
+    return static_cast<int>((m_positionSquare->x() + 1) / m_squareSize);
 }
 
 int Cursor::getSquareY() const{
-    return (int)((m_positionSquare->y() + 1) / m_squareSize);
+    return qFloor(static_cast<qreal>(m_positionSquare->y()) / m_squareSize);
 }
 
 int Cursor::getYPlus() const {
@@ -57,7 +57,7 @@ int Cursor::getYPlus() const {
 }
 
 int Cursor::getSquareZ() const{
-    return (int)((m_positionSquare->z() + 1) / m_squareSize);
+    return static_cast<int>((m_positionSquare->z() + 1) / m_squareSize);
 }
 
 void Cursor::setX(int x, bool withReal){
@@ -115,9 +115,12 @@ void Cursor::getPosition3D(Position3D &position) const {
 // -------------------------------------------------------
 
 Portion Cursor::getPortion() const{
-    return Portion(getSquareX() / RPM::portionSize,
-                   getSquareY()/ RPM::portionSize,
-                   getSquareZ() / RPM::portionSize);
+    int y = getSquareY();
+    if (m_positionSquare->y() > 0) {
+        y--;
+    }
+    return Portion(getSquareX() / RPM::portionSize, qFloor(static_cast<qreal>(y)
+        / RPM::portionSize), getSquareZ() / RPM::portionSize);
 }
 
 // -------------------------------------------------------
@@ -213,12 +216,22 @@ void Cursor::initialize(){
 // -------------------------------------------------------
 
 void Cursor::addHeight(int h, int hp) {
-    int y = (((static_cast<int>(m_positionReal.y()) / m_squareSize) + h) *
-        m_squareSize) + Common::modulo(static_cast<int>(m_positionReal.y()) +
-        hp, m_squareSize);
+    int y, yPlus, newY;
+    qreal ry, ryPlus;
+    ry = static_cast<qreal>(m_positionReal.y() / m_squareSize);
+    ryPlus = Common::modulo(qCeil(static_cast<qreal>(m_positionReal.y())),
+        m_squareSize);
+    if (m_positionReal.y() < 0) {
+        y = qFloor(ry);
+        yPlus = qFloor(ryPlus);
+    } else {
+        y = qFloor(ry);
+        yPlus = qCeil(ryPlus);
+    }
+    newY = ((y + h) * m_squareSize) + Common::modulo(yPlus + hp, m_squareSize);
 
-    m_positionSquare->setY(y);
-    m_positionReal.setY(y);
+    m_positionSquare->setY(newY);
+    m_positionReal.setY(newY);
 }
 
 // -------------------------------------------------------

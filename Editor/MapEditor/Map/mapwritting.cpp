@@ -89,11 +89,11 @@ QString Map::writeMap(QString path, MapProperties& properties,
 
     // Portions
     int lx = (properties.length() - 1) / RPM::portionSize;
-    int ly = (properties.depth() + properties.height() - 1) /
-            RPM::portionSize;;
+    int ld = (properties.depth() - 1) / RPM::portionSize;
+    int lh = (properties.height() - 1) / RPM::portionSize;
     int lz = (properties.width() - 1) / RPM::portionSize;
     for (int i = 0; i <= lx; i++){
-        for (int j = 0; j <= ly; j++){
+        for (int j = -ld; j <= lh; j++){
             for (int k = 0; k <= lz; k++){
                 QJsonObject obj;
                 Common::writeOtherJSON(
@@ -121,71 +121,102 @@ QString Map::writeMap(QString path, MapProperties& properties,
 void Map::correctMap(QString path, MapProperties& previousProperties,
                      MapProperties& properties)
 {
-    int portionMaxX, portionMaxY, portionMaxZ;
-    int newPortionMaxX, newPortionMaxY, newPortionMaxZ;
-    previousProperties.getPortionsNumber(portionMaxX, portionMaxY, portionMaxZ);
-    properties.getPortionsNumber(newPortionMaxX,
-                                 newPortionMaxY,
-                                 newPortionMaxZ);
+    int portionMaxX, portionMaxD, portionMaxH, portionMaxZ;
+    int newPortionMaxX, newPortionMaxD, newPortionMaxH, newPortionMaxZ;
+    previousProperties.getPortionsNumber(portionMaxX, portionMaxD, portionMaxH,
+        portionMaxZ);
+    properties.getPortionsNumber(newPortionMaxX, newPortionMaxD, newPortionMaxH,
+        newPortionMaxZ);
 
     // Write empty portions
     for (int i = portionMaxX + 1; i <= newPortionMaxX; i++) {
-        for (int j = 0; j <= newPortionMaxY; j++) {
-            for (int k = 0; k <= newPortionMaxZ; k++)
+        for (int j = -newPortionMaxD; j <= newPortionMaxH; j++) {
+            for (int k = 0; k <= newPortionMaxZ; k++) {
                 Map::writeEmptyMap(path, i, j, k);
+            }
         }
     }
-    for (int j = portionMaxY + 1; j <= newPortionMaxY;j++) {
+    for (int j = portionMaxD + 1; j <= newPortionMaxD; j++) {
         for (int i = 0; i <= newPortionMaxX; i++) {
-            for (int k = 0; k <= newPortionMaxZ; k++)
+            for (int k = 0; k <= newPortionMaxZ; k++) {
+                Map::writeEmptyMap(path, i, -j, k);
+            }
+        }
+    }
+    for (int j = portionMaxH + 1; j <= newPortionMaxH; j++) {
+        for (int i = 0; i <= newPortionMaxX; i++) {
+            for (int k = 0; k <= newPortionMaxZ; k++) {
                 Map::writeEmptyMap(path, i, j, k);
+            }
         }
     }
     for (int k = portionMaxZ + 1; k <= newPortionMaxZ; k++) {
         for (int i = 0; i <= newPortionMaxX; i++) {
-            for (int j = 0; j <= newPortionMaxY; j++)
+            for (int j = -newPortionMaxD; j <= newPortionMaxH; j++) {
                 Map::writeEmptyMap(path, i, j, k);
+            }
         }
     }
 
     int difLength = previousProperties.length() - properties.length();
     int difWidth = previousProperties.width() - properties.width();
     int difHeight = previousProperties.height() - properties.height();
+    int difDepth = previousProperties.depth() - properties.depth();
 
-    if (difLength > 0 || difWidth > 0 || difHeight > 0) {
+    if (difLength > 0 || difWidth > 0 || difHeight > 0 || difDepth) {
         QStandardItemModel* model = new QStandardItemModel;
         QList<int> listDeletedObjectsIDs;
         Map::loadObjects(model, path, false);
 
         // Complete delete
         for (int i = newPortionMaxX + 1; i <= portionMaxX; i++) {
-            for (int j = 0; j <= portionMaxY; j++) {
-                for (int k = 0; k <= portionMaxZ; k++)
+            for (int j = -portionMaxD; j <= portionMaxH; j++) {
+                for (int k = 0; k <= portionMaxZ; k++) {
                     deleteCompleteMap(path, i, j, k);
+                }
             }
         }
-        deleteObjects(model, newPortionMaxX + 1, portionMaxX, 0, portionMaxY, 0,
-                      portionMaxZ);
+        deleteObjects(model, newPortionMaxX + 1, portionMaxX, -portionMaxD,
+            portionMaxH, 0, portionMaxZ);
+        for (int j = newPortionMaxD + 1; j <= portionMaxD; j++) {
+            for (int i = 0; i <= portionMaxX; i++) {
+                for (int k = 0; k <= portionMaxZ; k++) {
+                    deleteCompleteMap(path, i, -j, k);
+                }
+            }
+        }
+        deleteObjects(model, 0, portionMaxX, -newPortionMaxD - 1, -portionMaxD,
+            0, portionMaxZ);
+        for (int j = newPortionMaxH + 1; j <= portionMaxH; j++) {
+            for (int i = 0; i <= portionMaxX; i++) {
+                for (int k = 0; k <= portionMaxZ; k++) {
+                    deleteCompleteMap(path, i, j, k);
+                }
+            }
+        }
+        deleteObjects(model, 0, portionMaxX, -newPortionMaxH - 1, -portionMaxH,
+            0, portionMaxZ);
         for (int k = newPortionMaxZ + 1; k <= portionMaxZ; k++) {
             for (int i = 0; i <= portionMaxX; i++) {
-                for (int j = 0; j <= portionMaxY; j++)
+                for (int j = -portionMaxD; j <= portionMaxH; j++) {
                     deleteCompleteMap(path, i, j, k);
+                }
             }
         }
-        deleteObjects(model, 0, portionMaxX, 0, portionMaxY, newPortionMaxZ + 1,
-                      portionMaxZ);
+        deleteObjects(model, 0, portionMaxX, -portionMaxD, portionMaxH,
+            newPortionMaxZ + 1, portionMaxZ);
 
         // Remove only cut items
         for (int i = 0; i <= newPortionMaxX; i++) {
-            for (int j = 0; j <= newPortionMaxY; j++) {
+            for (int j = -newPortionMaxD; j <= newPortionMaxH; j++) {
                 deleteMapElements(listDeletedObjectsIDs, path, i, j,
-                                  newPortionMaxZ, properties);
+                    newPortionMaxZ, properties);
             }
         }
         for (int k = 0; k <= newPortionMaxZ; k++) {
-            for (int j = 0; j <= newPortionMaxY; j++) {
+            for (int j = -newPortionMaxD; j <= newPortionMaxH; j++) {
                 deleteMapElements(listDeletedObjectsIDs, path, newPortionMaxX,
-                                  j, k, properties);
+                    j, k, properties);
             }
         }
         deleteObjectsByID(model, listDeletedObjectsIDs);

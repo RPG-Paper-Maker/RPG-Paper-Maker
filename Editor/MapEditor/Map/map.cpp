@@ -240,14 +240,17 @@ void Map::setModelObjects(QStandardItemModel* model){
 
 // -------------------------------------------------------
 
-MapPortion* Map::loadPortionMap(int i, int j, int k, bool force){
-
+MapPortion* Map::loadPortionMap(int i, int j, int k, bool force) {
     int lx = (m_mapProperties->length() - 1) / RPM::portionSize;
-    int ly = (m_mapProperties->depth() + m_mapProperties->height() - 1) /
-            RPM::portionSize;;
+    int ld = (m_mapProperties->depth() - 1) / RPM::portionSize;
+    if (m_mapProperties->depth() > 0) {
+        ld++;
+    }
+    int lh = (m_mapProperties->height() - 1) / RPM::portionSize;
     int lz = (m_mapProperties->width() - 1) / RPM::portionSize;
 
-    if (force || (i >= 0 && i <= lx && j >= 0 && j <= ly && k >= 0 && k <= lz)){
+    if (force || (i >= 0 && i <= lx && j >= -ld && j <= lh && k >= 0 && k <= lz))
+    {
         Portion portion(i, j, k);
         QString path = getPortionPath(i, j, k);
         MapPortion* mapPortion = new MapPortion(portion);
