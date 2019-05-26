@@ -145,10 +145,10 @@ const
 {
     int y = position.getY(squareSize);
     int d = m_depth * squareSize;
-    int h = m_height * squareSize;
+    int h = m_height * squareSize + squareSize - 1;
 
     return (position.x() >= -offset && position.x() < m_length + offset &&
-            y >= -d && y < h && position.z() >= -offset &&
+            y >= -d && y <= h && position.z() >= -offset &&
             position.z() < m_width + offset);
 }
 

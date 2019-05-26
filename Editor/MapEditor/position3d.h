@@ -14,6 +14,8 @@
 
 #include "portion.h"
 
+class MapProperties;
+
 // -------------------------------------------------------
 //
 //  CLASS Position3D
@@ -37,6 +39,7 @@ public:
     int getYpx(int squareSize) const;
     void setCoords(int x, int y, double yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
+    bool isOutMapPorperties(MapProperties& properties);
 
     virtual QString toString() const;
 

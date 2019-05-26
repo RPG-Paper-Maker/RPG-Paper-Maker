@@ -112,9 +112,7 @@ void MapObjects::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
     for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
 
-        if (position.x() >= properties.length() ||
-            position.z() >= properties.width())
-        {
+        if (position.isOutMapPorperties(properties)) {
             list.push_back(position);
             listDeletedObjectsIDs.push_back(i.value()->id());
             delete *i;

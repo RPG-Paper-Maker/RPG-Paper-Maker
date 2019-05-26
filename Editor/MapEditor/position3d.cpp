@@ -10,6 +10,7 @@
 */
 
 #include "position3d.h"
+#include "mapproperties.h"
 
 // -------------------------------------------------------
 //
@@ -67,6 +68,13 @@ void Position3D::setInGrid(Position3D& p, int w, int h) {
         z = h;
 
     setCoords(x, p.y(), p.yPlus(), z);
+}
+
+// -------------------------------------------------------
+
+bool Position3D::isOutMapPorperties(MapProperties& properties) {
+    return this->x() >= properties.length() || this->y() < -properties.depth()
+        || this->y() > properties.height() || this->z() >= properties.width();
 }
 
 // -------------------------------------------------------

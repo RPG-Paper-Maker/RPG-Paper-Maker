@@ -213,6 +213,14 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
                     newPortionMaxZ, properties);
             }
         }
+        for (int i = 0; i <= newPortionMaxX; i++) {
+            for (int k = 0; k <= newPortionMaxZ; k++) {
+                deleteMapElements(listDeletedObjectsIDs, path, i,
+                    -newPortionMaxD, k, properties);
+                deleteMapElements(listDeletedObjectsIDs, path, i,
+                    newPortionMaxH, k, properties);
+            }
+        }
         for (int k = 0; k <= newPortionMaxZ; k++) {
             for (int j = -newPortionMaxD; j <= newPortionMaxH; j++) {
                 deleteMapElements(listDeletedObjectsIDs, path, newPortionMaxX,

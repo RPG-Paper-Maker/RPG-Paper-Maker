@@ -74,9 +74,7 @@ void Floors::removeFloorOut(MapProperties& properties) {
     for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
 
-        if (position.x() >= properties.length() ||
-            position.z() >= properties.width())
-        {
+        if (position.isOutMapPorperties(properties)) {
             delete *i;
             list.push_back(position);
         }

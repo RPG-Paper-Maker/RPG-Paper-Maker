@@ -116,7 +116,7 @@ void Cursor::getPosition3D(Position3D &position) const {
 
 Portion Cursor::getPortion() const{
     int y = getSquareY();
-    if (m_positionSquare->y() > 0) {
+    if (m_positionSquare->y() > m_squareSize) {
         y--;
     }
     return Portion(getSquareX() / RPM::portionSize, qFloor(static_cast<qreal>(y)
@@ -216,22 +216,20 @@ void Cursor::initialize(){
 // -------------------------------------------------------
 
 void Cursor::addHeight(int h, int hp) {
-    int y, yPlus, newY;
-    qreal ry, ryPlus;
-    ry = static_cast<qreal>(m_positionReal.y() / m_squareSize);
-    ryPlus = Common::modulo(qCeil(static_cast<qreal>(m_positionReal.y())),
-        m_squareSize);
-    if (m_positionReal.y() < 0) {
-        y = qFloor(ry);
-        yPlus = qFloor(ryPlus);
-    } else {
-        y = qFloor(ry);
-        yPlus = qCeil(ryPlus);
-    }
-    newY = ((y + h) * m_squareSize) + Common::modulo(yPlus + hp, m_squareSize);
+    int y, yPlus, newY, maxD, maxH;
 
-    m_positionSquare->setY(newY);
-    m_positionReal.setY(newY);
+    maxD = RPM::get()->project()->currentMap()->mapProperties()->depth();
+    maxH = RPM::get()->project()->currentMap()->mapProperties()->height();
+    y = qFloor(static_cast<qreal>(m_positionReal.y()) / m_squareSize);
+    yPlus = Common::modulo(qFloor(static_cast<qreal>(m_positionReal.y())),
+        m_squareSize);
+
+    if (y + h >= -maxD && y + h <= maxH) {
+        newY = ((y + h) * m_squareSize) + Common::modulo(yPlus + hp, m_squareSize);
+
+        m_positionSquare->setY(newY);
+        m_positionReal.setY(newY);
+    }
 }
 
 // -------------------------------------------------------

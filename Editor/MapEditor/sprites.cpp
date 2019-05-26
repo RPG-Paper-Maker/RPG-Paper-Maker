@@ -421,9 +421,7 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
     for (i = m_all.begin(); i != m_all.end(); i++) {
         Position position = i.key();
 
-        if (position.x() >= properties.length() ||
-            position.z() >= properties.width())
-        {
+        if (position.isOutMapPorperties(properties)) {
             delete i.value();
             listGlobal.push_back(position);
         }
@@ -436,9 +434,7 @@ void Sprites::removeSpritesOut(MapProperties& properties) {
     for (j = m_walls.begin(); j != m_walls.end(); j++) {
         Position position = j.key();
 
-        if (position.x() >= properties.length() ||
-            position.z() >= properties.width())
-        {
+        if (position.isOutMapPorperties(properties)) {
             delete j.value();
             listWalls.push_back(position);
         }
