@@ -17,6 +17,7 @@
 
 void ControlMapEditor::setCursorObjectPosition(Position &p){
     m_cursorObject->setX(p.x());
+    m_cursorObject->setY(p);
     m_cursorObject->setZ(p.z());
 
     Portion portion;
@@ -36,6 +37,7 @@ void ControlMapEditor::setCursorObjectPosition(Position &p){
 
 void ControlMapEditor::setStartPosition(Position3D &p) {
     m_cursorStart->setX(p.x());
+    m_cursorStart->setY(p);
     m_cursorStart->setZ(p.z());
 }
 
@@ -289,6 +291,8 @@ void ControlMapEditor::updateMapObjects() {
 
 void ControlMapEditor::setObjectPosition(Position &position){
     position.setX(cursorObject()->getSquareX());
+    position.setY(cursorObject()->getSquareY());
+    position.setYPlus(cursorObject()->getPercentYPlus());
     position.setZ(cursorObject()->getSquareZ());
 }
 

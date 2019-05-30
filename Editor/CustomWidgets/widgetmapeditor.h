@@ -55,8 +55,7 @@ public:
     void save();
     void onKeyPress(int k, double speed);
     void setCursorX(int x);
-    void setCursorY(int y);
-    void setCursorYplus(int yPlus);
+    void setCursorY(int y, int yPlus);
     void setCursorZ(int z);
     void updateSpinBoxes();
     void addObject();

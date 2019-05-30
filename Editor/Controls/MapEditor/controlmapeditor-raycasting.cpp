@@ -40,8 +40,10 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     // Others
     m_distanceLand = 0;
     m_distanceSprite = 0;
+    m_distanceObject = 0;
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
+    m_elementOnObject = nullptr;
     for (int i = portions.size() - 1; i >= 0; i--) {
         Portion portion = portions.at(i);
         MapPortion *mapPortion = m_map->mapPortion(portion);
@@ -57,6 +59,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
             }
             if (m_elementOnSprite == nullptr) {
                 updateRaycastingSprites(mapPortion, layerOn);
+            }
+            if (m_elementOnObject == nullptr) {
+                updateRaycastingObjects(mapPortion);
             }
         }
     }
@@ -100,6 +105,10 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     }
 
     m_positionOnPlaneWallIndicator = m_positionOnLand;
+
+    if (m_distanceObject == 0.0f) {
+        m_positionOnObject = m_positionOnLand;
+    }
 }
 
 // -------------------------------------------------------
@@ -223,6 +232,13 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion *mapPortion, bool laye
     m_elementOnSprite = mapPortion->updateRaycastingSprites(m_map->squareSize(),
         m_distanceSprite, m_positionOnSprite, m_ray, m_camera->horizontalAngle(),
         layerOn);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateRaycastingObjects(MapPortion *mapPortion) {
+    m_elementOnObject = mapPortion->updateRaycastingObjects(m_map->squareSize(),
+        m_distanceObject, m_positionOnObject, m_ray);
 }
 
 // -------------------------------------------------------

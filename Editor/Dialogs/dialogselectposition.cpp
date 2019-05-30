@@ -103,13 +103,13 @@ void DialogSelectPosition::on_spinBoxX_valueChanged(int i){
 //--------------------------------------------
 
 void DialogSelectPosition::on_spinBoxY_valueChanged(int i){
-    ui->widgetMap->setCursorY(i);
+    ui->widgetMap->setCursorY(i, ui->spinBoxYplus->value());
 }
 
 //--------------------------------------------
 
 void DialogSelectPosition::on_spinBoxYplus_valueChanged(int i){
-    ui->widgetMap->setCursorYplus(i);
+    ui->widgetMap->setCursorY(ui->spinBoxY->value(), i);
 }
 
 //--------------------------------------------

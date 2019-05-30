@@ -36,10 +36,10 @@ public:
     int getSquareX() const;
     int getSquareY() const;
     int getYPlus() const;
+    double getPercentYPlus() const;
     int getSquareZ() const;
     void setX(int x, bool withReal = true);
-    void setY(int y);
-    void setYplus(int yPlus);
+    void setY(Position3D pos, bool withReal = true);
     void setZ(int z, bool withReal = true);
     void setPositions(Position3D& position);
     float getX() const;

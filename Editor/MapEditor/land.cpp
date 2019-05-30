@@ -50,6 +50,10 @@ bool LandDatas::operator!=(const LandDatas& other) const {
 
 QRect *LandDatas::textureRect() const { return m_textureRect; }
 
+bool LandDatas::up() const {
+    return m_up;
+}
+
 MapEditorSubSelectionKind LandDatas::getSubKind() const{
     return MapEditorSubSelectionKind::None;
 }
@@ -69,8 +73,16 @@ void LandDatas::initializeVertices(int, int, int, QVector<Vertex>&,
 // -------------------------------------------------------
 
 float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
+    return staticIntersection(squareSize, ray, position, m_up);
+}
+
+// -------------------------------------------------------
+
+float LandDatas::staticIntersection(int squareSize, QRay3D& ray, Position& position,
+    bool up)
+{
     QVector3D pos, size;
-    getPosSize(pos, size, squareSize, position);
+    getUpPosSize(pos, size, squareSize, position, up);
 
     QVector3D vecA = Lands::verticesQuad[0] * size + pos,
               vecC = Lands::verticesQuad[2] * size + pos;
@@ -81,12 +93,12 @@ float LandDatas::intersection(int squareSize, QRay3D& ray, Position& position) {
 
 // -------------------------------------------------------
 
-void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
-                           Position &position)
+void LandDatas::getUpPosSize(QVector3D& pos, QVector3D& size, int squareSize,
+        Position &position, bool up)
 {
     // Position
     float yLayerOffset = position.layer() * 0.05f;
-    if (!m_up)
+    if (!up)
         yLayerOffset *= -1;
     float yPosition = position.getY(squareSize) + yLayerOffset;
     pos.setX(position.x() * squareSize);
@@ -97,6 +109,14 @@ void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
     size.setX(squareSize);
     size.setY(0.0f);
     size.setZ(squareSize);
+}
+
+// -------------------------------------------------------
+
+void LandDatas::getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
+                           Position &position)
+{
+    getUpPosSize(pos, size, squareSize, position, m_up);
 }
 
 // -------------------------------------------------------

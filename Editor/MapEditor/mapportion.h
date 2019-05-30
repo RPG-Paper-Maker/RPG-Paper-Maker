@@ -85,6 +85,9 @@ public:
                                         Position &finalPosition,
                                         QRay3D& ray, double cameraHAngle,
                                         bool layerOn);
+    MapElement* updateRaycastingObjects(int squareSize, float& finalDistance,
+                                        Position &finalPosition,
+                                        QRay3D& ray);
     MapElement* updateRaycastingOverflowSprite(int squareSize,
                                                Position& position,
                                                float &finalDistance,

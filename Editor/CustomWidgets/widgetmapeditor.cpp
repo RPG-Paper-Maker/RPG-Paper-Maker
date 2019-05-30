@@ -330,16 +330,12 @@ void WidgetMapEditor::setCursorX(int x) {
         m_control.cursor()->setX(x);
 }
 
-void WidgetMapEditor::setCursorY(int y) {
-    if (m_control.map() != nullptr)
-        m_control.cursor()->setY(y);
-}
-
-// -------------------------------------------------------
-
-void WidgetMapEditor::setCursorYplus(int yPlus) {
-    if (m_control.map() != nullptr)
-        m_control.cursor()->setYplus(yPlus);
+void WidgetMapEditor::setCursorY(int y, int yPlus) {
+    if (m_control.map() != nullptr) {
+        Position3D pos(0, y, static_cast<qreal>(yPlus) / RPM::get()
+            ->getSquareSize() * 100, 0);
+        m_control.cursor()->setY(pos);
+    }
 }
 
 // -------------------------------------------------------

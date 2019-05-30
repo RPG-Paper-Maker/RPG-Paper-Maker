@@ -115,7 +115,6 @@ Sprites::~Sprites()
     QHash<Position, SpriteWallDatas*>::iterator j;
     for (j = m_walls.begin(); j != m_walls.end(); j++)
         delete *j;
-
     QHash<int, SpritesWalls*>::iterator k;
     for (k = m_wallsGL.begin(); k != m_wallsGL.end(); k++)
         delete *k;

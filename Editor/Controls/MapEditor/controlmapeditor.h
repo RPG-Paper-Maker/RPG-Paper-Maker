@@ -73,6 +73,7 @@ public:
                              QList<Portion> &adjacents);
     void updateRaycastingLand(MapPortion *mapPortion);
     void updateRaycastingSprites(MapPortion *mapPortion, bool layerOn);
+    void updateRaycastingObjects(MapPortion *mapPortion);
     QVector3D transformToNormalizedCoords(const QPoint &mouse);
     QVector4D transformToHomogeneousClip(QVector3D &normalized);
     QVector4D transformToEyeCoords(QVector4D &rayClip, QMatrix4x4 &projection);
@@ -181,6 +182,7 @@ public:
     void undo();
     void redo();
     void undoRedo(QJsonArray &states, bool reverseAction);
+    void addHeight(int h, int hp);
     void heightUp();
     void heightPlusUp();
     void heightDown();
@@ -229,12 +231,15 @@ protected:
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionRealOnSprite;
+    Position m_positionOnObject;
     QVector3D *m_positionStart;
     MapElement *m_elementOnLand;
     MapElement *m_elementOnSprite;
+    MapElement *m_elementOnObject;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
+    float m_distanceObject;
     Position m_positionPreviousPreview;
     QSet<MapPortion *> m_portionsPreviousPreview;
     bool m_isGridOnTop;

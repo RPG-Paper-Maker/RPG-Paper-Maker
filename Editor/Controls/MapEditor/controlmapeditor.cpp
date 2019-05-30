@@ -170,8 +170,8 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     // Cursor object
     m_cursorObject = new Cursor(positionObject);
     m_cursorObject->initializeSquareSize(m_map->squareSize());
-    Position pos(m_cursorObject->getSquareX(), m_cursorObject->getSquareY(), 0,
-        m_cursorObject->getSquareZ(), 0);
+    Position pos(m_cursorObject->getSquareX(), m_cursorObject->getSquareY(),
+        m_cursorObject->getPercentYPlus(), m_cursorObject->getSquareZ());
     setCursorObjectPosition(pos);
     m_cursorObject->setFrameNumber(1);
     m_cursorObject->loadTexture(":/textures/Ressources/object_square_cursor.png");
@@ -197,7 +197,8 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
         }
     }
     m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
-        0, heroPosition.z() * m_map->squareSize());
+        heroPosition.getY(m_map->squareSize()), heroPosition.z() * m_map
+        ->squareSize());
     m_cursorStart = new Cursor(m_positionStart);
     m_cursorStart->initializeSquareSize(m_map->squareSize());
     m_cursorStart->setFrameNumber(1);
@@ -631,8 +632,8 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         position = m_positionOnLand;
         return nullptr;
     case MapEditorSelectionKind::Objects:
-        position = m_positionOnPlane;
-        return nullptr;
+        position = m_positionOnObject;
+        return m_elementOnObject;
     default:
         position = m_positionOnPlane;
         return nullptr;
@@ -1023,26 +1024,35 @@ void ControlMapEditor::redo() {
 
 // -------------------------------------------------------
 
+void ControlMapEditor::addHeight(int h, int hp) {
+    this->cursor()->addHeight(h, hp);
+    Position pos(m_cursorObject->getSquareX(), this->cursor()->getSquareY(),
+        this->cursor()->getPercentYPlus(), m_cursorObject->getSquareZ());
+    setCursorObjectPosition(pos);
+}
+
+// -------------------------------------------------------
+
 void ControlMapEditor::heightUp() {
-    this->cursor()->addHeight(1, 0);
+    addHeight(1, 0);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::heightPlusUp() {
-    this->cursor()->addHeight(0, 1);
+    addHeight(0, 1);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::heightDown() {
-    this->cursor()->addHeight(-1, 0);
+    addHeight(-1, 0);
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::heightPlusDown() {
-    this->cursor()->addHeight(0, -1);
+    addHeight(0, -1);
 }
 
 // -------------------------------------------------------
@@ -1210,8 +1220,9 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
         if (!m_map->isInGrid(position))
             m_lastSquareInfos = "";
         else {
-            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + element
-                ->toString() + "]") + "\n" + position.toString(m_map->squareSize());
+            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + (kind ==
+                MapEditorSelectionKind::Objects ? "OBJECT" : element->toString()
+                ) + "]") + "\n" + position.toString(m_map->squareSize());
         }
     }
 
@@ -1238,7 +1249,7 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
         int value;
 
         value = event->delta() > 0 ? 1 : -1;
-        this->cursor()->addHeight(m_isShiftPressed ? 0 : value, m_isShiftPressed
+        addHeight(m_isShiftPressed ? 0 : value, m_isShiftPressed
             ? value : 0);
     } else {
         if (event->delta() > 0) {

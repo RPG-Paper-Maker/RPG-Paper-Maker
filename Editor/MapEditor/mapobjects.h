@@ -54,6 +54,10 @@ public:
     void clearSprites();
     void initializeVertices(int squareSize,
                             QHash<int, QOpenGLTexture *> &characters, QOpenGLTexture *tileset);
+    MapElement * updateRaycasting(int squareSize, float& finalDistance, Position
+        &finalPosition, QRay3D &ray);
+    bool updateRaycastingAt(Position &position, int
+        squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram *programFace);
     void updateGL();
@@ -65,9 +69,10 @@ public:
     virtual void write(QJsonObject &json) const;
 
 private:
-    QHash<Position, SystemCommonObject*> m_all;
-    QHash<int, QList<SpriteObject*>*> m_spritesStaticGL;
-    QHash<int, QList<SpriteObject*>*> m_spritesFaceGL;
+    QHash<Position, SystemCommonObject *> m_all;
+    QHash<Position, MapElement *> m_allElements;
+    QHash<int, QList<SpriteObject *>*> m_spritesStaticGL;
+    QHash<int, QList<SpriteObject *>*> m_spritesFaceGL;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;

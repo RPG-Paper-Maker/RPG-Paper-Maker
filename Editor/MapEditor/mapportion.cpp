@@ -279,6 +279,15 @@ MapElement* MapPortion::updateRaycastingSprites(int squareSize,
 
 // -------------------------------------------------------
 
+MapElement* MapPortion::updateRaycastingObjects(int squareSize, float&
+    finalDistance, Position &finalPosition, QRay3D& ray)
+{
+    return m_mapObjects->updateRaycasting(squareSize, finalDistance,
+        finalPosition, ray);
+}
+
+// -------------------------------------------------------
+
 MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
                                                         Position& position,
                                                         float &finalDistance,

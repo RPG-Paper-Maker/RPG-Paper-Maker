@@ -131,22 +131,27 @@ void MapObjects::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
 
 void MapObjects::clearSprites(){
     QHash<int, QList<SpriteObject*>*>::const_iterator i;
-    for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++){
+    for (i = m_spritesStaticGL.begin(); i != m_spritesStaticGL.end(); i++) {
         QList<SpriteObject*>* list = i.value();
         for (int j = 0; j < list->size(); j++)
             delete list->at(j);
         delete list;
     }
     QHash<int, QList<SpriteObject*>*>::const_iterator j;
-    for (j = m_spritesFaceGL.begin(); j != m_spritesFaceGL.end(); j++){
+    for (j = m_spritesFaceGL.begin(); j != m_spritesFaceGL.end(); j++) {
         QList<SpriteObject*>* list = j.value();
         for (int i = 0; i < list->size(); i++)
             delete list->at(i);
         delete list;
     }
+    QHash<Position, MapElement *>::const_iterator k;
+    for (k = m_allElements.begin(); k != m_allElements.end(); k++) {
+        delete k.value();
+    }
 
     m_spritesStaticGL.clear();
     m_spritesFaceGL.clear();
+    m_allElements.clear();
 }
 
 // -------------------------------------------------------
@@ -199,10 +204,9 @@ void MapObjects::initializeVertices(int squareSize,
             }
 
             // Create the sprite geometry
-            SpriteDatas sprite(
-                        state->graphicsKind(),
-                        new QRect(x, y, width, height));
-            SpriteObject* spriteObject = new SpriteObject(sprite, texture);
+            SpriteDatas *sprite = new SpriteDatas(state->graphicsKind(), new
+                QRect(x, y, width, height));
+            SpriteObject* spriteObject = new SpriteObject(*sprite, texture);
             spriteObject->initializeVertices(squareSize, position);
 
             // Adding the sprite to the GL list
@@ -213,11 +217,16 @@ void MapObjects::initializeVertices(int squareSize,
             if (hash.value(graphicsId) == nullptr)
                hash[graphicsId] = new QList<SpriteObject*>;
             hash[graphicsId]->append(spriteObject);
+            m_allElements.insert(position, sprite);
+        } else {
+            SpriteDatas *spriteEmpty = new SpriteDatas(MapEditorSubSelectionKind
+                ::None, new QRect(0, 0,0, 0));
+            m_allElements.insert(position, spriteEmpty);
         }
 
         // Draw the square of the object
-        QVector3D pos(position.x() * squareSize, 0.5f,
-                      position.z() * squareSize);
+        QVector3D pos(position.x() * squareSize, position.getY(squareSize) +
+            0.5f, position.z() * squareSize);
         QVector3D size(squareSize, 0.0, squareSize);
         float x = 0.0, y = 0.0, w = 1.0, h = 1.0;
         m_vertices.append(Vertex(Lands::verticesQuad[0] * size + pos,
@@ -234,6 +243,42 @@ void MapObjects::initializeVertices(int squareSize,
 
         count++;
     }
+}
+
+// -------------------------------------------------------
+
+MapElement * MapObjects::updateRaycasting(int squareSize, float& finalDistance,
+    Position &finalPosition, QRay3D &ray)
+{
+    MapElement *element = nullptr;
+
+    for (QHash<Position, MapElement *>::iterator i = m_allElements.begin();
+         i != m_allElements.end(); i++)
+    {
+        Position position = i.key();
+        if (updateRaycastingAt(position, squareSize, finalDistance,
+                               finalPosition, ray))
+        {
+            element = i.value();
+        }
+    }
+
+    return element;
+}
+
+// -------------------------------------------------------
+
+bool MapObjects::updateRaycastingAt(
+        Position &position, int squareSize,
+        float &finalDistance, Position &finalPosition, QRay3D& ray)
+{
+    float newDistance = LandDatas::staticIntersection(squareSize, ray, position);
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
+        finalPosition = position;
+        return true;
+    }
+
+    return false;
 }
 
 // -------------------------------------------------------
@@ -324,6 +369,7 @@ void MapObjects::paintSquares(){
 //  READ / WRITE
 //
 // -------------------------------------------------------
+
 
 void MapObjects::read(const QJsonObject & json){
     QJsonArray tab = json["list"].toArray();

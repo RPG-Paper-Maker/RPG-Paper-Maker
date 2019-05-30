@@ -26,13 +26,19 @@ public:
     bool operator==(const LandDatas& other) const;
     bool operator!=(const LandDatas& other) const;
     QRect* textureRect() const;
+    bool up() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
 
     virtual void initializeVertices(int, int, int, QVector<Vertex>&,
                                     QVector<GLuint>&, Position&, int&);
     void getPosSize(QVector3D& pos, QVector3D& size, int squareSize,
                     Position &position);
+
+    static void getUpPosSize(QVector3D& pos, QVector3D& size, int squareSize,
+        Position &position, bool up = true);
     float intersection(int squareSize, QRay3D& ray, Position& position);
+    static float staticIntersection(int squareSize, QRay3D& ray, Position& position,
+        bool up = true);
 
     static const QString JSON_UP;
     static const QString JSON_TEXTURE;
