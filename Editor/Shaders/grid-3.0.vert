@@ -3,7 +3,7 @@
 in vec3 position;
 
 uniform mat4 modelviewProjection;
-uniform int yPosition;
+uniform float yPosition;
 
 void main()
 {

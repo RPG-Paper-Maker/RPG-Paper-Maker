@@ -86,15 +86,13 @@ void Grid::initializeGL(){
 // -------------------------------------------------------
 
 void Grid::paintGL(QMatrix4x4& modelviewProjection, int y) {
-    glDisable(GL_DEPTH_TEST);
     m_program->bind();
     m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
-    m_program->setUniformValue(u_yPosition, y);
+    m_program->setUniformValue(u_yPosition, y + 0.5f);
     {
       m_vao.bind();
       glDrawArrays(GL_LINES, 0, m_vertices.size());
       m_vao.release();
     }
     m_program->release();
-    glEnable(GL_DEPTH_TEST);
 }

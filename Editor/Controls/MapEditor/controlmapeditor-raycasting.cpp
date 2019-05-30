@@ -121,7 +121,6 @@ void ControlMapEditor::getPortionsInRay(QList<Portion> &portions) {
     getCorrectPositionOnRay(positionCamera, direction, 0);
     Portion portionCamera;
     m_map->getLocalPortion(positionCamera, portionCamera);
-
     // If camera is inside the portions, ok !
     if (m_map->isInPortion(portionCamera))
         portions.append(portionCamera);

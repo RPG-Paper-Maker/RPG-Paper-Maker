@@ -9,6 +9,7 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
+#include <QtMath>
 #include "map.h"
 #include "rpm.h"
 #include "systemmapobject.h"
@@ -494,8 +495,9 @@ void Map::getGlobalPortion(Position3D& position, Portion &portion){
 void Map::getLocalPortion(Position3D& position, Portion& portion) const {
     portion.setCoords((position.x() / RPM::portionSize) - (m_cursor
         ->getSquareX() / RPM::portionSize), (position.y() / RPM::portionSize
-        ) - (m_cursor->getSquareY() / RPM::portionSize), (position.z() / RPM
-        ::portionSize) - (m_cursor->getSquareZ() / RPM::portionSize));
+        ) - qFloor(static_cast<qreal>(this->cursor()->getSquareY()) / RPM
+        ::portionSize), (position.z() / RPM::portionSize) - (m_cursor
+        ->getSquareZ() / RPM::portionSize));
 }
 
 // -------------------------------------------------------

@@ -1177,12 +1177,6 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
         m_cursorStart->paintGL(modelviewProjection);
     }
 
-    // Drawing grid
-    if (m_displayGrid){
-        m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()
-            ->getY()));
-    }
-
     // Drawing other stuff
     m_map->paintOthers(modelviewProjection, cameraRightWorldSpace,
         cameraUpWorldSpace, cameraDeepWorldSpace);
@@ -1193,6 +1187,12 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     {
         m_beginWallIndicator->paintGL(modelviewProjection);
         m_endWallIndicator->paintGL(modelviewProjection);
+    }
+
+    // Drawing grid
+    if (m_displayGrid){
+        m_grid->paintGL(modelviewProjection, static_cast<int>(this->cursor()
+            ->getY()));
     }
 }
 
