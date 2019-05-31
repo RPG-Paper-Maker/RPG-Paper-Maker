@@ -51,33 +51,33 @@ MODS_PATH = $$MAIN_PROJECT_DIR/mods
 # Trailing slash is important on Unix to indicate that we want to copy the source *content* and not the source folder itself
 # (it is optional in the target path)
 
-FROM_CONTENT = \"$$shell_path($$PWD/Content/)\"
-DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR/)\"
+FROM_CONTENT = \"$$shell_path($$PWD/Content)\"
+DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR)\"
 
-FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts/)\"
-DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts/)\"
+FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts)\"
+DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts)\"
 
-FROM_BR= \"$$shell_path($$MODS_PATH/BR/)\"
-DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR/)\"
+FROM_BR= \"$$shell_path($$MODS_PATH/BR)\"
+DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR)\"
 
-FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32/)\"
-DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32/)\"
+FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32)\"
+DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32)\"
 
-FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux/)\"
-DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux/)\"
+FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux)\"
+DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux)\"
 
-FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx/)\"
-DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx/)\"
+FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx)\"
+DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx)\"
 
-FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web/)\"
-DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web/)\"
+FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web)\"
+DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web)\"
 
 
 # Define custom commands
 
 # Create build Editor directory in case it wasn't created for the target yet
 # We make our own mkdir command, as $(MKDIR_CMD) seems unreliable
-win32: MK_DIR_CMD = mkdir
+win32: MK_DIR_CMD = -mkdir
 unix: MK_DIR_CMD = mkdir -p
 
 # We do not want to copy all those subfolders every time we `make` or `make check`, so we only copy when needed, following one of 2 methods at:
@@ -89,8 +89,8 @@ unix: MK_DIR_CMD = mkdir -p
 # In addition, we define two variants of the synchronization command because some destination folders are overlapping and we don't want one sync to break another one.
 win32 {
     # On Windows, please try it and if it fails, add dash to ignore errors: "-robocopy"
-    SYNC_PURGE_CMD = robocopy /mir /xo  # Mirror folders, removing files/folders that are not in source anymore (/mir ~= /e + /purge)
-    SYNC_PRESERVE_CMD = robocopy /e /xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
+    SYNC_PURGE_CMD = -robocopy /mir /xo  # Mirror folders, removing files/folders that are not in source anymore (/mir ~= /e + /purge)
+    SYNC_PRESERVE_CMD = -robocopy /e /xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
 }
 unix {
     SYNC_PURGE_CMD = rsync -rul --del   # Preserve symlinks with -l, crucial with OSX Frameworks, and removing files/folders that are not in source anymore
