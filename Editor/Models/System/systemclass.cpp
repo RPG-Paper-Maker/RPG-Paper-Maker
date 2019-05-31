@@ -10,7 +10,6 @@
 */
 
 #include "systemclass.h"
-#include "main.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 

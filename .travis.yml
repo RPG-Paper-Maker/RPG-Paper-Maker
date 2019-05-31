@@ -2,6 +2,10 @@ language: cpp
 
 osx_image: xcode10.1
 
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
 matrix:
   include:
     - os: linux
@@ -12,22 +16,6 @@ matrix:
         - QT_MAJOR=5
         - QT_MINOR=11
         - QT_PATCH=2
-        - PROJECT=Engine
-        - BINARY=Engine
-      addons:
-        apt:
-          packages:
-            - libglu1-mesa-dev
-    - os: linux
-      dist: xenial
-      sudo: required
-      compiler: gcc
-      env:
-        - QT_MAJOR=5
-        - QT_MINOR=11
-        - QT_PATCH=2
-        - PROJECT=Game
-        - BINARY=Game
       addons:
         apt:
           packages:
@@ -37,15 +25,6 @@ matrix:
       env:
         # current brew stable is 5.11.2
         - QT_MAJOR=5
-        - PROJECT=Engine
-        - BINARY=Engine.app
-    - os: osx
-      compiler: clang
-      env:
-        # current brew stable is 5.11.2
-        - QT_MAJOR=5
-        - PROJECT=Game
-        - BINARY=Game.app
 
 before_install:
   - |
@@ -73,20 +52,16 @@ install:
     if [ "$CXX" = "clang++" ]; then
       brew link --force qt${QT_MAJOR}
     fi
+  - ./update-mods
 
 script:
   - qmake -v
   - qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
   - make
-  - make -k check
-
-deploy:
-  provider: releases
-  api_key:
-    secure: "${RELEASES_API_KEY}"
-  file: "${PROJECT}/${BINARY}"
-  skip_cleanup: true
-  overwrite: true
-  on:
-    repo: RPG-Paper-Maker/RPG-Paper-Maker
-    tags: true
+  # Run with X11 display on Linux as some tests require a Qt app
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      xvfb-run make -k check
+    else
+      make -k check
+    fi

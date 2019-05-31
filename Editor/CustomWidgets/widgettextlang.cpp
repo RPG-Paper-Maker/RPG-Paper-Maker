@@ -11,7 +11,6 @@
 
 #include "widgettextlang.h"
 #include "ui_widgettextlang.h"
-#include "main.h"
 
 // -------------------------------------------------------
 //

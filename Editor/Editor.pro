@@ -4,43 +4,22 @@
 #
 #-------------------------------------------------
 
-CONFIG += c++11
+include(../Common.pri)
 
-QT       += core gui opengl network multimedia charts
-
-win32{
+win32 {
     LIBS += -lOpengl32
 }
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-RC_ICONS = icon.ico
+# Editor static library
+TEMPLATE = lib
+CONFIG += staticlib
 TARGET = RPG-Paper-Maker
-win32{
-    TARGET = "RPG Paper Maker"
-}
 
-TEMPLATE = app
-
-INCLUDEPATH += \
-    Dialogs \
-    Dialogs/Commands \
-    Dialogs/Systems \
-    Dialogs/SpecialElements \
-    CustomWidgets \
-    Controls \
-    Controls/MapEditor \
-    MapEditor \
-    MapEditor/Map \
-    Singletons \
-    Models \
-    Models/GameDatas \
-    Models/System \
-    Enums \
-    MathUtils
+# Library output path
+# Ex: path/to/RPG-Paper-Maker/Build/debug/Editor
+DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
-    main.h \
     Dialogs/mainwindow.h \
     Dialogs/dialognewproject.h \
     CustomWidgets/panelmainmenu.h \
@@ -297,7 +276,6 @@ HEADERS += \
     Enums/characteristickind.h
 
 SOURCES += \
-    main.cpp \
     Dialogs/mainwindow.cpp \
     Dialogs/dialognewproject.cpp \
     CustomWidgets/panelmainmenu.cpp \
@@ -617,71 +595,22 @@ FORMS += \
     Dialogs/Systems/dialogsystemcharacteristic.ui \
     Dialogs/dialogcompleteliststates.ui
 
-OTHER_FILES +=
-
+# Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \
-    ressources.qrc
+    $$PWD/ressources.qrc
 
-#-------------------------------------------------
-# Copy Content directory in build folder
-#-------------------------------------------------
-
-FROM = \"$$shell_path($$PWD\\Content)\"
-DEST = \"$$shell_path($$OUT_PWD)\"
-win32{
-    CONFIG(debug, debug|release) {
-        VARIANT = debug
-    } else {
-        VARIANT = release
-    }
-    DEST = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content)\"
-    DESTDIR = $$OUT_PWD\\$$VARIANT
-}
-
-FROMSCRIPTS= \"$$shell_path($$PWD\\mods\\Scripts)\"
-DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\Content\\basic\\Content\\Datas)\"
-win32{
-    DESTSCRIPTS = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\basic\\Content\\Datas\\Scripts)\"
-}
-
-FROMBR= \"$$shell_path($$PWD\\mods\\BR)\"
-DESTBR = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTBR = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\BR)\"
-}
-
-FROMWIN= \"$$shell_path($$PWD\\mods\\Game\\win32)\"
-DESTWIN = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTWIN = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\win32)\"
-}
-
-FROMLINUX= \"$$shell_path($$PWD\\mods\\Game\\linux)\"
-DESTLINUX = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTLINUX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\linux)\"
-}
-
-FROMOSX= \"$$shell_path($$PWD\\mods\\Game\\osx)\"
-DESTOSX = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTOSX = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\osx)\"
-}
-
-FROMWEB= \"$$shell_path($$PWD\\mods\\Game\\web)\"
-DESTWEB = \"$$shell_path($$OUT_PWD\\Content)\"
-win32{
-    DESTWEB = \"$$shell_path($$OUT_PWD\\$$VARIANT\\Content\\web)\"
-}
-
-!equals(PWD, $${OUT_PWD}) {
-    copyBR.commands = $(COPY_DIR) $$FROM $$DEST $$escape_expand(\n\t) $(COPY_DIR) $$FROMSCRIPTS $$DESTSCRIPTS $$escape_expand(\n\t) $(COPY_DIR) $$FROMBR $$DESTBR $$escape_expand(\n\t) $(COPY_DIR) $$FROMWIN $$DESTWIN $$escape_expand(\n\t) $(COPY_DIR) $$FROMLINUX $$DESTLINUX $$escape_expand(\n\t) $(COPY_DIR) $$FROMOSX $$DESTOSX $$escape_expand(\n\t) $(COPY_DIR) $$FROMWEB $$DESTWEB
-    first.depends = $(first) copyBR
-    export(first.depends)
-    export(copyBR.commands)
-    QMAKE_EXTRA_TARGETS += first copyBR
-}
-
+# Seems optional
 DISTFILES += \
     darktheme.qss \
     whitetheme.qss
+
+OTHER_FILES +=
+
+
+# Clean target explicitly (custom build paths are not included in the default clean)
+# We need to find the exact library name depending on the platform
+# If you don't care preserving the destination folder, you can also delete DESTDIR entirely (see EditorApp.pro for directory removal)
+win32: LIB_FILENAME = "$${TARGET}.$$QMAKE_EXTENSION_STATICLIB"   # Ex: RPG-Paper-Maker.lib
+unix: LIB_FILENAME = "lib$${TARGET}.$$QMAKE_EXTENSION_STATICLIB" # Ex: libRPG-Paper-Maker.a
+QMAKE_CLEAN += "$$DESTDIR/$$LIB_FILENAME"
+

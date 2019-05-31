@@ -26,6 +26,10 @@
 
 int main(int argc, char *argv[])
 {
+    // Call resource constructor to avoid stripping resources from build on static linking with Engine
+    // See: https://wiki.qt.io/QtResources
+    Q_INIT_RESOURCE(ressources);
+
     qRegisterMetaType<QVector<int>>("QVector<int>");
 
     #ifdef Q_OS_WIN

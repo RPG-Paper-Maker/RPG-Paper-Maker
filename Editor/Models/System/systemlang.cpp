@@ -10,7 +10,6 @@
 */
 
 #include "systemlang.h"
-#include "main.h"
 #include "dialogsystemlang.h"
 
 // -------------------------------------------------------
