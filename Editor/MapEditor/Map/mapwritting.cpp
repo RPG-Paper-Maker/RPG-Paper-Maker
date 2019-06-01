@@ -163,7 +163,7 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
     int difHeight = previousProperties.height() - properties.height();
     int difDepth = previousProperties.depth() - properties.depth();
 
-    if (difLength > 0 || difWidth > 0 || difHeight > 0 || difDepth) {
+    if (difLength > 0 || difWidth > 0 || difHeight > 0 || difDepth > 0) {
         QStandardItemModel* model = new QStandardItemModel;
         QList<int> listDeletedObjectsIDs;
         Map::loadObjects(model, path, false);
@@ -194,7 +194,7 @@ void Map::correctMap(QString path, MapProperties& previousProperties,
                 }
             }
         }
-        deleteObjects(model, 0, portionMaxX, -newPortionMaxH - 1, -portionMaxH,
+        deleteObjects(model, 0, portionMaxX, newPortionMaxH + 1, portionMaxH,
             0, portionMaxZ);
         for (int k = newPortionMaxZ + 1; k <= portionMaxZ; k++) {
             for (int i = 0; i <= portionMaxX; i++) {
@@ -260,7 +260,7 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
     SystemMapObject* super;
     QList<int> list;
 
-    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++){
+    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++) {
         super = ((SystemMapObject*) model->item(i)->data().value<quintptr>());
         Position3D position = super->position();
         int x = position.x() / RPM::portionSize;
@@ -270,12 +270,13 @@ void Map::deleteObjects(QStandardItemModel* model, int minI, int maxI,
             z <= maxK)
         {
             delete super;
-            list.push_back(i);
+            list.append(i);
         }
     }
 
-    for (int i = 0; i < list.size(); i++)
+    for (int i = list.size() - 1; i >= 0; i--) {
         model->removeRow(list.at(i));
+    }
 }
 
 // -------------------------------------------------------
