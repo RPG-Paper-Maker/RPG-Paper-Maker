@@ -51,27 +51,32 @@ MODS_PATH = $$MAIN_PROJECT_DIR/mods
 # Trailing slash is important on Unix to indicate that we want to copy the source *content* and not the source folder itself
 # (it is optional in the target path)
 
-FROM_CONTENT = \"$$shell_path($$PWD/Content)\"
-DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR)\"
+SLASH_END = ""
 
-FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts)\"
-DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts)\"
+unix {
+    SLASH_END = "/"
+}
 
-FROM_BR= \"$$shell_path($$MODS_PATH/BR)\"
-DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR)\"
+FROM_CONTENT = \"$$shell_path($$PWD/Content$$SLASH_END)\"
+DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR$$SLASH_END)\"
 
-FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32)\"
-DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32)\"
+FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts$$SLASH_END)\"
+DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts$$SLASH_END)\"
 
-FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux)\"
-DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux)\"
+FROM_BR= \"$$shell_path($$MODS_PATH/BR$$SLASH_END)\"
+DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR$$SLASH_END)\"
 
-FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx)\"
-DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx)\"
+FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32$$SLASH_END)\"
+DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32$$SLASH_END)\"
 
-FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web)\"
-DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web)\"
+FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux$$SLASH_END)\"
+DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux$$SLASH_END)\"
 
+FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx$$SLASH_END)\"
+DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx$$SLASH_END)\"
+
+FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web$$SLASH_END)\"
+DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web$$SLASH_END)\"
 
 # Define custom commands
 
