@@ -80,7 +80,7 @@ public:
     void addPreview(Position& p, MapElement* element);
     void addPreviewDelete(Position& p);
     MapElement* updateRaycastingLand(int squareSize, float& finalDistance,
-                                     Position &finalPosition, QRay3D& ray);
+        Position &finalPosition, QRay3D& ray, Position &previousCoords);
     MapElement* updateRaycastingSprites(int squareSize, float& finalDistance,
                                         Position &finalPosition,
                                         QRay3D& ray, double cameraHAngle,

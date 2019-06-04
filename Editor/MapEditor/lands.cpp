@@ -162,13 +162,13 @@ void Lands::removeLandOut(MapProperties& properties) {
 // -------------------------------------------------------
 
 MapElement* Lands::updateRaycasting(int squareSize, float& finalDistance,
-                                    Position &finalPosition, QRay3D &ray)
+    Position &finalPosition, QRay3D &ray, Position &previousCoords)
 {
     MapElement* elementFloor, *elementAutotile;
     elementFloor = m_floors->updateRaycasting(squareSize, finalDistance,
-                                              finalPosition, ray);
+        finalPosition, ray, previousCoords);
     elementAutotile = m_autotiles->updateRaycasting(squareSize, finalDistance,
-                                                    finalPosition, ray);
+        finalPosition, ray, previousCoords);
 
     return elementAutotile == nullptr ? elementFloor : elementAutotile;
 }

@@ -42,6 +42,7 @@ ControlMapEditor::ControlMapEditor() :
     m_elementOnSprite(nullptr),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_previousMouseCoords(-500, 0, 0, -500),
+    m_firstMouseCoords(-500, 0, 0, -500),
     m_needMapInfosToSave(false),
     m_needMapObjectsUpdate(false),
     m_displayGrid(true),
@@ -643,7 +644,8 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
 // -------------------------------------------------------
 
 void ControlMapEditor::getWallSpritesPositions(QList<Position> &positions) {
-    int x, y, yPlus, z;
+    int x, y, z;
+    double yPlus;
     Position3D begin, end;
     m_beginWallIndicator->getPosition(begin);
     m_endWallIndicator->getPosition(end);
@@ -797,12 +799,13 @@ MapPortion * ControlMapEditor::getMapPortion(Position &p, Portion &portion,
 void ControlMapEditor::traceLine(Position &previousCoords, Position &coords,
     QList<Position> &positions)
 {
-    if (m_previousMouseCoords.x() == -1)
+    if (m_previousMouseCoords.x() == -1) {
         return;
+    }
 
     int x1 = previousCoords.x(), x2 = coords.x();
     int y = coords.y();
-    int yPlus = coords.yPlus();
+    double yPlus = coords.yPlus();
     int z1 = previousCoords.z(), z2 = coords.z();
     int l = coords.layer();
     int dx = x2 - x1, dz = z2 - z1;
@@ -1307,6 +1310,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             static_cast<Position3D>(newPosition))
         {
             m_previousMouseCoords = newPosition;
+            m_firstMouseCoords = newPosition;
             addRemove(selection, subSelection, drawKind, layerOn, tileset,
                 specialID);
 
@@ -1342,6 +1346,7 @@ void ControlMapEditor::onMouseReleased(MapEditorSelectionKind,
 
     // Force previous mouse coords to be different
     m_previousMouseCoords.setCoords(-500, 0, 0, -500);
+    m_firstMouseCoords.setCoords(-500, 0, 0, -500);
 
     // Update current layer to undefined
     m_currentLayer = -1;

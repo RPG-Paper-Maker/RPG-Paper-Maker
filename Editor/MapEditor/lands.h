@@ -40,8 +40,8 @@ public:
                     QList<Position> &positions, QSet<MapPortion *> &update,
                     QSet<MapPortion *> &save, bool removeLayers = true);
     void removeLandOut(MapProperties& properties);
-    MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D &ray);
+    MapElement *updateRaycasting(int squareSize, float& finalDistance, Position
+        &finalPosition, QRay3D &ray, Position &previousCoords);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position) const;

@@ -39,11 +39,11 @@ public:
                      MapEditorSubSelectionKind &previousType);
 
     void removeFloorOut(MapProperties& properties);
-    MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D &ray);
-    bool updateRaycastingAt(Position &position, FloorDatas *floor,
-                            int squareSize, float &finalDistance,
-                            Position &finalPosition, QRay3D& ray);
+    MapElement *updateRaycasting(int squareSize, float& finalDistance, Position
+        &finalPosition, QRay3D &ray, Position &previousCoords);
+    bool updateRaycastingAt(Position &position, FloorDatas *floor, int
+        squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray,
+        Position &previousCoords);
 
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);

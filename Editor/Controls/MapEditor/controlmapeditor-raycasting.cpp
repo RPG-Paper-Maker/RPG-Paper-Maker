@@ -26,7 +26,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     QMatrix4x4 projection = m_camera->projection();
     QMatrix4x4 view = m_camera->view();
     QVector3D rayDirection = getRayWorld(m_mouse, projection, view);
-    int height = static_cast<int>(this->cursor()->getY());
+    int height = m_firstMouseCoords.x() == -500 ? static_cast<int>(this
+        ->cursor()->getY()) : m_firstMouseCoords.getY(RPM::get()
+        ->getSquareSize());
     int yGrid;
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, static_cast<int>(
@@ -221,7 +223,7 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion> &portions,
 void ControlMapEditor::updateRaycastingLand(MapPortion *mapPortion)
 {
     m_elementOnLand = mapPortion->updateRaycastingLand(m_map->squareSize(),
-        m_distanceLand, m_positionOnLand, m_ray);
+        m_distanceLand, m_positionOnLand, m_ray, m_firstMouseCoords);
 }
 
 // -------------------------------------------------------

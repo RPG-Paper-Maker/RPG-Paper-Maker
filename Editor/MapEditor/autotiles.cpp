@@ -128,7 +128,7 @@ void Autotiles::removeAutotileOut(MapProperties& properties) {
 // -------------------------------------------------------
 
 MapElement *Autotiles::updateRaycasting(int squareSize, float& finalDistance,
-                                        Position &finalPosition, QRay3D &ray)
+    Position &finalPosition, QRay3D &ray, Position &previousCoords)
 {
     MapElement* element = nullptr;
 
@@ -138,7 +138,7 @@ MapElement *Autotiles::updateRaycasting(int squareSize, float& finalDistance,
         Position position = i.key();
         AutotileDatas* autotile = i.value();
         if (updateRaycastingAt(position, autotile, squareSize, finalDistance,
-                               finalPosition, ray))
+            finalPosition, ray, previousCoords))
         {
             element = autotile;
         }
@@ -150,13 +150,18 @@ MapElement *Autotiles::updateRaycasting(int squareSize, float& finalDistance,
 // -------------------------------------------------------
 
 bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
-                                   int squareSize, float &finalDistance,
-                                   Position &finalPosition, QRay3D& ray)
+    int squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray,
+    Position &previousCoords)
 {
-    float newDistance = autotile->intersection(squareSize, ray, position);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
-        finalPosition = position;
-        return true;
+    // Check if autotile is in current drawing height
+    if (previousCoords.x() == -500 || (previousCoords.y() == position.y() &&
+        qFuzzyCompare(previousCoords.yPlus(), position.yPlus())))
+    {
+        float newDistance = autotile->intersection(squareSize, ray, position);
+        if (RPM::getMinDistance(finalDistance, newDistance)) {
+            finalPosition = position;
+            return true;
+        }
     }
 
     return false;

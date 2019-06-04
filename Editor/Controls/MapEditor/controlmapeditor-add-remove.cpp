@@ -211,7 +211,7 @@ void ControlMapEditor::paintPinLand(Position &p, MapEditorSubSelectionKind kindA
                     Position firstPosition = tab.at(0);
                     int x = firstPosition.x();
                     int y = firstPosition.y();
-                    int yPlus = firstPosition.yPlus();
+                    double yPlus = firstPosition.yPlus();
                     int z = firstPosition.z();
                     int layer = firstPosition.layer();
 
@@ -260,7 +260,10 @@ void ControlMapEditor::paintPinLand(Position &p, MapEditorSubSelectionKind kindA
 void ControlMapEditor::stockLand(Position &p, LandDatas *landDatas,
     MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo)
 {
-    if (m_map->isInGrid(p)) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
@@ -331,7 +334,10 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
 // -------------------------------------------------------
 
 void ControlMapEditor::eraseLand(Position &p, bool undoRedo){
-    if (m_map->isInGrid(p)) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
@@ -427,7 +433,10 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
 void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
     MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo)
 {
-    if (m_map->isInGrid(p)) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
@@ -474,7 +483,10 @@ void ControlMapEditor::stockSprite(Position &p, SpriteDatas *sprite,
 void ControlMapEditor::stockSpriteWall(Position &position, SpriteWallDatas* sprite,
     bool undoRedo)
 {
-    if (m_map->isInGrid(position)) {
+    if (m_map->isInGrid(position) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
+        m_firstMouseCoords.yPlus(), position.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(position, portion, undoRedo);
 
@@ -553,7 +565,10 @@ void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
 // -------------------------------------------------------
 
 void ControlMapEditor::eraseSprite(Position &p, bool undoRedo) {
-    if (m_map->isInGrid(p)) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
 
@@ -589,7 +604,10 @@ void ControlMapEditor::eraseSprite(Position &p, bool undoRedo) {
 // -------------------------------------------------------
 
 void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo) {
-    if (m_map->isInGrid(position)) {
+    if (m_map->isInGrid(position) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
+        m_firstMouseCoords.yPlus(), position.yPlus()))))
+    {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(position, portion, undoRedo);
 

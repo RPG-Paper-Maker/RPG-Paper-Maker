@@ -82,7 +82,12 @@ void ControlMapEditor::updatePreviewLands(MapEditorSelectionKind kind,
                 .yPlus(), position.z() + j, position.layer());
             Portion shortPortion;
             m_map->getLocalPortion(shortPosition, shortPortion);
-            if (m_map->isInGrid(shortPosition) && m_map->isInPortion(shortPortion)) {
+
+            if (m_map->isInGrid(shortPosition) && m_map->isInPortion(
+                shortPortion) && (m_firstMouseCoords.x() == -500 || (
+                m_firstMouseCoords.y() == position.y() && qFuzzyCompare(
+                m_firstMouseCoords.yPlus(), position.yPlus()))))
+            {
                 int layer = getLayer(m_map->mapPortion(shortPortion),
                     m_distanceLand, shortPosition, layerOn, kind);
                 shortPosition.setLayer(layer);
@@ -132,7 +137,10 @@ void ControlMapEditor::updatePreviewWallSprite(Position &position, int specialID
     Portion portion;
     m_map->getLocalPortion(position, portion);
 
-    if (m_map->isInGrid(position) && m_map->isInPortion(portion)) {
+    if (m_map->isInGrid(position) && m_map->isInPortion(portion) && (
+        m_firstMouseCoords.x() == -500 || (m_firstMouseCoords.y() == position
+        .y() && qFuzzyCompare(m_firstMouseCoords.yPlus(), position.yPlus()))))
+    {
         MapElement *element = m_isDeletingWall ? nullptr : new SpriteWallDatas(
             specialID);
         updatePreviewElementGrid(position, portion, element);
@@ -148,7 +156,10 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     MapElement *element = nullptr;
     Portion portion;
     m_map->getLocalPortion(m_positionPreviousPreview, portion);
-    if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(portion))
+    if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(
+        portion) && (m_firstMouseCoords.x() == -500 || (m_firstMouseCoords.y()
+        == m_positionPreviousPreview.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), m_positionPreviousPreview.yPlus()))))
     {
         int layer = getLayer(m_map->mapPortion(portion), m_distanceSprite,
             m_positionPreviousPreview, layerOn, kind);
@@ -163,8 +174,9 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
             break;
         }
 
-        if (element != nullptr)
+        if (element != nullptr) {
             updatePreviewElement(m_positionPreviousPreview, portion, element);
+        }
     }
 }
 
@@ -179,9 +191,9 @@ void ControlMapEditor::updatePreviewElement(Position &p, Portion &portion,
         mapPortion->addPreview(p, element);
         m_portionsToUpdate += mapPortion;
         m_portionsPreviousPreview += mapPortion;
-    }
-    else
+    } else {
         delete element;
+    }
 }
 
 // -------------------------------------------------------

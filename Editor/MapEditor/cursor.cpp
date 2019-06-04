@@ -222,7 +222,7 @@ void Cursor::addHeight(int h, int hp) {
     int y, yPlus, newY, maxD, maxH;
 
     maxD = RPM::get()->project()->currentMap()->mapProperties()->depth();
-    maxH = RPM::get()->project()->currentMap()->mapProperties()->height();
+    maxH = RPM::get()->project()->currentMap()->mapProperties()->height() - 1;
     y = qFloor(static_cast<qreal>(m_positionReal.y()) / m_squareSize);
     yPlus = Common::modulo(qFloor(static_cast<qreal>(m_positionReal.y())),
         m_squareSize);

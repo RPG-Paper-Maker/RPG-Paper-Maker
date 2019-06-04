@@ -54,11 +54,11 @@ public:
                         QSet<MapPortion*>& update, QSet<MapPortion*>& save);
 
     void removeAutotileOut(MapProperties& properties);
-    MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D &ray);
-    bool updateRaycastingAt(Position &position, AutotileDatas *autotile,
-                            int squareSize, float &finalDistance,
-                            Position &finalPosition, QRay3D& ray);
+    MapElement *updateRaycasting(int squareSize, float& finalDistance, Position
+        &finalPosition, QRay3D &ray, Position &previousCoords);
+    bool updateRaycastingAt(Position &position, AutotileDatas *autotile, int
+        squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray,
+        Position &previousCoords);
     void getAutotilesWithPreview(
             QHash<Position, AutotileDatas*> &autotilesWithPreview,
             QHash<Position, MapElement *> &preview);

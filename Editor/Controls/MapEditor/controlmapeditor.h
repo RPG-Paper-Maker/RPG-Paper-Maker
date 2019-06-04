@@ -244,6 +244,7 @@ protected:
     QSet<MapPortion *> m_portionsPreviousPreview;
     bool m_isGridOnTop;
     Position m_previousMouseCoords;
+    Position m_firstMouseCoords;
     Portion m_currentPortion;
     QSet<MapPortion *> m_portionsToUpdate;
     QSet<MapPortion *> m_portionsToSave;

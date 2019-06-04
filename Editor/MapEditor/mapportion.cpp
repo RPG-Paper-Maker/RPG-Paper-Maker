@@ -255,13 +255,11 @@ void MapPortion::addPreviewDelete(Position &p) {
 
 // -------------------------------------------------------
 
-MapElement* MapPortion::updateRaycastingLand(int squareSize,
-                                             float& finalDistance,
-                                             Position &finalPosition,
-                                             QRay3D& ray)
+MapElement* MapPortion::updateRaycastingLand(int squareSize, float&
+    finalDistance, Position &finalPosition, QRay3D& ray, Position &previousCoords)
 {
     return m_lands->updateRaycasting(squareSize, finalDistance, finalPosition,
-                                     ray);
+        ray, previousCoords);
 }
 
 // -------------------------------------------------------

@@ -87,7 +87,7 @@ void Floors::removeFloorOut(MapProperties& properties) {
 // -------------------------------------------------------
 
 MapElement* Floors::updateRaycasting(int squareSize, float& finalDistance,
-                                     Position &finalPosition, QRay3D &ray)
+    Position &finalPosition, QRay3D &ray, Position &previousCoords)
 {
     MapElement* element = nullptr;
 
@@ -97,7 +97,7 @@ MapElement* Floors::updateRaycasting(int squareSize, float& finalDistance,
         Position position = i.key();
         FloorDatas* floor = i.value();
         if (updateRaycastingAt(position, floor, squareSize, finalDistance,
-                               finalPosition, ray))
+            finalPosition, ray, previousCoords))
         {
             element = floor;
         }
@@ -108,14 +108,19 @@ MapElement* Floors::updateRaycasting(int squareSize, float& finalDistance,
 
 // -------------------------------------------------------
 
-bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor,
-                                int squareSize, float &finalDistance,
-                                Position &finalPosition, QRay3D& ray)
+bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor, int
+    squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray,
+    Position &previousCoords)
 {
-    float newDistance = floor->intersection(squareSize, ray, position);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
-        finalPosition = position;
-        return true;
+    // Check if floor is in current drawing height
+    if (previousCoords.x() == -500 || (previousCoords.y() == position.y() &&
+        qFuzzyCompare(previousCoords.yPlus(), position.yPlus())))
+    {
+        float newDistance = floor->intersection(squareSize, ray, position);
+        if (RPM::getMinDistance(finalDistance, newDistance)) {
+            finalPosition = position;
+            return true;
+        }
     }
 
     return false;
