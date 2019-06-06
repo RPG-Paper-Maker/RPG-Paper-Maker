@@ -20,6 +20,7 @@
 // -------------------------------------------------------
 
 MapObjects::MapObjects() :
+    m_isEmpty(true),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr)
@@ -37,7 +38,11 @@ MapObjects::~MapObjects()
 }
 
 bool MapObjects::isEmpty() const{
-    return m_all.empty();
+    return m_isEmpty;
+}
+
+void MapObjects::updateEmpty() {
+    m_isEmpty = m_all.empty();
 }
 
 // -------------------------------------------------------

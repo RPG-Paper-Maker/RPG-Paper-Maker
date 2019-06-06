@@ -30,6 +30,7 @@ public:
     Floors();
     virtual ~Floors();
     bool isEmpty() const;
+    void updateEmpty(bool previewSquare);
     FloorDatas* getFloor(Position& p) const;
     void setFloor(Position& p, FloorDatas* floor);
     FloorDatas* removeFloor(Position& p);
@@ -56,6 +57,7 @@ public:
 
 protected:
     QHash<Position, FloorDatas*> m_all;
+    bool m_isEmpty;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;

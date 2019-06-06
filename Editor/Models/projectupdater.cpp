@@ -13,6 +13,7 @@
 #include "rpm.h"
 #include "common.h"
 #include <QDirIterator>
+#include <QThread>
 
 const int ProjectUpdater::incompatibleVersionsCount = 6;
 

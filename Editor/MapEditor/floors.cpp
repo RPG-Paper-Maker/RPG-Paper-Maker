@@ -19,6 +19,7 @@
 // -------------------------------------------------------
 
 Floors::Floors() :
+    m_isEmpty(true),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr)
@@ -33,16 +34,18 @@ Floors::~Floors()
         delete i.value();
 }
 
+bool Floors::isEmpty() const{
+    return m_isEmpty;
+}
+
+void Floors::updateEmpty(bool previewSquare) {
+    m_isEmpty = m_all.isEmpty() && previewSquare;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-bool Floors::isEmpty() const{
-    return m_all.size() == 0;
-}
-
 // -------------------------------------------------------
 
 FloorDatas *Floors::getFloor(Position& p) const{
@@ -172,14 +175,14 @@ void Floors::initializeGL(QOpenGLShaderProgram *programStatic){
 
 // -------------------------------------------------------
 
-void Floors::updateGL(){
+void Floors::updateGL() {
     Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
                         m_vao, m_programStatic);
 }
 
 // -------------------------------------------------------
 
-void Floors::paintGL(){
+void Floors::paintGL() {
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
     m_vao.release();

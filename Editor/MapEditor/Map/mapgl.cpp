@@ -274,7 +274,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisible())
+        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
             mapPortion->paintFaceSprites();
     }
     m_textureTileset->release();

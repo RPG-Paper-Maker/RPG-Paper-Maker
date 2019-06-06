@@ -56,6 +56,7 @@ void Common::writeOtherJSON(QString path, const QJsonObject &obj,
     if (!saveFile.open(QIODevice::WriteOnly)) { return; }
     QJsonDocument saveDoc(obj);
     saveFile.write(saveDoc.toJson(format));
+    saveFile.close();
 }
 
 // -------------------------------------------------------
@@ -64,6 +65,7 @@ void Common::readOtherJSON(QString path, QJsonDocument& loadDoc){
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
     QByteArray saveData = loadFile.readAll();
+    loadFile.close();
     loadDoc = QJsonDocument::fromJson(saveData);
 }
 
@@ -74,6 +76,7 @@ void Common::writeArrayJSON(QString path, const QJsonArray &tab){
     if (!saveFile.open(QIODevice::WriteOnly)) { return; }
     QJsonDocument saveDoc(tab);
     saveFile.write(saveDoc.toJson(QJsonDocument::Compact));
+    saveFile.close();
 }
 
 // -------------------------------------------------------
@@ -82,6 +85,7 @@ void Common::readArrayJSON(QString path, QJsonDocument& loadDoc){
     QFile loadFile(path);
     loadFile.open(QIODevice::ReadOnly);
     QByteArray saveData = loadFile.readAll();
+    loadFile.close();
     loadDoc = QJsonDocument::fromJson(saveData);
 }
 

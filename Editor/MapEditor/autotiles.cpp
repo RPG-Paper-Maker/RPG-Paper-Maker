@@ -52,7 +52,8 @@ QString Autotiles::listD[COUNT_LIST] {"D1", "D2", "D3", "D4", "D5"};
 //
 // -------------------------------------------------------
 
-Autotiles::Autotiles()
+Autotiles::Autotiles() :
+    m_isEmpty(true)
 {
 
 }
@@ -66,16 +67,18 @@ Autotiles::~Autotiles()
     clearAutotilesGL();
 }
 
+bool Autotiles::isEmpty() const {
+    return m_isEmpty;
+}
+
+void Autotiles::updateEmpty(bool previewSquare) {
+    m_isEmpty = m_all.isEmpty() && previewSquare;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-bool Autotiles::isEmpty() const {
-    return true;
-}
-
 // -------------------------------------------------------
 
 void Autotiles::clearAutotilesGL() {

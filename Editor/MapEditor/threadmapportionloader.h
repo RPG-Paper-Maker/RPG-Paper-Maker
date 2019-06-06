@@ -12,7 +12,7 @@
 #ifndef THREADMAPPORTIONLOADER_H
 #define THREADMAPPORTIONLOADER_H
 
-#include <QThread>
+#include <QObject>
 
 class Map;
 class MapPortion;
@@ -22,18 +22,21 @@ class MapPortion;
 //  CLASS ThreadMapPortionLoader
 //
 //  A thread used for loading a portion asynchronously.
+// /!\ THAT CLASS IS DEPRECATED, WILL BE REMOVED
 //
 // -------------------------------------------------------
 
-class ThreadMapPortionLoader : public QThread
+class ThreadMapPortionLoader : public QObject
 {
     Q_OBJECT
 public:
-    ThreadMapPortionLoader(Map* map, MapPortion* mapPortion);
+    ThreadMapPortionLoader(Map* map, MapPortion* mapPortion, QString path);
 
 protected:
     Map* m_map;
     MapPortion* m_mapPortion;
+    QString m_path;
+
     /*
     int m_realX;
     int m_realY;
@@ -42,7 +45,11 @@ protected:
     int m_y;
     int m_z;*/
 
-    void run();
+public slots:
+    void process();
+signals:
+    void finished();
+    void error(QString err);
 };
 
 #endif // THREADMAPPORTIONLOADER_H

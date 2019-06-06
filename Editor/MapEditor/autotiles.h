@@ -41,6 +41,7 @@ public:
     static QString listD[];
 
     bool isEmpty() const;
+    void updateEmpty(bool previewSquare);
     void clearAutotilesGL();
     AutotileDatas* getAutotile(Position& p) const;
     void setAutotile(Position& p, AutotileDatas* autotile);
@@ -110,6 +111,7 @@ public:
 protected:
     QHash<Position, AutotileDatas*> m_all;
     QList<Autotile*> m_autotilesGL;
+    bool m_isEmpty;
 
     // OpenGL
     QOpenGLShaderProgram* m_program;

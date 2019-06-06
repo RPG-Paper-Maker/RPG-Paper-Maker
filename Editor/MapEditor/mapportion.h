@@ -36,10 +36,9 @@ public:
     MapObjects* mapObjects() const;
     bool isVisibleLoaded() const;
     bool isVisible() const;
-    bool isLoaded() const;
     void setIsVisible(bool b);
-    void setIsLoaded(bool b);
     bool isEmpty() const;
+    void updateEmpty();
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject &previous,
                  MapEditorSubSelectionKind &previousType,
@@ -132,7 +131,7 @@ private:
     QHash<Position, MapElement*> m_previewSquares;
     QList<Position> m_previewDelete;
     bool m_isVisible;
-    bool m_isLoaded;
+    bool m_isEmpty;
 };
 
 #endif // MAPPORTION_H

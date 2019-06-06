@@ -22,7 +22,8 @@ MapPortion::MapPortion(Portion &globalPortion) :
     m_globalPortion(globalPortion),
     m_lands(new Lands),
     m_sprites(new Sprites),
-    m_mapObjects(new MapObjects)
+    m_mapObjects(new MapObjects),
+    m_isEmpty(true)
 {
 
 }
@@ -43,28 +44,29 @@ void MapPortion::getGlobalPortion(Portion& portion) {
 MapObjects* MapPortion::mapObjects() const { return m_mapObjects; }
 
 bool MapPortion::isVisibleLoaded() const {
-    return isVisible();
+    return isVisible() && !isEmpty();
 }
 
 bool MapPortion::isVisible() const {
    return m_isVisible;
 }
 
-bool MapPortion::isLoaded() const {
-    return m_isLoaded;
-}
-
 void MapPortion::setIsVisible(bool b) {
     m_isVisible = b;
 }
 
-void MapPortion::setIsLoaded(bool b) {
-    m_isLoaded = b;
+bool MapPortion::isEmpty() const {
+    return m_isEmpty;
 }
 
-bool MapPortion::isEmpty() const {
-    return m_lands->isEmpty() && m_sprites->isEmpty() &&
-           m_mapObjects->isEmpty();
+void MapPortion::updateEmpty() {
+    bool previewSquare = m_previewSquares.isEmpty();
+
+    m_lands->updateEmpty(previewSquare);
+    m_sprites->updateEmpty(previewSquare);
+    m_mapObjects->updateEmpty();
+    m_isEmpty = m_lands->isEmpty() && m_sprites->isEmpty() && m_mapObjects
+        ->isEmpty() && previewSquare;
 }
 
 // -------------------------------------------------------
@@ -321,6 +323,8 @@ MapElement* MapPortion::getMapElementAt(Position& position,
     }
 }
 
+// -------------------------------------------------------
+
 int MapPortion::getLastLayerAt(Position& position, MapEditorSelectionKind kind)
 const
 {
@@ -399,31 +403,41 @@ void MapPortion::updateGLObjects() {
 // -------------------------------------------------------
 
 void MapPortion::paintFloors(){
-    m_lands->paintGL();
+    if (!m_lands->isEmpty()) {
+        m_lands->paintGL();
+    }
 }
 
 // -------------------------------------------------------
 
 void MapPortion::paintAutotiles(int textureID) {
-    m_lands->paintAutotilesGL(textureID);
+    if (!m_lands->isEmpty()) {
+        m_lands->paintAutotilesGL(textureID);
+    }
 }
 
 // -------------------------------------------------------
 
 void MapPortion::paintSprites(){
-    m_sprites->paintGL();
+    if (!m_sprites->isEmpty()) {
+        m_sprites->paintGL();
+    }
 }
 
 // -------------------------------------------------------
 
 void MapPortion::paintSpritesWalls(int textureID) {
-    m_sprites->paintSpritesWalls(textureID);
+    if (!m_sprites->isEmpty()) {
+        m_sprites->paintSpritesWalls(textureID);
+    }
 }
 
 // -------------------------------------------------------
 
 void MapPortion::paintFaceSprites(){
-    m_sprites->paintFaceGL();
+    if (!m_sprites->isEmpty()) {
+        m_sprites->paintFaceGL();
+    }
 }
 
 // -------------------------------------------------------
@@ -431,7 +445,9 @@ void MapPortion::paintFaceSprites(){
 void MapPortion::paintObjectsStaticSprites(int textureID,
                                            QOpenGLTexture* texture)
 {
-    m_mapObjects->paintStaticSprites(textureID, texture);
+    if (!m_mapObjects->isEmpty()) {
+        m_mapObjects->paintStaticSprites(textureID, texture);
+    }
 }
 
 // -------------------------------------------------------
@@ -439,13 +455,17 @@ void MapPortion::paintObjectsStaticSprites(int textureID,
 void MapPortion::paintObjectsFaceSprites(int textureID,
                                          QOpenGLTexture* texture)
 {
-    m_mapObjects->paintFaceSprites(textureID, texture);
+    if (!m_mapObjects->isEmpty()) {
+        m_mapObjects->paintFaceSprites(textureID, texture);
+    }
 }
 
 // -------------------------------------------------------
 
 void MapPortion::paintObjectsSquares(){
-    m_mapObjects->paintSquares();
+    if (!m_mapObjects->isEmpty()) {
+        m_mapObjects->paintSquares();
+    }
 }
 
 // -------------------------------------------------------

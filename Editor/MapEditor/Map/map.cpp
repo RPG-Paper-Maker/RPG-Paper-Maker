@@ -255,14 +255,7 @@ MapPortion* Map::loadPortionMap(int i, int j, int k, bool force) {
         Portion portion(i, j, k);
         QString path = getPortionPath(i, j, k);
         MapPortion* mapPortion = new MapPortion(portion);
-        RPM::readJSON(path, *mapPortion);
-        mapPortion->setIsLoaded(false);
-        /*
-        ThreadMapPortionLoader thread(this, portion);
-        thread.start();
-        */
-        loadPortionThread(mapPortion);
-        mapPortion->setIsLoaded(true);
+        loadPortionThread(mapPortion, path);
         return mapPortion;
     }
 
@@ -318,13 +311,17 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 
 // -------------------------------------------------------
 
-void Map::loadPortionThread(MapPortion* portion)
+void Map::loadPortionThread(MapPortion* portion, QString &path)
 {
+    RPM::readJSON(path, *portion);
     portion->initializeVertices(m_squareSize, m_textureTileset,
                                 m_texturesAutotiles, m_texturesCharacters,
                                 m_texturesSpriteWalls);
-    portion->initializeGL(m_programStatic, m_programFaceSprite);
-    portion->updateGL();
+    portion->updateEmpty();
+    if (!portion->isEmpty()) {
+        portion->initializeGL(m_programStatic, m_programFaceSprite);
+        portion->updateGL();
+    }
 }
 
 // -------------------------------------------------------
@@ -349,6 +346,7 @@ void Map::updatePortion(MapPortion* mapPortion)
                                    m_texturesSpriteWalls);
     mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
     mapPortion->updateGL();
+    mapPortion->updateEmpty();
 }
 
 // -------------------------------------------------------
@@ -371,6 +369,7 @@ void Map::updateMapObjects() {
             mapPortion->initializeGLObjects(m_programStatic,
                                             m_programFaceSprite);
             mapPortion->updateGLObjects();
+            mapPortion->updateEmpty();
         }
     }
 }

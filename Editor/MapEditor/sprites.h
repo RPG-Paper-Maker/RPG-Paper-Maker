@@ -61,6 +61,7 @@ public:
     void addOverflow(Position& p);
     void removeOverflow(Position& p);
     bool isEmpty() const;
+    void updateEmpty(bool previewSquare);
     bool contains(Position& position) const;
     void changePosition(Position& position, Position& newPosition);
     SpriteDatas* spriteAt(Position& position) const;
@@ -133,6 +134,7 @@ protected:
     QHash<Position, SpriteWallDatas*> m_walls;
     QHash<int, SpritesWalls*> m_wallsGL;
     QSet<Position> m_overflow;
+    bool m_isEmpty;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;

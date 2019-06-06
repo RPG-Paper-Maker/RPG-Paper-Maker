@@ -29,6 +29,7 @@ public:
     static int nbIndexesQuad;
 
     bool isEmpty() const;
+    void updateEmpty(bool preview);
     LandDatas* getLand(Position& p) const;
     void setLand(Position& p, LandDatas* land);
     LandDatas* removeLand(Position& p);
@@ -68,6 +69,7 @@ public:
 protected:
     Floors* m_floors;
     Autotiles* m_autotiles;
+    bool m_isEmpty;
 };
 
 #endif // LANDS_H

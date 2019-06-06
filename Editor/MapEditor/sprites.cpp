@@ -128,16 +128,19 @@ void Sprites::removeOverflow(Position& p) {
     m_overflow -= p;
 }
 
+bool Sprites::isEmpty() const{
+    return m_isEmpty;
+}
+
+void Sprites::updateEmpty(bool previewSquare) {
+    m_isEmpty = m_all.isEmpty() && m_walls.isEmpty() && m_overflow.isEmpty() &&
+        previewSquare;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-bool Sprites::isEmpty() const{
-    return m_all.size() == 0 && m_walls.size() == 0 && m_overflow.size() == 0;
-}
-
 // -------------------------------------------------------
 
 bool Sprites::contains(Position& position) const {

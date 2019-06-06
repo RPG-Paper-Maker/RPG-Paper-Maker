@@ -9,6 +9,7 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
+#include "rpm.h"
 #include "threadmapportionloader.h"
 #include "map.h"
 
@@ -18,9 +19,11 @@
 //
 // -------------------------------------------------------
 
-ThreadMapPortionLoader::ThreadMapPortionLoader(Map *map, MapPortion *mapPortion) :
+ThreadMapPortionLoader::ThreadMapPortionLoader(Map *map, MapPortion *mapPortion,
+    QString path) :
     m_map(map),
-    m_mapPortion(mapPortion)
+    m_mapPortion(mapPortion),
+    m_path(path)
 {
 
 }
@@ -31,7 +34,7 @@ ThreadMapPortionLoader::ThreadMapPortionLoader(Map *map, MapPortion *mapPortion)
 //
 // -------------------------------------------------------
 
-void ThreadMapPortionLoader::run() {
-    m_map->loadPortionThread(m_mapPortion);
-    m_mapPortion->setIsLoaded(true);
+void ThreadMapPortionLoader::process() {
+    m_map->loadPortionThread(m_mapPortion, m_path);
+    emit finished();
 }

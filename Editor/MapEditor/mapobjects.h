@@ -39,6 +39,7 @@ public:
     MapObjects();
     virtual ~MapObjects();
     bool isEmpty() const;
+    void updateEmpty();
     SystemCommonObject* getObjectAt(Position& p) const;
     void setObject(Position& p, SystemCommonObject* object);
     SystemCommonObject* removeObject(Position& p);
@@ -73,6 +74,7 @@ private:
     QHash<Position, MapElement *> m_allElements;
     QHash<int, QList<SpriteObject *>*> m_spritesStaticGL;
     QHash<int, QList<SpriteObject *>*> m_spritesFaceGL;
+    bool m_isEmpty;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;

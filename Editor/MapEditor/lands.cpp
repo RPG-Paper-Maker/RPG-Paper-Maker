@@ -44,16 +44,20 @@ Lands::~Lands()
     delete m_autotiles;
 }
 
-// -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
-// -------------------------------------------------------
-
 bool Lands::isEmpty() const {
     return m_floors->isEmpty() && m_autotiles->isEmpty();
 }
 
+void Lands::updateEmpty(bool preview) {
+    m_floors->updateEmpty(preview);
+    m_autotiles->updateEmpty(preview);
+    m_isEmpty = m_floors->isEmpty() && m_autotiles->isEmpty() && preview;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
 // -------------------------------------------------------
 
 LandDatas* Lands::getLand(Position& p) const {
@@ -270,13 +274,17 @@ void Lands::updateGL(){
 // -------------------------------------------------------
 
 void Lands::paintGL(){
-    m_floors->paintGL();
+    if (!m_floors->isEmpty()) {
+        m_floors->paintGL();
+    }
 }
 
 // -------------------------------------------------------
 
 void Lands::paintAutotilesGL(int textureID) {
-    m_autotiles->paintGL(textureID);
+    if (!m_autotiles->isEmpty()) {
+        m_autotiles->paintGL(textureID);
+    }
 }
 
 // -------------------------------------------------------

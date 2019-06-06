@@ -17,6 +17,7 @@
 #include <QDirIterator>
 #include <QMessageBox>
 #include <QApplication>
+#include <QThread>
 
 const QString Project::ENGINE_VERSION = "1.1.1";
 const QString Project::LAST_BUILD_DATE = "May 9 2019";

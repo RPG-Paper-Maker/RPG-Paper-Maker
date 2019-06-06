@@ -28,7 +28,7 @@
 //
 // -------------------------------------------------------
 
-class Map : protected QOpenGLFunctions
+class Map : protected QOpenGLFunctions, QObject
 {
 public:
     Map();
@@ -129,7 +129,7 @@ public:
     QString getMapObjectsPath() const;
     void loadPortion(int realX, int realY, int realZ, int x, int y, int z,
                      bool visible);
-    void loadPortionThread(MapPortion *portion);
+    void loadPortionThread(MapPortion *portion, QString &path);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
     void updatePortion(MapPortion *mapPortion);
@@ -171,7 +171,6 @@ public:
                      QVector3D &cameraDeepWorldSpace);
 
 private:
-    QList<ThreadMapPortionLoader> m_threadMapPortionLoaders;
     MapProperties* m_mapProperties;
     MapPortion** m_mapPortions;
     Cursor* m_cursor;
