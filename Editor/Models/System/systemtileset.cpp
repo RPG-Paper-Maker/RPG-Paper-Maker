@@ -122,7 +122,7 @@ void SystemTileset::updateModelSpriteWalls() {
 
 void SystemTileset::updateModel3DObjects() {
     updateModel(m_model3DObjects, RPM::get()->project()
-                ->specialElementsDatas()->model3DObjects());
+                ->specialElementsDatas()->modelObjects3D());
 }
 
 // -------------------------------------------------------

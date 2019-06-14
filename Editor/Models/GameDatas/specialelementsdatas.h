@@ -28,19 +28,22 @@
 class SpecialElementsDatas : public Serializable
 {
 public:
-    SpecialElementsDatas();
-    virtual ~SpecialElementsDatas();
     static const QString JSON_WALLS;
     static const QString JSON_AUTOTILES;
+    static const QString JSON_OBJECTS_3D;
+
+    SpecialElementsDatas();
+    virtual ~SpecialElementsDatas();
     void read(QString path);
     QStandardItemModel* model(PictureKind kind) const;
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
-    QStandardItemModel* model3DObjects() const;
+    QStandardItemModel* modelObjects3D() const;
     QStandardItemModel* modelReliefs() const;
     void setDefault();
     void setDefaultSpriteWalls();
     void setDefaultAutotiles();
+    void setDefaulObjects3D();
 
     virtual void read(const QJsonObject &json);
     void readSpecials(const QJsonObject &json, PictureKind kind,
@@ -52,7 +55,7 @@ public:
 private:
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
-    QStandardItemModel* m_model3DObjects;
+    QStandardItemModel* m_modelObjects3D;
     QStandardItemModel* m_modelReliefs;
 };
 

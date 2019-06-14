@@ -15,10 +15,10 @@
 #include <QDirIterator>
 #include <QThread>
 
-const int ProjectUpdater::incompatibleVersionsCount = 6;
+const int ProjectUpdater::incompatibleVersionsCount = 7;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0"};
 
 // -------------------------------------------------------
 //
@@ -438,6 +438,7 @@ void ProjectUpdater::updateVersion_1_0_0() {
     m_project->gameDatas()->writeTitleScreenGameOver(m_project
         ->pathCurrentProject());
 }
+
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_1_1() {
@@ -458,4 +459,20 @@ void ProjectUpdater::updateVersion_1_1_1() {
     m_project->gameDatas()->systemDatas()->setScreenHeight(480);
     m_project->gameDatas()->systemDatas()->setIsScreenWinow(true);
     m_project->writeSystemDatas();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_2_0() {
+    QDir dir(m_project->pathCurrentProject());
+
+    // TODO : update height map properties to 1 by default
+
+    // Shapes default
+    m_project->readShapesDatas();
+    m_project->shapesDatas()->setDefault();
+    m_project->writeShapesDatas();
+    dir.mkpath(RPM::PATH_SHAPES);
+    dir.mkpath(RPM::PATH_OBJ);
+    dir.mkpath(RPM::PATH_MTL);
 }

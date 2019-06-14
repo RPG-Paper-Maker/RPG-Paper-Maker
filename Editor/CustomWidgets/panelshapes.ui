@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PanelPicturePreview</class>
- <widget class="QWidget" name="PanelPicturePreview">
+ <class>PanelShapes</class>
+ <widget class="QWidget" name="PanelShapes">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>735</width>
-    <height>452</height>
+    <width>579</width>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -121,82 +121,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
-         <item>
-          <widget class="QScrollArea" name="scrollArea">
-           <property name="widgetResizable">
-            <bool>true</bool>
-           </property>
-           <widget class="QWidget" name="widgetContent">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>311</width>
-              <height>372</height>
-             </rect>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,1" columnstretch="0,1">
-               <item row="0" column="0">
-                <widget class="WidgetPicturePreview" name="widgetPreview" native="true"/>
-               </item>
-               <item row="0" column="1" rowspan="2">
-                <spacer name="horizontalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="0">
-                <widget class="WidgetTilesetSelector" name="widgetTileset" native="true"/>
-               </item>
-               <item row="2" column="0" colspan="2">
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>58</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>Options</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch=""/>
        </item>
       </layout>
      </item>
@@ -215,18 +140,6 @@
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WidgetPicturePreview</class>
-   <extends>QWidget</extends>
-   <header>widgetpicturepreview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetTilesetSelector</class>
-   <extends>QWidget</extends>
-   <header>widgettilesetselector.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -17,6 +17,7 @@
 
 const QString SpecialElementsDatas::JSON_WALLS = "walls";
 const QString SpecialElementsDatas::JSON_AUTOTILES = "autotiles";
+const QString SpecialElementsDatas::JSON_OBJECTS_3D = "o";
 
 // -------------------------------------------------------
 //
@@ -28,7 +29,7 @@ SpecialElementsDatas::SpecialElementsDatas()
 {
     m_modelAutotiles = new QStandardItemModel;
     m_modelSpriteWalls = new QStandardItemModel;
-    m_model3DObjects = new QStandardItemModel;
+    m_modelObjects3D = new QStandardItemModel;
     m_modelReliefs = new QStandardItemModel;
 }
 
@@ -36,7 +37,7 @@ SpecialElementsDatas::~SpecialElementsDatas()
 {
     SuperListItem::deleteModel(m_modelAutotiles);
     SuperListItem::deleteModel(m_modelSpriteWalls);
-    SuperListItem::deleteModel(m_model3DObjects);
+    SuperListItem::deleteModel(m_modelObjects3D);
     SuperListItem::deleteModel(m_modelReliefs);
 }
 
@@ -53,6 +54,8 @@ QStandardItemModel* SpecialElementsDatas::model(PictureKind kind) const {
         return modelSpriteWalls();
     case PictureKind::Reliefs:
         return modelReliefs();
+    case PictureKind::Object3D:
+        return modelObjects3D();
     default:
         return nullptr;
     }
@@ -66,8 +69,8 @@ QStandardItemModel* SpecialElementsDatas::modelSpriteWalls() const {
     return m_modelSpriteWalls;
 }
 
-QStandardItemModel* SpecialElementsDatas::model3DObjects() const {
-    return m_model3DObjects;
+QStandardItemModel* SpecialElementsDatas::modelObjects3D() const {
+    return m_modelObjects3D;
 }
 
 QStandardItemModel* SpecialElementsDatas::modelReliefs() const {
@@ -84,6 +87,7 @@ void SpecialElementsDatas::setDefault()
 {
     setDefaultSpriteWalls();
     setDefaultAutotiles();
+    setDefaulObjects3D();
 }
 
 // -------------------------------------------------------
@@ -115,6 +119,12 @@ void SpecialElementsDatas::setDefaultAutotiles() {
 }
 
 // -------------------------------------------------------
+
+void SpecialElementsDatas::setDefaulObjects3D() {
+
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -125,12 +135,13 @@ void SpecialElementsDatas::read(const QJsonObject &json){
     // Clear
     SuperListItem::deleteModel(m_modelAutotiles, false);
     SuperListItem::deleteModel(m_modelSpriteWalls, false);
-    SuperListItem::deleteModel(m_model3DObjects, false);
+    SuperListItem::deleteModel(m_modelObjects3D, false);
     SuperListItem::deleteModel(m_modelReliefs, false);
 
     // Read
     readSpecials(json, PictureKind::Walls, JSON_WALLS);
     readSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
+    readSpecials(json, PictureKind::Object3D, JSON_OBJECTS_3D);
 }
 
 // -------------------------------------------------------
@@ -157,6 +168,7 @@ void SpecialElementsDatas::readSpecials(const QJsonObject &json,
 void SpecialElementsDatas::write(QJsonObject &json) const{
     writeSpecials(json, PictureKind::Walls, JSON_WALLS);
     writeSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
+    writeSpecials(json, PictureKind::Object3D, JSON_OBJECTS_3D);
 }
 
 // -------------------------------------------------------

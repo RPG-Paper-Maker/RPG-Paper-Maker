@@ -49,6 +49,10 @@ public:
     static bool isInObjectConfig;
     static QString shadersExtension;
 
+    // COMMON JSON
+    const static QString JSON_KEY;
+    const static QString JSON_VALUE;
+
     // COLORS
     const static QColor colorGraySelectionDarker;
     const static QColor colorGraySelection;
@@ -95,6 +99,7 @@ public:
     const static QString pathKeyBoard;
     const static QString pathPicturesDatas;
     const static QString pathSongsDatas;
+    const static QString PATH_SHAPES_DATAS;
     const static QString pathSaves;
     const static QString pathPictures;
     const static QString pathHUD;
@@ -109,14 +114,17 @@ public:
     const static QString pathReliefs;
     const static QString pathTilesets;
     const static QString PATH_SPRITE_WALLS;
-    const static QString PATH_3D_OBJECT;
     const static QString PATH_RELIEFS;
+    const static QString PATH_TEXTURES_OBJECT_3D;
     const static QString PATH_BATTLERS;
     const static QString PATH_SONGS;
     const static QString PATH_MUSICS;
     const static QString PATH_BACKGROUND_SOUNDS;
     const static QString PATH_SOUNDS;
     const static QString PATH_MUSIC_EFFECTS;
+    const static QString PATH_SHAPES;
+    const static QString PATH_OBJ;
+    const static QString PATH_MTL;
     const static QString pathEngineSettings;
     const static QString fileMapInfos;
     const static QString fileMapObjects;

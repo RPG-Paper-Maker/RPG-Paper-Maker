@@ -24,7 +24,6 @@ DialogSongs::DialogSongs(QWidget *parent) :
 {
     ui->setupUi(this);
     
-
     ui->widgetSongs->initializePrimitives(nullptr, nullptr);
 
     // Tree model

@@ -9,44 +9,41 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef DIALOGSONGS_H
-#define DIALOGSONGS_H
+#ifndef DIALOGSHAPES_H
+#define DIALOGSHAPES_H
 
 // -------------------------------------------------------
 //
-//  CLASS DialogSongs
+//  CLASS DialogShapes
 //
-//  A dialog used for editing songs in the game.
+//  A dialog used for editing shapes in the game.
 //
 // -------------------------------------------------------
 
 #include <QDialog>
 #include <QStandardItemModel>
-#include "songkind.h"
+#include "customshapekind.h"
 
 namespace Ui {
-class DialogSongs;
+class DialogShapes;
 }
 
-class DialogSongs : public QDialog
+class DialogShapes : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogSongs(QWidget *parent = nullptr);
-    ~DialogSongs();
+    explicit DialogShapes(QWidget *parent = nullptr);
+    ~DialogShapes();
     QStandardItemModel* createFoldersModel() const;
-    void addfolders(QIcon& icon,
-                    QStandardItem* root,
-                    QList<QString>& names,
-                    QList<SongKind>& enums) const;
-
+    void addfolders(QIcon& icon, QStandardItem* root, QList<QString>& names,
+        QList<CustomShapeKind>& enums) const;
 
 private:
-    Ui::DialogSongs *ui;
+    Ui::DialogShapes *ui;
 
 private slots:
     void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };
 
-#endif // DIALOGSONGS_H
+#endif // DIALOGSHAPES_H

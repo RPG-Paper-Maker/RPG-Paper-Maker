@@ -65,6 +65,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     //  main function generating project folder. Returns a string if errors.
     QDir pathLocation(location);
     QString pathDir(Common::pathCombine(location, dirName));
+    QDir dir(pathDir);
 
     // Checking if the project can be created
     if (dirName.count() == 0)
@@ -90,22 +91,25 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     }
 
     // Create folders
-    QDir(pathDir).mkpath(RPM::pathBars);
-    QDir(pathDir).mkpath(RPM::pathIcons);
-    QDir(pathDir).mkpath(RPM::PATH_FACESETS);
-    QDir(pathDir).mkpath(RPM::PATH_WINDOW_SKINS);
-    QDir(pathDir).mkpath(RPM::PATH_TITLE_SCREEN);
-    QDir(pathDir).mkpath(RPM::pathAutotiles);
-    QDir(pathDir).mkpath(RPM::pathCharacters);
-    QDir(pathDir).mkpath(RPM::pathReliefs);
-    QDir(pathDir).mkpath(RPM::pathTilesets);
-    QDir(pathDir).mkpath(RPM::PATH_SPRITE_WALLS);
-    QDir(pathDir).mkpath(RPM::PATH_BATTLERS);
-    QDir(pathDir).mkpath(RPM::PATH_SONGS);
-    QDir(pathDir).mkpath(RPM::PATH_MUSICS);
-    QDir(pathDir).mkpath(RPM::PATH_BACKGROUND_SOUNDS);
-    QDir(pathDir).mkpath(RPM::PATH_SOUNDS);
-    QDir(pathDir).mkpath(RPM::PATH_MUSIC_EFFECTS);
+    dir.mkpath(RPM::pathBars);
+    dir.mkpath(RPM::pathIcons);
+    dir.mkpath(RPM::PATH_FACESETS);
+    dir.mkpath(RPM::PATH_WINDOW_SKINS);
+    dir.mkpath(RPM::PATH_TITLE_SCREEN);
+    dir.mkpath(RPM::pathAutotiles);
+    dir.mkpath(RPM::pathCharacters);
+    dir.mkpath(RPM::pathReliefs);
+    dir.mkpath(RPM::pathTilesets);
+    dir.mkpath(RPM::PATH_SPRITE_WALLS);
+    dir.mkpath(RPM::PATH_BATTLERS);
+    dir.mkpath(RPM::PATH_SONGS);
+    dir.mkpath(RPM::PATH_MUSICS);
+    dir.mkpath(RPM::PATH_BACKGROUND_SOUNDS);
+    dir.mkpath(RPM::PATH_SOUNDS);
+    dir.mkpath(RPM::PATH_MUSIC_EFFECTS);
+    dir.mkpath(RPM::PATH_SHAPES);
+    dir.mkpath(RPM::PATH_OBJ);
+    dir.mkpath(RPM::PATH_MTL);
 
     // Create the default datas
     Project *previousProject = RPM::get()->project();
@@ -133,8 +137,8 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::pathSaves), tab);
 
     // Creating first empty map
-    QDir(pathDir).mkdir(RPM::pathMaps);
-    QDir(pathDir).mkdir(Common::pathCombine(RPM::pathMaps,
+    dir.mkdir(RPM::pathMaps);
+    dir.mkdir(Common::pathCombine(RPM::pathMaps,
         RPM::TEMP_MAP_FOLDER_NAME));
     Map::writeDefaultMap(pathDir);
     Map::writeDefaultBattleMap(pathDir);

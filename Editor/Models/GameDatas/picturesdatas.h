@@ -26,7 +26,6 @@
 #ifndef PICTURESDATAS_H
 #define PICTURESDATAS_H
 
-
 class PicturesDatas : public Serializable
 {
 public:
@@ -49,6 +48,7 @@ public:
     void setDefaultReliefs(QList<QString>& names);
     void setDefaultTilesets(QList<QString>& names);
     void setDefaultWalls(QList<QString>& names);
+    void setDefaultObjects3D(QList<QString>& names);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

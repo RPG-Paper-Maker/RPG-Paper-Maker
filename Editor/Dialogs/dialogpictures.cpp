@@ -92,10 +92,10 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     listNames.clear();
     listEnums.clear();
     listNames << "Autotiles" << "Battlers" << "Characters" << "Reliefs" <<
-        "Tilesets" << "Walls";
+        "Tilesets" << "Walls" << "Objects 3D";
     listEnums << PictureKind::Autotiles << PictureKind::Battlers <<
         PictureKind::Characters << PictureKind::Reliefs << PictureKind::Tilesets
-        << PictureKind::Walls;
+        << PictureKind::Walls << PictureKind::Object3D;
     addfolders(icon, itemTextures2D, listNames, listEnums);
 
     return model;

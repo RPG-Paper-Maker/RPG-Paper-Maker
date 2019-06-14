@@ -37,6 +37,7 @@ Project::Project() :
     m_scriptsDatas(new ScriptsDatas),
     m_picturesDatas(new PicturesDatas),
     m_songsDatas(new SongsDatas),
+    m_shapesDatas(new ShapesDatas),
     m_keyBoardDatas(new KeyBoardDatas),
     m_specialElementsDatas(new SpecialElementsDatas)
 {
@@ -51,6 +52,7 @@ Project::~Project()
     delete m_scriptsDatas;
     delete m_picturesDatas;
     delete m_songsDatas;
+    delete m_shapesDatas;
     delete m_keyBoardDatas;
     delete m_specialElementsDatas;
 }
@@ -84,6 +86,8 @@ PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
 
 SongsDatas* Project::songsDatas() const { return m_songsDatas; }
 
+ShapesDatas* Project::shapesDatas() const { return m_shapesDatas; }
+
 KeyBoardDatas* Project::keyBoardDatas() const { return m_keyBoardDatas; }
 
 SpecialElementsDatas* Project::specialElementsDatas() const {
@@ -103,6 +107,7 @@ void Project::setDefault(){
     m_keyBoardDatas->setDefaultGame();
     m_picturesDatas->setDefault();
     m_songsDatas->setDefault();
+    m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
@@ -135,6 +140,7 @@ bool Project::read(QString path){
     readKeyBoardDatas();
     readPicturesDatas();
     readSongsDatas();
+    readShapesDatas();
     readGameDatas();
     readTreeMapDatas();
     readScriptsDatas();
@@ -365,6 +371,12 @@ void Project::readSongsDatas(){
 
 // -------------------------------------------------------
 
+void Project::readShapesDatas(){
+    m_shapesDatas->read(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::readSpecialsDatas() {
     m_specialElementsDatas->read(p_pathCurrentProject);
 }
@@ -389,12 +401,13 @@ void Project::readCommonEvents() {
 
 // -------------------------------------------------------
 
-void Project::write(QString path){
+void Project::write(QString path) {
     setPathCurrentProject(path);
     writeLangsDatas();
     writeKeyBoardDatas();
     writePicturesDatas();
     writeSongsDatas();
+    writeShapesDatas();
     writeSpecialsDatas();
     writeGameDatas();
     writeTreeMapDatas();
@@ -445,10 +458,16 @@ void Project::writePicturesDatas(){
 
 // -------------------------------------------------------
 
-void Project::writeSongsDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        RPM::pathSongsDatas),
-                     *m_songsDatas);
+void Project::writeSongsDatas() {
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM::pathSongsDatas
+        ), *m_songsDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writeShapesDatas() {
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_SHAPES_DATAS), *m_shapesDatas);
 }
 
 // -------------------------------------------------------

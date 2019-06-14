@@ -24,6 +24,10 @@ QSet<int> RPM::mapsUndoRedo;
 
 QString RPM::shadersExtension = "-3.0";
 
+// COMMON JSON
+const QString RPM::JSON_KEY = "k";
+const QString RPM::JSON_VALUE = "v";
+
 // COLORS
 const QColor RPM::colorGraySelectionDarker = QColor(60, 60, 60);
 const QColor RPM::colorGraySelection = QColor(80, 80, 80);
@@ -79,6 +83,8 @@ const QString RPM::pathPicturesDatas =
         Common::pathCombine(pathDatas, "pictures.json");
 const QString RPM::pathSongsDatas =
         Common::pathCombine(pathDatas, "songs.json");
+const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(pathDatas,
+    "shapes.json");
 const QString RPM::pathSaves = Common::pathCombine(pathDatas, "saves.json");
 
 // PATHS PICTURES
@@ -95,14 +101,22 @@ const QString RPM::pathCharacters = Common::pathCombine(pathTextures2D, "Charact
 const QString RPM::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
 const QString RPM::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
 const QString RPM::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
-const QString RPM::PATH_3D_OBJECT = Common::pathCombine(pathTextures2D, "3DObjects");
 const QString RPM::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString RPM::PATH_TEXTURES_OBJECT_3D = Common::pathCombine(pathTextures2D,
+    "Objects3D");
 const QString RPM::PATH_BATTLERS = Common::pathCombine(pathTextures2D, "Battlers");
+
+// PATHS SONGS
 const QString RPM::PATH_SONGS = Common::pathCombine("Content", "Songs");
 const QString RPM::PATH_MUSICS = Common::pathCombine(PATH_SONGS, "Musics");
 const QString RPM::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS, "BackgroundSounds");
 const QString RPM::PATH_SOUNDS = Common::pathCombine(PATH_SONGS, "Sounds");
 const QString RPM::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEffects");
+
+// PATHS SHAPES
+const QString RPM::PATH_SHAPES = Common::pathCombine("Content", "Shapes");
+const QString RPM::PATH_OBJ = Common::pathCombine(PATH_SHAPES, "OBJ");
+const QString RPM::PATH_MTL = Common::pathCombine(PATH_SHAPES, "MTL");
 
 const QString RPM::pathEngineSettings =
         Common::pathCombine("Content", "engineSettings.json");
@@ -299,13 +313,13 @@ int RPM::mod(int x, int m) {
 // -------------------------------------------------------
 
 float RPM::coefSquareSize() {
-    return RPM::get()->getSquareSize() / ((float) RPM::BASIC_SQUARE_SIZE);
+    return RPM::get()->getSquareSize() / (static_cast<float>(RPM::BASIC_SQUARE_SIZE));
 }
 
 // -------------------------------------------------------
 
 float RPM::coefReverseSquareSize() {
-    return ((float) RPM::BASIC_SQUARE_SIZE) / RPM::get()->getSquareSize();
+    return static_cast<float>(RPM::BASIC_SQUARE_SIZE) / RPM::get()->getSquareSize();
 }
 
 // -------------------------------------------------------
@@ -376,7 +390,7 @@ int RPM::generateMapId(){
     QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
                                 RPM::pathMaps));
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    int nbMaps = dir.count();
+    int nbMaps = static_cast<int>(dir.count());
 
     for (id = 1; id <= nbMaps + 1; id++)
         if (!isMapIdExisting(id)) break;

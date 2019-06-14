@@ -82,6 +82,7 @@
     <addaction name="actionVariables_manager"/>
     <addaction name="actionPictures_manager"/>
     <addaction name="actionSongs_manager"/>
+    <addaction name="actionShapes_manager"/>
     <addaction name="actionKeyboard_controls"/>
     <addaction name="actionCollisions_manager"/>
     <addaction name="actionScripts_manager"/>
@@ -166,6 +167,7 @@
    <addaction name="actionVariables_manager"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionSongs_manager"/>
+   <addaction name="actionShapes_manager"/>
    <addaction name="actionKeyboard_controls"/>
    <addaction name="actionCollisions_manager"/>
    <addaction name="actionScripts_manager"/>
@@ -321,7 +323,7 @@
     <string>Keyboard</string>
    </property>
    <property name="shortcut">
-    <string>6</string>
+    <string>8</string>
    </property>
   </action>
   <action name="actionSave_all">
@@ -405,7 +407,7 @@
   </action>
   <action name="action3D_objects">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
@@ -488,7 +490,7 @@
   </action>
   <action name="actionSongs_manager">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
@@ -516,7 +518,7 @@
     <string>Collisions</string>
    </property>
    <property name="shortcut">
-    <string>7</string>
+    <string>9</string>
    </property>
   </action>
   <action name="actionScripts_manager">
@@ -531,7 +533,7 @@
     <string>Scripts</string>
    </property>
    <property name="shortcut">
-    <string>8</string>
+    <string>0</string>
    </property>
   </action>
   <action name="actionDebug_options">
@@ -604,6 +606,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Down</string>
+   </property>
+  </action>
+  <action name="actionShapes_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/object_toolbar.png</normaloff>:/icons/Ressources/object_toolbar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Shapes manager</string>
+   </property>
+   <property name="iconText">
+    <string>Shapes</string>
+   </property>
+   <property name="shortcut">
+    <string>7</string>
    </property>
   </action>
  </widget>

@@ -63,6 +63,7 @@ void PicturesDatas::setDefault(){
     setDefaultWalls(names);
     setDefaultWindowSkins(names);
     setDefaultTitleScreen(names);
+    setDefaultObjects3D(names);
 }
 
 // -------------------------------------------------------
@@ -167,6 +168,12 @@ void PicturesDatas::setDefaultWalls(QList<QString>& names) {
     SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Walls]
             ->item(1)->data().value<quintptr>();
     picture->setDefaultWallInside();
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
+    setDefaultPictures(names, PictureKind::Object3D);
 }
 
 // -------------------------------------------------------

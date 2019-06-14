@@ -273,7 +273,13 @@ HEADERS += \
     Dialogs/dialogcompleteliststates.h \
     Models/System/systemcharacteristic.h \
     Dialogs/Systems/dialogsystemcharacteristic.h \
-    Enums/characteristickind.h
+    Enums/characteristickind.h \
+    Dialogs/dialogshapes.h \
+    Enums/shapekind.h \
+    Enums/customshapekind.h \
+    CustomWidgets/panelshapes.h \
+    Models/System/systemcustomshape.h \
+    Models/GameDatas/shapesdatas.h
 
 SOURCES += \
     Dialogs/mainwindow.cpp \
@@ -505,7 +511,11 @@ SOURCES += \
     CustomWidgets/panelrecentprojects.cpp \
     Dialogs/dialogcompleteliststates.cpp \
     Models/System/systemcharacteristic.cpp \
-    Dialogs/Systems/dialogsystemcharacteristic.cpp
+    Dialogs/Systems/dialogsystemcharacteristic.cpp \
+    Dialogs/dialogshapes.cpp \
+    CustomWidgets/panelshapes.cpp \
+    Models/System/systemcustomshape.cpp \
+    Models/GameDatas/shapesdatas.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -593,7 +603,9 @@ FORMS += \
     CustomWidgets/paneldamageskind.ui \
     Dialogs/Systems/dialogsystemcost.ui \
     Dialogs/Systems/dialogsystemcharacteristic.ui \
-    Dialogs/dialogcompleteliststates.ui
+    Dialogs/dialogcompleteliststates.ui \
+    Dialogs/dialogshapes.ui \
+    CustomWidgets/panelshapes.ui
 
 # Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \

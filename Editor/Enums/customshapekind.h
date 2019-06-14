@@ -9,41 +9,30 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef PICTUREKIND_H
-#define PICTUREKIND_H
+#ifndef CUSTOMSHAPEKIND_H
+#define CUSTOMSHAPEKIND_H
 
 #include <QMetaType>
 
 // -------------------------------------------------------
 //
-//  ENUM PictureKind
+//  ENUM CustomShapeKind
 //
-//  All the possible picutres.
+//  All the possible custom shapes infos.
 //
 // -------------------------------------------------------
 
-enum class PictureKind {
+enum class CustomShapeKind {
     None,
-    Bars,
-    Icons,
-    Autotiles,
-    Characters,
-    Reliefs,
-    Tilesets,
-    Walls,
-    Battlers,
-    Facesets,
-    WindowSkins,
-    TitleScreen,
-    Object3D,
-    Last
+    OBJ,
+    MTL
 };
 
-inline uint qHash(PictureKind pos)
+inline uint qHash(CustomShapeKind pos)
 {
    return static_cast<uint>(pos);
 }
 
-Q_DECLARE_METATYPE(PictureKind)
+Q_DECLARE_METATYPE(CustomShapeKind)
 
-#endif // PICTUREKIND_H
+#endif // CUSTOMSHAPEKIND_H

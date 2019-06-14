@@ -19,6 +19,7 @@
 #include "scriptsdatas.h"
 #include "picturesdatas.h"
 #include "songsdatas.h"
+#include "shapesdatas.h"
 #include "keyboarddatas.h"
 #include "specialelementsdatas.h"
 #include "oskind.h"
@@ -50,6 +51,7 @@ public:
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
     SongsDatas* songsDatas() const;
+    ShapesDatas * shapesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
     SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
@@ -68,6 +70,7 @@ public:
     void readKeyBoardDatas();
     void readPicturesDatas();
     void readSongsDatas();
+    void readShapesDatas();
     void readSpecialsDatas();
     void readSystemDatas();
     void readTilesetsDatas();
@@ -80,6 +83,7 @@ public:
     void writeKeyBoardDatas();
     void writePicturesDatas();
     void writeSongsDatas();
+    void writeShapesDatas();
     void writeSpecialsDatas();
     void writeSystemDatas();
     void writeTilesetsDatas();
@@ -97,6 +101,7 @@ private:
     ScriptsDatas* m_scriptsDatas;
     PicturesDatas* m_picturesDatas;
     SongsDatas* m_songsDatas;
+    ShapesDatas * m_shapesDatas;
     KeyBoardDatas* m_keyBoardDatas;
     SpecialElementsDatas* m_specialElementsDatas;
     QString m_version;

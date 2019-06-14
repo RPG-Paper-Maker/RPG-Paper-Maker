@@ -34,6 +34,7 @@
 #include "dialogdebugoptions.h"
 #include "dialoggeneraloptions.h"
 #include "dialogsongs.h"
+#include "dialogshapes.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -201,6 +202,7 @@ void MainWindow::enableAll(bool b){
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
     ui->actionSongs_manager->setEnabled(b);
+    ui->actionShapes_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionDebug_options->setEnabled(b);
@@ -209,6 +211,7 @@ void MainWindow::enableAll(bool b){
     ui->actionScripts_manager->setEnabled(b);
     ui->actionAutotiles->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
+    ui->action3D_objects->setEnabled(b);
     ui->actionShow_Hide_grid->setEnabled(b);
     ui->actionShow_Hide_square_informations->setEnabled(b);
     ui->actionPlay->setEnabled(b);
@@ -237,12 +240,14 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionVariables_manager->setEnabled(true);
     ui->actionSongs_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
+    ui->actionShapes_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
     ui->actionKeyboard_controls->setEnabled(true);
     ui->actionCollisions_manager->setEnabled(true);
     ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
+    ui->action3D_objects->setEnabled(true);
     ui->actionShow_Hide_grid->setEnabled(true);
     ui->actionShow_Hide_square_informations->setEnabled(true);
     ui->actionPlay->setEnabled(true);
@@ -519,6 +524,16 @@ void MainWindow::on_actionPictures_manager_triggered(){
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionShapes_manager_triggered() {
+    DialogShapes dialog;
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeShapesDatas();
+    else
+        project->readShapesDatas();
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionKeyboard_controls_triggered(){
     DialogKeyBoardControls dialog(project, RPM::get()->engineSettings());
     if (openDialog(dialog) == QDialog::Accepted){
@@ -564,6 +579,16 @@ void MainWindow::on_actionSprite_walls_triggered() {
         project->readSpecialsDatas();
 
     updateTextures();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_action3D_objects_triggered() {
+    DialogSpecialElements dialog(PictureKind::Object3D);
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeSpecialsDatas();
+    else
+        project->readSpecialsDatas();
 }
 
 // -------------------------------------------------------
@@ -643,7 +668,7 @@ void MainWindow::on_actionPlay_triggered(){
 void MainWindow::on_actionAbout_triggered() {
     QString name, website, buildDate, copyright;
     QStringList patreonThanks;
-    patreonThanks << "Utrano" << "Florian Dufour";
+    patreonThanks << "Utrano" << "Florian Dufour" << "Elias Luukkanen";
 
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
