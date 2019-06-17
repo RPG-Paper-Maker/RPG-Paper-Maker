@@ -139,6 +139,8 @@ QString SystemPicture::getPictureTitle(PictureKind kind) {
         return "Autotiles";
     case PictureKind::Walls:
         return "Walls";
+    case PictureKind::Object3D:
+        return "3D objects";
     default:
         return "";
     }

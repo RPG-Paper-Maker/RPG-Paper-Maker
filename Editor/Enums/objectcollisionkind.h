@@ -9,31 +9,22 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef CUSTOMSHAPEKIND_H
-#define CUSTOMSHAPEKIND_H
-
-#include <QMetaType>
+#ifndef OBJECTCOLLISIONKIND_H
+#define OBJECTCOLLISIONKIND_H
 
 // -------------------------------------------------------
 //
-//  ENUM CustomShapeKind
+//  ENUM ObjectCollisionKind
 //
-//  All the possible custom shapes infos.
+//  All the possible 3D object collision kind.
 //
 // -------------------------------------------------------
 
-enum class CustomShapeKind {
+enum class ObjectCollisionKind {
     None,
-    OBJ,
-    MTL,
-    Collisions
+    Perfect,
+    Simplified,
+    Custom
 };
 
-inline uint qHash(CustomShapeKind pos)
-{
-   return static_cast<uint>(pos);
-}
-
-Q_DECLARE_METATYPE(CustomShapeKind)
-
-#endif // CUSTOMSHAPEKIND_H
+#endif // OBJECTCOLLISIONKIND_H

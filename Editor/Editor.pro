@@ -279,7 +279,11 @@ HEADERS += \
     Enums/customshapekind.h \
     CustomWidgets/panelshapes.h \
     Models/System/systemcustomshape.h \
-    Models/GameDatas/shapesdatas.h
+    Models/GameDatas/shapesdatas.h \
+    CustomWidgets/widgetshape.h \
+    Dialogs/dialogshapespreview.h \
+    Models/System/systemobject3d.h \
+    Enums/objectcollisionkind.h
 
 SOURCES += \
     Dialogs/mainwindow.cpp \
@@ -515,7 +519,10 @@ SOURCES += \
     Dialogs/dialogshapes.cpp \
     CustomWidgets/panelshapes.cpp \
     Models/System/systemcustomshape.cpp \
-    Models/GameDatas/shapesdatas.cpp
+    Models/GameDatas/shapesdatas.cpp \
+    CustomWidgets/widgetshape.cpp \
+    Dialogs/dialogshapespreview.cpp \
+    Models/System/systemobject3d.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \
@@ -605,7 +612,9 @@ FORMS += \
     Dialogs/Systems/dialogsystemcharacteristic.ui \
     Dialogs/dialogcompleteliststates.ui \
     Dialogs/dialogshapes.ui \
-    CustomWidgets/panelshapes.ui
+    CustomWidgets/panelshapes.ui \
+    CustomWidgets/widgetshape.ui \
+    Dialogs/dialogshapespreview.ui
 
 # Resources are currently part of the Editor library, not the EditorApp. EditorApp's main function will require Q_INIT_RESOURCE.
 RESOURCES += \

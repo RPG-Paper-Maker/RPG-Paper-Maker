@@ -14,6 +14,9 @@
 
 #include "superlistitem.h"
 #include "systempicture.h"
+#include "shapekind.h"
+#include "objectcollisionkind.h"
+#include "customshapekind.h"
 
 // -------------------------------------------------------
 //
@@ -26,11 +29,36 @@
 class SystemSpecialElement : public SuperListItem
 {
 public:
+    const static QString JSON_SHAPE_KIND;
+    const static QString JSON_OBJ_ID;
+    const static QString JSON_MTL_ID;
+    const static QString JSON_PIC_ID;
+    const static QString JSON_COLLISION_KIND;
+    const static QString JSON_COLLISION_CUSTOM_ID;
+    const static QString JSON_LOCATION;
+    const static QString JSON_SCALE;
+    const static QString JSON_WIDTH_SQUARE;
+    const static QString JSON_WIDTH_PIXEL;
+    const static QString JSON_HEIGHT_SQUARE;
+    const static QString JSON_HEIGHT_PIXEL;
+    const static QString JSON_DEPTH_SQUARE;
+    const static QString JSON_DEPTH_PIXEL;
+
     SystemSpecialElement();
-    SystemSpecialElement(int i, QString n, int pictureId);
+    SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
+        int objID = -1, int mtlID = -1, int pictureID = -1, ObjectCollisionKind
+        collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
+        bool location = true, double scale = 1.0, int wS = 1, int wP = 0, int hS
+        = 1, int hP = 0, int dS = 1, int dP = 0);
     virtual ~SystemSpecialElement();
     virtual SystemPicture* picture() const;
     void setPictureID(int id);
+    SuperListItem * objID() const;
+
+    void updateObjName();
+    void updateMtlName();
+    void updateCustomCollisionName();
+    void updateGenericObjectName(SuperListItem *obj, CustomShapeKind kind);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemSpecialElement &super);
@@ -41,7 +69,20 @@ public:
 protected:
     SystemPicture* pictureByKind(PictureKind kind) const;
 
+    ShapeKind m_shapeKind;
+    SuperListItem *m_objID;
+    SuperListItem *m_mtlID;
     int m_pictureID;
+    ObjectCollisionKind m_collisionKind;
+    SuperListItem *m_collisionCustomID;
+    bool m_location;
+    double m_scale;
+    int m_widthSquare;
+    int m_widthPixel;
+    int m_heightSquare;
+    int m_heightPixel;
+    int m_depthSquare;
+    int m_depthPixel;
 };
 
 Q_DECLARE_METATYPE(SystemSpecialElement)

@@ -12,6 +12,7 @@
 #include "specialelementsdatas.h"
 #include "systemspritewall.h"
 #include "systemautotile.h"
+#include "systemobject3d.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -120,7 +121,16 @@ void SpecialElementsDatas::setDefaultAutotiles() {
 
 // -------------------------------------------------------
 
-void SpecialElementsDatas::setDefaulObjects3D() {
+void SpecialElementsDatas::setDefaulObjects3D() { 
+    QStandardItem *item;
+    SystemObject3D *sys;
+
+    item = new QStandardItem;
+    sys = new SystemObject3D(1, "House", ShapeKind::Custom, 1, 1, 1);
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(sys->toString());
+    m_modelObjects3D->appendRow(item);
 
 }
 

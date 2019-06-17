@@ -41,6 +41,7 @@ public:
     void setDefaultShapes(QList<QString>& names, CustomShapeKind kind);
     void setDefaultObj(QList<QString>& names);
     void setDefaultMtl(QList<QString>& names);
+    void setDefaultCollisions(QList<QString>& names);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

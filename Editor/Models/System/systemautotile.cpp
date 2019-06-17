@@ -28,7 +28,7 @@ SystemAutotile::SystemAutotile() :
 }
 
 SystemAutotile::SystemAutotile(int i, QString n, int pictureId) :
-    SystemSpecialElement(i, n, pictureId)
+    SystemSpecialElement(i, n, ShapeKind::Box, -1, -1, pictureId)
 {
 
 }

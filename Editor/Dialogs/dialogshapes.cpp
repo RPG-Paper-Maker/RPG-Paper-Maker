@@ -64,8 +64,9 @@ QStandardItemModel* DialogShapes::createFoldersModel() const{
     model->appendRow(itemShapes);
 
     // HUD
-    listNames << "OBJ" << "MTL";
-    listEnums << CustomShapeKind::OBJ << CustomShapeKind::MTL;
+    listNames << "OBJ" << "MTL" << "Collisions";
+    listEnums << CustomShapeKind::OBJ << CustomShapeKind::MTL << CustomShapeKind
+        ::Collisions;
     addfolders(icon, itemShapes, listNames, listEnums);
 
     return model;
@@ -100,5 +101,5 @@ void DialogShapes::on_folderSelected(const QModelIndex& current, const QModelInd
         ->treeView->model());
     QStandardItem* item = model->itemFromIndex(current);
     CustomShapeKind k = item->data().value<CustomShapeKind>();
-    ui->panelShapes->setCustomShapeKind(k);
+    ui->panelShapes->setShapeKind(k);
 }

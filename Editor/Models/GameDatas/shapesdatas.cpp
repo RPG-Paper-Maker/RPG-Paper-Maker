@@ -55,6 +55,7 @@ void ShapesDatas::setDefault() {
 
     setDefaultObj(names);
     setDefaultMtl(names);
+    setDefaultCollisions(names);
 }
 
 // -------------------------------------------------------
@@ -93,13 +94,21 @@ void ShapesDatas::setDefaultShapes(QList<QString> &names, CustomShapeKind kind)
 // -------------------------------------------------------
 
 void ShapesDatas::setDefaultObj(QList<QString>& names) {
+    names << "house";
     setDefaultShapes(names, CustomShapeKind::OBJ);
 }
 
 // -------------------------------------------------------
 
 void ShapesDatas::setDefaultMtl(QList<QString>& names) {
+    names << "house";
     setDefaultShapes(names, CustomShapeKind::MTL);
+}
+
+// -------------------------------------------------------
+
+void ShapesDatas::setDefaultCollisions(QList<QString>& names) {
+    setDefaultShapes(names, CustomShapeKind::Collisions);
 }
 
 // -------------------------------------------------------

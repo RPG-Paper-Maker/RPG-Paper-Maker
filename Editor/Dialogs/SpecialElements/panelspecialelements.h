@@ -33,12 +33,15 @@ class PanelSpecialElements : public QWidget
     Q_OBJECT
 
 public:
-    explicit PanelSpecialElements(QWidget *parent = 0);
+    explicit PanelSpecialElements(QWidget *parent = nullptr);
     ~PanelSpecialElements();
+
     void initialize(QStandardItemModel* model, PictureKind kind);
     void update(SystemSpecialElement *sys);
     int currentIndex() const;
     PanelSuperList* superList() const;
+    void hideObject3D();
+    void showObject3D();
 
 private:
     Ui::PanelSpecialElements *ui;

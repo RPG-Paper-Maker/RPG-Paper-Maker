@@ -56,11 +56,11 @@ PanelShapes::~PanelShapes()
     delete ui;
 }
 
-SystemCustomShape * PanelShapes::shape() const {
+SuperListItem * PanelShapes::shape() const {
     return m_shape;
 }
 
-void PanelShapes::setShape(SystemCustomShape *shape) {
+void PanelShapes::setShape(SuperListItem *shape) {
     m_shape = shape;
 }
 
@@ -70,7 +70,7 @@ void PanelShapes::setShape(SystemCustomShape *shape) {
 //
 // -------------------------------------------------------
 
-void PanelShapes::setCustomShapeKind(CustomShapeKind kind) {
+void PanelShapes::setShapeKind(CustomShapeKind kind) {
     bool isNone = kind == CustomShapeKind::None;
     m_shapeKind = kind;
 
@@ -104,7 +104,7 @@ void PanelShapes::setCustomShapeKind(CustomShapeKind kind) {
 
 // -------------------------------------------------------
 
-void PanelShapes::changeShape(SystemCustomShape *shape) {
+void PanelShapes::changeShape(SuperListItem *shape) {
     setShape(shape);
 
     int index = SuperListItem::getIndexById(ui->widgetPanelIDs->list()
@@ -123,7 +123,12 @@ void PanelShapes::showShapes(bool b) {
 // -------------------------------------------------------
 
 void PanelShapes::updateShapeItem(QStandardItem *item) {
-    // TODO
+    if (item != nullptr && m_shape != nullptr) {
+        SuperListItem *super = reinterpret_cast<SuperListItem *>(item->data()
+            .value<qintptr>());
+        m_shape->setId(super->id());
+        m_shape->setName(super->name());
+    }
 }
 
 // -------------------------------------------------------

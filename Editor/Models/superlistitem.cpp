@@ -15,6 +15,7 @@
 #include "dialogsystemname.h"
 #include "systemautotile.h"
 #include "systemspritewall.h"
+#include "systemobject3d.h"
 
 const QString SuperListItem::JSON_ID = "id";
 const QString SuperListItem::JSON_NAME = "name";
@@ -255,6 +256,8 @@ SuperListItem* SuperListItem::getnewInstance(PictureKind kind) {
         return new SystemAutotile;
     case PictureKind::Walls:
         return new SystemSpriteWall;
+    case PictureKind::Object3D:
+        return new SystemObject3D;
     default:
         return nullptr;
     }

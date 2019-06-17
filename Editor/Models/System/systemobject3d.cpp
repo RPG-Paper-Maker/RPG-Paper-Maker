@@ -9,7 +9,7 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#include "systemspritewall.h"
+#include "systemobject3d.h"
 
 // -------------------------------------------------------
 //
@@ -17,57 +17,55 @@
 //
 // -------------------------------------------------------
 
-SystemSpriteWall::SystemSpriteWall() :
+SystemObject3D::SystemObject3D() :
     SystemSpecialElement()
 {
 
 }
 
-SystemSpriteWall::SystemSpriteWall(int i, QString n, int pictureId) :
-    SystemSpecialElement(i, n, ShapeKind::Box, -1, -1, pictureId)
+SystemObject3D::SystemObject3D(int i, QString n, ShapeKind shapeKind, int objID,
+    int mtlID, int texID) :
+    SystemSpecialElement(i, n, shapeKind, objID, mtlID, texID)
 {
 
 }
 
-SystemSpriteWall::~SystemSpriteWall()
-{
+SystemObject3D::~SystemObject3D() {
 
-}
-
-SystemPicture* SystemSpriteWall::picture() const {
-    return pictureByKind(PictureKind::Walls);
 }
 
 // -------------------------------------------------------
 //
-//  INTERMEDIARY FUNCTIONS
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
-SuperListItem* SystemSpriteWall::createCopy() const{
-    SystemSpriteWall* super = new SystemSpriteWall;
+SystemPicture* SystemObject3D::picture() const {
+    return pictureByKind(PictureKind::Object3D);
+}
+
+// -------------------------------------------------------
+
+SuperListItem* SystemObject3D::createCopy() const{
+    SystemObject3D* super = new SystemObject3D;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemSpriteWall::setCopy(const SystemSpriteWall& super){
+void SystemObject3D::setCopy(const SystemObject3D& super){
     SystemSpecialElement::setCopy(super);
 }
 
 // -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
 
-void SystemSpriteWall::read(const QJsonObject &json){
+void SystemObject3D::read(const QJsonObject &json){
     SystemSpecialElement::read(json);
 }
 
 // -------------------------------------------------------
 
-void SystemSpriteWall::write(QJsonObject &json) const{
+void SystemObject3D::write(QJsonObject &json) const{
     SystemSpecialElement::write(json);
 }

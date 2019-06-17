@@ -35,16 +35,16 @@ public:
     explicit PanelShapes(QWidget *parent = nullptr);
     ~PanelShapes();
 
-    SystemCustomShape * shape() const;
-    void setShape(SystemCustomShape *shape);
+    SuperListItem * shape() const;
+    void setShape(SuperListItem *shape);
 
-    void setCustomShapeKind(CustomShapeKind kind);
-    void changeShape(SystemCustomShape *shape);
+    void setShapeKind(CustomShapeKind kind);
+    void changeShape(SuperListItem *shape);
 
 private:
     Ui::PanelShapes *ui;
     CustomShapeKind m_shapeKind;
-    SystemCustomShape *m_shape;
+    SuperListItem *m_shape;
 
     void showShapes(bool b);
     void updateShapeItem(QStandardItem *item);

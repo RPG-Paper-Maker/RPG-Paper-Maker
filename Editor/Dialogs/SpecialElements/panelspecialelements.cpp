@@ -45,11 +45,17 @@ PanelSuperList *PanelSpecialElements::superList() const {
 //
 // -------------------------------------------------------
 
-void PanelSpecialElements::initialize(QStandardItemModel* model,
-                                      PictureKind kind)
+void PanelSpecialElements::initialize(QStandardItemModel* model, PictureKind
+    kind)
 {
     m_model = model;
     m_kind = kind;
+
+    if (m_kind == PictureKind::Object3D) {
+        showObject3D();
+    } else {
+        hideObject3D();
+    }
 
     ui->panelSuperList->list()->initializeNewItemInstance(
                 SuperListItem::getnewInstance(kind));
@@ -58,6 +64,7 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
             SIGNAL(currentChanged(QModelIndex,QModelIndex)), this,
             SLOT(on_pageSelected(QModelIndex,QModelIndex)));
     ui->widgetPicture->setKind(kind);
+    ui->widgetShapeObj->setKind(CustomShapeKind::OBJ);
     ui->widgetTilesetSettings->setKind(kind);
     if (kind == PictureKind::Walls)
         ui->widgetTilesetSettings->deleteDirectionTab();
@@ -74,10 +81,41 @@ void PanelSpecialElements::initialize(QStandardItemModel* model,
 void PanelSpecialElements::update(SystemSpecialElement* sys) {
     SystemPicture* picture = sys->picture();
     ui->widgetPicture->setPicture(picture);
+    ui->widgetShapeObj->initialize(sys->objID());
     if (m_kind == PictureKind::Autotiles)
         ui->widgetTilesetSettings->updateImageAutotile(picture);
     else
         ui->widgetTilesetSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::hideObject3D() {
+    ui->horizontalSpacer->changeSize(0, 0);
+    ui->horizontalSpacer_2->changeSize(0, 0);
+    ui->horizontalSpacer_4->changeSize(0, 0);
+    ui->horizontalSpacer_5->changeSize(0, 0);
+    ui->horizontalSpacer_8->changeSize(0, 0);
+    ui->labelShape->hide();
+    ui->comboBoxShape->hide();
+    ui->labelObject->hide();
+    ui->widgetShapeObj->hide();
+    ui->labelMtl->hide();
+    ui->widgetShapeMtl->hide();
+    ui->labelCollisions->hide();
+    ui->comboBoxCollision->hide();
+    ui->widgetShapeCollisions->hide();
+    ui->labelLocation->hide();
+    ui->comboBoxLocation->hide();
+    ui->labelScale->hide();
+    ui->doubleSpinBoxScale->hide();
+    ui->groupBoxSize->hide();
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::showObject3D() {
+    ui->widgetTilesetSettings->hide();
 }
 
 // -------------------------------------------------------
