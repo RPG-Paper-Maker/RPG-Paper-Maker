@@ -79,6 +79,7 @@ void PanelTextures::hideAll() {
     ui->widgetTilesetSelector->hide();
     ui->widgetAutotilesSelector->hide();
     ui->widgetWallPreview->hide();
+    ui->widget3DObjectPreview->hide();
     ui->comboBox->hide();
     ui->labelInformation->hide();
 }
@@ -148,6 +149,9 @@ void PanelTextures::showWidgetSpecial() {
     case PictureKind::Walls:
         ui->widgetWallPreview->show();
         break;
+    case PictureKind::Object3D:
+        ui->widget3DObjectPreview->show();
+        break;
     default:
         break;
     }
@@ -186,10 +190,13 @@ QString PanelTextures::createlabelText() {
     QString kindText = "";
     switch (m_kind) {
     case PictureKind::Autotiles:
-        kindText = "autotiles";
+        kindText = "autotile";
         break;
     case PictureKind::Walls:
-        kindText = "walls";
+        kindText = "wall";
+        break;
+    case PictureKind::Object3D:
+        kindText = "3D object";
         break;
     default:
         break;
@@ -211,6 +218,13 @@ void PanelTextures::showAutotiles(SystemTileset *tileset) {
 void PanelTextures::showSpriteWalls(SystemTileset *tileset) {
     tileset->updateModelSpriteWalls();
     fillComboBox(tileset, PictureKind::Walls);
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showObjects3D(SystemTileset *tileset) {
+    tileset->updateModel3DObjects();
+    fillComboBox(tileset, PictureKind::Object3D);
 }
 
 // -------------------------------------------------------
@@ -237,8 +251,9 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
     // Select current ID
     int index = SuperListItem::getIndexById(modelComplete->invisibleRootItem(),
         getCurrentID());
-    if (index > 0)
+    if (index > 0) {
         ui->comboBox->setCurrentIndex(index);
+    }
 
     // UI display
     hideAll();

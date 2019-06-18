@@ -56,6 +56,7 @@ public:
     QAction * actionDoubleSprite() const;
     QAction * actionQuadraSprite() const;
     QAction * actionWallSprite() const;
+    QAction * actionObject3D() const;
     QAction * actionEvents() const;
     QAction * actionPencil() const;
     QAction * actionRectangle() const;
@@ -98,6 +99,7 @@ protected:
 private slots:
     void on_menuFloors_triggered(QAction *action);
     void on_menuFace_Sprite_triggered(QAction *action);
+    void on_menu3D_object_triggered(QAction *action);
     void on_menuEvents_triggered(QAction *action);
 
 signals:

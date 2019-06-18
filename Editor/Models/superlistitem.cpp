@@ -209,8 +209,7 @@ SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) 
 
 // -------------------------------------------------------
 
-void SuperListItem::fillComboBox(QComboBox* comboBox,
-                                 QStandardItemModel* model)
+void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model)
 {
     int l = model->invisibleRootItem()->rowCount()-1;
     SuperListItem* sys;

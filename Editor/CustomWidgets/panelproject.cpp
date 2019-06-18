@@ -129,6 +129,9 @@ void PanelProject::on_menuBarPressed() {
     case MapEditorSubSelectionKind::SpritesWall:
         ui->panelTextures->showSpriteWalls(tileset);
         break;
+    case MapEditorSubSelectionKind::Object3D:
+        ui->panelTextures->showObjects3D(tileset);
+        break;
     default:
         ui->panelTextures->showTileset();
         ui->panelTextures->setTilesetImage(tileset->picture()->getPath(

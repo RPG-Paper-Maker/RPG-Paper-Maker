@@ -64,7 +64,7 @@
   </widget>
   <widget class="QMenu" name="menu3D_object">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="title">
     <string>3D object</string>
@@ -203,11 +203,11 @@
   </action>
   <action name="action3D_object">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
-     <normaloff>:/icons/Ressources/object_disabled.png</normaloff>:/icons/Ressources/object_disabled.png</iconset>
+     <normaloff>:/icons/Ressources/object.png</normaloff>:/icons/Ressources/object.png</iconset>
    </property>
    <property name="text">
     <string>3D object</string>

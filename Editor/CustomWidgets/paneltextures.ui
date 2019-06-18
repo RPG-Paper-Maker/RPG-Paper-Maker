@@ -27,9 +27,12 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,1">
      <item>
       <widget class="QComboBox" name="comboBox"/>
+     </item>
+     <item>
+      <widget class="QWidget" name="widget3DObjectPreview" native="true"/>
      </item>
      <item>
       <widget class="WidgetShowPicture" name="widgetWallPreview" native="true"/>

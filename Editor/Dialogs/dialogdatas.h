@@ -89,6 +89,7 @@ private slots:
     void on_pageStatusSelected(QModelIndex index, QModelIndex);
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
+    void on_pushButton3DObjects_clicked();
     void on_tilesetPictureChanged(SystemPicture* picture);
 };
 

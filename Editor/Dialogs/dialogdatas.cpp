@@ -552,3 +552,9 @@ void DialogDatas::on_pushButtonAutotiles_clicked() {
 void DialogDatas::on_pushButtonSpriteWalls_clicked() {
     openSpecialElementsDialog(PictureKind::Walls);
 }
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButton3DObjects_clicked() {
+    openSpecialElementsDialog(PictureKind::Object3D);
+}

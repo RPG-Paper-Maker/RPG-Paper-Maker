@@ -89,6 +89,8 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() {
         return MapEditorSubSelectionKind::SpritesQuadra;
     else if (text == bar->actionWallSprite()->text())
         return MapEditorSubSelectionKind::SpritesWall;
+    else if (text == bar->actionObject3D()->text())
+        return MapEditorSubSelectionKind::Object3D;
     else if (text == bar->actionEvents()->text())
         return MapEditorSubSelectionKind::Object;
 
@@ -151,6 +153,10 @@ QAction * WidgetMenuBarMapEditor::actionWallSprite() const {
     return ui->actionWall_Sprite;
 }
 
+QAction * WidgetMenuBarMapEditor::actionObject3D() const {
+    return ui->action3D_object;
+}
+
 QAction * WidgetMenuBarMapEditor::actionEvents() const {
     return ui->actionEvents;
 }
@@ -174,7 +180,6 @@ QAction * WidgetMenuBarMapEditor::actionLayerNone() const {
 QAction * WidgetMenuBarMapEditor::actionLayerOn() const {
     return m_actionLayerOn;
 }
-
 
 // -------------------------------------------------------
 //
@@ -307,10 +312,12 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
         forceNoneLayer();
     else
         actionLayerOn()->setIcon(QIcon(":/icons/Ressources/layer_on.png"));
-    if (m_selectionKind == MapEditorSelectionKind::Sprites)
+    if (m_selectionKind == MapEditorSelectionKind::Sprites || m_selectionKind ==
+        MapEditorSelectionKind::Objects3D) {
         forcePencil();
-    else
+    } else {
         actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
+    }
 }
 
 // -------------------------------------------------------
@@ -475,6 +482,13 @@ void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction *action) {
 void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction *action) {
     updateSubSelection(ui->menuFace_Sprite, this->actions().at(static_cast<int>(
         MapEditorSelectionKind::Sprites)), action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menu3D_object_triggered(QAction *action) {
+    updateSubSelection(ui->menu3D_object, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::Objects3D)), action);
 }
 
 // -------------------------------------------------------

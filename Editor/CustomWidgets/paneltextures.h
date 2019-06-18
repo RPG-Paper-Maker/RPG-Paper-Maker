@@ -52,6 +52,7 @@ public:
     QString createlabelText();
     void showAutotiles(SystemTileset *tileset);
     void showSpriteWalls(SystemTileset *tileset);
+    void showObjects3D(SystemTileset *tileset);
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
 
 private:

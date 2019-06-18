@@ -57,6 +57,8 @@ QStandardItemModel* SystemTileset::model(PictureKind kind) const {
         return modelSpriteWalls();
     case PictureKind::Reliefs:
         return modelReliefs();
+    case PictureKind::Object3D:
+        return model3DObjects();
     default:
         return nullptr;
     }
