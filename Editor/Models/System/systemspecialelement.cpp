@@ -69,16 +69,100 @@ SystemSpecialElement::~SystemSpecialElement()
     delete m_collisionCustomID;
 }
 
-SystemPicture * SystemSpecialElement::picture() const {
-    return nullptr;
+ShapeKind SystemSpecialElement::shapeKind() const {
+    return m_shapeKind;
+}
+
+void SystemSpecialElement::setShapeKind(ShapeKind shape) {
+    m_shapeKind = shape;
+}
+
+SuperListItem * SystemSpecialElement::objID() const {
+    return m_objID;
+}
+
+SuperListItem * SystemSpecialElement::mtlID() const {
+    return m_mtlID;
 }
 
 void SystemSpecialElement::setPictureID(int id) {
     m_pictureID = id;
 }
 
-SuperListItem * SystemSpecialElement::objID() const {
-    return m_objID;
+ObjectCollisionKind SystemSpecialElement::collisionKind() const {
+    return m_collisionKind;
+}
+
+void SystemSpecialElement::setCollisionKind(ObjectCollisionKind collisionKind) {
+    m_collisionKind = collisionKind;
+}
+
+SuperListItem * SystemSpecialElement::collisionCustomID() const {
+    return m_collisionCustomID;
+}
+
+bool SystemSpecialElement::location() const {
+    return m_location;
+}
+
+void SystemSpecialElement::setLocation(bool location) {
+    m_location = location;
+}
+
+double SystemSpecialElement::scale() const {
+    return m_scale;
+}
+
+void SystemSpecialElement::setScale(double scale) {
+    m_scale = scale;
+}
+
+int SystemSpecialElement:: widthSquare() const {
+    return m_widthSquare;
+}
+
+void SystemSpecialElement::setWidthSquare(int ws) {
+    m_widthSquare = ws;
+}
+
+int SystemSpecialElement::widthPixel() const {
+    return m_widthPixel;
+}
+
+void SystemSpecialElement::setWidthPixel(int wp) {
+    m_widthPixel = wp;
+}
+
+int SystemSpecialElement::heightSquare() const {
+    return m_heightSquare;
+}
+
+void SystemSpecialElement::setHeightSquare(int hs) {
+    m_heightSquare = hs;
+}
+
+int SystemSpecialElement::heightPixel() const {
+    return m_heightPixel;
+}
+
+void SystemSpecialElement::setHeightPixel(int hp) {
+    m_heightPixel = hp;
+}
+
+int SystemSpecialElement::depthSquare() const {
+    return m_depthSquare;
+}
+
+void SystemSpecialElement::setDepthSquare(int ds) {
+    m_depthSquare = ds;
+}
+
+int SystemSpecialElement::depthPixel() const {
+    return m_depthPixel;
+}
+
+void SystemSpecialElement::setDepthPixel(int dp) {
+    m_depthPixel = dp;
 }
 
 // -------------------------------------------------------
@@ -115,6 +199,24 @@ void SystemSpecialElement::updateGenericObjectName(SuperListItem *obj,
 
 // -------------------------------------------------------
 
+SystemPicture* SystemSpecialElement::pictureByKind(PictureKind kind) const {
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(kind)->invisibleRootItem(),
+        m_pictureID));
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+SystemPicture * SystemSpecialElement::picture() const {
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemSpecialElement::createCopy() const{
     SystemSpecialElement* super = new SystemSpecialElement;
     super->setCopy(*this);
@@ -147,18 +249,6 @@ void SystemSpecialElement::setCopy(const SystemSpecialElement& super) {
 
 // -------------------------------------------------------
 
-SystemPicture* SystemSpecialElement::pictureByKind(PictureKind kind) const {
-    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
-        ->project()->picturesDatas()->model(kind)->invisibleRootItem(),
-        m_pictureID));
-}
-
-// -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
-
 void SystemSpecialElement::read(const QJsonObject &json){
     SuperListItem::read(json);
 
@@ -179,13 +269,10 @@ void SystemSpecialElement::read(const QJsonObject &json){
     if (json.contains(JSON_COLLISION_KIND)) {
         m_collisionKind = static_cast<ObjectCollisionKind>(json[
             JSON_COLLISION_KIND].toInt());
-        if (m_collisionKind == ObjectCollisionKind::Custom) {
-            if (json.contains(JSON_COLLISION_CUSTOM_ID)) {
-                m_collisionCustomID->setId(json[JSON_COLLISION_CUSTOM_ID]
-                    .toInt());
-                updateCustomCollisionName();
-            }
-        }
+    }
+    if (json.contains(JSON_COLLISION_CUSTOM_ID)) {
+        m_collisionCustomID->setId(json[JSON_COLLISION_CUSTOM_ID].toInt());
+        updateCustomCollisionName();
     }
     if (json.contains(JSON_LOCATION)) {
         m_location = json[JSON_LOCATION].toBool();
@@ -218,14 +305,16 @@ void SystemSpecialElement::read(const QJsonObject &json){
 void SystemSpecialElement::write(QJsonObject &json) const{
     SuperListItem::write(json);
 
-    if (m_shapeKind == ShapeKind::Box) {
+    if (m_shapeKind != ShapeKind::Box) {
         json[JSON_SHAPE_KIND] = static_cast<int>(m_shapeKind);
     }
-    if (m_objID->id() != -1) {
-        json[JSON_OBJ_ID] = m_objID->id();
-    }
-    if (m_mtlID->id() != -1) {
-        json[JSON_MTL_ID] = m_mtlID->id();
+    if (m_shapeKind == ShapeKind::Custom) {
+        if (m_objID->id() != -1) {
+            json[JSON_OBJ_ID] = m_objID->id();
+        }
+        if (m_mtlID->id() != -1) {
+            json[JSON_MTL_ID] = m_mtlID->id();
+        }
     }
     if (m_pictureID != -1) {
         json[JSON_PIC_ID] = m_pictureID;
@@ -241,25 +330,29 @@ void SystemSpecialElement::write(QJsonObject &json) const{
     if (!m_location) {
         json[JSON_LOCATION] = m_location;
     }
-    if (m_scale != 1.0) {
-        json[JSON_SCALE] = m_scale;
+    if (m_shapeKind == ShapeKind::Custom) {
+        if (m_scale != 1.0) {
+            json[JSON_SCALE] = m_scale;
+        }
     }
-    if (m_widthSquare != 1) {
-        json[JSON_WIDTH_SQUARE] = m_widthSquare;
-    }
-    if (m_widthPixel != 0) {
-        json[JSON_WIDTH_PIXEL] = m_widthPixel;
-    }
-    if (m_heightSquare != 1) {
-        json[JSON_HEIGHT_SQUARE] = m_heightSquare;
-    }
-    if (m_heightPixel != 0) {
-        json[JSON_HEIGHT_PIXEL] = m_heightPixel;
-    }
-    if (m_depthSquare != 1) {
-        json[JSON_DEPTH_SQUARE] = m_depthSquare;
-    }
-    if (m_depthPixel != 0) {
-        json[JSON_DEPTH_PIXEL] = m_depthPixel;
+    if (m_shapeKind == ShapeKind::Box) {
+        if (m_widthSquare != 1) {
+            json[JSON_WIDTH_SQUARE] = m_widthSquare;
+        }
+        if (m_widthPixel != 0) {
+            json[JSON_WIDTH_PIXEL] = m_widthPixel;
+        }
+        if (m_heightSquare != 1) {
+            json[JSON_HEIGHT_SQUARE] = m_heightSquare;
+        }
+        if (m_heightPixel != 0) {
+            json[JSON_HEIGHT_PIXEL] = m_heightPixel;
+        }
+        if (m_depthSquare != 1) {
+            json[JSON_DEPTH_SQUARE] = m_depthSquare;
+        }
+        if (m_depthPixel != 0) {
+            json[JSON_DEPTH_PIXEL] = m_depthPixel;
+        }
     }
 }

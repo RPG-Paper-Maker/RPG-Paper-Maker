@@ -51,24 +51,44 @@ public:
         bool location = true, double scale = 1.0, int wS = 1, int wP = 0, int hS
         = 1, int hP = 0, int dS = 1, int dP = 0);
     virtual ~SystemSpecialElement();
-    virtual SystemPicture* picture() const;
-    void setPictureID(int id);
+
+    ShapeKind shapeKind() const;
+    void setShapeKind(ShapeKind shape);
     SuperListItem * objID() const;
+    SuperListItem * mtlID() const;
+    void setPictureID(int id);
+    ObjectCollisionKind collisionKind() const;
+    void setCollisionKind(ObjectCollisionKind collisionKind);
+    SuperListItem *collisionCustomID() const;
+    bool location() const;
+    void setLocation(bool location);
+    double scale() const;
+    void setScale(double scale);
+    int widthSquare() const;
+    void setWidthSquare(int ws);
+    int widthPixel() const;
+    void setWidthPixel(int wp);
+    int heightSquare() const;
+    void setHeightSquare(int hs);
+    int heightPixel() const;
+    void setHeightPixel(int hp);
+    int depthSquare() const;
+    void setDepthSquare(int ds);
+    int depthPixel() const;
+    void setDepthPixel(int dp);
 
     void updateObjName();
     void updateMtlName();
     void updateCustomCollisionName();
     void updateGenericObjectName(SuperListItem *obj, CustomShapeKind kind);
 
+    virtual SystemPicture* picture() const;
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemSpecialElement &super);
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    SystemPicture* pictureByKind(PictureKind kind) const;
-
     ShapeKind m_shapeKind;
     SuperListItem *m_objID;
     SuperListItem *m_mtlID;
@@ -83,6 +103,8 @@ protected:
     int m_heightPixel;
     int m_depthSquare;
     int m_depthPixel;
+
+    SystemPicture* pictureByKind(PictureKind kind) const;
 };
 
 Q_DECLARE_METATYPE(SystemSpecialElement)

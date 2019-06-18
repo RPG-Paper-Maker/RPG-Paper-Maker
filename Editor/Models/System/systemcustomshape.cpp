@@ -74,6 +74,8 @@ QString SystemCustomShape::getLocalFolder(CustomShapeKind kind) {
         return RPM::PATH_OBJ;
     case CustomShapeKind::MTL:
         return RPM::PATH_MTL;
+    case CustomShapeKind::Collisions:
+        return RPM::PATH_COLLISIONS;
     default:
         throw std::invalid_argument("Kind of shape path not implemented");
     }
@@ -87,6 +89,8 @@ QString SystemCustomShape::getShapeTitle(CustomShapeKind kind) {
         return "OBJ";
     case CustomShapeKind::MTL:
         return "MTL";
+    case CustomShapeKind::Collisions:
+        return "Collisions";
     default:
         return "";
     }
@@ -97,6 +101,7 @@ QString SystemCustomShape::getShapeTitle(CustomShapeKind kind) {
 QString SystemCustomShape::getShapeExtension(CustomShapeKind kind) {
     switch(kind) {
     case CustomShapeKind::OBJ:
+    case CustomShapeKind::Collisions:
         return ".obj";
     case CustomShapeKind::MTL:
         return ".mtl";

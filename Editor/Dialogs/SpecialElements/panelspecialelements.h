@@ -36,21 +36,37 @@ public:
     explicit PanelSpecialElements(QWidget *parent = nullptr);
     ~PanelSpecialElements();
 
-    void initialize(QStandardItemModel* model, PictureKind kind);
+    void initialize(QStandardItemModel *model, PictureKind kind);
     void update(SystemSpecialElement *sys);
     int currentIndex() const;
     PanelSuperList* superList() const;
-    void hideObject3D();
-    void showObject3D();
 
 private:
     Ui::PanelSpecialElements *ui;
-    QStandardItemModel* m_model;
+    QList<QSize> m_spacersSize;
+    QStandardItemModel *m_model;
     PictureKind m_kind;
+
+    void hideObject3D();
+    void showObject3D();
+    void showBox();
+    void showCustomObject();
+    void showCustomObjectCollision(bool b);
+    SystemSpecialElement * currentElement() const;
 
 private slots:
     void on_pageSelected(QModelIndex index, QModelIndex);
-    void on_pictureChanged(SystemPicture* picture);
+    void on_comboBoxShape_currentIndexChanged(int index);
+    void on_pictureChanged(SystemPicture *picture);
+    void on_comboBoxCollision_currentIndexChanged(int index);
+    void on_comboBoxLocation_currentIndexChanged(int index);
+    void on_doubleSpinBoxScale_valueChanged(double d);
+    void on_spinBoxSquaresWidth_valueChanged(int i);
+    void on_spinBoxPixelsWidth_valueChanged(int i);
+    void on_spinBoxSquaresHeight_valueChanged(int i);
+    void on_spinBoxPixelsHeight_valueChanged(int i);
+    void on_spinBoxSquaresDepth_valueChanged(int i);
+    void on_spinBoxPixelsDepth_valueChanged(int i);
 };
 
 #endif // PANELSPECIALELEMENTS_H

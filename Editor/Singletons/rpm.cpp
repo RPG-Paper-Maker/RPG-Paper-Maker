@@ -117,6 +117,8 @@ const QString RPM::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEf
 const QString RPM::PATH_SHAPES = Common::pathCombine("Content", "Shapes");
 const QString RPM::PATH_OBJ = Common::pathCombine(PATH_SHAPES, "OBJ");
 const QString RPM::PATH_MTL = Common::pathCombine(PATH_SHAPES, "MTL");
+const QString RPM::PATH_COLLISIONS = Common::pathCombine(PATH_SHAPES,
+    "Collisions");
 
 const QString RPM::pathEngineSettings =
         Common::pathCombine("Content", "engineSettings.json");

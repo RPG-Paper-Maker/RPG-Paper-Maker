@@ -125,6 +125,7 @@ public:
     const static QString PATH_SHAPES;
     const static QString PATH_OBJ;
     const static QString PATH_MTL;
+    const static QString PATH_COLLISIONS;
     const static QString pathEngineSettings;
     const static QString fileMapInfos;
     const static QString fileMapObjects;
