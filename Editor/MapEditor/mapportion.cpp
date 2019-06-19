@@ -12,6 +12,11 @@
 #include "mapportion.h"
 #include "rpm.h"
 
+const QString MapPortion::JSON_LANDS = "lands";
+const QString MapPortion::JSON_SPRITES = "sprites";
+const QString MapPortion::JSON_OBJECT_3D = "objs3d";
+const QString MapPortion::JSON_OBJECT = "objs";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -22,6 +27,7 @@ MapPortion::MapPortion(Portion &globalPortion) :
     m_globalPortion(globalPortion),
     m_lands(new Lands),
     m_sprites(new Sprites),
+    m_objects3D(new Objects3D),
     m_mapObjects(new MapObjects),
     m_isEmpty(true)
 {
@@ -32,6 +38,7 @@ MapPortion::~MapPortion()
 {
     delete m_lands;
     delete m_sprites;
+    delete m_objects3D;
     delete m_mapObjects;
 
     clearPreview();
@@ -64,9 +71,10 @@ void MapPortion::updateEmpty() {
 
     m_lands->updateEmpty(previewSquare);
     m_sprites->updateEmpty(previewSquare);
+    m_objects3D->updateEmpty(previewSquare);
     m_mapObjects->updateEmpty();
-    m_isEmpty = m_lands->isEmpty() && m_sprites->isEmpty() && m_mapObjects
-        ->isEmpty() && previewSquare;
+    m_isEmpty = m_lands->isEmpty() && m_sprites->isEmpty() && m_objects3D
+        ->isEmpty() && m_mapObjects->isEmpty() && previewSquare;
 }
 
 // -------------------------------------------------------
@@ -75,7 +83,7 @@ void MapPortion::updateEmpty() {
 //
 // -------------------------------------------------------
 
-LandDatas* MapPortion::getLand(Position& p){
+LandDatas* MapPortion::getLand(Position& p) {
     return m_lands->getLand(p);
 }
 
@@ -146,6 +154,35 @@ bool MapPortion::deleteSpriteWall(Position &position,
                                   MapEditorSubSelectionKind &previousType)
 {
     return m_sprites->deleteSpriteWall(position, previous, previousType);
+}
+
+// -------------------------------------------------------
+
+bool MapPortion::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
+    Object3DDatas *object3D, QJsonObject &previous, MapEditorSubSelectionKind
+    &previousType)
+{
+    return m_objects3D->addObject3D(portionsOverflow, p, object3D, previous,
+        previousType);
+}
+
+// -------------------------------------------------------
+
+bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
+    QList<QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType
+    , QList<Position> &positions)
+{
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+    bool changed = m_objects3D->deleteObject3D(portionsOverflow, p, prev, kind);
+
+    if (changed) {
+        previous.append(prev);
+        previousType.append(kind);
+        positions.append(p);
+    }
+
+    return changed;
 }
 
 // -------------------------------------------------------
@@ -226,6 +263,12 @@ void MapPortion::removeSpritesOut(MapProperties& properties) {
 
 // -------------------------------------------------------
 
+void MapPortion::removeObjects3DOut(MapProperties& properties) {
+    m_objects3D->removeObjects3DOut(properties);
+}
+
+// -------------------------------------------------------
+
 void MapPortion::removeObjectsOut(QList<int> &listDeletedObjectsIDs,
                                   MapProperties& properties)
 {
@@ -279,6 +322,19 @@ MapElement* MapPortion::updateRaycastingSprites(int squareSize,
 
 // -------------------------------------------------------
 
+MapElement* MapPortion::updateRaycastingObjects3D(int squareSize,
+                                                float& finalDistance,
+                                                Position& finalPosition,
+                                                QRay3D &ray,
+                                                double cameraHAngle,
+                                                bool layerOn)
+{
+    return m_objects3D->updateRaycasting(squareSize, finalDistance,
+        finalPosition, ray, cameraHAngle, layerOn);
+}
+
+// -------------------------------------------------------
+
 MapElement* MapPortion::updateRaycastingObjects(int squareSize, float&
     finalDistance, Position &finalPosition, QRay3D& ray)
 {
@@ -309,6 +365,27 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
 
 // -------------------------------------------------------
 
+MapElement* MapPortion::updateRaycastingOverflowObject3D(int squareSize,
+                                                        Position& position,
+                                                        float &finalDistance,
+                                                        Position &finalPosition,
+                                                        QRay3D& ray,
+                                                        double cameraHAngle)
+{
+    Object3DDatas *object3D = m_objects3D->object3DAt(position);
+
+    if (m_objects3D->updateRaycastingAt(position, object3D, squareSize,
+                                      finalDistance, finalPosition, ray,
+                                      cameraHAngle))
+    {
+        return object3D;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
 MapElement* MapPortion::getMapElementAt(Position& position,
                                         MapEditorSelectionKind kind,
                                         MapEditorSubSelectionKind subKind)
@@ -318,6 +395,8 @@ MapElement* MapPortion::getMapElementAt(Position& position,
         return m_lands->getMapElementAt(position, subKind);
     case MapEditorSelectionKind::Sprites:
         return m_sprites->getMapElementAt(position, subKind);
+    case MapEditorSelectionKind::Objects3D:
+        return m_objects3D->getMapElementAt(position);
     default:
         return nullptr;
     }
@@ -333,6 +412,8 @@ const
         return m_lands->getLastLayerAt(position);
     case MapEditorSelectionKind::Sprites:
         return m_sprites->getLastLayerAt(position);
+    case MapEditorSelectionKind::Objects3D:
+        return m_objects3D->getLastLayerAt(position);
     default:
         return position.layer();
     }
@@ -355,6 +436,7 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
                                   squareSize, tileset->width(),
                                   tileset->height());
+    m_objects3D->initializeVertices(m_previewSquares, m_previewDelete);
     m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
 
@@ -374,6 +456,7 @@ void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
 {
     m_lands->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
+    m_objects3D->initializeGL(programStatic);
     initializeGLObjects(programStatic, programFace);
 }
 
@@ -387,9 +470,10 @@ void MapPortion::initializeGLObjects(QOpenGLShaderProgram *programStatic,
 
 // -------------------------------------------------------
 
-void MapPortion::updateGL(){
+void MapPortion::updateGL() {
     m_lands->updateGL();
     m_sprites->updateGL();
+    m_objects3D->updateGL();
     updateGLObjects();
 }
 
@@ -442,6 +526,14 @@ void MapPortion::paintFaceSprites(){
 
 // -------------------------------------------------------
 
+void MapPortion::paintObjects3D(int textureID) {
+    if (!m_objects3D->isEmpty()) {
+        m_objects3D->paintGL(textureID);
+    }
+}
+
+// -------------------------------------------------------
+
 void MapPortion::paintObjectsStaticSprites(int textureID,
                                            QOpenGLTexture* texture)
 {
@@ -474,30 +566,36 @@ void MapPortion::paintObjectsSquares(){
 //
 // -------------------------------------------------------
 
-void MapPortion::read(const QJsonObject & json){
-    if (json.contains("lands")){
-        m_lands->read(json["lands"].toObject());
-        m_sprites->read(json["sprites"].toObject());
-        m_mapObjects->read(json["objs"].toObject());
+void MapPortion::read(const QJsonObject &json) {
+    if (json.contains(JSON_LANDS)) {
+        m_lands->read(json[JSON_LANDS].toObject());
+        m_sprites->read(json[JSON_SPRITES].toObject());
+        m_objects3D->read(json[JSON_OBJECT_3D].toObject());
+        m_mapObjects->read(json[JSON_OBJECT].toObject());
     }
 }
 
 // -------------------------------------------------------
 
-void MapPortion::write(QJsonObject & json) const{
+void MapPortion::write(QJsonObject &json) const {
     QJsonObject obj;
 
     // Floors
     m_lands->write(obj);
-    json["lands"] = obj;
+    json[JSON_LANDS] = obj;
 
     // Sprites
     obj = QJsonObject();
     m_sprites->write(obj);
-    json["sprites"] = obj;
+    json[JSON_SPRITES] = obj;
+
+    // Objects 3D
+    obj = QJsonObject();
+    m_objects3D->write(obj);
+    json[JSON_OBJECT_3D] = obj;
 
     // Map objects
     obj = QJsonObject();
     m_mapObjects->write(obj);
-    json["objs"] = obj;
+    json[JSON_OBJECT] = obj;
 }

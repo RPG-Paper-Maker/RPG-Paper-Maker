@@ -589,6 +589,8 @@ void MainWindow::on_action3D_objects_triggered() {
         project->writeSpecialsDatas();
     else
         project->readSpecialsDatas();
+
+    updateTextures();
 }
 
 // -------------------------------------------------------

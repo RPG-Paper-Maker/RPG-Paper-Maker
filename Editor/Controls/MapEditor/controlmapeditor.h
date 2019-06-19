@@ -151,6 +151,11 @@ public:
     void removeSpriteWall(DrawKind drawKind);
     void eraseSprite(Position &p, bool undoRedo = false);
     void eraseSpriteWall(Position &position, bool undoRedo = false);
+    void addObject3D(Position &p, int specialID);
+    void stockObject3D(Position &p, Object3DDatas *object3D, bool undoRedo =
+        false);
+    void removeObject3D(Position &p);
+    void eraseObject3D(Position &p, bool undoRedo = false);
     void setCursorObjectPosition(Position &p);
     void showObjectMenuContext();
     void defineAsHero();
@@ -230,15 +235,18 @@ protected:
     Position m_positionOnPlaneWallIndicator;
     Position m_positionOnLand;
     Position m_positionOnSprite;
+    Position m_positionOnObject3D;
     Position m_positionRealOnSprite;
     Position m_positionOnObject;
     QVector3D *m_positionStart;
     MapElement *m_elementOnLand;
     MapElement *m_elementOnSprite;
+    MapElement *m_elementOnObject3D;
     MapElement *m_elementOnObject;
     float m_distancePlane;
     float m_distanceLand;
     float m_distanceSprite;
+    float m_distanceObject3D;
     float m_distanceObject;
     Position m_positionPreviousPreview;
     QSet<MapPortion *> m_portionsPreviousPreview;

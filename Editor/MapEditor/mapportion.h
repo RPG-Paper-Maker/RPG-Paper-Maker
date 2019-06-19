@@ -14,6 +14,7 @@
 
 #include "lands.h"
 #include "sprites.h"
+#include "objects3d.h"
 #include "mapobjects.h"
 #include "systemcommonobject.h"
 #include <QOpenGLTexture>
@@ -30,8 +31,14 @@
 class MapPortion : public Serializable
 {
 public:
+    const static QString JSON_LANDS;
+    const static QString JSON_SPRITES;
+    const static QString JSON_OBJECT_3D;
+    const static QString JSON_OBJECT;
+
     MapPortion(Portion& globalPortion);
     virtual ~MapPortion();
+
     void getGlobalPortion(Portion& portion);
     MapObjects* mapObjects() const;
     bool isVisibleLoaded() const;
@@ -59,6 +66,12 @@ public:
                        MapEditorSubSelectionKind &previousType);
     bool deleteSpriteWall(Position& position, QJsonObject &previous,
                           MapEditorSubSelectionKind &previousType);
+    bool addObject3D(QSet<Portion> &portionsOverflow, Position &p, Object3DDatas
+        *object3D, QJsonObject &previous, MapEditorSubSelectionKind
+        &previousType);
+    bool deleteObject3D(QSet<Portion> &portionsOverflow, Position &p, QList<
+        QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType,
+        QList<Position> &positions);
     void updateAutotiles(Position& position, QSet<MapPortion*> &update,
                          QSet<MapPortion*> &save,
                          QSet<MapPortion*> &previousPreview);
@@ -73,6 +86,7 @@ public:
     void removeOverflow(Position& p);
     void removeLandOut(MapProperties& properties);
     void removeSpritesOut(MapProperties& properties);
+    void removeObjects3DOut(MapProperties& properties);
     void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
                           MapProperties& properties);
     void clearPreview();
@@ -84,10 +98,20 @@ public:
                                         Position &finalPosition,
                                         QRay3D& ray, double cameraHAngle,
                                         bool layerOn);
+    MapElement* updateRaycastingObjects3D(int squareSize, float& finalDistance,
+                                        Position &finalPosition,
+                                        QRay3D& ray, double cameraHAngle,
+                                        bool layerOn);
     MapElement* updateRaycastingObjects(int squareSize, float& finalDistance,
                                         Position &finalPosition,
                                         QRay3D& ray);
     MapElement* updateRaycastingOverflowSprite(int squareSize,
+                                               Position& position,
+                                               float &finalDistance,
+                                               Position &finalPosition,
+                                               QRay3D& ray,
+                                               double cameraHAngle);
+    MapElement* updateRaycastingOverflowObject3D(int squareSize,
                                                Position& position,
                                                float &finalDistance,
                                                Position &finalPosition,
@@ -116,6 +140,7 @@ public:
     void paintSprites();
     void paintSpritesWalls(int textureID);
     void paintFaceSprites();
+    void paintObjects3D(int textureID);
     void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsSquares();
@@ -125,9 +150,10 @@ public:
 
 private:
     Portion m_globalPortion;
-    Lands* m_lands;
-    Sprites* m_sprites;
-    MapObjects* m_mapObjects;
+    Lands *m_lands;
+    Sprites *m_sprites;
+    Objects3D *m_objects3D;
+    MapObjects *m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;
     QList<Position> m_previewDelete;
     bool m_isVisible;

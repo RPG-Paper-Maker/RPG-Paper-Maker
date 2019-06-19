@@ -97,15 +97,9 @@ void PanelTextures::showTileset() {
 // -------------------------------------------------------
 
 int PanelTextures::getID() const {
-    if (m_kind != PictureKind::None) {
-        SystemTileset *tileset = RPM::get()->project()->currentMap()
-            ->mapProperties()->tileset();
-        int index = ui->comboBox->currentIndex();
-
-        return SuperListItem::getIdByIndex(tileset->model(m_kind), index);
-    }
-
-    return -1;
+    return m_kind == PictureKind::None ? -1 :SuperListItem::getIdByIndex(RPM
+        ::get()->project()->currentMap()->mapProperties()->tileset()->model(
+        m_kind), ui->comboBox->currentIndex());
 }
 
 // -------------------------------------------------------

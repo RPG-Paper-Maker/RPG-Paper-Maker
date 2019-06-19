@@ -1,0 +1,503 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
+
+    RPG Paper Maker engine is under LGPL-3 license.
+
+    Commercial license for commercial use of your games:
+        https://creativecommons.org/licenses/by-nc/4.0/.
+
+    See more information here: http://rpg-paper-maker.com/index.php/downloads.
+*/
+
+#include "objects3d.h"
+#include "map.h"
+#include "rpm.h"
+
+// -------------------------------------------------------
+//
+//
+//  ---------- Objects3DGL
+//
+//
+// -------------------------------------------------------
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+Objects3DGL::Objects3DGL() :
+    m_count(0),
+    m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
+    m_indexBuffer(QOpenGLBuffer::IndexBuffer),
+    m_program(nullptr)
+{
+
+}
+
+Objects3DGL::~Objects3DGL()
+{
+
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void Objects3DGL::initializeVertices(Position &position, Object3DDatas *object3D)
+{
+    // TODO
+}
+
+// -------------------------------------------------------
+
+void Objects3DGL::initializeGL(QOpenGLShaderProgram* program) {
+    if (m_program == nullptr){
+        initializeOpenGLFunctions();
+
+        // Programs
+        m_program = program;
+    }
+}
+
+// -------------------------------------------------------
+
+void Objects3DGL::updateGL() {
+    Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
+        m_vao, m_program);
+}
+
+// -------------------------------------------------------
+
+void Objects3DGL::paintGL(){
+    m_vao.bind();
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
+    m_vao.release();
+}
+
+// -------------------------------------------------------
+//
+//
+//  ---------- Objects3D
+//
+//
+// -------------------------------------------------------
+
+const QString Objects3D::JSON_ALL = "a";
+const QString Objects3D::JSON_OVERFLOW = "o";
+
+// -------------------------------------------------------
+//
+//  CONSTRUCTOR / DESTRUCTOR / GET / SET
+//
+// -------------------------------------------------------
+
+Objects3D::Objects3D() {
+
+}
+
+Objects3D::~Objects3D()
+{
+    QHash<Position, Object3DDatas*>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        delete *i;
+    }
+    QHash<int, Objects3DGL*>::iterator j;
+    for (j = m_allGL.begin(); j != m_allGL.end(); j++) {
+        delete *j;
+    }
+}
+
+bool Objects3D::isEmpty() const{
+    return m_isEmpty;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void Objects3D::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
+    &p, Object3DDatas *object3D)
+{
+    // TODO
+}
+
+// -------------------------------------------------------
+
+bool Objects3D::contains(Position &position) const {
+    return m_all.contains(position);
+}
+
+// -------------------------------------------------------
+
+void Objects3D::addOverflow(Position &p) {
+    m_overflow += p;
+}
+
+// -------------------------------------------------------
+
+void Objects3D::removeOverflow(Position &p) {
+    m_overflow -= p;
+}
+
+// -------------------------------------------------------
+
+void Objects3D::updateEmpty(bool previewSquare) {
+    m_isEmpty = m_all.isEmpty() && m_overflow.isEmpty() && previewSquare;
+}
+
+// -------------------------------------------------------
+
+void Objects3D::changePosition(Position& position, Position& newPosition) {
+    Object3DDatas *object3D;
+
+    object3D = m_all.value(position);
+    m_all.remove(position);
+    m_all.insert(newPosition, object3D);
+}
+
+// -------------------------------------------------------
+
+Object3DDatas * Objects3D::object3DAt(Position &position) const {
+    return m_all.value(position);
+}
+
+// -------------------------------------------------------
+
+void Objects3D::setObject3D(QSet<Portion> &portionsOverflow, Position &p,
+    Object3DDatas *object3D)
+{
+    m_all[p] = object3D;
+
+    // Getting overflowing portions
+    getSetPortionsOverflow(portionsOverflow, p, object3D);
+
+    // Adding to overflowing
+    addRemoveOverflow(portionsOverflow, p, true);
+}
+
+// -------------------------------------------------------
+
+void Objects3D::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
+                                bool add)
+{
+    Map* map = RPM::get()->project()->currentMap();
+    for (QSet<Portion>::iterator i = portionsOverflow.begin(); i !=
+            portionsOverflow.end(); i++)
+    {
+        Portion portion = *i;
+        if (map->isPortionInGrid(portion)) {
+            MapPortion* mapPortion = map->mapPortionFromGlobal(portion);
+            bool write = false;
+            if (mapPortion == nullptr) {
+                write = true;
+                mapPortion = map->loadPortionMap(portion.x(), portion.y(),
+                    portion.z());
+            }
+            if (add) {
+                mapPortion->addOverflow(p);
+            } else {
+                mapPortion->removeOverflow(p);
+            }
+            if (write) {
+                map->savePortionMap(mapPortion);
+                delete mapPortion;
+            }
+        }
+        else {
+            if (add) {
+                map->addOverflow(p, portion);
+            } else {
+                map->removeOverflow(p, portion);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+Object3DDatas * Objects3D::removeObject3D(QSet<Portion> &portionsOverflow,
+    Position &p)
+{
+    Object3DDatas *object3D = m_all.value(p);
+    if (object3D != nullptr){
+        m_all.remove(p);
+
+        // Getting overflowing portions
+        getSetPortionsOverflow(portionsOverflow, p, object3D);
+
+        // Adding to overflowing
+        addRemoveOverflow(portionsOverflow, p, false);
+
+        return object3D;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Objects3D::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
+    Object3DDatas *object3D, QJsonObject &previousObj, MapEditorSubSelectionKind
+    &previousType)
+{
+    QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
+    Object3DDatas *previousObject3D;
+    bool changed;
+
+    previousObject3D = removeObject3D(portionsOverflowRemove, p);
+    changed = true;
+    if (previousObject3D != nullptr) {
+        previousObject3D->write(previousObj);
+        previousType = previousObject3D->getSubKind();
+        changed = (*previousObject3D) != (*object3D);
+        delete previousObject3D;
+    }
+    setObject3D(portionsOverflowSet, p, object3D);
+
+    // Fusion of sets
+    portionsOverflow.unite(portionsOverflowRemove);
+    portionsOverflow.unite(portionsOverflowSet);
+
+    return changed;
+}
+
+// -------------------------------------------------------
+
+bool Objects3D::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
+    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType)
+{
+    Object3DDatas *previousObject3D;
+    bool changed;
+
+    previousObject3D = removeObject3D(portionsOverflow, p);
+    changed = false;
+    if (previousObject3D != nullptr) {
+        previousObject3D->write(previousObj);
+        previousType = previousObject3D->getSubKind();
+        changed = true;
+        delete previousObject3D;
+    }
+
+    return changed;
+}
+
+// -------------------------------------------------------
+
+void Objects3D::removeObjects3DOut(MapProperties &properties) {
+    QList<Position> list;
+
+    QHash<Position, Object3DDatas *>::iterator i;
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        Position position = i.key();
+
+        if (position.isOutMapPorperties(properties)) {
+            delete i.value();
+            list.push_back(position);
+        }
+    }
+    for (int k = 0; k < list.size(); k++) {
+        m_all.remove(list.at(k));
+    }
+}
+
+// -------------------------------------------------------
+
+MapElement* Objects3D::updateRaycasting(int squareSize, float &finalDistance,
+    Position &finalPosition, QRay3D &ray, double cameraHAngle, bool layerOn)
+{
+    MapElement* element = nullptr;
+
+    for (QHash<Position, Object3DDatas *>::iterator i = m_all.begin(); i !=
+        m_all.end(); i++)
+    {
+        Position position = i.key();
+        Object3DDatas *object3D = i.value();
+        if (this->updateRaycastingAt(position, object3D, squareSize,
+            finalDistance, finalPosition, ray, cameraHAngle))
+        {
+            element = object3D;
+        }
+    }
+
+    // Overflow
+    Map *map = RPM::get()->project()->currentMap();
+    for (QSet<Position>::iterator i = m_overflow.begin(); i != m_overflow.end();
+        i++)
+    {
+        Position position = *i;
+        Portion portion;
+        map->getLocalPortion(position, portion);
+        MapPortion* mapPortion = map->mapPortion(portion);
+        MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
+            squareSize, position, finalDistance, finalPosition, ray,
+            cameraHAngle);
+        if (newElement != nullptr) {
+            element = newElement;
+        }
+    }
+
+    return element;
+}
+
+// -------------------------------------------------------
+
+bool Objects3D::updateRaycastingAt(Position &position, Object3DDatas *object3D,
+    int squareSize, float &finalDistance, Position &finalPosition, QRay3D &ray,
+    double cameraHAngle)
+{
+    // TODO
+
+    return false;
+}
+
+// -------------------------------------------------------
+
+MapElement * Objects3D::getMapElementAt(Position &position) {
+    return this->object3DAt(position);
+}
+
+// -------------------------------------------------------
+
+int Objects3D::getLastLayerAt(Position &position) const {
+    return 0;
+}
+
+// -------------------------------------------------------
+
+void Objects3D::initializeVertices(QHash<Position, MapElement *>
+    &previewSquares, QList<Position> &previewDelete)
+{
+    // Clear
+    for (QHash<int, Objects3DGL *>::iterator i = m_allGL.begin(); i != m_allGL
+        .end(); i++)
+    {
+        delete *i;
+    }
+    m_allGL.clear();
+
+    // Create temp hash for preview
+    QHash<Position, Object3DDatas *> objectsWithPreview(m_all);
+    QHash<Position, MapElement*>::iterator itw;
+    for (itw = previewSquares.begin(); itw != previewSquares.end(); itw++) {
+        MapElement* element = itw.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Object3D) {
+            objectsWithPreview[itw.key()] = reinterpret_cast<Object3DDatas *>(
+                element);
+        }
+    }
+    for (int i = 0; i < previewDelete.size(); i++) {
+        objectsWithPreview.remove(previewDelete.at(i));
+    }
+
+    // Initialize vertices
+    for (QHash<Position, Object3DDatas *>::iterator i = objectsWithPreview
+         .begin(); i != objectsWithPreview.end(); i++)
+    {
+        Position position = i.key();
+        Object3DDatas *object3D = i.value();
+        int id = object3D->textureID();
+        Objects3DGL *objects = m_allGL.value(id);
+        if (objects == nullptr) {
+            objects = new Objects3DGL;
+            m_allGL[id] = objects;
+        }
+        objects->initializeVertices(position, object3D);
+    }
+}
+
+// -------------------------------------------------------
+
+void Objects3D::initializeGL(QOpenGLShaderProgram* programStatic) {
+    QHash<int, Objects3DGL *>::iterator i;
+    for (i = m_allGL.begin(); i != m_allGL.end(); i++) {
+        i.value()->initializeGL(programStatic);
+    }
+}
+
+// -------------------------------------------------------
+
+void Objects3D::updateGL() {
+    QHash<int, Objects3DGL *>::iterator i;
+    for (i = m_allGL.begin(); i != m_allGL.end(); i++) {
+        i.value()->updateGL();
+    }
+}
+
+// -------------------------------------------------------
+
+void Objects3D::paintGL(int textureID) {
+    Objects3DGL *objects = m_allGL.value(textureID);
+    if (objects != nullptr) {
+        objects->paintGL();
+    }
+}
+
+// -------------------------------------------------------
+//
+//  READ / WRITE
+//
+// -------------------------------------------------------
+
+void Objects3D::read(const QJsonObject & json) {
+    QJsonArray tab;
+
+    // All
+    tab = json[JSON_ALL].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        QJsonObject obj = tab.at(i).toObject();
+        Position p;
+        p.read(obj[RPM::JSON_KEY].toArray());
+        QJsonObject objVal = obj[RPM::JSON_VALUE].toObject();
+        Object3DDatas *object3D = new Object3DDatas;
+        object3D->read(objVal);
+        m_all[p] = object3D;
+    }
+
+    // Overflow
+    tab = json[JSON_OVERFLOW].toArray();
+    for (int i = 0; i < tab.size(); i++){
+        QJsonArray tabPosition = tab.at(i).toArray();
+        Position position;
+        position.read(tabPosition);
+        m_overflow += position;
+    }
+}
+
+// -------------------------------------------------------
+
+void Objects3D::write(QJsonObject &json) const {
+    QJsonArray tabAll, tabOverflow;
+
+    // All
+    for (QHash<Position, Object3DDatas *>::const_iterator i = m_all.begin(); i
+         != m_all.end(); i++)
+    {
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        i.key().write(tabKey);
+        QJsonObject obj3D;
+        i.value()->write(obj3D);
+
+        objHash[RPM::JSON_KEY] = tabKey;
+        objHash[RPM::JSON_VALUE] = obj3D;
+        tabAll.append(objHash);
+    }
+    json[JSON_ALL] = tabAll;
+
+    // Overflow
+    for (QSet<Position>::const_iterator i = m_overflow.begin();
+         i != m_overflow.end(); i++)
+    {
+        Position position = *i;
+        QJsonArray tabPosition;
+        position.write(tabPosition);
+        tabOverflow.append(tabPosition);
+    }
+    json[JSON_OVERFLOW] = tabOverflow;
+}

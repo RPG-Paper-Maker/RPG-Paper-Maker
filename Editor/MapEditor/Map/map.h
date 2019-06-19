@@ -195,6 +195,7 @@ private:
     QOpenGLTexture* m_textureTileset;
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
     QHash<int, QOpenGLTexture*> m_texturesSpriteWalls;
+    QHash<int, QOpenGLTexture*> m_texturesObjects3D;
     QList<TextureAutotile*> m_texturesAutotiles;
     QOpenGLTexture* m_textureObjectSquare;
 };

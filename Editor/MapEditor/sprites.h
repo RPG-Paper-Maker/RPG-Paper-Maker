@@ -27,6 +27,7 @@ class SpritesWalls : protected QOpenGLFunctions
 public:
     SpritesWalls();
     virtual ~SpritesWalls();
+
     void initializeVertices(Position& position, SpriteWallDatas* sprite,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* program);

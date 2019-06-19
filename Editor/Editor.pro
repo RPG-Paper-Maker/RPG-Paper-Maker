@@ -283,7 +283,10 @@ HEADERS += \
     CustomWidgets/widgetshape.h \
     Dialogs/dialogshapespreview.h \
     Models/System/systemobject3d.h \
-    Enums/objectcollisionkind.h
+    Enums/objectcollisionkind.h \
+    MapEditor/object3d.h \
+    MapEditor/objects3d.h \
+    MapEditor/object3dbox.h
 
 SOURCES += \
     Dialogs/mainwindow.cpp \
@@ -522,7 +525,10 @@ SOURCES += \
     Models/GameDatas/shapesdatas.cpp \
     CustomWidgets/widgetshape.cpp \
     Dialogs/dialogshapespreview.cpp \
-    Models/System/systemobject3d.cpp
+    Models/System/systemobject3d.cpp \
+    MapEditor/object3d.cpp \
+    MapEditor/objects3d.cpp \
+    MapEditor/object3dbox.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

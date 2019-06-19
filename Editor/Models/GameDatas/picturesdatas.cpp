@@ -112,9 +112,8 @@ void PicturesDatas::setDefaultTitleScreen(QList<QString>& names) {
 void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
     names << "general";
     setDefaultPictures(names, PictureKind::Autotiles);
-    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Autotiles]
-            ->item(1)->data().value<quintptr>();
-    picture->setDefaultAutotiles();
+    reinterpret_cast<SystemPicture *>(m_models[PictureKind::Autotiles]->item(1)
+        ->data().value<quintptr>())->setDefaultAutotiles();
 }
 
 // -------------------------------------------------------
@@ -122,8 +121,6 @@ void PicturesDatas::setDefaultAutotiles(QList<QString>& names) {
 void PicturesDatas::setDefaultBattlers(QList<QString>& names) {
     names << "lucas" << "kate" << "bibi" << "shana" << "wooly";
     setDefaultPictures(names, PictureKind::Battlers);
-    SystemPicture* picture = (SystemPicture*) m_models[PictureKind::Battlers]
-            ->item(1)->data().value<quintptr>();
 }
 
 // -------------------------------------------------------

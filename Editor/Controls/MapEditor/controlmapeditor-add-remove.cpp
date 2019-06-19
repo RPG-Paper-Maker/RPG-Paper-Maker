@@ -10,6 +10,7 @@
 */
 
 #include "controlmapeditor.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 
@@ -40,6 +41,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     // Avoid pointing to a deleted element before the next raycasting
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
+    m_elementOnObject3D = nullptr;
 }
 
 // -------------------------------------------------------
@@ -55,6 +57,9 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             break;
         case MapEditorSelectionKind::Sprites:
             addSprite(p, subSelection, drawKind, layerOn, tileset);
+            break;
+        case MapEditorSelectionKind::Objects3D:
+            addObject3D(p, specialID);
             break;
         default:
             break;
@@ -85,6 +90,11 @@ void ControlMapEditor::remove(MapElement *element, MapEditorSelectionKind select
             MapEditorSubSelectionKind::SpritesWall)
         {
             removeSprite(p, drawKind);
+        }
+        break;
+    case MapEditorSelectionKind::Objects3D:
+        if (element != nullptr) {
+            removeObject3D(p);
         }
         break;
     case MapEditorSelectionKind::Objects:
@@ -318,6 +328,7 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
             for (int i = 0; i < positions.size(); i++)
                 eraseLand(positions[i]);
             eraseLand(p);
+            break;
         case DrawKind::Rectangle:
             break;
         case DrawKind::Pin:
@@ -630,6 +641,130 @@ void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo) {
             }
 
             return;
+        }
+    }
+}
+
+// -------------------------------------------------------
+//
+//  OBJECTS 3D
+//
+// -------------------------------------------------------
+
+void ControlMapEditor::addObject3D(Position &p, int specialID) {
+    QList<Position> positions;
+    Object3DDatas *object3D;
+    SystemObject3D *special;
+
+    special = reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM
+        ::get()->project()->specialElementsDatas()->model(PictureKind::Object3D)
+        ->invisibleRootItem(), specialID));
+    object3D = new Object3DDatas(specialID, special);
+    stockObject3D(p, object3D);
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++) {
+        object3D = new Object3DDatas(specialID, special);
+        stockObject3D(p, object3D);
+    }
+    m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
+    undoRedo)
+{
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
+        Portion portion;
+        MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
+
+            // Add the 3D object
+            QSet<Portion> portionsOverflow;
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind
+                ::None;
+            bool changed = mapPortion->addObject3D(portionsOverflow, p, object3D
+                , previous, previousType);
+            if (changed && m_map->saved()) {
+                setToNotSaved();
+            }
+            if (changed) {
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(m_changes, previous,
+                        previousType, object3D, MapEditorSubSelectionKind
+                        ::Object3D, p);
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
+
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
+
+            return;
+        }
+    }
+
+    delete object3D;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::removeObject3D(Position &p) {
+    QList<Position> positions;
+
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++) {
+        eraseSprite(positions[i]);
+    }
+    eraseSprite(p);
+
+    m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
+        Portion portion;
+        MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
+            QSet<Portion> portionsOverflow;
+            QList<QJsonObject> previous;
+            QList<MapEditorSubSelectionKind> previousType;
+            QList<Position> positions;
+            bool changed = mapPortion->deleteObject3D(portionsOverflow, p,
+                previous, previousType, positions);
+            if (changed && m_map->saved()) {
+                setToNotSaved();
+            }
+            if (changed) {
+                if (!undoRedo) {
+                    for (int i = 0; i < previous.size(); i++) {
+                        m_controlUndoRedo.updateJsonList(m_changes, previous
+                            .at(i), previousType.at(i), nullptr,
+                            MapEditorSubSelectionKind::None, positions.at(i));
+                    }
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
+
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
         }
     }
 }

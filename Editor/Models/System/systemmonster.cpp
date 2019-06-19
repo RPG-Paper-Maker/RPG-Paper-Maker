@@ -167,7 +167,6 @@ void SystemMonster::read(const QJsonObject &json){
     SystemHero::read(json);
     QJsonArray tab;
     QJsonObject obj, objHash;
-    QStandardItem* item;
     QJsonArray jsonRow;
     QList<QStandardItem *> row;
     SystemProgressionTable *table;
@@ -197,8 +196,6 @@ void SystemMonster::write(QJsonObject &json) const{
     QJsonArray tab, tabRow;
     QJsonObject obj, objHash;
     SystemProgressionTable *table;
-    SystemLoot* loot;
-    int j, l;
 
     // Experience
     m_experience->write(obj);

@@ -56,6 +56,7 @@ public:
     void setShapeKind(ShapeKind shape);
     SuperListItem * objID() const;
     SuperListItem * mtlID() const;
+    int pictureID() const;
     void setPictureID(int id);
     ObjectCollisionKind collisionKind() const;
     void setCollisionKind(ObjectCollisionKind collisionKind);

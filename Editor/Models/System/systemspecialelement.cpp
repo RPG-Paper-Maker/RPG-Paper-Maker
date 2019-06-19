@@ -85,6 +85,10 @@ SuperListItem * SystemSpecialElement::mtlID() const {
     return m_mtlID;
 }
 
+int SystemSpecialElement::pictureID() const {
+    return m_pictureID;
+}
+
 void SystemSpecialElement::setPictureID(int id) {
     m_pictureID = id;
 }

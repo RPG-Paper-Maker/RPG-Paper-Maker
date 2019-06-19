@@ -31,9 +31,10 @@ void Map::loadTextures(){
     }
     m_textureTileset = createTexture(imageTileset);
 
-    // Characters && walls
+    // Characters && walls && objects3D
     loadCharactersTextures();
     loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
+    loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
     loadAutotiles();
 
     // Object square
@@ -112,6 +113,7 @@ void Map::loadSpecialPictures(PictureKind kind,
     QStandardItemModel* model = tileset->model(kind);
     QStandardItemModel* modelSpecials = RPM::get()->project()
             ->specialElementsDatas()->model(kind);
+    QOpenGLTexture *texture;
     int id;
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
@@ -119,7 +121,10 @@ void Map::loadSpecialPictures(PictureKind kind,
                     modelSpecials->invisibleRootItem(), id);
         QImage image;
         loadPicture(special->picture(), kind, image);
-        textures[special->id()] = createTexture(image);
+        texture = textures.value(special->pictureID());
+        if (texture == nullptr) {
+            textures[special->pictureID()] = createTexture(image);
+        }
     }
     addEmptyPicture(textures);
 }
