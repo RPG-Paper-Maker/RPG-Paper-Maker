@@ -632,6 +632,9 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         }
         position = m_positionOnLand;
         return nullptr;
+    case MapEditorSelectionKind::Objects3D:
+        position = m_positionOnObject3D;
+        return m_elementOnObject3D;
     case MapEditorSelectionKind::Objects:
         position = m_positionOnObject;
         return m_elementOnObject;
@@ -1132,6 +1135,17 @@ void ControlMapEditor::performUndoRedoAction(MapEditorSubSelectionKind kind,
         }
         else
             eraseSpriteWall(position, true);
+        break;
+    }
+    case MapEditorSubSelectionKind::Object3D:
+    {
+        if (before) {
+            Object3DDatas *object3D = Object3DDatas::instanciateFromJSON(obj);
+            object3D->read(obj);
+            stockObject3D(position, object3D, true);
+        }
+        else
+            eraseObject3D(position, true);
         break;
     }
     case MapEditorSubSelectionKind::Object:

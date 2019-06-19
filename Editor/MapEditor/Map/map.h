@@ -63,8 +63,10 @@ public:
     bool deleteObject(Position& p, MapPortion *mapPortion,
                       QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);
-    void addOverflow(Position& p, Portion& portion);
-    void removeOverflow(Position& p, Portion& portion);
+    void addOverflowSprites(Position& p, Portion& portion);
+    void removeOverflowSprites(Position& p, Portion& portion);
+    void addOverflowObjects3D(Position& p, Portion& portion);
+    void removeOverflowObjects3D(Position& p, Portion& portion);
 
     void initializeCursor(QVector3D *position);
     static void writeNewMap(QString path, MapProperties& properties);

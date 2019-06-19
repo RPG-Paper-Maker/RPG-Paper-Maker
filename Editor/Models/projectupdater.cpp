@@ -475,4 +475,6 @@ void ProjectUpdater::updateVersion_1_2_0() {
     dir.mkpath(RPM::PATH_SHAPES);
     dir.mkpath(RPM::PATH_OBJ);
     dir.mkpath(RPM::PATH_MTL);
+    dir.mkpath(RPM::PATH_COLLISIONS);
+    dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
 }

@@ -77,7 +77,7 @@ void SpritesWalls::updateGL(){
 
 void SpritesWalls::paintGL(){
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
     m_vao.release();
 }
 
@@ -219,9 +219,9 @@ void Sprites::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
                                                  portion.z());
             }
             if (add)
-                mapPortion->addOverflow(p);
+                mapPortion->addOverflowSprites(p);
             else
-                mapPortion->removeOverflow(p);
+                mapPortion->removeOverflowSprites(p);
             if (write) {
                 map->savePortionMap(mapPortion);
                 delete mapPortion;
@@ -229,9 +229,9 @@ void Sprites::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
         }
         else {
             if (add)
-                map->addOverflow(p, portion);
+                map->addOverflowSprites(p, portion);
             else
-                map->removeOverflow(p, portion);
+                map->removeOverflowSprites(p, portion);
         }
     }
 }
@@ -405,11 +405,14 @@ void Sprites::getWallsWithPreview(QHash<Position, SpriteWallDatas *>
     QHash<Position, MapElement*>::iterator itw;
     for (itw = preview.begin(); itw != preview.end(); itw++) {
         MapElement* element = itw.value();
-        if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall)
-            spritesWallWithPreview[itw.key()] = (SpriteWallDatas*) element;
+        if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall) {
+            spritesWallWithPreview[itw.key()] = reinterpret_cast<
+                SpriteWallDatas *>(element);
+        }
     }
-    for (int i = 0; i < previewDelete.size(); i++)
+    for (int i = 0; i < previewDelete.size(); i++) {
         spritesWallWithPreview.remove(previewDelete.at(i));
+    }
 }
 
 // -------------------------------------------------------

@@ -12,9 +12,12 @@
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
+#include <QOpenGLFunctions>
+#include <qray3d.h>
 #include "mapelement.h"
 #include "shapekind.h"
 #include "systemobject3d.h"
+#include "vertex.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +41,19 @@ public:
     bool operator==(const Object3DDatas& other) const;
     bool operator!=(const Object3DDatas& other) const;
 
+    static Object3DDatas * instanciate(int datasID, SystemObject3D *datas);
+    static Object3DDatas * instanciateFromJSON(const QJsonObject &json);
+    static SystemObject3D * readFromJSON(const QJsonObject &json, int &id);
+
+    virtual int width() const = 0;
+    virtual int height() const = 0;
+    virtual int depth() const = 0;
+    virtual int widthPixels() const = 0;
+    virtual int heightPixels() const = 0;
+    virtual int depthPixels() const = 0;
+    virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
+        &indexes, Position &position, int &count) = 0;
+    virtual float intersection(QRay3D& ray) const = 0;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;

@@ -102,6 +102,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::pathTilesets);
     dir.mkpath(RPM::PATH_SPRITE_WALLS);
     dir.mkpath(RPM::PATH_BATTLERS);
+    dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
     dir.mkpath(RPM::PATH_SONGS);
     dir.mkpath(RPM::PATH_MUSICS);
     dir.mkpath(RPM::PATH_BACKGROUND_SOUNDS);
@@ -110,6 +111,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_SHAPES);
     dir.mkpath(RPM::PATH_OBJ);
     dir.mkpath(RPM::PATH_MTL);
+    dir.mkpath(RPM::PATH_COLLISIONS);
 
     // Create the default datas
     Project *previousProject = RPM::get()->project();

@@ -284,7 +284,7 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
 
 // -------------------------------------------------------
 
-void DialogDatas::updateAnimation(SystemAnimation *sysAnimation) {
+void DialogDatas::updateAnimation(SystemAnimation *) {
 
 }
 
@@ -308,7 +308,7 @@ void DialogDatas::initializeStatus(GameDatas *gameDatas) {
 
 // -------------------------------------------------------
 
-void DialogDatas::updateStatus(SystemStatus *sysStatus) {
+void DialogDatas::updateStatus(SystemStatus *) {
 
 }
 

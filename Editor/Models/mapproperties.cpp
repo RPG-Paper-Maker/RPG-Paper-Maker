@@ -53,7 +53,15 @@ MapProperties::~MapProperties()
 {
     QHash<Portion, QSet<Position>*>::iterator i;
     for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
+    {
         delete *i;
+    }
+    for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
+         i++)
+    {
+        delete *i;
+    }
+
     delete m_music;
     delete m_backgroundSound;
     delete m_skyColorID;
@@ -111,33 +119,65 @@ void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
     m_skyColorID = skyColorID;
 }
 
-void MapProperties::addOverflow(Position& p, Portion& portion) {
-    QSet<Position>* portions = m_outOverflowSprites.value(portion);
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void MapProperties::addOverflow(Position& p, Portion& portion, QHash<Portion,
+    QSet<Position>*> &hash)
+{
+    QSet<Position>* portions = hash.value(portion);
 
     if (portions == nullptr) {
         portions = new QSet<Position>;
-        m_outOverflowSprites.insert(portion, portions);
+        hash.insert(portion, portions);
     }
 
     portions->insert(p);
 }
 
-void MapProperties::removeOverflow(Position& p, Portion& portion) {
-    QSet<Position>* portions = m_outOverflowSprites.value(portion);
+// -------------------------------------------------------
+
+void MapProperties::removeOverflow(Position& p, Portion& portion, QHash<Portion,
+    QSet<Position>*> &hash)
+{
+    QSet<Position>* portions = hash.value(portion);
 
     if (portions != nullptr) {
         portions->remove(p);
         if (portions->isEmpty()) {
-            m_outOverflowSprites.remove(portion);
+            hash.remove(portion);
             delete portions;
         }
     }
 }
 
 // -------------------------------------------------------
-//
-//  INTERMEDIARY FUNCTIONS
-//
+
+void MapProperties::addOverflowSprites(Position& p, Portion& portion) {
+    addOverflow(p, portion, m_outOverflowSprites);
+}
+
+// -------------------------------------------------------
+
+void MapProperties::removeOverflowSprites(Position& p, Portion& portion) {
+    removeOverflow(p, portion, m_outOverflowSprites);
+}
+
+// -------------------------------------------------------
+
+void MapProperties::addOverflowObjects3D(Position &p, Portion& portion) {
+    addOverflow(p, portion, m_outOverflowObjects3D);
+}
+
+// -------------------------------------------------------
+
+void MapProperties::removeOverflowObjects3D(Position& p, Portion& portion) {
+    removeOverflow(p, portion, m_outOverflowObjects3D);
+}
+
 // -------------------------------------------------------
 
 bool MapProperties::isInGrid(Position3D& position, int squareSize, int offset)
@@ -212,6 +252,28 @@ void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
 }
 
 // -------------------------------------------------------
+
+void MapProperties::updateRaycastingOverflowObjects3D(Portion& portion, float
+    &finalDistance, Position &finalPosition, QRay3D &ray)
+{
+    Map* map = RPM::get()->project()->currentMap();
+    QSet<Position>* positions = m_outOverflowObjects3D.value(portion);
+    if (positions != nullptr) {
+        QSet<Position>::iterator i;
+        for (i = positions->begin(); i != positions->end(); i++) {
+            Position position = *i;
+            Portion portion;
+            map->getLocalPortion(position, portion);
+            MapPortion* mapPortion = map->mapPortion(portion);
+            if (mapPortion != nullptr) {
+                mapPortion->updateRaycastingOverflowObject3D(position,
+                    finalDistance, finalPosition, ray);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -259,6 +321,23 @@ void MapProperties::read(const QJsonObject &json){
             positions->insert(position);
         }
         m_outOverflowSprites.insert(portion, positions);
+    }
+    tabOverflow = json["of3d"].toArray();
+    for (int i = 0; i < tabOverflow.size(); i++) {
+        QJsonObject objHash = tabOverflow.at(i).toObject();
+        QJsonArray tabKey = objHash["k"].toArray();
+        QJsonArray tabValue = objHash["v"].toArray();
+        Portion portion;
+        portion.read(tabKey);
+        QSet<Position>* positions = new QSet<Position>;
+
+        for (int j = 0; j < tabValue.size(); j++) {
+            QJsonArray tabPosition = tabValue.at(j).toArray();
+            Position position;
+            position.read(tabPosition);
+            positions->insert(position);
+        }
+        m_outOverflowObjects3D.insert(portion, positions);
     }
 }
 
@@ -315,4 +394,27 @@ void MapProperties::write(QJsonObject &json) const{
         tabOverflow.append(objHash);
     }
     json["ofsprites"] = tabOverflow;
+    for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
+         i++)
+    {
+        Portion portion = i.key();
+        QSet<Position>* positions = i.value();
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        QJsonArray tabValue;
+
+        portion.write(tabKey);
+        QSet<Position>::iterator j;
+        for (j = positions->begin(); j != positions->end(); j++) {
+            Position position = *j;
+            QJsonArray tabPosition;
+            position.write(tabPosition);
+            tabValue.append(tabPosition);
+        }
+
+        objHash["k"] = tabKey;
+        objHash["v"] = tabValue;
+        tabOverflow.append(objHash);
+    }
+    json["of3d"] = tabOverflow;
 }

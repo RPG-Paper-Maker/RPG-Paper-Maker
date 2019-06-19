@@ -60,6 +60,7 @@ private:
     PictureKind m_kind;
     int m_currentAutotilesID;
     int m_currentWallsID;
+    int m_currentObjects3DID;
 
     void updateTilesetImage();
     int getCurrentID() const;

@@ -160,6 +160,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
     case EventCommandKind::Last:
         return "";
     }
+
+    return "";
 }
 
 // -------------------------------------------------------

@@ -9,7 +9,7 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#include "object3d.h"
+#include "object3dbox.h"
 #include "rpm.h"
 
 const QString Object3DDatas::JSON_DATAS_ID = "did";
@@ -52,6 +52,41 @@ bool Object3DDatas::operator!=(const Object3DDatas& other) const {
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+Object3DDatas * Object3DDatas::instanciate(int datasID, SystemObject3D *datas) {
+    switch (datas->shapeKind()) {
+    case ShapeKind::Box:
+        return new Object3DBoxDatas(datasID, datas);
+    default:
+        return nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
+Object3DDatas * Object3DDatas::instanciateFromJSON(const QJsonObject &json) {
+    SystemObject3D *datas;
+    int id;
+
+    datas = Object3DDatas::readFromJSON(json, id);
+
+    return Object3DDatas::instanciate(id, datas);
+}
+
+// -------------------------------------------------------
+
+SystemObject3D * Object3DDatas::readFromJSON(const QJsonObject &json, int &id) {
+    id = json[JSON_DATAS_ID].toInt();
+    return reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM::get()
+        ->project()->specialElementsDatas()->model(PictureKind::Object3D)
+        ->invisibleRootItem(), id));
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
@@ -77,10 +112,7 @@ QString Object3DDatas::toString() const {
 void Object3DDatas::read(const QJsonObject &json) {
     MapElement::read(json);
 
-    m_datasID = json[JSON_DATAS_ID].toInt();
-    m_datas = reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM
-        ::get()->project()->specialElementsDatas()->model(PictureKind::Object3D)
-        ->invisibleRootItem(), m_datasID));
+    m_datas = Object3DDatas::readFromJSON(json, m_datasID);
 }
 
 // -------------------------------------------------------

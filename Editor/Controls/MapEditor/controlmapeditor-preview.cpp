@@ -45,7 +45,7 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
             updatePreviewWallSprites(specialID);
     } else {
         updatePreviewOthers(kind, subKind, front, layerOn, tileset,
-            xOffset, yOffset, zOffset);
+            xOffset, yOffset, zOffset, specialID);
     }
 }
 
@@ -151,7 +151,7 @@ void ControlMapEditor::updatePreviewWallSprite(Position &position, int specialID
 
 void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, bool front, bool layerOn, QRect &tileset,
-    int xOffset, int yOffset, int zOffset)
+    int xOffset, int yOffset, int zOffset, int specialID)
 {
     MapElement *element = nullptr;
     Portion portion;
@@ -169,6 +169,12 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         case MapEditorSelectionKind::Sprites:
             element = getCompleteSprite(subKind, xOffset, yOffset, zOffset,
                 tileset, front, layerOn);
+            break;
+        case MapEditorSelectionKind::Objects3D:
+            element = Object3DDatas::instanciate(specialID, reinterpret_cast<
+                SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
+                ->specialElementsDatas()->model(PictureKind::Object3D)
+                ->invisibleRootItem(), specialID)));
             break;
         default:
             break;

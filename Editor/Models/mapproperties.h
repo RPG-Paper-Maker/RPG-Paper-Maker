@@ -53,8 +53,14 @@ public:
     PrimitiveValue * skyColorID() const;
     void setSkyColorID(PrimitiveValue *skyColorID);
     void setBackgroundSound(SystemPlaySong* song);
-    void addOverflow(Position& p, Portion& portion);
-    void removeOverflow(Position& p, Portion& portion);
+    void addOverflow(Position& p, Portion& portion, QHash<Portion, QSet<Position
+        >*> &hash);
+    void removeOverflow(Position& p, Portion& portion, QHash<Portion, QSet<
+        Position>*> &hash);
+    void addOverflowSprites(Position& p, Portion& portion);
+    void removeOverflowSprites(Position& p, Portion& portion);
+    void addOverflowObjects3D(Position& p, Portion& portion);
+    void removeOverflowObjects3D(Position& p, Portion& portion);
 
     bool isInGrid(Position3D& position, int squareSize, int offset) const;
     void getPortionsNumber(int& lx, int& ld, int &lh, int& lz);
@@ -63,6 +69,8 @@ public:
     void updateRaycastingOverflowSprites(Portion& portion, float &finalDistance,
                                          Position &finalPosition, QRay3D& ray,
                                          double cameraHAngle);
+    void updateRaycastingOverflowObjects3D(Portion& portion, float
+        &finalDistance, Position &finalPosition, QRay3D &ray);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -78,6 +86,7 @@ protected:
     PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
     QHash<Portion, QSet<Position>*> m_outOverflowSprites;
+    QHash<Portion, QSet<Position>*> m_outOverflowObjects3D;
 };
 
 #endif // MAPPROPERTIES_H

@@ -88,6 +88,7 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
         QModelIndex)));
     ui->widgetPicture->setKind(kind);
     ui->widgetShapeObj->setKind(CustomShapeKind::OBJ);
+    ui->widgetShapeMtl->setKind(CustomShapeKind::MTL);
     ui->widgetTilesetSettings->setKind(kind);
     if (kind == PictureKind::Walls) {
         ui->widgetTilesetSettings->deleteDirectionTab();

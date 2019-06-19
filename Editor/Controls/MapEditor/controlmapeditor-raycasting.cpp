@@ -42,9 +42,11 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     // Others
     m_distanceLand = 0;
     m_distanceSprite = 0;
+    m_distanceObject3D = 0;
     m_distanceObject = 0;
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
+    m_elementOnObject3D = nullptr;
     m_elementOnObject = nullptr;
     for (int i = portions.size() - 1; i >= 0; i--) {
         Portion portion = portions.at(i);
@@ -54,6 +56,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
             m_map->mapProperties()->updateRaycastingOverflowSprites(globalPortion,
                 m_distanceSprite, m_positionOnSprite, m_ray,
                 m_camera->horizontalAngle());
+            m_map->mapProperties()->updateRaycastingOverflowObjects3D(
+                globalPortion, m_distanceObject3D, m_positionOnObject3D, m_ray);
         }
         else {
             if (m_elementOnLand == nullptr) {
@@ -61,6 +65,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
             }
             if (m_elementOnSprite == nullptr) {
                 updateRaycastingSprites(mapPortion, layerOn);
+            }
+            if (m_elementOnObject3D == nullptr) {
+                updateRaycastingObjects3D(mapPortion);
             }
             if (m_elementOnObject == nullptr) {
                 updateRaycastingObjects(mapPortion);
@@ -108,6 +115,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
 
     m_positionOnPlaneWallIndicator = m_positionOnLand;
 
+    if (m_distanceObject3D == 0.0f) {
+        m_positionOnObject3D = m_positionOnLand;
+    }
     if (m_distanceObject == 0.0f) {
         m_positionOnObject = m_positionOnLand;
     }
@@ -233,6 +243,13 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion *mapPortion, bool laye
     m_elementOnSprite = mapPortion->updateRaycastingSprites(m_map->squareSize(),
         m_distanceSprite, m_positionOnSprite, m_ray, m_camera->horizontalAngle(),
         layerOn);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateRaycastingObjects3D(MapPortion *mapPortion) {
+    m_elementOnObject3D = mapPortion->updateRaycastingObjects3D(
+        m_distanceObject3D, m_positionOnObject3D, m_ray);
 }
 
 // -------------------------------------------------------

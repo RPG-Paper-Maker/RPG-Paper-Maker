@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
-    EventCommand *command, SystemCommonObject *object, QStandardItemModel
+    EventCommand *command, SystemCommonObject *, QStandardItemModel
     *parameters, QWidget *parent) :
     DialogCommand(parent),
     m_kind(kind),

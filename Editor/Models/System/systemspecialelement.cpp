@@ -60,6 +60,8 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_depthPixel(dP)
 {
     updateObjName();
+    updateMtlName();
+    updateCustomCollisionName();
 }
 
 SystemSpecialElement::~SystemSpecialElement()

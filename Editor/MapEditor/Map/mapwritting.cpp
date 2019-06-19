@@ -304,6 +304,7 @@ void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
     // Removing cut content
     mapPortion.removeLandOut(properties);
     mapPortion.removeSpritesOut(properties);
+    mapPortion.removeObjects3DOut(properties);
     mapPortion.removeObjectsOut(listDeletedObjectsIDs, properties);
 
     RPM::writeJSON(pathPortion, mapPortion);

@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
-                                                 SystemCommonObject *object,
+                                                 SystemCommonObject *,
                                                  QStandardItemModel *parameters,
                                                  QWidget *parent) :
     DialogCommand(parent),

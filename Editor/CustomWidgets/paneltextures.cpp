@@ -25,7 +25,8 @@ PanelTextures::PanelTextures(QWidget *parent) :
     ui(new Ui::PanelTextures),
     m_kind(PictureKind::None),
     m_currentAutotilesID(-1),
-    m_currentWallsID(-1)
+    m_currentWallsID(-1),
+    m_currentObjects3DID(-1)
 {
     ui->setupUi(this);
 }
@@ -110,6 +111,8 @@ QWidget * PanelTextures::getSpecialWidget() const {
         return ui->widgetAutotilesSelector;
     case PictureKind::Walls:
         return ui->widgetWallPreview;
+    case PictureKind::Object3D:
+        return ui->widget3DObjectPreview;
     default:
         return ui->widgetTilesetSelector;
     }
@@ -262,6 +265,8 @@ int PanelTextures::getCurrentID() const {
         return m_currentAutotilesID;
     case PictureKind::Walls:
         return m_currentWallsID;
+    case PictureKind::Object3D:
+        return m_currentObjects3DID;
     default:
         return -1;
     }
@@ -276,6 +281,9 @@ void PanelTextures::updateCurrentID(int id) {
         break;
     case PictureKind::Walls:
         m_currentWallsID = id;
+        break;
+    case PictureKind::Object3D:
+        m_currentObjects3DID = id;
         break;
     default:
         break;

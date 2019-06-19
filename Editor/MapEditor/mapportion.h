@@ -82,8 +82,10 @@ public:
                    MapEditorSubSelectionKind &previousType);
     bool deleteObject(Position& p, QJsonObject &previous,
                       MapEditorSubSelectionKind &previousType);
-    void addOverflow(Position& p);
-    void removeOverflow(Position& p);
+    void addOverflowSprites(Position& p);
+    void removeOverflowSprites(Position& p);
+    void addOverflowObjects3D(Position& p);
+    void removeOverflowObjects3D(Position& p);
     void removeLandOut(MapProperties& properties);
     void removeSpritesOut(MapProperties& properties);
     void removeObjects3DOut(MapProperties& properties);
@@ -98,10 +100,9 @@ public:
                                         Position &finalPosition,
                                         QRay3D& ray, double cameraHAngle,
                                         bool layerOn);
-    MapElement* updateRaycastingObjects3D(int squareSize, float& finalDistance,
+    MapElement* updateRaycastingObjects3D(float& finalDistance,
                                         Position &finalPosition,
-                                        QRay3D& ray, double cameraHAngle,
-                                        bool layerOn);
+                                        QRay3D& ray);
     MapElement* updateRaycastingObjects(int squareSize, float& finalDistance,
                                         Position &finalPosition,
                                         QRay3D& ray);
@@ -111,12 +112,10 @@ public:
                                                Position &finalPosition,
                                                QRay3D& ray,
                                                double cameraHAngle);
-    MapElement* updateRaycastingOverflowObject3D(int squareSize,
-                                               Position& position,
+    MapElement* updateRaycastingOverflowObject3D(Position& position,
                                                float &finalDistance,
                                                Position &finalPosition,
-                                               QRay3D& ray,
-                                               double cameraHAngle);
+                                               QRay3D& ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);

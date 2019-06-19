@@ -44,7 +44,7 @@ QStandardItemModel* MonstersDatas::model() const { return m_model; }
 //
 // -------------------------------------------------------
 
-void MonstersDatas::setDefault(QStandardItem* modelCurrencies,
+void MonstersDatas::setDefault(QStandardItem* ,
                                QStandardItem* modelItems,
                                QStandardItem* modelWeapons,
                                QStandardItem* modelArmors)
@@ -164,8 +164,8 @@ void MonstersDatas::write(QJsonObject &json) const{
     QJsonArray jsonArray;
     for (int i = 0; i < m_model->invisibleRootItem()->rowCount(); i++){
         QJsonObject jsonCommon;
-        SystemMonster* sysMonster = ((SystemMonster*)m_model->item(i)->data()
-                                     .value<quintptr>());
+        SystemMonster* sysMonster = reinterpret_cast<SystemMonster *>(m_model
+            ->item(i)->data().value<quintptr>());
         sysMonster->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }

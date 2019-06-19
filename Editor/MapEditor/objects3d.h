@@ -89,14 +89,12 @@ public:
     bool deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
         QJsonObject &previousObj, MapEditorSubSelectionKind &previousType);
     void removeObjects3DOut(MapProperties& properties);
-    MapElement *updateRaycasting(int squareSize, float& finalDistance,
-                                 Position &finalPosition, QRay3D &ray,
-                                 double cameraHAngle, bool layerOn);
-    bool updateRaycastingAt(Position &position, Object3DDatas *object3D, int
-        squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray,
-        double cameraHAngle);
+    MapElement *updateRaycasting(float& finalDistance, Position &finalPosition,
+        QRay3D &ray);
+    bool updateRaycastingAt(Position &position, Object3DDatas *object3D, float
+        &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement * getMapElementAt(Position &position);
-    int getLastLayerAt(Position &position) const;
+    int getLastLayerAt(Position &) const;
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
         QList<Position>& previewDelete);
     void initializeGL(QOpenGLShaderProgram* programStatic);

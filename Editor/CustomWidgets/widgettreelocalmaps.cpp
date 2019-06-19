@@ -295,11 +295,13 @@ void WidgetTreeLocalMaps::updateTileset(){
             case MapEditorSubSelectionKind::SpritesWall:
                 m_panelTextures->showSpriteWalls(tileset);
                 break;
+            case MapEditorSubSelectionKind::Object3D:
+                m_panelTextures->showObjects3D(tileset);
+                break;
             default:
                 m_panelTextures->showTileset();
-                m_panelTextures->setTilesetImage(tileset->picture()
-                                                 ->getPath(
-                                                     PictureKind::Tilesets));
+                m_panelTextures->setTilesetImage(tileset->picture()->getPath(
+                    PictureKind::Tilesets));
                 break;
             }
         }
@@ -308,7 +310,7 @@ void WidgetTreeLocalMaps::updateTileset(){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::reload(){
+void WidgetTreeLocalMaps::reload() {
 
     // Loading map
     if (m_widgetMapEditor != nullptr){

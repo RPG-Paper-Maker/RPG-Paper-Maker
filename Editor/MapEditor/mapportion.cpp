@@ -239,14 +239,26 @@ bool MapPortion::deleteObject(Position& p, QJsonObject &previous,
 
 // -------------------------------------------------------
 
-void MapPortion::addOverflow(Position& p) {
+void MapPortion::addOverflowSprites(Position& p) {
     m_sprites->addOverflow(p);
 }
 
 // -------------------------------------------------------
 
-void MapPortion::removeOverflow(Position& p) {
+void MapPortion::removeOverflowSprites(Position& p) {
     m_sprites->removeOverflow(p);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::addOverflowObjects3D(Position &p) {
+    m_objects3D->addOverflow(p);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeOverflowObjects3D(Position& p) {
+    m_objects3D->removeOverflow(p);
 }
 
 // -------------------------------------------------------
@@ -322,15 +334,10 @@ MapElement* MapPortion::updateRaycastingSprites(int squareSize,
 
 // -------------------------------------------------------
 
-MapElement* MapPortion::updateRaycastingObjects3D(int squareSize,
-                                                float& finalDistance,
-                                                Position& finalPosition,
-                                                QRay3D &ray,
-                                                double cameraHAngle,
-                                                bool layerOn)
+MapElement* MapPortion::updateRaycastingObjects3D(float &finalDistance,
+    Position &finalPosition, QRay3D &ray)
 {
-    return m_objects3D->updateRaycasting(squareSize, finalDistance,
-        finalPosition, ray, cameraHAngle, layerOn);
+    return m_objects3D->updateRaycasting(finalDistance, finalPosition, ray);
 }
 
 // -------------------------------------------------------
@@ -365,18 +372,13 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
 
 // -------------------------------------------------------
 
-MapElement* MapPortion::updateRaycastingOverflowObject3D(int squareSize,
-                                                        Position& position,
-                                                        float &finalDistance,
-                                                        Position &finalPosition,
-                                                        QRay3D& ray,
-                                                        double cameraHAngle)
+MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
+    float &finalDistance, Position &finalPosition, QRay3D& ray)
 {
     Object3DDatas *object3D = m_objects3D->object3DAt(position);
 
-    if (m_objects3D->updateRaycastingAt(position, object3D, squareSize,
-                                      finalDistance, finalPosition, ray,
-                                      cameraHAngle))
+    if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
+        finalPosition, ray))
     {
         return object3D;
     }

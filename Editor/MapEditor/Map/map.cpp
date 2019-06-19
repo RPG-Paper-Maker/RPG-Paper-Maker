@@ -174,18 +174,34 @@ MapObjects* Map::objectsPortion(int x, int y, int z){
     return nullptr;
 }
 
-void Map::addOverflow(Position& p, Portion &portion) {
-    m_mapProperties->addOverflow(p, portion);
-}
-
-void Map::removeOverflow(Position& p, Portion &portion) {
-    m_mapProperties->removeOverflow(p, portion);
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void Map::addOverflowSprites(Position& p, Portion &portion) {
+    m_mapProperties->addOverflowSprites(p, portion);
+}
+
+// -------------------------------------------------------
+
+void Map::removeOverflowSprites(Position& p, Portion &portion) {
+    m_mapProperties->removeOverflowSprites(p, portion);
+}
+
+// -------------------------------------------------------
+
+void Map::addOverflowObjects3D(Position &p, Portion &portion) {
+    m_mapProperties->addOverflowObjects3D(p, portion);
+}
+
+// -------------------------------------------------------
+
+void Map::removeOverflowObjects3D(Position &p, Portion &portion) {
+    m_mapProperties->removeOverflowObjects3D(p, portion);
+}
+
 // -------------------------------------------------------
 
 void Map::initializeCursor(QVector3D *position) {
@@ -542,8 +558,8 @@ int Map::removeObject(QStandardItemModel *model, Position3D& p) {
     SystemMapObject* super;
 
     for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++) {
-        super = ((SystemMapObject*) model->item(i)->data()
-                 .value<quintptr>());
+        super = reinterpret_cast<SystemMapObject *>(model->item(i)->data().value
+            <quintptr>());
         if (p == super->position()) {
             model->removeRow(i);
             delete super;

@@ -150,7 +150,7 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
         }
 
         // Sorting in order to be sure to have commands in right order
-        qSort(list.begin(), list.end(), WidgetTreeCommands::itemLessThan);
+        std::sort(list.begin(), list.end(), WidgetTreeCommands::itemLessThan);
     }
 
     return list;
@@ -909,7 +909,7 @@ void WidgetTreeCommands::onSelectionChanged(QModelIndex index, QModelIndex
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &index) {
+void WidgetTreeCommands::onTreeViewClicked(const QModelIndex &) {
     QModelIndexList l = this->selectionModel()->selectedIndexes();
 
     for (int i = 0; i < l.size(); i++) {

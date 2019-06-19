@@ -73,6 +73,7 @@ public:
                              QList<Portion> &adjacents);
     void updateRaycastingLand(MapPortion *mapPortion);
     void updateRaycastingSprites(MapPortion *mapPortion, bool layerOn);
+    void updateRaycastingObjects3D(MapPortion *mapPortion);
     void updateRaycastingObjects(MapPortion *mapPortion);
     QVector3D transformToNormalizedCoords(const QPoint &mouse);
     QVector4D transformToHomogeneousClip(QVector3D &normalized);
@@ -96,7 +97,7 @@ public:
     void updatePreviewWallSprite(Position &position, int specialID);
     void updatePreviewOthers(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool front, bool layerOn,
-        QRect &tileset, int xOffset, int yOffset, int zOffset);
+        QRect &tileset, int xOffset, int yOffset, int zOffset, int specialID);
     void updatePreviewElement(Position& p, Portion &portion, MapElement *element);
     void updatePreviewElementGrid(Position &p, Portion &portion, MapElement *element);
     void updateMovingPortions();

@@ -49,7 +49,7 @@ Objects3DGL::~Objects3DGL()
 
 void Objects3DGL::initializeVertices(Position &position, Object3DDatas *object3D)
 {
-    // TODO
+    object3D->initializeVertices(m_vertices, m_indexes, position, m_count);
 }
 
 // -------------------------------------------------------
@@ -124,7 +124,27 @@ bool Objects3D::isEmpty() const{
 void Objects3D::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
     &p, Object3DDatas *object3D)
 {
-    // TODO
+    Portion currentPortion;
+    Map::getGlobalPortion(p, currentPortion);
+    int r = object3D->width() / 2;
+    int h = object3D->height();
+    int d = object3D->depth() / 2;
+
+    for (int i = -r; i < r; i++) {
+        for (int j = 0; j < h; j++) {
+            for (int k = -d; k < d; k++) {
+                Position newPosition = p;
+                newPosition.addX(i);
+                newPosition.addY(j);
+                newPosition.addZ(k);
+                Portion newPortion;
+                Map::getGlobalPortion(newPosition, newPortion);
+                if (newPortion != currentPortion) {
+                    portionsOverflow += newPortion;
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -200,9 +220,9 @@ void Objects3D::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
                     portion.z());
             }
             if (add) {
-                mapPortion->addOverflow(p);
+                mapPortion->addOverflowObjects3D(p);
             } else {
-                mapPortion->removeOverflow(p);
+                mapPortion->removeOverflowObjects3D(p);
             }
             if (write) {
                 map->savePortionMap(mapPortion);
@@ -211,9 +231,9 @@ void Objects3D::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
         }
         else {
             if (add) {
-                map->addOverflow(p, portion);
+                map->addOverflowObjects3D(p, portion);
             } else {
-                map->removeOverflow(p, portion);
+                map->removeOverflowObjects3D(p, portion);
             }
         }
     }
@@ -308,8 +328,8 @@ void Objects3D::removeObjects3DOut(MapProperties &properties) {
 
 // -------------------------------------------------------
 
-MapElement* Objects3D::updateRaycasting(int squareSize, float &finalDistance,
-    Position &finalPosition, QRay3D &ray, double cameraHAngle, bool layerOn)
+MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
+    &finalPosition, QRay3D &ray)
 {
     MapElement* element = nullptr;
 
@@ -318,8 +338,8 @@ MapElement* Objects3D::updateRaycasting(int squareSize, float &finalDistance,
     {
         Position position = i.key();
         Object3DDatas *object3D = i.value();
-        if (this->updateRaycastingAt(position, object3D, squareSize,
-            finalDistance, finalPosition, ray, cameraHAngle))
+        if (this->updateRaycastingAt(position, object3D, finalDistance,
+            finalPosition, ray))
         {
             element = object3D;
         }
@@ -334,9 +354,8 @@ MapElement* Objects3D::updateRaycasting(int squareSize, float &finalDistance,
         Portion portion;
         map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
-        MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
-            squareSize, position, finalDistance, finalPosition, ray,
-            cameraHAngle);
+        MapElement* newElement = mapPortion->updateRaycastingOverflowObject3D(
+            position, finalDistance, finalPosition, ray);
         if (newElement != nullptr) {
             element = newElement;
         }
@@ -348,10 +367,13 @@ MapElement* Objects3D::updateRaycasting(int squareSize, float &finalDistance,
 // -------------------------------------------------------
 
 bool Objects3D::updateRaycastingAt(Position &position, Object3DDatas *object3D,
-    int squareSize, float &finalDistance, Position &finalPosition, QRay3D &ray,
-    double cameraHAngle)
+    float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
-    // TODO
+    float newDistance = object3D->intersection(ray);
+    if (RPM::getMinDistance(finalDistance, newDistance)) {
+        finalPosition = position;
+        return true;
+    }
 
     return false;
 }
@@ -364,7 +386,7 @@ MapElement * Objects3D::getMapElementAt(Position &position) {
 
 // -------------------------------------------------------
 
-int Objects3D::getLastLayerAt(Position &position) const {
+int Objects3D::getLastLayerAt(Position &) const {
     return 0;
 }
 
@@ -454,7 +476,7 @@ void Objects3D::read(const QJsonObject & json) {
         Position p;
         p.read(obj[RPM::JSON_KEY].toArray());
         QJsonObject objVal = obj[RPM::JSON_VALUE].toObject();
-        Object3DDatas *object3D = new Object3DDatas;
+        Object3DDatas *object3D = Object3DDatas::instanciateFromJSON(objVal);
         object3D->read(objVal);
         m_all[p] = object3D;
     }

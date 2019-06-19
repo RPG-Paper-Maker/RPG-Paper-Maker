@@ -78,15 +78,16 @@ void MapElement::getPosSizeCenter(
 {
     // Offset
     float zPlus = 0, off = position.layer() * 0.05f;
-    if (getSubKind() == MapEditorSubSelectionKind::SpritesFace || front)
+    if (getSubKind() == MapEditorSubSelectionKind::SpritesFace || front) {
         zPlus += off;
-    else
+    } else {
         zPlus -= off;
+    }
     offset.setZ(zPlus);
 
     // Size
-    size.setX((float) width * squareSize);
-    size.setY((float) height * squareSize);
+    size.setX(static_cast<float>(width * squareSize));
+    size.setY(static_cast<float>(height * squareSize));
     size.setZ(1.0f);
 
     // Center
