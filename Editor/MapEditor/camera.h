@@ -52,6 +52,7 @@ public:
     bool cameraUp() const;
     bool cameraFront(const QVector3D &direction, int angle) const;
     void update(Cursor* cursor, int squareSize);
+    void updateTarget(QVector3D &target);
     void zoomPlus(int squareSize);
     void zoomLess(int squareSize);
     int getZoom(int squareSize) const;

@@ -128,6 +128,13 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->spinBoxPixelsHeight->setValue(sys->heightPixel());
     ui->spinBoxSquaresDepth->setValue(sys->depthSquare());
     ui->spinBoxPixelsDepth->setValue(sys->depthPixel());
+
+    // Object previewer
+    if (m_kind == PictureKind::Object3D) {
+        ui->widgetPreviewObject3D->loadObject(reinterpret_cast<SystemObject3D *>
+            (sys));
+        ui->widgetPreviewObject3D->updateObject();
+    }
 }
 
 // -------------------------------------------------------
@@ -149,12 +156,15 @@ void PanelSpecialElements::hideObject3D() {
     ui->labelScale->hide();
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->hide();
+    ui->widgetPreviewObject3D->hide();
+    ui->gridLayout_3->setRowStretch(8, 0);
 }
 
 // -------------------------------------------------------
 
 void PanelSpecialElements::showObject3D() {
     ui->widgetTilesetSettings->hide();
+    ui->gridLayout_3->setRowStretch(7, 0);
 }
 
 // -------------------------------------------------------
@@ -254,6 +264,7 @@ void PanelSpecialElements::on_comboBoxShape_currentIndexChanged(int index) {
         default:
             break;
         }
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -266,6 +277,7 @@ void PanelSpecialElements::on_pictureChanged(SystemPicture *picture) {
         ->getSelected()->data().value<quintptr>());
     sys->setPictureID(picture->id());
     ui->widgetTilesetSettings->updateImage(picture);
+    ui->widgetPreviewObject3D->updateObject();
 }
 
 // -------------------------------------------------------
@@ -300,6 +312,7 @@ void PanelSpecialElements::on_spinBoxSquaresWidth_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setWidthSquare(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -311,6 +324,7 @@ void PanelSpecialElements::on_spinBoxPixelsWidth_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setWidthPixel(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -322,6 +336,7 @@ void PanelSpecialElements::on_spinBoxSquaresHeight_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setHeightSquare(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -333,6 +348,7 @@ void PanelSpecialElements::on_spinBoxPixelsHeight_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setHeightPixel(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -344,6 +360,7 @@ void PanelSpecialElements::on_spinBoxSquaresDepth_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setDepthSquare(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 
@@ -355,5 +372,6 @@ void PanelSpecialElements::on_spinBoxPixelsDepth_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setDepthPixel(i);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }

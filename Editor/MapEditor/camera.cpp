@@ -117,16 +117,25 @@ bool Camera::cameraFront(const QVector3D &direction, int angle) const {
 
 // -------------------------------------------------------
 
-void Camera::update(Cursor *cursor, int squareSize){
+void Camera::update(Cursor *cursor, int squareSize) {
+    m_target.setX(cursor->getX() + (squareSize / 2));
+    m_target.setY(cursor->getY());
+    m_target.setZ(cursor->getZ() + (squareSize / 2));
 
+    updateTarget(m_target);
+}
+
+// -------------------------------------------------------
+
+void Camera::updateTarget(QVector3D &target) {
     // Horizontal angle should stay in [-450;270] interval
     m_horizontalAngle = fmod(m_horizontalAngle * M_PI / 180.0, 2 * M_PI)
             * 180.0 / M_PI;
 
     // Update target
-    m_target.setX(cursor->getX() + (squareSize / 2));
-    m_target.setY(cursor->getY());
-    m_target.setZ(cursor->getZ() + (squareSize / 2));
+    m_target.setX(target.x());
+    m_target.setY(target.y());
+    m_target.setZ(target.z());
 
     // Update position
     double distance = getDistance();

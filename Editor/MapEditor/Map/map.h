@@ -108,7 +108,8 @@ public:
     void deleteCharactersTextures();
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
-    void loadPicture(SystemPicture* picture, PictureKind kind, QImage &refImage);
+    static void loadPicture(SystemPicture* picture, PictureKind kind, QImage
+        &refImage);
     void loadAutotiles();
     TextureAutotile *loadPictureAutotile(
             QPainter& painter, TextureAutotile* textureAutotile,
@@ -121,7 +122,7 @@ public:
                               QImage& image, int& offset, QPoint &point);
     static void editPictureAutotilePreview(QImage& image, QImage& refImage);
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
-    QOpenGLTexture* createTexture(QImage& image);
+    static QOpenGLTexture* createTexture(QImage& image);
     QString getPortionPath(int i, int j, int k);
     QString getPortionPathTemp(int i, int j, int k);
     MapPortion* loadPortionMap(int i, int j, int k, bool force = false);

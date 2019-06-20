@@ -47,6 +47,8 @@ public:
     virtual int widthPixels() const;
     virtual int heightPixels() const;
     virtual int depthPixels() const;
+    virtual void getCenter(QVector3D &center) const;
+    virtual int minDistanceFromCenter() const;
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
         &indexes, Position &position, int &count);
     virtual float intersection(QRay3D& ray) const;

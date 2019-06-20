@@ -92,7 +92,8 @@ void PanelTextures::showTileset() {
 
     hideAll();
     ui->widgetTilesetSelector->show();
-    updateTilesetImage();
+    this->updateTilesetImage();
+    this->updateObject3DSize();
 }
 
 // -------------------------------------------------------
@@ -167,6 +168,9 @@ void PanelTextures::updateComboBoxSize() {
     int height = ui->comboBox->height() + 6 + currentSpecial->height();
     this->setGeometry(0, 0, width, height);
     setFixedSize(width, height);
+
+    // Update object3D previewer size
+    this->updateObject3DSize();
 }
 
 // -------------------------------------------------------
@@ -259,6 +263,17 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
 
 // -------------------------------------------------------
 
+void PanelTextures::updateObject3DSize() {
+    int w;
+
+    w = ui->comboBox->width();
+    ui->widget3DObjectPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
+        ->widget3DObjectPreview->y(), w, w);
+    ui->widget3DObjectPreview->setFixedSize(w, w);
+}
+
+// -------------------------------------------------------
+
 int PanelTextures::getCurrentID() const {
     switch (m_kind) {
     case PictureKind::Autotiles:
@@ -340,4 +355,11 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
 
     // Updating image on preview
     updateImageSpecial(special);
+
+    // Object previewer
+    if (m_kind == PictureKind::Object3D) {
+        ui->widget3DObjectPreview->loadObject(reinterpret_cast<SystemObject3D *>
+            (special));
+        ui->widget3DObjectPreview->updateObject();
+    }
 }

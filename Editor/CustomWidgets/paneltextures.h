@@ -54,6 +54,7 @@ public:
     void showSpriteWalls(SystemTileset *tileset);
     void showObjects3D(SystemTileset *tileset);
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
+    void updateObject3DSize();
 
 private:
     Ui::PanelTextures *ui;

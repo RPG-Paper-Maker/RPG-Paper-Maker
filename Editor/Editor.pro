@@ -286,7 +286,8 @@ HEADERS += \
     Enums/objectcollisionkind.h \
     MapEditor/object3d.h \
     MapEditor/objects3d.h \
-    MapEditor/object3dbox.h
+    MapEditor/object3dbox.h \
+    CustomWidgets/widgetpreviewobject3d.h
 
 SOURCES += \
     Dialogs/mainwindow.cpp \
@@ -528,7 +529,8 @@ SOURCES += \
     Models/System/systemobject3d.cpp \
     MapEditor/object3d.cpp \
     MapEditor/objects3d.cpp \
-    MapEditor/object3dbox.cpp
+    MapEditor/object3dbox.cpp \
+    CustomWidgets/widgetpreviewobject3d.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

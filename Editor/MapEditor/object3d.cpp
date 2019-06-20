@@ -38,6 +38,10 @@ Object3DDatas::~Object3DDatas()
 
 }
 
+SystemObject3D * Object3DDatas::datas() const {
+    return m_datas;
+}
+
 int Object3DDatas::textureID() const {
     return m_datas->pictureID();
 }

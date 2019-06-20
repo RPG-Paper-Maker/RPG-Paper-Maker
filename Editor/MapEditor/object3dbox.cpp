@@ -199,6 +199,28 @@ int Object3DBoxDatas::depthPixels() const {
 
 // -------------------------------------------------------
 
+void Object3DBoxDatas::getCenter(QVector3D &center) const {
+    center.setX(static_cast<float>(this->widthPixels()) / 2);
+    center.setY(static_cast<float>(this->heightPixels()) / 2);
+    center.setZ(static_cast<float>(this->depthPixels()) / 2);
+}
+
+// -------------------------------------------------------
+
+int Object3DBoxDatas::minDistanceFromCenter() const {
+    int w, h, d, max;
+
+    w = this->widthPixels();
+    h = this->heightPixels();
+    d = this->depthPixels();
+    max = std::max(w, h);
+    max = std::max(max, d);
+
+    return max + ((w + h + d) / 2);
+}
+
+// -------------------------------------------------------
+
 void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices, QVector<
     GLuint> &indexes, Position &position, int &count)
 {

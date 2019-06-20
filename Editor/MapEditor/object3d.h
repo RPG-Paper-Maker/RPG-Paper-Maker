@@ -36,6 +36,7 @@ public:
     Object3DDatas(int datasID, SystemObject3D *datas);
     virtual ~Object3DDatas();
 
+    SystemObject3D * datas() const;
     int textureID() const;
 
     bool operator==(const Object3DDatas& other) const;
@@ -51,6 +52,8 @@ public:
     virtual int widthPixels() const = 0;
     virtual int heightPixels() const = 0;
     virtual int depthPixels() const = 0;
+    virtual void getCenter(QVector3D &center) const = 0;
+    virtual int minDistanceFromCenter() const = 0;
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
         &indexes, Position &position, int &count) = 0;
     virtual float intersection(QRay3D& ray) const = 0;
