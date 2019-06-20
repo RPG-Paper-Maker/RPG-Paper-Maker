@@ -19,6 +19,7 @@
 #include "qray3d.h"
 #include "systemplaysong.h"
 #include "panelprimitivevalue.h"
+#include "mapelement.h"
 
 // -------------------------------------------------------
 //
@@ -36,6 +37,8 @@ public:
     MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
                   int idTileset);
     virtual ~MapProperties();
+
+    void clearOverflowSprites();
     QString realName() const;
     int length() const;
     int width() const;
@@ -66,10 +69,10 @@ public:
     void getPortionsNumber(int& lx, int& ld, int &lh, int& lz);
     virtual void setCopy(const MapProperties& super);
     void save(QString path, bool temp = false);
-    void updateRaycastingOverflowSprites(Portion& portion, float &finalDistance,
-                                         Position &finalPosition, QRay3D& ray,
-                                         double cameraHAngle);
-    void updateRaycastingOverflowObjects3D(Portion& portion, float
+    MapElement * updateRaycastingOverflowSprites(Portion& portion, float
+        &finalDistance, Position &finalPosition, QRay3D& ray, double
+        cameraHAngle);
+    MapElement * updateRaycastingOverflowObjects3D(Portion& portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray);
 
     virtual void read(const QJsonObject &json);

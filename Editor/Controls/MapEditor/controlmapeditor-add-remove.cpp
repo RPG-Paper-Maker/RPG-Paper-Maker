@@ -19,6 +19,7 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     QRect &tileset, int specialID)
 {
     Position p;
+
     MapElement *element = getPositionSelected(p, selection, subSelection,
         layerOn);
 

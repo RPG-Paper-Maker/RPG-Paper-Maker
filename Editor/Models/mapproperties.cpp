@@ -51,11 +51,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
 
 MapProperties::~MapProperties()
 {
-    QHash<Portion, QSet<Position>*>::iterator i;
-    for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
-    {
-        delete *i;
-    }
+    this->clearOverflowSprites();
+    QHash<Portion, QSet<Position>*>::const_iterator i;
     for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
          i++)
     {
@@ -123,6 +120,17 @@ void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void MapProperties::clearOverflowSprites() {
+    QHash<Portion, QSet<Position>*>::iterator i;
+    for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
+    {
+        delete *i;
+    }
+    m_outOverflowSprites.clear();
+}
+
 // -------------------------------------------------------
 
 void MapProperties::addOverflow(Position& p, Portion& portion, QHash<Portion,
@@ -206,13 +214,32 @@ void MapProperties::getPortionsNumber(int& lx, int& ld, int& lh, int& lz) {
 
 // -------------------------------------------------------
 
-void MapProperties::setCopy(const MapProperties& super){
+void MapProperties::setCopy(const MapProperties& super) {
+    QHash<Portion, QSet<Position> *>::const_iterator i;
+    QSet<Position>::iterator j;
+    QSet<Position> *set, *superSet;
+
     SystemLang::setCopy(super);
 
     m_length = super.m_length;
     m_width = super.m_width;
     m_height = super.m_height;
     m_depth = super.m_depth;
+    m_music->setId(super.m_music->id());
+    m_backgroundSound->setId(super.m_backgroundSound->id());
+    m_skyColorID->setCopy(*super.m_skyColorID);
+    m_isSkyColor = super.m_isSkyColor;
+    this->clearOverflowSprites();
+    for (i = super.m_outOverflowSprites.begin(); i != super.m_outOverflowSprites
+         .end(); i++)
+    {
+        set = new QSet<Position>();
+        superSet = i.value();
+        for (j = superSet->begin(); j != superSet->end(); j++) {
+            set->insert(*j);
+        }
+        m_outOverflowSprites.insert(i.key(), set);
+    }
 }
 
 // -------------------------------------------------------
@@ -225,14 +252,13 @@ void MapProperties::save(QString path, bool temp){
 
 // -------------------------------------------------------
 
-void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
-                                                    float &finalDistance,
-                                                    Position &finalPosition,
-                                                    QRay3D& ray,
-                                                    double cameraHAngle)
+MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
+    float &finalDistance, Position &finalPosition, QRay3D& ray, double
+    cameraHAngle)
 {
     Map* map = RPM::get()->project()->currentMap();
     QSet<Position>* positions = m_outOverflowSprites.value(portion);
+    MapElement *element = nullptr;
     if (positions != nullptr) {
         QSet<Position>::iterator i;
         for (i = positions->begin(); i != positions->end(); i++) {
@@ -241,23 +267,27 @@ void MapProperties::updateRaycastingOverflowSprites(Portion &portion,
             map->getLocalPortion(position, portion);
             MapPortion* mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
-                mapPortion->updateRaycastingOverflowSprite(map->squareSize(),
-                                                           position,
-                                                           finalDistance,
-                                                           finalPosition, ray,
-                                                           cameraHAngle);
+                element = mapPortion->updateRaycastingOverflowSprite(map
+                    ->squareSize(), position, finalDistance, finalPosition, ray,
+                    cameraHAngle);
+                if (element != nullptr) {
+                    return element;
+                }
             }
         }
     }
+
+    return element;
 }
 
 // -------------------------------------------------------
 
-void MapProperties::updateRaycastingOverflowObjects3D(Portion& portion, float
-    &finalDistance, Position &finalPosition, QRay3D &ray)
+MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
+    float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
     Map* map = RPM::get()->project()->currentMap();
     QSet<Position>* positions = m_outOverflowObjects3D.value(portion);
+    MapElement *element = nullptr;
     if (positions != nullptr) {
         QSet<Position>::iterator i;
         for (i = positions->begin(); i != positions->end(); i++) {
@@ -266,11 +296,16 @@ void MapProperties::updateRaycastingOverflowObjects3D(Portion& portion, float
             map->getLocalPortion(position, portion);
             MapPortion* mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
-                mapPortion->updateRaycastingOverflowObject3D(position,
+                element = mapPortion->updateRaycastingOverflowObject3D(position,
                     finalDistance, finalPosition, ray);
+                if (element != nullptr) {
+                    return element;
+                }
             }
         }
     }
+
+    return element;
 }
 
 // -------------------------------------------------------
@@ -323,22 +358,6 @@ void MapProperties::read(const QJsonObject &json){
         m_outOverflowSprites.insert(portion, positions);
     }
     tabOverflow = json["of3d"].toArray();
-    for (int i = 0; i < tabOverflow.size(); i++) {
-        QJsonObject objHash = tabOverflow.at(i).toObject();
-        QJsonArray tabKey = objHash["k"].toArray();
-        QJsonArray tabValue = objHash["v"].toArray();
-        Portion portion;
-        portion.read(tabKey);
-        QSet<Position>* positions = new QSet<Position>;
-
-        for (int j = 0; j < tabValue.size(); j++) {
-            QJsonArray tabPosition = tabValue.at(j).toArray();
-            Position position;
-            position.read(tabPosition);
-            positions->insert(position);
-        }
-        m_outOverflowObjects3D.insert(portion, positions);
-    }
 }
 
 // -------------------------------------------------------
@@ -394,27 +413,4 @@ void MapProperties::write(QJsonObject &json) const{
         tabOverflow.append(objHash);
     }
     json["ofsprites"] = tabOverflow;
-    for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
-         i++)
-    {
-        Portion portion = i.key();
-        QSet<Position>* positions = i.value();
-        QJsonObject objHash;
-        QJsonArray tabKey;
-        QJsonArray tabValue;
-
-        portion.write(tabKey);
-        QSet<Position>::iterator j;
-        for (j = positions->begin(); j != positions->end(); j++) {
-            Position position = *j;
-            QJsonArray tabPosition;
-            position.write(tabPosition);
-            tabValue.append(tabPosition);
-        }
-
-        objHash["k"] = tabKey;
-        objHash["v"] = tabValue;
-        tabOverflow.append(objHash);
-    }
-    json["of3d"] = tabOverflow;
 }

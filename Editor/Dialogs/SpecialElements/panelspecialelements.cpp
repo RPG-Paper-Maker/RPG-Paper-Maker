@@ -27,7 +27,6 @@ PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
 
     // Calculate spacer sizes
     m_spacersSize.append(ui->horizontalSpacer->geometry().size());
-    m_spacersSize.append(ui->horizontalSpacer_2->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_3->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_4->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_5->geometry().size());
@@ -122,7 +121,6 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
 
     ui->comboBoxCollision->setCurrentIndex(static_cast<int>(sys->collisionKind()));
     ui->widgetShapeCollisions->initialize(sys->collisionCustomID());
-    ui->comboBoxLocation->setCurrentIndex(sys->location() ? 0 : 1);
     ui->doubleSpinBoxScale->setValue(sys->scale());
     ui->spinBoxSquaresWidth->setValue(sys->widthSquare());
     ui->spinBoxPixelsWidth->setValue(sys->widthPixel());
@@ -136,7 +134,6 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
 
 void PanelSpecialElements::hideObject3D() {
     ui->horizontalSpacer->changeSize(0, 0);
-    ui->horizontalSpacer_2->changeSize(0, 0);
     ui->horizontalSpacer_4->changeSize(0, 0);
     ui->horizontalSpacer_5->changeSize(0, 0);
     ui->horizontalSpacer_6->changeSize(0, 0);
@@ -149,8 +146,6 @@ void PanelSpecialElements::hideObject3D() {
     ui->labelCollisions->hide();
     ui->comboBoxCollision->hide();
     ui->widgetShapeCollisions->hide();
-    ui->labelLocation->hide();
-    ui->comboBoxLocation->hide();
     ui->labelScale->hide();
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->hide();
@@ -166,7 +161,6 @@ void PanelSpecialElements::showObject3D() {
 
 void PanelSpecialElements::showBox() {
     ui->horizontalSpacer->changeSize(0, 0);
-    ui->horizontalSpacer_2->changeSize(0, 0);
     ui->horizontalSpacer_5->changeSize(0, 0);
     ui->horizontalSpacer_6->changeSize(0, 0);
 
@@ -187,12 +181,10 @@ void PanelSpecialElements::showBox() {
 void PanelSpecialElements::showCustomObject() {
     ui->horizontalSpacer->changeSize(m_spacersSize.at(0).width(),
         m_spacersSize.at(0).height());
-    ui->horizontalSpacer_2->changeSize(m_spacersSize.at(1).width(),
-        m_spacersSize.at(1).height());
-    ui->horizontalSpacer_5->changeSize(m_spacersSize.at(4).width(),
+    ui->horizontalSpacer_5->changeSize(m_spacersSize.at(3).width(),
+        m_spacersSize.at(3).height());
+    ui->horizontalSpacer_6->changeSize(m_spacersSize.at(4).width(),
         m_spacersSize.at(4).height());
-    ui->horizontalSpacer_6->changeSize(m_spacersSize.at(5).width(),
-        m_spacersSize.at(5).height());
 
     ui->labelObject->show();
     ui->widgetShapeObj->show();
@@ -286,17 +278,6 @@ void PanelSpecialElements::on_comboBoxCollision_currentIndexChanged(int index) {
         element->setCollisionKind(static_cast<ObjectCollisionKind>(index));
         this->showCustomObjectCollision(element->collisionKind() ==
             ObjectCollisionKind::Custom);
-    }
-}
-
-// -------------------------------------------------------
-
-void PanelSpecialElements::on_comboBoxLocation_currentIndexChanged(int index) {
-    SystemSpecialElement *element;
-
-    element = this->currentElement();
-    if (element != nullptr) {
-        element->setLocation(index == 0);
     }
 }
 

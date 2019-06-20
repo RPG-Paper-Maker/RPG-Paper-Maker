@@ -280,14 +280,20 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action) {
     MapEditorSubSelectionKind subSelectionAfter = subSelectionKind();
     if (subSelectionBefore != subSelectionAfter) {
         enableAllRight();
-        if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall)
+        if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
+            m_selectionKind == MapEditorSelectionKind::Objects3D)
+        {
             forceNoneLayer();
-        else
+        } else {
             actionLayerOn()->setIcon(QIcon(":/icons/Ressources/layer_on.png"));
-        if (m_selectionKind == MapEditorSelectionKind::Sprites)
+        }
+        if (m_selectionKind == MapEditorSelectionKind::Sprites ||
+            m_selectionKind == MapEditorSelectionKind::Objects3D)
+        {
             forcePencil();
-        else
+        } else {
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
+        }
     }
 
     // Repaint

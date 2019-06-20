@@ -126,13 +126,13 @@ void Objects3D::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
 {
     Portion currentPortion;
     Map::getGlobalPortion(p, currentPortion);
-    int r = object3D->width() / 2;
+    int r = object3D->width();
     int h = object3D->height();
-    int d = object3D->depth() / 2;
+    int d = object3D->depth();
 
-    for (int i = -r; i < r; i++) {
+    for (int i = 0; i < r; i++) {
         for (int j = 0; j < h; j++) {
-            for (int k = -d; k < d; k++) {
+            for (int k = 0; k < d; k++) {
                 Position newPosition = p;
                 newPosition.addX(i);
                 newPosition.addY(j);
@@ -479,6 +479,9 @@ void Objects3D::read(const QJsonObject & json) {
         Object3DDatas *object3D = Object3DDatas::instanciateFromJSON(objVal);
         object3D->read(objVal);
         m_all[p] = object3D;
+        QSet<Portion> portionsOverflow;
+        getSetPortionsOverflow(portionsOverflow, p, object3D);
+        addRemoveOverflow(portionsOverflow, p, true);
     }
 
     // Overflow

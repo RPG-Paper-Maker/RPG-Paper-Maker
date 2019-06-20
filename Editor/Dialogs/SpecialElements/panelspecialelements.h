@@ -59,7 +59,6 @@ private slots:
     void on_comboBoxShape_currentIndexChanged(int index);
     void on_pictureChanged(SystemPicture *picture);
     void on_comboBoxCollision_currentIndexChanged(int index);
-    void on_comboBoxLocation_currentIndexChanged(int index);
     void on_doubleSpinBoxScale_valueChanged(double d);
     void on_spinBoxSquaresWidth_valueChanged(int i);
     void on_spinBoxPixelsWidth_valueChanged(int i);

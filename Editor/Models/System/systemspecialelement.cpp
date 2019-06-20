@@ -18,7 +18,6 @@ const QString SystemSpecialElement::JSON_MTL_ID = "mid";
 const QString SystemSpecialElement::JSON_PIC_ID = "pid";
 const QString SystemSpecialElement::JSON_COLLISION_KIND = "ck";
 const QString SystemSpecialElement::JSON_COLLISION_CUSTOM_ID = "ccid";
-const QString SystemSpecialElement::JSON_LOCATION = "l";
 const QString SystemSpecialElement::JSON_SCALE = "s";
 const QString SystemSpecialElement::JSON_WIDTH_SQUARE = "ws";
 const QString SystemSpecialElement::JSON_WIDTH_PIXEL = "wp";
@@ -41,7 +40,7 @@ SystemSpecialElement::SystemSpecialElement() :
 
 SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
-    int collisionCustomID, bool location, double scale, int wS, int wP, int hS,
+    int collisionCustomID, double scale, int wS, int wP, int hS,
     int hP, int dS, int dP) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
@@ -50,7 +49,6 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_pictureID(pictureID),
     m_collisionKind(collisionKind),
     m_collisionCustomID(new SuperListItem(collisionCustomID)),
-    m_location(location),
     m_scale(scale),
     m_widthSquare(wS),
     m_widthPixel(wP),
@@ -105,14 +103,6 @@ void SystemSpecialElement::setCollisionKind(ObjectCollisionKind collisionKind) {
 
 SuperListItem * SystemSpecialElement::collisionCustomID() const {
     return m_collisionCustomID;
-}
-
-bool SystemSpecialElement::location() const {
-    return m_location;
-}
-
-void SystemSpecialElement::setLocation(bool location) {
-    m_location = location;
 }
 
 double SystemSpecialElement::scale() const {
@@ -243,7 +233,6 @@ void SystemSpecialElement::setCopy(const SystemSpecialElement& super) {
     m_collisionKind = super.m_collisionKind;
     m_collisionCustomID->setId(super.m_collisionCustomID->id());
     m_collisionCustomID->setName(super.m_collisionCustomID->name());
-    m_location = super.m_location;
     m_scale = super.m_scale;
     m_widthSquare = super.m_widthSquare;
     m_widthPixel = super.m_widthPixel;
@@ -279,9 +268,6 @@ void SystemSpecialElement::read(const QJsonObject &json){
     if (json.contains(JSON_COLLISION_CUSTOM_ID)) {
         m_collisionCustomID->setId(json[JSON_COLLISION_CUSTOM_ID].toInt());
         updateCustomCollisionName();
-    }
-    if (json.contains(JSON_LOCATION)) {
-        m_location = json[JSON_LOCATION].toBool();
     }
     if (json.contains(JSON_SCALE)) {
         m_scale = json[JSON_SCALE].toDouble();
@@ -332,9 +318,6 @@ void SystemSpecialElement::write(QJsonObject &json) const{
                 json[JSON_COLLISION_CUSTOM_ID] = m_collisionCustomID->id();
             }
         }
-    }
-    if (!m_location) {
-        json[JSON_LOCATION] = m_location;
     }
     if (m_shapeKind == ShapeKind::Custom) {
         if (m_scale != 1.0) {

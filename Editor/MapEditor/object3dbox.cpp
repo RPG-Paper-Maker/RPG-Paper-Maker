@@ -149,9 +149,9 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     center.setZ(pos.z() + (size.z() / 2));
 
     // Position
-    pos.setX((position.x() * squareSize) - (size.x() / 2));
+    pos.setX((position.x() * squareSize));
     pos.setY((position.getY(squareSize)));
-    pos.setZ((position.z() * squareSize) - (size.x() / 2));
+    pos.setZ((position.z() * squareSize));
 }
 
 // -------------------------------------------------------
@@ -202,26 +202,19 @@ int Object3DBoxDatas::depthPixels() const {
 void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices, QVector<
     GLuint> &indexes, Position &position, int &count)
 {
-    QVector3D pos, size, center, offsetPosition;
+    QVector3D pos, size, center;
     unsigned int offset;
     int i;
 
     getPosSizeCenterInfos(pos, size, center, position);
 
-    // Offset for centering
-    offsetPosition.setX(-0.5f);
-    offsetPosition.setY(0.0f);
-    offsetPosition.setZ(-0.5f);
-
     // Vertices
     for (i = 0; i < NB_VERTICES; i++) {
-        vertices.append(Vertex((VERTICES[i] - offsetPosition) * size + pos,
-            TEXTURES[i]));
+        vertices.append(Vertex(VERTICES[i] * size + pos, TEXTURES[i]));
     }
 
     // Create box for intersection tests
-    m_box = QBox3D((VERTICES[20] - offsetPosition) * size + pos, (
-        VERTICES[17] - offsetPosition) * size + pos);
+    m_box = QBox3D(VERTICES[20] * size + pos, VERTICES[17] * size + pos);
 
     // indexes
     offset = static_cast<unsigned int>(count * NB_VERTICES);

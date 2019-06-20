@@ -53,11 +53,17 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
         MapPortion *mapPortion = m_map->mapPortion(portion);
         if (mapPortion == nullptr) {
             Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
-            m_map->mapProperties()->updateRaycastingOverflowSprites(globalPortion,
-                m_distanceSprite, m_positionOnSprite, m_ray,
-                m_camera->horizontalAngle());
-            m_map->mapProperties()->updateRaycastingOverflowObjects3D(
-                globalPortion, m_distanceObject3D, m_positionOnObject3D, m_ray);
+            if (m_elementOnSprite == nullptr) {
+                m_elementOnSprite = m_map->mapProperties()
+                    ->updateRaycastingOverflowSprites(globalPortion,
+                    m_distanceSprite, m_positionOnSprite, m_ray, m_camera
+                    ->horizontalAngle());
+            }
+            if (m_elementOnObject3D == nullptr) {
+                m_elementOnObject3D = m_map->mapProperties()
+                    ->updateRaycastingOverflowObjects3D(globalPortion,
+                    m_distanceObject3D, m_positionOnObject3D, m_ray);
+            }
         }
         else {
             if (m_elementOnLand == nullptr) {
@@ -117,6 +123,10 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
 
     if (m_distanceObject3D == 0.0f) {
         m_positionOnObject3D = m_positionOnLand;
+
+        // Temp : by default position of objects center 0
+        m_positionOnObject3D.setCenterX(0);
+        m_positionOnObject3D.setCenterZ(0);
     }
     if (m_distanceObject == 0.0f) {
         m_positionOnObject = m_positionOnLand;

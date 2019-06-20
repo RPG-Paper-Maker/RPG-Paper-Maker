@@ -35,7 +35,6 @@ public:
     const static QString JSON_PIC_ID;
     const static QString JSON_COLLISION_KIND;
     const static QString JSON_COLLISION_CUSTOM_ID;
-    const static QString JSON_LOCATION;
     const static QString JSON_SCALE;
     const static QString JSON_WIDTH_SQUARE;
     const static QString JSON_WIDTH_PIXEL;
@@ -48,8 +47,8 @@ public:
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
         int objID = -1, int mtlID = -1, int pictureID = -1, ObjectCollisionKind
         collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
-        bool location = true, double scale = 1.0, int wS = 1, int wP = 0, int hS
-        = 1, int hP = 0, int dS = 1, int dP = 0);
+        double scale = 1.0, int wS = 1, int wP = 0, int hS = 1, int hP = 0, int
+        dS = 1, int dP = 0);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -61,8 +60,6 @@ public:
     ObjectCollisionKind collisionKind() const;
     void setCollisionKind(ObjectCollisionKind collisionKind);
     SuperListItem *collisionCustomID() const;
-    bool location() const;
-    void setLocation(bool location);
     double scale() const;
     void setScale(double scale);
     int widthSquare() const;
@@ -96,7 +93,6 @@ protected:
     int m_pictureID;
     ObjectCollisionKind m_collisionKind;
     SuperListItem *m_collisionCustomID;
-    bool m_location;
     double m_scale;
     int m_widthSquare;
     int m_widthPixel;
