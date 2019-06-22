@@ -230,23 +230,6 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     }
     m_textureTileset->release();
 
-    // Objects 3D
-    QHash<int, QOpenGLTexture*>::iterator itObj3D;
-    for (itObj3D = m_texturesObjects3D.begin(); itObj3D != m_texturesObjects3D
-         .end(); itObj3D++)
-    {
-        int textureID = itObj3D.key();
-        QOpenGLTexture *texture = itObj3D.value();
-        texture->bind();
-        for (int i = 0; i < totalSize; i++) {
-            mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
-                mapPortion->paintObjects3D(textureID);
-            }
-        }
-        texture->release();
-    }
-
     // Objects
     QHash<int, QOpenGLTexture*>::iterator it;
     for (it = m_texturesCharacters.begin();
@@ -273,6 +256,23 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintSpritesWalls(textureID);
+        }
+        texture->release();
+    }
+
+    // 3D objects
+    QHash<int, QOpenGLTexture*>::iterator itObj3D;
+    for (itObj3D = m_texturesObjects3D.begin(); itObj3D != m_texturesObjects3D
+         .end(); itObj3D++)
+    {
+        int textureID = itObj3D.key();
+        QOpenGLTexture *texture = itObj3D.value();
+        texture->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
+                mapPortion->paintObjects3D(textureID);
+            }
         }
         texture->release();
     }

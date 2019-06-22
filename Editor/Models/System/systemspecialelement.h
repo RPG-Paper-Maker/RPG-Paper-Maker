@@ -16,7 +16,7 @@
 #include "systempicture.h"
 #include "shapekind.h"
 #include "objectcollisionkind.h"
-#include "customshapekind.h"
+#include "systemcustomshape.h"
 
 // -------------------------------------------------------
 //
@@ -53,6 +53,7 @@ public:
 
     ShapeKind shapeKind() const;
     void setShapeKind(ShapeKind shape);
+    SystemCustomShape * obj() const;
     SuperListItem * objID() const;
     SuperListItem * mtlID() const;
     int pictureID() const;

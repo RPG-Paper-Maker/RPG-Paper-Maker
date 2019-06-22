@@ -661,11 +661,11 @@ void ControlMapEditor::addObject3D(Position &p, int specialID) {
         ::get()->project()->specialElementsDatas()->model(PictureKind::Object3D)
         ->invisibleRootItem(), specialID));
 
-    object3D = Object3DDatas::instanciate(specialID, special);
+    object3D = Object3DDatas::instanciate(special);
     stockObject3D(p, object3D);
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
-        object3D = Object3DDatas::instanciate(specialID, special);
+        object3D = Object3DDatas::instanciate(special);
         stockObject3D(p, object3D);
     }
     m_previousMouseCoords = p;

@@ -77,6 +77,12 @@ void SystemSpecialElement::setShapeKind(ShapeKind shape) {
     m_shapeKind = shape;
 }
 
+SystemCustomShape * SystemSpecialElement::obj() const {
+    return reinterpret_cast<SystemCustomShape *>(SuperListItem::getById(RPM
+        ::get()->project()->shapesDatas()->model(CustomShapeKind::OBJ)
+        ->invisibleRootItem(), m_objID->id()));
+}
+
 SuperListItem * SystemSpecialElement::objID() const {
     return m_objID;
 }

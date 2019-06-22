@@ -34,7 +34,6 @@ DialogShapesPreview::DialogShapesPreview(SuperListItem *shapeID,
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
-    connect(this, SIGNAL(dialogIsClosing()), this, SLOT(on_rejected()));
 }
 
 DialogShapesPreview::~DialogShapesPreview()

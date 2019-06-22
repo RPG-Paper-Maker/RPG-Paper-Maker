@@ -535,16 +535,18 @@ Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
 
 // -------------------------------------------------------
 
-bool Map::addObject(Position& p, MapPortion* mapPortion,
-                    SystemCommonObject *object, QJsonObject &previous,
-                    MapEditorSubSelectionKind &previousType)
+bool Map::addObject(Position &p, MapPortion *mapPortion, SystemCommonObject
+    *object, QJsonObject &previous, MapEditorSubSelectionKind &previousType)
 {
-    bool b = mapPortion->addObject(p, object, previous, previousType);
+    SystemMapObject *newObject;
+    QStandardItem *item;
+    int row;
+    bool b;
 
-    int row = Map::removeObject(m_modelObjects, p);
-    SystemMapObject* newObject = new SystemMapObject(object->id(),
-                                                     object->name(), p);
-    QStandardItem* item = new QStandardItem;
+    b = mapPortion->addObject(p, object, previous, previousType);
+    row = Map::removeObject(m_modelObjects, p);
+    newObject = new SystemMapObject(object->id(), object->name(), p);
+    item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(newObject)));
     item->setText(newObject->toString());
     m_modelObjects->insertRow(row, item);
@@ -554,10 +556,11 @@ bool Map::addObject(Position& p, MapPortion* mapPortion,
 
 // -------------------------------------------------------
 
-int Map::removeObject(QStandardItemModel *model, Position3D& p) {
-    SystemMapObject* super;
+int Map::removeObject(QStandardItemModel *model, Position3D &p) {
+    SystemMapObject *super;
+    int i, l;
 
-    for (int i = 2; i < model->invisibleRootItem()->rowCount(); i++) {
+    for (i = 2, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
         super = reinterpret_cast<SystemMapObject *>(model->item(i)->data().value
             <quintptr>());
         if (p == super->position()) {
@@ -572,9 +575,8 @@ int Map::removeObject(QStandardItemModel *model, Position3D& p) {
 
 // -------------------------------------------------------
 
-bool Map::deleteObject(Position& p, MapPortion *mapPortion,
-                       QJsonObject &previous,
-                       MapEditorSubSelectionKind &previousType)
+bool Map::deleteObject(Position &p, MapPortion *mapPortion, QJsonObject
+    &previous, MapEditorSubSelectionKind &previousType)
 {
     Map::removeObject(m_modelObjects, p);
 
@@ -583,14 +585,16 @@ bool Map::deleteObject(Position& p, MapPortion *mapPortion,
 
 // -------------------------------------------------------
 
-bool Map::isObjectIdExisting(int id) const{
+bool Map::isObjectIdExisting(int id) const {
     SystemMapObject* super;
+    int i;
 
-    for (int i = 0; i < m_modelObjects->invisibleRootItem()->rowCount(); i++){
-        super = ((SystemMapObject*) m_modelObjects->item(i)->data()
-                 .value<quintptr>());
-        if (id == super->id())
+    for (i = 0; i < m_modelObjects->invisibleRootItem()->rowCount(); i++) {
+        super = reinterpret_cast<SystemMapObject *>(m_modelObjects->item(i)
+            ->data().value<quintptr>());
+        if (id == super->id()) {
             return true;
+        }
     }
 
     return false;
@@ -598,13 +602,14 @@ bool Map::isObjectIdExisting(int id) const{
 
 // -------------------------------------------------------
 
-int Map::generateObjectId() const{
+int Map::generateObjectId() const {
     int id, l;
 
     l = m_modelObjects->invisibleRootItem()->rowCount();
-    for (id = 1; id < l + 1; id++){
-        if (!isObjectIdExisting(id))
+    for (id = 1; id < l + 1; id++) {
+        if (!isObjectIdExisting(id)) {
             break;
+        }
     }
 
     return id;
@@ -612,6 +617,6 @@ int Map::generateObjectId() const{
 
 // -------------------------------------------------------
 
-QString Map::generateObjectName(int id){
+QString Map::generateObjectName(int id) {
     return "OBJ" + Common::getFormatNumber(id);
 }

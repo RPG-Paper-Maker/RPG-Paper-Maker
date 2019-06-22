@@ -278,6 +278,7 @@ bool Objects3D::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
         changed = (*previousObject3D) != (*object3D);
         delete previousObject3D;
     }
+    object3D->preLoadSize(p);
     setObject3D(portionsOverflowSet, p, object3D);
 
     // Fusion of sets

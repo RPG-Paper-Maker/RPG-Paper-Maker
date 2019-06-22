@@ -10,6 +10,7 @@
 */
 
 #include "object3dbox.h"
+#include "object3dcustom.h"
 #include "rpm.h"
 
 const QString Object3DDatas::JSON_DATAS_ID = "did";
@@ -21,13 +22,12 @@ const QString Object3DDatas::JSON_DATAS_ID = "did";
 // -------------------------------------------------------
 
 Object3DDatas::Object3DDatas() :
-    Object3DDatas(-1, nullptr)
+    Object3DDatas(nullptr)
 {
 
 }
 
-Object3DDatas::Object3DDatas(int datasID, SystemObject3D *datas) :
-    m_datasID(datasID),
+Object3DDatas::Object3DDatas(SystemObject3D *datas) :
     m_datas(datas)
 {
 
@@ -47,7 +47,7 @@ int Object3DDatas::textureID() const {
 }
 
 bool Object3DDatas::operator==(const Object3DDatas& other) const {
-    return MapElement::operator==(other) && m_datasID == other.m_datasID;
+    return MapElement::operator==(other) && m_datas->id()== other.m_datas->id();
 }
 
 bool Object3DDatas::operator!=(const Object3DDatas& other) const {
@@ -60,10 +60,12 @@ bool Object3DDatas::operator!=(const Object3DDatas& other) const {
 //
 // -------------------------------------------------------
 
-Object3DDatas * Object3DDatas::instanciate(int datasID, SystemObject3D *datas) {
+Object3DDatas * Object3DDatas::instanciate(SystemObject3D *datas) {
     switch (datas->shapeKind()) {
     case ShapeKind::Box:
-        return new Object3DBoxDatas(datasID, datas);
+        return new Object3DBoxDatas(datas);
+    case ShapeKind::Custom:
+        return new Object3DCustomDatas(datas);
     default:
         return nullptr;
     }
@@ -72,21 +74,15 @@ Object3DDatas * Object3DDatas::instanciate(int datasID, SystemObject3D *datas) {
 // -------------------------------------------------------
 
 Object3DDatas * Object3DDatas::instanciateFromJSON(const QJsonObject &json) {
-    SystemObject3D *datas;
-    int id;
-
-    datas = Object3DDatas::readFromJSON(json, id);
-
-    return Object3DDatas::instanciate(id, datas);
+    return Object3DDatas::instanciate(Object3DDatas::readFromJSON(json));
 }
 
 // -------------------------------------------------------
 
-SystemObject3D * Object3DDatas::readFromJSON(const QJsonObject &json, int &id) {
-    id = json[JSON_DATAS_ID].toInt();
+SystemObject3D * Object3DDatas::readFromJSON(const QJsonObject &json) {
     return reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM::get()
         ->project()->specialElementsDatas()->model(PictureKind::Object3D)
-        ->invisibleRootItem(), id));
+        ->invisibleRootItem(), json[JSON_DATAS_ID].toInt()));
 }
 
 // -------------------------------------------------------
@@ -108,7 +104,7 @@ MapEditorSubSelectionKind Object3DDatas::getSubKind() const {
 // -------------------------------------------------------
 
 QString Object3DDatas::toString() const {
-    return "3D OBJECT";
+    return "3D OBJECT - " + m_datas->name();
 }
 
 // -------------------------------------------------------
@@ -116,7 +112,7 @@ QString Object3DDatas::toString() const {
 void Object3DDatas::read(const QJsonObject &json) {
     MapElement::read(json);
 
-    m_datas = Object3DDatas::readFromJSON(json, m_datasID);
+    m_datas = Object3DDatas::readFromJSON(json);
 }
 
 // -------------------------------------------------------
@@ -124,5 +120,5 @@ void Object3DDatas::read(const QJsonObject &json) {
 void Object3DDatas::write(QJsonObject &json) const{
     MapElement::write(json);
 
-    json[JSON_DATAS_ID] = m_datasID;
+    json[JSON_DATAS_ID] = m_datas->id();
 }

@@ -159,6 +159,9 @@
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="labelMtl">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>MTL:</string>
          </property>
@@ -166,6 +169,9 @@
        </item>
        <item row="2" column="1" colspan="2">
         <widget class="WidgetShape" name="widgetShapeMtl" native="true">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="minimumSize">
           <size>
            <width>200</width>

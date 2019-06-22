@@ -17,7 +17,6 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <qray3d.h>
-#include "vertex.h"
 #include "object3d.h"
 
 // -------------------------------------------------------
@@ -39,7 +38,7 @@ public:
     void paintGL();
 
 protected:
-    int m_count;
+    unsigned int m_count;
 
     // OpenGL
     QOpenGLBuffer m_vertexBuffer;

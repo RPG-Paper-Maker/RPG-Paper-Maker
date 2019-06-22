@@ -116,8 +116,8 @@ Object3DBoxDatas::Object3DBoxDatas() :
 
 }
 
-Object3DBoxDatas::Object3DBoxDatas(int datasID, SystemObject3D *datas) :
-    Object3DDatas(datasID, datas)
+Object3DBoxDatas::Object3DBoxDatas(SystemObject3D *datas) :
+    Object3DDatas(datas)
 {
 
 }
@@ -221,29 +221,28 @@ int Object3DBoxDatas::minDistanceFromCenter() const {
 
 // -------------------------------------------------------
 
-void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices, QVector<
-    GLuint> &indexes, Position &position, int &count)
+void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
+    QVector<GLuint> &indexes, Position &position, unsigned int &count)
 {
     QVector3D pos, size, center;
-    unsigned int offset;
     int i;
 
     getPosSizeCenterInfos(pos, size, center, position);
 
     // Vertices
     for (i = 0; i < NB_VERTICES; i++) {
-        vertices.append(Vertex(VERTICES[i] * size + pos, TEXTURES[i]));
+        vertices.append(Vertex(VERTICES[i] * size + pos, TEXTURES
+            [i]));
     }
 
     // Create box for intersection tests
     m_box = QBox3D(VERTICES[20] * size + pos, VERTICES[17] * size + pos);
 
     // indexes
-    offset = static_cast<unsigned int>(count * NB_VERTICES);
     for (i = 0; i < NB_INDEXES; i++) {
-        indexes.append(INDEXES[i] + offset);
+        indexes.append(INDEXES[i] + count);
     }
-    count++;
+    count += static_cast<unsigned int>(NB_VERTICES);
 }
 
 // -------------------------------------------------------
@@ -258,8 +257,8 @@ float Object3DBoxDatas::intersection(QRay3D &ray) const {
 
 // -------------------------------------------------------
 
-QString Object3DBoxDatas::toString() const {
-    return Object3DDatas::toString() + " - BOX";
+void Object3DBoxDatas::preLoadSize(Position &) {
+    // Don't need any preload
 }
 
 // -------------------------------------------------------

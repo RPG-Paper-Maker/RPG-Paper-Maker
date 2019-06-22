@@ -9,35 +9,31 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#ifndef OBJECT3DBOX_H
-#define OBJECT3DBOX_H
+#ifndef OBJECT3DCUSTOM_H
+#define OBJECT3DCUSTOM_H
 
 #include "object3d.h"
 #include "qbox3d.h"
 
 // -------------------------------------------------------
 //
-//  CLASS Object3DBoxDatas
+//  CLASS Object3DCustomDatas
 //
-//  A 3D box object datas.
+//  A 3D custom .obj object datas.
 //
 // -------------------------------------------------------
 
-class Object3DBoxDatas : public Object3DDatas
+class Object3DCustomDatas : public Object3DDatas
 {
 public:
-    static QVector3D VERTICES[];
-    static QVector2D TEXTURES[];
-    static GLuint INDEXES[];
-    static int NB_VERTICES;
-    static int NB_INDEXES;
+    const static QString PARSE_VERTEX;
+    const static QString PARSE_NORMAL;
+    const static QString PARSE_TEXTURE;
+    const static QString PARSE_FACE;
 
-    Object3DBoxDatas();
-    Object3DBoxDatas(SystemObject3D *datas);
-    virtual ~Object3DBoxDatas();
-
-    void getPosSizeCenterInfos(QVector3D &pos, QVector3D &size, QVector3D
-        &center, Position &position);
+    Object3DCustomDatas();
+    Object3DCustomDatas(SystemObject3D *datas);
+    virtual ~Object3DCustomDatas();
 
     virtual int width() const;
     virtual int height() const;
@@ -50,12 +46,15 @@ public:
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<
         GLuint> &indexes, Position &position, unsigned int &count);
     virtual float intersection(QRay3D& ray) const;
-    virtual void preLoadSize(Position &);
+    virtual void preLoadSize(Position &position);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     QBox3D m_box;
+
+    void parseVertices(QString &fileLine, Position &position, QVector3D
+        &minVertex, QVector3D &maxVertex, bool &firstVertex);
 };
 
-#endif // OBJECT3DBOX_H
+#endif // OBJECT3DCUSTOM_H

@@ -33,7 +33,7 @@ public:
     const static QString JSON_DATAS_ID;
 
     Object3DDatas();
-    Object3DDatas(int datasID, SystemObject3D *datas);
+    Object3DDatas(SystemObject3D *datas);
     virtual ~Object3DDatas();
 
     SystemObject3D * datas() const;
@@ -42,9 +42,9 @@ public:
     bool operator==(const Object3DDatas& other) const;
     bool operator!=(const Object3DDatas& other) const;
 
-    static Object3DDatas * instanciate(int datasID, SystemObject3D *datas);
+    static Object3DDatas * instanciate(SystemObject3D *datas);
     static Object3DDatas * instanciateFromJSON(const QJsonObject &json);
-    static SystemObject3D * readFromJSON(const QJsonObject &json, int &id);
+    static SystemObject3D * readFromJSON(const QJsonObject &json);
 
     virtual int width() const = 0;
     virtual int height() const = 0;
@@ -55,8 +55,9 @@ public:
     virtual void getCenter(QVector3D &center) const = 0;
     virtual int minDistanceFromCenter() const = 0;
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
-        &indexes, Position &position, int &count) = 0;
+        &indexes, Position &position, unsigned int &count) = 0;
     virtual float intersection(QRay3D& ray) const = 0;
+    virtual void preLoadSize(Position &position) = 0;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
@@ -64,7 +65,6 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    int m_datasID;
     SystemObject3D *m_datas;
 };
 

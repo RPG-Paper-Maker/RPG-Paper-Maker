@@ -171,7 +171,7 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                 tileset, front, layerOn);
             break;
         case MapEditorSelectionKind::Objects3D:
-            element = Object3DDatas::instanciate(specialID, reinterpret_cast<
+            element = Object3DDatas::instanciate(reinterpret_cast<
                 SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
                 ->specialElementsDatas()->model(PictureKind::Object3D)
                 ->invisibleRootItem(), specialID)));

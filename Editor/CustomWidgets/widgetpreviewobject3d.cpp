@@ -64,7 +64,7 @@ void WidgetPreviewObject3D::loadObject(SystemObject3D *object) {
     if (m_object != nullptr) {
         delete m_object;
     }
-    m_object = Object3DDatas::instanciate(object->id(), object);
+    m_object = Object3DDatas::instanciate(object);
 }
 
 // -------------------------------------------------------
@@ -90,7 +90,7 @@ void WidgetPreviewObject3D::updateObject() {
         // Update camera position
         m_camera->setDistance(m_object->minDistanceFromCenter());
         m_camera->setHorizontalAngle(-145.0);
-        m_camera->setVerticalAngle(55);
+        m_camera->setVerticalAngle(70);
         QVector3D center;
         m_object->getCenter(center);
         m_camera->updateTarget(center);
