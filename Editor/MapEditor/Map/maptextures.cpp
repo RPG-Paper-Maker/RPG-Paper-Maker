@@ -54,6 +54,12 @@ void Map::deleteTextures(){
         delete *i;
     }
     m_texturesSpriteWalls.clear();
+    for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesObjects3D.begin()
+         ; i != m_texturesObjects3D.end(); i++)
+    {
+        delete *i;
+    }
+    m_texturesObjects3D.clear();
     for (int i = 0; i < m_texturesAutotiles.size(); i++)
         delete m_texturesAutotiles[i];
     m_texturesAutotiles.clear();
@@ -119,11 +125,13 @@ void Map::loadSpecialPictures(PictureKind kind,
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
         special = (SystemSpecialElement*) SuperListItem::getById(
                     modelSpecials->invisibleRootItem(), id);
-        QImage image;
-        loadPicture(special->picture(), kind, image);
-        texture = textures.value(special->pictureID());
-        if (texture == nullptr) {
-            textures[special->pictureID()] = createTexture(image);
+        if (id != -1) {
+            QImage image;
+            loadPicture(special->picture(), kind, image);
+            texture = textures.value(special->pictureID());
+            if (texture == nullptr) {
+                textures[special->pictureID()] = createTexture(image);
+            }
         }
     }
     addEmptyPicture(textures);

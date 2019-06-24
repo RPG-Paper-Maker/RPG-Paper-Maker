@@ -70,6 +70,8 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
         modelIndex = ui->comboBoxShape->model()->index(i, 0);
         ui->comboBoxShape->model()->setData(modelIndex, v, Qt::UserRole - 1);
     }
+    modelIndex = ui->comboBoxCollision->model()->index(3, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, v, Qt::UserRole - 1);
 
     // Update UI widgets visible according to kind
     if (m_kind == PictureKind::Object3D) {
@@ -175,7 +177,10 @@ void PanelSpecialElements::showObject3D() {
 // -------------------------------------------------------
 
 void PanelSpecialElements::showBox() {
-    ui->horizontalSpacer->changeSize(0, 0);
+    QModelIndex modelIndex;
+    QVariant vDisable(0);
+    QVariant vEnable(1 | 32);
+
     ui->horizontalSpacer_5->changeSize(0, 0);
     ui->horizontalSpacer_6->changeSize(0, 0);
 
@@ -183,19 +188,29 @@ void PanelSpecialElements::showBox() {
     ui->widgetShapeObj->hide();
     ui->labelMtl->hide();
     ui->widgetShapeMtl->hide();
-    ui->labelCollisions->hide();
-    ui->comboBoxCollision->hide();
     ui->widgetShapeCollisions->hide();
     ui->labelScale->hide();
     ui->doubleSpinBoxScale->hide();
     ui->groupBoxSize->show();
+
+    modelIndex = ui->comboBoxCollision->model()->index(1, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vEnable, Qt::UserRole -
+        1);
+    modelIndex = ui->comboBoxCollision->model()->index(2, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vDisable, Qt::UserRole -
+        1);
+    if (ui->comboBoxCollision->currentIndex() == 2) {
+        ui->comboBoxCollision->setCurrentIndex(1);
+    }
 }
 
 // -------------------------------------------------------
 
 void PanelSpecialElements::showCustomObject() {
-    ui->horizontalSpacer->changeSize(m_spacersSize.at(0).width(),
-        m_spacersSize.at(0).height());
+    QModelIndex modelIndex;
+    QVariant vDisable(0);
+    QVariant vEnable(1 | 32);
+
     ui->horizontalSpacer_5->changeSize(m_spacersSize.at(3).width(),
         m_spacersSize.at(3).height());
     ui->horizontalSpacer_6->changeSize(m_spacersSize.at(4).width(),
@@ -205,13 +220,21 @@ void PanelSpecialElements::showCustomObject() {
     ui->widgetShapeObj->show();
     ui->labelMtl->show();
     ui->widgetShapeMtl->show();
-    ui->labelCollisions->show();
-    ui->comboBoxCollision->show();
     ui->widgetShapeCollisions->setVisible(currentElement()->collisionKind() ==
         ObjectCollisionKind::Custom);
     ui->labelScale->show();
     ui->doubleSpinBoxScale->show();
     ui->groupBoxSize->hide();
+
+    modelIndex = ui->comboBoxCollision->model()->index(1, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vDisable, Qt::UserRole -
+        1);
+    modelIndex = ui->comboBoxCollision->model()->index(2, 0);
+    ui->comboBoxCollision->model()->setData(modelIndex, vEnable, Qt::UserRole -
+        1);
+    if (ui->comboBoxCollision->currentIndex() == 1) {
+        ui->comboBoxCollision->setCurrentIndex(2);
+    }
 }
 
 // -------------------------------------------------------
@@ -269,6 +292,8 @@ void PanelSpecialElements::on_comboBoxShape_currentIndexChanged(int index) {
         default:
             break;
         }
+        ui->widgetPreviewObject3D->loadObject(static_cast<SystemObject3D *>(
+            element));
         ui->widgetPreviewObject3D->updateObject();
     }
 }
