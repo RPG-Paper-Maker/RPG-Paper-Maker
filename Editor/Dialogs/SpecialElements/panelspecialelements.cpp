@@ -92,8 +92,12 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
     if (kind == PictureKind::Walls) {
         ui->widgetTilesetSettings->deleteDirectionTab();
     }
+
+    // Connections
     connect(ui->widgetPicture, SIGNAL(pictureChanged(SystemPicture *)), this,
         SLOT(on_pictureChanged(SystemPicture*)));
+    connect(ui->widgetShapeObj, SIGNAL(shapeChanged()), this, SLOT(
+        on_objChanged()));
 
     // By default, go to first item
     index = m_model->index(0, 0);
@@ -282,6 +286,16 @@ void PanelSpecialElements::on_pictureChanged(SystemPicture *picture) {
 
 // -------------------------------------------------------
 
+void PanelSpecialElements::on_objChanged() {
+    SystemObject3D *element;
+
+    element = reinterpret_cast<SystemObject3D *>(this->currentElement());
+    ui->widgetPreviewObject3D->loadObject(element);
+    ui->widgetPreviewObject3D->updateObject();
+}
+
+// -------------------------------------------------------
+
 void PanelSpecialElements::on_comboBoxCollision_currentIndexChanged(int index) {
     SystemSpecialElement *element;
 
@@ -301,6 +315,7 @@ void PanelSpecialElements::on_doubleSpinBoxScale_valueChanged(double d) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setScale(d);
+        ui->widgetPreviewObject3D->updateObject();
     }
 }
 

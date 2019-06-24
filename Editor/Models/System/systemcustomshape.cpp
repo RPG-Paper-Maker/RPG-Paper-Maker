@@ -14,6 +14,10 @@
 #include "common.h"
 
 const QString SystemCustomShape::JSON_BR = "br";
+const QString SystemCustomShape::PARSE_VERTEX = "v ";
+const QString SystemCustomShape::PARSE_NORMAL = "vn ";
+const QString SystemCustomShape::PARSE_TEXTURE = "vt ";
+const QString SystemCustomShape::PARSE_FACE = "f ";
 
 // -------------------------------------------------------
 //
@@ -44,6 +48,30 @@ bool SystemCustomShape::isBR() const {
 
 void SystemCustomShape::setIsBR(bool b) {
     m_isBR = b;
+}
+
+QVector3D SystemCustomShape::getVertexAt(int i) const {
+    return m_vertices.at(i);
+}
+
+QVector2D SystemCustomShape::getTextureAt(int i) const {
+    return m_textures.at(i);
+}
+
+QPair<int, int> SystemCustomShape::getFace(int i) const {
+    return m_faces.at(i);
+}
+
+int SystemCustomShape::facesCount() const {
+    return m_faces.size();
+}
+
+QVector3D SystemCustomShape::minVertex() const {
+    return m_minVertex;
+}
+
+QVector3D SystemCustomShape::maxVertex() const {
+    return m_maxVertex;
 }
 
 // -------------------------------------------------------
@@ -140,6 +168,93 @@ QString SystemCustomShape::getLocalPath(CustomShapeKind kind) const {
     QString folder = getLocalFolder(kind);
 
     return Common::pathCombine(folder, name());
+}
+
+// -------------------------------------------------------
+
+void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
+    if (kind != CustomShapeKind::OBJ) {
+        return;
+    }
+
+    QVector3D temp3D;
+    QVector2D temp2D;
+    QStringList lineList, arg;
+    QString fileLine, fileName;
+    int i, squareSize;
+    bool firstVertex;
+
+    // clear
+    m_vertices.clear();
+    m_textures.clear();
+    m_faces.clear();
+
+    // Parsing .obj file
+    firstVertex = true;
+    squareSize = RPM::get()->getSquareSize();
+    fileName = this->getPath(CustomShapeKind::OBJ);
+    if (fileName.isEmpty()) {
+        return;
+    }
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream fileText(&file);
+        while (!fileText.atEnd()) {
+            fileLine = fileText.readLine();
+            if (fileLine.startsWith(PARSE_VERTEX)) {
+                lineList = fileLine.split(" ");
+                lineList.removeAll("");
+                temp3D.setX(lineList[1].toFloat());
+                temp3D.setY(lineList[2].toFloat());
+                temp3D.setZ(lineList[3].toFloat());
+                m_vertices.append(temp3D);
+
+                // Determine min and max border for creating box collision
+                if (firstVertex) {
+                    m_minVertex = temp3D;
+                    m_maxVertex = temp3D;
+                    firstVertex = false;
+                } else {
+                    if (temp3D.x() < m_minVertex.x()) {
+                        m_minVertex.setX(temp3D.x());
+                    }
+                    if (temp3D.y() < m_minVertex.y()) {
+                        m_minVertex.setY(temp3D.y());
+                    }
+                    if (temp3D.z() < m_minVertex.z()) {
+                        m_minVertex.setZ(temp3D.z());
+                    }
+                    if (temp3D.x() > m_maxVertex.x()) {
+                        m_maxVertex.setX(temp3D.x());
+                    }
+                    if (temp3D.y() > m_maxVertex.y()) {
+                        m_maxVertex.setY(temp3D.y());
+                    }
+                    if (temp3D.z() > m_maxVertex.z()) {
+                        m_maxVertex.setZ(temp3D.z());
+                    }
+                }
+            }
+            else if (fileLine.startsWith(PARSE_TEXTURE)) {
+                lineList = fileLine.split(" ");
+                lineList.removeAll("");
+                temp2D.setX(lineList[1].toFloat());
+                temp2D.setY(1.0f - lineList[2].toFloat());
+                m_textures.append(temp2D);
+            }
+            else if (fileLine.startsWith(PARSE_FACE)) {
+                lineList = fileLine.split(" ");
+                lineList.removeAll("");
+
+                for (i = 1; i <= 3; i++) {
+                    arg = lineList[i].split("/");
+                    m_faces.append(QPair<int, int>(arg[0].toInt() - 1, arg[1]
+                        .toInt() - 1));
+                }
+            }
+        }
+    }
+    file.close();
 }
 
 // -------------------------------------------------------

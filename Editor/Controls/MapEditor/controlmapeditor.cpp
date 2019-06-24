@@ -638,6 +638,8 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
             return m_elementOnObject3D;
         }
         position = m_positionOnLand;
+        position.setCenterX(0);
+        position.setCenterZ(0);
         return nullptr;
     case MapEditorSelectionKind::Objects:
         position = m_positionOnObject;

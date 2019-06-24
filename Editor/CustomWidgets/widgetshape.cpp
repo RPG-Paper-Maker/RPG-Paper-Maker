@@ -65,8 +65,13 @@ void WidgetShape::update() {
 
 void WidgetShape::openDialog(){
     DialogShapesPreview dialog(m_shapeID, m_kind);
+    int previousID = m_shapeID->id();
     if (dialog.exec() == QDialog::Accepted) {
         update();
+
+        if (previousID != m_shapeID->id()) {
+            emit shapeChanged();
+        }
     }
 }
 

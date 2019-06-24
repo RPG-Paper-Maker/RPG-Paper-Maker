@@ -15,7 +15,7 @@
 const QString SystemSpecialElement::JSON_SHAPE_KIND = "sk";
 const QString SystemSpecialElement::JSON_OBJ_ID = "oid";
 const QString SystemSpecialElement::JSON_MTL_ID = "mid";
-const QString SystemSpecialElement::JSON_PIC_ID = "pid";
+const QString SystemSpecialElement::JSON_PIC_ID = "pic";
 const QString SystemSpecialElement::JSON_COLLISION_KIND = "ck";
 const QString SystemSpecialElement::JSON_COLLISION_CUSTOM_ID = "ccid";
 const QString SystemSpecialElement::JSON_SCALE = "s";
@@ -195,8 +195,13 @@ void SystemSpecialElement::updateCustomCollisionName() {
 void SystemSpecialElement::updateGenericObjectName(SuperListItem *obj,
     CustomShapeKind kind)
 {
-    obj->setName(SuperListItem::getById(RPM::get()->project()->shapesDatas()
-        ->model(kind)->invisibleRootItem(), obj->id())->name());
+    SuperListItem *super;
+
+    super = SuperListItem::getById(RPM::get()->project()->shapesDatas()->model(
+        kind)->invisibleRootItem(), obj->id());
+    if (super != nullptr) {
+        obj->setName(super->name());
+    }
 }
 
 // -------------------------------------------------------

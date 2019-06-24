@@ -466,8 +466,6 @@ void ProjectUpdater::updateVersion_1_1_1() {
 void ProjectUpdater::updateVersion_1_2_0() {
     QDir dir(m_project->pathCurrentProject());
 
-    // TODO : update height map properties to 1 by default
-
     // Shapes default
     m_project->readShapesDatas();
     m_project->shapesDatas()->setDefault();

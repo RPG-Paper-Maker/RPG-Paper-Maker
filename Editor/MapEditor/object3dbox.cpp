@@ -257,12 +257,6 @@ float Object3DBoxDatas::intersection(QRay3D &ray) const {
 
 // -------------------------------------------------------
 
-void Object3DBoxDatas::preLoadSize(Position &) {
-    // Don't need any preload
-}
-
-// -------------------------------------------------------
-
 void Object3DBoxDatas::read(const QJsonObject & json) {
     Object3DDatas::read(json);
 }

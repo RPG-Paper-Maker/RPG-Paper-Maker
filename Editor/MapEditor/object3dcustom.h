@@ -26,11 +26,6 @@
 class Object3DCustomDatas : public Object3DDatas
 {
 public:
-    const static QString PARSE_VERTEX;
-    const static QString PARSE_NORMAL;
-    const static QString PARSE_TEXTURE;
-    const static QString PARSE_FACE;
-
     Object3DCustomDatas();
     Object3DCustomDatas(SystemObject3D *datas);
     virtual ~Object3DCustomDatas();
@@ -46,15 +41,11 @@ public:
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<
         GLuint> &indexes, Position &position, unsigned int &count);
     virtual float intersection(QRay3D& ray) const;
-    virtual void preLoadSize(Position &position);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
     QBox3D m_box;
-
-    void parseVertices(QString &fileLine, Position &position, QVector3D
-        &minVertex, QVector3D &maxVertex, bool &firstVertex);
 };
 
 #endif // OBJECT3DCUSTOM_H

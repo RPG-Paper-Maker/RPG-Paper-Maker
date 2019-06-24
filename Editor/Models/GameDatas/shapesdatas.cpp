@@ -123,6 +123,7 @@ void ShapesDatas::read(const QJsonObject &json){
     QJsonArray jsonArray;
     QStandardItemModel *model;
     QList<QStandardItem *> row;
+    CustomShapeKind kind;
 
     // Clear
     QHash<CustomShapeKind, QStandardItemModel *>::iterator i;
@@ -135,16 +136,17 @@ void ShapesDatas::read(const QJsonObject &json){
         jsonObj = jsonList.at(i).toObject();
         jsonArray = jsonObj[RPM::JSON_VALUE].toArray();
         model = new QStandardItemModel;
+        kind = static_cast<CustomShapeKind>(jsonObj[RPM::JSON_KEY].toInt());
 
         for (int j = 0; j < jsonArray.size(); j++) {
             SystemCustomShape *super = new SystemCustomShape;
             super->read(jsonArray[j].toObject());
+            super->loadCustomObj(kind);
             row = super->getModelRow();
             model->appendRow(row);
         }
 
-        m_models[static_cast<CustomShapeKind>(jsonObj[RPM::JSON_KEY].toInt())] =
-            model;
+        m_models[kind] = model;
     }
 }
 
@@ -153,17 +155,20 @@ void ShapesDatas::read(const QJsonObject &json){
 void ShapesDatas::write(QJsonObject &json) const {
     QJsonArray jsonFinalArray;
     QStandardItemModel *model;
+    CustomShapeKind kind;
 
     QHash<CustomShapeKind, QStandardItemModel*>::const_iterator i;
     for (i = m_models.begin(); i != m_models.end(); i++) {
         model = i.value();
         QJsonObject jsonObj;
         QJsonArray jsonArray;
-        jsonObj[RPM::JSON_KEY] = static_cast<int>(i.key());
+        kind = i.key();
+        jsonObj[RPM::JSON_KEY] = static_cast<int>(kind);
         for (int j = 0; j < model->invisibleRootItem()->rowCount(); j++) {
             QJsonObject jsonObjPicture;
             SystemCustomShape *super = reinterpret_cast<SystemCustomShape *>(
                 model->item(j)->data().value<quintptr>());
+            super->loadCustomObj(kind);
             super->write(jsonObjPicture);
             jsonArray.append(jsonObjPicture);
         }

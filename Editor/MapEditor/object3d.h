@@ -57,7 +57,6 @@ public:
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
         &indexes, Position &position, unsigned int &count) = 0;
     virtual float intersection(QRay3D& ray) const = 0;
-    virtual void preLoadSize(Position &position) = 0;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;

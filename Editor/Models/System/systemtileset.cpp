@@ -219,7 +219,7 @@ void SystemTileset::read(const QJsonObject &json){
     // Special elements
     readModel(json, "auto", m_modelAutotiles);
     readModel(json, "walls", m_modelSpriteWalls);
-    readModel(json, "3D", m_model3DObjects);
+    readModel(json, "objs", m_model3DObjects);
     readModel(json, "relief", m_modelReliefs);
 }
 
@@ -256,7 +256,7 @@ void SystemTileset::write(QJsonObject &json) const{
     // Special elements
     writeModel(json, "auto", m_modelAutotiles);
     writeModel(json, "walls", m_modelSpriteWalls);
-    writeModel(json, "3D", m_model3DObjects);
+    writeModel(json, "objs", m_model3DObjects);
     writeModel(json, "relief", m_modelReliefs);
 }
 

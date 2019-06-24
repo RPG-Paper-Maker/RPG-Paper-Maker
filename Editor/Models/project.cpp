@@ -140,8 +140,8 @@ bool Project::read(QString path){
     readKeyBoardDatas();
     readPicturesDatas();
     readSongsDatas();
-    readShapesDatas();
     readGameDatas();
+    readShapesDatas();
     readTreeMapDatas();
     readScriptsDatas();
     readSpecialsDatas();
@@ -407,9 +407,9 @@ void Project::write(QString path) {
     writeKeyBoardDatas();
     writePicturesDatas();
     writeSongsDatas();
-    writeShapesDatas();
     writeSpecialsDatas();
     writeGameDatas();
+    writeShapesDatas();
     writeTreeMapDatas();
     writeScriptsDatas();
 }

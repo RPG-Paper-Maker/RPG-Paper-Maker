@@ -50,6 +50,9 @@ private:
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);
     void on_pushButton_clicked();
+
+signals:
+    void shapeChanged();
 };
 
 #endif // WIDGETSHAPE_H

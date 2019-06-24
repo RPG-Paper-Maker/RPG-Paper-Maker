@@ -50,7 +50,6 @@ public:
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<
         GLuint> &indexes, Position &position, unsigned int &count);
     virtual float intersection(QRay3D& ray) const;
-    virtual void preLoadSize(Position &);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

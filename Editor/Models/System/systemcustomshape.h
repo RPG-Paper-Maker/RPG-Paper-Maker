@@ -13,6 +13,8 @@
 #define SYSTEMCUSTOMSHAPE_H
 
 #include <QMetaType>
+#include <QVector3D>
+#include <QVector2D>
 #include "superlistitem.h"
 #include "customshapekind.h"
 
@@ -28,6 +30,10 @@ class SystemCustomShape : public SuperListItem
 {
 public:
     static const QString JSON_BR;
+    const static QString PARSE_VERTEX;
+    const static QString PARSE_NORMAL;
+    const static QString PARSE_TEXTURE;
+    const static QString PARSE_FACE;
 
     SystemCustomShape();
     SystemCustomShape(int i, QString n, bool isBR);
@@ -35,6 +41,12 @@ public:
 
     bool isBR() const;
     void setIsBR(bool b);
+    QVector3D getVertexAt(int i) const;
+    QVector2D getTextureAt(int i) const;
+    QPair<int, int> getFace(int i) const;
+    int facesCount() const;
+    QVector3D minVertex() const;
+    QVector3D maxVertex() const;
 
     static SystemCustomShape * getByID(int id, CustomShapeKind kind);
     static QString getFolder(CustomShapeKind kind, bool isBR);
@@ -45,6 +57,7 @@ public:
 
     QString getPath(CustomShapeKind kind) const;
     QString getLocalPath(CustomShapeKind kind) const;
+    void loadCustomObj(CustomShapeKind kind);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemCustomShape &super);
@@ -55,6 +68,11 @@ public:
 
 protected:
     bool m_isBR;
+    QList<QVector3D> m_vertices;
+    QList<QVector2D> m_textures;
+    QList<QPair<int, int>> m_faces;
+    QVector3D m_minVertex;
+    QVector3D m_maxVertex;
 };
 
 Q_DECLARE_METATYPE(SystemCustomShape)
