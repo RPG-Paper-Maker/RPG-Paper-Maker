@@ -42,13 +42,14 @@ public:
     const static QString JSON_HEIGHT_PIXEL;
     const static QString JSON_DEPTH_SQUARE;
     const static QString JSON_DEPTH_PIXEL;
+    const static QString JSON_STRETCH;
 
     SystemSpecialElement();
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
         int objID = -1, int mtlID = -1, int pictureID = -1, ObjectCollisionKind
         collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
         double scale = 1.0, int wS = 1, int wP = 0, int hS = 1, int hP = 0, int
-        dS = 1, int dP = 0);
+        dS = 1, int dP = 0, bool stretch = false);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -75,6 +76,8 @@ public:
     void setDepthSquare(int ds);
     int depthPixel() const;
     void setDepthPixel(int dp);
+    bool stretch() const;
+    void setStretch(bool s);
 
     void updateObjName();
     void updateMtlName();
@@ -101,6 +104,7 @@ protected:
     int m_heightPixel;
     int m_depthSquare;
     int m_depthPixel;
+    bool m_stretch;
 
     SystemPicture* pictureByKind(PictureKind kind) const;
 };

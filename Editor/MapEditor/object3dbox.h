@@ -28,6 +28,7 @@ class Object3DBoxDatas : public Object3DDatas
 public:
     static QVector3D VERTICES[];
     static QVector2D TEXTURES[];
+    static QList<float> TEXTURES_VALUES;
     static GLuint INDEXES[];
     static int NB_VERTICES;
     static int NB_INDEXES;

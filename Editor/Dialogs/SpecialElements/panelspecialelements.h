@@ -67,6 +67,7 @@ private slots:
     void on_spinBoxPixelsHeight_valueChanged(int i);
     void on_spinBoxSquaresDepth_valueChanged(int i);
     void on_spinBoxPixelsDepth_valueChanged(int i);
+    void on_comboBoxStretch_currentIndexChanged(int index);
 };
 
 #endif // PANELSPECIALELEMENTS_H

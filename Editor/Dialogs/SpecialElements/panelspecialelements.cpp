@@ -132,6 +132,7 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->spinBoxPixelsHeight->setValue(sys->heightPixel());
     ui->spinBoxSquaresDepth->setValue(sys->depthSquare());
     ui->spinBoxPixelsDepth->setValue(sys->depthPixel());
+    ui->comboBoxStretch->setCurrentIndex(sys->stretch() ? 0 : 1);
 
     // Object previewer
     if (m_kind == PictureKind::Object3D) {
@@ -387,6 +388,18 @@ void PanelSpecialElements::on_spinBoxPixelsDepth_valueChanged(int i) {
     element = this->currentElement();
     if (element != nullptr) {
         element->setDepthPixel(i);
+        ui->widgetPreviewObject3D->updateObject();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::on_comboBoxStretch_currentIndexChanged(int index) {
+    SystemSpecialElement *element;
+
+    element = this->currentElement();
+    if (element != nullptr) {
+        element->setStretch(index == 0);
         ui->widgetPreviewObject3D->updateObject();
     }
 }

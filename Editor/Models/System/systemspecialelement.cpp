@@ -25,6 +25,7 @@ const QString SystemSpecialElement::JSON_HEIGHT_SQUARE = "hs";
 const QString SystemSpecialElement::JSON_HEIGHT_PIXEL = "hp";
 const QString SystemSpecialElement::JSON_DEPTH_SQUARE = "ds";
 const QString SystemSpecialElement::JSON_DEPTH_PIXEL = "dp";
+const QString SystemSpecialElement::JSON_STRETCH = "st";
 
 // -------------------------------------------------------
 //
@@ -41,7 +42,7 @@ SystemSpecialElement::SystemSpecialElement() :
 SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
     int collisionCustomID, double scale, int wS, int wP, int hS,
-    int hP, int dS, int dP) :
+    int hP, int dS, int dP, bool stretch) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
     m_objID(new SuperListItem(objID)),
@@ -55,7 +56,8 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_heightSquare(hS),
     m_heightPixel(hP),
     m_depthSquare(dS),
-    m_depthPixel(dP)
+    m_depthPixel(dP),
+    m_stretch(stretch)
 {
     updateObjName();
     updateMtlName();
@@ -167,6 +169,14 @@ void SystemSpecialElement::setDepthPixel(int dp) {
     m_depthPixel = dp;
 }
 
+bool SystemSpecialElement::stretch() const {
+    return m_stretch;
+}
+
+void SystemSpecialElement::setStretch(bool s) {
+    m_stretch = s;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -251,6 +261,7 @@ void SystemSpecialElement::setCopy(const SystemSpecialElement& super) {
     m_heightPixel = super.m_heightPixel;
     m_depthSquare = super.m_depthSquare;
     m_depthPixel = super.m_depthPixel;
+    m_stretch = super.m_stretch;
 }
 
 // -------------------------------------------------------
@@ -300,6 +311,9 @@ void SystemSpecialElement::read(const QJsonObject &json){
     }
     if (json.contains(JSON_DEPTH_PIXEL)) {
         m_depthPixel = json[JSON_DEPTH_PIXEL].toInt();
+    }
+    if (json.contains(JSON_STRETCH)) {
+        m_stretch = json[JSON_STRETCH].toBool();
     }
 }
 
@@ -353,6 +367,9 @@ void SystemSpecialElement::write(QJsonObject &json) const{
         }
         if (m_depthPixel != 0) {
             json[JSON_DEPTH_PIXEL] = m_depthPixel;
+        }
+        if (m_stretch) {
+            json[JSON_STRETCH] = m_stretch;
         }
     }
 }
