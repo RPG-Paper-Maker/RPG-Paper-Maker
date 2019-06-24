@@ -140,12 +140,16 @@ Object3DBoxDatas::~Object3DBoxDatas()
 void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     QVector3D &center, Position &position)
 {
-    int squareSize = RPM::get()->getSquareSize();
+    int squareSize;
+    float coef;
+
+    squareSize = RPM::get()->getSquareSize();
+    coef = 0.01f;
 
     // Size
-    size.setX(static_cast<float>(this->widthPixels()));
-    size.setY(static_cast<float>(this->heightPixels()));
-    size.setZ(static_cast<float>(this->depthPixels()));
+    size.setX(static_cast<float>(this->widthPixels()) - (2 * coef));
+    size.setY(static_cast<float>(this->heightPixels()) - (2 * coef));
+    size.setZ(static_cast<float>(this->depthPixels()) - (2 * coef));
 
     // Center
     center.setX(pos.x() + (size.x() / 2));
@@ -153,9 +157,9 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     center.setZ(pos.z() + (size.z() / 2));
 
     // Position
-    pos.setX((position.x() * squareSize));
-    pos.setY((position.getY(squareSize)));
-    pos.setZ((position.z() * squareSize));
+    pos.setX((position.x() * squareSize) + coef);
+    pos.setY(position.getY(squareSize) + coef);
+    pos.setZ((position.z() * squareSize) + coef);
 }
 
 // -------------------------------------------------------
