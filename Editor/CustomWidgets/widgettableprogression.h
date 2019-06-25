@@ -13,8 +13,8 @@
 #define WIDGETTABLEPROGRESSION_H
 
 #include <QTableWidget>
-#include <QtCharts>
 #include "systemprogressiontable.h"
+#include "widgetchart.h"
 
 class WidgetTableProgression : public QTableWidget
 {
@@ -36,8 +36,8 @@ public:
     void initialize(int rows, QString progression);
     void updateWithBaseInflation(int base, double inflation, int maxLevel,
         QHash<int, int> *subTable = nullptr);
-    void updateWithEasing(SystemProgressionTable* progression, QChartView *chartView,
-        int finalLevel);
+    void updateWithEasing(SystemProgressionTable* progression, WidgetChart
+        *chartView, int finalLevel);
     int easingLinear(double x, int start, int change, int duration);
     int easingQuadraticIn(double x, int start, int change, int duration);
     int easingQuadraticOut(double x, int start, int change, int duration);
@@ -48,15 +48,12 @@ public:
     int easingQuinticIn(double x, int start, int change, int duration);
     int easingQuinticOut(double x, int start, int change, int duration);
     void updateTotal();
-    void deleteLines();
 
 protected:
     bool m_completing;
     QHash<int, int> *m_table;
     WidgetTableProgression *m_totalWidget;
     QColor m_editedColor;
-    QLineSeries *m_line;
-    QLineSeries *m_horizontalLine;
 
 public slots:
     void on_cellChanged(int row, int column);

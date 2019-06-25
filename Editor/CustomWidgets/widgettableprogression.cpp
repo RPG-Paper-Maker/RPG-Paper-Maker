@@ -24,21 +24,19 @@ const QColor WidgetTableProgression::SUB_EDITED_COLOR = Qt::cyan;
 // -------------------------------------------------------
 
 WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
-    QTableWidget (parent),
+    QTableWidget(parent),
     m_completing(false),
     m_table(nullptr),
     m_totalWidget(nullptr),
-    m_editedColor(EDITED_COLOR),
-    m_line(nullptr),
-    m_horizontalLine(nullptr)
+    m_editedColor(EDITED_COLOR)
 {
-    connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(int,
-        int)));
+    connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(
+        int, int)));
     setEditable(true);
 }
 
 WidgetTableProgression::~WidgetTableProgression() {
-    deleteLines();
+
 }
 
 void WidgetTableProgression::setEditable(bool b) {
@@ -136,7 +134,7 @@ void WidgetTableProgression::updateWithBaseInflation(int base, double inflation,
 // -------------------------------------------------------
 
 void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
-    progression, QChartView *chartView, int finalLevel)
+    progression, WidgetChart *chartView, int finalLevel)
 {
     int start = progression->initialValue()->kind() == PrimitiveValueKind
         ::Number ? progression->initialValue()->numberValue() : 0;
@@ -149,11 +147,10 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
     QTableWidgetItem *itemLevel, * itemProgression;
 
     // Chart lines initialization
-    deleteLines();
-    m_line = new QLineSeries();
-    m_horizontalLine = new QLineSeries();
-    QVector<QPointF> expList;
-    *m_line<< QPointF(0, 0);
+    QLine horizontalLine;
+    QVector<QPoint> line;
+    QVector<QPoint> expList;
+    line << QPoint(0, 0);
 
     // Update according to equation
     for (int i = 0; i < finalLevel; i++) {
@@ -193,36 +190,21 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
 
         setItem(i, 0, itemLevel);
         setItem(i, 1, itemProgression);
-        *m_line << QPoint(i + 1, value);
+        line << QPoint(i + 1, value);
     }
 
     // Chart config
-    *m_horizontalLine << QPointF(1, 0) << QPointF(finalLevel, 0);
-    QAreaSeries *series = new QAreaSeries(m_line, m_horizontalLine);
+    horizontalLine.setP1(QPoint(1, 0));
+    horizontalLine.setP2(QPoint(finalLevel, 0));
     QPen pen(0x4f0a5b);
     pen.setWidth(2);
-    series->setPen(pen);
     QLinearGradient gradient(QPointF(0, 0), QPointF(0, 1));
     gradient.setColorAt(0.0, 0x9234a3);
     gradient.setColorAt(1.0, 0x9234a3);
     gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-    series->setBrush(gradient);
-    QChart *chart = chartView->chart();
-    chart->removeAllSeries();
-    chart->addSeries(series);
-    chart->createDefaultAxes();
-    QValueAxis *axisX = reinterpret_cast<QValueAxis *>(chart->axes(Qt
-        ::Horizontal).first());
-    QValueAxis *axisY = reinterpret_cast<QValueAxis *>(chart->axes(Qt
-        ::Vertical).first());
-    axisX->setRange(1, finalLevel);
-    axisY->setRange(0, value);
-    axisX->setTickCount(5);
-    axisX->setLabelFormat("%d");
-    axisY->setTickCount(5);
-    axisY->setLabelFormat("%d");
-    chart->legend()->setVisible(false);
-    chartView->setRenderHint(QPainter::Antialiasing);
+
+    chartView->initialize(line, horizontalLine, pen, gradient, 1, finalLevel, 5,
+        0, value, 5);
 
     m_completing = false;
 }
@@ -320,17 +302,6 @@ void WidgetTableProgression::updateTotal() {
             total += item(i - 1, 1)->text().toInt();
             m_totalWidget->item(i, 1)->setText(QString::number(total));
         }
-    }
-}
-
-// -------------------------------------------------------
-
-void WidgetTableProgression::deleteLines() {
-    if (m_line != nullptr) {
-        delete m_line;
-    }
-    if (m_horizontalLine != nullptr) {
-        delete m_horizontalLine;
     }
 }
 

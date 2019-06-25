@@ -41,7 +41,6 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
 
 PanelProgressionTable::~PanelProgressionTable()
 {
-    ui->graphicsView->chart()->removeAllSeries();
     delete ui;
 }
 
@@ -78,7 +77,7 @@ void PanelProgressionTable::updateProgress() {
         ui->panelPrimitiveValueFinal->updateKind();
         ui->tableWidget->setTable(m_progression->table());
         ui->tableWidget->initialize(m_maxLevel, NAME_EXPERIENCE);
-        ui->tableWidget->updateWithEasing(m_progression, ui->graphicsView,
+        ui->tableWidget->updateWithEasing(m_progression, ui->widgetChart,
             m_maxLevel);
         m_updating = false;
     }

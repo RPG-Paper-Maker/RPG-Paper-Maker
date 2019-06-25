@@ -288,7 +288,8 @@ HEADERS += \
     MapEditor/objects3d.h \
     MapEditor/object3dbox.h \
     CustomWidgets/widgetpreviewobject3d.h \
-    MapEditor/object3dcustom.h
+    MapEditor/object3dcustom.h \
+    CustomWidgets/widgetchart.h
 
 SOURCES += \
     Dialogs/mainwindow.cpp \
@@ -532,7 +533,8 @@ SOURCES += \
     MapEditor/objects3d.cpp \
     MapEditor/object3dbox.cpp \
     CustomWidgets/widgetpreviewobject3d.cpp \
-    MapEditor/object3dcustom.cpp
+    MapEditor/object3dcustom.cpp \
+    CustomWidgets/widgetchart.cpp
 
 FORMS += \
     Dialogs/mainwindow.ui \

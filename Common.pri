@@ -43,7 +43,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Common QT modules
-QT       += core gui opengl network multimedia charts
+QT       += core gui opengl network multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # Common include paths

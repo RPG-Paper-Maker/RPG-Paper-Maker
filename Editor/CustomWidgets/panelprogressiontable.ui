@@ -75,7 +75,14 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QChartView" name="graphicsView"/>
+          <widget class="WidgetChart" name="widgetChart">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -214,9 +221,10 @@
    <header>widgettableprogression.h</header>
   </customwidget>
   <customwidget>
-   <class>QChartView</class>
-   <extends>QGraphicsView</extends>
-   <header>QtCharts</header>
+   <class>WidgetChart</class>
+   <extends>QFrame</extends>
+   <header>widgetchart.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
