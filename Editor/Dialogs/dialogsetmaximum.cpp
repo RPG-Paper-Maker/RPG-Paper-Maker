@@ -49,6 +49,10 @@ int DialogSetMaximum::maximum() const { return ui->spinBoxMaximum->value(); }
 // -------------------------------------------------------
 
 bool DialogSetMaximum::isOrderedMax(QStandardItemModel* model, int limit) {
+    if (limit <= 0) {
+        return false;
+    }
+
     // If deleting stuff...
     if (limit < model->invisibleRootItem()->rowCount()){
         for (int i = 0; i < limit; i++){
