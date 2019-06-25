@@ -227,8 +227,10 @@ void Cursor::addHeight(int h, int hp) {
     yPlus = Common::modulo(qFloor(static_cast<qreal>(m_positionReal.y())),
         m_squareSize);
 
-    if (y + h >= -maxD && y + h <= maxH) {
-        newY = ((y + h) * m_squareSize) + Common::modulo(yPlus + hp, m_squareSize);
+    if (y + h >= -maxD && y + h <= maxH && yPlus + hp >= 0 && yPlus + hp <
+        m_squareSize)
+    {
+        newY = ((y + h) * m_squareSize) + yPlus + hp;
 
         m_positionSquare->setY(newY);
         m_positionReal.setY(newY);
