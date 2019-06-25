@@ -12,6 +12,7 @@
 #include "objects3d.h"
 #include "map.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -126,13 +127,17 @@ void Objects3D::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
 {
     Portion currentPortion;
     Map::getGlobalPortion(p, currentPortion);
-    int r = object3D->width();
-    int h = object3D->height();
-    int d = object3D->depth();
+    double scale = object3D->datas()->scale();
+    int x = Common::ceil(object3D->xMin() * scale);
+    int y = Common::ceil(object3D->yMin() * scale);
+    int z = Common::ceil(object3D->zMin() * scale);
+    int r = Common::ceil(object3D->xMax() * scale);
+    int h = Common::ceil(object3D->yMax() * scale);
+    int d = Common::ceil(object3D->zMax() * scale);
 
-    for (int i = 0; i < r; i++) {
-        for (int j = 0; j < h; j++) {
-            for (int k = 0; k < d; k++) {
+    for (int i = x; i < r; i++) {
+        for (int j = y; j < h; j++) {
+            for (int k = z; k < d; k++) {
                 Position newPosition = p;
                 newPosition.addX(i);
                 newPosition.addY(j);

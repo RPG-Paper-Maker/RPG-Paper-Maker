@@ -40,6 +40,12 @@ public:
     void getPosSizeCenterInfos(QVector3D &pos, QVector3D &size, QVector3D
         &center, Position &position);
 
+    virtual qreal xMin() const;
+    virtual qreal yMin() const;
+    virtual qreal zMin() const;
+    virtual qreal xMax() const;
+    virtual qreal yMax() const;
+    virtual qreal zMax() const;
     virtual int width() const;
     virtual int height() const;
     virtual int depth() const;

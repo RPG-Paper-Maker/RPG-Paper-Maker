@@ -11,6 +11,7 @@
 
 #include "object3dcustom.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -27,7 +28,9 @@ Object3DCustomDatas::Object3DCustomDatas() :
 Object3DCustomDatas::Object3DCustomDatas(SystemObject3D *datas) :
     Object3DDatas(datas)
 {
-    m_box = QBox3D(datas->obj()->minVertex(), datas->obj()->maxVertex());
+    m_min = datas->obj()->minVertex();
+    m_max = datas->obj()->maxVertex();
+    m_box = QBox3D(m_min, m_max);
 }
 
 Object3DCustomDatas::~Object3DCustomDatas()
@@ -41,20 +44,59 @@ Object3DCustomDatas::~Object3DCustomDatas()
 //
 // -------------------------------------------------------
 
+qreal Object3DCustomDatas::xMin() const {
+    return static_cast<qreal>(m_min.x()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DCustomDatas::yMin() const {
+    return static_cast<qreal>(m_min.y()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DCustomDatas::zMin() const {
+    return static_cast<qreal>(m_min.z()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DCustomDatas::xMax() const {
+    return static_cast<qreal>(m_max.x()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DCustomDatas::yMax() const {
+    return static_cast<qreal>(m_max.y()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DCustomDatas::zMax() const {
+    return static_cast<qreal>(m_max.z()) / RPM::get()->getSquareSize();
+}
+
+// -------------------------------------------------------
+
 int Object3DCustomDatas::width() const {
-    return this->widthPixels() / RPM::get()->getSquareSize();
+    return Common::ceil(static_cast<qreal>(this->widthPixels()) / RPM::get()
+        ->getSquareSize());
 }
 
 // -------------------------------------------------------
 
 int Object3DCustomDatas::height() const {
-    return this->heightPixels() / RPM::get()->getSquareSize();
+    return Common::ceil(static_cast<qreal>(this->heightPixels()) / RPM::get()
+        ->getSquareSize());
 }
 
 // -------------------------------------------------------
 
 int Object3DCustomDatas::depth() const {
-    return this->depthPixels() / RPM::get()->getSquareSize();
+    return Common::ceil(static_cast<qreal>(this->depthPixels()) / RPM::get()
+        ->getSquareSize());
 }
 
 // -------------------------------------------------------
@@ -65,8 +107,7 @@ int Object3DCustomDatas::widthPixels() const {
     minimum = m_box.minimum();
     maximum = m_box.maximum();
 
-    return static_cast<int>(static_cast<int>(maximum.x() - minimum.x()) *
-        m_datas->scale());
+    return static_cast<int>(maximum.x() - minimum.x());
 }
 
 // -------------------------------------------------------
@@ -77,8 +118,7 @@ int Object3DCustomDatas::heightPixels() const {
     minimum = m_box.minimum();
     maximum = m_box.maximum();
 
-    return static_cast<int>(static_cast<int>(maximum.y() - minimum.y()) *
-        m_datas->scale());
+    return static_cast<int>(maximum.y() - minimum.y());
 }
 
 // -------------------------------------------------------
@@ -89,18 +129,15 @@ int Object3DCustomDatas::depthPixels() const {
     minimum = m_box.minimum();
     maximum = m_box.maximum();
 
-    return static_cast<int>(static_cast<int>(maximum.z() - minimum.z()) *
-        m_datas->scale());
+    return static_cast<int>(maximum.z() - minimum.z());
 }
 
 // -------------------------------------------------------
 
 void Object3DCustomDatas::getCenter(QVector3D &center) const {
     QVector3D vec;
-    float scale;
 
-    scale = static_cast<float>(m_datas->scale());
-    vec = m_box.center() * QVector3D(scale, scale, scale);
+    vec = m_box.center();
     center.setX(vec.x());
     center.setY(vec.y());
     center.setZ(vec.z());

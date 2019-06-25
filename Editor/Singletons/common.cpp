@@ -9,8 +9,9 @@
     See more information here: http://rpg-paper-maker.com/index.php/downloads.
 */
 
-#include "common.h"
 #include <QDirIterator>
+#include <QtMath>
+#include "common.h"
 
 const QStringList Common::enumToStringDamagesKind = {
     "Statistic", "Currency", "Variable"
@@ -218,4 +219,10 @@ int Common::modulo(int x, int m) {
     int r = x % m;
 
     return r < 0 ? r + m : r;
+}
+
+// -------------------------------------------------------
+
+int Common::ceil(qreal r) {
+    return r < 0 ? qFloor(r) : qCeil(r);
 }

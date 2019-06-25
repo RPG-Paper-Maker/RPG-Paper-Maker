@@ -46,6 +46,12 @@ public:
     static Object3DDatas * instanciateFromJSON(const QJsonObject &json);
     static SystemObject3D * readFromJSON(const QJsonObject &json);
 
+    virtual qreal xMin() const = 0;
+    virtual qreal yMin() const = 0;
+    virtual qreal zMin() const = 0;
+    virtual qreal xMax() const = 0;
+    virtual qreal yMax() const = 0;
+    virtual qreal zMax() const = 0;
     virtual int width() const = 0;
     virtual int height() const = 0;
     virtual int depth() const = 0;

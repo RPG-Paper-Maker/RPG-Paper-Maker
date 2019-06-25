@@ -42,6 +42,7 @@ public:
     static bool getSubVersions(QString& version, int& m, int& f, int& b);
     static int versionDifferent(QString projectVersion, QString otherVersion);
     static int modulo(int x, int m);
+    static int ceil(qreal r);
 };
 
 #endif // COMMON_H

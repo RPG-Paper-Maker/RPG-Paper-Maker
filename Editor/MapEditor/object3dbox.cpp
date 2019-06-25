@@ -168,6 +168,41 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
 //
 // -------------------------------------------------------
 
+qreal Object3DBoxDatas::xMin() const {
+    return 0;
+}
+
+// -------------------------------------------------------
+
+qreal Object3DBoxDatas::yMin() const {
+    return 0;
+}
+
+// -------------------------------------------------------
+
+qreal Object3DBoxDatas::zMin() const {
+    return 0;
+}
+
+// -------------------------------------------------------
+
+qreal Object3DBoxDatas::xMax() const {
+    return this->width();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DBoxDatas::yMax() const {
+    return this->height();
+}
+
+// -------------------------------------------------------
+
+qreal Object3DBoxDatas::zMax() const {
+    return this->depth();
+}
+
+// -------------------------------------------------------
 int Object3DBoxDatas::width() const {
     return m_datas->widthSquare() + (m_datas->widthPixel() > 0 ? 1 : 0);
 }

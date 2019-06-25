@@ -30,6 +30,12 @@ public:
     Object3DCustomDatas(SystemObject3D *datas);
     virtual ~Object3DCustomDatas();
 
+    virtual qreal xMin() const;
+    virtual qreal yMin() const;
+    virtual qreal zMin() const;
+    virtual qreal xMax() const;
+    virtual qreal yMax() const;
+    virtual qreal zMax() const;
     virtual int width() const;
     virtual int height() const;
     virtual int depth() const;
@@ -46,6 +52,8 @@ public:
 
 protected:
     QBox3D m_box;
+    QVector3D m_min;
+    QVector3D m_max;
 };
 
 #endif // OBJECT3DCUSTOM_H
