@@ -19,9 +19,10 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     QRect &tileset, int specialID)
 {
     Position p;
+    bool b;
 
     MapElement *element = getPositionSelected(p, selection, subSelection,
-        layerOn);
+        layerOn, b);
 
     if (subSelection == MapEditorSubSelectionKind::SpritesWall) {
         if (!m_isDrawingWall && !m_isDeletingWall) {

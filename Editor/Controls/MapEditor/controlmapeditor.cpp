@@ -126,12 +126,18 @@ void ControlMapEditor::setTreeMapNode(QStandardItem *item) {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::moveCursorToMousePosition(QPoint point)
-{
-    updateMousePosition(point);
+void ControlMapEditor::moveCursorToMousePosition(QPoint point) {
+    Position position;
+    bool b;
 
-    if (m_map->isInGrid(m_positionOnPlane))
-        cursor()->setPositions(m_positionOnPlane);
+    this->updateMousePosition(point);
+
+    this->getPositionSelected(position, MapEditorSelectionKind::None,
+        MapEditorSubSelectionKind::None, true, b, true);
+
+    if (m_map->isInGrid(position)) {
+        this->cursor()->setPositions(position);
+    }
 }
 
 // -------------------------------------------------------
@@ -617,8 +623,11 @@ void ControlMapEditor::save() {
 
 MapElement * ControlMapEditor::getPositionSelected(Position &position,
     MapEditorSelectionKind selection, MapEditorSubSelectionKind subSelection,
-    bool layerOn, bool isForDisplay) const
+    bool layerOn, bool &isObject, bool isForDisplay) const
 {
+    MapElement *element;
+    float min;
+
     switch (selection) {
     case MapEditorSelectionKind::Land:
         position = m_positionOnLand;
@@ -643,7 +652,42 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         return nullptr;
     case MapEditorSelectionKind::Objects:
         position = m_positionOnObject;
+        isObject = true;
         return m_elementOnObject;
+    case MapEditorSelectionKind::None:
+        position = m_positionOnPlane;
+        min = 0.0f;
+        element = nullptr;
+        if (m_distanceObject != 0.0f) {
+            if (min == 0.0f || m_distanceObject < min) {
+                min = m_distanceObject;
+                position = m_positionOnObject;
+                element = m_elementOnObject;
+                isObject = true;
+            }
+        }
+        if (m_distanceLand != 0.0f) {
+            if (min == 0.0f || m_distanceLand < min) {
+                min = m_distanceLand;
+                position = m_positionOnLand;
+                element = m_elementOnLand;
+            }
+        }
+        if (m_distanceSprite != 0.0f) {
+            if (min == 0.0f || m_distanceSprite < min) {
+                min = m_distanceSprite;
+                position = m_positionOnSprite;
+                element = m_elementOnSprite;
+            }
+        }
+        if (m_distanceObject3D != 0.0f) {
+            if (min == 0.0f || m_distanceObject3D < min) {
+                min = m_distanceObject3D;
+                position = m_positionOnObject3D;
+                element = m_elementOnObject3D;
+            }
+        }
+        return element;
     default:
         position = m_positionOnPlane;
         return nullptr;
@@ -1238,14 +1282,16 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
 {
     if (focus) {
         Position position;
-        MapElement* element = getPositionSelected(position, kind, subKind,
-            layerOn, true);
-        if (!m_map->isInGrid(position))
+        bool isObject = false;
+        MapElement* element = getPositionSelected(position, m_isCtrlPressed ?
+            MapEditorSelectionKind::None : kind, subKind, layerOn, isObject,
+            true);
+        if (!m_map->isInGrid(position)) {
             m_lastSquareInfos = "";
-        else {
-            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + (kind ==
-                MapEditorSelectionKind::Objects ? "OBJECT" : element->toString()
-                ) + "]") + "\n" + position.toString(m_map->squareSize());
+        } else {
+            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + (isObject
+                ? "OBJECT" : element->toString()) + "]") + "\n" + position
+                .toString(m_map->squareSize());
         }
     }
 
@@ -1325,7 +1371,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
         if (m_isDeleting)
             removePreviewElements();
         Position newPosition;
-        getPositionSelected(newPosition, selection, subSelection, layerOn);
+        bool b;
+        getPositionSelected(newPosition, selection, subSelection, layerOn, b);
         if (static_cast<Position3D>(m_previousMouseCoords) !=
             static_cast<Position3D>(newPosition))
         {

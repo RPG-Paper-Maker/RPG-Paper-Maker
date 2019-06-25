@@ -25,7 +25,8 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     }
 
     Position position;
-    getPositionSelected(position, kind, subKind, layerOn);
+    bool b;
+    getPositionSelected(position, kind, subKind, layerOn, b);
     bool up = m_camera->cameraUp();
     bool front = m_camera->cameraFront(m_ray.direction(), position.angle());
     int xOffset = m_positionRealOnSprite.x() - position.x();

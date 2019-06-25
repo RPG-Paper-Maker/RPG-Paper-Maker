@@ -117,7 +117,7 @@ public:
         QRect& tileset, int specialID);
     MapElement * getPositionSelected(Position &position,
         MapEditorSelectionKind selection, MapEditorSubSelectionKind subSelection,
-        bool layerOn, bool isForDisplay = false) const;
+        bool layerOn, bool &isObject, bool isForDisplay = false) const;
     void add(MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
         QRect &tileset, int specialID, Position &p);

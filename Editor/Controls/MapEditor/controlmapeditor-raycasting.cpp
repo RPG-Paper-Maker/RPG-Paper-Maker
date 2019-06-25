@@ -252,7 +252,7 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion *mapPortion, bool laye
 {
     m_elementOnSprite = mapPortion->updateRaycastingSprites(m_map->squareSize(),
         m_distanceSprite, m_positionOnSprite, m_ray, m_camera->horizontalAngle(),
-        layerOn);
+        m_isCtrlPressed ? true : layerOn);
 }
 
 // -------------------------------------------------------
