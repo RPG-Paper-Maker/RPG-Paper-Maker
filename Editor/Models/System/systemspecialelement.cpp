@@ -41,8 +41,8 @@ SystemSpecialElement::SystemSpecialElement() :
 
 SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
-    int collisionCustomID, double scale, int wS, int wP, int hS,
-    int hP, int dS, int dP, bool stretch) :
+    int collisionCustomID, double scale, int wS, double wP, int hS, double hP,
+    int dS, double dP, bool stretch) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
     m_objID(new SuperListItem(objID)),
@@ -121,6 +121,10 @@ void SystemSpecialElement::setScale(double scale) {
     m_scale = scale;
 }
 
+int SystemSpecialElement:: width() const {
+    return (m_widthSquare * RPM::get()->getSquareSize()) + this->widthPixel();
+}
+
 int SystemSpecialElement:: widthSquare() const {
     return m_widthSquare;
 }
@@ -130,11 +134,15 @@ void SystemSpecialElement::setWidthSquare(int ws) {
 }
 
 int SystemSpecialElement::widthPixel() const {
-    return m_widthPixel;
+    return static_cast<int>(m_widthPixel * RPM::get()->getSquareSize() / 100);
 }
 
 void SystemSpecialElement::setWidthPixel(int wp) {
-    m_widthPixel = wp;
+    m_widthPixel = static_cast<double>(wp) / RPM::get()->getSquareSize() * 100;
+}
+
+int SystemSpecialElement:: height() const {
+    return (m_heightSquare * RPM::get()->getSquareSize()) + this->heightPixel();
 }
 
 int SystemSpecialElement::heightSquare() const {
@@ -146,11 +154,15 @@ void SystemSpecialElement::setHeightSquare(int hs) {
 }
 
 int SystemSpecialElement::heightPixel() const {
-    return m_heightPixel;
+    return static_cast<int>(m_heightPixel * RPM::get()->getSquareSize() / 100);
 }
 
 void SystemSpecialElement::setHeightPixel(int hp) {
-    m_heightPixel = hp;
+    m_heightPixel = static_cast<double>(hp) / RPM::get()->getSquareSize() * 100;
+}
+
+int SystemSpecialElement::depth() const {
+    return (m_depthSquare * RPM::get()->getSquareSize()) + this->depthPixel();
 }
 
 int SystemSpecialElement::depthSquare() const {
@@ -162,11 +174,11 @@ void SystemSpecialElement::setDepthSquare(int ds) {
 }
 
 int SystemSpecialElement::depthPixel() const {
-    return m_depthPixel;
+    return static_cast<int>(m_depthPixel * RPM::get()->getSquareSize() / 100);
 }
 
 void SystemSpecialElement::setDepthPixel(int dp) {
-    m_depthPixel = dp;
+    m_depthPixel = static_cast<double>(dp) / RPM::get()->getSquareSize() * 100;
 }
 
 bool SystemSpecialElement::stretch() const {
@@ -298,19 +310,19 @@ void SystemSpecialElement::read(const QJsonObject &json){
         m_widthSquare = json[JSON_WIDTH_SQUARE].toInt();
     }
     if (json.contains(JSON_WIDTH_PIXEL)) {
-        m_widthPixel = json[JSON_WIDTH_PIXEL].toInt();
+        m_widthPixel = json[JSON_WIDTH_PIXEL].toDouble();
     }
     if (json.contains(JSON_HEIGHT_SQUARE)) {
         m_heightSquare = json[JSON_HEIGHT_SQUARE].toInt();
     }
     if (json.contains(JSON_HEIGHT_PIXEL)) {
-        m_heightPixel = json[JSON_HEIGHT_PIXEL].toInt();
+        m_heightPixel = json[JSON_HEIGHT_PIXEL].toDouble();
     }
     if (json.contains(JSON_DEPTH_SQUARE)) {
         m_depthSquare = json[JSON_DEPTH_SQUARE].toInt();
     }
     if (json.contains(JSON_DEPTH_PIXEL)) {
-        m_depthPixel = json[JSON_DEPTH_PIXEL].toInt();
+        m_depthPixel = json[JSON_DEPTH_PIXEL].toDouble();
     }
     if (json.contains(JSON_STRETCH)) {
         m_stretch = json[JSON_STRETCH].toBool();
@@ -353,19 +365,19 @@ void SystemSpecialElement::write(QJsonObject &json) const{
         if (m_widthSquare != 1) {
             json[JSON_WIDTH_SQUARE] = m_widthSquare;
         }
-        if (m_widthPixel != 0) {
+        if (m_widthPixel != 0.0) {
             json[JSON_WIDTH_PIXEL] = m_widthPixel;
         }
         if (m_heightSquare != 1) {
             json[JSON_HEIGHT_SQUARE] = m_heightSquare;
         }
-        if (m_heightPixel != 0) {
+        if (m_heightPixel != 0.0) {
             json[JSON_HEIGHT_PIXEL] = m_heightPixel;
         }
         if (m_depthSquare != 1) {
             json[JSON_DEPTH_SQUARE] = m_depthSquare;
         }
-        if (m_depthPixel != 0) {
+        if (m_depthPixel != 0.0) {
             json[JSON_DEPTH_PIXEL] = m_depthPixel;
         }
         if (m_stretch) {

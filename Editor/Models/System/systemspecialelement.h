@@ -48,8 +48,8 @@ public:
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
         int objID = -1, int mtlID = -1, int pictureID = -1, ObjectCollisionKind
         collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
-        double scale = 1.0, int wS = 1, int wP = 0, int hS = 1, int hP = 0, int
-        dS = 1, int dP = 0, bool stretch = false);
+        double scale = 1.0, int wS = 1, double wP = 0, int hS = 1, double hP = 0
+        , int dS = 1, double dP = 0, bool stretch = false);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -64,14 +64,17 @@ public:
     SuperListItem *collisionCustomID() const;
     double scale() const;
     void setScale(double scale);
+    int width() const;
     int widthSquare() const;
     void setWidthSquare(int ws);
     int widthPixel() const;
     void setWidthPixel(int wp);
+    int height() const;
     int heightSquare() const;
     void setHeightSquare(int hs);
     int heightPixel() const;
     void setHeightPixel(int hp);
+    int depth() const;
     int depthSquare() const;
     void setDepthSquare(int ds);
     int depthPixel() const;
@@ -99,11 +102,11 @@ protected:
     SuperListItem *m_collisionCustomID;
     double m_scale;
     int m_widthSquare;
-    int m_widthPixel;
+    double m_widthPixel;
     int m_heightSquare;
-    int m_heightPixel;
+    double m_heightPixel;
     int m_depthSquare;
-    int m_depthPixel;
+    double m_depthPixel;
     bool m_stretch;
 
     SystemPicture* pictureByKind(PictureKind kind) const;

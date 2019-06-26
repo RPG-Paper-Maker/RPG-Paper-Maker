@@ -250,8 +250,8 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
     }
 
     // Select current ID
-    int index = SuperListItem::getIndexById(modelComplete->invisibleRootItem(),
-        getCurrentID());
+    int index = SuperListItem::getIndexById(model->invisibleRootItem(), this
+        ->getCurrentID());
     if (index > 0) {
         ui->comboBox->setCurrentIndex(index);
     }

@@ -25,6 +25,7 @@ WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     m_objectsGL(nullptr),
     m_camera(new Camera),
     m_isInitialized(false),
+    m_program(nullptr),
     m_texture(nullptr)
 {
 
@@ -36,7 +37,9 @@ WidgetPreviewObject3D::~WidgetPreviewObject3D() {
         delete m_object;
     }
     delete m_camera;
-    delete m_program;
+    if (m_program != nullptr) {
+        delete m_program;
+    }
 }
 
 // -------------------------------------------------------

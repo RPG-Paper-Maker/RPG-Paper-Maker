@@ -222,22 +222,19 @@ int Object3DBoxDatas::depth() const {
 // -------------------------------------------------------
 
 int Object3DBoxDatas::widthPixels() const {
-    return m_datas->widthSquare() * RPM::get()->getSquareSize() + m_datas
-        ->widthPixel();
+    return m_datas->width();
 }
 
 // -------------------------------------------------------
 
 int Object3DBoxDatas::heightPixels() const {
-    return m_datas->heightSquare() * RPM::get()->getSquareSize() + m_datas
-        ->heightPixel();
+    return m_datas->height();
 }
 
 // -------------------------------------------------------
 
 int Object3DBoxDatas::depthPixels() const {
-    return m_datas->depthSquare() * RPM::get()->getSquareSize() + m_datas
-        ->depthPixel();
+    return m_datas->depth();
 }
 
 // -------------------------------------------------------

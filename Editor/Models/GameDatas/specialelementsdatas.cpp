@@ -110,14 +110,14 @@ void SpecialElementsDatas::setDefaultAutotiles() {
 void SpecialElementsDatas::setDefaulObjects3D() { 
     this->addDefaultSpecial(new SystemObject3D(1, "Chest", ShapeKind::Box, -1,
         -1, 1), m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(1, "Cupboard", ShapeKind::Box, -1
+    this->addDefaultSpecial(new SystemObject3D(2, "Cupboard", ShapeKind::Box, -1
         ,  -1, 2, ObjectCollisionKind::None, -1, 1.0, 2, 0, 2, 0),
         m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(1, "Fridge", ShapeKind::Box, -1
+    this->addDefaultSpecial(new SystemObject3D(3, "Fridge", ShapeKind::Box, -1
         ,  -1, 3, ObjectCollisionKind::None, -1, 1.0, 1, 0, 2, 0),
         m_modelObjects3D);
-    this->addDefaultSpecial(new SystemObject3D(1, "Table", ShapeKind::Box, -1
-        ,  -1, 4, ObjectCollisionKind::None, -1, 1.0, 2, 0, 0, 8),
+    this->addDefaultSpecial(new SystemObject3D(4, "Table", ShapeKind::Box, -1
+        ,  -1, 4, ObjectCollisionKind::None, -1, 1.0, 2, 0, 0, 50),
         m_modelObjects3D);
 }
 
