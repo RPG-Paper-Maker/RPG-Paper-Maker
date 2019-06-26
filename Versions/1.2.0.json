@@ -42,7 +42,7 @@
             "files": [],
             "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework",
             "os": ["m"]
-        },
+        }
     ],
 	"replace": [],
 	"features": [
