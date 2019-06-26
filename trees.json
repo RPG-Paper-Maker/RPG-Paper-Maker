@@ -1044,54 +1044,6 @@
                                             {
                                                 "repo": "Dependencies",
                                                 "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Resources",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Resources"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/QtCharts",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/QtCharts"
-                                            },
-                                            {
-                                                "files": [
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
-                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/Current",
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/Current"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "files": [
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5/Resources/Info.plist",
-                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5/Resources/Info.plist"
-                                                                    }
-                                                                ],
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5/Resources"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5/QtCharts",
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5/QtCharts"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions/5"
-                                                    }
-                                                ],
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework/Versions"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Resources",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Resources"
                                             },
@@ -10966,11 +10918,6 @@
                                                         "repo": "Dependencies",
                                                         "source": "Game/osx/Game.app/Contents/PlugIns/imageformats/libqtiff.dylib",
                                                         "target": "Engine/Content/osx/Game.app/Contents/PlugIns/imageformats/libqtiff.dylib"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/osx/Game.app/Contents/PlugIns/imageformats/libqsvg.dylib",
-                                                        "target": "Engine/Content/osx/Game.app/Contents/PlugIns/imageformats/libqsvg.dylib"
                                                     },
                                                     {
                                                         "repo": "Dependencies",

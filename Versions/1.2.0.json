@@ -1,16 +1,48 @@
 {
-	"add": [],
+	"add": [
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Objects3D/table.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/table.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Objects3D/fridge.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/fridge.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Objects3D/chest.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/chest.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Objects3D/cupboard.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/cupboard.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D"
+        }
+    ],
 	"remove": [
         {
-            "repo": "Dependencies",
-            "source": "Engine/linux/libraries/libQt5Charts.so.5",
-            "target": "Engine/libraries/libQt5Charts.so.5"
+            "target": "Engine/libraries/libQt5Charts.so.5",
+            "os": ["l"]
         },
         {
-            "repo": "Dependencies",
-            "source": "Engine/win32/Qt5Charts.dll",
-            "target": "Engine/Qt5Charts.dll"
-        }
+            "target": "Engine/Qt5Charts.dll",
+            "os": ["w"]
+        },
+        {
+            "target": "Engine/Content/osx/Game.app/Contents/PlugIns/imageformats/libqsvg.dylib"
+        },
+        {
+            "files": [],
+            "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCharts.framework",
+            "os": ["m"]
+        },
     ],
 	"replace": [],
 	"features": [
