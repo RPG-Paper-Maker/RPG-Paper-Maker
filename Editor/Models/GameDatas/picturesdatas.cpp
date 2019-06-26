@@ -170,7 +170,7 @@ void PicturesDatas::setDefaultWalls(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
-    names << "house";
+    names << "chest" << "cupboard" << "fridge" << "table";
     setDefaultPictures(names, PictureKind::Object3D);
 }
 

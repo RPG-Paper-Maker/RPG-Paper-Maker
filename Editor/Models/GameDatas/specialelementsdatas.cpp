@@ -94,44 +94,45 @@ void SpecialElementsDatas::setDefault()
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaultSpriteWalls() {
-    QStandardItem* item;
-    SystemSpriteWall* sys;
-
-    item = new QStandardItem;
-    sys = new SystemSpriteWall(1, "Inside1", 1);
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(sys->toString());
-    m_modelSpriteWalls->appendRow(item);
+    this->addDefaultSpecial(new SystemSpriteWall(1, "Inside1", 1),
+        m_modelSpriteWalls);
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaultAutotiles() {
-    QStandardItem* item;
-    SystemAutotile* sys;
-
-    item = new QStandardItem;
-    sys = new SystemAutotile(1, "General", 1);
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
-    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(sys->toString());
-    m_modelAutotiles->appendRow(item);
+    this->addDefaultSpecial(new SystemAutotile(1, "General", 1),
+        m_modelAutotiles);
 }
 
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaulObjects3D() { 
+    this->addDefaultSpecial(new SystemObject3D(1, "Chest", ShapeKind::Box, -1,
+        -1, 1), m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(1, "Cupboard", ShapeKind::Box, -1
+        ,  -1, 2, ObjectCollisionKind::None, -1, 1.0, 2, 0, 2, 0),
+        m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(1, "Fridge", ShapeKind::Box, -1
+        ,  -1, 3, ObjectCollisionKind::None, -1, 1.0, 1, 0, 2, 0),
+        m_modelObjects3D);
+    this->addDefaultSpecial(new SystemObject3D(1, "Table", ShapeKind::Box, -1
+        ,  -1, 4, ObjectCollisionKind::None, -1, 1.0, 2, 0, 0, 8),
+        m_modelObjects3D);
+}
+
+// -------------------------------------------------------
+
+void SpecialElementsDatas::addDefaultSpecial(SystemSpecialElement *special,
+    QStandardItemModel *model)
+{
     QStandardItem *item;
-    SystemObject3D *sys;
 
     item = new QStandardItem;
-    sys = new SystemObject3D(1, "House", ShapeKind::Custom, 1, 1, 1);
-    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(special)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-    item->setText(sys->toString());
-    m_modelObjects3D->appendRow(item);
-
+    item->setText(special->toString());
+    model->appendRow(item);
 }
 
 // -------------------------------------------------------

@@ -464,6 +464,7 @@ void ProjectUpdater::updateVersion_1_1_1() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_2_0() {
+    QList<QString> names;
     QDir dir(m_project->pathCurrentProject());
 
     // Shapes default
@@ -475,4 +476,13 @@ void ProjectUpdater::updateVersion_1_2_0() {
     dir.mkpath(RPM::PATH_MTL);
     dir.mkpath(RPM::PATH_COLLISIONS);
     dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
+
+    m_project->readPicturesDatas();
+    m_project->picturesDatas()->setDefaultObjects3D(names);
+    m_project->writePicturesDatas();
+
+    // Objects 3D default
+    m_project->readSpecialsDatas();
+    m_project->specialElementsDatas()->setDefaulObjects3D();
+    m_project->writeSpecialsDatas();
 }

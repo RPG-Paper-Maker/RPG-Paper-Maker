@@ -24,8 +24,11 @@ SystemObject3D::SystemObject3D() :
 }
 
 SystemObject3D::SystemObject3D(int i, QString n, ShapeKind shapeKind, int objID,
-    int mtlID, int texID) :
-    SystemSpecialElement(i, n, shapeKind, objID, mtlID, texID)
+    int mtlID, int pictureID, ObjectCollisionKind collisionKind, int
+    collisionCustomID, double scale, int wS, int wP, int hS, int hP, int dS, int
+    dP, bool stretch) :
+    SystemSpecialElement(i, n, shapeKind, objID, mtlID, pictureID, collisionKind
+        , collisionCustomID, scale, wS, wP, hS, hP, dS, dP, stretch)
 {
 
 }

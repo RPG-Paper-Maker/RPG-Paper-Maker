@@ -1,0 +1,26 @@
+{
+	"add": [],
+	"remove": [
+        {
+            "repo": "Dependencies",
+            "source": "Engine/linux/libraries/libQt5Charts.so.5",
+            "target": "Engine/libraries/libQt5Charts.so.5"
+        },
+        {
+            "repo": "Dependencies",
+            "source": "Engine/win32/Qt5Charts.dll",
+            "target": "Engine/Qt5Charts.dll"
+        }
+    ],
+	"replace": [],
+	"features": [
+        "Y axis",
+        "Objects 3D: box, custom (.obj), shapes",
+        "Ctrl targets the closest element of the map, CTRL+left click teleports on the selected element"
+    ],
+	"bugs": [
+        "Map was disappearing on large maps ingame",
+        "Replace qt charts library by custom paintings for avoiding GPL3 licence",
+        "Set max minus could remove all"
+    ]
+}

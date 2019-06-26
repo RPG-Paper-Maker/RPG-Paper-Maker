@@ -14,7 +14,7 @@
 
 #include <QStandardItemModel>
 #include "serializable.h"
-#include "picturekind.h"
+#include "systemspecialelement.h"
 
 // -------------------------------------------------------
 //
@@ -44,6 +44,8 @@ public:
     void setDefaultSpriteWalls();
     void setDefaultAutotiles();
     void setDefaulObjects3D();
+    void addDefaultSpecial(SystemSpecialElement *special, QStandardItemModel
+        *model);
 
     virtual void read(const QJsonObject &json);
     void readSpecials(const QJsonObject &json, PictureKind kind,
@@ -52,7 +54,7 @@ public:
     void writeSpecials(QJsonObject &json, PictureKind kind,
                        QString jsonName) const;
 
-private:
+protected:
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_modelObjects3D;
