@@ -1,0 +1,35 @@
+{
+	"add": [
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/grass.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/halloween.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/desert.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains"
+        },
+    ],
+	"remove": [
+        {
+            "files": [],
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs"
+        },
+    ],
+	"replace": [],
+	"features": [
+    ],
+	"bugs": [
+    ]
+}

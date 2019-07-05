@@ -19,6 +19,7 @@
 const QString SpecialElementsDatas::JSON_WALLS = "walls";
 const QString SpecialElementsDatas::JSON_AUTOTILES = "autotiles";
 const QString SpecialElementsDatas::JSON_OBJECTS_3D = "o";
+const QString SpecialElementsDatas::JSON_MOUNTAINS = "m";
 
 // -------------------------------------------------------
 //
@@ -31,7 +32,7 @@ SpecialElementsDatas::SpecialElementsDatas()
     m_modelAutotiles = new QStandardItemModel;
     m_modelSpriteWalls = new QStandardItemModel;
     m_modelObjects3D = new QStandardItemModel;
-    m_modelReliefs = new QStandardItemModel;
+    m_modelMountains = new QStandardItemModel;
 }
 
 SpecialElementsDatas::~SpecialElementsDatas()
@@ -39,7 +40,7 @@ SpecialElementsDatas::~SpecialElementsDatas()
     SuperListItem::deleteModel(m_modelAutotiles);
     SuperListItem::deleteModel(m_modelSpriteWalls);
     SuperListItem::deleteModel(m_modelObjects3D);
-    SuperListItem::deleteModel(m_modelReliefs);
+    SuperListItem::deleteModel(m_modelMountains);
 }
 
 void SpecialElementsDatas::read(QString path){
@@ -54,7 +55,7 @@ QStandardItemModel* SpecialElementsDatas::model(PictureKind kind) const {
     case PictureKind::Walls:
         return modelSpriteWalls();
     case PictureKind::Reliefs:
-        return modelReliefs();
+        return modelMountains();
     case PictureKind::Object3D:
         return modelObjects3D();
     default:
@@ -74,8 +75,8 @@ QStandardItemModel* SpecialElementsDatas::modelObjects3D() const {
     return m_modelObjects3D;
 }
 
-QStandardItemModel* SpecialElementsDatas::modelReliefs() const {
-    return m_modelReliefs;
+QStandardItemModel* SpecialElementsDatas::modelMountains() const {
+    return m_modelMountains;
 }
 
 // -------------------------------------------------------
@@ -123,6 +124,12 @@ void SpecialElementsDatas::setDefaulObjects3D() {
 
 // -------------------------------------------------------
 
+void SpecialElementsDatas::setDefaulMountains() {
+
+}
+
+// -------------------------------------------------------
+
 void SpecialElementsDatas::addDefaultSpecial(SystemSpecialElement *special,
     QStandardItemModel *model)
 {
@@ -147,12 +154,13 @@ void SpecialElementsDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelAutotiles, false);
     SuperListItem::deleteModel(m_modelSpriteWalls, false);
     SuperListItem::deleteModel(m_modelObjects3D, false);
-    SuperListItem::deleteModel(m_modelReliefs, false);
+    SuperListItem::deleteModel(m_modelMountains, false);
 
     // Read
     readSpecials(json, PictureKind::Walls, JSON_WALLS);
     readSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
     readSpecials(json, PictureKind::Object3D, JSON_OBJECTS_3D);
+    readSpecials(json, PictureKind::Mountains, JSON_MOUNTAINS);
 }
 
 // -------------------------------------------------------
@@ -180,6 +188,7 @@ void SpecialElementsDatas::write(QJsonObject &json) const{
     writeSpecials(json, PictureKind::Walls, JSON_WALLS);
     writeSpecials(json, PictureKind::Autotiles, JSON_AUTOTILES);
     writeSpecials(json, PictureKind::Object3D, JSON_OBJECTS_3D);
+    writeSpecials(json, PictureKind::Mountains, JSON_MOUNTAINS);
 }
 
 // -------------------------------------------------------
@@ -192,9 +201,8 @@ void SpecialElementsDatas::writeSpecials(QJsonObject &json, PictureKind kind,
     for (int i = 0; i < this->model(kind)->invisibleRootItem()->rowCount(); i++)
     {
         QJsonObject json;
-        SuperListItem* sys =
-                ((SuperListItem*) this->model(kind)->item(i)->data()
-                 .value<quintptr>());
+        SuperListItem* sys = reinterpret_cast<SuperListItem *>(this->model(kind)
+            ->item(i)->data().value<quintptr>());
         sys->write(json);
         jsonArray.append(json);
     }

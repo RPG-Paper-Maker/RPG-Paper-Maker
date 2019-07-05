@@ -28,7 +28,7 @@ enum class PictureKind {
     Icons,
     Autotiles,
     Characters,
-    Reliefs,
+    Mountains,
     Tilesets,
     Walls,
     Battlers,

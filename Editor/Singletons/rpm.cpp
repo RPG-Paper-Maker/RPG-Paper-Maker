@@ -102,6 +102,7 @@ const QString RPM::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
 const QString RPM::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
 const QString RPM::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
 const QString RPM::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
+const QString RPM::PATH_MOUNTAINS = Common::pathCombine(pathTextures2D, "Mountains");
 const QString RPM::PATH_TEXTURES_OBJECT_3D = Common::pathCombine(pathTextures2D,
     "Objects3D");
 const QString RPM::PATH_BATTLERS = Common::pathCombine(pathTextures2D, "Battlers");

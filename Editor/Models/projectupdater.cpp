@@ -15,10 +15,10 @@
 #include <QDirIterator>
 #include <QThread>
 
-const int ProjectUpdater::incompatibleVersionsCount = 7;
+const int ProjectUpdater::incompatibleVersionsCount = 8;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1"};
 
 // -------------------------------------------------------
 //
@@ -485,4 +485,15 @@ void ProjectUpdater::updateVersion_1_2_0() {
     m_project->readSpecialsDatas();
     m_project->specialElementsDatas()->setDefaulObjects3D();
     m_project->writeSpecialsDatas();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_2_1() {
+    QList<QString> names;
+    QDir dir(m_project->pathCurrentProject());
+
+    // Shapes default
+    dir.remove(RPM::PATH_RELIEFS);
+    dir.mkpath(RPM::PATH_MOUNTAINS);
 }

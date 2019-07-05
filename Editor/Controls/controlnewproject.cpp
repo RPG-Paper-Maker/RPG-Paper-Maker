@@ -98,7 +98,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_TITLE_SCREEN);
     dir.mkpath(RPM::pathAutotiles);
     dir.mkpath(RPM::pathCharacters);
-    dir.mkpath(RPM::pathReliefs);
+    dir.mkpath(RPM::PATH_MOUNTAINS);
     dir.mkpath(RPM::pathTilesets);
     dir.mkpath(RPM::PATH_SPRITE_WALLS);
     dir.mkpath(RPM::PATH_BATTLERS);

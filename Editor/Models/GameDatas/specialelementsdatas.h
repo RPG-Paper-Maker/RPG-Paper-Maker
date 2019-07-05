@@ -31,6 +31,7 @@ public:
     static const QString JSON_WALLS;
     static const QString JSON_AUTOTILES;
     static const QString JSON_OBJECTS_3D;
+    static const QString JSON_MOUNTAINS;
 
     SpecialElementsDatas();
     virtual ~SpecialElementsDatas();
@@ -39,11 +40,12 @@ public:
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* modelObjects3D() const;
-    QStandardItemModel* modelReliefs() const;
+    QStandardItemModel* modelMountains() const;
     void setDefault();
     void setDefaultSpriteWalls();
     void setDefaultAutotiles();
     void setDefaulObjects3D();
+    void setDefaulMountains();
     void addDefaultSpecial(SystemSpecialElement *special, QStandardItemModel
         *model);
 
@@ -58,7 +60,7 @@ protected:
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_modelObjects3D;
-    QStandardItemModel* m_modelReliefs;
+    QStandardItemModel* m_modelMountains;
 };
 
 #endif // SPECIALELEMENTSDATAS_H

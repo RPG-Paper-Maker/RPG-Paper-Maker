@@ -28,6 +28,7 @@ HEADERS += \
     CustomWidgets/panelproject.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
+    Models/System/systemmountain.h \
     Singletons/singleton.h \
     Models/project.h \
     Dialogs/dialogdatas.h \
@@ -300,6 +301,7 @@ SOURCES += \
     CustomWidgets/panelproject.cpp \
     MapEditor/Map/map.cpp \
     Controls/controlmainwindow.cpp \
+    Models/System/systemmountain.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
     Dialogs/dialogcommands.cpp \

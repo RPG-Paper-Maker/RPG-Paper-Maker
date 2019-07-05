@@ -115,6 +115,7 @@ public:
     const static QString pathTilesets;
     const static QString PATH_SPRITE_WALLS;
     const static QString PATH_RELIEFS;
+    const static QString PATH_MOUNTAINS;
     const static QString PATH_TEXTURES_OBJECT_3D;
     const static QString PATH_BATTLERS;
     const static QString PATH_SONGS;
