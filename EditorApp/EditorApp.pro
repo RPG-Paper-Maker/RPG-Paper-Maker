@@ -80,11 +80,6 @@ DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web$$SLASH_END)\"
 
 # Define custom commands
 
-# Create build Editor directory in case it wasn't created for the target yet
-# We make our own mkdir command, as $(MKDIR_CMD) seems unreliable
-win32: MK_DIR_CMD = -mkdir
-unix: MK_DIR_CMD = mkdir -p
-
 # We do not want to copy all those subfolders every time we `make` or `make check`, so we only copy when needed, following one of 2 methods at:
 # https://stackoverflow.com/questions/18488154/how-to-get-qmake-to-copy-large-data-files-only-if-they-are-updated
 # A. Adding an extra compiler whose role is to copy files (https://doc.qt.io/qt-5/qmake-advanced-usage.html#adding-compilers)
@@ -98,14 +93,20 @@ win32 {
     SYNC_PRESERVE_CMD = -robocopy /e /xo # Copy folders (even empty), but don't remove file/folders that are not in source anymore
 }
 unix {
+    # Create build Editor directory in case it wasn't created for the target yet
+    # We make our own mkdir command, as $(MKDIR_CMD) seems unreliable
+    # Windows has no PRECOPY_COMMANDS at all, since robocopy will create intermediate directories as needed
+    PRECOPY_COMMANDS = \
+    mkdir -p $$DEST_CONTENT $$escape_expand(\n\t) \ # folder should have been created for built library, but safer (no order dependency)
+    mkdir -p $$DEST_SCRIPTS $$escape_expand(\n\t)   # optional since FROM_CONTENT already has basic/Content/Datas/Scripts, but safer
+
     SYNC_PURGE_CMD = rsync -rul --del   # Preserve symlinks with -l, crucial with OSX Frameworks, and removing files/folders that are not in source anymore
     SYNC_PRESERVE_CMD = rsync -rul      # Preserve symlinks
 }
 
 # Copy all content after making sure the target directory exists
 copyGameResources.commands = \
-    $$MK_DIR_CMD        $$DEST_CONTENT                  $$escape_expand(\n\t) \ # folder should have been created for built library, but safer (no order dependency)
-    $$MK_DIR_CMD        $$DEST_SCRIPTS                  $$escape_expand(\n\t) \ # optional since FROM_CONTENT already has basic/Content/Datas/Scripts, but safer
+    $$PRECOPY_COMMANDS                                                        \
     # preserve existing files when copying to DEST_CONTENT to avoid deleting DEST_SCRIPTS which is under the former (you must manually remove files not in FROM_CONTENT anymore)
     $$SYNC_PRESERVE_CMD $$FROM_CONTENT  $$DEST_CONTENT  $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_SCRIPTS  $$DEST_SCRIPTS  $$escape_expand(\n\t) \
