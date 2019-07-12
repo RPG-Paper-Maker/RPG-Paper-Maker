@@ -58,25 +58,25 @@ unix {
 }
 
 FROM_CONTENT = \"$$shell_path($$PWD/Content$$SLASH_END)\"
-DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR$$SLASH_END)\"
+DEST_CONTENT = \"$$shell_path($$DEST_CONTENT_DIR)\"
 
 FROM_SCRIPTS= \"$$shell_path($$MODS_PATH/Scripts$$SLASH_END)\"
-DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts$$SLASH_END)\"
+DEST_SCRIPTS = \"$$shell_path($$DEST_CONTENT_DIR/basic/Content/Datas/Scripts)\"
 
 FROM_BR= \"$$shell_path($$MODS_PATH/BR$$SLASH_END)\"
-DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR$$SLASH_END)\"
+DEST_BR = \"$$shell_path($$DEST_CONTENT_DIR/BR)\"
 
 FROM_WIN= \"$$shell_path($$MODS_PATH/Game/win32$$SLASH_END)\"
-DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32$$SLASH_END)\"
+DEST_WIN = \"$$shell_path($$DEST_CONTENT_DIR/win32)\"
 
 FROM_LINUX= \"$$shell_path($$MODS_PATH/Game/linux$$SLASH_END)\"
-DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux$$SLASH_END)\"
+DEST_LINUX = \"$$shell_path($$DEST_CONTENT_DIR/linux)\"
 
 FROM_OSX= \"$$shell_path($$MODS_PATH/Game/osx$$SLASH_END)\"
-DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx$$SLASH_END)\"
+DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx)\"
 
 FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web$$SLASH_END)\"
-DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web$$SLASH_END)\"
+DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web)\"
 
 # Define custom commands
 
