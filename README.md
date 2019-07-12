@@ -5,7 +5,7 @@
 [![Build](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker.svg?branch=develop)](https://travis-ci.org/RPG-Paper-Maker/RPG-Paper-Maker)
 [![Build](https://ci.appveyor.com/api/projects/status/iee74loc36pu1r0t?svg=true)](https://ci.appveyor.com/project/Wano-k/rpg-paper-maker)
 
-RPG Paper Maker is a free game making engine allowing you to create a 3D universe with many 2D sprites and even 3D objects using a simple interface (just like the RPG Maker series), RPG Paper Maker gives you a way to create RPGs in a full 3D world as simply as it is in 2D! RPG Paper Maker comes packed with cool retro inspired graphic assets for you to use in your own projects.
+RPG Paper Maker is a game making engine, free for non commercial use, allowing you to create a 3D universe with many 2D sprites and even 3D objects using a simple interface for all available platforms: Windows, Linux, and MacOS.
 
 ## Project organization
 The [organization](https://github.com/RPG-Paper-Maker) contains some independent repositories. If you want to fork several repositories, **you should put them all in the same parent root**. Example:
@@ -152,10 +152,6 @@ Try to respect the code style as much as possible. See the wiki page for code st
 
 ### Documentation
 Always check out our [documentation](http://rpg-paper-maker.com/index.php/documentation) here.
-
-## License
-
-RPG Paper Maker is a free software under GNU LGPLv.3 license. See LICENSE.txt. However, the games output are not also under LGPL license so you need to pay fees to commercialize your games made by the engine.
 
 ## Feature requests
 
