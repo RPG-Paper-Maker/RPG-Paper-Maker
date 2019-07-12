@@ -69,8 +69,9 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
         m_texture) / RPM::get()->getSquareSize());
     if (!newTextureRect.contains(cursorRect)) {
         makeSelection(0, 0);
-        this->repaint();
     }
+
+    this->repaint();
 }
 
 // -------------------------------------------------------
