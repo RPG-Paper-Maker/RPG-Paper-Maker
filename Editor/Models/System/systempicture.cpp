@@ -110,8 +110,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
         return RPM::pathAutotiles;
     case PictureKind::Characters:
         return RPM::pathCharacters;
-    case PictureKind::Reliefs:
-        return RPM::pathReliefs;
+    case PictureKind::Mountains:
+        return RPM::PATH_MOUNTAINS;
     case PictureKind::Tilesets:
         return RPM::pathTilesets;
     case PictureKind::Walls:

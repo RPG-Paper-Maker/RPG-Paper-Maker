@@ -144,7 +144,7 @@ void PicturesDatas::setDefaultCharacters(QList<QString>& names) {
 
 void PicturesDatas::setDefaultReliefs(QList<QString>& names) {
     names << "grass";
-    setDefaultPictures(names, PictureKind::Reliefs);
+    setDefaultPictures(names, PictureKind::Mountains);
 }
 
 // -------------------------------------------------------

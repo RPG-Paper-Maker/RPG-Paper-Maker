@@ -54,7 +54,7 @@ QStandardItemModel* SpecialElementsDatas::model(PictureKind kind) const {
         return modelAutotiles();
     case PictureKind::Walls:
         return modelSpriteWalls();
-    case PictureKind::Reliefs:
+    case PictureKind::Mountains:
         return modelMountains();
     case PictureKind::Object3D:
         return modelObjects3D();

@@ -55,7 +55,7 @@ QStandardItemModel* SystemTileset::model(PictureKind kind) const {
         return modelAutotiles();
     case PictureKind::Walls:
         return modelSpriteWalls();
-    case PictureKind::Reliefs:
+    case PictureKind::Mountains:
         return modelReliefs();
     case PictureKind::Object3D:
         return model3DObjects();
@@ -131,7 +131,7 @@ void SystemTileset::updateModel3DObjects() {
 
 void SystemTileset::updateModelReliefs() {
     updateModel(m_modelReliefs, RPM::get()->project()
-                ->specialElementsDatas()->modelReliefs());
+                ->specialElementsDatas()->modelMountains());
 }
 
 // -------------------------------------------------------
