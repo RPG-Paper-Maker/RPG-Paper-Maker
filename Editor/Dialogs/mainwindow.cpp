@@ -1,12 +1,12 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte
+    RPG Paper Maker Copyright (C) 2017-2019 Wano
 
-    RPG Paper Maker engine is under LGPL-3 license.
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
 
-    Commercial license for commercial use of your games:
-        https://creativecommons.org/licenses/by-nc/4.0/.
-
-    See more information here: http://rpg-paper-maker.com/index.php/downloads.
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
 */
 
 #include <QMessageBox>
@@ -687,11 +687,10 @@ void MainWindow::on_actionAbout_triggered() {
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
-    copyright = "RPG Paper Maker Copyright (C) 2017-2019 Marie Laporte\n\n"
-        "RPG Paper Maker software is licensed under LGPL-3 license.\n\nRPG Paper Maker games are licensed "
-        "under Creative Commons Attribution-NonCommercial 4.0 license. You are free to use RPG Paper Maker "
-        "for your personal or non-profit games. You can get the author's permission to use RPG Paper Maker "
-        "for commercial games by paying a fee.";
+    copyright = "RPG Paper Maker Copyright (C) 2017-2019 Wano\n\n"
+        "RPG Paper Maker is free for non commercial use. You don't have any fee "
+        "to pay as long as you don't plan to publish commercial games done with "
+        "RPG Paper Maker.";
 
     QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
         "\n" + website + "\n\nBuilt on " + buildDate +
