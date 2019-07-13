@@ -13,6 +13,7 @@
 #include "systemspritewall.h"
 #include "systemautotile.h"
 #include "systemobject3d.h"
+#include "systemmountain.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -90,6 +91,7 @@ void SpecialElementsDatas::setDefault()
     setDefaultSpriteWalls();
     setDefaultAutotiles();
     setDefaulObjects3D();
+    setDefaulMountains();
 }
 
 // -------------------------------------------------------
@@ -125,7 +127,7 @@ void SpecialElementsDatas::setDefaulObjects3D() {
 // -------------------------------------------------------
 
 void SpecialElementsDatas::setDefaulMountains() {
-
+    this->addDefaultSpecial(new SystemMountain(1, "grass", 1), m_modelMountains);
 }
 
 // -------------------------------------------------------

@@ -103,7 +103,7 @@
     <addaction name="actionAnimated_Autotiles"/>
     <addaction name="actionSprite_walls"/>
     <addaction name="action3D_objects"/>
-    <addaction name="actionReliefs"/>
+    <addaction name="actionMountains"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
@@ -176,7 +176,7 @@
    <addaction name="actionAnimated_Autotiles"/>
    <addaction name="actionSprite_walls"/>
    <addaction name="action3D_objects"/>
-   <addaction name="actionReliefs"/>
+   <addaction name="actionMountains"/>
    <addaction name="separator"/>
    <addaction name="actionPlay"/>
   </widget>
@@ -423,16 +423,16 @@
     <string>Ctrl+4</string>
    </property>
   </action>
-  <action name="actionReliefs">
+  <action name="actionMountains">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="../ressources.qrc">
      <normaloff>:/icons/Ressources/mountain_toolbar.png</normaloff>:/icons/Ressources/mountain_toolbar.png</iconset>
    </property>
    <property name="text">
-    <string>Reliefs</string>
+    <string>Mountains</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+5</string>

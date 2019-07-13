@@ -141,6 +141,8 @@ QString SystemPicture::getPictureTitle(PictureKind kind) {
         return "Walls";
     case PictureKind::Object3D:
         return "3D objects";
+    case PictureKind::Mountains:
+        return "Mountains";
     default:
         return "";
     }

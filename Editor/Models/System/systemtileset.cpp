@@ -35,7 +35,7 @@ SystemTileset::~SystemTileset(){
     SuperListItem::deleteModel(m_modelAutotiles);
     SuperListItem::deleteModel(m_modelSpriteWalls);
     SuperListItem::deleteModel(m_model3DObjects);
-    SuperListItem::deleteModel(m_modelReliefs);
+    SuperListItem::deleteModel(m_modelMountains);
 }
 
 SystemPicture* SystemTileset::picture() const {
@@ -56,7 +56,7 @@ QStandardItemModel* SystemTileset::model(PictureKind kind) const {
     case PictureKind::Walls:
         return modelSpriteWalls();
     case PictureKind::Mountains:
-        return modelReliefs();
+        return modelMountains();
     case PictureKind::Object3D:
         return model3DObjects();
     default:
@@ -76,8 +76,8 @@ QStandardItemModel* SystemTileset::model3DObjects() const {
     return m_model3DObjects;
 }
 
-QStandardItemModel* SystemTileset::modelReliefs() const {
-    return m_modelReliefs;
+QStandardItemModel* SystemTileset::modelMountains() const {
+    return m_modelMountains;
 }
 
 // -------------------------------------------------------
@@ -90,7 +90,7 @@ void SystemTileset::initializeModels() {
     m_modelAutotiles = new QStandardItemModel;
     m_modelSpriteWalls = new QStandardItemModel;
     m_model3DObjects = new QStandardItemModel;
-    m_modelReliefs = new QStandardItemModel;
+    m_modelMountains = new QStandardItemModel;
 }
 
 // -------------------------------------------------------
@@ -129,8 +129,8 @@ void SystemTileset::updateModel3DObjects() {
 
 // -------------------------------------------------------
 
-void SystemTileset::updateModelReliefs() {
-    updateModel(m_modelReliefs, RPM::get()->project()
+void SystemTileset::updateModelMountains() {
+    updateModel(m_modelMountains, RPM::get()->project()
                 ->specialElementsDatas()->modelMountains());
 }
 
@@ -220,7 +220,7 @@ void SystemTileset::read(const QJsonObject &json){
     readModel(json, "auto", m_modelAutotiles);
     readModel(json, "walls", m_modelSpriteWalls);
     readModel(json, "objs", m_model3DObjects);
-    readModel(json, "relief", m_modelReliefs);
+    readModel(json, "moun", m_modelMountains);
 }
 
 // -------------------------------------------------------
@@ -257,7 +257,7 @@ void SystemTileset::write(QJsonObject &json) const{
     writeModel(json, "auto", m_modelAutotiles);
     writeModel(json, "walls", m_modelSpriteWalls);
     writeModel(json, "objs", m_model3DObjects);
-    writeModel(json, "relief", m_modelReliefs);
+    writeModel(json, "moun", m_modelMountains);
 }
 
 // -------------------------------------------------------

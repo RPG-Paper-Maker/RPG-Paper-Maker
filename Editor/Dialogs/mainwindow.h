@@ -93,6 +93,7 @@ private slots:
     void on_actionAutotiles_triggered();
     void on_actionSprite_walls_triggered();
     void on_action3D_objects_triggered();
+    void on_actionMountains_triggered();
     void on_actionSet_BR_path_folder_triggered();
     void on_actionDebug_options_triggered();
     void on_actionGeneral_options_triggered();

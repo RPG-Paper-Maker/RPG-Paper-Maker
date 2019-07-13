@@ -16,6 +16,7 @@
 #include "systemautotile.h"
 #include "systemspritewall.h"
 #include "systemobject3d.h"
+#include "systemmountain.h"
 
 const QString SuperListItem::JSON_ID = "id";
 const QString SuperListItem::JSON_NAME = "name";
@@ -257,6 +258,8 @@ SuperListItem* SuperListItem::getnewInstance(PictureKind kind) {
         return new SystemSpriteWall;
     case PictureKind::Object3D:
         return new SystemObject3D;
+    case PictureKind::Mountains:
+        return new SystemMountain;
     default:
         return nullptr;
     }

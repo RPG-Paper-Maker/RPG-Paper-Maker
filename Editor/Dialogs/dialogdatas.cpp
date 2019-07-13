@@ -338,8 +338,10 @@ void DialogDatas::initializeTilesets(GameDatas *gameDatas){
     ui->panelSuperListTilesetSpriteWalls->showEditName(false);
     ui->panelSuperListTileset3DObjects->showButtonMax(false);
     ui->panelSuperListTileset3DObjects->showEditName(false);
-    ui->panelSuperListTilesetReliefs->showButtonMax(false);
-    ui->panelSuperListTilesetReliefs->showEditName(false);
+    ui->panelSuperListTilesetMountains->showButtonMax(false);
+    ui->panelSuperListTilesetMountains->showEditName(false);
+    ui->panelSuperListTilesetSlopes->showButtonMax(false);
+    ui->panelSuperListTilesetSlopes->showEditName(false);
 
     // Select the first tileset
     QModelIndex index = ui->panelSuperListTilesets->list()->getModel()
@@ -362,14 +364,14 @@ void DialogDatas::updateTileset(SystemTileset *sysTileset){
                 sysTileset->modelSpriteWalls());
     ui->panelSuperListTileset3DObjects->initializeModel(
                 sysTileset->model3DObjects());
-    ui->panelSuperListTilesetReliefs->initializeModel(
-                sysTileset->modelReliefs());
+    ui->panelSuperListTilesetMountains->initializeModel(
+                sysTileset->modelMountains());
 
     // Update special models
     sysTileset->updateModelAutotiles();
     sysTileset->updateModelSpriteWalls();
     sysTileset->updateModel3DObjects();
-    sysTileset->updateModelReliefs();
+    sysTileset->updateModelMountains();
 }
 
 // -------------------------------------------------------

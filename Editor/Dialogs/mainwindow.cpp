@@ -595,6 +595,18 @@ void MainWindow::on_action3D_objects_triggered() {
 
 // -------------------------------------------------------
 
+void MainWindow::on_actionMountains_triggered() {
+    DialogSpecialElements dialog(PictureKind::Mountains);
+    if (openDialog(dialog) == QDialog::Accepted)
+        project->writeSpecialsDatas();
+    else
+        project->readSpecialsDatas();
+
+    updateTextures();
+}
+
+// -------------------------------------------------------
+
 void MainWindow::on_actionSet_BR_path_folder_triggered(){
     DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR());
     if (openDialog(dialog) == QDialog::Accepted){

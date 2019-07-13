@@ -36,14 +36,14 @@ public:
     QStandardItemModel* modelAutotiles() const;
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* model3DObjects() const;
-    QStandardItemModel* modelReliefs() const;
+    QStandardItemModel* modelMountains() const;
     void setPictureID(int id);
     void initializeModels();
     void addSpecial(SuperListItem *special, PictureKind kind);
     void updateModelAutotiles();
     void updateModelSpriteWalls();
     void updateModel3DObjects();
-    void updateModelReliefs();
+    void updateModelMountains();
     static void updateModel(QStandardItemModel* model,
                             QStandardItemModel* completeModel);
     static void moveModel(QStandardItemModel* model,
@@ -65,7 +65,7 @@ protected:
     QStandardItemModel* m_modelAutotiles;
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_model3DObjects;
-    QStandardItemModel* m_modelReliefs;
+    QStandardItemModel* m_modelMountains;
 };
 
 Q_DECLARE_METATYPE(SystemTileset)
