@@ -26,6 +26,7 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_kind(PictureKind::None),
     m_currentAutotilesID(-1),
     m_currentWallsID(-1),
+    m_currentMountainID(-1),
     m_currentObjects3DID(-1)
 {
     ui->setupUi(this);
@@ -80,6 +81,7 @@ void PanelTextures::hideAll() {
     ui->widgetTilesetSelector->hide();
     ui->widgetAutotilesSelector->hide();
     ui->widgetWallPreview->hide();
+    ui->widgetMountainPreview->hide();
     ui->widget3DObjectPreview->hide();
     ui->comboBox->hide();
     ui->labelInformation->hide();
@@ -93,6 +95,7 @@ void PanelTextures::showTileset() {
     hideAll();
     ui->widgetTilesetSelector->show();
     this->updateTilesetImage();
+    this->updateMountainsSize();
     this->updateObject3DSize();
 }
 
@@ -112,6 +115,8 @@ QWidget * PanelTextures::getSpecialWidget() const {
         return ui->widgetAutotilesSelector;
     case PictureKind::Walls:
         return ui->widgetWallPreview;
+    case PictureKind::Mountains:
+        return ui->widgetMountainPreview;
     case PictureKind::Object3D:
         return ui->widget3DObjectPreview;
     default:
@@ -147,6 +152,9 @@ void PanelTextures::showWidgetSpecial() {
     case PictureKind::Walls:
         ui->widgetWallPreview->show();
         break;
+    case PictureKind::Mountains:
+        ui->widgetMountainPreview->show();
+        break;
     case PictureKind::Object3D:
         ui->widget3DObjectPreview->show();
         break;
@@ -170,6 +178,7 @@ void PanelTextures::updateComboBoxSize() {
     setFixedSize(width, height);
 
     // Update object3D previewer size
+    this->updateMountainsSize();
     this->updateObject3DSize();
 }
 
@@ -196,6 +205,9 @@ QString PanelTextures::createlabelText() {
     case PictureKind::Walls:
         kindText = "wall";
         break;
+    case PictureKind::Mountains:
+        kindText = "mountain";
+        break;
     case PictureKind::Object3D:
         kindText = "3D object";
         break;
@@ -219,6 +231,15 @@ void PanelTextures::showAutotiles(SystemTileset *tileset) {
 void PanelTextures::showSpriteWalls(SystemTileset *tileset) {
     tileset->updateModelSpriteWalls();
     fillComboBox(tileset, PictureKind::Walls);
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showMountains(SystemTileset *tileset) {
+    tileset->updateModelMountains();
+    fillComboBox(tileset, PictureKind::Mountains);
+    ui->widgetMountainPreview->initializeTilesetPictureID(tileset->picture()
+        ->id());
 }
 
 // -------------------------------------------------------
@@ -263,6 +284,17 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
 
 // -------------------------------------------------------
 
+void PanelTextures::updateMountainsSize() {
+    int w;
+
+    w = ui->comboBox->width();
+    ui->widgetMountainPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
+        ->widgetMountainPreview->y(), w, ui->widgetMountainPreview->height());
+    ui->widgetMountainPreview->setFixedWidth(w);
+}
+
+// -------------------------------------------------------
+
 void PanelTextures::updateObject3DSize() {
     int w;
 
@@ -280,6 +312,8 @@ int PanelTextures::getCurrentID() const {
         return m_currentAutotilesID;
     case PictureKind::Walls:
         return m_currentWallsID;
+    case PictureKind::Mountains:
+        return m_currentMountainID;
     case PictureKind::Object3D:
         return m_currentObjects3DID;
     default:
@@ -296,6 +330,9 @@ void PanelTextures::updateCurrentID(int id) {
         break;
     case PictureKind::Walls:
         m_currentWallsID = id;
+        break;
+    case PictureKind::Mountains:
+        m_currentMountainID = id;
         break;
     case PictureKind::Object3D:
         m_currentObjects3DID = id;
@@ -316,6 +353,9 @@ void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
         break;
     case PictureKind::Walls:
         ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
+        break;
+    case PictureKind::Mountains:
+        ui->widgetMountainPreview->updatePicture(special->picture(), m_kind);
         break;
     default:
         break;

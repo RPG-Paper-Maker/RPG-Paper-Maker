@@ -557,6 +557,12 @@ void DialogDatas::on_pushButtonSpriteWalls_clicked() {
 
 // -------------------------------------------------------
 
+void DialogDatas::on_pushButtonMountains_clicked() {
+    openSpecialElementsDialog(PictureKind::Mountains);
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::on_pushButton3DObjects_clicked() {
     openSpecialElementsDialog(PictureKind::Object3D);
 }

@@ -89,6 +89,8 @@ MapEditorSubSelectionKind WidgetMenuBarMapEditor::subSelectionKind() {
         return MapEditorSubSelectionKind::SpritesQuadra;
     else if (text == bar->actionWallSprite()->text())
         return MapEditorSubSelectionKind::SpritesWall;
+    else if (text == bar->actionMountain()->text())
+        return MapEditorSubSelectionKind::Mountains;
     else if (text == bar->actionObject3D()->text())
         return MapEditorSubSelectionKind::Object3D;
     else if (text == bar->actionEvents()->text())
@@ -151,6 +153,10 @@ QAction * WidgetMenuBarMapEditor::actionQuadraSprite() const {
 
 QAction * WidgetMenuBarMapEditor::actionWallSprite() const {
     return ui->actionWall_Sprite;
+}
+
+QAction * WidgetMenuBarMapEditor::actionMountain() const {
+    return ui->actionMountain;
 }
 
 QAction * WidgetMenuBarMapEditor::actionObject3D() const {
@@ -281,14 +287,16 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action) {
     if (subSelectionBefore != subSelectionAfter) {
         enableAllRight();
         if (subSelectionAfter == MapEditorSubSelectionKind::SpritesWall ||
-            m_selectionKind == MapEditorSelectionKind::Objects3D)
+            m_selectionKind == MapEditorSelectionKind::Objects3D ||
+            m_selectionKind == MapEditorSelectionKind::Mountains)
         {
             forceNoneLayer();
         } else {
             actionLayerOn()->setIcon(QIcon(":/icons/Ressources/layer_on.png"));
         }
         if (m_selectionKind == MapEditorSelectionKind::Sprites ||
-            m_selectionKind == MapEditorSelectionKind::Objects3D)
+            m_selectionKind == MapEditorSelectionKind::Objects3D ||
+            m_selectionKind == MapEditorSelectionKind::Mountains)
         {
             forcePencil();
         } else {
@@ -488,6 +496,13 @@ void WidgetMenuBarMapEditor::on_menuFloors_triggered(QAction *action) {
 void WidgetMenuBarMapEditor::on_menuFace_Sprite_triggered(QAction *action) {
     updateSubSelection(ui->menuFace_Sprite, this->actions().at(static_cast<int>(
         MapEditorSelectionKind::Sprites)), action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_menuMountain_triggered(QAction *action) {
+    updateSubSelection(ui->menuMountain, this->actions().at(static_cast<int>(
+        MapEditorSelectionKind::Mountains)), action);
 }
 
 // -------------------------------------------------------

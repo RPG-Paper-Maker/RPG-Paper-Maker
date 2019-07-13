@@ -31,12 +31,14 @@ class WidgetTilesetSelector : public QWidget
 public:
     explicit WidgetTilesetSelector(QWidget *parent = nullptr);
     ~WidgetTilesetSelector();
+    void setIsResizable(bool b);
     void setCurrentTexture(QRect& rect);
     void currentTexture(QRect &rect) const;
     void setImage(QString path);
     void setImageNone();
 
 protected:
+    bool m_isResizable;
     QImage m_textureTileset;
     WidgetSelectionRectangle* m_selectionRectangle;
 

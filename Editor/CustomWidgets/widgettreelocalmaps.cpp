@@ -295,6 +295,9 @@ void WidgetTreeLocalMaps::updateTileset(){
             case MapEditorSubSelectionKind::SpritesWall:
                 m_panelTextures->showSpriteWalls(tileset);
                 break;
+            case MapEditorSubSelectionKind::Mountains:
+                m_panelTextures->showMountains(tileset);
+                break;
             case MapEditorSubSelectionKind::Object3D:
                 m_panelTextures->showObjects3D(tileset);
                 break;

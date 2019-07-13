@@ -52,8 +52,10 @@ public:
     QString createlabelText();
     void showAutotiles(SystemTileset *tileset);
     void showSpriteWalls(SystemTileset *tileset);
+    void showMountains(SystemTileset *tileset);
     void showObjects3D(SystemTileset *tileset);
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
+    void updateMountainsSize();
     void updateObject3DSize();
 
 private:
@@ -61,6 +63,7 @@ private:
     PictureKind m_kind;
     int m_currentAutotilesID;
     int m_currentWallsID;
+    int m_currentMountainID;
     int m_currentObjects3DID;
 
     void updateTilesetImage();

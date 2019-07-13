@@ -20,6 +20,7 @@
 
 WidgetTilesetSelector::WidgetTilesetSelector(QWidget *parent) :
     QWidget(parent),
+    m_isResizable(true),
     m_selectionRectangle(new WidgetSelectionRectangle)
 {
 
@@ -28,6 +29,10 @@ WidgetTilesetSelector::WidgetTilesetSelector(QWidget *parent) :
 WidgetTilesetSelector::~WidgetTilesetSelector()
 {
     delete m_selectionRectangle;
+}
+
+void WidgetTilesetSelector::setIsResizable(bool b) {
+    m_isResizable = b;
 }
 
 // -------------------------------------------------------
@@ -133,8 +138,8 @@ void WidgetTilesetSelector::mousePressEvent(QMouseEvent *event){
 
 // -------------------------------------------------------
 
-void WidgetTilesetSelector::mouseMoveEvent(QMouseEvent *event){
-    if (event->buttons() == Qt::LeftButton){
+void WidgetTilesetSelector::mouseMoveEvent(QMouseEvent *event) {
+    if (event->buttons() == Qt::LeftButton && m_isResizable) {
         makeSelection(event->x(), event->y());
         this->repaint();
     }

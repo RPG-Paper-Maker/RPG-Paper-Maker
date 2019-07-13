@@ -31,7 +31,8 @@ enum class MapEditorSubSelectionKind {
     SpritesQuadra,
     SpritesWall,
     Object,
-    Object3D
+    Object3D,
+    Mountains
 };
 
 #endif // MAPEDITORSUBSELECTIONKIND_H

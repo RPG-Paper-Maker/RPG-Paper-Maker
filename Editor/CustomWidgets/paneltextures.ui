@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,1">
      <item>
       <widget class="QComboBox" name="comboBox"/>
      </item>
@@ -64,6 +64,9 @@
         <bool>true</bool>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="WidgetMountainSelector" name="widgetMountainPreview" native="true"/>
      </item>
      <item>
       <spacer name="verticalSpacer">
@@ -105,6 +108,12 @@
    <class>WidgetAutotilesSelector</class>
    <extends>QWidget</extends>
    <header>widgetautotilesselector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetMountainSelector</class>
+   <extends>QWidget</extends>
+   <header>widgetmountainselector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

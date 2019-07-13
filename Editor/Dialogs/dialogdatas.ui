@@ -46,7 +46,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>10</number>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -814,7 +814,7 @@
                 <property name="geometry">
                  <rect>
                   <x>0</x>
-                  <y>-40</y>
+                  <y>-153</y>
                   <width>245</width>
                   <height>686</height>
                  </rect>
@@ -1005,7 +1005,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QPushButton" name="pushButtonReliefs">
+                      <widget class="QPushButton" name="pushButtonMountains">
                        <property name="enabled">
                         <bool>true</bool>
                        </property>
@@ -1048,7 +1048,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QPushButton" name="pushButtonReliefs_2">
+                      <widget class="QPushButton" name="pushButtonSlopes">
                        <property name="enabled">
                         <bool>false</bool>
                        </property>
