@@ -61,6 +61,7 @@ public:
 private:
     Ui::PanelTextures *ui;
     PictureKind m_kind;
+    SystemTileset *m_tileset;
     int m_currentAutotilesID;
     int m_currentWallsID;
     int m_currentMountainID;
@@ -74,6 +75,7 @@ private:
 private slots:
     void onSplitterMoved(int, int);
     void on_comboBox_currentIndexChanged(int);
+    void on_pushButtonUpdateList_pressed();
 };
 
 #endif // PANELTEXTURES_H

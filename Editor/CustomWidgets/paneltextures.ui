@@ -27,9 +27,16 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,1">
      <item>
       <widget class="QComboBox" name="comboBox"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonUpdateList">
+       <property name="text">
+        <string>Update list...</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="WidgetPreviewObject3D" name="widget3DObjectPreview" native="true"/>

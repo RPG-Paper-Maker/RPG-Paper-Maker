@@ -13,6 +13,7 @@
 #include "ui_paneltextures.h"
 #include "systemspritewall.h"
 #include "rpm.h"
+#include "dialogtilesetspecialelements.h"
 
 // -------------------------------------------------------
 //
@@ -84,6 +85,7 @@ void PanelTextures::hideAll() {
     ui->widgetMountainPreview->hide();
     ui->widget3DObjectPreview->hide();
     ui->comboBox->hide();
+    ui->pushButtonUpdateList->hide();
     ui->labelInformation->hide();
 }
 
@@ -128,6 +130,7 @@ QWidget * PanelTextures::getSpecialWidget() const {
 
 void PanelTextures::showComboBox() {
     updateComboBoxSize();
+    ui->pushButtonUpdateList->show();
 
     // Setting label text
     if (ui->comboBox->count() == 0) {
@@ -171,6 +174,10 @@ void PanelTextures::updateComboBoxSize() {
         ->height());
     ui->comboBox->setFixedSize(this->parentWidget()->width(), ui->comboBox
         ->height());
+    ui->pushButtonUpdateList->setGeometry(0, 0, this->parentWidget()->width(),
+        ui->pushButtonUpdateList->height());
+    ui->pushButtonUpdateList->setFixedSize(this->parentWidget()->width(), ui
+        ->pushButtonUpdateList->height());
 
     int width = qMax(currentSpecial->width(), this->parentWidget()->width());
     int height = ui->comboBox->height() + 6 + currentSpecial->height();
@@ -216,12 +223,14 @@ QString PanelTextures::createlabelText() {
     }
 
     return "You don't have any " + kindText + " in this tileset. You can add "
-        "it in the tileset tab in the datas manager.";
+        "it thanks to the button update list here or in the tileset tab in the "
+        "datas manager.";
 }
 
 // -------------------------------------------------------
 
 void PanelTextures::showAutotiles(SystemTileset *tileset) {
+    m_tileset = tileset;
     tileset->updateModelAutotiles();
     fillComboBox(tileset, PictureKind::Autotiles);
 }
@@ -229,6 +238,7 @@ void PanelTextures::showAutotiles(SystemTileset *tileset) {
 // -------------------------------------------------------
 
 void PanelTextures::showSpriteWalls(SystemTileset *tileset) {
+    m_tileset = tileset;
     tileset->updateModelSpriteWalls();
     fillComboBox(tileset, PictureKind::Walls);
 }
@@ -236,6 +246,7 @@ void PanelTextures::showSpriteWalls(SystemTileset *tileset) {
 // -------------------------------------------------------
 
 void PanelTextures::showMountains(SystemTileset *tileset) {
+    m_tileset = tileset;
     tileset->updateModelMountains();
     fillComboBox(tileset, PictureKind::Mountains);
     ui->widgetMountainPreview->initializeTilesetPictureID(tileset->picture()
@@ -245,6 +256,7 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
 // -------------------------------------------------------
 
 void PanelTextures::showObjects3D(SystemTileset *tileset) {
+    m_tileset = tileset;
     tileset->updateModel3DObjects();
     fillComboBox(tileset, PictureKind::Object3D);
 }
@@ -290,7 +302,7 @@ void PanelTextures::updateMountainsSize() {
     w = ui->comboBox->width();
     ui->widgetMountainPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
         ->widgetMountainPreview->y(), w, ui->widgetMountainPreview->height());
-    ui->widgetMountainPreview->setFixedWidth(w);
+    ui->widgetMountainPreview->setFixedSize(w, ui->widgetMountainPreview->height());
 }
 
 // -------------------------------------------------------
@@ -401,5 +413,17 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
         ui->widget3DObjectPreview->loadObject(reinterpret_cast<SystemObject3D *>
             (special));
         ui->widget3DObjectPreview->updateObject();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::on_pushButtonUpdateList_pressed() {
+    DialogTilesetSpecialElements dialog(m_tileset, m_kind);
+    if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeTilesetsDatas();
+        this->fillComboBox(m_tileset, m_kind);
+    } else {
+        RPM::get()->project()->readTilesetsDatas();
     }
 }
