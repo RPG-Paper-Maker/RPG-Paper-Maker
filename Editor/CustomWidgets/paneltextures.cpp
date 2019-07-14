@@ -180,7 +180,8 @@ void PanelTextures::updateComboBoxSize() {
         ->pushButtonUpdateList->height());
 
     int width = qMax(currentSpecial->width(), this->parentWidget()->width());
-    int height = ui->comboBox->height() + 6 + currentSpecial->height();
+    int height = ui->comboBox->height() + + ui->pushButtonUpdateList->height() +
+        12 + currentSpecial->height();
     this->setGeometry(0, 0, width, height);
     setFixedSize(width, height);
 
@@ -297,12 +298,17 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
 // -------------------------------------------------------
 
 void PanelTextures::updateMountainsSize() {
-    int w;
+    if (m_kind == PictureKind::Mountains) {
+        int w, h;
 
-    w = ui->comboBox->width();
-    ui->widgetMountainPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
-        ->widgetMountainPreview->y(), w, ui->widgetMountainPreview->height());
-    ui->widgetMountainPreview->setFixedSize(w, ui->widgetMountainPreview->height());
+        w = ui->comboBox->width();
+        h = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
+            ui->widgetMountainPreview->height() + 18;
+        ui->widgetMountainPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
+            ->widgetMountainPreview->y(), w, ui->widgetMountainPreview->height());
+        this->setGeometry(0, 0, w, h);
+        this->setFixedSize(w, h);
+    }
 }
 
 // -------------------------------------------------------
@@ -366,9 +372,6 @@ void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
     case PictureKind::Walls:
         ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
         break;
-    case PictureKind::Mountains:
-        ui->widgetMountainPreview->updatePicture(special->picture(), m_kind);
-        break;
     default:
         break;
     }
@@ -419,11 +422,17 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
 // -------------------------------------------------------
 
 void PanelTextures::on_pushButtonUpdateList_pressed() {
+    int tilesetID;
+
+    tilesetID = m_tileset->id();
     DialogTilesetSpecialElements dialog(m_tileset, m_kind);
     if (dialog.exec() == QDialog::Accepted) {
         RPM::get()->project()->writeTilesetsDatas();
         this->fillComboBox(m_tileset, m_kind);
     } else {
         RPM::get()->project()->readTilesetsDatas();
+        m_tileset = reinterpret_cast<SystemTileset *>(SuperListItem::getById(RPM
+            ::get()->project()->gameDatas()->tilesetsDatas()->model()
+            ->invisibleRootItem(), tilesetID));
     }
 }

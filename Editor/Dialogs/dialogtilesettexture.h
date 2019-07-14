@@ -32,8 +32,11 @@ class DialogTilesetTexture : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogTilesetTexture(int pictureID, QWidget *parent = nullptr);
+    explicit DialogTilesetTexture(int pictureID, QRect& rect, QWidget *parent =
+        nullptr);
     ~DialogTilesetTexture();
+
+    QRect getRect() const;
 
 private:
     Ui::DialogTilesetTexture *ui;

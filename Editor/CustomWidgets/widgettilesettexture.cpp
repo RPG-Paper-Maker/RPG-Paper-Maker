@@ -21,7 +21,8 @@
 
 WidgetTilesetTexture::WidgetTilesetTexture(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetTilesetTexture)
+    ui(new Ui::WidgetTilesetTexture),
+    m_rect(0, 0, 1, 1)
 {
     ui->setupUi(this);
 
@@ -29,13 +30,13 @@ WidgetTilesetTexture::WidgetTilesetTexture(QWidget *parent) :
     item->setSizeHint(QSize(item->sizeHint().width(),
                             ui->listWidget->height() - 4));
     ui->listWidget->addItem(item);
+    this->updateText();
 }
 
 WidgetTilesetTexture::~WidgetTilesetTexture()
 {
     delete ui;
 }
-
 
 // -------------------------------------------------------
 //
@@ -44,16 +45,25 @@ WidgetTilesetTexture::~WidgetTilesetTexture()
 // -------------------------------------------------------
 
 void WidgetTilesetTexture::initialize(int pictureID) {
-    m_pictureID = pictureID;
+    WidgetTilesetTexture::m_pictureID = pictureID;
+}
+
+// -------------------------------------------------------
+
+void WidgetTilesetTexture::updateText() {
+    ui->listWidget->item(0)->setText("[" + QString::number(m_rect.x()) + "," +
+        QString::number(m_rect.y()) + "," + QString::number(m_rect.width()) +
+        "," + QString::number(m_rect.height()) + "]");
 }
 
 // -------------------------------------------------------
 
 void WidgetTilesetTexture::openDialog() {
-    DialogTilesetTexture dialog(m_pictureID);
+    DialogTilesetTexture dialog(m_pictureID, m_rect);
 
     if (dialog.exec() == QDialog::Accepted){
-
+        m_rect = dialog.getRect();
+        updateText();
     }
 }
 

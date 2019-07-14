@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>283</width>
-    <height>338</height>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
@@ -65,12 +65,15 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="spinBoxSquareWidth">
             <property name="minimumSize">
              <size>
               <width>75</width>
               <height>27</height>
              </size>
+            </property>
+            <property name="maximum">
+             <number>999</number>
             </property>
            </widget>
           </item>
@@ -95,7 +98,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBox_2">
+           <widget class="QSpinBox" name="spinBoxPixelWidth">
             <property name="minimumSize">
              <size>
               <width>75</width>
@@ -125,12 +128,18 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QSpinBox" name="spinBox_3">
+           <widget class="QSpinBox" name="spinBoxSquareHeight">
             <property name="minimumSize">
              <size>
               <width>75</width>
               <height>27</height>
              </size>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+            <property name="value">
+             <number>1</number>
             </property>
            </widget>
           </item>
@@ -155,7 +164,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBox_4">
+           <widget class="QSpinBox" name="spinBoxPixelHeight">
             <property name="minimumSize">
              <size>
               <width>75</width>
@@ -193,20 +202,11 @@
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="WidgetShowPicture" name="widgetPreview" native="true"/>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>WidgetShowPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetshowpicture.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>WidgetTilesetTexture</class>
    <extends>QWidget</extends>

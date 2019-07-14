@@ -37,6 +37,7 @@ public:
     QRect rect() const;
 
     void initialize(int pictureID);
+    void updateText();
     void openDialog();
 
 private:

@@ -36,10 +36,16 @@ public:
     ~WidgetMountainSelector();
 
     void initializeTilesetPictureID(int pictureID);
-    void updatePicture(SystemPicture *picture, PictureKind kind);
+    void updateAngle();
 
 private:
     Ui::WidgetMountainSelector *ui;
+
+public slots:
+    void on_spinBoxSquareWidth_valueChanged(int);
+    void on_spinBoxPixelWidth_valueChanged(int);
+    void on_spinBoxSquareHeight_valueChanged(int);
+    void on_spinBoxPixelHeight_valueChanged(int);
 };
 
 #endif // WIDGETMOUNTAINSELECTOR_H

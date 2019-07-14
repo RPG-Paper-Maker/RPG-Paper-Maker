@@ -20,7 +20,8 @@
 //
 // -------------------------------------------------------
 
-DialogTilesetTexture::DialogTilesetTexture(int pictureID, QWidget *parent) :
+DialogTilesetTexture::DialogTilesetTexture(int pictureID, QRect &rect, QWidget
+    *parent) :
     QDialog(parent),
     ui(new Ui::DialogTilesetTexture)
 {
@@ -31,9 +32,23 @@ DialogTilesetTexture::DialogTilesetTexture(int pictureID, QWidget *parent) :
         ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
         ::Tilesets)->invisibleRootItem(), pictureID))->getPath(PictureKind
         ::Tilesets));
+    ui->widget->setCurrentTexture(rect);
 }
 
 DialogTilesetTexture::~DialogTilesetTexture()
 {
     delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY
+//
+// -------------------------------------------------------
+
+QRect DialogTilesetTexture::getRect() const {
+    QRect rect;
+    ui->widget->currentTexture(rect);
+
+    return rect;
 }
