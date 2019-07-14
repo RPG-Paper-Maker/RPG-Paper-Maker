@@ -98,9 +98,10 @@ void CommonEventsDatas::setDefault(){
 
     // Events user
     QStringList namesEventsUser;
-    namesEventsUser << "Hero action";
+    namesEventsUser << "Hero action" << "Hero touch";
     QList<QVector<SystemCreateParameter*>> parametersUser;
-    parametersUser << QVector<SystemCreateParameter*>({});
+    parametersUser << QVector<SystemCreateParameter *>({}) << QVector<
+        SystemCreateParameter *>({});
     setDefaultEvent(m_modelEventsUser, namesEventsUser, parametersUser);
 
     // States

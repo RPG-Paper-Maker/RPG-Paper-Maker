@@ -232,6 +232,13 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(
     command = new EventCommand(kind, commandList);
     SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
                                           ->invisibleRootItem(), command);
+    if (kind == EventCommandKind::MoveObject) {
+        commandList = QVector<QString>({"1", "1", "1", "2"});
+        command = new EventCommand(EventCommandKind::SendEvent, commandList);
+        SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
+            ->invisibleRootItem(), command);
+    }
+
     item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
     item->setText(toString());
