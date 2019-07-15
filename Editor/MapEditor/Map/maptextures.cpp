@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "map.h"
 #include "systemautotile.h"
 #include "rpm.h"
@@ -16,7 +17,7 @@
 
 // -------------------------------------------------------
 
-void Map::loadTextures(){
+void Map::loadTextures() {
     deleteTextures();
 
     // Tileset
@@ -36,6 +37,7 @@ void Map::loadTextures(){
     loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
     loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
     loadAutotiles();
+    loadMountains();
 
     // Object square
     QImage imageObjectSquare(":/textures/Ressources/object_square.png");
@@ -63,6 +65,9 @@ void Map::deleteTextures(){
     for (int i = 0; i < m_texturesAutotiles.size(); i++)
         delete m_texturesAutotiles[i];
     m_texturesAutotiles.clear();
+    for (int i = 0; i < m_texturesMountains.size(); i++)
+        delete m_texturesMountains[i];
+    m_texturesMountains.clear();
     if (m_textureObjectSquare != nullptr)
         delete m_textureObjectSquare;
 }
@@ -176,7 +181,7 @@ void Map::loadAutotiles() {
     QPainter painter;
     painter.begin(&newImage);
     int offset = 0;
-    TextureAutotile* textureAutotile = nullptr;
+    TextureSeveral* textureAutotile = nullptr;
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
         id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
         special = (SystemSpecialElement*) SuperListItem::getById(
@@ -184,8 +189,8 @@ void Map::loadAutotiles() {
         textureAutotile = loadPictureAutotile(
             painter, textureAutotile, newImage, special->picture(), offset, id);
     }
-
     painter.end();
+
     if (offset > 0) {
         textureAutotile->setTexture(createTexture(newImage));
         m_texturesAutotiles.append(textureAutotile);
@@ -194,8 +199,8 @@ void Map::loadAutotiles() {
 
 // -------------------------------------------------------
 
-TextureAutotile* Map::loadPictureAutotile(
-        QPainter& painter, TextureAutotile *textureAutotile,
+TextureSeveral* Map::loadPictureAutotile(
+        QPainter& painter, TextureSeveral *textureAutotile,
         QImage& newImage, SystemPicture* picture, int& offset, int id)
 {
     QImage image(1, 1, QImage::Format_ARGB32);
@@ -236,8 +241,8 @@ void Map::editPictureWall(QImage& image, QImage& refImage) {
 
 // -------------------------------------------------------
 
-TextureAutotile* Map::editPictureAutotile(
-        QPainter &painter, TextureAutotile* textureAutotile, QImage& newImage,
+TextureSeveral * Map::editPictureAutotile(
+        QPainter &painter, TextureSeveral *textureAutotile, QImage& newImage,
         QImage& image, int &offset, int id)
 {
     int width = (image.width() / 2) / m_squareSize;
@@ -247,7 +252,7 @@ TextureAutotile* Map::editPictureAutotile(
     for (int i = 0; i < size; i++) {
         QPoint point(i % width, i / width);
         if (offset == 0 && textureAutotile == nullptr) {
-            textureAutotile = new TextureAutotile;
+            textureAutotile = new TextureSeveral;
             textureAutotile->setBegin(id, point);
         }
         paintPictureAutotile(painter, image, offset, point);
@@ -349,6 +354,149 @@ void Map::editPictureAutotilePreview(QImage& image, QImage& refImage) {
     }
     paint.end();
     refImage = newImage;
+}
+
+// -------------------------------------------------------
+
+void Map::loadMountains() {
+    SystemSpecialElement* special;
+    SystemTileset *tileset;
+    QStandardItemModel *model, *modelSpecials;
+    QImage newImage;
+    QPainter painter;
+    int i, l, id, offset;
+    TextureSeveral *textureMountain;
+
+    tileset = m_mapProperties->tileset();
+    model = tileset->model(PictureKind::Mountains);
+    modelSpecials = RPM::get()->project()->specialElementsDatas()->model
+        (PictureKind::Mountains);
+    newImage = QImage(4 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage
+        ::Format_ARGB32);
+    painter.begin(&newImage);
+    offset = 0;
+    textureMountain = nullptr;
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            qintptr>())->id();
+        special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
+            ::getById(modelSpecials->invisibleRootItem(), id));
+        textureMountain = loadPictureMountain(painter, textureMountain,
+            newImage, special->picture(), offset, id);
+    }
+    painter.end();
+
+    newImage.save("ae.png");
+
+    if (offset > 0) {
+        textureMountain->setTexture(createTexture(newImage));
+        m_texturesMountains.append(textureMountain);
+    }
+}
+
+// -------------------------------------------------------
+
+TextureSeveral * Map::loadPictureMountain(QPainter& painter, TextureSeveral
+    *textureMountain, QImage &newImage, SystemPicture *picture, int &offset, int
+    id)
+{
+    QImage image;
+    QString path;
+
+    image = QImage(1, 1, QImage::Format_ARGB32);
+    path = picture->getPath(PictureKind::Mountains);
+
+    if (path.isEmpty()) {
+        image.fill(QColor(0, 0, 0, 0));
+    } else {
+        image.load(path);
+        if (!image.isNull()) {
+            textureMountain = editPictureMountain(painter, textureMountain,
+                newImage, image, offset, id);
+        }
+    }
+
+    return textureMountain;
+}
+
+// -------------------------------------------------------
+
+TextureSeveral * Map::editPictureMountain(QPainter &painter, TextureSeveral
+    *textureMountain, QImage& newImage, QImage &image, int &offset, int id)
+{
+    int width = (image.width() / 3) / m_squareSize;
+    int height = (image.height() / 3) / m_squareSize;
+    int size = width * height;
+
+    for (int i = 0; i < size; i++) {
+        QPoint point(i % width, i / width);
+        if (offset == 0 && textureMountain == nullptr) {
+            textureMountain = new TextureSeveral;
+            textureMountain->setBegin(id, point);
+        }
+        paintPictureMountain(painter, image, offset);
+        textureMountain->setEnd(id, point);
+        textureMountain->addToList(id, point);
+        offset++;
+
+        if (offset == this->getMaxMountainOffsetTexture()) {
+            painter.end();
+            textureMountain->setTexture(createTexture(newImage));
+            m_texturesMountains.append(textureMountain);
+            newImage = QImage(4 * m_squareSize, RPM::MAX_PIXEL_SIZE, QImage
+                ::Format_ARGB32);
+            painter.begin(&newImage);
+            textureMountain = nullptr;
+            offset = 0;
+        }
+    }
+
+    return textureMountain;
+}
+
+// -------------------------------------------------------
+
+void Map::paintPictureMountain(QPainter &painter, QImage &image, int &offset)
+{
+    int i, l, y, sourceSize, sDiv;
+
+    y = offset * 4 * m_squareSize;
+    sourceSize = 3 * m_squareSize;
+    sDiv = qRound(m_squareSize / 2.0f);
+
+    // Draw original image
+    painter.drawImage(0, y, image);
+
+    // Add left/right autos
+    for (i = 0, l = 3; i < l; i++) {
+        painter.drawImage(sourceSize, y + (i * m_squareSize), image, 0, (i *
+            m_squareSize), sDiv, m_squareSize);
+        painter.drawImage(sourceSize + sDiv, y + (i * m_squareSize), image,
+            sourceSize - sDiv, (i * m_squareSize), sDiv, m_squareSize);
+    }
+
+    // Add top/bot autos
+    for (i = 0, l = 3; i < l; i++) {
+        painter.drawImage(i * m_squareSize, y + sourceSize, image, i *
+            m_squareSize, 0, m_squareSize, sDiv);
+        painter.drawImage(i * m_squareSize, y + sourceSize + sDiv, image, i *
+            m_squareSize, sourceSize - sDiv, m_squareSize, sDiv);
+    }
+
+    // Add all sides autos
+    painter.drawImage(sourceSize, y + sourceSize, image, 0, 0, sDiv, sDiv);
+    painter.drawImage(sourceSize + sDiv, y + sourceSize, image, sourceSize -
+        sDiv, 0, sDiv, sDiv);
+    painter.drawImage(sourceSize, y + sourceSize + sDiv, image, 0, sourceSize -
+        sDiv, sDiv, sDiv);
+    painter.drawImage(sourceSize + sDiv, y + sourceSize + sDiv, image,
+        sourceSize - sDiv, sourceSize - sDiv, sDiv, sDiv);
+}
+
+// -------------------------------------------------------
+
+int Map::getMaxMountainOffsetTexture() const {
+    return qFloor(RPM::MAX_PIXEL_SIZE / (4 * m_squareSize));
 }
 
 // -------------------------------------------------------

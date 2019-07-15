@@ -16,17 +16,17 @@
 
 // -------------------------------------------------------
 //
-//  CLASS TextureAutotile
+//  CLASS TextureSeveral
 //
-//  A texture for an autotile.
+//  A texture for a texture that is for several elements (autotiles, mountains).
 //
 // -------------------------------------------------------
 
-class TextureAutotile
+class TextureSeveral
 {
 public:
-    TextureAutotile();
-    ~TextureAutotile();
+    TextureSeveral();
+    ~TextureSeveral();
     QOpenGLTexture* texture();
     void setTexture(QOpenGLTexture* texture);
     void setBegin(int id, QPoint& point);

@@ -76,10 +76,10 @@ LandDatas* Lands::getLand(Position& p) const {
 void Lands::setLand(Position& p, LandDatas* land) {
     switch (land->getSubKind()) {
     case MapEditorSubSelectionKind::Floors:
-        m_floors->setFloor(p, (FloorDatas*) land);
+        m_floors->setFloor(p, reinterpret_cast<FloorDatas *>(land));
         break;
     case MapEditorSubSelectionKind::Autotiles:
-        m_autotiles->setAutotile(p, (AutotileDatas*) land);
+        m_autotiles->setAutotile(p, reinterpret_cast<AutotileDatas *>(land));
         break;
     default:
         break;
@@ -248,7 +248,7 @@ void Lands::updateAutotiles(Position& position,
 //
 // -------------------------------------------------------
 
-void Lands::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+void Lands::initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
                                QHash<Position, MapElement *> &previewSquares,
                                int squareSize, int width, int height)
 {

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "textureautotile.h"
+#include "textureseveral.h"
 #include <QDebug>
 // -------------------------------------------------------
 //
@@ -17,30 +17,30 @@
 //
 // -------------------------------------------------------
 
-TextureAutotile::TextureAutotile()
+TextureSeveral::TextureSeveral()
 {
 
 }
 
-TextureAutotile::~TextureAutotile()
+TextureSeveral::~TextureSeveral()
 {
     delete m_texture;
 }
 
-QOpenGLTexture* TextureAutotile::texture() {
+QOpenGLTexture* TextureSeveral::texture() {
     return m_texture;
 }
 
-void TextureAutotile::setTexture(QOpenGLTexture* texture) {
+void TextureSeveral::setTexture(QOpenGLTexture* texture) {
     m_texture = texture;
 }
 
-void TextureAutotile::setBegin(int id, QPoint& point) {
+void TextureSeveral::setBegin(int id, QPoint& point) {
     m_beginID = id;
     m_beginPoint = point;
 }
 
-void TextureAutotile::setEnd(int id, QPoint& point) {
+void TextureSeveral::setEnd(int id, QPoint& point) {
     m_endID = id;
     m_endPoint = point;
 }
@@ -51,7 +51,7 @@ void TextureAutotile::setEnd(int id, QPoint& point) {
 //
 // -------------------------------------------------------
 
-bool TextureAutotile::isSup(QRect* rect, QPoint& point) {
+bool TextureSeveral::isSup(QRect* rect, QPoint& point) {
     if (rect->y() > point.y())
         return true;
     else if (rect->y() == point.y())
@@ -62,7 +62,7 @@ bool TextureAutotile::isSup(QRect* rect, QPoint& point) {
 
 // -------------------------------------------------------
 
-bool TextureAutotile::isInf(QRect* rect, QPoint& point) {
+bool TextureSeveral::isInf(QRect* rect, QPoint& point) {
     if (rect->y() < point.y())
         return true;
     else if (rect->y() == point.y())
@@ -73,7 +73,7 @@ bool TextureAutotile::isInf(QRect* rect, QPoint& point) {
 
 // -------------------------------------------------------
 
-int TextureAutotile::isInTexture(int id, QRect* rect) {
+int TextureSeveral::isInTexture(int id, QRect* rect) {
     if (id >= m_beginID && id <= m_endID) {
         if (id == m_beginID) {
             if (id == m_endID)
@@ -91,13 +91,13 @@ int TextureAutotile::isInTexture(int id, QRect* rect) {
 
 // -------------------------------------------------------
 
-void TextureAutotile::addToList(int id, QPoint& point) {
+void TextureSeveral::addToList(int id, QPoint& point) {
     m_list.append(QPair<int, QPoint>(id, point));
 }
 
 // -------------------------------------------------------
 
-int TextureAutotile::getOffset(int id, QRect* rect) {
+int TextureSeveral::getOffset(int id, QRect* rect) {
     for (int i = 0; i < m_list.size(); i++) {
         const QPair<int, QPoint>& pair = m_list.at(i);
         const QPoint& p = pair.second;

@@ -76,7 +76,7 @@ QString AutotileDatas::toString() const {
 //
 // -------------------------------------------------------
 
-void AutotileDatas::initializeVertices(TextureAutotile* textureAutotile,
+void AutotileDatas::initializeVertices(TextureSeveral *textureAutotile,
                                        int squareSize, int width, int height,
                                        QVector<Vertex>& vertices,
                                        QVector<GLuint>& indexes,
@@ -292,7 +292,7 @@ Autotile::~Autotile()
 //
 // -------------------------------------------------------
 
-void Autotile::initializeVertices(TextureAutotile* textureAutotile,
+void Autotile::initializeVertices(TextureSeveral *textureAutotile,
                                   Position &position, AutotileDatas* autotile,
                                   int squareSize, int width, int height)
 {

@@ -438,7 +438,7 @@ const
 
 
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
-                                    QList<TextureAutotile*>& autotiles,
+                                    QList<TextureSeveral *> &autotiles,
                                     QHash<int, QOpenGLTexture *> &characters,
                                     QHash<int, QOpenGLTexture *> &walls)
 {

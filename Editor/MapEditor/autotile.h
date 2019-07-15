@@ -17,7 +17,7 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include "land.h"
-#include "textureautotile.h"
+#include "textureseveral.h"
 
 class Autotiles;
 
@@ -45,7 +45,7 @@ public:
     virtual MapEditorSubSelectionKind getSubKind() const;
     virtual QString toString() const;
 
-    virtual void initializeVertices(TextureAutotile* textureAutotile,
+    virtual void initializeVertices(TextureSeveral* textureAutotile,
                                     int squareSize, int width, int height,
                                     QVector<Vertex>& vertices,
                                     QVector<GLuint>& indexes,
@@ -74,7 +74,7 @@ class Autotile : protected QOpenGLFunctions
 public:
     Autotile();
     virtual ~Autotile();
-    void initializeVertices(TextureAutotile* textureAutotile,
+    void initializeVertices(TextureSeveral *textureAutotile,
                             Position& position, AutotileDatas* autotile,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* program);

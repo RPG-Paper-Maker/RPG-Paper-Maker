@@ -55,7 +55,7 @@ public:
                          QSet<MapPortion*> &update, QSet<MapPortion*> &save,
                          QSet<MapPortion*> &previousPreview);
 
-    void initializeVertices(QList<TextureAutotile *> &texturesAutotiles,
+    void initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize, int width, int height);
     void initializeGL(QOpenGLShaderProgram* programStatic);

@@ -124,8 +124,8 @@ public:
     int getLastLayerAt(Position& position, MapEditorSelectionKind kind) const;
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset,
-                            QList<TextureAutotile *> &autotiles,
-                            QHash<int, QOpenGLTexture*>& characters,
+                            QList<TextureSeveral *> &autotiles,
+                            QHash<int, QOpenGLTexture *>& characters,
                             QHash<int, QOpenGLTexture *> &walls);
     void initializeVerticesObjects(int squareSize,
                                    QHash<int, QOpenGLTexture*>& characters,

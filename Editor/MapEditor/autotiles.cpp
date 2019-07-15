@@ -386,7 +386,7 @@ void Autotiles::updateWithoutPreview(Position& position,
 //
 // -------------------------------------------------------
 
-void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+void Autotiles::initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
                                    QHash<Position, MapElement*>& previewSquares,
                                    int squareSize)
 {
@@ -404,10 +404,10 @@ void Autotiles::initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
     {
         Position position = i.key();
         AutotileDatas* autotile = i.value();
-        TextureAutotile* texture = nullptr;
+        TextureSeveral* texture = nullptr;
         int index = 0;
         for (; index < texturesAutotiles.size(); index++) {
-            TextureAutotile* textureAutotile = texturesAutotiles[index];
+            TextureSeveral* textureAutotile = texturesAutotiles[index];
             if (textureAutotile->isInTexture(autotile->autotileID(),
                                              autotile->textureRect()))
             {

@@ -33,6 +33,7 @@ HEADERS += \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \
     MapEditor/mountains.h \
+    MapEditor/textureseveral.h \
     Models/System/systemmountain.h \
     Singletons/singleton.h \
     Models/project.h \
@@ -220,7 +221,6 @@ HEADERS += \
     CustomWidgets/widgetshowpicture.h \
     CustomWidgets/widgetautotilesselector.h \
     MapEditor/autotiles.h \
-    MapEditor/textureautotile.h \
     MapEditor/autotile.h \
     Dialogs/dialogcollisions.h \
     Models/collisionsquare.h \
@@ -311,6 +311,7 @@ SOURCES += \
     Controls/controlmainwindow.cpp \
     MapEditor/mountain.cpp \
     MapEditor/mountains.cpp \
+    MapEditor/textureseveral.cpp \
     Models/System/systemmountain.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
@@ -485,7 +486,6 @@ SOURCES += \
     MapEditor/Map/maptextures.cpp \
     MapEditor/Map/mapwritting.cpp \
     MapEditor/autotiles.cpp \
-    MapEditor/textureautotile.cpp \
     MapEditor/autotile.cpp \
     Dialogs/dialogcollisions.cpp \
     Models/collisionsquare.cpp \

@@ -18,7 +18,7 @@
 #include "systemcommonobject.h"
 #include "threadmapportionloader.h"
 #include "cursor.h"
-#include "textureautotile.h"
+#include "textureseveral.h"
 
 // -------------------------------------------------------
 //
@@ -111,16 +111,24 @@ public:
     static void loadPicture(SystemPicture* picture, PictureKind kind, QImage
         &refImage);
     void loadAutotiles();
-    TextureAutotile *loadPictureAutotile(
-            QPainter& painter, TextureAutotile* textureAutotile,
+    TextureSeveral *loadPictureAutotile(
+            QPainter& painter, TextureSeveral* textureSeveral,
             QImage& newImage, SystemPicture* picture, int& offset, int id);
     static void editPictureWall(QImage& image, QImage& refImage);
-    TextureAutotile *editPictureAutotile(
-            QPainter& painter, TextureAutotile* textureAutotile,
+    TextureSeveral *editPictureAutotile(
+            QPainter& painter, TextureSeveral* textureSeveral,
             QImage& newImage, QImage& image, int& offset, int id);
     void paintPictureAutotile(QPainter& painter,
                               QImage& image, int& offset, QPoint &point);
     static void editPictureAutotilePreview(QImage& image, QImage& refImage);
+    void loadMountains();
+    TextureSeveral *loadPictureMountain(QPainter &painter, TextureSeveral
+        *textureSeveral, QImage &newImage, SystemPicture *picture, int &offset,
+        int id);
+    TextureSeveral *editPictureMountain(QPainter &painter, TextureSeveral
+        *textureSeveral, QImage& newImage, QImage& image, int& offset, int id);
+    void paintPictureMountain(QPainter& painter, QImage& image, int& offset);
+    int getMaxMountainOffsetTexture() const;
     void addEmptyPicture(QHash<int, QOpenGLTexture*>& textures);
     static QOpenGLTexture* createTexture(QImage& image);
     QString getPortionPath(int i, int j, int k);
@@ -199,7 +207,8 @@ private:
     QHash<int, QOpenGLTexture*> m_texturesCharacters;
     QHash<int, QOpenGLTexture*> m_texturesSpriteWalls;
     QHash<int, QOpenGLTexture*> m_texturesObjects3D;
-    QList<TextureAutotile*> m_texturesAutotiles;
+    QList<TextureSeveral *> m_texturesAutotiles;
+    QList<TextureSeveral *> m_texturesMountains;
     QOpenGLTexture* m_textureObjectSquare;
 };
 

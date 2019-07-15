@@ -15,7 +15,7 @@
 #include <QOpenGLFunctions>
 #include "autotile.h"
 #include "mapproperties.h"
-#include "textureautotile.h"
+#include "textureseveral.h"
 
 class MapPortion;
 
@@ -98,7 +98,7 @@ public:
                       QSet<MapPortion*>* previousPreview);
     void updateWithoutPreview(Position& position, QSet<MapPortion *> &update,
                               QSet<MapPortion *> &save);
-    void initializeVertices(QList<TextureAutotile*> &texturesAutotiles,
+    void initializeVertices(QList<TextureSeveral *> &texturesAutotiles,
                             QHash<Position, MapElement*>& previewSquares,
                             int squareSize);
     void initializeGL(QOpenGLShaderProgram* program);
