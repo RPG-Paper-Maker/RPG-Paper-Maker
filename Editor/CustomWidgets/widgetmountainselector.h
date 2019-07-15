@@ -35,6 +35,11 @@ public:
     explicit WidgetMountainSelector(QWidget *parent = nullptr);
     ~WidgetMountainSelector();
 
+    int getWidthSquares() const;
+    double getWidthPixels() const;
+    int getHeightSquares() const;
+    double getHeightPixels() const;
+    void getDefaultFloorRect(QRect& rect) const;
     void initializeTilesetPictureID(int pictureID);
     void updateAngle();
 

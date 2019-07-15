@@ -119,6 +119,36 @@ int PanelTextures::getID() const {
 
 // -------------------------------------------------------
 
+int PanelTextures::getWidthSquares() const {
+    return ui->widgetMountainPreview->getWidthSquares();
+}
+
+// -------------------------------------------------------
+
+double PanelTextures::getWidthPixels() const {
+    return ui->widgetMountainPreview->getWidthPixels();
+}
+
+// -------------------------------------------------------
+
+int PanelTextures::getHeightSquares() const {
+    return ui->widgetMountainPreview->getHeightSquares();
+}
+
+// -------------------------------------------------------
+
+double PanelTextures::getHeightPixels() const {
+    return ui->widgetMountainPreview->getHeightPixels();
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::getDefaultFloorRect(QRect& rect) const {
+    ui->widgetMountainPreview->getDefaultFloorRect(rect);
+}
+
+// -------------------------------------------------------
+
 QWidget * PanelTextures::getSpecialWidget() const {
     switch (m_kind) {
     case PictureKind::Autotiles:

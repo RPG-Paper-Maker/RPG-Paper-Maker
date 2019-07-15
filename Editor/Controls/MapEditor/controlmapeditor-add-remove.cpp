@@ -11,12 +11,14 @@
 
 #include "controlmapeditor.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 
 void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-    QRect &tileset, int specialID)
+    QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+    heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
     Position p;
     bool b;
@@ -35,7 +37,8 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
                 remove(element, selection, drawKind, p);
             else {
                 add(selection, subSelection, drawKind, layerOn,
-                    tileset, specialID, p);
+                    tileset, specialID, widthSquares, widthPixels, heightSquares
+                    , heightPixels, defaultFloorRect, p);
             }
         }
     }
@@ -44,13 +47,15 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
     m_elementOnObject3D = nullptr;
+    m_elementOnMountain = nullptr;
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::add(MapEditorSelectionKind selection,
     MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-    QRect &tileset, int specialID, Position &p)
+    QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+    heightSquares, double heightPixels, QRect &defaultFloorRect, Position &p)
 {
     if (tileset.width() != 0 && tileset.height() != 0) {
         switch (selection) {
@@ -62,6 +67,10 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
             break;
         case MapEditorSelectionKind::Objects3D:
             addObject3D(p, specialID);
+            break;
+        case MapEditorSelectionKind::Mountains:
+            addMountain(p, specialID, widthSquares, widthPixels, heightSquares,
+                heightPixels, defaultFloorRect);
             break;
         default:
             break;
@@ -80,8 +89,8 @@ void ControlMapEditor::add(MapEditorSelectionKind selection,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::remove(MapElement *element, MapEditorSelectionKind selection,
-    DrawKind drawKind, Position &p)
+void ControlMapEditor::remove(MapElement *element, MapEditorSelectionKind
+    selection, DrawKind drawKind, Position &p)
 {
     switch (selection){
     case MapEditorSelectionKind::Land:
@@ -97,6 +106,11 @@ void ControlMapEditor::remove(MapElement *element, MapEditorSelectionKind select
     case MapEditorSelectionKind::Objects3D:
         if (element != nullptr) {
             removeObject3D(p);
+        }
+        break;
+    case MapEditorSelectionKind::Mountains:
+        if (element != nullptr) {
+            removeMountain(p);
         }
         break;
     case MapEditorSelectionKind::Objects:
@@ -748,6 +762,146 @@ void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo) {
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteObject3D(portionsOverflow, p,
+                previous, previousType, positions);
+            if (changed && m_map->saved()) {
+                setToNotSaved();
+            }
+            if (changed) {
+                if (!undoRedo) {
+                    for (int i = 0; i < previous.size(); i++) {
+                        m_controlUndoRedo.updateJsonList(m_changes, previous
+                            .at(i), previousType.at(i), nullptr,
+                            MapEditorSubSelectionKind::None, positions.at(i));
+                    }
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
+
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+//
+//  MOUNTAINS
+//
+// -------------------------------------------------------
+
+void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
+    double widthPixels, int heightSquares, double heightPixels, QRect
+    &defaultFloorRect)
+{
+    QList<Position> positions;
+    MountainDatas *mountain;
+
+    mountain = new MountainDatas(specialID, widthSquares, widthPixels,
+        heightSquares, heightPixels);
+    stockMountain(p, mountain, defaultFloorRect);
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++) {
+        mountain = new MountainDatas(specialID, widthSquares, widthPixels,
+            heightSquares, heightPixels);
+        stockMountain(p, mountain, defaultFloorRect);
+    }
+    m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
+    &defaultFloorRect, bool undoRedo)
+{
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
+        Portion portion;
+        MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+        FloorDatas *topFloor = new FloorDatas(new QRect(defaultFloorRect));
+        Position positionFloor(p);
+        double yPlus = p.yPlus() + mountain->heightPixels();
+        positionFloor.setY(p.y() + mountain->heightSquares() + static_cast<int>(
+            yPlus / 100));
+        positionFloor.setYPlus(std::fmod(yPlus, 100));
+
+        if (mapPortion != nullptr) {
+
+            // Add the mountain and top floor
+            QSet<Portion> portionsOverflow;
+            QJsonObject previous;
+            MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind
+                ::None;
+            QJsonObject previousFloor;
+            MapEditorSubSelectionKind previousTypeFloor =
+                MapEditorSubSelectionKind::None;
+            bool changed = mapPortion->addMountain(portionsOverflow, p, mountain
+                , previous, previousType);
+            changed = mapPortion->addLand(positionFloor, topFloor, previousFloor
+                , previousTypeFloor, m_portionsToUpdate, m_portionsToSave) ||
+                changed;
+            if (changed && m_map->saved()) {
+                setToNotSaved();
+            }
+            if (changed) {
+                if (!undoRedo) {
+                    m_controlUndoRedo.updateJsonList(m_changes, previous,
+                        previousType, mountain, MapEditorSubSelectionKind
+                        ::Mountains, p);
+                    m_controlUndoRedo.updateJsonList(m_changes, previousFloor,
+                        previousTypeFloor, topFloor, MapEditorSubSelectionKind
+                        ::Floors, positionFloor);
+                }
+                if (m_map->isInPortion(portion, 0)) {
+                    m_portionsToUpdate += mapPortion;
+                    m_portionsToSave += mapPortion;
+                }
+
+                m_needMapInfosToSave = true;
+                updatePortionsToSaveOverflow(portionsOverflow);
+            }
+
+            return;
+        }
+    }
+
+    delete mountain;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::removeMountain(Position &p) {
+    QList<Position> positions;
+
+    traceLine(m_previousMouseCoords, p, positions);
+    for (int i = 0; i < positions.size(); i++) {
+        eraseMountain(positions[i]);
+    }
+    eraseMountain(p);
+
+    m_previousMouseCoords = p;
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
+    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+        m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
+        .yPlus(), p.yPlus()))))
+    {
+        Portion portion;
+        MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
+
+        if (mapPortion != nullptr) {
+            QSet<Portion> portionsOverflow;
+            QList<QJsonObject> previous;
+            QList<MapEditorSubSelectionKind> previousType;
+            QList<Position> positions;
+            bool changed = mapPortion->deleteMountain(portionsOverflow, p,
                 previous, previousType, positions);
             if (changed && m_map->saved()) {
                 setToNotSaved();

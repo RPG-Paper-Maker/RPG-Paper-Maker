@@ -40,6 +40,38 @@ WidgetMountainSelector::~WidgetMountainSelector()
 //
 // -------------------------------------------------------
 
+int WidgetMountainSelector::getWidthSquares() const {
+    return ui->spinBoxSquareWidth->value();
+}
+
+// -------------------------------------------------------
+
+double WidgetMountainSelector::getWidthPixels() const {
+    return static_cast<double>(ui->spinBoxPixelWidth->value()) / RPM::get()
+        ->getSquareSize() * 100;
+}
+
+// -------------------------------------------------------
+
+int WidgetMountainSelector::getHeightSquares() const {
+    return ui->spinBoxSquareHeight->value();
+}
+
+// -------------------------------------------------------
+
+double WidgetMountainSelector::getHeightPixels() const {
+    return static_cast<double>(ui->spinBoxPixelHeight->value()) / RPM::get()
+        ->getSquareSize() * 100;
+}
+
+// -------------------------------------------------------
+
+void WidgetMountainSelector::getDefaultFloorRect(QRect& rect) const {
+    ui->widgetTilesetTexture->getRect(rect);
+}
+
+// -------------------------------------------------------
+
 void WidgetMountainSelector::initializeTilesetPictureID(int pictureID) {
     ui->widgetTilesetTexture->initialize(pictureID);
 }

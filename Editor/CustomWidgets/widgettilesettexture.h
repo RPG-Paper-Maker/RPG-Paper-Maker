@@ -34,7 +34,7 @@ class WidgetTilesetTexture : public QWidget
 public:
     explicit WidgetTilesetTexture(QWidget *parent = nullptr);
     ~WidgetTilesetTexture();
-    QRect rect() const;
+    void getRect(QRect &rect) const;
 
     void initialize(int pictureID);
     void updateText();

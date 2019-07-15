@@ -40,6 +40,8 @@ ControlMapEditor::ControlMapEditor() :
     m_positionStart(nullptr),
     m_elementOnLand(nullptr),
     m_elementOnSprite(nullptr),
+    m_elementOnObject3D(nullptr),
+    m_elementOnMountain(nullptr),
     m_positionPreviousPreview(-1, 0, 0, -1, 0),
     m_previousMouseCoords(-500, 0, 0, -500),
     m_firstMouseCoords(-500, 0, 0, -500),
@@ -1352,7 +1354,9 @@ void ControlMapEditor::onMouseMove(QPoint point, Qt::MouseButton button,
 
 void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
     MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-    QRect &tileset, int specialID, QPoint point, Qt::MouseButton button)
+    QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+    heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint point,
+    Qt::MouseButton button)
 {
 
     // Update mouse
@@ -1379,7 +1383,8 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
             m_previousMouseCoords = newPosition;
             m_firstMouseCoords = newPosition;
             addRemove(selection, subSelection, drawKind, layerOn, tileset,
-                specialID);
+                specialID, widthSquares, widthPixels, heightSquares,
+                heightPixels, defaultFloorRect);
 
             // Wall sprite
             if (subSelection == MapEditorSubSelectionKind::SpritesWall) {

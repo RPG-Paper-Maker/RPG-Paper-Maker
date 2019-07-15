@@ -47,6 +47,11 @@ public:
     void setTilesetImageNone();
     void showTileset();
     int getID() const;
+    int getWidthSquares() const;
+    double getWidthPixels() const;
+    int getHeightSquares() const;
+    double getHeightPixels() const;
+    void getDefaultFloorRect(QRect& rect) const;
     QWidget * getSpecialWidget() const;
     void hideAll();
     void showComboBox();

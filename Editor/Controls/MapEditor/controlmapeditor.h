@@ -87,7 +87,8 @@ public:
     void updateWallIndicator();
     void updatePreviewElements(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, DrawKind drawKind, bool layerOn,
-        QRect &tileset, int specialID);
+        QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+        heightSquares, double heightPixels);
     void removePreviewElements();
     void updatePreviewLands(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool up, bool layerOn, QRect &tileset,
@@ -114,13 +115,16 @@ public:
     void save();
     void addRemove(MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-        QRect& tileset, int specialID);
+        QRect& tileset, int specialID, int widthSquares, double widthPixels, int
+        heightSquares, double heightPixels, QRect &defaultFloorRect);
     MapElement * getPositionSelected(Position &position,
         MapEditorSelectionKind selection, MapEditorSubSelectionKind subSelection,
         bool layerOn, bool &isObject, bool isForDisplay = false) const;
     void add(MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-        QRect &tileset, int specialID, Position &p);
+        QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+        heightSquares, double heightPixels, QRect &defaultFloorRect, Position
+        &p);
     void remove(MapElement *element, MapEditorSelectionKind selection,
         DrawKind drawKind, Position &p);
     void addLand(Position &p, MapEditorSubSelectionKind kind, DrawKind drawKind,
@@ -157,6 +161,13 @@ public:
         false);
     void removeObject3D(Position &p);
     void eraseObject3D(Position &p, bool undoRedo = false);
+    void addMountain(Position &p, int specialID, int widthSquares, double
+        widthPixels, int heightSquares, double heightPixels, QRect
+        &defaultFloorRect);
+    void stockMountain(Position &p, MountainDatas *mountain, QRect
+        &defaultFloorRect, bool undoRedo = false);
+    void removeMountain(Position &p);
+    void eraseMountain(Position &p, bool undoRedo = false);
     void setCursorObjectPosition(Position &p);
     void showObjectMenuContext();
     void defineAsHero();
@@ -206,7 +217,9 @@ public:
     void onMouseMove(QPoint point, Qt::MouseButton button, bool updateTree = true);
     void onMousePressed(MapEditorSelectionKind selection,
         MapEditorSubSelectionKind subSelection, DrawKind drawKind, bool layerOn,
-        QRect &tileset, int specialID, QPoint point, Qt::MouseButton button);
+        QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+        heightSquares, double heightPixels, QRect &defaultFloorRect, QPoint
+        point, Qt::MouseButton button);
     void onMouseReleased(MapEditorSelectionKind, MapEditorSubSelectionKind,
         DrawKind drawKind, QRect &, int specialID, QPoint, Qt::MouseButton button);
     void onKeyPressed(int k, double speed);
@@ -243,6 +256,7 @@ protected:
     MapElement *m_elementOnLand;
     MapElement *m_elementOnSprite;
     MapElement *m_elementOnObject3D;
+    MapElement *m_elementOnMountain;
     MapElement *m_elementOnObject;
     float m_distancePlane;
     float m_distanceLand;

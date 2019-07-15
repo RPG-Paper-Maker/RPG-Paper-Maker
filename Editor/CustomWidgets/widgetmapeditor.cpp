@@ -210,10 +210,15 @@ void WidgetMapEditor::paintGL() {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
                 int specialID = m_panelTextures->getID();
+                int widthSquares = m_panelTextures->getWidthSquares();
+                double widthPixels = m_panelTextures->getWidthPixels();
+                int heightSquares = m_panelTextures->getHeightSquares();
+                double heightPixels = m_panelTextures->getHeightPixels();
                 m_control.updateWallIndicator();
                 if (mousePosChanged && this->hasFocus()) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
-                        layerOn, tileset, specialID);
+                        layerOn, tileset, specialID, widthSquares, widthPixels,
+                        heightSquares, heightPixels);
                 }
             }
         }
@@ -550,8 +555,16 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
                     ->subSelectionKind();
                 int specialID = m_panelTextures->getID();
                 bool layerOn = m_menuBar->layerOn();
+                int widthSquares = m_panelTextures->getWidthSquares();
+                double widthPixels = m_panelTextures->getWidthPixels();
+                int heightSquares = m_panelTextures->getHeightSquares();
+                double heightPixels = m_panelTextures->getHeightPixels();
+                QRect defaultFloorRect;
+                m_panelTextures->getDefaultFloorRect(defaultFloorRect);
                 m_control.addRemove(m_menuBar->selectionKind(), subSelection,
-                    m_menuBar->drawKind(), layerOn, tileset, specialID);
+                    m_menuBar->drawKind(), layerOn, tileset, specialID,
+                    widthSquares, widthPixels, heightSquares, heightPixels,
+                    defaultFloorRect);
             }
         }
     }
@@ -571,8 +584,15 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
             QRect tileset;
             m_panelTextures->getTilesetTexture(tileset);
             int specialID = m_panelTextures->getID();
+            int widthSquares = m_panelTextures->getWidthSquares();
+            double widthPixels = m_panelTextures->getWidthPixels();
+            int heightSquares = m_panelTextures->getHeightSquares();
+            double heightPixels = m_panelTextures->getHeightPixels();
+            QRect defaultFloorRect;
+            m_panelTextures->getDefaultFloorRect(defaultFloorRect);
             m_control.onMousePressed(selection, subSelection, drawKind, layerOn,
-                tileset, specialID, event->pos(), button);
+                tileset, specialID, widthSquares, widthPixels, heightSquares,
+                heightPixels, defaultFloorRect, event->pos(), button);
         } else{
             if (button != Qt::MouseButton::MiddleButton) {
                 m_control.moveCursorToMousePosition(event->pos());

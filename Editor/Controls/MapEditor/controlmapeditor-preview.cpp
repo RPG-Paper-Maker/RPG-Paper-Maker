@@ -16,7 +16,8 @@
 
 void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, DrawKind drawKind, bool layerOn,
-    QRect &tileset, int specialID)
+    QRect &tileset, int specialID, int widthSquares, double widthPixels, int
+    heightSquares, double heightPixels)
 {
     if (drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall) ||
         m_isCtrlPressed)

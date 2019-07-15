@@ -38,6 +38,10 @@ WidgetTilesetTexture::~WidgetTilesetTexture()
     delete ui;
 }
 
+void WidgetTilesetTexture::getRect(QRect &rect) const {
+    rect = m_rect;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

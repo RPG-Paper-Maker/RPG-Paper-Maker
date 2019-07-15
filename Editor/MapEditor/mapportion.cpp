@@ -192,6 +192,35 @@ bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
 
 // -------------------------------------------------------
 
+bool MapPortion::addMountain(QSet<Portion> &portionsOverflow, Position &p,
+    MountainDatas *mountain, QJsonObject &previous, MapEditorSubSelectionKind
+    &previousType)
+{
+    return m_mountains->addMountain(portionsOverflow, p, mountain, previous,
+        previousType);
+}
+
+// -------------------------------------------------------
+
+bool MapPortion::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
+    QList<QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType
+    , QList<Position> &positions)
+{
+    QJsonObject prev;
+    MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
+    bool changed = m_mountains->deleteMountain(portionsOverflow, p, prev, kind);
+
+    if (changed) {
+        previous.append(prev);
+        previousType.append(kind);
+        positions.append(p);
+    }
+
+    return changed;
+}
+
+// -------------------------------------------------------
+
 void MapPortion::updateAutotiles(Position& position, QSet<MapPortion*> &update,
                                  QSet<MapPortion*> &save,
                                  QSet<MapPortion*> &previousPreview)
