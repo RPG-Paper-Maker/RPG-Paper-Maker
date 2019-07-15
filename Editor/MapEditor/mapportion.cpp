@@ -15,6 +15,7 @@
 const QString MapPortion::JSON_LANDS = "lands";
 const QString MapPortion::JSON_SPRITES = "sprites";
 const QString MapPortion::JSON_OBJECT_3D = "objs3d";
+const QString MapPortion::JSON_MOUNTAINS = "moun";
 const QString MapPortion::JSON_OBJECT = "objs";
 
 // -------------------------------------------------------
@@ -28,6 +29,7 @@ MapPortion::MapPortion(Portion &globalPortion) :
     m_lands(new Lands),
     m_sprites(new Sprites),
     m_objects3D(new Objects3D),
+    m_mountains(new Mountains),
     m_mapObjects(new MapObjects),
     m_isEmpty(true)
 {
@@ -39,6 +41,7 @@ MapPortion::~MapPortion()
     delete m_lands;
     delete m_sprites;
     delete m_objects3D;
+    delete m_mountains;
     delete m_mapObjects;
 
     clearPreview();
@@ -72,9 +75,11 @@ void MapPortion::updateEmpty() {
     m_lands->updateEmpty(previewSquare);
     m_sprites->updateEmpty(previewSquare);
     m_objects3D->updateEmpty(previewSquare);
+    m_mountains->updateEmpty(previewSquare);
     m_mapObjects->updateEmpty();
     m_isEmpty = m_lands->isEmpty() && m_sprites->isEmpty() && m_objects3D
-        ->isEmpty() && m_mapObjects->isEmpty() && previewSquare;
+        ->isEmpty() && m_mountains->isEmpty() && m_mapObjects->isEmpty() &&
+        previewSquare;
 }
 
 // -------------------------------------------------------
@@ -399,6 +404,8 @@ MapElement* MapPortion::getMapElementAt(Position& position,
         return m_sprites->getMapElementAt(position, subKind);
     case MapEditorSelectionKind::Objects3D:
         return m_objects3D->getMapElementAt(position);
+    case MapEditorSelectionKind::Mountains:
+        return m_mountains->getMapElementAt(position);
     default:
         return nullptr;
     }
@@ -416,6 +423,8 @@ const
         return m_sprites->getLastLayerAt(position);
     case MapEditorSelectionKind::Objects3D:
         return m_objects3D->getLastLayerAt(position);
+    case MapEditorSelectionKind::Mountains:
+        return m_mountains->getLastLayerAt(position);
     default:
         return position.layer();
     }
@@ -439,6 +448,7 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                   squareSize, tileset->width(),
                                   tileset->height());
     m_objects3D->initializeVertices(m_previewSquares, m_previewDelete);
+    m_mountains->initializeVertices(m_previewSquares, m_previewDelete);
     m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
 
@@ -459,6 +469,7 @@ void MapPortion::initializeGL(QOpenGLShaderProgram *programStatic,
     m_lands->initializeGL(programStatic);
     m_sprites->initializeGL(programStatic, programFace);
     m_objects3D->initializeGL(programStatic);
+    m_mountains->initializeGL(programStatic);
     initializeGLObjects(programStatic, programFace);
 }
 
@@ -476,6 +487,7 @@ void MapPortion::updateGL() {
     m_lands->updateGL();
     m_sprites->updateGL();
     m_objects3D->updateGL();
+    m_mountains->updateGL();
     updateGLObjects();
 }
 
@@ -536,6 +548,14 @@ void MapPortion::paintObjects3D(int textureID) {
 
 // -------------------------------------------------------
 
+void MapPortion::paintMountains(int textureID) {
+    if (!m_mountains->isEmpty()) {
+        m_mountains->paintGL(textureID);
+    }
+}
+
+// -------------------------------------------------------
+
 void MapPortion::paintObjectsStaticSprites(int textureID,
                                            QOpenGLTexture* texture)
 {
@@ -573,6 +593,7 @@ void MapPortion::read(const QJsonObject &json) {
         m_lands->read(json[JSON_LANDS].toObject());
         m_sprites->read(json[JSON_SPRITES].toObject());
         m_objects3D->read(json[JSON_OBJECT_3D].toObject());
+        m_mountains->read(json[JSON_MOUNTAINS].toObject());
         m_mapObjects->read(json[JSON_OBJECT].toObject());
     }
 }
@@ -595,6 +616,11 @@ void MapPortion::write(QJsonObject &json) const {
     obj = QJsonObject();
     m_objects3D->write(obj);
     json[JSON_OBJECT_3D] = obj;
+
+    // Mountains
+    obj = QJsonObject();
+    m_mountains->write(obj);
+    json[JSON_MOUNTAINS] = obj;
 
     // Map objects
     obj = QJsonObject();

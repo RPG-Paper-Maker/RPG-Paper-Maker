@@ -15,6 +15,7 @@
 #include "lands.h"
 #include "sprites.h"
 #include "objects3d.h"
+#include "mountains.h"
 #include "mapobjects.h"
 #include "systemcommonobject.h"
 #include <QOpenGLTexture>
@@ -34,6 +35,7 @@ public:
     const static QString JSON_LANDS;
     const static QString JSON_SPRITES;
     const static QString JSON_OBJECT_3D;
+    const static QString JSON_MOUNTAINS;
     const static QString JSON_OBJECT;
 
     MapPortion(Portion& globalPortion);
@@ -140,6 +142,7 @@ public:
     void paintSpritesWalls(int textureID);
     void paintFaceSprites();
     void paintObjects3D(int textureID);
+    void paintMountains(int textureID);
     void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsSquares();
@@ -152,6 +155,7 @@ private:
     Lands *m_lands;
     Sprites *m_sprites;
     Objects3D *m_objects3D;
+    Mountains *m_mountains;
     MapObjects *m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;
     QList<Position> m_previewDelete;

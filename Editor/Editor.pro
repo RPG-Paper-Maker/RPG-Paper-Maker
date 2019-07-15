@@ -31,6 +31,8 @@ HEADERS += \
     CustomWidgets/panelproject.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
+    MapEditor/mountain.h \
+    MapEditor/mountains.h \
     Models/System/systemmountain.h \
     Singletons/singleton.h \
     Models/project.h \
@@ -307,6 +309,8 @@ SOURCES += \
     CustomWidgets/panelproject.cpp \
     MapEditor/Map/map.cpp \
     Controls/controlmainwindow.cpp \
+    MapEditor/mountain.cpp \
+    MapEditor/mountains.cpp \
     Models/System/systemmountain.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
