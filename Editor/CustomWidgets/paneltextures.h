@@ -18,6 +18,9 @@
 #include "widgettilesetselector.h"
 #include "mapeditorsubselectionkind.h"
 
+
+class WidgetTreeLocalMaps;
+
 // -------------------------------------------------------
 //
 //  CLASS PanelTextures
@@ -38,6 +41,7 @@ public:
     explicit PanelTextures(QWidget *parent = nullptr);
     ~PanelTextures();
 
+    void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);
     void setTilesetImageNone();
@@ -60,6 +64,7 @@ public:
 
 private:
     Ui::PanelTextures *ui;
+    WidgetTreeLocalMaps *m_widgetTreeLocalMaps;
     PictureKind m_kind;
     SystemTileset *m_tileset;
     int m_currentAutotilesID;

@@ -14,6 +14,7 @@
 #include "systemspritewall.h"
 #include "rpm.h"
 #include "dialogtilesetspecialelements.h"
+#include "widgettreelocalmaps.h"
 
 // -------------------------------------------------------
 //
@@ -24,6 +25,7 @@
 PanelTextures::PanelTextures(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelTextures),
+    m_widgetTreeLocalMaps(nullptr),
     m_kind(PictureKind::None),
     m_currentAutotilesID(-1),
     m_currentWallsID(-1),
@@ -42,6 +44,12 @@ PanelTextures::~PanelTextures()
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void PanelTextures::initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w) {
+    m_widgetTreeLocalMaps = w;
+}
+
 // -------------------------------------------------------
 
 void PanelTextures::getTilesetTexture(QRect &rect) const{
@@ -427,9 +435,13 @@ void PanelTextures::on_pushButtonUpdateList_pressed() {
     tilesetID = m_tileset->id();
     DialogTilesetSpecialElements dialog(m_tileset, m_kind);
     if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writeSpecialsDatas();
         RPM::get()->project()->writeTilesetsDatas();
         this->fillComboBox(m_tileset, m_kind);
+        m_widgetTreeLocalMaps->reload();
+
     } else {
+        RPM::get()->project()->readSpecialsDatas();
         RPM::get()->project()->readTilesetsDatas();
         m_tileset = reinterpret_cast<SystemTileset *>(SuperListItem::getById(RPM
             ::get()->project()->gameDatas()->tilesetsDatas()->model()

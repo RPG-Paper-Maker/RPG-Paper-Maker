@@ -61,6 +61,8 @@ PanelProject::PanelProject(QWidget *parent, Project *p) :
         SLOT(onSplitterMoved(int, int)));
     connect(ui->splitter_2, SIGNAL(splitterMoved(int, int)), ui->panelTextures,
         SLOT(onSplitterMoved(int, int)));
+
+    ui->panelTextures->initializeWidgetTreeLocalMaps(ui->treeViewLocalMaps);
 }
 
 PanelProject::~PanelProject()
