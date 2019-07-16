@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "mountain.h"
 #include "rpm.h"
 #include "systemmountain.h"
@@ -18,10 +19,18 @@ const QString MountainDatas::JSON_WIDTH_SQUARES = "ws";
 const QString MountainDatas::JSON_WIDTH_PIXELS = "wp";
 const QString MountainDatas::JSON_HEIGHT_SQUARES = "hs";
 const QString MountainDatas::JSON_HEIGHT_PIXELS = "hp";
-const QString MountainDatas::JSON_DRAW_TOP = "dt";
-const QString MountainDatas::JSON_DRAW_BOT = "db";
-const QString MountainDatas::JSON_DRAW_LEFT = "dl";
-const QString MountainDatas::JSON_DRAW_RIGHT = "dr";
+const QString MountainDatas::JSON_TOP = "t";
+const QString MountainDatas::JSON_BOT = "b";
+const QString MountainDatas::JSON_LEFT = "l";
+const QString MountainDatas::JSON_RIGHT = "r";
+const int MountainDatas::X_LEFT_OFFSET = 0;
+const int MountainDatas::X_MID_OFFSET = 1;
+const int MountainDatas::X_RIGHT_OFFSET = 2;
+const int MountainDatas::X_MIX_OFFSET = 3;
+const int MountainDatas::Y_TOP_OFFSET = 0;
+const int MountainDatas::Y_MID_OFFSET = 1;
+const int MountainDatas::Y_BOT_OFFSET = 2;
+const int MountainDatas::Y_MIX_OFFSET = 3;
 
 // -------------------------------------------------------
 //
@@ -42,14 +51,12 @@ MountainDatas::MountainDatas(int specialID, int ws, double wp, int hs, double
     m_widthPixels(wp),
     m_heightSquares(hs),
     m_heightPixels(hp),
-    m_drawTop(false),
-    m_drawBot(false),
-    m_drawLeft(false),
-    m_drawRight(false)
+    m_top(false),
+    m_bot(false),
+    m_left(false),
+    m_right(false)
 {
-    m_textureID = reinterpret_cast<SystemMountain *>(SuperListItem::getById(RPM
-        ::get()->project()->specialElementsDatas()->modelMountains()
-        ->invisibleRootItem(), m_specialID))->picture()->id();
+
 }
 
 MountainDatas::~MountainDatas()
@@ -57,8 +64,8 @@ MountainDatas::~MountainDatas()
 
 }
 
-int MountainDatas::textureID() const {
-    return m_textureID;
+int MountainDatas::specialID() const {
+    return m_specialID;
 }
 
 int MountainDatas::widthSquares() const {
@@ -94,10 +101,238 @@ bool MountainDatas::operator!=(const MountainDatas& other) const {
 //
 // -------------------------------------------------------
 
-void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
-    QVector<GLuint> &indexes, Position &position, unsigned int &count)
-{
+int MountainDatas::widthTotalPixels() const {
+    return m_widthSquares * RPM::get()->getSquareSize() + static_cast<int>(
+        m_widthPixels * RPM::get()->getSquareSize() / 100);
+}
 
+// -------------------------------------------------------
+
+int MountainDatas::heightTotalPixels() const {
+    return m_heightSquares * RPM::get()->getSquareSize() + static_cast<int>(
+        m_heightPixels * RPM::get()->getSquareSize() / 100);
+}
+
+// -------------------------------------------------------
+
+void MountainDatas::drawEntireFaces(bool left, bool right, float angle, QVector3D
+    &center, int width, int height, float w, float faceHeight, int wp, float xLeft, float xRight, float yTop, float yBot, float zFront, float zBack,
+                                     float yOffset, QVector3D &vecFrontA, QVector3D
+    &vecBackA, QVector3D &vecFrontB, QVector3D
+                                    &vecBackB, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int &count)
+{
+    QVector3D vecStepLeftA, vecStepLeftB, vecStepRightA, vecStepRightB,
+        vecCenterA, vecCenterB, vecCorner, vecCenterC;
+    int i, xKind, squareSize;
+    float nbSteps;
+
+    squareSize = RPM::get()->getSquareSize();
+    xKind = MountainDatas::X_LEFT_OFFSET;
+    nbSteps = qCeil(static_cast<double>(faceHeight / squareSize));
+    vecCenterA = vecFrontA + (0.5 * (vecBackA - vecFrontA));
+    vecCenterB = vecFrontB + (0.5 * (vecBackB - vecFrontB));
+    vecCenterC = vecCenterA + (0.5 * (vecCenterB - vecCenterA));
+
+    // Define x offset according to left / right stuff
+    if (!left && right) {
+        xKind = MountainDatas::X_LEFT_OFFSET;
+    } else if (left && right) {
+        xKind = MountainDatas::X_MID_OFFSET;
+    } else if (left && !right) {
+        xKind = MountainDatas::X_RIGHT_OFFSET;
+    } else if (!left && !right) {
+        xKind = MountainDatas::X_MIX_OFFSET;
+    }
+
+    // Draw all faces
+    if (qFuzzyCompare(faceHeight, squareSize)) { // 1 Mix sprite
+        // Mix
+        this->drawSideCorner(xKind, MountainDatas::Y_MIX_OFFSET, angle, center, width,
+            height, w, faceHeight, wp, xLeft, xRight, vecBackA.x(), vecBackB.x(), vecFrontA.x(), vecBackB.x(), yTop, yBot, zFront, zBack, vecFrontA.z(), vecFrontB.z(), vecBackA.z(), vecBackB.z(),
+            yOffset, vertices, indexes, count, 0, vecFrontA.distanceToPoint(vecFrontB));
+    } else if (faceHeight <= (2 * squareSize)) { // 2 B / T sprites
+        // Bottom
+        vecCorner = vecCenterA;
+        vecCenterC = vecFrontA;
+        SpriteDatas::rotateVertexX(vecCorner, vecCenterC, 45, 0, 1, 0);
+        this->drawSideCorner(xKind, MountainDatas::Y_BOT_OFFSET, angle, center, width,
+            height, w, qFloor(static_cast<double>(faceHeight / 2)), wp, xLeft,
+            xRight, vecCenterA.x(), vecCenterB.x(), vecFrontA.x(), vecFrontB.x(),
+            vecCenterB.y(), yBot, zFront, vecCenterB.z(), vecFrontA.z(), vecFrontB.z(), vecCenterA.z(), vecCenterB.z(), yOffset, vertices,
+            indexes, count, vecCenterA.distanceToPoint(vecCenterB), vecFrontA.distanceToPoint(vecFrontB));
+
+        // Top
+        this->drawSideCorner(xKind, MountainDatas::Y_TOP_OFFSET, angle, center, width,
+            height, w, qCeil(static_cast<double>(faceHeight / 2)), wp, xLeft,
+            xRight, vecBackA.x(), vecBackB.x(), vecCenterA.x(), vecCenterB.x(),
+            yTop, vecCenterB.y(), vecCenterB.z(), zBack, vecCenterA.z(), vecCenterB.z(), vecBackA.z(), vecBackB.z(), yOffset, vertices,
+            indexes, count, 0, vecCenterA.distanceToPoint(vecCenterB));
+    }
+/*
+    else { // 3 B / M / T sprites
+        // Bottom
+        vecStepB = vecFront + ((1 / nbSteps) * (vecBack - vecFront));
+        this->drawSideCorner(xKind, MountainDatas::Y_BOT_OFFSET, angle, center, width,
+            height, w, qFloor(static_cast<double>(faceHeight / nbSteps)), wp, xLeft,
+            xRight, vecStepB.y(), yBot, zFront, vecStepB.z(), yOffset, vertices,
+            indexes, count);
+
+        // Middle: add as many as middle blocks as possible
+        for (i = 2; i <= nbSteps - 1; i++) {
+            vecStepA = vecStepB;
+            vecStepB = vecFront + ((i / nbSteps) * (vecBack - vecFront));
+            this->drawSideCorner(xKind, MountainDatas::Y_MID_OFFSET, angle, center,
+                width, height, w, qFloor(static_cast<double>(faceHeight /
+                nbSteps)), wp, xLeft, xRight, vecStepB.y(), vecStepA.y(), vecStepA
+                .z(), vecStepB.z(), yOffset, vertices, indexes, count);
+        }
+
+        // Top
+        this->drawSide(xKind, MountainDatas::Y_TOP_OFFSET, angle, center, width,
+            height, w, qCeil(static_cast<double>(faceHeight / nbSteps)), wp, xLeft,
+            xRight, yTop, vecStepB.y(), vecStepB.z(), zBack, yOffset, vertices,
+            indexes, count);
+    }*/
+}
+
+// -------------------------------------------------------
+
+void MountainDatas::drawSideCorner(int xKind, int yKind, float angle, QVector3D
+    &center, int width, int height, float w, float faceHeight, int wp, float xLeft, float xRight, float xLeftTop,
+    float xRightTop, float xLeftBot, float xRightBot, float yTop, float yBot, float zFront, float zBack,
+    float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
+    float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+    &count, float xCornerOffsetTop, float xCornerOffsetBot)
+{
+    this->drawFace(xKind, yKind, angle, center, width, height, w, faceHeight,
+        xLeft, xRight, xLeft, xRight, yTop, yBot, zFront, zFront, zBack, zBack,
+        yOffset, vertices, indexes, count, 0, 0, false);
+
+    // Draw corner only if there is a border width
+    if (wp > 0) {
+        this->drawFace(xKind, yKind, angle, center, width, height, w,
+            faceHeight, xLeftTop, xRightTop, xLeftBot, xRightBot, yTop, yBot,
+            zFrontLeft, zFrontRight, zBackLeft, zBackRight, yOffset, vertices,
+            indexes, count, xCornerOffsetTop, xCornerOffsetBot, true);
+    }
+}
+
+// -------------------------------------------------------
+
+void MountainDatas::drawFace(int xKind, int yKind, float angle, QVector3D
+    &center, int width, int height, float w, float faceHeight, float xLeftTop,
+    float xRightTop, float xLeftBot, float xRightBot, float yTop, float yBot,
+    float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
+    float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+    &count, float xCornerOffsetTop, float xCornerOffsetBot, bool isCorner)
+{
+    QVector3D vecA, vecB, vecC, vecD;
+    QVector2D texA, texB, texC, texD;
+    int squareSize;
+    float x, y, h, coefX, coefY;
+
+    squareSize = RPM::get()->getSquareSize();
+
+    // Textures coordinates
+    x = ((static_cast<float>(xKind) * squareSize)) / width;
+    y = ((static_cast<float>(yKind) * squareSize) + (yKind == MountainDatas
+        ::Y_BOT_OFFSET ? squareSize - faceHeight : 0) + yOffset) / height;
+    h = faceHeight / height;
+    coefX = 0.1f / width;
+    coefY = 0.1f / height;
+    x += coefX;
+    y += coefY;
+    w -= (coefX * 2);
+    h -= (coefY * 2);
+
+    // Textures and vertices
+    if (isCorner) {
+        texA = QVector2D(((static_cast<float>(xKind) * squareSize) + ((squareSize - xCornerOffsetTop) / 2)) / width + coefX, y);
+        texB = QVector2D(((static_cast<float>(xKind + 1) * squareSize) - ((squareSize - xCornerOffsetTop) / 2)) / width - coefX, y);
+        texC = QVector2D(((static_cast<float>(xKind + 1) * squareSize) - ((squareSize - xCornerOffsetBot) / 2)) / width - coefX, y + h);
+        texD = QVector2D(((static_cast<float>(xKind) * squareSize) + ((squareSize - xCornerOffsetBot) / 2)) / width + coefX, y + h);
+    } else { // Triangle form for corners
+        texA = QVector2D(x, y);
+        texB = QVector2D(x + w, y);
+        texC = QVector2D(x + w, y + h);
+        texD = QVector2D(x, y + h);
+    }
+
+    vecA = QVector3D(xLeftTop, yTop, zBackLeft);
+    vecB = QVector3D(xRightTop, yTop, zBackRight);
+    vecC = QVector3D(xRightBot, yBot, zFrontRight);
+    vecD = QVector3D(xLeftBot, yBot, zFrontLeft);
+
+    // Rotate and draw sprite side
+    SpriteDatas::rotateSprite(vecA, vecB, vecC, vecD, center, angle);
+    SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, vecA,
+        vecB, vecC, vecD, texA, texB, texC, texD);
+}
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
+    QVector<GLuint> &indexes, TextureSeveral *texture, Position &position,
+    int &count)
+{
+    QVector3D center, vecFrontA, vecBackA, vecFrontB, vecBackB;
+    int squareSize, width, height, wp, hp;
+    float yOffset, w, faceHeight, xLeft, xRight, yTop, yBot, zFront, zBack;
+
+    // General configurations
+    squareSize = RPM::get()->getSquareSize();
+    yOffset = texture->getOffset(m_specialID, nullptr) * 4 * squareSize;
+    wp = this->widthTotalPixels();
+    hp = this->heightTotalPixels();
+    width = 4 * squareSize;
+    height = RPM::MAX_PIXEL_SIZE;
+    faceHeight = static_cast<float>(qSqrt((wp * wp) + (hp * hp)));
+    w = static_cast<float>(squareSize) / width;
+    center.setX(position.x() * squareSize + (squareSize / 2));
+    center.setY(position.getY(squareSize) + (squareSize / 2));
+    center.setZ(position.z() * squareSize + (squareSize / 2));
+    xLeft = position.x() * squareSize;
+    xRight = (position.x() + 1) * squareSize;
+    yTop = position.getY(squareSize) + hp;
+    yBot = position.getY(squareSize);
+    zFront = (position.z() + 1) * squareSize + wp;
+    zBack = zFront - wp;
+    vecFrontB.setX(xLeft);
+    vecFrontB.setY(yBot);
+    vecFrontB.setZ(zFront);
+    vecBackB.setX(xLeft);
+    vecBackB.setY(yTop);
+    vecBackB.setZ(zBack);
+    vecFrontA.setX(xLeft - wp);
+    vecFrontA.setY(yBot);
+    vecFrontA.setZ(zBack);
+    vecBackA.setX(xLeft);
+    vecBackA.setY(yTop);
+    vecBackA.setZ(zBack);
+
+    // Bot
+    if (!m_bot) {
+        this->drawEntireFaces(m_left, m_right, 0, center, width, height, w,
+            faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, vertices, indexes, count);
+    }
+    // Top
+    if (!m_top) {
+        this->drawEntireFaces(m_right, m_left, 180, center, width, height, w,
+                              faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, vertices, indexes, count);
+    }
+    // Left
+    if (!m_left) {
+        this->drawEntireFaces(m_top, m_bot, -90, center, width, height, w,
+                              faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, vertices, indexes, count);
+    }
+    // Right
+    if (!m_right) {
+        this->drawEntireFaces(m_bot, m_top, 90, center, width, height, w,
+                              faceHeight, wp, xLeft, xRight, yTop, yBot, zFront, zBack, yOffset, vecFrontA, vecBackA, vecFrontB, vecBackB, vertices, indexes, count);
+    }
 }
 
 // -------------------------------------------------------
@@ -152,17 +387,17 @@ void MountainDatas::read(const QJsonObject &json) {
     if (json.contains(JSON_HEIGHT_PIXELS)) {
         m_heightPixels = json[JSON_HEIGHT_PIXELS].toDouble();
     }
-    if (json.contains(JSON_DRAW_TOP)) {
-        m_drawTop = json[JSON_DRAW_TOP].toBool();
+    if (json.contains(JSON_TOP)) {
+        m_top = json[JSON_TOP].toBool();
     }
-    if (json.contains(JSON_DRAW_BOT)) {
-        m_drawBot = json[JSON_DRAW_BOT].toBool();
+    if (json.contains(JSON_BOT)) {
+        m_bot = json[JSON_BOT].toBool();
     }
-    if (json.contains(JSON_DRAW_LEFT)) {
-        m_drawLeft = json[JSON_DRAW_LEFT].toBool();
+    if (json.contains(JSON_LEFT)) {
+        m_left = json[JSON_LEFT].toBool();
     }
-    if (json.contains(JSON_DRAW_RIGHT)) {
-        m_drawRight = json[JSON_DRAW_RIGHT].toBool();
+    if (json.contains(JSON_RIGHT)) {
+        m_right = json[JSON_RIGHT].toBool();
     }
 }
 
@@ -186,16 +421,16 @@ void MountainDatas::write(QJsonObject &json) const {
     if (m_heightPixels != 0.0) {
         json[JSON_HEIGHT_PIXELS] = m_heightPixels;
     }
-    if (m_drawTop) {
-        json[JSON_DRAW_TOP] = m_drawTop;
+    if (!m_top) {
+        json[JSON_TOP] = m_top;
     }
-    if (m_drawBot) {
-        json[JSON_DRAW_BOT] = m_drawBot;
+    if (!m_bot) {
+        json[JSON_BOT] = m_bot;
     }
-    if (m_drawLeft) {
-        json[JSON_DRAW_LEFT] = m_drawLeft;
+    if (!m_left) {
+        json[JSON_LEFT] = m_left;
     }
-    if (m_drawRight) {
-        json[JSON_DRAW_RIGHT] = m_drawRight;
+    if (!m_right) {
+        json[JSON_RIGHT] = m_right;
     }
 }

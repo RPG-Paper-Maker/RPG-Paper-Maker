@@ -273,12 +273,23 @@ void SpriteDatas::initializeVertices(int squareSize,
 
 // -------------------------------------------------------
 
-void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
+void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
+                               QVector3D& vecC, QVector3D& vecD,
+                               QVector3D& center, float angle)
+{
+    rotateSpriteX(vecA, vecB, vecC, vecD, center, angle, 0.0f, 1.0f, 0.0f);
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::rotateVertexX(QVector3D& vec, QVector3D& center, float angle,
+    float x, float y, float z)
+{
     QMatrix4x4 m;
     QVector3D v(vec);
 
     v -= center;
-    m.rotate(-angle, 0.0, 1.0, 0.0);
+    m.rotate(-angle, x, y, z);
     v = v * m + center;
 
     vec.setX(v.x());
@@ -288,14 +299,14 @@ void SpriteDatas::rotateVertex(QVector3D& vec, QVector3D& center, int angle) {
 
 // -------------------------------------------------------
 
-void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
-                               QVector3D& vecC, QVector3D& vecD,
-                               QVector3D& center, int angle)
+void SpriteDatas::rotateSpriteX(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
+                         QVector3D& vecD, QVector3D& center, float angle,
+                          float x, float y, float z)
 {
-    rotateVertex(vecA, center, angle);
-    rotateVertex(vecB, center, angle);
-    rotateVertex(vecC, center, angle);
-    rotateVertex(vecD, center, angle);
+    rotateVertexX(vecA, center, angle, x, y, z);
+    rotateVertexX(vecB, center, angle, x, y, z);
+    rotateVertexX(vecC, center, angle, x, y, z);
+    rotateVertexX(vecD, center, angle, x, y, z);
 }
 
 // -------------------------------------------------------

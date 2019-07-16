@@ -86,7 +86,7 @@ void WidgetMountainSelector::updateAngle() {
         ->spinBoxPixelWidth->value();
     angle = width == 0 ? 90 : qRadiansToDegrees(qAtan((ui->spinBoxSquareHeight
         ->value() * RPM::get()->getSquareSize() + ui->spinBoxPixelHeight
-        ->value()) / static_cast<qreal>(width)));
+                                                       ->value()) / width));
     ui->labelAngle->setText("(angle = " + QString::number(angle) + "°)");
 }
 

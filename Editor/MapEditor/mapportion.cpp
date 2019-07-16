@@ -468,6 +468,7 @@ const
 
 void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QList<TextureSeveral *> &autotiles,
+                                    QList<TextureSeveral *> &mountains,
                                     QHash<int, QOpenGLTexture *> &characters,
                                     QHash<int, QOpenGLTexture *> &walls)
 {
@@ -477,7 +478,7 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                   squareSize, tileset->width(),
                                   tileset->height());
     m_objects3D->initializeVertices(m_previewSquares, m_previewDelete);
-    m_mountains->initializeVertices(m_previewSquares, m_previewDelete);
+    m_mountains->initializeVertices(mountains, m_previewSquares, m_previewDelete);
     m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
 
@@ -519,7 +520,6 @@ void MapPortion::updateGL() {
     m_mountains->updateGL();
     updateGLObjects();
 }
-
 
 // -------------------------------------------------------
 

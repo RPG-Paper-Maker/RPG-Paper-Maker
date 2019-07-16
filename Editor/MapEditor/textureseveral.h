@@ -33,7 +33,7 @@ public:
     void setEnd(int id, QPoint& point);
     static bool isSup(QRect* rect, QPoint& point);
     static bool isInf(QRect* rect, QPoint& point);
-    int isInTexture(int id, QRect* rect);
+    bool isInTexture(int id, QRect* rect);
     void addToList(int id, QPoint& point);
     int getOffset(int id, QRect* rect);
 

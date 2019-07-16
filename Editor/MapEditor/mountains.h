@@ -32,13 +32,15 @@ class MountainsGL : protected QOpenGLFunctions
 public:
     MountainsGL();
     virtual ~MountainsGL();
-    void initializeVertices(Position& position, MountainDatas *mountain);
-    void initializeGL(QOpenGLShaderProgram* program);
+
+    void initializeVertices(TextureSeveral *texture, Position &position,
+        MountainDatas *mountain);
+    void initializeGL(QOpenGLShaderProgram *program);
     void updateGL();
     void paintGL();
 
 protected:
-    unsigned int m_count;
+    int m_count;
 
     // OpenGL
     QOpenGLBuffer m_vertexBuffer;
@@ -71,6 +73,7 @@ public:
     static void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position
         &p, MountainDatas *mountain);
 
+    void clearMountainsGL();
     bool contains(Position &position) const;
     void addOverflow(Position &p);
     void removeOverflow(Position &p);
@@ -94,8 +97,8 @@ public:
         &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement * getMapElementAt(Position &position);
     int getLastLayerAt(Position &) const;
-    void initializeVertices(QHash<Position, MapElement*>& previewSquares,
-        QList<Position>& previewDelete);
+    void initializeVertices(QList<TextureSeveral *> &texturesMountains, QHash<
+        Position, MapElement*>& previewSquares, QList<Position>& previewDelete);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
     void paintGL(int textureID);
@@ -105,7 +108,7 @@ public:
 
 protected:
     QHash<Position, MountainDatas *> m_all;
-    QHash<int, MountainsGL *> m_allGL;
+    QList<MountainsGL *> m_allGL;
     QSet<Position> m_overflow;
     bool m_isEmpty;
 };

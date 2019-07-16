@@ -80,9 +80,13 @@ public:
                                     QVector<GLuint>& indexesFace,
                                     Position &position, int& countStatic,
                                     int& countFace);
-    static void rotateVertex(QVector3D& vec, QVector3D& center, int angle);
     static void rotateSprite(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
-                             QVector3D& vecD, QVector3D& center, int angle);
+                             QVector3D& vecD, QVector3D& center, float angle);
+    static void rotateVertexX(QVector3D& vec, QVector3D& center, float angle,
+                              float x, float y, float z);
+    static void rotateSpriteX(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
+                             QVector3D& vecD, QVector3D& center, float angle,
+                             float x, float y, float z);
     static void addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
                                         QVector<GLuint>& indexesStatic,
                                         int& count,

@@ -52,6 +52,10 @@ void TextureSeveral::setEnd(int id, QPoint& point) {
 // -------------------------------------------------------
 
 bool TextureSeveral::isSup(QRect* rect, QPoint& point) {
+    if (rect == nullptr) {
+        return true;
+    }
+
     if (rect->y() > point.y())
         return true;
     else if (rect->y() == point.y())
@@ -63,6 +67,10 @@ bool TextureSeveral::isSup(QRect* rect, QPoint& point) {
 // -------------------------------------------------------
 
 bool TextureSeveral::isInf(QRect* rect, QPoint& point) {
+    if (rect == nullptr) {
+        return true;
+    }
+
     if (rect->y() < point.y())
         return true;
     else if (rect->y() == point.y())
@@ -73,7 +81,7 @@ bool TextureSeveral::isInf(QRect* rect, QPoint& point) {
 
 // -------------------------------------------------------
 
-int TextureSeveral::isInTexture(int id, QRect* rect) {
+bool TextureSeveral::isInTexture(int id, QRect* rect) {
     if (id >= m_beginID && id <= m_endID) {
         if (id == m_beginID) {
             if (id == m_endID)
@@ -101,8 +109,11 @@ int TextureSeveral::getOffset(int id, QRect* rect) {
     for (int i = 0; i < m_list.size(); i++) {
         const QPair<int, QPoint>& pair = m_list.at(i);
         const QPoint& p = pair.second;
-        if (id == pair.first && p.x() == rect->x() && p.y() == rect->y())
+        if (id == pair.first && (rect == nullptr || (p.x() == rect->x() && p.y()
+            == rect->y())))
+        {
             return i;
+        }
     }
 
     return -1;

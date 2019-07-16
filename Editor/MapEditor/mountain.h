@@ -16,6 +16,7 @@
 #include <QOpenGLFunctions>
 #include "mapelement.h"
 #include "vertex.h"
+#include "textureseveral.h"
 
 // -------------------------------------------------------
 //
@@ -33,16 +34,24 @@ public:
     const static QString JSON_WIDTH_PIXELS;
     const static QString JSON_HEIGHT_SQUARES;
     const static QString JSON_HEIGHT_PIXELS;
-    const static QString JSON_DRAW_TOP;
-    const static QString JSON_DRAW_BOT;
-    const static QString JSON_DRAW_LEFT;
-    const static QString JSON_DRAW_RIGHT;
+    const static QString JSON_TOP;
+    const static QString JSON_BOT;
+    const static QString JSON_LEFT;
+    const static QString JSON_RIGHT;
+    const static int X_LEFT_OFFSET;
+    const static int X_MID_OFFSET;
+    const static int X_RIGHT_OFFSET;
+    const static int X_MIX_OFFSET;
+    const static int Y_TOP_OFFSET;
+    const static int Y_MID_OFFSET;
+    const static int Y_BOT_OFFSET;
+    const static int Y_MIX_OFFSET;
 
     MountainDatas();
     MountainDatas(int specialID, int ws, double wp, int hs, double hp);
     virtual ~MountainDatas();
 
-    int textureID() const;
+    int specialID() const;
     int widthSquares() const;
     double widthPixels() const;
     int heightSquares() const;
@@ -51,8 +60,27 @@ public:
     bool operator==(const MountainDatas& other) const;
     bool operator!=(const MountainDatas& other) const;
 
+    int widthTotalPixels() const;
+    int heightTotalPixels() const;
+    void drawEntireFaces(bool left, bool right, float angle, QVector3D &center,
+        int width, int height, float w, float faceHeight, int wp, float xLeft, float
+        xRight, float yTop, float yBot, float zFront, float zBack, float yOffset, QVector3D &vecFrontA, QVector3D &vecBackA, QVector3D &vecFrontB, QVector3D &vecBackB, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+        &count);
+    void drawSideCorner(int xKind, int yKind, float angle, QVector3D &center, int
+        width, int height, float w, float faceHeight, int wp, float xLeft, float xRight, float xLeftTop, float
+        xRightTop, float xLeftBot, float xRightBot, float yTop, float yBot, float zFront, float zBack,
+        float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
+        float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+        &count, float xCornerOffsetTop, float xCornerOffsetBot);
+    void drawFace(int xKind, int yKind, float angle, QVector3D &center, int
+        width, int height, float w, float faceHeight, float xLeftTop, float
+        xRightTop, float xLeftBot, float xRightBot, float yTop, float yBot,
+        float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
+        float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+        &count, float xCornerOffsetTop, float xCornerOffsetBot, bool isCorner);
+
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
-        &indexes, Position &position, unsigned int &count);
+        &indexes, TextureSeveral *texture, Position &position, int &count);
     virtual float intersection(QRay3D& ray) const;
     virtual MapEditorSelectionKind getKind() const;
     virtual MapEditorSubSelectionKind getSubKind() const;
@@ -67,10 +95,10 @@ protected:
     double m_widthPixels;
     int m_heightSquares;
     double m_heightPixels;
-    bool m_drawTop;
-    bool m_drawBot;
-    bool m_drawLeft;
-    bool m_drawRight;
+    bool m_top;
+    bool m_bot;
+    bool m_left;
+    bool m_right;
 };
 
 #endif // MOUNTAIN_H

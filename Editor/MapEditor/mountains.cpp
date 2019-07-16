@@ -48,9 +48,11 @@ MountainsGL::~MountainsGL()
 //
 // -------------------------------------------------------
 
-void MountainsGL::initializeVertices(Position &position, MountainDatas *mountain)
+void MountainsGL::initializeVertices(TextureSeveral *texture, Position &position,
+    MountainDatas *mountain)
 {
-    mountain->initializeVertices(m_vertices, m_indexes, position, m_count);
+    mountain->initializeVertices(m_vertices, m_indexes, texture, position,
+        m_count);
 }
 
 // -------------------------------------------------------
@@ -106,10 +108,7 @@ Mountains::~Mountains()
     for (i = m_all.begin(); i != m_all.end(); i++) {
         delete *i;
     }
-    QHash<int, MountainsGL*>::iterator j;
-    for (j = m_allGL.begin(); j != m_allGL.end(); j++) {
-        delete *j;
-    }
+    this->clearMountainsGL();
 }
 
 bool Mountains::isEmpty() const{
@@ -152,6 +151,14 @@ void Mountains::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
         }
     }
     */
+}
+
+// -------------------------------------------------------
+
+void Mountains::clearMountainsGL() {
+    for (int i = 0; i < m_allGL.size(); i++)
+        delete m_allGL.at(i);
+    m_allGL.clear();
 }
 
 // -------------------------------------------------------
@@ -403,72 +410,75 @@ int Mountains::getLastLayerAt(Position &) const {
 
 // -------------------------------------------------------
 
-void Mountains::initializeVertices(QHash<Position, MapElement *>
-    &previewSquares, QList<Position> &previewDelete)
+void Mountains::initializeVertices(QList<TextureSeveral *> &texturesMountains,
+    QHash<Position, MapElement *> &previewSquares, QList<Position>
+    &previewDelete)
 {
+    int j, l;
+
     // Clear
-    for (QHash<int, MountainsGL *>::iterator i = m_allGL.begin(); i != m_allGL
-        .end(); i++)
-    {
-        delete *i;
+    this->clearMountainsGL();
+    for (j = 0, l = texturesMountains.size(); j < l; j++) {
+        m_allGL.append(new MountainsGL);
     }
-    m_allGL.clear();
 
     // Create temp hash for preview
-    QHash<Position, MountainDatas *> objectsWithPreview(m_all);
+    QHash<Position, MountainDatas *> mountainsWithPreview(m_all);
     QHash<Position, MapElement*>::iterator itw;
     for (itw = previewSquares.begin(); itw != previewSquares.end(); itw++) {
         MapElement* element = itw.value();
         if (element->getSubKind() == MapEditorSubSelectionKind::Mountains) {
-            objectsWithPreview[itw.key()] = reinterpret_cast<MountainDatas *>(
+            mountainsWithPreview[itw.key()] = reinterpret_cast<MountainDatas *>(
                 element);
         }
     }
     for (int i = 0; i < previewDelete.size(); i++) {
-        objectsWithPreview.remove(previewDelete.at(i));
+        mountainsWithPreview.remove(previewDelete.at(i));
     }
 
     // Initialize vertices
-    for (QHash<Position, MountainDatas *>::iterator i = objectsWithPreview
-         .begin(); i != objectsWithPreview.end(); i++)
+    QHash<Position, MountainDatas*>::iterator i;
+    for (i = mountainsWithPreview.begin(); i != mountainsWithPreview.end(); i++)
     {
         Position position = i.key();
         MountainDatas *mountain = i.value();
-        int id = mountain->textureID();
-        MountainsGL *objects = m_allGL.value(id);
-        if (objects == nullptr) {
-            objects = new MountainsGL;
-            m_allGL[id] = objects;
+        TextureSeveral *texture = nullptr;
+        int index = 0;
+        for (; index < texturesMountains.size(); index++) {
+            TextureSeveral* textureMountain = texturesMountains[index];
+            if (textureMountain->isInTexture(mountain->specialID(), nullptr))
+            {
+                texture = textureMountain;
+                break;
+            }
         }
-        objects->initializeVertices(position, mountain);
+        if (texture != nullptr && texture->texture() != nullptr) {
+            MountainsGL* mountainsGL = m_allGL.at(index);
+            mountainsGL->initializeVertices(texture, position, mountain);
+        }
     }
 }
 
 // -------------------------------------------------------
 
 void Mountains::initializeGL(QOpenGLShaderProgram* programStatic) {
-    QHash<int, MountainsGL *>::iterator i;
-    for (i = m_allGL.begin(); i != m_allGL.end(); i++) {
-        i.value()->initializeGL(programStatic);
+    for (int i = 0, l = m_allGL.size(); i < l; i++) {
+        m_allGL.at(i)->initializeGL(programStatic);
     }
 }
 
 // -------------------------------------------------------
 
 void Mountains::updateGL() {
-    QHash<int, MountainsGL *>::iterator i;
-    for (i = m_allGL.begin(); i != m_allGL.end(); i++) {
-        i.value()->updateGL();
+    for (int i = 0, l = m_allGL.size(); i < l; i++) {
+        m_allGL.at(i)->updateGL();
     }
 }
 
 // -------------------------------------------------------
 
 void Mountains::paintGL(int textureID) {
-    MountainsGL *objects = m_allGL.value(textureID);
-    if (objects != nullptr) {
-        objects->paintGL();
-    }
+    m_allGL.at(textureID)->paintGL();
 }
 
 // -------------------------------------------------------

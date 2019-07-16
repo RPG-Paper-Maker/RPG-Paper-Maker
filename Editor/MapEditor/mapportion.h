@@ -129,10 +129,9 @@ public:
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSelectionKind kind) const;
 
-    void initializeVertices(int squareSize, QOpenGLTexture* tileset,
-                            QList<TextureSeveral *> &autotiles,
-                            QHash<int, QOpenGLTexture *>& characters,
-                            QHash<int, QOpenGLTexture *> &walls);
+    void initializeVertices(int squareSize, QOpenGLTexture* tileset, QList<
+        TextureSeveral *> &autotiles, QList<TextureSeveral *> &mountains, QHash<
+        int, QOpenGLTexture *>& characters, QHash<int, QOpenGLTexture *> &walls);
     void initializeVerticesObjects(int squareSize,
                                    QHash<int, QOpenGLTexture*>& characters,
                                    QOpenGLTexture *tileset);

@@ -277,6 +277,19 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         texture->release();
     }
 
+    // Mountains
+    for (int j = 0; j < m_texturesMountains.size(); j++) {
+        QOpenGLTexture* texture = m_texturesMountains[j]->texture();
+        texture->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
+                mapPortion->paintMountains(j);
+            }
+        }
+        texture->release();
+    }
+
     // Face sprites
     m_programStatic->release();
     m_programFaceSprite->bind();

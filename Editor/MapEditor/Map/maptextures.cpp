@@ -386,8 +386,6 @@ void Map::loadMountains() {
     }
     painter.end();
 
-    newImage.save("ae.png");
-
     if (offset > 0) {
         textureMountain->setTexture(createTexture(newImage));
         m_texturesMountains.append(textureMountain);
