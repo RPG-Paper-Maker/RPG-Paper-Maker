@@ -98,7 +98,9 @@ public:
     void updatePreviewWallSprite(Position &position, int specialID);
     void updatePreviewOthers(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool front, bool layerOn,
-        QRect &tileset, int xOffset, int yOffset, int zOffset, int specialID);
+        QRect &tileset, int xOffset, int yOffset, int zOffset, int specialID,
+        int widthSquares, double widthPixels, int heightSquares, double
+        heightPixels);
     void updatePreviewElement(Position& p, Portion &portion, MapElement *element);
     void updatePreviewElementGrid(Position &p, Portion &portion, MapElement *element);
     void updateMovingPortions();

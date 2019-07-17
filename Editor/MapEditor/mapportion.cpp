@@ -194,21 +194,23 @@ bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
 
 bool MapPortion::addMountain(QSet<Portion> &portionsOverflow, Position &p,
     MountainDatas *mountain, QJsonObject &previous, MapEditorSubSelectionKind
-    &previousType)
+    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save)
 {
     return m_mountains->addMountain(portionsOverflow, p, mountain, previous,
-        previousType);
+        previousType, update, save);
 }
 
 // -------------------------------------------------------
 
 bool MapPortion::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
     QList<QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType
-    , QList<Position> &positions)
+    , QList<Position> &positions, QSet<MapPortion *> &update, QSet<MapPortion *>
+    &save)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_mountains->deleteMountain(portionsOverflow, p, prev, kind);
+    bool changed = m_mountains->deleteMountain(portionsOverflow, p, prev, kind,
+        update, save);
 
     if (changed) {
         previous.append(prev);
@@ -221,12 +223,20 @@ bool MapPortion::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
 
 // -------------------------------------------------------
 
-void MapPortion::updateAutotiles(Position& position, QSet<MapPortion*> &update,
-                                 QSet<MapPortion*> &save,
-                                 QSet<MapPortion*> &previousPreview)
+void MapPortion::updateAutotiles(Position &position, QSet<MapPortion *> &update,
+    QSet<MapPortion *> &save, QSet<MapPortion *> &previousPreview)
 {
     m_lands->updateAutotiles(position, m_previewSquares, update, save,
-                             previousPreview);
+        previousPreview);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::updateMountains(Position &position, QSet<MapPortion *> &update,
+    QSet<MapPortion *> &save, QSet<MapPortion *> &previousPreview)
+{
+    m_mountains->updateMountains(position, m_previewSquares, update, save,
+        previousPreview);
 }
 
 // -------------------------------------------------------

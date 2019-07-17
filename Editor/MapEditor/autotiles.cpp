@@ -172,18 +172,22 @@ bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
 
 // -------------------------------------------------------
 
-void Autotiles::getAutotilesWithPreview(
-        QHash<Position, AutotileDatas*> &autotilesWithPreview,
-        QHash<Position, MapElement*> &preview)
+void Autotiles::getAutotilesWithPreview(QHash<Position, AutotileDatas *>
+    &autotilesWithPreview, QHash<Position, MapElement *> &preview)
 {
-    autotilesWithPreview = m_all;
     QHash<Position, MapElement*>::iterator itw;
+    MapElement *element;
+
+    autotilesWithPreview = m_all;
     for (itw = preview.begin(); itw != preview.end(); itw++) {
-        MapElement* element = itw.value();
-        if (element->getSubKind() == MapEditorSubSelectionKind::Floors)
+        element = itw.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Floors) {
             autotilesWithPreview.remove(itw.key());
-        else if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
-            autotilesWithPreview[itw.key()] = (AutotileDatas*) element;
+        } else if (element->getSubKind() == MapEditorSubSelectionKind::Autotiles)
+        {
+            autotilesWithPreview[itw.key()] = reinterpret_cast<AutotileDatas *>(
+                element);
+        }
     }
 }
 
@@ -193,41 +197,43 @@ AutotileDatas* Autotiles::tileExisting(Position& position, Portion& portion,
                                        QHash<Position, AutotileDatas*> &preview)
 {
     Portion newPortion;
-    RPM::get()->project()->currentMap()->getLocalPortion(position,
-                                                           newPortion);
-    if (portion == newPortion)
-        return (AutotileDatas*) preview.value(position);
-    else { // If out of current portion
-        MapPortion* mapPortion = RPM::get()->project()->currentMap()
-                ->mapPortion(newPortion);
+    MapPortion *mapPortion;
 
-        return (mapPortion == nullptr) ? nullptr : (AutotileDatas*) mapPortion
-            ->getMapElementAt(position, MapEditorSelectionKind::Land,
-                              MapEditorSubSelectionKind::Autotiles);
+    RPM::get()->project()->currentMap()->getLocalPortion(position, newPortion);
+    if (portion == newPortion) {
+        return reinterpret_cast<AutotileDatas *>(preview.value(position));
+    } else { // If out of current portion
+        mapPortion = RPM::get()->project()->currentMap()->mapPortion(newPortion);
+
+        return (mapPortion == nullptr) ? nullptr : reinterpret_cast<
+            AutotileDatas *>(mapPortion->getMapElementAt(position,
+            MapEditorSelectionKind::Land, MapEditorSubSelectionKind::Autotiles));
     }
 }
 
 // -------------------------------------------------------
 
-AutotileDatas* Autotiles::tileOnWhatever(
-        Position& position, Portion &portion, int id, QRect& rect,
-        QHash<Position, AutotileDatas*> &preview)
+AutotileDatas* Autotiles::tileOnWhatever(Position &position, Portion &portion,
+    int id, QRect& rect, QHash<Position, AutotileDatas *> &preview)
 {
-    AutotileDatas* autotile = tileExisting(position, portion, preview);
+    AutotileDatas *autotile;
 
-    return (autotile != nullptr && autotile->autotileID() == id &&
-            (*autotile->textureRect()) == rect) ? autotile : nullptr;
+    autotile = Autotiles::tileExisting(position, portion, preview);
+
+    return (autotile != nullptr && autotile->autotileID() == id && (*autotile
+        ->textureRect()) == rect) ? autotile : nullptr;
 }
 
 // -------------------------------------------------------
 
-bool Autotiles::tileOnLeft(Position& position, Portion& portion, int id,
-                           QRect& rect,
-                           QHash<Position, AutotileDatas*> &preview)
+bool Autotiles::tileOnLeft(Position &position, Portion &portion, int id, QRect
+    &rect, QHash<Position, AutotileDatas *> &preview)
 {
     Position newPosition(position.x() - 1, position.y(), position.yPlus(),
-                         position.z(), position.layer());
-    return tileOnWhatever(newPosition, portion, id, rect, preview) != nullptr;
+        position.z(), position.layer());
+
+    return Autotiles::tileOnWhatever(newPosition, portion, id, rect, preview) !=
+        nullptr;
 }
 
 // -------------------------------------------------------
@@ -309,61 +315,66 @@ bool Autotiles::tileOnBottomRight(Position& position, Portion& portion, int id,
 
 // -------------------------------------------------------
 
-void Autotiles::updateAround(Position& position,
-                             QHash<Position, AutotileDatas *> &autotiles,
-                             QSet<MapPortion*>& update, QSet<MapPortion*>& save,
-                             QSet<MapPortion *> *previousPreview)
+void Autotiles::updateAround(Position &position, QHash<Position, AutotileDatas *
+    > &autotiles, QSet<MapPortion *> &update, QSet<MapPortion *> &save, QSet<
+    MapPortion *> *previousPreview)
 {
-    Portion portion;
+    Portion portion, newPortion;
+    Position newPosition;
+    AutotileDatas *newAutotile, *previewAutotile;
+    MapPortion *mapPortion;
+    bool changed, center;
+    int i, j;
+
     RPM::get()->project()->currentMap()->getLocalPortion(position, portion);
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -1; j <= 1; j++) {
-            Position newPosition(position.x() + i, position.y(),
-                                 position.yPlus(), position.z() + j,
-                                 position.layer());
-            AutotileDatas* newAutotile = tileExisting(newPosition, portion,
-                                                      autotiles);
+    for (i = -1; i <= 1; i++) {
+        for (j = -1; j <= 1; j++) {
+            newPosition = Position(position.x() + i, position.y(), position
+                .yPlus(), position.z() + j, position.layer());
+            newAutotile = Autotiles::tileExisting(newPosition, portion,
+                autotiles);
             if (newAutotile != nullptr) {
 
                 // Update the current autotile
-                AutotileDatas* previewAutotile = nullptr;
-                bool changed;
-                if (previousPreview == nullptr)
+                previewAutotile = nullptr;
+                if (previousPreview == nullptr) {
                     changed = newAutotile->update(newPosition, portion,
-                                                  autotiles);
-                else {
-                    bool center = (i == 0 && j == 0);
-                    if (center)
+                        autotiles);
+                } else {
+                    center = (i == 0 && j == 0);
+                    if (center) {
                         previewAutotile = newAutotile;
-                    else
+                    } else {
                         previewAutotile = new AutotileDatas(*newAutotile);
+                    }
                     changed = previewAutotile->update(newPosition, portion,
-                                                      autotiles);
-                    if (!changed && !center)
+                        autotiles);
+                    if (!changed && !center) {
                         delete previewAutotile;
+                    }
                 }
 
                 if (changed) {
-                    Portion newPortion;
                     RPM::get()->project()->currentMap()->getLocalPortion(
-                                newPosition, newPortion);
+                        newPosition, newPortion);
 
                     // Update view in different portion
                     if (portion != newPortion) {
-                        MapPortion* mapPortion = RPM::get()->project()
-                                ->currentMap()->mapPortion(newPortion);
+                        mapPortion = RPM::get()->project()->currentMap()
+                            ->mapPortion(newPortion);
                         update += mapPortion;
-                        if (previousPreview == nullptr)
+                        if (previousPreview == nullptr) {
                             save += mapPortion;
-                        else
+                        } else {
                             *previousPreview += mapPortion;
+                        }
                     }
 
                     // If preview, add the autotile to it
                     if (previousPreview != nullptr) {
-                        RPM::get()->project()->currentMap()
-                                ->mapPortion(newPortion)
-                                ->addPreview(newPosition, previewAutotile);
+                        RPM::get()->project()->currentMap()->mapPortion(
+                            newPortion)->addPreview(newPosition,
+                            previewAutotile);
                     }
                 }
             }
@@ -373,11 +384,10 @@ void Autotiles::updateAround(Position& position,
 
 // -------------------------------------------------------
 
-void Autotiles::updateWithoutPreview(Position& position,
-                                     QSet<MapPortion *> &update,
-                                     QSet<MapPortion *> &save)
+void Autotiles::updateWithoutPreview(Position &position, QSet<MapPortion *>
+    &update, QSet<MapPortion *> &save)
 {
-    updateAround(position, m_all, update, save, nullptr);
+    Autotiles::updateAround(position, m_all, update, save, nullptr);
 }
 
 // -------------------------------------------------------

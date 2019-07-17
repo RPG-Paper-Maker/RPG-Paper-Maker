@@ -155,6 +155,90 @@ void Mountains::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
 
 // -------------------------------------------------------
 
+MountainDatas* Mountains::tileExisting(Position &position, Portion &portion,
+    QHash<Position, MountainDatas*> &preview)
+{
+    Portion newPortion;
+    MapPortion *mapPortion;
+
+    RPM::get()->project()->currentMap()->getLocalPortion(position, newPortion);
+    if (portion == newPortion) {
+        return reinterpret_cast<MountainDatas *>(preview.value(position));
+    } else { // If out of current portion
+        mapPortion = RPM::get()->project()->currentMap()->mapPortion(newPortion);
+
+        return (mapPortion == nullptr) ? nullptr : reinterpret_cast<
+            MountainDatas *>(mapPortion->getMapElementAt(position,
+            MapEditorSelectionKind::Mountains, MapEditorSubSelectionKind
+            ::Mountains));
+    }
+}
+
+
+// -------------------------------------------------------
+
+MountainDatas* Mountains::tileOnWhatever(Position &position, Portion &portion,
+    int id, int width, int height, QHash<Position, MountainDatas *> &preview)
+{
+    MountainDatas *mountain;
+
+    mountain = Mountains::tileExisting(position, portion, preview);
+
+    return mountain != nullptr && mountain->specialID() == id && width ==
+        mountain->widthTotalPixels() && height == mountain->heightTotalPixels()
+        ? mountain : nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Mountains::tileOnLeft(Position &position, Portion &portion, int id, int
+    width, int height, QHash<Position, MountainDatas *> &preview)
+{
+    Position newPosition(position.x() - 1, position.y(), position.yPlus(),
+        position.z(), position.layer());
+
+    return Mountains::tileOnWhatever(newPosition, portion, id, width, height,
+        preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Mountains::tileOnRight(Position &position, Portion &portion, int id, int
+    width, int height, QHash<Position, MountainDatas *> &preview)
+{
+    Position newPosition(position.x() + 1, position.y(), position.yPlus(),
+        position.z(), position.layer());
+
+    return Mountains::tileOnWhatever(newPosition, portion, id, width, height,
+        preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Mountains::tileOnTop(Position &position, Portion &portion, int id, int
+    width, int height, QHash<Position, MountainDatas *> &preview)
+{
+    Position newPosition(position.x(), position.y(), position.yPlus(),
+        position.z() - 1, position.layer());
+
+    return Mountains::tileOnWhatever(newPosition, portion, id, width, height,
+        preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
+bool Mountains::tileOnBottom(Position &position, Portion &portion, int id, int
+    width, int height, QHash<Position, MountainDatas *> &preview)
+{
+    Position newPosition(position.x(), position.y(), position.yPlus(),
+        position.z() + 1, position.layer());
+
+    return Mountains::tileOnWhatever(newPosition, portion, id, width, height,
+        preview) != nullptr;
+}
+
+// -------------------------------------------------------
+
 void Mountains::clearMountainsGL() {
     for (int i = 0; i < m_allGL.size(); i++)
         delete m_allGL.at(i);
@@ -280,7 +364,7 @@ MountainDatas * Mountains::removeMountain(QSet<Portion> &portionsOverflow,
 
 bool Mountains::addMountain(QSet<Portion> &portionsOverflow, Position &p,
     MountainDatas *mountain, QJsonObject &previousObj, MapEditorSubSelectionKind
-    &previousType)
+    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save)
 {
     QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
     MountainDatas *previousmountain;
@@ -295,6 +379,7 @@ bool Mountains::addMountain(QSet<Portion> &portionsOverflow, Position &p,
         delete previousmountain;
     }
     setMountain(portionsOverflowSet, p, mountain);
+    this->updateWithoutPreview(p, update, save);
 
     // Fusion of sets
     portionsOverflow.unite(portionsOverflowRemove);
@@ -306,7 +391,8 @@ bool Mountains::addMountain(QSet<Portion> &portionsOverflow, Position &p,
 // -------------------------------------------------------
 
 bool Mountains::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
-    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType)
+    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, QSet<
+    MapPortion *> &update, QSet<MapPortion *> &save)
 {
     MountainDatas *previousmountain;
     bool changed;
@@ -319,6 +405,8 @@ bool Mountains::deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
         changed = true;
         delete previousmountain;
     }
+
+    this->updateWithoutPreview(p, update, save);
 
     return changed;
 }
@@ -406,6 +494,115 @@ MapElement * Mountains::getMapElementAt(Position &position) {
 
 int Mountains::getLastLayerAt(Position &) const {
     return 0;
+}
+
+// -------------------------------------------------------
+
+void Mountains::getMountainsWithPreview(QHash<Position, MountainDatas *>
+    &mountainsWithPreview, QHash<Position, MapElement *> &preview)
+{
+    QHash<Position, MapElement*>::iterator itw;
+    MapElement *element;
+
+    mountainsWithPreview = m_all;
+    for (itw = preview.begin(); itw != preview.end(); itw++) {
+        element = itw.value();
+        if (element->getSubKind() == MapEditorSubSelectionKind::Mountains) {
+            mountainsWithPreview[itw.key()] = reinterpret_cast<MountainDatas *>(
+                element);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Mountains::updateAround(Position &position, QHash<Position, MountainDatas *
+    > &mountains, QSet<MapPortion *> &update, QSet<MapPortion *> &save, QSet<
+    MapPortion *> *previousPreview)
+{
+    Portion portion, newPortion;
+    Position newPosition;
+    MountainDatas *newMountain, *previewMountain;
+    MapPortion *mapPortion;
+    bool changed, center;
+    int i, j;
+
+    RPM::get()->project()->currentMap()->getLocalPortion(position, portion);
+    for (i = -1; i <= 1; i++) {
+        for (j = -1; j <= 1; j++) {
+            newPosition = Position(position.x() + i, position.y(), position
+                .yPlus(), position.z() + j, position.layer());
+            newMountain = Mountains::tileExisting(newPosition, portion,
+                mountains);
+            if (newMountain != nullptr) {
+
+                // Update the current mountain
+                previewMountain = nullptr;
+                if (previousPreview == nullptr) {
+                    changed = newMountain->update(newPosition, portion,
+                        mountains);
+                } else {
+                    center = (i == 0 && j == 0);
+                    if (center) {
+                        previewMountain = newMountain;
+                    } else {
+                        previewMountain = new MountainDatas(*newMountain);
+                    }
+                    changed = previewMountain->update(newPosition, portion,
+                        mountains);
+                    if (!changed && !center) {
+                        delete previewMountain;
+                    }
+                }
+
+                if (changed) {
+                    RPM::get()->project()->currentMap()->getLocalPortion(
+                        newPosition, newPortion);
+
+                    // Update view in different portion
+                    if (portion != newPortion) {
+                        mapPortion = RPM::get()->project()->currentMap()
+                            ->mapPortion(newPortion);
+                        update += mapPortion;
+                        if (previousPreview == nullptr) {
+                            save += mapPortion;
+                        } else {
+                            *previousPreview += mapPortion;
+                        }
+                    }
+
+                    // If preview, add the autotile to it
+                    if (previousPreview != nullptr) {
+                        RPM::get()->project()->currentMap()->mapPortion(
+                            newPortion)->addPreview(newPosition,
+                            previewMountain);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void Mountains::updateWithoutPreview(Position &position, QSet<MapPortion *>
+    &update, QSet<MapPortion *> &save)
+{
+    Mountains::updateAround(position, m_all, update, save, nullptr);
+}
+
+
+// -------------------------------------------------------
+
+void Mountains::updateMountains(Position &position, QHash<Position, MapElement *>
+    &preview, QSet<MapPortion *> &update, QSet<MapPortion *> &save, QSet<
+    MapPortion *> &previousPreview)
+{
+    QHash<Position, MountainDatas *> mountainsWithPreview;
+
+    this->getMountainsWithPreview(mountainsWithPreview, preview);
+    this->updateAround(position, mountainsWithPreview, update, save,
+        &previousPreview);
 }
 
 // -------------------------------------------------------

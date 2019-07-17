@@ -840,7 +840,7 @@ void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
             MapEditorSubSelectionKind previousTypeFloor =
                 MapEditorSubSelectionKind::None;
             bool changed = mapPortion->addMountain(portionsOverflow, p, mountain
-                , previous, previousType);
+                , previous, previousType, m_portionsToUpdate, m_portionsToSave);
             changed = mapPortion->addLand(positionFloor, topFloor, previousFloor
                 , previousTypeFloor, m_portionsToUpdate, m_portionsToSave) ||
                 changed;
@@ -902,7 +902,8 @@ void ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
             QList<MapEditorSubSelectionKind> previousType;
             QList<Position> positions;
             bool changed = mapPortion->deleteMountain(portionsOverflow, p,
-                previous, previousType, positions);
+                previous, previousType, positions, m_portionsToUpdate,
+                m_portionsToSave);
             if (changed && m_map->saved()) {
                 setToNotSaved();
             }

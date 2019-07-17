@@ -63,14 +63,17 @@ public:
     int widthTotalPixels() const;
     int heightTotalPixels() const;
     void drawEntireFaces(bool left, bool right, float angle, QVector3D &center,
-        int width, int height, float w, float faceHeight, int wp, float xLeft, float
-        xRight, float yTop, float yBot, float zFront, float zBack, float yOffset, QVector3D &vecFrontA, QVector3D &vecBackA, QVector3D &vecFrontB, QVector3D &vecBackB, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
-        &count);
-    void drawSideCorner(int xKind, int yKind, float angle, QVector3D &center, int
-        width, int height, float w, float faceHeight, int wp, float xLeft, float xRight, float xLeftTop, float
-        xRightTop, float xLeftBot, float xRightBot, float yTop, float yBot, float zFront, float zBack,
-        float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
-        float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
+        int width, int height, float w, float faceHeight, int wp, float xLeft,
+        float xRight, float yTop, float yBot, float zFront, float zBack, float
+        yOffset, QVector3D &vecFrontA, QVector3D &vecBackA, QVector3D
+        &vecFrontB, QVector3D &vecBackB, QVector<Vertex> &vertices, QVector<
+        GLuint> &indexes, int &count);
+    void drawSideCorner(int xKind, int yKind, float angle, QVector3D &center,
+        int width, int height, float w, float faceHeight, int wp, float xLeft,
+        float xRight, float xLeftTop, float xRightTop, float xLeftBot, float
+        xRightBot, float yTop, float yBot, float zFront, float zBack, float
+        zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight, float
+        yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
         &count, float xCornerOffsetTop, float xCornerOffsetBot);
     void drawFace(int xKind, int yKind, float angle, QVector3D &center, int
         width, int height, float w, float faceHeight, float xLeftTop, float
@@ -78,6 +81,8 @@ public:
         float zFrontLeft, float zFrontRight, float zBackLeft, float zBackRight,
         float yOffset, QVector<Vertex> &vertices, QVector<GLuint> &indexes, int
         &count, float xCornerOffsetTop, float xCornerOffsetBot, bool isCorner);
+    bool update(Position &position, Portion &portion, QHash<Position,
+        MountainDatas *> &preview);
 
     virtual void initializeVertices(QVector<Vertex> &vertices, QVector<GLuint>
         &indexes, TextureSeveral *texture, Position &position, int &count);
@@ -90,7 +95,6 @@ public:
 
 protected:
     int m_specialID;
-    int m_textureID;
     int m_widthSquares;
     double m_widthPixels;
     int m_heightSquares;

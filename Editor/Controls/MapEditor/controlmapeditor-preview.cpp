@@ -47,7 +47,8 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
             updatePreviewWallSprites(specialID);
     } else {
         updatePreviewOthers(kind, subKind, front, layerOn, tileset,
-            xOffset, yOffset, zOffset, specialID);
+            xOffset, yOffset, zOffset, specialID, widthSquares, widthPixels,
+            heightSquares, heightPixels);
     }
 }
 
@@ -153,10 +154,13 @@ void ControlMapEditor::updatePreviewWallSprite(Position &position, int specialID
 
 void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, bool front, bool layerOn, QRect &tileset,
-    int xOffset, int yOffset, int zOffset, int specialID)
+    int xOffset, int yOffset, int zOffset, int specialID, int widthSquares,
+    double widthPixels, int heightSquares, double heightPixels)
 {
     MapElement *element = nullptr;
     Portion portion;
+    MapPortion *mapPortion;
+
     m_map->getLocalPortion(m_positionPreviousPreview, portion);
     if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(
         portion) && (m_firstMouseCoords.x() == -500 || (m_firstMouseCoords.y()
@@ -177,6 +181,14 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                 SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
                 ->specialElementsDatas()->model(PictureKind::Object3D)
                 ->invisibleRootItem(), specialID)));
+            break;
+        case MapEditorSelectionKind::Mountains:
+            element = new MountainDatas(specialID, widthSquares, widthPixels,
+                heightSquares, heightPixels);
+            mapPortion = m_map->mapPortion(portion);
+            mapPortion->updateMountains(m_positionPreviousPreview,
+                m_portionsToUpdate, m_portionsToSave,
+                m_portionsPreviousPreview);
             break;
         default:
             break;

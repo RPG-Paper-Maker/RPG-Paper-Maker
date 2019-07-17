@@ -76,13 +76,15 @@ public:
         QList<Position> &positions);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previous, MapEditorSubSelectionKind
-        &previousType);
+        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save);
     bool deleteMountain(QSet<Portion> &portionsOverflow, Position &p, QList<
         QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType,
-        QList<Position> &positions);
-    void updateAutotiles(Position& position, QSet<MapPortion*> &update,
-                         QSet<MapPortion*> &save,
-                         QSet<MapPortion*> &previousPreview);
+        QList<Position> &positions, QSet<MapPortion *> &update, QSet<MapPortion
+        *> &save);
+    void updateAutotiles(Position &position, QSet<MapPortion *> &update, QSet<
+        MapPortion *> &save, QSet<MapPortion *> &previousPreview);
+    void updateMountains(Position &position, QSet<MapPortion *> &update, QSet<
+        MapPortion *> &save, QSet<MapPortion *> &previousPreview);
     void updateSpriteWalls();
     SpriteWallDatas* getWallAt(Position& position);
     void fillWithFloor();

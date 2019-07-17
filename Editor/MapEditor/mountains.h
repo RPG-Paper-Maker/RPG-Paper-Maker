@@ -19,6 +19,8 @@
 #include <qray3d.h>
 #include "mountain.h"
 
+class MapPortion;
+
 // -------------------------------------------------------
 //
 //  CLASS MountainsGL
@@ -72,6 +74,18 @@ public:
 
     static void getSetPortionsOverflow(QSet<Portion>& portionsOverflow, Position
         &p, MountainDatas *mountain);
+    static MountainDatas * tileExisting(Position &position, Portion &portion,
+        QHash<Position, MountainDatas *> &preview);
+    static MountainDatas * tileOnWhatever(Position &position, Portion &portion,
+        int id, int width, int height, QHash<Position, MountainDatas *> &preview);
+    static bool tileOnLeft(Position &position, Portion &portion, int id, int
+        width, int height, QHash<Position, MountainDatas *> &preview);
+    static bool tileOnRight(Position &position, Portion &portion, int id, int
+        width, int height, QHash<Position, MountainDatas *> &preview);
+    static bool tileOnTop(Position &position, Portion &portion, int id, int
+        width, int height, QHash<Position, MountainDatas *> &preview);
+    static bool tileOnBottom(Position &position, Portion &portion, int id, int
+        width, int height, QHash<Position, MountainDatas *> &preview);
 
     void clearMountainsGL();
     bool contains(Position &position) const;
@@ -87,9 +101,10 @@ public:
     MountainDatas * removeMountain(QSet<Portion> &portionsOverflow, Position &p);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previousObj, MapEditorSubSelectionKind
-        &previousType);
+        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save);
     bool deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
-        QJsonObject &previousObj, MapEditorSubSelectionKind &previousType);
+        QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, QSet<
+        MapPortion *> &update, QSet<MapPortion *> &save);
     void removeMountainsOut(MapProperties& properties);
     MapElement *updateRaycasting(float& finalDistance, Position &finalPosition,
         QRay3D &ray);
@@ -97,6 +112,16 @@ public:
         &finalDistance, Position &finalPosition, QRay3D& ray);
     MapElement * getMapElementAt(Position &position);
     int getLastLayerAt(Position &) const;
+    void getMountainsWithPreview(QHash<Position, MountainDatas *>
+        &mountainsWithPreview, QHash<Position, MapElement *> &preview);
+    void updateAround(Position &position, QHash<Position, MountainDatas *>
+        &mountains, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+        QSet<MapPortion*> *previousPreview);
+    void updateWithoutPreview(Position &position, QSet<MapPortion *> &update,
+        QSet<MapPortion *> &save);
+    void updateMountains(Position &position, QHash<Position, MapElement *>
+        &preview, QSet<MapPortion *> &update, QSet<MapPortion *> &save, QSet<
+        MapPortion*> &previousPreview);
     void initializeVertices(QList<TextureSeveral *> &texturesMountains, QHash<
         Position, MapElement*>& previewSquares, QList<Position>& previewDelete);
     void initializeGL(QOpenGLShaderProgram* programStatic);

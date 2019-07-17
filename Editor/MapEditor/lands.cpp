@@ -231,15 +231,15 @@ void Lands::updateRemoveLayer(Position& position, QList<QJsonObject> &previous,
 
 // -------------------------------------------------------
 
-void Lands::updateAutotiles(Position& position,
-                            QHash<Position, MapElement*> &preview,
-                            QSet<MapPortion*> &update, QSet<MapPortion*> &save,
-                            QSet<MapPortion *> &previousPreview)
+void Lands::updateAutotiles(Position &position, QHash<Position, MapElement *>
+    &preview, QSet<MapPortion *> &update, QSet<MapPortion *> &save, QSet<
+    MapPortion *> &previousPreview)
 {
-    QHash<Position, AutotileDatas*> autotilesWithPreview;
+    QHash<Position, AutotileDatas *> autotilesWithPreview;
+
     m_autotiles->getAutotilesWithPreview(autotilesWithPreview, preview);
     m_autotiles->updateAround(position, autotilesWithPreview, update, save,
-                              &previousPreview);
+        &previousPreview);
 }
 
 // -------------------------------------------------------
