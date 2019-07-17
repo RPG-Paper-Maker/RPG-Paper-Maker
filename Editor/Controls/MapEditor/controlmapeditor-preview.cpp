@@ -196,9 +196,7 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
             topPosition.setY(m_positionPreviousPreview.y() + heightSquares +
                 static_cast<int>(yPlus / 100));
             topPosition.setYPlus(std::fmod(yPlus, 100));
-            topFloor = new FloorDatas(new QRect(defaultFloorRect.x(),
-                defaultFloorRect.y(), defaultFloorRect.width(), defaultFloorRect
-                .height()));
+            topFloor = new FloorDatas(new QRect(defaultFloorRect));
             m_map->getLocalPortion(topPosition, topPortion);
             updatePreviewElement(topPosition, topPortion, topFloor);
             break;

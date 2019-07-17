@@ -384,6 +384,12 @@ MapElement* MapPortion::updateRaycastingObjects3D(float &finalDistance,
     return m_objects3D->updateRaycasting(finalDistance, finalPosition, ray);
 }
 
+MapElement* MapPortion::updateRaycastingMountains(float &finalDistance, Position
+    &finalPosition, QRay3D &ray)
+{
+    return m_mountains->updateRaycasting(finalDistance, finalPosition, ray);
+}
+
 // -------------------------------------------------------
 
 MapElement* MapPortion::updateRaycastingObjects(int squareSize, float&

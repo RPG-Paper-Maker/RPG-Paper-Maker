@@ -113,6 +113,8 @@ public:
     MapElement* updateRaycastingObjects3D(float& finalDistance,
                                         Position &finalPosition,
                                         QRay3D& ray);
+    MapElement* updateRaycastingMountains(float &finalDistance, Position
+        &finalPosition, QRay3D &ray);
     MapElement* updateRaycastingObjects(int squareSize, float& finalDistance,
                                         Position &finalPosition,
                                         QRay3D& ray);

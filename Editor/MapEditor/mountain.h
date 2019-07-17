@@ -17,6 +17,7 @@
 #include "mapelement.h"
 #include "vertex.h"
 #include "textureseveral.h"
+#include "qbox3d.h"
 
 // -------------------------------------------------------
 //
@@ -103,6 +104,8 @@ protected:
     bool m_bot;
     bool m_left;
     bool m_right;
+
+    QBox3D m_box;
 };
 
 #endif // MOUNTAIN_H

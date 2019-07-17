@@ -284,11 +284,11 @@ void ControlMapEditor::paintPinLand(Position &p, MapEditorSubSelectionKind kindA
 // -------------------------------------------------------
 
 void ControlMapEditor::stockLand(Position &p, LandDatas *landDatas,
-    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo)
+    MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo, bool force)
 {
-    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+    if (force || (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
-        .yPlus(), p.yPlus()))))
+        .yPlus(), p.yPlus())))))
     {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
@@ -360,10 +360,10 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseLand(Position &p, bool undoRedo){
-    if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
+void ControlMapEditor::eraseLand(Position &p, bool undoRedo, bool force) {
+    if (force || (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
-        .yPlus(), p.yPlus()))))
+        .yPlus(), p.yPlus())))))
     {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
@@ -681,7 +681,7 @@ void ControlMapEditor::addObject3D(Position &p, int specialID) {
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
         object3D = Object3DDatas::instanciate(special);
-        stockObject3D(p, object3D);
+        stockObject3D(positions[i], object3D);
     }
     m_previousMouseCoords = p;
 }
@@ -798,23 +798,35 @@ void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
 {
     QList<Position> positions;
     MountainDatas *mountain;
+    FloorDatas *topFloor;
+    Position positionFloor;
+    bool isAdded;
 
     mountain = new MountainDatas(specialID, widthSquares, widthPixels,
         heightSquares, heightPixels);
-    stockMountain(p, mountain, defaultFloorRect);
+    isAdded = stockMountain(p, mountain);
+    topFloor = new FloorDatas(new QRect(defaultFloorRect));
+    getMountainTopFloorPosition(positionFloor, p, heightSquares, heightPixels);
+    stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors, false,
+        false, isAdded);
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
         mountain = new MountainDatas(specialID, widthSquares, widthPixels,
             heightSquares, heightPixels);
-        stockMountain(p, mountain, defaultFloorRect);
+        isAdded = stockMountain(positions[i], mountain);
+        topFloor = new FloorDatas(new QRect(defaultFloorRect));
+        getMountainTopFloorPosition(positionFloor, positions[i], heightSquares,
+            heightPixels);
+        stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors,
+            false, false, isAdded);
     }
     m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
-    &defaultFloorRect, bool undoRedo)
+bool ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, bool
+    undoRedo)
 {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
@@ -822,12 +834,6 @@ void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
     {
         Portion portion;
         MapPortion *mapPortion = getMapPortion(p, portion, undoRedo);
-        FloorDatas *topFloor = new FloorDatas(new QRect(defaultFloorRect));
-        Position positionFloor(p);
-        double yPlus = p.yPlus() + mountain->heightPixels();
-        positionFloor.setY(p.y() + mountain->heightSquares() + static_cast<int>(
-            yPlus / 100));
-        positionFloor.setYPlus(std::fmod(yPlus, 100));
 
         if (mapPortion != nullptr) {
 
@@ -837,13 +843,8 @@ void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
             MapEditorSubSelectionKind previousType = MapEditorSubSelectionKind
                 ::None;
             QJsonObject previousFloor;
-            MapEditorSubSelectionKind previousTypeFloor =
-                MapEditorSubSelectionKind::None;
             bool changed = mapPortion->addMountain(portionsOverflow, p, mountain
                 , previous, previousType, m_portionsToUpdate, m_portionsToSave);
-            changed = mapPortion->addLand(positionFloor, topFloor, previousFloor
-                , previousTypeFloor, m_portionsToUpdate, m_portionsToSave) ||
-                changed;
             if (changed && m_map->saved()) {
                 setToNotSaved();
             }
@@ -852,9 +853,6 @@ void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
                     m_controlUndoRedo.updateJsonList(m_changes, previous,
                         previousType, mountain, MapEditorSubSelectionKind
                         ::Mountains, p);
-                    m_controlUndoRedo.updateJsonList(m_changes, previousFloor,
-                        previousTypeFloor, topFloor, MapEditorSubSelectionKind
-                        ::Floors, positionFloor);
                 }
                 if (m_map->isInPortion(portion, 0)) {
                     m_portionsToUpdate += mapPortion;
@@ -864,31 +862,48 @@ void ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, QRect
                 m_needMapInfosToSave = true;
                 updatePortionsToSaveOverflow(portionsOverflow);
             }
-
-            return;
         }
+        return true;
     }
 
     delete mountain;
+
+    return false;
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::removeMountain(Position &p) {
     QList<Position> positions;
+    Position positionFloor;
+    int heightSquares;
+    double heightPixels;
+    bool isRemoved;
 
+    heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)->heightSquares();
+    heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)->heightPixels();
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
-        eraseMountain(positions[i]);
+        isRemoved = eraseMountain(positions[i]);
+        if (isRemoved) {
+            getMountainTopFloorPosition(positionFloor, positions[i],
+                heightSquares, heightPixels);
+            eraseLand(positionFloor, false, true);
+        }
     }
-    eraseMountain(p);
+    isRemoved = eraseMountain(p);
+    if (isRemoved) {
+        getMountainTopFloorPosition(positionFloor, p, heightSquares,
+            heightPixels);
+        eraseLand(positionFloor, false, true);
+    }
 
     m_previousMouseCoords = p;
 }
 
 // -------------------------------------------------------
 
-void ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
+bool ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
         .yPlus(), p.yPlus()))))
@@ -924,5 +939,9 @@ void ControlMapEditor::eraseMountain(Position &p, bool undoRedo) {
                 updatePortionsToSaveOverflow(portionsOverflow);
             }
         }
+
+        return true;
     }
+
+    return false;
 }

@@ -652,6 +652,13 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         position.setCenterX(0);
         position.setCenterZ(0);
         return nullptr;
+    case MapEditorSelectionKind::Mountains:
+        if (m_isDeleting || isForDisplay) {
+            position = m_positionOnMountain;
+            return m_elementOnMountain;
+        }
+        position = m_positionOnLand;
+        return nullptr;
     case MapEditorSelectionKind::Objects:
         position = m_positionOnObject;
         isObject = true;
@@ -690,9 +697,6 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
             }
         }
         return element;
-    default:
-        position = m_positionOnPlane;
-        return nullptr;
     }
 }
 
@@ -1200,6 +1204,17 @@ void ControlMapEditor::performUndoRedoAction(MapEditorSubSelectionKind kind,
             eraseObject3D(position, true);
         break;
     }
+    case MapEditorSubSelectionKind::Mountains:
+    {
+        if (before) {
+            MountainDatas *mountain = new MountainDatas;
+            mountain->read(obj);
+            stockMountain(position, mountain, true);
+        }
+        else
+            eraseMountain(position, true);
+        break;
+    }
     case MapEditorSubSelectionKind::Object:
         if (before) {
             SystemCommonObject* object = new SystemCommonObject;
@@ -1307,6 +1322,19 @@ bool ControlMapEditor::isVisible(Position3D &position) {
     m_map->getLocalPortion(position, portion);
 
     return m_map->isInPortion(portion);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::getMountainTopFloorPosition(Position &topPosition,
+    Position &p, int heightSquares, double heightPixels) const
+{
+    double yPlus;
+
+    topPosition = p;
+    yPlus = p.yPlus() + heightPixels;
+    topPosition.setY(p.y() + heightSquares + static_cast<int>(yPlus / 100));
+    topPosition.setYPlus(std::fmod(yPlus, 100));
 }
 
 // -------------------------------------------------------

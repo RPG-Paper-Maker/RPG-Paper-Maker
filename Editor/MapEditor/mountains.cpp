@@ -449,24 +449,6 @@ MapElement* Mountains::updateRaycasting(float &finalDistance, Position
         }
     }
 
-    // Overflow
-    /*
-    Map *map = RPM::get()->project()->currentMap();
-    for (QSet<Position>::iterator i = m_overflow.begin(); i != m_overflow.end();
-        i++)
-    {
-        Position position = *i;
-        Portion portion;
-        map->getLocalPortion(position, portion);
-        MapPortion* mapPortion = map->mapPortion(portion);
-        MapElement* newElement = mapPortion->updateRaycastingOverflowmountain(
-            position, finalDistance, finalPosition, ray);
-        if (newElement != nullptr) {
-            element = newElement;
-        }
-    }
-    */
-
     return element;
 }
 

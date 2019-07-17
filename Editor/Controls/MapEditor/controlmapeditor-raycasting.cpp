@@ -21,38 +21,46 @@
 
 void ControlMapEditor::updateRaycasting(bool layerOn) {
     QList<Portion> portions;
+    QMatrix4x4 projection, view;
+    QVector3D rayDirection, cameraPosition;
+    Portion portion, globalPortion;
+    Position positionLayerZero;
+    MapPortion *mapPortion;
+    MapElement *element;
+    int height, yGrid, layer;
 
     // Raycasting plane
-    QMatrix4x4 projection = m_camera->projection();
-    QMatrix4x4 view = m_camera->view();
-    QVector3D rayDirection = getRayWorld(m_mouse, projection, view);
-    int height = m_firstMouseCoords.x() == -500 ? static_cast<int>(this
-        ->cursor()->getY()) : m_firstMouseCoords.getY(RPM::get()
-        ->getSquareSize());
-    int yGrid;
+    projection = m_camera->projection();
+    view = m_camera->view();
+    rayDirection = getRayWorld(m_mouse, projection, view);
+    height = m_firstMouseCoords.x() == -500 ? static_cast<int>(this->cursor()
+        ->getY()) : m_firstMouseCoords.getY(RPM::get()->getSquareSize());
     m_distancePlane = (height - m_camera->positionY()) / rayDirection.y();
     getCorrectPositionOnRay(m_positionOnPlane, rayDirection, static_cast<int>(
         m_distancePlane));
-    QVector3D cameraPosition(m_camera->positionX(), m_camera->positionY(),
+    cameraPosition = QVector3D(m_camera->positionX(), m_camera->positionY(),
         m_camera->positionZ());
     m_ray.setOrigin(cameraPosition);
     m_ray.setDirection(rayDirection);
     getPortionsInRay(portions);
 
-    // Others
+    // Initializing distances and elements to 0
     m_distanceLand = 0;
     m_distanceSprite = 0;
     m_distanceObject3D = 0;
+    m_distanceMountain = 0;
     m_distanceObject = 0;
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
     m_elementOnObject3D = nullptr;
+    m_elementOnMountain = nullptr;
     m_elementOnObject = nullptr;
+
     for (int i = portions.size() - 1; i >= 0; i--) {
-        Portion portion = portions.at(i);
-        MapPortion *mapPortion = m_map->mapPortion(portion);
+        portion = portions.at(i);
+        mapPortion = m_map->mapPortion(portion);
         if (mapPortion == nullptr) {
-            Portion globalPortion = m_map->getGlobalFromLocalPortion(portion);
+            globalPortion = m_map->getGlobalFromLocalPortion(portion);
             if (m_elementOnSprite == nullptr) {
                 m_elementOnSprite = m_map->mapProperties()
                     ->updateRaycastingOverflowSprites(globalPortion,
@@ -75,6 +83,9 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
             if (m_elementOnObject3D == nullptr) {
                 updateRaycastingObjects3D(mapPortion);
             }
+            if (m_elementOnMountain == nullptr) {
+                updateRaycastingMountains(mapPortion);
+            }
             if (m_elementOnObject == nullptr) {
                 updateRaycastingObjects(mapPortion);
             }
@@ -96,16 +107,16 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
         m_positionRealOnSprite = m_positionOnLand;
         m_elementOnSprite = nullptr;
     } else {
-        Position positionLayerZero(m_positionOnSprite);
-        Portion portion;
+        positionLayerZero = Position(m_positionOnSprite);
         m_map->getLocalPortion(positionLayerZero, portion);
-        MapPortion *mapPortion = m_map->mapPortion(portion);
-        MapElement *element = nullptr;
-        int layer = 0;
+        mapPortion = m_map->mapPortion(portion);
+        element = nullptr;
+        layer = 0;
         while (element == nullptr) {
             positionLayerZero.setLayer(layer++);
             element = mapPortion->getMapElementAt(positionLayerZero,
-                MapEditorSelectionKind::Sprites, MapEditorSubSelectionKind::None);
+                MapEditorSelectionKind::Sprites, MapEditorSubSelectionKind
+                ::None);
         }
         if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall) {
             m_distanceSprite = reinterpret_cast<SpriteWallDatas *>(element)
@@ -260,6 +271,13 @@ void ControlMapEditor::updateRaycastingSprites(MapPortion *mapPortion, bool laye
 void ControlMapEditor::updateRaycastingObjects3D(MapPortion *mapPortion) {
     m_elementOnObject3D = mapPortion->updateRaycastingObjects3D(
         m_distanceObject3D, m_positionOnObject3D, m_ray);
+}
+
+// -------------------------------------------------------
+
+void ControlMapEditor::updateRaycastingMountains(MapPortion *mapPortion) {
+    m_elementOnMountain = mapPortion->updateRaycastingMountains(
+        m_distanceMountain, m_positionOnMountain, m_ray);
 }
 
 // -------------------------------------------------------

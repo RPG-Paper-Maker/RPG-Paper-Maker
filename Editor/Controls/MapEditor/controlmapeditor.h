@@ -74,6 +74,7 @@ public:
     void updateRaycastingLand(MapPortion *mapPortion);
     void updateRaycastingSprites(MapPortion *mapPortion, bool layerOn);
     void updateRaycastingObjects3D(MapPortion *mapPortion);
+    void updateRaycastingMountains(MapPortion *mapPortion);
     void updateRaycastingObjects(MapPortion *mapPortion);
     QVector3D transformToNormalizedCoords(const QPoint &mouse);
     QVector4D transformToHomogeneousClip(QVector3D &normalized);
@@ -142,9 +143,10 @@ public:
         QRect &textureAfter, bool up);
     void getLandTexture(QRect &rect, LandDatas *land);
     void stockLand(Position &p, LandDatas *landDatas,
-        MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false);
+        MapEditorSubSelectionKind kind, bool layerOn, bool undoRedo = false,
+        bool force = false);
     void removeLand(Position &p, DrawKind drawKind);
-    void eraseLand(Position &p, bool undoRedo = false);
+    void eraseLand(Position &p, bool undoRedo = false, bool force = false);
     void addSprite(Position &p, MapEditorSubSelectionKind kind, DrawKind drawKind,
         bool layerOn, QRect &tileset);
     SpriteDatas * getCompleteSprite(MapEditorSubSelectionKind kind, int xOffset,
@@ -166,10 +168,10 @@ public:
     void addMountain(Position &p, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect);
-    void stockMountain(Position &p, MountainDatas *mountain, QRect
-        &defaultFloorRect, bool undoRedo = false);
+    bool stockMountain(Position &p, MountainDatas *mountain, bool undoRedo =
+        false);
     void removeMountain(Position &p);
-    void eraseMountain(Position &p, bool undoRedo = false);
+    bool eraseMountain(Position &p, bool undoRedo = false);
     void setCursorObjectPosition(Position &p);
     void showObjectMenuContext();
     void defineAsHero();
@@ -211,6 +213,8 @@ public:
     QString getSquareInfos(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool layerOn, bool focus);
     bool isVisible(Position3D &position);
+    void getMountainTopFloorPosition(Position& topPosition, Position& p, int
+        heightSquares, double heightPixels) const;
     void paintGL(QMatrix4x4 &modelviewProjection, QVector3D &cameraRightWorldSpace,
         QVector3D &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace,
         MapEditorSelectionKind selectionKind,
@@ -252,6 +256,7 @@ protected:
     Position m_positionOnLand;
     Position m_positionOnSprite;
     Position m_positionOnObject3D;
+    Position m_positionOnMountain;
     Position m_positionRealOnSprite;
     Position m_positionOnObject;
     QVector3D *m_positionStart;
@@ -264,6 +269,7 @@ protected:
     float m_distanceLand;
     float m_distanceSprite;
     float m_distanceObject3D;
+    float m_distanceMountain;
     float m_distanceObject;
     Position m_positionPreviousPreview;
     QSet<MapPortion *> m_portionsPreviousPreview;

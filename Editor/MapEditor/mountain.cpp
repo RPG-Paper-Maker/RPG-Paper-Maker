@@ -366,6 +366,10 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
     vecBackA.setY(yTop);
     vecBackA.setZ(zBack);
 
+    // Box collisions
+    m_box = QBox3D(QVector3D(xLeft, yTop, position.z() * squareSize), QVector3D(
+        xRight, yBot, (position.z() + 1) * squareSize));
+
     // Bot
     if (!m_bot) {
         this->drawEntireFaces(m_left, m_right, 0, center, width, height, w,
@@ -397,7 +401,7 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
 float MountainDatas::intersection(QRay3D &ray) const {
     float minDistance = 0;
 
-    //RPM::getMinDistance(minDistance, m_box.intersection(ray));
+    RPM::getMinDistance(minDistance, m_box.intersection(ray));
 
     return minDistance;
 }
