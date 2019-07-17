@@ -88,7 +88,7 @@ public:
     void updatePreviewElements(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, DrawKind drawKind, bool layerOn,
         QRect &tileset, int specialID, int widthSquares, double widthPixels, int
-        heightSquares, double heightPixels);
+        heightSquares, double heightPixels, QRect &defaultFloorRect);
     void removePreviewElements();
     void updatePreviewLands(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool up, bool layerOn, QRect &tileset,
@@ -100,7 +100,7 @@ public:
         MapEditorSubSelectionKind subKind, bool front, bool layerOn,
         QRect &tileset, int xOffset, int yOffset, int zOffset, int specialID,
         int widthSquares, double widthPixels, int heightSquares, double
-        heightPixels);
+        heightPixels, QRect &defaultFloorRect);
     void updatePreviewElement(Position& p, Portion &portion, MapElement *element);
     void updatePreviewElementGrid(Position &p, Portion &portion, MapElement *element);
     void updateMovingPortions();

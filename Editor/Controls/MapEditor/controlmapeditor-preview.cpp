@@ -17,7 +17,7 @@
 void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, DrawKind drawKind, bool layerOn,
     QRect &tileset, int specialID, int widthSquares, double widthPixels, int
-    heightSquares, double heightPixels)
+    heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
     if (drawKind == DrawKind::Pin || (m_isDeleting && !m_isDeletingWall) ||
         m_isCtrlPressed)
@@ -48,7 +48,7 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     } else {
         updatePreviewOthers(kind, subKind, front, layerOn, tileset,
             xOffset, yOffset, zOffset, specialID, widthSquares, widthPixels,
-            heightSquares, heightPixels);
+            heightSquares, heightPixels, defaultFloorRect);
     }
 }
 
@@ -155,11 +155,15 @@ void ControlMapEditor::updatePreviewWallSprite(Position &position, int specialID
 void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
     MapEditorSubSelectionKind subKind, bool front, bool layerOn, QRect &tileset,
     int xOffset, int yOffset, int zOffset, int specialID, int widthSquares,
-    double widthPixels, int heightSquares, double heightPixels)
+    double widthPixels, int heightSquares, double heightPixels, QRect
+    &defaultFloorRect)
 {
     MapElement *element = nullptr;
-    Portion portion;
+    Portion portion, topPortion;
     MapPortion *mapPortion;
+    Position topPosition;
+    double yPlus;
+    FloorDatas *topFloor;
 
     m_map->getLocalPortion(m_positionPreviousPreview, portion);
     if (m_map->isInGrid(m_positionPreviousPreview) && m_map->isInPortion(
@@ -185,10 +189,18 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
         case MapEditorSelectionKind::Mountains:
             element = new MountainDatas(specialID, widthSquares, widthPixels,
                 heightSquares, heightPixels);
-            mapPortion = m_map->mapPortion(portion);
-            mapPortion->updateMountains(m_positionPreviousPreview,
-                m_portionsToUpdate, m_portionsToSave,
-                m_portionsPreviousPreview);
+
+            // Top floor adding
+            topPosition = m_positionPreviousPreview;
+            yPlus = m_positionPreviousPreview.yPlus() + heightPixels;
+            topPosition.setY(m_positionPreviousPreview.y() + heightSquares +
+                static_cast<int>(yPlus / 100));
+            topPosition.setYPlus(std::fmod(yPlus, 100));
+            topFloor = new FloorDatas(new QRect(defaultFloorRect.x(),
+                defaultFloorRect.y(), defaultFloorRect.width(), defaultFloorRect
+                .height()));
+            m_map->getLocalPortion(topPosition, topPortion);
+            updatePreviewElement(topPosition, topPortion, topFloor);
             break;
         default:
             break;
@@ -196,6 +208,13 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
 
         if (element != nullptr) {
             updatePreviewElement(m_positionPreviousPreview, portion, element);
+
+            if (kind == MapEditorSelectionKind::Mountains) {
+                mapPortion = m_map->mapPortion(portion);
+                mapPortion->updateMountains(m_positionPreviousPreview,
+                    m_portionsToUpdate, m_portionsToSave,
+                    m_portionsPreviousPreview);
+            }
         }
     }
 }

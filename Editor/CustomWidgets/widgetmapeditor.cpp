@@ -214,11 +214,13 @@ void WidgetMapEditor::paintGL() {
                 double widthPixels = m_panelTextures->getWidthPixels();
                 int heightSquares = m_panelTextures->getHeightSquares();
                 double heightPixels = m_panelTextures->getHeightPixels();
+                QRect defaultTopFloor;
+                m_panelTextures->getDefaultFloorRect(defaultTopFloor);
                 m_control.updateWallIndicator();
                 if (mousePosChanged && this->hasFocus()) {
                     m_control.updatePreviewElements(kind, subKind, drawKind,
                         layerOn, tileset, specialID, widthSquares, widthPixels,
-                        heightSquares, heightPixels);
+                        heightSquares, heightPixels, defaultTopFloor);
                 }
             }
         }
