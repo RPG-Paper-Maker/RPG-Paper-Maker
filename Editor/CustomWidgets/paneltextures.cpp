@@ -72,6 +72,7 @@ void PanelTextures::setTilesetImage(QString path) {
 
 void PanelTextures::setTilesetImageNone() {
     ui->widgetTilesetSelector->setImageNone();
+    hideAll();
     updateTilesetImage();
 }
 
