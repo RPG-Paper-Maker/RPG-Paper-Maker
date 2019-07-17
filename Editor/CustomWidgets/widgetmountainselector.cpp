@@ -79,14 +79,13 @@ void WidgetMountainSelector::initializeTilesetPictureID(int pictureID) {
 // -------------------------------------------------------
 
 void WidgetMountainSelector::updateAngle() {
-    int width;
-    double angle;
+    double angle, width;
 
     width = ui->spinBoxSquareWidth->value() * RPM::get()->getSquareSize() + ui
         ->spinBoxPixelWidth->value();
-    angle = width == 0 ? 90 : qRadiansToDegrees(qAtan((ui->spinBoxSquareHeight
+    angle = width == 0.0 ? 90 : qRadiansToDegrees(qAtan((ui->spinBoxSquareHeight
         ->value() * RPM::get()->getSquareSize() + ui->spinBoxPixelHeight
-                                                       ->value()) / width));
+        ->value()) / width));
     ui->labelAngle->setText("(angle = " + QString::number(angle) + "°)");
 }
 
