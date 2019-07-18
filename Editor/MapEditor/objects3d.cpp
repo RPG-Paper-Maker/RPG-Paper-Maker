@@ -484,9 +484,6 @@ void Objects3D::read(const QJsonObject & json) {
         Object3DDatas *object3D = Object3DDatas::instanciateFromJSON(objVal);
         object3D->read(objVal);
         m_all[p] = object3D;
-        QSet<Portion> portionsOverflow;
-        getSetPortionsOverflow(portionsOverflow, p, object3D);
-        addRemoveOverflow(portionsOverflow, p, true);
     }
 
     // Overflow

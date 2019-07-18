@@ -181,12 +181,18 @@ void ControlMapEditor::updatePreviewOthers(MapEditorSelectionKind kind,
                 tileset, front, layerOn);
             break;
         case MapEditorSelectionKind::Objects3D:
+            if (specialID == -1) {
+                break;
+            }
             element = Object3DDatas::instanciate(reinterpret_cast<
                 SystemObject3D *>(SuperListItem::getById(RPM::get()->project()
                 ->specialElementsDatas()->model(PictureKind::Object3D)
                 ->invisibleRootItem(), specialID)));
             break;
         case MapEditorSelectionKind::Mountains:
+            if (specialID == -1) {
+                break;
+            }
             element = new MountainDatas(specialID, widthSquares, widthPixels,
                 heightSquares, heightPixels);
 

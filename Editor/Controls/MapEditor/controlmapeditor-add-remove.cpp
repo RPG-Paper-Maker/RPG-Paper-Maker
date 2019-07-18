@@ -668,6 +668,10 @@ void ControlMapEditor::eraseSpriteWall(Position &position, bool undoRedo) {
 // -------------------------------------------------------
 
 void ControlMapEditor::addObject3D(Position &p, int specialID) {
+    if (specialID == -1) {
+        return;
+    }
+
     QList<Position> positions;
     Object3DDatas *object3D;
     SystemObject3D *special;
@@ -796,6 +800,10 @@ void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
     double widthPixels, int heightSquares, double heightPixels, QRect
     &defaultFloorRect)
 {
+    if (specialID == -1) {
+        return;
+    }
+
     QList<Position> positions;
     MountainDatas *mountain;
     FloorDatas *topFloor;

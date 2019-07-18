@@ -693,9 +693,6 @@ void Mountains::read(const QJsonObject & json) {
         MountainDatas *mountain = new MountainDatas;
         mountain->read(objVal);
         m_all[p] = mountain;
-        QSet<Portion> portionsOverflow;
-        getSetPortionsOverflow(portionsOverflow, p, mountain);
-        addRemoveOverflow(portionsOverflow, p, true);
     }
 
     // Overflow

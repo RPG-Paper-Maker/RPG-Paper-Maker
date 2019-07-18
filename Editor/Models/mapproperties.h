@@ -32,6 +32,10 @@
 class MapProperties : public SystemLang
 {
 public:
+    static const QString JSON_OVERFLOW_SPRITES;
+    static const QString JSON_OVERFLOW_OBJECTS3D;
+    static const QString JSON_OVERFLOW_MOUNTAINS;
+
     MapProperties();
     MapProperties(QString path);
     MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
@@ -80,6 +84,9 @@ public:
         &finalDistance, Position &finalPosition, QRay3D &ray);
     MapElement * updateRaycastingOverflowMountains(Portion& portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray);
+    void readOverflow(const QJsonArray &tab, QHash<Portion, QSet<Position> *>
+        &overflow);
+    void writeOverflow(QJsonObject &json, const QHash<Portion, QSet<Position> *> &overflow, QString jsonLabel) const;
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

@@ -13,6 +13,10 @@
 #include "rpm.h"
 #include "common.h"
 
+const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
+const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
+const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -45,8 +49,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true)
 {
-    m_skyColorID->setModelDataBase(RPM::get()
-                                   ->project()->gameDatas()->systemDatas()->modelColors());
+    m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelColors());
 }
 
 MapProperties::~MapProperties()
@@ -273,6 +277,28 @@ void MapProperties::setCopy(const MapProperties& super) {
         }
         m_outOverflowSprites.insert(i.key(), set);
     }
+    this->clearOverflowObjects3D();
+    for (i = super.m_outOverflowObjects3D.begin(); i != super
+         .m_outOverflowObjects3D.end(); i++)
+    {
+        set = new QSet<Position>();
+        superSet = i.value();
+        for (j = superSet->begin(); j != superSet->end(); j++) {
+            set->insert(*j);
+        }
+        m_outOverflowObjects3D.insert(i.key(), set);
+    }
+    this->clearOverflowMountains();
+    for (i = super.m_outOverflowMountains.begin(); i != super
+         .m_outOverflowMountains.end(); i++)
+    {
+        set = new QSet<Position>();
+        superSet = i.value();
+        for (j = superSet->begin(); j != superSet->end(); j++) {
+            set->insert(*j);
+        }
+        m_outOverflowMountains.insert(i.key(), set);
+    }
 }
 
 // -------------------------------------------------------
@@ -370,6 +396,60 @@ MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
 }
 
 // -------------------------------------------------------
+
+void MapProperties::readOverflow(const QJsonArray &tab, QHash<Portion, QSet<
+    Position> *> &overflow)
+{
+    for (int i = 0; i < tab.size(); i++) {
+        QJsonObject objHash = tab.at(i).toObject();
+        QJsonArray tabKey = objHash[RPM::JSON_KEY].toArray();
+        QJsonArray tabValue = objHash[RPM::JSON_VALUE].toArray();
+        Portion portion;
+        portion.read(tabKey);
+        QSet<Position>* positions = new QSet<Position>;
+
+        for (int j = 0; j < tabValue.size(); j++) {
+            QJsonArray tabPosition = tabValue.at(j).toArray();
+            Position position;
+            position.read(tabPosition);
+            positions->insert(position);
+        }
+        overflow.insert(portion, positions);
+    }
+}
+
+// -------------------------------------------------------
+
+void MapProperties::writeOverflow(QJsonObject &json, const QHash<Portion, QSet<
+    Position> *> &overflow, QString jsonLabel) const
+{
+    QHash<Portion, QSet<Position>*>::const_iterator i;
+    QJsonArray tabOverflow;
+    for (i = overflow.begin(); i != overflow.end(); i++)
+    {
+        Portion portion = i.key();
+        QSet<Position>* positions = i.value();
+        QJsonObject objHash;
+        QJsonArray tabKey;
+        QJsonArray tabValue;
+
+        portion.write(tabKey);
+        QSet<Position>::iterator j;
+        for (j = positions->begin(); j != positions->end(); j++) {
+            Position position = *j;
+            QJsonArray tabPosition;
+            position.write(tabPosition);
+            tabValue.append(tabPosition);
+        }
+
+        objHash["k"] = tabKey;
+        objHash["v"] = tabValue;
+        tabOverflow.append(objHash);
+    }
+    json[jsonLabel] = tabOverflow;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -401,28 +481,17 @@ void MapProperties::read(const QJsonObject &json){
         ->systemDatas()->modelColors());
 
     // Overflow
-    QJsonArray tabOverflow = json["ofsprites"].toArray();
-    for (int i = 0; i < tabOverflow.size(); i++) {
-        QJsonObject objHash = tabOverflow.at(i).toObject();
-        QJsonArray tabKey = objHash["k"].toArray();
-        QJsonArray tabValue = objHash["v"].toArray();
-        Portion portion;
-        portion.read(tabKey);
-        QSet<Position>* positions = new QSet<Position>;
-
-        for (int j = 0; j < tabValue.size(); j++) {
-            QJsonArray tabPosition = tabValue.at(j).toArray();
-            Position position;
-            position.read(tabPosition);
-            positions->insert(position);
-        }
-        m_outOverflowSprites.insert(portion, positions);
-    }
+    this->readOverflow(json[JSON_OVERFLOW_SPRITES].toArray(),
+        m_outOverflowSprites);
+    this->readOverflow(json[JSON_OVERFLOW_OBJECTS3D].toArray(),
+        m_outOverflowObjects3D);
+    this->readOverflow(json[JSON_OVERFLOW_MOUNTAINS].toArray(),
+        m_outOverflowMountains);
 }
 
 // -------------------------------------------------------
 
-void MapProperties::write(QJsonObject &json) const{
+void MapProperties::write(QJsonObject &json) const {
     SystemLang::write(json);
     QJsonObject obj;
 
@@ -449,28 +518,7 @@ void MapProperties::write(QJsonObject &json) const{
     }
 
     // Overflow
-    QHash<Portion, QSet<Position>*>::const_iterator i;
-    QJsonArray tabOverflow;
-    for (i = m_outOverflowSprites.begin(); i != m_outOverflowSprites.end(); i++)
-    {
-        Portion portion = i.key();
-        QSet<Position>* positions = i.value();
-        QJsonObject objHash;
-        QJsonArray tabKey;
-        QJsonArray tabValue;
-
-        portion.write(tabKey);
-        QSet<Position>::iterator j;
-        for (j = positions->begin(); j != positions->end(); j++) {
-            Position position = *j;
-            QJsonArray tabPosition;
-            position.write(tabPosition);
-            tabValue.append(tabPosition);
-        }
-
-        objHash["k"] = tabKey;
-        objHash["v"] = tabValue;
-        tabOverflow.append(objHash);
-    }
-    json["ofsprites"] = tabOverflow;
+    this->writeOverflow(json, m_outOverflowSprites, JSON_OVERFLOW_SPRITES);
+    this->writeOverflow(json, m_outOverflowObjects3D, JSON_OVERFLOW_OBJECTS3D);
+    this->writeOverflow(json, m_outOverflowMountains, JSON_OVERFLOW_MOUNTAINS);
 }
