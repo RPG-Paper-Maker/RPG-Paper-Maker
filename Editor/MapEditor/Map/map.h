@@ -67,6 +67,8 @@ public:
     void removeOverflowSprites(Position& p, Portion& portion);
     void addOverflowObjects3D(Position& p, Portion& portion);
     void removeOverflowObjects3D(Position& p, Portion& portion);
+    void addOverflowMountains(Position& p, Portion& portion);
+    void removeOverflowMountains(Position& p, Portion& portion);
 
     void initializeCursor(QVector3D *position);
     static void writeNewMap(QString path, MapProperties& properties);

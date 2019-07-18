@@ -101,16 +101,40 @@ bool MountainDatas::operator!=(const MountainDatas& other) const {
 //
 // -------------------------------------------------------
 
+int MountainDatas::width() const {
+    return m_widthSquares + (this->widthOnlyPixelsPlus() > 0 ? 1 : 0);
+}
+
+// -------------------------------------------------------
+
+int MountainDatas::height(int yPlus) const {
+    return m_heightSquares + (this->heightOnlyPixelsPlus() + yPlus > 0 ? 1 : 0);
+}
+
+// -------------------------------------------------------
+
+int MountainDatas::widthOnlyPixelsPlus() const {
+    return static_cast<int>(m_widthPixels * RPM::get()->getSquareSize() / 100);
+}
+
+// -------------------------------------------------------
+
+int MountainDatas::heightOnlyPixelsPlus() const {
+    return static_cast<int>(m_heightPixels * RPM::get()->getSquareSize() / 100);
+}
+
+// -------------------------------------------------------
+
 int MountainDatas::widthTotalPixels() const {
-    return m_widthSquares * RPM::get()->getSquareSize() + static_cast<int>(
-        m_widthPixels * RPM::get()->getSquareSize() / 100);
+    return m_widthSquares * RPM::get()->getSquareSize() + this
+        ->widthOnlyPixelsPlus();
 }
 
 // -------------------------------------------------------
 
 int MountainDatas::heightTotalPixels() const {
-    return m_heightSquares * RPM::get()->getSquareSize() + static_cast<int>(
-        m_heightPixels * RPM::get()->getSquareSize() / 100);
+    return m_heightSquares * RPM::get()->getSquareSize() + this
+        ->heightOnlyPixelsPlus();
 }
 
 // -------------------------------------------------------
@@ -366,9 +390,12 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
     vecBackA.setY(yTop);
     vecBackA.setZ(zBack);
 
-    // Box collisions
+    // Box collisions & overflow
     m_box = QBox3D(QVector3D(xLeft, yTop, position.z() * squareSize), QVector3D(
         xRight, yBot, (position.z() + 1) * squareSize));
+    m_boxOverflow = QBox3D(QVector3D(xLeft - wp, yTop, (position.z() *
+        squareSize) - wp), QVector3D(xRight + wp, yBot, ((position.z() + 1) *
+        squareSize) + wp));
 
     // Bot
     if (!m_bot) {

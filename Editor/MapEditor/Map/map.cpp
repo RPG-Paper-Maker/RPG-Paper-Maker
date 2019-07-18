@@ -204,6 +204,18 @@ void Map::removeOverflowObjects3D(Position &p, Portion &portion) {
 
 // -------------------------------------------------------
 
+void Map::addOverflowMountains(Position& p, Portion& portion) {
+    m_mapProperties->addOverflowMountains(p, portion);
+}
+
+// -------------------------------------------------------
+
+void Map::removeOverflowMountains(Position& p, Portion& portion) {
+    m_mapProperties->removeOverflowMountains(p, portion);
+}
+
+// -------------------------------------------------------
+
 void Map::initializeCursor(QVector3D *position) {
     m_cursor = new Cursor(position);
     m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");

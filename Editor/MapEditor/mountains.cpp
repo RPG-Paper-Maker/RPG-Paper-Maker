@@ -124,20 +124,16 @@ bool Mountains::isEmpty() const{
 void Mountains::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
     &p, MountainDatas *mountain)
 {
-    /*
     Portion currentPortion;
-    Map::getGlobalPortion(p, currentPortion);
-    double scale = mountain->datas()->scale();
-    int x = Common::ceil(mountain->xMin() * scale);
-    int y = Common::ceil(mountain->yMin() * scale);
-    int z = Common::ceil(mountain->zMin() * scale);
-    int r = Common::ceil(mountain->xMax() * scale);
-    int h = Common::ceil(mountain->yMax() * scale);
-    int d = Common::ceil(mountain->zMax() * scale);
+    int width, height;
 
-    for (int i = x; i < r; i++) {
-        for (int j = y; j < h; j++) {
-            for (int k = z; k < d; k++) {
+    Map::getGlobalPortion(p, currentPortion);
+    width = mountain->width();
+    height = mountain->height(p.getYpx(RPM::get()->getSquareSize()));
+
+    for (int i = -width; i <= width; i++) {
+        for (int j = 0; j < height; j++) {
+            for (int k = -width; k <= width; k++) {
                 Position newPosition = p;
                 newPosition.addX(i);
                 newPosition.addY(j);
@@ -150,7 +146,6 @@ void Mountains::getSetPortionsOverflow(QSet<Portion> &portionsOverflow, Position
             }
         }
     }
-    */
 }
 
 // -------------------------------------------------------
@@ -304,7 +299,6 @@ void Mountains::setMountain(QSet<Portion> &portionsOverflow, Position &p,
 void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
                                 bool add)
 {
-    /*
     Map* map = RPM::get()->project()->currentMap();
     for (QSet<Portion>::iterator i = portionsOverflow.begin(); i !=
             portionsOverflow.end(); i++)
@@ -336,7 +330,6 @@ void Mountains::addRemoveOverflow(QSet<Portion>& portionsOverflow, Position& p,
             }
         }
     }
-    */
 }
 
 // -------------------------------------------------------
@@ -435,17 +428,38 @@ void Mountains::removeMountainsOut(MapProperties &properties) {
 MapElement* Mountains::updateRaycasting(float &finalDistance, Position
     &finalPosition, QRay3D &ray)
 {
-    MapElement* element = nullptr;
+    MapElement *element, *newElement;
+    Position position;
+    Portion portion;
+    MountainDatas *mountain;
+    Map *map;
+    MapPortion *mapPortion;
 
+    element = nullptr;
     for (QHash<Position, MountainDatas *>::iterator i = m_all.begin(); i !=
         m_all.end(); i++)
     {
-        Position position = i.key();
-        MountainDatas *mountain = i.value();
+        position = i.key();
+        mountain = i.value();
         if (this->updateRaycastingAt(position, mountain, finalDistance,
             finalPosition, ray))
         {
             element = mountain;
+        }
+    }
+
+    // Overflow
+    map = RPM::get()->project()->currentMap();
+    for (QSet<Position>::iterator i = m_overflow.begin(); i != m_overflow.end();
+        i++)
+    {
+        position = *i;
+        map->getLocalPortion(position, portion);
+        mapPortion = map->mapPortion(portion);
+        newElement = mapPortion->updateRaycastingOverflowMountain(position,
+            finalDistance, finalPosition, ray);
+        if (newElement != nullptr) {
+            element = newElement;
         }
     }
 

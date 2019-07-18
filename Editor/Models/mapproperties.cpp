@@ -52,12 +52,8 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
 MapProperties::~MapProperties()
 {
     this->clearOverflowSprites();
-    QHash<Portion, QSet<Position>*>::const_iterator i;
-    for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
-         i++)
-    {
-        delete *i;
-    }
+    this->clearOverflowObjects3D();
+    this->clearOverflowMountains();
 
     delete m_music;
     delete m_backgroundSound;
@@ -133,6 +129,31 @@ void MapProperties::clearOverflowSprites() {
 
 // -------------------------------------------------------
 
+void MapProperties::clearOverflowObjects3D() {
+    QHash<Portion, QSet<Position>*>::iterator i;
+    for (i = m_outOverflowObjects3D.begin(); i != m_outOverflowObjects3D.end();
+         i++)
+    {
+        delete *i;
+    }
+    m_outOverflowObjects3D.clear();
+}
+
+// -------------------------------------------------------
+
+
+void MapProperties::clearOverflowMountains() {
+    QHash<Portion, QSet<Position>*>::iterator i;
+    for (i = m_outOverflowMountains.begin(); i != m_outOverflowMountains.end();
+         i++)
+    {
+        delete *i;
+    }
+    m_outOverflowMountains.clear();
+}
+
+// -------------------------------------------------------
+
 void MapProperties::addOverflow(Position& p, Portion& portion, QHash<Portion,
     QSet<Position>*> &hash)
 {
@@ -184,6 +205,18 @@ void MapProperties::addOverflowObjects3D(Position &p, Portion& portion) {
 
 void MapProperties::removeOverflowObjects3D(Position& p, Portion& portion) {
     removeOverflow(p, portion, m_outOverflowObjects3D);
+}
+
+// -------------------------------------------------------
+
+void MapProperties::addOverflowMountains(Position &p, Portion& portion) {
+    addOverflow(p, portion, m_outOverflowMountains);
+}
+
+// -------------------------------------------------------
+
+void MapProperties::removeOverflowMountains(Position& p, Portion& portion) {
+    removeOverflow(p, portion, m_outOverflowMountains);
 }
 
 // -------------------------------------------------------
@@ -309,6 +342,34 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
 }
 
 // -------------------------------------------------------
+
+MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
+    float &finalDistance, Position &finalPosition, QRay3D &ray)
+{
+    Map* map = RPM::get()->project()->currentMap();
+    QSet<Position>* positions = m_outOverflowMountains.value(portion);
+    MapElement *element = nullptr;
+    if (positions != nullptr) {
+        QSet<Position>::iterator i;
+        for (i = positions->begin(); i != positions->end(); i++) {
+            Position position = *i;
+            Portion portion;
+            map->getLocalPortion(position, portion);
+            MapPortion* mapPortion = map->mapPortion(portion);
+            if (mapPortion != nullptr) {
+                element = mapPortion->updateRaycastingOverflowMountain(position
+                    , finalDistance, finalPosition, ray);
+                if (element != nullptr) {
+                    return element;
+                }
+            }
+        }
+    }
+
+    return element;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -357,7 +418,6 @@ void MapProperties::read(const QJsonObject &json){
         }
         m_outOverflowSprites.insert(portion, positions);
     }
-    tabOverflow = json["of3d"].toArray();
 }
 
 // -------------------------------------------------------

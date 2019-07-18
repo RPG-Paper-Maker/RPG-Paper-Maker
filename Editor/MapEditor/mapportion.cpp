@@ -307,6 +307,18 @@ void MapPortion::removeOverflowObjects3D(Position& p) {
 
 // -------------------------------------------------------
 
+void MapPortion::addOverflowMountains(Position &p) {
+    m_mountains->addOverflow(p);
+}
+
+// -------------------------------------------------------
+
+void MapPortion::removeOverflowMountains(Position& p) {
+    m_mountains->removeOverflow(p);
+}
+
+// -------------------------------------------------------
+
 void MapPortion::removeLandOut(MapProperties& properties) {
     m_lands->removeLandOut(properties);
 }
@@ -322,6 +334,13 @@ void MapPortion::removeSpritesOut(MapProperties& properties) {
 void MapPortion::removeObjects3DOut(MapProperties& properties) {
     m_objects3D->removeObjects3DOut(properties);
 }
+
+// -------------------------------------------------------
+
+void MapPortion::removeMountainsOut(MapProperties& properties) {
+    m_mountains->removeMountainsOut(properties);
+}
+
 
 // -------------------------------------------------------
 
@@ -425,12 +444,30 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
 MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
     float &finalDistance, Position &finalPosition, QRay3D& ray)
 {
-    Object3DDatas *object3D = m_objects3D->object3DAt(position);
+    Object3DDatas *object3D;
 
+    object3D = m_objects3D->object3DAt(position);
     if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
         finalPosition, ray))
     {
         return object3D;
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+MapElement * MapPortion::updateRaycastingOverflowMountain(Position &position,
+    float &finalDistance, Position &finalPosition, QRay3D &ray)
+{
+    MountainDatas *mountain;
+
+    mountain = m_mountains->mountainAt(position);
+    if (m_mountains->updateRaycastingAt(position, mountain, finalDistance,
+        finalPosition, ray))
+    {
+        return mountain;
     }
 
     return nullptr;

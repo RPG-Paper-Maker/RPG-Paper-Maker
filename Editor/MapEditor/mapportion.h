@@ -96,11 +96,14 @@ public:
     void removeOverflowSprites(Position& p);
     void addOverflowObjects3D(Position& p);
     void removeOverflowObjects3D(Position& p);
+    void addOverflowMountains(Position& p);
+    void removeOverflowMountains(Position& p);
     void removeLandOut(MapProperties& properties);
     void removeSpritesOut(MapProperties& properties);
     void removeObjects3DOut(MapProperties& properties);
-    void removeObjectsOut(QList<int>& listDeletedObjectsIDs,
-                          MapProperties& properties);
+    void removeMountainsOut(MapProperties& properties);
+    void removeObjectsOut(QList<int>& listDeletedObjectsIDs, MapProperties
+        &properties);
     void clearPreview();
     void addPreview(Position& p, MapElement* element);
     void addPreviewDelete(Position& p);
@@ -124,10 +127,10 @@ public:
                                                Position &finalPosition,
                                                QRay3D& ray,
                                                double cameraHAngle);
-    MapElement* updateRaycastingOverflowObject3D(Position& position,
-                                               float &finalDistance,
-                                               Position &finalPosition,
-                                               QRay3D& ray);
+    MapElement * updateRaycastingOverflowObject3D(Position &position, float
+        &finalDistance, Position &finalPosition, QRay3D &ray);
+    MapElement * updateRaycastingOverflowMountain(Position &position, float
+        &finalDistance, Position &finalPosition, QRay3D &ray);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);

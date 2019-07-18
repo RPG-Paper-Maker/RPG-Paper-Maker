@@ -39,6 +39,8 @@ public:
     virtual ~MapProperties();
 
     void clearOverflowSprites();
+    void clearOverflowObjects3D();
+    void clearOverflowMountains();
     QString realName() const;
     int length() const;
     int width() const;
@@ -64,6 +66,8 @@ public:
     void removeOverflowSprites(Position& p, Portion& portion);
     void addOverflowObjects3D(Position& p, Portion& portion);
     void removeOverflowObjects3D(Position& p, Portion& portion);
+    void addOverflowMountains(Position& p, Portion& portion);
+    void removeOverflowMountains(Position& p, Portion& portion);
 
     bool isInGrid(Position3D& position, int squareSize, int offset) const;
     void getPortionsNumber(int& lx, int& ld, int &lh, int& lz);
@@ -73,6 +77,8 @@ public:
         &finalDistance, Position &finalPosition, QRay3D& ray, double
         cameraHAngle);
     MapElement * updateRaycastingOverflowObjects3D(Portion& portion, float
+        &finalDistance, Position &finalPosition, QRay3D &ray);
+    MapElement * updateRaycastingOverflowMountains(Portion& portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray);
 
     virtual void read(const QJsonObject &json);
@@ -90,6 +96,7 @@ protected:
     bool m_isSkyColor;
     QHash<Portion, QSet<Position>*> m_outOverflowSprites;
     QHash<Portion, QSet<Position>*> m_outOverflowObjects3D;
+    QHash<Portion, QSet<Position>*> m_outOverflowMountains;
 };
 
 #endif // MAPPROPERTIES_H

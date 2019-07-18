@@ -72,6 +72,11 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
                     ->updateRaycastingOverflowObjects3D(globalPortion,
                     m_distanceObject3D, m_positionOnObject3D, m_ray);
             }
+            if (m_elementOnMountain == nullptr) {
+                m_elementOnMountain = m_map->mapProperties()
+                    ->updateRaycastingOverflowMountains(globalPortion,
+                    m_distanceMountain, m_positionOnMountain, m_ray);
+            }
         }
         else {
             if (m_elementOnLand == nullptr) {
@@ -139,6 +144,11 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
         m_positionOnObject3D.setCenterX(0);
         m_positionOnObject3D.setCenterZ(0);
     }
+
+    if (m_distanceMountain == 0.0f) {
+        m_positionOnMountain = m_positionOnLand;
+    }
+
     if (m_distanceObject == 0.0f) {
         m_positionOnObject = m_positionOnLand;
     }

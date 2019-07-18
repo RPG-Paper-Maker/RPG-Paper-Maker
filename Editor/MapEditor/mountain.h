@@ -61,6 +61,10 @@ public:
     bool operator==(const MountainDatas& other) const;
     bool operator!=(const MountainDatas& other) const;
 
+    int width() const;
+    int height(int yPlus) const;
+    int widthOnlyPixelsPlus() const;
+    int heightOnlyPixelsPlus() const;
     int widthTotalPixels() const;
     int heightTotalPixels() const;
     void drawEntireFaces(bool left, bool right, float angle, QVector3D &center,
@@ -106,6 +110,7 @@ protected:
     bool m_right;
 
     QBox3D m_box;
+    QBox3D m_boxOverflow;
 };
 
 #endif // MOUNTAIN_H
