@@ -57,6 +57,7 @@ public:
     void initializeMessage(QStandardItemModel *parameters = nullptr,
         QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
+    void initializeNumberAndUpdate(PrimitiveValue *m, bool isInteger = true);
     void initializeNumberVariableAndUpdate(PrimitiveValue *m);
     void initializeDataBaseAndUpdate(PrimitiveValue *m);
     void initializeMessageAndUpdate(PrimitiveValue *m);

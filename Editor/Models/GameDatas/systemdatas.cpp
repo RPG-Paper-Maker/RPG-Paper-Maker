@@ -25,6 +25,8 @@ const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
+const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
+const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
 
 // -------------------------------------------------------
 //
@@ -34,6 +36,8 @@ const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 
 SystemDatas::SystemDatas() :
     m_projectName(new LangsTranslation("Project without name")),
+    m_mountainCollisionHeight(new PrimitiveValue(8)),
+    m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
@@ -50,6 +54,9 @@ SystemDatas::SystemDatas() :
 
 SystemDatas::~SystemDatas() {
     delete m_projectName;
+    delete m_mountainCollisionHeight;
+    delete m_mountainCollisionAngle;
+
     SuperListItem::deleteModel(m_modelColors);
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
@@ -95,6 +102,14 @@ void SystemDatas::setPortionRay(int p) { m_portionsRay = p; }
 int SystemDatas::squareSize() const { return m_squareSize; }
 
 void SystemDatas::setSquareSize(int i) { m_squareSize = i; }
+
+PrimitiveValue * SystemDatas::mountainCollisionHeight() const {
+    return m_mountainCollisionHeight;
+}
+
+PrimitiveValue * SystemDatas::mountainCollisionAngle() const {
+    return m_mountainCollisionAngle;
+}
 
 int SystemDatas::idMapHero() const {
     return m_idMapHero;
@@ -283,6 +298,14 @@ void SystemDatas::read(const QJsonObject &json){
     m_isScreenWindow = json[JSON_IS_SCREEN_WINDOW].toBool();
     m_portionsRay = json["pr"].toInt();
     m_squareSize = json["ss"].toInt();
+    if (json.contains(JSON_MOUNTAIN_COLLISION_HEIGHT)) {
+        m_mountainCollisionHeight->read(json[JSON_MOUNTAIN_COLLISION_HEIGHT]
+            .toObject());
+    }
+    if (json.contains(JSON_MOUNTAIN_COLLISION_ANGLE)) {
+        m_mountainCollisionAngle->read(json[JSON_MOUNTAIN_COLLISION_ANGLE]
+            .toObject());
+    }
     m_idMapHero = json["idMapHero"].toInt();
     m_idObjectHero = json["idObjHero"].toInt();
     m_pathBR = json["pathBR"].toString();
@@ -358,6 +381,16 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
     json["pr"] = m_portionsRay;
     json["ss"] = m_squareSize;
+    if (m_mountainCollisionHeight->numberValue() != 8) {
+        obj = QJsonObject();
+        m_mountainCollisionHeight->write(obj);
+        json[JSON_MOUNTAIN_COLLISION_HEIGHT] = obj;
+    }
+    if (m_mountainCollisionAngle->numberDoubleValue() != 45.0) {
+        obj = QJsonObject();
+        m_mountainCollisionAngle->write(obj);
+        json[JSON_MOUNTAIN_COLLISION_ANGLE] = obj;
+    }
     json["idMapHero"] = m_idMapHero;
     json["idObjHero"] = m_idObjectHero;
     json["pathBR"] = m_pathBR;

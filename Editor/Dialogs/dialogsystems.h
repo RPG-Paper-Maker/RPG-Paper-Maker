@@ -37,9 +37,12 @@ class DialogSystems : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSystems(GameDatas *gameDatas, QWidget *parent = 0);
+    explicit DialogSystems(GameDatas *gameDatas, QWidget *parent = nullptr);
     ~DialogSystems();
     int getSquareSize() const;
+
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
 
 private:
     Ui::DialogSystems *ui;

@@ -193,6 +193,16 @@ void PanelPrimitiveValue::initializeModel(PrimitiveValue *m) {
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeNumberAndUpdate(PrimitiveValue *m, bool
+    isInteger)
+{
+    initializeNumber(m->modelParameter(), m->modelProperties(), isInteger);
+    initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initializeNumberVariableAndUpdate(PrimitiveValue *m)
 {
     initializeNumberVariable();

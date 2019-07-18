@@ -38,6 +38,8 @@ public:
     static const QString JSON_WINDOW_SKINS;
     static const QString JSON_LAST_MAJOR_VERSION;
     static const QString JSON_LAST_MINOR_VERSION;
+    static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
+    static const QString JSON_MOUNTAIN_COLLISION_ANGLE;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -55,6 +57,8 @@ public:
     void setPortionRay(int p);
     int squareSize() const;
     void setSquareSize(int i);
+    PrimitiveValue * mountainCollisionHeight() const;
+    PrimitiveValue * mountainCollisionAngle() const;
     int idMapHero() const;
     void setIdMapHero(int i);
     int idObjectHero() const;
@@ -92,6 +96,8 @@ private:
     bool m_isScreenWindow;
     int m_portionsRay;
     int m_squareSize;
+    PrimitiveValue *m_mountainCollisionHeight;
+    PrimitiveValue *m_mountainCollisionAngle;
     int m_idMapHero;
     int m_idObjectHero;
     QString m_pathBR;

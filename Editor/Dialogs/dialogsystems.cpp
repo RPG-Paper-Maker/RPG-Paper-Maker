@@ -44,6 +44,11 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
     initializeStates(gameDatas);
     initializeCommonReactors(gameDatas);
     initializeCommonObjects(gameDatas);
+
+    Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
+        sp->installEventFilter(this);
+        sp->clearFocus();
+    }
 }
 
 DialogSystems::~DialogSystems()
@@ -61,7 +66,18 @@ int DialogSystems::getSquareSize() const {
 //
 // -------------------------------------------------------
 
-void DialogSystems::initializeSystem(GameDatas *gameDatas){
+bool DialogSystems::eventFilter(QObject *o, QEvent *e) {
+    if (e->type() == QEvent::Wheel) {
+        e->ignore();
+        return true;
+    }
+    return QDialog::eventFilter(o, e);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::initializeSystem(GameDatas *gameDatas) {
+    SystemDatas *systemDatas;
 
     // Don't show edit name
     ui->panelSuperListColors->showEditName(false);
@@ -80,20 +96,17 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas){
     ui->panelSuperListParticules->list()->setCanEdit(true);
 
     // Values
-    ui->widgetGameName->initializeNamesTrans(RPM::get()->project()->gameDatas()
-        ->systemDatas()->projectName());
-    ui->spinBoxScreenWidth->setValue(RPM::get()->project()->gameDatas()
-        ->systemDatas()->screenWidth());
-    ui->spinBoxScreenHeight->setValue(RPM::get()->project()->gameDatas()
-        ->systemDatas()->screenHeight());
-    ui->spinBoxScreenWidth->setEnabled(RPM::get()->project()->gameDatas()
-        ->systemDatas()->isScreenWindow());
-    ui->spinBoxScreenHeight->setEnabled(RPM::get()->project()->gameDatas()
-        ->systemDatas()->isScreenWindow());
-    ui->comboBoxScreenWindow->setCurrentIndex(RPM::get()->project()->gameDatas()
-        ->systemDatas()->isScreenWindow() ? 0 : 1);
-    ui->spinBoxSquareSize->setValue(RPM::get()->project()->gameDatas()
-                                    ->systemDatas()->squareSize());
+    systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
+    ui->widgetGameName->initializeNamesTrans(systemDatas->projectName());
+    ui->spinBoxScreenWidth->setValue(systemDatas->screenWidth());
+    ui->spinBoxScreenHeight->setValue(systemDatas->screenHeight());
+    ui->spinBoxScreenWidth->setEnabled(systemDatas->isScreenWindow());
+    ui->spinBoxScreenHeight->setEnabled(systemDatas->isScreenWindow());
+    ui->comboBoxScreenWindow->setCurrentIndex(systemDatas->isScreenWindow() ? 0
+        : 1);
+    ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
+    ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas->mountainCollisionHeight());
+    ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas->mountainCollisionAngle(), false);
 
     // Initializing all the models
     ui->panelSuperListColors->list()->initializeNewItemInstance(new SystemColor);
