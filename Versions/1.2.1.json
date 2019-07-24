@@ -29,7 +29,13 @@
     ],
 	"replace": [],
 	"features": [
+        "Mountains",
+        "Tileset special elements: shortcut button to update list directly",
+        "Time commands moved to staging tab",
+        "Event hero touch added by default"
     ],
 	"bugs": [
+        "Autotiles: several autotiles in a tileset was not corresctly displayed in textures panel",
+        "Several walls in a tileset was making game loading infinite"
     ]
 }
