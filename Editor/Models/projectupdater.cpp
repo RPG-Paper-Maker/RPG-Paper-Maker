@@ -496,4 +496,9 @@ void ProjectUpdater::updateVersion_1_2_1() {
     // Shapes default
     dir.remove(RPM::PATH_RELIEFS);
     dir.mkpath(RPM::PATH_MOUNTAINS);
+
+    // Default Mountains
+    m_project->readSpecialsDatas();
+    m_project->specialElementsDatas()->setDefaulMountains();
+    m_project->writeSpecialsDatas();
 }
