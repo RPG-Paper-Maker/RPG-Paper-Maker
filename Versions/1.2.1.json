@@ -16,10 +16,25 @@
                     "repo": "Basic-Ressources",
                     "source": "Content/Pictures/Textures2D/Mountains/desert.png",
                     "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/halloween-noborders.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween-noborders.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/grass-noborders.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass-noborders.png"
+                },
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Pictures/Textures2D/Mountains/desert-noborders.png",
+                    "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert-noborders.png"
                 }
             ],
             "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains"
-        },
+        }
     ],
 	"remove": [
         {
