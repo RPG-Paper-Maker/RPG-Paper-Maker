@@ -64,26 +64,6 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Reliefs/grass.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/grass.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Reliefs/halloween.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/halloween.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Reliefs/desert.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs/desert.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Reliefs"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Walls/inside2.png",
                                         "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside2.png"
                                     },
@@ -94,6 +74,41 @@
                                     }
                                 ],
                                 "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/grass.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/halloween.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/desert.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/halloween-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween-noborders.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/grass-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass-noborders.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Mountains/desert-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert-noborders.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains"
                             },
                             {
                                 "files": [
@@ -151,6 +166,11 @@
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/Textures2D/Objects3D/cupboard.png",
                                         "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/cupboard.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Pictures/Textures2D/Objects3D/template.png",
+                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/template.png"
                                     }
                                 ],
                                 "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D"
@@ -12947,11 +12967,6 @@
             },
             {
                 "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/system-wall.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-wall.js"
-            },
-            {
-                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/scene-battle-4.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-battle-4.js"
             },
@@ -13004,11 +13019,6 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/datas-troops.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-troops.js"
-            },
-            {
-                "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/autotiles.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/autotiles.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13074,11 +13084,6 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/graphic-equip-stats.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/graphic-equip-stats.js"
-            },
-            {
-                "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/system-autotile.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-autotile.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13152,8 +13157,18 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/texture-several.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/texture-several.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/scene-menu.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-menu.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-special-element.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-special-element.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13267,6 +13282,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/mountain.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/mountain.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/graphic-text-icon.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/graphic-text-icon.js"
             },
@@ -13369,11 +13389,6 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-tileset.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-tileset.js"
-            },
-            {
-                "repo": "Game-Scripts",
-                "source": "Content/Datas/Scripts/System/texture-autotile.js",
-                "target": "Engine/Content/basic/Content/Datas/Scripts/System/texture-autotile.js"
             },
             {
                 "repo": "Game-Scripts",
