@@ -101,7 +101,8 @@ public:
     MountainDatas * removeMountain(QSet<Portion> &portionsOverflow, Position &p);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previousObj, MapEditorSubSelectionKind
-        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save);
+        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+        Position &positionPreviousFloor);
     bool deleteMountain(QSet<Portion> &portionsOverflow, Position &p,
         QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, QSet<
         MapPortion *> &update, QSet<MapPortion *> &save);

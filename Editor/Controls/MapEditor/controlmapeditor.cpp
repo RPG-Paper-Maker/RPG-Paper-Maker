@@ -698,6 +698,8 @@ MapElement * ControlMapEditor::getPositionSelected(Position &position,
         }
         return element;
     }
+
+    return nullptr;
 }
 
 // -------------------------------------------------------
@@ -1209,7 +1211,8 @@ void ControlMapEditor::performUndoRedoAction(MapEditorSubSelectionKind kind,
         if (before) {
             MountainDatas *mountain = new MountainDatas;
             mountain->read(obj);
-            stockMountain(position, mountain, true);
+            Position p;
+            stockMountain(position, mountain, p, true);
         }
         else
             eraseMountain(position, true);
@@ -1327,7 +1330,7 @@ bool ControlMapEditor::isVisible(Position3D &position) {
 // -------------------------------------------------------
 
 void ControlMapEditor::getMountainTopFloorPosition(Position &topPosition,
-    Position &p, int heightSquares, double heightPixels) const
+    Position &p, int heightSquares, double heightPixels)
 {
     double yPlus;
 

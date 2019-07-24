@@ -13,6 +13,7 @@
 #include "map.h"
 #include "rpm.h"
 #include "common.h"
+#include "controlmapeditor.h"
 
 // -------------------------------------------------------
 //
@@ -357,20 +358,30 @@ MountainDatas * Mountains::removeMountain(QSet<Portion> &portionsOverflow,
 
 bool Mountains::addMountain(QSet<Portion> &portionsOverflow, Position &p,
     MountainDatas *mountain, QJsonObject &previousObj, MapEditorSubSelectionKind
-    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save)
+    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+    Position &positionPreviousFloor)
 {
     QSet<Portion> portionsOverflowRemove, portionsOverflowSet;
     MountainDatas *previousmountain;
     bool changed;
+    int y;
+    double yPlus;
 
     previousmountain = removeMountain(portionsOverflowRemove, p);
     changed = true;
     if (previousmountain != nullptr) {
+        y = previousmountain->heightSquares();
+        yPlus = previousmountain->heightPixels();
         previousmountain->write(previousObj);
         previousType = previousmountain->getSubKind();
         changed = (*previousmountain) != (*mountain);
         delete previousmountain;
+    } else {
+        y = mountain->heightSquares();
+        yPlus = mountain->heightPixels();
     }
+    ControlMapEditor::getMountainTopFloorPosition(positionPreviousFloor,
+        p, y, yPlus);
     setMountain(portionsOverflowSet, p, mountain);
     this->updateWithoutPreview(p, update, save);
 

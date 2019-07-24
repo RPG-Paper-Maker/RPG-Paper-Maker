@@ -76,7 +76,8 @@ public:
         QList<Position> &positions);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previous, MapEditorSubSelectionKind
-        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save);
+        &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+        Position &positionPreviousFloor);
     bool deleteMountain(QSet<Portion> &portionsOverflow, Position &p, QList<
         QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType,
         QList<Position> &positions, QSet<MapPortion *> &update, QSet<MapPortion

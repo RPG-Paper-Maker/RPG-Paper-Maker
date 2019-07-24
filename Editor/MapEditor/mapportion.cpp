@@ -194,10 +194,11 @@ bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
 
 bool MapPortion::addMountain(QSet<Portion> &portionsOverflow, Position &p,
     MountainDatas *mountain, QJsonObject &previous, MapEditorSubSelectionKind
-    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save)
+    &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,
+    Position &positionPreviousFloor)
 {
     return m_mountains->addMountain(portionsOverflow, p, mountain, previous,
-        previousType, update, save);
+        previousType, update, save, positionPreviousFloor);
 }
 
 // -------------------------------------------------------

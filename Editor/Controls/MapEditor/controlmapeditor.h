@@ -168,8 +168,8 @@ public:
     void addMountain(Position &p, int specialID, int widthSquares, double
         widthPixels, int heightSquares, double heightPixels, QRect
         &defaultFloorRect);
-    bool stockMountain(Position &p, MountainDatas *mountain, bool undoRedo =
-        false);
+    bool stockMountain(Position &p, MountainDatas *mountain, Position
+        &positionPreviousFloor, bool undoRedo = false);
     void removeMountain(Position &p);
     bool eraseMountain(Position &p, bool undoRedo = false);
     void setCursorObjectPosition(Position &p);
@@ -213,8 +213,8 @@ public:
     QString getSquareInfos(MapEditorSelectionKind kind,
         MapEditorSubSelectionKind subKind, bool layerOn, bool focus);
     bool isVisible(Position3D &position);
-    void getMountainTopFloorPosition(Position& topPosition, Position& p, int
-        heightSquares, double heightPixels) const;
+    static void getMountainTopFloorPosition(Position& topPosition, Position& p, int
+        heightSquares, double heightPixels);
     void paintGL(QMatrix4x4 &modelviewProjection, QVector3D &cameraRightWorldSpace,
         QVector3D &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace,
         MapEditorSelectionKind selectionKind,

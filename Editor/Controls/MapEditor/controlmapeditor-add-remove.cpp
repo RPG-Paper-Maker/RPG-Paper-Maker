@@ -807,24 +807,28 @@ void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
     QList<Position> positions;
     MountainDatas *mountain;
     FloorDatas *topFloor;
-    Position positionFloor;
+    Position positionFloor, positionPreviousFloor;
     bool isAdded;
 
+    positionPreviousFloor = p;
     mountain = new MountainDatas(specialID, widthSquares, widthPixels,
         heightSquares, heightPixels);
-    isAdded = stockMountain(p, mountain);
+    isAdded = stockMountain(p, mountain, positionPreviousFloor);
     topFloor = new FloorDatas(new QRect(defaultFloorRect));
-    getMountainTopFloorPosition(positionFloor, p, heightSquares, heightPixels);
+    ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
+        heightSquares, heightPixels);
+    eraseLand(positionPreviousFloor, false, isAdded);
     stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors, false,
         false, isAdded);
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
         mountain = new MountainDatas(specialID, widthSquares, widthPixels,
             heightSquares, heightPixels);
-        isAdded = stockMountain(positions[i], mountain);
+        isAdded = stockMountain(positions[i], mountain, positionPreviousFloor);
         topFloor = new FloorDatas(new QRect(defaultFloorRect));
-        getMountainTopFloorPosition(positionFloor, positions[i], heightSquares,
-            heightPixels);
+        ControlMapEditor::getMountainTopFloorPosition(positionFloor, positions[i
+            ], heightSquares, heightPixels);
+        eraseLand(positionPreviousFloor, false, isAdded);
         stockLand(positionFloor, topFloor, MapEditorSubSelectionKind::Floors,
             false, false, isAdded);
     }
@@ -833,8 +837,8 @@ void ControlMapEditor::addMountain(Position &p, int specialID, int widthSquares,
 
 // -------------------------------------------------------
 
-bool ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, bool
-    undoRedo)
+bool ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain,
+    Position &positionPreviousFloor, bool undoRedo)
 {
     if (m_map->isInGrid(p) && (m_firstMouseCoords.x() == -500 || (
         m_firstMouseCoords.y() == p.y() && qFuzzyCompare(m_firstMouseCoords
@@ -852,7 +856,8 @@ bool ControlMapEditor::stockMountain(Position &p, MountainDatas *mountain, bool
                 ::None;
             QJsonObject previousFloor;
             bool changed = mapPortion->addMountain(portionsOverflow, p, mountain
-                , previous, previousType, m_portionsToUpdate, m_portionsToSave);
+                , previous, previousType, m_portionsToUpdate, m_portionsToSave,
+                positionPreviousFloor);
             if (changed && m_map->saved()) {
                 setToNotSaved();
             }
@@ -888,21 +893,23 @@ void ControlMapEditor::removeMountain(Position &p) {
     double heightPixels;
     bool isRemoved;
 
-    heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)->heightSquares();
-    heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)->heightPixels();
+    heightSquares = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+        ->heightSquares();
+    heightPixels = reinterpret_cast<MountainDatas *>(m_elementOnMountain)
+        ->heightPixels();
     traceLine(m_previousMouseCoords, p, positions);
     for (int i = 0; i < positions.size(); i++) {
         isRemoved = eraseMountain(positions[i]);
         if (isRemoved) {
-            getMountainTopFloorPosition(positionFloor, positions[i],
-                heightSquares, heightPixels);
+            ControlMapEditor::getMountainTopFloorPosition(positionFloor,
+                positions[i], heightSquares, heightPixels);
             eraseLand(positionFloor, false, true);
         }
     }
     isRemoved = eraseMountain(p);
     if (isRemoved) {
-        getMountainTopFloorPosition(positionFloor, p, heightSquares,
-            heightPixels);
+        ControlMapEditor::getMountainTopFloorPosition(positionFloor, p,
+            heightSquares, heightPixels);
         eraseLand(positionFloor, false, true);
     }
 

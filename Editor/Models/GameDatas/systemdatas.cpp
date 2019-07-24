@@ -36,7 +36,7 @@ const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
 
 SystemDatas::SystemDatas() :
     m_projectName(new LangsTranslation("Project without name")),
-    m_mountainCollisionHeight(new PrimitiveValue(8)),
+    m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_idMapHero(1),
     m_idObjectHero(1),
@@ -381,7 +381,7 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_IS_SCREEN_WINDOW] = m_isScreenWindow;
     json["pr"] = m_portionsRay;
     json["ss"] = m_squareSize;
-    if (m_mountainCollisionHeight->numberValue() != 8) {
+    if (m_mountainCollisionHeight->numberValue() != 4) {
         obj = QJsonObject();
         m_mountainCollisionHeight->write(obj);
         json[JSON_MOUNTAIN_COLLISION_HEIGHT] = obj;
