@@ -147,7 +147,7 @@ void MountainDatas::drawEntireFaces(bool left, bool right, float angle,
     &indexes, int &count)
 {
     QVector3D vecStepLeftA, vecStepLeftB, vecStepRightA, vecStepRightB,
-        vecCenterA, vecCenterB, vecCorner, vecCenterC;
+        vecCenterA, vecCenterB;
     int i, xKind, squareSize;
     float nbSteps;
 
@@ -156,7 +156,6 @@ void MountainDatas::drawEntireFaces(bool left, bool right, float angle,
     nbSteps = qCeil(static_cast<double>(faceHeight / squareSize));
     vecCenterA = vecFrontA + (0.5 * (vecBackA - vecFrontA));
     vecCenterB = vecFrontB + (0.5 * (vecBackB - vecFrontB));
-    vecCenterC = vecCenterA + (0.5 * (vecCenterB - vecCenterA));
 
     // Define x offset according to left / right stuff
     if (!left && right) {
@@ -179,9 +178,6 @@ void MountainDatas::drawEntireFaces(bool left, bool right, float angle,
             vertices, indexes, count, 0, vecFrontA.distanceToPoint(vecFrontB));
     } else if (faceHeight <= (2 * squareSize)) { // 2 B / T sprites
         // Bottom
-        vecCorner = vecCenterA;
-        vecCenterC = vecFrontA;
-        SpriteDatas::rotateVertexX(vecCorner, vecCenterC, 45, 0, 1, 0);
         this->drawSideCorner(xKind, MountainDatas::Y_BOT_OFFSET, angle, center,
             width, height, w, qFloor(static_cast<double>(faceHeight / 2)), wp,
             xLeft, xRight, vecCenterA.x(), vecCenterB.x(), vecFrontA.x(),

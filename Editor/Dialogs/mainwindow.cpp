@@ -680,10 +680,10 @@ void MainWindow::on_actionPlay_triggered(){
 // -------------------------------------------------------
 
 void MainWindow::on_actionAbout_triggered() {
-    QString name, website, buildDate, copyright;
-    QStringList patreonThanks;
-    patreonThanks << "Utrano" << "Florian Dufour" << "Elias Luukkanen";
+    QString name, website, buildDate, copyright, patreonThanks;
 
+    patreonThanks = "Florian Dufour, Keven Tremblay, Anana, Utrano, Dennis "
+        "Haase, Clark.";
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
@@ -694,8 +694,7 @@ void MainWindow::on_actionAbout_triggered() {
 
     QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
         "\n" + website + "\n\nBuilt on " + buildDate +
-        "\n\nPatreon special thanks: " + patreonThanks.join(", ") + "\n\n" +
-        copyright);
+        "\n\nPatreon special thanks: " + patreonThanks + "\n\n" + copyright);
 }
 
 // -------------------------------------------------------
