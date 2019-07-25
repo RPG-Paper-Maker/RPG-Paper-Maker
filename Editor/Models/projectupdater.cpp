@@ -498,7 +498,10 @@ void ProjectUpdater::updateVersion_1_2_1() {
     dir.mkpath(RPM::PATH_MOUNTAINS);
 
     // Default Mountains
+    m_project->readShapesDatas();
     m_project->readSpecialsDatas();
     m_project->specialElementsDatas()->setDefaulMountains();
     m_project->writeSpecialsDatas();
+    m_project->readTilesetsDatas();
+    m_project->writeTilesetsDatas();
 }

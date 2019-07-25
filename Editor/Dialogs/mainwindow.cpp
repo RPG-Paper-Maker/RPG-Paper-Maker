@@ -212,6 +212,7 @@ void MainWindow::enableAll(bool b){
     ui->actionAutotiles->setEnabled(b);
     ui->actionSprite_walls->setEnabled(b);
     ui->action3D_objects->setEnabled(b);
+    ui->actionMountains->setEnabled(b);
     ui->actionShow_Hide_grid->setEnabled(b);
     ui->actionShow_Hide_square_informations->setEnabled(b);
     ui->actionPlay->setEnabled(b);
@@ -248,6 +249,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionAutotiles->setEnabled(true);
     ui->actionSprite_walls->setEnabled(true);
     ui->action3D_objects->setEnabled(true);
+    ui->actionMountains->setEnabled(true);
     ui->actionShow_Hide_grid->setEnabled(true);
     ui->actionShow_Hide_square_informations->setEnabled(true);
     ui->actionPlay->setEnabled(true);
