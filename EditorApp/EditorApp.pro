@@ -134,3 +134,7 @@ QMAKE_CLEAN += "$$DESTDIR/$$APP_FILENAME"
 extraclean.commands = $$DEL_DIR_CMD $$DEST_CONTENT_DIR
 clean.depends = extraclean
 QMAKE_EXTRA_TARGETS += clean extraclean
+
+CONFIG += ordered
+DEPENDPATH += $$PWD/Editor
+PRE_TARGETDEPS += $$ROOT_DESTDIR/Editor/libRPG-Paper-Maker.a
