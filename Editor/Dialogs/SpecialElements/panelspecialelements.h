@@ -49,6 +49,8 @@ private:
 
     void hideObject3D();
     void showObject3D();
+    void hideMountain();
+    void showMountain();
     void showBox();
     void showCustomObject();
     void showCustomObjectCollision(bool b);

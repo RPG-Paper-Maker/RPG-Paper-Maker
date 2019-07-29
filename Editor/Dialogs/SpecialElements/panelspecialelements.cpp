@@ -79,6 +79,12 @@ void PanelSpecialElements::initialize(QStandardItemModel *model, PictureKind
     } else {
         hideObject3D();
     }
+    if (m_kind == PictureKind::Mountains) {
+        showMountain();
+        ui->widgetShowPicture->setCover(true);
+    } else {
+        hideMountain();
+    }
 
     // Initialize widgets and connections
     ui->panelSuperList->list()->initializeNewItemInstance(SuperListItem
@@ -142,6 +148,9 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
             (sys));
         ui->widgetPreviewObject3D->updateObject();
     }
+    if (m_kind == PictureKind::Mountains) {
+        ui->widgetShowPicture->updatePicture(picture, PictureKind::Mountains);
+    }
 }
 
 // -------------------------------------------------------
@@ -171,6 +180,21 @@ void PanelSpecialElements::hideObject3D() {
 
 void PanelSpecialElements::showObject3D() {
     ui->widgetTilesetSettings->hide();
+    ui->gridLayout_3->setRowStretch(7, 0);
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::hideMountain() {
+    ui->scrollArea->hide();
+    ui->gridLayout_3->setRowStretch(9, 0);
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::showMountain() {
+    ui->widgetTilesetSettings->hide();
+    ui->scrollArea->show();
     ui->gridLayout_3->setRowStretch(7, 0);
 }
 
