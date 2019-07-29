@@ -28,8 +28,6 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     m_initialPictureID(picture->id())
 {
     ui->setupUi(this);
-    
-    ui->widget->setAreNegIDsEnabled(RPM::isInObjectConfig);
 
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
@@ -72,6 +70,16 @@ void DialogPicturesPreview::setCurrentTexture(QRect rect) {
 
 void DialogPicturesPreview::currentTexture(QRect& rect) const{
     ui->widget->currentTexture(rect);
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogPicturesPreview::setAreNegIDsEnabled(bool b) {
+    ui->widget->setAreNegIDsEnabled(b);
 }
 
 // -------------------------------------------------------

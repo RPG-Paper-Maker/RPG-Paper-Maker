@@ -37,6 +37,7 @@ public:
 
     SuperListItem * shape() const;
     void setShape(SuperListItem *shape);
+    void setAreNegIDsEnabled(bool b);
 
     void setShapeKind(CustomShapeKind kind);
     void changeShape(SuperListItem *shape);
@@ -45,6 +46,7 @@ private:
     Ui::PanelShapes *ui;
     CustomShapeKind m_shapeKind;
     SuperListItem *m_shape;
+    bool m_areNegIDsEnabled;
 
     void showShapes(bool b);
     void updateShapeItem(QStandardItem *item);

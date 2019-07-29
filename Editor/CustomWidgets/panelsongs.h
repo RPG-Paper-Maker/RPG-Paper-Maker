@@ -45,6 +45,7 @@ public:
 
     SystemSong * song() const;
     void setSong(SystemSong *song);
+    void setAreNegIDsEnabled(bool b);
 
     void initializePrimitives(QStandardItemModel *parameters, QStandardItemModel
         *properties);
@@ -73,6 +74,7 @@ private:
     QHash<SongKind, int> m_start;
     QHash<SongKind, bool> m_endBool;
     QHash<SongKind, int> m_end;
+    bool m_areNegIDsEnabled;
 
     void showSongs(bool b);
     void updateSong(QStandardItem *item);

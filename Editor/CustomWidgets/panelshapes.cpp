@@ -27,7 +27,8 @@ PanelShapes::PanelShapes(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelShapes),
     m_shapeKind(CustomShapeKind::None),
-    m_shape(nullptr)
+    m_shape(nullptr),
+    m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
 
@@ -64,6 +65,10 @@ void PanelShapes::setShape(SuperListItem *shape) {
     m_shape = shape;
 }
 
+void PanelShapes::setAreNegIDsEnabled(bool b) {
+    m_areNegIDsEnabled = b;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -77,6 +82,7 @@ void PanelShapes::setShapeKind(CustomShapeKind kind) {
     showShapes(!isNone);
 
     if (!isNone) {
+        ui->widgetPanelIDs->list()->setAreNegIDsEnabled(m_areNegIDsEnabled);
         ui->widgetPanelIDs->initializeModel(RPM::get()->project()->shapesDatas()
             ->model(kind));
 

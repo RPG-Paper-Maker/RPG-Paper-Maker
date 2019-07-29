@@ -35,7 +35,7 @@ class DialogPicturesPreview : public QDialog
 
 public:
     explicit DialogPicturesPreview(SystemPicture* picture, PictureKind kind,
-                                   QWidget *parent = 0);
+                                   QWidget *parent = nullptr);
     ~DialogPicturesPreview();
     SystemPicture* picture() const;
     int indexX() const;
@@ -44,6 +44,8 @@ public:
     void setIndexY(int i);
     void setCurrentTexture(QRect rect);
     void currentTexture(QRect &rect) const;
+
+    void setAreNegIDsEnabled(bool b);
 
 protected:
     virtual void closeEvent(QCloseEvent *);

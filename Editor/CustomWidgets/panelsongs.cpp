@@ -38,7 +38,8 @@ PanelSongs::PanelSongs(QWidget *parent) :
     m_mediaPlayerMusicEffectTemp(&m_mediaPlayerMusicEffect2),
     m_playedMusic(nullptr),
     m_playedBackgoundSound(nullptr),
-    m_needRestartMusic(false)
+    m_needRestartMusic(false),
+    m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
 
@@ -139,6 +140,10 @@ void PanelSongs::setSong(SystemSong *song) {
     m_song = song;
 }
 
+void PanelSongs::setAreNegIDsEnabled(bool b) {
+    m_areNegIDsEnabled = b;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -163,6 +168,7 @@ void PanelSongs::setSongKind(SongKind kind) {
     showSongs(!isNone);
 
     if (!isNone) {
+        ui->widgetPanelIDs->list()->setAreNegIDsEnabled(m_areNegIDsEnabled);
         ui->widgetPanelIDs->initializeModel(RPM::get()->project()
             ->songsDatas()->model(kind));
 

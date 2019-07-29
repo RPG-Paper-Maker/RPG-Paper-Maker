@@ -24,6 +24,8 @@ DialogShapes::DialogShapes(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->panelShapes->setAreNegIDsEnabled(false);
+
     // Tree model
     ui->treeView->setModel(createFoldersModel());
     ui->treeView->expandAll();
