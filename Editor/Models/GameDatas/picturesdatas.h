@@ -34,6 +34,8 @@ public:
     void read(QString path);
     QStandardItemModel* model(PictureKind kind) const;
     void setModel(PictureKind kind, QStandardItemModel* model);
+    SystemPicture * missingPicture() const;
+
     void setDefault();
     void fillList(QList<SystemPicture*> &pictures, QList<QString> &names);
     void setDefaultPictures(QList<QString>& names, PictureKind kind);
@@ -55,6 +57,7 @@ public:
 
 private:
     QHash<PictureKind, QStandardItemModel*> m_models;
+    SystemPicture *m_missingPicture;
 };
 
 #endif // PICTURESDATAS_H

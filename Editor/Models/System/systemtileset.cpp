@@ -39,10 +39,17 @@ SystemTileset::~SystemTileset(){
 }
 
 SystemPicture* SystemTileset::picture() const {
-    return (SystemPicture*) SuperListItem::getById(
-                RPM::get()->project()->picturesDatas()
-                ->model(PictureKind::Tilesets)->invisibleRootItem(),
-                m_pictureID);
+    SystemPicture *picture;
+
+    picture = reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM
+        ::get()->project()->picturesDatas()->model(PictureKind::Tilesets)
+        ->invisibleRootItem(), m_pictureID, false));
+    if (picture == nullptr) {
+        picture = RPM::get()->project()->picturesDatas()->missingPicture();
+        picture->setId(m_pictureID);
+    }
+
+    return picture;
 }
 
 void SystemTileset::setPictureID(int id) {
@@ -78,6 +85,10 @@ QStandardItemModel* SystemTileset::model3DObjects() const {
 
 QStandardItemModel* SystemTileset::modelMountains() const {
     return m_modelMountains;
+}
+
+int SystemTileset::pictureID() const {
+    return m_pictureID;
 }
 
 // -------------------------------------------------------

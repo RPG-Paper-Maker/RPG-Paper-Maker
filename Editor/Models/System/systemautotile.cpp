@@ -39,7 +39,15 @@ SystemAutotile::~SystemAutotile()
 }
 
 SystemPicture* SystemAutotile::picture() const {
-    return pictureByKind(PictureKind::Autotiles);
+    SystemPicture *picture;
+
+    picture = this->pictureByKind(PictureKind::Autotiles);
+    if (picture == nullptr) {
+        picture = RPM::get()->project()->picturesDatas()->missingPicture();
+        picture->setId(m_pictureID);
+    }
+
+    return picture;
 }
 
 // -------------------------------------------------------

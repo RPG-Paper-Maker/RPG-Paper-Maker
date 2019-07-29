@@ -29,7 +29,7 @@ class SystemPicture : public SuperListItem
 {
 public:
     SystemPicture();
-    SystemPicture(int i, QString n, bool isBR);
+    SystemPicture(int i, QString n, bool isBR, bool isMissing = false);
     virtual ~SystemPicture();
     bool isBR() const;
     void setIsBR(bool b);
@@ -63,6 +63,7 @@ protected:
     bool m_isBR;
     QHash<QPoint, CollisionSquare*> m_collisions;
     bool m_repeatCollisions;
+    bool m_isMissing;
 };
 
 Q_DECLARE_METATYPE(SystemPicture)

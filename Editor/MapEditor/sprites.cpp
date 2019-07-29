@@ -656,17 +656,17 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
         Position position = i.key();
         SpriteWallDatas* sprite = i.value();
         int id = sprite->wallID();
-        SpritesWalls* sprites = m_wallsGL.value(id);
-        if (sprites == nullptr) {
-            sprites = new SpritesWalls;
-            m_wallsGL[id] = sprites;
-        }
         QOpenGLTexture* texture = texturesWalls.value(id);
-        if (texture == nullptr)
-            texture = texturesWalls.value(-1);
 
-        sprites->initializeVertices(position, sprite, squareSize,
-                                    texture->width(), texture->height());
+        if (texture != nullptr) {
+            SpritesWalls* sprites = m_wallsGL.value(id);
+            if (sprites == nullptr) {
+                sprites = new SpritesWalls;
+                m_wallsGL[id] = sprites;
+            }
+            sprites->initializeVertices(position, sprite, squareSize,
+                                        texture->width(), texture->height());
+        }
     }
 }
 

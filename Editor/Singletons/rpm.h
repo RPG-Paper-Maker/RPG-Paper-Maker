@@ -135,6 +135,7 @@ public:
     const static QString TEMP_UNDOREDO_MAP_FOLDER_NAME;
     const static QString dirGames;
     const static QString dirDesktop;
+    const static QString TEXTURE_MISSING;
 
     // INTEGERS
     const static int portionSize;

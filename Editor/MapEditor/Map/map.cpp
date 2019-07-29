@@ -30,7 +30,8 @@ Map::Map() :
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
-    m_textureObjectSquare(nullptr)
+    m_textureObjectSquare(nullptr),
+    m_textureMissing(nullptr)
 {
 
 }
@@ -42,7 +43,8 @@ Map::Map(int id) :
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
-    m_textureObjectSquare(nullptr)
+    m_textureObjectSquare(nullptr),
+    m_textureMissing(nullptr)
 {
     QString realName = RPM::generateMapName(id);
     QString pathMaps = Common::pathCombine(RPM::get()->project()
@@ -172,6 +174,10 @@ MapObjects* Map::objectsPortion(int x, int y, int z){
         return mapPortion->mapObjects();
 
     return nullptr;
+}
+
+QOpenGLTexture * Map::textureMissing() const {
+    return m_textureMissing;
 }
 
 // -------------------------------------------------------

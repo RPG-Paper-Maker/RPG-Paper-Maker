@@ -25,10 +25,11 @@ SystemPicture::SystemPicture() :
 
 }
 
-SystemPicture::SystemPicture(int i, QString n, bool isBR) :
+SystemPicture::SystemPicture(int i, QString n, bool isBR, bool isMissing) :
     SuperListItem(i,n),
     m_isBR(isBR),
-    m_repeatCollisions(false)
+    m_repeatCollisions(false),
+    m_isMissing(isMissing)
 {
 
 }
@@ -150,9 +151,13 @@ QString SystemPicture::getPictureTitle(PictureKind kind) {
 
 // -------------------------------------------------------
 
-QString SystemPicture::getPath(PictureKind kind) const{
-    if (id() == -1)
+QString SystemPicture::getPath(PictureKind kind) const {
+    // If NONE, return empty path
+    if (id() == -1) {
         return "";
+    } else if (m_isMissing) {
+        return RPM::TEXTURE_MISSING;
+    }
 
     QString folder = getFolder(kind, m_isBR);
 

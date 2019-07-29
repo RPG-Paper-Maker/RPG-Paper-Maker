@@ -194,10 +194,10 @@ void MapObjects::initializeVertices(int squareSize,
             } else {
                 texture = characters[graphicsId];
 
-                // If texture ID doesn't exist, load empty texture
-                if (texture == nullptr){
-                    graphicsId = -1;
-                    texture = characters[graphicsId];
+                // If texture ID doesn't exist, load missing texture
+                if (texture == nullptr) {
+                    texture = RPM::get()->project()->currentMap()
+                        ->textureMissing();
                 }
 
                 int frames = RPM::get()->project()->gameDatas()->systemDatas()

@@ -237,6 +237,9 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     {
         int textureID = it.key();
         QOpenGLTexture* texture = it.value();
+        if (texture == nullptr) {
+            texture = m_textureMissing;
+        }
         for (int i = 0; i < totalSize; i++) {
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
@@ -251,13 +254,15 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     {
         int textureID = itWalls.key();
         QOpenGLTexture* texture = itWalls.value();
-        texture->bind();
-        for (int i = 0; i < totalSize; i++) {
-            mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-                mapPortion->paintSpritesWalls(textureID);
+        if (texture != nullptr) {
+            texture->bind();
+            for (int i = 0; i < totalSize; i++) {
+                mapPortion = this->mapPortionBrut(i);
+                if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                    mapPortion->paintSpritesWalls(textureID);
+            }
+            texture->release();
         }
-        texture->release();
     }
 
     // 3D objects
@@ -267,14 +272,16 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     {
         int textureID = itObj3D.key();
         QOpenGLTexture *texture = itObj3D.value();
-        texture->bind();
-        for (int i = 0; i < totalSize; i++) {
-            mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
-                mapPortion->paintObjects3D(textureID);
+        if (texture != nullptr) {
+            texture->bind();
+            for (int i = 0; i < totalSize; i++) {
+                mapPortion = this->mapPortionBrut(i);
+                if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
+                    mapPortion->paintObjects3D(textureID);
+                }
             }
+            texture->release();
         }
-        texture->release();
     }
 
     // Mountains
@@ -314,7 +321,10 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
          it != m_texturesCharacters.end(); it++)
     {
         int textureID = it.key();
-        QOpenGLTexture* texture = it.value();
+        QOpenGLTexture *texture = it.value();
+        if (texture == nullptr) {
+            texture = m_textureMissing;
+        }
         for (int i = 0; i < totalSize; i++) {
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())

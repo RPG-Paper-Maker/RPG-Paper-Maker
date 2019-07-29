@@ -18,58 +18,73 @@
 // -------------------------------------------------------
 
 void Map::loadTextures() {
+    QImage image;
+
     deleteTextures();
 
     // Tileset
     QImage imageTileset(1, 1, QImage::Format_ARGB32);
-    QString path = m_mapProperties->tileset()->picture()->getPath(
-        PictureKind::Tilesets);
-    if (!path.isEmpty() && QFile::exists(path)) {
+    QString path = m_mapProperties->tileset()->picture()->getPath(PictureKind
+        ::Tilesets);
+    if (!path.isEmpty()) {
         imageTileset = QImage(path);
-    }
-    else {
+    } else {
         imageTileset.fill(QColor(0, 0, 0, 0));
     }
-    m_textureTileset = createTexture(imageTileset);
+    m_textureTileset = this->createTexture(imageTileset);
+
+    // Texture missing
+    image = QImage(RPM::TEXTURE_MISSING);
+    m_textureMissing = this->createTexture(image);
 
     // Characters && walls && objects3D
-    loadCharactersTextures();
-    loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
-    loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
-    loadAutotiles();
-    loadMountains();
+    this->loadCharactersTextures();
+    this->loadSpecialPictures(PictureKind::Walls, m_texturesSpriteWalls);
+    this->loadSpecialPictures(PictureKind::Object3D, m_texturesObjects3D);
+    this->loadAutotiles();
+    this->loadMountains();
 
     // Object square
-    QImage imageObjectSquare(":/textures/Ressources/object_square.png");
-    m_textureObjectSquare = createTexture(imageObjectSquare);
+    image = QImage(":/textures/Ressources/object_square.png");
+    m_textureObjectSquare = this->createTexture(image);
 }
 
 // -------------------------------------------------------
 
-void Map::deleteTextures(){
+void Map::deleteTextures() {
     if (m_textureTileset != nullptr)
         delete m_textureTileset;
     deleteCharactersTextures();
     for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesSpriteWalls.begin()
          ; i != m_texturesSpriteWalls.end(); i++)
     {
-        delete *i;
+        if (*i != nullptr) {
+            delete *i;
+        }
     }
     m_texturesSpriteWalls.clear();
     for (QHash<int, QOpenGLTexture*>::iterator i = m_texturesObjects3D.begin()
          ; i != m_texturesObjects3D.end(); i++)
     {
-        delete *i;
+        if (*i != nullptr) {
+            delete *i;
+        }
     }
     m_texturesObjects3D.clear();
-    for (int i = 0; i < m_texturesAutotiles.size(); i++)
+    for (int i = 0; i < m_texturesAutotiles.size(); i++) {
         delete m_texturesAutotiles[i];
+    }
     m_texturesAutotiles.clear();
-    for (int i = 0; i < m_texturesMountains.size(); i++)
+    for (int i = 0; i < m_texturesMountains.size(); i++) {
         delete m_texturesMountains[i];
+    }
     m_texturesMountains.clear();
-    if (m_textureObjectSquare != nullptr)
+    if (m_textureObjectSquare != nullptr) {
         delete m_textureObjectSquare;
+    }
+    if (m_textureMissing != nullptr) {
+        delete m_textureMissing;
+    }
 }
 
 // -------------------------------------------------------
@@ -87,21 +102,21 @@ void Map::deleteCharactersTextures() {
 
 // -------------------------------------------------------
 
-void Map::loadPictures(PictureKind kind,
-                                 QHash<int, QOpenGLTexture*>& textures)
+void Map::loadPictures(PictureKind kind, QHash<int, QOpenGLTexture*>& textures)
 {
-    SystemPicture* picture;
+    SystemPicture *picture;
     QStandardItemModel* model = RPM::get()->project()->picturesDatas()
             ->model(kind);
     int id;
 
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-        picture = (SystemPicture*) model->item(i)->data().value<qintptr>();
+        picture = reinterpret_cast<SystemPicture *>(model->item(i)->data().value
+            <qintptr>());
         id = picture->id();
         if (id != 0) {
             QImage image;
             loadPicture(picture, kind, image);
-            textures[id] = createTexture(image);
+            textures[id] = this->createTexture(image);
         }
     }
 }
@@ -120,23 +135,24 @@ void Map::loadSpecialPictures(PictureKind kind,
                               QHash<int, QOpenGLTexture*>& textures)
 {
     SystemSpecialElement* special;
-    SystemTileset* tileset = m_mapProperties->tileset();
-    QStandardItemModel* model = tileset->model(kind);
-    QStandardItemModel* modelSpecials = RPM::get()->project()
-            ->specialElementsDatas()->model(kind);
-    QOpenGLTexture *texture;
+    SystemTileset* tileset;
+    QStandardItemModel *model, *modelSpecials;
     int id;
+    bool loaded;
+
+    tileset = m_mapProperties->tileset();
+    modelSpecials = RPM::get()->project()->specialElementsDatas()->model(kind);
+    model = tileset->model(kind);
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-        id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
-        special = (SystemSpecialElement*) SuperListItem::getById(
-                    modelSpecials->invisibleRootItem(), id);
+        id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            qintptr>())->id();
+        special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
+            ::getById(modelSpecials->invisibleRootItem(), id));
         if (id != -1) {
             QImage image;
-            loadPicture(special->picture(), kind, image);
-            texture = textures.value(special->pictureID());
-            if (texture == nullptr) {
-                textures[special->pictureID()] = createTexture(image);
-            }
+            loaded = loadPicture(special->picture(), kind, image);
+            textures[special->id()] = loaded ? this->createTexture(image) :
+                nullptr;
         }
     }
     addEmptyPicture(textures);
@@ -144,18 +160,19 @@ void Map::loadSpecialPictures(PictureKind kind,
 
 // -------------------------------------------------------
 
-void Map::loadPicture(SystemPicture* picture, PictureKind kind,
-                      QImage& refImage)
+bool Map::loadPicture(SystemPicture* picture, PictureKind kind, QImage& refImage)
 {
     QImage image(1, 1, QImage::Format_ARGB32);
     refImage = image;
     QString path = picture->getPath(kind);
 
-    if (path.isEmpty())
+    if (path.isEmpty()) {
         image.fill(QColor(0, 0, 0, 0));
-    else {
+        return false;
+    } else {
         image.load(path);
         if (!image.isNull()) {
+
             switch (kind) {
             case PictureKind::Walls:
                 editPictureWall(image, refImage); break;
@@ -163,7 +180,9 @@ void Map::loadPicture(SystemPicture* picture, PictureKind kind,
                 refImage = image;
                 break;
             }
+            return true;
         }
+        return false;
     }
 }
 
@@ -178,16 +197,21 @@ void Map::loadAutotiles() {
     int id;
     QImage newImage(64 * m_squareSize, RPM::MAX_PIXEL_SIZE,
                     QImage::Format_ARGB32);
+    SystemPicture *picture;
     QPainter painter;
     painter.begin(&newImage);
     int offset = 0;
     TextureSeveral* textureAutotile = nullptr;
     for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
-        id = ((SuperListItem*) model->item(i)->data().value<qintptr>())->id();
-        special = (SystemSpecialElement*) SuperListItem::getById(
-                    modelSpecials->invisibleRootItem(), id);
-        textureAutotile = loadPictureAutotile(
-            painter, textureAutotile, newImage, special->picture(), offset, id);
+        id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            qintptr>())->id();
+        special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
+            ::getById(modelSpecials->invisibleRootItem(), id, false));
+        picture = special == nullptr ? RPM::get()->project()->picturesDatas()
+            ->missingPicture() : special->picture();
+
+        textureAutotile = loadPictureAutotile(painter, textureAutotile, newImage
+            , picture, offset, id);
     }
     painter.end();
 
@@ -366,6 +390,7 @@ void Map::loadMountains() {
     QPainter painter;
     int i, l, id, offset;
     TextureSeveral *textureMountain;
+    SystemPicture *picture;
 
     tileset = m_mapProperties->tileset();
     model = tileset->model(PictureKind::Mountains);
@@ -380,9 +405,11 @@ void Map::loadMountains() {
         id = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
             qintptr>())->id();
         special = reinterpret_cast<SystemSpecialElement *>(SuperListItem
-            ::getById(modelSpecials->invisibleRootItem(), id));
+            ::getById(modelSpecials->invisibleRootItem(), id, false));
+        picture = special == nullptr ? RPM::get()->project()->picturesDatas()
+            ->missingPicture() : special->picture();
         textureMountain = loadPictureMountain(painter, textureMountain,
-            newImage, special->picture(), offset, id);
+            newImage, picture, offset, id);
     }
     painter.end();
 

@@ -28,12 +28,14 @@ const QString SpecialElementsDatas::JSON_MOUNTAINS = "m";
 //
 // -------------------------------------------------------
 
-SpecialElementsDatas::SpecialElementsDatas()
+SpecialElementsDatas::SpecialElementsDatas() :
+    m_modelAutotiles(new QStandardItemModel),
+    m_modelSpriteWalls(new QStandardItemModel),
+    m_modelObjects3D(new QStandardItemModel),
+    m_modelMountains(new QStandardItemModel),
+    m_missingObject3D(nullptr)
 {
-    m_modelAutotiles = new QStandardItemModel;
-    m_modelSpriteWalls = new QStandardItemModel;
-    m_modelObjects3D = new QStandardItemModel;
-    m_modelMountains = new QStandardItemModel;
+
 }
 
 SpecialElementsDatas::~SpecialElementsDatas()
@@ -42,6 +44,9 @@ SpecialElementsDatas::~SpecialElementsDatas()
     SuperListItem::deleteModel(m_modelSpriteWalls);
     SuperListItem::deleteModel(m_modelObjects3D);
     SuperListItem::deleteModel(m_modelMountains);
+    if (m_missingObject3D != nullptr) {
+        delete m_missingObject3D;
+    }
 }
 
 void SpecialElementsDatas::read(QString path){
@@ -78,6 +83,10 @@ QStandardItemModel* SpecialElementsDatas::modelObjects3D() const {
 
 QStandardItemModel* SpecialElementsDatas::modelMountains() const {
     return m_modelMountains;
+}
+
+SystemObject3D * SpecialElementsDatas::missingObject3D() const {
+    return m_missingObject3D;
 }
 
 // -------------------------------------------------------
@@ -182,6 +191,12 @@ void SpecialElementsDatas::readSpecials(const QJsonObject &json,
         item->setText(sys->toString());
         this->model(kind)->appendRow(item);
     }
+
+    // Missing object 3D
+    if (m_missingObject3D != nullptr) {
+        delete m_missingObject3D;
+    }
+    m_missingObject3D = new SystemObject3D;
 }
 
 // -------------------------------------------------------

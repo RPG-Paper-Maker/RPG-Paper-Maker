@@ -133,6 +133,7 @@ const QString RPM::dirGames = Common::pathCombine(
                 QStandardPaths::StandardLocation::DocumentsLocation),
             gamesFolderName);
 const QString RPM::dirDesktop = "desktop";
+const QString RPM::TEXTURE_MISSING = ":/textures/Ressources/missing.png";
 
 const int RPM::portionSize = 16;
 const int RPM::BASIC_SQUARE_SIZE = 32;

@@ -43,7 +43,8 @@ void WidgetAutotilesSelector::currentTexture(QRect &rect) const {
 // -------------------------------------------------------
 
 void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
-    QString path = autotile->picture()->getPath(PictureKind::Autotiles);
+    QString path = autotile == nullptr ? RPM::TEXTURE_MISSING : autotile
+        ->picture()->getPath(PictureKind::Autotiles);
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     float coef = RPM::coefReverseSquareSize();

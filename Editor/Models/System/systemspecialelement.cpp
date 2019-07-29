@@ -231,7 +231,7 @@ void SystemSpecialElement::updateGenericObjectName(SuperListItem *obj,
 SystemPicture* SystemSpecialElement::pictureByKind(PictureKind kind) const {
     return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
         ->project()->picturesDatas()->model(kind)->invisibleRootItem(),
-        m_pictureID));
+        m_pictureID, false));
 }
 
 // -------------------------------------------------------

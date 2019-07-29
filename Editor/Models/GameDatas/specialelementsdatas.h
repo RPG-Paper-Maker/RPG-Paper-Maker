@@ -14,7 +14,7 @@
 
 #include <QStandardItemModel>
 #include "serializable.h"
-#include "systemspecialelement.h"
+#include "systemobject3d.h"
 
 // -------------------------------------------------------
 //
@@ -41,6 +41,7 @@ public:
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* modelObjects3D() const;
     QStandardItemModel* modelMountains() const;
+    SystemObject3D * missingObject3D() const;
     void setDefault();
     void setDefaultSpriteWalls();
     void setDefaultAutotiles();
@@ -61,6 +62,7 @@ protected:
     QStandardItemModel* m_modelSpriteWalls;
     QStandardItemModel* m_modelObjects3D;
     QStandardItemModel* m_modelMountains;
+    SystemObject3D *m_missingObject3D;
 };
 
 #endif // SPECIALELEMENTSDATAS_H

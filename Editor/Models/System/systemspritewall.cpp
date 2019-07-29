@@ -10,6 +10,7 @@
 */
 
 #include "systemspritewall.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -35,7 +36,15 @@ SystemSpriteWall::~SystemSpriteWall()
 }
 
 SystemPicture* SystemSpriteWall::picture() const {
-    return pictureByKind(PictureKind::Walls);
+    SystemPicture *picture;
+
+    picture = this->pictureByKind(PictureKind::Walls);
+    if (picture == nullptr) {
+        picture = RPM::get()->project()->picturesDatas()->missingPicture();
+        picture->setId(m_pictureID);
+    }
+
+    return picture;
 }
 
 // -------------------------------------------------------

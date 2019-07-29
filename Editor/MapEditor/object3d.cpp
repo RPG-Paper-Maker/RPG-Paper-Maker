@@ -80,9 +80,20 @@ Object3DDatas * Object3DDatas::instanciateFromJSON(const QJsonObject &json) {
 // -------------------------------------------------------
 
 SystemObject3D * Object3DDatas::readFromJSON(const QJsonObject &json) {
-    return reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM::get()
-        ->project()->specialElementsDatas()->model(PictureKind::Object3D)
-        ->invisibleRootItem(), json[JSON_DATAS_ID].toInt()));
+    SystemObject3D *object;
+    int id;
+
+    id = json[JSON_DATAS_ID].toInt();
+    object = reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM
+        ::get()->project()->specialElementsDatas()->model(PictureKind::Object3D)
+        ->invisibleRootItem(), id, false));
+    if (object == nullptr) {
+        object = RPM::get()->project()->specialElementsDatas()
+            ->missingObject3D();
+        object->setId(id);
+    }
+
+    return object;
 }
 
 // -------------------------------------------------------

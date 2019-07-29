@@ -19,7 +19,8 @@
 //
 // -------------------------------------------------------
 
-PicturesDatas::PicturesDatas()
+PicturesDatas::PicturesDatas() :
+    m_missingPicture(new SystemPicture(-2, "picture_not_found", true, true))
 {
 
 }
@@ -27,8 +28,11 @@ PicturesDatas::PicturesDatas()
 PicturesDatas::~PicturesDatas()
 {
     QHash<PictureKind, QStandardItemModel*>::iterator i;
-    for (i = m_models.begin(); i != m_models.end(); i++)
+    for (i = m_models.begin(); i != m_models.end(); i++) {
         SuperListItem::deleteModel(i.value());
+    }
+
+    delete m_missingPicture;
 }
 
 void PicturesDatas::read(QString path){
@@ -41,6 +45,10 @@ QStandardItemModel* PicturesDatas::model(PictureKind kind) const {
 
 void PicturesDatas::setModel(PictureKind kind, QStandardItemModel *model) {
     m_models[kind] = model;
+}
+
+SystemPicture * PicturesDatas::missingPicture() const {
+    return m_missingPicture;
 }
 
 // -------------------------------------------------------

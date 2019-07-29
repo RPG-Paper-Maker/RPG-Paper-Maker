@@ -428,13 +428,16 @@ void Objects3D::initializeVertices(QHash<Position, MapElement *>
     {
         Position position = i.key();
         Object3DDatas *object3D = i.value();
-        int id = object3D->textureID();
-        Objects3DGL *objects = m_allGL.value(id);
-        if (objects == nullptr) {
-            objects = new Objects3DGL;
-            m_allGL[id] = objects;
+
+        if (object3D->textureID() != -1) {
+            int id = object3D->datas()->id();
+            Objects3DGL *objects = m_allGL.value(id);
+            if (objects == nullptr) {
+                objects = new Objects3DGL;
+                m_allGL[id] = objects;
+            }
+            objects->initializeVertices(position, object3D);
         }
-        objects->initializeVertices(position, object3D);
     }
 }
 

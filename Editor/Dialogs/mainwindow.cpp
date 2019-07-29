@@ -538,7 +538,7 @@ void MainWindow::on_actionShapes_manager_triggered() {
 
 void MainWindow::on_actionKeyboard_controls_triggered(){
     DialogKeyBoardControls dialog(project, RPM::get()->engineSettings());
-    if (openDialog(dialog) == QDialog::Accepted){
+    if (openDialog(dialog) == QDialog::Accepted) {
         RPM::get()->saveEngineSettings();
         project->writeKeyBoardDatas();
         project->readKeyBoardDatas();
@@ -553,20 +553,26 @@ void MainWindow::on_actionKeyboard_controls_triggered(){
 
 void MainWindow::on_actionCollisions_manager_triggered() {
     DialogCollisions dialog;
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
         project->writePicturesDatas();
-    else
+        project->writeSpecialsDatas();
+    } else {
         project->readPicturesDatas();
+        project->readSpecialsDatas();
+    }
 }
 
 // -------------------------------------------------------
 
 void MainWindow::on_actionAutotiles_triggered() {
     DialogSpecialElements dialog(PictureKind::Autotiles);
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
+        project->writePicturesDatas();
         project->writeSpecialsDatas();
-    else
+    } else {
+        project->readPicturesDatas();
         project->readSpecialsDatas();
+    }
 
     updateTextures();
 }
@@ -575,10 +581,13 @@ void MainWindow::on_actionAutotiles_triggered() {
 
 void MainWindow::on_actionSprite_walls_triggered() {
     DialogSpecialElements dialog(PictureKind::Walls);
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
+        project->writePicturesDatas();
         project->writeSpecialsDatas();
-    else
+    } else {
+        project->readPicturesDatas();
         project->readSpecialsDatas();
+    }
 
     updateTextures();
 }

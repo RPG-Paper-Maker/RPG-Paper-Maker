@@ -10,6 +10,7 @@
 */
 
 #include "systemobject3d.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -44,7 +45,15 @@ SystemObject3D::~SystemObject3D() {
 // -------------------------------------------------------
 
 SystemPicture* SystemObject3D::picture() const {
-    return pictureByKind(PictureKind::Object3D);
+    SystemPicture *picture;
+
+    picture = this->pictureByKind(PictureKind::Object3D);
+    if (picture == nullptr) {
+        picture = RPM::get()->project()->picturesDatas()->missingPicture();
+        picture->setId(m_pictureID);
+    }
+
+    return picture;
 }
 
 // -------------------------------------------------------

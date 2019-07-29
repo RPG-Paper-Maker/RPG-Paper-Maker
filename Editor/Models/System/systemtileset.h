@@ -37,6 +37,7 @@ public:
     QStandardItemModel* modelSpriteWalls() const;
     QStandardItemModel* model3DObjects() const;
     QStandardItemModel* modelMountains() const;
+    int pictureID() const;
     void setPictureID(int id);
     void initializeModels();
     void addSpecial(SuperListItem *special, PictureKind kind);
@@ -44,6 +45,7 @@ public:
     void updateModelSpriteWalls();
     void updateModel3DObjects();
     void updateModelMountains();
+
     static void updateModel(QStandardItemModel* model,
                             QStandardItemModel* completeModel);
     static void moveModel(QStandardItemModel* model,

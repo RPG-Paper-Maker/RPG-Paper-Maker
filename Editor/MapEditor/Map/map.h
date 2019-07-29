@@ -54,7 +54,7 @@ public:
     void setMapPortion(Portion& p, MapPortion *mapPortion);
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
-
+    QOpenGLTexture * textureMissing() const;
 
     bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object, QJsonObject &previous,
@@ -110,7 +110,7 @@ public:
     void deleteCharactersTextures();
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
-    static void loadPicture(SystemPicture* picture, PictureKind kind, QImage
+    static bool loadPicture(SystemPicture* picture, PictureKind kind, QImage
         &refImage);
     void loadAutotiles();
     TextureSeveral *loadPictureAutotile(
@@ -211,7 +211,8 @@ private:
     QHash<int, QOpenGLTexture*> m_texturesObjects3D;
     QList<TextureSeveral *> m_texturesAutotiles;
     QList<TextureSeveral *> m_texturesMountains;
-    QOpenGLTexture* m_textureObjectSquare;
+    QOpenGLTexture *m_textureObjectSquare;
+    QOpenGLTexture *m_textureMissing;
 };
 
 #endif // MAP_H

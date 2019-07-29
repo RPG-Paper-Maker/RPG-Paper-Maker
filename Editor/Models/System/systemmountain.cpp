@@ -10,6 +10,7 @@
 */
 
 #include "systemmountain.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -35,7 +36,15 @@ SystemMountain::~SystemMountain()
 }
 
 SystemPicture* SystemMountain::picture() const {
-    return pictureByKind(PictureKind::Mountains);
+    SystemPicture *picture;
+
+    picture = this->pictureByKind(PictureKind::Mountains);
+    if (picture == nullptr) {
+        picture = RPM::get()->project()->picturesDatas()->missingPicture();
+        picture->setId(m_pictureID);
+    }
+
+    return picture;
 }
 
 // -------------------------------------------------------

@@ -289,8 +289,7 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
     m_tileset = tileset;
     tileset->updateModelMountains();
     fillComboBox(tileset, PictureKind::Mountains);
-    ui->widgetMountainPreview->initializeTilesetPictureID(tileset->picture()
-        ->id());
+    ui->widgetMountainPreview->initializeTilesetPictureID(tileset->pictureID());
 }
 
 // -------------------------------------------------------
@@ -318,8 +317,9 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
             ->data().value<quintptr>());
         SystemSpecialElement *special = reinterpret_cast<SystemSpecialElement *>
             (SuperListItem::getById(modelComplete->invisibleRootItem(), super
-            ->id()));
-        ui->comboBox->setItemIcon(i, QIcon(special->picture()->getPath(m_kind)));
+            ->id(), false));
+        ui->comboBox->setItemIcon(i, QIcon(special == nullptr ? RPM
+            ::TEXTURE_MISSING : special->picture()->getPath(m_kind)));
     }
 
     // Select current ID
@@ -466,16 +466,17 @@ void PanelTextures::on_pushButtonUpdateList_pressed() {
     tilesetID = m_tileset->id();
     DialogTilesetSpecialElements dialog(m_tileset, m_kind);
     if (dialog.exec() == QDialog::Accepted) {
+        RPM::get()->project()->writePicturesDatas();
         RPM::get()->project()->writeSpecialsDatas();
         RPM::get()->project()->writeTilesetsDatas();
         this->fillComboBox(m_tileset, m_kind);
-        m_widgetTreeLocalMaps->reload();
-
     } else {
+        RPM::get()->project()->readPicturesDatas();
         RPM::get()->project()->readSpecialsDatas();
         RPM::get()->project()->readTilesetsDatas();
         m_tileset = reinterpret_cast<SystemTileset *>(SuperListItem::getById(RPM
             ::get()->project()->gameDatas()->tilesetsDatas()->model()
             ->invisibleRootItem(), tilesetID));
     }
+    m_widgetTreeLocalMaps->reload();
 }
