@@ -47,7 +47,7 @@ QStandardItem* TreeMapDatas::root() const { return m_model->item(0); }
 //
 // -------------------------------------------------------
 
-void TreeMapDatas::setDefault(){
+void TreeMapDatas::setDefault() {
     clearModel();
     QStandardItem* itemPlains = addDir(root(), 0, TreeMapTag::createDir(
         "Plains"));

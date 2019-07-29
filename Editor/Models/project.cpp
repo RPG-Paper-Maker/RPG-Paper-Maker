@@ -507,3 +507,9 @@ QString Project::createRPMFile() {
 
     return NULL;
 }
+
+// -------------------------------------------------------
+
+bool Project::isHeroDefined() const {
+    return p_gameDatas->systemDatas()->idMapHero() != -1;
+}

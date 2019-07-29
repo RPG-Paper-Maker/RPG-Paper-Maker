@@ -657,35 +657,37 @@ void MainWindow::on_actionShow_Hide_square_informations_triggered() {
 
 // -------------------------------------------------------
 
-void MainWindow::on_actionPlay_triggered(){
-    if (RPM::mapsToSave.count() > 0) {
-        QMessageBox::StandardButton box =
-                QMessageBox::question(this, "Save",
-                                      "You have some maps that are not saved. "
-                                      "Do you want to save all?",
-                                      QMessageBox::Yes | QMessageBox::No |
-                                      QMessageBox::Cancel);
+void MainWindow::on_actionPlay_triggered() {
+    if (RPM::get()->project()->isHeroDefined()) {
+        if (RPM::mapsToSave.count() > 0) {
+            QMessageBox::StandardButton box = QMessageBox::question(this, "Save"
+                , "You have some maps that are not saved. Do you want to save "
+                "all?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            if (box == QMessageBox::Yes) {
+                saveAllMaps();
+            } else if (box == QMessageBox::Cancel) {
+                return;
+            }
+        }
 
-        if (box == QMessageBox::Yes)
-            saveAllMaps();
-        else if (box == QMessageBox::Cancel)
-            return;
+        // Play process
+        QString execName = "Game";
+        #ifdef Q_OS_WIN
+            execName += ".exe";
+        #elif __linux__
+            execName += ".sh";
+        #else
+            execName += ".app";
+        #endif
+
+        if (gameProcess->isOpen()) {
+            gameProcess->close();
+        }
+        gameProcess->start("\"" + Common::pathCombine(project
+            ->pathCurrentProject(), execName) + "\"");
+    } else {
+        QMessageBox::critical(this, "No hero defined", "There is no hero defined. Please define one hero before trying to launch again.\n You can define an object in a map as hero by right clicking on it in object mode and clicking on \"Define as Hero\".");
     }
-
-    // Play process
-    QString execName = "Game";
-    #ifdef Q_OS_WIN
-        execName += ".exe";
-    #elif __linux__
-        execName += ".sh";
-    #else
-        execName += ".app";
-    #endif
-
-    if (gameProcess->isOpen())
-        gameProcess->close();
-    gameProcess->start("\"" + Common::pathCombine(project->pathCurrentProject(),
-                                                 execName) + "\"");
 }
 
 // -------------------------------------------------------

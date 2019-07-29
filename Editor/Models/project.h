@@ -89,7 +89,9 @@ public:
     void writeTilesetsDatas();
     void writeCommonEvents();
     void saveCurrentMap();
+
     QString createRPMFile();
+    bool isHeroDefined() const;
 
 private:
     QString p_pathCurrentProject;
