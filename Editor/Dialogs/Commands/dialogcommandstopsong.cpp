@@ -20,7 +20,7 @@
 
 DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
                                              EventCommand *command,
-                                             SystemCommonObject *object,
+                                             SystemCommonObject *,
                                              QStandardItemModel *parameters,
                                              QWidget *parent) :
     DialogCommand(parent),

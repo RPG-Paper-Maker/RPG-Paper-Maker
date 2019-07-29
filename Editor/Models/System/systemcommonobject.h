@@ -34,9 +34,7 @@ public:
     SystemCommonObject(int i, QString n, int id, QStandardItemModel *states,
                        QStandardItemModel *events);
     virtual ~SystemCommonObject();
-    bool isHero() const;
-    void setIsHero(bool b);
-    static QString strInheritance, strStates, strEvents, strIsHero;
+    static QString strInheritance, strStates, strEvents;
 
     void setDefault();
     void setDefaultFirst();
@@ -65,7 +63,6 @@ protected:
     int m_inheritanceId;
     QStandardItemModel* m_states;
     QStandardItemModel* m_events;
-    bool m_isHero;
 };
 
 Q_DECLARE_METATYPE(SystemCommonObject)

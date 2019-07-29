@@ -35,7 +35,7 @@ public:
                                    EventCommand *command = nullptr,
                                    SystemCommonObject *object = nullptr,
                                    QStandardItemModel* parameters = nullptr,
-                                   QWidget *parent = 0);
+                                   QWidget *parent = nullptr);
     ~DialogCommandStopSong();
     EventCommandKind getCommandKind() const;
     EventCommand* getCommand() const;

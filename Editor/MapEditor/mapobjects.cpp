@@ -170,7 +170,7 @@ void MapObjects::initializeVertices(int squareSize,
     m_indexes.clear();
 
     // Objects and their squares
-    int count = 0;
+    unsigned int count = 0;
     QHash<Position, SystemCommonObject*>::iterator i;
     for (i = m_all.begin(); i != m_all.end(); i++){
         Position position = i.key();
@@ -242,7 +242,8 @@ void MapObjects::initializeVertices(int squareSize,
                           QVector2D(x + w, y + h)));
         m_vertices.append(Vertex(Lands::verticesQuad[3] * size + pos,
                           QVector2D(x, y + h)));
-        int offset = count * Lands::nbVerticesQuad;
+        unsigned int offset = count * static_cast<unsigned int>(Lands
+            ::nbVerticesQuad);
         for (int i = 0; i < Lands::nbIndexesQuad; i++)
             m_indexes.append(Lands::indexesQuad[i] + offset);
 
@@ -365,7 +366,7 @@ void MapObjects::paintFaceSprites(int textureID, QOpenGLTexture* texture){
 
 void MapObjects::paintSquares(){
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
     m_vao.release();
 }
 
@@ -378,9 +379,6 @@ void MapObjects::paintSquares(){
 
 void MapObjects::read(const QJsonObject & json){
     QJsonArray tab = json["list"].toArray();
-    bool isMapHero = RPM::get()->project()->gameDatas()->systemDatas()
-        ->idMapHero() == RPM::get()->project()->currentMap()->mapProperties()
-        ->id();
 
     for (int i = 0; i < tab.size(); i++) {
         QJsonObject objHash = tab.at(i).toObject();
@@ -388,8 +386,6 @@ void MapObjects::read(const QJsonObject & json){
         p.read(objHash["k"].toArray());
         SystemCommonObject* o = new SystemCommonObject;
         o->read(objHash["v"].toObject());
-        o->setIsHero(isMapHero && o->id() == RPM::get()->project()->gameDatas()
-            ->systemDatas()->idObjectHero());
         m_all.insert(p, o);
     }
 }

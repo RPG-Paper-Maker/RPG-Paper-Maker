@@ -64,7 +64,6 @@ void ControlMapEditor::defineAsHero() {
     SystemDatas *datas = RPM::get()->project()->gameDatas()->systemDatas();
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
-    m_selectedObject->setIsHero(true);
     RPM::get()->project()->writeSystemDatas();
 
     // Update cursor position
@@ -82,7 +81,9 @@ void ControlMapEditor::addHero(SystemCommonObject *object, Position3D &position)
     datas = RPM::get()->project()->gameDatas()->systemDatas();
 
     // If hero, remove start cursor
-    if (object->isHero()) {
+    if (object->id() == datas->idObjectHero() && m_map->mapProperties()->id() ==
+        datas->idMapHero())
+    {
         datas->setIdMapHero(m_map->mapProperties()->id());
         datas->setIdObjectHero(object->id());
         RPM::get()->project()->writeSystemDatas();
@@ -98,7 +99,9 @@ void ControlMapEditor::removeHero(SystemCommonObject *object) {
     datas = RPM::get()->project()->gameDatas()->systemDatas();
 
     // If hero, remove start cursor
-    if (object->isHero()) {
+    if (object->id() == datas->idObjectHero() && m_map->mapProperties()->id() ==
+        datas->idMapHero())
+    {
         Position3D position(-1, 0, 0, -1);
         datas->setIdMapHero(-1);
         datas->setIdObjectHero(-1);
@@ -266,7 +269,6 @@ void ControlMapEditor::moveObject(Position &p) {
         {
             SystemCommonObject *object = reinterpret_cast<SystemCommonObject *>(
                 m_selectedObject->createCopy());
-            object->setIsHero(m_selectedObject->isHero());
             eraseObject(m_previousMouseCoords, false, true);
             stockObject(p, object, false, true);
 
