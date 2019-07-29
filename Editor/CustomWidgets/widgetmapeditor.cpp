@@ -777,6 +777,8 @@ void WidgetMapEditor::contextNew() {
     if (m_control.isCursorObjectVisible()) {
         addObject();
     }
+
+    m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
@@ -785,6 +787,8 @@ void WidgetMapEditor::contextEdit() {
     if (m_control.isCursorObjectVisible()) {
         addObject();
     }
+
+    m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
@@ -793,6 +797,8 @@ void WidgetMapEditor::contextCopy() {
     if (m_control.isCursorObjectVisible()) {
         m_control.copyObject();
     }
+
+    m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
@@ -801,6 +807,8 @@ void WidgetMapEditor::contextPaste() {
     if (m_control.isCursorObjectVisible()) {
         m_control.pasteObject();
     }
+
+    m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
@@ -809,6 +817,8 @@ void WidgetMapEditor::contextDelete() {
     if (m_control.isCursorObjectVisible()) {
         deleteObject();
     }
+
+    m_contextMenu->setFocus();
 }
 
 // -------------------------------------------------------
@@ -817,4 +827,6 @@ void WidgetMapEditor::contextHero() {
     if (m_control.isCursorObjectVisible()) {
         m_control.defineAsHero();
     }
+
+    m_contextMenu->setFocus();
 }
