@@ -98,13 +98,26 @@ void DialogSelectPosition::on_spinBoxX_valueChanged(int i){
 
 //--------------------------------------------
 
-void DialogSelectPosition::on_spinBoxY_valueChanged(int i){
-    ui->widgetMap->setCursorY(i, ui->spinBoxYplus->value());
+void DialogSelectPosition::on_spinBoxY_valueChanged(int i) {
+    Map* map = ui->widgetMap->getMap();
+    if (map != nullptr) {
+        MapProperties* properties = map->mapProperties();
+        if (i >= properties->height()) {
+            i = properties->height() - 1;
+            ui->spinBoxY->setValue(i);
+        } else if (i < -properties->depth()) {
+            i = -properties->depth();
+            ui->spinBoxY->setValue(i);
+        }
+        ui->widgetMap->setCursorY(i, ui->spinBoxYplus->value());
+    } else {
+        ui->spinBoxY->setValue(0);
+    }
 }
 
 //--------------------------------------------
 
-void DialogSelectPosition::on_spinBoxYplus_valueChanged(int i){
+void DialogSelectPosition::on_spinBoxYplus_valueChanged(int i) {
     ui->widgetMap->setCursorY(ui->spinBoxY->value(), i);
 }
 

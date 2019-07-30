@@ -647,6 +647,31 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *) {
 
 void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
     if (m_control.map() != nullptr) {
+        int key = event->key();
+
+        // Move cursor up / down with arrow shortcut for dialog select position
+        if (m_menuBar == nullptr) {
+            if (m_control.isCtrlPressed()) {
+                if (m_control.isShiftPressed()) {
+                    if (key == Qt::Key_Up) {
+                        this->heightPlusUp();
+                        return;
+                    } else if (key == Qt::Key_Down) {
+                        this->heightPlusDown();
+                        return;
+                    }
+                } else {
+                    if (key == Qt::Key_Up) {
+                        this->heightUp();
+                        return;
+                    } else if (key == Qt::Key_Down) {
+                        this->heightDown();
+                        return;
+                    }
+                }
+            }
+        }
+
         if (m_keysPressed.isEmpty()) {
             m_firstPressure = true;
             m_timerFirstPressure->start(35);
@@ -663,8 +688,7 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
         }
 
         // Tab
-        int key = event->key();
-        if (key == Qt::Key_Tab) {
+        if (m_menuBar != nullptr && key == Qt::Key_Tab) {
             m_menuBar->toggleSelection();
         }
 
