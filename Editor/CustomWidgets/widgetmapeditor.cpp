@@ -35,6 +35,8 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_timerFirstPressure(new QTimer),
     m_firstPressure(false),
     m_spinBoxX(nullptr),
+    m_spinBoxY(nullptr),
+    m_spinBoxYPlus(nullptr),
     m_spinBoxZ(nullptr)
 {
     QPixmap cursorPixmap;
@@ -125,8 +127,12 @@ void WidgetMapEditor::deleteMap() {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *z) {
+void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y,
+    QSpinBox *yPlus, QSpinBox *z)
+{
     m_spinBoxX = x;
+    m_spinBoxY = y;
+    m_spinBoxYPlus = yPlus;
     m_spinBoxZ = z;
 }
 
@@ -357,6 +363,8 @@ void WidgetMapEditor::setCursorZ(int z) {
 void WidgetMapEditor::updateSpinBoxes() {
     if (m_spinBoxX != nullptr) {
         m_spinBoxX->setValue(m_control.cursor()->getSquareX());
+        m_spinBoxY->setValue(m_control.cursor()->getSquareY());
+        m_spinBoxYPlus->setValue(m_control.cursor()->getYPlus());
         m_spinBoxZ->setValue(m_control.cursor()->getSquareZ());
     }
 }

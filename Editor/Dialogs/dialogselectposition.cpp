@@ -20,28 +20,24 @@
 //
 // -------------------------------------------------------
 
-DialogSelectPosition::DialogSelectPosition(
-        int idMap,
-        int x,
-        int y,
-        int yPlus,
-        int z,
-        QWidget *parent) :
+DialogSelectPosition::DialogSelectPosition(int idMap, int x, int y, int yPlus,
+    int z, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSelectPosition),
     m_treeMapDatas(new TreeMapDatas)
 {
     ui->setupUi(this);
+
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
     m_treeMapDatas->read(RPM::get()->project()->pathCurrentProject());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
-
-    ui->widgetMap->initializeSpinBoxesCoords(ui->spinBoxX, ui->spinBoxZ);
+    ui->widgetMap->initializeSpinBoxesCoords(ui->spinBoxX, ui->spinBoxY, ui
+        ->spinBoxYplus, ui->spinBoxZ);
+    ui->spinBoxYplus->setMaximum(RPM::get()->getSquareSize() - 1);
 
     // Initialize coords
-    QVector3D position(x * RPM::get()->getSquareSize(),
-                       y * RPM::get()->getSquareSize() + yPlus,
-                       z * RPM::get()->getSquareSize());
+    QVector3D position(x * RPM::get()->getSquareSize(), y * RPM::get()
+        ->getSquareSize() + yPlus, z * RPM::get()->getSquareSize());
     ui->treeViewLocalMaps->setMap(idMap, position);
 }
 
@@ -130,7 +126,7 @@ void DialogSelectPosition::on_spinBoxZ_valueChanged(int i){
 
 // -------------------------------------------------------
 
-void DialogSelectPosition::accept(){
+void DialogSelectPosition::accept() {
     if (currentTag()->isDir()) {
         QMessageBox::warning(this, "Warning", "You should select a map and not "
             "a folder.");

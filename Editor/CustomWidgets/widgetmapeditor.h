@@ -44,7 +44,8 @@ public:
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);
     void deleteMap();
-    void initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *z);
+    void initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y, QSpinBox *yPlus,
+        QSpinBox *z);
     void resizeGL(int width, int height);
     void initializeGL();
     void paintGL();
@@ -85,6 +86,8 @@ private:
     QTimer *m_timerFirstPressure;
     bool m_firstPressure;
     QSpinBox *m_spinBoxX;
+    QSpinBox *m_spinBoxY;
+    QSpinBox *m_spinBoxYPlus;
     QSpinBox *m_spinBoxZ;
     QVector3D *m_position;
     QVector3D *m_positionObject;
