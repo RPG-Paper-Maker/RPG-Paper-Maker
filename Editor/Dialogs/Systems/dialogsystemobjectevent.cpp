@@ -20,7 +20,6 @@ DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
 {
     ui->setupUi(this);
     
-
     initialize();
 }
 

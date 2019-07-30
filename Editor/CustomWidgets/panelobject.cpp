@@ -33,7 +33,6 @@ PanelObject::PanelObject(QWidget *parent) :
 
     // Updating infos lists
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
-    ui->treeViewEvents->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
 
     // Keep space when hiding widgets

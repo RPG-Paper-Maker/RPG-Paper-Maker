@@ -239,8 +239,9 @@ int WidgetSuperTree::getNewId(QStandardItemModel *model, int offset){
 void WidgetSuperTree::addNewItem(SuperListItem* super, QStandardItem *root,
                                  int index)
 {
-    if (m_updateId)
+    if (m_updateId) {
         super->setId(getNewId(p_model));
+    }
     QList<QStandardItem*> row = super->getModelRow();
     root->insertRow(index, row);
     QModelIndex modelIndex = p_model->index(index, 0);
