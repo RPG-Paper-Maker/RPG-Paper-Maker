@@ -330,7 +330,11 @@ void PanelSpecialElements::on_pictureChanged(SystemPicture *picture) {
     sys = reinterpret_cast<SystemSpecialElement *>(ui->panelSuperList->list()
         ->getSelected()->data().value<quintptr>());
     sys->setPictureID(picture->id());
-    ui->widgetTilesetSettings->updateImage(picture);
+    if (m_kind == PictureKind::Autotiles) {
+        ui->widgetTilesetSettings->updateImageAutotile(picture);
+    } else {
+        ui->widgetTilesetSettings->updateImage(picture);
+    }
     ui->widgetPreviewObject3D->updateObject();
 }
 
