@@ -17,6 +17,7 @@
 #include "mainwindow.h"
 #include "rpm.h"
 #include "common.h"
+#include "dialogfirstlaunch.h"
 
 //-------------------------------------------------
 //
@@ -77,8 +78,8 @@ int main(int argc, char *argv[])
 
     // Load engine settings
     EngineSettings *engineSettings = new EngineSettings;
-    QFile fileSettings(Common::pathCombine(QDir::currentPath(),
-        RPM::pathEngineSettings));
+    QFile fileSettings(Common::pathCombine(QDir::currentPath(), RPM
+        ::pathEngineSettings));
     if (fileSettings.exists()) {
         engineSettings->read();
     } else {
@@ -106,6 +107,14 @@ int main(int argc, char *argv[])
     // Opening window
     MainWindow w;
     w.showMaximized();
+
+    // Show first launch window
+    DialogFirstLaunch dialog;
+    if (engineSettings->firstTime()) {
+        dialog.show();
+        engineSettings->setFirstTime(false);
+        engineSettings->write();
+    }
 
     // Executing
     return a.exec();

@@ -111,4 +111,7 @@
         <file>Themes/defaulttheme.qss</file>
         <file>Themes/whitemactheme.qss</file>
     </qresource>
+    <qresource prefix="/images">
+        <file>Ressources/kate.png</file>
+    </qresource>
 </RCC>

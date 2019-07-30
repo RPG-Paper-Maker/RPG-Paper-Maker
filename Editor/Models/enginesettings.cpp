@@ -18,6 +18,7 @@
 
 const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
+const QString EngineSettings::JSON_FIRST_TIME = "ft";
 const int EngineSettings::MAX_PROJECTS_NUMBER = 6;
 
 // -------------------------------------------------------
@@ -29,7 +30,8 @@ const int EngineSettings::MAX_PROJECTS_NUMBER = 6;
 EngineSettings::EngineSettings() :
     m_keyBoardDatas(new KeyBoardDatas),
     m_zoomPictures(0),
-    m_theme(ThemeKind::Dark)
+    m_theme(ThemeKind::Dark),
+    m_firstTime(true)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -83,6 +85,14 @@ QString EngineSettings::projectAtName(int i) const {
 
 QString EngineSettings::projectAtLink(int i) const {
     return m_projectLinks.at(i);
+}
+
+bool EngineSettings::firstTime() const {
+    return m_firstTime;
+}
+
+void EngineSettings::setFirstTime(bool b) {
+    m_firstTime = b;
 }
 
 // -------------------------------------------------------
@@ -217,6 +227,9 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0; i < tab.size(); i++) {
         m_projectLinks.append(tab.at(i).toString());
     }
+    if (json.contains(JSON_FIRST_TIME)) {
+        m_firstTime = json[JSON_FIRST_TIME].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -241,4 +254,7 @@ void EngineSettings::write(QJsonObject &json) const {
         tab.append(m_projectLinks.at(i));
     }
     json[JSON_PROJECT_LINKS] = tab;
+    if (!m_firstTime) {
+        json[JSON_FIRST_TIME] = false;
+    }
 }

@@ -33,8 +33,10 @@ public:
     void setCover(bool b);
     void setCoef(float coef);
     void setRect(QRectF *rect);
+    void setDrawBackground(bool b);
 
     void updatePicture(SystemPicture* picture, PictureKind kind);
+    void updatePictureByName(QString path);
     void updatePictureSize();
     void activateCanDrawRect();
     bool isInsideImage(QPoint& pos) const;
@@ -53,6 +55,7 @@ protected:
     bool m_firstPresure;
     int m_width;
     int m_height;
+    bool m_drawBackgorund;
 
     virtual void paintEvent(QPaintEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);

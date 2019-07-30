@@ -68,6 +68,9 @@ private:
 
     void updateTextures();
 
+protected:
+    virtual void closeEvent(QCloseEvent *event);
+
 private slots:
     void on_actionNew_project_triggered();
     void on_actionBrowse_triggered();
@@ -103,7 +106,6 @@ private slots:
     void on_actionAbout_triggered();
     void checkUpdate();
     void openRecentProject(QString path);
-    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

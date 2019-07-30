@@ -28,7 +28,8 @@ WidgetShowPicture::WidgetShowPicture(QWidget *parent) :
     m_canDrawRect(false),
     m_firstPresure(true),
     m_width(-1),
-    m_height(-1)
+    m_height(-1),
+    m_drawBackgorund(true)
 {
     this->setMouseTracking(true);
 }
@@ -50,6 +51,10 @@ void WidgetShowPicture::setRect(QRectF *rect) {
     m_rect = rect;
 }
 
+void WidgetShowPicture::setDrawBackground(bool b) {
+    m_drawBackgorund = b;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -58,7 +63,12 @@ void WidgetShowPicture::setRect(QRectF *rect) {
 
 void WidgetShowPicture::updatePicture(SystemPicture* picture, PictureKind kind)
 {
-    QString path = picture->getPath(kind);
+    this->updatePictureByName(picture->getPath(kind));
+}
+
+// -------------------------------------------------------
+
+void WidgetShowPicture::updatePictureByName(QString path) {
     m_baseImage = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
     if (!m_baseImage.isNull()) {
@@ -150,8 +160,10 @@ void WidgetShowPicture::updateSizePosition() {
 void WidgetShowPicture::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
-    painter.fillRect(0, 0, m_image.width(), m_image.height(), RPM
-        ::colorAlmostTransparent);
+    if (m_drawBackgorund) {
+        painter.fillRect(0, 0, m_image.width(), m_image.height(), RPM
+            ::colorAlmostTransparent);
+    }
     painter.drawImage(0, 0, m_image);
 
     if (m_rect != nullptr && m_rect->width() > 0 && m_rect->height() > 0) {

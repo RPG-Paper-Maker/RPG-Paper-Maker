@@ -22,6 +22,7 @@ DESTDIR = $$ROOT_DESTDIR/Editor
 HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
+    Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/mainwindow.h \
     Dialogs/dialognewproject.h \
@@ -300,6 +301,7 @@ HEADERS += \
 SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
+    Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/mainwindow.cpp \
     Dialogs/dialognewproject.cpp \
@@ -551,6 +553,7 @@ SOURCES += \
 FORMS += \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
+    Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/mainwindow.ui \
     Dialogs/dialognewproject.ui \
