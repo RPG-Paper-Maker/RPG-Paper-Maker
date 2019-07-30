@@ -58,6 +58,7 @@ public:
     void showWidgetSpecial();
     void updateComboBoxSize();
     void updateLabelSize();
+    void updateWidgetSize();
     QString createlabelText();
     void showAutotiles(SystemTileset *tileset);
     void showSpriteWalls(SystemTileset *tileset);

@@ -208,7 +208,6 @@ void PanelTextures::showWidgetSpecial() {
 // -------------------------------------------------------
 
 void PanelTextures::updateComboBoxSize() {
-    QWidget *currentSpecial = getSpecialWidget();
     ui->comboBox->setGeometry(0, 0, this->parentWidget()->width(), ui->comboBox
         ->height());
     ui->comboBox->setFixedSize(this->parentWidget()->width(), ui->comboBox
@@ -218,11 +217,7 @@ void PanelTextures::updateComboBoxSize() {
     ui->pushButtonUpdateList->setFixedSize(this->parentWidget()->width(), ui
         ->pushButtonUpdateList->height());
 
-    int width = qMax(currentSpecial->width(), this->parentWidget()->width());
-    int height = ui->comboBox->height() + + ui->pushButtonUpdateList->height() +
-        12 + currentSpecial->height();
-    this->setGeometry(0, 0, width, height);
-    setFixedSize(width, height);
+    this->updateWidgetSize();
 
     // Update object3D previewer size
     this->updateMountainsSize();
@@ -239,6 +234,20 @@ void PanelTextures::updateLabelSize() {
     this->setGeometry(0, 0, this->parentWidget()->width(), this->parentWidget()
         ->height());
     setFixedSize(this->parentWidget()->width(), this->parentWidget()->height());
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::updateWidgetSize() {
+    QWidget *currentSpecial;
+    int width, height;
+
+    currentSpecial = this->getSpecialWidget();
+    width = qMax(currentSpecial->width(), this->parentWidget()->width());
+    height = ui->comboBox->height() + + ui->pushButtonUpdateList->height() +
+        12 + currentSpecial->height();
+    this->setGeometry(0, 0, width, height);
+    this->setFixedSize(width, height);
 }
 
 // -------------------------------------------------------
@@ -436,11 +445,14 @@ void PanelTextures::onSplitterMoved(int, int) {
 // -------------------------------------------------------
 
 void PanelTextures::on_comboBox_currentIndexChanged(int) {
-    int id = getID();
+    int id;
+
+    id = getID();
 
     // Update index selection
-    if (ui->comboBox->count() > 1)
+    if (ui->comboBox->count() > 1) {
         updateCurrentID(id);
+    }
 
     // Update picture preview
     SystemSpecialElement* special = reinterpret_cast<SystemSpecialElement *>(
@@ -456,6 +468,9 @@ void PanelTextures::on_comboBox_currentIndexChanged(int) {
             (special));
         ui->widget3DObjectPreview->updateObject();
     }
+
+    // Update size according to widget size
+    this->updateWidgetSize();
 }
 
 // -------------------------------------------------------
