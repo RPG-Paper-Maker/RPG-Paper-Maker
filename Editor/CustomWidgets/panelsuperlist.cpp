@@ -139,12 +139,15 @@ void PanelSuperList::on_pushButtonPlus_pressed() {
 // -------------------------------------------------------
 
 void PanelSuperList::on_pushButtonMinus_pressed() {
+    QString message;
     int value = this->list()->getModel()->rowCount() - 1;
 
     if (DialogSetMaximum::isOrderedMax(list()->getModel(), value)) {
         updateMaximum(value);
     } else {
-        QMessageBox::information(this, "Warning", DialogSetMaximum::STR_WARNING);
+        message = value == 0 ? "You cannot remove the last element because that"
+            " list cannot be empty." : DialogSetMaximum::STR_WARNING;
+        QMessageBox::information(this, "Warning", message);
     }
 }
 
