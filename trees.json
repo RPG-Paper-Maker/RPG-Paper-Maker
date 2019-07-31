@@ -733,11 +733,6 @@
                 "target": "Engine/RPG-Paper-Maker"
             },
             {
-                "repo": "Dependencies",
-                "source": "Engine/linux/README.txt",
-                "target": "Engine/README.txt"
-            },
-            {
                 "exe": true,
                 "repo": "Dependencies",
                 "source": "Engine/linux/run.sh",

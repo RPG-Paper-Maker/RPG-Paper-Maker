@@ -1,0 +1,36 @@
+{
+	"add": [],
+	"remove": [
+        {
+            "target": "Engine/README.txt",
+            "os": ["l"]
+        }
+    ],
+	"replace": [],
+	"features": [
+        "Handle non existing textures ingame and engine (engine show a specific texture)",
+        "Avoid running a game if there is no correct hero defined",
+        "First launch: tutorial + warning",
+        "Set maximum: change message minus when there is one item",
+        "Set maximum: select the last new created item"
+    ],
+	"bugs": [
+        "Ingame: non existing tileset used made error",
+        "Wrong autotiles drawing with several tilesets in database",
+        "Disable none access for shapes / songs windows",
+        "Could'nt select none texture for special elements and tilesets",
+        "Crashed ingame when a picture ID was missing and inferior to max ID",
+        "Crashed when removing 3D object that was in the current map with update list button only",
+        "Autotiles / walls: collisions were not saved in panel textures and toolbar button",
+        "Remove collision image from mountains",
+        "Copying hero object, define as hero, delete the previous hero was also removing hero states",
+        "Keyboard shortcut copy paste randomly not always working in map editor objects",
+        "Events list on object: displaying content according to index and no ID",
+        "Autotiles picture: when none picture wrong display when changing to a new picture",
+        "Autotiles + walls panel textures wrong display after showing none texture autotile (after updating list)",
+        "Collision errors with some rects in tileset",
+        "Teleport command: no spinbox update when changing height (+changing spinbox limits)",
+        "Pressing tab in teleport command crashed",
+        "Teleport command: ctrl + arrows up/down not working"
+    ]
+}
