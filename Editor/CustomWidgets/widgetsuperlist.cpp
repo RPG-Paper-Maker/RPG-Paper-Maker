@@ -126,7 +126,8 @@ int WidgetSuperList::getIndex(){
 
 // -------------------------------------------------------
 
-void WidgetSuperList::setMaximum(int newSize){
+void WidgetSuperList::setMaximum(int newSize) {
+    QModelIndex modelIndex;
     int previousSize = p_model->invisibleRootItem()->rowCount();
 
     // Add new empty items
@@ -138,8 +139,7 @@ void WidgetSuperList::setMaximum(int newSize){
             QList<QStandardItem*> row = super->getModelRow();
             p_model->insertRow(i, row);
         }
-    }
-    else {
+    } else {
         for (int i = previousSize - 1; i >= newSize; i--){
             SuperListItem* super = (SuperListItem*) p_model->item(i)->data()
                                    .value<quintptr>();
@@ -148,6 +148,8 @@ void WidgetSuperList::setMaximum(int newSize){
         }
         emit deleteIDs();
     }
+    modelIndex = p_model->index(p_model->invisibleRootItem()->rowCount() - 1, 0);
+    setCurrentIndex(modelIndex);
 
     emit updated();
 }
@@ -160,8 +162,7 @@ void WidgetSuperList::addNewItem(SuperListItem* super){
 
     QList<QStandardItem*> row = copy->getModelRow();
     p_model->appendRow(row);
-    QModelIndex modelIndex = p_model->index(
-                p_model->invisibleRootItem()->rowCount() - 1, 0);
+    QModelIndex modelIndex = p_model->index(p_model->invisibleRootItem()->rowCount() - 1, 0);
     setCurrentIndex(modelIndex);
 
     emit updated();
