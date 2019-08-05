@@ -20,6 +20,7 @@
 #include "map.h"
 #include "enginesettings.h"
 #include "oskind.h"
+#include "translations.h"
 
 // -------------------------------------------------------
 //
@@ -35,14 +36,19 @@ class RPM : public Singleton<RPM>
 public:
     RPM();
     virtual ~RPM();
-    Project* project() const;
-    EngineSettings* engineSettings() const;
+
+    Project * project() const;
+    EngineSettings * engineSettings() const;
+    Translations * translations() const;
+
     void setProject(Project* p);
     void setEngineSettings(EngineSettings* e);
+    void readTranslations();
     void saveEngineSettings() const;
     void loadEngineSettings();
     int getPortionsRay() const;
     int getSquareSize() const;
+
     static QSet<int> mapsToSave;
     static QSet<int> mapsUndoRedo;
     static bool isInConfig;
@@ -52,6 +58,8 @@ public:
     // COMMON JSON
     const static QString JSON_KEY;
     const static QString JSON_VALUE;
+    const static QString JSON_EXTENSION;
+    const static QString DASH;
 
     // COLORS
     const static QColor colorGraySelectionDarker;
@@ -128,6 +136,8 @@ public:
     const static QString PATH_MTL;
     const static QString PATH_COLLISIONS;
     const static QString pathEngineSettings;
+    const static QString PATH_TRANSLATIONS;
+    const static QString PATH_TRANSLATIONS_LANGUAGES;
     const static QString fileMapInfos;
     const static QString fileMapObjects;
     const static QString gamesFolderName;
@@ -162,10 +172,12 @@ public:
     static bool isPressingEnter(QKeyEvent* event);
     static PictureKind subSelectionToPictureKind(
             MapEditorSubSelectionKind subKind);
+    static QString translate(const QString& key);
 
 protected:
-    Project* p_project;
-    EngineSettings* m_engineSettings;
+    Project *p_project;
+    EngineSettings *m_engineSettings;
+    Translations *m_translations;
 };
 
 #endif // RPM_H

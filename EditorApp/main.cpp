@@ -92,6 +92,9 @@ int main(int argc, char *argv[])
     engineSettings->updateTheme();
     qApp->setWindowIcon(QIcon(":/icons/icon.ico"));
 
+    // Translations
+    RPM::get()->readTranslations();
+
     // Create document folder for games if not existing
     QString documentsPath = QStandardPaths::writableLocation(
         QStandardPaths::StandardLocation::DocumentsLocation);

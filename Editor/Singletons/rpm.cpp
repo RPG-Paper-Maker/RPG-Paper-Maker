@@ -27,6 +27,9 @@ QString RPM::shadersExtension = "-3.0";
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
 const QString RPM::JSON_VALUE = "v";
+const QString RPM::JSON_EXTENSION = ".json";
+const QString RPM::DASH = "-";
+
 
 // COLORS
 const QColor RPM::colorGraySelectionDarker = QColor(60, 60, 60);
@@ -123,6 +126,10 @@ const QString RPM::PATH_COLLISIONS = Common::pathCombine(PATH_SHAPES,
 
 const QString RPM::pathEngineSettings =
         Common::pathCombine("Content", "engineSettings.json");
+const QString RPM::PATH_TRANSLATIONS = Common::pathCombine("Content",
+    "translations");
+const QString RPM::PATH_TRANSLATIONS_LANGUAGES = Common::pathCombine(RPM
+    ::PATH_TRANSLATIONS, "languages.json");
 const QString RPM::fileMapInfos = "infos.json";
 const QString RPM::fileMapObjects = "objects.json";
 const QString RPM::gamesFolderName = "RPG Paper Maker Games";
@@ -150,7 +157,8 @@ bool RPM::isInObjectConfig = false;
 
 RPM::RPM() :
     p_project(nullptr),
-    m_engineSettings(nullptr)
+    m_engineSettings(nullptr),
+    m_translations(new Translations)
 {
 
 }
@@ -163,11 +171,14 @@ RPM::~RPM()
     }
 
     delete m_engineSettings;
+    delete m_translations;
 }
 
 Project* RPM::project() const { return p_project; }
 
 EngineSettings* RPM::engineSettings() const { return m_engineSettings; }
+
+Translations * RPM::translations() const { return m_translations; }
 
 int RPM::getPortionsRay() const {
     return project()->gameDatas()->systemDatas()->portionsRay();
@@ -196,6 +207,12 @@ void RPM::loadEngineSettings(){
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void RPM::readTranslations() {
+    m_translations->read();
+}
+
 // -------------------------------------------------------
 
 void RPM::writeJSON(QString path, const Serializable &obj){
@@ -428,4 +445,10 @@ PictureKind RPM::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
     default:
         return PictureKind::None;
     }
+}
+
+// -------------------------------------------------------
+
+QString RPM::translate(const QString &key) {
+    return RPM::get()->translations()->get(key);
 }

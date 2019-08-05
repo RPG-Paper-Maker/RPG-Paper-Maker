@@ -35,7 +35,11 @@ DialogNewProject::DialogNewProject(QWidget *parent) :
     ui->lineEditProjectName->setFocus();
     ui->lineEditLocation->setText(RPM::dirGames);
     ui->lineEditLocation->setCursorPosition(0);
-    //setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(RPM::translate(
+        Translations::OK));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(RPM::translate(
+        Translations::CANCEL));
 }
 
 DialogNewProject::~DialogNewProject()

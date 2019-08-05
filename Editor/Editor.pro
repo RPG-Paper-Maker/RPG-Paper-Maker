@@ -36,6 +36,7 @@ HEADERS += \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
     Models/System/systemmountain.h \
+    Models/translations.h \
     Singletons/singleton.h \
     Models/project.h \
     Dialogs/dialogdatas.h \
@@ -407,6 +408,7 @@ SOURCES += \
     CustomWidgets/panelobjectevent.cpp \
     Dialogs/Commands/dialogcommandsendevent.cpp \
     CustomWidgets/widgettreelocalmaps.cpp \
+    Models/translations.cpp \
     Models/treemaptag.cpp \
     Models/GameDatas/treemapdatas.cpp \
     Dialogs/dialogmapproperties.cpp \
