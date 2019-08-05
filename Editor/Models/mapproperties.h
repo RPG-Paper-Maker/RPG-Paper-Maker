@@ -32,6 +32,15 @@
 class MapProperties : public SystemLang
 {
 public:
+    static const QString JSON_TILESET_ID;
+    static const QString JSON_LENGTH;
+    static const QString JSON_WIDTH;
+    static const QString JSON_HEIGHT;
+    static const QString JSON_DEPTH;
+    static const QString JSON_MUSIC;
+    static const QString JSON_BACKGROUND_SOUND;
+    static const QString JSON_IS_SKY_COLOR;
+    static const QString JSON_SKY_COLOR_ID;
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
     static const QString JSON_OVERFLOW_MOUNTAINS;
@@ -39,55 +48,56 @@ public:
     MapProperties();
     MapProperties(QString path);
     MapProperties(int i, LangsTranslation *names, int l, int w, int h, int d,
-                  int idTileset);
+        int idTileset);
     virtual ~MapProperties();
 
+    SystemTileset * tileset() const;
+    void setTilesetID(int id);
+    int length() const;
+    void setLength(int l);
+    int width() const;
+    void setWidth(int w);
+    int height() const;
+    void setHeight(int h);
+    int depth() const;
+    void setDepth(int d);
+    SystemPlaySong * music() const;
+    void setMusic(SystemPlaySong *song);
+    SystemPlaySong * backgroundSound() const;
+    void setBackgroundSound(SystemPlaySong *song);
+    PrimitiveValue * skyColorID() const;
+    void setSkyColorID(PrimitiveValue *skyColorID);
+
+    QString realName() const;
     void clearOverflowSprites();
     void clearOverflowObjects3D();
     void clearOverflowMountains();
-    QString realName() const;
-    int length() const;
-    int width() const;
-    int height() const;
-    int depth() const;
-    SystemTileset* tileset() const;
-    void setTilesetID(int id);
-    void setLength(int l);
-    void setWidth(int w);
-    void setHeight(int h);
-    void setDepth(int d);
-    SystemPlaySong * music() const;
-    void setMusic(SystemPlaySong* song);
-    SystemPlaySong * backgroundSound() const;
-    PrimitiveValue * skyColorID() const;
-    void setSkyColorID(PrimitiveValue *skyColorID);
-    void setBackgroundSound(SystemPlaySong* song);
-    void addOverflow(Position& p, Portion& portion, QHash<Portion, QSet<Position
-        >*> &hash);
-    void removeOverflow(Position& p, Portion& portion, QHash<Portion, QSet<
-        Position>*> &hash);
-    void addOverflowSprites(Position& p, Portion& portion);
-    void removeOverflowSprites(Position& p, Portion& portion);
-    void addOverflowObjects3D(Position& p, Portion& portion);
-    void removeOverflowObjects3D(Position& p, Portion& portion);
-    void addOverflowMountains(Position& p, Portion& portion);
-    void removeOverflowMountains(Position& p, Portion& portion);
-
-    bool isInGrid(Position3D& position, int squareSize, int offset) const;
-    void getPortionsNumber(int& lx, int& ld, int &lh, int& lz);
-    virtual void setCopy(const MapProperties& super);
+    void addOverflow(Position &p, Portion &portion, QHash<Portion, QSet<Position
+        > *> &hash);
+    void removeOverflow(Position &p, Portion &portion, QHash<Portion, QSet<
+        Position> *> &hash);
+    void addOverflowSprites(Position &p, Portion &portion);
+    void removeOverflowSprites(Position &p, Portion &portion);
+    void addOverflowObjects3D(Position &p, Portion &portion);
+    void removeOverflowObjects3D(Position &p, Portion &portion);
+    void addOverflowMountains(Position &p, Portion &portion);
+    void removeOverflowMountains(Position &p, Portion &portion);
+    bool isInGrid(Position3D &position, int squareSize, int offset) const;
+    void getPortionsNumber(int &lx, int &ld, int &lh, int &lz);
     void save(QString path, bool temp = false);
-    MapElement * updateRaycastingOverflowSprites(Portion& portion, float
-        &finalDistance, Position &finalPosition, QRay3D& ray, double
+    MapElement * updateRaycastingOverflowSprites(Portion &portion, float
+        &finalDistance, Position &finalPosition, QRay3D &ray, double
         cameraHAngle);
-    MapElement * updateRaycastingOverflowObjects3D(Portion& portion, float
+    MapElement * updateRaycastingOverflowObjects3D(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray);
-    MapElement * updateRaycastingOverflowMountains(Portion& portion, float
+    MapElement * updateRaycastingOverflowMountains(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray);
     void readOverflow(const QJsonArray &tab, QHash<Portion, QSet<Position> *>
         &overflow);
-    void writeOverflow(QJsonObject &json, const QHash<Portion, QSet<Position> *> &overflow, QString jsonLabel) const;
+    void writeOverflow(QJsonObject &json, const QHash<Portion, QSet<Position> *>
+        &overflow, QString jsonLabel) const;
 
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
@@ -97,13 +107,13 @@ protected:
     int m_width;
     int m_height;
     int m_depth;
-    SystemPlaySong* m_music;
-    SystemPlaySong* m_backgroundSound;
+    SystemPlaySong *m_music;
+    SystemPlaySong *m_backgroundSound;
     PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
-    QHash<Portion, QSet<Position>*> m_outOverflowSprites;
-    QHash<Portion, QSet<Position>*> m_outOverflowObjects3D;
-    QHash<Portion, QSet<Position>*> m_outOverflowMountains;
+    QHash<Portion, QSet<Position> *> m_outOverflowSprites;
+    QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;
+    QHash<Portion, QSet<Position> *> m_outOverflowMountains;
 };
 
 #endif // MAPPROPERTIES_H

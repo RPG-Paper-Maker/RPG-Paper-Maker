@@ -40,6 +40,7 @@ public:
     virtual ~Project();
     static const QString ENGINE_VERSION;
     static const QString LAST_BUILD_DATE;
+    static const int MAX_PROJECTS_NUMBER;
     void setDefault();
     QString pathCurrentProject() const;
     void setPathCurrentProject(QString s);

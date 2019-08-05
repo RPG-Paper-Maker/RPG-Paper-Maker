@@ -75,10 +75,13 @@ SuperListItem* SystemLang::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemLang::setCopy(const SystemLang& item){
-    SuperListItem::setCopy(item);
+void SystemLang::setCopy(const SuperListItem &super) {
+    const SystemLang *lang;
 
-    m_names->setCopy(*item.m_names);
+    lang = reinterpret_cast<const SystemLang *>(&super);
+    SuperListItem::setCopy(*lang);
+
+    m_names->setCopy(*lang->m_names);
 }
 
 // -------------------------------------------------------

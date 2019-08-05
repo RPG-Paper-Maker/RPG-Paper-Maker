@@ -11,6 +11,7 @@
 
 #include "dialogcommandconditions.h"
 #include "ui_dialogcommandconditions.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -30,6 +31,7 @@ DialogCommandConditions::DialogCommandConditions(EventCommand* command,
 
     ui->widgetVariableVariable->initialize();
     ui->widgetVariableVariableConstant->initializeNumberVariable();
+    ui->comboBoxVariableOperation->addItems(RPM::ENUM_TO_STRING_OPERATION);
 
     if (command != nullptr) initialize(command);
 }
@@ -46,12 +48,14 @@ DialogCommandConditions::~DialogCommandConditions()
 // -------------------------------------------------------
 
 void DialogCommandConditions::initialize(EventCommand* command){
-    int i = 0;
+    int i;
+
+    i = 0;
     ui->checkBox->setChecked(command->valueCommandAt(i++) == "1");
     ui->tabWidget->setCurrentIndex(command->valueCommandAt(i++).toInt());
     ui->widgetVariableVariable->setCurrentId(command->valueCommandAt(i++)
                                              .toInt());
-    ui->widgetVariableOperation->setCurrentIndex(command
+    ui->comboBoxVariableOperation->setCurrentIndex(command
                                                  ->valueCommandAt(i++)
                                                  .toInt());
     ui->widgetVariableVariableConstant->initializeCommand(command, i);
@@ -65,7 +69,7 @@ EventCommand* DialogCommandConditions::getCommand() const{
     command.append("0"); // Page
     command.append(QString::number(ui->widgetVariableVariable
                                    ->currentId()));
-    command.append(ui->widgetVariableOperation->operation());
+    command.append(QString::number(ui->comboBoxVariableOperation->currentIndex()));
     ui->widgetVariableVariableConstant->getCommand(command);
 
     return new EventCommand(EventCommandKind::If, command);

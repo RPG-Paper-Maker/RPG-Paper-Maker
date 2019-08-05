@@ -37,14 +37,22 @@ const QColor RPM::COLOR_MENU_SELECTION_BLUE = QColor(47, 139, 196);
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
 const QString RPM::JSON_VALUE = "v";
-const QString RPM::JSON_EXTENSION = ".json";
+
+// EXTENSIONS
+const QString RPM::EXTENSION_JSON = ".json";
+const QString RPM::EXTENSION_QSS = ".qss";
+const QString RPM::EXTENSION_RPM = ".rpm";
+const QString RPM::EXTENSION_PNG = ".png";
+const QString RPM::EXTENSION_JPG = ".jpg";
 
 // STRING SYMBOLS
 const QString RPM::DASH = "-";
+const QString RPM::TRUE_BOOL_STRING = "1";
+const QString RPM::FALSE_BOOL_STRING = "0";
 
 // FILE / FOLDER NAMES
-const QString RPM::FILE_MAP_INFOS = "infos" + JSON_EXTENSION;
-const QString RPM::FILE_MAP_OBJECTS = "objects" + JSON_EXTENSION;
+const QString RPM::FILE_MAP_INFOS = "infos" + EXTENSION_JSON;
+const QString RPM::FILE_MAP_OBJECTS = "objects" + EXTENSION_JSON;
 const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
 const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
@@ -62,55 +70,55 @@ const QString RPM::PATH_SCRIPTS_SYSTEM_DIR = Common::pathCombine(
 const QString RPM::PATH_SCRIPTS_PLUGINS_DIR = Common::pathCombine(
     PATH_SCRIPTS_DIR, "Plugins");
 const QString RPM::PATH_COMMON_EVENTS = Common::pathCombine(PATH_DATAS,
-    "commonEvents" + JSON_EXTENSION);
+    "commonEvents" + EXTENSION_JSON);
 const QString RPM::PATH_VARIABLES = Common::pathCombine(PATH_DATAS,
-    "variables" + JSON_EXTENSION);
+    "variables" + EXTENSION_JSON);
 const QString RPM::PATH_SYSTEM = Common::pathCombine(PATH_DATAS,
-    "system" + JSON_EXTENSION);
+    "system" + EXTENSION_JSON);
 const QString RPM::PATH_BATTLE_SYSTEM = Common::pathCombine(PATH_DATAS,
-    "battleSystem" + JSON_EXTENSION);
+    "battleSystem" + EXTENSION_JSON);
 const QString RPM::PATH_ITEMS = Common::pathCombine(PATH_DATAS,
-    "items" + JSON_EXTENSION);
+    "items" + EXTENSION_JSON);
 const QString RPM::PATH_SKILLS = Common::pathCombine(PATH_DATAS,
-    "skills" + JSON_EXTENSION);
+    "skills" + EXTENSION_JSON);
 const QString RPM::PATH_WEAPONS = Common::pathCombine(PATH_DATAS,
-    "weapons" + JSON_EXTENSION);
+    "weapons" + EXTENSION_JSON);
 const QString RPM::PATH_ARMORS = Common::pathCombine(PATH_DATAS,
-    "armors" + JSON_EXTENSION);
+    "armors" + EXTENSION_JSON);
 const QString RPM::PATH_HEROES = Common::pathCombine(PATH_DATAS,
-    "heroes" + JSON_EXTENSION);
+    "heroes" + EXTENSION_JSON);
 const QString RPM::PATH_MONSTERS = Common::pathCombine(PATH_DATAS,
-    "monsters" + JSON_EXTENSION);
+    "monsters" + EXTENSION_JSON);
 const QString RPM::PATH_TROOPS = Common::pathCombine(PATH_DATAS,
-    "troops" + JSON_EXTENSION);
+    "troops" + EXTENSION_JSON);
 const QString RPM::PATH_CLASSES = Common::pathCombine(PATH_DATAS,
-    "classes" + JSON_EXTENSION);
+    "classes" + EXTENSION_JSON);
 const QString RPM::PATH_TILESETS_DATAS = Common::pathCombine(PATH_DATAS,
-    "tilesets" + JSON_EXTENSION);
+    "tilesets" + EXTENSION_JSON);
 const QString RPM::PATH_ANIMATIONS = Common::pathCombine(PATH_DATAS,
-    "animations" + JSON_EXTENSION);
+    "animations" + EXTENSION_JSON);
 const QString RPM::PATH_STATUS = Common::pathCombine(PATH_DATAS,
-    "status" + JSON_EXTENSION);
+    "status" + EXTENSION_JSON);
 const QString RPM::PATH_SPECIAL_ELEMENTS = Common::pathCombine(PATH_DATAS,
-    "specialElements" + JSON_EXTENSION);
+    "specialElements" + EXTENSION_JSON);
 const QString RPM::PATH_TITLE_SCREEN_GAME_OVER = Common::pathCombine(PATH_DATAS,
-    "titlescreenGameover" + JSON_EXTENSION);
+    "titlescreenGameover" + EXTENSION_JSON);
 const QString RPM::PATH_TREE_MAP = Common::pathCombine(PATH_DATAS,
-    "treeMap" + JSON_EXTENSION);
+    "treeMap" + EXTENSION_JSON);
 const QString RPM::PATH_LANGS = Common::pathCombine(PATH_DATAS,
-    "langs" + JSON_EXTENSION);
+    "langs" + EXTENSION_JSON);
 const QString RPM::PATH_SCRIPTS = Common::pathCombine(PATH_DATAS,
-    "scripts" + JSON_EXTENSION);
+    "scripts" + EXTENSION_JSON);
 const QString RPM::PATH_KEYBOARD = Common::pathCombine(PATH_DATAS,
-    "keyBoard" + JSON_EXTENSION);
+    "keyBoard" + EXTENSION_JSON);
 const QString RPM::PATH_PICTURES_DATAS = Common::pathCombine(PATH_DATAS,
-    "pictures" + JSON_EXTENSION);
+    "pictures" + EXTENSION_JSON);
 const QString RPM::PATH_SONGS_DATAS = Common::pathCombine(PATH_DATAS,
-    "songs" + JSON_EXTENSION);
+    "songs" + EXTENSION_JSON);
 const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(PATH_DATAS,
-    "shapes" + JSON_EXTENSION);
+    "shapes" + EXTENSION_JSON);
 const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS,
-    "saves" + JSON_EXTENSION);
+    "saves" + EXTENSION_JSON);
 const QString RPM::PATH_PICTURES = Common::pathCombine(FOLDER_CONTENT,
     "Pictures");
 const QString RPM::PATH_HUD = Common::pathCombine(PATH_PICTURES,
@@ -162,11 +170,11 @@ const QString RPM::PATH_MTL = Common::pathCombine(PATH_SHAPES,
 const QString RPM::PATH_COLLISIONS = Common::pathCombine(PATH_SHAPES,
     "Collisions");
 const QString RPM::PATH_ENGINE_SETTINGS = Common::pathCombine(FOLDER_CONTENT,
-    "engineSettings" + JSON_EXTENSION);
+    "engineSettings" + EXTENSION_JSON);
 const QString RPM::PATH_TRANSLATIONS = Common::pathCombine(FOLDER_CONTENT,
     "translations");
 const QString RPM::PATH_TRANSLATIONS_LANGUAGES = Common::pathCombine(RPM
-    ::PATH_TRANSLATIONS, "languages" + JSON_EXTENSION);
+    ::PATH_TRANSLATIONS, "languages" + EXTENSION_JSON);
 const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
     ::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation),
     FOLDER_GAMES);
@@ -191,6 +199,23 @@ const QStringList RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND = {
 };
 const QStringList RPM::ENUM_TO_STRING_OS_KIND = {
     "Windows", "Linux", "Mac"
+};
+
+const QStringList RPM::ENUM_TO_STRING_TEAM = {
+    "team", "reserve", "hidden"
+};
+
+const QStringList RPM::ENUM_TO_STRING_OPERATION = {
+    "= (Equal to)", "!= (Not equal to)", ">= (Greater than or equal to)",
+    "<= (Lesser than or equal to)", "> (Greater than)", "< (Lesser than)"
+};
+
+const QStringList RPM::ENUM_TO_STRING_OPERATION_SIMPLE = {
+    "=", "!=", ">=", "<=", ">", "<"
+};
+
+const QStringList RPM::ENUM_TO_STRING_FORMULA_STAT = {
+    "Statistic", "Currency", "Variable"
 };
 
 // OTHER STATIC VALUES

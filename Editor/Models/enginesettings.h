@@ -19,23 +19,29 @@
 //
 //  CLASS EngineSettings
 //
-//  The engine settings (keyboard for the engine).
+//  The different engine settings.
 //
 // -------------------------------------------------------
 
 class EngineSettings : public Serializable
 {
 public:
+    static const QString JSON_KEYBOARD;
+    static const QString JSON_ZOOM_PICTURES;
+    static const QString JSON_THEME;
     static const QString JSON_PROJECT_NAMES;
     static const QString JSON_PROJECT_LINKS;
     static const QString JSON_FIRST_TIME;
-    static const int MAX_PROJECTS_NUMBER;
+    static const QString THEME_DEFAULT;
+    static const QString THEME_WHITE;
+    static const QString THEME_WHITE_MAC;
+    static const QString THEME_DARK;
+    static const QString PATH_THEMES;
 
     EngineSettings();
     virtual ~EngineSettings();
-    void read();
-    void write();
-    KeyBoardDatas* keyBoardDatas() const;
+
+    KeyBoardDatas * keyBoardDatas() const;
     int zoomPictures() const;
     void setZoomPictures(int z);
     ThemeKind theme() const;
@@ -46,16 +52,18 @@ public:
     bool firstTime() const;
     void setFirstTime(bool b);
 
-    QString getThemeContent() const;
-    void updateTheme();
     void setDefault();
+    QString getThemeContent() const;
+    void read();
+    void write();
+    void updateTheme();
     void updateProject(QString name, QString link);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
-    KeyBoardDatas* m_keyBoardDatas;
+    KeyBoardDatas *m_keyBoardDatas;
     int m_zoomPictures;
     ThemeKind m_theme;
     QStringList m_projectNames;

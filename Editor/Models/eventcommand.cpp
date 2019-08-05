@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include <widgetcomboboxoperation.h>
 #include "eventcommand.h"
 #include "rpm.h"
 #include "widgetcomboboxteam.h"
@@ -17,6 +16,9 @@
 #include "systemobjectevent.h"
 #include "systemcommandmove.h"
 
+const QString EventCommand::JSON_KIND = "kind";
+const QString EventCommand::JSON_COMMANDS = "command";
+const QString EventCommand::BEGINNING_COMMAND = "> ";
 QVector<QString> EventCommand::emptyCommandList = QVector<QString>();
 
 // -------------------------------------------------------
@@ -25,14 +27,15 @@ QVector<QString> EventCommand::emptyCommandList = QVector<QString>();
 //
 // -------------------------------------------------------
 
-EventCommand::EventCommand() : EventCommand(EventCommandKind::None)
+EventCommand::EventCommand() :
+    EventCommand(EventCommandKind::None)
 {
 
 }
 
 EventCommand::EventCommand(EventCommandKind k, QVector<QString> &l) :
-    p_kind(k),
-    p_listCommand(l)
+    m_kind(k),
+    m_listCommand(l)
 {
 
 }
@@ -42,64 +45,29 @@ EventCommand::~EventCommand() {
 }
 
 EventCommandKind EventCommand::kind() const {
-    return p_kind;
+    return m_kind;
 }
 
 void  EventCommand::setKind(EventCommandKind k) {
-    p_kind = k;
+    m_kind = k;
 }
 
 int EventCommand::commandsCount() const {
-    return p_listCommand.size();
+    return m_listCommand.size();
 }
 
 QString EventCommand::valueCommandAt(int index) const {
-    return p_listCommand.at(index);
+    return m_listCommand.at(index);
 }
 
 void EventCommand::setCommands(QVector<QString>& commands) {
-    p_listCommand = commands;
+    m_listCommand = commands;
 }
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
-// -------------------------------------------------------
-
-bool EventCommand::hasElse() const { return p_listCommand[0] == "1"; }
-
-// -------------------------------------------------------
-
-bool EventCommand::isBattleWithoutGameOver() const {
-    return p_listCommand[1] == "0";
-}
-
-// -------------------------------------------------------
-
-bool EventCommand::isEditable() const{
-    return isErasable() &&
-         p_kind != EventCommandKind::While &&
-         p_kind != EventCommandKind::WhileBreak &&
-         p_kind != EventCommandKind::EndWhile &&
-         p_kind != EventCommandKind::Else &&
-         p_kind != EventCommandKind::EndIf &&
-         p_kind != EventCommandKind::EndGame &&
-         p_kind != EventCommandKind::OpenMainMenu &&
-         p_kind != EventCommandKind::OpenSavesMenu;
-}
-
-// -------------------------------------------------------
-
-bool EventCommand::isErasable() const{
-    return p_kind != EventCommandKind::None &&
-           p_kind != EventCommandKind::EndWhile &&
-           p_kind != EventCommandKind::Else &&
-           p_kind != EventCommandKind::EndIf &&
-           p_kind != EventCommandKind::IfWin &&
-           p_kind != EventCommandKind::IfLose;
-}
-
 // -------------------------------------------------------
 
 QString EventCommand::kindToString(EventCommandKind kind) {
@@ -174,40 +142,70 @@ bool EventCommand::eventCommandKindLessThan(const EventCommandKind &v1, const
 
 // -------------------------------------------------------
 
-int EventCommand::getSongID(QStandardItemModel *parameters) const
-{
-    int i = 0;
+bool EventCommand::hasElse() const {
+    return m_listCommand[0] == RPM::TRUE_BOOL_STRING;
+}
 
-    bool isIDNumber = p_listCommand.at(i++) == "1";
-    QString idNumber = strNumber(i, parameters);
-    int id = p_listCommand.at(i++).toInt();
+// -------------------------------------------------------
+
+bool EventCommand::isBattleWithoutGameOver() const {
+    return m_listCommand[1] == RPM::FALSE_BOOL_STRING;
+}
+
+// -------------------------------------------------------
+
+bool EventCommand::isEditable() const {
+    return this->isErasable() && m_kind != EventCommandKind::While && m_kind !=
+        EventCommandKind::WhileBreak && m_kind != EventCommandKind::EndWhile &&
+        m_kind != EventCommandKind::Else && m_kind != EventCommandKind::EndIf &&
+        m_kind != EventCommandKind::EndGame && m_kind != EventCommandKind
+        ::OpenMainMenu && m_kind != EventCommandKind::OpenSavesMenu;
+}
+
+// -------------------------------------------------------
+
+bool EventCommand::isErasable() const {
+    return m_kind != EventCommandKind::None && m_kind != EventCommandKind
+        ::EndWhile && m_kind != EventCommandKind::Else && m_kind !=
+        EventCommandKind::EndIf && m_kind != EventCommandKind::IfWin && m_kind
+        != EventCommandKind::IfLose;
+}
+
+// -------------------------------------------------------
+
+int EventCommand::getSongID(QStandardItemModel *parameters) const {
+    QString idNumber;
+    bool isIDNumber;
+    int i, id;
+
+    i = 0;
+    isIDNumber = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING;
+    idNumber = this->strNumber(i, parameters);
+    id = m_listCommand.at(i++).toInt();
 
     return isIDNumber ? idNumber.toInt() : id;
 }
 
 // -------------------------------------------------------
 
-void EventCommand::setCopy(const EventCommand& copy){
-    p_kind = copy.p_kind;
-    p_listCommand = copy.p_listCommand;
+void EventCommand::setCopy(const EventCommand &copy) {
+    m_kind = copy.m_kind;
+    m_listCommand = copy.m_listCommand;
 }
 
 // -------------------------------------------------------
-//
-//  TO STRING : what to display on screen
-//
-// -------------------------------------------------------
 
-QString EventCommand::toString(SystemCommonObject* object,
-                               QStandardItemModel* parameters) const
+QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
 {
-    QString str = "> ";
+    QString str;
 
-    switch (p_kind) {
+    str = BEGINNING_COMMAND;
+    switch (m_kind) {
     case EventCommandKind::ShowText:
-        str += strShowText(); break;
+        str += this->strShowText(); break;
     case EventCommandKind::ChangeVariables:
-        str += strChangeVariables(object, parameters); break;
+        str += this->strChangeVariables(object, parameters); break;
     case EventCommandKind::EndGame:
         str += "Game Over"; break;
     case EventCommandKind::While:
@@ -229,39 +227,39 @@ QString EventCommand::toString(SystemCommonObject* object,
     case EventCommandKind::OpenSavesMenu:
         str += "Open the saves menu"; break;
     case EventCommandKind::ModifyInventory:
-        str += strModifyInventory(); break;
+        str += this->strModifyInventory(); break;
     case EventCommandKind::ModifyTeam:
-        str += strModifyTeam(parameters); break;
+        str += this->strModifyTeam(parameters); break;
     case EventCommandKind::StartBattle:
-        str += strStartBattle(parameters); break;
+        str += this->strStartBattle(parameters); break;
     case EventCommandKind::IfWin:
         str += "if Win"; break;
     case EventCommandKind::IfLose:
         str += "if Lose"; break;
     case EventCommandKind::ChangeState:
-        str += strChangeState(object, parameters); break;
+        str += this->strChangeState(object, parameters); break;
     case EventCommandKind::SendEvent:
-        str += strSendEvent(); break;
+        str += this->strSendEvent(); break;
     case EventCommandKind::TeleportObject:
-        str += strTeleportObject(object, parameters); break;
+        str += this->strTeleportObject(object, parameters); break;
     case EventCommandKind::MoveObject:
-        str += strMoveObject(parameters); break;
+        str += this->strMoveObject(parameters); break;
     case EventCommandKind::Wait:
-        str += strWait(); break;
+        str += this->strWait(); break;
     case EventCommandKind::MoveCamera:
-        str += strMoveCamera(parameters); break;
+        str += this->strMoveCamera(parameters); break;
     case EventCommandKind::PlayMusic:
-        str += strPlayMusic(object, parameters); break;
+        str += this->strPlayMusic(object, parameters); break;
     case EventCommandKind::StopMusic:
-        str += strStopMusic(object, parameters); break;
+        str += this->strStopMusic(object, parameters); break;
     case EventCommandKind::PlayBackgroundSound:
-        str += strPlayBackgroundSound(object, parameters); break;
+        str += this->strPlayBackgroundSound(object, parameters); break;
     case EventCommandKind::StopBackgroundSound:
-        str += strStopBackgroundSound(object, parameters); break;
+        str += this->strStopBackgroundSound(object, parameters); break;
     case EventCommandKind::PlayASound:
-        str += strPlaySound(object, parameters); break;
+        str += this->strPlaySound(object, parameters); break;
     case EventCommandKind::PlayMusicEffect:
-        str += strPlayMusicEffect(object, parameters); break;
+        str += this->strPlayMusicEffect(object, parameters); break;
     default:
         break;
     }
@@ -271,16 +269,18 @@ QString EventCommand::toString(SystemCommonObject* object,
 
 // -------------------------------------------------------
 
-QString EventCommand::strNumberVariable(int &i) const{
-    PrimitiveValueKind kind =
-            static_cast<PrimitiveValueKind>(p_listCommand.at(i++).toInt());
-    int value = p_listCommand.at(i++).toInt();
-    switch (kind){
+QString EventCommand::strNumberVariable(int &i) const {
+    PrimitiveValueKind kind;
+    int value;
+
+    kind = static_cast<PrimitiveValueKind>(m_listCommand.at(i++).toInt());
+    value = m_listCommand.at(i++).toInt();
+    switch (kind) {
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
         return "Variable " + RPM::get()->project()->gameDatas()
-                ->variablesDatas()->getVariableById(value)->toString();
+            ->variablesDatas()->getVariableById(value)->toString();
     default:
         return "";
     }
@@ -288,25 +288,26 @@ QString EventCommand::strNumberVariable(int &i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strDataBaseId(int &i, QStandardItemModel* dataBase,
-                                    QStandardItemModel *parameters) const
+QString EventCommand::strDataBaseId(int &i, QStandardItemModel *dataBase,
+    QStandardItemModel *parameters) const
 {
-    PrimitiveValueKind kind =
-            static_cast<PrimitiveValueKind>(p_listCommand.at(i++).toInt());
-    int value = p_listCommand.at(i++).toInt();
+    PrimitiveValueKind kind;
+    int value;
 
+    kind = static_cast<PrimitiveValueKind>(m_listCommand.at(i++).toInt());
+    value = m_listCommand.at(i++).toInt();
     switch (kind){
     case PrimitiveValueKind::Number:
         return QString::number(value);
     case PrimitiveValueKind::Variable:
         return "Variable " + RPM::get()->project()->gameDatas()
-                ->variablesDatas()->getVariableById(value)->toString();
+            ->variablesDatas()->getVariableById(value)->toString();
     case PrimitiveValueKind::DataBase:
         return SuperListItem::getById(dataBase->invisibleRootItem(), value)
-                ->toString();
+            ->toString();
     case PrimitiveValueKind::Parameter:
         return SuperListItem::getById(parameters->invisibleRootItem(), value)
-                ->toString();
+            ->toString();
     default:
         return "";
     }
@@ -314,23 +315,23 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel* dataBase,
 
 // -------------------------------------------------------
 
-QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const{
-    PrimitiveValueKind kind =
-            static_cast<PrimitiveValueKind>(p_listCommand.at(i++).toInt());
-    QString value = p_listCommand.at(i++);
+QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const {
+    PrimitiveValueKind kind;
+    QString value;
 
-    switch (kind){
+    kind = static_cast<PrimitiveValueKind>(m_listCommand.at(i++).toInt());
+    value = m_listCommand.at(i++);
+    switch (kind) {
     case PrimitiveValueKind::Number:
         return value;
     case PrimitiveValueKind::NumberDouble:
         return QString::number(value.toDouble());
     case PrimitiveValueKind::Variable:
         return "Variable " + RPM::get()->project()->gameDatas()
-                ->variablesDatas()->getVariableById(value.toInt())->toString();
+            ->variablesDatas()->getVariableById(value.toInt())->toString();
     case PrimitiveValueKind::Parameter:
-        return SuperListItem::getById(parameters->invisibleRootItem(),
-                                      value.toInt())
-                ->toString();
+        return SuperListItem::getById(parameters->invisibleRootItem(), value
+            .toInt())->toString();
     default:
         return "";
     }
@@ -338,8 +339,8 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strShowText() const{
-    return "Show text: " + p_listCommand.at(0);
+QString EventCommand::strShowText() const {
+    return "Show text: " + m_listCommand.at(0);
 }
 
 // -------------------------------------------------------
@@ -347,32 +348,34 @@ QString EventCommand::strShowText() const{
 QString EventCommand::strChangeVariables(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
-    int i = 0;
-    QString several = "";
-    QString selection = strChangeVariablesSelection(i, several);
-    QString operation = strChangeVariablesOperation(i);
-    QString value = strChangeVariablesValue(i, object, parameters);
+    QString several, selection, operation, value;
+    int i;
+
+    i = 0;
+    several = "";
+    selection = this->strChangeVariablesSelection(i, several);
+    operation = this->strChangeVariablesOperation(i);
+    value = this->strChangeVariablesValue(i, object, parameters);
 
     return "Change variable" + several + ": " + selection + " " + operation +
-            " " + value;
+        " " + value;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeVariablesSelection(int& i,
-                                                  QString& several) const
+QString EventCommand::strChangeVariablesSelection(int &i, QString &several) const
 {
-    QString selection = p_listCommand.at(i++);
-    QString str = "";
-    if (selection == "0"){
+    QString selection, str;
+
+    selection = m_listCommand.at(i++);
+    if (selection == RPM::FALSE_BOOL_STRING) {
         str += RPM::get()->project()->gameDatas()->variablesDatas()
-                ->getVariableById(p_listCommand.at(i++).toInt())->toString();
-    }
-    else{
+            ->getVariableById(m_listCommand.at(i++).toInt())->toString();
+    } else {
         several += "s";
-        str += p_listCommand.at(i++);
+        str += m_listCommand.at(i++);
         str += " to ";
-        str += p_listCommand.at(i++);
+        str += m_listCommand.at(i++);
     }
 
     return str;
@@ -380,15 +383,23 @@ QString EventCommand::strChangeVariablesSelection(int& i,
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeVariablesOperation(int& i) const{
-    QString operation = p_listCommand.at(i++);
-    QString str = "";
-    if (operation == "0") str += "=";
-    else if (operation == "1") str += "+";
-    else if (operation == "2") str += "-";
-    else if (operation == "3") str += "*";
-    else if (operation == "4") str += "/";
-    else if (operation == "5") str += "%";
+QString EventCommand::strChangeVariablesOperation(int &i) const {
+    QString operation, str;
+
+    operation = m_listCommand.at(i++);
+    if (operation == "0") {
+        str += "=";
+    } else if (operation == "1") {
+        str += "+";
+    } else if (operation == "2") {
+        str += "-";
+    } else if (operation == "3") {
+        str += "*";
+    } else if (operation == "4") {
+        str += "/";
+    } else if (operation == "5") {
+        str += "%";
+    }
 
     return str;
 }
@@ -398,16 +409,16 @@ QString EventCommand::strChangeVariablesOperation(int& i) const{
 QString EventCommand::strChangeVariablesValue(int &i, SystemCommonObject *
     , QStandardItemModel *parameters) const
 {
-    QString value = p_listCommand.at(i++);
-    QString str = "";
+    QString value, str;
 
+    value = m_listCommand.at(i++);
     if (value == "0") {
         str += strNumber(i, parameters);
     } else if (value == "1") {
         str += "random number between ";
-        str += strNumber(i, parameters);
+        str += this->strNumber(i, parameters);
         str += " and ";
-        str += strNumber(i, parameters);
+        str += this->strNumber(i, parameters);
     }
 
     return str;
@@ -415,21 +426,23 @@ QString EventCommand::strChangeVariablesValue(int &i, SystemCommonObject *
 
 // -------------------------------------------------------
 
-QString EventCommand::strInputNumber() const{
-    QString variable = RPM::get()->project()->gameDatas()->variablesDatas()
-            ->getVariableById(p_listCommand.at(0).toInt())->toString();
-    return "Input number in variable " + variable;
+QString EventCommand::strInputNumber() const {
+    return "Input number in variable " + RPM::get()->project()->gameDatas()
+        ->variablesDatas()->getVariableById(m_listCommand.at(0).toInt())
+        ->toString();
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strCondition() const{
-    int i = 1;
-    QString condition = "";
-    int page = p_listCommand.at(i++).toInt();
-    switch (page){
+QString EventCommand::strCondition() const {
+    QString condition;
+    int i, page;
+
+    i = 1;
+    page = m_listCommand.at(i++).toInt();
+    switch (page) {
     case 0:
-        condition = strConditionPageVariables(i);
+        condition = this->strConditionPageVariables(i);
         break;
     }
     return "if (" + condition + ")";
@@ -437,40 +450,45 @@ QString EventCommand::strCondition() const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strConditionPageVariables(int &i) const{
-    QString condition = "";
-    condition += "variable ";
-    int variable = p_listCommand.at(i++).toInt();
-    QString operation = WidgetComboBoxOperation::toString(p_listCommand.at(i++)
-                                                          .toInt());
-    condition += RPM::get()->project()->gameDatas()
-            ->variablesDatas()->getVariableById(variable)->toString();
-    condition += " " + operation + " ";
-    condition += strNumberVariable(i);
+QString EventCommand::strConditionPageVariables(int &i) const {
+    QString condition, operation;
+    int variable;
 
+    condition = "variable ";
+    variable = m_listCommand.at(i++).toInt();
+    operation = RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++).toInt());
+    condition += RPM::get()->project()->gameDatas()->variablesDatas()
+        ->getVariableById(variable)->toString();
+    condition += " " + operation + " ";
+    condition += this->strNumberVariable(i);
 
     return condition;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyInventory() const{
-    int i = 0;
-    QString selection = strModifyInventorySelection(i);
-    QString operation = strChangeVariablesOperation(i);
-    QString number = strNumberVariable(i);
+QString EventCommand::strModifyInventory() const {
+    QString selection, operation ,number;
+    int i;
+
+    i = 0;
+    selection = this->strModifyInventorySelection(i);
+    operation = this->strChangeVariablesOperation(i);
+    number = this->strNumberVariable(i);
 
     return "Modify inventory: " + selection + " " + operation + " " + number;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strModifyInventorySelection(int &i) const{
-    QString selection = "";
+QString EventCommand::strModifyInventorySelection(int &i) const {
+    QStandardItem *item;
+    QString selection;
+    int objectType, objectID;
 
     // Object type
-    int objectType = p_listCommand.at(i++).toInt();
-    switch(objectType){
+    objectType = m_listCommand.at(i++).toInt();
+    switch(objectType) {
     case 0:
         selection += "item "; break;
     case 1:
@@ -479,24 +497,24 @@ QString EventCommand::strModifyInventorySelection(int &i) const{
         selection += "armor "; break;
     }
 
-    // Id of the object
-    int objectId = p_listCommand.at(i++).toInt();
-    QStandardItem* item = nullptr;
-    switch(objectType){
+    // ID of the object
+    objectID = m_listCommand.at(i++).toInt();
+    item = nullptr;
+    switch(objectType) {
     case 0:
         item = RPM::get()->project()->gameDatas()->itemsDatas()->model()
-                ->invisibleRootItem();
+            ->invisibleRootItem();
         break;
     case 1:
         item = RPM::get()->project()->gameDatas()->weaponsDatas()->model()
-                ->invisibleRootItem();
+            ->invisibleRootItem();
         break;
     case 2:
         item = RPM::get()->project()->gameDatas()->armorsDatas()->model()
-                ->invisibleRootItem();
+            ->invisibleRootItem();
         break;
     }
-    selection += SuperListItem::getById(item, objectId)->toString();
+    selection += SuperListItem::getById(item, objectID)->toString();
 
     return selection;
 }
@@ -504,11 +522,16 @@ QString EventCommand::strModifyInventorySelection(int &i) const{
 // -------------------------------------------------------
 
 QString EventCommand::strModifyTeam(QStandardItemModel *parameters) const {
-    int i = 0;
-    QString operation = "";
-    int kind = p_listCommand.at(i++).toInt();
-    if (kind == 0) operation += strModifyTeamInstance(i, parameters);
-    else if (kind == 1) operation += strModifyTeamMoveDelete(i, parameters);
+    QString operation;
+    int i, kind;
+
+    i = 0;
+    kind = m_listCommand.at(i++).toInt();
+    if (kind == 0) {
+        operation += this->strModifyTeamInstance(i, parameters);
+    } else if (kind == 1) {
+        operation += this->strModifyTeamMoveDelete(i, parameters);
+    }
 
     return "Modify team: " + operation;
 }
@@ -518,23 +541,20 @@ QString EventCommand::strModifyTeam(QStandardItemModel *parameters) const {
 QString EventCommand::strModifyTeamInstance(int &i, QStandardItemModel
     *parameters) const
 {
-    QString level = strNumber(i, parameters);
-    QString teamNew = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
-                                                   .toInt());
-    QString stockVariable = RPM::get()->project()->gameDatas()
-            ->variablesDatas()->getVariableById(p_listCommand.at(i++)
-                                                      .toInt())->toString();
-    QString character = "";
-    int kindNew = p_listCommand.at(i++).toInt();
-    int idNew = p_listCommand.at(i++).toInt();
-    if (kindNew == 0){
-        character += "hero " +
-                SuperListItem::getById(RPM::get()->project()->gameDatas()
-                                       ->heroesDatas()->model()
-                                       ->invisibleRootItem(), idNew)
-                ->toString();
-    }
-    else if (kindNew == 1){
+    QString level, teamNew, stockVariable, character;
+    int kindNew, idNew;
+
+    level = this->strNumber(i, parameters);
+    teamNew = RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+    stockVariable = RPM::get()->project()->gameDatas()->variablesDatas()
+        ->getVariableById(m_listCommand.at(i++).toInt())->toString();
+    kindNew = m_listCommand.at(i++).toInt();
+    idNew = m_listCommand.at(i++).toInt();
+    if (kindNew == 0) {
+        character += "hero " + SuperListItem::getById(RPM::get()->project()
+            ->gameDatas()->heroesDatas()->model()->invisibleRootItem(), idNew)
+            ->toString();
+    } else if (kindNew == 1) {
         character += "monster ";
     }
 
@@ -547,24 +567,27 @@ QString EventCommand::strModifyTeamInstance(int &i, QStandardItemModel
 QString EventCommand::strModifyTeamMoveDelete(int &i, QStandardItemModel
     *parameters) const
 {
-    QString addRemove = p_listCommand.at(i++).toInt() == 0 ? "move" : "remove";
-    QString characterId = strNumber(i, parameters);
-    QString addRemoveTeam = WidgetComboBoxTeam::toString(p_listCommand.at(i++)
-                                                         .toInt());
+    QString addRemove, characterID, addRemoveTeam;
 
-    return addRemove + " the character with id " + characterId + " in " +
-            addRemoveTeam;
+    addRemove = m_listCommand.at(i++).toInt() == 0 ? "move" : "remove";
+    characterID = this->strNumber(i, parameters);
+    addRemoveTeam = RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt());
+
+    return addRemove + " the character with id " + characterID + " in " +
+        addRemoveTeam;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattle(QStandardItemModel* parameters) const{
-    int i = 0;
+QString EventCommand::strStartBattle(QStandardItemModel *parameters) const {
+    QString options, troop, battleMap, transition;
+    int i;
 
-    QString options = strStartBattleOptions(i);
-    QString troop = strStartBattleTroop(parameters, i);
-    QString battleMap = strStartBattleMap(parameters, i);
-    QString transition = strStartBattleTransition(parameters, i);
+    i = 0;
+    options = this->strStartBattleOptions(i);
+    troop = this->strStartBattleTroop(parameters, i);
+    battleMap = this->strStartBattleMap(parameters, i);
+    transition = this->strStartBattleTransition(parameters, i);
 
     return "Start battle: troop " + troop + " with battle map " + battleMap +
         transition + "\n\n" + options;
@@ -572,13 +595,15 @@ QString EventCommand::strStartBattle(QStandardItemModel* parameters) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattleTroop(QStandardItemModel* parameters,
-    int& i) const
+QString EventCommand::strStartBattleTroop(QStandardItemModel *parameters, int
+    &i) const
 {
-    int kind = p_listCommand.at(i++).toInt();
-    switch(kind){
+    int kind;
+
+    kind = m_listCommand.at(i++).toInt();
+    switch(kind) {
     case 0:
-        return "with ID " + strDataBaseId(i, RPM::get()->project()
+        return "with ID " + this->strDataBaseId(i, RPM::get()->project()
             ->gameDatas()->troopsDatas()->model(), parameters);
     case 1:
         return "random (in map property)";
@@ -589,47 +614,48 @@ QString EventCommand::strStartBattleTroop(QStandardItemModel* parameters,
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattleMap(QStandardItemModel* parameters,
-    int& i) const
+QString EventCommand::strStartBattleMap(QStandardItemModel *parameters, int &i)
+    const
 {
-    int kind = p_listCommand.at(i++).toInt();
     QString id, x, y, yPlus, z;
-    switch (kind){
+    int kind;
+
+    kind = m_listCommand.at(i++).toInt();
+    switch (kind) {
     case 0:
-        return strDataBaseId(i, RPM::get()->project()->gameDatas()
+        return this->strDataBaseId(i, RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelBattleMaps(), parameters);
     case 1:
-        id = p_listCommand.at(i++);
-        x = p_listCommand.at(i++);
-        y = p_listCommand.at(i++);
-        yPlus = p_listCommand.at(i++);
-        z = p_listCommand.at(i++);
+        id = m_listCommand.at(i++);
+        x = m_listCommand.at(i++);
+        y = m_listCommand.at(i++);
+        yPlus = m_listCommand.at(i++);
+        z = m_listCommand.at(i++);
         break;
     case 2:
-        id = strNumber(i, parameters);
-        x = strNumber(i, parameters);
-        y = strNumber(i, parameters);
-        yPlus = strNumber(i, parameters);
-        z = strNumber(i, parameters);
+        id = this->strNumber(i, parameters);
+        x = this->strNumber(i, parameters);
+        y = this->strNumber(i, parameters);
+        yPlus = this->strNumber(i, parameters);
+        z = this->strNumber(i, parameters);
         break;
     }
 
-    return "\n\tID map: " + id + "\n" +
-           "\tX: " + x + "\n" +
-           "\tY: " + y + "\n" +
-           "\tY plus: " + yPlus + "\n" +
-           "\tZ: " + z;
+    return "\n\tID map: " + id + "\n" + "\tX: " + x + "\n" + "\tY: " + y + "\n"
+        + "\tY plus: " + yPlus + "\n" + "\tZ: " + z;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattleOptions(int& i) const {
-    QString strOptions = "[";
+QString EventCommand::strStartBattleOptions(int &i) const {
     QStringList listOptions;
-    if (p_listCommand.at(i++) == "1") {
+    QString strOptions;
+
+    strOptions = "[";
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Allow escape";
     }
-    if (p_listCommand.at(i++) == "1") {
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Defeat causes Game Over";
     }
     strOptions += listOptions.join(";");
@@ -640,34 +666,40 @@ QString EventCommand::strStartBattleOptions(int& i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattleTransition(QStandardItemModel* parameters,
-    int& i) const
+QString EventCommand::strStartBattleTransition(QStandardItemModel *parameters,
+    int &i) const
 {
-    QString transition = " with transition: ";
-    int type = p_listCommand.at(i++).toInt();
-    transition += strStartBattleTransitionType(parameters, i, type, "in");
+    QString transition;
+    int type;
+
+    transition = " with transition: ";
+    type = m_listCommand.at(i++).toInt();
+    transition += this->strStartBattleTransitionType(parameters, i, type, "in");
     transition += " and then ";
-    type = p_listCommand.at(i++).toInt();
-    transition += strStartBattleTransitionType(parameters, i, type, "out");
+    type = m_listCommand.at(i++).toInt();
+    transition += this->strStartBattleTransitionType(parameters, i, type, "out");
 
     return transition;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strStartBattleTransitionType(QStandardItemModel* parameters,
-    int& i, int type, QString name) const
+QString EventCommand::strStartBattleTransitionType(QStandardItemModel
+    *parameters, int &i, int type, QString name) const
 {
     QString transition;
+
     switch (type) {
     case 0:
-        transition += "none"; break;
+        transition += "none";
+        break;
     case 1:
         transition += "fade " + name + " " + strDataBaseId(i, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelColors(), parameters);
         break;
     case 2:
-        transition += "zoom " + name; break;
+        transition += "zoom " + name;
+        break;
     }
 
     return transition;
@@ -676,25 +708,32 @@ QString EventCommand::strStartBattleTransitionType(QStandardItemModel* parameter
 // -------------------------------------------------------
 
 QString EventCommand::strChangeState(SystemCommonObject *object,
-                                     QStandardItemModel *parameters) const
+    QStandardItemModel *parameters) const
 {
-    int i = 0 ;
-    QStandardItemModel* modelDataBase = nullptr;
-    if (object != nullptr)
-        modelDataBase = object->modelStates();
+    QStandardItemModel *modelDataBase;
+    QString value, operation;
+    int i;
 
-    QString value = strDataBaseId(i, modelDataBase, parameters);
-    QString operation = strChangeStateOperation(i);
+    i = 0;
+    modelDataBase = nullptr;
+    if (object != nullptr) {
+        modelDataBase = object->modelStates();
+    }
+
+    value = this->strDataBaseId(i, modelDataBase, parameters);
+    operation = this->strChangeStateOperation(i);
 
     return "Change state: " + operation + value;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strChangeStateOperation(int& i) const{
-    int operation = p_listCommand.at(i++).toInt();
-    QString str = "";
-    switch (operation){
+QString EventCommand::strChangeStateOperation(int &i) const {
+    QString str;
+    int operation;
+
+    operation = m_listCommand.at(i++).toInt();
+    switch (operation) {
     case 0:
         str += "pass into"; break;
     case 1:
@@ -709,20 +748,21 @@ QString EventCommand::strChangeStateOperation(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strSendEvent() const{
-    int i = 0 ;
+QString EventCommand::strSendEvent() const {
+    QStandardItemModel *model;
+    SystemObjectEvent *e;
+    QString target, event;
+    int i = 0;
 
-    QString target = strSendEventTarget(i);
-    SystemObjectEvent* e = SystemObjectEvent::getCommandEvent(this, i);
-    QStandardItemModel* model = e->isSystem() ?
-                RPM::get()->project()->gameDatas()->commonEventsDatas()
-                ->modelEventsSystem() :
-                RPM::get()->project()->gameDatas()->commonEventsDatas()
-                ->modelEventsUser();
-    e->setName(SuperListItem::getById(model->invisibleRootItem(),
-                                      e->id())->name());
+    target = strSendEventTarget(i);
+    e = SystemObjectEvent::getCommandEvent(this, i);
+    model = e->isSystem() ? RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelEventsSystem() : RPM::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelEventsUser();
+    e->setName(SuperListItem::getById(model->invisibleRootItem(), e->id())
+        ->name());
     e->updateParameters();
-    QString event = e->getLabelTab();
+    event = e->getLabelTab();
     delete e;
 
     return "Send event: to " + target + " with event " + event;
@@ -730,20 +770,21 @@ QString EventCommand::strSendEvent() const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strSendEventTarget(int& i) const{
-    QString str = "";
-    int index = p_listCommand.at(i++).toInt();
-    int id;
+QString EventCommand::strSendEventTarget(int &i) const {
+    QString str;
+    int index, id;
 
-    switch (index){
+    index = m_listCommand.at(i++).toInt();
+    switch (index) {
     case 0:
-        str += "all"; break;
+        str += "all";
+        break;
     case 1:
-        id = p_listCommand.at(i++).toInt();
+        id = m_listCommand.at(i++).toInt();
         str += "detection " + QString::number(id);
         break;
     case 2:
-        id = p_listCommand.at(i++).toInt();
+        id = m_listCommand.at(i++).toInt();
         str += "object " + QString::number(id);
         break;
     case 3:
@@ -756,65 +797,64 @@ QString EventCommand::strSendEventTarget(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strTeleportObject(SystemCommonObject* object,
-                                        QStandardItemModel* parameters) const
+QString EventCommand::strTeleportObject(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
 {
-    int i = 0;
+    QString strObj, strPosition, strOptions;
+    int i;
 
-    QString strObj = strMoveObjectID(parameters, i);
-    QString strPosition = strTeleportObjectPosition(object, parameters, i);
-    QString strOptions = strTeleportObjectOptions(i);
+    i = 0;
+    strObj = this->strMoveObjectID(parameters, i);
+    strPosition = this->strTeleportObjectPosition(object, parameters, i);
+    strOptions = this->strTeleportObjectOptions(i);
 
     return "Teleport object: " + strObj + " to the coordinates\n" + strOptions +
-            "\n" + strPosition;
+        "\n" + strPosition;
 }
 
 // -------------------------------------------------------
 
 QString EventCommand::strTeleportObjectPosition(SystemCommonObject*,
-                                                QStandardItemModel* parameters,
-                                                int& i) const
+    QStandardItemModel *parameters, int &i) const
 {
-    int kind = p_listCommand.at(i++).toInt();
+    QString id, x, y, yPlus, z;
+    int kind;
 
-    if (kind == 0 || kind == 1){
-        QString id, x, y, yPlus, z;
-        switch (kind){
+    kind = m_listCommand.at(i++).toInt();
+    if (kind == 0 || kind == 1) {
+        switch (kind) {
         case 0:
-            id = p_listCommand.at(i++);
-            x = p_listCommand.at(i++);
-            y = p_listCommand.at(i++);
-            yPlus = p_listCommand.at(i++);
-            z = p_listCommand.at(i++);
+            id = m_listCommand.at(i++);
+            x = m_listCommand.at(i++);
+            y = m_listCommand.at(i++);
+            yPlus = m_listCommand.at(i++);
+            z = m_listCommand.at(i++);
             break;
         case 1:
-            id = strNumber(i, parameters);
-            x = strNumber(i, parameters);
-            y = strNumber(i, parameters);
-            yPlus = strNumber(i, parameters);
-            z = strNumber(i, parameters);
+            id = this->strNumber(i, parameters);
+            x = this->strNumber(i, parameters);
+            y = this->strNumber(i, parameters);
+            yPlus = this->strNumber(i, parameters);
+            z = this->strNumber(i, parameters);
             break;
         }
 
-        return "\tID map: " + id + "\n" +
-               "\tX: " + x + "\n" +
-               "\tY: " + y + "\n" +
-               "\tY plus: " + yPlus + "\n" +
-               "\tZ: " + z;
+        return "\tID map: " + id + "\n" + "\tX: " + x + "\n" + "\tY: " + y +
+            "\n" + "\tY plus: " + yPlus + "\n" + "\tZ: " + z;
     }
 
-    return "\t" + strMoveObjectID(parameters, i) + "'s coordinates";
+    return "\t" + this->strMoveObjectID(parameters, i) + "'s coordinates";
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strTeleportObjectOptions(int& i) const{
-    QString strOptions = "[";
-
+QString EventCommand::strTeleportObjectOptions(int &i) const {
     QStringList listOptions;
+    QString strOptions, str;
 
-    QString str = "Direction:";
-    switch (p_listCommand.at(i++).toInt()){
+    strOptions = "[";
+    str = "Direction:";
+    switch (m_listCommand.at(i++).toInt()) {
     case 0:
         listOptions << str + "Unchanged"; break;
     case 1:
@@ -835,9 +875,9 @@ QString EventCommand::strTeleportObjectOptions(int& i) const{
         listOptions << str + "South-East"; break;
     }
     str = "Shading before:";
-    listOptions << ((p_listCommand.at(i++) == "0") ? "ON" : "OFF");
+    listOptions << ((m_listCommand.at(i++) == "0") ? "ON" : "OFF");
     str = "Shading after:";
-    listOptions << ((p_listCommand.at(i++) == "0") ? "ON" : "OFF");
+    listOptions << ((m_listCommand.at(i++) == "0") ? "ON" : "OFF");
     strOptions += listOptions.join(";");
     strOptions += "]";
 
@@ -846,30 +886,32 @@ QString EventCommand::strTeleportObjectOptions(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObject(QStandardItemModel* parameters) const{
-    int i = 0 ;
+QString EventCommand::strMoveObject(QStandardItemModel *parameters) const {
+    QString strObj, strOptions, strMoves;
+    int i;
 
-    QString strObj = strMoveObjectID(parameters, i);
-    QString strOptions = strMoveObjectOptions(i);
-    QString strMoves = strMoveObjectMoves(i);
+    i = 0;
+    strObj = this->strMoveObjectID(parameters, i);
+    strOptions = this->strMoveObjectOptions(i);
+    strMoves = this->strMoveObjectMoves(i);
 
     return "Move object: " + strObj + "\n" + strOptions + strMoves;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObjectID(QStandardItemModel* parameters,
-                                      int& i) const
+QString EventCommand::strMoveObjectID(QStandardItemModel *parameters, int &i) const
 {
-    QStandardItemModel* modelObjects;
+    QStandardItemModel *modelObjects;
+    QString strObj;
+
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         modelObjects = new QStandardItemModel;
         Map::setModelObjects(modelObjects);
-    }
-    else{
+    } else {
         modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
-    QString strObj = strDataBaseId(i, modelObjects, parameters);
+    strObj = this->strDataBaseId(i, modelObjects, parameters);
 
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(modelObjects);
@@ -880,15 +922,20 @@ QString EventCommand::strMoveObjectID(QStandardItemModel* parameters,
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObjectOptions(int& i) const{
-    QString strOptions = "[";
+QString EventCommand::strMoveObjectOptions(int &i) const {
     QStringList listOptions;
-    if (p_listCommand.at(i++) == "1")
+    QString strOptions;
+
+    strOptions = "[";
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Ignore";
-    if (p_listCommand.at(i++) == "1")
+    }
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Wait end";
-    if (p_listCommand.at(i++) == "1")
+    }
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Camera orientation";
+    }
     strOptions += listOptions.join(";");
     strOptions += "]";
 
@@ -897,10 +944,12 @@ QString EventCommand::strMoveObjectOptions(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObjectMoves(int& i) const{
-    QString strMoves = "";
-    while(i < commandsCount()){
-        SystemCommandMove move;
+QString EventCommand::strMoveObjectMoves(int &i) const {
+    SystemCommandMove move;
+    QString strMoves;
+
+    while(i < commandsCount()) {
+        move = SystemCommandMove();
         strMoves += "\n";
         move.initialize(this, i);
         strMoves += "\t" + move.toString();
@@ -911,38 +960,41 @@ QString EventCommand::strMoveObjectMoves(int& i) const{
 
 // -------------------------------------------------------
 
-QString EventCommand::strWait() const{
-    return "Wait: " + p_listCommand.at(0) + " seconds";
+QString EventCommand::strWait() const {
+    return "Wait: " + m_listCommand.at(0) + " seconds";
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCamera(QStandardItemModel* parameters) const {
-    int i = 0;
+QString EventCommand::strMoveCamera(QStandardItemModel *parameters) const {
+    QString target, operation, move, rotation, zoom, options;
+    int i;
 
-    QString target = strMoveCameraTarget(parameters, i);
-    QString operation = strChangeVariablesOperation(i);
-    QString move = strMoveCameraMove(parameters, i, operation);
-    QString rotation = strMoveCameraRotation(parameters, i, operation);
-    QString zoom = strMoveCameraZoom(parameters, i, operation);
-    QString options = strMoveCameraOptions(parameters, i);
+    i = 0;
+    target = this->strMoveCameraTarget(parameters, i);
+    operation = this->strChangeVariablesOperation(i);
+    move = this->strMoveCameraMove(parameters, i, operation);
+    rotation = this->strMoveCameraRotation(parameters, i, operation);
+    zoom = this->strMoveCameraZoom(parameters, i, operation);
+    options = this->strMoveCameraOptions(parameters, i);
 
     return "Move camera:\nTarget: " + target + "\nMove: " + move +
-            "\nRotation: " + rotation + "\nZoom: " + zoom + "\n" +
-            options;
+        "\nRotation: " + rotation + "\nZoom: " + zoom + "\n" + options;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraTarget(QStandardItemModel* parameters,
-                                          int& i) const
+QString EventCommand::strMoveCameraTarget(QStandardItemModel *parameters, int
+    &i) const
 {
-    int targetKind = p_listCommand.at(i++).toInt();
+    int targetKind;
+
+    targetKind = m_listCommand.at(i++).toInt();
     switch (targetKind) {
     case 0:
         return "Unchanged";
     case 1:
-        return "Object " + strMoveObjectID(parameters, i);
+        return "Object " + this->strMoveObjectID(parameters, i);
     }
 
     return "";
@@ -950,156 +1002,159 @@ QString EventCommand::strMoveCameraTarget(QStandardItemModel* parameters,
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraMove(QStandardItemModel* parameters, int& i,
-                                        QString &operation) const
+QString EventCommand::strMoveCameraMove(QStandardItemModel *parameters, int &i,
+    QString &operation) const
 {
-    // Options
-    QString strOptions = "[";
     QStringList listOptions;
-    if (p_listCommand.at(i++) == "1")
+    QString strOptions, x, y, z;
+    // Options
+    strOptions = "[";
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Offset";
-    if (p_listCommand.at(i++) == "1")
+    }
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Camera orientation";
+    }
     strOptions += listOptions.join(";");
     strOptions += "]";
 
     // Moves
-    QString x = operation + strNumber(i, parameters) + " ";
-    x += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
-    QString y = operation + strNumber(i, parameters) + " ";
-    y += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
-    QString z = operation + strNumber(i, parameters) + " ";
-    z += (p_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    x = operation + this->strNumber(i, parameters) + " ";
+    x += (m_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    y = operation + this->strNumber(i, parameters) + " ";
+    y += (m_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
+    z = operation + this->strNumber(i, parameters) + " ";
+    z += (m_listCommand.at(i++).toInt() == 0 ? "square(s)" : "pixel(s)");
 
     return "X: " + x + "; Y: " + y + "; Z: " + z + " " + strOptions;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraRotation(QStandardItemModel *parameters,
-                                            int& i, QString &operation) const
+QString EventCommand::strMoveCameraRotation(QStandardItemModel *parameters, int
+    &i, QString &operation) const
 {
-    // Options
-    QString strOptions = "[";
     QStringList listOptions;
-    if (p_listCommand.at(i++) == "1")
+    QString strOptions, h, v;
+
+    // Options
+    strOptions = "[";
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         listOptions << "Offset";
+    }
     strOptions += listOptions.join(";");
     strOptions += "]";
 
     // Rotation
-    QString h = operation + strNumber(i, parameters) + "°";
-    QString v = operation + strNumber(i, parameters) + "°";
+    h = operation + this->strNumber(i, parameters) + "°";
+    v = operation + this->strNumber(i, parameters) + "°";
 
     return "H: " + h + "; V: " + v + " " + strOptions;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraZoom(QStandardItemModel* parameters, int& i,
-                                        QString &operation) const
+QString EventCommand::strMoveCameraZoom(QStandardItemModel *parameters, int &i,
+    QString &operation) const
 {
-    QString d = operation + strNumber(i, parameters);
-
-    return "Distance: " + d;
+    return "Distance: " + operation + this->strNumber(i, parameters);
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraOptions(QStandardItemModel* parameters,
-                                           int& i) const
+QString EventCommand::strMoveCameraOptions(QStandardItemModel *parameters, int
+    &i) const
 {
     QString str;
 
-    if (p_listCommand.at(i++) == "1")
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
         str += "[Wait end] ";
-
-    str += "TIME: " + strNumber(i, parameters) + " seconds";
+    }
+    str += "TIME: " + this->strNumber(i, parameters) + " seconds";
 
     return str;
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strPlaySong(SystemCommonObject*,
-                                  QStandardItemModel* parameters,
-                                  SongKind kind) const
+QString EventCommand::strPlaySong(SystemCommonObject*, QStandardItemModel
+    *parameters, SongKind kind) const
+{
+    QString idNumber, id, volume, start, end;
+    bool isIDNumber, isStart, isEnd;
+    int i;
+
+    i = 0;
+    isIDNumber = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING;
+    idNumber = this->strNumber(i, parameters);
+    id = SuperListItem::getById(RPM::get()->project()->songsDatas()->model(kind)
+        ->invisibleRootItem(), m_listCommand.at(i++).toInt())->toString();
+    volume = this->strNumber(i, parameters);
+    isStart = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING;
+    start = this->strNumber(i, parameters);
+    isEnd = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING;
+    end = this->strNumber(i, parameters);
+
+    return (isIDNumber ? "with ID " + idNumber : id) + " with volume: " +
+        volume + (isStart ? "\nStart: " + start : "") + (isEnd ? "\nEnd: " + end
+        : "");
+}
+
+QString EventCommand::strPlayMusic(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    return "Play music: " + this->strPlaySong(object, parameters, SongKind
+        ::Music);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlayBackgroundSound(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    return "Play background sound: " + this->strPlaySong(object, parameters,
+        SongKind::BackgroundSound);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlaySound(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    return "Play sound: " + this->strPlaySong(object, parameters, SongKind
+        ::Sound);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strPlayMusicEffect(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    return "Play music effect: " + this->strPlaySong(object, parameters,
+        SongKind::MusicEffect);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strStopSong(SystemCommonObject*, QStandardItemModel
+    *parameters) const
 {
     int i = 0;
-
-    bool isIDNumber = p_listCommand.at(i++) == "1";
-    QString idNumber = strNumber(i, parameters);
-    QString id = SuperListItem::getById(RPM::get()->project()->songsDatas()
-        ->model(kind)->invisibleRootItem(), p_listCommand.at(i++)
-        .toInt())->toString();
-    QString volume = strNumber(i, parameters);
-    bool isStart = p_listCommand.at(i++) == "1";
-    QString start = strNumber(i, parameters);
-    bool isEnd = p_listCommand.at(i++) == "1";
-    QString end = strNumber(i, parameters);
-
-    return (isIDNumber ? "with ID " + idNumber : id) +
-            " with volume: " + volume + (isStart ? "\nStart: " + start : "") +
-            (isEnd ? "\nEnd: " + end : "");
+    return this->strNumber(i, parameters) + " seconds";
 }
 
-QString EventCommand::strPlayMusic(SystemCommonObject* object,
-                                   QStandardItemModel* parameters) const
+QString EventCommand::strStopMusic(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
 {
-    return "Play music: " + strPlaySong(object, parameters, SongKind::Music);
+    return "Stop music: " + this->strStopSong(object, parameters);
 }
 
 // -------------------------------------------------------
 
-QString EventCommand::strPlayBackgroundSound(SystemCommonObject* object,
-                                             QStandardItemModel* parameters)
-                                             const
+QString EventCommand::strStopBackgroundSound(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
 {
-    return "Play background sound: " + strPlaySong(object, parameters,
-                                                   SongKind::BackgroundSound);
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strPlaySound(SystemCommonObject* object,
-                                   QStandardItemModel* parameters) const
-{
-    return "Play sound: " + strPlaySong(object, parameters, SongKind::Sound);
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strPlayMusicEffect(SystemCommonObject* object,
-                                         QStandardItemModel* parameters) const
-{
-    return "Play music effect: " + strPlaySong(object, parameters,
-                                               SongKind::MusicEffect);
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strStopSong(SystemCommonObject*,
-                                  QStandardItemModel* parameters) const
-{
-    int i = 0;
-    QString seconds = strNumber(i, parameters);
-
-    return seconds + " seconds";
-}
-
-QString EventCommand::strStopMusic(SystemCommonObject* object,
-                                   QStandardItemModel* parameters) const
-{
-    return "Stop music: " + strStopSong(object, parameters);
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strStopBackgroundSound(SystemCommonObject* object,
-                                             QStandardItemModel* parameters)
-                                             const
-{
-    return "Stop background sound: " + strStopSong(object, parameters);
+    return "Stop background sound: " + this->strStopSong(object, parameters);
 }
 
 // -------------------------------------------------------
@@ -1108,24 +1163,24 @@ QString EventCommand::strStopBackgroundSound(SystemCommonObject* object,
 //
 // -------------------------------------------------------
 
-void EventCommand::read(const QJsonObject &json){
-    p_kind = static_cast<EventCommandKind>(json["kind"].toInt());
-    readCommand(json["command"].toArray());
-}
+void EventCommand::read(const QJsonObject &json) {
+    QJsonArray tab;
+    QJsonValue val;
+    int i, l;
 
-// -------------------------------------------------------
+    m_kind = static_cast<EventCommandKind>(json[JSON_KIND].toInt());
+    tab = json[JSON_COMMANDS].toArray();
+    m_listCommand.clear();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        val = tab[i];
 
-void EventCommand::readCommand(const QJsonArray &json){
-    p_listCommand.clear();
-    for (int i = 0; i < json.size(); i++){
-        QJsonValue val = json[i];
-
-        if (val.isString())
-            p_listCommand.append(json[i].toString());
-        else if (val.isDouble())
-            p_listCommand.append(QString::number(json[i].toDouble()));
-        else
-            p_listCommand.append(QString::number(val.toInt()));
+        if (val.isString()) {
+            m_listCommand.append(tab[i].toString());
+        } else if (val.isDouble()) {
+            m_listCommand.append(QString::number(tab[i].toDouble()));
+        } else {
+            m_listCommand.append(QString::number(val.toInt()));
+        }
     }
 }
 
@@ -1133,29 +1188,26 @@ void EventCommand::readCommand(const QJsonArray &json){
 
 QJsonObject EventCommand::getJSON() const{
     QJsonObject json;
-    json["kind"] = (int)p_kind;
-    json["command"] = getArrayJSON();
+    QJsonArray tab;
+    QString s;
+    bool conversionOk, conversionDoubleOk;
+    double d;
+    int i, l, integer;
+
+    json[JSON_KIND] = static_cast<int>(m_kind);
+    for (i = 0, l = m_listCommand.size(); i < l; i++) {
+        s = m_listCommand.at(i);
+        integer = s.toInt(&conversionOk);
+        d = s.toDouble(&conversionDoubleOk);
+        if (conversionOk) {
+            tab.append(integer);
+        } else if (conversionDoubleOk) {
+            tab.append(d);
+        } else {
+            tab.append(s);
+        }
+    }
+    json[JSON_COMMANDS] = tab;
 
     return json;
-}
-
-// -------------------------------------------------------
-
-QJsonArray EventCommand::getArrayJSON() const{
-    QJsonArray tab;
-    for (int i = 0; i < p_listCommand.length(); i++){
-        QString s = p_listCommand.at(i);
-        bool conversionOk, conversionDoubleOk;
-        int integer = s.toInt(&conversionOk);
-        double d = s.toDouble(&conversionDoubleOk);
-
-        if (conversionOk)
-            tab.append(integer);
-        else if (conversionDoubleOk)
-            tab.append(d);
-        else
-            tab.append(s);
-    }
-
-    return tab;
 }

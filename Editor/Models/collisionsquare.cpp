@@ -11,6 +11,7 @@
 
 #include "collisionsquare.h"
 #include "rpm.h"
+#include "common.h"
 
 const QString CollisionSquare::JSON_RECT = "rec";
 const QString CollisionSquare::JSON_LEFT = "l";
@@ -30,7 +31,7 @@ CollisionSquare::CollisionSquare() :
 
 }
 
-CollisionSquare::CollisionSquare(QRectF* rect) :
+CollisionSquare::CollisionSquare(QRectF *rect) :
     m_rect(rect),
     m_left(true),
     m_right(true),
@@ -41,17 +42,19 @@ CollisionSquare::CollisionSquare(QRectF* rect) :
 }
 
 CollisionSquare::~CollisionSquare() {
-    if (m_rect != nullptr)
+    if (m_rect != nullptr) {
         delete m_rect;
+    }
 }
 
-QRectF *CollisionSquare::rect() const {
+QRectF * CollisionSquare::rect() const {
     return m_rect;
 }
 
 void CollisionSquare::setRect(QRectF *rect) {
-    if (m_rect != nullptr)
+    if (m_rect != nullptr) {
         delete m_rect;
+    }
     m_rect = rect;
 }
 
@@ -84,8 +87,9 @@ bool CollisionSquare::hasAllDirections() const {
 // -------------------------------------------------------
 
 void CollisionSquare::setDefaultPraticable() {
-    if (m_rect != nullptr)
+    if (m_rect != nullptr) {
         delete m_rect;
+    }
     m_rect = new QRectF(0, 0, 100, 100);
 }
 
@@ -125,12 +129,15 @@ void CollisionSquare::revertLeft() {
 
 // -------------------------------------------------------
 
-CollisionSquare* CollisionSquare::createCopy() {
-    CollisionSquare* collision = new CollisionSquare;
-    if (m_rect == nullptr)
+CollisionSquare * CollisionSquare::createCopy() {
+    CollisionSquare *collision;
+
+    collision = new CollisionSquare;
+    if (m_rect == nullptr) {
         collision->m_rect = nullptr;
-    else
+    } else {
         collision->m_rect = new QRectF(*m_rect);
+    }
     collision->m_top = m_top;
     collision->m_right = m_right;
     collision->m_bot = m_bot;
@@ -146,59 +153,66 @@ CollisionSquare* CollisionSquare::createCopy() {
 // -------------------------------------------------------
 
 void CollisionSquare::read(const QJsonObject &json) {
+    QJsonArray tab;
+
     if (json.contains(JSON_RECT)) {
         if (!json[JSON_RECT].isNull()) {
-            QJsonArray tab = json[JSON_RECT].toArray();
-            m_rect = new QRectF(tab.at(0).toDouble(), tab.at(1).toDouble(),
-                                tab.at(2).toDouble(), tab.at(3).toDouble());
+            tab = json[JSON_RECT].toArray();
+            m_rect = new QRectF;
+            Common::readRectF(tab, *m_rect);
         }
-    }
-    else
+    } else {
         setDefaultPraticable();
+    }
 
-    if (json.contains(JSON_LEFT))
+    if (json.contains(JSON_LEFT)) {
         m_left = json[JSON_LEFT].toBool();
-    else
+    } else {
         m_left = true;
-    if (json.contains(JSON_RIGHT))
+    }
+    if (json.contains(JSON_RIGHT)) {
         m_right = json[JSON_RIGHT].toBool();
-    else
+    } else {
         m_right = true;
-    if (json.contains(JSON_TOP))
+    }
+    if (json.contains(JSON_TOP)) {
         m_top = json[JSON_TOP].toBool();
-    else
+    } else {
         m_top = true;
-    if (json.contains(JSON_BOT))
+    }
+    if (json.contains(JSON_BOT)) {
         m_bot = json[JSON_BOT].toBool();
-    else
+    } else {
         m_bot = true;
+    }
 }
 
 // -------------------------------------------------------
 
 void CollisionSquare::write(QJsonObject &json) const {
+    QJsonArray tab;
+
     if (m_rect != nullptr) {
-        if (m_rect->x() != 0 || m_rect->y() != 0 || m_rect->width() != 100 ||
-            m_rect->height() != 100)
+        if (m_rect->x() != 0.0 || m_rect->y() != 0.0|| m_rect->width() != 100.0
+            || m_rect->height() != 100.0)
         {
-            QJsonArray tab;
-            tab.append(m_rect->x());
-            tab.append(m_rect->y());
-            tab.append(m_rect->width());
-            tab.append(m_rect->height());
+            Common::writeRectF(tab, *m_rect);
             json[JSON_RECT] = tab;
         }
-    }
-    else
+    } else {
         json[JSON_RECT] = QJsonValue();
+    }
 
-
-    if (!m_left)
+    if (!m_left) {
         json[JSON_LEFT] = m_left;
-    if (!m_right)
+    }
+    if (!m_right) {
         json[JSON_RIGHT] = m_right;
-    if (!m_top)
+    }
+    if (!m_top) {
         json[JSON_TOP] = m_top;
-    if (!m_bot)
+    }
+    if (!m_bot) {
         json[JSON_BOT] = m_bot;
+    }
 }

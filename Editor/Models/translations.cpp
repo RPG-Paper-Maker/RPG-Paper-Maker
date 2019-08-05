@@ -81,7 +81,7 @@ void Translations::readTranslations() {
 
     Common::readOtherJSON(Common::pathCombine(RPM::PATH_TRANSLATIONS,
         Translations::JSON_TRANSLATIONS + RPM::DASH + m_currentLanguage + RPM
-        ::JSON_EXTENSION), doc);
+        ::EXTENSION_JSON), doc);
     obj = doc.object();
     keys = obj.keys();
     for (i = 0, l = keys.size(); i < l; i++) {

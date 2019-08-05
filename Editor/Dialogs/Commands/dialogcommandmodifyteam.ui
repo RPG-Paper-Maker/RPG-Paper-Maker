@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
+    <width>661</width>
     <height>260</height>
    </rect>
   </property>
@@ -70,7 +70,7 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetComboBoxTeam" name="comboBoxInstanceTeam" native="true"/>
+        <widget class="QComboBox" name="comboBoxInstanceTeam"/>
        </item>
        <item>
         <widget class="QLabel" name="labelOfInstance">
@@ -333,21 +333,9 @@
         </widget>
        </item>
        <item>
-        <widget class="WidgetComboBoxTeam" name="comboBoxAddRemoveTeam" native="true">
+        <widget class="QComboBox" name="comboBoxAddRemoveTeam">
          <property name="enabled">
           <bool>false</bool>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>23</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>23</height>
-          </size>
          </property>
         </widget>
        </item>
@@ -393,12 +381,6 @@
    <header>widgetvariable.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>WidgetComboBoxTeam</class>
-   <extends>QWidget</extends>
-   <header>widgetcomboboxteam.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -436,7 +418,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

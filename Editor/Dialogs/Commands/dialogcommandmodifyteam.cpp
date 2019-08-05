@@ -33,6 +33,8 @@ DialogCommandModifyTeam::DialogCommandModifyTeam(EventCommand *command,
     ui->widgetVariableConstantAddRemove->initializeNumber(nullptr, nullptr);
     ui->panelPrimitiveValueLevel->initializeNumber(nullptr, nullptr);
     ui->panelPrimitiveValueLevel->setNumberValue(1);
+    ui->comboBoxInstanceTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
+    ui->comboBoxAddRemoveTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
 
     if (command != nullptr) initialize(command);
 }

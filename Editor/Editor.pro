@@ -55,7 +55,6 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangevariables.h \
     Dialogs/Commands/dialogcommandinputnumber.h \
     Dialogs/Commands/dialogcommandconditions.h \
-    CustomWidgets/widgetcomboboxoperation.h \
     CustomWidgets/widgettextlang.h \
     CustomWidgets/widgetmenubarmapeditor.h \
     Enums/mapeditorselectionkind.h \
@@ -84,7 +83,6 @@ HEADERS += \
     Models/GameDatas/classesdatas.h \
     Models/System/systemclass.h \
     Dialogs/Commands/dialogcommandmodifyteam.h \
-    CustomWidgets/widgetcomboboxteam.h \
     Models/GameDatas/battlesystemdatas.h \
     Models/System/systemlang.h \
     Models/System/systemelement.h \
@@ -256,7 +254,6 @@ HEADERS += \
     CustomWidgets/widgettableprogression.h \
     Models/System/systemprogressiontable.h \
     CustomWidgets/widgeticon.h \
-    CustomWidgets/widgetcomboboxformulastat.h \
     Enums/targetkind.h \
     Enums/availablekind.h \
     Models/GameDatas/animationsdatas.h \
@@ -332,7 +329,6 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangevariables.cpp \
     Dialogs/Commands/dialogcommandinputnumber.cpp \
     Dialogs/Commands/dialogcommandconditions.cpp \
-    CustomWidgets/widgetcomboboxoperation.cpp \
     CustomWidgets/widgettextlang.cpp \
     CustomWidgets/widgetmenubarmapeditor.cpp \
     MapEditor/mapportion.cpp \
@@ -358,7 +354,6 @@ SOURCES += \
     Models/GameDatas/classesdatas.cpp \
     Models/System/systemclass.cpp \
     Dialogs/Commands/dialogcommandmodifyteam.cpp \
-    CustomWidgets/widgetcomboboxteam.cpp \
     Models/GameDatas/battlesystemdatas.cpp \
     Models/System/systemlang.cpp \
     Models/System/systemelement.cpp \
@@ -520,7 +515,6 @@ SOURCES += \
     CustomWidgets/widgettableprogression.cpp \
     Models/System/systemprogressiontable.cpp \
     CustomWidgets/widgeticon.cpp \
-    CustomWidgets/widgetcomboboxformulastat.cpp \
     Models/GameDatas/animationsdatas.cpp \
     Models/System/systemanimation.cpp \
     Models/GameDatas/statusdatas.cpp \

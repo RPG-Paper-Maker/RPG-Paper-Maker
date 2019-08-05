@@ -31,13 +31,15 @@ public:
     SystemLang();
     SystemLang(int i, LangsTranslation* names);
     virtual ~SystemLang();
+
     LangsTranslation* names() const;
     virtual void setName(QString n);
+
     void setDefault();
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemLang& item);
-
+    virtual void setCopy(const SuperListItem& super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

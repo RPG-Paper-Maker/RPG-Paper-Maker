@@ -26,20 +26,23 @@
 class CollisionSquare : public Serializable
 {
 public:
-    CollisionSquare();
-    CollisionSquare(QRectF* rect);
-    virtual ~CollisionSquare();
-    QRectF* rect() const;
-    void setRect(QRectF* rect);
-    bool left() const;
-    bool right() const;
-    bool top() const;
-    bool bot() const;
     static const QString JSON_RECT;
     static const QString JSON_LEFT;
     static const QString JSON_RIGHT;
     static const QString JSON_TOP;
     static const QString JSON_BOT;
+
+    CollisionSquare();
+    CollisionSquare(QRectF *rect);
+    virtual ~CollisionSquare();
+
+    QRectF * rect() const;
+    void setRect(QRectF *rect);
+    bool left() const;
+    bool right() const;
+    bool top() const;
+    bool bot() const;
+
     bool hasAllDirections() const;
     void setDefaultPraticable();
     void revertAllDirections();
@@ -47,7 +50,7 @@ public:
     void revertRight();
     void revertBot();
     void revertLeft();
-    CollisionSquare *createCopy();
+    CollisionSquare * createCopy();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -60,8 +63,8 @@ protected:
     bool m_bot;
 };
 
-inline uint qHash(const QPoint & key) {
-    return key.x() + key.y();
+inline uint qHash(const QPoint &key) {
+    return static_cast<uint>(key.x() + key.y());
 }
 
 #endif // COLLISIONSQUARE_H

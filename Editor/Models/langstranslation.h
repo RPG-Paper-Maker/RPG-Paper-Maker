@@ -14,7 +14,7 @@
 
 #include <QHash>
 #include <QVector>
-#include <QJsonObject>
+#include "serializable.h"
 
 // -------------------------------------------------------
 //
@@ -24,14 +24,15 @@
 //
 // -------------------------------------------------------
 
-class LangsTranslation
+class LangsTranslation : public Serializable
 {
 public:
     LangsTranslation();
     LangsTranslation(QString name);
     LangsTranslation(QVector<int> ids, QVector<QString> names);
     virtual ~LangsTranslation();
-    int mainId() const;
+
+    int mainID() const;
     QString mainName() const;
     void setMainName(QString n);
     QString defaultMainName() const;
@@ -40,8 +41,8 @@ public:
     void setAllNames(QString n);
     bool isEmpty() const;
 
-    void read(const QJsonObject &json);
-    void write(QJsonObject &json) const;
+    virtual void read(const QJsonObject &json);
+    virtual void write(QJsonObject &json) const;
 
 protected:
     QHash<int, QString> m_names;

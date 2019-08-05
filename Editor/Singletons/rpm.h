@@ -52,10 +52,18 @@ public:
     // COMMON JSON
     static const QString JSON_KEY;
     static const QString JSON_VALUE;
-    static const QString JSON_EXTENSION;
+
+    // EXTENSIONS
+    static const QString EXTENSION_JSON;
+    static const QString EXTENSION_QSS;
+    static const QString EXTENSION_RPM;
+    static const QString EXTENSION_PNG;
+    static const QString EXTENSION_JPG;
 
     // STRING SYMBOLS
     static const QString DASH;
+    static const QString TRUE_BOOL_STRING;
+    static const QString FALSE_BOOL_STRING;
 
     // FILE / FOLDER NAMES
     static const QString FILE_MAP_INFOS;
@@ -140,6 +148,10 @@ public:
     static const QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
     static const QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
     static const QStringList ENUM_TO_STRING_OS_KIND;
+    static const QStringList ENUM_TO_STRING_TEAM;
+    static const QStringList ENUM_TO_STRING_OPERATION;
+    static const QStringList ENUM_TO_STRING_OPERATION_SIMPLE;
+    static const QStringList ENUM_TO_STRING_FORMULA_STAT;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

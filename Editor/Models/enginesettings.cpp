@@ -16,10 +16,17 @@
 #include <QApplication>
 #include <QStyleFactory>
 
+const QString EngineSettings::JSON_KEYBOARD = "kb";
+const QString EngineSettings::JSON_ZOOM_PICTURES = "zp";
+const QString EngineSettings::JSON_THEME = "theme";
 const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
 const QString EngineSettings::JSON_FIRST_TIME = "ft";
-const int EngineSettings::MAX_PROJECTS_NUMBER = 6;
+const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
+const QString EngineSettings::THEME_WHITE = "whitetheme";
+const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
+const QString EngineSettings::THEME_DARK = "darktheme";
+const QString EngineSettings::PATH_THEMES = ":/stylesheets/Themes/";
 
 // -------------------------------------------------------
 //
@@ -39,22 +46,11 @@ EngineSettings::EngineSettings() :
     #endif
 }
 
-EngineSettings::~EngineSettings()
-{
+EngineSettings::~EngineSettings() {
     delete m_keyBoardDatas;
 }
 
-void EngineSettings::read(){
-    Common::readJSON(Common::pathCombine(QDir::currentPath(),
-                                       RPM::PATH_ENGINE_SETTINGS), *this);
-}
-
-void EngineSettings::write(){
-    Common::writeJSON(Common::pathCombine(QDir::currentPath(),
-                                        RPM::PATH_ENGINE_SETTINGS), *this);
-}
-
-KeyBoardDatas* EngineSettings::keyBoardDatas() const {
+KeyBoardDatas * EngineSettings::keyBoardDatas() const {
     return m_keyBoardDatas;
 }
 
@@ -101,17 +97,21 @@ void EngineSettings::setFirstTime(bool b) {
 //
 // -------------------------------------------------------
 
+void EngineSettings::setDefault() {
+    m_keyBoardDatas->setDefaultEngine();
+}
+
+// -------------------------------------------------------
+
 QString EngineSettings::getThemeContent() const {
-    QString content = "";
+    QString content;
+
     switch (m_theme) {
     case ThemeKind::Dark:
-        content += readContent("darktheme");
-        #ifdef Q_OS_WIN
-            content += readContent("darkthemeWin32");
-        #endif
+        content += this->readContent("darktheme");
         break;
     case ThemeKind::White:
-        content += readContent("whitetheme");
+        content += this->readContent("whitetheme");
         break;
     }
 
@@ -120,24 +120,28 @@ QString EngineSettings::getThemeContent() const {
 
 // -------------------------------------------------------
 
-QString EngineSettings::readContent(QString name) const {
-    QFile file(":/stylesheets/Themes/" + name + ".qss");
-    if (file.open(QFile::ReadOnly)) {
-       return QLatin1String(file.readAll());
-    }
-    return "";
+void EngineSettings::read() {
+    Common::readJSON(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_ENGINE_SETTINGS), *this);
+}
+
+// -------------------------------------------------------
+
+void EngineSettings::write() {
+    Common::writeJSON(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_ENGINE_SETTINGS), *this);
 }
 
 // -------------------------------------------------------
 
 void EngineSettings::updateTheme() {
+    QPalette darkPalette;
+
     switch (m_theme) {
     case ThemeKind::Dark:
-    {
         #ifdef Q_OS_WIN
-            qApp->setStyleSheet(readContent("defaulttheme"));
+            qApp->setStyleSheet(readContent(THEME_DEFAULT));
             qApp->setStyle(QStyleFactory::create("Fusion"));
-            QPalette darkPalette;
             darkPalette.setColor(QPalette::Window, QColor(53,53,53));
             darkPalette.setColor(QPalette::WindowText, Qt::white);
             darkPalette.setColor(QPalette::Base, QColor(25,25,25));
@@ -151,81 +155,81 @@ void EngineSettings::updateTheme() {
             darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
             darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
             darkPalette.setColor(QPalette::HighlightedText, Qt::white);
-            darkPalette.setColor(QPalette::Disabled, QPalette::Text,
-                                 QColor(150,150,150));
+            darkPalette.setColor(QPalette::Disabled, QPalette::Text, QColor(150,
+                150,150));
             darkPalette.setColor(QPalette::Disabled, QPalette::WindowText,
-                                 QColor(150,150,150));
+                QColor(150,150,150));
             darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText,
-                                 QColor(150,150,150));
+                QColor(150,150,150));
             qApp->setPalette(darkPalette);
         #else
-            qApp->setStyleSheet(readContent("darktheme"));
+            qApp->setStyleSheet(readContent(THEME_DARK));
         #endif
         break;
-    }
     case ThemeKind::White:
         #ifdef  Q_OS_MAC
-            qApp->setStyleSheet(readContent("whitemactheme"));
+            qApp->setStyleSheet(readContent(THEME_WHITE_MAC));
         #else
-            qApp->setStyleSheet(readContent("whitetheme"));
+            qApp->setStyleSheet(readContent(THEME_WHITE));
         #endif
         break;
     }
-}
-
-// -------------------------------------------------------
-
-void EngineSettings::setDefault(){
-    m_keyBoardDatas->setDefaultEngine();
 }
 
 // -------------------------------------------------------
 
 void EngineSettings::updateProject(QString name, QString link) {
-    int index = m_projectLinks.indexOf(link);
-    int number;
+    int index, number;
+
+    index = m_projectLinks.indexOf(link);
     if (index != -1) {
         m_projectNames.removeAt(index);
         m_projectLinks.removeAt(index);
     }
-
     m_projectNames.insert(0, name);
     m_projectLinks.insert(0, link);
-
     number = projectNumber();
-    if (number > MAX_PROJECTS_NUMBER) {
+    if (number > Project::MAX_PROJECTS_NUMBER) {
         m_projectNames.removeAt(number - 1);
         m_projectLinks.removeAt(number - 1);
     }
 
-    write();
+   this->write();
+}
+
+// -------------------------------------------------------
+
+QString EngineSettings::readContent(QString name) const {
+    QFile file(PATH_THEMES + name + RPM::EXTENSION_QSS);
+    if (file.open(QFile::ReadOnly)) {
+       return QLatin1String(file.readAll());
+    }
+    return "";
 }
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
 void EngineSettings::read(const QJsonObject &json) {
     QJsonArray tab;
-    int i;
+    int i, l;
 
-    m_keyBoardDatas->read(json["kb"].toObject());
-
-    if (json.contains("zp")) {
-        m_zoomPictures = json["zp"].toInt();
+    m_keyBoardDatas->read(json[JSON_KEYBOARD].toObject());
+    if (json.contains(JSON_ZOOM_PICTURES)) {
+        m_zoomPictures = json[JSON_ZOOM_PICTURES].toInt();
     }
-    m_theme = json.contains("theme") ? static_cast<ThemeKind>(
-        json["theme"].toInt()) : ThemeKind::Dark;
-
+    m_theme = json.contains(JSON_THEME) ? static_cast<ThemeKind>(json[
+        JSON_THEME].toInt()) : ThemeKind::Dark;
     tab = json[JSON_PROJECT_NAMES].toArray();
-    for (i = 0; i < tab.size(); i++) {
-        m_projectNames.append(tab.at(i).toString());
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_projectNames << tab.at(i).toString();
     }
     tab = json[JSON_PROJECT_LINKS].toArray();
-    for (i = 0; i < tab.size(); i++) {
-        m_projectLinks.append(tab.at(i).toString());
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_projectLinks << tab.at(i).toString();
     }
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
@@ -237,20 +241,20 @@ void EngineSettings::read(const QJsonObject &json) {
 void EngineSettings::write(QJsonObject &json) const {
     QJsonObject obj;
     QJsonArray tab;
-    int i;
+    int i, l;
 
     m_keyBoardDatas->write(obj);
-    json["kb"] = obj;
-    json["zp"] = m_zoomPictures;
+    json[JSON_KEYBOARD] = obj;
+    json[JSON_ZOOM_PICTURES] = m_zoomPictures;
     if (m_theme != ThemeKind::Dark) {
-        json["theme"] = static_cast<int>(m_theme);
+        json[JSON_THEME] = static_cast<int>(m_theme);
     }
-    for (i = 0; i < m_projectNames.length(); i++) {
-        tab.append(m_projectNames.at(i));
+    for (i = 0, l = m_projectNames.size(); i < l; i++) {
+        tab << m_projectNames.at(i);
     }
     json[JSON_PROJECT_NAMES] = tab;
     tab = QJsonArray();
-    for (i = 0; i < m_projectLinks.length(); i++) {
+    for (i = 0, l = m_projectLinks.size(); i < l; i++) {
         tab.append(m_projectLinks.at(i));
     }
     json[JSON_PROJECT_LINKS] = tab;

@@ -37,36 +37,36 @@ public:
     PrimitiveValue(PrimitiveValueKind kind);
     PrimitiveValue(PrimitiveValueKind kind, int n);
 
-    static PrimitiveValue * createKeyBoard(int id);
-    static PrimitiveValue * createDefaultDataBaseValue();
-    static PrimitiveValue * createDefaultNumberValue();
-    static PrimitiveValue * createDefaultMessageValue();
-
+    PrimitiveValueKind kind() const;
+    void setKind(PrimitiveValueKind k);
+    int numberValue() const;
+    void setNumberValue(int n);
+    double numberDoubleValue() const;
+    void setNumberDoubleValue(double n);
+    QString messageValue() const;
+    void setMessageValue(QString m);
+    bool switchValue() const;
+    void setSwitchValue(bool s);
     QStandardItemModel* modelParameter() const;
     void setModelParameter(QStandardItemModel* model);
     QStandardItemModel* modelProperties() const;
     void setModelProperties(QStandardItemModel* model);
     QStandardItemModel* modelDataBase() const;
     void setModelDataBase(QStandardItemModel* model);
+
+    static PrimitiveValue * createKeyBoard(int id);
+    static PrimitiveValue * createDefaultDataBaseValue();
+    static PrimitiveValue * createDefaultNumberValue();
+    static PrimitiveValue * createDefaultMessageValue();
+
     QString toString() const;
     void labelTab(QString& str) const;
-    int numberValue() const;
-    double numberDoubleValue() const;
-    QString messageValue() const;
-    bool switchValue() const;
-    void setNumberValue(int n);
-    void setNumberDoubleValue(double n);
-    void setMessageValue(QString m);
-    void setSwitchValue(bool s);
-    PrimitiveValueKind kind() const;
-    void setKind(PrimitiveValueKind k);
-    void setCopy(const PrimitiveValue &prim);
-    void initializeCommandParameter(const EventCommand *command, int& i);
-    void getCommandParameter(QVector<QString> &command);
     bool isDefaultDataBaseValue() const;
     bool isDefaultNumberValue() const;
     bool isDefaultMessageValue() const;
-
+    void initializeCommandParameter(const EventCommand *command, int& i);
+    void getCommandParameter(QVector<QString> &command);
+    void setCopy(const PrimitiveValue &prim);
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
 
