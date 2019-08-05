@@ -1,0 +1,36 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Documentation: event commands reorder correctly",
+        "Software huge code cleaning",
+        "Rotation for lands, sprites, 3D objects",
+        "Mountains new option: force collision or non collision",
+        "Menu walls separated from sprites menu in map editor toolbar",
+        "Collisions manager: 3D objetcs and mountains",
+        "Choose number frames",
+        "New object reactions option: ignore the other received events when at least one is triggered",
+        "Object properties",
+        "Detections",
+        "Title screen completion",
+        "Objects moves (path when not reacting, speed, frequency)",
+        "ABS tutorial in documentation"
+    ],
+    "finished": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+    ],
+	"bugs": []
+}
