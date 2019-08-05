@@ -10,6 +10,7 @@
 */
 
 #include <QtMath>
+#include <QDirIterator>
 #include "map.h"
 #include "rpm.h"
 #include "systemmapobject.h"
@@ -46,23 +47,23 @@ Map::Map(int id) :
     m_textureObjectSquare(nullptr),
     m_textureMissing(nullptr)
 {
-    QString realName = RPM::generateMapName(id);
+    QString realName = Map::generateMapName(id);
     QString pathMaps = Common::pathCombine(RPM::get()->project()
                                           ->pathCurrentProject(),
-                                          RPM::pathMaps);
+                                          RPM::PATH_MAPS);
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
     // Temp map files
     if (!RPM::mapsToSave.contains(id)) {
         QString pathTemp = Common::pathCombine(m_pathMap,
-                                              RPM::TEMP_MAP_FOLDER_NAME);
+                                              RPM::FOLDER_TEMP_MAP);
         Common::deleteAllFiles(pathTemp);
-        QFile(Common::pathCombine(m_pathMap, RPM::fileMapObjects)).copy(
-                    Common::pathCombine(pathTemp, RPM::fileMapObjects));
+        QFile(Common::pathCombine(m_pathMap, RPM::FILE_MAP_OBJECTS)).copy(
+                    Common::pathCombine(pathTemp, RPM::FILE_MAP_OBJECTS));
     }
     if (!RPM::mapsUndoRedo.contains(id)) {
         Common::deleteAllFiles(
-           Common::pathCombine(m_pathMap, RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME));
+           Common::pathCombine(m_pathMap, RPM::FOLDER_UNDO_REDO_TEMP_MAP));
     }
 
     m_mapProperties = new MapProperties(m_pathMap);
@@ -250,7 +251,7 @@ QString Map::getPortionPath(int i, int j, int k) {
 
 QString Map::getPortionPathTemp(int i, int j, int k) {
     return Common::pathCombine(m_pathMap, Common::pathCombine(
-                                  RPM::TEMP_MAP_FOLDER_NAME,
+                                  RPM::FOLDER_TEMP_MAP,
                                   getPortionPathMap(i, j, k)));
 }
 
@@ -276,13 +277,13 @@ void Map::setModelObjects(QStandardItemModel* model){
 // -------------------------------------------------------
 
 MapPortion* Map::loadPortionMap(int i, int j, int k, bool force) {
-    int lx = (m_mapProperties->length() - 1) / RPM::portionSize;
-    int ld = (m_mapProperties->depth() - 1) / RPM::portionSize;
+    int lx = (m_mapProperties->length() - 1) / RPM::PORTION_SIZE;
+    int ld = (m_mapProperties->depth() - 1) / RPM::PORTION_SIZE;
     if (m_mapProperties->depth() > 0) {
         ld++;
     }
-    int lh = (m_mapProperties->height() - 1) / RPM::portionSize;
-    int lz = (m_mapProperties->width() - 1) / RPM::portionSize;
+    int lh = (m_mapProperties->height() - 1) / RPM::PORTION_SIZE;
+    int lz = (m_mapProperties->width() - 1) / RPM::PORTION_SIZE;
 
     if (force || (i >= 0 && i <= lx && j >= -ld && j <= lh && k >= 0 && k <= lz))
     {
@@ -308,7 +309,7 @@ void Map::savePortionMap(MapPortion* mapPortion){
         Common::writeOtherJSON(path, obj);
     }
     else
-        RPM::writeJSON(path, *mapPortion);
+        Common::writeJSON(path, *mapPortion);
 }
 
 // -------------------------------------------------------
@@ -320,15 +321,15 @@ void Map::saveMapProperties() {
 // -------------------------------------------------------
 
 QString Map::getMapInfosPath() const{
-    return Common::pathCombine(m_pathMap, RPM::fileMapInfos);
+    return Common::pathCombine(m_pathMap, RPM::FILE_MAP_INFOS);
 }
 
 // -------------------------------------------------------
 
 QString Map::getMapObjectsPath() const{
     return Common::pathCombine(m_pathMap,
-                              Common::pathCombine(RPM::TEMP_MAP_FOLDER_NAME,
-                                                 RPM::fileMapObjects));
+                              Common::pathCombine(RPM::FOLDER_TEMP_MAP,
+                                                 RPM::FILE_MAP_OBJECTS));
 }
 
 // -------------------------------------------------------
@@ -347,7 +348,7 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 
 void Map::loadPortionThread(MapPortion* portion, QString &path)
 {
-    RPM::readJSON(path, *portion);
+    Common::readJSON(path, *portion);
     portion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
         m_texturesSpriteWalls);
@@ -480,10 +481,10 @@ bool Map::isInGrid(Position3D &position, int offset) const {
 // -------------------------------------------------------
 
 bool Map::isPortionInGrid(Portion& portion) const {
-    int l = m_mapProperties->length() / RPM::portionSize;
-    int w = m_mapProperties->width() / RPM::portionSize;
-    int d = m_mapProperties->depth() / RPM::portionSize;
-    int h = m_mapProperties->height() / RPM::portionSize;
+    int l = m_mapProperties->length() / RPM::PORTION_SIZE;
+    int w = m_mapProperties->width() / RPM::PORTION_SIZE;
+    int d = m_mapProperties->depth() / RPM::PORTION_SIZE;
+    int h = m_mapProperties->height() / RPM::PORTION_SIZE;
 
     return (portion.x() >= 0 && portion.x() < l && portion.y() >= -d &&
             portion.y() < h && portion.z() >= 0 && portion.z() < w);
@@ -511,9 +512,9 @@ bool Map::isInSomething(Position3D& position, Portion& portion,
 // -------------------------------------------------------
 
 void Map::getGlobalPortion(Position3D& position, Portion &portion){
-    portion.setX(position.x() / RPM::portionSize);
-    portion.setY(position.y() / RPM::portionSize);
-    portion.setZ(position.z() / RPM::portionSize);
+    portion.setX(position.x() / RPM::PORTION_SIZE);
+    portion.setY(position.y() / RPM::PORTION_SIZE);
+    portion.setZ(position.z() / RPM::PORTION_SIZE);
 
     if (position.x() < 0)
         portion.addX(-1);
@@ -526,29 +527,29 @@ void Map::getGlobalPortion(Position3D& position, Portion &portion){
 // -------------------------------------------------------
 
 void Map::getLocalPortion(Position3D& position, Portion& portion) const {
-    portion.setCoords((position.x() / RPM::portionSize) - (m_cursor
-        ->getSquareX() / RPM::portionSize), qFloor(static_cast<qreal>(position
-        .y()) / RPM::portionSize) - qFloor(static_cast<qreal>(this->cursor()
-        ->getSquareY()) / RPM::portionSize), (position.z() / RPM::portionSize) -
-        (m_cursor->getSquareZ() / RPM::portionSize));
+    portion.setCoords((position.x() / RPM::PORTION_SIZE) - (m_cursor
+        ->getSquareX() / RPM::PORTION_SIZE), qFloor(static_cast<qreal>(position
+        .y()) / RPM::PORTION_SIZE) - qFloor(static_cast<qreal>(this->cursor()
+        ->getSquareY()) / RPM::PORTION_SIZE), (position.z() / RPM::PORTION_SIZE)
+        - (m_cursor->getSquareZ() / RPM::PORTION_SIZE));
 }
 
 // -------------------------------------------------------
 
 Portion Map::getGlobalFromLocalPortion(Portion& portion) const{
     return Portion(
-                portion.x() + (cursor()->getSquareX() / RPM::portionSize),
-                portion.y() + (cursor()->getSquareY() / RPM::portionSize),
-                portion.z() + (cursor()->getSquareZ() / RPM::portionSize));
+                portion.x() + (cursor()->getSquareX() / RPM::PORTION_SIZE),
+                portion.y() + (cursor()->getSquareY() / RPM::PORTION_SIZE),
+                portion.z() + (cursor()->getSquareZ() / RPM::PORTION_SIZE));
 }
 
 // -------------------------------------------------------
 
 Portion Map::getLocalFromGlobalPortion(Portion& portion) const {
     return Portion(
-                portion.x() - (cursor()->getSquareX() / RPM::portionSize),
-                portion.y() - (cursor()->getSquareY() / RPM::portionSize),
-                portion.z() - (cursor()->getSquareZ() / RPM::portionSize));
+                portion.x() - (cursor()->getSquareX() / RPM::PORTION_SIZE),
+                portion.y() - (cursor()->getSquareY() / RPM::PORTION_SIZE),
+                portion.z() - (cursor()->getSquareZ() / RPM::PORTION_SIZE));
 }
 
 // -------------------------------------------------------
@@ -637,4 +638,42 @@ int Map::generateObjectId() const {
 
 QString Map::generateObjectName(int id) {
     return "OBJ" + Common::getFormatNumber(id);
+}
+
+bool Map::isMapIdExisting(int id){
+    QDirIterator directories(Common::pathCombine(RPM::get()->project()
+                                                ->pathCurrentProject(),
+                                                RPM::PATH_MAPS),
+                             QDir::Dirs | QDir::NoDotAndDotDot);
+
+    while (directories.hasNext()){
+        directories.next();
+        if (directories.fileName() == generateMapName(id))
+            return true;
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------
+// generate an id for a new map according to the ids of the already existing
+// maps
+
+int Map::generateMapId(){
+    int id;
+    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+                                RPM::PATH_MAPS));
+    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    int nbMaps = static_cast<int>(dir.count());
+
+    for (id = 1; id <= nbMaps + 1; id++)
+        if (!isMapIdExisting(id)) break;
+
+    return id;
+}
+
+// -------------------------------------------------------
+
+QString Map::generateMapName(int id){
+    return "MAP" + Common::getFormatNumber(id);
 }

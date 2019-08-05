@@ -11,6 +11,7 @@
 
 #include "dialogsystemwindowskin.h"
 #include "rpm.h"
+#include "common.h"
 
 const QString SystemWindowSkin::JSON_PICTURE_ID = "pid";
 const QString SystemWindowSkin::JSON_TOP_LEFT = "tl";
@@ -228,40 +229,40 @@ void SystemWindowSkin::read(const QJsonObject &json) {
     m_pictureID = json[JSON_PICTURE_ID].toInt();
 
     tab = json[JSON_TOP_LEFT].toArray();
-    RPM::readRectF(tab, m_topLeft);
+    Common::readRectF(tab, m_topLeft);
     tab = json[JSON_TOP_RIGHT].toArray();
-    RPM::readRectF(tab, m_topRight);
+    Common::readRectF(tab, m_topRight);
     tab = json[JSON_BOT_LEFT].toArray();
-    RPM::readRectF(tab, m_botLeft);
+    Common::readRectF(tab, m_botLeft);
     tab = json[JSON_BOT_RIGHT].toArray();
-    RPM::readRectF(tab, m_botRight);
+    Common::readRectF(tab, m_botRight);
     tab = json[JSON_LEFT].toArray();
-    RPM::readRectF(tab, m_left);
+    Common::readRectF(tab, m_left);
     tab = json[JSON_RIGHT].toArray();
-    RPM::readRectF(tab, m_right);
+    Common::readRectF(tab, m_right);
     tab = json[JSON_TOP].toArray();
-    RPM::readRectF(tab, m_top);
+    Common::readRectF(tab, m_top);
     tab = json[JSON_BOT].toArray();
-    RPM::readRectF(tab, m_bot);
+    Common::readRectF(tab, m_bot);
     tab = json[JSON_BACKGROUND].toArray();
-    RPM::readRectF(tab, m_background);
+    Common::readRectF(tab, m_background);
     tab = json[JSON_BACKGROUND_SELECTION].toArray();
-    RPM::readRectF(tab, m_backgroundSelection);
+    Common::readRectF(tab, m_backgroundSelection);
     m_backgroudRepeat = json[JSON_BACKGROUND_REPEAT].toBool();
     tab = json[JSON_ARROW_END_MESSAGE].toArray();
-    RPM::readRectF(tab, m_arrowEndMessage);
+    Common::readRectF(tab, m_arrowEndMessage);
     tab = json[JSON_ARROW_TARGET_SELECTION].toArray();
-    RPM::readRectF(tab, m_arrowTargetSelection);
+    Common::readRectF(tab, m_arrowTargetSelection);
     tab = json[JSON_ARROW_UP_DOWN].toArray();
-    RPM::readRectF(tab, m_arrowUpDown);
+    Common::readRectF(tab, m_arrowUpDown);
     tab = json[JSON_TEXT_NORMAL].toArray();
-    RPM::readRectF(tab, m_textNormal);
+    Common::readRectF(tab, m_textNormal);
     tab = json[JSON_TEXT_CRITICAL].toArray();
-    RPM::readRectF(tab, m_textCritical);
+    Common::readRectF(tab, m_textCritical);
     tab = json[JSON_TEXT_HEAL].toArray();
-    RPM::readRectF(tab, m_textHeal);
+    Common::readRectF(tab, m_textHeal);
     tab = json[JSON_TEXT_MISS].toArray();
-    RPM::readRectF(tab, m_textMiss);
+    Common::readRectF(tab, m_textMiss);
 }
 
 // -------------------------------------------------------
@@ -272,55 +273,55 @@ void SystemWindowSkin::write(QJsonObject &json) const {
 
     json[JSON_PICTURE_ID] = m_pictureID;
 
-    RPM::writeRectF(tab, m_topLeft);
+    Common::writeRectF(tab, m_topLeft);
     json[JSON_TOP_LEFT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_topRight);
+    Common::writeRectF(tab, m_topRight);
     json[JSON_TOP_RIGHT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_botLeft);
+    Common::writeRectF(tab, m_botLeft);
     json[JSON_BOT_LEFT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_botRight);
+    Common::writeRectF(tab, m_botRight);
     json[JSON_BOT_RIGHT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_left);
+    Common::writeRectF(tab, m_left);
     json[JSON_LEFT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_right);
+    Common::writeRectF(tab, m_right);
     json[JSON_RIGHT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_top);
+    Common::writeRectF(tab, m_top);
     json[JSON_TOP] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_bot);
+    Common::writeRectF(tab, m_bot);
     json[JSON_BOT] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_background);
+    Common::writeRectF(tab, m_background);
     json[JSON_BACKGROUND] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_backgroundSelection);
+    Common::writeRectF(tab, m_backgroundSelection);
     json[JSON_BACKGROUND_SELECTION] = tab;
     tab = QJsonArray();
     json[JSON_BACKGROUND_REPEAT] = m_backgroudRepeat;
-    RPM::writeRectF(tab, m_arrowEndMessage);
+    Common::writeRectF(tab, m_arrowEndMessage);
     json[JSON_ARROW_END_MESSAGE] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_arrowTargetSelection);
+    Common::writeRectF(tab, m_arrowTargetSelection);
     json[JSON_ARROW_TARGET_SELECTION] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_arrowUpDown);
+    Common::writeRectF(tab, m_arrowUpDown);
     json[JSON_ARROW_UP_DOWN] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_textNormal);
+    Common::writeRectF(tab, m_textNormal);
     json[JSON_TEXT_NORMAL] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_textCritical);
+    Common::writeRectF(tab, m_textCritical);
     json[JSON_TEXT_CRITICAL] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_textHeal);
+    Common::writeRectF(tab, m_textHeal);
     json[JSON_TEXT_HEAL] = tab;
     tab = QJsonArray();
-    RPM::writeRectF(tab, m_textMiss);
+    Common::writeRectF(tab, m_textMiss);
     json[JSON_TEXT_MISS] = tab;
 }

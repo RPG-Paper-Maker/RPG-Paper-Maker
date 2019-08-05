@@ -11,6 +11,7 @@
 
 #include "dialogsystemeffect.h"
 #include "ui_dialogsystemeffect.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -136,7 +137,8 @@ void DialogSystemEffect::initialize() {
 
     // Special Action
     index = static_cast<int>(m_effect.specialActionKind());
-    ui->comboBoxSpecialAction->addItems(Common::enumToStringEffectSpecialActionKind);
+    ui->comboBoxSpecialAction->addItems(RPM
+        ::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND);
     ui->comboBoxSpecialAction->setCurrentIndex(index);
 
     // Script

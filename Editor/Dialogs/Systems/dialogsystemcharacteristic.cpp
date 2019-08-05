@@ -11,6 +11,7 @@
 
 #include "dialogsystemcharacteristic.h"
 #include "ui_dialogsystemcharacteristic.h"
+#include "rpm.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -46,8 +47,8 @@ SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
 
 void DialogSystemCharacteristic::initialize() {
     int index = m_characteristic.increaseDecreaseKind()->id();
-    ui->comboBoxIncreaseDecreaseKind->addItems(Common
-        ::enumToStringIncreaseDecreaseKind);
+    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
+        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
 
     // Temporary disable combobox
     QModelIndex modelIndex;

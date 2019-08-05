@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "widgettilesetpraticable.h"
-#include "rpm.h"
-#include "dialogrect.h"
 #include <QPainter>
 #include <QtMath>
+#include "widgettilesetpraticable.h"
+#include "rpm.h"
+#include "common.h"
+#include "dialogrect.h"
 
 const int WidgetTilesetPraticable::OFFSET = 5;
 
@@ -487,13 +488,13 @@ bool WidgetTilesetPraticable::canDraw(QPoint& mousePoint) const {
 // -------------------------------------------------------
 
 void WidgetTilesetPraticable::keyPressEvent(QKeyEvent *event){
-    QKeySequence seq = RPM::getKeySequence(event);
+    QKeySequence seq = Common::getKeySequence(event);
     QList<QAction*> actions = m_contextMenu->actions();
     QAction* action;
 
     // Forcing shortcuts
     action = actions.at(0);
-    if (RPM::isPressingEnter(event) && action->isEnabled()) {
+    if (Common::isPressingEnter(event) && action->isEnabled()) {
         contextEdit();
         return;
     }
@@ -597,7 +598,7 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
 
     // Draw background
     painter.fillRect(0, 0, m_image.width(), m_image.height(),
-                     RPM::colorAlmostTransparent);
+                     RPM::COLOR_ALMOST_TRANSPARENT);
 
     // Draw image
     if (!m_image.isNull()) {
@@ -609,43 +610,43 @@ void WidgetTilesetPraticable::paintEvent(QPaintEvent *){
 
     // Draw all the collisions
     painter.setPen(RPM::get()->engineSettings()->theme() == ThemeKind::Dark ?
-        RPM::colorAlmostWhite : RPM::colorFortyTransparent);
+        RPM::COLOR_ALMOST_WHITE : RPM::COLOR_FORTY_TRANSPARENT);
     for (QHash<QPoint, CollisionSquare*>::iterator i = squares->begin();
          i != squares->end(); i++)
     {
         drawCollision(painter, i.key(), i.value(),
-                      RPM::colorFortyTransparent);
+                      RPM::COLOR_FORTY_TRANSPARENT);
     }
 
     // Draw another layer for the selected collision
     CollisionSquare* collision = squares->value(m_selectedPoint);
     if (collision != nullptr) {
-        painter.setPen(RPM::colorPurpleSelection);
+        painter.setPen(RPM::COLOR_PURPLE_SELECTION);
         drawCollision(painter, m_selectedPoint, collision,
-                      RPM::colorPurpleSelectionBackground);
+                      RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
     }
 
     // Draw hovered layer
     collision = squares->value(m_hoveredPoint);
     if (collision != nullptr) {
         drawCollision(painter, m_hoveredPoint, collision,
-                      RPM::colorGrayHoverBackground, false);
+                      RPM::COLOR_GRAY_HOVER_BACKGROUND, false);
     }
 
     // For repeat option :
     if (picture->repeatCollisions()) {
         QRect rect;
         getRectRepeatBot(rect);
-        painter.fillRect(rect, RPM::colorFortyTransparent);
+        painter.fillRect(rect, RPM::COLOR_FORTY_TRANSPARENT);
         getRectRepeatTop(rect);
-        painter.fillRect(rect, RPM::colorFortyTransparent);
+        painter.fillRect(rect, RPM::COLOR_FORTY_TRANSPARENT);
         QHash<QPoint, CollisionSquare*> list;
         getPointsRepeat(list);
         for (QHash<QPoint, CollisionSquare*>::iterator i = list.begin();
              i != list.end(); i++)
         {
             drawCollision(painter, i.key(), i.value(),
-                          RPM::colorFortyTransparent, true);
+                          RPM::COLOR_FORTY_TRANSPARENT, true);
         }
     }
 }

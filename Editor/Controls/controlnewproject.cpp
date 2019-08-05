@@ -91,15 +91,15 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     }
 
     // Create folders
-    dir.mkpath(RPM::pathBars);
-    dir.mkpath(RPM::pathIcons);
+    dir.mkpath(RPM::PATH_BARS);
+    dir.mkpath(RPM::PATH_ICONS);
     dir.mkpath(RPM::PATH_FACESETS);
     dir.mkpath(RPM::PATH_WINDOW_SKINS);
     dir.mkpath(RPM::PATH_TITLE_SCREEN);
-    dir.mkpath(RPM::pathAutotiles);
-    dir.mkpath(RPM::pathCharacters);
+    dir.mkpath(RPM::PATH_AUTOTILES);
+    dir.mkpath(RPM::PATH_CHARACTERS);
     dir.mkpath(RPM::PATH_MOUNTAINS);
-    dir.mkpath(RPM::pathTilesets);
+    dir.mkpath(RPM::PATH_TILESETS);
     dir.mkpath(RPM::PATH_SPRITE_WALLS);
     dir.mkpath(RPM::PATH_BATTLERS);
     dir.mkpath(RPM::PATH_TEXTURES_OBJECT_3D);
@@ -136,12 +136,12 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
-    Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::pathSaves), tab);
+    Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::PATH_SAVES), tab);
 
     // Creating first empty map
-    dir.mkdir(RPM::pathMaps);
-    dir.mkdir(Common::pathCombine(RPM::pathMaps,
-        RPM::TEMP_MAP_FOLDER_NAME));
+    dir.mkdir(RPM::PATH_MAPS);
+    dir.mkdir(Common::pathCombine(RPM::PATH_MAPS,
+        RPM::FOLDER_TEMP_MAP));
     Map::writeDefaultMap(pathDir);
     Map::writeDefaultBattleMap(pathDir);
 

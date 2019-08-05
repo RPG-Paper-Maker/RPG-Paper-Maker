@@ -159,7 +159,7 @@ void WidgetPicturePreview::paintEvent(QPaintEvent *){
     QPainter painter(this);
 
     painter.fillRect(QRect(0, 0, m_image.width(), m_image.height()),
-                     RPM::colorAlmostTransparent);
+                     RPM::COLOR_ALMOST_TRANSPARENT);
     painter.drawImage(0, 0, m_image);
 
     if (m_chooseRect && m_kind == PictureKind::Characters)

@@ -748,19 +748,19 @@ void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
 //  keyPressEvent: force shortcuts
 
 void WidgetTreeCommands::keyPressEvent(QKeyEvent *event){
-    QKeySequence seq = RPM::getKeySequence(event);
+    QKeySequence seq = Common::getKeySequence(event);
     QList<QAction*> actions = m_contextMenuCommonCommands->actions();
     QAction* action;
     int key;
 
     // Forcing shortcuts
     action = actions.at(1);
-    if (RPM::isPressingEnter(event) && action->isEnabled()) {
+    if (Common::isPressingEnter(event) && action->isEnabled()) {
         contextEdit();
         return;
     }
     action = actions.at(0);
-    if (RPM::isPressingEnter(event) && action->isEnabled()) {
+    if (Common::isPressingEnter(event) && action->isEnabled()) {
         contextNew();
         return;
     }
@@ -859,13 +859,13 @@ void WidgetTreeCommands::paintEvent(QPaintEvent *event) {
             y = rect.y() + ((i + 1) * WidgetTreeCommands::rectHeight);
             w = this->width() - x;
             painter.fillRect(x, y, w, WidgetTreeCommands::rectHeight, isSelected
-                ? RPM::colorMenuSelectionBlue : (themeKind == ThemeKind::Dark ?
-                RPM::colorGrey : RPM::colorAlmostWhite));
-            painter.setPen(isSelected ? RPM::colorAlmostWhite : (themeKind ==
-                ThemeKind::Dark ? RPM::colorAlmostWhite : RPM::colorAlmostBlack));
+                ? RPM::COLOR_MENU_SELECTION_BLUE : (themeKind == ThemeKind::Dark ?
+                RPM::COLOR_GREY : RPM::COLOR_ALMOST_WHITE));
+            painter.setPen(isSelected ? RPM::COLOR_ALMOST_WHITE : (themeKind ==
+                ThemeKind::Dark ? RPM::COLOR_ALMOST_WHITE : RPM::COLOR_ALMOST_BLACK));
             painter.drawText(x, y + WidgetTreeCommands::rectHeight - 4,
                 EventCommand::kindToString(m_availableCommands.at(i)));
-            painter.setPen(RPM::colorGraySelection);
+            painter.setPen(RPM::COLOR_GRAY_SELECTION);
             painter.drawLine(x, y + WidgetTreeCommands::rectHeight - 1, x + w, y
                 + WidgetTreeCommands::rectHeight - 1);
         }

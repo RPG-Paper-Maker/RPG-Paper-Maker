@@ -34,7 +34,7 @@ ScriptsDatas::~ScriptsDatas()
 }
 
 void ScriptsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathScripts), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_SCRIPTS), *this);
 }
 
 QStandardItemModel* ScriptsDatas::modelSystem() const { return m_modelSystem; }
@@ -189,9 +189,9 @@ void ScriptsDatas::write(QJsonObject &json) const{
 // -------------------------------------------------------
 
 void ScriptsDatas::writeDesktop(QString path) const{
-    path = Common::pathCombine(path, RPM::pathScriptsDir);
-    QDir(path).mkdir(RPM::dirDesktop);
-    path = Common::pathCombine(path, Common::pathCombine(RPM::dirDesktop,
+    path = Common::pathCombine(path, RPM::PATH_SCRIPTS_DIR);
+    QDir(path).mkdir(RPM::FOLDER_DESKTOP);
+    path = Common::pathCombine(path, Common::pathCombine(RPM::FOLDER_DESKTOP,
                                                        "includes.js"));
 
     QFile writeInfos(path);

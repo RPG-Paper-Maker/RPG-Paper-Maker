@@ -140,9 +140,9 @@ int ControlUndoRedo::updateMapCurrentState(int idMap) {
 QString ControlUndoRedo::getTempDir(int idMap) const {
     return Common::pathCombine(Common::pathCombine(Common::pathCombine(
         RPM::get()->project()->pathCurrentProject(),
-        RPM::pathMaps),
-        RPM::generateMapName(idMap)),
-        RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+        RPM::PATH_MAPS),
+        Map::generateMapName(idMap)),
+        RPM::FOLDER_UNDO_REDO_TEMP_MAP);
 }
 
 // -------------------------------------------------------

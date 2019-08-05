@@ -25,7 +25,7 @@ const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
 
 MapProperties::MapProperties() :
     MapProperties(1,
-                  new LangsTranslation(RPM::generateMapName(1)),
+                  new LangsTranslation(Map::generateMapName(1)),
                   16, 16, 16, 0, 1)
 {
 
@@ -33,7 +33,7 @@ MapProperties::MapProperties() :
 
 MapProperties::MapProperties(QString path)
 {
-    RPM::readJSON(Common::pathCombine(path, RPM::fileMapInfos), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w,
@@ -65,7 +65,7 @@ MapProperties::~MapProperties()
 }
 
 QString MapProperties::realName() const {
-    return RPM::generateMapName(id());
+    return Map::generateMapName(id());
 }
 
 int MapProperties::length() const { return m_length; }
@@ -240,13 +240,13 @@ const
 // -------------------------------------------------------
 
 void MapProperties::getPortionsNumber(int& lx, int& ld, int& lh, int& lz) {
-    lx = (length() - 1) / RPM::portionSize;
-    ld = (depth() - 1) / RPM::portionSize;
+    lx = (length() - 1) / RPM::PORTION_SIZE;
+    ld = (depth() - 1) / RPM::PORTION_SIZE;
     if (depth() > 0) {
         ld++;
     }
-    lh = (height() - 1) / RPM::portionSize;
-    lz = (width() - 1) / RPM::portionSize;
+    lh = (height() - 1) / RPM::PORTION_SIZE;
+    lz = (width() - 1) / RPM::PORTION_SIZE;
 }
 
 // -------------------------------------------------------
@@ -305,8 +305,8 @@ void MapProperties::setCopy(const MapProperties& super) {
 
 void MapProperties::save(QString path, bool temp){
     if (temp)
-        path = Common::pathCombine(path, RPM::TEMP_MAP_FOLDER_NAME);
-    RPM::writeJSON(Common::pathCombine(path, RPM::fileMapInfos), *this);
+        path = Common::pathCombine(path, RPM::FOLDER_TEMP_MAP);
+    Common::writeJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
 // -------------------------------------------------------

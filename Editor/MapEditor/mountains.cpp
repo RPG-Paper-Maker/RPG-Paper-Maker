@@ -483,7 +483,7 @@ bool Mountains::updateRaycastingAt(Position &position, MountainDatas *mountain,
     float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
     float newDistance = mountain->intersection(ray);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
+    if (Common::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

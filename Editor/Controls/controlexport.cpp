@@ -123,10 +123,10 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
+    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Common::pathCombine(path, RPM::pathScriptsSystemDir);
+    QString pathScripts = Common::pathCombine(path, RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
@@ -136,7 +136,7 @@ void ControlExport::removeWebNoNeed(QString path) {
 void ControlExport::removeDesktopNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
+    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
@@ -266,7 +266,7 @@ void ControlExport::copyBRPictures(QString path) {
     }
 
     // Copy the new picutres datas without BR
-    QString pathDatas = Common::pathCombine(path, RPM::pathDatas);
-    RPM::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
+    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
+    Common::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
         newPicturesDatas);
 }

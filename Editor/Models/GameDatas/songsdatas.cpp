@@ -32,7 +32,7 @@ SongsDatas::~SongsDatas()
 }
 
 void SongsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathSongsDatas), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_SONGS_DATAS), *this);
 }
 
 QStandardItemModel* SongsDatas::model(SongKind kind) const {

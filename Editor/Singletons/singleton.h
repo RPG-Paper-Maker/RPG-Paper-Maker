@@ -23,26 +23,26 @@
 template <class T> class Singleton
 {
 public:
-    static T* get();
+    static T * get();
     static void kill();
 
 protected:
-    static T* element;
+    static T * element;
 
 private:
-    T& operator= (const T&){}
+    T & operator= (const T&) {}
 };
 
 template <class T> T* Singleton<T>::element = nullptr;
 
-template <class T>  T* Singleton<T>::get(){
-    if (element == nullptr)
+template <class T>  T* Singleton<T>::get() {
+    if (element == nullptr) {
         element = new T();
+    }
     return element;
 }
 
-template <class T> void Singleton<T>::kill()
-{
+template <class T> void Singleton<T>::kill() {
     delete element;
     element = nullptr;
 }

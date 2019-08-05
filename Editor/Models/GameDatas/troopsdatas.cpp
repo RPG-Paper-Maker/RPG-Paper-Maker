@@ -32,7 +32,7 @@ TroopsDatas::~TroopsDatas()
 }
 
 void TroopsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathTroops), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_TROOPS), *this);
 }
 
 QStandardItemModel* TroopsDatas::model() const { return m_model; }

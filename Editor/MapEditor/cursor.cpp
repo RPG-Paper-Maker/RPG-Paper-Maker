@@ -122,8 +122,8 @@ Portion Cursor::getPortion() const{
     if (m_positionSquare->y() > m_squareSize) {
         y--;
     }
-    return Portion(getSquareX() / RPM::portionSize, qFloor(static_cast<qreal>(y)
-        / RPM::portionSize), getSquareZ() / RPM::portionSize);
+    return Portion(getSquareX() / RPM::PORTION_SIZE, qFloor(static_cast<qreal>(y)
+        / RPM::PORTION_SIZE), getSquareZ() / RPM::PORTION_SIZE);
 }
 
 // -------------------------------------------------------

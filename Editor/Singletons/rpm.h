@@ -26,156 +26,149 @@
 //
 //  CLASS RPM
 //
-//  RPM is a special class (singleton) containing the current project,
-//  and also a set of static functions (utils).
+//  RPM is a special class (singleton) containing the current project, and
+//  some other engine settings.
 //
 // -------------------------------------------------------
 
 class RPM : public Singleton<RPM>
 {
 public:
+    // COLORS
+    static const QColor COLOR_GRAY_SELECTION_DARKER;
+    static const QColor COLOR_GRAY_SELECTION;
+    static const QColor COLOR_GRAY_SELECTION_LIGHTER;
+    static const QColor COLOR_GRAY_SELECTION_BACKGROUND;
+    static const QColor COLOR_GRAY_HOVER_BACKGROUND;
+    static const QColor COLOR_PURPLE_SELECTION;
+    static const QColor COLOR_PURPLE_SELCTION_BACKGROUND;
+    static const QColor COLOR_ALMOST_WHITE;
+    static const QColor COLOR_ALMOST_BLACK;
+    static const QColor COLOR_ALMOST_TRANSPARENT;
+    static const QColor COLOR_FORTY_TRANSPARENT;
+    static const QColor COLOR_GREY;
+    static const QColor COLOR_MENU_SELECTION_BLUE;
+
+    // COMMON JSON
+    static const QString JSON_KEY;
+    static const QString JSON_VALUE;
+    static const QString JSON_EXTENSION;
+
+    // STRING SYMBOLS
+    static const QString DASH;
+
+    // FILE / FOLDER NAMES
+    static const QString FILE_MAP_INFOS;
+    static const QString FILE_MAP_OBJECTS;
+    static const QString FOLDER_GAMES;
+    static const QString FOLDER_DESKTOP;
+    static const QString FOLDER_CONTENT;
+    static const QString FOLDER_TEMP_MAP;
+    static const QString FOLDER_UNDO_REDO_TEMP_MAP;
+
+    // PATHS
+    static const QString PATH_BASIC;
+    static const QString PATH_BR;
+    static const QString PATH_DATAS;
+    static const QString PATH_MAPS;
+    static const QString PATH_SCRIPTS_DIR;
+    static const QString PATH_SCRIPTS_SYSTEM_DIR;
+    static const QString PATH_SCRIPTS_PLUGINS_DIR;
+    static const QString PATH_COMMON_EVENTS;
+    static const QString PATH_VARIABLES;
+    static const QString PATH_SYSTEM;
+    static const QString PATH_BATTLE_SYSTEM;
+    static const QString PATH_ITEMS;
+    static const QString PATH_SKILLS;
+    static const QString PATH_WEAPONS;
+    static const QString PATH_ARMORS;
+    static const QString PATH_HEROES;
+    static const QString PATH_MONSTERS;
+    static const QString PATH_TROOPS;
+    static const QString PATH_CLASSES;
+    static const QString PATH_TILESETS_DATAS;
+    static const QString PATH_ANIMATIONS;
+    static const QString PATH_STATUS;
+    static const QString PATH_SPECIAL_ELEMENTS;
+    static const QString PATH_TITLE_SCREEN_GAME_OVER;
+    static const QString PATH_TREE_MAP;
+    static const QString PATH_LANGS;
+    static const QString PATH_SCRIPTS;
+    static const QString PATH_KEYBOARD;
+    static const QString PATH_PICTURES_DATAS;
+    static const QString PATH_SONGS_DATAS;
+    static const QString PATH_SHAPES_DATAS;
+    static const QString PATH_SAVES;
+    static const QString PATH_PICTURES;
+    static const QString PATH_HUD;
+    static const QString PATH_TEXTURES_2D;
+    static const QString PATH_BARS;
+    static const QString PATH_ICONS;
+    static const QString PATH_FACESETS;
+    static const QString PATH_WINDOW_SKINS;
+    static const QString PATH_TITLE_SCREEN;
+    static const QString PATH_AUTOTILES;
+    static const QString PATH_CHARACTERS;
+    static const QString PATH_TILESETS;
+    static const QString PATH_SPRITE_WALLS;
+    static const QString PATH_RELIEFS;
+    static const QString PATH_MOUNTAINS;
+    static const QString PATH_TEXTURES_OBJECT_3D;
+    static const QString PATH_BATTLERS;
+    static const QString PATH_SONGS;
+    static const QString PATH_MUSICS;
+    static const QString PATH_BACKGROUND_SOUNDS;
+    static const QString PATH_SOUNDS;
+    static const QString PATH_MUSIC_EFFECTS;
+    static const QString PATH_SHAPES;
+    static const QString PATH_OBJ;
+    static const QString PATH_MTL;
+    static const QString PATH_COLLISIONS;
+    static const QString PATH_ENGINE_SETTINGS;
+    static const QString PATH_TRANSLATIONS;
+    static const QString PATH_TRANSLATIONS_LANGUAGES;
+    static const QString PATH_GAMES;
+    static const QString PATH_TEXTURE_MISSING;
+
+    // INTEGERS
+    static const int PORTION_SIZE;
+    static const int BASIC_SQUARE_SIZE;
+    static const int MAX_PIXEL_SIZE;
+
+    // ENUM TO STRING
+    static const QStringList ENUM_TO_STRING_DAMAGES_KIND;
+    static const QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
+    static const QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
+    static const QStringList ENUM_TO_STRING_OS_KIND;
+
+    // OTHER STATIC VALUES
+    static QSet<int> mapsToSave;
+    static QSet<int> mapsUndoRedo;
+    static QString shadersExtension;
+    static bool isInConfig;
+    static bool isInObjectConfig;
+
     RPM();
     virtual ~RPM();
 
     Project * project() const;
     EngineSettings * engineSettings() const;
     Translations * translations() const;
+    void setProject(Project *p);
 
-    void setProject(Project* p);
-    void setEngineSettings(EngineSettings* e);
-    void readTranslations();
-    void saveEngineSettings() const;
-    void loadEngineSettings();
-    int getPortionsRay() const;
-    int getSquareSize() const;
-
-    static QSet<int> mapsToSave;
-    static QSet<int> mapsUndoRedo;
-    static bool isInConfig;
-    static bool isInObjectConfig;
-    static QString shadersExtension;
-
-    // COMMON JSON
-    const static QString JSON_KEY;
-    const static QString JSON_VALUE;
-    const static QString JSON_EXTENSION;
-    const static QString DASH;
-
-    // COLORS
-    const static QColor colorGraySelectionDarker;
-    const static QColor colorGraySelection;
-    const static QColor colorGraySelectionLighter;
-    const static QColor colorGraySelectionBackground;
-    const static QColor colorPurpleSelection;
-    const static QColor colorPurpleSelectionBackground;
-    const static QColor colorGrayHoverBackground;
-    const static QColor colorAlmostWhite;
-    const static QColor colorAlmostBlack;
-    const static QColor colorAlmostTransparent;
-    const static QColor colorFortyTransparent;
-    const static QColor colorGrey;
-    const static QColor colorMenuSelectionBlue;
-
-    // PATHS
-    const static QString pathBasic;
-    const static QString pathBR;
-    const static QString pathDatas;
-    const static QString pathMaps;
-    const static QString pathScriptsDir;
-    const static QString pathScriptsSystemDir;
-    const static QString pathScriptsPluginsDir;
-    const static QString pathCommonEvents;
-    const static QString pathVariables;
-    const static QString pathSystem;
-    const static QString pathBattleSystem;
-    const static QString pathItems;
-    const static QString pathSkills;
-    const static QString pathWeapons;
-    const static QString pathArmors;
-    const static QString pathHeroes;
-    const static QString pathMonsters;
-    const static QString pathTroops;
-    const static QString pathClasses;
-    const static QString PATH_TILESETS;
-    const static QString PATH_ANIMATIONS;
-    const static QString PATH_STATUS;
-    const static QString PATH_SPECIAL_ELEMENTS;
-    const static QString PATH_TITLE_SCREEN_GAME_OVER;
-    const static QString pathTreeMap;
-    const static QString pathLangs;
-    const static QString pathScripts;
-    const static QString pathKeyBoard;
-    const static QString pathPicturesDatas;
-    const static QString pathSongsDatas;
-    const static QString PATH_SHAPES_DATAS;
-    const static QString pathSaves;
-    const static QString pathPictures;
-    const static QString pathHUD;
-    const static QString pathTextures2D;
-    const static QString pathBars;
-    const static QString pathIcons;
-    const static QString PATH_FACESETS;
-    const static QString PATH_WINDOW_SKINS;
-    const static QString PATH_TITLE_SCREEN;
-    const static QString pathAutotiles;
-    const static QString pathCharacters;
-    const static QString pathReliefs;
-    const static QString pathTilesets;
-    const static QString PATH_SPRITE_WALLS;
-    const static QString PATH_RELIEFS;
-    const static QString PATH_MOUNTAINS;
-    const static QString PATH_TEXTURES_OBJECT_3D;
-    const static QString PATH_BATTLERS;
-    const static QString PATH_SONGS;
-    const static QString PATH_MUSICS;
-    const static QString PATH_BACKGROUND_SOUNDS;
-    const static QString PATH_SOUNDS;
-    const static QString PATH_MUSIC_EFFECTS;
-    const static QString PATH_SHAPES;
-    const static QString PATH_OBJ;
-    const static QString PATH_MTL;
-    const static QString PATH_COLLISIONS;
-    const static QString pathEngineSettings;
-    const static QString PATH_TRANSLATIONS;
-    const static QString PATH_TRANSLATIONS_LANGUAGES;
-    const static QString fileMapInfos;
-    const static QString fileMapObjects;
-    const static QString gamesFolderName;
-    const static QString TEMP_MAP_FOLDER_NAME;
-    const static QString TEMP_UNDOREDO_MAP_FOLDER_NAME;
-    const static QString dirGames;
-    const static QString dirDesktop;
-    const static QString TEXTURE_MISSING;
-
-    // INTEGERS
-    const static int portionSize;
-    const static int BASIC_SQUARE_SIZE;
-    const static int MAX_PIXEL_SIZE;
-
-    // METHODS
-    static void writeJSON(QString path, const Serializable &obj);
-    static void readJSON(QString path, Serializable &obj);
-    static void writeRect(QJsonArray &json, const QRect& rect);
-    static void readRect(QJsonArray &json, QRect& rect);
-    static void writeRectF(QJsonArray &json, const QRectF& rect);
-    static void readRectF(QJsonArray &json, QRectF &rect);
-    static QKeySequence getKeySequence(QKeyEvent *event);
-    static QString keyToString(int keyInt);
-    static int mod(int x, int m);
     static float coefSquareSize();
     static float coefReverseSquareSize();
-    static QString osToString(OSKind os);
-    static bool getMinDistance(float &finalDistance, float newDistance);
-    static bool isMapIdExisting(int id);
-    static int generateMapId();
-    static QString generateMapName(int id);
-    static bool isPressingEnter(QKeyEvent* event);
-    static PictureKind subSelectionToPictureKind(
-            MapEditorSubSelectionKind subKind);
-    static QString translate(const QString& key);
+    static int getPortionsRay();
+    static int getSquareSize();
+    static void readEngineSettings();
+    static void readTranslations();
+    static void saveEngineSettings();
+    static QString translate(const QString &key);
+
+    void loadEngineSettings();
 
 protected:
-    Project *p_project;
+    Project *m_project;
     EngineSettings *m_engineSettings;
     Translations *m_translations;
 };

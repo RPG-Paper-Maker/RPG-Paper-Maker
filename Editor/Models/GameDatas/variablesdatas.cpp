@@ -31,7 +31,7 @@ VariablesDatas::~VariablesDatas()
 }
 
 void VariablesDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathVariables), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_VARIABLES), *this);
 }
 
 QStandardItemModel* VariablesDatas::model() const {

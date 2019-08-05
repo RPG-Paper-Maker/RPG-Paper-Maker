@@ -19,133 +19,184 @@
 #include "rpm.h"
 #include "common.h"
 
-QSet<int> RPM::mapsToSave;
-QSet<int> RPM::mapsUndoRedo;
-
-QString RPM::shadersExtension = "-3.0";
+// COLORS
+const QColor RPM::COLOR_GRAY_SELECTION_DARKER = QColor(60, 60, 60);
+const QColor RPM::COLOR_GRAY_SELECTION = QColor(80, 80, 80);
+const QColor RPM::COLOR_GRAY_SELECTION_LIGHTER = QColor(220, 220, 220);
+const QColor RPM::COLOR_GRAY_SELECTION_BACKGROUND = QColor(80, 80, 80, 75);
+const QColor RPM::COLOR_GRAY_HOVER_BACKGROUND = QColor(50, 50, 50, 75);
+const QColor RPM::COLOR_PURPLE_SELECTION = QColor(134, 29, 226);
+const QColor RPM::COLOR_PURPLE_SELCTION_BACKGROUND = QColor(134, 29, 226, 75);
+const QColor RPM::COLOR_ALMOST_WHITE = QColor(245, 245, 245);
+const QColor RPM::COLOR_ALMOST_BLACK = QColor(25, 25, 25);
+const QColor RPM::COLOR_ALMOST_TRANSPARENT = QColor(0, 0, 0, 20);
+const QColor RPM::COLOR_FORTY_TRANSPARENT = QColor(0, 0, 0, 40);
+const QColor RPM::COLOR_GREY = QColor(90, 90, 90);
+const QColor RPM::COLOR_MENU_SELECTION_BLUE = QColor(47, 139, 196);
 
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
 const QString RPM::JSON_VALUE = "v";
 const QString RPM::JSON_EXTENSION = ".json";
+
+// STRING SYMBOLS
 const QString RPM::DASH = "-";
 
+// FILE / FOLDER NAMES
+const QString RPM::FILE_MAP_INFOS = "infos" + JSON_EXTENSION;
+const QString RPM::FILE_MAP_OBJECTS = "objects" + JSON_EXTENSION;
+const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
+const QString RPM::FOLDER_DESKTOP = "desktop";
+const QString RPM::FOLDER_CONTENT = "Content";
+const QString RPM::FOLDER_TEMP_MAP = "temp";
+const QString RPM::FOLDER_UNDO_REDO_TEMP_MAP = "tempUndoRedo";
 
-// COLORS
-const QColor RPM::colorGraySelectionDarker = QColor(60, 60, 60);
-const QColor RPM::colorGraySelection = QColor(80, 80, 80);
-const QColor RPM::colorGraySelectionLighter = QColor(220, 220, 220);
-const QColor RPM::colorGraySelectionBackground = QColor(80, 80, 80, 75);
-const QColor RPM::colorPurpleSelection = QColor(134, 29, 226);
-const QColor RPM::colorPurpleSelectionBackground = QColor(134, 29, 226, 75);
-const QColor RPM::colorGrayHoverBackground = QColor(50, 50, 50, 75);
-const QColor RPM::colorAlmostWhite = QColor(245, 245, 245);
-const QColor RPM::colorAlmostBlack = QColor(25, 25, 25);
-const QColor RPM::colorAlmostTransparent = QColor(0, 0, 0, 20);
-const QColor RPM::colorFortyTransparent = QColor(0, 0, 0, 40);
-const QColor RPM::colorGrey = QColor(90, 90, 90);
-const QColor RPM::colorMenuSelectionBlue = QColor(47, 139, 196);
-
-// PATHS DATAS
-const QString RPM::pathBasic = Common::pathCombine("Content", "basic");
-const QString RPM::pathBR = Common::pathCombine("Content", "BR");
-const QString RPM::pathDatas = Common::pathCombine("Content", "Datas");
-const QString RPM::pathMaps = Common::pathCombine(pathDatas, "Maps");
-const QString RPM::pathScriptsDir = Common::pathCombine(pathDatas, "Scripts");
-const QString RPM::pathScriptsSystemDir =
-        Common::pathCombine(pathScriptsDir, "System");
-const QString RPM::pathScriptsPluginsDir =
-        Common::pathCombine(pathScriptsDir, "Plugins");
-const QString RPM::pathCommonEvents =
-        Common::pathCombine(pathDatas, "commonEvents.json");
-const QString RPM::pathVariables =
-        Common::pathCombine(pathDatas, "variables.json");
-const QString RPM::pathSystem = Common::pathCombine(pathDatas, "system.json");
-const QString RPM::pathBattleSystem =
-        Common::pathCombine(pathDatas, "battleSystem.json");
-const QString RPM::pathItems = Common::pathCombine(pathDatas, "items.json");
-const QString RPM::pathSkills = Common::pathCombine(pathDatas, "skills.json");
-const QString RPM::pathWeapons = Common::pathCombine(pathDatas, "weapons.json");
-const QString RPM::pathArmors = Common::pathCombine(pathDatas, "armors.json");
-const QString RPM::pathHeroes = Common::pathCombine(pathDatas, "heroes.json");
-const QString RPM::pathMonsters = Common::pathCombine(pathDatas, "monsters.json");
-const QString RPM::pathTroops = Common::pathCombine(pathDatas, "troops.json");
-const QString RPM::pathClasses = Common::pathCombine(pathDatas, "classes.json");
-const QString RPM::PATH_TILESETS = Common::pathCombine(pathDatas, "tilesets.json");
-const QString RPM::PATH_ANIMATIONS = Common::pathCombine(pathDatas, "animations.json");
-const QString RPM::PATH_STATUS = Common::pathCombine(pathDatas, "status.json");
-const QString RPM::PATH_SPECIAL_ELEMENTS =
-        Common::pathCombine(pathDatas, "specialElements.json");
-const QString RPM::PATH_TITLE_SCREEN_GAME_OVER = Common::pathCombine(pathDatas,
-    "titlescreenGameover.json");
-const QString RPM::pathTreeMap = Common::pathCombine(pathDatas, "treeMap.json");
-const QString RPM::pathLangs = Common::pathCombine(pathDatas, "langs.json");
-const QString RPM::pathScripts = Common::pathCombine(pathDatas, "scripts.json");
-const QString RPM::pathKeyBoard = Common::pathCombine(pathDatas, "keyBoard.json");
-const QString RPM::pathPicturesDatas =
-        Common::pathCombine(pathDatas, "pictures.json");
-const QString RPM::pathSongsDatas =
-        Common::pathCombine(pathDatas, "songs.json");
-const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(pathDatas,
-    "shapes.json");
-const QString RPM::pathSaves = Common::pathCombine(pathDatas, "saves.json");
-
-// PATHS PICTURES
-const QString RPM::pathPictures = Common::pathCombine("Content", "Pictures");
-const QString RPM::pathHUD = Common::pathCombine(pathPictures, "HUD");
-const QString RPM::pathTextures2D = Common::pathCombine(pathPictures, "Textures2D");
-const QString RPM::pathBars = Common::pathCombine(pathHUD, "Bars");
-const QString RPM::pathIcons = Common::pathCombine(pathHUD, "Icons");
-const QString RPM::PATH_FACESETS = Common::pathCombine(pathHUD, "Facesets");
-const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(pathHUD, "WindowSkins");
-const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(pathHUD, "TitleScreen");
-const QString RPM::pathAutotiles = Common::pathCombine(pathTextures2D, "Autotiles");
-const QString RPM::pathCharacters = Common::pathCombine(pathTextures2D, "Characters");
-const QString RPM::pathReliefs = Common::pathCombine(pathTextures2D, "Reliefs");
-const QString RPM::pathTilesets = Common::pathCombine(pathTextures2D, "Tilesets");
-const QString RPM::PATH_SPRITE_WALLS = Common::pathCombine(pathTextures2D, "Walls");
-const QString RPM::PATH_RELIEFS = Common::pathCombine(pathTextures2D, "Reliefs");
-const QString RPM::PATH_MOUNTAINS = Common::pathCombine(pathTextures2D, "Mountains");
-const QString RPM::PATH_TEXTURES_OBJECT_3D = Common::pathCombine(pathTextures2D,
+// PATHS
+const QString RPM::PATH_BASIC = Common::pathCombine(FOLDER_CONTENT, "basic");
+const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
+const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");
+const QString RPM::PATH_MAPS = Common::pathCombine(PATH_DATAS, "Maps");
+const QString RPM::PATH_SCRIPTS_DIR = Common::pathCombine(PATH_DATAS, "Scripts");
+const QString RPM::PATH_SCRIPTS_SYSTEM_DIR = Common::pathCombine(
+    PATH_SCRIPTS_DIR, "System");
+const QString RPM::PATH_SCRIPTS_PLUGINS_DIR = Common::pathCombine(
+    PATH_SCRIPTS_DIR, "Plugins");
+const QString RPM::PATH_COMMON_EVENTS = Common::pathCombine(PATH_DATAS,
+    "commonEvents" + JSON_EXTENSION);
+const QString RPM::PATH_VARIABLES = Common::pathCombine(PATH_DATAS,
+    "variables" + JSON_EXTENSION);
+const QString RPM::PATH_SYSTEM = Common::pathCombine(PATH_DATAS,
+    "system" + JSON_EXTENSION);
+const QString RPM::PATH_BATTLE_SYSTEM = Common::pathCombine(PATH_DATAS,
+    "battleSystem" + JSON_EXTENSION);
+const QString RPM::PATH_ITEMS = Common::pathCombine(PATH_DATAS,
+    "items" + JSON_EXTENSION);
+const QString RPM::PATH_SKILLS = Common::pathCombine(PATH_DATAS,
+    "skills" + JSON_EXTENSION);
+const QString RPM::PATH_WEAPONS = Common::pathCombine(PATH_DATAS,
+    "weapons" + JSON_EXTENSION);
+const QString RPM::PATH_ARMORS = Common::pathCombine(PATH_DATAS,
+    "armors" + JSON_EXTENSION);
+const QString RPM::PATH_HEROES = Common::pathCombine(PATH_DATAS,
+    "heroes" + JSON_EXTENSION);
+const QString RPM::PATH_MONSTERS = Common::pathCombine(PATH_DATAS,
+    "monsters" + JSON_EXTENSION);
+const QString RPM::PATH_TROOPS = Common::pathCombine(PATH_DATAS,
+    "troops" + JSON_EXTENSION);
+const QString RPM::PATH_CLASSES = Common::pathCombine(PATH_DATAS,
+    "classes" + JSON_EXTENSION);
+const QString RPM::PATH_TILESETS_DATAS = Common::pathCombine(PATH_DATAS,
+    "tilesets" + JSON_EXTENSION);
+const QString RPM::PATH_ANIMATIONS = Common::pathCombine(PATH_DATAS,
+    "animations" + JSON_EXTENSION);
+const QString RPM::PATH_STATUS = Common::pathCombine(PATH_DATAS,
+    "status" + JSON_EXTENSION);
+const QString RPM::PATH_SPECIAL_ELEMENTS = Common::pathCombine(PATH_DATAS,
+    "specialElements" + JSON_EXTENSION);
+const QString RPM::PATH_TITLE_SCREEN_GAME_OVER = Common::pathCombine(PATH_DATAS,
+    "titlescreenGameover" + JSON_EXTENSION);
+const QString RPM::PATH_TREE_MAP = Common::pathCombine(PATH_DATAS,
+    "treeMap" + JSON_EXTENSION);
+const QString RPM::PATH_LANGS = Common::pathCombine(PATH_DATAS,
+    "langs" + JSON_EXTENSION);
+const QString RPM::PATH_SCRIPTS = Common::pathCombine(PATH_DATAS,
+    "scripts" + JSON_EXTENSION);
+const QString RPM::PATH_KEYBOARD = Common::pathCombine(PATH_DATAS,
+    "keyBoard" + JSON_EXTENSION);
+const QString RPM::PATH_PICTURES_DATAS = Common::pathCombine(PATH_DATAS,
+    "pictures" + JSON_EXTENSION);
+const QString RPM::PATH_SONGS_DATAS = Common::pathCombine(PATH_DATAS,
+    "songs" + JSON_EXTENSION);
+const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(PATH_DATAS,
+    "shapes" + JSON_EXTENSION);
+const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS,
+    "saves" + JSON_EXTENSION);
+const QString RPM::PATH_PICTURES = Common::pathCombine(FOLDER_CONTENT,
+    "Pictures");
+const QString RPM::PATH_HUD = Common::pathCombine(PATH_PICTURES,
+    "HUD");
+const QString RPM::PATH_TEXTURES_2D = Common::pathCombine(PATH_PICTURES,
+    "Textures2D");
+const QString RPM::PATH_BARS = Common::pathCombine(PATH_HUD,
+    "Bars");
+const QString RPM::PATH_ICONS = Common::pathCombine(PATH_HUD,
+    "Icons");
+const QString RPM::PATH_FACESETS = Common::pathCombine(PATH_HUD,
+    "Facesets");
+const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(PATH_HUD,
+    "WindowSkins");
+const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(PATH_HUD,
+    "TitleScreen");
+const QString RPM::PATH_AUTOTILES = Common::pathCombine(PATH_TEXTURES_2D,
+    "Autotiles");
+const QString RPM::PATH_CHARACTERS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Characters");
+const QString RPM::PATH_TILESETS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Tilesets");
+const QString RPM::PATH_SPRITE_WALLS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Walls");
+const QString RPM::PATH_RELIEFS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Reliefs");
+const QString RPM::PATH_MOUNTAINS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Mountains");
+const QString RPM::PATH_TEXTURES_OBJECT_3D = Common::pathCombine(PATH_TEXTURES_2D,
     "Objects3D");
-const QString RPM::PATH_BATTLERS = Common::pathCombine(pathTextures2D, "Battlers");
-
-// PATHS SONGS
-const QString RPM::PATH_SONGS = Common::pathCombine("Content", "Songs");
-const QString RPM::PATH_MUSICS = Common::pathCombine(PATH_SONGS, "Musics");
-const QString RPM::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS, "BackgroundSounds");
-const QString RPM::PATH_SOUNDS = Common::pathCombine(PATH_SONGS, "Sounds");
-const QString RPM::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS, "MusicEffects");
-
-// PATHS SHAPES
-const QString RPM::PATH_SHAPES = Common::pathCombine("Content", "Shapes");
-const QString RPM::PATH_OBJ = Common::pathCombine(PATH_SHAPES, "OBJ");
-const QString RPM::PATH_MTL = Common::pathCombine(PATH_SHAPES, "MTL");
+const QString RPM::PATH_BATTLERS = Common::pathCombine(PATH_TEXTURES_2D,
+    "Battlers");
+const QString RPM::PATH_SONGS = Common::pathCombine(FOLDER_CONTENT,
+    "Songs");
+const QString RPM::PATH_MUSICS = Common::pathCombine(PATH_SONGS,
+    "Musics");
+const QString RPM::PATH_BACKGROUND_SOUNDS = Common::pathCombine(PATH_SONGS,
+    "BackgroundSounds");
+const QString RPM::PATH_SOUNDS = Common::pathCombine(PATH_SONGS,
+    "Sounds");
+const QString RPM::PATH_MUSIC_EFFECTS = Common::pathCombine(PATH_SONGS,
+    "MusicEffects");
+const QString RPM::PATH_SHAPES = Common::pathCombine(FOLDER_CONTENT,
+    "Shapes");
+const QString RPM::PATH_OBJ = Common::pathCombine(PATH_SHAPES,
+    "OBJ");
+const QString RPM::PATH_MTL = Common::pathCombine(PATH_SHAPES,
+    "MTL");
 const QString RPM::PATH_COLLISIONS = Common::pathCombine(PATH_SHAPES,
     "Collisions");
-
-const QString RPM::pathEngineSettings =
-        Common::pathCombine("Content", "engineSettings.json");
-const QString RPM::PATH_TRANSLATIONS = Common::pathCombine("Content",
+const QString RPM::PATH_ENGINE_SETTINGS = Common::pathCombine(FOLDER_CONTENT,
+    "engineSettings" + JSON_EXTENSION);
+const QString RPM::PATH_TRANSLATIONS = Common::pathCombine(FOLDER_CONTENT,
     "translations");
 const QString RPM::PATH_TRANSLATIONS_LANGUAGES = Common::pathCombine(RPM
-    ::PATH_TRANSLATIONS, "languages.json");
-const QString RPM::fileMapInfos = "infos.json";
-const QString RPM::fileMapObjects = "objects.json";
-const QString RPM::gamesFolderName = "RPG Paper Maker Games";
-const QString RPM::TEMP_MAP_FOLDER_NAME = "temp";
-const QString RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME = "tempUndoRedo";
-const QString RPM::dirGames = Common::pathCombine(
-            QStandardPaths::writableLocation(
-                QStandardPaths::StandardLocation::DocumentsLocation),
-            gamesFolderName);
-const QString RPM::dirDesktop = "desktop";
-const QString RPM::TEXTURE_MISSING = ":/textures/Ressources/missing.png";
+    ::PATH_TRANSLATIONS, "languages" + JSON_EXTENSION);
+const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
+    ::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation),
+    FOLDER_GAMES);
+const QString RPM::PATH_TEXTURE_MISSING = ":/textures/Ressources/missing.png";
 
-const int RPM::portionSize = 16;
+// INTEGERS
+const int RPM::PORTION_SIZE = 16;
 const int RPM::BASIC_SQUARE_SIZE = 32;
 const int RPM::MAX_PIXEL_SIZE = 4096;
 
+// ENUM TO STRING
+const QStringList RPM::ENUM_TO_STRING_DAMAGES_KIND = {
+    "Statistic", "Currency", "Variable"
+};
+const QStringList RPM::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND = {
+    "Apply weapon(s) effects and properties", "Open skills choice",
+    "Open items choice", "Escape", "End turn"
+};
+const QStringList RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND = {
+    "Statistic value", "Element resistance", "Status resistance",
+    "Experience gain", "Currency gain", "Skill cost", "Variable"
+};
+const QStringList RPM::ENUM_TO_STRING_OS_KIND = {
+    "Windows", "Linux", "Mac"
+};
+
+// OTHER STATIC VALUES
+QSet<int> RPM::mapsToSave;
+QSet<int> RPM::mapsUndoRedo;
+QString RPM::shadersExtension = "-3.0";
 bool RPM::isInConfig = false;
 bool RPM::isInObjectConfig = false;
 
@@ -156,51 +207,36 @@ bool RPM::isInObjectConfig = false;
 // -------------------------------------------------------
 
 RPM::RPM() :
-    p_project(nullptr),
-    m_engineSettings(nullptr),
+    m_project(nullptr),
+    m_engineSettings(new EngineSettings),
     m_translations(new Translations)
 {
 
 }
 
-RPM::~RPM()
-{
-    if (p_project != nullptr){
-        delete p_project;
-        p_project = nullptr;
+RPM::~RPM() {
+    if (m_project != nullptr) {
+        delete m_project;
+        m_project = nullptr;
     }
-
     delete m_engineSettings;
     delete m_translations;
 }
 
-Project* RPM::project() const { return p_project; }
-
-EngineSettings* RPM::engineSettings() const { return m_engineSettings; }
-
-Translations * RPM::translations() const { return m_translations; }
-
-int RPM::getPortionsRay() const {
-    return project()->gameDatas()->systemDatas()->portionsRay();
+Project* RPM::project() const {
+    return m_project;
 }
 
-int RPM::getSquareSize() const {
-    return project()->gameDatas()->systemDatas()->squareSize();
+EngineSettings* RPM::engineSettings() const {
+    return m_engineSettings;
 }
 
-void RPM::setProject(Project* p) { p_project = p; }
-
-void RPM::setEngineSettings(EngineSettings* e) { m_engineSettings = e; }
-
-void RPM::saveEngineSettings() const{
-    m_engineSettings->write();
+Translations * RPM::translations() const {
+    return m_translations;
 }
 
-void RPM::loadEngineSettings(){
-    delete m_engineSettings;
-
-    m_engineSettings = new EngineSettings;
-    m_engineSettings->read();
+void RPM::setProject(Project *p) {
+    m_project = p;
 }
 
 // -------------------------------------------------------
@@ -209,246 +245,67 @@ void RPM::loadEngineSettings(){
 //
 // -------------------------------------------------------
 
-void RPM::readTranslations() {
-    m_translations->read();
-}
-
-// -------------------------------------------------------
-
-void RPM::writeJSON(QString path, const Serializable &obj){
-    QJsonObject gameObject;
-    obj.write(gameObject);
-    Common::writeOtherJSON(path, gameObject);
-}
-
-// -------------------------------------------------------
-
-void RPM::readJSON(QString path, Serializable &obj){
-    QJsonDocument loadDoc;
-    Common::readOtherJSON(path, loadDoc);
-    obj.read(loadDoc.object());
-}
-
-// -------------------------------------------------------
-
-void RPM::writeRect(QJsonArray &json, const QRect &rect) {
-    json.append(rect.x());
-    json.append(rect.y());
-    json.append(rect.width());
-    json.append(rect.height());
-}
-
-// -------------------------------------------------------
-
-void RPM::readRect(QJsonArray&json, QRect& rect) {
-    rect.setX(json[0].toInt());
-    rect.setY(json[1].toInt());
-    rect.setWidth(json[2].toInt());
-    rect.setHeight(json[3].toInt());
-}
-
-// -------------------------------------------------------
-
-void RPM::writeRectF(QJsonArray &json, const QRectF &rect) {
-    json.append(rect.x());
-    json.append(rect.y());
-    json.append(rect.width());
-    json.append(rect.height());
-}
-
-// -------------------------------------------------------
-
-void RPM::readRectF(QJsonArray&json, QRectF& rect) {
-    rect.setX(json[0].toDouble());
-    rect.setY(json[1].toDouble());
-    rect.setWidth(json[2].toDouble());
-    rect.setHeight(json[3].toDouble());
-}
-
-// -------------------------------------------------------
-
-QKeySequence RPM::getKeySequence(QKeyEvent *event){
-    int keyInt = event->key();
-    Qt::Key key = static_cast<Qt::Key>(keyInt);
-
-    if(key != Qt::Key_unknown){
-
-        // the user have clicked just and only the special keys Ctrl, Shift,
-        // Alt, Meta.
-        if(key != Qt::Key_Control &&
-            key != Qt::Key_Shift &&
-            key != Qt::Key_Alt &&
-            key != Qt::Key_Meta)
-        {
-            // check for a combination of user clicks
-            Qt::KeyboardModifiers modifiers = event->modifiers();
-            if(modifiers & Qt::ShiftModifier)
-                keyInt += Qt::SHIFT;
-            if(modifiers & Qt::ControlModifier)
-                keyInt += Qt::CTRL;
-            if(modifiers & Qt::AltModifier)
-                keyInt += Qt::ALT;
-            if(modifiers & Qt::MetaModifier)
-                keyInt += Qt::META;
-
-            return QKeySequence(keyInt);
-        }
-    }
-
-    return QKeySequence();
-}
-
-// -------------------------------------------------------
-
-QString RPM::keyToString(int keyInt){
-    QKeySequence seq(keyInt);
-    Qt::Key key = static_cast<Qt::Key>(keyInt);
-
-    if (key != Qt::Key_unknown){
-        switch (key) {
-        case Qt::Key_Control:
-            return "CTRL";
-        case Qt::Key_Shift:
-            return "SHIFT";
-        case Qt::Key_Alt:
-            return "ALT";
-        case Qt::Key_Meta:
-            return "META";
-        case Qt::Key_AltGr:
-            return "ALTGR";
-        default:
-            return seq.toString();
-        }
-    }
-
-    return "?";
-}
-
-// -------------------------------------------------------
-
-int RPM::mod(int x, int m) {
-    int r = x % m;
-    return r < 0 ? r + m : r;
-}
-
-// -------------------------------------------------------
-
 float RPM::coefSquareSize() {
-    return RPM::get()->getSquareSize() / (static_cast<float>(RPM::BASIC_SQUARE_SIZE));
+    return RPM::get()->getSquareSize() / (static_cast<float>(RPM
+        ::BASIC_SQUARE_SIZE));
 }
 
 // -------------------------------------------------------
 
 float RPM::coefReverseSquareSize() {
-    return static_cast<float>(RPM::BASIC_SQUARE_SIZE) / RPM::get()->getSquareSize();
+    return static_cast<float>(RPM::BASIC_SQUARE_SIZE) / RPM::get()
+        ->getSquareSize();
 }
 
 // -------------------------------------------------------
 
-QString RPM::osToString(OSKind os) {
-    switch (os) {
-    case OSKind::Window:
-        return "Window";
-    case OSKind::Linux:
-        return "Linux";
-    case OSKind::Mac:
-        return "Mac";
+int RPM::getPortionsRay() {
+    return RPM::get()->project()->gameDatas()->systemDatas()->portionsRay();
+}
+
+// -------------------------------------------------------
+
+int RPM::getSquareSize() {
+    return RPM::get()->project()->gameDatas()->systemDatas()->squareSize();
+}
+
+// -------------------------------------------------------
+
+void RPM::readEngineSettings() {
+    QFile fileSettings(Common::pathCombine(QDir::currentPath(), RPM
+        ::PATH_ENGINE_SETTINGS));
+
+    if (fileSettings.exists()) {
+        RPM::get()->engineSettings()->read();
+    } else {
+        RPM::get()->engineSettings()->setDefault();
+        RPM::get()->engineSettings()->write();
     }
-
-    return "";
 }
 
 // -------------------------------------------------------
 
-bool RPM::getMinDistance(float& finalDistance, float newDistance) {
-    if (std::isnan(finalDistance))
-        finalDistance = 0;
-    if (std::isnan(newDistance))
-        newDistance = 0;
-
-    if (finalDistance == 0) {
-        if (newDistance > 0) {
-            finalDistance = newDistance;
-            return true;
-        }
-    }
-    else {
-        if (newDistance > 0) {
-            if (newDistance < finalDistance) {
-                finalDistance = newDistance;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-// -------------------------------------------------------
-// check if a directory with that id in Maps folder already exists
-
-bool RPM::isMapIdExisting(int id){
-    QDirIterator directories(Common::pathCombine(RPM::get()->project()
-                                                ->pathCurrentProject(),
-                                                RPM::pathMaps),
-                             QDir::Dirs | QDir::NoDotAndDotDot);
-
-    while (directories.hasNext()){
-        directories.next();
-        if (directories.fileName() == generateMapName(id))
-            return true;
-    }
-
-    return false;
-}
-
-// -------------------------------------------------------
-// generate an id for a new map according to the ids of the already existing
-// maps
-
-int RPM::generateMapId(){
-    int id;
-    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
-                                RPM::pathMaps));
-    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    int nbMaps = static_cast<int>(dir.count());
-
-    for (id = 1; id <= nbMaps + 1; id++)
-        if (!isMapIdExisting(id)) break;
-
-    return id;
+void RPM::readTranslations() {
+    RPM::get()->translations()->read();
 }
 
 // -------------------------------------------------------
 
-QString RPM::generateMapName(int id){
-    return "MAP" + Common::getFormatNumber(id);
-}
-
-
-// -------------------------------------------------------
-
-bool RPM::isPressingEnter(QKeyEvent* event) {
-    return event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter ||
-           event->key() == Qt::Key_Return;
-}
-
-// -------------------------------------------------------
-
-PictureKind RPM::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
-{
-    switch (subKind) {
-    case MapEditorSubSelectionKind::Autotiles:
-        return PictureKind::Autotiles;
-    case MapEditorSubSelectionKind::SpritesWall:
-        return PictureKind::Walls;
-    default:
-        return PictureKind::None;
-    }
+void RPM::saveEngineSettings() {
+    RPM::get()->engineSettings()->write();
 }
 
 // -------------------------------------------------------
 
 QString RPM::translate(const QString &key) {
     return RPM::get()->translations()->get(key);
+}
+
+// -------------------------------------------------------
+
+void RPM::loadEngineSettings() {
+    delete m_engineSettings;
+
+    m_engineSettings = new EngineSettings;
+    m_engineSettings->read();
 }

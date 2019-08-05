@@ -56,7 +56,7 @@ SystemPlaySong * TitleScreenGameOverDatas::titleMusic() const {
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
         *this);
 }
 

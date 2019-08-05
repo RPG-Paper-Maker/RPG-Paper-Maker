@@ -728,17 +728,17 @@ void WidgetMapEditor::keyPressEvent(QKeyEvent *event) {
         if (m_menuBar != nullptr && m_menuBar->selectionKind() ==
             MapEditorSelectionKind::Objects)
         {
-            QKeySequence seq = RPM::getKeySequence(event);
+            QKeySequence seq = Common::getKeySequence(event);
             QList<QAction*> actions = m_contextMenu->actions();
             QAction* action;
 
             action = actions.at(0);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextNew();
                 return;
             }
             action = actions.at(1);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextEdit();
                 return;
             }

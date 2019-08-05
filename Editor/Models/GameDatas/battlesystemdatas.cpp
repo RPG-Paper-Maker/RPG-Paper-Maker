@@ -78,7 +78,7 @@ BattleSystemDatas::~BattleSystemDatas()
 }
 
 void BattleSystemDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathBattleSystem), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_BATTLE_SYSTEM), *this);
 }
 
 int BattleSystemDatas::idStatisticLevel() const { return m_idStatisticLevel; }

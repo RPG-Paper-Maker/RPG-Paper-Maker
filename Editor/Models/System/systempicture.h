@@ -16,6 +16,7 @@
 #include "superlistitem.h"
 #include "picturekind.h"
 #include "collisionsquare.h"
+#include "mapeditorsubselectionkind.h"
 
 // -------------------------------------------------------
 //
@@ -40,6 +41,8 @@ public:
     static QString getFolder(PictureKind kind, bool isBR);
     static QString getLocalFolder(PictureKind kind);
     static QString getPictureTitle(PictureKind kind);
+    static PictureKind subSelectionToPictureKind(MapEditorSubSelectionKind
+        subKind);
     QString getPath(PictureKind kind) const;
     QString getLocalPath(PictureKind kind) const;
     void getRepeatList(QImage& image,

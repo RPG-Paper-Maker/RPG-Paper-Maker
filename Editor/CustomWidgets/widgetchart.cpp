@@ -24,7 +24,7 @@
 WidgetChart::WidgetChart(QWidget *parent) :
     QFrame(parent),
     m_penGrey(Qt::darkGray, 1),
-    m_penText(RPM::colorAlmostBlack)
+    m_penText(RPM::COLOR_ALMOST_BLACK)
 {
 
 }

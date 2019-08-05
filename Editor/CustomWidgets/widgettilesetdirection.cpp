@@ -173,7 +173,7 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
         painter.setTransform(transform);
         QRect rect(posX - 3, posY - 3, 5, 5);
         if (hoveredPoint.x() == i && hoveredPoint.y() == j)
-            painter.fillRect(rect, RPM::colorGrayHoverBackground);
+            painter.fillRect(rect, RPM::COLOR_GRAY_HOVER_BACKGROUND);
         painter.drawRect(rect);
     }
 }
@@ -249,7 +249,7 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
         return;
 
     // Draw arrows
-    painter.setPen(RPM::colorGrey);
+    painter.setPen(RPM::COLOR_GREY);
     for (int i = 0; i < m_image.width() / RPM::BASIC_SQUARE_SIZE; i++) {
         for (int j = 0; j < m_image.height() / RPM::BASIC_SQUARE_SIZE; j++) {
 
@@ -275,7 +275,7 @@ void WidgetTilesetDirection::paintEvent(QPaintEvent *){
             QRect rect;
             getCenterRect(rect, i, j);
             if (m_hoveredPoint.x() == i && m_hoveredPoint.y() == j)
-                painter.fillRect(rect, RPM::colorGrayHoverBackground);
+                painter.fillRect(rect, RPM::COLOR_GRAY_HOVER_BACKGROUND);
             painter.drawRect(rect);
         }
     }

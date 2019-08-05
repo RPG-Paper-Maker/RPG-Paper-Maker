@@ -50,7 +50,7 @@ SpecialElementsDatas::~SpecialElementsDatas()
 }
 
 void SpecialElementsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SPECIAL_ELEMENTS),
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_SPECIAL_ELEMENTS),
                     *this);
 }
 

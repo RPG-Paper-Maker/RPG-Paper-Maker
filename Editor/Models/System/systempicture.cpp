@@ -104,17 +104,17 @@ QString SystemPicture::getFolder(PictureKind kind, bool isBR){
 QString SystemPicture::getLocalFolder(PictureKind kind) {
     switch (kind){
     case PictureKind::Bars:
-        return RPM::pathBars;
+        return RPM::PATH_BARS;
     case PictureKind::Icons:
-        return RPM::pathIcons;
+        return RPM::PATH_ICONS;
     case PictureKind::Autotiles:
-        return RPM::pathAutotiles;
+        return RPM::PATH_AUTOTILES;
     case PictureKind::Characters:
-        return RPM::pathCharacters;
+        return RPM::PATH_CHARACTERS;
     case PictureKind::Mountains:
         return RPM::PATH_MOUNTAINS;
     case PictureKind::Tilesets:
-        return RPM::pathTilesets;
+        return RPM::PATH_TILESETS;
     case PictureKind::Walls:
         return RPM::PATH_SPRITE_WALLS;
     case PictureKind::Battlers:
@@ -151,12 +151,26 @@ QString SystemPicture::getPictureTitle(PictureKind kind) {
 
 // -------------------------------------------------------
 
+PictureKind SystemPicture::subSelectionToPictureKind(MapEditorSubSelectionKind subKind)
+{
+    switch (subKind) {
+    case MapEditorSubSelectionKind::Autotiles:
+        return PictureKind::Autotiles;
+    case MapEditorSubSelectionKind::SpritesWall:
+        return PictureKind::Walls;
+    default:
+        return PictureKind::None;
+    }
+}
+
+// -------------------------------------------------------
+
 QString SystemPicture::getPath(PictureKind kind) const {
     // If NONE, return empty path
     if (id() == -1) {
         return "";
     } else if (m_isMissing) {
-        return RPM::TEXTURE_MISSING;
+        return RPM::PATH_TEXTURE_MISSING;
     }
 
     QString folder = getFolder(kind, m_isBR);

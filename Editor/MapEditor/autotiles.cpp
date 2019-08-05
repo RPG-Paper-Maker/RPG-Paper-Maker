@@ -11,6 +11,7 @@
 
 #include "autotiles.h"
 #include "rpm.h"
+#include "common.h"
 
 QHash<QString, int> Autotiles::initializeAutotileBorder() {
     QHash<QString, int> hash;
@@ -161,7 +162,7 @@ bool Autotiles::updateRaycastingAt(Position &position, AutotileDatas *autotile,
         qFuzzyCompare(previousCoords.yPlus(), position.yPlus())))
     {
         float newDistance = autotile->intersection(squareSize, ray, position);
-        if (RPM::getMinDistance(finalDistance, newDistance)) {
+        if (Common::getMinDistance(finalDistance, newDistance)) {
             finalPosition = position;
             return true;
         }

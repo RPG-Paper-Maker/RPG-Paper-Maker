@@ -162,7 +162,7 @@ void WidgetShowPicture::paintEvent(QPaintEvent *){
 
     if (m_drawBackgorund) {
         painter.fillRect(0, 0, m_image.width(), m_image.height(), RPM
-            ::colorAlmostTransparent);
+            ::COLOR_ALMOST_TRANSPARENT);
     }
     painter.drawImage(0, 0, m_image);
 

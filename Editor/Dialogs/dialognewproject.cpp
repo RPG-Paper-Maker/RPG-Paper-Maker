@@ -9,15 +9,16 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialognewproject.h"
-#include "ui_dialognewproject.h"
-#include "mainwindow.h"
-#include "rpm.h"
 #include <QKeyEvent>
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QApplication>
+#include "dialognewproject.h"
+#include "ui_dialognewproject.h"
+#include "mainwindow.h"
+#include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -33,7 +34,7 @@ DialogNewProject::DialogNewProject(QWidget *parent) :
     
 
     ui->lineEditProjectName->setFocus();
-    ui->lineEditLocation->setText(RPM::dirGames);
+    ui->lineEditLocation->setText(RPM::PATH_GAMES);
     ui->lineEditLocation->setCursorPosition(0);
 
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(RPM::translate(

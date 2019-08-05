@@ -179,8 +179,8 @@ void ControlMapEditor::getPortionsInRay(QList<Portion> &portions) {
             leftBotPortion.z());
         QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
             rightTopPortion.z());
-        leftBotCorner *= RPM::portionSize * m_map->squareSize();
-        rightTopCorner *= RPM::portionSize * m_map->squareSize();
+        leftBotCorner *= RPM::PORTION_SIZE * m_map->squareSize();
+        rightTopCorner *= RPM::PORTION_SIZE * m_map->squareSize();
         rightTopCorner.setX(rightTopCorner.x() - 1);
         rightTopCorner.setY(rightTopCorner.y() - 1);
         rightTopCorner.setZ(rightTopCorner.z() - 1);
@@ -241,8 +241,8 @@ void ControlMapEditor::updatePortionsInRay(QList<Portion> &portions,
                 leftBotPortion.z());
             QVector3D rightTopCorner(rightTopPortion.x(), rightTopPortion.y(),
                 rightTopPortion.z());
-            leftBotCorner *= RPM::portionSize * m_map->squareSize();
-            rightTopCorner *= RPM::portionSize * m_map->squareSize();
+            leftBotCorner *= RPM::PORTION_SIZE * m_map->squareSize();
+            rightTopCorner *= RPM::PORTION_SIZE * m_map->squareSize();
             rightTopCorner.setX(rightTopCorner.x() - 1);
             rightTopCorner.setY(rightTopCorner.y() - 1);
             rightTopCorner.setZ(rightTopCorner.z() - 1);

@@ -12,6 +12,7 @@
 #include "sprites.h"
 #include "map.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -512,7 +513,7 @@ bool Sprites::updateRaycastingAt(
 {
     float newDistance = sprite->intersection(squareSize, ray, position,
                                              cameraHAngle);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
+    if (Common::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }
@@ -527,7 +528,7 @@ bool Sprites::updateRaycastingWallAt(
         Position &finalPosition, QRay3D& ray)
 {
     float newDistance = wall->intersection(ray);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
+    if (Common::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

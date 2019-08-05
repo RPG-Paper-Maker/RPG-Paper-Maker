@@ -31,7 +31,7 @@ HeroesDatas::~HeroesDatas()
 }
 
 void HeroesDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathHeroes), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_HEROES), *this);
 }
 
 QStandardItemModel* HeroesDatas::model() const { return m_model; }

@@ -43,7 +43,7 @@ CommonEventsDatas::~CommonEventsDatas()
 }
 
 void CommonEventsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathCommonEvents), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS), *this);
 }
 
 QStandardItemModel* CommonEventsDatas::modelEventsSystem() const {

@@ -157,7 +157,7 @@ QString SystemCost::toString() const {
         textD += QString::number(m_variableID->id());
         break;
     }
-    text += Common::enumToStringDamagesKind.at(m_kind->id()) + " " + textD +
+    text += RPM::ENUM_TO_STRING_DAMAGES_KIND.at(m_kind->id()) + " " + textD +
         ": " + m_valueFormula->toString();
 
     return text;

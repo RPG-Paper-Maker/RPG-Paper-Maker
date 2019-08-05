@@ -33,7 +33,7 @@ SkillsDatas::~SkillsDatas()
 }
 
 void SkillsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathSkills), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_SKILLS), *this);
 }
 
 QStandardItemModel* SkillsDatas::model() const { return m_model; }

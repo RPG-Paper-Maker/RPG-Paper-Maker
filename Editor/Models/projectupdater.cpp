@@ -9,11 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDirIterator>
+#include <QThread>
 #include "projectupdater.h"
 #include "rpm.h"
 #include "common.h"
-#include <QDirIterator>
-#include <QThread>
 
 const int ProjectUpdater::incompatibleVersionsCount = 8;
 
@@ -75,7 +75,7 @@ void ProjectUpdater::copyPreviousProject() {
 void ProjectUpdater::getAllPathsMapsPortions()
 {
     QString pathMaps = Common::pathCombine(m_project->pathCurrentProject(),
-                                          RPM::pathMaps);
+                                          RPM::PATH_MAPS);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Clear
@@ -150,10 +150,10 @@ void ProjectUpdater::copySystemScripts() {
     QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
     QString pathBasic = Common::pathCombine(pathContent, "basic");
     QString pathScripts = Common::pathCombine(pathBasic,
-                                             RPM::pathScriptsSystemDir);
+                                             RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QString pathProjectScripts =
             Common::pathCombine(m_project->pathCurrentProject(),
-                               RPM::pathScriptsSystemDir);
+                               RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();
     dir.cdUp();
@@ -176,7 +176,7 @@ void ProjectUpdater::check() {
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (Common::versionDifferent(incompatibleVersions[i],
+        if (Project::versionDifferent(incompatibleVersions[i],
                                      m_project->version()) == 1)
         {
             index = i;
@@ -200,7 +200,7 @@ void ProjectUpdater::check() {
     m_project->readLangsDatas();
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setPathBR(
-                Common::pathCombine(QDir::currentPath(), RPM::pathBR));
+                Common::pathCombine(QDir::currentPath(), RPM::PATH_BR));
     m_project->writeSystemDatas();
     emit progress(100, "");
     QThread::sleep(1);
@@ -294,7 +294,7 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Adding a default special elements datas to the project
     SpecialElementsDatas specialElementsDatas;
     specialElementsDatas.setDefault();
-    RPM::writeJSON(Common::pathCombine(
+    Common::writeJSON(Common::pathCombine(
                          m_project->pathCurrentProject(),
                          RPM::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
 

@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QListWidgetItem>
+#include <QMimeData>
 #include "widgetsuperlist.h"
 #include "widgetsupertree.h"
 #include "rpm.h"
-#include <QListWidgetItem>
-#include <QMimeData>
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -204,19 +205,19 @@ void WidgetSuperList::brutDelete(QStandardItem* item){
 void WidgetSuperList::keyPressEvent(QKeyEvent *event) {
     int key;
 
-    if (RPM::isPressingEnter(event)) {
+    if (Common::isPressingEnter(event)) {
         emit tryingEdit();
     }
 
     if (m_hasContextMenu || m_canBrutRemove){
 
-        QKeySequence seq = RPM::getKeySequence(event);
+        QKeySequence seq = Common::getKeySequence(event);
         QList<QAction*> actions = m_contextMenu->actions();
         QAction* action;
 
         // Forcing shortcuts
         action = actions.at(0);
-        if (RPM::isPressingEnter(event) && action->isEnabled()) {
+        if (Common::isPressingEnter(event) && action->isEnabled()) {
             contextEdit();
             return;
         }

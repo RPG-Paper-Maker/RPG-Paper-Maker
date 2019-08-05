@@ -12,6 +12,7 @@
 #include <QtMath>
 #include "mountain.h"
 #include "rpm.h"
+#include "common.h"
 #include "systemmountain.h"
 
 const QString MountainDatas::JSON_SPECIAL_ID = "sid";
@@ -424,7 +425,7 @@ void MountainDatas::initializeVertices(QVector<Vertex> &vertices,
 float MountainDatas::intersection(QRay3D &ray) const {
     float minDistance = 0;
 
-    RPM::getMinDistance(minDistance, m_box.intersection(ray));
+    Common::getMinDistance(minDistance, m_box.intersection(ray));
 
     return minDistance;
 }

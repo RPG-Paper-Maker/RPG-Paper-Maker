@@ -131,7 +131,7 @@ void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem* item){
 void WidgetTreeLocalMaps::deleteAllMapTemp(){
     QString pathMaps = Common::pathCombine(RPM::get()->project()
                                           ->pathCurrentProject(),
-                                          RPM::pathMaps);
+                                          RPM::PATH_MAPS);
     deleteMapTemp(pathMaps, m_model->invisibleRootItem());
 }
 
@@ -144,13 +144,13 @@ void WidgetTreeLocalMaps::deleteMapTemp(QString& path, QStandardItem* item){
     if (tag != nullptr && !tag->isDir()){
         QString pathMap =
                 Common::pathCombine(path,
-                                   RPM::generateMapName(
+                                   Map::generateMapName(
                                        tag->id()));
         QString pathTemp = Common::pathCombine(pathMap,
-                                              RPM::TEMP_MAP_FOLDER_NAME);
+                                              RPM::FOLDER_TEMP_MAP);
         Common::deleteAllFiles(pathTemp);
         pathTemp = Common::pathCombine(pathMap,
-                                      RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+                                      RPM::FOLDER_UNDO_REDO_TEMP_MAP);
         Common::deleteAllFiles(pathTemp);
     }
     else{
@@ -234,8 +234,8 @@ void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
     TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(item->data().value
         <quintptr>());
     QString mapPath =
-            Common::pathCombine(RPM::pathMaps,
-                               RPM::generateMapName(tag->id()));
+            Common::pathCombine(RPM::PATH_MAPS,
+                               Map::generateMapName(tag->id()));
 
     QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
                             mapPath)).removeRecursively();
@@ -284,8 +284,8 @@ void WidgetTreeLocalMaps::updateTileset(){
             QString path = Common::pathCombine(
                             Common::pathCombine(RPM::get()->project()
                                                ->pathCurrentProject(),
-                                               RPM::pathMaps),
-                            RPM::generateMapName(tag->id()));
+                                               RPM::PATH_MAPS),
+                            Map::generateMapName(tag->id()));
             MapProperties properties(path);
             SystemTileset* tileset = properties.tileset();
             switch (m_widgetMenuMapEditor->subSelectionKind()) {
@@ -354,10 +354,10 @@ void WidgetTreeLocalMaps::cleanCopy(){
         m_copied = nullptr;
 
         // Remove files temp
-        QString pathMaps = Common::pathCombine(m_pathProject, RPM::pathMaps);
+        QString pathMaps = Common::pathCombine(m_pathProject, RPM::PATH_MAPS);
         QDir(Common::pathCombine(
-                 pathMaps, RPM::TEMP_MAP_FOLDER_NAME)).removeRecursively();
-        QDir(pathMaps).mkdir(RPM::TEMP_MAP_FOLDER_NAME);
+                 pathMaps, RPM::FOLDER_TEMP_MAP)).removeRecursively();
+        QDir(pathMaps).mkdir(RPM::FOLDER_TEMP_MAP);
     }
 }
 
@@ -420,7 +420,7 @@ void WidgetTreeLocalMaps::showContextMenu(const QPoint & p){
 // -------------------------------------------------------
 
 void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
-    QKeySequence seq = RPM::getKeySequence(event);
+    QKeySequence seq = Common::getKeySequence(event);
     QStandardItem* selected = getSelected();
     QList<QAction*> actions;
     QAction* action;
@@ -440,7 +440,7 @@ void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
                 return;
             }
             action = actions.at(2);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextEditDirectory();
                 return;
             }
@@ -463,7 +463,7 @@ void WidgetTreeLocalMaps::keyPressEvent(QKeyEvent *event) {
         else {
             actions = m_contextMenuMap->actions();
             action = actions.at(0);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextEditMap();
                 return;
             }
@@ -488,10 +488,10 @@ void WidgetTreeLocalMaps::contextNewMap(){
     if (selected != nullptr){
         MapProperties properties;
         properties.names()->updateNames();
-        int id = RPM::generateMapId();
+        int id = Map::generateMapId();
         properties.setId(id);
         properties.names()->setAllNames(
-                    RPM::generateMapName(id));
+                    Map::generateMapName(id));
 
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
@@ -535,8 +535,8 @@ void WidgetTreeLocalMaps::contextEditMap(){
         QString path = Common::pathCombine(
                         Common::pathCombine(RPM::get()->project()
                                            ->pathCurrentProject(),
-                                           RPM::pathMaps),
-                        RPM::generateMapName(tag->id()));
+                                           RPM::PATH_MAPS),
+                        Map::generateMapName(tag->id()));
         MapProperties properties(path);
         properties.names()->updateNames();
         MapProperties previousProperties;
@@ -545,7 +545,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             QString pathTemp = Common::pathCombine(path,
-                                                  RPM::TEMP_MAP_FOLDER_NAME);
+                                                  RPM::FOLDER_TEMP_MAP);
             if (RPM::mapsToSave.contains(properties.id())) {
                 Common::copyAllFiles(pathTemp, path);
                 Common::deleteAllFiles(pathTemp);

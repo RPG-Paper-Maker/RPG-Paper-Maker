@@ -125,7 +125,7 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
 
     // Draw background
     painter.fillRect(QRectF(rect().x() + 1, rect().y() + 1, rect().width() - 2,
-        rect().height() - 2), RPM::colorAlmostTransparent);
+        rect().height() - 2), RPM::COLOR_ALMOST_TRANSPARENT);
 
     // Draw image
     if (m_state->graphicsKind() != MapEditorSubSelectionKind::None) {

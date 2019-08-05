@@ -751,8 +751,8 @@ LandDatas * ControlMapEditor::getLand(Portion &portion, Position &p) {
 void ControlMapEditor::getFloorTextureReduced(QRect &rect, QRect &rectAfter,
     int localX, int localZ)
 {
-    rectAfter.setX(rect.x() + RPM::mod(localX, rect.width()));
-    rectAfter.setY(rect.y() + RPM::mod(localZ, rect.height()));
+    rectAfter.setX(rect.x() + Common::modulo(localX, rect.width()));
+    rectAfter.setY(rect.y() + Common::modulo(localZ, rect.height()));
     rectAfter.setWidth(1);
     rectAfter.setHeight(1);
 }

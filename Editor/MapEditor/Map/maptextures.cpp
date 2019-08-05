@@ -34,7 +34,7 @@ void Map::loadTextures() {
     m_textureTileset = this->createTexture(imageTileset);
 
     // Texture missing
-    image = QImage(RPM::TEXTURE_MISSING);
+    image = QImage(RPM::PATH_TEXTURE_MISSING);
     m_textureMissing = this->createTexture(image);
 
     // Characters && walls && objects3D

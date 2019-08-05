@@ -43,7 +43,7 @@ void WidgetAutotilesSelector::currentTexture(QRect &rect) const {
 // -------------------------------------------------------
 
 void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
-    QString path = autotile == nullptr ? RPM::TEXTURE_MISSING : autotile
+    QString path = autotile == nullptr ? RPM::PATH_TEXTURE_MISSING : autotile
         ->picture()->getPath(PictureKind::Autotiles);
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();

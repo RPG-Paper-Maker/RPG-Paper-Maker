@@ -54,7 +54,7 @@ TreeMapTag::~TreeMapTag(){
 bool TreeMapTag::isDir() const { return p_id == -1; }
 
 QString TreeMapTag::realName() const {
-    return RPM::generateMapName(id());
+    return Map::generateMapName(id());
 }
 
 QVector3D* TreeMapTag::position() const { return m_position; }
@@ -113,12 +113,12 @@ void TreeMapTag::copyItem(const QStandardItem* from,
 
         if (!copyTag->isDir()){
             QString mapName =
-                    RPM::generateMapName(copyTag->id());
+                    Map::generateMapName(copyTag->id());
             QString pathMaps = Common::pathCombine(
                         RPM::get()->project()->pathCurrentProject(),
-                        RPM::pathMaps);
+                        RPM::PATH_MAPS);
             QString pathMapsTemp = Common::pathCombine(
-                        pathMaps, RPM::TEMP_MAP_FOLDER_NAME);
+                        pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMapSource = Common::pathCombine(pathMaps, mapName);
             QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
             QDir(pathMapsTemp).mkdir(mapName);
@@ -129,12 +129,12 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             // Remove temp
             QDir(Common::pathCombine(
                      pathMapTarget,
-                     RPM::TEMP_MAP_FOLDER_NAME)).removeRecursively();
+                     RPM::FOLDER_TEMP_MAP)).removeRecursively();
             QDir(Common::pathCombine(
                      pathMapTarget,
-                     RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME)).removeRecursively();
-            QDir(pathMapTarget).mkdir(RPM::TEMP_MAP_FOLDER_NAME);
-            QDir(pathMapTarget).mkdir(RPM::TEMP_UNDOREDO_MAP_FOLDER_NAME);
+                     RPM::FOLDER_UNDO_REDO_TEMP_MAP)).removeRecursively();
+            QDir(pathMapTarget).mkdir(RPM::FOLDER_TEMP_MAP);
+            QDir(pathMapTarget).mkdir(RPM::FOLDER_UNDO_REDO_TEMP_MAP);
         }
     }
 
@@ -164,23 +164,23 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
         if (!copyTag->isDir()){
             QString pathMaps = Common::pathCombine(
                         RPM::get()->project()->pathCurrentProject(),
-                        RPM::pathMaps);
+                        RPM::PATH_MAPS);
             QString pathMapsTemp =
-                    Common::pathCombine(pathMaps, RPM::TEMP_MAP_FOLDER_NAME);
+                    Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMap =
                     Common::pathCombine(pathMapsTemp,
-                                       RPM::generateMapName(
+                                       Map::generateMapName(
                                            copyTag->id()));
-            int newId = RPM::generateMapId();
-            QString newMapName = RPM::generateMapName(newId);
+            int newId = Map::generateMapId();
+            QString newMapName = Map::generateMapName(newId);
             MapProperties properties(pathMap);
             properties.setId(newId);
             QDir(pathMaps).mkdir(newMapName);
             copyTag->setId(newId);
             QString newPathMap = Common::pathCombine(pathMaps, newMapName);
             Common::copyPath(pathMap, newPathMap);
-            RPM::writeJSON(Common::pathCombine(newPathMap,
-                                                RPM::fileMapInfos),
+            Common::writeJSON(Common::pathCombine(newPathMap,
+                                                RPM::FILE_MAP_INFOS),
                              properties);
         }
     }

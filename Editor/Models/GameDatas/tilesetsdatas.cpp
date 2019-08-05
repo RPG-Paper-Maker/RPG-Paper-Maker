@@ -30,7 +30,7 @@ TilesetsDatas::~TilesetsDatas()
 }
 
 void TilesetsDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TILESETS), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_TILESETS_DATAS), *this);
 }
 
 QStandardItemModel* TilesetsDatas::model() const { return m_model; }

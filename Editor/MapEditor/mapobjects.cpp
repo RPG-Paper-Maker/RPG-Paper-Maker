@@ -11,6 +11,7 @@
 
 #include "mapobjects.h"
 #include "rpm.h"
+#include "common.h"
 #include "systemstate.h"
 
 // -------------------------------------------------------
@@ -279,7 +280,7 @@ bool MapObjects::updateRaycastingAt(
         float &finalDistance, Position &finalPosition, QRay3D& ray)
 {
     float newDistance = LandDatas::staticIntersection(squareSize, ray, position);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
+    if (Common::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

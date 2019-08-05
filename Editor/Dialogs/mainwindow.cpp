@@ -126,7 +126,7 @@ void MainWindow::newProject(){
 
 void MainWindow::openExistingProject(){
     QString file = QFileDialog::getOpenFileName(this, "Open a project",
-                                                RPM::dirGames,
+                                                RPM::PATH_GAMES,
                                                 "RPG Paper Maker (*.rpm)");
     if (file.count() > 0) openProject(Common::getDirectoryPath(file));
 }

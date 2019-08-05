@@ -419,7 +419,7 @@ QString SystemCharacteristic::toString() const {
     case CharacteristicKind::IncreaseDecrease:
     {
         text += QString(m_isIncreaseDecrease ? "Increase" : "Decrease") + " " +
-            Common::enumToStringIncreaseDecreaseKind.at(m_increaseDecreaseKind
+            RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND.at(m_increaseDecreaseKind
             ->id()) + " ";
         switch (static_cast<IncreaseDecreaseKind>(m_increaseDecreaseKind->id()))
         {

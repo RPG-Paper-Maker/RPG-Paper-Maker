@@ -118,14 +118,14 @@ void PanelRecentProjects::paintEvent(QPaintEvent *) {
         y = RECT_Y + (i * RECT_HEIGHT);
         if (isSelected) {
             painter.fillRect(x, y, w, h, themeKind == ThemeKind::Dark ? RPM
-                ::colorGraySelectionDarker : RPM::colorGraySelectionLighter);
+                ::COLOR_GRAY_SELECTION_DARKER : RPM::COLOR_GRAY_SELECTION_LIGHTER);
             font.setUnderline(true);
             painter.setFont(font);
         }
-        painter.setPen(RPM::colorMenuSelectionBlue);
+        painter.setPen(RPM::COLOR_MENU_SELECTION_BLUE);
         painter.drawText(x * 2, y + RECT_OFFSET_Y_NAME, RPM::get()
             ->engineSettings()->projectAtName(i));
-        painter.setPen(RPM::colorGrey);
+        painter.setPen(RPM::COLOR_GREY);
         font.setUnderline(false);
         painter.setFont(font);
         painter.drawText(x * 2, y + RECT_OFFSET_Y_LINK, RPM::get()
@@ -134,8 +134,8 @@ void PanelRecentProjects::paintEvent(QPaintEvent *) {
 
     // Draw empty information message
     if (RPM::get()->engineSettings()->projectNumber() == 0) {
-        painter.setPen(themeKind == ThemeKind::Dark ? RPM::colorGrey : RPM
-            ::colorAlmostBlack);
+        painter.setPen(themeKind == ThemeKind::Dark ? RPM::COLOR_GREY : RPM
+            ::COLOR_ALMOST_BLACK);
         painter.drawText(x * 2, RECT_Y + RECT_OFFSET_Y_NAME, MESSAGE_EMPTY);
     }
 }

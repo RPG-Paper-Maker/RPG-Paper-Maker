@@ -56,6 +56,9 @@ public:
     SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
 
+    static bool getSubVersions(QString &version, int &m, int &f, int &b);
+    static int versionDifferent(QString projectVersion, QString otherVersion);
+
     bool read(QString path);
     bool readVersion();
     bool readOS();

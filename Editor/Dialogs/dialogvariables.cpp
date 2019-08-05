@@ -85,9 +85,9 @@ void DialogVariables::on_pageSelected(QModelIndex index, QModelIndex){
 
 void DialogVariables::on_buttonBox_clicked(QAbstractButton *button){
     if((QPushButton*)button == ui->buttonBox->button(QDialogButtonBox::Ok)){
-        RPM::writeJSON(Common::pathCombine(RPM::get()->project()
+        Common::writeJSON(Common::pathCombine(RPM::get()->project()
                                             ->pathCurrentProject(),
-                                            RPM::pathVariables),
+                                            RPM::PATH_VARIABLES),
                          *(RPM::get()->project()->gameDatas()
                            ->variablesDatas()));
     }

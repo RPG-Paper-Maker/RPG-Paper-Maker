@@ -45,13 +45,13 @@ EngineSettings::~EngineSettings()
 }
 
 void EngineSettings::read(){
-    RPM::readJSON(Common::pathCombine(QDir::currentPath(),
-                                       RPM::pathEngineSettings), *this);
+    Common::readJSON(Common::pathCombine(QDir::currentPath(),
+                                       RPM::PATH_ENGINE_SETTINGS), *this);
 }
 
 void EngineSettings::write(){
-    RPM::writeJSON(Common::pathCombine(QDir::currentPath(),
-                                        RPM::pathEngineSettings), *this);
+    Common::writeJSON(Common::pathCombine(QDir::currentPath(),
+                                        RPM::PATH_ENGINE_SETTINGS), *this);
 }
 
 KeyBoardDatas* EngineSettings::keyBoardDatas() const {

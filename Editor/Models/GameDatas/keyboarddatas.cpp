@@ -32,7 +32,7 @@ KeyBoardDatas::~KeyBoardDatas()
 }
 
 void KeyBoardDatas::read(QString path){
-    RPM::readJSON(Common::pathCombine(path, RPM::pathKeyBoard), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_KEYBOARD), *this);
 }
 
 QStandardItemModel* KeyBoardDatas::model() const { return m_model; }

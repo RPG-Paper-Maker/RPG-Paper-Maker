@@ -141,8 +141,8 @@ void WidgetPreviewObject3D::paintGL() {
 
     // Clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(RPM::colorAlmostBlack.red() / 255.0f, RPM::colorAlmostBlack
-        .green() / 255.0f, RPM::colorAlmostBlack.blue() / 255.0f, 1.0f);
+    glClearColor(RPM::COLOR_ALMOST_BLACK.red() / 255.0f, RPM::COLOR_ALMOST_BLACK
+        .green() / 255.0f, RPM::COLOR_ALMOST_BLACK.blue() / 255.0f, 1.0f);
 
     // Config
     glEnable(GL_DEPTH_TEST);

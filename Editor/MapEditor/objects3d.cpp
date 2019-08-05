@@ -375,7 +375,7 @@ bool Objects3D::updateRaycastingAt(Position &position, Object3DDatas *object3D,
     float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
     float newDistance = object3D->intersection(ray);
-    if (RPM::getMinDistance(finalDistance, newDistance)) {
+    if (Common::getMinDistance(finalDistance, newDistance)) {
         finalPosition = position;
         return true;
     }

@@ -28,7 +28,7 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
 {
     ui->setupUi(this);
     
-    ui->lineEditLocation->setText(RPM::dirGames);
+    ui->lineEditLocation->setText(RPM::PATH_GAMES);
     ui->lineEditLocation->setCursorPosition(0);
     ui->spinBoxMajorVersion->setValue(project->gameDatas()->systemDatas()
         ->lastMajorVersion());

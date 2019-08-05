@@ -396,7 +396,7 @@ QString SystemEffect::toString() const {
             textDamages = QString::number(m_damagesVariableID->id());
             break;
         }
-        text += "Damages on " + Common::enumToStringDamagesKind.at(m_damagesKind
+        text += "Damages on " + RPM::ENUM_TO_STRING_DAMAGES_KIND.at(m_damagesKind
             ->id()) + " " + textDamages + " with " + m_damagesFormula->toString()
             + " " + (m_isDamageElement ? "[Element: " + m_damagesElementID
             ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
@@ -422,8 +422,9 @@ QString SystemEffect::toString() const {
         text += "Call common reaction " + m_commonReactionID->toString();
         break;
     case EffectKind::SpecialActions:
-        text += "Special action: " + Common::enumToStringEffectSpecialActionKind
-            .at(static_cast<int>(m_specialActionKind));
+        text += "Special action: " + RPM
+            ::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND.at(static_cast<int>(
+            m_specialActionKind));
         break;
     case EffectKind::Script:
         text += "Script: " + m_scriptFormula->toString();

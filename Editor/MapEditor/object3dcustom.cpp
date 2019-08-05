@@ -194,7 +194,7 @@ void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
 float Object3DCustomDatas::intersection(QRay3D &ray) const {
     float minDistance = 0;
 
-    RPM::getMinDistance(minDistance, m_box.intersection(ray));
+    Common::getMinDistance(minDistance, m_box.intersection(ray));
 
     return minDistance;
 }

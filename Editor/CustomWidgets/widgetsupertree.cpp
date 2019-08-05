@@ -12,6 +12,7 @@
 #include "widgetsupertree.h"
 #include "superlistitem.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -277,14 +278,14 @@ void WidgetSuperTree::updateKeyboardUpDown(int offset) {
 void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
     int key;
 
-    if (RPM::isPressingEnter(event)) {
+    if (Common::isPressingEnter(event)) {
         emit tryingEdit();
     }
 
     if (m_hasContextMenu || !m_canBeControled){
 
         // Forcing shortcuts
-        QKeySequence seq = RPM::getKeySequence(event);
+        QKeySequence seq = Common::getKeySequence(event);
         QList<QAction*> actions = m_contextMenuCommonCommands->actions();
         QAction* action;
 
@@ -296,12 +297,12 @@ void WidgetSuperTree::keyPressEvent(QKeyEvent *event) {
 
         if (m_canBeControled){
             action = actions.at(1);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextEdit();
                 return;
             }
             action = actions.at(0);
-            if (RPM::isPressingEnter(event) && action->isEnabled()) {
+            if (Common::isPressingEnter(event) && action->isEnabled()) {
                 contextNew();
                 return;
             }

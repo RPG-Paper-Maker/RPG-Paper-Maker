@@ -175,6 +175,9 @@ public:
                               const QJsonArray & tab);
     static void writeJSONArray(QStandardItemModel* model,
                                QJsonArray & tab);
+    static bool isMapIdExisting(int id);
+    static int generateMapId();
+    static QString generateMapName(int id);
 
     void initializeGL();
     void paintFloors(QMatrix4x4 &modelviewProjection);

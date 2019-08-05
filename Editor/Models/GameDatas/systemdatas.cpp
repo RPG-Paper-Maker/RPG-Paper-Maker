@@ -64,7 +64,7 @@ SystemDatas::~SystemDatas() {
 }
 
 void SystemDatas::read(QString path) {
-    RPM::readJSON(Common::pathCombine(path, RPM::pathSystem), *this);
+    Common::readJSON(Common::pathCombine(path, RPM::PATH_SYSTEM), *this);
 }
 
 LangsTranslation * SystemDatas::projectName() const {
@@ -189,7 +189,7 @@ void SystemDatas::setDefault() {
     m_squareSize = 16;
     m_framesAnimation = 4;
     m_idWindowSkin = 1;
-    m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::pathBR);
+    m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
 
     setDefaultColors();
     setDefaultCurrencies();

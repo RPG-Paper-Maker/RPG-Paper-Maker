@@ -12,6 +12,7 @@
 #include <QVector2D>
 #include "object3dbox.h"
 #include "rpm.h"
+#include "common.h"
 
 QVector3D Object3DBoxDatas::VERTICES[24] {
 
@@ -309,7 +310,7 @@ void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
 float Object3DBoxDatas::intersection(QRay3D &ray) const {
     float minDistance = 0;
 
-    RPM::getMinDistance(minDistance, m_box.intersection(ray));
+    Common::getMinDistance(minDistance, m_box.intersection(ray));
 
     return minDistance;
 }

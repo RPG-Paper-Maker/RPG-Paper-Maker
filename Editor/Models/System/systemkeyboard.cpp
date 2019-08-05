@@ -12,6 +12,7 @@
 #include "systemkeyboard.h"
 #include "dialogsystemkeyboardgeneral.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -79,7 +80,7 @@ QString SystemKeyBoard::shortCutString() const{
         listAND.clear();
         for (j = 0, ll = m_shortcuts[i].size(); j < ll; j++){
             int shortCut = m_shortcuts[i][j];
-            listAND.append(RPM::keyToString(shortCut));
+            listAND.append(Common::keyToString(shortCut));
         }
         strAND = listAND.join(" + ");
         listOR.append(strAND);

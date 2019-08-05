@@ -11,6 +11,7 @@
 
 #include "floors.h"
 #include "rpm.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -120,7 +121,7 @@ bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor, int
         qFuzzyCompare(previousCoords.yPlus(), position.yPlus())))
     {
         float newDistance = floor->intersection(squareSize, ray, position);
-        if (RPM::getMinDistance(finalDistance, newDistance)) {
+        if (Common::getMinDistance(finalDistance, newDistance)) {
             finalPosition = position;
             return true;
         }

@@ -48,7 +48,7 @@ void PanelDamagesKind::initialize(PrimitiveValue *statisticID, PrimitiveValue
     m_kind = kind;
     int index = m_kind->id();
 
-    ui->comboBoxChoice->addItems(Common::enumToStringDamagesKind);
+    ui->comboBoxChoice->addItems(RPM::ENUM_TO_STRING_DAMAGES_KIND);
     ui->comboBoxChoice->setCurrentIndex(index);
     ui->panelPrimitiveValueStatistic->initializeDataBaseCommandId(m_statisticID
         ->modelDataBase());

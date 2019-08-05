@@ -12,6 +12,7 @@
 #include "sprite.h"
 #include "map.h"
 #include "rpm.h"
+#include "common.h"
 #include "qbox3d.h"
 #include "qplane3d.h"
 
@@ -359,7 +360,7 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
                       vecC = m_vertices.at(i++);
             box = QBox3D(vecA, vecC);
             distance = box.intersection(ray);
-            RPM::getMinDistance(minDistance, distance);
+            Common::getMinDistance(minDistance, distance);
         }
     }
 
