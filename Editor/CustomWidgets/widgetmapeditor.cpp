@@ -46,6 +46,12 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     this->setFocus();
 
     // Initialize cursors
+    cursorPixmap = QPixmap(":/icons/Ressources/translate_cursor.png");
+    m_cursorTranslate = QCursor(cursorPixmap, 16, 16);
+    cursorPixmap = QPixmap(":/icons/Ressources/rotate_cursor.png");
+    m_cursorRotate = QCursor(cursorPixmap, 16, 16);
+    cursorPixmap = QPixmap(":/icons/Ressources/scale_cursor.png");
+    m_cursorScale = QCursor(cursorPixmap, 16, 16);
     cursorPixmap = QPixmap(":/icons/Ressources/pencil_cursor.png");
     m_cursorPencil = QCursor(cursorPixmap, 4, 27);
     cursorPixmap = QPixmap(":/icons/Ressources/rectangle_cursor.png");
@@ -477,15 +483,18 @@ void WidgetMapEditor::updateCursor() {
         setCursor(Qt::ArrowCursor);
     } else {
         switch (m_menuBar->drawKind()) {
+        case DrawKind::Translate:
+            cursor = &m_cursorTranslate; break;
+        case DrawKind::Rotate:
+            cursor = &m_cursorRotate; break;
+        case DrawKind::Scale:
+            cursor = &m_cursorScale; break;
         case DrawKind::Pencil:
-            cursor = &m_cursorPencil;
-            break;
+            cursor = &m_cursorPencil; break;
         case DrawKind::Rectangle:
-            cursor = &m_cursorRectangle;
-            break;
+            cursor = &m_cursorRectangle; break;
         case DrawKind::Pin:
-            cursor = &m_cursorPinPaint;
-            break;
+            cursor = &m_cursorPinPaint; break;
         }
         setCursor(*cursor);
     }

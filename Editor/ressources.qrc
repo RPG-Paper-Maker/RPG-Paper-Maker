@@ -64,6 +64,15 @@
         <file>Ressources/height_plus.png</file>
         <file>Ressources/height_down.png</file>
         <file>Ressources/height_down_plus.png</file>
+        <file>Ressources/rotate.png</file>
+        <file>Ressources/rotate_cursor.png</file>
+        <file>Ressources/rotate_disable.png</file>
+        <file>Ressources/scale.png</file>
+        <file>Ressources/scale_cursor.png</file>
+        <file>Ressources/scale_disable.png</file>
+        <file>Ressources/translate.png</file>
+        <file>Ressources/translate_cursor.png</file>
+        <file>Ressources/translate_disable.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

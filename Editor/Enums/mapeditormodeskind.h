@@ -21,6 +21,9 @@
 // -------------------------------------------------------
 
 enum class MapEditorModesKind {
+    TransformTranslate,
+    TransformRotate,
+    TransformScale,
     DrawPencil,
     DrawRectangle,
     DrawPin,

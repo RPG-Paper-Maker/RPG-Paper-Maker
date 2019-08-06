@@ -21,6 +21,9 @@
 // -------------------------------------------------------
 
 enum class DrawKind {
+    Translate,
+    Rotate,
+    Scale,
     Pencil,
     Rectangle,
     Pin

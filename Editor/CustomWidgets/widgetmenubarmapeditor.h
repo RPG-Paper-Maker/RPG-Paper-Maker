@@ -59,6 +59,9 @@ public:
     QAction * actionMountain() const;
     QAction * actionObject3D() const;
     QAction * actionEvents() const;
+    QAction * actionTranslate() const;
+    QAction * actionRotate() const;
+    QAction * actionScale() const;
     QAction * actionPencil() const;
     QAction * actionRectangle() const;
     QAction * actionPin() const;
@@ -76,6 +79,9 @@ private:
     bool m_selection;
     QAction *m_actionHeight;
     QAction *m_actionHeightPlus;
+    QAction *m_actionTranslate;
+    QAction *m_actionRotate;
+    QAction *m_actionScale;
     QAction *m_actionPencil;
     QAction *m_actionRectangle;
     QAction *m_actionPin;
@@ -92,6 +98,7 @@ protected:
     void updateSubSelection(QMenu *menu, QAction *menuAction, QAction *action);
     void updateRight(QAction *action);
     void forceNoneLayer();
+    void forceNoRotation();
     void forcePencil();
     void forceRight(int i);
     void enableAllRight();

@@ -97,6 +97,9 @@ private:
     ContextMenuList *m_contextMenu;
     long m_elapsedTime;
     QColor m_backgroundColor;
+    QCursor m_cursorTranslate;
+    QCursor m_cursorRotate;
+    QCursor m_cursorScale;
     QCursor m_cursorPencil;
     QCursor m_cursorRectangle;
     QCursor m_cursorPinPaint;
