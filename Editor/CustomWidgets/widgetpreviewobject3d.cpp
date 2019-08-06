@@ -81,7 +81,7 @@ void WidgetPreviewObject3D::updateObject() {
 
         // Load object
         m_objectsGL = new Objects3DGL;
-        m_objectsGL->initializeVertices(position, m_object);
+        m_objectsGL->initializeVertices(position, m_object, nullptr);
         m_objectsGL->initializeGL(m_program);
         m_objectsGL->updateGL();
 
@@ -161,7 +161,7 @@ void WidgetPreviewObject3D::paintGL() {
     if (m_texture != nullptr) {
         m_texture->bind();
     }
-    m_objectsGL->paintGL();
+    m_objectsGL->paintGL(0);
     if (m_texture != nullptr) {
         m_texture->release();
     }

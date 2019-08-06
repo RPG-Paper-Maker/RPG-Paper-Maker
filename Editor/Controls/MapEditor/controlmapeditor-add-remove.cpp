@@ -20,9 +20,14 @@ void ControlMapEditor::addRemove(MapEditorSelectionKind selection,
     QRect &tileset, int specialID, int widthSquares, double widthPixels, int
     heightSquares, double heightPixels, QRect &defaultFloorRect)
 {
+    if (drawKind == DrawKind::Translate || drawKind == DrawKind::Rotate ||
+        drawKind == DrawKind::Scale)
+    {
+        return;
+    }
+
     Position p;
     bool b;
-
     MapElement *element = getPositionSelected(p, selection, subSelection,
         layerOn, b);
 
@@ -198,6 +203,8 @@ void ControlMapEditor::addLand(Position &p, MapEditorSubSelectionKind kind,
     case DrawKind::Pin:
         paintPinLand(p, kind, specialID, tileset, up);
         break;
+    default:
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -347,10 +354,13 @@ void ControlMapEditor::removeLand(Position &p, DrawKind drawKind) {
             break;
         case DrawKind::Rectangle:
             break;
-        case DrawKind::Pin:
+        case DrawKind::Pin: {
             QRect tileset(0, 0, 1, 1);
             paintPinLand(p, MapEditorSubSelectionKind::None, -1, tileset,
                 m_camera->cameraUp());
+            break;
+        }
+        default:
             break;
         }
 
@@ -426,6 +436,8 @@ void ControlMapEditor::addSprite(Position &p, MapEditorSubSelectionKind kind,
         break;
     case DrawKind::Rectangle:
         break;
+    default:
+        break;
     }
 
     m_previousMouseCoords = p;
@@ -451,6 +463,8 @@ void ControlMapEditor::addSpriteWall(DrawKind drawKind, int specialID)
     case DrawKind::Pin:
         break;
     case DrawKind::Rectangle:
+        break;
+    default:
         break;
     }
 }
@@ -564,6 +578,8 @@ void ControlMapEditor::removeSprite(Position &p, DrawKind drawKind) {
             break;
         case DrawKind::Rectangle:
             break;
+        default:
+            break;
         }
 
         m_previousMouseCoords = p;
@@ -585,6 +601,8 @@ void ControlMapEditor::removeSpriteWall(DrawKind drawKind) {
     case DrawKind::Pin:
         break;
     case DrawKind::Rectangle:
+        break;
+    default:
         break;
     }
 }

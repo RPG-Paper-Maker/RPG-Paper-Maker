@@ -217,7 +217,7 @@ void WidgetMapEditor::paintGL() {
             // Update control
             bool mousePosChanged = m_control.mousePositionChanged(point);
             m_control.updateMousePosition(point);
-            m_control.update(layerOn);
+            m_control.update(kind, drawKind, layerOn);
             if (m_menuBar != nullptr) {
                 QRect tileset;
                 m_panelTextures->getTilesetTexture(tileset);
@@ -618,7 +618,8 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                 updateSpinBoxes();
             } else {
                 m_control.updateMouseMove(event->pos());
-                m_control.update(false);
+                m_control.update(MapEditorSelectionKind::None, DrawKind::Pencil,
+                    false);
             }
         }
     }

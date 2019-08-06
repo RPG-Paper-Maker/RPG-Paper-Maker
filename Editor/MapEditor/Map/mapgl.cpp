@@ -23,6 +23,7 @@ void Map::initializeGL(){
     // Uniform location of camera
     u_modelviewProjectionStatic = m_programStatic
             ->uniformLocation("modelviewProjection");
+    u_hoveredStatic = m_programStatic->uniformLocation("hovered");
 
     // Release
     m_programStatic->release();
@@ -42,6 +43,7 @@ void Map::initializeGL(){
             ->uniformLocation("cameraDeepWorldspace");
     u_modelViewProjection = m_programFaceSprite
             ->uniformLocation("modelViewProjection");
+    u_hoveredFace = m_programFaceSprite->uniformLocation("hovered");
 
     // Release
     m_programFaceSprite->release();
@@ -184,6 +186,7 @@ void Map::paintFloors(QMatrix4x4& modelviewProjection) {
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
+    m_programStatic->setUniformValue(u_hoveredStatic, false);
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
@@ -220,13 +223,14 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
+    m_programStatic->setUniformValue(u_hoveredStatic, false);
 
     // Sprites
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-            mapPortion->paintSprites();
+            mapPortion->paintSprites(u_hoveredStatic);
     }
     m_textureTileset->release();
 
@@ -277,7 +281,7 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
             for (int i = 0; i < totalSize; i++) {
                 mapPortion = this->mapPortionBrut(i);
                 if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
-                    mapPortion->paintObjects3D(textureID);
+                    mapPortion->paintObjects3D(textureID, u_hoveredStatic);
                 }
             }
             texture->release();
@@ -308,11 +312,12 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                                          cameraDeepWorldSpace);
     m_programFaceSprite->setUniformValue(u_modelViewProjection,
                                          modelviewProjection);
+    m_programFaceSprite->setUniformValue(u_hoveredFace, false);
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
         mapPortion = this->mapPortionBrut(i);
         if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-            mapPortion->paintFaceSprites();
+            mapPortion->paintFaceSprites(u_hoveredFace);
     }
     m_textureTileset->release();
 

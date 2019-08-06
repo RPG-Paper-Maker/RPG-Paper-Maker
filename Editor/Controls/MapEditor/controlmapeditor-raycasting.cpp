@@ -19,14 +19,16 @@
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateRaycasting(bool layerOn) {
+void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
+    DrawKind drawKind, bool layerOn)
+{
     QList<Portion> portions;
     QMatrix4x4 projection, view;
     QVector3D rayDirection, cameraPosition;
     Portion portion, globalPortion;
     Position positionLayerZero;
     MapPortion *mapPortion;
-    MapElement *element;
+    MapElement *element, *elementSprite, *elementObject3D;
     int height, yGrid, layer;
 
     // Raycasting plane
@@ -50,6 +52,8 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
     m_distanceObject3D = 0;
     m_distanceMountain = 0;
     m_distanceObject = 0;
+    elementSprite = m_elementOnSprite;
+    elementObject3D = m_elementOnObject3D;
     m_elementOnLand = nullptr;
     m_elementOnSprite = nullptr;
     m_elementOnObject3D = nullptr;
@@ -151,6 +155,35 @@ void ControlMapEditor::updateRaycasting(bool layerOn) {
 
     if (m_distanceObject == 0.0f) {
         m_positionOnObject = m_positionOnLand;
+    }
+
+    // Handle pre-selection for transformations
+    if (drawKind == DrawKind::Rotate) {
+        if (selectionKind == MapEditorSelectionKind::Sprites &&
+            m_elementOnSprite != elementSprite)
+        {
+            if (elementSprite != nullptr) {
+                elementSprite->setIsHovered(false);
+            }
+            if (m_elementOnSprite != nullptr && m_elementOnSprite->getSubKind()
+                != MapEditorSubSelectionKind::SpritesFace && m_elementOnSprite
+                ->getSubKind() != MapEditorSubSelectionKind::SpritesWall)
+            {
+                m_elementOnSprite->setIsHovered(true);
+            }
+            m_portionsToUpdate += m_mapPortionSprite;
+        }
+        if (selectionKind == MapEditorSelectionKind::Objects3D &&
+            m_elementOnObject3D != elementObject3D)
+        {
+            if (elementObject3D != nullptr) {
+                elementObject3D->setIsHovered(false);
+            }
+            if (m_elementOnObject3D != nullptr) {
+                m_elementOnObject3D->setIsHovered(true);
+            }
+            m_portionsToUpdate += m_mapPortionObject3D;
+        }
     }
 }
 
@@ -271,16 +304,28 @@ void ControlMapEditor::updateRaycastingLand(MapPortion *mapPortion)
 
 void ControlMapEditor::updateRaycastingSprites(MapPortion *mapPortion, bool layerOn)
 {
+    MapElement *element;
+
+    element = m_elementOnSprite;
     m_elementOnSprite = mapPortion->updateRaycastingSprites(m_map->squareSize(),
         m_distanceSprite, m_positionOnSprite, m_ray, m_camera->horizontalAngle(),
         m_isCtrlPressed ? true : layerOn);
+    if (m_elementOnSprite != element) {
+        m_mapPortionSprite = mapPortion;
+    }
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::updateRaycastingObjects3D(MapPortion *mapPortion) {
+    MapElement *element;
+
+    element = m_elementOnSprite;
     m_elementOnObject3D = mapPortion->updateRaycastingObjects3D(
         m_distanceObject3D, m_positionOnObject3D, m_ray);
+    if (m_elementOnObject3D != element) {
+        m_mapPortionObject3D = mapPortion;
+    }
 }
 
 // -------------------------------------------------------

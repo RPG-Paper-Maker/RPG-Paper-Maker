@@ -145,7 +145,8 @@ public:
     void loadPortionThread(MapPortion *portion, QString &path);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
-    void updatePortion(MapPortion *mapPortion);
+    void updatePortion(MapPortion *mapPortion, MapElement *elementExcludeSprite,
+        MapElement *elementExcludeObject3D);
     void updateSpriteWalls(MapEditorSubSelectionKind subSelection);
     void updateMapObjects();
     void loadPortions(Portion portion);
@@ -197,8 +198,9 @@ private:
     bool m_saved;
 
     // Static program
-    QOpenGLShaderProgram* m_programStatic;
+    QOpenGLShaderProgram *m_programStatic;
     int u_modelviewProjectionStatic;
+    int u_hoveredStatic;
 
     // Face sprite program
     QOpenGLShaderProgram* m_programFaceSprite;
@@ -206,6 +208,7 @@ private:
     int u_cameraUpWorldspace;
     int u_cameraDeepWorldspace;
     int u_modelViewProjection;
+    int u_hoveredFace;
 
     // Textures
     QOpenGLTexture* m_textureTileset;

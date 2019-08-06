@@ -62,12 +62,15 @@ public:
         double cameraVerticalAngle);
     void deleteMap(bool updateCamera = true);
     void onResize(int width, int height);
-    void update(bool layerOn);
-    void updateMouse(QPoint point, bool layerOn);
+    void update(MapEditorSelectionKind selectionKind, DrawKind drawKind, bool
+        layerOn);
+    void updateMouse(QPoint point, MapEditorSelectionKind selectionKind,
+        DrawKind drawKind, bool layerOn);
     void updateMousePosition(QPoint point);
     void updateMouseMove(QPoint point);
     bool mousePositionChanged(QPoint point);
-    void updateRaycasting(bool layerOn);
+    void updateRaycasting(MapEditorSelectionKind selectionKind, DrawKind
+        drawKind, bool layerOn);
     void getPortionsInRay(QList<Portion> &portions);
     void updatePortionsInRay(QList<Portion> &portions,
                              QList<Portion> &adjacents);
@@ -111,7 +114,7 @@ public:
     void removePortion(int i, int j, int k);
     void setPortion(int i, int j, int k, int m, int n, int o, bool visible);
     void loadPortion(int a, int b, int c, int i, int j, int k);
-    void updatePortions();
+    void updatePortions(DrawKind drawKind);
     void saveTempPortions();
     void clearPortionsToUpdate();
     void setToNotSaved();
@@ -271,6 +274,8 @@ protected:
     float m_distanceObject3D;
     float m_distanceMountain;
     float m_distanceObject;
+    MapPortion *m_mapPortionSprite;
+    MapPortion *m_mapPortionObject3D;
     Position m_positionPreviousPreview;
     QSet<MapPortion *> m_portionsPreviousPreview;
     bool m_isGridOnTop;

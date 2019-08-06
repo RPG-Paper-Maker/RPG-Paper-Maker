@@ -30,9 +30,12 @@
 
 Objects3DGL::Objects3DGL() :
     m_count(0),
+    m_isHovered(false),
     m_vertexBuffer(QOpenGLBuffer::VertexBuffer),
     m_indexBuffer(QOpenGLBuffer::IndexBuffer),
-    m_program(nullptr)
+    m_program(nullptr),
+    m_vertexBufferHovered(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferHovered(QOpenGLBuffer::IndexBuffer)
 {
 
 }
@@ -48,9 +51,17 @@ Objects3DGL::~Objects3DGL()
 //
 // -------------------------------------------------------
 
-void Objects3DGL::initializeVertices(Position &position, Object3DDatas *object3D)
+void Objects3DGL::initializeVertices(Position &position, Object3DDatas *object3D,
+    MapElement *excludeElement)
 {
-    object3D->initializeVertices(m_vertices, m_indexes, position, m_count);
+    if (excludeElement == object3D) {
+        unsigned int count = 0;
+        m_isHovered = true;
+        object3D->initializeVertices(m_verticesHovered, m_indexesHovered,
+            position, count);
+    } else {
+        object3D->initializeVertices(m_vertices, m_indexes, position, m_count);
+    }
 }
 
 // -------------------------------------------------------
@@ -69,14 +80,25 @@ void Objects3DGL::initializeGL(QOpenGLShaderProgram* program) {
 void Objects3DGL::updateGL() {
     Map::updateGLStatic(m_vertexBuffer, m_indexBuffer, m_vertices, m_indexes,
         m_vao, m_program);
+    Map::updateGLStatic(m_vertexBufferHovered, m_indexBufferHovered,
+        m_verticesHovered, m_indexesHovered, m_vaoHovered, m_program);
 }
 
 // -------------------------------------------------------
 
-void Objects3DGL::paintGL(){
+void Objects3DGL::paintGL(int uniformHovered) {
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
     m_vao.release();
+
+    if (m_isHovered) {
+        m_program->setUniformValue(uniformHovered, true);
+        m_vaoHovered.bind();
+        glDrawElements(GL_TRIANGLES, m_indexesHovered.size(), GL_UNSIGNED_INT,
+            nullptr);
+        m_vaoHovered.release();
+        m_program->setUniformValue(uniformHovered, false);
+    }
 }
 
 // -------------------------------------------------------
@@ -398,7 +420,7 @@ int Objects3D::getLastLayerAt(Position &) const {
 // -------------------------------------------------------
 
 void Objects3D::initializeVertices(QHash<Position, MapElement *>
-    &previewSquares, QList<Position> &previewDelete)
+    &previewSquares, QList<Position> &previewDelete, MapElement *excludeElement)
 {
     // Clear
     for (QHash<int, Objects3DGL *>::iterator i = m_allGL.begin(); i != m_allGL
@@ -436,7 +458,7 @@ void Objects3D::initializeVertices(QHash<Position, MapElement *>
                 objects = new Objects3DGL;
                 m_allGL[id] = objects;
             }
-            objects->initializeVertices(position, object3D);
+            objects->initializeVertices(position, object3D, excludeElement);
         }
     }
 }
@@ -461,10 +483,10 @@ void Objects3D::updateGL() {
 
 // -------------------------------------------------------
 
-void Objects3D::paintGL(int textureID) {
+void Objects3D::paintGL(int textureID, int uniformHovered) {
     Objects3DGL *objects = m_allGL.value(textureID);
     if (objects != nullptr) {
-        objects->paintGL();
+        objects->paintGL(uniformHovered);
     }
 }
 

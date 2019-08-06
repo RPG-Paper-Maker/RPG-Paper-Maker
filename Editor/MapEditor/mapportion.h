@@ -139,7 +139,8 @@ public:
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset, QList<
         TextureSeveral *> &autotiles, QList<TextureSeveral *> &mountains, QHash<
-        int, QOpenGLTexture *>& characters, QHash<int, QOpenGLTexture *> &walls);
+        int, QOpenGLTexture *>& characters, QHash<int, QOpenGLTexture *> &walls,
+        MapElement *elementExcludeSprite, MapElement *elementExcludeObject3D);
     void initializeVerticesObjects(int squareSize,
                                    QHash<int, QOpenGLTexture*>& characters,
                                    QOpenGLTexture *tileset);
@@ -151,10 +152,10 @@ public:
     void updateGLObjects();
     void paintFloors();
     void paintAutotiles(int textureID);
-    void paintSprites();
+    void paintSprites(int uniformHovered);
     void paintSpritesWalls(int textureID);
-    void paintFaceSprites();
-    void paintObjects3D(int textureID);
+    void paintFaceSprites(int uniformHovered);
+    void paintObjects3D(int textureID, int uniformHovered);
     void paintMountains(int textureID);
     void paintObjectsStaticSprites(int textureID, QOpenGLTexture* texture);
     void paintObjectsFaceSprites(int textureID, QOpenGLTexture* texture);

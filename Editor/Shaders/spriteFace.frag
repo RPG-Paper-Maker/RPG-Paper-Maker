@@ -7,9 +7,12 @@ uniform float alpha_threshold;
 void main()
 {
     vec4 color = texture2D(texture, coordTexture);
-    gl_FragColor = texture2D(texture, coordTexture);
     if (color.a <= alpha_threshold) // Or whichever comparison here
         discard;
 
-    gl_FragColor = color;
+    if (!hovered) {
+        colorHover = 0.0f;
+    }
+    gl_FragColor = vec4(color.x + colorHover, color.y + colorHover, color.z +
+        colorHover, color.w);
 }

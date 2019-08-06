@@ -306,10 +306,11 @@ void ControlMapEditor::updateCameraTreeNode() {
 //
 // -------------------------------------------------------
 
-void ControlMapEditor::update(bool layerOn)
+void ControlMapEditor::update(MapEditorSelectionKind selectionKind, DrawKind
+    drawKind, bool layerOn)
 {
     // Update portions
-    updatePortions();
+    updatePortions(drawKind);
     saveTempPortions();
     clearPortionsToUpdate();
     updateMovingPortions();
@@ -318,7 +319,7 @@ void ControlMapEditor::update(bool layerOn)
     m_camera->update(cursor(), m_map->squareSize());
 
     // Raycasting
-    updateRaycasting(layerOn);
+    updateRaycasting(selectionKind, drawKind, layerOn);
 
     // Mouse update
     m_mouseBeforeUpdate = m_mouseMove;
@@ -326,10 +327,12 @@ void ControlMapEditor::update(bool layerOn)
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updateMouse(QPoint point, bool layerOn) {
+void ControlMapEditor::updateMouse(QPoint point, MapEditorSelectionKind
+    selectionKind, DrawKind drawKind, bool layerOn)
+{
     updateMousePosition(point);
     m_mouseMove = point;
-    updateRaycasting(layerOn);
+    updateRaycasting(selectionKind, drawKind, layerOn);
     m_mouseBeforeUpdate = m_mouseMove;
 }
 
@@ -365,16 +368,20 @@ void ControlMapEditor::updateWallIndicator() {
 
 // -------------------------------------------------------
 
-void ControlMapEditor::updatePortions() {
+void ControlMapEditor::updatePortions(DrawKind drawKind) {
     if (m_needMapObjectsUpdate) {
         m_needMapObjectsUpdate = false;
         m_map->updateMapObjects();
     }
 
     QSet<MapPortion *>::iterator i;
+    bool isTransforming;
+
+    isTransforming = drawKind == DrawKind::Rotate;
     for (i = m_portionsToUpdate.begin(); i != m_portionsToUpdate.end(); i++) {
         MapPortion *mapPortion = *i;
-        m_map->updatePortion(mapPortion);
+        m_map->updatePortion(mapPortion, isTransforming ? m_elementOnSprite :
+            nullptr, isTransforming ? m_elementOnObject3D : nullptr);
     }
 }
 
@@ -1391,7 +1398,7 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 {
 
     // Update mouse
-    updateMouse(point, layerOn);
+    updateMouse(point, selection, drawKind, layerOn);
 
     if (button != Qt::MouseButton::MiddleButton) {
 

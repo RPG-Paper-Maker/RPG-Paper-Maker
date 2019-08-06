@@ -276,7 +276,8 @@ void Map::setModelObjects(QStandardItemModel* model){
 
 // -------------------------------------------------------
 
-MapPortion* Map::loadPortionMap(int i, int j, int k, bool force) {
+MapPortion* Map::loadPortionMap(int i, int j, int k, bool force)
+{
     int lx = (m_mapProperties->length() - 1) / RPM::PORTION_SIZE;
     int ld = (m_mapProperties->depth() - 1) / RPM::PORTION_SIZE;
     if (m_mapProperties->depth() > 0) {
@@ -335,7 +336,7 @@ QString Map::getMapObjectsPath() const{
 // -------------------------------------------------------
 
 void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
-                      bool visible)
+    bool visible)
 {
     MapPortion* newMapPortion = loadPortionMap(realX, realY, realZ);
     if (newMapPortion != nullptr)
@@ -351,7 +352,7 @@ void Map::loadPortionThread(MapPortion* portion, QString &path)
     Common::readJSON(path, *portion);
     portion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
-        m_texturesSpriteWalls);
+        m_texturesSpriteWalls, nullptr, nullptr);
     portion->updateEmpty();
     if (!portion->isEmpty()) {
         portion->initializeGL(m_programStatic, m_programFaceSprite);
@@ -373,12 +374,13 @@ void Map::replacePortion(Portion& previousPortion, Portion& newPortion,
 
 // -------------------------------------------------------
 
-void Map::updatePortion(MapPortion* mapPortion)
+void Map::updatePortion(MapPortion* mapPortion, MapElement *elementExcludeSprite
+    , MapElement *elementExcludeObject3D)
 {
     mapPortion->updateSpriteWalls();
     mapPortion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
-        m_texturesSpriteWalls);
+        m_texturesSpriteWalls, elementExcludeSprite, elementExcludeObject3D);
     mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
     mapPortion->updateGL();
     mapPortion->updateEmpty();
@@ -411,7 +413,7 @@ void Map::updateMapObjects() {
 
 // -------------------------------------------------------
 
-void Map::loadPortions(Portion portion){
+void Map::loadPortions(Portion portion) {
     deletePortions();
 
     m_mapPortions = new MapPortion*[getMapPortionTotalSize()];

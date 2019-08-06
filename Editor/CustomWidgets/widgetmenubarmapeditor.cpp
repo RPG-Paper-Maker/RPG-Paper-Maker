@@ -338,11 +338,8 @@ void WidgetMenuBarMapEditor::updateSelection(QAction *action) {
         } else {
             actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
         }
-        if (m_selectionKind == MapEditorSelectionKind::Land || (m_selectionKind
-            == MapEditorSelectionKind::Sprites && (subSelectionAfter ==
-            MapEditorSubSelectionKind::SpritesFace || subSelectionAfter ==
-            MapEditorSubSelectionKind::SpritesWall)) || m_selectionKind ==
-            MapEditorSelectionKind::Mountains || m_selectionKind ==
+        if (m_selectionKind == MapEditorSelectionKind::Land || m_selectionKind
+            == MapEditorSelectionKind::Mountains || m_selectionKind ==
             MapEditorSelectionKind::Objects)
         {
             this->forceNoRotation();
@@ -384,11 +381,9 @@ void WidgetMenuBarMapEditor::updateSubSelection(QMenu *menu, QAction
     } else {
         this->actionPin()->setIcon(QIcon(":/icons/Ressources/pin.png"));
     }
-    if (m_selectionKind == MapEditorSelectionKind::Land || (m_selectionKind ==
-        MapEditorSelectionKind::Sprites && (subKind == MapEditorSubSelectionKind
-        ::SpritesFace || subKind == MapEditorSubSelectionKind::SpritesWall)) ||
-        m_selectionKind == MapEditorSelectionKind::Mountains || m_selectionKind
-        == MapEditorSelectionKind::Objects)
+    if (m_selectionKind == MapEditorSelectionKind::Land || m_selectionKind ==
+        MapEditorSelectionKind::Mountains || m_selectionKind ==
+        MapEditorSelectionKind::Objects)
     {
         this->forceNoRotation();
     } else {

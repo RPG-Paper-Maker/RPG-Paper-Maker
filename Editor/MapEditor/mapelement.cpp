@@ -25,7 +25,8 @@ QString MapElement::jsonZ = "zOff";
 MapElement::MapElement() :
     m_xOffset(0),
     m_yOffset(0),
-    m_zOffset(0)
+    m_zOffset(0),
+    m_isHovered(false)
 {
 
 }
@@ -54,6 +55,14 @@ void MapElement::setYOffset(int y) {
 
 void MapElement::setZOffset(int z) {
     m_zOffset = z;
+}
+
+bool MapElement::isHovered() const {
+    return m_isHovered;
+}
+
+void MapElement::setIsHovered(bool b) {
+    m_isHovered = b;
 }
 
 MapEditorSelectionKind MapElement::getKind() const{

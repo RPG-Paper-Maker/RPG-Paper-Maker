@@ -119,12 +119,12 @@ public:
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,
                             QList<Position>& previewDelete,
-                            int squareSize, int width, int height);
+                            int squareSize, int width, int height, MapElement *elementExclude);
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram* programFace);
     void updateGL();
-    void paintGL();
-    void paintFaceGL();
+    void paintGL(int uniformHovered);
+    void paintFaceGL(int uniformHovered);
     void paintSpritesWalls(int textureID);
 
     virtual void read(const QJsonObject &json);
@@ -136,6 +136,7 @@ protected:
     QHash<int, SpritesWalls*> m_wallsGL;
     QSet<Position> m_overflow;
     bool m_isEmpty;
+    bool m_isHovered;
 
     // OpenGL static
     QOpenGLBuffer m_vertexBufferStatic;
@@ -144,6 +145,11 @@ protected:
     QVector<GLuint> m_indexesStatic;
     QOpenGLVertexArrayObject m_vaoStatic;
     QOpenGLShaderProgram* m_programStatic;
+    QOpenGLBuffer m_vertexBufferStaticHovered;
+    QOpenGLBuffer m_indexBufferStaticHovered;
+    QVector<Vertex> m_verticesStaticHovered;
+    QVector<GLuint> m_indexesStaticHovered;
+    QOpenGLVertexArrayObject m_vaoStaticHovered;
 
     // OpenGL face
     QOpenGLBuffer m_vertexBufferFace;
@@ -152,6 +158,11 @@ protected:
     QVector<GLuint> m_indexesFace;
     QOpenGLVertexArrayObject m_vaoFace;
     QOpenGLShaderProgram* m_programFace;
+    QOpenGLBuffer m_vertexBufferFaceHovered;
+    QOpenGLBuffer m_indexBufferFaceHovered;
+    QVector<VertexBillboard> m_verticesFaceHovered;
+    QVector<GLuint> m_indexesFaceHovered;
+    QOpenGLVertexArrayObject m_vaoFaceHovered;
 };
 
 #endif // SPRITES_H

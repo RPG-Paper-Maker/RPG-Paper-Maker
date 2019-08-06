@@ -97,12 +97,17 @@ void SpritesWalls::paintGL(){
 // -------------------------------------------------------
 
 Sprites::Sprites() :
+    m_isHovered(false),
     m_vertexBufferStatic(QOpenGLBuffer::VertexBuffer),
     m_indexBufferStatic(QOpenGLBuffer::IndexBuffer),
     m_programStatic(nullptr),
+    m_vertexBufferStaticHovered(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferStaticHovered(QOpenGLBuffer::IndexBuffer),
     m_vertexBufferFace(QOpenGLBuffer::VertexBuffer),
     m_indexBufferFace(QOpenGLBuffer::IndexBuffer),
-    m_programFace(nullptr)
+    m_programFace(nullptr),
+    m_vertexBufferFaceHovered(QOpenGLBuffer::VertexBuffer),
+    m_indexBufferFaceHovered(QOpenGLBuffer::IndexBuffer)
 {
 
 }
@@ -605,16 +610,21 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
 void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
                                  QHash<Position, MapElement *> &previewSquares,
                                  QList<Position> &previewDelete,
-                                 int squareSize, int width, int height)
+                                 int squareSize, int width, int height, MapElement *elementExclude)
 {
     int countStatic = 0;
     int countFace = 0;
+    m_isHovered = false;
 
     // Clear
     m_verticesStatic.clear();
     m_indexesStatic.clear();
+    m_verticesStaticHovered.clear();
+    m_indexesStaticHovered.clear();
     m_verticesFace.clear();
     m_indexesFace.clear();
+    m_verticesFaceHovered.clear();
+    m_indexesFaceHovered.clear();
     for (QHash<int, SpritesWalls*>::iterator i = m_wallsGL.begin();
          i != m_wallsGL.end(); i++)
     {
@@ -631,7 +641,7 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
         if (element->getKind() == MapEditorSelectionKind::Sprites &&
             element->getSubKind() != MapEditorSubSelectionKind::SpritesWall)
         {
-            spritesWithPreview[i.key()] = (SpriteDatas*) element;
+            spritesWithPreview[i.key()] = reinterpret_cast<SpriteDatas *>(element);
         }
     }
     QHash<Position, SpriteWallDatas*> spritesWallWithPreview;
@@ -643,11 +653,19 @@ void Sprites::initializeVertices(QHash<int, QOpenGLTexture *> &texturesWalls,
     {
         Position position = i.key();
         SpriteDatas* sprite = i.value();
+        int count = 0;
 
-        sprite->initializeVertices(squareSize, width, height,
-                                   m_verticesStatic, m_indexesStatic,
-                                   m_verticesFace, m_indexesFace,
-                                   position, countStatic, countFace);
+        if (sprite == elementExclude) {
+            m_isHovered = true;
+            sprite->initializeVertices(squareSize, width, height,
+                m_verticesStaticHovered, m_indexesStaticHovered,
+                m_verticesFaceHovered, m_indexesFaceHovered, position, count,
+                count);
+        } else {
+            sprite->initializeVertices(squareSize, width, height,
+                m_verticesStatic, m_indexesStatic, m_verticesFace, m_indexesFace
+                , position, countStatic, countFace);
+        }
     }
 
     // Initialize vertices for walls
@@ -693,11 +711,15 @@ void Sprites::initializeGL(QOpenGLShaderProgram* programStatic,
 
 void Sprites::updateGL() {
     Map::updateGLStatic(m_vertexBufferStatic, m_indexBufferStatic,
-                        m_verticesStatic, m_indexesStatic, m_vaoStatic,
-                        m_programStatic);
-    Map::updateGLFace(m_vertexBufferFace, m_indexBufferFace,
-                      m_verticesFace, m_indexesFace, m_vaoFace,
-                      m_programFace);
+        m_verticesStatic, m_indexesStatic, m_vaoStatic, m_programStatic);
+    Map::updateGLStatic(m_vertexBufferStaticHovered, m_indexBufferStaticHovered,
+        m_verticesStaticHovered, m_indexesStaticHovered, m_vaoStaticHovered,
+        m_programStatic);
+    Map::updateGLFace(m_vertexBufferFace, m_indexBufferFace, m_verticesFace,
+        m_indexesFace, m_vaoFace, m_programFace);
+    Map::updateGLFace(m_vertexBufferFaceHovered, m_indexBufferFaceHovered,
+        m_verticesFaceHovered, m_indexesFaceHovered, m_vaoFaceHovered,
+        m_programFace);
     QHash<int, SpritesWalls*>::iterator i;
     for (i = m_wallsGL.begin(); i != m_wallsGL.end(); i++)
         i.value()->updateGL();
@@ -705,18 +727,37 @@ void Sprites::updateGL() {
 
 // -------------------------------------------------------
 
-void Sprites::paintGL(){
+void Sprites::paintGL(int uniformHovered) {
     m_vaoStatic.bind();
-    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexesStatic.size(), GL_UNSIGNED_INT,
+        nullptr);
     m_vaoStatic.release();
+
+    if (m_isHovered) {
+        m_programStatic->setUniformValue(uniformHovered, true);
+        m_vaoStaticHovered.bind();
+        glDrawElements(GL_TRIANGLES, m_indexesStaticHovered.size(),
+            GL_UNSIGNED_INT, nullptr);
+        m_vaoStaticHovered.release();
+        m_programStatic->setUniformValue(uniformHovered, false);
+    }
 }
 
 // -------------------------------------------------------
 
-void Sprites::paintFaceGL(){
+void Sprites::paintFaceGL(int uniformHovered) {
     m_vaoFace.bind();
-    glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexesFace.size(), GL_UNSIGNED_INT, nullptr);
     m_vaoFace.release();
+
+    if (m_isHovered) {
+        m_programFace->setUniformValue(uniformHovered, true);
+        m_vaoFaceHovered.bind();
+        glDrawElements(GL_TRIANGLES, m_indexesFaceHovered.size(),
+            GL_UNSIGNED_INT, nullptr);
+        m_vaoFaceHovered.release();
+        m_programFace->setUniformValue(uniformHovered, false);
+    }
 }
 
 // -------------------------------------------------------

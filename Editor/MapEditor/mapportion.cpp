@@ -524,14 +524,17 @@ void MapPortion::initializeVertices(int squareSize, QOpenGLTexture *tileset,
                                     QList<TextureSeveral *> &autotiles,
                                     QList<TextureSeveral *> &mountains,
                                     QHash<int, QOpenGLTexture *> &characters,
-                                    QHash<int, QOpenGLTexture *> &walls)
+                                    QHash<int, QOpenGLTexture *> &walls,
+                                    MapElement *elementExcludeSprite,
+                                    MapElement *elementExcludeObject3D)
 {
     m_lands->initializeVertices(autotiles, m_previewSquares, squareSize,
                                 tileset->width(), tileset->height());
     m_sprites->initializeVertices(walls, m_previewSquares, m_previewDelete,
                                   squareSize, tileset->width(),
-                                  tileset->height());
-    m_objects3D->initializeVertices(m_previewSquares, m_previewDelete);
+                                  tileset->height(), elementExcludeSprite);
+    m_objects3D->initializeVertices(m_previewSquares, m_previewDelete,
+        elementExcludeObject3D);
     m_mountains->initializeVertices(mountains, m_previewSquares, m_previewDelete);
     m_mapObjects->initializeVertices(squareSize, characters, tileset);
 }
@@ -599,9 +602,9 @@ void MapPortion::paintAutotiles(int textureID) {
 
 // -------------------------------------------------------
 
-void MapPortion::paintSprites(){
+void MapPortion::paintSprites(int uniformHovered) {
     if (!m_sprites->isEmpty()) {
-        m_sprites->paintGL();
+        m_sprites->paintGL(uniformHovered);
     }
 }
 
@@ -615,17 +618,17 @@ void MapPortion::paintSpritesWalls(int textureID) {
 
 // -------------------------------------------------------
 
-void MapPortion::paintFaceSprites(){
+void MapPortion::paintFaceSprites(int uniformHovered) {
     if (!m_sprites->isEmpty()) {
-        m_sprites->paintFaceGL();
+        m_sprites->paintFaceGL(uniformHovered);
     }
 }
 
 // -------------------------------------------------------
 
-void MapPortion::paintObjects3D(int textureID) {
+void MapPortion::paintObjects3D(int textureID, int uniformHovered) {
     if (!m_objects3D->isEmpty()) {
-        m_objects3D->paintGL(textureID);
+        m_objects3D->paintGL(textureID, uniformHovered);
     }
 }
 

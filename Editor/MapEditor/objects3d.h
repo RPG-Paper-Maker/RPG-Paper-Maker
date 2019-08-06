@@ -32,13 +32,15 @@ class Objects3DGL : protected QOpenGLFunctions
 public:
     Objects3DGL();
     virtual ~Objects3DGL();
-    void initializeVertices(Position& position, Object3DDatas *object3D);
+    void initializeVertices(Position& position, Object3DDatas *object3D,
+        MapElement *excludeElement);
     void initializeGL(QOpenGLShaderProgram* program);
     void updateGL();
-    void paintGL();
+    void paintGL(int uniformHovered);
 
 protected:
     unsigned int m_count;
+    bool m_isHovered;
 
     // OpenGL
     QOpenGLBuffer m_vertexBuffer;
@@ -47,6 +49,11 @@ protected:
     QVector<GLuint> m_indexes;
     QOpenGLVertexArrayObject m_vao;
     QOpenGLShaderProgram* m_program;
+    QOpenGLBuffer m_vertexBufferHovered;
+    QOpenGLBuffer m_indexBufferHovered;
+    QVector<Vertex> m_verticesHovered;
+    QVector<GLuint> m_indexesHovered;
+    QOpenGLVertexArrayObject m_vaoHovered;
 };
 
 // -------------------------------------------------------
@@ -95,10 +102,10 @@ public:
     MapElement * getMapElementAt(Position &position);
     int getLastLayerAt(Position &) const;
     void initializeVertices(QHash<Position, MapElement*>& previewSquares,
-        QList<Position>& previewDelete);
+        QList<Position>& previewDelete, MapElement *excludeElement);
     void initializeGL(QOpenGLShaderProgram* programStatic);
     void updateGL();
-    void paintGL(int textureID);
+    void paintGL(int textureID, int uniformHovered);
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
