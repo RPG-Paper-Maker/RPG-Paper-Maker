@@ -17,6 +17,7 @@
 #include "controlmainwindow.h"
 #include "project.h"
 #include "widgetmapeditor.h"
+#include "singleton.h"
 
 // -------------------------------------------------------
 //
@@ -30,17 +31,18 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Singleton<MainWindow>
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     ControlMainWindow control;
     QString appName() const;
     QString version() const;
-    WidgetMapEditor* mapEditor() const;
+    WidgetMapEditor * mapEditor() const;
+    PanelTextures * panelTextures() const;
     static void showNotImplementedWindow(QWidget* parent);
     void newProject();
     void openExistingProject();

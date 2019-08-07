@@ -110,6 +110,8 @@ private slots:
     void on_menuMountain_triggered(QAction *action);
     void on_menu3D_object_triggered(QAction *action);
     void on_menuEvents_triggered(QAction *action);
+    void on_actionRotateTriggered(bool);
+    void on_actionDrawTriggered(bool);
 
 signals:
     void selectionChanged();

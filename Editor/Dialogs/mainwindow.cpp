@@ -87,6 +87,10 @@ WidgetMapEditor* MainWindow::mapEditor() const{
     return ((PanelProject*)mainPanel)->widgetMapEditor();
 }
 
+PanelTextures * MainWindow::panelTextures() const {
+    return  reinterpret_cast<PanelProject *>(mainPanel)->panelTextures();
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

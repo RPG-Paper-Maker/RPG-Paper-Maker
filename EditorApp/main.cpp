@@ -97,8 +97,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Opening window
-    MainWindow w;
-    w.showMaximized();
+    MainWindow *w = MainWindow::get();
+    w->showMaximized();
 
     // Show first launch window
     DialogFirstLaunch dialog;
@@ -109,5 +109,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Executing
-    return a.exec();
+    int result = a.exec();
+    delete w;
+    return result;
 }

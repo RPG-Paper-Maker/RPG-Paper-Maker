@@ -17,7 +17,7 @@
 #include "systemspecialelement.h"
 #include "widgettilesetselector.h"
 #include "mapeditorsubselectionkind.h"
-
+#include "drawkind.h"
 
 class WidgetTreeLocalMaps;
 
@@ -64,14 +64,17 @@ public:
     void showSpriteWalls(SystemTileset *tileset);
     void showMountains(SystemTileset *tileset);
     void showObjects3D(SystemTileset *tileset);
+    void showTransformations();
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
     void updateMountainsSize();
     void updateObject3DSize();
+    void updateShow();
 
 private:
     Ui::PanelTextures *ui;
     WidgetTreeLocalMaps *m_widgetTreeLocalMaps;
     PictureKind m_kind;
+    DrawKind m_drawKind;
     SystemTileset *m_tileset;
     int m_currentAutotilesID;
     int m_currentWallsID;

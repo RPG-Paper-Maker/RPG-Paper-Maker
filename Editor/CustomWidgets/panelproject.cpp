@@ -27,7 +27,7 @@ PanelProject::PanelProject(QWidget *parent) :
 
     // Set default proportion of splitters
     QList<int> sizesVertical;
-    sizesVertical << 100 << 500;
+    sizesVertical << 135 << 500;
     ui->splitter_2->setSizes(sizesVertical);
     QList<int> sizesHorizontal;
     sizesHorizontal << 250 << 200;
@@ -73,6 +73,10 @@ PanelProject::~PanelProject()
 
 Project* PanelProject::project() const {
     return m_project;
+}
+
+PanelTextures * PanelProject::panelTextures() const {
+    return ui->panelTextures;
 }
 
 WidgetMapEditor * PanelProject::widgetMapEditor() const {

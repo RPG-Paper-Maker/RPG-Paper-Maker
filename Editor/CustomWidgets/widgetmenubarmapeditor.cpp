@@ -14,6 +14,7 @@
 #include "widgetmenubarmapeditor.h"
 #include "ui_widgetmenubarmapeditor.h"
 #include "common.h"
+#include "mainwindow.h"
 
 QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
 QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
@@ -240,17 +241,23 @@ void WidgetMenuBarMapEditor::initializeRightMenu() {
     m_actionRotate = new QAction(QIcon(":/icons/Ressources/rotate_disable.png"), "Rotate");
     m_actionRotate->setProperty("selection", false);
     m_actionRotate->setEnabled(false);
+    this->connect(m_actionRotate, SIGNAL(triggered(bool)), this, SLOT(
+        on_actionRotateTriggered(bool)));
     m_actionScale = new QAction(QIcon(":/icons/Ressources/scale_disable.png"), "Scale");
     m_actionScale->setProperty("selection", false);
     m_actionScale->setEnabled(false);
     m_actionPencil = new QAction(QIcon(":/icons/Ressources/pencil.png"), "Pencil");
     m_actionPencil->setProperty("selection", true);
+    this->connect(m_actionPencil, SIGNAL(triggered(bool)), this, SLOT(
+        on_actionDrawTriggered(bool)));
     m_actionRectangle = new QAction(QIcon(":/icons/Ressources/rectangle.png"),
         "Rectangle");
     m_actionRectangle->setEnabled(false);
     m_actionRectangle->setProperty("selection", false);
     m_actionPin = new QAction(QIcon(":/icons/Ressources/pin.png"), "Pin of paint");
     m_actionPin->setProperty("selection", false);
+    this->connect(m_actionPin, SIGNAL(triggered(bool)), this, SLOT(
+        on_actionDrawTriggered(bool)));
     bar->addAction(m_actionTranslate);
     bar->addAction(m_actionRotate);
     bar->addAction(m_actionScale);
@@ -448,6 +455,7 @@ void WidgetMenuBarMapEditor::forceNoRotation() {
         ::TransformRotate));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/rotate_disable.png"));
+    this->on_actionDrawTriggered(false);
 }
 
 // -------------------------------------------------------
@@ -465,6 +473,7 @@ void WidgetMenuBarMapEditor::forcePencil() {
     action = bar->actions().at(static_cast<int>(MapEditorModesKind::DrawPin));
     action->setEnabled(false);
     action->setIcon(QIcon(":/icons/Ressources/pin_disable.png"));
+    this->on_actionDrawTriggered(false);
 }
 
 // -------------------------------------------------------
@@ -601,4 +610,16 @@ void WidgetMenuBarMapEditor::on_menu3D_object_triggered(QAction *action) {
 void WidgetMenuBarMapEditor::on_menuEvents_triggered(QAction *action) {
     updateSubSelection(ui->menuEvents, this->actions().at(static_cast<int>(
         MapEditorSelectionKind::Objects)), action);
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_actionRotateTriggered(bool) {
+    MainWindow::get()->panelTextures()->showTransformations();
+}
+
+// -------------------------------------------------------
+
+void WidgetMenuBarMapEditor::on_actionDrawTriggered(bool) {
+    MainWindow::get()->panelTextures()->updateShow();
 }

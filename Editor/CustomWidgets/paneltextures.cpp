@@ -27,6 +27,7 @@ PanelTextures::PanelTextures(QWidget *parent) :
     ui(new Ui::PanelTextures),
     m_widgetTreeLocalMaps(nullptr),
     m_kind(PictureKind::None),
+    m_drawKind(DrawKind::Pencil),
     m_currentAutotilesID(-1),
     m_currentWallsID(-1),
     m_currentMountainID(-1),
@@ -93,6 +94,7 @@ void PanelTextures::hideAll() {
     ui->widgetWallPreview->hide();
     ui->widgetMountainPreview->hide();
     ui->widget3DObjectPreview->hide();
+    ui->panelTransformations->hide();
     ui->comboBox->hide();
     ui->pushButtonUpdateList->hide();
     ui->labelInformation->hide();
@@ -103,11 +105,15 @@ void PanelTextures::hideAll() {
 void PanelTextures::showTileset() {
     m_kind = PictureKind::None;
 
-    hideAll();
-    ui->widgetTilesetSelector->show();
-    this->updateTilesetImage();
-    this->updateMountainsSize();
-    this->updateObject3DSize();
+    if (m_drawKind == DrawKind::Rotate) {
+        this->showTransformations();
+    } else {
+        hideAll();
+        ui->widgetTilesetSelector->show();
+        this->updateTilesetImage();
+        this->updateMountainsSize();
+        this->updateObject3DSize();
+    }
 }
 
 // -------------------------------------------------------
@@ -304,9 +310,30 @@ void PanelTextures::showMountains(SystemTileset *tileset) {
 // -------------------------------------------------------
 
 void PanelTextures::showObjects3D(SystemTileset *tileset) {
-    m_tileset = tileset;
-    tileset->updateModel3DObjects();
-    fillComboBox(tileset, PictureKind::Object3D);
+    m_kind = PictureKind::Object3D;
+
+    if (m_drawKind == DrawKind::Rotate) {
+        this->showTransformations();
+    } else {
+        m_tileset = tileset;
+        tileset->updateModel3DObjects();
+        fillComboBox(tileset, PictureKind::Object3D);
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::showTransformations() {
+    int width, height;
+
+    m_drawKind = DrawKind::Rotate;
+    this->hideAll();
+    ui->panelTransformations->show();
+    width = qMax(ui->panelTransformations->width(), this->parentWidget()
+        ->width());
+    height = ui->panelTransformations->height();
+    this->setGeometry(0, 0, width, height);
+    this->setFixedSize(width, height);
 }
 
 // -------------------------------------------------------
@@ -421,6 +448,30 @@ void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
         ui->widgetWallPreview->updatePicture(special->picture(), m_kind);
         break;
     default:
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::updateShow() {
+    m_drawKind = DrawKind::Pencil;
+
+    switch (m_kind) {
+    case PictureKind::Autotiles:
+        this->showAutotiles(m_tileset);
+        break;
+    case PictureKind::Walls:
+        this->showSpriteWalls(m_tileset);
+        break;
+    case PictureKind::Mountains:
+        this->showMountains(m_tileset);
+        break;
+    case PictureKind::Object3D:
+        this->showObjects3D(m_tileset);
+        break;
+    default:
+        this->showTileset();
         break;
     }
 }

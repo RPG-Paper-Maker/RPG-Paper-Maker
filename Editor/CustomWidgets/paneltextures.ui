@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,1,0">
      <item>
       <widget class="QComboBox" name="comboBox"/>
      </item>
@@ -88,6 +88,9 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="PanelTransformations" name="panelTransformations" native="true"/>
+     </item>
     </layout>
    </item>
   </layout>
@@ -121,6 +124,12 @@
    <class>WidgetMountainSelector</class>
    <extends>QWidget</extends>
    <header>widgetmountainselector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelTransformations</class>
+   <extends>QWidget</extends>
+   <header>paneltransformations.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

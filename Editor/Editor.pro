@@ -20,6 +20,7 @@ TARGET = RPG-Paper-Maker
 DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
+    CustomWidgets/paneltransformations.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     Dialogs/dialogfirstlaunch.h \
@@ -297,6 +298,7 @@ HEADERS += \
     CustomWidgets/widgetchart.h
 
 SOURCES += \
+    CustomWidgets/paneltransformations.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -547,6 +549,7 @@ SOURCES += \
     CustomWidgets/widgetchart.cpp
 
 FORMS += \
+    CustomWidgets/paneltransformations.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     Dialogs/dialogfirstlaunch.ui \

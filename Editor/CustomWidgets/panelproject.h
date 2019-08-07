@@ -41,6 +41,7 @@ public:
     ~PanelProject();
 
     Project* project() const;
+    PanelTextures * panelTextures() const;
     WidgetMapEditor * widgetMapEditor() const;
     WidgetTreeLocalMaps * widgetTreeLocalMaps() const;
 
