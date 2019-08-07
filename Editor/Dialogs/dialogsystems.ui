@@ -64,9 +64,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-101</y>
+                <y>-161</y>
                 <width>248</width>
-                <height>787</height>
+                <height>838</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -369,6 +369,36 @@
                             <width>200</width>
                             <height>16777215</height>
                            </size>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QVBoxLayout" name="verticalLayout_25" stretch="0,0">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="label_23">
+                          <property name="text">
+                           <string>Animation frames</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QSpinBox" name="spinBoxAnimationFrames">
+                          <property name="enabled">
+                           <bool>true</bool>
+                          </property>
+                          <property name="minimum">
+                           <number>1</number>
+                          </property>
+                          <property name="maximum">
+                           <number>99</number>
+                          </property>
+                          <property name="value">
+                           <number>4</number>
                           </property>
                          </widget>
                         </item>
@@ -1466,15 +1496,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>PanelObject</class>
@@ -1504,12 +1540,6 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -54,10 +54,8 @@ void WidgetPicturePreview::setIndexX(int i) {
 int WidgetPicturePreview::indexY() const { return m_indexY; }
 
 void WidgetPicturePreview::setIndexY(int i) {
-    int frames = RPM::get()->project()->gameDatas()->systemDatas()
-            ->framesAnimation();
-    if (i >= frames)
-        i = frames - 1;
+    if (i >= 4)
+        i = 3;
 
     m_indexY = i;
 
@@ -98,7 +96,7 @@ void WidgetPicturePreview::updateImageSize(){
             m_selectionRectangle->setSquareWidth(m_image.width() *
                                                  coef / frames);
             m_selectionRectangle->setSquareHeight(m_image.height() *
-                                                  coef/ frames);
+                                                  coef/ 4);
             updateRectangleCharacter();
             break;
         default:

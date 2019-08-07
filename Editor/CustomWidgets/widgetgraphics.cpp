@@ -147,9 +147,11 @@ void WidgetGraphics::paintEvent(QPaintEvent *event) {
             } else {
                 width = image.width() / RPM::get()->project()->gameDatas()
                     ->systemDatas()->framesAnimation();
-                height = image.height() / RPM::get()->project()->gameDatas()
-                    ->systemDatas()->framesAnimation();
-                newX = m_state->indexX() * width;
+                height = image.height() / 4;
+                newX = (m_state->indexX() >= RPM::get()->project()->gameDatas()
+                    ->systemDatas()->framesAnimation() ? RPM::get()->project()
+                    ->gameDatas()->systemDatas()->framesAnimation() - 1 :
+                    m_state->indexX()) * width;
                 newY = m_state->indexY() * height;
             }
 

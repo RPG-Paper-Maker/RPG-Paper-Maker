@@ -105,8 +105,11 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->comboBoxScreenWindow->setCurrentIndex(systemDatas->isScreenWindow() ? 0
         : 1);
     ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
-    ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas->mountainCollisionHeight());
-    ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas->mountainCollisionAngle(), false);
+    ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas
+        ->mountainCollisionHeight());
+    ui->widgetMountainCollisionAngle->initializeNumberAndUpdate(systemDatas
+        ->mountainCollisionAngle(), false);
+    ui->spinBoxAnimationFrames->setValue(systemDatas->framesAnimation());
 
     // Initializing all the models
     ui->panelSuperListColors->list()->initializeNewItemInstance(new SystemColor);
@@ -405,6 +408,12 @@ void DialogSystems::on_comboBoxScreenWindow_currentIndexChanged(int index) {
 
 void DialogSystems::on_spinBoxSquareSize_valueChanged(int i) {
     RPM::get()->project()->gameDatas()->systemDatas()->setSquareSize(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_spinBoxAnimationFrames_valueChanged(int i) {
+    RPM::get()->project()->gameDatas()->systemDatas()->setFramesAnimation(i);
 }
 
 // -------------------------------------------------------

@@ -204,8 +204,9 @@ void MapObjects::initializeVertices(int squareSize,
                 int frames = RPM::get()->project()->gameDatas()->systemDatas()
                         ->framesAnimation();
                 width = texture->width() / frames / squareSize;
-                height = texture->height() / frames / squareSize;
-                x = state->indexX() * width;
+                height = texture->height() / 4 / squareSize;
+                x = (state->indexX() >= frames ? frames - 1 : state->indexX()) *
+                    width;
                 y = state->indexY() * height;
             }
 
