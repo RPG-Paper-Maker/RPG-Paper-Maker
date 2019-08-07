@@ -25,11 +25,12 @@ DialogCollisions::DialogCollisions(QWidget *parent) :
 {
     ui->setupUi(this);
     
-
-    initializeTilesets();
-    initializeCharacters();
-    initializeAutotiles();
-    initializeWalls();
+    this->initializeTilesets();
+    this->initializeCharacters();
+    this->initializeAutotiles();
+    this->initializeWalls();
+    this->initializeMountains();
+    this->initializeObjects3D();
 }
 
 DialogCollisions::~DialogCollisions()
@@ -176,6 +177,112 @@ void DialogCollisions::updateWall(SystemSpriteWall *wall) {
 }
 
 // -------------------------------------------------------
+
+void DialogCollisions::initializeMountains() {
+    QModelIndex index;
+
+    ui->panelSuperListMountains->list()->initializeNewItemInstance(new
+        SystemMountain);
+    ui->panelSuperListMountains->initializeModel(RPM::get()->project()
+        ->specialElementsDatas()->modelMountains());
+    this->connect(ui->panelSuperListMountains->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_mountainSelected(QModelIndex, QModelIndex)));
+    ui->widgetShowPicture->setCover(true);
+
+    // Select the first mountain
+    index = ui->panelSuperListMountains->list()->getModel()->index(0, 0);
+    ui->panelSuperListMountains->list()->setIndex(0);
+    this->on_mountainSelected(index, index);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::updateMountain(SystemMountain *mountain) {
+    SystemPicture *picture;
+
+    // Picture management
+    picture = mountain->picture();
+    ui->widgetShowPicture->updatePicture(picture, PictureKind::Mountains);
+
+    // Collisions
+    ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(mountain
+        ->mountainCollisionKind()));
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::initializeObjects3D() {
+    QModelIndex index, modelIndex;
+    QVariant v(0);
+
+    // List
+    ui->panelSuperListObjects3D->list()->initializeNewItemInstance(new
+        SystemObject3D);
+    ui->panelSuperListObjects3D->initializeModel(RPM::get()->project()
+        ->specialElementsDatas()->modelObjects3D());
+    this->connect(ui->panelSuperListObjects3D->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_object3DSelected(QModelIndex, QModelIndex)));
+
+    // Disable comobox
+    modelIndex = ui->comboBoxCollisionObject3D->model()->index(3, 0);
+    ui->comboBoxCollisionObject3D->model()->setData(modelIndex, v, Qt::UserRole
+        - 1);
+
+    // Select the first 3D object
+    index = ui->panelSuperListObjects3D->list()->getModel()->index(0, 0);
+    ui->panelSuperListObjects3D->list()->setIndex(0);
+    this->on_object3DSelected(index, index);
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::updateObject3D(SystemObject3D *object) {
+    QVariant vDisable(0);
+    QVariant vEnable(1 | 32);
+    QModelIndex modelIndex;
+
+    // Collisions
+    ui->comboBoxCollisionObject3D->setCurrentIndex(static_cast<int>(object
+        ->collisionKind()));
+    ui->widgetShapeCollisions->initialize(object->collisionCustomID());
+    switch (object->shapeKind()) {
+    case ShapeKind::Box:
+        ui->widgetShapeCollisions->hide();
+        modelIndex = ui->comboBoxCollisionObject3D->model()->index(1, 0);
+        ui->comboBoxCollisionObject3D->model()->setData(modelIndex, vEnable,
+            Qt::UserRole - 1);
+        modelIndex = ui->comboBoxCollisionObject3D->model()->index(2, 0);
+        ui->comboBoxCollisionObject3D->model()->setData(modelIndex, vDisable, Qt
+            ::UserRole - 1);
+        if (ui->comboBoxCollisionObject3D->currentIndex() == 2) {
+            ui->comboBoxCollisionObject3D->setCurrentIndex(1);
+        }
+        break;
+    case ShapeKind::Custom:
+        ui->widgetShapeCollisions->setVisible(object->collisionKind() ==
+            ObjectCollisionKind::Custom);
+        modelIndex = ui->comboBoxCollisionObject3D->model()->index(1, 0);
+        ui->comboBoxCollisionObject3D->model()->setData(modelIndex, vDisable, Qt
+            ::UserRole - 1);
+        modelIndex = ui->comboBoxCollisionObject3D->model()->index(2, 0);
+        ui->comboBoxCollisionObject3D->model()->setData(modelIndex, vEnable, Qt
+            ::UserRole - 1);
+        if (ui->comboBoxCollisionObject3D->currentIndex() == 1) {
+            ui->comboBoxCollisionObject3D->setCurrentIndex(2);
+        }
+        break;
+    default:
+        break;
+    }
+
+    // Object previewer
+    ui->widgetPreviewObject3D->loadObject(object);
+    ui->widgetPreviewObject3D->updateObject();
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -213,4 +320,61 @@ void DialogCollisions::on_wallSelected(QModelIndex index, QModelIndex) {
             ->itemFromIndex(index);
     if (selected != nullptr)
         updateWall((SystemSpriteWall*)selected->data().value<quintptr>());
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_mountainSelected(QModelIndex index, QModelIndex) {
+    QStandardItem *selected;
+
+    selected = ui->panelSuperListMountains->list()->getModel()->itemFromIndex(
+        index);
+    if (selected != nullptr) {
+        this->updateMountain(reinterpret_cast<SystemMountain *>(selected->data()
+            .value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_object3DSelected(QModelIndex index, QModelIndex) {
+    QStandardItem *selected;
+
+    selected = ui->panelSuperListObjects3D->list()->getModel()->itemFromIndex(
+        index);
+    if (selected != nullptr) {
+        this->updateObject3D(reinterpret_cast<SystemObject3D *>(selected->data()
+            .value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_comboBoxCollisionMountains_currentIndexChanged(int
+    index)
+{
+    SystemMountain *mountain;
+
+    mountain = reinterpret_cast<SystemMountain *>(ui->panelSuperListMountains
+        ->list()->getSelected()->data().value<quintptr>());
+    if (mountain != nullptr) {
+        mountain->setMountainCollisionKind(static_cast<MountainCollisionKind>(
+            index));
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::on_comboBoxCollisionObject3D_currentIndexChanged(int
+    index)
+{
+    SystemObject3D *object;
+
+    object = reinterpret_cast<SystemObject3D *>(ui->panelSuperListObjects3D
+        ->list()->getSelected()->data().value<quintptr>());
+    if (object != nullptr) {
+        object->setCollisionKind(static_cast<ObjectCollisionKind>(index));
+        ui->widgetShapeCollisions->setVisible(object->collisionKind() ==
+            ObjectCollisionKind::Custom);
+    }
 }

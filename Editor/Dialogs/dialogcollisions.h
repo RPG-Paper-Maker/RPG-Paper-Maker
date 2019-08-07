@@ -16,6 +16,8 @@
 #include "systemtileset.h"
 #include "systemautotile.h"
 #include "systemspritewall.h"
+#include "systemmountain.h"
+#include "systemobject3d.h"
 #include "panelsuperlist.h"
 
 // -------------------------------------------------------
@@ -35,7 +37,7 @@ class DialogCollisions : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogCollisions(QWidget *parent = 0);
+    explicit DialogCollisions(QWidget *parent = nullptr);
     ~DialogCollisions();
 
 private:
@@ -50,12 +52,20 @@ private:
     void updateAutotile(SystemAutotile* autotile);
     void initializeWalls();
     void updateWall(SystemSpriteWall* wall);
+    void initializeMountains();
+    void updateMountain(SystemMountain *mountain);
+    void initializeObjects3D();
+    void updateObject3D(SystemObject3D *object);
 
 private slots:
     void on_tilesetSelected(QModelIndex index, QModelIndex);
     void on_characterSelected(QModelIndex index, QModelIndex);
     void on_autotileSelected(QModelIndex index, QModelIndex);
     void on_wallSelected(QModelIndex index, QModelIndex);
+    void on_mountainSelected(QModelIndex index, QModelIndex);
+    void on_object3DSelected(QModelIndex index, QModelIndex);
+    void on_comboBoxCollisionMountains_currentIndexChanged(int index);
+    void on_comboBoxCollisionObject3D_currentIndexChanged(int index);
 };
 
 #endif // DIALOGCOLLISIONS_H
