@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-161</y>
+                <y>0</y>
                 <width>248</width>
                 <height>838</height>
                </rect>
@@ -1367,7 +1367,7 @@
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_17" stretch="0,1">
+            <layout class="QVBoxLayout" name="verticalLayout_17" stretch="0,0,1">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
                <item>
@@ -1390,33 +1390,20 @@
                 </widget>
                </item>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout_15" stretch="0,0">
+                <layout class="QVBoxLayout" name="verticalLayout_15" stretch="">
                  <property name="spacing">
                   <number>6</number>
                  </property>
-                 <item>
-                  <spacer name="verticalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="checkBoxCommonReactionBlockingHero">
-                   <property name="text">
-                    <string>Blocking hero</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </item>
               </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBoxCommonReactionBlockingHero">
+               <property name="text">
+                <string>Block hero when reaction</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="WidgetTreeCommands" name="treeCommandsView" native="true"/>
