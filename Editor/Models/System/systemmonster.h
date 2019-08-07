@@ -47,7 +47,7 @@ public:
     SystemProgressionTable *currencyProgressionAt(int id);
 
     virtual SuperListItem* createCopy() const;
-    void setCopy(const SystemMonster& monster);
+    virtual void setCopy(const SystemMonster& monster);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

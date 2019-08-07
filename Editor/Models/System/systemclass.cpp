@@ -153,6 +153,58 @@ SuperListItem* SystemClass::createCopy() const{
 }
 
 // -------------------------------------------------------
+
+void SystemClass::setCopy(const SuperListItem &super) {
+    const SystemClass *sys;
+    SystemStatisticProgression *progression;
+    SystemClassSkill *classSkill;
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+    QHash<int, int>::const_iterator it;
+    int i, l;
+
+    sys = reinterpret_cast<const SystemClass *>(&super);
+    m_initialLevel = sys->m_initialLevel;
+    m_maxLevel = sys->m_maxLevel;
+    m_expBase = sys->m_expBase;
+    m_expInflation = sys->m_expInflation;
+
+    // ExpTable
+    m_expTable.clear();
+    for (it = sys->m_expTable.begin(); it != sys->m_expTable.end(); it++) {
+        m_expTable.insert(it.key(), it.value());
+    }
+
+    // Skills
+    for (i = 0, l = sys->skills()->invisibleRootItem()->rowCount(); i < l - 1;
+         i++)
+    {
+        classSkill = new SystemClassSkill;
+        classSkill->setCopy(*reinterpret_cast<SystemClassSkill *>(sys->skills()
+            ->item(i)->data().value<quintptr>()));
+        row = classSkill->getModelRow();
+        m_skills->appendRow(row);
+    }
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_skills->appendRow(item);
+
+    // Statistics progression
+    for (i = 0, l = sys->statisticsProgression()->invisibleRootItem()
+         ->rowCount(); i < l - 1; i++)
+    {
+        progression = new SystemStatisticProgression;
+        progression->setCopy(*reinterpret_cast<SystemStatisticProgression *>(sys
+            ->statisticsProgression()->item(i)->data().value<quintptr>()));
+        row = progression->getModelRow();
+        m_statisticsProgression->appendRow(row);
+    }
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_statisticsProgression->appendRow(item);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
