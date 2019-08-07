@@ -31,6 +31,7 @@ PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     m_spacersSize.append(ui->horizontalSpacer_4->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_5->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_6->geometry().size());
+    m_spacersSize.append(ui->horizontalSpacer_7->geometry().size());
 
     this->showBox();
 }
@@ -141,6 +142,8 @@ void PanelSpecialElements::update(SystemSpecialElement *sys) {
     ui->spinBoxSquaresDepth->setValue(sys->depthSquare());
     ui->spinBoxPixelsDepth->setValue(sys->depthPixel());
     ui->comboBoxStretch->setCurrentIndex(sys->stretch() ? 0 : 1);
+    ui->comboBoxCollisionMountains->setCurrentIndex(static_cast<int>(sys
+        ->mountainCollisionKind()));
 
     // Object previewer
     if (m_kind == PictureKind::Object3D) {
@@ -188,6 +191,9 @@ void PanelSpecialElements::showObject3D() {
 void PanelSpecialElements::hideMountain() {
     ui->scrollArea->hide();
     ui->gridLayout_3->setRowStretch(9, 0);
+    ui->labelCollisionMountains->hide();
+    ui->comboBoxCollisionMountains->hide();
+    ui->horizontalSpacer_7->changeSize(0, 0);
 }
 
 // -------------------------------------------------------
@@ -196,6 +202,9 @@ void PanelSpecialElements::showMountain() {
     ui->widgetTilesetSettings->hide();
     ui->scrollArea->show();
     ui->gridLayout_3->setRowStretch(7, 0);
+
+    ui->horizontalSpacer_7->changeSize(m_spacersSize.at(5).width(),
+        m_spacersSize.at(5).height());
 }
 
 // -------------------------------------------------------
@@ -454,5 +463,19 @@ void PanelSpecialElements::on_comboBoxStretch_currentIndexChanged(int index) {
     if (element != nullptr) {
         element->setStretch(index == 0);
         ui->widgetPreviewObject3D->updateObject();
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSpecialElements::on_comboBoxCollisionMountains_currentIndexChanged(int
+    index)
+{
+    SystemSpecialElement *element;
+
+    element = this->currentElement();
+    if (element != nullptr) {
+        element->setMountainCollisionKind(static_cast<MountainCollisionKind>(
+            index));
     }
 }

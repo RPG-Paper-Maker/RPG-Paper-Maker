@@ -17,6 +17,7 @@
 #include "shapekind.h"
 #include "objectcollisionkind.h"
 #include "systemcustomshape.h"
+#include "mountaincollisionkind.h"
 
 // -------------------------------------------------------
 //
@@ -43,13 +44,15 @@ public:
     const static QString JSON_DEPTH_SQUARE;
     const static QString JSON_DEPTH_PIXEL;
     const static QString JSON_STRETCH;
+    const static QString JSON_MOUNTAIN_COLLISION_KIND;
 
     SystemSpecialElement();
     SystemSpecialElement(int i, QString n, ShapeKind shapeKind = ShapeKind::Box,
         int objID = -1, int mtlID = -1, int pictureID = -1, ObjectCollisionKind
         collisionKind = ObjectCollisionKind::None, int collisionCustomID = -1,
         double scale = 1.0, int wS = 1, double wP = 0, int hS = 1, double hP = 0
-        , int dS = 1, double dP = 0, bool stretch = false);
+        , int dS = 1, double dP = 0, bool stretch = false, MountainCollisionKind
+        mountainCollisionKind = MountainCollisionKind::Default);
     virtual ~SystemSpecialElement();
 
     ShapeKind shapeKind() const;
@@ -81,6 +84,8 @@ public:
     void setDepthPixel(int dp);
     bool stretch() const;
     void setStretch(bool s);
+    MountainCollisionKind mountainCollisionKind() const;
+    void setMountainCollisionKind(MountainCollisionKind mountainCollisionKind);
 
     void updateObjName();
     void updateMtlName();
@@ -108,6 +113,7 @@ protected:
     int m_depthSquare;
     double m_depthPixel;
     bool m_stretch;
+    MountainCollisionKind m_mountainCollisionKind;
 
     SystemPicture* pictureByKind(PictureKind kind) const;
 };

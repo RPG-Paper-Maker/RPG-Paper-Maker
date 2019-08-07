@@ -26,6 +26,7 @@ const QString SystemSpecialElement::JSON_HEIGHT_PIXEL = "hp";
 const QString SystemSpecialElement::JSON_DEPTH_SQUARE = "ds";
 const QString SystemSpecialElement::JSON_DEPTH_PIXEL = "dp";
 const QString SystemSpecialElement::JSON_STRETCH = "st";
+const QString SystemSpecialElement::JSON_MOUNTAIN_COLLISION_KIND = "mck";
 
 // -------------------------------------------------------
 //
@@ -42,7 +43,8 @@ SystemSpecialElement::SystemSpecialElement() :
 SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     , int objID, int mtlID, int pictureID, ObjectCollisionKind collisionKind,
     int collisionCustomID, double scale, int wS, double wP, int hS, double hP,
-    int dS, double dP, bool stretch) :
+    int dS, double dP, bool stretch, MountainCollisionKind
+    mountainCollisionKind) :
     SuperListItem(i, n),
     m_shapeKind(shapeKind),
     m_objID(new SuperListItem(objID)),
@@ -57,7 +59,8 @@ SystemSpecialElement::SystemSpecialElement(int i, QString n, ShapeKind shapeKind
     m_heightPixel(hP),
     m_depthSquare(dS),
     m_depthPixel(dP),
-    m_stretch(stretch)
+    m_stretch(stretch),
+    m_mountainCollisionKind(mountainCollisionKind)
 {
     updateObjName();
     updateMtlName();
@@ -189,6 +192,16 @@ void SystemSpecialElement::setStretch(bool s) {
     m_stretch = s;
 }
 
+MountainCollisionKind SystemSpecialElement::mountainCollisionKind() const {
+    return m_mountainCollisionKind;
+}
+
+void SystemSpecialElement::setMountainCollisionKind(MountainCollisionKind
+    mountainCollisionKind)
+{
+    m_mountainCollisionKind = mountainCollisionKind;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -274,6 +287,7 @@ void SystemSpecialElement::setCopy(const SystemSpecialElement& super) {
     m_depthSquare = super.m_depthSquare;
     m_depthPixel = super.m_depthPixel;
     m_stretch = super.m_stretch;
+    m_mountainCollisionKind = super.m_mountainCollisionKind;
 }
 
 // -------------------------------------------------------
@@ -326,6 +340,10 @@ void SystemSpecialElement::read(const QJsonObject &json){
     }
     if (json.contains(JSON_STRETCH)) {
         m_stretch = json[JSON_STRETCH].toBool();
+    }
+    if (json.contains(JSON_MOUNTAIN_COLLISION_KIND)) {
+        m_mountainCollisionKind = static_cast<MountainCollisionKind>(json[
+            JSON_MOUNTAIN_COLLISION_KIND].toInt());
     }
 }
 
@@ -383,5 +401,9 @@ void SystemSpecialElement::write(QJsonObject &json) const{
         if (m_stretch) {
             json[JSON_STRETCH] = m_stretch;
         }
+    }
+    if (m_mountainCollisionKind != MountainCollisionKind::Default) {
+        json[JSON_MOUNTAIN_COLLISION_KIND] = static_cast<int>(
+            m_mountainCollisionKind);
     }
 }

@@ -31,6 +31,7 @@ HEADERS += \
     Controls/controlnewproject.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
+    Enums/mountaincollisionkind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \
