@@ -21,7 +21,7 @@
 //
 //  CLASS SystemState
 //
-//  A particulary state (datas).
+//  A particulary state of an object (datas).
 //
 // -------------------------------------------------------
 

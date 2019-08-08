@@ -13,6 +13,7 @@
 #include "ui_panelobject.h"
 #include "systemobjectevent.h"
 #include "systemevent.h"
+#include "systemproperty.h"
 #include "systemstate.h"
 #include "systemcommonreaction.h"
 #include "rpm.h"
@@ -32,8 +33,10 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->setupUi(this);
 
     // Updating infos lists
-    ui->treeViewStates->initializeNewItemInstance(new SystemState);
+    ui->treeViewProperties->initializeNewItemInstance(new SystemProperty);
+    ui->treeViewProperties->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
+    ui->treeViewStates->initializeNewItemInstance(new SystemState);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -90,6 +93,11 @@ void PanelObject::updateModel() {
         ui->lineEditName->setText(m_model->name());
         ui->checkBoxOneEventPerFrame->setChecked(m_model->onlyOneEventPerFrame());
         initializeCommonInheritance();
+
+        // Properties
+        ui->treeViewProperties->initializeModel(m_model->modelProperties());
+        index = ui->treeViewProperties->getModel()->index(0,0);
+        ui->treeViewProperties->setCurrentIndex(index);
 
         // Events
         ui->treeViewEvents->initializeModel(m_model->modelEvents());

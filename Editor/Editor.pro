@@ -23,6 +23,7 @@ HEADERS += \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
+    Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/mainwindow.h \
@@ -38,6 +39,7 @@ HEADERS += \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
     Models/System/systemmountain.h \
+    Models/System/systemproperty.h \
     Models/translations.h \
     Singletons/singleton.h \
     Models/project.h \
@@ -302,6 +304,7 @@ SOURCES += \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
+    Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/mainwindow.cpp \
@@ -316,6 +319,7 @@ SOURCES += \
     MapEditor/mountains.cpp \
     MapEditor/textureseveral.cpp \
     Models/System/systemmountain.cpp \
+    Models/System/systemproperty.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
     Dialogs/dialogcommands.cpp \
@@ -553,6 +557,7 @@ FORMS += \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
+    Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/mainwindow.ui \

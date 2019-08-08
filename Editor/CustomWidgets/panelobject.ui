@@ -144,7 +144,7 @@
            <item>
             <widget class="QLabel" name="label_7">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="maximumSize">
               <size>
@@ -160,7 +160,7 @@
            <item>
             <widget class="WidgetSuperTree" name="treeViewProperties">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="maximumSize">
               <size>
@@ -168,6 +168,9 @@
                <height>65</height>
               </size>
              </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
             </widget>
            </item>
           </layout>

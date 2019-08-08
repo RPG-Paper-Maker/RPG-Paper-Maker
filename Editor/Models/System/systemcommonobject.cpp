@@ -15,11 +15,13 @@
 #include "systemobjectevent.h"
 #include "systemstate.h"
 #include "systemcommonreaction.h"
+#include "systemproperty.h"
 
 const QString SystemCommonObject::JSON_ONLY_ONE_EVENT_PER_FRAME = "ooepf";
-QString SystemCommonObject::strInheritance = "hId";
-QString SystemCommonObject::strStates = "states";
-QString SystemCommonObject::strEvents = "events";
+const QString SystemCommonObject::JSON_INHERITANCE_ID = "hId";
+const QString SystemCommonObject::JSON_STATES = "states";
+const QString SystemCommonObject::JSON_PROPERTIES = "p";
+const QString SystemCommonObject::JSON_EVENTS = "events";
 
 // -------------------------------------------------------
 //
@@ -29,25 +31,27 @@ QString SystemCommonObject::strEvents = "events";
 
 SystemCommonObject::SystemCommonObject() :
     SystemCommonObject(1, "", false, -1, new QStandardItemModel, new
-        QStandardItemModel)
+        QStandardItemModel, new QStandardItemModel)
 {
 
 }
 
 SystemCommonObject::SystemCommonObject(int i, QString n, bool
     onlyOneEventPerFrame, int id, QStandardItemModel *states, QStandardItemModel
-    *events) :
+    *properties, QStandardItemModel *events) :
     SuperListItem(i,n),
     m_onlyOneEventPerFrame(onlyOneEventPerFrame),
     m_inheritanceId(id),
     m_states(states),
+    m_properties(properties),
     m_events(events)
 {
 
 }
 
-SystemCommonObject::~SystemCommonObject(){
+SystemCommonObject::~SystemCommonObject() {
     SuperListItem::deleteModel(m_states);
+    SuperListItem::deleteModel(m_properties);
     SuperListItem::deleteModel(m_events);
 }
 
@@ -59,13 +63,25 @@ void SystemCommonObject::setOnlyOneEventPerFrame(bool b) {
     m_onlyOneEventPerFrame = b;
 }
 
-int SystemCommonObject::inheritanceId() const { return m_inheritanceId; }
+int SystemCommonObject::inheritanceId() const {
+    return m_inheritanceId;
+}
 
-void SystemCommonObject::setInheritance(int id) { m_inheritanceId = id; }
+void SystemCommonObject::setInheritance(int id) {
+    m_inheritanceId = id;
+}
 
-QStandardItemModel* SystemCommonObject::modelStates() const { return m_states; }
+QStandardItemModel * SystemCommonObject::modelStates() const {
+    return m_states;
+}
 
-QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
+QStandardItemModel * SystemCommonObject::modelProperties() const {
+    return m_properties;
+}
+
+QStandardItemModel * SystemCommonObject::modelEvents() const {
+    return m_events;
+}
 
 // -------------------------------------------------------
 //
@@ -74,15 +90,19 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 // -------------------------------------------------------
 
 void SystemCommonObject::setDefault() {
-    QStandardItem* model = RPM::get()->project()->gameDatas()
-            ->commonEventsDatas()->modelCommonObjects()->invisibleRootItem();
-    int id = p_id;
+    QStandardItem *model;
+    SystemCommonObject *object;
+    int id;
+
+    model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelCommonObjects()->invisibleRootItem();
+    id = p_id;
 
     // Copy the object with ID 1
-    SystemCommonObject* object = static_cast<SystemCommonObject*>(
-        SuperListItem::getById(model, 1));
-    SuperListItem::deleteModel(m_states, false);
+    object = static_cast<SystemCommonObject *>(SuperListItem::getById(model, 1));
+    SuperListItem::deleteModel(m_properties, false);
     SuperListItem::deleteModel(m_events, false);
+    SuperListItem::deleteModel(m_states, false);
     setCopy(*object);
     setId(id);
     setName("");
@@ -91,26 +111,31 @@ void SystemCommonObject::setDefault() {
 // -------------------------------------------------------
 
 void SystemCommonObject::setDefaultFirst() {
-    QList<QStandardItem*> row;
-    QStandardItem* item;
-    SystemState* state;
-    SuperListItem* super;
+    QStandardItemModel *modelEventsUser;
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+    SystemState *state;
+    SystemObjectEvent *event;
+    SuperListItem *super;
+    QString name;
 
     // ID and name
     setId(1);
     setName("Basic");
 
-    QStandardItemModel* modelEventsUser =
-            RPM::get()->project()->gameDatas()->commonEventsDatas()
-            ->modelEventsUser();
+    modelEventsUser = RPM::get()->project()->gameDatas()->commonEventsDatas()
+        ->modelEventsUser();
+
+    // Properties
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_properties->appendRow(item);
 
     // Events
     m_events->clear();
-    QString name = ((SystemObjectEvent*) modelEventsUser->item(0)->data()
-                    .value<quintptr>())->name();
-    SystemObjectEvent* event = new SystemObjectEvent(1, name,
-                                                     new QStandardItemModel,
-                                                     false);
+    name = reinterpret_cast<SystemObjectEvent *>(modelEventsUser->item(0)
+        ->data().value<quintptr>())->name();
+    event = new SystemObjectEvent(1, name, new QStandardItemModel, false);
     event->setDefault();
     row = event->getModelRow();
     m_events->appendRow(row);
@@ -121,11 +146,9 @@ void SystemCommonObject::setDefaultFirst() {
     // States
     m_states->clear();
     super = SuperListItem::getById(RPM::get()->project()->gameDatas()
-                                   ->commonEventsDatas()->modelStates()
-                                   ->invisibleRootItem(), 1);
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
-                            true, false, false, false, false, true, true,
-                            false);
+        true, false, false, false, false, true, true, false);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -136,58 +159,50 @@ void SystemCommonObject::setDefaultFirst() {
 // -------------------------------------------------------
 
 void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
-                                        QStandardItemModel *)
+    QStandardItemModel *)
 {
-    QList<QStandardItem*> row;
-    QStandardItem* item;
-    SystemState* state;
-    SuperListItem* super;
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+    SystemState *state;
+    SuperListItem *super;
 
     // ID and name
     setId(2);
     setName("Hero");
+
+    // Properties
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_properties->appendRow(item);
 
     // Events
     m_events->clear();
 
     // Reaction to event keyPress Action
     setDefaultHeroKeyPressEvent(modelEventsSystem, 1, true, true,
-                                EventCommandKind::MoveObject,
-                                QVector<QString>({"7", "-1", "0", "1", "1",
-                                                  "0", "1"}));
+        EventCommandKind::MoveObject, QVector<QString>({"7", "-1", "0", "1", "1"
+        , "0", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 2, true, true,
-                                EventCommandKind::MoveObject,
-                                QVector<QString>({"7", "-1", "0", "1", "1",
-                                                  "1", "1"}));
+        EventCommandKind::MoveObject, QVector<QString>({"7", "-1", "0", "1", "1"
+        , "1", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 3, true, true,
-                                EventCommandKind::MoveObject,
-                                QVector<QString>({"7", "-1", "0", "1", "1",
-                                                  "2", "1"}));
+        EventCommandKind::MoveObject, QVector<QString>({"7", "-1", "0", "1", "1"
+        , "2", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 4, true, true,
-                                EventCommandKind::MoveObject,
-                                QVector<QString>({"7", "-1", "0", "1", "1",
-                                                  "3", "1"}));
+        EventCommandKind::MoveObject, QVector<QString>({"7", "-1", "0", "1", "1"
+        , "3", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 9, true, true,
-                                EventCommandKind::MoveCamera,
-                                QVector<QString>({"0", "1", "0", "0", "3", "0",
-                                                  "0", "3", "0", "0", "3", "0",
-                                                  "0", "0", "12", "-90", "12",
-                                                  "0", "3", "0", "1", "12", "1"}
-                                                 ));
+        EventCommandKind::MoveCamera, QVector<QString>({"0", "1", "0", "0", "3",
+        "0", "0", "3", "0", "0", "3", "0", "0", "0", "12", "-90", "12", "0", "3"
+        , "0", "1", "12", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 10, true, true,
-                                EventCommandKind::MoveCamera,
-                                QVector<QString>({"0", "1", "0", "0", "3", "0",
-                                                  "0", "3", "0", "0", "3", "0",
-                                                  "0", "0", "12", "90", "12",
-                                                  "0", "3", "0", "1", "12", "1"}
-                                                 ));
+        EventCommandKind::MoveCamera, QVector<QString>({"0", "1", "0", "0", "3",
+        "0", "0", "3", "0", "0", "3", "0", "0", "0", "12", "90", "12", "0", "3",
+        "0", "1", "12", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 11, false, false,
-                                EventCommandKind::SendEvent,
-                                QVector<QString>({"1", "1", "1", "1"}));
+        EventCommandKind::SendEvent, QVector<QString>({"1", "1", "1", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 13, false, false,
-                                EventCommandKind::OpenMainMenu,
-                                QVector<QString>({}));
-
+        EventCommandKind::OpenMainMenu, QVector<QString>({}));
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_events->appendRow(item);
@@ -195,11 +210,9 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
     // States
     m_states->clear();
     super = SuperListItem::getById(RPM::get()->project()->gameDatas()
-                                   ->commonEventsDatas()->modelStates()
-                                   ->invisibleRootItem(), 1);
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::SpritesFace, 1, 0,
-                            0, true, false, false, false, false, true, true,
-                            false);
+        0, true, false, false, false, false, true, true, false);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -209,37 +222,36 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
 
 // -------------------------------------------------------
 
-void SystemCommonObject::setDefaultHeroKeyPressEvent(
-        QStandardItemModel *modelEventsSystem, int k, bool r, bool ri,
-        EventCommandKind kind, QVector<QString> commandList)
+void SystemCommonObject::setDefaultHeroKeyPressEvent(QStandardItemModel
+    *modelEventsSystem, int k, bool r, bool ri, EventCommandKind kind, QVector<
+    QString> commandList)
 {
-    QStandardItem* item;
+    QStandardItem *item;
+    SystemObjectEvent *event;
+    SystemReaction *reaction;
+    EventCommand *command;
     QString name;
-    SystemObjectEvent* event;
-    SystemReaction* reaction;
-    EventCommand* command;
 
-    name = ((SystemObjectEvent*) modelEventsSystem->item(2)->data()
-            .value<quintptr>())->name();
+    name = reinterpret_cast<SystemObjectEvent *>(modelEventsSystem->item(2)
+        ->data().value<quintptr>())->name();
     event = new SystemObjectEvent(3, name, new QStandardItemModel, true);
-    event->addParameter(new SystemParameter(1, "", nullptr,
-                                            PrimitiveValue::createKeyBoard(k)));
-    event->addParameter(new SystemParameter(2, "", nullptr,
-                                            new PrimitiveValue(r)));
-    event->addParameter(new SystemParameter(3, "", nullptr,
-                                            new PrimitiveValue(ri)));
+    event->addParameter(new SystemParameter(1, "", nullptr, PrimitiveValue
+        ::createKeyBoard(k)));
+    event->addParameter(new SystemParameter(2, "", nullptr, new PrimitiveValue(
+        r)));
+    event->addParameter(new SystemParameter(3, "", nullptr, new PrimitiveValue(
+        ri)));
     event->setDefaultHero();
     reaction = event->reactionAt(1);
     command = new EventCommand(kind, commandList);
     SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
-                                          ->invisibleRootItem(), command);
+        ->invisibleRootItem(), command);
     if (kind == EventCommandKind::MoveObject) {
         commandList = QVector<QString>({"1", "1", "1", "2"});
         command = new EventCommand(EventCommandKind::SendEvent, commandList);
         SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
             ->invisibleRootItem(), command);
     }
-
     item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
     item->setText(toString());
@@ -248,122 +260,150 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(
 
 // -------------------------------------------------------
 
-void SystemCommonObject::updateModelEvents(){
-    for (int i = 0; i < m_events->invisibleRootItem()->rowCount()-1; i++){
-        SystemObjectEvent* event = (SystemObjectEvent*) m_events->item(i)
-                ->data().value<quintptr>();
+void SystemCommonObject::updateModelEvents() {
+    SystemObjectEvent *event;
+    int i, l;
+
+    for (i = 0, l = m_events->invisibleRootItem()->rowCount() - 1; i < l; i++) {
+        event = reinterpret_cast<SystemObjectEvent *>(m_events->item(i)->data()
+            .value<quintptr>());
         event->updateParameters();
     }
 }
 
 // -------------------------------------------------------
 
-bool SystemCommonObject::inherit(const SystemCommonObject *object){
-    int id = object->inheritanceId();
-    if (id == p_id) return true;
-    else if (id == -1) return false;
-    else{
-        QStandardItemModel* model = RPM::get()->project()->gameDatas()
-                ->commonEventsDatas()->modelCommonObjects();
-        SystemCommonObject* obj =
-                (SystemCommonObject*)
-                SuperListItem::getById(model->invisibleRootItem(), id);
+bool SystemCommonObject::inherit(const SystemCommonObject *object) {
+    QStandardItemModel *model;
+    SystemCommonObject *obj;
+    int id;
+
+    id = object->inheritanceId();
+    if (id == p_id) {
+        return true;
+    } else if (id == -1) {
+        return false;
+    } else {
+        model = RPM::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelCommonObjects();
+        obj = reinterpret_cast<SystemCommonObject *>(SuperListItem::getById(
+            model->invisibleRootItem(), id));
         return inherit(obj);
     }
 }
 
 // -------------------------------------------------------
 
-bool SystemCommonObject::canInherit(QStandardItemModel* model,
-                                    SystemCommonObject* object) const
+bool SystemCommonObject::canInherit(QStandardItemModel *model,
+    SystemCommonObject *object) const
 {
-    int id = object->inheritanceId();
-    if (this == object || id == p_id) return false;
-    else if (id == -1) return true;
-    else{
-        int index = SuperListItem::getIndexById(model->invisibleRootItem(), id);
-        return canInherit(model, (SystemCommonObject*) model->item(index+1)
-                          ->data().value<quintptr>());
+    int id, index;
+
+    id = object->inheritanceId();
+    if (this == object || id == p_id) {
+        return false;
+    } else if (id == -1) {
+        return true;
+    } else {
+        index = SuperListItem::getIndexById(model->invisibleRootItem(), id);
+        return this->canInherit(model, reinterpret_cast<SystemCommonObject *>(
+            model->item(index + 1)->data().value<quintptr>()));
     }
 }
 
 // -------------------------------------------------------
 
-SystemState* SystemCommonObject::getFirstState() const{
-    SystemState* state = nullptr;
+SystemState * SystemCommonObject::getFirstState() const {
+    SystemCommonObject *obj;
+    SystemState *state;
 
-    if (m_inheritanceId != -1){
-        SystemCommonObject* obj;
-        obj = (SystemCommonObject*) SuperListItem::getById(
-                    RPM::get()->project()->gameDatas()->commonEventsDatas()
-                    ->modelCommonObjects()->invisibleRootItem(),
-                    m_inheritanceId);
+    state = nullptr;
+    if (m_inheritanceId != -1) {
+        obj = reinterpret_cast<SystemCommonObject *>(SuperListItem::getById(RPM
+            ::get()->project()->gameDatas()->commonEventsDatas()
+            ->modelCommonObjects()->invisibleRootItem(), m_inheritanceId));
         state = obj->getFirstState();
-        if (state != nullptr)
+        if (state != nullptr) {
             return state;
+        }
     }
-
-    if (m_states->invisibleRootItem()->rowCount() > 0)
-        return (SystemState*) m_states->item(0)->data().value<qintptr>();
+    if (m_states->invisibleRootItem()->rowCount() > 0) {
+        return reinterpret_cast<SystemState *>(m_states->item(0)->data().value<
+            qintptr>());
+    }
 
     return nullptr;
 }
 
 // -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
 
-SuperListItem* SystemCommonObject::createCopy() const{
-    SystemCommonObject* super = new SystemCommonObject;
+SuperListItem* SystemCommonObject::createCopy() const {
+    SystemCommonObject *super = new SystemCommonObject;
     super->setCopy(*this);
     return super;
 }
 
 // -------------------------------------------------------
 
-void SystemCommonObject::setCopy(const SystemCommonObject& item){
-    SuperListItem::setCopy(item);
-    p_id = item.p_id;
-    m_onlyOneEventPerFrame = item.m_onlyOneEventPerFrame;
-    m_inheritanceId = item.inheritanceId();
+void SystemCommonObject::setCopy(const SuperListItem &super) {
+    const SystemCommonObject *object;
+
+    SuperListItem::setCopy(super);
+    object = reinterpret_cast<const SystemCommonObject *>(&super);
+
+    p_id = object->p_id;
+    m_onlyOneEventPerFrame = object->m_onlyOneEventPerFrame;
+    m_inheritanceId = object->inheritanceId();
+
+    // Properties
+    SuperListItem::copy(m_properties, object->m_properties);
 
     // Events
-    SuperListItem::copy(m_events, item.m_events);
+    SuperListItem::copy(m_events, object->m_events);
 
     // States
-    SuperListItem::copy(m_states, item.m_states);
+    SuperListItem::copy(m_states, object->m_states);
+
 }
 
 // -------------------------------------------------------
-//
-//  READ / WRITE
-//
-// -------------------------------------------------------
 
-void SystemCommonObject::read(const QJsonObject &json){
+void SystemCommonObject::read(const QJsonObject &json) {
     SuperListItem::read(json);
 
     m_onlyOneEventPerFrame = json[JSON_ONLY_ONE_EVENT_PER_FRAME].toBool();
-    m_inheritanceId = json[strInheritance].toInt();
+    m_inheritanceId = json[JSON_INHERITANCE_ID].toInt();
 
-    // Events
-    SuperListItem::readTree(m_events, new SystemObjectEvent, json, strEvents);
-    updateModelEvents();
+    // Properties
+    SuperListItem::readTree(m_properties, new SystemProperty, json,
+        JSON_PROPERTIES);
 
     // States
-    SuperListItem::readTree(m_states, new SystemState, json, strStates);
+    SuperListItem::readTree(m_states, new SystemState, json, JSON_STATES);
+
+    // Events
+    SuperListItem::readTree(m_events, new SystemObjectEvent, json, JSON_EVENTS);
+    updateModelEvents();
 }
 
 // -------------------------------------------------------
 
-void SystemCommonObject::write(QJsonObject &json) const{
+void SystemCommonObject::write(QJsonObject &json) const {
     SuperListItem::write(json);
 
     json[JSON_ONLY_ONE_EVENT_PER_FRAME] = m_onlyOneEventPerFrame;
-    json[strInheritance] = m_inheritanceId;
+    json[JSON_INHERITANCE_ID] = m_inheritanceId;
+
+    // Properties
+    SuperListItem::writeTree(m_properties, json, JSON_PROPERTIES);
 
     // Events
-    QJsonArray tab;
-    SuperListItem::writeTree(m_events, json, strEvents);
+    SuperListItem::writeTree(m_events, json, JSON_EVENTS);
 
     // States
-    SuperListItem::writeTree(m_states, json, strStates);
+    SuperListItem::writeTree(m_states, json, JSON_STATES);
 }
