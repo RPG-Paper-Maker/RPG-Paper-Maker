@@ -88,6 +88,7 @@ void PanelObject::updateModel() {
 
         QModelIndex index;
         ui->lineEditName->setText(m_model->name());
+        ui->checkBoxOneEventPerFrame->setChecked(m_model->onlyOneEventPerFrame());
         initializeCommonInheritance();
 
         // Events
@@ -307,6 +308,12 @@ void PanelObject::passToNone() {
 
 void PanelObject::on_lineEditName_textChanged(const QString &text) {
     m_model->setName(text);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxOneEventPerFrame_toggled(bool checked) {
+    m_model->setOnlyOneEventPerFrame(checked);
 }
 
 // -------------------------------------------------------

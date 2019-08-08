@@ -16,6 +16,7 @@
 #include "systemstate.h"
 #include "systemcommonreaction.h"
 
+const QString SystemCommonObject::JSON_ONLY_ONE_EVENT_PER_FRAME = "ooepf";
 QString SystemCommonObject::strInheritance = "hId";
 QString SystemCommonObject::strStates = "states";
 QString SystemCommonObject::strEvents = "events";
@@ -27,15 +28,17 @@ QString SystemCommonObject::strEvents = "events";
 // -------------------------------------------------------
 
 SystemCommonObject::SystemCommonObject() :
-    SystemCommonObject(1,"",-1,new QStandardItemModel, new QStandardItemModel)
+    SystemCommonObject(1, "", false, -1, new QStandardItemModel, new
+        QStandardItemModel)
 {
 
 }
 
-SystemCommonObject::SystemCommonObject(int i, QString n, int id,
-                                       QStandardItemModel* states,
-                                       QStandardItemModel* events) :
+SystemCommonObject::SystemCommonObject(int i, QString n, bool
+    onlyOneEventPerFrame, int id, QStandardItemModel *states, QStandardItemModel
+    *events) :
     SuperListItem(i,n),
+    m_onlyOneEventPerFrame(onlyOneEventPerFrame),
     m_inheritanceId(id),
     m_states(states),
     m_events(events)
@@ -46,6 +49,14 @@ SystemCommonObject::SystemCommonObject(int i, QString n, int id,
 SystemCommonObject::~SystemCommonObject(){
     SuperListItem::deleteModel(m_states);
     SuperListItem::deleteModel(m_events);
+}
+
+bool SystemCommonObject::onlyOneEventPerFrame() const {
+    return m_onlyOneEventPerFrame;
+}
+
+void SystemCommonObject::setOnlyOneEventPerFrame(bool b) {
+    m_onlyOneEventPerFrame = b;
 }
 
 int SystemCommonObject::inheritanceId() const { return m_inheritanceId; }
@@ -62,7 +73,7 @@ QStandardItemModel* SystemCommonObject::modelEvents() const { return m_events; }
 //
 // -------------------------------------------------------
 
-void SystemCommonObject::setDefault(){
+void SystemCommonObject::setDefault() {
     QStandardItem* model = RPM::get()->project()->gameDatas()
             ->commonEventsDatas()->modelCommonObjects()->invisibleRootItem();
     int id = p_id;
@@ -311,6 +322,7 @@ SuperListItem* SystemCommonObject::createCopy() const{
 void SystemCommonObject::setCopy(const SystemCommonObject& item){
     SuperListItem::setCopy(item);
     p_id = item.p_id;
+    m_onlyOneEventPerFrame = item.m_onlyOneEventPerFrame;
     m_inheritanceId = item.inheritanceId();
 
     // Events
@@ -328,6 +340,8 @@ void SystemCommonObject::setCopy(const SystemCommonObject& item){
 
 void SystemCommonObject::read(const QJsonObject &json){
     SuperListItem::read(json);
+
+    m_onlyOneEventPerFrame = json[JSON_ONLY_ONE_EVENT_PER_FRAME].toBool();
     m_inheritanceId = json[strInheritance].toInt();
 
     // Events
@@ -342,6 +356,8 @@ void SystemCommonObject::read(const QJsonObject &json){
 
 void SystemCommonObject::write(QJsonObject &json) const{
     SuperListItem::write(json);
+
+    json[JSON_ONLY_ONE_EVENT_PER_FRAME] = m_onlyOneEventPerFrame;
     json[strInheritance] = m_inheritanceId;
 
     // Events
