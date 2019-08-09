@@ -26,6 +26,7 @@
 #include "dialogcommandmovecamera.h"
 #include "dialogcommandplaysong.h"
 #include "dialogcommandstopsong.h"
+#include "dialogcommandchangeproperty.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +43,13 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
+
+    // Disable change property if no property available
+    if (object == nullptr || object->modelProperties() == nullptr || object
+        ->modelProperties()->invisibleRootItem()->rowCount() == 1)
+    {
+        ui->pushButtonChangeProperty->setEnabled(false);
+    }
 }
 
 DialogCommands::~DialogCommands()
@@ -110,6 +118,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandPlaySong("Play a music effect",
                                          SongKind::MusicEffect,
                                          command, object, parameters);
+    case EventCommandKind::ChangeProperty:
+        return new DialogCommandChangeProperty(command, object, parameters);
     default:
         return nullptr;
     }
@@ -282,4 +292,10 @@ void DialogCommands::on_pushButtonPlaySound_clicked() {
 
 void DialogCommands::on_pushButtonPlayMusicEffect_clicked() {
     openDialogCommand(EventCommandKind::PlayMusicEffect);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeProperty_clicked() {
+    openDialogCommand(EventCommandKind::ChangeProperty);
 }

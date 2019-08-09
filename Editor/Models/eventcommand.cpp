@@ -260,6 +260,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strPlaySound(object, parameters); break;
     case EventCommandKind::PlayMusicEffect:
         str += this->strPlayMusicEffect(object, parameters); break;
+    case EventCommandKind::ChangeProperty:
+        str += this->strChangeProperty(object, parameters); break;
     default:
         break;
     }
@@ -288,9 +290,10 @@ QString EventCommand::strNumberVariable(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strDataBaseId(int &i, QStandardItemModel *dataBase,
-    QStandardItemModel *parameters) const
+QString EventCommand::strDataBaseId(int &i, SystemCommonObject *object,
+    QStandardItemModel *dataBase, QStandardItemModel *parameters) const
 {
+    SuperListItem *super;
     PrimitiveValueKind kind;
     int value;
 
@@ -303,11 +306,56 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel *dataBase,
         return "Variable " + RPM::get()->project()->gameDatas()
             ->variablesDatas()->getVariableById(value)->toString();
     case PrimitiveValueKind::DataBase:
-        return SuperListItem::getById(dataBase->invisibleRootItem(), value)
-            ->toString();
+        super = SuperListItem::getById(dataBase->invisibleRootItem(), value);
+        return super == nullptr ? "" : super->toString();
     case PrimitiveValueKind::Parameter:
-        return SuperListItem::getById(parameters->invisibleRootItem(), value)
-            ->toString();
+        super = SuperListItem::getById(parameters->invisibleRootItem(), value);
+        return super == nullptr ? "" : super->toString();
+    case PrimitiveValueKind::Property:
+        super = SuperListItem::getById(object->modelProperties()
+            ->invisibleRootItem(), value);
+        return super == nullptr ? "" : super->toString();
+    default:
+        return "";
+    }
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strProperty(int &i, SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    SuperListItem *super;
+    PrimitiveValueKind kind;
+    QString value;
+
+    kind = static_cast<PrimitiveValueKind>(m_listCommand.at(i++).toInt());
+    value = m_listCommand.at(i++);
+    switch (kind){
+    case PrimitiveValueKind::None:
+        return "";
+    case PrimitiveValueKind::Number:
+    case PrimitiveValueKind::NumberDouble:
+    case PrimitiveValueKind::Message:
+        return value;
+    case PrimitiveValueKind::Switch:
+        return value == RPM::TRUE_BOOL_STRING ? "ON" : "OFF";
+    case PrimitiveValueKind::KeyBoard:
+        super = SuperListItem::getById(RPM::get()->project()
+            ->keyBoardDatas() ->model()->invisibleRootItem(), value.toInt());
+        return "Keyboard " + (super == nullptr ? "" : super->toString());
+    case PrimitiveValueKind::Variable:
+        super = RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(value.toInt());
+        return "Variable " + (super == nullptr ? "" : super->toString());
+    case PrimitiveValueKind::Parameter:
+        super = SuperListItem::getById(parameters->invisibleRootItem(), value
+            .toInt());
+        return (super == nullptr ? "" : super->toString());
+    case PrimitiveValueKind::Property:
+        super = SuperListItem::getById(object->modelProperties()
+            ->invisibleRootItem(), value.toInt());
+        return "Parameter " + (super == nullptr ? "" : super->toString());
     default:
         return "";
     }
@@ -316,6 +364,7 @@ QString EventCommand::strDataBaseId(int &i, QStandardItemModel *dataBase,
 // -------------------------------------------------------
 
 QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const {
+    SuperListItem *super;
     PrimitiveValueKind kind;
     QString value;
 
@@ -327,11 +376,13 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const {
     case PrimitiveValueKind::NumberDouble:
         return QString::number(value.toDouble());
     case PrimitiveValueKind::Variable:
-        return "Variable " + RPM::get()->project()->gameDatas()
-            ->variablesDatas()->getVariableById(value.toInt())->toString();
+        super = RPM::get()->project()->gameDatas()
+            ->variablesDatas()->getVariableById(value.toInt());
+        return "Variable " + (super == nullptr ? "" : super->toString());
     case PrimitiveValueKind::Parameter:
-        return SuperListItem::getById(parameters->invisibleRootItem(), value
-            .toInt())->toString();
+        super = SuperListItem::getById(parameters->invisibleRootItem(), value
+            .toInt());
+        return super == nullptr ? "" : super->toString();
     default:
         return "";
     }
@@ -603,7 +654,7 @@ QString EventCommand::strStartBattleTroop(QStandardItemModel *parameters, int
     kind = m_listCommand.at(i++).toInt();
     switch(kind) {
     case 0:
-        return "with ID " + this->strDataBaseId(i, RPM::get()->project()
+        return "with ID " + this->strDataBaseId(i, nullptr, RPM::get()->project()
             ->gameDatas()->troopsDatas()->model(), parameters);
     case 1:
         return "random (in map property)";
@@ -623,7 +674,7 @@ QString EventCommand::strStartBattleMap(QStandardItemModel *parameters, int &i)
     kind = m_listCommand.at(i++).toInt();
     switch (kind) {
     case 0:
-        return this->strDataBaseId(i, RPM::get()->project()->gameDatas()
+        return this->strDataBaseId(i, nullptr, RPM::get()->project()->gameDatas()
             ->battleSystemDatas()->modelBattleMaps(), parameters);
     case 1:
         id = m_listCommand.at(i++);
@@ -694,7 +745,7 @@ QString EventCommand::strStartBattleTransitionType(QStandardItemModel
         transition += "none";
         break;
     case 1:
-        transition += "fade " + name + " " + strDataBaseId(i, RPM::get()
+        transition += "fade " + name + " " + strDataBaseId(i, nullptr, RPM::get()
             ->project()->gameDatas()->systemDatas()->modelColors(), parameters);
         break;
     case 2:
@@ -720,7 +771,7 @@ QString EventCommand::strChangeState(SystemCommonObject *object,
         modelDataBase = object->modelStates();
     }
 
-    value = this->strDataBaseId(i, modelDataBase, parameters);
+    value = this->strDataBaseId(i, object, modelDataBase, parameters);
     operation = this->strChangeStateOperation(i);
 
     return "Change state: " + operation + value;
@@ -911,7 +962,7 @@ QString EventCommand::strMoveObjectID(QStandardItemModel *parameters, int &i) co
     } else {
         modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
-    strObj = this->strDataBaseId(i, modelObjects, parameters);
+    strObj = this->strDataBaseId(i, nullptr, modelObjects, parameters);
 
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(modelObjects);
@@ -1155,6 +1206,24 @@ QString EventCommand::strStopBackgroundSound(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
     return "Stop background sound: " + this->strStopSong(object, parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeProperty(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString propertyID, operation, newValue;
+    int i;
+
+    i = 0;
+    propertyID = this->strDataBaseId(i, object, object->modelProperties(),
+        parameters);
+    operation = this->strChangeVariablesOperation(i);
+    newValue = this->strProperty(i, object, parameters);
+
+    return "Change property: property ID " + propertyID + " " + operation + " "
+        + newValue;
 }
 
 // -------------------------------------------------------

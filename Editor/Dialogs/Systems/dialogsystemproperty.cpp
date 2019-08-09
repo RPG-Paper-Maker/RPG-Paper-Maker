@@ -45,7 +45,7 @@ void DialogSystemProperty::initialize()
     ui->lineEditName->setText(m_property.name());
     ui->panelPrimitiveValueInitial->initializeModel(m_property.initialValue());
     ui->panelPrimitiveValueInitial->initializePropertyAndUpdate(m_property
-        .initialValue(), nullptr, RPM::get()->project()->currentObjectProperties());
+        .initialValue(), nullptr, nullptr);
 }
 
 // -------------------------------------------------------

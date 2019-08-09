@@ -533,12 +533,12 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButtonChangeProperties">
+                 <widget class="QPushButton" name="pushButtonChangeProperty">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>Change properties...</string>
+                   <string>Change property...</string>
                   </property>
                  </widget>
                 </item>

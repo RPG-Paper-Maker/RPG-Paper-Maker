@@ -23,6 +23,7 @@ HEADERS += \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
+    Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
@@ -304,6 +305,7 @@ SOURCES += \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
+    Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
@@ -557,6 +559,7 @@ FORMS += \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
+    Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \

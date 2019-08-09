@@ -50,7 +50,7 @@ void DialogCommandChangeState::initializeStateId(){
     QStandardItemModel* properties = nullptr;
     if (m_object != nullptr){
         dataBase = m_object->modelStates();
-        // TODO : properties
+        properties = m_object->modelProperties();
     }
     ui->widgetStateId->initializeDataBaseCommandId(dataBase, m_parameters,
                                                    properties);

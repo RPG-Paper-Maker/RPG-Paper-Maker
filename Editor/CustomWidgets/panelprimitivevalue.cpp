@@ -695,10 +695,8 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
         case PrimitiveValueKind::NumberDouble:
             setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
             break;
-        case PrimitiveValueKind::Message:
-            setMessageValue(command->valueCommandAt(i++));
-            break;
         default:
+            setMessageValue(command->valueCommandAt(i++));
             break;
         }
         break;
@@ -741,10 +739,8 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
         case PrimitiveValueKind::NumberDouble:
             command.append(QString::number(m_model->numberDoubleValue()));
             break;
-        case PrimitiveValueKind::Message:
-            command.append(m_model->messageValue());
-            break;
         default:
+            command.append(m_model->messageValue());
             break;
         }
         break;

@@ -35,9 +35,9 @@ public:
      DialogCommandChangeState(EventCommand *command = nullptr,
                               SystemCommonObject *object = nullptr,
                               QStandardItemModel* parameters = nullptr,
-                              QWidget *parent = 0);
+                              QWidget *parent = nullptr);
      virtual ~DialogCommandChangeState();
-     EventCommand* getCommand() const;
+     EventCommand * getCommand() const;
 
 protected:
      virtual void initialize(EventCommand* command);
@@ -46,6 +46,7 @@ private:
      Ui::DialogCommandChangeState *ui;
      SystemCommonObject* m_object;
      QStandardItemModel* m_parameters;
+
      void initializeStateId();
      void selectionState(QVector<QString>& command) const;
      void operation(QVector<QString>& command) const;

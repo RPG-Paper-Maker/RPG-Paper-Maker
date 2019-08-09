@@ -69,7 +69,10 @@ private:
     QVector<QString> m_listCommand;
 
     QString strNumberVariable(int &i) const;
-    QString strDataBaseId(int &i, QStandardItemModel *dataBase = nullptr,
+    QString strDataBaseId(int &i, SystemCommonObject *object = nullptr,
+        QStandardItemModel *dataBase = nullptr, QStandardItemModel *parameters =
+        nullptr) const;
+    QString strProperty(int &i, SystemCommonObject *object = nullptr,
         QStandardItemModel *parameters = nullptr) const;
     QString strNumber(int &i, QStandardItemModel *parameters = nullptr) const;
     QString strShowText() const;
@@ -132,6 +135,8 @@ private:
     QString strStopMusic(SystemCommonObject *object, QStandardItemModel
          *parameters) const;
     QString strStopBackgroundSound(SystemCommonObject *object,
+         QStandardItemModel *parameters) const;
+    QString strChangeProperty(SystemCommonObject *object,
          QStandardItemModel *parameters) const;
 };
 
