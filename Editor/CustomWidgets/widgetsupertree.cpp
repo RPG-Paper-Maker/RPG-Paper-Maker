@@ -100,6 +100,12 @@ void WidgetSuperTree::updateAllModelRow() {
 }
 
 // -------------------------------------------------------
+
+void WidgetSuperTree::updateAbsoluteAllNodesString() {
+    this->updateAllNodesString(this->getModel()->invisibleRootItem());
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU
 //
@@ -204,13 +210,19 @@ QStandardItem* WidgetSuperTree::getRootOfItem(QStandardItem* selected){
 
 // -------------------------------------------------------
 
-void WidgetSuperTree::updateAllNodesString(QStandardItem *item){
-    for (int i = 0; i < item->rowCount(); i++){
+void WidgetSuperTree::updateAllNodesString(QStandardItem *item) {
+    QList<QStandardItem *> row;
+    int i, j, l, ll;
+    for (i = 0, l = item->rowCount(); i < l; i++) {
         updateAllNodesString(item->child(i));
         SuperListItem* super = (SuperListItem*) item->child(i)->data()
                                .value<quintptr>();
-        if (super != nullptr)
-            item->child(i)->setText(super->toString());
+        if (super != nullptr) {
+            row = super->getModelRow();
+            for (j = 0, ll = row.size(); j < ll; j++) {
+                item->child(i, j)->setText(row.at(j)->text());
+            }
+        }
     }
 }
 

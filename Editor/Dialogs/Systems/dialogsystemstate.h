@@ -32,7 +32,7 @@ class DialogSystemState : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogSystemState(SystemState& state, QWidget *parent = 0);
+    explicit DialogSystemState(SystemState& state, QWidget *parent = nullptr);
     ~DialogSystemState();
 
 private:

@@ -79,6 +79,7 @@ void PanelObjectEvent::initialize(SystemObjectEvent *event) {
     ui->treeViewParameters->setColumnWidth(0,100);
     ui->treeViewParameters->setColumnWidth(1,250);
     ui->treeViewParameters->setColumnWidth(2,100);
+    ui->treeViewParameters->updateAbsoluteAllNodesString();
 }
 
 // -------------------------------------------------------

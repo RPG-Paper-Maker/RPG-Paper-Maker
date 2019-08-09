@@ -363,6 +363,7 @@ void SystemCommonObject::setCopy(const SuperListItem &super) {
     SuperListItem::copy(m_properties, object->m_properties);
 
     // Events
+    RPM::get()->project()->setCurrentObject(this);
     SuperListItem::copy(m_events, object->m_events);
 
     // States
@@ -382,12 +383,13 @@ void SystemCommonObject::read(const QJsonObject &json) {
     SuperListItem::readTree(m_properties, new SystemProperty, json,
         JSON_PROPERTIES);
 
-    // States
-    SuperListItem::readTree(m_states, new SystemState, json, JSON_STATES);
-
     // Events
+    RPM::get()->project()->setCurrentObject(this);
     SuperListItem::readTree(m_events, new SystemObjectEvent, json, JSON_EVENTS);
     updateModelEvents();
+
+    // States
+    SuperListItem::readTree(m_states, new SystemState, json, JSON_STATES);
 }
 
 // -------------------------------------------------------

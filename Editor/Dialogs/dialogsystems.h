@@ -76,6 +76,7 @@ private slots:
     void on_commonObjectNameChanged(QString);
     void on_commonObjectMaximumChanged();
     void on_checkBoxCommonReactionBlockingHero_toggled(bool checked);
+    void on_tabWidget_currentChanged(int index);
 };
 
 #endif // DIALOGSYSTEMS_H

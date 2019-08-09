@@ -187,12 +187,17 @@ QString PrimitiveValue::toString() const {
         return "Variable: " + RPM::get()->project()->gameDatas()
             ->variablesDatas()->getVariableById(m_numberValue)->toString();
     case PrimitiveValueKind::Parameter:
-        return "Parameter:";
+        return this->modelParameter() == nullptr ? "" : "Parameter: " +
+            SuperListItem::getById(this->modelParameter()->invisibleRootItem(),
+            m_numberValue)->toString();
     case PrimitiveValueKind::Property:
-        return "Property:";
+        return this->modelProperties() == nullptr ? "" : "Property: " +
+            SuperListItem::getById(this->modelProperties()->invisibleRootItem(),
+            m_numberValue)->toString();
     case PrimitiveValueKind::DataBase:
-        return modelDataBase() == nullptr ? "" : SuperListItem::getById(
-            modelDataBase()->invisibleRootItem(), m_numberValue)->toString();
+        return this->modelDataBase() == nullptr ? "" : SuperListItem::getById(
+            this->modelDataBase()->invisibleRootItem(), m_numberValue)
+            ->toString();
     case PrimitiveValueKind::Message:
         return m_messageValue;
     case PrimitiveValueKind::Script:
@@ -214,7 +219,6 @@ void PrimitiveValue::labelTab(QString &str) const {
     switch (m_kind) {
     case PrimitiveValueKind::Anything:
     case PrimitiveValueKind::Parameter:
-    case PrimitiveValueKind::Property:
     case PrimitiveValueKind::DataBase:
     case PrimitiveValueKind::Default:
         break;
@@ -244,6 +248,11 @@ void PrimitiveValue::labelTab(QString &str) const {
         str += "KB>" + reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById
             (RPM::get()->project()->keyBoardDatas()->model()
             ->invisibleRootItem(), m_numberValue))->abbreviation();
+        break;
+    case PrimitiveValueKind::Property:
+        str += "P>" + SuperListItem::getById(RPM::get()->project()
+            ->currentObject()->modelProperties()->invisibleRootItem(),
+            m_numberValue)->name();
         break;
     }
 }

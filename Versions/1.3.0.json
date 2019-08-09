@@ -5,7 +5,7 @@
 	"features": [
         "Documentation: event commands reorder correctly",
         "Software huge code cleaning",
-        "Rotation for lands, sprites, 3D objects",
+        "Rotation for sprites and 3D objects",
         "Mountains new option: force collision or non collision",
         "Collisions manager: 3D objetcs and mountains",
         "Choose number frames",
@@ -23,7 +23,7 @@
         true,
         true,
         true,
-        false,
+        true,
         false,
         false,
         false,

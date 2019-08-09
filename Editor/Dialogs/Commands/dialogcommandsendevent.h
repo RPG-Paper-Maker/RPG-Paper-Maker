@@ -32,8 +32,8 @@ class DialogCommandSendEvent : public DialogCommand
     Q_OBJECT
 
 public:
-    explicit DialogCommandSendEvent(EventCommand *command = nullptr,
-                                    QWidget *parent = 0);
+    explicit DialogCommandSendEvent(EventCommand *command = nullptr, QWidget
+        *parent = nullptr);
     ~DialogCommandSendEvent();
     EventCommand* getCommand() const;
 

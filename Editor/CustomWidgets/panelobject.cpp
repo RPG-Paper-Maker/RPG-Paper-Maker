@@ -81,6 +81,7 @@ void PanelObject::updateList() {
 
 void PanelObject::initializeModel(SystemCommonObject *object) {
     m_model = object;
+    RPM::get()->project()->setCurrentObject(object);
 }
 
 // -------------------------------------------------------
@@ -96,6 +97,8 @@ void PanelObject::updateModel() {
 
         // Properties
         ui->treeViewProperties->initializeModel(m_model->modelProperties());
+        connect(ui->treeViewProperties, SIGNAL(needsUpdateJson(SuperListItem *)),
+            this, SLOT(on_updateJsonProperties(SuperListItem *)));
         index = ui->treeViewProperties->getModel()->index(0,0);
         ui->treeViewProperties->setCurrentIndex(index);
 
@@ -354,6 +357,14 @@ void PanelObject::on_updateJsonStates(SuperListItem *) {
 void PanelObject::on_updateJsonEvents(SuperListItem *) {
     updateReactionsWidgets();
     on_updateJsonStates(nullptr);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_updateJsonProperties(SuperListItem *) {
+    ui->treeViewEvents->updateAbsoluteAllNodesString();
+    this->updateReactionsWidgets();
+    this->on_updateJsonStates(nullptr);
 }
 
 // -------------------------------------------------------

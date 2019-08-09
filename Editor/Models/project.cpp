@@ -75,6 +75,14 @@ void Project::setCurrentMap(Map* m) {
         p_currentMap = m;
 }
 
+SystemCommonObject * Project::currentObject() const {
+    return m_currentObject;
+}
+
+void Project::setCurrentObject(SystemCommonObject *object) {
+    m_currentObject = object;
+}
+
 GameDatas* Project::gameDatas() const { return p_gameDatas; }
 
 TreeMapDatas* Project::treeMapDatas() const { return m_treeMapDatas; }
@@ -102,6 +110,11 @@ QString Project::version() const { return m_version; }
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+QStandardItemModel * Project::currentObjectProperties() const {
+    return m_currentObject == nullptr ? nullptr : m_currentObject
+        ->modelProperties();
+}
 
 bool Project::getSubVersions(QString& version, int& m, int& f, int& b) {
     QStringList list = version.split(".");

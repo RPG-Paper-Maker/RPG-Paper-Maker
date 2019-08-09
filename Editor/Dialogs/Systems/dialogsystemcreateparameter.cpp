@@ -55,7 +55,7 @@ void DialogSystemCreateParameter::initialize(){
 // -------------------------------------------------------
 
 void DialogSystemCreateParameter::on_lineEditName_textChanged(const QString &
-                                                              text)
+    text)
 {
     m_param.setName(text);
 }

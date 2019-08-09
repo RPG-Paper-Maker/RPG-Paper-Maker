@@ -35,6 +35,7 @@ public:
 
     PrimitiveValue * initialValue() const;
 
+    virtual QString toString() const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

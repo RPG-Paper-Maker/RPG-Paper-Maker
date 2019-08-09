@@ -11,6 +11,7 @@
 
 #include "dialogcommandsendevent.h"
 #include "ui_dialogcommandsendevent.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -19,12 +20,11 @@
 // -------------------------------------------------------
 
 DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
-                                               QWidget *parent) :
+    QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandSendEvent)
 {
     ui->setupUi(this);
-    
 
     bool test = command == nullptr;
     if (test){

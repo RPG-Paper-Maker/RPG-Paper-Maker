@@ -11,6 +11,7 @@
 
 #include "dialogsystemparameter.h"
 #include "ui_dialogsystemparameter.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -43,5 +44,7 @@ DialogSystemParameter::~DialogSystemParameter()
 
 void DialogSystemParameter::initialize(){
     ui->widgetValue->initializeModel(m_param.value());
-    ui->widgetValue->initializeParameterEvent();
+    ui->widgetValue->initializeParameterEvent(RPM::get()->project()
+        ->currentObject() == nullptr ? nullptr : RPM::get()->project()
+        ->currentObject()->modelProperties());
 }

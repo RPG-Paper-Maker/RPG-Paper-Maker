@@ -11,6 +11,7 @@
 
 #include "systemparameter.h"
 #include "dialogsystemparameter.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -72,12 +73,13 @@ SuperListItem* SystemParameter::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemParameter::setCopy(const SystemParameter& param){
+void SystemParameter::setCopy(const SystemParameter& param) {
     SuperListItem::setCopy(param);
     p_id = param.p_id;
 
     m_parameter = param.m_parameter;
     m_value->setCopy(*param.m_value);
+    m_value->setModelProperties(RPM::get()->project()->currentObjectProperties());
 }
 
 // -------------------------------------------------------
@@ -109,10 +111,11 @@ QList<QStandardItem *> SystemParameter::getModelRow() const{
 //
 // -------------------------------------------------------
 
-void SystemParameter::read(const QJsonObject &json){
+void SystemParameter::read(const QJsonObject &json) {
     SuperListItem::read(json);
 
     m_value->read(json["v"].toObject());
+    m_value->setModelProperties(RPM::get()->project()->currentObjectProperties());
 }
 
 // -------------------------------------------------------

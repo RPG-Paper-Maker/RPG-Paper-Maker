@@ -46,6 +46,8 @@ public:
     void setPathCurrentProject(QString s);
     Map* currentMap(bool force = false) const;
     void setCurrentMap(Map* m);
+    SystemCommonObject * currentObject() const;
+    void setCurrentObject(SystemCommonObject *object);
     GameDatas* gameDatas() const;
     TreeMapDatas* treeMapDatas() const;
     LangsDatas* langsDatas() const;
@@ -56,6 +58,8 @@ public:
     KeyBoardDatas* keyBoardDatas() const;
     SpecialElementsDatas* specialElementsDatas() const;
     QString version() const;
+
+    QStandardItemModel * currentObjectProperties() const;
 
     static bool getSubVersions(QString &version, int &m, int &f, int &b);
     static int versionDifferent(QString projectVersion, QString otherVersion);
@@ -101,6 +105,7 @@ private:
     QString p_pathCurrentProject;
     Map* p_currentMap;
     Map* p_currentMapConfig;
+    SystemCommonObject *m_currentObject;
     GameDatas* p_gameDatas;
     TreeMapDatas* m_treeMapDatas;
     LangsDatas* m_langsDatas;

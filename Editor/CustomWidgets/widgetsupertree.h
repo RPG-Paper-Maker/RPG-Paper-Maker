@@ -42,6 +42,7 @@ public:
     void setCanBeEmpty(bool b);
     void setCanBeControled(bool b);
     void setCanMove(bool b);
+    void updateAbsoluteAllNodesString();
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
     QStandardItem* getSelected() const;

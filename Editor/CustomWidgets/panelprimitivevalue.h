@@ -47,7 +47,7 @@ public:
 
     void updateModel();
     void initializePrimitives();
-    void initializeParameterEvent();
+    void initializeParameterEvent(QStandardItemModel *properties);
     void initializeNumberVariable();
     void initializeNumber(QStandardItemModel *parameters, QStandardItemModel
         *properties, bool isInteger = true);
@@ -56,11 +56,15 @@ public:
         *properties = nullptr);
     void initializeMessage(QStandardItemModel *parameters = nullptr,
         QStandardItemModel *properties = nullptr);
+    void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
+        *properties);
     void initializeModel(PrimitiveValue *m);
     void initializeNumberAndUpdate(PrimitiveValue *m, bool isInteger = true);
     void initializeNumberVariableAndUpdate(PrimitiveValue *m);
     void initializeDataBaseAndUpdate(PrimitiveValue *m);
     void initializeMessageAndUpdate(PrimitiveValue *m);
+    void initializePropertyAndUpdate(PrimitiveValue *m, QStandardItemModel
+        *parameters, QStandardItemModel *properties);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
     void setNumberDoubleValue(double n);

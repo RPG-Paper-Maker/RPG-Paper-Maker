@@ -48,6 +48,12 @@ PrimitiveValue * SystemProperty::initialValue() const {
 //
 // -------------------------------------------------------
 
+QString SystemProperty::toString() const {
+    return SuperListItem::toString() + " = " + m_initialValue->toString();
+}
+
+// -------------------------------------------------------
+
 bool SystemProperty::openDialog() {
     SystemProperty super;
 

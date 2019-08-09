@@ -88,7 +88,9 @@ void PanelPrimitiveValue::initializePrimitives() {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeParameterEvent() {
+void PanelPrimitiveValue::initializeParameterEvent(QStandardItemModel
+    *properties)
+{
     m_kind = PanelPrimitiveValueKind::ParameterEvent;
     addDefault();
     addAnything();
@@ -97,6 +99,7 @@ void PanelPrimitiveValue::initializeParameterEvent() {
     addMessage();
     addSwitch();
     addKeyBoard();
+    addProperty(properties);
     setNumberValue(m_model->numberValue());
     setMessageValue(m_model->messageValue());
     setSwitchValue(m_model->switchValue());
@@ -174,6 +177,26 @@ void PanelPrimitiveValue::initializeMessage(QStandardItemModel *parameters,
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::Property;
+    addNone();
+    addNumberDouble();
+    addVariable();
+    addMessage();
+    addSwitch();
+    addKeyBoard();
+    addParameter(parameters);
+    addProperty(properties);
+    setNumberDoubleValue(m_model->numberDoubleValue());
+    setMessageValue(m_model->messageValue());
+    setSwitchValue(m_model->switchValue());
+    initialize();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initialize() {
     hideAll();
     connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this, SLOT(
@@ -225,6 +248,16 @@ void PanelPrimitiveValue::initializeMessageAndUpdate(PrimitiveValue *m)
 {
     initializeMessage();
     initializeModel(m);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializePropertyAndUpdate(PrimitiveValue *m,
+    QStandardItemModel *parameters, QStandardItemModel *properties)
+{
+    initializeModel(m);
+    initializeProperty(parameters, properties);
     updateModel();
 }
 
@@ -447,7 +480,7 @@ void PanelPrimitiveValue::addParameter(QStandardItemModel *model) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
-    if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
+    if (model != nullptr && model->invisibleRootItem()->rowCount() > 1) {
         ui->comboBoxChoice->addItem("Property", static_cast<int>(
             PrimitiveValueKind::Property));
         m_model->setModelProperties(model);
@@ -652,6 +685,23 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
             setNumberValue(command->valueCommandAt(i++).toInt());
         }
         break;
+    case PanelPrimitiveValueKind::Property:
+        setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
+            .toInt()));
+        switch (m_model->kind()) {
+        case PrimitiveValueKind::Number:
+            setNumberValue(command->valueCommandAt(i++).toInt());
+            break;
+        case PrimitiveValueKind::NumberDouble:
+            setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
+            break;
+        case PrimitiveValueKind::Message:
+            setMessageValue(command->valueCommandAt(i++));
+            break;
+        default:
+            break;
+        }
+        break;
     }
 }
 
@@ -680,6 +730,23 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
             command.append(m_model->messageValue());
         else
             command.append(QString::number(m_model->numberValue()));
+        break;
+    case PanelPrimitiveValueKind::Property:
+        command.append(QString::number(static_cast<int>(m_model->kind())));
+
+        switch (m_model->kind()) {
+        case PrimitiveValueKind::Number:
+            command.append(QString::number(m_model->numberValue()));
+            break;
+        case PrimitiveValueKind::NumberDouble:
+            command.append(QString::number(m_model->numberDoubleValue()));
+            break;
+        case PrimitiveValueKind::Message:
+            command.append(m_model->messageValue());
+            break;
+        default:
+            break;
+        }
         break;
     }
 }

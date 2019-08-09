@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1322,7 +1322,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_4">
+       <widget class="QWidget" name="tabCommonReactions">
         <attribute name="title">
          <string>Common reactions</string>
         </attribute>
@@ -1390,7 +1390,7 @@
                 </widget>
                </item>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout_15" stretch="">
+                <layout class="QVBoxLayout" name="verticalLayout_15">
                  <property name="spacing">
                   <number>6</number>
                  </property>
@@ -1414,7 +1414,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_7">
+       <widget class="QWidget" name="tabCommonModels">
         <attribute name="title">
          <string>Models</string>
         </attribute>

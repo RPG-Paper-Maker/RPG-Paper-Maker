@@ -372,7 +372,7 @@ void DialogSystems::initializeCommonObjects(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject){
+void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject) {
     ui->widgetCommonObject->initializeModel(sysCommonObject);
     ui->widgetCommonObject->updateModel();
 }
@@ -527,5 +527,22 @@ void DialogSystems::on_checkBoxCommonReactionBlockingHero_toggled(bool checked){
         SystemCommonReaction* react = (SystemCommonReaction*) selected->data()
                 .value<quintptr>();
         react->setBlockingHero(checked);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_tabWidget_currentChanged(int index) {
+    switch (index) {
+    case 5:
+        RPM::get()->project()->setCurrentObject(nullptr);
+        break;
+    case 6:
+        RPM::get()->project()->setCurrentObject(reinterpret_cast<
+            SystemCommonObject *>(ui->panelSuperListCommonObjects->list()
+            ->getSelected()->data().value<quintptr>()));
+        break;
+    default:
+        break;
     }
 }

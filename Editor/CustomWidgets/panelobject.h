@@ -70,6 +70,7 @@ private slots:
     void on_comboBoxInheritance_currentIndexChanged(int index);
     void on_updateJsonStates(SuperListItem *);
     void on_updateJsonEvents(SuperListItem *);
+    void on_updateJsonProperties(SuperListItem *);
     void on_stateChanged(QModelIndex index, QModelIndex);
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_tabWidgetCommands_currentChanged(int index);
