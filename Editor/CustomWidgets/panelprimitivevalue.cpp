@@ -197,6 +197,19 @@ void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeVariableParamProp(QStandardItemModel
+    *parameters, QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::VariableParamProp;
+    this->addVariable();
+    this->addParameter(parameters);
+    this->addProperty(properties);
+    setNumberValue(m_model->numberValue());
+    initialize();
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initialize() {
     hideAll();
     connect(ui->comboBoxChoice, SIGNAL(currentIndexChanged(int)), this, SLOT(
@@ -669,6 +682,7 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
     case PanelPrimitiveValueKind::ConstantVariable:
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
+    case PanelPrimitiveValueKind::VariableParamProp:
         setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
             .toInt()));
         if (m_model->kind() == PrimitiveValueKind::NumberDouble)
@@ -690,10 +704,17 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
             .toInt()));
         switch (m_model->kind()) {
         case PrimitiveValueKind::Number:
+        case PrimitiveValueKind::Variable:
+        case PrimitiveValueKind::Parameter:
+        case PrimitiveValueKind::Property:
+        case PrimitiveValueKind::KeyBoard:
             setNumberValue(command->valueCommandAt(i++).toInt());
             break;
         case PrimitiveValueKind::NumberDouble:
             setNumberDoubleValue(command->valueCommandAt(i++).toDouble());
+            break;
+        case PrimitiveValueKind::Switch:
+            setSwitchValue(command->valueCommandAt(i++) == RPM::TRUE_BOOL_STRING);
             break;
         default:
             setMessageValue(command->valueCommandAt(i++));
@@ -713,6 +734,7 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
     case PanelPrimitiveValueKind::ConstantVariable:
     case PanelPrimitiveValueKind::DataBaseCommandId:
     case PanelPrimitiveValueKind::Number:
+    case PanelPrimitiveValueKind::VariableParamProp:
         command.append(QString::number(static_cast<int>(m_model->kind())));
 
         if (m_model->kind() == PrimitiveValueKind::NumberDouble)
@@ -734,10 +756,18 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
 
         switch (m_model->kind()) {
         case PrimitiveValueKind::Number:
+        case PrimitiveValueKind::Variable:
+        case PrimitiveValueKind::Parameter:
+        case PrimitiveValueKind::Property:
+        case PrimitiveValueKind::KeyBoard:
             command.append(QString::number(m_model->numberValue()));
             break;
         case PrimitiveValueKind::NumberDouble:
             command.append(QString::number(m_model->numberDoubleValue()));
+            break;
+        case PrimitiveValueKind::Switch:
+            command.append(m_model->switchValue() ? RPM::TRUE_BOOL_STRING : RPM
+                ::FALSE_BOOL_STRING);
             break;
         default:
             command.append(m_model->messageValue());

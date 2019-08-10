@@ -27,7 +27,8 @@ enum class PanelPrimitiveValueKind {
     DataBaseCommandId,
     Number,
     Message,
-    Property
+    Property,
+    VariableParamProp
 };
 
 #endif // PANELPRIMITIVEVALUEKIND_H

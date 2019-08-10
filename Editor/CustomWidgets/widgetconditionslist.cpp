@@ -54,7 +54,7 @@ void WidgetConditionsList::mouseDoubleClickEvent(QMouseEvent *event) {
             ->currentIndex());
         if (selected != nullptr) {
             if (!selected->data().isNull()) {
-                DialogCommandConditions dialog(nullptr, true);
+                DialogCommandConditions dialog(nullptr, nullptr, nullptr, true);
                 if (dialog.exec() == QDialog::Accepted) {
                     // Ading condition to list
                     EventCommand *command = dialog.getCommand();

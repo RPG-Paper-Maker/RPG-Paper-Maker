@@ -58,6 +58,8 @@ public:
         QStandardItemModel *properties = nullptr);
     void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
         *properties);
+    void initializeVariableParamProp(QStandardItemModel *parameters,
+        QStandardItemModel *properties);
     void initializeModel(PrimitiveValue *m);
     void initializeNumberAndUpdate(PrimitiveValue *m, bool isInteger = true);
     void initializeNumberVariableAndUpdate(PrimitiveValue *m);

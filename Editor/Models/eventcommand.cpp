@@ -217,7 +217,7 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     case EventCommandKind::InputNumber:
         str += strInputNumber(); break;
     case EventCommandKind::If:
-        str += strCondition(); break;
+        str += strCondition(object, parameters); break;
     case EventCommandKind::Else:
         str += "Else"; break;
     case EventCommandKind::EndIf:
@@ -333,7 +333,7 @@ QString EventCommand::strProperty(int &i, SystemCommonObject *object,
     value = m_listCommand.at(i++);
     switch (kind){
     case PrimitiveValueKind::None:
-        return "";
+        return "None";
     case PrimitiveValueKind::Number:
     case PrimitiveValueKind::NumberDouble:
     case PrimitiveValueKind::Message:
@@ -351,11 +351,11 @@ QString EventCommand::strProperty(int &i, SystemCommonObject *object,
     case PrimitiveValueKind::Parameter:
         super = SuperListItem::getById(parameters->invisibleRootItem(), value
             .toInt());
-        return (super == nullptr ? "" : super->toString());
+        return "Parameter " + (super == nullptr ? "" : super->toString());
     case PrimitiveValueKind::Property:
         super = SuperListItem::getById(object->modelProperties()
             ->invisibleRootItem(), value.toInt());
-        return "Parameter " + (super == nullptr ? "" : super->toString());
+        return "Property " + (super == nullptr ? "" : super->toString());
     default:
         return "";
     }
@@ -485,15 +485,19 @@ QString EventCommand::strInputNumber() const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strCondition() const {
+QString EventCommand::strCondition(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     QString condition;
-    int i, page;
+    int i, radioIndex, tabIndex;
 
     i = 1;
-    page = m_listCommand.at(i++).toInt();
-    switch (page) {
+    radioIndex = m_listCommand.at(i++).toInt();
+    tabIndex = 0;
+    switch (tabIndex) {
     case 0:
-        condition = this->strConditionPageVariables(i);
+        condition = this->strConditionPageVariables(object, parameters, i,
+            radioIndex);
         break;
     }
     return "if (" + condition + ")";
@@ -501,17 +505,19 @@ QString EventCommand::strCondition() const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strConditionPageVariables(int &i) const {
+QString EventCommand::strConditionPageVariables(SystemCommonObject *object,
+    QStandardItemModel *parameters, int &i, int radioIndex) const
+{
     QString condition, operation;
-    int variable;
 
-    condition = "variable ";
-    variable = m_listCommand.at(i++).toInt();
-    operation = RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++).toInt());
-    condition += RPM::get()->project()->gameDatas()->variablesDatas()
-        ->getVariableById(variable)->toString();
-    condition += " " + operation + " ";
-    condition += this->strNumberVariable(i);
+    switch (radioIndex) {
+    case 0:
+        condition = this->strProperty(i, object, parameters);
+        operation = RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++).toInt());
+        condition += " " + operation + " ";
+        condition += this->strProperty(i, object, parameters);
+        break;
+    }
 
     return condition;
 }

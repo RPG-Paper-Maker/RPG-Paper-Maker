@@ -83,8 +83,10 @@ private:
     QString strChangeVariablesValue(int &i, SystemCommonObject *object,
         QStandardItemModel *parameters) const;
     QString strInputNumber() const;
-    QString strCondition() const;
-    QString strConditionPageVariables(int &i) const;
+    QString strCondition(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strConditionPageVariables(SystemCommonObject *object,
+        QStandardItemModel *parameters, int &i, int radioIndex) const;
     QString strModifyInventory() const;
     QString strModifyInventorySelection(int &i) const;
     QString strModifyTeam(QStandardItemModel *parameters) const;

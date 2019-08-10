@@ -78,7 +78,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::InputNumber:
         return new DialogCommandInputNumber(command);
     case EventCommandKind::If:
-        return new DialogCommandConditions(command);
+        return new DialogCommandConditions(command, object, parameters);
     case EventCommandKind::ModifyInventory:
         return new DialogCommandModifyInventory(command);
     case EventCommandKind::ModifyTeam:

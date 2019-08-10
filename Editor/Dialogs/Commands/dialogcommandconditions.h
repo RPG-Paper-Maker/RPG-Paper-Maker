@@ -33,16 +33,23 @@ class DialogCommandConditions : public DialogCommand
 
 public:
     explicit DialogCommandConditions(EventCommand *command = nullptr,
-                                     bool hideElse = false,
-                                     QWidget *parent = 0);
+        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        nullptr, bool hideElse = false, QWidget *parent = nullptr);
     virtual ~DialogCommandConditions();
-    EventCommand* getCommand() const;
+
+    void initializePrimitives(SystemCommonObject *object, QStandardItemModel
+        *parameters);
+
+    virtual EventCommand * getCommand() const;
 
 protected:
-    virtual void initialize(EventCommand* command);
+    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandConditions *ui;
+
+private slots:
+    void on_radioButtonVariableParamProp_clicked(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H
