@@ -40,6 +40,8 @@ public:
     static void readOtherJSON(QString path, QJsonDocument &loadDoc);
     static void writeArrayJSON(QString path, const QJsonArray &tab);
     static void readArrayJSON(QString path, QJsonDocument &loadDoc);
+    static void modifyJSONValue(QJsonObject &root, QString path, QJsonValue
+        value);
     static QString pathCombine(const QString &p1, const QString &p2);
     static bool copyPath(QString src, QString dst);
     static QString getDirectoryPath(QString &file);

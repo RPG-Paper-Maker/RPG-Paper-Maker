@@ -59,6 +59,9 @@ public slots:
     void updateVersion_1_1_1();
     void updateVersion_1_2_0();
     void updateVersion_1_2_1();
+    void updateVersion_1_3_0();
+    void updateVersion_1_3_0_command(QJsonArray &children, QJsonObject &root,
+        QString path);
 
 signals:
     void progress(int, QString);

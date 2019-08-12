@@ -117,6 +117,61 @@ void Common::readArrayJSON(QString path, QJsonDocument& loadDoc) {
 
 // -------------------------------------------------------
 
+void Common::modifyJSONValue(QJsonObject &root, QString path, QJsonValue value)
+{
+    QList<QJsonObject> objs;
+    QList<QJsonArray> tabs;
+    QList<bool> objsOrTabs;
+    QStringList list = path.split(".");
+    QJsonArray defaultArray;
+    QJsonObject obj = root;
+    QJsonArray tab = defaultArray;
+    QString param;
+    QJsonValue tempValue;
+    bool isCurrentObj;
+    int i, l;
+
+    isCurrentObj = true;
+    obj = root;
+    for (i = 0, l = list.size(); i < l; i++) {
+        param = list.at(i);
+        if (isCurrentObj) {
+            tempValue = obj[param];
+        } else {
+            tempValue = tab[param.toInt()];
+        }
+        isCurrentObj = tempValue.isObject();
+        if (isCurrentObj) {
+            obj = tempValue.toObject();
+            objs.append(obj);
+            tabs.append(QJsonArray());
+        } else {
+            tab = tempValue.toArray();
+            objs.append(QJsonObject());
+            tabs.append(tab);
+        }
+        objsOrTabs.append(isCurrentObj);
+    }
+
+    QJsonValue final = value;
+    for (i = list.size() - 1; i >= 1; i--) {
+        param = list.at(i);
+        if (objsOrTabs.at(i - 1)) {
+            obj = objs.at(i - 1);
+            obj[param] = final;
+            final = obj;
+        } else {
+            tab = tabs.at(i - 1);
+            tab.replace(param.toInt(), final);
+            final = tab;
+        }
+    }
+
+    root[list.at(0)] = final;
+}
+
+// -------------------------------------------------------
+
 QString Common::pathCombine(const QString &p1, const QString &p2) {
     return QDir::cleanPath(p1 + QDir::separator() + p2);
 }

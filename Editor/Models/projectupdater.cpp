@@ -15,10 +15,11 @@
 #include "rpm.h"
 #include "common.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 8;
+const int ProjectUpdater::incompatibleVersionsCount = 9;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
-    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1"};
+    {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
+     "1.3.0"};
 
 // -------------------------------------------------------
 //
@@ -504,4 +505,75 @@ void ProjectUpdater::updateVersion_1_2_1() {
     m_project->writeSpecialsDatas();
     m_project->readTilesetsDatas();
     m_project->writeTilesetsDatas();
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_3_0() {
+
+    // Update command condition
+    for (int i = 0; i < m_listMapPortions.size(); i++) {
+        QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
+        QList<QString>* paths = m_listMapPortionsPaths.at(i);
+
+        for (int j = 0; j < mapPortions->size(); j++) {
+            QJsonObject obj = mapPortions->at(j);
+            QJsonObject objObject = obj[MapPortion::JSON_OBJECT].toObject();
+            QJsonObject objTempObjects = objObject;
+            QJsonArray tabObjects = objObject["list"].toArray();
+
+            for (int k = 0; k < tabObjects.size(); k++) {
+                QJsonArray tabEvents = tabObjects.at(k).toObject()["v"]
+                    .toObject()["events"].toArray();
+
+                for (int l = 0; l < tabEvents.size(); l++) {
+                    QJsonObject objReactions = tabEvents.at(l).toObject()["r"]
+                        .toObject();
+                    QStringList eventKeys = objReactions.keys();
+                    for (int m = 0; m < eventKeys.size(); m++) {
+                        QString key = eventKeys.at(m);
+                        QJsonArray tabCommands = objReactions[key]
+                            .toObject()["c"].toArray();
+                        QString path = "list." + QString::number(k) +
+                            ".v.events." + QString::number(l) + "." + key + ".c";
+                        this->updateVersion_1_3_0_command(tabCommands,
+                            objTempObjects, path);
+                    }
+                }
+            }
+
+
+            obj[MapPortion::JSON_OBJECT] = objTempObjects;
+            Common::writeOtherJSON(paths->at(j), obj);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_3_0_command(QJsonArray &children,
+    QJsonObject &root, QString path)
+{
+    QJsonObject objCommand;
+    QJsonArray nextchildren;
+    int i, l;
+    QString newPath;
+
+    for (i = 0, l = children.size(); i < l; i++) {
+        objCommand = children.at(i).toObject();
+        nextchildren = objCommand["children"].toArray();
+        newPath = path + QString::number(i);
+
+        if (objCommand["kind"].toInt() == static_cast<int>(EventCommandKind::If))
+        {
+            QJsonArray newArray = objCommand["command"].toArray();
+            int idVariable = newArray.at(3).toInt();
+            newArray.replace(3, static_cast<int>(PrimitiveValueKind::Variable));
+            newArray.insert(4, idVariable);
+            Common::modifyJSONValue(root, newPath + ".command", newArray);
+        }
+
+        this->updateVersion_1_3_0_command(nextchildren, root, newPath +
+            ".children");
+    }
 }
