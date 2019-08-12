@@ -55,6 +55,7 @@ void DialogCommandChangeProperty::initializePrimitives() {
     ui->panelPrimitivePropertyIDValue->initializeDataBaseCommandId(dataBase,
         m_parameters, nullptr);
     ui->panelPrimitiveNewValue->initializeProperty(m_parameters, dataBase);
+    ui->panelPrimitiveNewValue->showNumberDouble();
 }
 
 // -------------------------------------------------------
