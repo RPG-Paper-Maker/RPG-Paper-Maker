@@ -16,6 +16,7 @@
 #include "systemstate.h"
 #include "systemcommonreaction.h"
 #include "systemproperty.h"
+#include "systemevent.h"
 
 const QString SystemCommonObject::JSON_ONLY_ONE_EVENT_PER_FRAME = "ooepf";
 const QString SystemCommonObject::JSON_INHERITANCE_ID = "hId";
@@ -256,6 +257,54 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(QStandardItemModel
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
     item->setText(toString());
     m_events->appendRow(item);
+}
+
+// -------------------------------------------------------
+
+void SystemCommonObject::setDefaultInvisibleObject() {
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+    SystemState *state;
+    SystemObjectEvent *event;
+    SuperListItem *super;
+    SystemEvent *eventTime;
+
+    // Properties
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_properties->appendRow(item);
+
+    // Events
+    m_events->clear();
+    eventTime = reinterpret_cast<SystemEvent *>(RPM::get()->project()
+        ->gameDatas()->commonEventsDatas()->modelEventsSystem()->item(0)->data()
+        .value<quintptr>());
+    event = new SystemObjectEvent(1, eventTime->name(), new QStandardItemModel,
+        true);
+    event->addParameter(new SystemParameter(1, "", reinterpret_cast<
+        SystemCreateParameter *>(eventTime->modelParameters()->item(0)->data()
+        .value<quintptr>()), new PrimitiveValue(PrimitiveValueKind::Default)));
+    event->addParameter(new SystemParameter(2, "", reinterpret_cast<
+        SystemCreateParameter *>(eventTime->modelParameters()->item(0)->data()
+        .value<quintptr>()), new PrimitiveValue(false)));
+    event->setDefault();
+    row = event->getModelRow();
+    m_events->appendRow(row);
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_events->appendRow(item);
+
+    // States
+    m_states->clear();
+    super = SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
+    state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
+        false, false, false, false, false, false, false, false);
+    row = state->getModelRow();
+    m_states->appendRow(row);
+    item = new QStandardItem();
+    item->setText(SuperListItem::beginningText);
+    m_states->appendRow(item);
 }
 
 // -------------------------------------------------------

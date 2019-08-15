@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>857</width>
+    <width>950</width>
     <height>753</height>
    </rect>
   </property>
@@ -1483,6 +1483,35 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSong</class>
+   <extends>QWidget</extends>
+   <header>widgetsong.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelObject</class>
+   <extends>QWidget</extends>
+   <header>panelobject.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
@@ -1495,38 +1524,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelObject</class>
-   <extends>QWidget</extends>
-   <header>panelobject.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetTextLang</class>
-   <extends>QWidget</extends>
-   <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetTreeCommands</class>
    <extends>QWidget</extends>
    <header>widgettreecommands.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSong</class>
-   <extends>QWidget</extends>
-   <header>widgetsong.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -204,51 +204,89 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_8">
-           <item row="0" column="0">
-            <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
-             <item>
-              <widget class="QLabel" name="labelGraphics">
-               <property name="text">
-                <string>Graphics:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="WidgetGraphics" name="frameGraphics">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="comboBoxGraphics">
-               <item>
-                <property name="text">
-                 <string>None</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Sprite fix</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Sprite face</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-            </layout>
+           <item row="1" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBoxOptions">
+             <property name="title">
+              <string>Options</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_6">
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="checkBoxThrough">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Through</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="checkBoxDirectionFix">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Direction fix</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkBoxSetWithCamera">
+                  <property name="text">
+                   <string>Set with camera</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBoxMoveAnimation">
+                  <property name="text">
+                   <string>Move animation</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkBoxStopAnimation">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Stop animation</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkBoxClimbAnimation">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Climb animation</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QCheckBox" name="checkBoxPixelOffset">
+                  <property name="text">
+                   <string>Pixel offset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QCheckBox" name="checkBoxKeepPosition">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Keep position</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
            </item>
            <item row="0" column="1">
             <widget class="QGroupBox" name="groupBoxMoving">
@@ -347,89 +385,51 @@
              </layout>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="QGroupBox" name="groupBoxOptions">
-             <property name="title">
-              <string>Options</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_7">
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_6">
-                <item row="0" column="1">
-                 <widget class="QCheckBox" name="checkBoxThrough">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Through</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="checkBoxDirectionFix">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Direction fix</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkBoxSetWithCamera">
-                  <property name="text">
-                   <string>Set with camera</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="checkBoxMoveAnimation">
-                  <property name="text">
-                   <string>Move animation</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="checkBoxStopAnimation">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Stop animation</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QCheckBox" name="checkBoxClimbAnimation">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Climb animation</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="checkBoxPixelOffset">
-                  <property name="text">
-                   <string>Pixel offset</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QCheckBox" name="checkBoxKeepPosition">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Keep position</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
+             <item>
+              <widget class="QLabel" name="labelGraphics">
+               <property name="text">
+                <string>Graphics:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="WidgetGraphics" name="frameGraphics">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBoxGraphics">
+               <item>
+                <property name="text">
+                 <string>None</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Sprite fix</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Sprite face</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>

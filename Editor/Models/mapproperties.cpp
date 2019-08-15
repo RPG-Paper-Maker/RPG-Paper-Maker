@@ -22,6 +22,7 @@ const QString MapProperties::JSON_MUSIC = "music";
 const QString MapProperties::JSON_BACKGROUND_SOUND = "bgs";
 const QString MapProperties::JSON_IS_SKY_COLOR = "isky";
 const QString MapProperties::JSON_SKY_COLOR_ID = "sky";
+const QString MapProperties::JSON_INVISIBLE_OBJECT = "io";
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
 const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
@@ -54,10 +55,12 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_backgroundSound(new SystemPlaySong(-1, SongKind::BackgroundSound)),
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
-    m_isSkyColor(true)
+    m_isSkyColor(true),
+    m_invisibleObject(new SystemCommonObject)
 {
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
+    m_invisibleObject->setDefaultInvisibleObject();
 }
 
 MapProperties::~MapProperties() {
@@ -67,6 +70,7 @@ MapProperties::~MapProperties() {
     delete m_music;
     delete m_backgroundSound;
     delete m_skyColorID;
+    delete m_invisibleObject;
 }
 
 SystemTileset * MapProperties::tileset() const {
@@ -133,6 +137,10 @@ PrimitiveValue * MapProperties::skyColorID() const {
 
 void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
     m_skyColorID = skyColorID;
+}
+
+SystemCommonObject * MapProperties::invisibleObject() const {
+    return m_invisibleObject;
 }
 
 // -------------------------------------------------------
@@ -341,6 +349,12 @@ void MapProperties::save(QString path, bool temp) {
 
 // -------------------------------------------------------
 
+void MapProperties::setDefaultInvisibleObject() {
+    m_invisibleObject->setDefaultInvisibleObject();
+}
+
+// -------------------------------------------------------
+
 MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
     float &finalDistance, Position &finalPosition, QRay3D &ray, double
     cameraHAngle)
@@ -535,6 +549,10 @@ void MapProperties::read(const QJsonObject &json){
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
 
+    // Invisible object
+    m_invisibleObject = new SystemCommonObject;
+    m_invisibleObject->read(json[JSON_INVISIBLE_OBJECT].toObject());
+
     // Overflow
     this->readOverflow(json[JSON_OVERFLOW_SPRITES].toArray(),
         m_outOverflowSprites);
@@ -571,6 +589,11 @@ void MapProperties::write(QJsonObject &json) const {
         m_skyColorID->write(obj);
         json[JSON_SKY_COLOR_ID] = obj;
     }
+
+    // Invisible object
+    obj = QJsonObject();
+    m_invisibleObject->write(obj);
+    json[JSON_INVISIBLE_OBJECT] = obj;
 
     // Overflow
     this->writeOverflow(json, m_outOverflowSprites, JSON_OVERFLOW_SPRITES);

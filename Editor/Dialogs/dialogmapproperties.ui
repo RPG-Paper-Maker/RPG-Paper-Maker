@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>697</width>
-    <height>492</height>
+    <width>1100</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Map properties...</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_8">
+  <layout class="QGridLayout" name="gridLayout_11">
    <property name="leftMargin">
     <number>15</number>
    </property>
@@ -32,63 +32,20 @@
       <number>15</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="WidgetTextLang" name="widgetLangName" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>408</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1">
-       <property name="spacing">
-        <number>10</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7">
+        <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,1">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_2">
+          <layout class="QGridLayout" name="gridLayout_8">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
              <property name="text">
-              <string>Tileset:</string>
+              <string>Name:</string>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QComboBox" name="comboBoxTileset">
+           <item row="0" column="1">
+            <widget class="WidgetTextLang" name="widgetLangName" native="true">
              <property name="minimumSize">
               <size>
                <width>200</width>
@@ -103,7 +60,7 @@
              </property>
             </widget>
            </item>
-           <item>
+           <item row="0" column="2" rowspan="2">
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -111,10 +68,33 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>68</width>
-               <height>18</height>
+               <height>58</height>
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Tileset:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBoxTileset">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -399,10 +379,10 @@
              <number>9</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_6">
@@ -466,139 +446,201 @@
            </layout>
           </widget>
          </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
-           <item>
-            <widget class="QLabel" name="label_9">
-             <property name="enabled">
-              <bool>false</bool>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Invisible object</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_12">
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
-             <property name="text">
-              <string>Battle map:</string>
-             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>661</width>
+                <height>460</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <widget class="PanelObject" name="panelObject" native="true"/>
+               </item>
+              </layout>
+             </widget>
             </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBoxBattleMap">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="title">
-            <string>Random battles</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0">
-             <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
-              <item>
-               <widget class="QTreeView" name="treeViewRandomBattles"/>
-              </item>
-              <item>
-               <layout class="QGridLayout" name="gridLayout">
+         </widget>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Battles</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+               <item>
+                <widget class="QLabel" name="label_9">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Battle map:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="comboBoxBattleMap">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="title">
+                <string>Random battles</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_2">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_11">
-                  <property name="text">
-                   <string>Number of steps after next battle:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" rowspan="4">
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>18</width>
-                    <height>118</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="1" column="0">
-                 <widget class="PanelPrimitiveValue" name="widgetConstantVariableSteps" native="true">
-                  <property name="minimumSize">
-                   <size>
-                    <width>250</width>
-                    <height>27</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>250</width>
-                    <height>27</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_12">
-                  <property name="text">
-                   <string>with variation (in %):</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="PanelPrimitiveValue" name="widgetConstantVariableStepsVariation" native="true">
-                  <property name="minimumSize">
-                   <size>
-                    <width>250</width>
-                    <height>27</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>250</width>
-                    <height>27</height>
-                   </size>
-                  </property>
-                 </widget>
+                 <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+                  <item>
+                   <widget class="QTreeView" name="treeViewRandomBattles"/>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_11">
+                      <property name="text">
+                       <string>Number of steps after next battle:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1" rowspan="4">
+                     <spacer name="horizontalSpacer_4">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>18</width>
+                        <height>118</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="PanelPrimitiveValue" name="widgetConstantVariableSteps" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>250</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>250</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_12">
+                      <property name="text">
+                       <string>with variation (in %):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="PanelPrimitiveValue" name="widgetConstantVariableStepsVariation" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>250</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>250</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
                 </item>
                </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </item>
       </layout>
      </item>
@@ -615,6 +657,10 @@
     </layout>
    </item>
   </layout>
+  <zorder>panelObject</zorder>
+  <zorder>label_13</zorder>
+  <zorder>tabWidget</zorder>
+  <zorder>buttonBox</zorder>
  </widget>
  <customwidgets>
   <customwidget>
@@ -633,6 +679,12 @@
    <class>WidgetSong</class>
    <extends>QWidget</extends>
    <header>widgetsong.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelObject</class>
+   <extends>QWidget</extends>
+   <header>panelobject.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

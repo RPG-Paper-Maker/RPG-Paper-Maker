@@ -190,6 +190,17 @@ void PanelObject::showName(bool b) {
 
 // -------------------------------------------------------
 
+void PanelObject::showInvisible(bool b) {
+    this->showName(!b);
+    ui->groupBoxOptions->setEnabled(!b);
+    ui->groupBoxMoving->setEnabled(!b);
+    ui->labelGraphics->setEnabled(!b);
+    ui->frameGraphics->setEnabled(!b);
+    ui->comboBoxGraphics->setEnabled(!b);
+}
+
+// -------------------------------------------------------
+
 void PanelObject::updateReactions() {
     int l, ll;
 
@@ -222,8 +233,6 @@ void PanelObject::updateReactionsWidgets() {
     WidgetTreeCommands *tree;
     SystemObjectEvent *event;
     QCheckBox *checkbox;
-    QPushButton *pushButton;
-    QSpacerItem *spacer;
     QHBoxLayout *hlayout;
     QVariant variant;
     int l;
@@ -258,24 +267,7 @@ void PanelObject::updateReactionsWidgets() {
             connect(checkbox, SIGNAL(toggled(bool)), this, SLOT(
                 on_blockingHeroChanged(bool)));
             m_checkBoxes.append(checkbox);
-            hlayout->addWidget(checkbox);
-            spacer = new QSpacerItem(1,1);
-            hlayout->addSpacerItem(spacer);
-            pushButton = new QPushButton("Copy reaction");
-            pushButton->setProperty("reaction", variant);
-            connect(pushButton, SIGNAL(clicked(bool)), this, SLOT(on_copyReaction()));
-            m_pushButtons.append(pushButton);
-            hlayout->addWidget(pushButton);
-            pushButton = new QPushButton("Paste reaction");
-            pushButton->setProperty("reaction", variant);
-            pushButton->setEnabled(m_copiedReaction != nullptr);
-            connect(pushButton, SIGNAL(clicked(bool)), this, SLOT(on_pasteReaction()));
-            m_pushButtons.append(pushButton);
-            hlayout->addWidget(pushButton);
-
-            hlayout->setStretch(1,1);
-            layout->addWidget(widgetCheckbox,1,0);
-
+            layout->addWidget(checkbox, 1, 0);
             ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
         }
     }

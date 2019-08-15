@@ -41,7 +41,7 @@ DialogMapProperties::~DialogMapProperties()
 //
 // -------------------------------------------------------
 
-void DialogMapProperties::initialize(){
+void DialogMapProperties::initialize() {
 
     // Tileset
     SuperListItem::fillComboBox(ui->comboBoxTileset, RPM::get()->project()
@@ -72,6 +72,13 @@ void DialogMapProperties::initialize(){
 
     ui->widgetConstantVariableSteps->initializeNumberVariable();
     ui->widgetConstantVariableStepsVariation->initializeNumberVariable();
+
+    // Invisible object
+    ui->panelObject->initializeList(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelCommonObjects());
+    ui->panelObject->initializeModel(m_mapProperties.invisibleObject());
+    ui->panelObject->updateModel();
+    ui->panelObject->showInvisible(true);
 }
 
 // -------------------------------------------------------

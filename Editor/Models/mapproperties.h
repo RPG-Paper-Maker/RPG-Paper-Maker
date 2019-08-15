@@ -41,6 +41,7 @@ public:
     static const QString JSON_BACKGROUND_SOUND;
     static const QString JSON_IS_SKY_COLOR;
     static const QString JSON_SKY_COLOR_ID;
+    static const QString JSON_INVISIBLE_OBJECT;
     static const QString JSON_OVERFLOW_SPRITES;
     static const QString JSON_OVERFLOW_OBJECTS3D;
     static const QString JSON_OVERFLOW_MOUNTAINS;
@@ -67,6 +68,7 @@ public:
     void setBackgroundSound(SystemPlaySong *song);
     PrimitiveValue * skyColorID() const;
     void setSkyColorID(PrimitiveValue *skyColorID);
+    SystemCommonObject * invisibleObject() const;
 
     QString realName() const;
     void clearOverflowSprites();
@@ -85,6 +87,7 @@ public:
     bool isInGrid(Position3D &position, int squareSize, int offset) const;
     void getPortionsNumber(int &lx, int &ld, int &lh, int &lz);
     void save(QString path, bool temp = false);
+    void setDefaultInvisibleObject();
     MapElement * updateRaycastingOverflowSprites(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray, double
         cameraHAngle);
@@ -111,6 +114,7 @@ protected:
     SystemPlaySong *m_backgroundSound;
     PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
+    SystemCommonObject *m_invisibleObject;
     QHash<Portion, QSet<Position> *> m_outOverflowSprites;
     QHash<Portion, QSet<Position> *> m_outOverflowObjects3D;
     QHash<Portion, QSet<Position> *> m_outOverflowMountains;

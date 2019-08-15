@@ -547,6 +547,19 @@ void ProjectUpdater::updateVersion_1_3_0() {
             Common::writeOtherJSON(paths->at(j), obj);
         }
     }
+
+    // Map properties invisible object
+    QJsonObject objInvisible;
+    SystemCommonObject invisible;
+    invisible.setDefaultInvisibleObject();
+    for (int i = 0, l = m_listMapProperties.size(); i < l; i++) {
+        MapProperties properties;
+        objInvisible = QJsonObject();
+        properties.read(m_listMapProperties.at(i));
+        properties.invisibleObject()->setDefaultInvisibleObject();
+        properties.write(objInvisible);
+        Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), objInvisible);
+    }
 }
 
 // -------------------------------------------------------
