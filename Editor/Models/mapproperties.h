@@ -39,6 +39,7 @@ public:
     static const QString JSON_DEPTH;
     static const QString JSON_MUSIC;
     static const QString JSON_BACKGROUND_SOUND;
+    static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_IS_SKY_COLOR;
     static const QString JSON_SKY_COLOR_ID;
     static const QString JSON_STARTUP_OBJECT;
@@ -66,6 +67,7 @@ public:
     void setMusic(SystemPlaySong *song);
     SystemPlaySong * backgroundSound() const;
     void setBackgroundSound(SystemPlaySong *song);
+    PrimitiveValue * cameraProperties() const;
     PrimitiveValue * skyColorID() const;
     void setSkyColorID(PrimitiveValue *skyColorID);
     SystemCommonObject * startupObject() const;
@@ -112,6 +114,7 @@ protected:
     int m_depth;
     SystemPlaySong *m_music;
     SystemPlaySong *m_backgroundSound;
+    PrimitiveValue *m_cameraProperties;
     PrimitiveValue *m_skyColorID;
     bool m_isSkyColor;
     SystemCommonObject *m_startupObject;

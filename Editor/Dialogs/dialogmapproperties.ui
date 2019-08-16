@@ -270,6 +270,29 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Background sound:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" rowspan="3">
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>88</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
              <property name="enabled">
@@ -284,46 +307,7 @@
             <widget class="WidgetSong" name="widgetChooseMusic" native="true">
              <property name="minimumSize">
               <size>
-               <width>200</width>
-               <height>27</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>27</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2" rowspan="3">
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>28</width>
-               <height>88</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_8">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Background sound:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="WidgetSong" name="widgetChooseBackgroundSound" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
+               <width>250</width>
                <height>27</height>
               </size>
              </property>
@@ -338,28 +322,41 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_10">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
-              <string>Camera properties:</string>
+              <string>Camera prop. ID:</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="comboBoxCameraProperties">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+           <item row="1" column="1">
+            <widget class="WidgetSong" name="widgetChooseBackgroundSound" native="true">
              <property name="minimumSize">
               <size>
-               <width>200</width>
-               <height>0</height>
+               <width>250</width>
+               <height>27</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>16777215</height>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveCameraProperties" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
               </size>
              </property>
             </widget>
@@ -371,31 +368,18 @@
            <property name="enabled">
             <bool>true</bool>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="title">
             <string>Sky</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
-            <property name="leftMargin">
-             <number>9</number>
-            </property>
-            <property name="topMargin">
-             <number>9</number>
-            </property>
-            <property name="bottomMargin">
-             <number>9</number>
-            </property>
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_6">
-              <item row="1" column="0">
-               <widget class="QRadioButton" name="radioButtonSkybox">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Skybox</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0">
                <widget class="QRadioButton" name="radioButtonColor">
                 <property name="text">
@@ -403,25 +387,6 @@
                 </property>
                 <property name="checked">
                  <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QWidget" name="widgetChooseSkybox" native="true">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>200</width>
-                  <height>27</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>200</width>
-                  <height>27</height>
-                 </size>
                 </property>
                </widget>
               </item>
@@ -438,6 +403,29 @@
                   <width>250</width>
                   <height>27</height>
                  </size>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" rowspan="2">
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>38</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0">
+               <widget class="QRadioButton" name="radioButtonSkybox">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Skybox</string>
                 </property>
                </widget>
               </item>
@@ -487,7 +475,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>661</width>
+                <width>632</width>
                 <height>460</height>
                </rect>
               </property>

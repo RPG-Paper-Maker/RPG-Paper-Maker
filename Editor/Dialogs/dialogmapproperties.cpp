@@ -60,6 +60,10 @@ void DialogMapProperties::initialize() {
     // Background sound
     ui->widgetChooseBackgroundSound->initialize(m_mapProperties.backgroundSound());
 
+    // Camera properties
+    ui->panelPrimitiveCameraProperties->initializeDataBaseAndUpdate(
+        m_mapProperties.cameraProperties());
+
     // Sizes
     ui->spinBoxLength->setValue(m_mapProperties.length());
     ui->spinBoxWidth->setValue(m_mapProperties.width());

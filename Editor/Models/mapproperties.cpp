@@ -20,6 +20,7 @@ const QString MapProperties::JSON_HEIGHT = "h";
 const QString MapProperties::JSON_DEPTH = "d";
 const QString MapProperties::JSON_MUSIC = "music";
 const QString MapProperties::JSON_BACKGROUND_SOUND = "bgs";
+const QString MapProperties::JSON_CAMERA_PROPERTIES = "cp";
 const QString MapProperties::JSON_IS_SKY_COLOR = "isky";
 const QString MapProperties::JSON_SKY_COLOR_ID = "sky";
 const QString MapProperties::JSON_STARTUP_OBJECT = "so";
@@ -54,10 +55,13 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_depth(d),
     m_music(new SystemPlaySong(-1, SongKind::Music)),
     m_backgroundSound(new SystemPlaySong(-1, SongKind::BackgroundSound)),
+    m_cameraProperties(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true),
     m_startupObject(new SystemCommonObject)
 {
+    m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelcameraProperties());
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
     m_startupObject->setDefaultStartupObject();
@@ -69,6 +73,7 @@ MapProperties::~MapProperties() {
     this->clearOverflowMountains();
     delete m_music;
     delete m_backgroundSound;
+    delete m_cameraProperties;
     delete m_skyColorID;
     delete m_startupObject;
 }
@@ -129,6 +134,10 @@ SystemPlaySong * MapProperties::backgroundSound() const {
 
 void MapProperties::setBackgroundSound(SystemPlaySong *song) {
     m_backgroundSound = song;
+}
+
+PrimitiveValue * MapProperties::cameraProperties() const {
+    return m_cameraProperties;
 }
 
 PrimitiveValue * MapProperties::skyColorID() const {
@@ -539,6 +548,14 @@ void MapProperties::read(const QJsonObject &json){
     m_backgroundSound = new SystemPlaySong(-1, SongKind::BackgroundSound);
     m_backgroundSound->read(json[JSON_BACKGROUND_SOUND].toObject());
 
+    // Camera properties
+    m_cameraProperties = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
+    if (json.contains(JSON_CAMERA_PROPERTIES)) {
+        m_cameraProperties->read(json[JSON_CAMERA_PROPERTIES].toObject());
+    }
+    m_cameraProperties->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelcameraProperties());
+
     // Sky
     m_skyColorID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     m_isSkyColor = json.contains(JSON_IS_SKY_COLOR) ? json[JSON_IS_SKY_COLOR]
@@ -581,6 +598,13 @@ void MapProperties::write(QJsonObject &json) const {
     obj = QJsonObject();
     m_backgroundSound->write(obj);
     json[JSON_BACKGROUND_SOUND] = obj;
+
+    // Camera properties
+    if (!m_cameraProperties->isDefaultDataBaseValue()) {
+        obj = QJsonObject();
+        m_cameraProperties->write(obj);
+        json[JSON_CAMERA_PROPERTIES] = obj;
+    }
 
     // Sky
     json[JSON_IS_SKY_COLOR] = m_isSkyColor;
