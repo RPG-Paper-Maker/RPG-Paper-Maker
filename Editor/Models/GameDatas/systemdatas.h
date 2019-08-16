@@ -36,6 +36,7 @@ public:
     static const QString JSON_IS_SCREEN_WINDOW;
     static const QString JSON_COLORS;
     static const QString JSON_WINDOW_SKINS;
+    static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_LAST_MAJOR_VERSION;
     static const QString JSON_LAST_MINOR_VERSION;
     static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
@@ -75,6 +76,7 @@ public:
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
     QStandardItemModel * modelWindowSkins() const;
+    QStandardItemModel * modelcameraProperties() const;
     int lastMajorVersion() const;
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
@@ -85,6 +87,7 @@ public:
     void setDefaultCurrencies();
     void setDefaultItemsTypes();
     void setDefaultWindowSkins();
+    void setDefaultCameraProperties();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -108,6 +111,7 @@ private:
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
     QStandardItemModel *m_modelWindowSkins;
+    QStandardItemModel *m_modelCameraProperties;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
 };

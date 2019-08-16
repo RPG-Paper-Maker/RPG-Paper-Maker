@@ -81,6 +81,10 @@ QToolBar {
     background-color: rgba(0, 0, 0, 10%);
 }
 
+QToolButton {
+    font-size: 11px;
+}
+
 QToolButton, QCheckBox, QLabel {
     background: transparent;
 }

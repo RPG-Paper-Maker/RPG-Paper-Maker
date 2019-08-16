@@ -16,6 +16,7 @@
 #include "systemcurrency.h"
 #include "systemcolor.h"
 #include "systemwindowskin.h"
+#include "systemcameraproperties.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -23,6 +24,7 @@ const QString SystemDatas::JSON_SCREEN_HEIGHT = "sh";
 const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
 const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
+const QString SystemDatas::JSON_CAMERA_PROPERTIES = "cp";
 const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
@@ -46,6 +48,7 @@ SystemDatas::SystemDatas() :
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
     m_modelWindowSkins(new QStandardItemModel),
+    m_modelCameraProperties(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0)
 {
@@ -61,6 +64,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelCurrencies);
     SuperListItem::deleteModel(m_modelItemsTypes);
     SuperListItem::deleteModel(m_modelWindowSkins);
+    SuperListItem::deleteModel(m_modelCameraProperties);
 }
 
 void SystemDatas::read(QString path) {
@@ -159,6 +163,10 @@ QStandardItemModel * SystemDatas::modelWindowSkins() const {
     return m_modelWindowSkins;
 }
 
+QStandardItemModel * SystemDatas::modelcameraProperties() const {
+    return m_modelCameraProperties;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -191,10 +199,11 @@ void SystemDatas::setDefault() {
     m_idWindowSkin = 1;
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
 
-    setDefaultColors();
-    setDefaultCurrencies();
-    setDefaultItemsTypes();
-    setDefaultWindowSkins();
+    this->setDefaultColors();
+    this->setDefaultCurrencies();
+    this->setDefaultItemsTypes();
+    this->setDefaultWindowSkins();
+    this->setDefaultCameraProperties();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -276,6 +285,22 @@ void SystemDatas::setDefaultWindowSkins() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultCameraProperties() {
+    QList<QStandardItem *> row;
+    SystemCameraProperties *cameraProperties;
+
+    cameraProperties = new SystemCameraProperties(1, "Outside");
+    row = cameraProperties->getModelRow();
+    m_modelCameraProperties->appendRow(row);
+    cameraProperties = new SystemCameraProperties(2, "Battle", new
+        PrimitiveValue(180.0), new PrimitiveValue(SystemCameraProperties
+        ::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(60.0));
+    row = cameraProperties->getModelRow();
+    m_modelCameraProperties->appendRow(row);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -283,6 +308,7 @@ void SystemDatas::setDefaultWindowSkins() {
 
 void SystemDatas::read(const QJsonObject &json){
     QJsonArray jsonList;
+    QList<QStandardItem *> row;
     QStandardItem *item;
 
     // Clear
@@ -290,6 +316,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelCurrencies, false);
     SuperListItem::deleteModel(m_modelItemsTypes, false);
     SuperListItem::deleteModel(m_modelWindowSkins, false);
+    SuperListItem::deleteModel(m_modelCameraProperties, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -328,7 +355,7 @@ void SystemDatas::read(const QJsonObject &json){
     // Currencies
     jsonList = json["currencies"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SystemCurrency* sys = new SystemCurrency;
         sys->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
@@ -340,7 +367,7 @@ void SystemDatas::read(const QJsonObject &json){
     // Items kind
     jsonList = json["itemsTypes"].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem* item = new QStandardItem;
+        item = new QStandardItem;
         SuperListItem* sys = new SuperListItem;
         sys->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
@@ -352,13 +379,22 @@ void SystemDatas::read(const QJsonObject &json){
     // Window skins
     jsonList = json[JSON_WINDOW_SKINS].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        QStandardItem *item = new QStandardItem;
+        item = new QStandardItem;
         SystemWindowSkin *sys = new SystemWindowSkin;
         sys->read(jsonList[i].toObject());
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
         item->setText(sys->toString());
         m_modelWindowSkins->appendRow(item);
+    }
+
+    // Camera properties
+    jsonList = json[JSON_CAMERA_PROPERTIES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemCameraProperties *cameraProperties = new SystemCameraProperties;
+        cameraProperties->read(jsonList[i].toObject());
+        row = cameraProperties->getModelRow();
+        m_modelCameraProperties->appendRow(row);
     }
 
     // Version
@@ -446,6 +482,19 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_WINDOW_SKINS] = jsonArray;
+
+    // Camera properties
+    jsonArray = QJsonArray();
+    l = m_modelCameraProperties->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemCameraProperties *cameraProperties = reinterpret_cast<
+            SystemCameraProperties *>(m_modelCameraProperties->item(i)->data()
+            .value<quintptr>());
+        cameraProperties->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_CAMERA_PROPERTIES] = jsonArray;
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;

@@ -67,6 +67,10 @@ WidgetMenuBarMapEditor > QMenu::item:selected{
      background-color: #8c8c8c;
 }
 
+QToolButton {
+    font-size: 11px;
+}
+
 QToolButton::disabled {
     color: #474747;
 }

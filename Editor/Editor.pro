@@ -39,6 +39,7 @@ HEADERS += \
     MapEditor/mountain.h \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
+    Models/System/systemcameraproperties.h \
     Models/System/systemmountain.h \
     Models/System/systemproperty.h \
     Models/translations.h \
@@ -320,6 +321,7 @@ SOURCES += \
     MapEditor/mountain.cpp \
     MapEditor/mountains.cpp \
     MapEditor/textureseveral.cpp \
+    Models/System/systemcameraproperties.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemproperty.cpp \
     Models/project.cpp \

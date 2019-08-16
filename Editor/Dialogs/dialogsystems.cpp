@@ -23,6 +23,7 @@
 #include "systembattlemap.h"
 #include "systemcolor.h"
 #include "systemwindowskin.h"
+#include "systemcameraproperties.h"
 
 // -------------------------------------------------------
 //
@@ -123,6 +124,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemWindowSkin);
     ui->panelSuperListWindowSkins->initializeModel(gameDatas->systemDatas()
         ->modelWindowSkins());
+    ui->panelSuperListCameraProperties->list()->initializeNewItemInstance(new
+        SystemCameraProperties);
+    ui->panelSuperListCameraProperties->initializeModel(gameDatas->systemDatas()
+        ->modelcameraProperties());
     int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
     SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
         ->gameDatas()->systemDatas()->modelWindowSkins());
