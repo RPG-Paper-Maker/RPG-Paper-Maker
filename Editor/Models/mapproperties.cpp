@@ -22,7 +22,7 @@ const QString MapProperties::JSON_MUSIC = "music";
 const QString MapProperties::JSON_BACKGROUND_SOUND = "bgs";
 const QString MapProperties::JSON_IS_SKY_COLOR = "isky";
 const QString MapProperties::JSON_SKY_COLOR_ID = "sky";
-const QString MapProperties::JSON_INVISIBLE_OBJECT = "io";
+const QString MapProperties::JSON_STARTUP_OBJECT = "so";
 const QString MapProperties::JSON_OVERFLOW_SPRITES = "ofsprites";
 const QString MapProperties::JSON_OVERFLOW_OBJECTS3D = "of3d";
 const QString MapProperties::JSON_OVERFLOW_MOUNTAINS = "ofmoun";
@@ -56,11 +56,11 @@ MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
     m_backgroundSound(new SystemPlaySong(-1, SongKind::BackgroundSound)),
     m_skyColorID(new PrimitiveValue(PrimitiveValueKind::DataBase, 1)),
     m_isSkyColor(true),
-    m_invisibleObject(new SystemCommonObject)
+    m_startupObject(new SystemCommonObject)
 {
     m_skyColorID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors());
-    m_invisibleObject->setDefaultInvisibleObject();
+    m_startupObject->setDefaultStartupObject();
 }
 
 MapProperties::~MapProperties() {
@@ -70,7 +70,7 @@ MapProperties::~MapProperties() {
     delete m_music;
     delete m_backgroundSound;
     delete m_skyColorID;
-    delete m_invisibleObject;
+    delete m_startupObject;
 }
 
 SystemTileset * MapProperties::tileset() const {
@@ -139,8 +139,8 @@ void MapProperties::setSkyColorID(PrimitiveValue *skyColorID) {
     m_skyColorID = skyColorID;
 }
 
-SystemCommonObject * MapProperties::invisibleObject() const {
-    return m_invisibleObject;
+SystemCommonObject * MapProperties::startupObject() const {
+    return m_startupObject;
 }
 
 // -------------------------------------------------------
@@ -349,8 +349,8 @@ void MapProperties::save(QString path, bool temp) {
 
 // -------------------------------------------------------
 
-void MapProperties::setDefaultInvisibleObject() {
-    m_invisibleObject->setDefaultInvisibleObject();
+void MapProperties::setDefaultStartupObject() {
+    m_startupObject->setDefaultStartupObject();
 }
 
 // -------------------------------------------------------
@@ -550,8 +550,8 @@ void MapProperties::read(const QJsonObject &json){
         ->systemDatas()->modelColors());
 
     // Invisible object
-    m_invisibleObject = new SystemCommonObject;
-    m_invisibleObject->read(json[JSON_INVISIBLE_OBJECT].toObject());
+    m_startupObject = new SystemCommonObject;
+    m_startupObject->read(json[JSON_STARTUP_OBJECT].toObject());
 
     // Overflow
     this->readOverflow(json[JSON_OVERFLOW_SPRITES].toArray(),
@@ -592,8 +592,8 @@ void MapProperties::write(QJsonObject &json) const {
 
     // Invisible object
     obj = QJsonObject();
-    m_invisibleObject->write(obj);
-    json[JSON_INVISIBLE_OBJECT] = obj;
+    m_startupObject->write(obj);
+    json[JSON_STARTUP_OBJECT] = obj;
 
     // Overflow
     this->writeOverflow(json, m_outOverflowSprites, JSON_OVERFLOW_SPRITES);

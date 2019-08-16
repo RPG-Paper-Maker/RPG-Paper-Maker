@@ -261,7 +261,7 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(QStandardItemModel
 
 // -------------------------------------------------------
 
-void SystemCommonObject::setDefaultInvisibleObject() {
+void SystemCommonObject::setDefaultStartupObject() {
     QList<QStandardItem *> row;
     QStandardItem *item;
     SystemState *state;

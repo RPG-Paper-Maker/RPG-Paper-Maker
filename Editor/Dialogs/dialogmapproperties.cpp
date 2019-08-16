@@ -76,7 +76,7 @@ void DialogMapProperties::initialize() {
     // Invisible object
     ui->panelObject->initializeList(RPM::get()->project()->gameDatas()
         ->commonEventsDatas()->modelCommonObjects());
-    ui->panelObject->initializeModel(m_mapProperties.invisibleObject());
+    ui->panelObject->initializeModel(m_mapProperties.startupObject());
     ui->panelObject->updateModel();
     ui->panelObject->showInvisible(true);
 }

@@ -53,7 +53,7 @@ public:
                                      int k, bool r, bool ri,
                                      EventCommandKind kind,
                                      QVector<QString> commandList);
-    void setDefaultInvisibleObject();
+    void setDefaultStartupObject();
     int inheritanceId() const;
     void setInheritance(int id);
     bool inherit(const SystemCommonObject *object);

@@ -474,7 +474,7 @@
          </property>
          <widget class="QWidget" name="tab_2">
           <attribute name="title">
-           <string>Invisible object</string>
+           <string>Map startup reactions</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_12">
            <item row="0" column="0">
@@ -657,10 +657,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>panelObject</zorder>
-  <zorder>label_13</zorder>
-  <zorder>tabWidget</zorder>
-  <zorder>buttonBox</zorder>
  </widget>
  <customwidgets>
   <customwidget>
