@@ -24,6 +24,7 @@ HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
+    Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
@@ -307,6 +308,7 @@ SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
+    Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
@@ -562,6 +564,7 @@ FORMS += \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
+    Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \

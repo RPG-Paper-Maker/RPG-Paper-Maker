@@ -10,6 +10,7 @@
 */
 
 #include "systemcameraproperties.h"
+#include "dialogsystemcameraproperties.h"
 
 const QString SystemCameraProperties::JSON_DISTANCE = "d";
 const QString SystemCameraProperties::JSON_HORIZONTAL_ANGLE = "ha";
@@ -72,6 +73,42 @@ SystemCameraProperties::~SystemCameraProperties() {
     delete m_far;
 }
 
+PrimitiveValue * SystemCameraProperties::distance() const {
+    return m_distance;
+}
+
+PrimitiveValue * SystemCameraProperties::horizontalAngle() const {
+    return m_horizontalAngle;
+}
+
+PrimitiveValue * SystemCameraProperties::verticalAngle() const {
+    return m_verticalAngle;
+}
+
+PrimitiveValue * SystemCameraProperties::targetOffsetX() const {
+    return m_targetOffsetX;
+}
+
+PrimitiveValue * SystemCameraProperties::targetOffsetY() const {
+    return m_targetOffsetY;
+}
+
+PrimitiveValue * SystemCameraProperties::targetOffsetZ() const {
+    return m_targetOffsetZ;
+}
+
+PrimitiveValue * SystemCameraProperties::fieldOfView() const {
+    return m_fieldOfView;
+}
+
+PrimitiveValue * SystemCameraProperties::near() const {
+    return m_near;
+}
+
+PrimitiveValue * SystemCameraProperties::far() const {
+    return m_far;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -81,13 +118,12 @@ SystemCameraProperties::~SystemCameraProperties() {
 bool SystemCameraProperties::openDialog() {
     SystemCameraProperties cameraProperties;;
     cameraProperties.setCopy(*this);
-    /*
-    DialogSystemCurrency dialog(currency);
+    DialogSystemCameraProperties dialog(cameraProperties);
 
     if (dialog.exec() == QDialog::Accepted) {
-        setCopy(currency);
+        setCopy(cameraProperties);
         return true;
-    }*/
+    }
 
     return false;
 }
