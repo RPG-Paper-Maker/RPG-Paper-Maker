@@ -79,6 +79,12 @@ bool Position3D::isOutMapPorperties(MapProperties& properties) {
 
 // -------------------------------------------------------
 
+void Position3D::setCopy(const Position3D &position) {
+    this->setCoords(position.x(), position.y(), position.yPlus(), position.z());
+}
+
+// -------------------------------------------------------
+
 QString Position3D::toString() const {
     QString infos = "[" + QString::number(m_x) + "," + QString::number(m_y) +
         "," + QString::number(m_y_plus) + "," + QString::number(m_z) + "]";

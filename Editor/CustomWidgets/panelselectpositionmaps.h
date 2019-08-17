@@ -9,35 +9,32 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef DIALOGCOMMANDTELEPORTOBJECTSELECT_H
-#define DIALOGCOMMANDTELEPORTOBJECTSELECT_H
+#ifndef PANELSELECTPOSITIONMAPS_H
+#define PANELSELECTPOSITIONMAPS_H
 
-#include <QDialog>
+#include <QWidget>
 #include <QModelIndex>
 #include "treemapdatas.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogCommandTeleportObjectSelect
+//  CLASS PanelSelectPositionMaps
 //
-//  A dialog used for selecting a position for teleporting
-//  (displaying the maps).
+//  A panel used for selecting a map and a position.
 //
 // -------------------------------------------------------
 
 namespace Ui {
-class DialogSelectPosition;
+class PanelSelectPositionMaps;
 }
 
-class DialogSelectPosition : public QDialog
+class PanelSelectPositionMaps : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DialogSelectPosition(int idMap, int x, int y, int yPlus, int z,
-        QWidget *parent = nullptr);
-    ~DialogSelectPosition();
-
+    explicit PanelSelectPositionMaps(QWidget *parent = nullptr);
+    ~PanelSelectPositionMaps();
     int idMap() const;
     QString mapName() const;
     int x() const;
@@ -46,12 +43,17 @@ public:
     int z() const;
 
     TreeMapTag * currentTag() const;
+    void initialize(int idMap, int x, int y, int yPlus, int z);
 
 private:
-    Ui::DialogSelectPosition *ui;
+    Ui::PanelSelectPositionMaps *ui;
+    TreeMapDatas* m_treeMapDatas;
 
 private slots:
-    void accept();
+    void on_spinBoxX_valueChanged(int i);
+    void on_spinBoxY_valueChanged(int i);
+    void on_spinBoxYplus_valueChanged(int i);
+    void on_spinBoxZ_valueChanged(int i);
 };
 
-#endif // DIALOGCOMMANDTELEPORTOBJECTSELECT_H
+#endif // PANELSELECTPOSITIONMAPS_H

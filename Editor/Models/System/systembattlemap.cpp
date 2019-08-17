@@ -10,10 +10,12 @@
 */
 
 #include "systembattlemap.h"
-#include "dialogselectposition.h"
+#include "dialogsystembattlemap.h"
+#include "rpm.h"
 
-const QString SystemBattleMap::jsonIdMap = "idm";
-const QString SystemBattleMap::jsonPosition = "p";
+const QString SystemBattleMap::JSON_CAMERA_PROPERTIES_ID = "cpi";
+const QString SystemBattleMap::JSON_ID_MAP = "idm";
+const QString SystemBattleMap::JSON_POSITION = "p";
 
 // -------------------------------------------------------
 //
@@ -21,26 +23,45 @@ const QString SystemBattleMap::jsonPosition = "p";
 //
 // -------------------------------------------------------
 
-SystemBattleMap::SystemBattleMap()
+SystemBattleMap::SystemBattleMap() :
+    SystemBattleMap(-1, "")
 {
 
 }
 
-SystemBattleMap::SystemBattleMap(int i, QString name) :
-    SystemBattleMap(i, name, 1, Position3D(0, 0, 0, 0))
+SystemBattleMap::SystemBattleMap(int i, QString name, PrimitiveValue *cpi, int
+    im, Position3D p) :
+    SuperListItem(i, name),
+    m_cameraPropertiesID(cpi),
+    m_idMap(im),
+    m_position(p)
 {
-
+    m_cameraPropertiesID->setModelDataBase(RPM::get()->project()->gameDatas()
+        ->systemDatas()->modelcameraProperties());
 }
 
-SystemBattleMap::SystemBattleMap(int i, QString name, int idMap,
-    Position3D position) : SuperListItem(i, name), m_idMap(idMap), m_position(
-    position)
-{
-
+SystemBattleMap::~SystemBattleMap() {
+    delete m_cameraPropertiesID;
 }
 
-SystemBattleMap::~SystemBattleMap(){
+PrimitiveValue * SystemBattleMap::cameraPropertiesID() const {
+    return m_cameraPropertiesID;
+}
 
+int SystemBattleMap::idMap() const {
+    return m_idMap;
+}
+
+void SystemBattleMap::setIDMap(int id) {
+    m_idMap = id;
+}
+
+Position3D SystemBattleMap::position() const {
+    return m_position;
+}
+
+void SystemBattleMap::setPosition(Position3D &position) {
+    m_position = position;
 }
 
 // -------------------------------------------------------
@@ -49,17 +70,13 @@ SystemBattleMap::~SystemBattleMap(){
 //
 // -------------------------------------------------------
 
-bool SystemBattleMap::openDialog(){
+bool SystemBattleMap::openDialog() {
     SystemBattleMap battleMap;
     battleMap.setCopy(*this);
 
-    DialogSelectPosition dialog(battleMap.m_idMap, battleMap.m_position.x(),
-        battleMap.m_position.y(), battleMap.m_position.yPlus(), battleMap
-        .m_position.z());
-    if (dialog.exec() == QDialog::Accepted){
-        m_idMap = dialog.idMap();
-        p_name = dialog.mapName();
-        m_position.setCoords(dialog.x(), dialog.y(), dialog.yPlus(),dialog.z());
+    DialogSystemBattleMap dialog(battleMap);
+    if (dialog.exec() == QDialog::Accepted) {
+        this->setCopy(battleMap);
         return true;
     }
     return false;
@@ -67,8 +84,8 @@ bool SystemBattleMap::openDialog(){
 
 // -------------------------------------------------------
 
-SuperListItem* SystemBattleMap::createCopy() const{
-    SystemBattleMap* super = new SystemBattleMap;
+SuperListItem* SystemBattleMap::createCopy() const {
+    SystemBattleMap *super = new SystemBattleMap;
     super->setCopy(*this);
     return super;
 }
@@ -76,12 +93,15 @@ SuperListItem* SystemBattleMap::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemBattleMap::setCopy(const SystemBattleMap& battleMap){
-    SuperListItem::setCopy(battleMap);
+void SystemBattleMap::setCopy(const SuperListItem &super) {
+    const SystemBattleMap *battleMap;
 
-    m_idMap = battleMap.m_idMap;
-    m_position.setCoords(battleMap.m_position.x(), battleMap.m_position.y(),
-        battleMap.m_position.yPlus(), battleMap.m_position.z());
+    SuperListItem::setCopy(super);
+
+    battleMap = reinterpret_cast<const SystemBattleMap *>(&super);
+    m_cameraPropertiesID->setCopy(*battleMap->m_cameraPropertiesID);
+    m_idMap = battleMap->m_idMap;
+    m_position.setCopy(battleMap->m_position);
 }
 
 // -------------------------------------------------------
@@ -99,17 +119,26 @@ QString SystemBattleMap::toString() const {
 void SystemBattleMap::read(const QJsonObject &json){
     SuperListItem::read(json);
 
-    m_idMap = json[jsonIdMap].toInt();
-    m_position.read(json[jsonPosition].toArray());
+    if (json.contains(JSON_CAMERA_PROPERTIES_ID)) {
+        m_cameraPropertiesID->read(json[JSON_CAMERA_PROPERTIES_ID].toObject());
+    }
+    m_idMap = json[JSON_ID_MAP].toInt();
+    m_position.read(json[JSON_POSITION].toArray());
 }
 
 // -------------------------------------------------------
 
 void SystemBattleMap::write(QJsonObject &json) const{
     SuperListItem::write(json);
-    QJsonArray objTab;
+    QJsonObject obj;
+    QJsonArray tab;
 
-    json[jsonIdMap] = m_idMap;
-    m_position.write(objTab);
-    json[jsonPosition] = objTab;
+    if (!m_cameraPropertiesID->isDefaultDataBaseValue()) {
+        obj = QJsonObject();
+        m_cameraPropertiesID->write(obj);
+        json[JSON_CAMERA_PROPERTIES_ID] = obj;
+    }
+    json[JSON_ID_MAP] = m_idMap;
+    m_position.write(tab);
+    json[JSON_POSITION] = tab;
 }

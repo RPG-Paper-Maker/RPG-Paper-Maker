@@ -29,22 +29,31 @@
 class SystemBattleMap : public SuperListItem
 {
 public:
+    static const QString JSON_CAMERA_PROPERTIES_ID;
+    static const QString JSON_ID_MAP;
+    static const QString JSON_POSITION;
+
     SystemBattleMap();
-    SystemBattleMap(int i, QString name);
-    SystemBattleMap(int i, QString name, int idMap, Position3D position);
+    SystemBattleMap(int i, QString name, PrimitiveValue *cpi = new
+        PrimitiveValue(PrimitiveValueKind::DataBase, 1), int im = 1, Position3D
+        p = Position3D(0, 0, 0, 0));
     virtual ~SystemBattleMap();
+
+    PrimitiveValue * cameraPropertiesID() const;
+    int idMap() const;
+    void setIDMap(int id);
+    Position3D position() const;
+    void setPosition(Position3D &position);
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemBattleMap &battleMap);
+    virtual void setCopy(const SuperListItem &super);
     virtual QString toString() const;
-
-    static const QString jsonIdMap;
-    static const QString jsonPosition;
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
 protected:
+    PrimitiveValue *m_cameraPropertiesID;
     int m_idMap;
     Position3D m_position;
 };

@@ -40,6 +40,7 @@ public:
     void setCoords(int x, int y, double yPlus, int z);
     void setInGrid(Position3D &p, int w, int h);
     bool isOutMapPorperties(MapProperties& properties);
+    void setCopy(const Position3D &position);
 
     virtual QString toString() const;
 

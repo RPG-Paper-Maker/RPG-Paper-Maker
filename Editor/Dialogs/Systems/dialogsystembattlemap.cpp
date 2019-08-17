@@ -10,8 +10,8 @@
 */
 
 #include <QMessageBox>
-#include "dialogselectposition.h"
-#include "ui_dialogselectposition.h"
+#include "dialogsystembattlemap.h"
+#include "ui_dialogsystembattlemap.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -20,43 +20,26 @@
 //
 // -------------------------------------------------------
 
-DialogSelectPosition::DialogSelectPosition(int idMap, int x, int y, int yPlus,
-    int z, QWidget *parent) :
+DialogSystemBattleMap::DialogSystemBattleMap(SystemBattleMap &battleMap,
+    QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSelectPosition)
+    ui(new Ui::DialogSystemBattleMap),
+    m_battleMap(battleMap)
 {
+    Position3D position;
+
     ui->setupUi(this);
 
-    ui->panelSelectPositionMaps->initialize(idMap, x, y, yPlus, z);
+    ui->panelPrimitiveCameraPropertiesID->initializeDataBaseAndUpdate(battleMap
+        .cameraPropertiesID());
+    position = battleMap.position();
+    ui->panelSelectPositionMaps->initialize(battleMap.idMap(), position.x(),
+        position.y(), position.getYpx(RPM::getSquareSize()), position.z());
 }
 
-DialogSelectPosition::~DialogSelectPosition()
+DialogSystemBattleMap::~DialogSystemBattleMap()
 {
     delete ui;
-}
-
-int DialogSelectPosition::idMap() const{
-    return ui->panelSelectPositionMaps->idMap();
-}
-
-QString DialogSelectPosition::mapName() const {
-    return ui->panelSelectPositionMaps->mapName();
-}
-
-int DialogSelectPosition::x() const {
-    return ui->panelSelectPositionMaps->x();
-}
-
-int DialogSelectPosition::y() const {
-    return ui->panelSelectPositionMaps->y();
-}
-
-int DialogSelectPosition::yPlus() const {
-    return ui->panelSelectPositionMaps->yPlus();
-}
-
-int DialogSelectPosition::z() const {
-    return ui->panelSelectPositionMaps->z();
 }
 
 //--------------------------------------------
@@ -65,7 +48,7 @@ int DialogSelectPosition::z() const {
 //
 //--------------------------------------------
 
-TreeMapTag * DialogSelectPosition::currentTag() const {
+TreeMapTag * DialogSystemBattleMap::currentTag() const {
     return ui->panelSelectPositionMaps->currentTag();
 }
 
@@ -75,11 +58,16 @@ TreeMapTag * DialogSelectPosition::currentTag() const {
 //
 //--------------------------------------------
 
-void DialogSelectPosition::accept() {
+void DialogSystemBattleMap::accept() {
     if (currentTag()->isDir()) {
         QMessageBox::warning(this, "Warning", "You should select a map and not "
             "a folder.");
-    } else{
+    } else {
+        Position3D position(ui->panelSelectPositionMaps->x(), ui
+            ->panelSelectPositionMaps->y(), ui->panelSelectPositionMaps->yPlus()
+            , ui->panelSelectPositionMaps->z());
+        m_battleMap.setIDMap(ui->panelSelectPositionMaps->idMap());
+        m_battleMap.setPosition(position);
         QDialog::accept();
     }
 }

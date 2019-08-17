@@ -20,10 +20,12 @@ TARGET = RPG-Paper-Maker
 DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
+    CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
+    Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
@@ -304,10 +306,12 @@ HEADERS += \
     CustomWidgets/widgetchart.h
 
 SOURCES += \
+    CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
+    Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -560,10 +564,12 @@ SOURCES += \
     CustomWidgets/widgetchart.cpp
 
 FORMS += \
+    CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
+    Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
