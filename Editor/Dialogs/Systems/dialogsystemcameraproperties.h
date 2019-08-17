@@ -36,8 +36,6 @@ public:
         &cameraProperties, QWidget *parent = nullptr);
     ~DialogSystemCameraProperties();
 
-    SystemCameraProperties & cameraProperties() const;
-
 private:
     Ui::DialogSystemCameraProperties *ui;
     SystemCameraProperties &m_cameraProperties;

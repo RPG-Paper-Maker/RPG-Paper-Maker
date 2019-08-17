@@ -34,11 +34,6 @@ DialogSystemCameraProperties::~DialogSystemCameraProperties()
     delete ui;
 }
 
-SystemCameraProperties & DialogSystemCameraProperties::cameraProperties() const
-{
-    return m_cameraProperties;
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

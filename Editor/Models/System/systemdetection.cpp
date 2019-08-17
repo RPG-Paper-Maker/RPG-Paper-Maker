@@ -11,6 +11,7 @@
 
 #include "systemdetection.h"
 #include "rpm.h"
+#include "dialogsystemdetection.h"
 
 const QString SystemDetection::JSON_FIELD_LEFT = "fl";
 const QString SystemDetection::JSON_FIELD_RIGHT = "fr";
@@ -94,13 +95,12 @@ void SystemDetection::setFieldBot(int f) {
 bool SystemDetection::openDialog() {
     SystemDetection detection;
     detection.setCopy(*this);
-    /*
-    DialogSystemCameraProperties dialog(cameraProperties);
+    DialogSystemDetection dialog(detection);
 
     if (dialog.exec() == QDialog::Accepted) {
-        setCopy(cameraProperties);
+        setCopy(detection);
         return true;
-    }*/
+    }
 
     return false;
 }

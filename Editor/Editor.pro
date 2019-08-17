@@ -27,6 +27,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
+    Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
@@ -314,6 +315,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
+    Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
@@ -573,6 +575,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
+    Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \

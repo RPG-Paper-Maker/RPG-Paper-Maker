@@ -24,6 +24,7 @@
 #include "systemcolor.h"
 #include "systemwindowskin.h"
 #include "systemcameraproperties.h"
+#include "systemdetection.h"
 
 // -------------------------------------------------------
 //
@@ -128,6 +129,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemCameraProperties);
     ui->panelSuperListCameraProperties->initializeModel(gameDatas->systemDatas()
         ->modelcameraProperties());
+    ui->panelSuperListDetections->list()->initializeNewItemInstance(new
+        SystemDetection);
+    ui->panelSuperListDetections->initializeModel(gameDatas->systemDatas()
+        ->modelDetections());
     int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
     SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
         ->gameDatas()->systemDatas()->modelWindowSkins());

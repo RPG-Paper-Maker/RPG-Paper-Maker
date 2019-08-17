@@ -587,7 +587,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_8">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Detections</string>
@@ -596,7 +596,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListDetections" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -1483,15 +1483,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetTextLang</class>
-   <extends>QWidget</extends>
-   <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
