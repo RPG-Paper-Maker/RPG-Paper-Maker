@@ -294,7 +294,7 @@ void SystemDatas::setDefaultCameraProperties() {
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
     cameraProperties = new SystemCameraProperties(2, "Battle", new
-        PrimitiveValue(180.0), new PrimitiveValue(SystemCameraProperties
+        PrimitiveValue(360.0), new PrimitiveValue(SystemCameraProperties
         ::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(60.0));
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
