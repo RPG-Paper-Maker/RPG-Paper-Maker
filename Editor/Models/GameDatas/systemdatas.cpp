@@ -17,6 +17,7 @@
 #include "systemcolor.h"
 #include "systemwindowskin.h"
 #include "systemcameraproperties.h"
+#include "systemdetection.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -25,6 +26,7 @@ const QString SystemDatas::JSON_IS_SCREEN_WINDOW = "isw";
 const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 const QString SystemDatas::JSON_CAMERA_PROPERTIES = "cp";
+const QString SystemDatas::JSON_DETECTIONS = "d";
 const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
@@ -49,6 +51,7 @@ SystemDatas::SystemDatas() :
     m_modelItemsTypes(new QStandardItemModel),
     m_modelWindowSkins(new QStandardItemModel),
     m_modelCameraProperties(new QStandardItemModel),
+    m_modelDetections(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0)
 {
@@ -65,6 +68,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelItemsTypes);
     SuperListItem::deleteModel(m_modelWindowSkins);
     SuperListItem::deleteModel(m_modelCameraProperties);
+    SuperListItem::deleteModel(m_modelDetections);
 }
 
 void SystemDatas::read(QString path) {
@@ -167,6 +171,10 @@ QStandardItemModel * SystemDatas::modelcameraProperties() const {
     return m_modelCameraProperties;
 }
 
+QStandardItemModel * SystemDatas::modelDetections() const {
+    return m_modelDetections;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -204,6 +212,7 @@ void SystemDatas::setDefault() {
     this->setDefaultItemsTypes();
     this->setDefaultWindowSkins();
     this->setDefaultCameraProperties();
+    this->setDefaultDetections();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -301,6 +310,17 @@ void SystemDatas::setDefaultCameraProperties() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultDetections() {
+    QList<QStandardItem *> row;
+    SystemDetection *detection;
+
+    detection = new SystemDetection(1, "Front", 0, 0, 0, 1);
+    row = detection->getModelRow();
+    m_modelDetections->appendRow(row);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -395,6 +415,15 @@ void SystemDatas::read(const QJsonObject &json){
         cameraProperties->read(jsonList[i].toObject());
         row = cameraProperties->getModelRow();
         m_modelCameraProperties->appendRow(row);
+    }
+
+    // Detections
+    jsonList = json[JSON_DETECTIONS].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemDetection *detection = new SystemDetection;
+        detection->read(jsonList[i].toObject());
+        row = detection->getModelRow();
+        m_modelDetections->appendRow(row);
     }
 
     // Version
@@ -495,6 +524,18 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_CAMERA_PROPERTIES] = jsonArray;
+
+    // Detections
+    jsonArray = QJsonArray();
+    l = m_modelDetections->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemDetection *detection = reinterpret_cast<SystemDetection *>(
+            m_modelDetections->item(i)->data().value<quintptr>());
+        detection->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_DETECTIONS] = jsonArray;
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;
