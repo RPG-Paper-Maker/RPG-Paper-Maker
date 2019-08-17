@@ -460,6 +460,12 @@ void Project::readSystemDatas(){
 
 // -------------------------------------------------------
 
+void Project::readBattleSystemDatas() {
+    p_gameDatas->readBattleSystem(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::readTilesetsDatas() {
     p_gameDatas->readTilesets(p_pathCurrentProject);
 }
@@ -553,6 +559,12 @@ void Project::writeSpecialsDatas() {
 
 void Project::writeSystemDatas(){
     p_gameDatas->writeSystem(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::writeBattleSystemDatas() {
+    p_gameDatas->writeBattleSystem(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------

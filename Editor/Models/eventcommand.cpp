@@ -118,6 +118,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Play a sound...";
     case EventCommandKind::PlayMusicEffect:
         return "Play a music effect...";
+    case EventCommandKind::ChangeProperty:
+        return "Change property...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:

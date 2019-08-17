@@ -14,6 +14,7 @@
 #include "projectupdater.h"
 #include "rpm.h"
 #include "common.h"
+#include "systembattlemap.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 9;
 
@@ -510,9 +511,10 @@ void ProjectUpdater::updateVersion_1_2_1() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_3_0() {
+    int i, l;
 
     // Update command condition
-    for (int i = 0; i < m_listMapPortions.size(); i++) {
+    for (i = 0; i < m_listMapPortions.size(); i++) {
         QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
         QList<QString>* paths = m_listMapPortionsPaths.at(i);
 
@@ -552,7 +554,7 @@ void ProjectUpdater::updateVersion_1_3_0() {
     QJsonObject objInvisible;
     SystemCommonObject invisible;
     invisible.setDefaultStartupObject();
-    for (int i = 0, l = m_listMapProperties.size(); i < l; i++) {
+    for (i = 0, l = m_listMapProperties.size(); i < l; i++) {
         MapProperties properties;
         objInvisible = QJsonObject();
         properties.read(m_listMapProperties.at(i));
@@ -560,6 +562,20 @@ void ProjectUpdater::updateVersion_1_3_0() {
         properties.write(objInvisible);
         Common::writeOtherJSON(m_listMapPropertiesPaths.at(i), objInvisible);
     }
+
+    // Camera properties + battle map default camera properties
+    m_project->readSystemDatas();
+    m_project->gameDatas()->systemDatas()->setDefaultCameraProperties();
+    m_project->writeSystemDatas();
+    m_project->readBattleSystemDatas();
+    QStandardItemModel *modelBattleMaps = m_project->gameDatas()
+        ->battleSystemDatas()->modelBattleMaps();
+    for (i = 0, l = modelBattleMaps->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        reinterpret_cast<SystemBattleMap *>(modelBattleMaps->item(i)->data()
+            .value<quintptr>())->cameraPropertiesID()->setNumberValue(2);
+    }
+    m_project->writeBattleSystemDatas();
 }
 
 // -------------------------------------------------------

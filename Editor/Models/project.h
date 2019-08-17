@@ -81,6 +81,7 @@ public:
     void readShapesDatas();
     void readSpecialsDatas();
     void readSystemDatas();
+    void readBattleSystemDatas();
     void readTilesetsDatas();
     void readCommonEvents();
     void write(QString path);
@@ -94,6 +95,7 @@ public:
     void writeShapesDatas();
     void writeSpecialsDatas();
     void writeSystemDatas();
+    void writeBattleSystemDatas();
     void writeTilesetsDatas();
     void writeCommonEvents();
     void saveCurrentMap();
