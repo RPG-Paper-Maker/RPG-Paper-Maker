@@ -55,7 +55,6 @@ public:
     void centerInSquare(int offset);
     void initializeGL();
     void initializeVertices();
-    void initializeSquareSize(int s);
     void initialize();
     void addHeight(int h, int hp);
     void paintGL(QMatrix4x4& modelviewProjection);
@@ -64,7 +63,6 @@ public:
 protected:
     QVector3D* m_positionSquare;
     QVector3D m_positionReal;
-    int m_squareSize;
 
     // OpenGL informations
     QOpenGLBuffer m_vertexBuffer;

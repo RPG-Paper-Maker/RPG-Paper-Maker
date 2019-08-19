@@ -44,6 +44,7 @@ public:
     Cursor * cursor() const;
     Cursor * cursorObject() const;
     Cursor * cursorStart() const;
+    Cursor * cursorDetection() const;
     Camera * camera() const;
     bool isCtrlPressed() const;
     void setIsCtrlPressed(bool b);
@@ -57,6 +58,9 @@ public:
     void updateCameraTreeNode();
     void initialize();
     void reLoadTextures();
+    void applyMap(Map *map, QVector3D *position, QVector3D *positionObject,
+        int cameraDistance, double cameraHorizontalAngle,
+        double cameraVerticalAngle, bool isDetection = false);
     Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle,
         double cameraVerticalAngle);
@@ -245,6 +249,7 @@ protected:
     WallIndicator *m_endWallIndicator;
     Cursor *m_cursorObject;
     Cursor *m_cursorStart;
+    Cursor *m_cursorDetection;
     Camera *m_camera;
 
     // Others
@@ -263,6 +268,7 @@ protected:
     Position m_positionRealOnSprite;
     Position m_positionOnObject;
     QVector3D *m_positionStart;
+    QVector3D *m_positionDetection;
     MapElement *m_elementOnLand;
     MapElement *m_elementOnSprite;
     MapElement *m_elementOnObject3D;
@@ -301,6 +307,7 @@ protected:
     int m_currentLayer = -1;
     QString m_lastSquareInfos;
     SystemCommonObject *m_copiedObject;
+    bool m_isDetection;
 };
 
 #endif // CONTROLMAPEDITOR_H

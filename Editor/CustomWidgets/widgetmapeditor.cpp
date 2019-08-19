@@ -16,6 +16,7 @@
 #include <QTime>
 #include <QMessageBox>
 #include <QToolTip>
+#include <QApplication>
 #include "widgetmapeditor.h"
 #include "rpm.h"
 #include "systemcolor.h"
@@ -32,6 +33,7 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_menuBar(nullptr),
     m_needUpdateMap(false),
     isGLInitialized(false),
+    m_detection(nullptr),
     m_timerFirstPressure(new QTimer),
     m_firstPressure(false),
     m_spinBoxX(nullptr),
@@ -102,7 +104,28 @@ Map * WidgetMapEditor::getMap() const {
 //
 // -------------------------------------------------------
 
-Map *WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
+void WidgetMapEditor::applyMap(SystemDetection *detection, QVector3D *position,
+    QVector3D *positionObject, int cameraDistance, double cameraHorizontalAngle,
+    double cameraVerticalAngle)
+{
+    Map *map;
+
+    m_detection = detection;
+    m_position = position;
+    m_positionObject = positionObject;
+    m_cameraDistance = cameraDistance;
+    m_cameraHorizontalAngle = cameraHorizontalAngle;
+    m_cameraVerticalAngle = cameraVerticalAngle;
+
+    map = m_detection->createDetectionMap();
+    m_control.applyMap(map, position, positionObject, cameraDistance,
+        cameraHorizontalAngle, cameraVerticalAngle, true);
+    m_backgroundColor = Qt::black;
+}
+
+// -------------------------------------------------------
+
+Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
     *positionObject, int cameraDistance, double cameraHorizontalAngle,
     double cameraVerticalAngle)
 {
@@ -311,8 +334,28 @@ void WidgetMapEditor::needUpdateMap(int idMap, QVector3D *position, QVector3D
     m_cameraHorizontalAngle = cameraHorizontalAngle;
     m_cameraVerticalAngle = cameraVerticalAngle;
 
-    if (isGLInitialized)
+    if (isGLInitialized) {
         initializeMap();
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::needUpdateMapDetection(SystemDetection *detection,
+    QVector3D *position, QVector3D *positionObject, int cameraDistance, double
+    cameraHorizontalAngle, double cameraVerticalAngle)
+{
+    m_needUpdateMap = true;
+    m_detection = detection;
+    m_position = position;
+    m_positionObject = positionObject;
+    m_cameraDistance = cameraDistance;
+    m_cameraHorizontalAngle = cameraHorizontalAngle;
+    m_cameraVerticalAngle = cameraVerticalAngle;
+
+    if (isGLInitialized) {
+        initializeMap();
+    }
 }
 
 // -------------------------------------------------------
@@ -326,14 +369,20 @@ void WidgetMapEditor::updateCameraDistance(float coef) {
 
 void WidgetMapEditor::initializeMap() {
     makeCurrent();
-    loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
-        m_cameraHorizontalAngle, m_cameraVerticalAngle);
-    if (m_menuBar != nullptr)
+    if (m_detection == nullptr) {
+        loadMap(m_idMap, m_position, m_positionObject, m_cameraDistance,
+            m_cameraHorizontalAngle, m_cameraVerticalAngle);
+    } else {
+        applyMap(m_detection, m_position, m_positionObject, m_cameraDistance,
+            m_cameraHorizontalAngle, m_cameraVerticalAngle);
+    }
+    if (m_menuBar != nullptr) {
         m_menuBar->show();
+    }
 
     m_needUpdateMap = false;
-    this->setFocus();
     updateSpinBoxes();
+    this->setFocus();
 }
 
 // -------------------------------------------------------
@@ -528,6 +577,7 @@ void WidgetMapEditor::wheelEvent(QWheelEvent *event) {
 // -------------------------------------------------------
 
 void WidgetMapEditor::enterEvent(QEvent *) {
+    this->setFocus();
     updateCursor();
 }
 

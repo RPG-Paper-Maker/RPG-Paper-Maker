@@ -40,38 +40,34 @@ Cursor::~Cursor()
     delete m_texture;
 }
 
-void Cursor::initializeSquareSize(int s){
-    m_squareSize = s;
-}
-
 int Cursor::getSquareX() const{
-    return static_cast<int>((m_positionSquare->x() + 1) / m_squareSize);
+    return static_cast<int>((m_positionSquare->x() + 1) / RPM::getSquareSize());
 }
 
 int Cursor::getSquareY() const{
-    return qFloor(static_cast<qreal>(m_positionSquare->y()) / m_squareSize);
+    return qFloor(static_cast<qreal>(m_positionSquare->y()) / RPM::getSquareSize());
 }
 
 int Cursor::getYPlus() const {
-   return Common::modulo(static_cast<int>(m_positionSquare->y()), m_squareSize);
+   return Common::modulo(static_cast<int>(m_positionSquare->y()), RPM::getSquareSize());
 }
 
 double Cursor::getPercentYPlus() const {
-    return static_cast<double>(getYPlus()) / m_squareSize * 100;
+    return static_cast<double>(getYPlus()) / RPM::getSquareSize() * 100;
 }
 
 int Cursor::getSquareZ() const{
-    return static_cast<int>((m_positionSquare->z() + 1) / m_squareSize);
+    return static_cast<int>((m_positionSquare->z() + 1) / RPM::getSquareSize());
 }
 
 void Cursor::setX(int x, bool withReal){
-    m_positionSquare->setX(x * m_squareSize);
+    m_positionSquare->setX(x * RPM::getSquareSize());
     if (withReal)
-        m_positionReal.setX(x * m_squareSize);
+        m_positionReal.setX(x * RPM::getSquareSize());
 }
 
 void Cursor::setY(Position3D pos, bool withReal) {
-    int y = pos.getY(m_squareSize);
+    int y = pos.getY(RPM::getSquareSize());
 
     m_positionSquare->setY(y);
     if (withReal)
@@ -79,9 +75,9 @@ void Cursor::setY(Position3D pos, bool withReal) {
 }
 
 void Cursor::setZ(int z, bool withReal){
-    m_positionSquare->setZ(z * m_squareSize);
+    m_positionSquare->setZ(z * RPM::getSquareSize());
     if (withReal)
-        m_positionReal.setZ(z * m_squareSize);
+        m_positionReal.setZ(z * RPM::getSquareSize());
 }
 
 void Cursor::setPositions(Position3D& position){
@@ -119,7 +115,7 @@ void Cursor::getPosition3D(Position3D &position) const {
 
 Portion Cursor::getPortion() const{
     int y = getSquareY();
-    if (m_positionSquare->y() > m_squareSize) {
+    if (m_positionSquare->y() > RPM::getSquareSize()) {
         y--;
     }
     return Portion(getSquareX() / RPM::PORTION_SIZE, qFloor(static_cast<qreal>(y)
@@ -137,18 +133,18 @@ void Cursor::loadTexture(QString path){
 // -------------------------------------------------------
 
 void Cursor::updatePositionSquare() {
-    setX(static_cast<int>(m_positionReal.x()) / m_squareSize, false);
-    //m_positionSquare->setY(static_cast<int>(m_positionReal.y() / m_squareSize));
-    setZ(static_cast<int>(m_positionReal.z()) / m_squareSize, false);
+    setX(static_cast<int>(m_positionReal.x()) / RPM::getSquareSize(), false);
+    //m_positionSquare->setY(static_cast<int>(m_positionReal.y() / RPM::getSquareSize()));
+    setZ(static_cast<int>(m_positionReal.z()) / RPM::getSquareSize(), false);
 }
 
 // ------------------------------------------------------
 
 void Cursor::centerInSquare(int offset) {
-    m_positionReal.setX(((int)((m_positionReal.x()) / m_squareSize) *
-                        m_squareSize) + (m_squareSize / 2) - offset);
-    m_positionReal.setZ(((int)((m_positionReal.z()) / m_squareSize) *
-                        m_squareSize) + (m_squareSize / 2) - 1);
+    m_positionReal.setX(((int)((m_positionReal.x()) / RPM::getSquareSize()) *
+                        RPM::getSquareSize()) + (RPM::getSquareSize() / 2) - offset);
+    m_positionReal.setZ(((int)((m_positionReal.z()) / RPM::getSquareSize()) *
+                        RPM::getSquareSize()) + (RPM::getSquareSize() / 2) - 1);
 }
 
 // ------------------------------------------------------
@@ -157,11 +153,11 @@ void Cursor::onKeyPressed(int key, double angle, int w, int h, double speed){
     int xPlus, zPlus, res;
     KeyBoardDatas* keyBoardDatas = RPM::get()->engineSettings()
             ->keyBoardDatas();
-    w *= m_squareSize;
-    h *= m_squareSize;
+    w *= RPM::getSquareSize();
+    h *= RPM::getSquareSize();
 
     if (speed == -1)
-        speed = m_squareSize;
+        speed = RPM::getSquareSize();
 
     if (keyBoardDatas->isEqual(key, KeyBoardEngineKind::MoveCursorUp)){
         xPlus = (int)(speed * (qRound(qCos(angle * M_PI / 180.0))));
@@ -223,14 +219,14 @@ void Cursor::addHeight(int h, int hp) {
 
     maxD = RPM::get()->project()->currentMap()->mapProperties()->depth();
     maxH = RPM::get()->project()->currentMap()->mapProperties()->height() - 1;
-    y = qFloor(static_cast<qreal>(m_positionReal.y()) / m_squareSize);
+    y = qFloor(static_cast<qreal>(m_positionReal.y()) / RPM::getSquareSize());
     yPlus = Common::modulo(qFloor(static_cast<qreal>(m_positionReal.y())),
-        m_squareSize);
+        RPM::getSquareSize());
 
     if (y + h >= -maxD && y + h <= maxH && yPlus + hp >= 0 && yPlus + hp <
-        m_squareSize)
+        RPM::getSquareSize())
     {
-        newY = ((y + h) * m_squareSize) + yPlus + hp;
+        newY = ((y + h) * RPM::getSquareSize()) + yPlus + hp;
 
         m_positionSquare->setY(newY);
         m_positionReal.setY(newY);
@@ -247,13 +243,13 @@ void Cursor::initializeVertices(){
 
     // Vertices
     m_vertices.clear();
-    m_vertices.append(Vertex(Lands::verticesQuad[0] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[0] * RPM::getSquareSize() + pos,
                       QVector2D(0.0f, 0.0f)));
-    m_vertices.append(Vertex(Lands::verticesQuad[1] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[1] * RPM::getSquareSize() + pos,
                       QVector2D(w, 0.0f)));
-    m_vertices.append(Vertex(Lands::verticesQuad[2] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[2] * RPM::getSquareSize() + pos,
                       QVector2D(w, h)));
-    m_vertices.append(Vertex(Lands::verticesQuad[3] * m_squareSize + pos,
+    m_vertices.append(Vertex(Lands::verticesQuad[3] * RPM::getSquareSize() + pos,
                       QVector2D(0.0f, h)));
 
     // indexes

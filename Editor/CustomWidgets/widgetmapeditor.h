@@ -20,6 +20,7 @@
 #include "widgetmenubarmapeditor.h"
 #include "paneltextures.h"
 #include "controlmapeditor.h"
+#include "systemdetection.h"
 
 // -------------------------------------------------------
 //
@@ -40,6 +41,9 @@ public:
     void setTreeMapNode(QStandardItem *item);
     Map * getMap() const;
 
+    void applyMap(SystemDetection *detection, QVector3D *position, QVector3D
+        *positionObject, int cameraDistance, double cameraHorizontalAngle,
+        double cameraVerticalAngle);
     Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);
@@ -50,7 +54,11 @@ public:
     void initializeGL();
     void paintGL();
     void needUpdateMap(int idMap, QVector3D *position, QVector3D *positionObject,
-        int cameraDistance, double cameraHorizontalAngle, double cameraVerticalAngle);
+        int cameraDistance, double cameraHorizontalAngle, double
+        cameraVerticalAngle);
+    void needUpdateMapDetection(SystemDetection *detection, QVector3D *position,
+        QVector3D *positionObject, int cameraDistance, double
+        cameraHorizontalAngle, double cameraVerticalAngle);
     void updateCameraDistance(float coef);
     void initializeMap();
     void save();
@@ -82,6 +90,7 @@ private:
     bool m_needUpdateMap;
     bool isGLInitialized;
     int m_idMap;
+    SystemDetection *m_detection;
     QSet<int> m_keysPressed;
     QTimer *m_timerFirstPressure;
     bool m_firstPressure;

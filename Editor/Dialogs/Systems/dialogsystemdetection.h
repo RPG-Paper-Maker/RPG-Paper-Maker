@@ -39,6 +39,9 @@ public:
 private:
     Ui::DialogSystemDetection *ui;
     SystemDetection &m_detection;
+    Map *m_map;
+    QVector3D *m_position;
+    QVector3D *m_positionObject;
 
     void initialize();
 

@@ -33,6 +33,8 @@ DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
 DialogSystemDetection::~DialogSystemDetection()
 {
     delete ui;
+    delete m_position;
+    delete m_positionObject;
 }
 
 // -------------------------------------------------------
@@ -47,6 +49,13 @@ void DialogSystemDetection::initialize() {
     ui->spinBoxFieldRight->setValue(m_detection.fieldRight());
     ui->spinBoxFieldTop->setValue(m_detection.fieldTop());
     ui->spinBoxFieldBot->setValue(m_detection.fieldBot());
+
+    m_position = new QVector3D;
+    m_positionObject = new QVector3D;
+    m_detection.getTargetPosition(m_position);
+    ui->widgetMapEditor->needUpdateMapDetection(&m_detection, m_position,
+        m_positionObject, 400, -129, Camera::defaultVAngle);
+    ui->widgetMapEditor->setFocus();
 }
 
 // -------------------------------------------------------

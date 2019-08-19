@@ -254,14 +254,20 @@ SpriteWallDatas* MapPortion::getWallAt(Position &position) {
 
 // -------------------------------------------------------
 
-void MapPortion::fillWithFloor() {
+void MapPortion::fillWithFloor(MapProperties *properties) {
     QRect rect(0, 0, 1, 1);
     Position p;
 
     for (int i = 0; i < RPM::PORTION_SIZE; i++) {
         for (int j = 0; j < RPM::PORTION_SIZE; j++) {
-            p.setCoords(i, 0, 0, j);
-            m_lands->setLand(p, new FloorDatas(new QRect(rect)));
+            p.setCoords(m_globalPortion.x() * RPM::PORTION_SIZE + i,
+                m_globalPortion.y() * RPM::PORTION_SIZE, 0, m_globalPortion.z()
+                * RPM::PORTION_SIZE + j);
+            if (p.x() < properties->length() && p.y() >= -properties->depth() &&
+                p.y() < properties->height() && p.z() < properties->width())
+            {
+                m_lands->setLand(p, new FloorDatas(new QRect(rect)));
+            }
         }
     }
 }

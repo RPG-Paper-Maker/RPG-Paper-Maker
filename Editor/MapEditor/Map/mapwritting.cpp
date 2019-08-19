@@ -47,7 +47,7 @@ void Map::writeDefaultMap(QString path){
     // Portion
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
-    mapPortion.fillWithFloor();
+    mapPortion.fillWithFloor(&properties);
     SystemCommonObject* o = new SystemCommonObject(1, "Hero", false, 2, new
         QStandardItemModel, new QStandardItemModel, new QStandardItemModel);
     QJsonObject previous;
@@ -66,7 +66,7 @@ int Map::writeDefaultBattleMap(QString path) {
     QString pathMap = writeMap(path, properties, jsonObject);
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
-    mapPortion.fillWithFloor();
+    mapPortion.fillWithFloor(&properties);
     Common::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
         mapPortion);
 

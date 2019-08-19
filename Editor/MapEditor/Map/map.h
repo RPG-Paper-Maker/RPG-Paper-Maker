@@ -33,7 +33,7 @@ class Map : protected QOpenGLFunctions, QObject
 public:
     Map();
     Map(int id);
-    Map(MapProperties* properties);
+    Map(MapProperties* properties, bool isDetection = false);
     virtual ~Map();
     MapProperties* mapProperties() const;
     void setMapProperties(MapProperties* p);
@@ -140,9 +140,9 @@ public:
     void saveMapProperties();
     QString getMapInfosPath() const;
     QString getMapObjectsPath() const;
-    void loadPortion(int realX, int realY, int realZ, int x, int y, int z,
-                     bool visible);
-    void loadPortionThread(MapPortion *portion, QString &path);
+    void loadPortion(int realX, int realY, int realZ, int x, int y, int z, bool
+        visible);
+    void loadPortionThread(MapPortion *mapPortion, QString &path);
     void replacePortion(Portion& previousPortion, Portion& newPortion,
                         bool visible);
     void updatePortion(MapPortion *mapPortion, MapElement *elementExcludeSprite,
@@ -196,6 +196,7 @@ private:
     int m_portionsRay;
     int m_squareSize;
     bool m_saved;
+    bool m_isDetection;
 
     // Static program
     QOpenGLShaderProgram *m_programStatic;

@@ -28,6 +28,7 @@ Map::Map() :
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
+    m_isDetection(false),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
@@ -41,6 +42,7 @@ Map::Map(int id) :
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
+    m_isDetection(false),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
@@ -76,15 +78,23 @@ Map::Map(int id) :
     loadTextures();
 }
 
-Map::Map(MapProperties* properties) :
+Map::Map(MapProperties* properties, bool isDetection) :
     m_mapProperties(properties),
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
+    m_isDetection(isDetection),
     m_programStatic(nullptr),
-    m_programFaceSprite(nullptr)
+    m_programFaceSprite(nullptr),
+    m_textureTileset(nullptr),
+    m_textureObjectSquare(nullptr),
+    m_textureMissing(nullptr)
 {
+    m_portionsRay = RPM::get()->getPortionsRay() + 1;
+    m_squareSize = RPM::get()->getSquareSize();
 
+    // Loading textures
+    loadTextures();
 }
 
 Map::~Map() {
@@ -226,7 +236,6 @@ void Map::removeOverflowMountains(Position& p, Portion& portion) {
 void Map::initializeCursor(QVector3D *position) {
     m_cursor = new Cursor(position);
     m_cursor->loadTexture(":/textures/Ressources/editor_cursor.png");
-    m_cursor->initializeSquareSize(m_squareSize);
     m_cursor->initialize();
 }
 
@@ -338,7 +347,7 @@ QString Map::getMapObjectsPath() const{
 void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
     bool visible)
 {
-    MapPortion* newMapPortion = loadPortionMap(realX, realY, realZ);
+    MapPortion* newMapPortion = loadPortionMap(realX, realY, realZ, false);
     if (newMapPortion != nullptr)
         newMapPortion->setIsVisible(visible);
 
@@ -347,16 +356,24 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 
 // -------------------------------------------------------
 
-void Map::loadPortionThread(MapPortion* portion, QString &path)
+void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
 {
-    Common::readJSON(path, *portion);
-    portion->initializeVertices(m_squareSize, m_textureTileset,
+    if (m_isDetection) {
+        Portion portion;
+        mapPortion->getGlobalPortion(portion);
+        if (portion.y() == 0) {
+            mapPortion->fillWithFloor(m_mapProperties);
+        }
+    } else {
+        Common::readJSON(path, *mapPortion);
+    }
+    mapPortion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
         m_texturesSpriteWalls, nullptr, nullptr);
-    portion->updateEmpty();
-    if (!portion->isEmpty()) {
-        portion->initializeGL(m_programStatic, m_programFaceSprite);
-        portion->updateGL();
+    mapPortion->updateEmpty();
+    if (!mapPortion->isEmpty()) {
+        mapPortion->initializeGL(m_programStatic, m_programFaceSprite);
+        mapPortion->updateGL();
     }
 }
 

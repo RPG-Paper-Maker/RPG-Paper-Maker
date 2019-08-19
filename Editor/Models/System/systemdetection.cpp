@@ -88,6 +88,32 @@ void SystemDetection::setFieldBot(int f) {
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+Map * SystemDetection::createDetectionMap() const {
+    Map *map;
+    MapProperties *mapProperties;
+
+    mapProperties = new MapProperties(1, new LangsTranslation(""), 1 +
+        m_fieldLeft + m_fieldRight, 1 + m_fieldTop + m_fieldBot, 1000, 1000, 1);
+    map = new Map(mapProperties, true);
+
+    return map;
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::getTargetPosition(QVector3D *position) const {
+    position->setX((m_fieldLeft * RPM::getSquareSize()) + (RPM::getSquareSize()
+        / 2));
+    position->setZ((m_fieldTop * RPM::getSquareSize()) + (RPM::getSquareSize()
+        / 2));
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------

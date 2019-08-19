@@ -387,7 +387,7 @@
         </layout>
        </item>
        <item>
-        <widget class="WidgetMapEditor" name="widget" native="true"/>
+        <widget class="WidgetMapEditor" name="widgetMapEditor" native="true"/>
        </item>
       </layout>
      </item>

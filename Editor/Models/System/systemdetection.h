@@ -15,6 +15,7 @@
 #include <QMetaType>
 #include "systemobject3d.h"
 #include "position3d.h"
+#include "map.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +43,7 @@ public:
         DEFAULT_FIELD_RIGHT, int ft = DEFAULT_FIELD_TOP, int fb =
         DEFAULT_FIELD_BOT);
     virtual ~SystemDetection();
+
     int fieldLeft() const;
     void setFieldLeft(int f);
     int fieldRight() const;
@@ -50,6 +52,9 @@ public:
     void setFieldTop(int f);
     int fieldBot() const;
     void setFieldBot(int f);
+
+    Map * createDetectionMap() const;
+    void getTargetPosition(QVector3D *position) const;
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

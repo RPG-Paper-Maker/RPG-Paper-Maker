@@ -36,8 +36,10 @@ ControlMapEditor::ControlMapEditor() :
     m_endWallIndicator(nullptr),
     m_cursorObject(nullptr),
     m_cursorStart(nullptr),
+    m_cursorDetection(nullptr),
     m_camera(new Camera),
     m_positionStart(nullptr),
+    m_positionDetection(nullptr),
     m_elementOnLand(nullptr),
     m_elementOnSprite(nullptr),
     m_elementOnObject3D(nullptr),
@@ -88,6 +90,10 @@ Cursor * ControlMapEditor::cursorObject() const {
 
 Cursor * ControlMapEditor::cursorStart() const {
     return m_cursorStart;
+}
+
+Cursor * ControlMapEditor::cursorDetection() const {
+    return m_cursorDetection;
 }
 
 Camera * ControlMapEditor::camera() const {
@@ -150,18 +156,19 @@ void ControlMapEditor::reLoadTextures(){
 
 // -------------------------------------------------------
 
-Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
-    QVector3D *positionObject, int cameraDistance, double cameraHorizontalAngle,
-    double cameraVerticalAngle)
+void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
+    *positionObject, int cameraDistance, double cameraHorizontalAngle, double
+    cameraVerticalAngle, bool isDetection)
 {
     SystemMapObject *mapObject;
     Position3D heroPosition;
     int i, l;
 
     clearPortionsToUpdate();
+    m_isDetection = isDetection;
 
     // Map & cursor
-    m_map = new Map(idMap);
+    m_map = map;
     RPM::get()->project()->setCurrentMap(m_map);
     m_map->initializeCursor(position);
     m_map->initializeGL();
@@ -178,7 +185,6 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
 
     // Cursor object
     m_cursorObject = new Cursor(positionObject);
-    m_cursorObject->initializeSquareSize(m_map->squareSize());
     Position pos(m_cursorObject->getSquareX(), m_cursorObject->getSquareY(),
         m_cursorObject->getPercentYPlus(), m_cursorObject->getSquareZ());
     setCursorObjectPosition(pos);
@@ -187,32 +193,41 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     m_cursorObject->initialize();
 
     // Cursor start
-    heroPosition = Position3D(-1, 0, 0, -1);
-    if (m_map->mapProperties()->id() == RPM::get()->project()->gameDatas()
-        ->systemDatas()->idMapHero())
-    {
-
-        for (i = 2, l = m_map->modelObjects()->invisibleRootItem()->rowCount();
-            i < l; i++)
+    if (!m_isDetection) {
+        heroPosition = Position3D(-1, 0, 0, -1);
+        if (m_map->mapProperties()->id() == RPM::get()->project()->gameDatas()
+            ->systemDatas()->idMapHero())
         {
-            mapObject = reinterpret_cast<SystemMapObject *>(m_map->modelObjects()
-                ->item(i)->data().value<quintptr>());
-            if (mapObject->id() == RPM::get()->project()->gameDatas()
-                ->systemDatas()->idObjectHero())
+
+            for (i = 2, l = m_map->modelObjects()->invisibleRootItem()->rowCount();
+                i < l; i++)
             {
-                heroPosition = mapObject->position();
-                break;
+                mapObject = reinterpret_cast<SystemMapObject *>(m_map->modelObjects()
+                    ->item(i)->data().value<quintptr>());
+                if (mapObject->id() == RPM::get()->project()->gameDatas()
+                    ->systemDatas()->idObjectHero())
+                {
+                    heroPosition = mapObject->position();
+                    break;
+                }
             }
         }
+        m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
+            heroPosition.getY(m_map->squareSize()), heroPosition.z() * m_map
+            ->squareSize());
+        m_cursorStart = new Cursor(m_positionStart);
+        m_cursorStart->setFrameNumber(1);
+        m_cursorStart->loadTexture(":/textures/Ressources/start.png");
+        m_cursorStart->initialize();
+    } else {
+        m_positionDetection = new QVector3D(position->x() - (RPM
+            ::getSquareSize() / 2), position->y(), position->z() - (RPM
+            ::getSquareSize() / 2));
+        m_cursorDetection = new Cursor(m_positionDetection);
+        m_cursorDetection->setFrameNumber(1);
+        m_cursorDetection->loadTexture(":/textures/Ressources/big_arrow_down.png");
+        m_cursorDetection->initialize();
     }
-    m_positionStart = new QVector3D(heroPosition.x() * m_map->squareSize(),
-        heroPosition.getY(m_map->squareSize()), heroPosition.z() * m_map
-        ->squareSize());
-    m_cursorStart = new Cursor(m_positionStart);
-    m_cursorStart->initializeSquareSize(m_map->squareSize());
-    m_cursorStart->setFrameNumber(1);
-    m_cursorStart->loadTexture(":/textures/Ressources/start.png");
-    m_cursorStart->initialize();
 
     // Wall indicator
     m_beginWallIndicator = new WallIndicator;
@@ -230,6 +245,16 @@ Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
     m_camera->setHorizontalAngle(cameraHorizontalAngle);
     m_camera->setVerticalAngle(cameraVerticalAngle);
     m_camera->update(cursor(), m_map->squareSize());
+}
+
+// -------------------------------------------------------
+
+Map * ControlMapEditor::loadMap(int idMap, QVector3D *position,
+    QVector3D *positionObject, int cameraDistance, double cameraHorizontalAngle,
+    double cameraVerticalAngle)
+{
+    this->applyMap(new Map(idMap), position, positionObject, cameraDistance,
+        cameraHorizontalAngle, cameraVerticalAngle);
 
     return m_map;
 }
@@ -249,6 +274,10 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
         delete m_cursorStart;
         m_cursorStart = nullptr;
     }
+    if (m_cursorDetection != nullptr) {
+        delete m_cursorDetection;
+        m_cursorDetection = nullptr;
+    }
     if (m_beginWallIndicator != nullptr) {
         delete m_beginWallIndicator;
         m_beginWallIndicator = nullptr;
@@ -260,6 +289,10 @@ void ControlMapEditor::deleteMap(bool updateCamera) {
     if (m_positionStart != nullptr) {
         delete m_positionStart;
         m_positionStart = nullptr;
+    }
+    if (m_positionDetection != nullptr) {
+        delete m_positionDetection;
+        m_positionDetection = nullptr;
     }
 
     // Grid
@@ -1263,12 +1296,24 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing user cursor
-    m_map->cursor()->paintGL(modelviewProjection);
+    if (!m_isDetection) {
+        m_map->cursor()->paintGL(modelviewProjection);
+    }
 
     // Drawing start cursor
-    m_cursorStart->getPosition3D(position);
-    if (isVisible(position) && position.x() >= 0 && position.z() >= 0) {
-        m_cursorStart->paintGL(modelviewProjection);
+    if (m_cursorStart != nullptr) {
+        m_cursorStart->getPosition3D(position);
+        if (isVisible(position) && position.x() >= 0 && position.z() >= 0) {
+            m_cursorStart->paintGL(modelviewProjection);
+        }
+    }
+
+    // Drawing detection cursor
+    if (m_cursorDetection != nullptr) {
+        m_cursorDetection->getPosition3D(position);
+        if (isVisible(position)) {
+            m_cursorDetection->paintGL(modelviewProjection);
+        }
     }
 
     // Drawing other stuff
@@ -1368,7 +1413,7 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
         }
     }
 
-    if (updateTree) {
+    if (!m_isDetection && updateTree) {
         updateCameraTreeNode();
     }
 }

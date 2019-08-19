@@ -113,6 +113,7 @@
         <file>Ressources/tileset_cursor.png</file>
         <file>Ressources/start.png</file>
         <file>Ressources/missing.png</file>
+        <file>Ressources/big_arrow_down.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>Themes/darktheme.qss</file>
