@@ -33,7 +33,7 @@ class Map : protected QOpenGLFunctions, QObject
 public:
     Map();
     Map(int id);
-    Map(MapProperties* properties, bool isDetection = false);
+    Map(MapProperties* properties, SystemDetection *detection = nullptr);
     virtual ~Map();
     MapProperties* mapProperties() const;
     void setMapProperties(MapProperties* p);
@@ -157,6 +157,7 @@ public:
     bool isInSomething(Position3D& position, Portion& portion,
                        int offset = -1) const;
     static void getGlobalPortion(Position3D &position, Portion& portion);
+    static bool isInGlobalPortion(Position3D &position, Portion& portion);
     void getLocalPortion(Position3D &position, Portion& portion) const;
     Portion getGlobalFromLocalPortion(Portion& portion) const;
     Portion getLocalFromGlobalPortion(Portion& portion) const;
@@ -196,7 +197,7 @@ private:
     int m_portionsRay;
     int m_squareSize;
     bool m_saved;
-    bool m_isDetection;
+    SystemDetection *m_detection;
 
     // Static program
     QOpenGLShaderProgram *m_programStatic;
@@ -220,6 +221,7 @@ private:
     QList<TextureSeveral *> m_texturesMountains;
     QOpenGLTexture *m_textureObjectSquare;
     QOpenGLTexture *m_textureMissing;
+    QOpenGLTexture *m_textureDetection;
 };
 
 #endif // MAP_H

@@ -316,6 +316,7 @@ void SystemDatas::setDefaultDetections() {
     SystemDetection *detection;
 
     detection = new SystemDetection(1, "Front", 0, 0, 0, 1);
+    detection->setDefault();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
 }
@@ -337,6 +338,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelItemsTypes, false);
     SuperListItem::deleteModel(m_modelWindowSkins, false);
     SuperListItem::deleteModel(m_modelCameraProperties, false);
+    SuperListItem::deleteModel(m_modelDetections, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());

@@ -31,6 +31,7 @@ MapPortion::MapPortion(Portion &globalPortion) :
     m_objects3D(new Objects3D),
     m_mountains(new Mountains),
     m_mapObjects(new MapObjects),
+    m_detection(nullptr),
     m_isEmpty(true)
 {
 
@@ -45,6 +46,10 @@ MapPortion::~MapPortion()
     delete m_mapObjects;
 
     clearPreview();
+}
+
+void MapPortion::setDetection(SystemDetection *detection) {
+    m_detection = detection;
 }
 
 void MapPortion::getGlobalPortion(Portion& portion) {
@@ -88,9 +93,17 @@ void MapPortion::updateEmpty() {
 //
 // -------------------------------------------------------
 
+void MapPortion::initializeDetection() {
+    m_detection->initializeObjects(m_objects3D, m_globalPortion);
+}
+
+// -------------------------------------------------------
+
 LandDatas* MapPortion::getLand(Position& p) {
     return m_lands->getLand(p);
 }
+
+// -------------------------------------------------------
 
 bool MapPortion::addLand(Position& p, LandDatas *land, QJsonObject& previous,
                          MapEditorSubSelectionKind& previousType,

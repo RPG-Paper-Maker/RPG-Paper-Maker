@@ -13,9 +13,10 @@
 #define SYSTEMDETECTION_H
 
 #include <QMetaType>
-#include "systemobject3d.h"
 #include "position3d.h"
-#include "map.h"
+#include "objects3d.h"
+
+class Map;
 
 // -------------------------------------------------------
 //
@@ -33,6 +34,8 @@ public:
     static const QString JSON_FIELD_TOP;
     static const QString JSON_FIELD_BOT;
     static const QString JSON_BOXES;
+    static const QString JSON_BOXES_HEIGHT_SQUARES;
+    static const QString JSON_BOXES_HEIGHT_PIXELS;
     static const int DEFAULT_FIELD_LEFT;
     static const int DEFAULT_FIELD_RIGHT;
     static const int DEFAULT_FIELD_TOP;
@@ -53,8 +56,10 @@ public:
     int fieldBot() const;
     void setFieldBot(int f);
 
-    Map * createDetectionMap() const;
+    Map * createDetectionMap();
     void getTargetPosition(QVector3D *position) const;
+    void setDefault();
+    void initializeObjects(Objects3D *objects3D, Portion &globalPortion);
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

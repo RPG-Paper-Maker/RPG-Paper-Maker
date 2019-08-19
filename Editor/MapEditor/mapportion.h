@@ -12,13 +12,14 @@
 #ifndef MAPPORTION_H
 #define MAPPORTION_H
 
+#include <QOpenGLTexture>
 #include "lands.h"
 #include "sprites.h"
 #include "objects3d.h"
 #include "mountains.h"
 #include "mapobjects.h"
 #include "systemcommonobject.h"
-#include <QOpenGLTexture>
+#include "systemdetection.h"
 
 // -------------------------------------------------------
 //
@@ -41,13 +42,16 @@ public:
     MapPortion(Portion& globalPortion);
     virtual ~MapPortion();
 
+    void setDetection(SystemDetection *detection);
     void getGlobalPortion(Portion& portion);
     MapObjects* mapObjects() const;
+
     bool isVisibleLoaded() const;
     bool isVisible() const;
     void setIsVisible(bool b);
     bool isEmpty() const;
     void updateEmpty();
+    void initializeDetection();
     LandDatas* getLand(Position& p);
     bool addLand(Position& p, LandDatas* land, QJsonObject &previous,
                  MapEditorSubSelectionKind &previousType,
@@ -173,6 +177,7 @@ private:
     MapObjects *m_mapObjects;
     QHash<Position, MapElement*> m_previewSquares;
     QList<Position> m_previewDelete;
+    SystemDetection *m_detection;
     bool m_isVisible;
     bool m_isEmpty;
 };

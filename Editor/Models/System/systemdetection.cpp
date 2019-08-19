@@ -12,12 +12,15 @@
 #include "systemdetection.h"
 #include "rpm.h"
 #include "dialogsystemdetection.h"
+#include "object3dbox.h"
 
 const QString SystemDetection::JSON_FIELD_LEFT = "fl";
 const QString SystemDetection::JSON_FIELD_RIGHT = "fr";
 const QString SystemDetection::JSON_FIELD_TOP = "ft";
 const QString SystemDetection::JSON_FIELD_BOT = "fb";
 const QString SystemDetection::JSON_BOXES = "b";
+const QString SystemDetection::JSON_BOXES_HEIGHT_SQUARES = "bhs";
+const QString SystemDetection::JSON_BOXES_HEIGHT_PIXELS = "bhp";
 const int SystemDetection::DEFAULT_FIELD_LEFT = 2;
 const int SystemDetection::DEFAULT_FIELD_RIGHT = 2;
 const int SystemDetection::DEFAULT_FIELD_TOP = 2;
@@ -92,13 +95,13 @@ void SystemDetection::setFieldBot(int f) {
 //
 // -------------------------------------------------------
 
-Map * SystemDetection::createDetectionMap() const {
+Map * SystemDetection::createDetectionMap() {
     Map *map;
     MapProperties *mapProperties;
 
     mapProperties = new MapProperties(1, new LangsTranslation(""), 1 +
         m_fieldLeft + m_fieldRight, 1 + m_fieldTop + m_fieldBot, 1000, 1000, 1);
-    map = new Map(mapProperties, true);
+    map = new Map(mapProperties, this);
 
     return map;
 }
@@ -110,6 +113,37 @@ void SystemDetection::getTargetPosition(QVector3D *position) const {
         / 2));
     position->setZ((m_fieldTop * RPM::getSquareSize()) + (RPM::getSquareSize()
         / 2));
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::setDefault() {
+    Position3D position;
+
+    position.setZ(1);
+    m_boxes.insert(position, new SystemObject3D(-1, "", ShapeKind::Box, -1, -1,
+        -2));
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::initializeObjects(Objects3D *objects3D, Portion
+    &globalPortion)
+{
+    QHash<Position3D, SystemObject3D *>::iterator it;
+    QSet<Portion> portionsOverflow;
+    Object3DDatas *object;
+    Position position;
+
+    for (it = m_boxes.begin(); it != m_boxes.end(); it++) {
+        position = Position(it.key());
+        position.setX(position.x() + m_fieldLeft);
+        position.setZ(position.z() + m_fieldTop);
+        if (Map::isInGlobalPortion(position, globalPortion)) {
+            object = new Object3DBoxDatas(it.value());
+            objects3D->setObject3D(portionsOverflow, position, object);
+        }
+    }
 }
 
 // -------------------------------------------------------
@@ -189,8 +223,11 @@ void SystemDetection::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         obj = tab.at(i).toObject();
         position.read(obj[RPM::JSON_KEY].toArray());
-        object = new SystemObject3D;
-        object->read(obj[RPM::JSON_VALUE].toObject());
+        obj = obj[RPM::JSON_VALUE].toObject();
+        object = new SystemObject3D(-1, "", ShapeKind::Box, -1, -1, -2,
+            ObjectCollisionKind::None, -1, 1.0, 1, 0, obj[
+            JSON_BOXES_HEIGHT_SQUARES].toInt(), obj[JSON_BOXES_HEIGHT_PIXELS]
+            .toInt());
         m_boxes.insert(position, object);
     }
 }
@@ -199,6 +236,7 @@ void SystemDetection::read(const QJsonObject &json) {
 
 void SystemDetection::write(QJsonObject &json) const {
     QHash<Position3D, SystemObject3D *>::const_iterator it;
+    SystemObject3D *object;
     QJsonArray tab, tabPosition;
     QJsonObject obj, objHash;
 
@@ -221,7 +259,9 @@ void SystemDetection::write(QJsonObject &json) const {
             tabPosition = QJsonArray();
             it.key().write(tabPosition);
             obj = QJsonObject();
-            it.value()->write(obj);
+            object = it.value();
+            obj[JSON_BOXES_HEIGHT_SQUARES] = object->heightSquare();
+            obj[JSON_BOXES_HEIGHT_PIXELS] = object->heightPixel();
             objHash = QJsonObject();
             objHash[RPM::JSON_KEY] = tabPosition;
             objHash[RPM::JSON_VALUE] = obj;

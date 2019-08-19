@@ -27,6 +27,7 @@ class Position : public Position3D
 {
 public:
     Position();
+    Position(const Position3D &pos);
     Position(int x, int y, double y_plus, int z, int layer = 0);
     Position(int x, int y, double y_plus, int z, int layer, int centerX,
              int centerZ, int angle);

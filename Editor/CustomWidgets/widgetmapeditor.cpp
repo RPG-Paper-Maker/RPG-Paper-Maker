@@ -664,8 +664,10 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                 heightPixels, defaultFloorRect, event->pos(), button);
         } else {
             if (button != Qt::MouseButton::MiddleButton) {
-                m_control.moveCursorToMousePosition(event->pos());
-                updateSpinBoxes();
+                if (m_detection == nullptr) {
+                    m_control.moveCursorToMousePosition(event->pos());
+                    updateSpinBoxes();
+                }
             } else {
                 m_control.updateMouseMove(event->pos());
                 m_control.update(MapEditorSelectionKind::None, DrawKind::Pencil,

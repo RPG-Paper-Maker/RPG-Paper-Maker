@@ -19,6 +19,12 @@
 
 Position::Position() : Position(0, 0, 0, 0, 0) {}
 
+Position::Position(const Position3D &pos) :
+    Position(pos.x(), pos.y(), pos.yPlus(), pos.z(), 0)
+{
+
+}
+
 Position::Position(int x, int y, double y_plus, int z, int layer) :
     Position(x, y, y_plus, z, layer, 50, 50, 0)
 {

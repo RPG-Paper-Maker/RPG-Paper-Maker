@@ -209,8 +209,8 @@ bool Project::read(QString path){
     readKeyBoardDatas();
     readPicturesDatas();
     readSongsDatas();
-    readGameDatas();
     readShapesDatas();
+    readGameDatas();
     readTreeMapDatas();
     readScriptsDatas();
     readSpecialsDatas();

@@ -270,22 +270,35 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     }
 
     // 3D objects
-    QHash<int, QOpenGLTexture*>::iterator itObj3D;
-    for (itObj3D = m_texturesObjects3D.begin(); itObj3D != m_texturesObjects3D
-         .end(); itObj3D++)
-    {
-        int textureID = itObj3D.key();
-        QOpenGLTexture *texture = itObj3D.value();
-        if (texture != nullptr) {
-            texture->bind();
-            for (int i = 0; i < totalSize; i++) {
-                mapPortion = this->mapPortionBrut(i);
-                if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
-                    mapPortion->paintObjects3D(textureID, u_hoveredStatic);
+    if (m_detection == nullptr) {
+        QHash<int, QOpenGLTexture*>::iterator itObj3D;
+        for (itObj3D = m_texturesObjects3D.begin(); itObj3D !=
+             m_texturesObjects3D.end(); itObj3D++)
+        {
+            int textureID = itObj3D.key();
+            QOpenGLTexture *texture = itObj3D.value();
+            if (texture != nullptr) {
+                texture->bind();
+                for (int i = 0; i < totalSize; i++) {
+                    mapPortion = this->mapPortionBrut(i);
+                    if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                    {
+                        mapPortion->paintObjects3D(textureID, u_hoveredStatic);
+                    }
                 }
+                texture->release();
             }
-            texture->release();
         }
+    } else {
+        // 3D boxes for detections
+        m_textureDetection->bind();
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded()) {
+                mapPortion->paintObjects3D(1, u_hoveredStatic);
+            }
+        }
+        m_textureDetection->release();
     }
 
     // Mountains

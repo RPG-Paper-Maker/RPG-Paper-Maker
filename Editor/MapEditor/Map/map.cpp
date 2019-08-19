@@ -28,12 +28,13 @@ Map::Map() :
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
     m_saved(true),
-    m_isDetection(false),
+    m_detection(nullptr),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr),
-    m_textureMissing(nullptr)
+    m_textureMissing(nullptr),
+    m_textureDetection(nullptr)
 {
 
 }
@@ -42,12 +43,13 @@ Map::Map(int id) :
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
-    m_isDetection(false),
+    m_detection(nullptr),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr),
-    m_textureMissing(nullptr)
+    m_textureMissing(nullptr),
+    m_textureDetection(nullptr)
 {
     QString realName = Map::generateMapName(id);
     QString pathMaps = Common::pathCombine(RPM::get()->project()
@@ -78,17 +80,18 @@ Map::Map(int id) :
     loadTextures();
 }
 
-Map::Map(MapProperties* properties, bool isDetection) :
+Map::Map(MapProperties* properties, SystemDetection *detection) :
     m_mapProperties(properties),
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
-    m_isDetection(isDetection),
+    m_detection(detection),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),
     m_textureTileset(nullptr),
     m_textureObjectSquare(nullptr),
-    m_textureMissing(nullptr)
+    m_textureMissing(nullptr),
+    m_textureDetection(nullptr)
 {
     m_portionsRay = RPM::get()->getPortionsRay() + 1;
     m_squareSize = RPM::get()->getSquareSize();
@@ -358,14 +361,16 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 
 void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
 {
-    if (m_isDetection) {
+    if (m_detection == nullptr) {
+        Common::readJSON(path, *mapPortion);
+    } else {
         Portion portion;
         mapPortion->getGlobalPortion(portion);
         if (portion.y() == 0) {
             mapPortion->fillWithFloor(m_mapProperties);
         }
-    } else {
-        Common::readJSON(path, *mapPortion);
+        mapPortion->setDetection(m_detection);
+        mapPortion->initializeDetection();
     }
     mapPortion->initializeVertices(m_squareSize, m_textureTileset,
         m_texturesAutotiles, m_texturesMountains, m_texturesCharacters,
@@ -541,6 +546,16 @@ void Map::getGlobalPortion(Position3D& position, Portion &portion){
         portion.addY(-1);
     if (position.z() < 0)
         portion.addZ(-1);
+}
+
+// -------------------------------------------------------
+
+bool Map::isInGlobalPortion(Position3D &position, Portion& portion) {
+    return position.x() >= (portion.x() * RPM::PORTION_SIZE) && position.x() <
+        ((portion.x() + 1) * RPM::PORTION_SIZE) && position.y() >= (portion.y()
+        * RPM::PORTION_SIZE) && position.y() < ((portion.y() + 1) * RPM
+        ::PORTION_SIZE) && position.z() >= (portion.z() * RPM::PORTION_SIZE) &&
+        position.z() < ((portion.z() + 1) * RPM::PORTION_SIZE);
 }
 
 // -------------------------------------------------------

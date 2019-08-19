@@ -47,6 +47,13 @@ void Map::loadTextures() {
     // Object square
     image = QImage(":/textures/Ressources/object_square.png");
     m_textureObjectSquare = this->createTexture(image);
+
+    // Detection
+    if (m_detection != nullptr) {
+        image = QImage(500, 500, QImage::Format_ARGB32);
+        image.fill(RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
+        m_textureDetection = this->createTexture(image);
+    }
 }
 
 // -------------------------------------------------------
@@ -84,6 +91,9 @@ void Map::deleteTextures() {
     }
     if (m_textureMissing != nullptr) {
         delete m_textureMissing;
+    }
+    if (m_textureDetection != nullptr) {
+        delete m_textureDetection;
     }
 }
 

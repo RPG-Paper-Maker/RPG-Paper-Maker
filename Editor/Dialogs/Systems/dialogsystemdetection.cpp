@@ -49,6 +49,7 @@ void DialogSystemDetection::initialize() {
     ui->spinBoxFieldRight->setValue(m_detection.fieldRight());
     ui->spinBoxFieldTop->setValue(m_detection.fieldTop());
     ui->spinBoxFieldBot->setValue(m_detection.fieldBot());
+    ui->spinBoxWidth->hide();
 
     m_position = new QVector3D;
     m_positionObject = new QVector3D;
