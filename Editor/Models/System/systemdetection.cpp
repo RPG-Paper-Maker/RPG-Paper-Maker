@@ -46,7 +46,9 @@ SystemDetection::SystemDetection(int i, QString n, int fl, int fr, int ft, int
     m_fieldLeft(fl),
     m_fieldRight(fr),
     m_fieldTop(ft),
-    m_fieldBot(fb)
+    m_fieldBot(fb),
+    m_currentHeightSquares(1),
+    m_currentHeightPixels(0)
 {
 
 }
@@ -91,6 +93,14 @@ void SystemDetection::setFieldBot(int f) {
     m_fieldBot = f;
 }
 
+void SystemDetection::setCurrentHeightSquares(int v) {
+    m_currentHeightSquares = v;
+}
+
+void SystemDetection::setCurrentHeightPixels(int v) {
+    m_currentHeightPixels = v;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -120,7 +130,9 @@ void SystemDetection::getTargetPosition(QVector3D *position) const {
 // -------------------------------------------------------
 
 SystemObject3D * SystemDetection::instanciateObject() const {
-    return new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2);
+    return new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
+        ObjectCollisionKind::None, -1, 1.0, 1, 0, m_currentHeightSquares,
+        m_currentHeightPixels, 1, 0, true);
 }
 
 // -------------------------------------------------------
@@ -295,7 +307,7 @@ void SystemDetection::read(const QJsonObject &json) {
         object = new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
             ObjectCollisionKind::None, -1, 1.0, 1, 0, obj[
             JSON_BOXES_HEIGHT_SQUARES].toInt(), obj[JSON_BOXES_HEIGHT_PIXELS]
-            .toInt());
+            .toInt(), 1, 0, true);
         m_boxes.insert(position, object);
     }
 }

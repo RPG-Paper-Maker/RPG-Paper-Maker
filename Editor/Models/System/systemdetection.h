@@ -57,6 +57,8 @@ public:
     void setFieldTop(int f);
     int fieldBot() const;
     void setFieldBot(int f);
+    void setCurrentHeightSquares(int v);
+    void setCurrentHeightPixels(int v);
 
     Map * createDetectionMap();
     void getTargetPosition(QVector3D *position) const;
@@ -79,6 +81,8 @@ protected:
     int m_fieldRight;
     int m_fieldTop;
     int m_fieldBot;
+    int m_currentHeightSquares;
+    int m_currentHeightPixels;
     QHash<Position3D, SystemObject3D *> m_boxes;
 };
 

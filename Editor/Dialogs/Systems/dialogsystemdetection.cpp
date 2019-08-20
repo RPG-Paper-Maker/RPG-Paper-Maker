@@ -107,6 +107,18 @@ void DialogSystemDetection::on_spinBoxFieldBot_valueChanged(int i) {
 
 // -------------------------------------------------------
 
+void DialogSystemDetection::on_spinBoxHeightSquares_valueChanged(int i) {
+    m_detection.setCurrentHeightSquares(i);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::on_spinBoxHeightPixels_valueChanged(int i) {
+    m_detection.setCurrentHeightPixels(i);
+}
+
+// -------------------------------------------------------
+
 void DialogSystemDetection::on_comboBoxAutomatic_currentIndexChanged(int index)
 {
 

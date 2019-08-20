@@ -52,6 +52,8 @@ private slots:
     void on_spinBoxFieldRight_valueChanged(int i);
     void on_spinBoxFieldTop_valueChanged(int i);
     void on_spinBoxFieldBot_valueChanged(int i);
+    void on_spinBoxHeightSquares_valueChanged(int i);
+    void on_spinBoxHeightPixels_valueChanged(int i);
     void on_comboBoxAutomatic_currentIndexChanged(int index);
     void on_pushButtonGenerate_pressed();
 };
