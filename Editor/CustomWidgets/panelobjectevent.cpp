@@ -177,24 +177,30 @@ void PanelObjectEvent::on_comboBoxEventsUserCurrentIndexChanged(int index) {
 
 void PanelObjectEvent::on_radioButtonEventSystem_toggled(bool checked) {
     ui->comboBoxEventsSystem->setEnabled(checked);
-    m_event->setIsSystem(true);
-    QStandardItemModel *model = RPM::get()->project()->gameDatas()
-        ->commonEventsDatas()->modelEventsSystem();
-    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
-        ->comboBoxEventsSystem->currentIndex())->data().value<quintptr>());
-    updateEvent(super);
-    updateParameters(super);
+
+    if (checked) {
+        m_event->setIsSystem(true);
+        QStandardItemModel *model = RPM::get()->project()->gameDatas()
+            ->commonEventsDatas()->modelEventsSystem();
+        SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
+            ->comboBoxEventsSystem->currentIndex())->data().value<quintptr>());
+        updateEvent(super);
+        updateParameters(super);
+    }
 }
 
 // -------------------------------------------------------
 
 void PanelObjectEvent::on_radioButtonEventUser_toggled(bool checked) {
     ui->comboBoxEventsUser->setEnabled(checked);
-    m_event->setIsSystem(false);
-    QStandardItemModel *model = RPM::get()->project()->gameDatas()
-        ->commonEventsDatas()->modelEventsUser();
-    SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
-        ->comboBoxEventsUser->currentIndex())->data().value<quintptr>());
-    updateEvent(super);
-    updateParameters(super);
+
+    if (checked) {
+        m_event->setIsSystem(false);
+        QStandardItemModel *model = RPM::get()->project()->gameDatas()
+            ->commonEventsDatas()->modelEventsUser();
+        SystemEvent *super = reinterpret_cast<SystemEvent *>(model->item(ui
+            ->comboBoxEventsUser->currentIndex())->data().value<quintptr>());
+        updateEvent(super);
+        updateParameters(super);
+    }
 }

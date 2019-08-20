@@ -276,7 +276,8 @@ void DialogSystems::initializeMainMenu(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogSystems::initializeEvents(GameDatas *gameDatas){
+void DialogSystems::initializeEvents(GameDatas *gameDatas) {
+    ui->treeViewEventsParameters->setUpdateId(true);
     ui->treeViewEventsParameters
             ->initializeNewItemInstance(new SystemCreateParameter);
     ui->panelSuperListEvents->list()

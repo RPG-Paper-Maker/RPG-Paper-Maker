@@ -585,21 +585,22 @@ void ProjectUpdater::updateVersion_1_3_0_command(QJsonArray &children,
 {
     QJsonObject objCommand;
     QJsonArray nextchildren;
-    int i, l;
+    int i, l, k;
     QString newPath;
 
     for (i = 0, l = children.size(); i < l; i++) {
         objCommand = children.at(i).toObject();
         nextchildren = objCommand["children"].toArray();
         newPath = path + QString::number(i);
-
-        if (objCommand["kind"].toInt() == static_cast<int>(EventCommandKind::If))
-        {
+        k = objCommand["kind"].toInt();
+        if (k == static_cast<int>(EventCommandKind::If)) {
             QJsonArray newArray = objCommand["command"].toArray();
             int idVariable = newArray.at(3).toInt();
             newArray.replace(3, static_cast<int>(PrimitiveValueKind::Variable));
             newArray.insert(4, idVariable);
             Common::modifyJSONValue(root, newPath + ".command", newArray);
+        } else if (k == static_cast<int>(EventCommandKind::SendEvent)) {
+
         }
 
         this->updateVersion_1_3_0_command(nextchildren, root, newPath +
