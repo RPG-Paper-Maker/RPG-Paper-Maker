@@ -60,6 +60,7 @@ void DialogSystemDetection::initialize() {
     ui->spinBoxFieldBot->setValue(m_detection.fieldBot());
     ui->labelWidth->hide();
     ui->spinBoxWidth->hide();
+    ui->spinBoxHeightPixels->setMaximum(RPM::getSquareSize() - 1);
 
     m_detection.getTargetPosition(m_position);
     this->updateMap();
@@ -166,7 +167,8 @@ void DialogSystemDetection::on_spinBoxHeightSquares_valueChanged(int i) {
 // -------------------------------------------------------
 
 void DialogSystemDetection::on_spinBoxHeightPixels_valueChanged(int i) {
-    m_detection.setCurrentHeightPixels(i);
+    m_detection.setCurrentHeightPixels(static_cast<double>(i) / RPM
+        ::getSquareSize() * 100.0);
 }
 
 // -------------------------------------------------------

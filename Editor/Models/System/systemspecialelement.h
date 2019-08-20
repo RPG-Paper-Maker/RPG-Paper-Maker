@@ -76,6 +76,7 @@ public:
     int heightSquare() const;
     void setHeightSquare(int hs);
     int heightPixel() const;
+    double heightP() const;
     void setHeightPixel(int hp);
     int depth() const;
     int depthSquare() const;

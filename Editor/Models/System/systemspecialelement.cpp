@@ -160,6 +160,10 @@ int SystemSpecialElement::heightPixel() const {
     return static_cast<int>(m_heightPixel * RPM::get()->getSquareSize() / 100);
 }
 
+double SystemSpecialElement::heightP() const {
+    return m_heightPixel;
+}
+
 void SystemSpecialElement::setHeightPixel(int hp) {
     m_heightPixel = static_cast<double>(hp) / RPM::get()->getSquareSize() * 100;
 }

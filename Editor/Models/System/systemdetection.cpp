@@ -48,7 +48,7 @@ SystemDetection::SystemDetection(int i, QString n, int fl, int fr, int ft, int
     m_fieldTop(ft),
     m_fieldBot(fb),
     m_currentHeightSquares(1),
-    m_currentHeightPixels(0)
+    m_currentHeightPixels(0.0)
 {
 
 }
@@ -97,7 +97,7 @@ void SystemDetection::setCurrentHeightSquares(int v) {
     m_currentHeightSquares = v;
 }
 
-void SystemDetection::setCurrentHeightPixels(int v) {
+void SystemDetection::setCurrentHeightPixels(double v) {
     m_currentHeightPixels = v;
 }
 
@@ -348,9 +348,10 @@ void SystemDetection::read(const QJsonObject &json) {
         position.read(obj[RPM::JSON_KEY].toArray());
         obj = obj[RPM::JSON_VALUE].toObject();
         object = new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
-            ObjectCollisionKind::None, -1, 1.0, 1, 0, obj[
-            JSON_BOXES_HEIGHT_SQUARES].toInt(), obj[JSON_BOXES_HEIGHT_PIXELS]
-            .toInt(), 1, 0, true);
+            ObjectCollisionKind::None, -1, 1.0, 1, 0, obj.contains(
+            JSON_BOXES_HEIGHT_SQUARES) ? obj[JSON_BOXES_HEIGHT_SQUARES].toInt()
+            : 1, obj.contains(JSON_BOXES_HEIGHT_PIXELS) ? obj[
+            JSON_BOXES_HEIGHT_PIXELS].toDouble() : 0, 1, 0, true);
         m_boxes.insert(position, object);
     }
 }
@@ -383,8 +384,12 @@ void SystemDetection::write(QJsonObject &json) const {
             it.key().write(tabPosition);
             obj = QJsonObject();
             object = it.value();
-            obj[JSON_BOXES_HEIGHT_SQUARES] = object->heightSquare();
-            obj[JSON_BOXES_HEIGHT_PIXELS] = object->heightPixel();
+            if (object->heightSquare() != 1) {
+                obj[JSON_BOXES_HEIGHT_SQUARES] = object->heightSquare();
+            }
+            if (object->heightP() != 0.0) {
+                obj[JSON_BOXES_HEIGHT_PIXELS] = object->heightP();
+            }
             objHash = QJsonObject();
             objHash[RPM::JSON_KEY] = tabPosition;
             objHash[RPM::JSON_VALUE] = obj;
