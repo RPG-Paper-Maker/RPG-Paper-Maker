@@ -25,6 +25,8 @@ const int SystemDetection::DEFAULT_FIELD_LEFT = 2;
 const int SystemDetection::DEFAULT_FIELD_RIGHT = 2;
 const int SystemDetection::DEFAULT_FIELD_TOP = 2;
 const int SystemDetection::DEFAULT_FIELD_BOT = 2;
+const int SystemDetection::DEFAULT_CAMERA_DISTANCE = 400;
+const int SystemDetection::DEFAULT_CAMERA_HORIZONTAL_ANGLE = -125;
 
 // -------------------------------------------------------
 //
@@ -188,6 +190,28 @@ void SystemDetection::correctPosition(Position3D &newPosition, Position3D
     newPosition.setY(position.y());
     newPosition.setYPlus(position.yPlus());
     newPosition.setZ(position.z() - m_fieldTop);
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::removeLimitDetections() {
+    QHash<Position3D, SystemObject3D *>::iterator it;
+    QList<Position3D> removeList;
+    Position position;
+    int i, l;
+
+    for (it = m_boxes.begin(); it != m_boxes.end(); it++) {
+        position = Position(it.key());
+        if (position.x() < -m_fieldLeft || position.x() > m_fieldRight ||
+            position.z() < -m_fieldTop || position.z() > m_fieldBot)
+        {
+            removeList.append(position);
+            delete *it;
+        }
+    }
+    for (i = 0, l = removeList.size(); i < l; i++) {
+        m_boxes.remove(removeList.at(i));
+    }
 }
 
 // -------------------------------------------------------

@@ -53,10 +53,18 @@ void DialogSystemDetection::initialize() {
 
     m_position = new QVector3D;
     m_positionObject = new QVector3D;
-    m_detection.getTargetPosition(m_position);
-    ui->widgetMapEditor->needUpdateMapDetection(&m_detection, m_position,
-        m_positionObject, 400, -129, Camera::defaultVAngle);
+    this->updateMap();
     ui->widgetMapEditor->setFocus();
+}
+
+// -------------------------------------------------------
+
+void DialogSystemDetection::updateMap() {
+    m_detection.getTargetPosition(m_position);
+    m_detection.removeLimitDetections();
+    ui->widgetMapEditor->needUpdateMapDetection(&m_detection, m_position,
+        m_positionObject, SystemDetection::DEFAULT_CAMERA_DISTANCE,
+        SystemDetection::DEFAULT_CAMERA_HORIZONTAL_ANGLE, Camera::defaultVAngle);
 }
 
 // -------------------------------------------------------
@@ -73,24 +81,28 @@ void DialogSystemDetection::on_lineEditName_textChanged(const QString &text) {
 
 void DialogSystemDetection::on_spinBoxFieldLeft_valueChanged(int i) {
     m_detection.setFieldLeft(i);
+    this->updateMap();
 }
 
 // -------------------------------------------------------
 
 void DialogSystemDetection::on_spinBoxFieldRight_valueChanged(int i) {
     m_detection.setFieldRight(i);
+    this->updateMap();
 }
 
 // -------------------------------------------------------
 
 void DialogSystemDetection::on_spinBoxFieldTop_valueChanged(int i) {
     m_detection.setFieldTop(i);
+    this->updateMap();
 }
 
 // -------------------------------------------------------
 
 void DialogSystemDetection::on_spinBoxFieldBot_valueChanged(int i) {
     m_detection.setFieldBot(i);
+    this->updateMap();
 }
 
 // -------------------------------------------------------

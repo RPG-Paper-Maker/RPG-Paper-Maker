@@ -44,6 +44,7 @@ private:
     QVector3D *m_positionObject;
 
     void initialize();
+    void updateMap();
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);

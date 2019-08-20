@@ -40,6 +40,8 @@ public:
     static const int DEFAULT_FIELD_RIGHT;
     static const int DEFAULT_FIELD_TOP;
     static const int DEFAULT_FIELD_BOT;
+    static const int DEFAULT_CAMERA_DISTANCE;
+    static const int DEFAULT_CAMERA_HORIZONTAL_ANGLE;
 
     SystemDetection();
     SystemDetection(int i, QString n, int fl = DEFAULT_FIELD_LEFT, int fr =
@@ -64,6 +66,7 @@ public:
     void addObject(Position3D &position, SystemObject3D *object);
     void deleteObject(Position3D &position);
     void correctPosition(Position3D &newPosition, Position3D &position);
+    void removeLimitDetections();
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
