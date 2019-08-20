@@ -575,7 +575,6 @@ bool WidgetMapEditor::focusNextPrevChild(bool) {
 
 void WidgetMapEditor::focusOutEvent(QFocusEvent *) {
     m_keysPressed.clear();
-    this->setFocus();
 }
 
 // -------------------------------------------------------
@@ -596,6 +595,7 @@ void WidgetMapEditor::enterEvent(QEvent *) {
 // -------------------------------------------------------
 
 void WidgetMapEditor::leaveEvent(QEvent *) {
+    this->clearFocus();
     setCursor(Qt::ArrowCursor);
 }
 
