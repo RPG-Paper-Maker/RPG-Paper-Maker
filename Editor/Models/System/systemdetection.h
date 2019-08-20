@@ -58,8 +58,12 @@ public:
 
     Map * createDetectionMap();
     void getTargetPosition(QVector3D *position) const;
+    SystemObject3D * instanciateObject() const;
     void setDefault();
     void initializeObjects(Objects3D *objects3D, Portion &globalPortion);
+    void addObject(Position3D &position, SystemObject3D *object);
+    void deleteObject(Position3D &position);
+    void correctPosition(Position3D &newPosition, Position3D &position);
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

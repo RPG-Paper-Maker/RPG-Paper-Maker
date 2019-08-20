@@ -114,6 +114,7 @@
         <file>Ressources/start.png</file>
         <file>Ressources/missing.png</file>
         <file>Ressources/big_arrow_down.png</file>
+        <file>Ressources/detection_box.png</file>
     </qresource>
     <qresource prefix="/stylesheets">
         <file>Themes/darktheme.qss</file>

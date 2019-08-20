@@ -60,7 +60,7 @@ public:
     void reLoadTextures();
     void applyMap(Map *map, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle,
-        double cameraVerticalAngle, bool isDetection = false);
+        double cameraVerticalAngle, SystemDetection *detection = nullptr);
     Map * loadMap(int idMap, QVector3D *position, QVector3D *positionObject,
         int cameraDistance, double cameraHorizontalAngle,
         double cameraVerticalAngle);
@@ -307,7 +307,7 @@ protected:
     int m_currentLayer = -1;
     QString m_lastSquareInfos;
     SystemCommonObject *m_copiedObject;
-    bool m_isDetection;
+    SystemDetection *m_detection;
 };
 
 #endif // CONTROLMAPEDITOR_H

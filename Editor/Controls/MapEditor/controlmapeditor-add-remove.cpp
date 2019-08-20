@@ -694,16 +694,18 @@ void ControlMapEditor::addObject3D(Position &p, int specialID) {
     Object3DDatas *object3D;
     SystemObject3D *special;
 
-    special = reinterpret_cast<SystemObject3D *>(SuperListItem::getById(RPM
-        ::get()->project()->specialElementsDatas()->model(PictureKind::Object3D)
-        ->invisibleRootItem(), specialID));
-
+    special = m_detection == nullptr ? reinterpret_cast<SystemObject3D *>(
+        SuperListItem::getById(RPM::get()->project()->specialElementsDatas()
+        ->model(PictureKind::Object3D)->invisibleRootItem(), specialID)) :
+        m_detection->instanciateObject();
     object3D = Object3DDatas::instanciate(special);
     stockObject3D(p, object3D);
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++) {
-        object3D = Object3DDatas::instanciate(special);
-        stockObject3D(positions[i], object3D);
+    if (m_detection == nullptr) {
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++) {
+            object3D = Object3DDatas::instanciate(special);
+            stockObject3D(positions[i], object3D);
+        }
     }
     m_previousMouseCoords = p;
 }
@@ -729,6 +731,9 @@ void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
                 ::None;
             bool changed = mapPortion->addObject3D(portionsOverflow, p, object3D
                 , previous, previousType);
+            if (m_detection != nullptr) {
+                m_detection->addObject(p, object3D->datas());
+            }
             if (changed && m_map->saved()) {
                 setToNotSaved();
             }
@@ -751,6 +756,9 @@ void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
         }
     }
 
+    if (m_detection != nullptr) {
+        delete object3D->datas();
+    }
     delete object3D;
 }
 
@@ -785,6 +793,9 @@ void ControlMapEditor::eraseObject3D(Position &p, bool undoRedo) {
             QList<Position> positions;
             bool changed = mapPortion->deleteObject3D(portionsOverflow, p,
                 previous, previousType, positions);
+            if (m_detection != nullptr) {
+                m_detection->deleteObject(p);
+            }
             if (changed && m_map->saved()) {
                 setToNotSaved();
             }

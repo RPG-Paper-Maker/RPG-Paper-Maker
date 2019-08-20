@@ -85,6 +85,7 @@ Map::Map(MapProperties* properties, SystemDetection *detection) :
     m_mapPortions(nullptr),
     m_cursor(nullptr),
     m_modelObjects(new QStandardItemModel),
+    m_saved(true),
     m_detection(detection),
     m_programStatic(nullptr),
     m_programFaceSprite(nullptr),

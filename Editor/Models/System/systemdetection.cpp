@@ -117,12 +117,17 @@ void SystemDetection::getTargetPosition(QVector3D *position) const {
 
 // -------------------------------------------------------
 
+SystemObject3D * SystemDetection::instanciateObject() const {
+    return new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2);
+}
+
+// -------------------------------------------------------
+
 void SystemDetection::setDefault() {
     Position3D position;
 
     position.setZ(1);
-    m_boxes.insert(position, new SystemObject3D(-1, "", ShapeKind::Box, -1, -1,
-        -2));
+    m_boxes.insert(position, this->instanciateObject());
 }
 
 // -------------------------------------------------------
@@ -144,6 +149,45 @@ void SystemDetection::initializeObjects(Objects3D *objects3D, Portion
             objects3D->setObject3D(portionsOverflow, position, object);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::addObject(Position3D &position, SystemObject3D *object) {
+    SystemObject3D *previousObject;
+    Position3D newPosition;
+
+    this->correctPosition(newPosition, position);
+    previousObject = m_boxes.value(newPosition);
+    if (previousObject != nullptr) {
+        delete previousObject;
+    }
+    m_boxes.insert(newPosition, object);
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::deleteObject(Position3D &position) {
+    SystemObject3D *object;
+    Position3D newPosition;
+
+    this->correctPosition(newPosition, position);
+    object = m_boxes.value(newPosition);
+    if (object != nullptr) {
+        delete object;
+    }
+    m_boxes.remove(newPosition);
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::correctPosition(Position3D &newPosition, Position3D
+    &position)
+{
+    newPosition.setX(position.x() - m_fieldLeft);
+    newPosition.setY(position.y());
+    newPosition.setYPlus(position.yPlus());
+    newPosition.setZ(position.z() - m_fieldTop);
 }
 
 // -------------------------------------------------------
@@ -224,7 +268,7 @@ void SystemDetection::read(const QJsonObject &json) {
         obj = tab.at(i).toObject();
         position.read(obj[RPM::JSON_KEY].toArray());
         obj = obj[RPM::JSON_VALUE].toObject();
-        object = new SystemObject3D(-1, "", ShapeKind::Box, -1, -1, -2,
+        object = new SystemObject3D(1, "", ShapeKind::Box, -1, -1, -2,
             ObjectCollisionKind::None, -1, 1.0, 1, 0, obj[
             JSON_BOXES_HEIGHT_SQUARES].toInt(), obj[JSON_BOXES_HEIGHT_PIXELS]
             .toInt());

@@ -50,8 +50,7 @@ void Map::loadTextures() {
 
     // Detection
     if (m_detection != nullptr) {
-        image = QImage(500, 500, QImage::Format_ARGB32);
-        image.fill(RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
+        image = QImage(":/textures/Ressources/detection_box.png");
         m_textureDetection = this->createTexture(image);
     }
 }

@@ -158,14 +158,14 @@ void ControlMapEditor::reLoadTextures(){
 
 void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
     *positionObject, int cameraDistance, double cameraHorizontalAngle, double
-    cameraVerticalAngle, bool isDetection)
+    cameraVerticalAngle, SystemDetection *detection)
 {
     SystemMapObject *mapObject;
     Position3D heroPosition;
     int i, l;
 
     clearPortionsToUpdate();
-    m_isDetection = isDetection;
+    m_detection = detection;
 
     // Map & cursor
     m_map = map;
@@ -193,7 +193,7 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
     m_cursorObject->initialize();
 
     // Cursor start
-    if (!m_isDetection) {
+    if (m_detection == nullptr) {
         heroPosition = Position3D(-1, 0, 0, -1);
         if (m_map->mapProperties()->id() == RPM::get()->project()->gameDatas()
             ->systemDatas()->idMapHero())
@@ -650,15 +650,19 @@ void ControlMapEditor::clearPortionsToUpdate() {
 // -------------------------------------------------------
 
 void ControlMapEditor::setToNotSaved () {
-    m_map->setSaved(false);
-    RPM::mapsToSave.insert(m_map->mapProperties()->id());
-    m_treeMapNode->setText(m_map->mapProperties()->name() + " *");
+    if (m_treeMapNode != nullptr) {
+        m_map->setSaved(false);
+        RPM::mapsToSave.insert(m_map->mapProperties()->id());
+        m_treeMapNode->setText(m_map->mapProperties()->name() + " *");
+    }
 }
 
 // -------------------------------------------------------
 
 void ControlMapEditor::save() {
-    m_treeMapNode->setText(m_map->mapProperties()->name());
+    if (m_treeMapNode != nullptr) {
+        m_treeMapNode->setText(m_map->mapProperties()->name());
+    }
 }
 
 // -------------------------------------------------------
@@ -1296,7 +1300,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing user cursor
-    if (!m_isDetection) {
+    if (m_detection == nullptr) {
         m_map->cursor()->paintGL(modelviewProjection);
     }
 
@@ -1413,7 +1417,7 @@ void ControlMapEditor::onMouseWheelMove(QWheelEvent *event, bool updateTree) {
         }
     }
 
-    if (!m_isDetection && updateTree) {
+    if (m_detection == nullptr && updateTree) {
         updateCameraTreeNode();
     }
 }

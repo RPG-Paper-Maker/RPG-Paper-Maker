@@ -119,7 +119,7 @@ void WidgetMapEditor::applyMap(SystemDetection *detection, QVector3D *position,
 
     map = m_detection->createDetectionMap();
     m_control.applyMap(map, position, positionObject, cameraDistance,
-        cameraHorizontalAngle, cameraVerticalAngle, true);
+        cameraHorizontalAngle, cameraVerticalAngle, detection);
     m_backgroundColor = Qt::black;
 }
 
@@ -593,13 +593,15 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
     if (m_control.map() != nullptr) {
 
         // Tooltip for height
-        if (event->pos().x() <= 50 && event->pos().y() <= 50) {
-            QToolTip::showText(this->mapToGlobal(event->pos()), "To change "
-                "height square, use CTRL+mousewheel or CTRL+arrowUpDown.\nTo "
-                "change height plus, use CTRL+SHIFT+mousewheel or "
-                "CTRL+SHIFT+arrowUpDown");
-        } else {
-            QToolTip::hideText();
+        if (m_menuBar != nullptr) {
+            if (event->pos().x() <= 50 && event->pos().y() <= 50) {
+                QToolTip::showText(this->mapToGlobal(event->pos()), "To change "
+                    "height square, use CTRL+mousewheel or CTRL+arrowUpDown.\n"
+                    "To change height plus, use CTRL+SHIFT+mousewheel or "
+                    "CTRL+SHIFT+arrowUpDown");
+            } else {
+                QToolTip::hideText();
+            }
         }
 
         // Multi keys
@@ -615,25 +617,33 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
             Qt::MouseButton button = *i;
             m_control.onMouseMove(event->pos(), button, m_menuBar != nullptr);
 
-            if (m_menuBar != nullptr && button != Qt::MouseButton::MiddleButton
-                && !m_control.isCtrlPressed())
+            if (button != Qt::MouseButton::MiddleButton && !m_control
+                .isCtrlPressed())
             {
-                QRect tileset;
-                m_panelTextures->getTilesetTexture(tileset);
-                MapEditorSubSelectionKind subSelection = m_menuBar
-                    ->subSelectionKind();
-                int specialID = m_panelTextures->getID();
-                bool layerOn = m_menuBar->layerOn();
-                int widthSquares = m_panelTextures->getWidthSquares();
-                double widthPixels = m_panelTextures->getWidthPixels();
-                int heightSquares = m_panelTextures->getHeightSquares();
-                double heightPixels = m_panelTextures->getHeightPixels();
                 QRect defaultFloorRect;
-                m_panelTextures->getDefaultFloorRect(defaultFloorRect);
-                m_control.addRemove(m_menuBar->selectionKind(), subSelection,
-                    m_menuBar->drawKind(), layerOn, tileset, specialID,
-                    widthSquares, widthPixels, heightSquares, heightPixels,
-                    defaultFloorRect);
+                if (m_menuBar != nullptr) {
+                    QRect tileset;
+                    m_panelTextures->getTilesetTexture(tileset);
+                    MapEditorSubSelectionKind subSelection = m_menuBar
+                        ->subSelectionKind();
+                    int specialID = m_panelTextures->getID();
+                    bool layerOn = m_menuBar->layerOn();
+                    int widthSquares = m_panelTextures->getWidthSquares();
+                    double widthPixels = m_panelTextures->getWidthPixels();
+                    int heightSquares = m_panelTextures->getHeightSquares();
+                    double heightPixels = m_panelTextures->getHeightPixels();
+                    m_panelTextures->getDefaultFloorRect(defaultFloorRect);
+                    m_control.addRemove(m_menuBar->selectionKind(), subSelection
+                        , m_menuBar->drawKind(), layerOn, tileset, specialID,
+                        widthSquares, widthPixels, heightSquares, heightPixels,
+                        defaultFloorRect);
+                } else if (m_detection != nullptr) {
+                    defaultFloorRect.setWidth(1);
+                    defaultFloorRect.setHeight(1);
+                    m_control.addRemove(MapEditorSelectionKind::Objects3D,
+                        MapEditorSubSelectionKind::Object3D, DrawKind::Pencil,
+                        false, defaultFloorRect, 1, 1, 0, 1, 0, defaultFloorRect);
+                }
             }
         }
     }
@@ -645,6 +655,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
     this->setFocus();
     if (m_control.map() != nullptr) {
         Qt::MouseButton button = event->button();
+        QRect defaultFloorRect;
         if (m_menuBar != nullptr) {
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
             MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
@@ -657,7 +668,6 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
             double widthPixels = m_panelTextures->getWidthPixels();
             int heightSquares = m_panelTextures->getHeightSquares();
             double heightPixels = m_panelTextures->getHeightPixels();
-            QRect defaultFloorRect;
             m_panelTextures->getDefaultFloorRect(defaultFloorRect);
             m_control.onMousePressed(selection, subSelection, drawKind, layerOn,
                 tileset, specialID, widthSquares, widthPixels, heightSquares,
@@ -667,6 +677,13 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                 if (m_detection == nullptr) {
                     m_control.moveCursorToMousePosition(event->pos());
                     updateSpinBoxes();
+                } else {
+                    defaultFloorRect.setWidth(1);
+                    defaultFloorRect.setHeight(1);
+                    m_control.onMousePressed(MapEditorSelectionKind::Objects3D,
+                        MapEditorSubSelectionKind::Object3D, DrawKind::Pencil,
+                        false, defaultFloorRect, 1, 1, 0, 1, 0, defaultFloorRect
+                        , event->pos(), button);
                 }
             } else {
                 m_control.updateMouseMove(event->pos());
@@ -681,14 +698,22 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
 
 void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
     this->setFocus();
-    if (m_control.map() != nullptr && m_menuBar != nullptr) {
+    if (m_control.map() != nullptr) {
         Qt::MouseButton button = event->button();
         QRect tileset;
-        m_panelTextures->getTilesetTexture(tileset);
-        MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
-        int specialID = m_panelTextures->getID();
-        m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
-            m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
+        if (m_menuBar != nullptr) {
+            m_panelTextures->getTilesetTexture(tileset);
+            MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
+            int specialID = m_panelTextures->getID();
+            m_control.onMouseReleased(m_menuBar->selectionKind(), subSelection,
+                m_menuBar->drawKind(), tileset, specialID, event->pos(), button);
+        } else if (m_detection != nullptr) {
+            tileset.setWidth(1);
+            tileset.setHeight(1);
+            m_control.onMouseReleased(MapEditorSelectionKind::Objects3D,
+                MapEditorSubSelectionKind::Object3D, DrawKind::Pencil, tileset,
+                1, event->pos(), button);
+        }
     }
     this->setFocus();
 }
