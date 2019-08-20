@@ -767,9 +767,11 @@ void ControlMapEditor::stockObject3D(Position &p, Object3DDatas *object3D, bool
 void ControlMapEditor::removeObject3D(Position &p) {
     QList<Position> positions;
 
-    traceLine(m_previousMouseCoords, p, positions);
-    for (int i = 0; i < positions.size(); i++) {
-        eraseObject3D(positions[i]);
+    if (m_detection == nullptr) {
+        traceLine(m_previousMouseCoords, p, positions);
+        for (int i = 0; i < positions.size(); i++) {
+            eraseObject3D(positions[i]);
+        }
     }
     eraseObject3D(p);
 

@@ -69,6 +69,8 @@ public:
     void deleteObject(Position3D &position);
     void correctPosition(Position3D &newPosition, Position3D &position);
     void removeLimitDetections();
+    void generateCircle(int radius, Position3D &origin);
+    void generateRectangle(int length, int width, Position3D &origin);
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

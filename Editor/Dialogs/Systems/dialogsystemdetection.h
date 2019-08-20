@@ -42,6 +42,12 @@ private:
     Map *m_map;
     QVector3D *m_position;
     QVector3D *m_positionObject;
+    int m_radius;
+    int m_length;
+    int m_cameraDistance;
+    double m_cameraHorizontalAngle;
+    double m_cameraVerticalAngle;
+    bool m_first;
 
     void initialize();
     void updateMap();
@@ -55,6 +61,7 @@ private slots:
     void on_spinBoxHeightSquares_valueChanged(int i);
     void on_spinBoxHeightPixels_valueChanged(int i);
     void on_comboBoxAutomatic_currentIndexChanged(int index);
+    void on_spinBoxRadiusLength_valueChanged(int i);
     void on_pushButtonGenerate_pressed();
 };
 

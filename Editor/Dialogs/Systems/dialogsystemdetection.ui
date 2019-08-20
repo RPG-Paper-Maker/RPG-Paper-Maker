@@ -283,14 +283,14 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_9">
+               <widget class="QLabel" name="labelRadiusLength">
                 <property name="text">
-                 <string>Ray:</string>
+                 <string>Radius:</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QSpinBox" name="spinBoxRayLength">
+               <widget class="QSpinBox" name="spinBoxRadiusLength">
                 <property name="minimumSize">
                  <size>
                   <width>100</width>
@@ -307,7 +307,7 @@
                  <number>1</number>
                 </property>
                 <property name="maximum">
-                 <number>999</number>
+                 <number>500</number>
                 </property>
                 <property name="value">
                  <number>1</number>
@@ -328,7 +328,7 @@
                </spacer>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_10">
+               <widget class="QLabel" name="labelWidth">
                 <property name="text">
                  <string>Width:</string>
                 </property>
@@ -352,7 +352,7 @@
                  <number>1</number>
                 </property>
                 <property name="maximum">
-                 <number>999</number>
+                 <number>500</number>
                 </property>
                 <property name="value">
                  <number>1</number>

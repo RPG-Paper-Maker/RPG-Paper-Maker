@@ -121,10 +121,8 @@ Map * SystemDetection::createDetectionMap() {
 // -------------------------------------------------------
 
 void SystemDetection::getTargetPosition(QVector3D *position) const {
-    position->setX((m_fieldLeft * RPM::getSquareSize()) + (RPM::getSquareSize()
-        / 2));
-    position->setZ((m_fieldTop * RPM::getSquareSize()) + (RPM::getSquareSize()
-        / 2));
+    position->setX(m_fieldLeft * RPM::getSquareSize());
+    position->setZ(m_fieldTop * RPM::getSquareSize());
 }
 
 // -------------------------------------------------------
@@ -227,6 +225,48 @@ void SystemDetection::removeLimitDetections() {
 }
 
 // -------------------------------------------------------
+
+void SystemDetection::generateCircle(int radius, Position3D &origin) {
+    SystemObject3D *object;
+    Position position;
+    int x, z;
+
+    for (z = -radius; z <= radius; z++) {
+        for (x = -radius; x <= radius; x++) {
+            if ((x * x) + (z * z) <= radius * radius) {
+                position.setX(origin.x() + x);
+                position.setY(origin.y());
+                position.setYPlus(origin.yPlus());
+                position.setZ(origin.z() + z);
+                object = this->instanciateObject();
+                this->addObject(position, object);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemDetection::generateRectangle(int length, int width, Position3D
+    &origin)
+{
+    SystemObject3D *object;
+    Position position;
+    int x, z;
+
+    for (z = -width; z <= width; z++) {
+        for (x = -length; x <= length; x++) {
+            position.setX(origin.x() + x);
+            position.setY(origin.y());
+            position.setYPlus(origin.yPlus());
+            position.setZ(origin.z() + z);
+            object = this->instanciateObject();
+            this->addObject(position, object);
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -267,6 +307,9 @@ void SystemDetection::setCopy(const SuperListItem &super) {
     m_fieldRight = detection->m_fieldRight;
     m_fieldTop = detection->m_fieldTop;
     m_fieldBot = detection->m_fieldBot;
+    for (it = m_boxes.begin(); it != m_boxes.end(); it++) {
+        delete *it;
+    }
     m_boxes.clear();
     for (it = detection->m_boxes.begin(); it != detection->m_boxes.end(); it++)
     {

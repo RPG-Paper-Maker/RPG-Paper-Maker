@@ -98,6 +98,18 @@ Map * WidgetMapEditor::getMap() const {
     return m_control.map();
 }
 
+int WidgetMapEditor::cameraDistance() const {
+    return m_cameraDistance;
+}
+
+double WidgetMapEditor::cameraHorizontalAngle() const {
+    return m_cameraHorizontalAngle;
+}
+
+double WidgetMapEditor::cameraVerticalAngle() const {
+    return m_cameraVerticalAngle;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

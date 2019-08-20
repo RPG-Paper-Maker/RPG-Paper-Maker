@@ -40,6 +40,9 @@ public:
     void setPanelTextures(PanelTextures *m);
     void setTreeMapNode(QStandardItem *item);
     Map * getMap() const;
+    int cameraDistance() const;
+    double cameraHorizontalAngle() const;
+    double cameraVerticalAngle() const;
 
     void applyMap(SystemDetection *detection, QVector3D *position, QVector3D
         *positionObject, int cameraDistance, double cameraHorizontalAngle,

@@ -220,9 +220,8 @@ void ControlMapEditor::applyMap(Map *map, QVector3D *position, QVector3D
         m_cursorStart->loadTexture(":/textures/Ressources/start.png");
         m_cursorStart->initialize();
     } else {
-        m_positionDetection = new QVector3D(position->x() - (RPM
-            ::getSquareSize() / 2), position->y(), position->z() - (RPM
-            ::getSquareSize() / 2));
+        m_positionDetection = new QVector3D(positionObject->x(), positionObject
+            ->y(), positionObject->z());
         m_cursorDetection = new Cursor(m_positionDetection);
         m_cursorDetection->setFrameNumber(1);
         m_cursorDetection->loadTexture(":/textures/Ressources/big_arrow_down.png");
@@ -1300,9 +1299,7 @@ void ControlMapEditor::paintGL(QMatrix4x4 &modelviewProjection,
     }
 
     // Drawing user cursor
-    if (m_detection == nullptr) {
-        m_map->cursor()->paintGL(modelviewProjection);
-    }
+    m_map->cursor()->paintGL(modelviewProjection);
 
     // Drawing start cursor
     if (m_cursorStart != nullptr) {
