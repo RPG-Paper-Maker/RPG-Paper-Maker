@@ -88,7 +88,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::ChangeState:
         return new DialogCommandChangeState(command, object, parameters);
     case EventCommandKind::SendEvent:
-        return new DialogCommandSendEvent(command);
+        return new DialogCommandSendEvent(command, object, parameters);
     case EventCommandKind::TeleportObject:
         return new DialogCommandTeleportObject(command, object, parameters);
     case EventCommandKind::MoveObject:

@@ -102,8 +102,10 @@ private:
     QString strChangeState(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strChangeStateOperation(int &i) const;
-    QString strSendEvent() const;
-    QString strSendEventTarget(int &i) const;
+    QString strSendEvent(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strSendEventTarget(SystemCommonObject *object, QStandardItemModel
+        *parameters, int &i) const;
     QString strTeleportObject(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strTeleportObjectPosition(SystemCommonObject*, QStandardItemModel

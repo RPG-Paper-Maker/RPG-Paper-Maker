@@ -241,7 +241,7 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     case EventCommandKind::ChangeState:
         str += this->strChangeState(object, parameters); break;
     case EventCommandKind::SendEvent:
-        str += this->strSendEvent(); break;
+        str += this->strSendEvent(object, parameters); break;
     case EventCommandKind::TeleportObject:
         str += this->strTeleportObject(object, parameters); break;
     case EventCommandKind::MoveObject:
@@ -807,13 +807,15 @@ QString EventCommand::strChangeStateOperation(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strSendEvent() const {
+QString EventCommand::strSendEvent(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     QStandardItemModel *model;
     SystemObjectEvent *e;
     QString target, event;
     int i = 0;
 
-    target = strSendEventTarget(i);
+    target = strSendEventTarget(object, parameters, i);
     e = SystemObjectEvent::getCommandEvent(this, i);
     model = e->isSystem() ? RPM::get()->project()->gameDatas()
         ->commonEventsDatas()->modelEventsSystem() : RPM::get()->project()
@@ -829,7 +831,9 @@ QString EventCommand::strSendEvent() const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strSendEventTarget(int &i) const {
+QString EventCommand::strSendEventTarget(SystemCommonObject *object,
+    QStandardItemModel *parameters, int &i) const
+{
     QString str;
     int index, id;
 
@@ -839,15 +843,18 @@ QString EventCommand::strSendEventTarget(int &i) const {
         str += "all";
         break;
     case 1:
-        id = m_listCommand.at(i++).toInt();
-        str += "detection " + QString::number(id);
+        str += "detection " + strDataBaseId(i, object, RPM::get()->project()
+            ->gameDatas()->systemDatas()->modelDetections(), parameters);
+        if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+            str += " (sender can't receive)";
+        }
         break;
     case 2:
         id = m_listCommand.at(i++).toInt();
         str += "object " + QString::number(id);
         break;
     case 3:
-        str += "sender ";
+        str += "sender";
         break;
     }
 

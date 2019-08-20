@@ -20,16 +20,17 @@
 // -------------------------------------------------------
 
 DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
-    QWidget *parent) :
+    SystemCommonObject *object, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandSendEvent)
 {
+    QStandardItemModel *properties;
     ui->setupUi(this);
 
     bool test = command == nullptr;
-    if (test){
-        QVector<QString> l({"1", "1", "0", "1",
-                            "1",
+    if (test) {
+        QVector<QString> l({"1", QString::number(static_cast<int>(
+            PrimitiveValueKind::DataBase)), "1", RPM::TRUE_BOOL_STRING, "0", "1", "1",
                             QString::number((int) PrimitiveValueKind::Default),
                             "2",
                             QString::number((int) PrimitiveValueKind::Default)}
@@ -37,10 +38,16 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
         command = new EventCommand(EventCommandKind::SendEvent, l);
     }
 
+    properties = object == nullptr ? nullptr : object->modelProperties();
+    ui->panelPrimitiveDetectionID->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelDetections(), parameters,
+        properties);
+
     initialize(command);
 
-    if (test)
+    if (test) {
         delete command;
+    }
 }
 
 DialogCommandSendEvent::~DialogCommandSendEvent()
@@ -65,7 +72,9 @@ void DialogCommandSendEvent::initialize(EventCommand* command){
         break;
     case 1:
         ui->radioButtonDetection->setChecked(true);
-        command->valueCommandAt(i++).toInt();
+        ui->panelPrimitiveDetectionID->initializeCommand(command, i);
+        ui->checkBoxSenderNoReceive->setChecked(command->valueCommandAt(i++) ==
+            RPM::TRUE_BOOL_STRING);
         break;
     case 2:
         ui->radioButtonObject->setChecked(true);
@@ -99,8 +108,9 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
     }
     else if(ui->radioButtonDetection->isChecked()){
         command.append("1");
-        command.append("1");
-        // TODO
+        ui->panelPrimitiveDetectionID->getCommand(command);
+        command.append(ui->checkBoxSenderNoReceive->isChecked() ? RPM
+            ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
     }
     else if(ui->radioButtonObject->isChecked()){
         command.append("2");

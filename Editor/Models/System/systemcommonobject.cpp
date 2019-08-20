@@ -201,7 +201,9 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
         "0", "0", "3", "0", "0", "3", "0", "0", "0", "12", "90", "12", "0", "3",
         "0", "1", "12", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 11, false, false,
-        EventCommandKind::SendEvent, QVector<QString>({"1", "1", "1", "1"}));
+        EventCommandKind::SendEvent, QVector<QString>({"1", QString::number(
+        static_cast<int>(PrimitiveValueKind::DataBase)), "1", RPM
+        ::TRUE_BOOL_STRING, "1", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 13, false, false,
         EventCommandKind::OpenMainMenu, QVector<QString>({}));
     item = new QStandardItem();
@@ -248,7 +250,8 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(QStandardItemModel
     SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
         ->invisibleRootItem(), command);
     if (kind == EventCommandKind::MoveObject) {
-        commandList = QVector<QString>({"1", "1", "1", "2"});
+        commandList = QVector<QString>({"1", QString::number(static_cast<int>(
+            PrimitiveValueKind::DataBase)), "1", RPM::TRUE_BOOL_STRING, "1", "2"});
         command = new EventCommand(EventCommandKind::SendEvent, commandList);
         SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
             ->invisibleRootItem(), command);
