@@ -37,6 +37,7 @@ Project::Project() :
     m_langsDatas(new LangsDatas),
     m_scriptsDatas(new ScriptsDatas),
     m_picturesDatas(new PicturesDatas),
+    m_videosDatas(new VideosDatas),
     m_songsDatas(new SongsDatas),
     m_shapesDatas(new ShapesDatas),
     m_keyBoardDatas(new KeyBoardDatas),
@@ -52,6 +53,7 @@ Project::~Project()
     delete m_treeMapDatas;
     delete m_scriptsDatas;
     delete m_picturesDatas;
+    delete m_videosDatas;
     delete m_songsDatas;
     delete m_shapesDatas;
     delete m_keyBoardDatas;
@@ -92,6 +94,10 @@ LangsDatas* Project::langsDatas() const { return m_langsDatas; }
 ScriptsDatas* Project::scriptsDatas() const { return m_scriptsDatas; }
 
 PicturesDatas* Project::picturesDatas() const { return m_picturesDatas; }
+
+VideosDatas * Project::videosDatas() const {
+    return m_videosDatas;
+}
 
 SongsDatas* Project::songsDatas() const { return m_songsDatas; }
 
@@ -175,6 +181,7 @@ void Project::setDefault(){
     m_langsDatas->setDefault();
     m_keyBoardDatas->setDefaultGame();
     m_picturesDatas->setDefault();
+    m_videosDatas->setDefault();
     m_songsDatas->setDefault();
     m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
@@ -208,6 +215,7 @@ bool Project::read(QString path){
     readLangsDatas();
     readKeyBoardDatas();
     readPicturesDatas();
+    readVideosDatas();
     readSongsDatas();
     readShapesDatas();
     readGameDatas();
@@ -436,6 +444,12 @@ void Project::readPicturesDatas(){
 
 // -------------------------------------------------------
 
+void Project::readVideosDatas() {
+    m_videosDatas->read(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::readSongsDatas(){
     m_songsDatas->read(p_pathCurrentProject);
 }
@@ -483,6 +497,7 @@ void Project::write(QString path) {
     writeLangsDatas();
     writeKeyBoardDatas();
     writePicturesDatas();
+    writeVideosDatas();
     writeSongsDatas();
     writeSpecialsDatas();
     writeGameDatas();
@@ -528,16 +543,22 @@ void Project::writeKeyBoardDatas(){
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
-                                        RPM::PATH_PICTURES_DATAS),
-                     *m_picturesDatas);
+    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_PICTURES_DATAS), *m_picturesDatas);
+}
+
+// -------------------------------------------------------
+
+void Project::writeVideosDatas() {
+    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_VIDEOS_DATAS), *m_videosDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSongsDatas() {
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM::PATH_SONGS_DATAS
-        ), *m_songsDatas);
+    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_SONGS_DATAS), *m_songsDatas);
 }
 
 // -------------------------------------------------------

@@ -171,6 +171,7 @@
    <addaction name="actionSystems_manager"/>
    <addaction name="actionVariables_manager"/>
    <addaction name="actionPictures_manager"/>
+   <addaction name="actionVideos_manager"/>
    <addaction name="actionSongs_manager"/>
    <addaction name="actionShapes_manager"/>
    <addaction name="actionKeyboard_controls"/>
@@ -626,6 +627,18 @@
    </property>
    <property name="shortcut">
     <string>7</string>
+   </property>
+  </action>
+  <action name="actionVideos_manager">
+   <property name="icon">
+    <iconset resource="../ressources.qrc">
+     <normaloff>:/icons/Ressources/play_song.png</normaloff>:/icons/Ressources/play_song.png</iconset>
+   </property>
+   <property name="text">
+    <string>Videos manager</string>
+   </property>
+   <property name="iconText">
+    <string>Videos</string>
    </property>
   </action>
  </widget>

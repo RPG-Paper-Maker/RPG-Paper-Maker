@@ -22,6 +22,7 @@ DESTDIR = $$ROOT_DESTDIR/Editor
 HEADERS += \
     CustomWidgets/panelselectpositionmaps.h \
     CustomWidgets/paneltransformations.h \
+    CustomWidgets/panelvideos.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
@@ -31,6 +32,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
+    Dialogs/dialogvideos.h \
     Dialogs/mainwindow.h \
     Dialogs/dialognewproject.h \
     CustomWidgets/panelmainmenu.h \
@@ -43,10 +45,12 @@ HEADERS += \
     MapEditor/mountain.h \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
+    Models/GameDatas/videosdatas.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemdetection.h \
     Models/System/systemmountain.h \
     Models/System/systemproperty.h \
+    Models/System/systemvideo.h \
     Models/translations.h \
     Singletons/singleton.h \
     Models/project.h \
@@ -310,6 +314,7 @@ HEADERS += \
 SOURCES += \
     CustomWidgets/panelselectpositionmaps.cpp \
     CustomWidgets/paneltransformations.cpp \
+    CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
@@ -319,6 +324,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
+    Dialogs/dialogvideos.cpp \
     Dialogs/mainwindow.cpp \
     Dialogs/dialognewproject.cpp \
     CustomWidgets/panelmainmenu.cpp \
@@ -330,10 +336,12 @@ SOURCES += \
     MapEditor/mountain.cpp \
     MapEditor/mountains.cpp \
     MapEditor/textureseveral.cpp \
+    Models/GameDatas/videosdatas.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemdetection.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemvideo.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \
     Dialogs/dialogcommands.cpp \
@@ -570,6 +578,7 @@ SOURCES += \
 FORMS += \
     CustomWidgets/panelselectpositionmaps.ui \
     CustomWidgets/paneltransformations.ui \
+    CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
@@ -579,6 +588,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \
+    Dialogs/dialogvideos.ui \
     Dialogs/mainwindow.ui \
     Dialogs/dialognewproject.ui \
     CustomWidgets/panelmainmenu.ui \

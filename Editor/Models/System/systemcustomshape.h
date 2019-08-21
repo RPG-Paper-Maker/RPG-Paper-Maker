@@ -62,7 +62,6 @@ public:
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemCustomShape &super);
     virtual QList<QStandardItem*> getModelRow() const;
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

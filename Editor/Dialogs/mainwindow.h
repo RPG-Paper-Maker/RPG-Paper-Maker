@@ -92,6 +92,7 @@ private slots:
     void on_actionVariables_manager_triggered();
     void on_actionSongs_manager_triggered();
     void on_actionPictures_manager_triggered();
+    void on_actionVideos_manager_triggered();
     void on_actionShapes_manager_triggered();
     void on_actionKeyboard_controls_triggered();
     void on_actionCollisions_manager_triggered();

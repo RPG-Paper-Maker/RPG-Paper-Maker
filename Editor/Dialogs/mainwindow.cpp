@@ -35,6 +35,7 @@
 #include "dialoggeneraloptions.h"
 #include "dialogsongs.h"
 #include "dialogshapes.h"
+#include "dialogvideos.h"
 #include "common.h"
 
 // -------------------------------------------------------
@@ -208,6 +209,7 @@ void MainWindow::enableAll(bool b){
     ui->actionSongs_manager->setEnabled(b);
     ui->actionShapes_manager->setEnabled(b);
     ui->actionPictures_manager->setEnabled(b);
+    ui->actionVideos_manager->setEnabled(b);
     ui->actionSet_BR_path_folder->setEnabled(b);
     ui->actionDebug_options->setEnabled(b);
     ui->actionKeyboard_controls->setEnabled(b);
@@ -245,6 +247,7 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionVariables_manager->setEnabled(true);
     ui->actionSongs_manager->setEnabled(true);
     ui->actionPictures_manager->setEnabled(true);
+    ui->actionVideos_manager->setEnabled(true);
     ui->actionShapes_manager->setEnabled(true);
     ui->actionSet_BR_path_folder->setEnabled(true);
     ui->actionDebug_options->setEnabled(true);
@@ -526,6 +529,17 @@ void MainWindow::on_actionPictures_manager_triggered(){
         project->readPicturesDatas();
 
     updateTextures();
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionVideos_manager_triggered() {
+    DialogVideos dialog;
+    if (this->openDialog(dialog) == QDialog::Accepted) {
+        project->writeVideosDatas();
+    } else {
+        project->readVideosDatas();
+    }
 }
 
 // -------------------------------------------------------

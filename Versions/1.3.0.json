@@ -14,7 +14,7 @@
         "Map properties: map startup reactions",
         "Camera properties for map properties and battle maps",
         "Detections",
-        "Title screen completion",
+        "Title screen completion: video, commands list (new game, load game, options, quit, script), keyboard configuration",
         "Objects moves (path when not reacting, speed, frequency)",
         "ABS tutorial in documentation"
     ],

@@ -41,8 +41,7 @@ DialogPictures::DialogPictures(QWidget *parent) :
     ui->widgetPicturePreview->setSizePolicy(sp_retain);
 }
 
-DialogPictures::~DialogPictures()
-{
+DialogPictures::~DialogPictures() {
     delete ui->treeView->model();
     delete ui;
 }

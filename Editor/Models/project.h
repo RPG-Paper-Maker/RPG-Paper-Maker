@@ -18,6 +18,7 @@
 #include "langsdatas.h"
 #include "scriptsdatas.h"
 #include "picturesdatas.h"
+#include "videosdatas.h"
 #include "songsdatas.h"
 #include "shapesdatas.h"
 #include "keyboarddatas.h"
@@ -53,6 +54,7 @@ public:
     LangsDatas* langsDatas() const;
     ScriptsDatas* scriptsDatas() const;
     PicturesDatas* picturesDatas() const;
+    VideosDatas * videosDatas() const;
     SongsDatas* songsDatas() const;
     ShapesDatas * shapesDatas() const;
     KeyBoardDatas* keyBoardDatas() const;
@@ -77,6 +79,7 @@ public:
     void readScriptsDatas();
     void readKeyBoardDatas();
     void readPicturesDatas();
+    void readVideosDatas();
     void readSongsDatas();
     void readShapesDatas();
     void readSpecialsDatas();
@@ -91,6 +94,7 @@ public:
     void writeScriptsDatas();
     void writeKeyBoardDatas();
     void writePicturesDatas();
+    void writeVideosDatas();
     void writeSongsDatas();
     void writeShapesDatas();
     void writeSpecialsDatas();
@@ -113,6 +117,7 @@ private:
     LangsDatas* m_langsDatas;
     ScriptsDatas* m_scriptsDatas;
     PicturesDatas* m_picturesDatas;
+    VideosDatas *m_videosDatas;
     SongsDatas* m_songsDatas;
     ShapesDatas * m_shapesDatas;
     KeyBoardDatas* m_keyBoardDatas;

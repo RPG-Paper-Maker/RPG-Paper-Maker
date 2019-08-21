@@ -1,0 +1,75 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2019 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+#ifndef PANELVIDEOS_H
+#define PANELVIDEOS_H
+
+#include <QWidget>
+#include <QMediaPlayer>
+#include "systemvideo.h"
+
+// -------------------------------------------------------
+//
+//  CLASS PanelVideos
+//
+//  Panel used for videos selection.
+//
+// -------------------------------------------------------
+
+namespace Ui {
+class PanelVideos;
+}
+
+class PanelVideos : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit PanelVideos(QWidget *parent = nullptr);
+    ~PanelVideos();
+
+    SystemVideo * video() const;
+    void setVideo(SystemVideo *video);
+    void setAreNegIDsEnabled(bool b);
+
+    void setKind();
+    void changeVideo(SystemVideo *video);
+
+private:
+    Ui::PanelVideos *ui;
+    SystemVideo *m_video;
+    bool m_areNegIDsEnabled;
+    QMediaPlayer *m_player;
+
+    void updateVideo(QStandardItem *item);
+    void loadAvailableContent(int row = -1);
+    void loadContentFromFolder(QString path, bool isBR);
+    void deleteContent(QString path);
+    void moveContent();
+    void updateVideos();
+
+public slots:
+    void showAvailableContent(bool b);
+
+private slots:
+    void on_listIDsIndexChanged(QModelIndex index, QModelIndex);
+    void on_listIndexChanged(QModelIndex index, QModelIndex);
+    void on_pushButtonMove_clicked();
+    void on_pushButtonRefresh_clicked();
+    void on_pushButtonAdd_clicked();
+    void deletingContent(SuperListItem *super, int row);
+    void on_treeViewAvailableContentDoubleClicked(QModelIndex);
+    void on_pushButtonPlay_clicked();
+    void on_pushButtonStop_clicked();
+    void on_pushButtonPause_clicked();
+};
+
+#endif // PANELVIDEOS_H

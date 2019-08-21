@@ -104,6 +104,7 @@ public:
     static const QString PATH_SCRIPTS;
     static const QString PATH_KEYBOARD;
     static const QString PATH_PICTURES_DATAS;
+    static const QString PATH_VIDEOS_DATAS;
     static const QString PATH_SONGS_DATAS;
     static const QString PATH_SHAPES_DATAS;
     static const QString PATH_SAVES;
@@ -123,6 +124,7 @@ public:
     static const QString PATH_MOUNTAINS;
     static const QString PATH_TEXTURES_OBJECT_3D;
     static const QString PATH_BATTLERS;
+    static const QString PATH_VIDEOS;
     static const QString PATH_SONGS;
     static const QString PATH_MUSICS;
     static const QString PATH_BACKGROUND_SOUNDS;
