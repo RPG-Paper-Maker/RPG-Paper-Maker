@@ -42,6 +42,7 @@ HEADERS += \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
     Enums/mountaincollisionkind.h \
+    Enums/titlecommandkind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \
@@ -52,6 +53,7 @@ HEADERS += \
     Models/System/systemdetection.h \
     Models/System/systemmountain.h \
     Models/System/systemproperty.h \
+    Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
     Models/translations.h \
     Singletons/singleton.h \
@@ -345,6 +347,7 @@ SOURCES += \
     Models/System/systemdetection.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemtitlecommand.cpp \
     Models/System/systemvideo.cpp \
     Models/project.cpp \
     Dialogs/dialogdatas.cpp \

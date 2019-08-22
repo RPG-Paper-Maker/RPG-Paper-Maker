@@ -492,6 +492,12 @@ void Project::readCommonEvents() {
 
 // -------------------------------------------------------
 
+void Project::readTitleScreenGameOver() {
+    p_gameDatas->readTitleScreenGameOver(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
 void Project::write(QString path) {
     setPathCurrentProject(path);
     writeLangsDatas();
@@ -598,6 +604,12 @@ void Project::writeTilesetsDatas() {
 
 void Project::writeCommonEvents() {
     p_gameDatas->writeCommonEvents(p_pathCurrentProject);
+}
+
+// -------------------------------------------------------
+
+void Project::writeTitleScreenGameOver() {
+    p_gameDatas->writeTitleScreenGameOver(p_pathCurrentProject);
 }
 
 // -------------------------------------------------------

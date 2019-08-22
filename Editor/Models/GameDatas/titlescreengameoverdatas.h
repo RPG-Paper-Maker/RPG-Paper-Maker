@@ -31,6 +31,7 @@ public:
     static const QString JSON_TITLE_BACKGROUND_IMAGE;
     static const QString JSON_TITLE_BACKGROUND_VIDEO;
     static const QString JSON_TITLE_MUSIC;
+    static const QString JSON_TITLE_COMMANDS;
 
     TitleScreenGameOverDatas();
     virtual ~TitleScreenGameOverDatas();
@@ -40,6 +41,7 @@ public:
     SuperListItem * titleBackgroundImageID() const;
     SuperListItem * titleBackgroundVideoID() const;
     SystemPlaySong * titleMusic() const;
+    QStandardItemModel * modelTitleCommands() const;
 
     void read(QString path);
     void setDefault();
@@ -52,6 +54,7 @@ protected:
     SuperListItem *m_titleBackgroundImageID;
     SuperListItem *m_titleBackgroundVideoID;
     SystemPlaySong *m_titleMusic;
+    QStandardItemModel *m_modelTitleCommands;
 };
 
 #endif // TITLESCREENGAMEOVERDATAS_H

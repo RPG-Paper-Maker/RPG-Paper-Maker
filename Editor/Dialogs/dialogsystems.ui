@@ -1228,7 +1228,7 @@
                   <property name="title">
                    <string>Options configuration</string>
                   </property>
-                  <widget class="QCheckBox" name="checkBox_4">
+                  <widget class="QCheckBox" name="checkBoxTitleKeyboard">
                    <property name="geometry">
                     <rect>
                      <x>20</x>

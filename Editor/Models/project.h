@@ -87,6 +87,7 @@ public:
     void readBattleSystemDatas();
     void readTilesetsDatas();
     void readCommonEvents();
+    void readTitleScreenGameOver();
     void write(QString path);
     void writeGameDatas();
     void writeLangsDatas();
@@ -102,6 +103,7 @@ public:
     void writeBattleSystemDatas();
     void writeTilesetsDatas();
     void writeCommonEvents();
+    void writeTitleScreenGameOver();
     void saveCurrentMap();
 
     QString createRPMFile();

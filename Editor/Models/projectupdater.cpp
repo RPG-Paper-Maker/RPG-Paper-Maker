@@ -15,6 +15,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "systembattlemap.h"
+#include "systemtitlecommand.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 9;
 
@@ -576,6 +577,21 @@ void ProjectUpdater::updateVersion_1_3_0() {
             .value<quintptr>())->cameraPropertiesID()->setNumberValue(2);
     }
     m_project->writeBattleSystemDatas();
+
+    // Title screen commands
+    m_project->readTitleScreenGameOver();
+    m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
+        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("New game")
+        , TitleCommandKind::NewGame))->getModelRow());
+    m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
+        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Load game"
+        ), TitleCommandKind::LoadGame))->getModelRow());
+    m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
+        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Options"),
+        TitleCommandKind::Options))->getModelRow());
+    m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
+        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Exit"),
+        TitleCommandKind::Exit))->getModelRow());
 }
 
 // -------------------------------------------------------

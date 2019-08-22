@@ -25,6 +25,7 @@
 #include "systemwindowskin.h"
 #include "systemcameraproperties.h"
 #include "systemdetection.h"
+#include "systemtitlecommand.h"
 
 // -------------------------------------------------------
 //
@@ -266,6 +267,10 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
         ->titleScreenGameOverDatas()->titleBackgroundVideoID());
     ui->widgetChooseMusicTitle->initialize(gameDatas->titleScreenGameOverDatas()
         ->titleMusic());
+    ui->panelSuperListTitleScrenMenuCommands->initializeModel(gameDatas
+        ->titleScreenGameOverDatas()->modelTitleCommands());
+    ui->panelSuperListTitleScrenMenuCommands->list()->initializeNewItemInstance(
+        new SystemTitleCommand);
 }
 
 // -------------------------------------------------------
