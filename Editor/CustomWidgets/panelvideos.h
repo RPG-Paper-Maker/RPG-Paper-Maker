@@ -36,18 +36,19 @@ public:
     explicit PanelVideos(QWidget *parent = nullptr);
     ~PanelVideos();
 
-    SystemVideo * video() const;
-    void setVideo(SystemVideo *video);
+    SuperListItem * video() const;
+    void setVideo(SuperListItem *video);
     void setAreNegIDsEnabled(bool b);
 
     void setKind();
-    void changeVideo(SystemVideo *video);
+    void changeVideo(SuperListItem *video);
 
 private:
     Ui::PanelVideos *ui;
-    SystemVideo *m_video;
+    SuperListItem *m_video;
     bool m_areNegIDsEnabled;
     QMediaPlayer *m_player;
+    bool m_isOutput;
 
     void updateVideo(QStandardItem *item);
     void loadAvailableContent(int row = -1);

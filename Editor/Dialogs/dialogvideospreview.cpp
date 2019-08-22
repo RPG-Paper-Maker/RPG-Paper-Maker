@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogshapespreview.h"
-#include "ui_dialogshapespreview.h"
+#include "dialogvideospreview.h"
+#include "ui_dialogvideospreview.h"
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -19,24 +19,23 @@
 //
 // -------------------------------------------------------
 
-DialogShapesPreview::DialogShapesPreview(SuperListItem *shapeID,
-    CustomShapeKind kind, QWidget *parent) :
+DialogVideosPreview::DialogVideosPreview(SuperListItem *videoID, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogShapesPreview),
-    m_kind(kind),
-    m_shapeID(shapeID),
-    m_initialShapeID(shapeID->id())
+    ui(new Ui::DialogVideosPreview),
+    m_videoID(videoID),
+    m_initialVideoID(videoID->id())
 {
     ui->setupUi(this);
-    ui->widget->setShapeKind(kind);
-    ui->widget->changeShape(shapeID);
+
+    ui->widget->setKind();
+    ui->widget->changeVideo(videoID);
     ui->widget->showAvailableContent(false);
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
 }
 
-DialogShapesPreview::~DialogShapesPreview()
+DialogVideosPreview::~DialogVideosPreview()
 {
     delete ui;
 }
@@ -47,24 +46,24 @@ DialogShapesPreview::~DialogShapesPreview()
 //
 // -------------------------------------------------------
 
-void DialogShapesPreview::closeEvent(QCloseEvent *) {
+void DialogVideosPreview::closeEvent(QCloseEvent *) {
     this->on_rejected();
 }
 
 // -------------------------------------------------------
 
-void DialogShapesPreview::on_accepted() {
-    RPM::get()->project()->writePicturesDatas();
+void DialogVideosPreview::on_accepted() {
+    RPM::get()->project()->writeVideosDatas();
 }
 
 // -------------------------------------------------------
 
-void DialogShapesPreview::on_rejected() {
-    RPM::get()->project()->readPicturesDatas();
+void DialogVideosPreview::on_rejected() {
+    RPM::get()->project()->readVideosDatas();
 
-    // Update new picture adress
+    // Update new video adress
     SuperListItem *super = SuperListItem::getById(RPM::get()->project()
-        ->shapesDatas()->model(m_kind)->invisibleRootItem(), m_initialShapeID);
-    m_shapeID->setId(super->id());
-    m_shapeID->setName(super->name());
+        ->videosDatas()->model()->invisibleRootItem(), m_initialVideoID);
+    m_videoID->setId(super->id());
+    m_videoID->setName(super->name());
 }

@@ -80,12 +80,12 @@
     <addaction name="actionDatas_manager"/>
     <addaction name="actionSystems_manager"/>
     <addaction name="actionVariables_manager"/>
+    <addaction name="actionCollisions_manager"/>
+    <addaction name="actionKeyboard_controls"/>
+    <addaction name="actionScripts_manager"/>
     <addaction name="actionPictures_manager"/>
     <addaction name="actionSongs_manager"/>
     <addaction name="actionShapes_manager"/>
-    <addaction name="actionKeyboard_controls"/>
-    <addaction name="actionCollisions_manager"/>
-    <addaction name="actionScripts_manager"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -170,13 +170,14 @@
    <addaction name="actionDatas_manager"/>
    <addaction name="actionSystems_manager"/>
    <addaction name="actionVariables_manager"/>
+   <addaction name="actionCollisions_manager"/>
+   <addaction name="actionKeyboard_controls"/>
+   <addaction name="actionScripts_manager"/>
+   <addaction name="separator"/>
    <addaction name="actionPictures_manager"/>
    <addaction name="actionVideos_manager"/>
    <addaction name="actionSongs_manager"/>
    <addaction name="actionShapes_manager"/>
-   <addaction name="actionKeyboard_controls"/>
-   <addaction name="actionCollisions_manager"/>
-   <addaction name="actionScripts_manager"/>
    <addaction name="separator"/>
    <addaction name="actionAutotiles"/>
    <addaction name="actionAnimated_Autotiles"/>
@@ -329,7 +330,7 @@
     <string>Keyboard</string>
    </property>
    <property name="shortcut">
-    <string>8</string>
+    <string>5</string>
    </property>
   </action>
   <action name="actionSave_all">
@@ -367,7 +368,7 @@
     <string>Pictures</string>
    </property>
    <property name="shortcut">
-    <string>4</string>
+    <string>8</string>
    </property>
   </action>
   <action name="actionSet_BR_path_folder">
@@ -509,7 +510,7 @@
     <string>Songs</string>
    </property>
    <property name="shortcut">
-    <string>5</string>
+    <string>9</string>
    </property>
   </action>
   <action name="actionCollisions_manager">
@@ -524,7 +525,7 @@
     <string>Collisions</string>
    </property>
    <property name="shortcut">
-    <string>9</string>
+    <string>4</string>
    </property>
   </action>
   <action name="actionScripts_manager">
@@ -539,7 +540,7 @@
     <string>Scripts</string>
    </property>
    <property name="shortcut">
-    <string>0</string>
+    <string>6</string>
    </property>
   </action>
   <action name="actionDebug_options">
@@ -626,7 +627,7 @@
     <string>Shapes</string>
    </property>
    <property name="shortcut">
-    <string>7</string>
+    <string>0</string>
    </property>
   </action>
   <action name="actionVideos_manager">

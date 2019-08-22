@@ -13,8 +13,9 @@
 #include "rpm.h"
 #include "common.h"
 
-const QString TitleScreenGameOverDatas::JSON_TITLE_LOGO = "tl";
-const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND = "tb";
+const QString TitleScreenGameOverDatas::JSON_IS_TITLE_BACKGROUND_IMAGE = "itbi";
+const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_IMAGE = "tb";
+const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_VIDEO = "tbv";
 const QString TitleScreenGameOverDatas::JSON_TITLE_MUSIC = "tm";
 
 // -------------------------------------------------------
@@ -24,25 +25,34 @@ const QString TitleScreenGameOverDatas::JSON_TITLE_MUSIC = "tm";
 // -------------------------------------------------------
 
 TitleScreenGameOverDatas::TitleScreenGameOverDatas() :
-    m_titleLogoID(new SuperListItem),
-    m_titleBackgroundID(new SuperListItem),
+    m_isBackgroundImage(true),
+    m_titleBackgroundImageID(new SuperListItem),
+    m_titleBackgroundVideoID(new SuperListItem),
     m_titleMusic(new SystemPlaySong(-1, SongKind::Music))
 {
 
 }
 
 TitleScreenGameOverDatas::~TitleScreenGameOverDatas() {
-    delete m_titleLogoID;
-    delete m_titleBackgroundID;
+    delete m_titleBackgroundImageID;
+    delete m_titleBackgroundVideoID;
     delete m_titleMusic;
 }
 
-SuperListItem * TitleScreenGameOverDatas::titleLogoID() const {
-    return m_titleLogoID;
+bool TitleScreenGameOverDatas::isBackgroundImage() const {
+    return m_isBackgroundImage;
 }
 
-SuperListItem * TitleScreenGameOverDatas::titleBackgroundID() const {
-    return m_titleBackgroundID;
+void TitleScreenGameOverDatas::setIsBackgroundImage(bool b) {
+    m_isBackgroundImage = b;
+}
+
+SuperListItem * TitleScreenGameOverDatas::titleBackgroundImageID() const {
+    return m_titleBackgroundImageID;
+}
+
+SuperListItem * TitleScreenGameOverDatas::titleBackgroundVideoID() const {
+    return m_titleBackgroundVideoID;
 }
 
 SystemPlaySong * TitleScreenGameOverDatas::titleMusic() const {
@@ -63,8 +73,8 @@ void TitleScreenGameOverDatas::read(QString path){
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::setDefault() {
-    m_titleLogoID->setId(1);
-    m_titleBackgroundID->setId(2);
+    m_titleBackgroundImageID->setId(1);
+    m_titleBackgroundVideoID->setId(-1);
     m_titleMusic->setId(1);
 }
 
@@ -75,11 +85,14 @@ void TitleScreenGameOverDatas::setDefault() {
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::read(const QJsonObject &json) {
-    if (json.contains(JSON_TITLE_LOGO)) {
-        m_titleLogoID->setId(json[JSON_TITLE_LOGO].toInt());
+    if (json.contains(JSON_IS_TITLE_BACKGROUND_IMAGE)) {
+        m_isBackgroundImage = json[JSON_IS_TITLE_BACKGROUND_IMAGE].toBool();
     }
-    if (json.contains(JSON_TITLE_BACKGROUND)) {
-        m_titleBackgroundID->setId(json[JSON_TITLE_BACKGROUND].toInt());
+    if (json.contains(JSON_TITLE_BACKGROUND_IMAGE)) {
+        m_titleBackgroundImageID->setId(json[JSON_TITLE_BACKGROUND_IMAGE].toInt());
+    }
+    if (json.contains(JSON_TITLE_BACKGROUND_VIDEO)) {
+        m_titleBackgroundVideoID->setId(json[JSON_TITLE_BACKGROUND_VIDEO].toInt());
     }
     m_titleMusic->read(json[JSON_TITLE_MUSIC].toObject());
 }
@@ -89,11 +102,15 @@ void TitleScreenGameOverDatas::read(const QJsonObject &json) {
 void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     QJsonObject obj;
 
-    if (!m_titleLogoID->isDefault()) {
-        json[JSON_TITLE_LOGO] = m_titleLogoID->id();
-    }
-    if (!m_titleBackgroundID->isDefault()) {
-        json[JSON_TITLE_BACKGROUND] = m_titleBackgroundID->id();
+    if (m_isBackgroundImage) {
+        if (!m_titleBackgroundImageID->isDefault()) {
+            json[JSON_TITLE_BACKGROUND_IMAGE] = m_titleBackgroundImageID->id();
+        }
+    } else {
+        json[JSON_IS_TITLE_BACKGROUND_IMAGE] = m_isBackgroundImage;
+        if (m_titleBackgroundVideoID->id() != -1) {
+            json[JSON_TITLE_BACKGROUND_VIDEO] = m_titleBackgroundVideoID->id();
+        }
     }
     obj = QJsonObject();
     m_titleMusic->write(obj);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogShapesPreview</class>
- <widget class="QDialog" name="DialogShapesPreview">
+ <class>DialogVideosPreview</class>
+ <widget class="QDialog" name="DialogVideosPreview">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Select a shape...</string>
+   <string>Select a video...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -27,39 +27,22 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
      <item>
-      <widget class="PanelShapes" name="widget" native="true"/>
+      <widget class="PanelVideos" name="widget" native="true"/>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0">
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>88</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -67,9 +50,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelShapes</class>
+   <class>PanelVideos</class>
    <extends>QWidget</extends>
-   <header>panelshapes.h</header>
+   <header>panelvideos.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -78,32 +61,32 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogShapesPreview</receiver>
+   <receiver>DialogVideosPreview</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>248</x>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>157</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogShapesPreview</receiver>
+   <receiver>DialogVideosPreview</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>316</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>286</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

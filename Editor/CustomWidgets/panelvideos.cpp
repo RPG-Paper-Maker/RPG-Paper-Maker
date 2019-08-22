@@ -28,7 +28,8 @@ PanelVideos::PanelVideos(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PanelVideos),
     m_video(nullptr),
-    m_areNegIDsEnabled(true)
+    m_areNegIDsEnabled(true),
+    m_isOutput(false)
 {
     ui->setupUi(this);
 
@@ -61,11 +62,11 @@ PanelVideos::~PanelVideos()
 }
 
 
-SystemVideo * PanelVideos::video() const {
+SuperListItem *PanelVideos::video() const {
     return m_video;
 }
 
-void PanelVideos::setVideo(SystemVideo *video) {
+void PanelVideos::setVideo(SuperListItem *video) {
     m_video = video;
 }
 
@@ -103,17 +104,13 @@ void PanelVideos::setKind() {
     ui->checkBoxContent->setText("Show available content of " + SystemVideo
         ::getLocalFolder());
 
-    updateVideo(ui->widgetPanelIDs->list()->getModel()->item(0));
-
     // Player config
     m_player = new QMediaPlayer;
-    m_player->setVideoOutput(ui->widgetVideo);
-    ui->widgetVideo->show();
 }
 
 // -------------------------------------------------------
 
-void PanelVideos::changeVideo(SystemVideo *video) {
+void PanelVideos::changeVideo(SuperListItem *video) {
     this->setVideo(video);
 
     int index = SuperListItem::getIndexById(ui->widgetPanelIDs->list()
@@ -126,15 +123,21 @@ void PanelVideos::changeVideo(SystemVideo *video) {
 // -------------------------------------------------------
 
 void PanelVideos::updateVideo(QStandardItem *item) {
+    SystemVideo *video;
+
+    if (m_isOutput) {
+        this->on_pushButtonStop_clicked();
+    }
     if (item != nullptr) {
-        m_video = reinterpret_cast<SystemVideo *>(item->data().value<qintptr>());
+        video = reinterpret_cast<SystemVideo *>(item->data().value<qintptr>());
         if (m_video != nullptr) {
-            if (m_video->id() != -1) {
-                QUrl path = QUrl::fromLocalFile(m_video->getPath());
-                m_player->setMedia(path);
-            }
-            ui->pushButtonPlay->setEnabled(m_video->id() != -1);
+            m_video->setId(video->id());
+            m_video->setName(video->name());
         }
+        if (video->id() != -1) {
+            m_player->setMedia(QUrl::fromLocalFile(video->getPath()));
+        }
+        ui->pushButtonPlay->setEnabled(video->id() != -1);
     }
 }
 
@@ -303,6 +306,10 @@ void PanelVideos::on_treeViewAvailableContentDoubleClicked(QModelIndex) {
 // -------------------------------------------------------
 
 void PanelVideos::on_pushButtonPlay_clicked() {
+    if (!m_isOutput) {
+        m_isOutput = true;
+        m_player->setVideoOutput(ui->widgetVideo);
+    }
     m_player->play();
     ui->pushButtonPause->setEnabled(true);
     ui->pushButtonStop->setEnabled(true);

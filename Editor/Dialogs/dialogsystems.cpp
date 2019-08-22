@@ -256,12 +256,14 @@ void DialogSystems::updateStatisticsBase(){
 // -------------------------------------------------------
 
 void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
-    ui->widgetPictureTitleLogo->setKind(PictureKind::TitleScreen);
-    ui->widgetPictureTitleLogo->initializeSuper(gameDatas
-        ->titleScreenGameOverDatas()->titleLogoID());
+    if (!gameDatas->titleScreenGameOverDatas()->isBackgroundImage()) {
+        ui->radioButtonVideo->setChecked(true);
+    }
     ui->widgetPictureTitleBackground->setKind(PictureKind::TitleScreen);
     ui->widgetPictureTitleBackground->initializeSuper(gameDatas
-        ->titleScreenGameOverDatas()->titleBackgroundID());
+        ->titleScreenGameOverDatas()->titleBackgroundImageID());
+    ui->widgetVideoTitleBackground->initialize(gameDatas
+        ->titleScreenGameOverDatas()->titleBackgroundVideoID());
     ui->widgetChooseMusicTitle->initialize(gameDatas->titleScreenGameOverDatas()
         ->titleMusic());
 }
@@ -468,8 +470,23 @@ void DialogSystems::on_statisticsUpdated(){
 // -------------------------------------------------------
 
 void DialogSystems::on_equipmentUpdated(){
-    RPM::get()->project()->gameDatas()->battleSystemDatas()
-            ->updateEquipments();
+    RPM::get()->project()->gameDatas()->battleSystemDatas()->updateEquipments();
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_radioButtonImage_toggled(bool checked) {
+    ui->widgetPictureTitleBackground->setEnabled(checked);
+    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
+        ->setIsBackgroundImage(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_radioButtonVideo_toggled(bool checked) {
+    ui->widgetVideoTitleBackground->setEnabled(checked);
+    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
+        ->setIsBackgroundImage(!checked);
 }
 
 // -------------------------------------------------------
@@ -496,7 +513,6 @@ void DialogSystems::on_pageCommonReactorsSelected(QModelIndex index,
 }
 
 // -------------------------------------------------------
-// Common objects
 
 void DialogSystems::on_pageCommonObjectsSelected(QModelIndex index,
                                                  QModelIndex)

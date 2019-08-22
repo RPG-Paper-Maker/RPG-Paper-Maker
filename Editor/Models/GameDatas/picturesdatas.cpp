@@ -111,7 +111,7 @@ void PicturesDatas::setDefaultWindowSkins(QList<QString>& names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultTitleScreen(QList<QString>& names) {
-    names << "logo" << "background";
+    names << "background";
     setDefaultPictures(names, PictureKind::TitleScreen);
 }
 

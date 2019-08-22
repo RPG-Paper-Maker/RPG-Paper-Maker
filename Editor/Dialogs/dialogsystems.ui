@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1025,79 +1025,157 @@
              <property name="title">
               <string>Title screen</string>
              </property>
-             <layout class="QGridLayout" name="gridLayout_35">
+             <layout class="QGridLayout" name="gridLayout_38">
               <item row="0" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
+               <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,0,1">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_24" stretch="0,0,0,0,0,0,1">
+                 <layout class="QVBoxLayout" name="verticalLayout_24" stretch="0,0,0,1">
                   <item>
-                   <widget class="QLabel" name="label_17">
-                    <property name="text">
-                     <string>Logo:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="WidgetPicture" name="widgetPictureTitleLogo" native="true">
+                   <widget class="QGroupBox" name="groupBox_28">
                     <property name="minimumSize">
                      <size>
-                      <width>200</width>
-                      <height>27</height>
+                      <width>0</width>
+                      <height>0</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>200</width>
-                      <height>27</height>
+                      <width>300</width>
+                      <height>16777215</height>
                      </size>
                     </property>
+                    <property name="title">
+                     <string>Background</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_37">
+                     <item row="0" column="0">
+                      <layout class="QGridLayout" name="gridLayout_35" rowstretch="0,1">
+                       <item row="0" column="0">
+                        <widget class="QRadioButton" name="radioButtonImage">
+                         <property name="text">
+                          <string>Image:</string>
+                         </property>
+                         <property name="checked">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="WidgetPicture" name="widgetPictureTitleBackground" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2" rowspan="2">
+                        <spacer name="horizontalSpacer_4">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>78</width>
+                           <height>58</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QRadioButton" name="radioButtonVideo">
+                         <property name="text">
+                          <string>Video:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="WidgetVideo" name="widgetVideoTitleBackground" native="true">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>200</width>
+                           <height>27</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_16">
-                    <property name="text">
-                     <string>Background:</string>
-                    </property>
-                   </widget>
+                   <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
+                    <item>
+                     <widget class="QLabel" name="label_22">
+                      <property name="text">
+                       <string>Music:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>268</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                   <item>
-                   <widget class="WidgetPicture" name="widgetPictureTitleBackground" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_22">
-                    <property name="text">
-                     <string>Music:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="WidgetSong" name="widgetChooseMusicTitle" native="true">
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>27</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
+                    <item>
+                     <widget class="WidgetSong" name="widgetChooseMusicTitle" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>200</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>200</width>
+                        <height>27</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_5">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>108</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                   <item>
                    <spacer name="verticalSpacer_3">
@@ -1106,8 +1184,8 @@
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>188</width>
-                      <height>40</height>
+                      <width>308</width>
+                      <height>13</height>
                      </size>
                     </property>
                    </spacer>
@@ -1115,17 +1193,55 @@
                  </layout>
                 </item>
                 <item>
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                 <widget class="QGroupBox" name="groupBox_29">
+                  <property name="enabled">
+                   <bool>true</bool>
                   </property>
-                  <property name="sizeHint" stdset="0">
+                  <property name="minimumSize">
                    <size>
-                    <width>278</width>
-                    <height>248</height>
+                    <width>200</width>
+                    <height>0</height>
                    </size>
                   </property>
-                 </spacer>
+                  <property name="maximumSize">
+                   <size>
+                    <width>150</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="title">
+                   <string>Menu commands</string>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_39">
+                   <item row="0" column="0">
+                    <widget class="PanelSuperList" name="panelSuperListTitleScrenMenuCommands" native="true">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="groupBox_30">
+                  <property name="title">
+                   <string>Options configuration</string>
+                  </property>
+                  <widget class="QCheckBox" name="checkBox_4">
+                   <property name="geometry">
+                    <rect>
+                     <x>20</x>
+                     <y>40</y>
+                     <width>211</width>
+                     <height>23</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Keyboard assignment</string>
+                   </property>
+                  </widget>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1483,6 +1599,17 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
@@ -1507,17 +1634,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelSuperList</class>
-   <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
@@ -1527,6 +1643,12 @@
    <class>WidgetTreeCommands</class>
    <extends>QWidget</extends>
    <header>widgettreecommands.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetVideo</class>
+   <extends>QWidget</extends>
+   <header>widgetvideo.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

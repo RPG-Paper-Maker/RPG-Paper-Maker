@@ -27,14 +27,18 @@
 class TitleScreenGameOverDatas : public Serializable
 {
 public:
-    static const QString JSON_TITLE_LOGO;
-    static const QString JSON_TITLE_BACKGROUND;
+    static const QString JSON_IS_TITLE_BACKGROUND_IMAGE;
+    static const QString JSON_TITLE_BACKGROUND_IMAGE;
+    static const QString JSON_TITLE_BACKGROUND_VIDEO;
     static const QString JSON_TITLE_MUSIC;
 
     TitleScreenGameOverDatas();
     virtual ~TitleScreenGameOverDatas();
-    SuperListItem * titleLogoID() const;
-    SuperListItem * titleBackgroundID() const;
+
+    bool isBackgroundImage() const;
+    void setIsBackgroundImage(bool b);
+    SuperListItem * titleBackgroundImageID() const;
+    SuperListItem * titleBackgroundVideoID() const;
     SystemPlaySong * titleMusic() const;
 
     void read(QString path);
@@ -44,8 +48,9 @@ public:
     virtual void write(QJsonObject &json) const;
 
 protected:
-    SuperListItem *m_titleLogoID;
-    SuperListItem *m_titleBackgroundID;
+    bool m_isBackgroundImage;
+    SuperListItem *m_titleBackgroundImageID;
+    SuperListItem *m_titleBackgroundVideoID;
     SystemPlaySong *m_titleMusic;
 };
 

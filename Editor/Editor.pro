@@ -25,6 +25,7 @@ HEADERS += \
     CustomWidgets/panelvideos.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
+    CustomWidgets/widgetvideo.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
@@ -33,6 +34,7 @@ HEADERS += \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/dialogvideos.h \
+    Dialogs/dialogvideospreview.h \
     Dialogs/mainwindow.h \
     Dialogs/dialognewproject.h \
     CustomWidgets/panelmainmenu.h \
@@ -317,6 +319,7 @@ SOURCES += \
     CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
+    CustomWidgets/widgetvideo.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
@@ -325,6 +328,7 @@ SOURCES += \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/dialogvideos.cpp \
+    Dialogs/dialogvideospreview.cpp \
     Dialogs/mainwindow.cpp \
     Dialogs/dialognewproject.cpp \
     CustomWidgets/panelmainmenu.cpp \
@@ -581,6 +585,7 @@ FORMS += \
     CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
+    CustomWidgets/widgetvideo.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
@@ -589,6 +594,7 @@ FORMS += \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/dialogvideos.ui \
+    Dialogs/dialogvideospreview.ui \
     Dialogs/mainwindow.ui \
     Dialogs/dialognewproject.ui \
     CustomWidgets/panelmainmenu.ui \
