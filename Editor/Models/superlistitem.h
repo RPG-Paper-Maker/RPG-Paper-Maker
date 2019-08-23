@@ -71,6 +71,7 @@ public:
         const QJsonObject &json, const QString &name);
     static void writeTree(QStandardItemModel *model, QJsonObject &json, const
         QString &name);
+    void reset();
 
     virtual void read(const QJsonObject &json);
     void readId(const QJsonObject &json);

@@ -267,10 +267,12 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
         ->titleScreenGameOverDatas()->titleBackgroundVideoID());
     ui->widgetChooseMusicTitle->initialize(gameDatas->titleScreenGameOverDatas()
         ->titleMusic());
-    ui->panelSuperListTitleScrenMenuCommands->initializeModel(gameDatas
+    ui->treeViewTitleMenuCommands->initializeNewItemInstance(new
+        SystemTitleCommand);
+    ui->treeViewTitleMenuCommands->initializeModel(gameDatas
         ->titleScreenGameOverDatas()->modelTitleCommands());
-    ui->panelSuperListTitleScrenMenuCommands->list()->initializeNewItemInstance(
-        new SystemTitleCommand);
+    ui->checkBoxTitleKeyboard->setChecked(gameDatas->titleScreenGameOverDatas()
+        ->titleOptionKeyboard());
 }
 
 // -------------------------------------------------------
@@ -436,23 +438,27 @@ void DialogSystems::on_spinBoxAnimationFrames_valueChanged(int i) {
 
 // -------------------------------------------------------
 
-void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index){
+void DialogSystems::on_comboBoxBattleLevel_currentIndexChanged(int index) {
     if (index != -1) {
-        SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleLevel
-                ->itemData(index).value<qintptr>();
+        SystemStatistic *statistic;
+
+        statistic = reinterpret_cast<SystemStatistic *>(ui->comboBoxBattleLevel
+            ->itemData(index).value<qintptr>());
         RPM::get()->project()->gameDatas()->battleSystemDatas()
-                ->setIdStatisticLevel(statistic->id());
+            ->setIdStatisticLevel(statistic->id());
     }
 }
 
 // -------------------------------------------------------
 
-void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index){
+void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index) {
     if (index != -1) {
-        SystemStatistic* statistic = (SystemStatistic*) ui->comboBoxBattleExp
-                ->itemData(index).value<qintptr>();
+        SystemStatistic *statistic;
+
+        statistic = reinterpret_cast<SystemStatistic *>(ui->comboBoxBattleExp
+            ->itemData(index).value<qintptr>());
         RPM::get()->project()->gameDatas()->battleSystemDatas()
-                ->setIdStatisticExp(statistic->id());
+            ->setIdStatisticExp(statistic->id());
     }
 }
 
@@ -492,6 +498,13 @@ void DialogSystems::on_radioButtonVideo_toggled(bool checked) {
     ui->widgetVideoTitleBackground->setEnabled(checked);
     RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
         ->setIsBackgroundImage(!checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_checkBoxTitleKeyboard_toggled(bool checked) {
+    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
+        ->setTitleOptionKeyboard(checked);
 }
 
 // -------------------------------------------------------

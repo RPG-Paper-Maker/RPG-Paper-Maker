@@ -361,6 +361,12 @@ void SuperListItem::writeTree(QStandardItemModel *model, QJsonObject &json,
     }
 }
 
+// -------------------------------------------------------
+
+void SuperListItem::reset() {
+    p_id = -1;
+    p_name = "<None>";
+}
 
 // -------------------------------------------------------
 //

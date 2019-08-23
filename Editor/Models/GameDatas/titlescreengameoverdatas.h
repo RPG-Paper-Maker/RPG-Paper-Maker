@@ -32,6 +32,7 @@ public:
     static const QString JSON_TITLE_BACKGROUND_VIDEO;
     static const QString JSON_TITLE_MUSIC;
     static const QString JSON_TITLE_COMMANDS;
+    static const QString JSON_TITLE_OPTION_KEYBOARD;
 
     TitleScreenGameOverDatas();
     virtual ~TitleScreenGameOverDatas();
@@ -42,6 +43,8 @@ public:
     SuperListItem * titleBackgroundVideoID() const;
     SystemPlaySong * titleMusic() const;
     QStandardItemModel * modelTitleCommands() const;
+    bool titleOptionKeyboard() const;
+    void setTitleOptionKeyboard(bool tok);
 
     void read(QString path);
     void setDefault();
@@ -55,6 +58,7 @@ protected:
     SuperListItem *m_titleBackgroundVideoID;
     SystemPlaySong *m_titleMusic;
     QStandardItemModel *m_modelTitleCommands;
+    bool m_titleOptionKeyboard;
 };
 
 #endif // TITLESCREENGAMEOVERDATAS_H

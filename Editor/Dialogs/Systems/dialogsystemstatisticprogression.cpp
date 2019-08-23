@@ -31,8 +31,7 @@ DialogSystemStatisticProgression::DialogSystemStatisticProgression(
     initialize();
 }
 
-DialogSystemStatisticProgression::~DialogSystemStatisticProgression()
-{
+DialogSystemStatisticProgression::~DialogSystemStatisticProgression() {
     delete ui;
 }
 

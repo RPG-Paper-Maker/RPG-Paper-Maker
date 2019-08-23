@@ -66,7 +66,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>248</width>
-                <height>838</height>
+                <height>865</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -94,6 +94,18 @@
                     <widget class="WidgetTextLang" name="widgetGameName" native="true">
                      <property name="enabled">
                       <bool>true</bool>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>27</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>27</height>
+                      </size>
                      </property>
                     </widget>
                    </item>
@@ -1136,7 +1148,7 @@
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>268</width>
+                        <width>0</width>
                         <height>20</height>
                        </size>
                       </property>
@@ -1214,10 +1226,10 @@
                   </property>
                   <layout class="QGridLayout" name="gridLayout_39">
                    <item row="0" column="0">
-                    <widget class="PanelSuperList" name="panelSuperListTitleScrenMenuCommands" native="true">
-                     <property name="enabled">
-                      <bool>true</bool>
-                     </property>
+                    <widget class="WidgetSuperTree" name="treeViewTitleMenuCommands">
+                     <attribute name="headerVisible">
+                      <bool>false</bool>
+                     </attribute>
                     </widget>
                    </item>
                   </layout>
@@ -1239,6 +1251,9 @@
                    </property>
                    <property name="text">
                     <string>Keyboard assignment</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </widget>

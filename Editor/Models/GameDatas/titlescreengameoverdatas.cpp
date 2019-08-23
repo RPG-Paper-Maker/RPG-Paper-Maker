@@ -19,6 +19,7 @@ const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_IMAGE = "tb";
 const QString TitleScreenGameOverDatas::JSON_TITLE_BACKGROUND_VIDEO = "tbv";
 const QString TitleScreenGameOverDatas::JSON_TITLE_MUSIC = "tm";
 const QString TitleScreenGameOverDatas::JSON_TITLE_COMMANDS = "tc";
+const QString TitleScreenGameOverDatas::JSON_TITLE_OPTION_KEYBOARD = "tok";
 
 // -------------------------------------------------------
 //
@@ -31,7 +32,8 @@ TitleScreenGameOverDatas::TitleScreenGameOverDatas() :
     m_titleBackgroundImageID(new SuperListItem),
     m_titleBackgroundVideoID(new SuperListItem),
     m_titleMusic(new SystemPlaySong(-1, SongKind::Music)),
-    m_modelTitleCommands(new QStandardItemModel)
+    m_modelTitleCommands(new QStandardItemModel),
+    m_titleOptionKeyboard(true)
 {
 
 }
@@ -65,6 +67,14 @@ SystemPlaySong * TitleScreenGameOverDatas::titleMusic() const {
 
 QStandardItemModel * TitleScreenGameOverDatas::modelTitleCommands() const {
     return m_modelTitleCommands;
+}
+
+bool TitleScreenGameOverDatas::titleOptionKeyboard() const {
+    return m_titleOptionKeyboard;
+}
+
+void TitleScreenGameOverDatas::setTitleOptionKeyboard(bool tok) {
+    m_titleOptionKeyboard = tok;
 }
 
 // -------------------------------------------------------
@@ -101,9 +111,7 @@ void TitleScreenGameOverDatas::setDefault() {
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::read(const QJsonObject &json) {
-    SystemTitleCommand *titleCommand;
     QJsonArray tab;
-    int i, l;
 
     // Clear
     SuperListItem::deleteModel(m_modelTitleCommands, false);
@@ -111,19 +119,25 @@ void TitleScreenGameOverDatas::read(const QJsonObject &json) {
     // Title screen
     if (json.contains(JSON_IS_TITLE_BACKGROUND_IMAGE)) {
         m_isBackgroundImage = json[JSON_IS_TITLE_BACKGROUND_IMAGE].toBool();
+    } else {
+        m_isBackgroundImage = true;
     }
     if (json.contains(JSON_TITLE_BACKGROUND_IMAGE)) {
         m_titleBackgroundImageID->setId(json[JSON_TITLE_BACKGROUND_IMAGE].toInt());
+    } else {
+        m_titleBackgroundImageID->reset();
     }
     if (json.contains(JSON_TITLE_BACKGROUND_VIDEO)) {
         m_titleBackgroundVideoID->setId(json[JSON_TITLE_BACKGROUND_VIDEO].toInt());
+    } else {
+        m_titleBackgroundVideoID->reset();
     }
     m_titleMusic->read(json[JSON_TITLE_MUSIC].toObject());
-    tab = json[JSON_TITLE_COMMANDS].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
-        titleCommand = new SystemTitleCommand;
-        titleCommand->read(tab.at(i).toObject());
-        m_modelTitleCommands->appendRow(titleCommand->getModelRow());
+    SuperListItem::readTree(m_modelTitleCommands, new SystemTitleCommand, json,
+        JSON_TITLE_COMMANDS);
+    m_titleOptionKeyboard = true;
+    if (json.contains(JSON_TITLE_OPTION_KEYBOARD)) {
+        m_titleOptionKeyboard = json[JSON_TITLE_OPTION_KEYBOARD].toBool();
     }
 }
 
@@ -131,14 +145,14 @@ void TitleScreenGameOverDatas::read(const QJsonObject &json) {
 
 void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     QJsonObject obj;
-    QJsonArray tab;
-    int i, l;
 
     if (m_isBackgroundImage) {
+        m_titleBackgroundVideoID->reset();
         if (!m_titleBackgroundImageID->isDefault()) {
             json[JSON_TITLE_BACKGROUND_IMAGE] = m_titleBackgroundImageID->id();
         }
     } else {
+        m_titleBackgroundImageID->reset();
         json[JSON_IS_TITLE_BACKGROUND_IMAGE] = m_isBackgroundImage;
         if (m_titleBackgroundVideoID->id() != -1) {
             json[JSON_TITLE_BACKGROUND_VIDEO] = m_titleBackgroundVideoID->id();
@@ -147,15 +161,8 @@ void TitleScreenGameOverDatas::write(QJsonObject &json) const {
     obj = QJsonObject();
     m_titleMusic->write(obj);
     json[JSON_TITLE_MUSIC] = obj;
-    for (i = 0, l = m_modelTitleCommands->invisibleRootItem()->rowCount(); i < l
-         ; i++)
-    {
-        obj = QJsonObject();
-        reinterpret_cast<SystemTitleCommand *>(m_modelTitleCommands->item(i)
-            ->data().value<quintptr>())->write(obj);
-        tab.append(obj);
-    }
-    if (!tab.isEmpty()) {
-        json[JSON_TITLE_COMMANDS] = tab;
+    SuperListItem::writeTree(m_modelTitleCommands, json, JSON_TITLE_COMMANDS);
+    if (!m_titleOptionKeyboard) {
+        json[JSON_TITLE_OPTION_KEYBOARD] = m_titleOptionKeyboard;
     }
 }

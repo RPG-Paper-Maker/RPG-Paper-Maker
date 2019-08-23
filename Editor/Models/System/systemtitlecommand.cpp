@@ -10,6 +10,7 @@
 */
 
 #include "systemtitlecommand.h"
+#include "dialogsystemtitlecommand.h"
 
 const QString SystemTitleCommand::JSON_KIND = "k";
 const QString SystemTitleCommand::JSON_SCRIPT = "s";
@@ -61,14 +62,13 @@ void SystemTitleCommand::setScript(QString s) {
 // -------------------------------------------------------
 
 bool SystemTitleCommand::openDialog() {
-    /*
     SystemTitleCommand titleCommand;
     titleCommand.setCopy(*this);
     DialogSystemTitleCommand dialog(titleCommand);
     if (dialog.exec() == QDialog::Accepted) {
         setCopy(titleCommand);
         return true;
-    }*/
+    }
     return false;
 }
 
@@ -89,7 +89,22 @@ void SystemTitleCommand::setCopy(const SuperListItem &super) {
     SystemLang::setCopy(*titleCommand);
 
     m_kind = titleCommand->m_kind;
-    m_script = titleCommand->m_script;
+    m_script = m_kind == TitleCommandKind::Script ? titleCommand->m_script : "";
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem *> SystemTitleCommand::getModelRow() const{
+    QList<QStandardItem *> row;
+    QStandardItem *item;
+
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
+    item->setText(this->toStringName());
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    row.append(item);
+
+    return row;
 }
 
 // -------------------------------------------------------
