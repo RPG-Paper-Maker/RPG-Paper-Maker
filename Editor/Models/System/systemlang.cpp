@@ -82,6 +82,7 @@ void SystemLang::setCopy(const SuperListItem &super) {
     SuperListItem::setCopy(*lang);
 
     m_names->setCopy(*lang->m_names);
+    setName(m_names->mainName());
 }
 
 // -------------------------------------------------------
