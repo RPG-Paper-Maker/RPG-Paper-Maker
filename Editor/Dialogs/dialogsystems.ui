@@ -1039,7 +1039,7 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_38">
               <item row="0" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,0,1">
+               <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,1,1">
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_24" stretch="0,0,0,1">
                   <item>
@@ -1211,13 +1211,13 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>200</width>
+                    <width>0</width>
                     <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>150</width>
+                    <width>16777215</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1238,24 +1238,17 @@
                 <item>
                  <widget class="QGroupBox" name="groupBox_30">
                   <property name="title">
-                   <string>Options configuration</string>
+                   <string>Settings configuration</string>
                   </property>
-                  <widget class="QCheckBox" name="checkBoxTitleKeyboard">
-                   <property name="geometry">
-                    <rect>
-                     <x>20</x>
-                     <y>40</y>
-                     <width>211</width>
-                     <height>23</height>
-                    </rect>
-                   </property>
-                   <property name="text">
-                    <string>Keyboard assignment</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
+                  <layout class="QGridLayout" name="gridLayout_40">
+                   <item row="0" column="0">
+                    <widget class="WidgetSuperTree" name="treeViewTitleSettings">
+                     <attribute name="headerVisible">
+                      <bool>false</bool>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>

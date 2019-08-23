@@ -587,8 +587,8 @@ void ProjectUpdater::updateVersion_1_3_0() {
         ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Load game"
         ), TitleCommandKind::LoadGame))->getModelRow());
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
-        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Options"),
-        TitleCommandKind::Options))->getModelRow());
+        ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Settings"),
+        TitleCommandKind::Settings))->getModelRow());
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
         ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Exit"),
         TitleCommandKind::Exit))->getModelRow());

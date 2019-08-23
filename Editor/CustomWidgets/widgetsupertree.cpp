@@ -29,7 +29,8 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     m_updateId(false),
     m_hasContextMenu(true),
     m_canBeControled(true),
-    m_canMove(true)
+    m_canMove(true),
+    m_canCreateDelete(true)
 {
     this->setIndentation(0);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -68,6 +69,15 @@ void WidgetSuperTree::setCanMove(bool b) {
     this->setAcceptDrops(b);
     this->setDragEnabled(b);
     this->setDropIndicatorShown(b);
+}
+
+bool WidgetSuperTree::setCanCreateDelete(bool b) {
+    m_canCreateDelete = b;
+    m_contextMenuCommonCommands->canNew(b);
+    m_contextMenuCommonCommands->canEdit(b);
+    m_contextMenuCommonCommands->canCopy(b);
+    m_contextMenuCommonCommands->canPaste(b);
+    m_contextMenuCommonCommands->canDelete(b);
 }
 
 void WidgetSuperTree::initializeModel(QStandardItemModel* m){
@@ -408,7 +418,7 @@ void WidgetSuperTree::onSelectionChanged(QModelIndex index, QModelIndex) {
     if (selected != nullptr)
         super = (SuperListItem*) selected->data().value<quintptr>();
 
-    m_contextMenuCommonCommands->canEdit(super != nullptr);
+    m_contextMenuCommonCommands->canEdit(m_canCreateDelete && super != nullptr);
 }
 
 // -------------------------------------------------------

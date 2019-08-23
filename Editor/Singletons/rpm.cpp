@@ -222,6 +222,10 @@ const QStringList RPM::ENUM_TO_STRING_FORMULA_STAT = {
     "Statistic", "Currency", "Variable"
 };
 
+const QStringList RPM::ENUM_TO_STRING_TITLE_SETTINGS = {
+    "Keyboard assigments"
+};
+
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;

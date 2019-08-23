@@ -42,6 +42,7 @@ public:
     void setCanBeEmpty(bool b);
     void setCanBeControled(bool b);
     void setCanMove(bool b);
+    bool setCanCreateDelete(bool b);
     void updateAbsoluteAllNodesString();
 
     static int getNewId(QStandardItemModel* model, int offset = 1);
@@ -68,6 +69,7 @@ private:
     bool m_hasContextMenu;
     bool m_canBeControled;
     bool m_canMove;
+    bool m_canCreateDelete;
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
     void setItem(QStandardItem *selected, SuperListItem* super);

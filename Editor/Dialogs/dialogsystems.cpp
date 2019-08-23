@@ -271,8 +271,11 @@ void DialogSystems::initializeTitleScreenGameOver(GameDatas *gameDatas) {
         SystemTitleCommand);
     ui->treeViewTitleMenuCommands->initializeModel(gameDatas
         ->titleScreenGameOverDatas()->modelTitleCommands());
-    ui->checkBoxTitleKeyboard->setChecked(gameDatas->titleScreenGameOverDatas()
-        ->titleOptionKeyboard());
+    ui->treeViewTitleSettings->setCanBeControled(false);
+    ui->treeViewTitleSettings->setCanCreateDelete(false);
+    ui->treeViewTitleSettings->initializeNewItemInstance(new SuperListItem);
+    ui->treeViewTitleSettings->initializeModel(gameDatas
+        ->titleScreenGameOverDatas()->modelTitleSettings());
 }
 
 // -------------------------------------------------------
@@ -498,13 +501,6 @@ void DialogSystems::on_radioButtonVideo_toggled(bool checked) {
     ui->widgetVideoTitleBackground->setEnabled(checked);
     RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
         ->setIsBackgroundImage(!checked);
-}
-
-// -------------------------------------------------------
-
-void DialogSystems::on_checkBoxTitleKeyboard_toggled(bool checked) {
-    RPM::get()->project()->gameDatas()->titleScreenGameOverDatas()
-        ->setTitleOptionKeyboard(checked);
 }
 
 // -------------------------------------------------------

@@ -44,6 +44,7 @@ HEADERS += \
     CustomWidgets/panelproject.h \
     Enums/mountaincollisionkind.h \
     Enums/titlecommandkind.h \
+    Enums/titlesettingkind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \

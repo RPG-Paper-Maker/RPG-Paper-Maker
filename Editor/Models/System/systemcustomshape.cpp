@@ -181,7 +181,7 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
     QVector2D temp2D;
     QStringList lineList, arg;
     QString fileLine, fileName;
-    int i, squareSize;
+    int i;
     bool firstVertex;
 
     // clear
@@ -191,7 +191,6 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
 
     // Parsing .obj file
     firstVertex = true;
-    squareSize = RPM::get()->getSquareSize();
     fileName = this->getPath(CustomShapeKind::OBJ);
     if (fileName.isEmpty()) {
         return;

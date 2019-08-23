@@ -233,7 +233,6 @@ void PanelObject::updateReactionsWidgets() {
     WidgetTreeCommands *tree;
     SystemObjectEvent *event;
     QCheckBox *checkbox;
-    QHBoxLayout *hlayout;
     QVariant variant;
     int l;
 
@@ -244,6 +243,8 @@ void PanelObject::updateReactionsWidgets() {
         .value<quintptr>());
 
     if (super != nullptr) {
+        QHBoxLayout *hlayout;
+
         clear();
 
         // Create all the corresponding tabs for all events

@@ -9,23 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef TITLECOMMANDKIND_H
-#define TITLECOMMANDKIND_H
+#ifndef TITLESETTINGKIND_H
+#define TITLESETTINGKIND_H
 
 // -------------------------------------------------------
 //
-//  ENUM TitleCommandKind
+//  ENUM TitleSettingKind
 //
-//  All the possible commands for title screen.
+//  All the possible title settings.
 //
 // -------------------------------------------------------
 
-enum class TitleCommandKind {
-    NewGame,
-    LoadGame,
-    Settings,
-    Exit,
-    Script
+enum class TitleSettingKind {
+    KeyboardAssignment
 };
 
-#endif // TITLECOMMANDKIND_H
+#endif // TITLESETTINGKIND_H
