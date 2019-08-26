@@ -16,6 +16,7 @@
 #include "common.h"
 #include "systembattlemap.h"
 #include "systemtitlecommand.h"
+#include "titlesettingkind.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 9;
 
@@ -512,6 +513,8 @@ void ProjectUpdater::updateVersion_1_2_1() {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_3_0() {
+    QStandardItem *item;
+    SuperListItem *super;
     int i, l;
 
     // Update command condition
@@ -592,6 +595,18 @@ void ProjectUpdater::updateVersion_1_3_0() {
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
         ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("Exit"),
         TitleCommandKind::Exit))->getModelRow());
+
+    // Title screen settings
+    item = new QStandardItem;
+    super = new SuperListItem(0, RPM::ENUM_TO_STRING_TITLE_SETTINGS.at(
+        static_cast<int>(TitleSettingKind::KeyboardAssignment)));
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
+    item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
+    item->setText(super->toStringName());
+    item->setCheckable(true);
+    item->setCheckState(Qt::Checked);
+    m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleSettings()
+        ->appendRow(item);
 }
 
 // -------------------------------------------------------

@@ -204,7 +204,5 @@ void TitleScreenGameOverDatas::write(QJsonObject &json) const {
         }
         tab.append(obj);
     }
-    if (!tab.isEmpty()) {
-        json[JSON_TITLE_SETTINGS] = tab;
-    }
+    json[JSON_TITLE_SETTINGS] = tab;
 }
