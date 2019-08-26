@@ -63,6 +63,7 @@ public:
     void labelTab(QString& str) const;
     bool isDefaultDataBaseValue() const;
     bool isDefaultNumberValue() const;
+    bool isDefaultNumberDoubleValue() const;
     bool isDefaultMessageValue() const;
     void initializeCommandParameter(const EventCommand *command, int& i);
     void getCommandParameter(QVector<QString> &command);

@@ -55,6 +55,7 @@ HEADERS += \
     Models/System/systemdetection.h \
     Models/System/systemmountain.h \
     Models/System/systemproperty.h \
+    Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
     Models/translations.h \
@@ -350,6 +351,7 @@ SOURCES += \
     Models/System/systemdetection.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
     Models/System/systemvideo.cpp \
     Models/project.cpp \

@@ -3,14 +3,14 @@
 	"remove": [
 		{
             "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/logo.png"
-        },
+        }
 	],
 	"replace": [
 		{
             "repo": "Basic-Ressources",
             "source": "Content/Pictures/HUD/TitleScreen/background.png",
             "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/background.png"
-        },
+        }
 	],
 	"features": [
         "Documentation: event commands reorder correctly",
@@ -40,7 +40,7 @@
         true,
         true,
         true,
-        false,
+        true,
         false,
         false
     ],

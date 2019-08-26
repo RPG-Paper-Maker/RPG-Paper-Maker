@@ -607,6 +607,10 @@ void ProjectUpdater::updateVersion_1_3_0() {
     item->setCheckState(Qt::Checked);
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleSettings()
         ->appendRow(item);
+
+    // Speed frequency
+    m_project->gameDatas()->systemDatas()->setDefaultSpeedFrequencies();
+    m_project->writeSystemDatas();
 }
 
 // -------------------------------------------------------

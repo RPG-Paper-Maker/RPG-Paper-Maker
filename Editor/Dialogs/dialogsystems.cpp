@@ -26,6 +26,7 @@
 #include "systemcameraproperties.h"
 #include "systemdetection.h"
 #include "systemtitlecommand.h"
+#include "systemspeedfrequency.h"
 
 // -------------------------------------------------------
 //
@@ -88,7 +89,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListWindowSkins->showEditName(false);
     ui->panelSuperListCameraProperties->showEditName(false);
     ui->panelSuperListDetections->showEditName(false);
-    ui->panelSuperListParticules->showEditName(false);
+    ui->panelSuperListSpeedFrequency->showEditName(false);
 
     // Allow editions
     ui->panelSuperListWindowSkins->list()->setCanEdit(true);
@@ -96,7 +97,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListColors->list()->setCanEdit(true);
     ui->panelSuperListDetections->list()->setCanEdit(true);
     ui->panelSuperListCurrencies->list()->setCanEdit(true);
-    ui->panelSuperListParticules->list()->setCanEdit(true);
+    ui->panelSuperListSpeedFrequency->list()->setCanEdit(true);
 
     // Values
     systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
@@ -134,6 +135,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemDetection);
     ui->panelSuperListDetections->initializeModel(gameDatas->systemDatas()
         ->modelDetections());
+    ui->panelSuperListSpeedFrequency->list()->initializeNewItemInstance(new
+        SystemSpeedFrequency);
+    ui->panelSuperListSpeedFrequency->initializeModel(gameDatas->systemDatas()
+        ->modelSpeedFrequencies());
     int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
     SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
         ->gameDatas()->systemDatas()->modelWindowSkins());

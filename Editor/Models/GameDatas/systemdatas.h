@@ -38,6 +38,7 @@ public:
     static const QString JSON_WINDOW_SKINS;
     static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_DETECTIONS;
+    static const QString JSON_SPEED_FREQUENCIES;
     static const QString JSON_LAST_MAJOR_VERSION;
     static const QString JSON_LAST_MINOR_VERSION;
     static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
@@ -79,6 +80,7 @@ public:
     QStandardItemModel * modelWindowSkins() const;
     QStandardItemModel * modelcameraProperties() const;
     QStandardItemModel * modelDetections() const;
+    QStandardItemModel * modelSpeedFrequencies() const;
     int lastMajorVersion() const;
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
@@ -91,6 +93,7 @@ public:
     void setDefaultWindowSkins();
     void setDefaultCameraProperties();
     void setDefaultDetections();
+    void setDefaultSpeedFrequencies();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -116,6 +119,7 @@ private:
     QStandardItemModel *m_modelWindowSkins;
     QStandardItemModel *m_modelCameraProperties;
     QStandardItemModel *m_modelDetections;
+    QStandardItemModel *m_modelSpeedFrequencies;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
 };

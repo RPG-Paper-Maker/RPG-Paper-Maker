@@ -18,6 +18,7 @@
 #include "systemwindowskin.h"
 #include "systemcameraproperties.h"
 #include "systemdetection.h"
+#include "systemspeedfrequency.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -31,6 +32,7 @@ const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
+const QString SystemDatas::JSON_SPEED_FREQUENCIES = "sf";
 
 // -------------------------------------------------------
 //
@@ -52,6 +54,7 @@ SystemDatas::SystemDatas() :
     m_modelWindowSkins(new QStandardItemModel),
     m_modelCameraProperties(new QStandardItemModel),
     m_modelDetections(new QStandardItemModel),
+    m_modelSpeedFrequencies(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0)
 {
@@ -69,6 +72,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelWindowSkins);
     SuperListItem::deleteModel(m_modelCameraProperties);
     SuperListItem::deleteModel(m_modelDetections);
+    SuperListItem::deleteModel(m_modelSpeedFrequencies);
 }
 
 void SystemDatas::read(QString path) {
@@ -175,6 +179,10 @@ QStandardItemModel * SystemDatas::modelDetections() const {
     return m_modelDetections;
 }
 
+QStandardItemModel * SystemDatas::modelSpeedFrequencies() const {
+    return m_modelSpeedFrequencies;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -213,6 +221,7 @@ void SystemDatas::setDefault() {
     this->setDefaultWindowSkins();
     this->setDefaultCameraProperties();
     this->setDefaultDetections();
+    this->setDefaultSpeedFrequencies();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -322,6 +331,32 @@ void SystemDatas::setDefaultDetections() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultSpeedFrequencies() {
+    QList<QStandardItem *> row;
+    SystemSpeedFrequency *speedFrequency;
+
+    speedFrequency = new SystemSpeedFrequency(1, "Normal", new PrimitiveValue(
+        1.0));
+    row = speedFrequency->getModelRow();
+    m_modelSpeedFrequencies->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(2, "Low", new PrimitiveValue(0.75));
+    row = speedFrequency->getModelRow();
+    m_modelSpeedFrequencies->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(3, "Very low", new PrimitiveValue(
+        0.5));
+    row = speedFrequency->getModelRow();
+    m_modelSpeedFrequencies->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.25));
+    row = speedFrequency->getModelRow();
+    m_modelSpeedFrequencies->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(1, "Very fast", new PrimitiveValue
+        (1.5));
+    row = speedFrequency->getModelRow();
+    m_modelSpeedFrequencies->appendRow(row);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -339,6 +374,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelWindowSkins, false);
     SuperListItem::deleteModel(m_modelCameraProperties, false);
     SuperListItem::deleteModel(m_modelDetections, false);
+    SuperListItem::deleteModel(m_modelSpeedFrequencies, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -426,6 +462,15 @@ void SystemDatas::read(const QJsonObject &json){
         detection->read(jsonList[i].toObject());
         row = detection->getModelRow();
         m_modelDetections->appendRow(row);
+    }
+
+    // Speed frequencies
+    jsonList = json[JSON_SPEED_FREQUENCIES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemSpeedFrequency *speedFrequency = new SystemSpeedFrequency;
+        speedFrequency->read(jsonList[i].toObject());
+        row = speedFrequency->getModelRow();
+        m_modelSpeedFrequencies->appendRow(row);
     }
 
     // Version
@@ -538,6 +583,19 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_DETECTIONS] = jsonArray;
+
+    // Speed frequencies
+    jsonArray = QJsonArray();
+    l = m_modelSpeedFrequencies->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemSpeedFrequency *speedFrequency = reinterpret_cast<
+            SystemSpeedFrequency *>(m_modelSpeedFrequencies->item(i)->data()
+            .value<quintptr>());
+        speedFrequency->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_SPEED_FREQUENCIES] = jsonArray;
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;

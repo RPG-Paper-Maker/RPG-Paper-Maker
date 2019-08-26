@@ -271,6 +271,14 @@ bool PrimitiveValue::isDefaultNumberValue() const {
 
 // -------------------------------------------------------
 
+bool PrimitiveValue::isDefaultNumberDoubleValue() const {
+    return m_kind == PrimitiveValueKind::NumberDouble && m_numberDoubleValue ==
+        0.0;
+}
+
+
+// -------------------------------------------------------
+
 bool PrimitiveValue::isDefaultMessageValue() const {
     return m_kind == PrimitiveValueKind::Message && m_messageValue.isEmpty();
 }
