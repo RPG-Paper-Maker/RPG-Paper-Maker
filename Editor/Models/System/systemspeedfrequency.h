@@ -33,6 +33,8 @@ public:
     SystemSpeedFrequency(int i, QString n, PrimitiveValue *v);
     virtual ~SystemSpeedFrequency();
 
+    PrimitiveValue * value() const;
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

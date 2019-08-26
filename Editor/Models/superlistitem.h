@@ -61,7 +61,8 @@ public:
     static SuperListItem* getById(QStandardItem* item, int id,
                                   bool first = true);
     static SuperListItem* getByIndex(QStandardItemModel* model, int index);
-    static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model);
+    static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
+        bool showID = true);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
     static SuperListItem* getnewInstance(PictureKind kind);

@@ -225,7 +225,7 @@
                 <item row="1" column="1" colspan="5">
                  <widget class="QPushButton" name="pushButtonEditRoute">
                   <property name="enabled">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                   <property name="text">
                    <string>Edit route...</string>

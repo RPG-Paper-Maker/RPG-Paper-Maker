@@ -10,6 +10,7 @@
 */
 
 #include "systemspeedfrequency.h"
+#include "dialogsystemspeedfrequency.h"
 
 const QString SystemSpeedFrequency::JSON_VALUE = "v";
 
@@ -35,6 +36,10 @@ SystemSpeedFrequency::~SystemSpeedFrequency() {
     delete m_value;
 }
 
+PrimitiveValue * SystemSpeedFrequency::value() const {
+    return m_value;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -44,12 +49,11 @@ SystemSpeedFrequency::~SystemSpeedFrequency() {
 bool SystemSpeedFrequency::openDialog() {
     SystemSpeedFrequency speedFrequency;
     speedFrequency.setCopy(*this);
-    /*
-    DialogSystemSpeedFrequency dialog(windowSkin);
-    if (dialog.exec() == QDialog::Accepted){
-        setCopy(windowSkin);
+    DialogSystemSpeedFrequency dialog(speedFrequency);
+    if (dialog.exec() == QDialog::Accepted) {
+        setCopy(speedFrequency);
         return true;
-    }*/
+    }
     return false;
 }
 

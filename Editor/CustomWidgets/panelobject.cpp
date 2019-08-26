@@ -17,6 +17,7 @@
 #include "systemstate.h"
 #include "systemcommonreaction.h"
 #include "rpm.h"
+#include "objectmovingkind.h"
 
 // -------------------------------------------------------
 //
@@ -37,6 +38,12 @@ PanelObject::PanelObject(QWidget *parent) :
     ui->treeViewProperties->setUpdateId(true);
     ui->treeViewEvents->initializeNewItemInstance(new SystemObjectEvent);
     ui->treeViewStates->initializeNewItemInstance(new SystemState);
+
+    // Moving
+    SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()
+        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
+    SuperListItem::fillComboBox(ui->comboBoxFreq, RPM::get()->project()
+        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -449,6 +456,13 @@ void PanelObject::on_blockingHeroChanged(bool c) {
     SystemReaction* reaction = reinterpret_cast<SystemReaction *>(checkbox
         ->property("reaction").value<quintptr>());
     reaction->setBlockingHero(c);
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_comboBoxMovingType_currentIndexChanged(int index) {
+    ui->pushButtonEditRoute->setEnabled(index == static_cast<int>(
+        ObjectMovingKind::Route));
 }
 
 // -------------------------------------------------------

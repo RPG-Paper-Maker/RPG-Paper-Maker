@@ -76,6 +76,7 @@ private slots:
     void on_eventChanged(QModelIndex index, QModelIndex);
     void on_tabWidgetCommands_currentChanged(int index);
     void on_blockingHeroChanged(bool c);
+    void on_comboBoxMovingType_currentIndexChanged(int index);
     void on_checkBoxMoveAnimation_toggled(bool checked);
     void on_checkBoxStopAnimation_toggled(bool checked);
     void on_checkBoxDirectionFix_toggled(bool checked);

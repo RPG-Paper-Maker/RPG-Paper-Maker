@@ -31,6 +31,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemproperty.h \
+    Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogfirstlaunch.h \
     Dialogs/dialogtilesettexture.h \
@@ -43,6 +44,7 @@ HEADERS += \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
     Enums/mountaincollisionkind.h \
+    Enums/objectmovingkind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
     MapEditor/Map/map.h \
@@ -330,6 +332,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
+    Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogfirstlaunch.cpp \
     Dialogs/dialogtilesettexture.cpp \
@@ -599,6 +602,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
+    Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogfirstlaunch.ui \
     Dialogs/dialogtilesettexture.ui \
