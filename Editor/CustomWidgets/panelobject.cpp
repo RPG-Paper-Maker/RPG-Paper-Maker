@@ -74,7 +74,6 @@ PanelObject::~PanelObject()
 
 void PanelObject::initializeList(QStandardItemModel *list) {
     m_list = list;
-    updateList();
 }
 
 // -------------------------------------------------------
@@ -152,6 +151,7 @@ void PanelObject::setInheritanceName(int index, QString name) {
 // -------------------------------------------------------
 
 void PanelObject::initializeCommonInheritance() {
+    this->updateList();
 
     // Disable the unselectable inheritances
     const QStandardItemModel *model = qobject_cast<const QStandardItemModel *>(

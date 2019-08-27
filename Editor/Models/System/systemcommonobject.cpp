@@ -362,7 +362,7 @@ bool SystemCommonObject::canInherit(QStandardItemModel *model,
     } else {
         index = SuperListItem::getIndexById(model->invisibleRootItem(), id);
         return this->canInherit(model, reinterpret_cast<SystemCommonObject *>(
-            model->item(index + 1)->data().value<quintptr>()));
+            model->item(index)->data().value<quintptr>()));
     }
 }
 
