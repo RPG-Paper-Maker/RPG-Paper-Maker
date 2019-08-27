@@ -578,6 +578,8 @@ void MainWindow::on_actionCollisions_manager_triggered() {
         project->readPicturesDatas();
         project->readSpecialsDatas();
     }
+
+    updateTextures();
 }
 
 // -------------------------------------------------------
