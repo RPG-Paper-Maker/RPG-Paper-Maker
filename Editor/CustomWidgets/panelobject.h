@@ -52,6 +52,7 @@ public:
     void updateReactions();
     void updateReactionsWidgets();
     SystemState * getSelectedState() const;
+    void updateStateMoving(SystemState *state);
     void updateStateOptions(SystemState *state);
     void passToSprite();
     void passToNone();
@@ -77,6 +78,9 @@ private slots:
     void on_tabWidgetCommands_currentChanged(int index);
     void on_blockingHeroChanged(bool c);
     void on_comboBoxMovingType_currentIndexChanged(int index);
+    void on_comboBoxSpeed_currentIndexChanged(int index);
+    void on_comboBoxFreq_currentIndexChanged(int index);
+    void on_pushButtonEditRoute_clicked();
     void on_checkBoxMoveAnimation_toggled(bool checked);
     void on_checkBoxStopAnimation_toggled(bool checked);
     void on_checkBoxDirectionFix_toggled(bool checked);

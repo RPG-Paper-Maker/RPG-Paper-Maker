@@ -44,8 +44,7 @@ public:
 
     bool onlyOneEventPerFrame() const;
     void setOnlyOneEventPerFrame(bool b);
-
-    void setDefault();
+    virtual void setDefault();
     void setDefaultFirst();
     void setDefaultHero(QStandardItemModel* modelEventsSystem,
                         QStandardItemModel *);

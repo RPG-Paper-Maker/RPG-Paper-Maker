@@ -16,6 +16,7 @@
 #include "superlistitem.h"
 #include "systemobjectevent.h"
 #include "mapeditorsubselectionkind.h"
+#include "objectmovingkind.h"
 
 // -------------------------------------------------------
 //
@@ -28,11 +29,17 @@
 class SystemState : public SuperListItem
 {
 public:
+    static const QString JSON_OBJECT_MOVING_KIND;
+    static const QString JSON_EVENT_COMMAND_ROUTE;
+    static const QString JSON_SPEED_ID;
+    static const QString JSON_FREQUENCY_ID;
+
     SystemState();
     SystemState(SuperListItem* state, MapEditorSubSelectionKind gk, int gid,
-                int x, int y, bool m, bool s, bool cl, bool d, bool t, bool c,
-                bool p, bool k);
+        int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
+        bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k);
     virtual ~SystemState();
+
     virtual QString name() const;
     SuperListItem* state() const;
     void setState(SuperListItem* s);
@@ -46,6 +53,14 @@ public:
     void setIndexY(int i);
     QRect rectTileset() const;
     void setRectTileset(QRect rect);
+    ObjectMovingKind objectMovingKind() const;
+    void setObjectMovingKind(ObjectMovingKind k);
+    EventCommand * eventCommandRoute() const;
+    void setEventCommandRoute(EventCommand *ecr);
+    int speedID() const;
+    void setSpeedID(int s);
+    int frequencyID() const;
+    void setFrequencyID(int f);
     bool moveAnimation() const;
     bool stopAnimation() const;
     bool climbAnimation() const;
@@ -63,10 +78,11 @@ public:
     void setPixelOffset(bool b);
     void setKeepPosition(bool b);
 
+    void removeRoute();
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SystemState &state);
-
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
@@ -77,6 +93,10 @@ protected:
     int m_indexX;
     int m_indexY;
     QRect m_rectTileset;
+    ObjectMovingKind m_objectMovingKind;
+    EventCommand *m_eventCommandRoute;
+    int m_speedID;
+    int m_frequencyID;
     bool m_moveAnimation;
     bool m_stopAnimation;
     bool m_climbAnimation;

@@ -350,7 +350,7 @@ void SystemDatas::setDefaultSpeedFrequencies() {
     speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.5));
     row = speedFrequency->getModelRow();
     m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(1, "Very fast", new PrimitiveValue
+    speedFrequency = new SystemSpeedFrequency(5, "Very fast", new PrimitiveValue
         (2.0));
     row = speedFrequency->getModelRow();
     m_modelSpeedFrequencies->appendRow(row);

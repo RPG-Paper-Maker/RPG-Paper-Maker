@@ -15,6 +15,11 @@
 #include "dialogsystemstate.h"
 #include "rpm.h"
 
+const QString SystemState::JSON_OBJECT_MOVING_KIND = "omk";
+const QString SystemState::JSON_EVENT_COMMAND_ROUTE = "ecr";
+const QString SystemState::JSON_SPEED_ID = "s";
+const QString SystemState::JSON_FREQUENCY_ID = "f";
+
 // -------------------------------------------------------
 //
 //  CONSTRUCTOR / DESTRUCTOR / GET / SET
@@ -23,23 +28,26 @@
 
 SystemState::SystemState() :
     SystemState(SuperListItem::getById(RPM::get()->project()->gameDatas()
-                                       ->commonEventsDatas()->modelStates()
-                                       ->invisibleRootItem(), 1),
-                MapEditorSubSelectionKind::None, -1, 0, 0, false, false, false,
-                false, false, false, false, false)
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1),
+        MapEditorSubSelectionKind::None, -1, 0, 0, ObjectMovingKind::Fix,
+        nullptr, 1, 1, false, false, false, false, false, false, false, false)
 {
 
 }
 
-SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk,
-                         int gid, int x, int y, bool m, bool s, bool cl, bool d,
-                         bool t, bool c, bool p, bool k) :
+SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
+    gid, int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
+    bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k) :
     SuperListItem(state->id(), state->name()),
     m_state(state),
     m_graphicsKind(gk),
     m_graphicsId(gid),
     m_indexX(x),
     m_indexY(y),
+    m_objectMovingKind(omk),
+    m_eventCommandRoute(ecr),
+    m_speedID(sp),
+    m_frequencyID(fr),
     m_moveAnimation(m),
     m_stopAnimation(s),
     m_climbAnimation(cl),
@@ -52,8 +60,8 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk,
 
 }
 
-SystemState::~SystemState(){
-
+SystemState::~SystemState() {
+    this->removeRoute();
 }
 
 QString SystemState::name() const { return m_state->name(); }
@@ -94,6 +102,38 @@ void SystemState::setRectTileset(QRect rect) {
     m_rectTileset = rect;
 }
 
+ObjectMovingKind SystemState::objectMovingKind() const {
+    return m_objectMovingKind;
+}
+
+void SystemState::setObjectMovingKind(ObjectMovingKind k) {
+    m_objectMovingKind = k;
+}
+
+EventCommand * SystemState::eventCommandRoute() const {
+    return m_eventCommandRoute;
+}
+
+void SystemState::setEventCommandRoute(EventCommand *ecr) {
+    m_eventCommandRoute = ecr;
+}
+
+int SystemState::speedID() const {
+    return m_speedID;
+}
+
+void SystemState::setSpeedID(int s) {
+    m_speedID = s;
+}
+
+int SystemState::frequencyID() const {
+    return m_frequencyID;
+}
+
+void SystemState::setFrequencyID(int f) {
+    m_frequencyID = f;
+}
+
 bool SystemState::moveAnimation() const { return m_moveAnimation; }
 
 bool SystemState::stopAnimation() const { return m_stopAnimation; }
@@ -132,11 +172,24 @@ void SystemState::setKeepPosition(bool b) { m_keepPosition = b; }
 //
 // -------------------------------------------------------
 
-bool SystemState::openDialog(){
+void SystemState::removeRoute() {
+    if (m_eventCommandRoute != nullptr) {
+        delete m_eventCommandRoute;
+        m_eventCommandRoute = nullptr;
+    }
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+bool SystemState::openDialog() {
     SystemState super;
     super.setCopy(*this);
     DialogSystemState dialog(super);
-    if (dialog.exec() == QDialog::Accepted){
+    if (dialog.exec() == QDialog::Accepted) {
         setCopy(super);
         return true;
     }
@@ -145,7 +198,7 @@ bool SystemState::openDialog(){
 
 // -------------------------------------------------------
 
-SuperListItem* SystemState::createCopy() const{
+SuperListItem* SystemState::createCopy() const {
     SystemState* super = new SystemState;
     super->setCopy(*this);
     return super;
@@ -153,7 +206,7 @@ SuperListItem* SystemState::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemState::setCopy(const SystemState& state){
+void SystemState::setCopy(const SystemState& state) {
     SuperListItem::setCopy(state);
     p_id = state.p_id;
 
@@ -163,6 +216,14 @@ void SystemState::setCopy(const SystemState& state){
     m_indexX = state.m_indexX;
     m_indexY = state.m_indexY;
     m_rectTileset = state.m_rectTileset;
+    m_objectMovingKind = state.m_objectMovingKind;
+    this->removeRoute();
+    if (state.m_eventCommandRoute != nullptr) {
+        m_eventCommandRoute = new EventCommand;
+        m_eventCommandRoute->setCopy(*state.m_eventCommandRoute);
+    }
+    m_speedID = state.m_speedID;
+    m_frequencyID = state.m_frequencyID;
     m_moveAnimation = state.m_moveAnimation;
     m_stopAnimation = state.m_stopAnimation;
     m_climbAnimation = state.m_climbAnimation;
@@ -179,7 +240,7 @@ void SystemState::setCopy(const SystemState& state){
 //
 // -------------------------------------------------------
 
-void SystemState::read(const QJsonObject &json){
+void SystemState::read(const QJsonObject &json) {
     SuperListItem::read(json);
     QJsonArray tab;
 
@@ -196,6 +257,22 @@ void SystemState::read(const QJsonObject &json){
         m_indexX = json["x"].toInt();
         m_indexY = json["y"].toInt();
     }
+    if (json.contains(JSON_OBJECT_MOVING_KIND)) {
+        m_objectMovingKind = static_cast<ObjectMovingKind>(json[
+            JSON_OBJECT_MOVING_KIND].toInt());
+    }
+    if (json.contains(JSON_EVENT_COMMAND_ROUTE)) {
+        m_eventCommandRoute = new EventCommand;
+        m_eventCommandRoute->read(json[JSON_EVENT_COMMAND_ROUTE].toObject());
+    } else {
+        m_eventCommandRoute = nullptr;
+    }
+    if (json.contains(JSON_SPEED_ID)) {
+        m_speedID = json[JSON_SPEED_ID].toInt();
+    }
+    if (json.contains(JSON_FREQUENCY_ID)) {
+        m_frequencyID = json[JSON_FREQUENCY_ID].toInt();
+    }
     m_moveAnimation = json["move"].toBool();
     m_stopAnimation = json["stop"].toBool();
     m_climbAnimation = json["climb"].toBool();
@@ -211,6 +288,7 @@ void SystemState::read(const QJsonObject &json){
 void SystemState::write(QJsonObject &json) const{
     SuperListItem::write(json);
     QJsonArray tab;
+    QJsonObject obj;
 
     json["gk"] = (int) m_graphicsKind;
     json["gid"] = m_graphicsId;
@@ -223,6 +301,19 @@ void SystemState::write(QJsonObject &json) const{
     } else {
         json["x"] = m_indexX;
         json["y"] = m_indexY;
+    }
+    if (m_objectMovingKind != ObjectMovingKind::Fix) {
+        json[JSON_OBJECT_MOVING_KIND] = static_cast<int>(m_objectMovingKind);
+    }
+    if (m_eventCommandRoute != nullptr) {
+        obj = m_eventCommandRoute->getJSON();
+        json[JSON_EVENT_COMMAND_ROUTE] = obj;
+    }
+    if (m_speedID != 1) {
+        json[JSON_SPEED_ID] = m_speedID;
+    }
+    if (m_frequencyID != 1) {
+        json[JSON_FREQUENCY_ID] = m_frequencyID;
     }
     json["move"] = m_moveAnimation;
     json["stop"] = m_stopAnimation;

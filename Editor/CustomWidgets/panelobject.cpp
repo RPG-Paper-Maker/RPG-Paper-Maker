@@ -18,6 +18,7 @@
 #include "systemcommonreaction.h"
 #include "rpm.h"
 #include "objectmovingkind.h"
+#include "dialogcommandmoveobject.h"
 
 // -------------------------------------------------------
 //
@@ -290,6 +291,19 @@ SystemState* PanelObject::getSelectedState() const {
 
 // -------------------------------------------------------
 
+void PanelObject::updateStateMoving(SystemState *state) {
+    ui->comboBoxMovingType->setCurrentIndex(static_cast<int>(state
+        ->objectMovingKind()));
+    ui->comboBoxSpeed->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->invisibleRootItem(), state->speedID()));
+    ui->comboBoxFreq->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->invisibleRootItem(), state->frequencyID()));
+}
+
+// -------------------------------------------------------
+
 void PanelObject::updateStateOptions(SystemState *state) {
     ui->checkBoxMoveAnimation->setChecked(state->moveAnimation());
     ui->checkBoxStopAnimation->setChecked(state->stopAnimation());
@@ -418,7 +432,8 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
             }
 
             // Update options state
-            updateStateOptions(super);
+            this->updateStateMoving(super);
+            this->updateStateOptions(super);
 
             showStateWidgets(true);
         }
@@ -461,8 +476,62 @@ void PanelObject::on_blockingHeroChanged(bool c) {
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxMovingType_currentIndexChanged(int index) {
-    ui->pushButtonEditRoute->setEnabled(index == static_cast<int>(
-        ObjectMovingKind::Route));
+    QStandardItem *selected;
+    bool isRoute;
+
+    isRoute = index == static_cast<int>(ObjectMovingKind::Route);
+    ui->pushButtonEditRoute->setEnabled(isRoute);
+    selected = ui->treeViewStates->getSelected();
+    if (selected != nullptr) {
+        SystemState *state;
+
+        state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
+        state->setObjectMovingKind(static_cast<ObjectMovingKind>(index));
+        if (!isRoute) {
+            state->removeRoute();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_comboBoxSpeed_currentIndexChanged(int index) {
+    if (ui->treeViewStates->getModel() == nullptr) {
+        return;
+    }
+    reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
+        .value<quintptr>())->setSpeedID(SuperListItem::getIdByIndex(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(), index));
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_comboBoxFreq_currentIndexChanged(int index) {
+    if (ui->treeViewStates->getModel() == nullptr) {
+        return;
+    }
+    reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
+        .value<quintptr>())->setFrequencyID(SuperListItem::getIdByIndex(RPM
+        ::get()->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(),
+        index));
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_pushButtonEditRoute_clicked() {
+    QStandardItem *selected;
+
+    selected = ui->treeViewStates->getSelected();
+    if (selected != nullptr) {
+        SystemState *state;
+
+        state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
+        DialogCommandMoveObject dialog(state->eventCommandRoute());
+        if (dialog.exec() == QDialog::Accepted) {
+            state->removeRoute();
+            state->setEventCommandRoute(dialog.getCommand());
+        }
+    }
 }
 
 // -------------------------------------------------------
