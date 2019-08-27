@@ -55,7 +55,7 @@ QVector3D SystemCustomShape::getVertexAt(int i) const {
 }
 
 QVector2D SystemCustomShape::getTextureAt(int i) const {
-    return m_textures.at(i);
+    return m_textures.value(i);
 }
 
 QPair<int, int> SystemCustomShape::getFace(int i) const {
@@ -179,9 +179,9 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
 
     QVector3D temp3D;
     QVector2D temp2D;
-    QStringList lineList, arg;
+    QStringList lineList, arg, arg1, arg2, arg3, arg4;
     QString fileLine, fileName;
-    int i;
+    int i, l;
     bool firstVertex;
 
     // clear
@@ -244,10 +244,30 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
             else if (fileLine.startsWith(PARSE_FACE)) {
                 lineList = fileLine.split(" ");
                 lineList.removeAll("");
+                l = lineList.size();
 
-                for (i = 1; i <= 3; i++) {
-                    arg = lineList[i].split("/");
-                    m_faces.append(QPair<int, int>(arg[0].toInt() - 1, arg[1]
+                if (l == 4) {
+                    for (i = 1; i < l; i++) {
+                        arg = lineList[i].split("/");
+                        m_faces.append(QPair<int, int>(arg[0].toInt() - 1, arg[1]
+                            .toInt() - 1));
+                    }
+                } else if (l == 5) {
+                    arg1 = lineList[1].split("/");
+                    arg2 = lineList[2].split("/");
+                    arg3 = lineList[3].split("/");
+                    arg4 = lineList[4].split("/");
+                    m_faces.append(QPair<int, int>(arg1[0].toInt() - 1, arg1[1]
+                        .toInt() - 1));
+                    m_faces.append(QPair<int, int>(arg2[0].toInt() - 1, arg2[1]
+                        .toInt() - 1));
+                    m_faces.append(QPair<int, int>(arg3[0].toInt() - 1, arg3[1]
+                        .toInt() - 1));
+                    m_faces.append(QPair<int, int>(arg1[0].toInt() - 1, arg1[1]
+                        .toInt() - 1));
+                    m_faces.append(QPair<int, int>(arg3[0].toInt() - 1, arg3[1]
+                        .toInt() - 1));
+                    m_faces.append(QPair<int, int>(arg4[0].toInt() - 1, arg4[1]
                         .toInt() - 1));
                 }
             }

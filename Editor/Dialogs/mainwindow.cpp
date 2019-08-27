@@ -574,9 +574,11 @@ void MainWindow::on_actionCollisions_manager_triggered() {
     if (openDialog(dialog) == QDialog::Accepted) {
         project->writePicturesDatas();
         project->writeSpecialsDatas();
+        project->writeShapesDatas();
     } else {
         project->readPicturesDatas();
         project->readSpecialsDatas();
+        project->readShapesDatas();
     }
 
     updateTextures();
@@ -616,10 +618,15 @@ void MainWindow::on_actionSprite_walls_triggered() {
 
 void MainWindow::on_action3D_objects_triggered() {
     DialogSpecialElements dialog(PictureKind::Object3D);
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
+        project->writePicturesDatas();
         project->writeSpecialsDatas();
-    else
+        project->writeShapesDatas();
+    } else {
+        project->readPicturesDatas();
         project->readSpecialsDatas();
+        project->readShapesDatas();
+    }
 
     updateTextures();
 }
@@ -628,10 +635,13 @@ void MainWindow::on_action3D_objects_triggered() {
 
 void MainWindow::on_actionMountains_triggered() {
     DialogSpecialElements dialog(PictureKind::Mountains);
-    if (openDialog(dialog) == QDialog::Accepted)
+    if (openDialog(dialog) == QDialog::Accepted) {
+        project->writePicturesDatas();
         project->writeSpecialsDatas();
-    else
+    } else {
+        project->readPicturesDatas();
         project->readSpecialsDatas();
+    }
 
     updateTextures();
 }
