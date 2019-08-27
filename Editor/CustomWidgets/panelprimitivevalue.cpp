@@ -95,12 +95,12 @@ void PanelPrimitiveValue::initializeParameterEvent(QStandardItemModel
     addDefault();
     addAnything();
     addNone();
-    addNumber();
+    addNumberDouble();
     addMessage();
     addSwitch();
     addKeyBoard();
     addProperty(properties);
-    setNumberValue(m_model->numberValue());
+    setNumberDoubleValue(m_model->numberDoubleValue());
     setMessageValue(m_model->messageValue());
     setSwitchValue(m_model->switchValue());
     initialize();
