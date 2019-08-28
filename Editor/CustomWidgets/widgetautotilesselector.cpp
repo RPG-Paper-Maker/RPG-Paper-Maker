@@ -47,20 +47,25 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
         ->picture()->getPath(PictureKind::Autotiles);
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
-    float coef = RPM::coefReverseSquareSize();
+    float coef;
+    int width, height;
+
+    coef = RPM::coefReverseSquareSize();
     if (!image.isNull()) {
         Map::editPictureAutotilePreview(image, m_texture);
         m_texture = m_texture.scaled(static_cast<int>(m_texture.width() * coef),
             static_cast<int>(m_texture.height() * coef));
-    } else
+        width = static_cast<int>(SystemAutotile::getPreviewWidth(image) * coef);
+        height = static_cast<int>(SystemAutotile::getPreviewHeight(image) *
+            coef);
+    } else {
         m_texture = image;
+        width = 0;
+        height = 0;
+    }
 
-    this->setGeometry(this->geometry().x(), this->geometry().y(), static_cast
-        <int>(SystemAutotile::getPreviewWidth(m_texture) * coef), static_cast
-        <int>(SystemAutotile::getPreviewHeight(m_texture) * coef));
-    setFixedSize(static_cast<int>(SystemAutotile::getPreviewWidth(m_texture) *
-        coef), static_cast<int>(SystemAutotile::getPreviewHeight(m_texture) *
-        coef));
+    this->setGeometry(this->geometry().x(), this->geometry().y(), width, height);
+    setFixedSize(width, height);
 
     // If cursor out of the new texture
     QRect cursorRect;
