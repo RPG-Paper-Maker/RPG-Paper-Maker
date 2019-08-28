@@ -12,6 +12,10 @@
 #include "map.h"
 #include "rpm.h"
 
+QOpenGLTexture * Map::textureObject3DAt(int id) {
+    return m_texturesObjects3D.value(id);
+}
+
 // -------------------------------------------------------
 
 void Map::initializeGL(){

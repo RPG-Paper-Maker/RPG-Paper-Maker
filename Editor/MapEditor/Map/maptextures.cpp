@@ -183,8 +183,9 @@ bool Map::loadPicture(SystemPicture* picture, PictureKind kind, QImage& refImage
         if (!image.isNull()) {
 
             switch (kind) {
-            case PictureKind::Walls:
+            case PictureKind::Walls: {
                 editPictureWall(image, refImage); break;
+            }
             default:
                 refImage = image;
                 break;
@@ -257,6 +258,7 @@ TextureSeveral* Map::loadPictureAutotile(
 void Map::editPictureWall(QImage& image, QImage& refImage) {
     QImage newImage(image.width() + RPM::get()->getSquareSize(),
                     image.height(), QImage::Format_ARGB32);
+    newImage.fill(Qt::transparent);
     QImage borderLeft =
             image.copy(0, 0, RPM::get()->getSquareSize() / 2, image.height());
     QImage borderRight =
@@ -365,8 +367,9 @@ void Map::editPictureAutotilePreview(QImage& image, QImage& refImage) {
     QImage newImage(SystemAutotile::getPreviewWidth(image),
                     SystemAutotile::getPreviewHeight(image),
                     QImage::Format_ARGB32);
-    QPainter paint;
-    paint.begin(&newImage);
+    newImage.fill(Qt::transparent);
+    QPainter painter;
+    painter.begin(&newImage);
     int rows = SystemAutotile::getPreviewRows(image);
     int columns = SystemAutotile::getPreviewColumns(image);
 
@@ -382,10 +385,10 @@ void Map::editPictureAutotilePreview(QImage& image, QImage& refImage) {
                      RPM::get()->getSquareSize(),
                      RPM::get()->getSquareSize(),
                      RPM::get()->getSquareSize());
-            paint.drawImage(out, image, in);
+            painter.drawImage(out, image, in);
         }
     }
-    paint.end();
+    painter.end();
     refImage = newImage;
 }
 

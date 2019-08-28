@@ -55,6 +55,7 @@ public:
     MapObjects* objectsPortion(Portion& p);
     MapObjects* objectsPortion(int x, int y, int z);
     QOpenGLTexture * textureMissing() const;
+    QOpenGLTexture * textureObject3DAt(int id);
 
     bool addObject(Position& p, MapPortion *mapPortion,
                    SystemCommonObject* object, QJsonObject &previous,
@@ -110,13 +111,12 @@ public:
     void deleteCharactersTextures();
     void loadSpecialPictures(PictureKind kind,
                              QHash<int, QOpenGLTexture*>& textures);
-    static bool loadPicture(SystemPicture* picture, PictureKind kind, QImage
-        &refImage);
+    bool loadPicture(SystemPicture* picture, PictureKind kind, QImage &refImage);
     void loadAutotiles();
     TextureSeveral *loadPictureAutotile(
             QPainter& painter, TextureSeveral* textureSeveral,
             QImage& newImage, SystemPicture* picture, int& offset, int id);
-    static void editPictureWall(QImage& image, QImage& refImage);
+    void editPictureWall(QImage& image, QImage& refImage);
     TextureSeveral *editPictureAutotile(
             QPainter& painter, TextureSeveral* textureSeveral,
             QImage& newImage, QImage& image, int& offset, int id);

@@ -73,9 +73,9 @@ void WidgetTilesetSettings::updateImageAutotile(SystemPicture* picture) {
     QString path = picture->getPath(PictureKind::Autotiles);
     QImage image = (!path.isEmpty() && QFile::exists(path)) ? QImage(path) :
         QImage();
-    if (!image.isNull())
+    if (!image.isNull()) {
         Map::editPictureAutotilePreview(image, editedImage);
-    else
+    } else
         editedImage = image;
     updateImageSpecial(editedImage, picture);
 }

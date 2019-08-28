@@ -71,7 +71,7 @@ void WidgetSuperTree::setCanMove(bool b) {
     this->setDropIndicatorShown(b);
 }
 
-bool WidgetSuperTree::setCanCreateDelete(bool b) {
+void WidgetSuperTree::setCanCreateDelete(bool b) {
     m_canCreateDelete = b;
     m_contextMenuCommonCommands->canNew(b);
     m_contextMenuCommonCommands->canEdit(b);
