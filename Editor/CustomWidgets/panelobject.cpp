@@ -242,7 +242,7 @@ void PanelObject::updateReactionsWidgets() {
     SystemObjectEvent *event;
     QCheckBox *checkbox;
     QVariant variant;
-    int l;
+    int l, index;
 
     // Update reactions (if new/delete)
     updateReactions();
@@ -252,7 +252,7 @@ void PanelObject::updateReactionsWidgets() {
 
     if (super != nullptr) {
         QHBoxLayout *hlayout;
-
+        index = ui->tabWidgetCommands->currentIndex();
         clear();
 
         // Create all the corresponding tabs for all events
@@ -279,6 +279,8 @@ void PanelObject::updateReactionsWidgets() {
             layout->addWidget(checkbox, 1, 0);
             ui->tabWidgetCommands->addTab(widget, event->getLabelTab());
         }
+
+        ui->tabWidgetCommands->setCurrentIndex(index);
     }
 }
 
