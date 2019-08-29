@@ -237,7 +237,6 @@ void PanelObject::updateReactions() {
 void PanelObject::updateReactionsWidgets() {
     QGridLayout *layout;
     QWidget *widget;
-    QWidget *widgetCheckbox;
     WidgetTreeCommands *tree;
     SystemObjectEvent *event;
     QCheckBox *checkbox;
@@ -268,7 +267,6 @@ void PanelObject::updateReactionsWidgets() {
             // Checkboxes and buttons
             variant = QVariant::fromValue(reinterpret_cast<quintptr>(event
                 ->reactionAt(super->id())));
-            widgetCheckbox = new QWidget();
             checkbox = new QCheckBox("Block hero when reaction");
             checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this, SLOT(

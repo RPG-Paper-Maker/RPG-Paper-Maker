@@ -100,6 +100,28 @@ Camera * ControlMapEditor::camera() const {
     return m_camera;
 }
 
+Position *ControlMapEditor::positionOnElement(MapEditorSelectionKind kind,
+    MapEditorSubSelectionKind subKind, DrawKind dk) const
+{
+    switch (kind) {
+    case MapEditorSelectionKind::Land:
+        return m_elementOnLand == nullptr ? nullptr : new Position(
+            m_positionOnLand);
+    case MapEditorSelectionKind::Sprites:
+        return m_elementOnSprite == nullptr && (dk != DrawKind::Rotate ||
+            subKind != MapEditorSubSelectionKind::SpritesWall) ? nullptr : new
+            Position(m_positionOnSprite);
+    case MapEditorSelectionKind::Mountains:
+        return m_elementOnMountain == nullptr ? nullptr : new Position(
+            m_positionOnMountain);
+    case MapEditorSelectionKind::Objects3D:
+        return m_elementOnObject3D == nullptr ? nullptr : new Position(
+            m_positionOnObject3D);
+    default:
+        return nullptr;
+    }
+}
+
 bool ControlMapEditor::isCtrlPressed() const {
     return m_isCtrlPressed;
 }
@@ -1394,6 +1416,35 @@ void ControlMapEditor::getMountainTopFloorPosition(Position &topPosition,
 }
 
 // -------------------------------------------------------
+
+void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
+    Position &previousPosition, MapEditorSelectionKind k)
+{
+    MapPortion *mapPortion;
+    Portion portion;
+
+    m_map->getLocalPortion(newPosition, portion);
+    mapPortion = m_map->mapPortion(portion);
+    if (mapPortion != nullptr) {
+        MapElement *element;
+        QJsonObject obj;
+
+        element = mapPortion->updateElementPosition(newPosition,
+            previousPosition, k);
+        setToNotSaved();
+        element->write(obj);
+        m_controlUndoRedo.updateJsonList(m_changes, obj, element->getSubKind(),
+            nullptr, MapEditorSubSelectionKind::None, previousPosition);
+        m_controlUndoRedo.updateJsonList(m_changes, obj,
+            MapEditorSubSelectionKind::None, element, element->getSubKind(),
+            newPosition);
+        m_portionsToUpdate += mapPortion;
+        m_portionsToSave += mapPortion;
+        m_needMapInfosToSave = true;
+    }
+}
+
+// -------------------------------------------------------
 //
 //  EVENTS
 //
@@ -1456,8 +1507,9 @@ void ControlMapEditor::onMousePressed(MapEditorSelectionKind selection,
 
         // Add/Remove something
         m_isDeleting = button == Qt::MouseButton::RightButton;
-        if (m_isDeleting)
+        if (m_isDeleting) {
             removePreviewElements();
+        }
         Position newPosition;
         bool b;
         getPositionSelected(newPosition, selection, subSelection, layerOn, b);

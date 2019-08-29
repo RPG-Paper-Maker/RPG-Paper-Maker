@@ -42,6 +42,8 @@ public:
     double angle() const;
     bool applyLeftRightClick() const;
     void initializeRotation(AxisKind ak);
+    void updatePositionAuto();
+    void updatePositionClick(bool positive = true);
 
 private:
     Ui::PanelSubTransformation *ui;
@@ -52,10 +54,13 @@ protected:
 
 public slots:
     void on_comboBoxOperation_currentIndexChanged(int index);
-    void on_doubleSpinBoxAngle_valueChanged(double d);
+    void on_doubleSpinBoxAngle_valueChanged(double);
     void on_checkBoxApplyLeftRightClick_toggled(bool checked);
     void on_pushButtonDefineDefault_clicked();
     void on_pushButtonResetDefault_clicked();
+
+signals:
+    void positionChanged(Position &newPosition);
 };
 
 #endif // PANELSUBTRANSFORMATION_H

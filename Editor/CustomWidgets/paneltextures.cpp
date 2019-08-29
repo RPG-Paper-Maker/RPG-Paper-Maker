@@ -40,6 +40,10 @@ PanelTextures::~PanelTextures() {
     delete ui;
 }
 
+PanelTransformations * PanelTextures::panelTransformations() const {
+    return ui->panelTransformations;
+}
+
 void PanelTextures::setDrawKind(DrawKind dk) {
     m_drawKind = dk;
 }
@@ -83,10 +87,14 @@ void PanelTextures::setTilesetImageNone() {
 // -------------------------------------------------------
 
 void PanelTextures::updateTilesetImage() {
-    this->setGeometry(0, 0, ui->widgetTilesetSelector->width(), ui
-        ->widgetTilesetSelector->height());
-    setFixedSize(ui->widgetTilesetSelector->width(), ui->widgetTilesetSelector
-        ->height());
+    if (m_drawKind != DrawKind::Translate && m_drawKind != DrawKind::Rotate &&
+        m_drawKind != DrawKind::Scale)
+    {
+        this->setGeometry(0, 0, ui->widgetTilesetSelector->width(), ui
+            ->widgetTilesetSelector->height());
+        setFixedSize(ui->widgetTilesetSelector->width(), ui
+            ->widgetTilesetSelector->height());
+    }
 }
 
 // -------------------------------------------------------
@@ -98,6 +106,7 @@ void PanelTextures::hideAll() {
     ui->widgetMountainPreview->hide();
     ui->widget3DObjectPreview->hide();
     ui->panelTransformations->hide();
+    ui->panelTransformations->deletePosition();
     ui->comboBox->hide();
     ui->pushButtonUpdateList->hide();
     ui->labelInformation->hide();
@@ -114,6 +123,7 @@ void PanelTextures::showTileset() {
         hideAll();
         ui->widgetTilesetSelector->show();
         this->updateTilesetImage();
+        this->updateWallsSize();
         this->updateMountainsSize();
         this->updateObject3DSize();
     }
@@ -160,17 +170,23 @@ void PanelTextures::getDefaultFloorRect(QRect& rect) const {
 // -------------------------------------------------------
 
 QWidget * PanelTextures::getSpecialWidget() const {
-    switch (m_kind) {
-    case PictureKind::Autotiles:
-        return ui->widgetAutotilesSelector;
-    case PictureKind::Walls:
-        return ui->widgetWallPreview;
-    case PictureKind::Mountains:
-        return ui->widgetMountainPreview;
-    case PictureKind::Object3D:
-        return ui->widget3DObjectPreview;
-    default:
-        return ui->widgetTilesetSelector;
+    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
+        m_drawKind == DrawKind::Scale)
+    {
+        return ui->panelTransformations;
+    } else {
+        switch (m_kind) {
+        case PictureKind::Autotiles:
+            return ui->widgetAutotilesSelector;
+        case PictureKind::Walls:
+            return ui->widgetWallPreview;
+        case PictureKind::Mountains:
+            return ui->widgetMountainPreview;
+        case PictureKind::Object3D:
+            return ui->widget3DObjectPreview;
+        default:
+            return ui->widgetTilesetSelector;
+        }
     }
 }
 
@@ -229,6 +245,7 @@ void PanelTextures::updateComboBoxSize() {
     this->updateWidgetSize();
 
     // Update object3D previewer size
+    this->updateWallsSize();
     this->updateMountainsSize();
     this->updateObject3DSize();
 }
@@ -335,6 +352,8 @@ void PanelTextures::showTransformations() {
     ui->panelTransformations->show();
     width = qMax(ui->panelTransformations->width(), this->parentWidget()
         ->width());
+    this->setFixedSize(width, this->parentWidget()->height());
+    this->updateGeometry();
     height = ui->panelTransformations->height();
     this->setGeometry(0, 0, width, height);
     this->setFixedSize(width, height);
@@ -372,6 +391,22 @@ void PanelTextures::fillComboBox(SystemTileset *tileset, PictureKind kind) {
     // UI display
     hideAll();
     showComboBox();
+}
+
+// -------------------------------------------------------
+
+void PanelTextures::updateWallsSize() {
+    if (m_kind == PictureKind::Walls) {
+        int w, h;
+
+        w = qMax(ui->comboBox->width(), ui->widgetWallPreview->width());
+        h = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
+            ui->widgetWallPreview->height() + 18;
+        ui->widgetWallPreview->setGeometry(0, 0, w, ui->widgetWallPreview
+            ->height());
+        this->setGeometry(0, 0, w, h);
+        this->setFixedSize(w, h);
+    }
 }
 
 // -------------------------------------------------------
@@ -484,13 +519,19 @@ void PanelTextures::updateShow() {
 // -------------------------------------------------------
 
 void PanelTextures::onSplitterMoved(int, int) {
-    if (m_kind == PictureKind::None)
-        updateTilesetImage();
-    else {
-        if (ui->comboBox->count() == 0)
-            updateLabelSize();
-        else
-            updateComboBoxSize();
+    if (m_drawKind == DrawKind::Translate || m_drawKind == DrawKind::Rotate ||
+        m_drawKind == DrawKind::Scale)
+    {
+        if (m_kind == PictureKind::None)
+            updateTilesetImage();
+        else {
+            if (ui->comboBox->count() == 0)
+                updateLabelSize();
+            else
+                updateComboBoxSize();
+        }
+    } else {
+        this->showTransformations();
     }
 }
 

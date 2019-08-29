@@ -36,9 +36,8 @@ public:
     explicit PanelTransformations(QWidget *parent = nullptr);
     ~PanelTransformations();
 
-    void setMapElementPosition(Position *p);
-
     AxisKind currentAxisKind() const;
+    void deletePosition();
     void initialize();
 
 private:
@@ -46,6 +45,15 @@ private:
 
 protected:
     Position *m_mapElementPosition;
+
+    void updateText();
+
+public slots:
+    void on_positionSelected(Position *p, bool positive);
+    void on_positionChangedUI(Position &previousPosition);
+
+signals:
+    void positionChanged(Position &newPosition, Position &previousPosition);
 };
 
 #endif // PANELTRANSFORMATIONS_H

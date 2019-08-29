@@ -9,7 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "position.h"
+#include "common.h"
 
 // -------------------------------------------------------
 //
@@ -21,6 +23,13 @@ Position::Position() : Position(0, 0, 0, 0, 0) {}
 
 Position::Position(const Position3D &pos) :
     Position(pos.x(), pos.y(), pos.yPlus(), pos.z(), 0)
+{
+
+}
+
+Position::Position(const Position &pos) :
+    Position(pos.x(), pos.y(), pos.yPlus(), pos.z(), pos.layer(), pos.centerX(),
+        pos.centerZ(), pos.angleY(), pos.angleX(), pos.angleZ())
 {
 
 }
@@ -92,11 +101,11 @@ double Position::angleY() const {
 }
 
 void Position::setAngleY(double a) {
-    m_angleY = a;
+    m_angleY = Position::filterAngle(a);
 }
 
 void Position::addAngleY(double a) {
-    this->setAngleY(this->angleY() + a);
+    this->setAngleY(Position::filterAngle(this->angleY() + a));
 }
 
 double Position::angleX() const {
@@ -104,11 +113,11 @@ double Position::angleX() const {
 }
 
 void Position::setAngleX(double a) {
-    m_angleX = a;
+    m_angleX = Position::filterAngle(a);
 }
 
 void Position::addAngleX(double a) {
-    this->setAngleX(this->angleX() + a);
+    this->setAngleX(Position::filterAngle(this->angleX() + a));
 }
 
 double Position::angleZ() const {
@@ -116,17 +125,32 @@ double Position::angleZ() const {
 }
 
 void Position::setAngleZ(double a) {
-    m_angleZ = a;
+    m_angleZ = Position::filterAngle(a);
 }
 
 void Position::addAngleZ(double a) {
-    this->setAngleZ(this->angleZ() + a);
+    this->setAngleZ(Position::filterAngle(this->angleZ() + a));
 }
 
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+double Position::filterAngle(double a) {
+    int r;
+
+    if (a > 0) {
+        r = qFloor(a / 360);
+    } else {
+        r = qCeil(a / 360);
+    }
+    a -= r * 360;
+
+    return a;
+}
+
 // -------------------------------------------------------
 
 bool Position::isHorizontal() const {

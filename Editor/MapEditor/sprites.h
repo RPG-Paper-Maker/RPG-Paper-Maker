@@ -115,7 +115,7 @@ public:
             QList<QJsonObject> previous,
             QList<MapEditorSubSelectionKind> previousType,
             QList<Position> positions);
-
+    MapElement *updateSpritePosition(Position &newPosition, Position &previousPosition);
     void initializeVertices(QHash<int, QOpenGLTexture*>& texturesWalls,
                             QHash<Position, MapElement*>& previewSquares,
                             QList<Position>& previewDelete,

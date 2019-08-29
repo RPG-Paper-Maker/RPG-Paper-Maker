@@ -533,6 +533,20 @@ const
 }
 
 // -------------------------------------------------------
+
+MapElement * MapPortion::updateElementPosition(Position &newPosition, Position
+    &previousPosition, MapEditorSelectionKind kind)
+{
+    switch (kind) {
+    case MapEditorSelectionKind::Sprites:
+        return m_sprites->updateSpritePosition(newPosition, previousPosition);
+        break;
+    default:
+        return nullptr;
+    }
+}
+
+// -------------------------------------------------------
 //
 //  GL
 //

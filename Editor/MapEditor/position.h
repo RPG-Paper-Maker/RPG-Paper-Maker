@@ -29,6 +29,7 @@ class Position : public Position3D
 public:
     Position();
     Position(const Position3D &pos);
+    Position(const Position &pos);
     Position(int x, int y, double y_plus, int z, int layer = 0);
     Position(int x, int y, double y_plus, int z, int layer, int centerX,
              int centerZ, double angleY, double angleX = 0, double angleZ = 0);
@@ -36,6 +37,7 @@ public:
 
     bool operator==(const Position& other) const;
     bool operator!=(const Position& other) const;
+
     void setX(int x);
     void setZ(int z);
     void setCoords(int x, int y, double y_plus, int z);
@@ -54,6 +56,8 @@ public:
     double angleZ() const;
     void setAngleZ(double a);
     void addAngleZ(double a);
+
+    static double filterAngle(double a);
 
     bool isHorizontal() const;
     void setAngle(AxisKind ak, double a);

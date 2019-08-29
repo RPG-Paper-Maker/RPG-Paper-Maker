@@ -684,6 +684,18 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
             m_control.onMousePressed(selection, subSelection, drawKind, layerOn,
                 tileset, specialID, widthSquares, widthPixels, heightSquares,
                 heightPixels, defaultFloorRect, event->pos(), button);
+
+            // Rotations
+            if (button != Qt::MouseButton::MiddleButton) {
+                if (drawKind == DrawKind::Rotate) {
+                    Position *position;
+
+                    position = m_control.positionOnElement(selection,
+                        subSelection, drawKind);
+                    emit selectPositionTransformation(position, button == Qt
+                        ::MouseButton::LeftButton);
+                }
+            }
         } else {
             if (button != Qt::MouseButton::MiddleButton) {
                 if (m_detection == nullptr) {
@@ -960,4 +972,13 @@ void WidgetMapEditor::contextHero() {
     }
 
     m_contextMenu->setFocus();
+}
+
+// -------------------------------------------------------
+
+void WidgetMapEditor::onTransformationPositionChanged(Position &newPosition,
+    Position &previousPosition)
+{
+    m_control.onTransformationPositionChanged(newPosition, previousPosition,
+        m_menuBar->selectionKind());
 }

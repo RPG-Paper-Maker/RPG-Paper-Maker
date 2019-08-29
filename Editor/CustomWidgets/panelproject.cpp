@@ -55,16 +55,22 @@ PanelProject::PanelProject(QWidget *parent, Project *p) :
 
     connect(ui->widgetMenuBar, SIGNAL(selectionChanged()), this, SLOT(
         on_menuBarPressed()));
-    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(selectionChanged()), this, SLOT(
-        on_menuBarPressed()));
+    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(selectionChanged()), this,
+        SLOT(on_menuBarPressed()));
     connect(ui->widgetMenuBar, SIGNAL(triggered(QAction *)), this, SLOT(
         on_menuBarPressed()));
-    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(triggered(QAction *)), this, SLOT(
-        on_menuBarPressed()));
+    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(triggered(QAction *)),
+        this, SLOT(on_menuBarPressed()));
     connect(ui->splitter, SIGNAL(splitterMoved(int, int)), ui->panelTextures,
         SLOT(onSplitterMoved(int, int)));
     connect(ui->splitter_2, SIGNAL(splitterMoved(int, int)), ui->panelTextures,
         SLOT(onSplitterMoved(int, int)));
+    connect(ui->openGLWidget, SIGNAL(selectPositionTransformation(Position *,
+        bool)), ui->panelTextures->panelTransformations(), SLOT(
+        on_positionSelected(Position *, bool)));
+    connect(ui->panelTextures->panelTransformations(), SIGNAL(positionChanged(
+        Position &, Position &)), ui->openGLWidget, SLOT(
+        onTransformationPositionChanged(Position &, Position &)));
 
     ui->panelTextures->initializeWidgetTreeLocalMaps(ui->treeViewLocalMaps);
 }
@@ -154,6 +160,4 @@ void PanelProject::on_menuBarPressed() {
             PictureKind::Tilesets));
         break;
     }
-
-    ui->openGLWidget->setFocus();
 }

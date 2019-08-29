@@ -75,6 +75,43 @@ void PanelSubTransformation::initializeRotation(AxisKind ak) {
 }
 
 // -------------------------------------------------------
+
+void PanelSubTransformation::updatePositionAuto() {
+    if (m_mapElementPosition != nullptr && !this->applyLeftRightClick()) {
+        Position previousPosition;
+
+        previousPosition = *m_mapElementPosition;
+        m_mapElementPosition->setAngle(m_axisKind, this->angle());
+
+        if (*m_mapElementPosition != previousPosition) {
+            emit positionChanged(previousPosition);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelSubTransformation::updatePositionClick(bool positive) {
+    if (m_mapElementPosition != nullptr && this->applyLeftRightClick()) {
+        Position previousPosition;
+
+        previousPosition = *m_mapElementPosition;
+        if (this->operation()) {
+            m_mapElementPosition->setAngle(m_axisKind, positive ? this->angle()
+                : -this->angle());
+        } else {
+            m_mapElementPosition->addAngle(m_axisKind, positive ? this->angle()
+                : -this->angle());
+
+        }
+
+        if (*m_mapElementPosition != previousPosition) {
+            emit positionChanged(previousPosition);
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  SLOTS
 //
@@ -86,19 +123,16 @@ void PanelSubTransformation::on_comboBoxOperation_currentIndexChanged(int index)
 
     equal = index == 1;
     RPM::get()->engineSettings()->setRotationOperation(m_axisKind, equal);
+    RPM::get()->engineSettings()->write();
     if (equal) {
-        this->on_doubleSpinBoxAngle_valueChanged(this->angle());
+        this->updatePositionAuto();
     }
 }
 
 // -------------------------------------------------------
 
-void PanelSubTransformation::on_doubleSpinBoxAngle_valueChanged(double d) {
-    if (this->operation()) {
-        if (m_mapElementPosition != nullptr) {
-            m_mapElementPosition->setAngle(m_axisKind, d);
-        }
-    }
+void PanelSubTransformation::on_doubleSpinBoxAngle_valueChanged(double) {
+    this->updatePositionAuto();
 }
 
 // -------------------------------------------------------
@@ -108,6 +142,7 @@ void PanelSubTransformation::on_checkBoxApplyLeftRightClick_toggled(bool checked
     QModelIndex modelIndex;
 
     RPM::get()->engineSettings()->setRotationLeftRightClick(m_axisKind, checked);
+    RPM::get()->engineSettings()->write();
 
     // If not checked, impossible to select + operation
     modelIndex = ui->comboBoxOperation->model()->index(0, 0);
@@ -123,12 +158,15 @@ void PanelSubTransformation::on_checkBoxApplyLeftRightClick_toggled(bool checked
         ui->comboBoxOperation->model()->setData(modelIndex, vEnable, Qt
             ::UserRole - 1);
     }
+
+    this->updatePositionAuto();
 }
 
 // -------------------------------------------------------
 
 void PanelSubTransformation::on_pushButtonDefineDefault_clicked() {
     RPM::get()->engineSettings()->setRotationAngle(m_axisKind, this->angle());
+    RPM::get()->engineSettings()->write();
 }
 
 // -------------------------------------------------------

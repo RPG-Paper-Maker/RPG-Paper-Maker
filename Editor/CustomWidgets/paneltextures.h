@@ -18,6 +18,7 @@
 #include "widgettilesetselector.h"
 #include "mapeditorsubselectionkind.h"
 #include "drawkind.h"
+#include "paneltransformations.h"
 
 class WidgetTreeLocalMaps;
 
@@ -41,6 +42,7 @@ public:
     explicit PanelTextures(QWidget *parent = nullptr);
     ~PanelTextures();
 
+    PanelTransformations * panelTransformations() const;
     void setDrawKind(DrawKind dk);
 
     void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
@@ -68,6 +70,7 @@ public:
     void showObjects3D(SystemTileset *tileset);
     void showTransformations();
     void fillComboBox(SystemTileset *tileset, PictureKind kind);
+    void updateWallsSize();
     void updateMountainsSize();
     void updateObject3DSize();
     void updateShow();

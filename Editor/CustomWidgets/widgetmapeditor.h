@@ -142,6 +142,11 @@ protected slots:
     void contextPaste();
     void contextDelete();
     void contextHero();
+    void onTransformationPositionChanged(Position &newPosition, Position
+        &previousPosition);
+
+signals:
+    void selectPositionTransformation(Position *pn, bool positive);
 };
 
 #endif // WIDGETMAPEDITOR_H
