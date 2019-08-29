@@ -14,6 +14,7 @@
 
 #include <QWidget>
 #include "axiskind.h"
+#include "position.h"
 
 // -------------------------------------------------------
 //
@@ -35,11 +36,16 @@ public:
     explicit PanelTransformations(QWidget *parent = nullptr);
     ~PanelTransformations();
 
+    void setMapElementPosition(Position *p);
+
     AxisKind currentAxisKind() const;
     void initialize();
 
 private:
     Ui::PanelTransformations *ui;
+
+protected:
+    Position *m_mapElementPosition;
 };
 
 #endif // PANELTRANSFORMATIONS_H

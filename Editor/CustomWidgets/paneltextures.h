@@ -41,6 +41,8 @@ public:
     explicit PanelTextures(QWidget *parent = nullptr);
     ~PanelTextures();
 
+    void setDrawKind(DrawKind dk);
+
     void initializeWidgetTreeLocalMaps(WidgetTreeLocalMaps *w);
     void getTilesetTexture(QRect &rect) const;
     void setTilesetImage(QString path);

@@ -36,9 +36,12 @@ PanelTextures::PanelTextures(QWidget *parent) :
     ui->setupUi(this);
 }
 
-PanelTextures::~PanelTextures()
-{
+PanelTextures::~PanelTextures() {
     delete ui;
+}
+
+void PanelTextures::setDrawKind(DrawKind dk) {
+    m_drawKind = dk;
 }
 
 // -------------------------------------------------------
@@ -318,6 +321,7 @@ void PanelTextures::showObjects3D(SystemTileset *tileset) {
         m_tileset = tileset;
         tileset->updateModel3DObjects();
         fillComboBox(tileset, PictureKind::Object3D);
+        this->updateWidgetSize();
     }
 }
 
@@ -379,8 +383,8 @@ void PanelTextures::updateMountainsSize() {
         w = ui->comboBox->width();
         h = ui->comboBox->height() + ui->pushButtonUpdateList->height() +
             ui->widgetMountainPreview->height() + 18;
-        ui->widgetMountainPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
-            ->widgetMountainPreview->y(), w, ui->widgetMountainPreview->height());
+        ui->widgetMountainPreview->setGeometry(0, 0, w, ui
+            ->widgetMountainPreview->height());
         this->setGeometry(0, 0, w, h);
         this->setFixedSize(w, h);
     }
@@ -392,8 +396,7 @@ void PanelTextures::updateObject3DSize() {
     int w;
 
     w = ui->comboBox->width();
-    ui->widget3DObjectPreview->setGeometry(ui->widget3DObjectPreview->x(), ui
-        ->widget3DObjectPreview->y(), w, w);
+    ui->widget3DObjectPreview->setGeometry(0, 0, w, w);
     ui->widget3DObjectPreview->setFixedSize(w, w);
 }
 
@@ -455,8 +458,6 @@ void PanelTextures::updateImageSpecial(SystemSpecialElement *special)
 // -------------------------------------------------------
 
 void PanelTextures::updateShow() {
-    m_drawKind = DrawKind::Pencil;
-
     switch (m_kind) {
     case PictureKind::Autotiles:
         this->showAutotiles(m_tileset);

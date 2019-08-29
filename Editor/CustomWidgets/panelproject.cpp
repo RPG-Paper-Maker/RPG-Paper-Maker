@@ -55,7 +55,11 @@ PanelProject::PanelProject(QWidget *parent, Project *p) :
 
     connect(ui->widgetMenuBar, SIGNAL(selectionChanged()), this, SLOT(
         on_menuBarPressed()));
+    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(selectionChanged()), this, SLOT(
+        on_menuBarPressed()));
     connect(ui->widgetMenuBar, SIGNAL(triggered(QAction *)), this, SLOT(
+        on_menuBarPressed()));
+    connect(ui->widgetMenuBar->cornerWidget(), SIGNAL(triggered(QAction *)), this, SLOT(
         on_menuBarPressed()));
     connect(ui->splitter, SIGNAL(splitterMoved(int, int)), ui->panelTextures,
         SLOT(onSplitterMoved(int, int)));
@@ -127,6 +131,9 @@ void PanelProject::on_menuBarPressed() {
     // Remove preview elements stuff
     ui->openGLWidget->removePreviewElements();
 
+    // Update panel textures draw kind
+    ui->panelTextures->setDrawKind(ui->widgetMenuBar->drawKind());
+
     // Update panel textures
     switch (ui->widgetMenuBar->subSelectionKind()) {
     case MapEditorSubSelectionKind::Autotiles:
@@ -147,4 +154,6 @@ void PanelProject::on_menuBarPressed() {
             PictureKind::Tilesets));
         break;
     }
+
+    ui->openGLWidget->setFocus();
 }

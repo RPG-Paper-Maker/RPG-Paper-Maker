@@ -32,6 +32,14 @@ PanelTransformations::~PanelTransformations()
     delete ui;
 }
 
+void PanelTransformations::setMapElementPosition(Position *p) {
+    m_mapElementPosition = p;
+
+    ui->panelSubTransformationX->setMapElementPosition(p);
+    ui->panelSubTransformationY->setMapElementPosition(p);
+    ui->panelSubTransformationZ->setMapElementPosition(p);
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

@@ -22,6 +22,7 @@ const QString EngineSettings::JSON_THEME = "theme";
 const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
 const QString EngineSettings::JSON_FIRST_TIME = "ft";
+const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
 const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
@@ -48,6 +49,9 @@ EngineSettings::EngineSettings() :
     #endif
 
     // Rotation
+    m_rotationOperations.append(false);
+    m_rotationOperations.append(false);
+    m_rotationOperations.append(false);
     m_rotationLeftRightClicks.append(true);
     m_rotationLeftRightClicks.append(true);
     m_rotationLeftRightClicks.append(true);
@@ -270,15 +274,15 @@ void EngineSettings::read(const QJsonObject &json) {
     }
     tab = json[JSON_ROTATION_OPERATIONS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        m_rotationOperations << tab.at(i).toBool();
+        m_rotationOperations.replace(i, tab.at(i).toBool());
     }
     tab = json[JSON_ROTATION_LEFT_RIGHT_CLICKS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        m_rotationLeftRightClicks << tab.at(i).toBool();
+        m_rotationLeftRightClicks.replace(i, tab.at(i).toBool());
     }
     tab = json[JSON_ROTATION_ANGLES].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
-        m_rotationAngles << tab.at(i).toDouble();
+        m_rotationAngles.replace(i, tab.at(i).toDouble());
     }
 }
 
@@ -311,21 +315,15 @@ void EngineSettings::write(QJsonObject &json) const {
     for (i = 0, l = m_rotationOperations.size(); i < l; i++) {
         tab.append(m_rotationOperations.at(i));
     }
-    if (!tab.isEmpty()) {
-        json[JSON_ROTATION_OPERATIONS] = tab;
-    }
+    json[JSON_ROTATION_OPERATIONS] = tab;
     tab = QJsonArray();
     for (i = 0, l = m_rotationLeftRightClicks.size(); i < l; i++) {
         tab.append(m_rotationLeftRightClicks.at(i));
     }
-    if (!tab.isEmpty()) {
-        json[JSON_ROTATION_LEFT_RIGHT_CLICKS] = tab;
-    }
+    json[JSON_ROTATION_LEFT_RIGHT_CLICKS] = tab;
     tab = QJsonArray();
     for (i = 0, l = m_rotationAngles.size(); i < l; i++) {
         tab.append(m_rotationAngles.at(i));
     }
-    if (!tab.isEmpty()) {
-        json[JSON_ROTATION_ANGLES] = tab;
-    }
+    json[JSON_ROTATION_ANGLES] = tab;
 }
