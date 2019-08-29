@@ -106,10 +106,10 @@ bool Camera::cameraUp() const {
 
 // -------------------------------------------------------
 
-bool Camera::cameraFront(const QVector3D &direction, int angle) const {
+bool Camera::cameraFront(const QVector3D &direction, double angle) const {
     QVector3D planeDirection = QVector3D(0, 0, 1);
     QMatrix4x4 m;
-    m.rotate(-angle, 0.0, 1.0, 0.0);
+    m.rotate(-static_cast<float>(angle), 0.0, 1.0, 0.0);
     planeDirection = planeDirection * m;
 
     return QVector3D::dotProduct(direction, planeDirection) < 0;

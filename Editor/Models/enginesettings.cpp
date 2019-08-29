@@ -22,6 +22,8 @@ const QString EngineSettings::JSON_THEME = "theme";
 const QString EngineSettings::JSON_PROJECT_NAMES = "pn";
 const QString EngineSettings::JSON_PROJECT_LINKS = "pl";
 const QString EngineSettings::JSON_FIRST_TIME = "ft";
+const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
+const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -44,6 +46,14 @@ EngineSettings::EngineSettings() :
     #ifdef Q_OS_MAC
         m_theme = ThemeKind::White;
     #endif
+
+    // Rotation
+    m_rotationLeftRightClicks.append(true);
+    m_rotationLeftRightClicks.append(true);
+    m_rotationLeftRightClicks.append(true);
+    m_rotationAngles.append(90);
+    m_rotationAngles.append(90);
+    m_rotationAngles.append(90);
 }
 
 EngineSettings::~EngineSettings() {
@@ -89,6 +99,30 @@ bool EngineSettings::firstTime() const {
 
 void EngineSettings::setFirstTime(bool b) {
     m_firstTime = b;
+}
+
+bool EngineSettings::rotationOperation(AxisKind ak) const {
+    return m_rotationOperations.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setRotationOperation(AxisKind ak, bool b) {
+    m_rotationOperations.replace(static_cast<int>(ak), b);
+}
+
+bool EngineSettings::rotationLeftRightClick(AxisKind ak) const {
+    return m_rotationLeftRightClicks.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setRotationLeftRightClick(AxisKind ak, bool b) {
+    m_rotationLeftRightClicks.replace(static_cast<int>(ak), b);
+}
+
+double EngineSettings::rotationAngle(AxisKind ak) const {
+    return m_rotationAngles.at(static_cast<int>(ak));
+}
+
+void EngineSettings::setRotationAngle(AxisKind ak, double a) {
+    m_rotationAngles.replace(static_cast<int>(ak), a);
 }
 
 // -------------------------------------------------------
@@ -234,6 +268,18 @@ void EngineSettings::read(const QJsonObject &json) {
     if (json.contains(JSON_FIRST_TIME)) {
         m_firstTime = json[JSON_FIRST_TIME].toBool();
     }
+    tab = json[JSON_ROTATION_OPERATIONS].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_rotationOperations << tab.at(i).toBool();
+    }
+    tab = json[JSON_ROTATION_LEFT_RIGHT_CLICKS].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_rotationLeftRightClicks << tab.at(i).toBool();
+    }
+    tab = json[JSON_ROTATION_ANGLES].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        m_rotationAngles << tab.at(i).toDouble();
+    }
 }
 
 // -------------------------------------------------------
@@ -260,5 +306,26 @@ void EngineSettings::write(QJsonObject &json) const {
     json[JSON_PROJECT_LINKS] = tab;
     if (!m_firstTime) {
         json[JSON_FIRST_TIME] = false;
+    }
+    tab = QJsonArray();
+    for (i = 0, l = m_rotationOperations.size(); i < l; i++) {
+        tab.append(m_rotationOperations.at(i));
+    }
+    if (!tab.isEmpty()) {
+        json[JSON_ROTATION_OPERATIONS] = tab;
+    }
+    tab = QJsonArray();
+    for (i = 0, l = m_rotationLeftRightClicks.size(); i < l; i++) {
+        tab.append(m_rotationLeftRightClicks.at(i));
+    }
+    if (!tab.isEmpty()) {
+        json[JSON_ROTATION_LEFT_RIGHT_CLICKS] = tab;
+    }
+    tab = QJsonArray();
+    for (i = 0, l = m_rotationAngles.size(); i < l; i++) {
+        tab.append(m_rotationAngles.at(i));
+    }
+    if (!tab.isEmpty()) {
+        json[JSON_ROTATION_ANGLES] = tab;
     }
 }

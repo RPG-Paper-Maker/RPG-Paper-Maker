@@ -13,6 +13,7 @@
 #define POSITION_H
 
 #include "position3d.h"
+#include "axiskind.h"
 
 // -------------------------------------------------------
 //
@@ -30,7 +31,7 @@ public:
     Position(const Position3D &pos);
     Position(int x, int y, double y_plus, int z, int layer = 0);
     Position(int x, int y, double y_plus, int z, int layer, int centerX,
-             int centerZ, int angle);
+             int centerZ, double angleY, double angleX = 0, double angleZ = 0);
     virtual ~Position();
 
     bool operator==(const Position& other) const;
@@ -44,10 +45,19 @@ public:
     void setCenterX(int x);
     int centerZ() const;
     void setCenterZ(int z);
-    int angle() const;
-    void setAngle(int a);
+    double angleY() const;
+    void setAngleY(double a);
+    void addAngleY(double a);
+    double angleX() const;
+    void setAngleX(double a);
+    void addAngleX(double a);
+    double angleZ() const;
+    void setAngleZ(double a);
+    void addAngleZ(double a);
 
     bool isHorizontal() const;
+    void setAngle(AxisKind ak, double a);
+    void addAngle(AxisKind ak, double a);
     void setHorizontal();
     void setVertical();
     void setCurrent(Position& position) const;
@@ -67,7 +77,9 @@ protected:
     int m_layer;
     int m_centerX;
     int m_centerZ;
-    int m_angle;
+    double m_angleY;
+    double m_angleX;
+    double m_angleZ;
 
     void getStringLayerYPlus(QString& infos, int squareSize) const;
 };
@@ -75,7 +87,8 @@ protected:
 inline uint qHash(const Position& pos)
 {
    return (pos.x() + pos.y() + pos.yPlus() + pos.z() + pos.layer()
-           + pos.centerX() + pos.centerZ() + pos.angle());
+           + pos.centerX() + pos.centerZ() + pos.angleY() + pos.angleX() + pos
+           .angleZ());
 }
 
 #endif // POSITION_H

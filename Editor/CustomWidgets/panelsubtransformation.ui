@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PanelSubTransformation</class>
+ <widget class="QWidget" name="PanelSubTransformation">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,1">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+       <item>
+        <widget class="QComboBox" name="comboBoxOperation">
+         <item>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>=</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Angle:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="doubleSpinBoxAngle">
+         <property name="minimum">
+          <double>-9999999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999999.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>90.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxApplyLeftRightClick">
+       <property name="text">
+        <string>Apply on left / right click</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDefineDefault">
+       <property name="text">
+        <string>Define as default Y rotation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonResetDefault">
+       <property name="text">
+        <string>Reset to default Y rotation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>318</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -30,7 +30,7 @@ void ControlMapEditor::updatePreviewElements(MapEditorSelectionKind kind,
     bool b;
     getPositionSelected(position, kind, subKind, layerOn, b);
     bool up = m_camera->cameraUp();
-    bool front = m_camera->cameraFront(m_ray.direction(), position.angle());
+    bool front = m_camera->cameraFront(m_ray.direction(), position.angleY());
     int xOffset = m_positionRealOnSprite.x() - position.x();
     int yOffset = m_positionRealOnSprite.y() - position.y();
     int zOffset = m_positionRealOnSprite.z() - position.z();

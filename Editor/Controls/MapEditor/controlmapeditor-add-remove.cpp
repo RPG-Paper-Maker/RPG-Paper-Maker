@@ -413,7 +413,7 @@ void ControlMapEditor::addSprite(Position &p, MapEditorSubSelectionKind kind,
     DrawKind drawKind, bool layerOn, QRect &tileset)
 {
     QList<Position> positions;
-    bool front = m_camera->cameraFront(m_ray.direction(), p.angle());
+    bool front = m_camera->cameraFront(m_ray.direction(), p.angleY());
     int xOffset = m_positionRealOnSprite.x() - p.x();
     int yOffset = m_positionRealOnSprite.y() - p.y();
     int zOffset = m_positionRealOnSprite.z() - p.z();

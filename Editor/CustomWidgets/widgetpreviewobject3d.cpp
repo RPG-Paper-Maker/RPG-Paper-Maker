@@ -86,8 +86,9 @@ void WidgetPreviewObject3D::updateObject() {
         m_objectsGL->updateGL();
 
         // Texture
-        m_texture = RPM::get()->project()->currentMap()->textureObject3DAt(
-            m_object->datas()->pictureID());
+        Map::loadPicture(m_object->datas()->picture(), PictureKind::Object3D,
+            image);
+        m_texture = Map::createTexture(image);
 
         // Update camera position
         m_camera->setDistance(m_object->minDistanceFromCenter());

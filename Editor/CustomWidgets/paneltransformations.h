@@ -13,6 +13,7 @@
 #define PANELTRANSFORMATIONS_H
 
 #include <QWidget>
+#include "axiskind.h"
 
 // -------------------------------------------------------
 //
@@ -33,6 +34,9 @@ class PanelTransformations : public QWidget
 public:
     explicit PanelTransformations(QWidget *parent = nullptr);
     ~PanelTransformations();
+
+    AxisKind currentAxisKind() const;
+    void initialize();
 
 private:
     Ui::PanelTransformations *ui;

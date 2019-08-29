@@ -26,18 +26,20 @@ Position::Position(const Position3D &pos) :
 }
 
 Position::Position(int x, int y, double y_plus, int z, int layer) :
-    Position(x, y, y_plus, z, layer, 50, 50, 0)
+    Position(x, y, y_plus, z, layer, 50, 50, 0, 0, 0)
 {
 
 }
 
 Position::Position(int x, int y, double y_plus, int z, int layer, int centerX,
-                   int centerZ, int angle) :
+                   int centerZ, double angleY, double angleX, double angleZ) :
     Position3D(x, y, y_plus, z),
     m_layer(layer),
     m_centerX(centerX),
     m_centerZ(centerZ),
-    m_angle(angle)
+    m_angleY(angleY),
+    m_angleX(angleX),
+    m_angleZ(angleZ)
 {
 
 }
@@ -49,8 +51,9 @@ Position::~Position() {
 bool Position::operator==(const Position& other) const{
     return m_x == other.x() && m_y == other.y() && qFuzzyCompare(m_y_plus, other
         .yPlus()) && m_z == other.z() && m_layer == other.layer() && m_centerX
-        == other.centerX() && m_centerZ == other.centerZ() && m_angle ==
-        other.angle();
+        == other.centerX() && m_centerZ == other.centerZ() && qFuzzyCompare(
+        m_angleY, other.m_angleY) && qFuzzyCompare(m_angleX, other.m_angleX) &&
+        qFuzzyCompare(m_angleZ, other.m_angleZ);
 }
 
 bool Position::operator!=(const Position& other) const{
@@ -84,9 +87,41 @@ int Position::centerZ() const{ return m_centerZ; }
 
 void Position::setCenterZ(int z){ m_centerZ = z; }
 
-int Position::angle() const{ return m_angle; }
+double Position::angleY() const {
+    return m_angleY;
+}
 
-void Position::setAngle(int a){ m_angle = a; }
+void Position::setAngleY(double a) {
+    m_angleY = a;
+}
+
+void Position::addAngleY(double a) {
+    this->setAngleY(this->angleY() + a);
+}
+
+double Position::angleX() const {
+    return m_angleX;
+}
+
+void Position::setAngleX(double a) {
+    m_angleX = a;
+}
+
+void Position::addAngleX(double a) {
+    this->setAngleX(this->angleX() + a);
+}
+
+double Position::angleZ() const {
+    return m_angleZ;
+}
+
+void Position::setAngleZ(double a) {
+    m_angleZ = a;
+}
+
+void Position::addAngleZ(double a) {
+    this->setAngleZ(this->angleZ() + a);
+}
 
 // -------------------------------------------------------
 //
@@ -95,7 +130,39 @@ void Position::setAngle(int a){ m_angle = a; }
 // -------------------------------------------------------
 
 bool Position::isHorizontal() const {
-    return m_angle == 0;
+    return m_angleY == 0.0;
+}
+
+// -------------------------------------------------------
+
+void Position::setAngle(AxisKind ak, double a) {
+    switch (ak) {
+    case AxisKind::X:
+        this->setAngleX(a);
+        break;
+    case AxisKind::Y:
+        this->setAngleY(a);
+        break;
+    case AxisKind::Z:
+        this->setAngleZ(a);
+        break;
+    }
+}
+
+// -------------------------------------------------------
+
+void Position::addAngle(AxisKind ak, double a) {
+    switch (ak) {
+    case AxisKind::X:
+        this->addAngleX(a);
+        break;
+    case AxisKind::Y:
+        this->addAngleY(a);
+        break;
+    case AxisKind::Z:
+        this->addAngleZ(a);
+        break;
+    }
 }
 
 // -------------------------------------------------------
@@ -103,7 +170,7 @@ bool Position::isHorizontal() const {
 void Position::setHorizontal() {
     setCenterX(50);
     setCenterZ(0);
-    setAngle(0);
+    setAngleY(0);
 }
 
 // -------------------------------------------------------
@@ -111,7 +178,7 @@ void Position::setHorizontal() {
 void Position::setVertical() {
     setCenterX(0);
     setCenterZ(50);
-    setAngle(90);
+    setAngleY(90);
 }
 
 // -------------------------------------------------------
@@ -119,7 +186,7 @@ void Position::setVertical() {
 void Position::setCurrent(Position& position) const {
     position.setCenterX(m_centerX);
     position.setCenterZ(m_centerZ);
-    position.setAngle(m_angle);
+    position.setAngleY(m_angleY);
 }
 
 // -------------------------------------------------------
@@ -198,12 +265,13 @@ void Position::getBotRight(Position& position) const {
 
 void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
     int yPlus = getYpx(squareSize);
-    if (yPlus > 0)
+    if (yPlus > 0) {
         infos += "y+ = " + QString::number(yPlus) + "px\n";
-    infos += "Layer = " + QString::number(m_layer) + "\nAngle = " +
-            QString::number(m_angle) + "\nCenter x = " +
-            QString::number(m_centerX) + "%\nCenter z = " +
-            QString::number(m_centerZ) + "%";
+    }
+    infos += "Layer = " + QString::number(m_layer) + "\nAngles = [" + QString
+        ::number(m_angleX) + ", " + QString::number(m_angleY) + ", " + QString
+        ::number(m_angleZ) + "]\nCenter x = " + QString::number(m_centerX) +
+        "%\nCenter z = " + QString::number(m_centerZ) + "%";
 }
 
 // -------------------------------------------------------
@@ -222,15 +290,21 @@ QString Position::toString(int squareSize) const {
 //
 // -------------------------------------------------------
 
-void Position::read(const QJsonArray & json){
+void Position::read(const QJsonArray & json) {
+    int size;
+
     Position3D::read(json);
 
     m_layer = json[4].toInt();
-
-    if (json.size() > 5) {
+    size = json.size();
+    if (size > 5) {
         m_centerX = json[5].toInt();
         m_centerZ = json[6].toInt();
-        m_angle = json[7].toInt();
+        m_angleY = json[7].toDouble();
+        if (size > 8) {
+            m_angleX = json[8].toDouble();
+            m_angleZ = json[9].toDouble();
+        }
     }
 }
 
@@ -240,10 +314,14 @@ void Position::write(QJsonArray &json) const{
     Position3D::write(json);
 
     json.append(m_layer);
-    if (m_centerX != 50 || m_centerZ != 50 || m_angle != 0) {
+    if (m_centerX != 50 || m_centerZ != 50 || m_angleY != 0.0) {
         json.append(m_centerX);
         json.append(m_centerZ);
-        json.append(m_angle);
+        json.append(m_angleY);
+        if (m_angleX != 0.0 || m_angleZ != 0.0) {
+            json.append(m_angleX);
+            json.append(m_angleZ);
+        }
     }
 }
 

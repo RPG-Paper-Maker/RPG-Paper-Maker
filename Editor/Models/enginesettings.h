@@ -14,6 +14,7 @@
 
 #include "keyboarddatas.h"
 #include "themekind.h"
+#include "axiskind.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,9 @@ public:
     static const QString JSON_PROJECT_NAMES;
     static const QString JSON_PROJECT_LINKS;
     static const QString JSON_FIRST_TIME;
+    static const QString JSON_ROTATION_OPERATIONS;
+    static const QString JSON_ROTATION_LEFT_RIGHT_CLICKS;
+    static const QString JSON_ROTATION_ANGLES;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
@@ -51,6 +55,12 @@ public:
     QString projectAtLink(int i) const;
     bool firstTime() const;
     void setFirstTime(bool b);
+    bool rotationOperation(AxisKind ak) const;
+    void setRotationOperation(AxisKind ak, bool b);
+    bool rotationLeftRightClick(AxisKind ak) const;
+    void setRotationLeftRightClick(AxisKind ak, bool b);
+    double rotationAngle(AxisKind ak) const;
+    void setRotationAngle(AxisKind ak, double a);
 
     void setDefault();
     QString getThemeContent() const;
@@ -69,6 +79,9 @@ protected:
     QStringList m_projectNames;
     QStringList m_projectLinks;
     bool m_firstTime;
+    QList<bool> m_rotationOperations;
+    QList<bool> m_rotationLeftRightClicks;
+    QList<double> m_rotationAngles;
 
     QString readContent(QString name) const;
 };

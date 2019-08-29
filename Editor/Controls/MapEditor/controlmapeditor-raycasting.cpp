@@ -129,11 +129,11 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
         }
         if (element->getSubKind() == MapEditorSubSelectionKind::SpritesWall) {
             m_distanceSprite = reinterpret_cast<SpriteWallDatas *>(element)
-                ->intersectionPlane(positionLayerZero.angle(), m_ray);
+                ->intersectionPlane(positionLayerZero.angleY(), m_ray);
         }
         else {
             m_distanceSprite = reinterpret_cast<SpriteDatas *>(element)
-                ->intersectionPlane(positionLayerZero.angle(), m_ray);
+                ->intersectionPlane(positionLayerZero.angleY(), m_ray);
         }
         getCorrectPositionOnRay(m_positionRealOnSprite, rayDirection,
             static_cast<int>(m_distanceSprite));

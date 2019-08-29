@@ -193,7 +193,7 @@ void SpriteDatas::initializeVertices(int squareSize,
         vecC = Sprite::modelQuad[2] * size + pos;
         vecD = Sprite::modelQuad[3] * size + pos;
     }
-    rotateSprite(vecA, vecB, vecC, vecD, center, position.angle());
+    rotateSprite(vecA, vecB, vecC, vecD, center, position.angleY());
     m_vertices.append(vecA);
     m_vertices.append(vecC);
 
@@ -276,21 +276,21 @@ void SpriteDatas::initializeVertices(int squareSize,
 
 void SpriteDatas::rotateSprite(QVector3D& vecA, QVector3D& vecB,
                                QVector3D& vecC, QVector3D& vecD,
-                               QVector3D& center, float angle)
+                               QVector3D& center, double angle)
 {
     rotateSpriteX(vecA, vecB, vecC, vecD, center, angle, 0.0f, 1.0f, 0.0f);
 }
 
 // -------------------------------------------------------
 
-void SpriteDatas::rotateVertexX(QVector3D& vec, QVector3D& center, float angle,
+void SpriteDatas::rotateVertexX(QVector3D& vec, QVector3D& center, double angle,
     float x, float y, float z)
 {
     QMatrix4x4 m;
     QVector3D v(vec);
 
     v -= center;
-    m.rotate(-angle, x, y, z);
+    m.rotate(-static_cast<float>(angle), x, y, z);
     v = v * m + center;
 
     vec.setX(v.x());
@@ -301,7 +301,7 @@ void SpriteDatas::rotateVertexX(QVector3D& vec, QVector3D& center, float angle,
 // -------------------------------------------------------
 
 void SpriteDatas::rotateSpriteX(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
-                         QVector3D& vecD, QVector3D& center, float angle,
+                         QVector3D& vecD, QVector3D& center, double angle,
                           float x, float y, float z)
 {
     rotateVertexX(vecA, center, angle, x, y, z);
@@ -336,7 +336,7 @@ void SpriteDatas::addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
 // -------------------------------------------------------
 
 float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
-                                int cameraHAngle)
+                                double cameraHAngle)
 {
     float minDistance = 0, distance = 0;
     QBox3D box;
@@ -369,11 +369,11 @@ float SpriteDatas::intersection(int squareSize, QRay3D& ray, Position& position,
 
 // -------------------------------------------------------
 
-float SpriteDatas::intersectionPlane(int angle, QRay3D& ray)
+float SpriteDatas::intersectionPlane(double angle, QRay3D& ray)
 {
     QVector3D normal(0, 0, 1);
     QMatrix4x4 m;
-    m.rotate(-angle, 0.0, 1.0, 0.0);
+    m.rotate(-static_cast<float>(angle), 0.0, 1.0, 0.0);
     normal = normal * m;
 
     QPlane3D plane(m_vertices.isEmpty() ? QVector3D() : m_vertices.at(0),
@@ -512,7 +512,7 @@ void SpriteObject::updateFaceGL(){
 
 void SpriteObject::paintGL(){
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, nullptr);
     m_vao.release();
 }
 
@@ -722,7 +722,7 @@ void SpriteWallDatas::initializeVertices(int squareSize, int width, int height,
               vecD = Sprite::modelQuad[3] * size + center;
 
     SpriteDatas::rotateSprite(m_vecA, vecB, m_vecC, vecD, center,
-                              position.angle());
+                              position.angleY());
     SpriteDatas::addStaticSpriteToBuffer(vertices, indexes, count, m_vecA, vecB,
                                          m_vecC, vecD, texA, texB, texC, texD);
 }
@@ -737,7 +737,7 @@ float SpriteWallDatas::intersection(QRay3D& ray)
 
 // -------------------------------------------------------
 
-float SpriteWallDatas::intersectionPlane(int angle, QRay3D& ray) {
+float SpriteWallDatas::intersectionPlane(double angle, QRay3D& ray) {
     QVector3D normal(0, 0, 1);
     QMatrix4x4 m;
     m.rotate(-angle, 0.0, 1.0, 0.0);

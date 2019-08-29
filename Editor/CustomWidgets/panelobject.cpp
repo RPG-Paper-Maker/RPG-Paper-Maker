@@ -251,7 +251,6 @@ void PanelObject::updateReactionsWidgets() {
         .value<quintptr>());
 
     if (super != nullptr) {
-        QHBoxLayout *hlayout;
         index = ui->tabWidgetCommands->currentIndex();
         clear();
 
@@ -270,7 +269,6 @@ void PanelObject::updateReactionsWidgets() {
             variant = QVariant::fromValue(reinterpret_cast<quintptr>(event
                 ->reactionAt(super->id())));
             widgetCheckbox = new QWidget();
-            hlayout = new QHBoxLayout(widgetCheckbox);
             checkbox = new QCheckBox("Block hero when reaction");
             checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this, SLOT(

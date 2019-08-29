@@ -23,9 +23,29 @@ PanelTransformations::PanelTransformations(QWidget *parent) :
     ui(new Ui::PanelTransformations)
 {
     ui->setupUi(this);
+
+    this->initialize();
 }
 
 PanelTransformations::~PanelTransformations()
 {
     delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+AxisKind PanelTransformations::currentAxisKind() const {
+    return static_cast<AxisKind>(ui->tabWidget->currentIndex());
+}
+
+// -------------------------------------------------------
+
+void PanelTransformations::initialize() {
+    ui->panelSubTransformationX->initializeRotation(AxisKind::X);
+    ui->panelSubTransformationY->initializeRotation(AxisKind::Y);
+    ui->panelSubTransformationZ->initializeRotation(AxisKind::Z);
 }

@@ -81,11 +81,11 @@ public:
                                     Position &position, int& countStatic,
                                     int& countFace);
     static void rotateSprite(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
-                             QVector3D& vecD, QVector3D& center, float angle);
-    static void rotateVertexX(QVector3D& vec, QVector3D& center, float angle,
+                             QVector3D& vecD, QVector3D& center, double angle);
+    static void rotateVertexX(QVector3D& vec, QVector3D& center, double angle,
                               float x, float y, float z);
     static void rotateSpriteX(QVector3D& vecA, QVector3D& vecB, QVector3D& vecC,
-                             QVector3D& vecD, QVector3D& center, float angle,
+                             QVector3D& vecD, QVector3D& center, double angle,
                              float x, float y, float z);
     static void addStaticSpriteToBuffer(QVector<Vertex>& verticesStatic,
                                         QVector<GLuint>& indexesStatic,
@@ -95,8 +95,8 @@ public:
                                         QVector2D& texA, QVector2D& texB,
                                         QVector2D& texC, QVector2D& texD);
     float intersection(int squareSize, QRay3D& ray, Position& position,
-                       int cameraHAngle);
-    float intersectionPlane(int angle, QRay3D& ray);
+                       double cameraHAngle);
+    float intersectionPlane(double angle, QRay3D& ray);
 
     static QString jsonFront;
 
@@ -178,7 +178,7 @@ public:
                                     QVector<GLuint>& indexes,
                                     Position& position, int& count);
     float intersection(QRay3D& ray);
-    float intersectionPlane(int angle, QRay3D& ray);
+    float intersectionPlane(double angle, QRay3D& ray);
     virtual QString toString() const;
 
     virtual void read(const QJsonObject &json);

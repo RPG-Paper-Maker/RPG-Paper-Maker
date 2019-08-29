@@ -564,7 +564,8 @@ MapElement* Sprites::getMapElementAt(Position& position,
 int Sprites::getLastLayerAt(Position& position) const {
     int count = position.layer() + 1;
     Position p(position.x(), position.y(), position.yPlus(), position.z(),
-               count, position.centerX(), position.centerZ(), position.angle());
+        count, position.centerX(), position.centerZ(), position.angleY(),
+        position.angleX(), position.angleZ());
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {
@@ -584,9 +585,9 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
                                 QList<Position> positions)
 {
     int i = position.layer() + 1;
-    Position p(position.x(), position.y(), position.yPlus(),
-               position.z(), i, position.centerX(), position.centerZ(),
-               position.angle());
+    Position p(position.x(), position.y(), position.yPlus(), position.z(), i,
+        position.centerX(), position.centerZ(), position.angleY(), position
+        .angleY(), position.angleZ());
     SpriteDatas* sprite = spriteAt(p);
 
     while (sprite != nullptr) {

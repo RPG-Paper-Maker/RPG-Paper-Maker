@@ -50,7 +50,7 @@ public:
     OrientationKind orientationKind() const;
     OrientationKind orientationFromTargetKind() const;
     bool cameraUp() const;
-    bool cameraFront(const QVector3D &direction, int angle) const;
+    bool cameraFront(const QVector3D &direction, double angle) const;
     void update(Cursor* cursor, int squareSize);
     void updateTarget(QVector3D &target);
     void zoomPlus(int squareSize);

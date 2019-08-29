@@ -226,6 +226,10 @@ const QStringList RPM::ENUM_TO_STRING_TITLE_SETTINGS = {
     "Keyboard assigments"
 };
 
+const QStringList RPM::ENUM_TO_STRING_AXIS_KIND = {
+    "X", "Y", "Z"
+};
+
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;

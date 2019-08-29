@@ -21,6 +21,7 @@ DESTDIR = $$ROOT_DESTDIR/Editor
 
 HEADERS += \
     CustomWidgets/panelselectpositionmaps.h \
+    CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/panelvideos.h \
     CustomWidgets/widgetmountainselector.h \
@@ -43,6 +44,7 @@ HEADERS += \
     Controls/controlnewproject.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
+    Enums/axiskind.h \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
     Enums/titlecommandkind.h \
@@ -322,6 +324,7 @@ HEADERS += \
 
 SOURCES += \
     CustomWidgets/panelselectpositionmaps.cpp \
+    CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetmountainselector.cpp \
@@ -592,6 +595,7 @@ SOURCES += \
 
 FORMS += \
     CustomWidgets/panelselectpositionmaps.ui \
+    CustomWidgets/panelsubtransformation.ui \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetmountainselector.ui \
