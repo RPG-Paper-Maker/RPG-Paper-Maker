@@ -338,7 +338,9 @@ void Position::write(QJsonArray &json) const{
     Position3D::write(json);
 
     json.append(m_layer);
-    if (m_centerX != 50 || m_centerZ != 50 || m_angleY != 0.0) {
+    if (m_centerX != 50 || m_centerZ != 50 || m_angleY != 0.0 || m_angleX != 0.0
+        || m_angleZ != 0.0)
+    {
         json.append(m_centerX);
         json.append(m_centerZ);
         json.append(m_angleY);

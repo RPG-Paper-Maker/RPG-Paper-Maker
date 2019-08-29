@@ -744,12 +744,28 @@ void WidgetMapEditor::mouseReleaseEvent(QMouseEvent *event) {
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *) {
+void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event) {
     this->setFocus();
     if (m_control.map() != nullptr) {
         if (m_menuBar != nullptr) {
-            if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects)
+            if (m_menuBar->selectionKind() == MapEditorSelectionKind::Objects) {
                 addObject();
+            }
+            // Rotations
+            Qt::MouseButton button = event->button();
+            DrawKind drawKind = m_menuBar->drawKind();
+            MapEditorSelectionKind selection = m_menuBar->selectionKind();
+            MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
+            if (button != Qt::MouseButton::MiddleButton) {
+                if (drawKind == DrawKind::Rotate) {
+                    Position *position;
+
+                    position = m_control.positionOnElement(selection,
+                        subSelection, drawKind);
+                    emit selectPositionTransformation(position, button == Qt
+                        ::MouseButton::LeftButton);
+                }
+            }
         }
     }
 }

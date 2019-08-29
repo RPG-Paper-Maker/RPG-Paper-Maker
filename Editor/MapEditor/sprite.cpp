@@ -193,7 +193,16 @@ void SpriteDatas::initializeVertices(int squareSize,
         vecC = Sprite::modelQuad[2] * size + pos;
         vecD = Sprite::modelQuad[3] * size + pos;
     }
-    rotateSprite(vecA, vecB, vecC, vecD, center, position.angleY());
+
+    if (position.angleY() != 0.0) {
+        rotateSpriteX(vecA, vecB, vecC, vecD, center, position.angleY(), 0, 1, 0);
+    }
+    if (position.angleX() != 0.0) {
+        rotateSpriteX(vecA, vecB, vecC, vecD, center, position.angleX(), 1, 0, 0);
+    }
+    if (position.angleZ() != 0.0) {
+        rotateSpriteX(vecA, vecB, vecC, vecD, center, position.angleZ(), 0, 0, 1);
+    }
     m_vertices.append(vecA);
     m_vertices.append(vecC);
 
