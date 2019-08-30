@@ -1,5 +1,23 @@
 {
-	"add": [],
+	"add": [
+		{
+			"repo": "Dependencies",
+			"source": "Engine/linux/libraries/libQt5MultimediaWidgets.so.5",
+			"target": "Engine/libraries/libQt5MultimediaWidgets.so.5",
+			"os": ["l"]
+		},
+		{
+			"repo": "Dependencies",
+			"source": "Engine/win32/Qt5MultimediaWidgets.dll",
+			"target": "Engine/Qt5MultimediaWidgets.dll",
+			"os": ["w"]
+		},
+		{
+			"repo": "Dependencies",
+			"source": "Game/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc",
+			"target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc"
+		}
+	],
 	"remove": [
 		{
             "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/logo.png"
@@ -59,7 +77,7 @@
 		"New class / hero / monster empty lists",
 		"Rename blocking hero to block hero when reaction",
 		"Time event not working",
-		"Remove copy reaction / paste reaction on objects (will be replaced by multiple commands selection)"
+		"Remove copy reaction / paste reaction on objects (will be replaced by multiple commands selection)",
 		"Focus issues",
 		"Cancel collision window transform 3D objets",
 		"Import obj correction: ingame error + no texture crash + quads faces",

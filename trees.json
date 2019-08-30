@@ -620,6 +620,11 @@
                 "files": [
                     {
                         "repo": "Dependencies",
+                        "source": "Engine/linux/libraries/libQt5MultimediaWidgets.so.5",
+                        "target": "Engine/libraries/libQt5MultimediaWidgets.so.5"
+                    },
+                    {
+                        "repo": "Dependencies",
                         "source": "Engine/linux/libraries/libicudata.so.56",
                         "target": "Engine/libraries/libicudata.so.56"
                     },
@@ -1402,6 +1407,11 @@
                 "repo": "Dependencies",
                 "source": "Engine/win32/Qt5Core.dll",
                 "target": "Engine/Qt5Core.dll"
+            },
+            {
+                "repo": "Dependencies",
+                "source": "Engine/win32/Qt5MultimediaWidgets.dll",
+                "target": "Engine/Qt5MultimediaWidgets.dll"
             },
             {
                 "repo": "Dependencies",
@@ -10740,6 +10750,11 @@
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/osx/Game.app/Contents/Resources/qml/QtMultimedia/plugins.qmltypes",
                                                                 "target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia/plugins.qmltypes"
+                                                            },
+                                                            {
+                                                                "repo": "Dependencies",
+                                                                "source": "Game/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc",
+                                                                "target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc"
                                                             }
                                                         ],
                                                         "target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia"
