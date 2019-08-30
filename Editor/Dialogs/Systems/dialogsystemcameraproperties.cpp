@@ -59,9 +59,9 @@ void DialogSystemCameraProperties::initialize() {
 
     ui->panelPrimitiveFOV->initializeNumberAndUpdate(m_cameraProperties
         .fieldOfView(), false);
-    ui->panelPrimitiveNear->initializeNumberAndUpdate(m_cameraProperties.near(),
+    ui->panelPrimitiveNear->initializeNumberAndUpdate(m_cameraProperties.nearCam(),
         false);
-    ui->panelPrimitiveFar->initializeNumberAndUpdate(m_cameraProperties.far(),
+    ui->panelPrimitiveFar->initializeNumberAndUpdate(m_cameraProperties.farCam(),
         false);
 }
 

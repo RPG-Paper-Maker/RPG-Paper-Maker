@@ -66,8 +66,8 @@ public:
     PrimitiveValue * targetOffsetY() const;
     PrimitiveValue * targetOffsetZ() const;
     PrimitiveValue * fieldOfView() const;
-    PrimitiveValue * near() const;
-    PrimitiveValue * far() const;
+    PrimitiveValue * nearCam() const;
+    PrimitiveValue * farCam() const;
 
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;

@@ -101,11 +101,11 @@ PrimitiveValue * SystemCameraProperties::fieldOfView() const {
     return m_fieldOfView;
 }
 
-PrimitiveValue * SystemCameraProperties::near() const {
+PrimitiveValue * SystemCameraProperties::nearCam() const {
     return m_near;
 }
 
-PrimitiveValue * SystemCameraProperties::far() const {
+PrimitiveValue * SystemCameraProperties::farCam() const {
     return m_far;
 }
 
