@@ -19,8 +19,8 @@
 #include <QApplication>
 #include <QThread>
 
-const QString Project::ENGINE_VERSION = "1.2.2";
-const QString Project::LAST_BUILD_DATE = "July 31 2019";
+const QString Project::ENGINE_VERSION = "1.3.0";
+const QString Project::LAST_BUILD_DATE = "August 30 2019";
 const int Project::MAX_PROJECTS_NUMBER = 6;
 
 // -------------------------------------------------------
@@ -212,19 +212,23 @@ bool Project::read(QString path){
     if (!readOS())
         return false;
 
-    readLangsDatas();
-    readKeyBoardDatas();
-    readPicturesDatas();
-    readVideosDatas();
-    readSongsDatas();
-    readShapesDatas();
-    readGameDatas();
-    readTreeMapDatas();
-    readScriptsDatas();
-    readSpecialsDatas();
+    this->readAll();
     p_currentMap = nullptr;
 
     return true;
+}
+
+void Project::readAll() {
+    this->readLangsDatas();
+    this->readKeyBoardDatas();
+    this->readPicturesDatas();
+    this->readVideosDatas();
+    this->readSongsDatas();
+    this->readShapesDatas();
+    this->readGameDatas();
+    this->readTreeMapDatas();
+    this->readScriptsDatas();
+    this->readSpecialsDatas();
 }
 
 // -------------------------------------------------------

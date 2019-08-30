@@ -291,6 +291,19 @@ bool MapObjects::updateRaycastingAt(
 
 // -------------------------------------------------------
 
+QList<QStandardItem *> MapObjects::getAllCommandsList() const {
+    QList<QStandardItem *> list;
+    QHash<Position, SystemCommonObject*>::const_iterator i;
+
+    for (i = m_all.begin(); i != m_all.end(); i++) {
+        list.append(i.value()->getAllCommandsList());
+    }
+
+    return list;
+}
+
+// -------------------------------------------------------
+
 void MapObjects::initializeGL(QOpenGLShaderProgram *programStatic,
                               QOpenGLShaderProgram *programFace)
 {

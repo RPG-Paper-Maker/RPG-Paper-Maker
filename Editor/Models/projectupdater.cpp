@@ -17,6 +17,7 @@
 #include "systembattlemap.h"
 #include "systemtitlecommand.h"
 #include "titlesettingkind.h"
+#include "systemcommonreaction.h"
 
 const int ProjectUpdater::incompatibleVersionsCount = 9;
 
@@ -163,6 +164,60 @@ void ProjectUpdater::copySystemScripts() {
     dir.cdUp();
     dir.mkdir("System");
     Common::copyPath(pathScripts, pathProjectScripts);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateCommands() {
+    QList<QJsonObject> *mapPortions;
+    QList<QString> *paths;
+    QList<QStandardItem *> list;
+    QStandardItemModel *model;
+    MapPortion *mapPortion;
+    Portion portion;
+    QJsonObject obj;
+    int i, j, k, l, ll, lll;
+
+    m_project->readAll();
+
+    // Map portions
+    for (i = 0, l = m_listMapPortionsPaths.size(); i < l; i++) {
+        mapPortions = m_listMapPortions.at(i);
+        paths = m_listMapPortionsPaths.at(i);
+        for (j = 0, ll = paths->size(); j < ll; j++) {
+            obj = mapPortions->at(j);
+            mapPortion = new MapPortion(portion);
+            mapPortion->read(obj);
+            list = mapPortion->mapObjects()->getAllCommandsList();
+            for (k = 0, lll = list.size(); k < lll; k++) {
+                emit updatingCommands(list.at(k));
+            }
+            obj = QJsonObject();
+            mapPortion->write(obj);
+            delete mapPortion;
+            Common::writeOtherJSON(paths->at(j), obj);
+        }
+    }
+
+    // Common reactions
+    model = m_project->gameDatas()->commonEventsDatas()->modelCommonReactors();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        emit updatingCommands(reinterpret_cast<SystemCommonReaction *>(model
+            ->item(i)->data().value<quintptr>())->modelCommands()
+            ->invisibleRootItem());
+    }
+
+    // Models
+    model = m_project->gameDatas()->commonEventsDatas()->modelCommonObjects();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        list = reinterpret_cast<SystemCommonObject *>(model->item(i)->data()
+            .value<quintptr>())->getAllCommandsList();
+        for (j = 0, ll = list.size(); j < ll; j++) {
+            emit updatingCommands(list.at(j));
+        }
+    }
+
+    m_project->writeCommonEvents();
 }
 
 // -------------------------------------------------------
@@ -517,42 +572,12 @@ void ProjectUpdater::updateVersion_1_3_0() {
     SuperListItem *super;
     int i, l;
 
-    // Update command condition
-    for (i = 0; i < m_listMapPortions.size(); i++) {
-        QList<QJsonObject>* mapPortions = m_listMapPortions.at(i);
-        QList<QString>* paths = m_listMapPortionsPaths.at(i);
-
-        for (int j = 0; j < mapPortions->size(); j++) {
-            QJsonObject obj = mapPortions->at(j);
-            QJsonObject objObject = obj[MapPortion::JSON_OBJECT].toObject();
-            QJsonObject objTempObjects = objObject;
-            QJsonArray tabObjects = objObject["list"].toArray();
-
-            for (int k = 0; k < tabObjects.size(); k++) {
-                QJsonArray tabEvents = tabObjects.at(k).toObject()["v"]
-                    .toObject()["events"].toArray();
-
-                for (int l = 0; l < tabEvents.size(); l++) {
-                    QJsonObject objReactions = tabEvents.at(l).toObject()["r"]
-                        .toObject();
-                    QStringList eventKeys = objReactions.keys();
-                    for (int m = 0; m < eventKeys.size(); m++) {
-                        QString key = eventKeys.at(m);
-                        QJsonArray tabCommands = objReactions[key]
-                            .toObject()["c"].toArray();
-                        QString path = "list." + QString::number(k) +
-                            ".v.events." + QString::number(l) + "." + key + ".c";
-                        this->updateVersion_1_3_0_command(tabCommands,
-                            objTempObjects, path);
-                    }
-                }
-            }
-
-
-            obj[MapPortion::JSON_OBJECT] = objTempObjects;
-            Common::writeOtherJSON(paths->at(j), obj);
-        }
-    }
+    // Update command condition and sendEvent
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_3_0_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_3_0_commands(QStandardItem *)));
 
     // Map properties invisible object
     QJsonObject objInvisible;
@@ -568,21 +593,28 @@ void ProjectUpdater::updateVersion_1_3_0() {
     }
 
     // Camera properties + battle map default camera properties
-    m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setDefaultCameraProperties();
-    m_project->writeSystemDatas();
-    m_project->readBattleSystemDatas();
     QStandardItemModel *modelBattleMaps = m_project->gameDatas()
         ->battleSystemDatas()->modelBattleMaps();
+    SystemBattleMap *battleMap;
     for (i = 0, l = modelBattleMaps->invisibleRootItem()->rowCount(); i < l; i++)
     {
-        reinterpret_cast<SystemBattleMap *>(modelBattleMaps->item(i)->data()
-            .value<quintptr>())->cameraPropertiesID()->setNumberValue(2);
+        battleMap = reinterpret_cast<SystemBattleMap *>(modelBattleMaps->item(i)
+            ->data().value<quintptr>());
+        if (battleMap != nullptr) {
+            battleMap->cameraPropertiesID()->setNumberValue(2);
+        }
     }
     m_project->writeBattleSystemDatas();
 
+    // Detections
+    m_project->gameDatas()->systemDatas()->setDefaultDetections();
+
+    // Videos
+    m_project->videosDatas()->setDefault();
+    m_project->writeVideosDatas();
+
     // Title screen commands
-    m_project->readTitleScreenGameOver();
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleCommands()
         ->appendRow((new SystemTitleCommand(-1, new LangsTranslation("New game")
         , TitleCommandKind::NewGame))->getModelRow());
@@ -607,6 +639,7 @@ void ProjectUpdater::updateVersion_1_3_0() {
     item->setCheckState(Qt::Checked);
     m_project->gameDatas()->titleScreenGameOverDatas()->modelTitleSettings()
         ->appendRow(item);
+    m_project->writeTitleScreenGameOver();
 
     // Speed frequency
     m_project->gameDatas()->systemDatas()->setDefaultSpeedFrequencies();
@@ -615,30 +648,43 @@ void ProjectUpdater::updateVersion_1_3_0() {
 
 // -------------------------------------------------------
 
-void ProjectUpdater::updateVersion_1_3_0_command(QJsonArray &children,
-    QJsonObject &root, QString path)
-{
-    QJsonObject objCommand;
-    QJsonArray nextchildren;
-    int i, l, k;
-    QString newPath;
+void ProjectUpdater::updateVersion_1_3_0_commands(QStandardItem *commands) {
+    QStandardItem *child;
+    EventCommand *command;
+    QVector<QString> list;
+    EventCommandKind kind;
+    int i, l;
 
-    for (i = 0, l = children.size(); i < l; i++) {
-        objCommand = children.at(i).toObject();
-        nextchildren = objCommand["children"].toArray();
-        newPath = path + QString::number(i);
-        k = objCommand["kind"].toInt();
-        if (k == static_cast<int>(EventCommandKind::If)) {
-            QJsonArray newArray = objCommand["command"].toArray();
-            int idVariable = newArray.at(3).toInt();
-            newArray.replace(3, static_cast<int>(PrimitiveValueKind::Variable));
-            newArray.insert(4, idVariable);
-            Common::modifyJSONValue(root, newPath + ".command", newArray);
-        } else if (k == static_cast<int>(EventCommandKind::SendEvent)) {
+    for (i = 0, l = commands->rowCount(); i < l; i++) {
+        child = commands->child(i);
+        this->updateVersion_1_3_0_commands(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        kind = command->kind();
+        list = command->commands();
+        if (kind == EventCommandKind::If) {
+            int idVariable;
+            PrimitiveValueKind numberKind;
 
+            idVariable = list.at(2).toInt();
+            list.replace(2, QString::number(static_cast<int>(PrimitiveValueKind
+                ::Variable)));
+            list.insert(3, QString::number(idVariable));
+            numberKind = static_cast<PrimitiveValueKind>(list.at(5).toInt());
+            if (numberKind == PrimitiveValueKind::Number) {
+                list.replace(5, QString::number(static_cast<int>(
+                    PrimitiveValueKind::NumberDouble)));
+            }
+            command->setCommands(list);
+        } else if (kind == EventCommandKind::SendEvent) {
+            int target;
+
+            target = list.at(0).toInt();
+            if (target == 1) {
+                list.insert(1, QString::number(static_cast<int>(
+                    PrimitiveValueKind::DataBase)));
+                list.insert(3, RPM::TRUE_BOOL_STRING);
+                command->setCommands(list);
+            }
         }
-
-        this->updateVersion_1_3_0_command(nextchildren, root, newPath +
-            ".children");
     }
 }

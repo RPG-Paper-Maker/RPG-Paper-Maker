@@ -67,6 +67,7 @@ public:
     static int versionDifferent(QString projectVersion, QString otherVersion);
 
     bool read(QString path);
+    void readAll();
     bool readVersion();
     bool readOS();
     OSKind getProjectOS();

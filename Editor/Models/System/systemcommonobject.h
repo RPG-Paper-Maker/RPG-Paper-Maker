@@ -63,6 +63,7 @@ public:
     QStandardItemModel* modelEvents() const;
     void updateModelEvents();
     SystemState* getFirstState() const;
+    QList<QStandardItem *> getAllCommandsList() const;
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

@@ -59,6 +59,7 @@ public:
         &finalPosition, QRay3D &ray);
     bool updateRaycastingAt(Position &position, int
         squareSize, float &finalDistance, Position &finalPosition, QRay3D& ray);
+    QList<QStandardItem *> getAllCommandsList() const;
     void initializeGL(QOpenGLShaderProgram* programStatic,
                       QOpenGLShaderProgram *programFace);
     void updateGL();

@@ -60,6 +60,10 @@ QString EventCommand::valueCommandAt(int index) const {
     return m_listCommand.at(index);
 }
 
+QVector<QString> EventCommand::commands() {
+    return m_listCommand;
+}
+
 void EventCommand::setCommands(QVector<QString>& commands) {
     m_listCommand = commands;
 }

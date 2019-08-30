@@ -46,6 +46,7 @@ public:
     void setKind(EventCommandKind k);
     int commandsCount() const;
     QString valueCommandAt(int index) const;
+    QVector<QString> commands();
     void setCommands(QVector<QString> &commands);
 
     static QString kindToString(EventCommandKind kind);

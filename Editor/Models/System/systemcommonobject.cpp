@@ -274,6 +274,8 @@ void SystemCommonObject::setDefaultStartupObject() {
     SuperListItem *super;
     SystemEvent *eventTime;
 
+    m_inheritanceId = -1;
+
     // Properties
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
@@ -388,6 +390,34 @@ SystemState * SystemCommonObject::getFirstState() const {
     }
 
     return nullptr;
+}
+
+// -------------------------------------------------------
+
+QList<QStandardItem *> SystemCommonObject::getAllCommandsList() const {
+    QList<QStandardItem *> list;
+    SystemObjectEvent *event;
+    SystemState *state;
+    int i, j, l, ll;
+
+    for (i = 0, l = m_events->invisibleRootItem()->rowCount(); i < l; i++) {
+        event = reinterpret_cast<SystemObjectEvent *>(m_events->item(i)->data()
+            .value<quintptr>());
+        if (event != nullptr) {
+            for (j = 0, ll = m_states->invisibleRootItem()->rowCount(); j < ll;
+                 j++)
+            {
+                state = reinterpret_cast<SystemState *>(m_states->item(j)
+                    ->data().value<quintptr>());
+                if (state != nullptr) {
+                    list << event->reactionAt(state->id())->modelCommands()
+                        ->invisibleRootItem();
+                }
+            }
+        }
+    }
+
+    return list;
 }
 
 // -------------------------------------------------------
