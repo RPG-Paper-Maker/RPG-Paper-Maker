@@ -588,14 +588,13 @@ void WidgetMapEditor::wheelEvent(QWheelEvent *event) {
 // -------------------------------------------------------
 
 void WidgetMapEditor::enterEvent(QEvent *) {
-    this->setFocus();
     updateCursor();
+    this->setFocus();
 }
 
 // -------------------------------------------------------
 
 void WidgetMapEditor::leaveEvent(QEvent *) {
-    this->clearFocus();
     setCursor(Qt::ArrowCursor);
 }
 
