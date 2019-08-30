@@ -34,7 +34,7 @@ ScriptsDatas::~ScriptsDatas()
 }
 
 void ScriptsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_SCRIPTS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SCRIPTS), *this);
 }
 
 QStandardItemModel* ScriptsDatas::modelSystem() const { return m_modelSystem; }

@@ -172,6 +172,8 @@ public:
     Translations * translations() const;
     void setProject(Project *p);
 
+    static void writeJSON(QString path, const Serializable &obj);
+    static void readJSON(QString path, Serializable &obj);
     static float coefSquareSize();
     static float coefReverseSquareSize();
     static int getPortionsRay();

@@ -32,7 +32,7 @@ ItemsDatas::~ItemsDatas()
 }
 
 void ItemsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_ITEMS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_ITEMS), *this);
 }
 
 QStandardItemModel* ItemsDatas::model() const { return m_model; }

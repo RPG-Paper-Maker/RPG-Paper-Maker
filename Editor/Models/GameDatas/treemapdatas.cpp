@@ -34,7 +34,7 @@ TreeMapDatas::~TreeMapDatas()
 }
 
 void TreeMapDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_TREE_MAP), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TREE_MAP), *this);
 }
 
 QStandardItemModel* TreeMapDatas::model() const { return m_model; }

@@ -53,7 +53,7 @@ void Map::writeDefaultMap(QString path){
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;
     mapPortion.addObject(position, o, previous, previousType);
-    Common::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
+    RPM::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
         mapPortion);
 }
 
@@ -67,7 +67,7 @@ int Map::writeDefaultBattleMap(QString path) {
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
     mapPortion.fillWithFloor(&properties);
-    Common::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
+    RPM::writeJSON(Common::pathCombine(pathMap, getPortionPathMap(0, 0, 0)),
         mapPortion);
 
     return properties.id();
@@ -84,7 +84,7 @@ QString Map::writeMap(QString path, MapProperties& properties,
     QString dirMap = Common::pathCombine(dirMaps, mapName);
 
     // Properties
-    Common::writeJSON(Common::pathCombine(dirMap, RPM::FILE_MAP_INFOS),
+    RPM::writeJSON(Common::pathCombine(dirMap, RPM::FILE_MAP_INFOS),
                      properties);
 
     // Portions
@@ -299,7 +299,7 @@ void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
     Portion portion(i, j, k);
     QString pathPortion = Common::pathCombine(path, getPortionPathMap(i, j, k));
     MapPortion mapPortion(portion);
-    Common::readJSON(pathPortion, mapPortion);
+    RPM::readJSON(pathPortion, mapPortion);
 
     // Removing cut content
     mapPortion.removeLandOut(properties);
@@ -308,7 +308,7 @@ void Map::deleteMapElements(QList<int>& listDeletedObjectsIDs, QString path,
     mapPortion.removeMountainsOut(properties);
     mapPortion.removeObjectsOut(listDeletedObjectsIDs, properties);
 
-    Common::writeJSON(pathPortion, mapPortion);
+    RPM::writeJSON(pathPortion, mapPortion);
 }
 
 // -------------------------------------------------------

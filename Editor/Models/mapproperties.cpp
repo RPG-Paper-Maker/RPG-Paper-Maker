@@ -42,7 +42,7 @@ MapProperties::MapProperties() :
 }
 
 MapProperties::MapProperties(QString path) {
-    Common::readJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
 MapProperties::MapProperties(int i, LangsTranslation* names, int l, int w, int h
@@ -353,7 +353,7 @@ void MapProperties::save(QString path, bool temp) {
     if (temp) {
         path = Common::pathCombine(path, RPM::FOLDER_TEMP_MAP);
     }
-    Common::writeJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
+    RPM::writeJSON(Common::pathCombine(path, RPM::FILE_MAP_INFOS), *this);
 }
 
 // -------------------------------------------------------

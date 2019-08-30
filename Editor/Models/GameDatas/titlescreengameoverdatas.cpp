@@ -83,7 +83,7 @@ QStandardItemModel * TitleScreenGameOverDatas::modelTitleSettings() const {
 // -------------------------------------------------------
 
 void TitleScreenGameOverDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
         *this);
 }
 

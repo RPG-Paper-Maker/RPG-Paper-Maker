@@ -31,7 +31,7 @@ ArmorsDatas::~ArmorsDatas()
 }
 
 void ArmorsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_ARMORS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_ARMORS), *this);
 }
 
 QStandardItemModel* ArmorsDatas::model() const { return m_model; }

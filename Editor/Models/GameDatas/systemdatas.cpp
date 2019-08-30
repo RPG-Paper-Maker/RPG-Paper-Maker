@@ -76,7 +76,7 @@ SystemDatas::~SystemDatas() {
 }
 
 void SystemDatas::read(QString path) {
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_SYSTEM), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SYSTEM), *this);
 }
 
 LangsTranslation * SystemDatas::projectName() const {

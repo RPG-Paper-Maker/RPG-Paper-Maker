@@ -23,6 +23,11 @@
             },
             {
                 "files": [
+                ],
+                "target": "Engine/Content/BR/Content/Videos"
+            },
+            {
+                "files": [
                     {
                         "files": [
                             {
@@ -449,11 +454,6 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/TitleScreen/logo.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/logo.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
                                         "source": "Content/Pictures/HUD/TitleScreen/background.png",
                                         "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/background.png"
                                     }
@@ -590,6 +590,26 @@
                     }
                 ],
                 "target": "Engine/Content/basic"
+            },
+            {
+                "files": [
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/languages.json",
+                        "target": "Engine/Content/translations/languages.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-fr.json",
+                        "target": "Engine/Content/translations/translations-fr.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-eng.json",
+                        "target": "Engine/Content/translations/translations-eng.json"
+                    }
+                ],
+                "target": "Engine/Content/translations"
             }
         ],
         "target": "Engine/Content/"
@@ -12937,6 +12957,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-detection.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-detection.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/scene-menu-skills.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-menu-skills.js"
             },
@@ -13062,6 +13087,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/scene-title-settings.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-title-settings.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/datas-skills.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-skills.js"
             },
@@ -13109,6 +13139,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/scene-menu-equip.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-menu-equip.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/datas-videos.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-videos.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13172,6 +13207,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-property.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-property.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-troop.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-troop.js"
             },
@@ -13202,6 +13242,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/settings.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/settings.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/graphic-player.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/graphic-player.js"
             },
@@ -13212,6 +13257,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-camera-properties.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-camera-properties.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/datas-classes.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-classes.js"
             },
@@ -13219,6 +13269,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/camera.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/camera.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-title-command.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-title-command.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13382,8 +13437,23 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-mountain.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-mountain.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-tileset.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-tileset.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-video.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-video.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/scene-keyboard-assign.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/scene-keyboard-assign.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13439,6 +13509,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-value.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-value.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/graphic-keyboard.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/graphic-keyboard.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -13539,6 +13614,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/system-class.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-class.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/graphic-setting.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/graphic-setting.js"
             },
             {
                 "repo": "Game-Scripts",

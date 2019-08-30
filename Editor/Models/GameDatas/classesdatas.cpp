@@ -33,7 +33,7 @@ ClassesDatas::~ClassesDatas()
 }
 
 void ClassesDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_CLASSES), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_CLASSES), *this);
 }
 
 QStandardItemModel* ClassesDatas::model() const { return m_model; }

@@ -179,7 +179,7 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
             copyTag->setId(newId);
             QString newPathMap = Common::pathCombine(pathMaps, newMapName);
             Common::copyPath(pathMap, newPathMap);
-            Common::writeJSON(Common::pathCombine(newPathMap,
+            RPM::writeJSON(Common::pathCombine(newPathMap,
                                                 RPM::FILE_MAP_INFOS),
                              properties);
         }

@@ -36,7 +36,7 @@ PicturesDatas::~PicturesDatas()
 }
 
 void PicturesDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_PICTURES_DATAS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_PICTURES_DATAS), *this);
 }
 
 QStandardItemModel* PicturesDatas::model(PictureKind kind) const {

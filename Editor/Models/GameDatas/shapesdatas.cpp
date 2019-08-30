@@ -33,7 +33,7 @@ ShapesDatas::~ShapesDatas() {
 }
 
 void ShapesDatas::read(QString path) {
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_SHAPES_DATAS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SHAPES_DATAS), *this);
 }
 
 QStandardItemModel * ShapesDatas::model(CustomShapeKind kind) const {

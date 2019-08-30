@@ -267,6 +267,6 @@ void ControlExport::copyBRPictures(QString path) {
 
     // Copy the new picutres datas without BR
     QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
-    Common::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
+    RPM::writeJSON(Common::pathCombine(pathDatas, "pictures.json"),
         newPicturesDatas);
 }

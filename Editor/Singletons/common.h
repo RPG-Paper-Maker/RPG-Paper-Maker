@@ -16,7 +16,6 @@
 #include <QRectF>
 #include <QKeySequence>
 #include <QKeyEvent>
-#include "serializable.h"
 
 // -------------------------------------------------------
 //
@@ -29,8 +28,8 @@
 class Common
 {
 public:
-    static void writeJSON(QString path, const Serializable &obj);
-    static void readJSON(QString path, Serializable &obj);
+    static int versionDifferent(QString projectVersion, QString otherVersion);
+    static bool getSubVersions(QString &version, int &m, int &f, int &b);
     static void writeRect(QJsonArray &json, const QRect &rect);
     static void readRect(QJsonArray &json, QRect &rect);
     static void writeRectF(QJsonArray &json, const QRectF &rect);

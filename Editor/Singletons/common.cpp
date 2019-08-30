@@ -11,20 +11,65 @@
 
 #include <QDirIterator>
 #include <QtMath>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "common.h"
 
-void Common::writeJSON(QString path, const Serializable &obj) {
-    QJsonObject gameObject;
-    obj.write(gameObject);
-    Common::writeOtherJSON(path, gameObject);
+// -------------------------------------------------------
+
+int Common::versionDifferent(QString projectVersion, QString otherVersion)
+{
+    int mProject, fProject, bProject, mEngine, fEngine, bEngine;
+    bool ok = getSubVersions(projectVersion, mProject, fProject, bProject);
+    bool ok2 = getSubVersions(otherVersion, mEngine, fEngine, bEngine);
+
+    // Error while trying to convert one of the versions version
+    if (!ok || !ok2)
+        return -2;
+
+    // If project <, return -1, if =, return 0, if > return 1
+    if (mProject < mEngine)
+        return -1;
+    else if (mProject > mEngine)
+        return 1;
+    else {
+        if (fProject < fEngine)
+            return -1;
+        else if (fProject > fEngine)
+            return 1;
+        else {
+            if (bProject < bEngine)
+                return -1;
+            else if (bProject > bEngine)
+                return 1;
+            else
+                return 0;
+        }
+    }
 }
 
 // -------------------------------------------------------
 
-void Common::readJSON(QString path, Serializable &obj) {
-    QJsonDocument loadDoc;
-    Common::readOtherJSON(path, loadDoc);
-    obj.read(loadDoc.object());
+bool Common::getSubVersions(QString& version, int& m, int& f, int& b) {
+    QStringList list = version.split(".");
+    if (list.size() != 3)
+        return false;
+    bool ok;
+    int integer;
+    integer = list.at(0).toInt(&ok);
+    if (!ok)
+        return false;
+    m = integer;
+    integer = list.at(1).toInt(&ok);
+    if (!ok)
+        return false;
+    f = integer;
+    integer = list.at(2).toInt(&ok);
+    if (!ok)
+        return false;
+    b = integer;
+
+    return true;
 }
 
 // -------------------------------------------------------

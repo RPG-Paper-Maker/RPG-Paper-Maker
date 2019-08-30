@@ -32,7 +32,7 @@ VideosDatas::~VideosDatas() {
 }
 
 void VideosDatas::read(QString path) {
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_VIDEOS_DATAS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_VIDEOS_DATAS), *this);
 }
 
 QStandardItemModel * VideosDatas::model() const {

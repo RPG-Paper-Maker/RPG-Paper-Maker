@@ -32,7 +32,7 @@ StatusDatas::~StatusDatas()
 }
 
 void StatusDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_STATUS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_STATUS), *this);
 }
 
 QStandardItemModel* StatusDatas::model() const {

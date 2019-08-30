@@ -122,61 +122,6 @@ QStandardItemModel * Project::currentObjectProperties() const {
         ->modelProperties();
 }
 
-bool Project::getSubVersions(QString& version, int& m, int& f, int& b) {
-    QStringList list = version.split(".");
-    if (list.size() != 3)
-        return false;
-    bool ok;
-    int integer;
-    integer = list.at(0).toInt(&ok);
-    if (!ok)
-        return false;
-    m = integer;
-    integer = list.at(1).toInt(&ok);
-    if (!ok)
-        return false;
-    f = integer;
-    integer = list.at(2).toInt(&ok);
-    if (!ok)
-        return false;
-    b = integer;
-
-    return true;
-}
-
-// -------------------------------------------------------
-
-int Project::versionDifferent(QString projectVersion, QString otherVersion)
-{
-    int mProject, fProject, bProject, mEngine, fEngine, bEngine;
-    bool ok = getSubVersions(projectVersion, mProject, fProject, bProject);
-    bool ok2 = getSubVersions(otherVersion, mEngine, fEngine, bEngine);
-
-    // Error while trying to convert one of the versions version
-    if (!ok || !ok2)
-        return -2;
-
-    // If project <, return -1, if =, return 0, if > return 1
-    if (mProject < mEngine)
-        return -1;
-    else if (mProject > mEngine)
-        return 1;
-    else {
-        if (fProject < fEngine)
-            return -1;
-        else if (fProject > fEngine)
-            return 1;
-        else {
-            if (bProject < bEngine)
-                return -1;
-            else if (bProject > bEngine)
-                return 1;
-            else
-                return 0;
-        }
-    }
-}
-
 void Project::setDefault(){
     m_langsDatas->setDefault();
     m_keyBoardDatas->setDefaultGame();
@@ -247,7 +192,7 @@ bool Project::readVersion(){
                           + " your current RPG Paper Maker version is " +
                           Project::ENGINE_VERSION;
 
-    int dBefore = Project::versionDifferent(m_version, "0.3.0");
+    int dBefore = Common::versionDifferent(m_version, "0.3.0");
 
     // If impossible to convert the version
     if (dBefore == -2) {
@@ -265,7 +210,7 @@ bool Project::readVersion(){
         return false;
     }
 
-    int d = Project::versionDifferent(m_version, Project::ENGINE_VERSION);
+    int d = Common::versionDifferent(m_version, Project::ENGINE_VERSION);
 
     // If the project if superior to the engine
     if (d == 1) {
@@ -525,63 +470,63 @@ void Project::writeGameDatas(){
 // -------------------------------------------------------
 
 void Project::writeLangsDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         RPM::PATH_LANGS), *m_langsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeTreeMapDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         RPM::PATH_TREE_MAP), *m_treeMapDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeScriptsDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         RPM::PATH_SCRIPTS), *m_scriptsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeKeyBoardDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         RPM::PATH_KEYBOARD), *m_keyBoardDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
         ::PATH_PICTURES_DATAS), *m_picturesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeVideosDatas() {
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
         ::PATH_VIDEOS_DATAS), *m_videosDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSongsDatas() {
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
         ::PATH_SONGS_DATAS), *m_songsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeShapesDatas() {
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
         ::PATH_SHAPES_DATAS), *m_shapesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSpecialsDatas() {
-    Common::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
                                         RPM::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
 }

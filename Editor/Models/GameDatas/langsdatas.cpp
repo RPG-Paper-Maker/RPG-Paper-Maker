@@ -30,7 +30,7 @@ LangsDatas::~LangsDatas()
 }
 
 void LangsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_LANGS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_LANGS), *this);
 }
 
 QStandardItemModel* LangsDatas::model() const { return m_model; }

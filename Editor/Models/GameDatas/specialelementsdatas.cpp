@@ -50,8 +50,7 @@ SpecialElementsDatas::~SpecialElementsDatas()
 }
 
 void SpecialElementsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_SPECIAL_ELEMENTS),
-                    *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_SPECIAL_ELEMENTS), *this);
 }
 
 QStandardItemModel* SpecialElementsDatas::model(PictureKind kind) const {

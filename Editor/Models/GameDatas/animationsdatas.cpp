@@ -32,7 +32,7 @@ AnimationsDatas::~AnimationsDatas()
 }
 
 void AnimationsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS), *this);
 }
 
 QStandardItemModel* AnimationsDatas::model() const {

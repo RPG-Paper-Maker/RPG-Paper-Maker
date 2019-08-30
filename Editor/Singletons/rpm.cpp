@@ -282,6 +282,22 @@ void RPM::setProject(Project *p) {
 //
 // -------------------------------------------------------
 
+void RPM::writeJSON(QString path, const Serializable &obj) {
+    QJsonObject gameObject;
+    obj.write(gameObject);
+    Common::writeOtherJSON(path, gameObject);
+}
+
+// -------------------------------------------------------
+
+void RPM::readJSON(QString path, Serializable &obj) {
+    QJsonDocument loadDoc;
+    Common::readOtherJSON(path, loadDoc);
+    obj.read(loadDoc.object());
+}
+
+// -------------------------------------------------------
+
 float RPM::coefSquareSize() {
     return RPM::get()->getSquareSize() / (static_cast<float>(RPM
         ::BASIC_SQUARE_SIZE));

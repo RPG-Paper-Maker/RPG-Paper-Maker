@@ -33,7 +33,7 @@ MonstersDatas::~MonstersDatas()
 }
 
 void MonstersDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_MONSTERS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_MONSTERS), *this);
 }
 
 QStandardItemModel* MonstersDatas::model() const { return m_model; }

@@ -63,9 +63,6 @@ public:
 
     QStandardItemModel * currentObjectProperties() const;
 
-    static bool getSubVersions(QString &version, int &m, int &f, int &b);
-    static int versionDifferent(QString projectVersion, QString otherVersion);
-
     bool read(QString path);
     void readAll();
     bool readVersion();

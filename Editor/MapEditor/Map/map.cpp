@@ -323,7 +323,7 @@ void Map::savePortionMap(MapPortion* mapPortion){
         Common::writeOtherJSON(path, obj);
     }
     else
-        Common::writeJSON(path, *mapPortion);
+        RPM::writeJSON(path, *mapPortion);
 }
 
 // -------------------------------------------------------
@@ -363,7 +363,7 @@ void Map::loadPortion(int realX, int realY, int realZ, int x, int y, int z,
 void Map::loadPortionThread(MapPortion* mapPortion, QString &path)
 {
     if (m_detection == nullptr) {
-        Common::readJSON(path, *mapPortion);
+        RPM::readJSON(path, *mapPortion);
     } else {
         Portion portion;
         mapPortion->getGlobalPortion(portion);

@@ -159,14 +159,14 @@ QString EngineSettings::getThemeContent() const {
 // -------------------------------------------------------
 
 void EngineSettings::read() {
-    Common::readJSON(Common::pathCombine(QDir::currentPath(), RPM
+    RPM::readJSON(Common::pathCombine(QDir::currentPath(), RPM
         ::PATH_ENGINE_SETTINGS), *this);
 }
 
 // -------------------------------------------------------
 
 void EngineSettings::write() {
-    Common::writeJSON(Common::pathCombine(QDir::currentPath(), RPM
+    RPM::writeJSON(Common::pathCombine(QDir::currentPath(), RPM
         ::PATH_ENGINE_SETTINGS), *this);
 }
 

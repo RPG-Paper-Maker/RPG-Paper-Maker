@@ -293,7 +293,7 @@ void GameDatas::readCommonEvents(QString path) {
 
 void GameDatas::write(QString path){
     writeCommonEvents(path);
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_VARIABLES),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_VARIABLES),
                      *m_variablesDatas);
     writeSystem(path);
     writeBattleSystem(path);
@@ -314,96 +314,96 @@ void GameDatas::write(QString path){
 // -------------------------------------------------------
 
 void GameDatas::writeTilesets(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_TILESETS_DATAS),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TILESETS_DATAS),
         *m_tilesetsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSystem(QString path){
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_SYSTEM),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_SYSTEM),
         *m_systemDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeBattleSystem(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_BATTLE_SYSTEM),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_BATTLE_SYSTEM),
         *m_battleSystemDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeItems(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_ITEMS), *m_itemsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_ITEMS), *m_itemsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeSkills(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_SKILLS), *m_skillsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_SKILLS), *m_skillsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeWeapons(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_WEAPONS), *m_weaponsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_WEAPONS), *m_weaponsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeArmors(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_ARMORS), *m_armorsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_ARMORS), *m_armorsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeHeroes(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_HEROES), *m_heroesDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_HEROES), *m_heroesDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeMonsters(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_MONSTERS), *m_monstersDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_MONSTERS), *m_monstersDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeTroops(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_TROOPS), *m_troopsDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TROOPS), *m_troopsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeClasses(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_CLASSES), *m_classesDatas);
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_CLASSES), *m_classesDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeAnimations(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_ANIMATIONS),
         *m_animationsDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeStatus(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_STATUS),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_STATUS),
         *m_statusDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeTitleScreenGameOver(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_TITLE_SCREEN_GAME_OVER),
         *m_titleScreenGameOverDatas);
 }
 
 // -------------------------------------------------------
 
 void GameDatas::writeCommonEvents(QString path) {
-    Common::writeJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS),
+    RPM::writeJSON(Common::pathCombine(path, RPM::PATH_COMMON_EVENTS),
         *m_commonEventsDatas);
 }

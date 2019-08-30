@@ -32,7 +32,7 @@ WeaponsDatas::~WeaponsDatas()
 }
 
 void WeaponsDatas::read(QString path){
-    Common::readJSON(Common::pathCombine(path, RPM::PATH_WEAPONS), *this);
+    RPM::readJSON(Common::pathCombine(path, RPM::PATH_WEAPONS), *this);
 }
 
 QStandardItemModel* WeaponsDatas::model() const { return m_model; }

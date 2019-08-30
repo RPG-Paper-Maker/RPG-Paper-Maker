@@ -235,7 +235,7 @@ void ProjectUpdater::check() {
     int index = incompatibleVersionsCount;
 
     for (int i = 0; i < incompatibleVersionsCount; i++) {
-        if (Project::versionDifferent(incompatibleVersions[i],
+        if (Common::versionDifferent(incompatibleVersions[i],
                                      m_project->version()) == 1)
         {
             index = i;
@@ -353,7 +353,7 @@ void ProjectUpdater::updateVersion_0_4_0() {
     // Adding a default special elements datas to the project
     SpecialElementsDatas specialElementsDatas;
     specialElementsDatas.setDefault();
-    Common::writeJSON(Common::pathCombine(
+    RPM::writeJSON(Common::pathCombine(
                          m_project->pathCurrentProject(),
                          RPM::PATH_SPECIAL_ELEMENTS), specialElementsDatas);
 
