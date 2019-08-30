@@ -300,12 +300,13 @@ void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
         if (position.angleZ() != 0.0) {
             SpriteDatas::rotateVertexX(vec, center, position.angleZ(), 0, 0, 1);
         }
-        vertices.append(Vertex(vec + pos, QVector2D(textures[static_cast<int>(tex.x())
-            ], textures[static_cast<int>(tex.y())])));
+        vertices.append(Vertex(vec + pos, QVector2D(textures[static_cast<int>(
+            tex.x())], textures[static_cast<int>(tex.y())])));
     }
 
     // Create box for intersection tests
-    m_box = QBox3D(vertices.at(20).position(), vertices.at(17).position());
+    m_box = QBox3D(vertices.at(static_cast<int>(count) + 20).position(),
+        vertices.at(static_cast<int>(count) + 17).position());
 
     // Indexes
     for (i = 0; i < NB_INDEXES; i++) {
