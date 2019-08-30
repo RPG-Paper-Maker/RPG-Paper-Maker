@@ -174,4 +174,5 @@ void PanelSubTransformation::on_pushButtonDefineDefault_clicked() {
 void PanelSubTransformation::on_pushButtonResetDefault_clicked() {
     ui->doubleSpinBoxAngle->setValue(RPM::get()->engineSettings()->rotationAngle
         (m_axisKind));
+    this->updatePositionAuto();
 }
