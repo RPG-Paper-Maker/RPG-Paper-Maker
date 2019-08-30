@@ -747,6 +747,11 @@
                             }
                         ],
                         "target": "Engine/libraries/QtMultimedia"
+                    },
+                    {
+                        "repo": "Dependencies",
+                        "source": "Engine/linux/libraries/libQt5OpenGL.so.5",
+                        "target": "Engine/libraries/libQt5OpenGL.so.5"
                     }
                 ],
                 "target": "Engine/libraries"

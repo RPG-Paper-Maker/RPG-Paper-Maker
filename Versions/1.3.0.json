@@ -8,6 +8,12 @@
 		},
 		{
 			"repo": "Dependencies",
+			"source": "Engine/linux/libraries/libQt5OpenGL.so.5",
+			"target": "Engine/libraries/libQt5OpenGL.so.5",
+			"os": ["l"]
+		}
+		{
+			"repo": "Dependencies",
 			"source": "Engine/win32/Qt5MultimediaWidgets.dll",
 			"target": "Engine/Qt5MultimediaWidgets.dll",
 			"os": ["w"]
@@ -16,6 +22,26 @@
 			"repo": "Dependencies",
 			"source": "Game/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc",
 			"target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc"
+		},
+		{
+			"files": [
+				{
+				    "repo": "RPG-Paper-Maker",
+				    "source": "EditorApp/Content/translations/languages.json",
+				    "target": "Engine/Content/translations/languages.json"
+				},
+				{
+				    "repo": "RPG-Paper-Maker",
+				    "source": "EditorApp/Content/translations/translations-fr.json",
+				    "target": "Engine/Content/translations/translations-fr.json"
+				},
+				{
+				    "repo": "RPG-Paper-Maker",
+				    "source": "EditorApp/Content/translations/translations-eng.json",
+				    "target": "Engine/Content/translations/translations-eng.json"
+				}
+			],
+			"target": "Engine/Content/translations"
 		}
 	],
 	"remove": [
