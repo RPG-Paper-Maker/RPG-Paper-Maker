@@ -20,6 +20,12 @@
 		},
 		{
 			"repo": "Dependencies",
+			"source": "Engine/win32/Qt5OpenGL.dll",
+			"target": "Engine/Qt5OpenGL.dll",
+			"os": ["w"]
+		},
+		{
+			"repo": "Dependencies",
 			"source": "Game/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc",
 			"target": "Engine/Content/osx/Game.app/Contents/Resources/qml/QtMultimedia/Video.qmlc"
 		},

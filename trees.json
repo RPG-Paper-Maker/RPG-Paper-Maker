@@ -1475,6 +1475,11 @@
                 "target": "Engine/Qt5Network.dll"
             },
             {
+                "repo": "Dependencies",
+                "source": "Engine/win32/Qt5OpenGL.dll",
+                "target": "Engine/Qt5OpenGL.dll"
+            },
+            {
                 "files": [
                     {
                         "repo": "Dependencies",
