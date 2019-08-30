@@ -140,7 +140,7 @@ public:
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);
     int getLastLayerAt(Position& position, MapEditorSelectionKind kind) const;
-    MapElement *updateElementPosition(Position &newPosition, Position &previousPosition,
+    MapElement * updateElementPosition(Position &previousPosition,
         MapEditorSelectionKind kind);
 
     void initializeVertices(int squareSize, QOpenGLTexture* tileset, QList<

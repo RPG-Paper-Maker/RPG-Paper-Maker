@@ -534,13 +534,14 @@ const
 
 // -------------------------------------------------------
 
-MapElement * MapPortion::updateElementPosition(Position &newPosition, Position
-    &previousPosition, MapEditorSelectionKind kind)
+MapElement * MapPortion::updateElementPosition(Position &previousPosition,
+    MapEditorSelectionKind kind)
 {
     switch (kind) {
     case MapEditorSelectionKind::Sprites:
-        return m_sprites->updateSpritePosition(newPosition, previousPosition);
-        break;
+        return m_sprites->spriteAt(previousPosition);
+    case MapEditorSelectionKind::Objects3D:
+        return m_objects3D->object3DAt(previousPosition);
     default:
         return nullptr;
     }

@@ -30,6 +30,8 @@ public:
     Object3DCustomDatas(SystemObject3D *datas);
     virtual ~Object3DCustomDatas();
 
+    void rotateVertex(QVector3D& vec, Position &position, QVector3D& center);
+
     virtual qreal xMin() const;
     virtual qreal yMin() const;
     virtual qreal zMin() const;

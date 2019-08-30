@@ -63,6 +63,7 @@ public:
     SpriteDatas();
     SpriteDatas(MapEditorSubSelectionKind kind, QRect* textureRect,
                 bool front = true);
+    SpriteDatas(const SpriteDatas &sprite);
     virtual ~SpriteDatas();
     bool operator==(const SpriteDatas& other) const;
     bool operator!=(const SpriteDatas& other) const;

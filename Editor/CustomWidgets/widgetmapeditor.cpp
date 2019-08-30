@@ -690,8 +690,7 @@ void WidgetMapEditor::mousePressEvent(QMouseEvent *event) {
                 if (drawKind == DrawKind::Rotate) {
                     Position *position;
 
-                    position = m_control.positionOnElement(selection,
-                        subSelection, drawKind);
+                    position = m_control.positionOnElement(selection, drawKind);
                     emit selectPositionTransformation(position, button == Qt
                         ::MouseButton::LeftButton);
                 }
@@ -755,13 +754,11 @@ void WidgetMapEditor::mouseDoubleClickEvent(QMouseEvent *event) {
             Qt::MouseButton button = event->button();
             DrawKind drawKind = m_menuBar->drawKind();
             MapEditorSelectionKind selection = m_menuBar->selectionKind();
-            MapEditorSubSelectionKind subSelection = m_menuBar->subSelectionKind();
             if (button != Qt::MouseButton::MiddleButton) {
                 if (drawKind == DrawKind::Rotate) {
                     Position *position;
 
-                    position = m_control.positionOnElement(selection,
-                        subSelection, drawKind);
+                    position = m_control.positionOnElement(selection, drawKind);
                     emit selectPositionTransformation(position, button == Qt
                         ::MouseButton::LeftButton);
                 }

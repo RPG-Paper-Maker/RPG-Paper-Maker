@@ -40,6 +40,26 @@ Object3DCustomDatas::~Object3DCustomDatas()
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void Object3DCustomDatas::rotateVertex(QVector3D& vec, Position &position,
+    QVector3D& center)
+{
+    if (position.angleY() != 0.0) {
+        SpriteDatas::rotateVertexX(vec, center, position.angleY(), 0, 1, 0);
+    }
+    if (position.angleX() != 0.0) {
+        SpriteDatas::rotateVertexX(vec, center, position.angleX(), 1, 0, 0);
+    }
+    if (position.angleZ() != 0.0) {
+        SpriteDatas::rotateVertexX(vec, center, position.angleZ(), 0, 0, 1);
+    }
+}
+
+// -------------------------------------------------------
+//
 //  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
@@ -162,7 +182,7 @@ int Object3DCustomDatas::minDistanceFromCenter() const {
 void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
     QVector<GLuint> &indexes, Position &position, unsigned int &count)
 {
-    QVector3D positionOffset, size;
+    QVector3D positionOffset, size, center, vec, vecA, vecB;
     SystemCustomShape *shape;
     QPair<int, int> index;
     int i, l, squareSize;
@@ -177,16 +197,23 @@ void Object3DCustomDatas::initializeVertices(QVector<Vertex> &vertices,
     positionOffset.setX(position.x() * squareSize);
     positionOffset.setY(position.getY(squareSize));
     positionOffset.setZ(position.z() * squareSize);
+    m_box = QBox3D(shape->minVertex() * size + positionOffset, shape
+        ->maxVertex() * size + positionOffset);
+    this->getCenter(center);
     for (i = 0, l = shape->facesCount(); i < l; i++) {
         index = shape->getFace(i);
-        vertices.append(Vertex(shape->getVertexAt(index.first) * size +
-            positionOffset, shape->getTextureAt(index.second)));
+        vec = shape->getVertexAt(index.first) * size + positionOffset;
+        this->rotateVertex(vec, position, center);
+        vertices.append(Vertex(vec, shape->getTextureAt(index.second)));
         indexes.append(count++);
     }
 
     // Create collision box according to vertex positions
-    m_box = QBox3D(shape->minVertex() * size + positionOffset, shape
-        ->maxVertex() * size + positionOffset);
+    vecA = shape->minVertex() * size + positionOffset;
+    vecB = shape->maxVertex() * size + positionOffset;
+    this->rotateVertex(vecA, position, center);
+    this->rotateVertex(vecB, position, center);
+    m_box = QBox3D(vecA, vecB);
 }
 
 // -------------------------------------------------------

@@ -603,22 +603,6 @@ void Sprites::updateRemoveLayer(QSet<Portion> portionsOverflow,
 }
 
 // -------------------------------------------------------
-
-MapElement * Sprites::updateSpritePosition(Position &newPosition, Position
-    &previousPosition)
-{
-    SpriteDatas *sprite;
-
-    sprite = m_all.value(previousPosition);
-    if (sprite != nullptr) {
-        m_all.remove(previousPosition);
-        m_all.insert(newPosition, sprite);
-    }
-
-    return sprite;
-}
-
-// -------------------------------------------------------
 //
 //  GL
 //

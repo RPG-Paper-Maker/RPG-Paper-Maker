@@ -46,8 +46,7 @@ public:
     Cursor * cursorStart() const;
     Cursor * cursorDetection() const;
     Camera * camera() const;
-    Position * positionOnElement(MapEditorSelectionKind kind, MapEditorSubSelectionKind subKind, DrawKind dk)
-        const;
+    Position * positionOnElement(MapEditorSelectionKind kind, DrawKind dk) const;
     bool isCtrlPressed() const;
     void setIsCtrlPressed(bool b);
     bool isShiftPressed() const;
@@ -224,7 +223,8 @@ public:
     bool isVisible(Position3D &position);
     static void getMountainTopFloorPosition(Position& topPosition, Position& p, int
         heightSquares, double heightPixels);
-    void onTransformationPositionChanged(Position &newPosition, Position &previousPosition, MapEditorSelectionKind k);
+    void onTransformationPositionChanged(Position &newPosition, Position
+        &previousPosition, MapEditorSelectionKind k);
     void paintGL(QMatrix4x4 &modelviewProjection, QVector3D &cameraRightWorldSpace,
         QVector3D &cameraUpWorldSpace, QVector3D &cameraDeepWorldSpace,
         MapEditorSelectionKind selectionKind,

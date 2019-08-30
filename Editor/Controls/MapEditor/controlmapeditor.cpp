@@ -101,16 +101,16 @@ Camera * ControlMapEditor::camera() const {
 }
 
 Position *ControlMapEditor::positionOnElement(MapEditorSelectionKind kind,
-    MapEditorSubSelectionKind subKind, DrawKind dk) const
+    DrawKind dk) const
 {
     switch (kind) {
     case MapEditorSelectionKind::Land:
         return m_elementOnLand == nullptr ? nullptr : new Position(
             m_positionOnLand);
     case MapEditorSelectionKind::Sprites:
-        return m_elementOnSprite == nullptr && (dk != DrawKind::Rotate ||
-            subKind != MapEditorSubSelectionKind::SpritesWall) ? nullptr : new
-            Position(m_positionOnSprite);
+        return m_elementOnSprite == nullptr || (dk == DrawKind::Rotate &&
+            m_elementOnSprite->getSubKind() == MapEditorSubSelectionKind
+            ::SpritesWall) ? nullptr : new Position(m_positionOnSprite);
     case MapEditorSelectionKind::Mountains:
         return m_elementOnMountain == nullptr ? nullptr : new Position(
             m_positionOnMountain);
@@ -1429,18 +1429,22 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         MapElement *element;
         QJsonObject obj;
 
-        element = mapPortion->updateElementPosition(newPosition,
-            previousPosition, k);
-        setToNotSaved();
-        element->write(obj);
-        m_controlUndoRedo.updateJsonList(m_changes, obj, element->getSubKind(),
-            nullptr, MapEditorSubSelectionKind::None, previousPosition);
-        m_controlUndoRedo.updateJsonList(m_changes, obj,
-            MapEditorSubSelectionKind::None, element, element->getSubKind(),
-            newPosition);
-        m_portionsToUpdate += mapPortion;
-        m_portionsToSave += mapPortion;
-        m_needMapInfosToSave = true;
+        element = mapPortion->updateElementPosition(previousPosition, k);
+        if (k == MapEditorSelectionKind::Sprites) {
+            SpriteDatas *sprite;
+
+            sprite = new SpriteDatas(*reinterpret_cast<SpriteDatas *>(
+                element));
+            this->eraseSprite(previousPosition);
+            this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
+        } else {
+            Object3DDatas *object3D;
+
+            object3D = Object3DDatas::instanciate(reinterpret_cast<Object3DDatas
+                *>(element)->datas());
+            this->eraseObject3D(previousPosition);
+            this->stockObject3D(newPosition, object3D);
+        }
     }
 }
 

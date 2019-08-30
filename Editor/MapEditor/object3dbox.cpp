@@ -13,6 +13,7 @@
 #include "object3dbox.h"
 #include "rpm.h"
 #include "common.h"
+#include "sprite.h"
 
 QVector3D Object3DBoxDatas::VERTICES[24] {
 
@@ -153,9 +154,7 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     size.setZ(static_cast<float>(this->depthPixels()) - (2 * coef));
 
     // Center
-    center.setX(pos.x() + (size.x() / 2));
-    center.setY(pos.y());
-    center.setZ(pos.z() + (size.z() / 2));
+    this->getCenter(center);
 
     // Position
     pos.setX((position.x() * squareSize) + coef);
@@ -265,7 +264,7 @@ int Object3DBoxDatas::minDistanceFromCenter() const {
 void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
     QVector<GLuint> &indexes, Position &position, unsigned int &count)
 {
-    QVector3D pos, size, center;
+    QVector3D pos, size, center, vec;
     QVector2D tex;
     QList<float> textures;
     int i, w, h, d;
@@ -291,12 +290,22 @@ void Object3DBoxDatas::initializeVertices(QVector<Vertex> &vertices,
     // Vertices
     for (i = 0; i < NB_VERTICES; i++) {
         tex = TEXTURES[i];
-        vertices.append(Vertex(VERTICES[i] * size + pos, QVector2D(textures[
-            static_cast<int>(tex.x())], textures[static_cast<int>(tex.y())])));
+        vec = VERTICES[i] * size;
+        if (position.angleY() != 0.0) {
+            SpriteDatas::rotateVertexX(vec, center, position.angleY(), 0, 1, 0);
+        }
+        if (position.angleX() != 0.0) {
+            SpriteDatas::rotateVertexX(vec, center, position.angleX(), 1, 0, 0);
+        }
+        if (position.angleZ() != 0.0) {
+            SpriteDatas::rotateVertexX(vec, center, position.angleZ(), 0, 0, 1);
+        }
+        vertices.append(Vertex(vec + pos, QVector2D(textures[static_cast<int>(tex.x())
+            ], textures[static_cast<int>(tex.y())])));
     }
 
     // Create box for intersection tests
-    m_box = QBox3D(VERTICES[20] * size + pos, VERTICES[17] * size + pos);
+    m_box = QBox3D(vertices.at(20).position(), vertices.at(17).position());
 
     // Indexes
     for (i = 0; i < NB_INDEXES; i++) {

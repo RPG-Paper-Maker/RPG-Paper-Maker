@@ -211,6 +211,8 @@ void Position::setCurrent(Position& position) const {
     position.setCenterX(m_centerX);
     position.setCenterZ(m_centerZ);
     position.setAngleY(m_angleY);
+    position.setAngleX(m_angleX);
+    position.setAngleZ(m_angleZ);
 }
 
 // -------------------------------------------------------

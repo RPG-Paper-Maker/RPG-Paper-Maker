@@ -91,6 +91,14 @@ SpriteDatas::SpriteDatas(MapEditorSubSelectionKind kind, QRect *textureRect,
 
 }
 
+SpriteDatas::SpriteDatas(const SpriteDatas& sprite) :
+    m_kind(sprite.m_kind),
+    m_textureRect(new QRect(*sprite.m_textureRect)),
+    m_front(sprite.m_front)
+{
+
+}
+
 SpriteDatas::~SpriteDatas()
 {
     delete m_textureRect;
