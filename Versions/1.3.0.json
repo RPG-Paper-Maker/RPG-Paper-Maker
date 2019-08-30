@@ -11,7 +11,7 @@
 			"source": "Engine/linux/libraries/libQt5OpenGL.so.5",
 			"target": "Engine/libraries/libQt5OpenGL.so.5",
 			"os": ["l"]
-		}
+		},
 		{
 			"repo": "Dependencies",
 			"source": "Engine/win32/Qt5MultimediaWidgets.dll",
