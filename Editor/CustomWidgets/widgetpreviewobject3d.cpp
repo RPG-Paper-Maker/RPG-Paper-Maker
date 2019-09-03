@@ -22,6 +22,7 @@
 WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     QOpenGLWidget(parent),
     m_object(nullptr),
+    m_object3DShape(nullptr),
     m_objectsGL(nullptr),
     m_camera(new Camera),
     m_isInitialized(false),
@@ -35,6 +36,9 @@ WidgetPreviewObject3D::~WidgetPreviewObject3D() {
     this->clearObject();
     if (m_object != nullptr) {
         delete m_object;
+    }
+    if (m_object3DShape != nullptr) {
+        delete m_object3DShape;
     }
     delete m_camera;
     if (m_program != nullptr) {
@@ -61,13 +65,21 @@ void WidgetPreviewObject3D::clearObject() {
 // -------------------------------------------------------
 
 void WidgetPreviewObject3D::loadObject(SystemObject3D *object) {
-    Position position;
-    QImage image;
-
     if (m_object != nullptr) {
         delete m_object;
     }
     m_object = Object3DDatas::instanciate(object);
+}
+
+// -------------------------------------------------------
+
+void WidgetPreviewObject3D::loadShape(SystemCustomShape *shape) {
+    if (m_object3DShape != nullptr) {
+        delete m_object3DShape;
+    }
+
+    m_object3DShape = new SystemObject3D(-1, "", ShapeKind::Custom, shape->id());
+    this->loadObject(m_object3DShape);
 }
 
 // -------------------------------------------------------
@@ -156,16 +168,18 @@ void WidgetPreviewObject3D::paintGL() {
     QMatrix4x4 modelviewProjection = projectionMatrix * viewMatrix;
 
     // Paint
-    m_program->bind();
-    m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
-    if (m_texture != nullptr) {
-        m_texture->bind();
+    if (m_objectsGL != nullptr) {
+        m_program->bind();
+        m_program->setUniformValue(u_modelviewProjection, modelviewProjection);
+        if (m_texture != nullptr) {
+            m_texture->bind();
+        }
+        m_objectsGL->paintGL(0);
+        if (m_texture != nullptr) {
+            m_texture->release();
+        }
+        m_program->release();
     }
-    m_objectsGL->paintGL(0);
-    if (m_texture != nullptr) {
-        m_texture->release();
-    }
-    m_program->release();
 }
 
 // -------------------------------------------------------

@@ -129,12 +129,22 @@ void PanelShapes::showShapes(bool b) {
 // -------------------------------------------------------
 
 void PanelShapes::updateShapeItem(QStandardItem *item) {
-    if (item != nullptr && m_shape != nullptr) {
+    if (item != nullptr) {
+        ui->widgetPreviewObject3D->show();
         SystemCustomShape *super = reinterpret_cast<SystemCustomShape *>(item
             ->data().value<qintptr>());
-        m_shape->setId(super->id());
-        m_shape->setName(super->name());
-        super->loadCustomObj(m_shapeKind);
+        if (m_shape != nullptr) {
+            m_shape->setId(super->id());
+            m_shape->setName(super->name());
+        }
+        if (m_shapeKind == CustomShapeKind::OBJ) {
+            ui->widgetPreviewObject3D->show();
+            super->loadCustomObj(m_shapeKind);
+            ui->widgetPreviewObject3D->loadShape(super);
+            ui->widgetPreviewObject3D->updateObject();
+        }
+    } else {
+        ui->widgetPreviewObject3D->hide();
     }
 }
 

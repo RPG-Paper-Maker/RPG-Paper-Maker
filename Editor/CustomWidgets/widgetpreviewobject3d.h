@@ -34,11 +34,13 @@ public:
 
     void clearObject();
     void loadObject(SystemObject3D *object);
+    void loadShape(SystemCustomShape *shape);
     void updateObject();
 
 protected:
     Object3DDatas *m_object;
     Objects3DGL *m_objectsGL;
+    SystemObject3D *m_object3DShape;
     Camera *m_camera;
     bool m_isInitialized;
 

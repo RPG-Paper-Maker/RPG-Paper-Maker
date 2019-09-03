@@ -121,7 +121,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch=""/>
+        <widget class="WidgetPreviewObject3D" name="widgetPreviewObject3D" native="true"/>
        </item>
       </layout>
      </item>
@@ -140,6 +140,12 @@
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPreviewObject3D</class>
+   <extends>QWidget</extends>
+   <header>widgetpreviewobject3d.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
