@@ -225,6 +225,24 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
                                      modelviewProjection);
     m_programStatic->setUniformValue(u_hoveredStatic, false);
 
+    // Walls
+    QHash<int, QOpenGLTexture*>::iterator itWalls;
+    for (itWalls = m_texturesSpriteWalls.begin();
+         itWalls != m_texturesSpriteWalls.end(); itWalls++)
+    {
+        int textureID = itWalls.key();
+        QOpenGLTexture* texture = itWalls.value();
+        if (texture != nullptr) {
+            texture->bind();
+            for (int i = 0; i < totalSize; i++) {
+                mapPortion = this->mapPortionBrut(i);
+                if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                    mapPortion->paintSpritesWalls(textureID);
+            }
+            texture->release();
+        }
+    }
+
     // Sprites
     m_textureTileset->bind();
     for (int i = 0; i < totalSize; i++) {
@@ -248,24 +266,6 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
             mapPortion = this->mapPortionBrut(i);
             if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
                 mapPortion->paintObjectsStaticSprites(textureID, texture);
-        }
-    }
-
-    // Walls
-    QHash<int, QOpenGLTexture*>::iterator itWalls;
-    for (itWalls = m_texturesSpriteWalls.begin();
-         itWalls != m_texturesSpriteWalls.end(); itWalls++)
-    {
-        int textureID = itWalls.key();
-        QOpenGLTexture* texture = itWalls.value();
-        if (texture != nullptr) {
-            texture->bind();
-            for (int i = 0; i < totalSize; i++) {
-                mapPortion = this->mapPortionBrut(i);
-                if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-                    mapPortion->paintSpritesWalls(textureID);
-            }
-            texture->release();
         }
     }
 
