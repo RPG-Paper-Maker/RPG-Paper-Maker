@@ -23,6 +23,7 @@
 DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
                                                  SystemCommonObject *,
                                                  QStandardItemModel *parameters,
+                                                 bool idObjectFixed,
                                                  QWidget *parent) :
     DialogCommand(parent),
     ui(new Ui::DialogCommandMoveObject),
@@ -30,6 +31,12 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
 {
     ui->setupUi(this);
     
+    if (idObjectFixed) {
+        ui->labelObjectID->hide();
+        ui->widgetPrimitiveObjectID->hide();
+        ui->horizontalSpacer->changeSize(0, 0);
+    }
+
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);

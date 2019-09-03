@@ -35,6 +35,7 @@ public:
     explicit DialogCommandMoveObject(EventCommand *command = nullptr,
                                      SystemCommonObject *object = nullptr,
                                      QStandardItemModel* parameters = nullptr,
+                                     bool idObjectFixed = false,
                                      QWidget *parent = 0);
     virtual ~DialogCommandMoveObject();
     EventCommand* getCommand() const;
