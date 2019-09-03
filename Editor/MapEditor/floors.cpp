@@ -171,7 +171,7 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
                     break;
                 }
             }
-            if (j == ll || ll == 0) {
+            if (j == ll) {
                 layers.append(p);
             }
         } else {

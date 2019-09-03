@@ -155,6 +155,7 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
 
     if (m_distanceObject == 0.0f) {
         m_positionOnObject = m_positionOnLand;
+        m_positionOnObject.setLayer(0);
     }
 
     // Handle pre-selection for transformations
