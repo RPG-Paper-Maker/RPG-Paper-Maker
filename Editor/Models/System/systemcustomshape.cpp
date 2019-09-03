@@ -33,7 +33,8 @@ SystemCustomShape::SystemCustomShape() :
 
 SystemCustomShape::SystemCustomShape(int i, QString n, bool isBR) :
     SuperListItem(i, n),
-    m_isBR(isBR)
+    m_isBR(isBR),
+    m_loaded(false)
 {
 
 }
@@ -173,7 +174,7 @@ QString SystemCustomShape::getLocalPath(CustomShapeKind kind) const {
 // -------------------------------------------------------
 
 void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
-    if (kind != CustomShapeKind::OBJ) {
+    if (kind != CustomShapeKind::OBJ || m_loaded) {
         return;
     }
 
@@ -274,6 +275,7 @@ void SystemCustomShape::loadCustomObj(CustomShapeKind kind) {
         }
     }
     file.close();
+    m_loaded = true;
 }
 
 // -------------------------------------------------------

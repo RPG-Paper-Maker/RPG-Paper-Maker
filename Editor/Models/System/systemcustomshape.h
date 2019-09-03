@@ -72,6 +72,7 @@ protected:
     QList<QPair<int, int>> m_faces;
     QVector3D m_minVertex;
     QVector3D m_maxVertex;
+    bool m_loaded;
 };
 
 Q_DECLARE_METATYPE(SystemCustomShape)

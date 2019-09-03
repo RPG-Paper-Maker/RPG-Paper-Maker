@@ -130,10 +130,11 @@ void PanelShapes::showShapes(bool b) {
 
 void PanelShapes::updateShapeItem(QStandardItem *item) {
     if (item != nullptr && m_shape != nullptr) {
-        SuperListItem *super = reinterpret_cast<SuperListItem *>(item->data()
-            .value<qintptr>());
+        SystemCustomShape *super = reinterpret_cast<SystemCustomShape *>(item
+            ->data().value<qintptr>());
         m_shape->setId(super->id());
         m_shape->setName(super->name());
+        super->loadCustomObj(m_shapeKind);
     }
 }
 

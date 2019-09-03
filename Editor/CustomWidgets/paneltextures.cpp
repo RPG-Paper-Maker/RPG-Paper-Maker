@@ -577,11 +577,13 @@ void PanelTextures::on_pushButtonUpdateList_pressed() {
         RPM::get()->project()->writePicturesDatas();
         RPM::get()->project()->writeSpecialsDatas();
         RPM::get()->project()->writeTilesetsDatas();
+        RPM::get()->project()->writeShapesDatas();
         this->fillComboBox(m_tileset, m_kind);
     } else {
         RPM::get()->project()->readPicturesDatas();
         RPM::get()->project()->readSpecialsDatas();
         RPM::get()->project()->readTilesetsDatas();
+        RPM::get()->project()->readShapesDatas();
         m_tileset = reinterpret_cast<SystemTileset *>(SuperListItem::getById(RPM
             ::get()->project()->gameDatas()->tilesetsDatas()->model()
             ->invisibleRootItem(), tilesetID));
