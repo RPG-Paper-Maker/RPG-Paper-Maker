@@ -139,6 +139,10 @@ bool Floors::updateRaycastingAt(Position &position, FloorDatas* floor, int
 void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
                                 int squareSize, int width, int height)
 {
+    QList<Position> layers;
+    Position p;
+    int j, ll, layer;
+
     m_vertices.clear();
     m_indexes.clear();
     int count = 0;
@@ -158,9 +162,29 @@ void Floors::initializeVertices(QHash<Position, MapElement *> &previewSquares,
     QHash<Position, FloorDatas*>::iterator i;
     for (i = floorsWithPreview.begin(); i != floorsWithPreview.end(); i++) {
         FloorDatas* floor = i.value();
-        Position p = i.key();
-        floor->initializeVertices(squareSize, width, height, m_vertices,
-                                  m_indexes, p, count);
+        p = i.key();
+        layer = p.layer();
+        if (layer > 0) {
+            for (j = 0, ll = layers.size(); j < ll; j++) {
+                if (layer <= layers.at(j).layer()) {
+                    layers.insert(j, p);
+                    break;
+                }
+            }
+            if (j == ll || ll == 0) {
+                layers.append(p);
+            }
+        } else {
+            floor->initializeVertices(squareSize, width, height, m_vertices,
+                m_indexes, p, count);
+        }
+    }
+
+    // Vertices for layers
+    for (j = 0, ll = layers.size(); j < ll; j++) {
+        p = layers.at(j);
+        floorsWithPreview.value(p)->initializeVertices(squareSize, width, height
+            , m_vertices, m_indexes, p, count);
     }
 }
 

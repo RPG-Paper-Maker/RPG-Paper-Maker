@@ -219,13 +219,51 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
 {
     int totalSize = getMapPortionTotalSize();
     MapPortion* mapPortion;
+    QHash<int, QOpenGLTexture*>::iterator it;
 
+    // Face sprites
+    m_programStatic->release();
+    m_programFaceSprite->bind();
+    m_programFaceSprite->setUniformValue(u_cameraRightWorldspace,
+                                         cameraRightWorldSpace);
+    m_programFaceSprite->setUniformValue(u_cameraUpWorldspace,
+                                         cameraUpWorldSpace);
+    m_programFaceSprite->setUniformValue(u_cameraDeepWorldspace,
+                                         cameraDeepWorldSpace);
+    m_programFaceSprite->setUniformValue(u_modelViewProjection,
+                                         modelviewProjection);
+    m_programFaceSprite->setUniformValue(u_hoveredFace, false);
+    m_textureTileset->bind();
+    for (int i = 0; i < totalSize; i++) {
+        mapPortion = this->mapPortionBrut(i);
+        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+            mapPortion->paintFaceSprites(u_hoveredFace);
+    }
+    m_textureTileset->release();
+
+    // Objects face sprites
+    for (it = m_texturesCharacters.begin();
+         it != m_texturesCharacters.end(); it++)
+    {
+        int textureID = it.key();
+        QOpenGLTexture *texture = it.value();
+        if (texture == nullptr) {
+            texture = m_textureMissing;
+        }
+        for (int i = 0; i < totalSize; i++) {
+            mapPortion = this->mapPortionBrut(i);
+            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
+                mapPortion->paintObjectsFaceSprites(textureID, texture);
+        }
+    }
+    m_programFaceSprite->release();
+
+
+    // Walls
     m_programStatic->bind();
     m_programStatic->setUniformValue(u_modelviewProjectionStatic,
                                      modelviewProjection);
     m_programStatic->setUniformValue(u_hoveredStatic, false);
-
-    // Walls
     QHash<int, QOpenGLTexture*>::iterator itWalls;
     for (itWalls = m_texturesSpriteWalls.begin();
          itWalls != m_texturesSpriteWalls.end(); itWalls++)
@@ -253,7 +291,6 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
     m_textureTileset->release();
 
     // Objects
-    QHash<int, QOpenGLTexture*>::iterator it;
     for (it = m_texturesCharacters.begin();
          it != m_texturesCharacters.end(); it++)
     {
@@ -313,43 +350,6 @@ void Map::paintOthers(QMatrix4x4 &modelviewProjection,
         }
         texture->release();
     }
-
-    // Face sprites
-    m_programStatic->release();
-    m_programFaceSprite->bind();
-    m_programFaceSprite->setUniformValue(u_cameraRightWorldspace,
-                                         cameraRightWorldSpace);
-    m_programFaceSprite->setUniformValue(u_cameraUpWorldspace,
-                                         cameraUpWorldSpace);
-    m_programFaceSprite->setUniformValue(u_cameraDeepWorldspace,
-                                         cameraDeepWorldSpace);
-    m_programFaceSprite->setUniformValue(u_modelViewProjection,
-                                         modelviewProjection);
-    m_programFaceSprite->setUniformValue(u_hoveredFace, false);
-    m_textureTileset->bind();
-    for (int i = 0; i < totalSize; i++) {
-        mapPortion = this->mapPortionBrut(i);
-        if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-            mapPortion->paintFaceSprites(u_hoveredFace);
-    }
-    m_textureTileset->release();
-
-    // Objects face sprites
-    for (it = m_texturesCharacters.begin();
-         it != m_texturesCharacters.end(); it++)
-    {
-        int textureID = it.key();
-        QOpenGLTexture *texture = it.value();
-        if (texture == nullptr) {
-            texture = m_textureMissing;
-        }
-        for (int i = 0; i < totalSize; i++) {
-            mapPortion = this->mapPortionBrut(i);
-            if (mapPortion != nullptr && mapPortion->isVisibleLoaded())
-                mapPortion->paintObjectsFaceSprites(textureID, texture);
-        }
-    }
-    m_programFaceSprite->release();
 
     // Objects squares
     m_programStatic->bind();
