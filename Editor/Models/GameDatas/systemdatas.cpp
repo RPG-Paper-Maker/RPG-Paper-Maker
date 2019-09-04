@@ -328,6 +328,10 @@ void SystemDatas::setDefaultDetections() {
     detection->setDefault();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
+    detection = new SystemDetection(2, "Self", 0, 0, 0, 0);
+    detection->setSelf();
+    row = detection->getModelRow();
+    m_modelDetections->appendRow(row);
 }
 
 // -------------------------------------------------------

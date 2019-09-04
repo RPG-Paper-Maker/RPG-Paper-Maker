@@ -135,10 +135,9 @@ SystemObject3D * SystemDetection::instanciateObject() const {
 
 // -------------------------------------------------------
 
-void SystemDetection::setDefault() {
+void SystemDetection::setSelf() {
     Position3D position;
 
-    position.setZ(1);
     m_boxes.insert(position, this->instanciateObject());
 }
 
@@ -270,6 +269,15 @@ void SystemDetection::generateRectangle(int length, int width, Position3D
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemDetection::setDefault() {
+    Position3D position;
+
+    position.setZ(1);
+    m_boxes.insert(position, this->instanciateObject());
+}
+
 // -------------------------------------------------------
 
 bool SystemDetection::openDialog() {

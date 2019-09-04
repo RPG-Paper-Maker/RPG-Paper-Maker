@@ -63,7 +63,7 @@ public:
     Map * createDetectionMap();
     void getTargetPosition(QVector3D *position) const;
     SystemObject3D * instanciateObject() const;
-    void setDefault();
+    void setSelf();
     void initializeObjects(Objects3D *objects3D, Portion &globalPortion);
     void addObject(Position3D &position, SystemObject3D *object);
     void deleteObject(Position3D &position);
@@ -72,6 +72,7 @@ public:
     void generateCircle(int radius, Position3D &origin);
     void generateRectangle(int length, int width, Position3D &origin);
 
+    virtual void setDefault();
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

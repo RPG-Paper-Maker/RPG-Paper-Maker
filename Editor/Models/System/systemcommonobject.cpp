@@ -253,7 +253,7 @@ void SystemCommonObject::setDefaultHeroKeyPressEvent(QStandardItemModel
         ->invisibleRootItem(), command);
     if (kind == EventCommandKind::MoveObject) {
         commandList = QVector<QString>({"1", QString::number(static_cast<int>(
-            PrimitiveValueKind::DataBase)), "1", RPM::TRUE_BOOL_STRING, "1", "2"});
+            PrimitiveValueKind::DataBase)), "2", RPM::TRUE_BOOL_STRING, "1", "2"});
         command = new EventCommand(EventCommandKind::SendEvent, commandList);
         SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
             ->invisibleRootItem(), command);
