@@ -1584,6 +1584,16 @@
                         "target": "Engine/Content/win32/Qt5Core.dll"
                     },
                     {
+                        "files": [
+                            {
+                                "repo": "Dependencies",
+                                "source": "Game/win32/audio/qtaudio_windows.dll",
+                                "target": "Engine/Content/win32/audio/qtaudio_windows.dll"
+                            }
+                        ],
+                        "target": "Engine/Content/win32/audio"
+                    },
+                    {
                         "repo": "Dependencies",
                         "source": "Game/win32/Qt5Multimedia.dll",
                         "target": "Engine/Content/win32/Qt5Multimedia.dll"

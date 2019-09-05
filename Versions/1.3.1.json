@@ -1,0 +1,19 @@
+{
+	"add": [
+		 {
+            "files": [
+                {
+                    "repo": "Dependencies",
+                    "source": "Game/win32/audio/qtaudio_windows.dll",
+                    "target": "Engine/Content/win32/audio/qtaudio_windows.dll"
+                }
+            ],
+            "target": "Engine/Content/win32/audio"
+        }
+	],
+	"remove": [],
+	"replace": [],
+	"features": [],
+	"bugs": [
+	]
+}
