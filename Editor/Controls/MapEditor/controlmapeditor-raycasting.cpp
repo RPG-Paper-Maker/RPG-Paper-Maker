@@ -143,10 +143,6 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
 
     if (m_distanceObject3D == 0.0f) {
         m_positionOnObject3D = m_positionOnLand;
-
-        // Temp : by default position of objects center 0
-        m_positionOnObject3D.setCenterX(0);
-        m_positionOnObject3D.setCenterZ(0);
     }
 
     if (m_distanceMountain == 0.0f) {

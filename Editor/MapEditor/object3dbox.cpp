@@ -154,7 +154,9 @@ void Object3DBoxDatas::getPosSizeCenterInfos(QVector3D &pos, QVector3D &size,
     size.setZ(static_cast<float>(this->depthPixels()) - (2 * coef));
 
     // Center
-    this->getCenter(center);
+    center.setX(squareSize / 2);
+    center.setY(static_cast<float>(this->heightPixels()) / 2);
+    center.setZ(squareSize / 2);
 
     // Position
     pos.setX((position.x() * squareSize) + coef);
