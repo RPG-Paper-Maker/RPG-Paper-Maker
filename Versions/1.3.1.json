@@ -13,7 +13,30 @@
 	],
 	"remove": [],
 	"replace": [],
-	"features": [],
+	"features": [
+        "Custom shape previewer: show shape without texture"
+    ],
 	"bugs": [
+        "Ingame sound for Windows",
+        "Object linking issue: fix try (+ message error in case it happen again)",
+        "Ingame logs",
+        "Semi transparent sprite layer show what's behind wall",
+        "Semi transparent floor layered weird behavior",
+        "Ingame message error when use deleted class",
+        "Bug monster with empty loots",
+        "Custom object in 3D object previewer not correctly updated",
+        "Route: hide select object ID",
+        "Move random not ignoring when not possible",
+        "Reaction not pausing move route",
+        "Title screen script global variable $that",
+        "Rename enum options to settings in title screen commands",
+        "Send hero touch to detection self",
+        "Crash ingame when item none icon and empty description",
+        "3D object center X Y issues duplication",
+        "Correction 3D object rotation: different behavior",
+        "Collisions 3D Object by default",
+        "Height issue going up too much high",
+        "Crash when empty reaction in condition/loop",
+        "Save states & properties ingame"
 	]
 }
