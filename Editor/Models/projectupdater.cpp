@@ -244,6 +244,7 @@ void ProjectUpdater::check() {
     }
 
     // Updating for each version
+    m_project->readAll();
     for (int i = index; i < incompatibleVersionsCount; i++) {
         emit progress(80, "Checking version " + incompatibleVersions[i] +
                       "...");
@@ -256,8 +257,6 @@ void ProjectUpdater::check() {
     copySystemScripts();
     emit progress(99, "Correcting the BR path");
     QThread::sleep(1);
-    m_project->readLangsDatas();
-    m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setPathBR(
                 Common::pathCombine(QDir::currentPath(), RPM::PATH_BR));
     m_project->writeSystemDatas();
