@@ -73,6 +73,11 @@
         <file>Ressources/translate.png</file>
         <file>Ressources/translate_cursor.png</file>
         <file>Ressources/translate_disable.png</file>
+        <file>Ressources/bold.png</file>
+        <file>Ressources/italic.png</file>
+        <file>Ressources/text-center.png</file>
+        <file>Ressources/text-left.png</file>
+        <file>Ressources/text-right.png</file>
     </qresource>
     <qresource prefix="/">
         <file>Shaders/cursor.frag</file>

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>453</width>
-    <height>148</height>
+    <width>666</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Show text...</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">
     <number>15</number>
    </property>
@@ -27,20 +27,364 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
+     <property name="spacing">
+      <number>15</number>
+     </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1,0">
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Message:</string>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+         <item>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Interlocutor:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="PanelPrimitiveValue" name="panelPrimitiveInterlocutor" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Faceset:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="WidgetPicture" name="widgetPictureFaceset" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>250</width>
+               <height>27</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>378</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="WidgetShowPicture" name="widgetShowPictureFaceset" native="true"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
          </property>
-        </widget>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,1,1,1,1,1">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButtonBold">
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/bold.png</normaloff>:/icons/Ressources/bold.png</iconset>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonItalic">
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/italic.png</normaloff>:/icons/Ressources/italic.png</iconset>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonLeft">
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/text-left.png</normaloff>:/icons/Ressources/text-left.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonCenter">
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/text-center.png</normaloff>:/icons/Ressources/text-center.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonRight">
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/text-right.png</normaloff>:/icons/Ressources/text-right.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxFontSize">
+             <item>
+              <property name="text">
+               <string>Font size</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxFontName">
+             <item>
+              <property name="text">
+               <string>Font name</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxTextColor">
+             <item>
+              <property name="text">
+               <string>Text color</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxBackColor">
+             <item>
+              <property name="text">
+               <string>Back color</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxStrokeColor">
+             <item>
+              <property name="text">
+               <string>Stroke color</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1,0">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButtonVariable">
+             <property name="text">
+              <string>Variable</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonParameter">
+             <property name="text">
+              <string>Parameter</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonProperty">
+             <property name="text">
+              <string>Property</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonIcon">
+             <property name="text">
+              <string>Icon</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../ressources.qrc">
+               <normaloff>:/icons/Ressources/picture.png</normaloff>:/icons/Ressources/picture.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>248</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QPlainTextEdit" name="plainTextMessage"/>
        </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,1,0">
+         <item>
+          <widget class="QCheckBox" name="checkBoxUse">
+           <property name="text">
+            <string>Use</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveText" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>568</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonPreview">
+           <property name="text">
+            <string>Preview...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0">
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>118</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
@@ -56,7 +400,29 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetShowPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetshowpicture.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../ressources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

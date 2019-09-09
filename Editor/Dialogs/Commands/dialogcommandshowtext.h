@@ -32,11 +32,18 @@ class DialogCommandShowText : public DialogCommand
 
 public:
     explicit DialogCommandShowText(EventCommand *command = nullptr,
-                                   QWidget *parent = 0);
+        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandShowText();
-    EventCommand* getCommand() const;
+
+    virtual EventCommand * getCommand() const;
 
 protected:
+    SuperListItem *m_facesetID;
+
+    void initializeWidgets(SystemCommonObject *object, QStandardItemModel
+        *parameters);
+
     virtual void initialize(EventCommand* command);
 
 private:
