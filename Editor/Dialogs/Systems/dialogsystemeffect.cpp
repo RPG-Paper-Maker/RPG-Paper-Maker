@@ -75,7 +75,7 @@ void DialogSystemEffect::initialize() {
     ui->panelDamagesKind->initialize(m_effect.damagesStatisticID(), m_effect
         .damagesCurrencyID(), m_effect.damagesVariableID(), m_effect
         .damagesKind());
-    ui->panelPrimitiveValueDamageFormula->initializeMessage();
+    ui->panelPrimitiveValueDamageFormula->initializeMessage(true);
     ui->panelPrimitiveValueDamageFormula->initializeModel(m_effect
         .damagesFormula());
     ui->panelPrimitiveValueDamageFormula->updateModel();
@@ -86,17 +86,17 @@ void DialogSystemEffect::initialize() {
         .damagesElementID());
     ui->panelPrimitiveValueElementID->updateModel();
     ui->checkBoxVariance->setChecked(m_effect.isDamageVariance());
-    ui->panelPrimitiveValueVariance->initializeMessage();
+    ui->panelPrimitiveValueVariance->initializeMessage(true);
     ui->panelPrimitiveValueVariance->initializeModel(m_effect
         .damagesVarianceFormula());
     ui->panelPrimitiveValueVariance->updateModel();
     ui->checkBoxCritical->setChecked(m_effect.isDamageCritical());
-    ui->panelPrimitiveValueCritical->initializeMessage();
+    ui->panelPrimitiveValueCritical->initializeMessage(true);
     ui->panelPrimitiveValueCritical->initializeModel(m_effect
         .damagesCriticalFormula());
     ui->panelPrimitiveValueCritical->updateModel();
     ui->checkBoxPrecision->setChecked(m_effect.isDamagePrecision());
-    ui->panelPrimitiveValuePrecision->initializeMessage();
+    ui->panelPrimitiveValuePrecision->initializeMessage(true);
     ui->panelPrimitiveValuePrecision->initializeModel(m_effect
         .damagesPrecisionFormula());
     ui->panelPrimitiveValuePrecision->updateModel();
@@ -108,7 +108,7 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueStatusID->initializeModel(m_effect
         .statusID());
     ui->panelPrimitiveValueStatusID->updateModel();
-    ui->panelPrimitiveValueStatusPrecision->initializeMessage();
+    ui->panelPrimitiveValueStatusPrecision->initializeMessage(true);
     ui->panelPrimitiveValueStatusPrecision->initializeModel(m_effect
         .statusPrecisionFormula());
     ui->panelPrimitiveValueStatusPrecision->updateModel();
@@ -142,7 +142,7 @@ void DialogSystemEffect::initialize() {
     ui->comboBoxSpecialAction->setCurrentIndex(index);
 
     // Script
-    ui->panelPrimitiveValueScript->initializeMessage();
+    ui->panelPrimitiveValueScript->initializeMessage(true);
     ui->panelPrimitiveValueScript->initializeModel(m_effect
         .scriptFormula());
     ui->panelPrimitiveValueScript->updateModel();

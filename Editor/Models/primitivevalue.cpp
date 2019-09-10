@@ -71,6 +71,12 @@ PrimitiveValue::PrimitiveValue(PrimitiveValueKind kind, int n) :
     m_numberValue = n;
 }
 
+PrimitiveValue::PrimitiveValue(PrimitiveValueKind kind, QString m) :
+    PrimitiveValue(kind)
+{
+    m_messageValue = m;
+}
+
 PrimitiveValueKind PrimitiveValue::kind() const {
     return m_kind;
 }
@@ -199,6 +205,7 @@ QString PrimitiveValue::toString() const {
             this->modelDataBase()->invisibleRootItem(), m_numberValue)
             ->toString();
     case PrimitiveValueKind::Message:
+    case PrimitiveValueKind::Font:
         return m_messageValue;
     case PrimitiveValueKind::Script:
         return "Script > " + m_messageValue;
@@ -254,6 +261,9 @@ void PrimitiveValue::labelTab(QString &str) const {
             ->currentObject()->modelProperties()->invisibleRootItem(),
             m_numberValue)->name();
         break;
+    case PrimitiveValueKind::Font:
+        str += m_messageValue;
+        break;
     }
 }
 
@@ -305,6 +315,7 @@ void PrimitiveValue::initializeCommandParameter(const EventCommand *command, int
         break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
         m_messageValue = command->valueCommandAt(i++);
         break;
     case PrimitiveValueKind::Switch:
@@ -334,6 +345,7 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command) {
         break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
         command.append(m_messageValue);
         break;
     case PrimitiveValueKind::Switch:
@@ -364,6 +376,7 @@ void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
          m_numberValue = prim.m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
         m_messageValue = prim.m_messageValue; break;
     case PrimitiveValueKind::Switch:
         m_switchValue = prim.m_switchValue; break;
@@ -398,6 +411,7 @@ void PrimitiveValue::read(const QJsonObject &json) {
         m_numberValue = v.toInt(); break;    
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
         m_messageValue = v.toString(); break;
     case PrimitiveValueKind::Switch:
         m_switchValue = v.toBool(); break;
@@ -428,6 +442,7 @@ void PrimitiveValue::write(QJsonObject &json) const{
         v = m_numberValue; break;
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Script:
+    case PrimitiveValueKind::Font:
         v = m_messageValue; break;
     case PrimitiveValueKind::Switch:
         v = m_switchValue; break;

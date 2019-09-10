@@ -59,7 +59,7 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     }
 
     ui->panelPrimitiveValueConditions->addNone();
-    ui->panelPrimitiveValueConditions->initializeMessage();
+    ui->panelPrimitiveValueConditions->initializeMessage(true);
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
@@ -194,7 +194,7 @@ void PanelDatasCommonSkillItem::updateAllModelsRow() {
 void PanelDatasCommonSkillItem::initializeCommonSkill() {
     // Initialize widgets
     ui->panelPrimitiveValueTargetConditions->addNone();
-    ui->panelPrimitiveValueTargetConditions->initializeMessage();
+    ui->panelPrimitiveValueTargetConditions->initializeMessage(true);
     ui->panelPrimitiveValueAnimationUser->addNone();
     ui->panelPrimitiveValueAnimationUser->initializeDataBaseCommandId(RPM
         ::get()->project()->gameDatas()->animationsDatas()->model(), nullptr

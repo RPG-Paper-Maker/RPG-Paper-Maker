@@ -19,7 +19,6 @@
 //
 // -------------------------------------------------------
 
-
 DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
     *parent) :
     QDialog(parent),

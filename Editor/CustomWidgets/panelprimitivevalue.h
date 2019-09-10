@@ -54,19 +54,22 @@ public:
     void initializeDataBaseCommandId(QStandardItemModel *dataBase,
         QStandardItemModel *parameters = nullptr, QStandardItemModel
         *properties = nullptr);
-    void initializeMessage(QStandardItemModel *parameters = nullptr,
-        QStandardItemModel *properties = nullptr);
+    void initializeMessage(bool formula, QStandardItemModel *parameters
+        = nullptr, QStandardItemModel *properties = nullptr);
     void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
         *properties);
     void initializeVariableParamProp(QStandardItemModel *parameters,
         QStandardItemModel *properties);
+    void initializeFont(QStandardItemModel *parameters = nullptr,
+        QStandardItemModel *properties = nullptr);
     void initializeModel(PrimitiveValue *m);
     void initializeNumberAndUpdate(PrimitiveValue *m, bool isInteger = true);
     void initializeNumberVariableAndUpdate(PrimitiveValue *m);
     void initializeDataBaseAndUpdate(PrimitiveValue *m);
-    void initializeMessageAndUpdate(PrimitiveValue *m);
+    void initializeMessageAndUpdate(PrimitiveValue *m, bool formula);
     void initializePropertyAndUpdate(PrimitiveValue *m, QStandardItemModel
         *parameters, QStandardItemModel *properties);
+    void initializeFontAndUpdate(PrimitiveValue *m);
     void setKind(PrimitiveValueKind kind);
     void setNumberValue(int n);
     void setNumberDoubleValue(double n);
@@ -85,10 +88,11 @@ public:
     void addParameter(QStandardItemModel *model);
     void addProperty(QStandardItemModel *model);
     void addDataBase(QStandardItemModel *model);
-    void addMessage();
+    void addMessage(bool formula);
     void addScript();
     void addSwitch();
     void addKeyBoard();
+    void addFont();
     void showDefault();
     void showAnything();
     void showNone();
@@ -103,6 +107,7 @@ public:
     void showScript();
     void showSwitch();
     void showKeyBoard();
+    void showFront();
     int getKindIndex(PrimitiveValueKind kind);
     void initializeCommand(EventCommand *command, int &i);
     void getCommand(QVector<QString> &command);
@@ -133,6 +138,7 @@ private slots:
     void on_lineEditMessage_textChanged(const QString &text);
     void on_lineEditScript_textChanged(const QString &text);
     void on_comboBoxSwitch_currentIndexChanged(int index);
+    void on_fontComboBox_currentIndexChanged(int);
 };
 
 #endif // PANELPRIMITIVEVALUE_H

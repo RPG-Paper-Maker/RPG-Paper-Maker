@@ -27,6 +27,8 @@
 #include "systemdetection.h"
 #include "systemtitlecommand.h"
 #include "systemspeedfrequency.h"
+#include "systemfontsize.h"
+#include "systemfontname.h"
 
 // -------------------------------------------------------
 //
@@ -90,6 +92,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListCameraProperties->showEditName(false);
     ui->panelSuperListDetections->showEditName(false);
     ui->panelSuperListSpeedFrequency->showEditName(false);
+    ui->panelSuperListFontSizes->showEditName(false);
+    ui->panelSuperListFontNames->showEditName(false);
 
     // Allow editions
     ui->panelSuperListWindowSkins->list()->setCanEdit(true);
@@ -98,6 +102,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListDetections->list()->setCanEdit(true);
     ui->panelSuperListCurrencies->list()->setCanEdit(true);
     ui->panelSuperListSpeedFrequency->list()->setCanEdit(true);
+    ui->panelSuperListFontSizes->list()->setCanEdit(true);
+    ui->panelSuperListFontNames->list()->setCanEdit(true);
 
     // Values
     systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
@@ -139,6 +145,14 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemSpeedFrequency);
     ui->panelSuperListSpeedFrequency->initializeModel(gameDatas->systemDatas()
         ->modelSpeedFrequencies());
+    ui->panelSuperListFontSizes->list()->initializeNewItemInstance(new
+        SystemFontSize);
+    ui->panelSuperListFontSizes->initializeModel(gameDatas->systemDatas()
+        ->modelFontSizes());
+    ui->panelSuperListFontNames->list()->initializeNewItemInstance(new
+        SystemFontName);
+    ui->panelSuperListFontNames->initializeModel(gameDatas->systemDatas()
+        ->modelFontNames());
     int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
     SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
         ->gameDatas()->systemDatas()->modelWindowSkins());
@@ -180,9 +194,9 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
 
     // Formulas
     ui->panelPrimitiveValueFormulaIsDead->initializeMessageAndUpdate(gameDatas
-        ->battleSystemDatas()->formulaIsDead());
+        ->battleSystemDatas()->formulaIsDead(), true);
     ui->panelPrimitiveValueFormulaCrit->initializeMessageAndUpdate(gameDatas
-        ->battleSystemDatas()->formulaCrit());
+        ->battleSystemDatas()->formulaCrit(), true);
 
     // Initialize musics
     ui->widgetChooseBattleMusic->initialize(gameDatas->battleSystemDatas()

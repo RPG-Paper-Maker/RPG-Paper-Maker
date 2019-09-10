@@ -33,7 +33,8 @@ enum class PrimitiveValueKind {
     Script,
     Switch,
     KeyBoard,
-    NumberDouble
+    NumberDouble,
+    Font
 };
 
 #endif // PRIMITIVEVALUEKIND_H

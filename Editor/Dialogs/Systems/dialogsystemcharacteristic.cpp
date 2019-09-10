@@ -125,7 +125,7 @@ void DialogSystemCharacteristic::initialize() {
 
     // Script
     ui->panelPrimitiveValueScript->initializeMessageAndUpdate(m_characteristic
-        .script());
+        .script(), true);
 }
 
 // -------------------------------------------------------

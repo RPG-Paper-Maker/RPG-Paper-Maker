@@ -31,6 +31,8 @@ HEADERS += \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
+    Dialogs/Systems/dialogsystemfontname.h \
+    Dialogs/Systems/dialogsystemfontsize.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
@@ -57,6 +59,8 @@ HEADERS += \
     Models/GameDatas/videosdatas.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemdetection.h \
+    Models/System/systemfontname.h \
+    Models/System/systemfontsize.h \
     Models/System/systemmountain.h \
     Models/System/systemproperty.h \
     Models/System/systemspeedfrequency.h \
@@ -334,6 +338,8 @@ SOURCES += \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
+    Dialogs/Systems/dialogsystemfontname.cpp \
+    Dialogs/Systems/dialogsystemfontsize.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
@@ -355,6 +361,8 @@ SOURCES += \
     Models/GameDatas/videosdatas.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemdetection.cpp \
+    Models/System/systemfontname.cpp \
+    Models/System/systemfontsize.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemproperty.cpp \
     Models/System/systemspeedfrequency.cpp \
@@ -605,6 +613,8 @@ FORMS += \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \
+    Dialogs/Systems/dialogsystemfontname.ui \
+    Dialogs/Systems/dialogsystemfontsize.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \

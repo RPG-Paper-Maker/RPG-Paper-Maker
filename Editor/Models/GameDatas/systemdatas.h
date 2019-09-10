@@ -39,6 +39,8 @@ public:
     static const QString JSON_CAMERA_PROPERTIES;
     static const QString JSON_DETECTIONS;
     static const QString JSON_SPEED_FREQUENCIES;
+    static const QString JSON_FONT_SIZES;
+    static const QString JSON_FONT_NAMES;
     static const QString JSON_LAST_MAJOR_VERSION;
     static const QString JSON_LAST_MINOR_VERSION;
     static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
@@ -81,6 +83,8 @@ public:
     QStandardItemModel * modelcameraProperties() const;
     QStandardItemModel * modelDetections() const;
     QStandardItemModel * modelSpeedFrequencies() const;
+    QStandardItemModel * modelFontSizes() const;
+    QStandardItemModel * modelFontNames() const;
     int lastMajorVersion() const;
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
@@ -94,6 +98,8 @@ public:
     void setDefaultCameraProperties();
     void setDefaultDetections();
     void setDefaultSpeedFrequencies();
+    void setDefaultFontSizes();
+    void setDefaultFontNames();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -120,6 +126,8 @@ private:
     QStandardItemModel *m_modelCameraProperties;
     QStandardItemModel *m_modelDetections;
     QStandardItemModel *m_modelSpeedFrequencies;
+    QStandardItemModel *m_modelFontSizes;
+    QStandardItemModel *m_modelFontNames;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
 };

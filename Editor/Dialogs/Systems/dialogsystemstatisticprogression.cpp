@@ -79,7 +79,7 @@ void DialogSystemStatisticProgression::initialize() {
     ui->panelPrimitiveValueRandom->updateKind();
 
     // Formula
-    ui->panelPrimitiveValueFormula->initializeMessage();
+    ui->panelPrimitiveValueFormula->initializeMessage(true);
     ui->panelPrimitiveValueFormula->initializeModel(m_statisticProgression
         .formula());
     ui->panelPrimitiveValueFormula->updateValue(true);

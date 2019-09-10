@@ -36,6 +36,7 @@ public:
     PrimitiveValue(bool s);
     PrimitiveValue(PrimitiveValueKind kind);
     PrimitiveValue(PrimitiveValueKind kind, int n);
+    PrimitiveValue(PrimitiveValueKind kind, QString m);
 
     PrimitiveValueKind kind() const;
     void setKind(PrimitiveValueKind k);

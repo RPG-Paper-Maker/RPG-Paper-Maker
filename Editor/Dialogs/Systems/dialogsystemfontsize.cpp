@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#include "dialogsystemcost.h"
-#include "ui_dialogsystemcost.h"
-
+#include "dialogsystemfontsize.h"
+#include "ui_dialogsystemfontsize.h"
 
 // -------------------------------------------------------
 //
@@ -19,22 +18,19 @@
 //
 // -------------------------------------------------------
 
-DialogSystemCost::DialogSystemCost(SystemCost &cost, QWidget *parent) :
+DialogSystemFontSize::DialogSystemFontSize(SystemFontSize &fontSize, QWidget
+    *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSystemCost),
-    m_cost(cost)
+    m_fontSize(fontSize),
+    ui(new Ui::DialogSystemFontSize)
 {
     ui->setupUi(this);
 
-    initialize();
+    this->initialize();
 }
 
-DialogSystemCost::~DialogSystemCost() {
+DialogSystemFontSize::~DialogSystemFontSize() {
     delete ui;
-}
-
-SystemCost & DialogSystemCost::cost() const {
-    return m_cost;
 }
 
 // -------------------------------------------------------
@@ -43,10 +39,7 @@ SystemCost & DialogSystemCost::cost() const {
 //
 // -------------------------------------------------------
 
-void DialogSystemCost::initialize() {
-    ui->panelDamagesKind->initialize(m_cost.statisticID(), m_cost
-        .currencyID(), m_cost.variableID(), m_cost.kind());
-    ui->panelPrimitiveValue->initializeMessage(true);
-    ui->panelPrimitiveValue->initializeModel(m_cost.valueFormula());
-    ui->panelPrimitiveValue->updateModel();
+void DialogSystemFontSize::initialize() {
+    ui->lineEditName->setText(m_fontSize.name());
+    ui->panelPrimitiveSize->initializeNumberAndUpdate(m_fontSize.size());
 }

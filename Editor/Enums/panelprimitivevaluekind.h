@@ -28,7 +28,8 @@ enum class PanelPrimitiveValueKind {
     Number,
     Message,
     Property,
-    VariableParamProp
+    VariableParamProp,
+    Font
 };
 
 #endif // PANELPRIMITIVEVALUEKIND_H

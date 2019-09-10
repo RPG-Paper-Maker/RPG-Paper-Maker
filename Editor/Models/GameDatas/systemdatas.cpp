@@ -19,6 +19,8 @@
 #include "systemcameraproperties.h"
 #include "systemdetection.h"
 #include "systemspeedfrequency.h"
+#include "systemfontname.h"
+#include "systemfontsize.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -28,6 +30,8 @@ const QString SystemDatas::JSON_COLORS = "colors";
 const QString SystemDatas::JSON_WINDOW_SKINS = "wskins";
 const QString SystemDatas::JSON_CAMERA_PROPERTIES = "cp";
 const QString SystemDatas::JSON_DETECTIONS = "d";
+const QString SystemDatas::JSON_FONT_SIZES = "fs";
+const QString SystemDatas::JSON_FONT_NAMES = "fn";
 const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
@@ -55,6 +59,8 @@ SystemDatas::SystemDatas() :
     m_modelCameraProperties(new QStandardItemModel),
     m_modelDetections(new QStandardItemModel),
     m_modelSpeedFrequencies(new QStandardItemModel),
+    m_modelFontSizes(new QStandardItemModel),
+    m_modelFontNames(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0)
 {
@@ -73,6 +79,8 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelCameraProperties);
     SuperListItem::deleteModel(m_modelDetections);
     SuperListItem::deleteModel(m_modelSpeedFrequencies);
+    SuperListItem::deleteModel(m_modelFontSizes);
+    SuperListItem::deleteModel(m_modelFontNames);
 }
 
 void SystemDatas::read(QString path) {
@@ -183,6 +191,14 @@ QStandardItemModel * SystemDatas::modelSpeedFrequencies() const {
     return m_modelSpeedFrequencies;
 }
 
+QStandardItemModel * SystemDatas::modelFontSizes() const {
+    return m_modelFontSizes;
+}
+
+QStandardItemModel * SystemDatas::modelFontNames() const {
+    return m_modelFontNames;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -222,6 +238,8 @@ void SystemDatas::setDefault() {
     this->setDefaultCameraProperties();
     this->setDefaultDetections();
     this->setDefaultSpeedFrequencies();
+    this->setDefaultFontSizes();
+    this->setDefaultFontNames();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -361,6 +379,41 @@ void SystemDatas::setDefaultSpeedFrequencies() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultFontSizes() {
+    QList<QStandardItem *> row;
+    SystemFontSize *fontSize;
+
+    fontSize = new SystemFontSize(1, "Normal", new PrimitiveValue(13));
+    row = fontSize->getModelRow();
+    m_modelFontSizes->appendRow(row);
+    fontSize = new SystemFontSize(2, "Small", new PrimitiveValue(10));
+    row = fontSize->getModelRow();
+    m_modelFontSizes->appendRow(row);
+    fontSize = new SystemFontSize(1, "Very small", new PrimitiveValue(7));
+    row = fontSize->getModelRow();
+    m_modelFontSizes->appendRow(row);
+    fontSize = new SystemFontSize(1, "Big", new PrimitiveValue(16));
+    row = fontSize->getModelRow();
+    m_modelFontSizes->appendRow(row);
+    fontSize = new SystemFontSize(1, "Very big", new PrimitiveValue(19));
+    row = fontSize->getModelRow();
+    m_modelFontSizes->appendRow(row);
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultFontNames() {
+    QList<QStandardItem *> row;
+    SystemFontName *fontName;
+
+    fontName = new SystemFontName(1, "Arial", new PrimitiveValue(
+        PrimitiveValueKind::Message, "Arial"));
+    row = fontName->getModelRow();
+    m_modelFontNames->appendRow(row);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -379,6 +432,8 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelCameraProperties, false);
     SuperListItem::deleteModel(m_modelDetections, false);
     SuperListItem::deleteModel(m_modelSpeedFrequencies, false);
+    SuperListItem::deleteModel(m_modelFontSizes, false);
+    SuperListItem::deleteModel(m_modelFontNames, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -475,6 +530,24 @@ void SystemDatas::read(const QJsonObject &json){
         speedFrequency->read(jsonList[i].toObject());
         row = speedFrequency->getModelRow();
         m_modelSpeedFrequencies->appendRow(row);
+    }
+
+    // Font size
+    jsonList = json[JSON_FONT_SIZES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemFontSize *fontsize = new SystemFontSize;
+        fontsize->read(jsonList[i].toObject());
+        row = fontsize->getModelRow();
+        m_modelFontSizes->appendRow(row);
+    }
+
+    // Font name
+    jsonList = json[JSON_FONT_NAMES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemFontName *fontname = new SystemFontName;
+        fontname->read(jsonList[i].toObject());
+        row = fontname->getModelRow();
+        m_modelFontNames->appendRow(row);
     }
 
     // Version
@@ -600,6 +673,30 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_SPEED_FREQUENCIES] = jsonArray;
+
+    // Font size
+    jsonArray = QJsonArray();
+    l = m_modelFontSizes->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemFontSize *fontsize = reinterpret_cast<SystemFontSize *>(
+            m_modelFontSizes->item(i)->data().value<quintptr>());
+        fontsize->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_FONT_SIZES] = jsonArray;
+
+    // Font name
+    jsonArray = QJsonArray();
+    l = m_modelFontNames->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemFontName *fontname = reinterpret_cast<SystemFontName *>(
+            m_modelFontNames->item(i)->data().value<quintptr>());
+        fontname->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_FONT_NAMES] = jsonArray;
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;

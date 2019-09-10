@@ -77,7 +77,7 @@ void PanelPrimitiveValue::initializePrimitives() {
     addAnything();
     addNone();
     addNumber();
-    addMessage();
+    addMessage(false);
     addSwitch();
     addKeyBoard();
     setNumberValue(m_model->numberValue());
@@ -96,7 +96,7 @@ void PanelPrimitiveValue::initializeParameterEvent(QStandardItemModel
     addAnything();
     addNone();
     addNumberDouble();
-    addMessage();
+    addMessage(false);
     addSwitch();
     addKeyBoard();
     addProperty(properties);
@@ -162,13 +162,13 @@ void PanelPrimitiveValue::initializeDataBaseCommandId(QStandardItemModel
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeMessage(QStandardItemModel *parameters,
-    QStandardItemModel *properties)
+void PanelPrimitiveValue::initializeMessage(bool formula, QStandardItemModel
+    *parameters, QStandardItemModel *properties)
 {
     m_kind = PanelPrimitiveValueKind::Message;
     addParameter(parameters);
     addProperty(properties);
-    addMessage();
+    addMessage(formula);
     addVariable();
     initialize();
     showMessage();
@@ -184,7 +184,7 @@ void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
     addNone();
     addNumberDouble();
     addVariable();
-    addMessage();
+    addMessage(false);
     addSwitch();
     addKeyBoard();
     addParameter(parameters);
@@ -205,6 +205,21 @@ void PanelPrimitiveValue::initializeVariableParamProp(QStandardItemModel
     this->addParameter(parameters);
     this->addProperty(properties);
     setNumberValue(m_model->numberValue());
+    initialize();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeFont(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::Font;
+    addFont();
+    addParameter(parameters);
+    addProperty(properties);
+    addMessage(false);
+    addVariable();
+    setMessageValue(m_model->messageValue());
     initialize();
 }
 
@@ -257,9 +272,10 @@ void PanelPrimitiveValue::initializeDataBaseAndUpdate(PrimitiveValue *m)
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::initializeMessageAndUpdate(PrimitiveValue *m)
+void PanelPrimitiveValue::initializeMessageAndUpdate(PrimitiveValue *m, bool
+    formula)
 {
-    initializeMessage();
+    initializeMessage(formula);
     initializeModel(m);
     updateModel();
 }
@@ -271,6 +287,14 @@ void PanelPrimitiveValue::initializePropertyAndUpdate(PrimitiveValue *m,
 {
     initializeModel(m);
     initializeProperty(parameters, properties);
+    updateModel();
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::initializeFontAndUpdate(PrimitiveValue *m) {
+    initializeModel(m);
+    initializeFont();
     updateModel();
 }
 
@@ -331,6 +355,12 @@ void PanelPrimitiveValue::setMessageValue(QString m) {
         ui->lineEditMessage->setText(m); break;
     case PrimitiveValueKind::Script:
         ui->lineEditScript->setText(m); break;
+    case PrimitiveValueKind::Font:
+    {
+        QFont font(m);
+        ui->fontComboBox->setCurrentFont(font);
+        break;
+    }
     default:
         break;
     }
@@ -395,6 +425,10 @@ void PanelPrimitiveValue::updateValue(bool update) {
         setNumberDoubleValue(update ? m_model->numberDoubleValue() : ui
             ->doubleSpinBoxNumber->value());
         break;
+    case PrimitiveValueKind::Font:
+        setMessageValue(update ? m_model->messageValue() : ui->fontComboBox
+            ->currentText());
+        break;
     }
 }
 
@@ -429,6 +463,7 @@ void PanelPrimitiveValue::hideAll() {
     ui->comboBoxSwitch->hide();
     ui->comboBoxKeyBoard->hide();
     ui->doubleSpinBoxNumber->hide();
+    ui->fontComboBox->hide();
     ui->horizontalSpacer->changeSize(0, 0);
 }
 
@@ -519,9 +554,9 @@ void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
 
 // -------------------------------------------------------
 
-void PanelPrimitiveValue::addMessage() {
-    ui->comboBoxChoice->addItem("Formula", static_cast<int>(
-        PrimitiveValueKind::Message));
+void PanelPrimitiveValue::addMessage(bool formula) {
+    ui->comboBoxChoice->addItem(formula ? "Formula" : "Text", static_cast<int
+        >(PrimitiveValueKind::Message));
 }
 
 // -------------------------------------------------------
@@ -547,6 +582,13 @@ void PanelPrimitiveValue::addKeyBoard() {
         ->keyBoardDatas()->model());
     connect(ui->comboBoxKeyBoard, SIGNAL(currentIndexChanged(int)), this,
         SLOT(on_comboBoxKeyBoardCurrentIndexChanged(int)));
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::addFont() {
+    ui->comboBoxChoice->addItem("Font", static_cast<int>(PrimitiveValueKind
+        ::Font));
 }
 
 // -------------------------------------------------------
@@ -663,6 +705,14 @@ void PanelPrimitiveValue::showKeyBoard() {
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::showFront() {
+    setKind(PrimitiveValueKind::Font);
+    hideAll();
+    ui->fontComboBox->show();
+}
+
+// -------------------------------------------------------
+
 int PanelPrimitiveValue::getKindIndex(PrimitiveValueKind kind) {
     for (int i = 0; i < ui->comboBoxChoice->count(); i++) {
         if (ui->comboBoxChoice->itemData(i).toInt() == static_cast<int>(kind))
@@ -691,9 +741,12 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
             setNumberValue(command->valueCommandAt(i++).toInt());
         break;
     case PanelPrimitiveValueKind::Message:
+    case PanelPrimitiveValueKind::Font:
         setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
             .toInt()));
-        if (m_model->kind() == PrimitiveValueKind::Message) {
+        if (m_model->kind() == PrimitiveValueKind::Message || m_model->kind() ==
+            PrimitiveValueKind::Font)
+        {
             setMessageValue(command->valueCommandAt(i++));
         } else {
             setNumberValue(command->valueCommandAt(i++).toInt());
@@ -744,12 +797,16 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
 
         break;
     case PanelPrimitiveValueKind::Message:
+    case PanelPrimitiveValueKind::Font:
         command.append(QString::number(static_cast<int>(m_model->kind())));
 
-        if (m_model->kind() == PrimitiveValueKind::Message)
+        if (m_model->kind() == PrimitiveValueKind::Message || m_model->kind() ==
+            PrimitiveValueKind::Font)
+        {
             command.append(m_model->messageValue());
-        else
+        } else {
             command.append(QString::number(m_model->numberValue()));
+        }
         break;
     case PanelPrimitiveValueKind::Property:
         command.append(QString::number(static_cast<int>(m_model->kind())));
@@ -826,6 +883,8 @@ void PanelPrimitiveValue::on_comboBoxChoiceCurrentIndexChanged(int index) {
         showKeyBoard(); break;
     case PrimitiveValueKind::NumberDouble:
         showNumberDouble(); break;
+    case PrimitiveValueKind::Font:
+        showFront(); break;
     }
 }
 
@@ -894,4 +953,10 @@ void PanelPrimitiveValue::on_lineEditScript_textChanged(const QString &text) {
 
 void PanelPrimitiveValue::on_comboBoxSwitch_currentIndexChanged(int index) {
     setSwitchValue(index == 0);
+}
+
+// -------------------------------------------------------
+
+void PanelPrimitiveValue::on_fontComboBox_currentIndexChanged(int) {
+    this->setMessageValue(ui->fontComboBox->currentText());
 }

@@ -22,8 +22,8 @@
 WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     QOpenGLWidget(parent),
     m_object(nullptr),
-    m_object3DShape(nullptr),
     m_objectsGL(nullptr),
+    m_object3DShape(nullptr),
     m_camera(new Camera),
     m_isInitialized(false),
     m_program(nullptr),
