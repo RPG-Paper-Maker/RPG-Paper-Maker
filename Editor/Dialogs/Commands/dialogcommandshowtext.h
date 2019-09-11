@@ -13,6 +13,7 @@
 #define DIALOGCOMMANDSHOWTEXT_H
 
 #include "dialogcommand.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -48,6 +49,9 @@ protected:
 
 private:
     Ui::DialogCommandShowText *ui;
+
+public slots:
+    void on_checkBoxUse_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDSHOWTEXT_H

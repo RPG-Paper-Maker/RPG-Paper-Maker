@@ -212,31 +212,35 @@ SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) 
 // -------------------------------------------------------
 
 void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
-    bool showID)
+    bool showID, bool nameOnly, bool showIcon)
 {
     int l = model->invisibleRootItem()->rowCount()-1;
     SuperListItem* sys;
     QStandardItem* item;
+    QIcon icon;
 
     if (l > -1) {
-        for (int i = 0; i < l; i++){
+        for (int i = 0; i <= l; i++) {
             item = model->item(i);
-            if (showID) {
-                comboBox->addItem(item->text());
-            } else {
-                sys = reinterpret_cast<SuperListItem *>(item->data().value<
-                    quintptr>());
-                comboBox->addItem(sys->toStringName());
-            }
-        }
-
-        item = model->item(l);
-        sys = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>());
-        if (sys != nullptr) {
-            if (showID) {
-                comboBox->addItem(item->text());
-            } else {
-                comboBox->addItem(sys->toStringName());
+            sys = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>
+                ());
+            sys->getIcon(icon);
+            if (sys != nullptr) {
+                if (showID) {
+                    comboBox->addItem(item->text());
+                } else if (nameOnly) {
+                    if (showIcon) {
+                        comboBox->addItem(icon, sys->name());
+                    } else {
+                        comboBox->addItem(sys->name());
+                    }
+                } else {
+                    if (showIcon) {
+                        comboBox->addItem(icon, sys->toStringName());
+                    } else {
+                        comboBox->addItem(sys->toStringName());
+                    }
+                }
             }
         }
     }
@@ -378,6 +382,14 @@ void SuperListItem::writeTree(QStandardItemModel *model, QJsonObject &json,
 void SuperListItem::reset() {
     p_id = -1;
     p_name = "<None>";
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::getIcon(QIcon &icon) {
+    QPixmap pix(24, 24);
+
+    icon = QIcon(pix);
 }
 
 // -------------------------------------------------------

@@ -81,6 +81,15 @@ void SystemColor::setCopy(const SystemColor &color) {
 
 // -------------------------------------------------------
 
+void SystemColor::getIcon(QIcon &icon) {
+    QPixmap pix(24, 24);
+
+    pix.fill(m_color);
+    icon = QIcon(pix);
+}
+
+// -------------------------------------------------------
+
 void SystemColor::read(const QJsonObject &json) {
     SuperListItem::read(json);
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
-    <height>452</height>
+    <width>788</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1,0">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
          <item>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0">
@@ -91,7 +91,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>378</width>
-               <height>40</height>
+               <height>0</height>
               </size>
              </property>
             </spacer>
@@ -99,7 +99,17 @@
           </layout>
          </item>
          <item>
-          <widget class="WidgetShowPicture" name="widgetShowPictureFaceset" native="true"/>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -206,6 +216,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxFontSize">
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>Font size</string>
@@ -215,6 +231,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxFontName">
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>Font name</string>
@@ -224,6 +246,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxTextColor">
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>Text color</string>
@@ -233,6 +261,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxBackColor">
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>Back color</string>
@@ -242,6 +276,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxStrokeColor">
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>Stroke color</string>
@@ -252,52 +292,108 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1,0">
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
            <property name="spacing">
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="pushButtonVariable">
-             <property name="text">
-              <string>Variable</string>
+            <widget class="QComboBox" name="comboBoxVariable">
+             <property name="minimumSize">
+              <size>
+               <width>125</width>
+               <height>0</height>
+              </size>
              </property>
-             <property name="icon">
-              <iconset resource="../../ressources.qrc">
-               <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
              </property>
+             <item>
+              <property name="text">
+               <string>Variable</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../ressources.qrc">
+                <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButtonParameter">
-             <property name="text">
-              <string>Parameter</string>
+            <widget class="QComboBox" name="comboBoxParameter">
+             <property name="minimumSize">
+              <size>
+               <width>125</width>
+               <height>0</height>
+              </size>
              </property>
-             <property name="icon">
-              <iconset resource="../../ressources.qrc">
-               <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
              </property>
+             <item>
+              <property name="text">
+               <string>Parameter</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../ressources.qrc">
+                <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButtonProperty">
-             <property name="text">
-              <string>Property</string>
+            <widget class="QComboBox" name="comboBoxProperty">
+             <property name="minimumSize">
+              <size>
+               <width>125</width>
+               <height>0</height>
+              </size>
              </property>
-             <property name="icon">
-              <iconset resource="../../ressources.qrc">
-               <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
              </property>
+             <item>
+              <property name="text">
+               <string>Property</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../ressources.qrc">
+                <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButtonIcon">
-             <property name="text">
-              <string>Icon</string>
+            <widget class="QComboBox" name="comboBoxIcon">
+             <property name="minimumSize">
+              <size>
+               <width>125</width>
+               <height>0</height>
+              </size>
              </property>
-             <property name="icon">
-              <iconset resource="../../ressources.qrc">
-               <normaloff>:/icons/Ressources/picture.png</normaloff>:/icons/Ressources/picture.png</iconset>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>16777215</height>
+              </size>
              </property>
+             <item>
+              <property name="text">
+               <string>Icon</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../ressources.qrc">
+                <normaloff>:/icons/Ressources/picture.png</normaloff>:/icons/Ressources/picture.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -331,6 +427,9 @@
          </item>
          <item>
           <widget class="PanelPrimitiveValue" name="panelPrimitiveText" native="true">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -411,12 +510,6 @@
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetShowPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetshowpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

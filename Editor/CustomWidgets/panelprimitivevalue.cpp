@@ -163,12 +163,14 @@ void PanelPrimitiveValue::initializeDataBaseCommandId(QStandardItemModel
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::initializeMessage(bool formula, QStandardItemModel
-    *parameters, QStandardItemModel *properties)
+    *parameters, QStandardItemModel *properties, bool showPrimitive)
 {
     m_kind = PanelPrimitiveValueKind::Message;
     addParameter(parameters);
     addProperty(properties);
-    addMessage(formula);
+    if (showPrimitive) {
+        addMessage(formula);
+    }
     addVariable();
     initialize();
     showMessage();

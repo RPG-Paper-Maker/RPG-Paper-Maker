@@ -42,6 +42,7 @@ public:
     virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SystemColor &color);
+    virtual void getIcon(QIcon &icon);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -62,7 +62,7 @@ public:
                                   bool first = true);
     static SuperListItem* getByIndex(QStandardItemModel* model, int index);
     static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
-        bool showID = true);
+        bool showID = true, bool nameOnly = false, bool showIcon = false);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
     static SuperListItem* getnewInstance(PictureKind kind);
@@ -73,6 +73,7 @@ public:
     static void writeTree(QStandardItemModel *model, QJsonObject &json, const
         QString &name);
     void reset();
+    virtual void getIcon(QIcon &icon);
 
     virtual void read(const QJsonObject &json);
     void readId(const QJsonObject &json);

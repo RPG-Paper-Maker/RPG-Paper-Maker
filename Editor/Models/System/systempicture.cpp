@@ -337,9 +337,13 @@ void SystemPicture::setDefaultCharacterTileset() {
 }
 
 // -------------------------------------------------------
-//
-//  READ / WRITE
-//
+
+void SystemPicture::getIcon(QIcon &icon) {
+    QPixmap pix(this->getPath(PictureKind::Icons));
+
+    icon = QIcon(pix);
+}
+
 // -------------------------------------------------------
 
 void SystemPicture::read(const QJsonObject &json){
