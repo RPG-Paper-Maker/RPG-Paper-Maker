@@ -76,7 +76,8 @@ private:
     QString strProperty(int &i, SystemCommonObject *object = nullptr,
         QStandardItemModel *parameters = nullptr) const;
     QString strNumber(int &i, QStandardItemModel *parameters = nullptr) const;
-    QString strShowText() const;
+    QString strShowText(SystemCommonObject *object = nullptr, QStandardItemModel
+        *parameters = nullptr) const;
     QString strChangeVariables(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
     QString strChangeVariablesSelection(int &i, QString &several) const;

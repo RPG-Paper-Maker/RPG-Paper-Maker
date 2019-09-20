@@ -224,10 +224,14 @@ void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
             item = model->item(i);
             sys = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>
                 ());
-            sys->getIcon(icon);
             if (sys != nullptr) {
+                sys->getIcon(icon);
                 if (showID) {
-                    comboBox->addItem(item->text());
+                    if (showIcon) {
+                        comboBox->addItem(icon, item->text());
+                    } else {
+                        comboBox->addItem(item->text());
+                    }
                 } else if (nameOnly) {
                     if (showIcon) {
                         comboBox->addItem(icon, sys->name());

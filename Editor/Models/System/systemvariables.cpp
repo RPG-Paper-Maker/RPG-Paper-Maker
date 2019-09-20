@@ -75,12 +75,15 @@ SuperListItem* SystemVariables::getById(int id) const{
 
 // -------------------------------------------------------
 
-void SystemVariables::setDefault(){
-    for (int j = 1; j <= SystemVariables::variablesPerPage; j++){
-        QStandardItem* varItem = new QStandardItem();
-        SuperListItem* var =
-                new SuperListItem(
-                    j + ((id()-1) * SystemVariables::variablesPerPage),"");
+void SystemVariables::setDefaultVariables(bool i) {
+    QStandardItem *varItem;
+    SuperListItem *var;
+    int j, l;
+
+    for (j = 1, l = SystemVariables::variablesPerPage; j <= l; j++) {
+        varItem = new QStandardItem;
+        var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? "Lucas "
+            "instance ID" : "");
         varItem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(var)));
         varItem->setFlags(varItem->flags() ^ (Qt::ItemIsDropEnabled));
         varItem->setText(var->toString());

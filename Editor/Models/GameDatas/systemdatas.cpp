@@ -390,13 +390,13 @@ void SystemDatas::setDefaultFontSizes() {
     fontSize = new SystemFontSize(2, "Small", new PrimitiveValue(10));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(1, "Very small", new PrimitiveValue(7));
+    fontSize = new SystemFontSize(3, "Very small", new PrimitiveValue(7));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(1, "Big", new PrimitiveValue(16));
+    fontSize = new SystemFontSize(4, "Big", new PrimitiveValue(16));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(1, "Very big", new PrimitiveValue(19));
+    fontSize = new SystemFontSize(5, "Very big", new PrimitiveValue(19));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
 }

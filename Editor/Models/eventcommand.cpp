@@ -209,7 +209,7 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     str = BEGINNING_COMMAND;
     switch (m_kind) {
     case EventCommandKind::ShowText:
-        str += this->strShowText(); break;
+        str += this->strShowText(object, parameters); break;
     case EventCommandKind::ChangeVariables:
         str += this->strChangeVariables(object, parameters); break;
     case EventCommandKind::EndGame:
@@ -396,8 +396,18 @@ QString EventCommand::strNumber(int &i, QStandardItemModel *parameters) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strShowText() const {
-    return "Show text: " + m_listCommand.at(0);
+QString EventCommand::strShowText(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    QString interlocutor, text;
+    int i;
+
+    i = 0;
+    interlocutor = this->strProperty(i, object, parameters);
+    i++;
+    text = m_listCommand.at(i++);
+
+    return "Show text [" + interlocutor + "]: " + text;
 }
 
 // -------------------------------------------------------

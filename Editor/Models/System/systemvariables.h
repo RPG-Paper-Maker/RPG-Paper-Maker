@@ -35,7 +35,7 @@ public:
     QStandardItemModel* model() const;
     virtual QString idToString() const;
     SuperListItem* getById(int id) const;
-    virtual void setDefault();
+    void setDefaultVariables(bool i);
     virtual SuperListItem* createCopy() const;
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json);

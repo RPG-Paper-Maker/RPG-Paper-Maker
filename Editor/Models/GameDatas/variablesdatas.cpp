@@ -44,11 +44,11 @@ QStandardItemModel* VariablesDatas::model() const {
 //
 // -------------------------------------------------------
 
-void VariablesDatas::setDefault(){
+void VariablesDatas::setDefault() {
     for (int i = 1; i <= 5; i++){
         QStandardItem * item = new QStandardItem();
         SystemVariables* page = new SystemVariables(i, "");
-        page->setDefault();
+        page->setDefaultVariables(i == 1);
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(page)));
         item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
         item->setText(page->toString());
