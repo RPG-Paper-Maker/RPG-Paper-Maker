@@ -63,7 +63,7 @@ protected:
     void initializeWidgets(SystemCommonObject *object, QStandardItemModel
         *parameters);
     void insertTag(int index, QComboBox *combobox, QString tag,
-        QStandardItemModel *model, int modelIndex);
+        QStandardItemModel *model, int modelIndex, bool closure = true);
     void insertNoValueTag(QString tag);
 
     virtual void initialize(EventCommand* command);

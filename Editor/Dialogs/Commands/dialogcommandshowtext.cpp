@@ -116,14 +116,19 @@ void DialogCommandShowText::initializeWidgets(SystemCommonObject *object,
 // -------------------------------------------------------
 
 void DialogCommandShowText::insertTag(int index, QComboBox *combobox, QString
-    tag, QStandardItemModel *model, int modelIndex)
+    tag, QStandardItemModel *model, int modelIndex, bool closure)
 {
     if (index > 0) {
+        QString text;
+
         combobox->setCurrentIndex(0);
-        ui->plainTextMessage->insertPlainText("[" + tag + "=" + QString::number(
-            reinterpret_cast<SuperListItem *>(SuperListItem::getByIndex(model,
-            modelIndex))->id()) + "]" + ui->plainTextMessage->textCursor()
-            .selectedText() + "[/" + tag + "]");
+        text = "[" + tag + "=" + QString::number(reinterpret_cast<SuperListItem
+            *>(SuperListItem::getByIndex(model,modelIndex))->id()) + "]";
+        if (closure) {
+            text += ui->plainTextMessage->textCursor().selectedText() + "[/" +
+                tag + "]";
+        }
+        ui->plainTextMessage->insertPlainText(text);
         ui->plainTextMessage->setFocus();
     }
 }
@@ -240,21 +245,21 @@ void DialogCommandShowText::on_comboBoxVariable_currentIndexChanged(int index) {
         <SystemVariables *>(RPM::get()->project()->gameDatas()->variablesDatas()
         ->model()->item((index - 1) / SystemVariables::variablesPerPage)->data()
         .value<quintptr>())->model(), (index - 1) % SystemVariables
-        ::variablesPerPage);
+        ::variablesPerPage, false);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandShowText::on_comboBoxParameters_currentIndexChanged(int index) {
     this->insertTag(index, ui->comboBoxParameters, TAG_PARAMETER, m_parameters,
-        index - 1);
+        index - 1, false);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandShowText::on_comboBoxProperties_currentIndexChanged(int index) {
     this->insertTag(index, ui->comboBoxProperties, TAG_PROPERTY, m_properties,
-        index - 1);
+        index - 1, false);
 }
 
 // -------------------------------------------------------
@@ -264,12 +269,12 @@ void DialogCommandShowText::on_comboBoxHeroName_currentIndexChanged(int index) {
         <SystemVariables *>(RPM::get()->project()->gameDatas()->variablesDatas()
         ->model()->item((index - 1) / SystemVariables::variablesPerPage)->data()
         .value<quintptr>())->model(), (index - 1) % SystemVariables
-        ::variablesPerPage);
+        ::variablesPerPage, false);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandShowText::on_comboBoxIcon_currentIndexChanged(int index) {
     this->insertTag(index, ui->comboBoxIcon, TAG_ICON, RPM::get()->project()
-        ->picturesDatas()->model(PictureKind::Icons), index - 1);
+        ->picturesDatas()->model(PictureKind::Icons), index - 1, false);
 }
