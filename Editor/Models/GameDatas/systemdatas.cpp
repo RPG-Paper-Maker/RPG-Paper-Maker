@@ -407,8 +407,8 @@ void SystemDatas::setDefaultFontNames() {
     QList<QStandardItem *> row;
     SystemFontName *fontName;
 
-    fontName = new SystemFontName(1, "Arial", new PrimitiveValue(
-        PrimitiveValueKind::Message, "Arial"));
+    fontName = new SystemFontName(1, "sans-serif", new PrimitiveValue(
+        PrimitiveValueKind::Message, "sans-serif"));
     row = fontName->getModelRow();
     m_modelFontNames->appendRow(row);
 }

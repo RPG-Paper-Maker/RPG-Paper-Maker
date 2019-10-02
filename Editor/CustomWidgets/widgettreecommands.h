@@ -72,6 +72,8 @@ protected:
     void insertIfBlock(EventCommand* command, QStandardItem *root, int pos);
     void insertElseBlock(QStandardItem *root, int pos);
     void insertStartBattle(QStandardItem *root, int pos);
+    void insertChoiceBlocks(EventCommand* command, QStandardItem *root, int pos);
+    void insertChoiceBlock(int index, QStandardItem *root, int pos);
     void deleteCommand();
     void deleteEndBlock(QStandardItem *root, int row);
     void deleteElseBlock(QStandardItem *root, int row);

@@ -130,6 +130,28 @@ bool LangsTranslation::isEmpty() const {
 //
 // -------------------------------------------------------
 
+void LangsTranslation::getCommand(QVector<QString> &command) {
+    QHash<int, QString>::const_iterator i;
+
+    for (i = m_names.begin(); i != m_names.end(); i++) {
+        command.append(QString::number(i.key()));
+        command.append(i.value());
+    }
+}
+
+// -------------------------------------------------------
+
+void LangsTranslation::initializeCommand(EventCommand *command, int &i) {
+    int id;
+    QString name;
+
+    id = command->valueCommandAt(i++).toInt();
+    name = command->valueCommandAt(i++);
+    m_names[id] = name;
+}
+
+// -------------------------------------------------------
+
 void LangsTranslation::read(const QJsonObject &json) {
     QJsonObject::const_iterator i;
     for (i = json.begin(); i != json.end(); i++) {

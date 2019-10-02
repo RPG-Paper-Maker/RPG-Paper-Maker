@@ -124,6 +124,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Play a music effect...";
     case EventCommandKind::ChangeProperty:
         return "Change property...";
+    case EventCommandKind::DisplayChoice:
+        return "Display a choice...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -131,6 +133,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
     case EventCommandKind::EndIf:
     case EventCommandKind::IfWin:
     case EventCommandKind::IfLose:
+    case EventCommandKind::Choice:
+    case EventCommandKind::EndChoice:
     case EventCommandKind::Last:
         return "";
     }
@@ -165,7 +169,8 @@ bool EventCommand::isEditable() const {
         EventCommandKind::WhileBreak && m_kind != EventCommandKind::EndWhile &&
         m_kind != EventCommandKind::Else && m_kind != EventCommandKind::EndIf &&
         m_kind != EventCommandKind::EndGame && m_kind != EventCommandKind
-        ::OpenMainMenu && m_kind != EventCommandKind::OpenSavesMenu;
+        ::OpenMainMenu && m_kind != EventCommandKind::OpenSavesMenu && m_kind !=
+        EventCommandKind::Choice && m_kind != EventCommandKind::EndChoice;
 }
 
 // -------------------------------------------------------
@@ -190,6 +195,47 @@ int EventCommand::getSongID(QStandardItemModel *parameters) const {
     id = m_listCommand.at(i++).toInt();
 
     return isIDNumber ? idNumber.toInt() : id;
+}
+
+// -------------------------------------------------------
+
+int EventCommand::getChoicesNumber() const {
+    QString next;
+    int i, l, nb;
+
+    i = 2;
+    l = this->commandsCount();
+    nb = 0;
+    while (i < l) {
+        next = m_listCommand.at(i);
+        if (next == RPM::DASH) {
+            m_listCommand.at(i++).toInt();
+            i++;
+            nb++;
+        }
+        i += 2;
+    }
+
+    return nb;
+}
+
+// -------------------------------------------------------
+
+void EventCommand::getChoicesIDs(QList<int> &list) {
+    QString next;
+    int i, l, nb;
+
+    i = 2;
+    l = this->commandsCount();
+    nb = 0;
+    while (i < l) {
+        next = m_listCommand.at(i);
+        if (next == RPM::DASH) {
+            list.append(m_listCommand.at(i++).toInt());
+            i++;
+        }
+        i += 2;
+    }
 }
 
 // -------------------------------------------------------
@@ -268,6 +314,12 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strPlayMusicEffect(object, parameters); break;
     case EventCommandKind::ChangeProperty:
         str += this->strChangeProperty(object, parameters); break;
+    case EventCommandKind::DisplayChoice:
+        str += this->strDisplayChoice(object, parameters); break;
+    case EventCommandKind::Choice:
+        str += this->strChoice(); break;
+    case EventCommandKind::EndChoice:
+        str += "End choice"; break;
     default:
         break;
     }
@@ -1253,6 +1305,26 @@ QString EventCommand::strChangeProperty(SystemCommonObject *object,
 
     return "Change property: property ID " + propertyID + " " + operation + " "
         + newValue;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strDisplayChoice(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString cancelIndex;
+    int i;
+
+    i = 0;
+    cancelIndex = this->strProperty(i, object, parameters);
+
+    return "Display a choice: [cancel index=" + cancelIndex + "]";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChoice() const {
+    return "Choice " + m_listCommand.at(0) + ":";
 }
 
 // -------------------------------------------------------

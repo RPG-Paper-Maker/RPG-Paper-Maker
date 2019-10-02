@@ -180,18 +180,26 @@ void PanelPrimitiveValue::initializeMessage(bool formula, QStandardItemModel
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
-    QStandardItemModel *properties)
+    QStandardItemModel *properties, bool isInteger)
 {
     m_kind = PanelPrimitiveValueKind::Property;
     addNone();
-    addNumberDouble();
+    if (isInteger) {
+        addNumber();
+    } else {
+        addNumberDouble();
+    }
     addVariable();
     addMessage(false);
     addSwitch();
     addKeyBoard();
     addParameter(parameters);
     addProperty(properties);
-    setNumberDoubleValue(m_model->numberDoubleValue());
+    if (isInteger) {
+        setNumberValue(m_model->numberValue());
+    } else {
+        setNumberDoubleValue(m_model->numberDoubleValue());
+    }
     setMessageValue(m_model->messageValue());
     setSwitchValue(m_model->switchValue());
     initialize();

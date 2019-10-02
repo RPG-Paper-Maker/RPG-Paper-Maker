@@ -8,6 +8,7 @@
     See RPG Paper Maker EULA here:
         http://rpg-paper-maker.com/index.php/eula.
 */
+
 #include "dialogcommandwait.h"
 #include "ui_dialogcommandwait.h"
 

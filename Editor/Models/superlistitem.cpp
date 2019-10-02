@@ -37,7 +37,8 @@ SuperListItem::~SuperListItem() {}
 SuperListItem::SuperListItem(int i, QString n, bool datas) :
     p_id(i),
     p_name(n),
-    m_containsDatas(datas)
+    m_containsDatas(datas),
+    m_displayID(true)
 {
 
 }
@@ -49,6 +50,10 @@ void SuperListItem::setId(int i) { p_id = i; }
 QString SuperListItem::name() const { return p_name; }
 
 void SuperListItem::setName(QString n){ p_name = n; }
+
+void SuperListItem::setDisplayID(bool b) {
+    m_displayID = b;
+}
 
 // -------------------------------------------------------
 //
@@ -91,6 +96,7 @@ SuperListItem* SuperListItem::createCopy() const{
 
 void SuperListItem::setCopy(const SuperListItem& item){
     p_name = item.name();
+    m_displayID = item.m_displayID;
 }
 
 // -------------------------------------------------------
@@ -303,7 +309,7 @@ QList<QStandardItem *> SuperListItem::getModelRow() const{
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     if (!m_containsDatas || RPM::get()->project()->gameDatas()->isDatasRead()) {
-        item->setText(toString());
+        item->setText(m_displayID ? this->toString() : this->toStringName());
     }
     row.append(item);
     RPM::get()->project();

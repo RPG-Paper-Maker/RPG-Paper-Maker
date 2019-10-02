@@ -56,7 +56,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonDisplayChoice">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Display a choice...</string>

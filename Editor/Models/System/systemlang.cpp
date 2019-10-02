@@ -37,11 +37,6 @@ SystemLang::~SystemLang(){
 
 LangsTranslation* SystemLang::names() const { return m_names; }
 
-void SystemLang::setName(QString n){
-    SuperListItem::setName(n);
-    m_names->setMainName(n);
-}
-
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -50,6 +45,31 @@ void SystemLang::setName(QString n){
 
 void SystemLang::setDefault(){
     setName(p_name);
+}
+
+// -------------------------------------------------------
+
+QString SystemLang::name() const {
+    return m_names->mainName();
+}
+
+// -------------------------------------------------------
+
+void SystemLang::setName(QString n){
+    SuperListItem::setName(n);
+    m_names->setMainName(n);
+}
+
+// -------------------------------------------------------
+
+void SystemLang::getCommand(QVector<QString> &command) {
+    m_names->getCommand(command);
+}
+
+// -------------------------------------------------------
+
+void SystemLang::initializeCommand(EventCommand *command, int &i) {
+    m_names->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------

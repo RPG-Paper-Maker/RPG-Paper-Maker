@@ -58,10 +58,11 @@ public:
     bool isEditable() const;
     bool isErasable() const;
     int getSongID(QStandardItemModel *parameters) const;
+    int getChoicesNumber() const;
+    void getChoicesIDs(QList<int> &list);
     void setCopy(const EventCommand &copy);
     QString toString(SystemCommonObject *object = nullptr, QStandardItemModel
         *parameters = nullptr) const;
-
     void read(const QJsonObject &json);
     QJsonObject getJSON() const;
 
@@ -144,6 +145,9 @@ private:
          QStandardItemModel *parameters) const;
     QString strChangeProperty(SystemCommonObject *object,
          QStandardItemModel *parameters) const;
+    QString strDisplayChoice(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strChoice() const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

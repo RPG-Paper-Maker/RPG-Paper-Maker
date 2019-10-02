@@ -71,11 +71,13 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     if (dirName.count() == 0)
         return "The directory name can't be empty.";
     if (!QDir::isAbsolutePath(location))
-        return "The path location needs to be absolute.";
+        return "The path location " + location + " needs to be absolute.";
     if (!pathLocation.exists())
-        return "The path location doesn't exists.";
-    if (!pathLocation.mkdir(dirName))
-        return "The directory " + dirName + " already exists.";
+        return "The path location " + location + " doesn't exists.";
+    if (!pathLocation.mkdir(dirName)) {
+        return "The directory " + dirName + " already exists in " + location +
+            ".";
+    }
 
     // If all is ok, then let's fill the project folder
 

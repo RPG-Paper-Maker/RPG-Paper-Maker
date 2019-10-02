@@ -16,6 +16,7 @@
 #include <QMetaType>
 #include "superlistitem.h"
 #include "langstranslation.h"
+#include "eventcommand.h"
 
 // -------------------------------------------------------
 //
@@ -33,10 +34,12 @@ public:
     virtual ~SystemLang();
 
     LangsTranslation* names() const;
+
+    virtual void setDefault();
+    virtual QString name() const;
     virtual void setName(QString n);
-
-    void setDefault();
-
+    virtual void getCommand(QVector<QString> &command);
+    virtual void initializeCommand(EventCommand *command, int &i);
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem& super);

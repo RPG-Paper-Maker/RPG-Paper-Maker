@@ -53,6 +53,9 @@ enum class EventCommandKind {
     PlayASound,
     PlayMusicEffect,
     ChangeProperty,
+    DisplayChoice,
+    Choice,
+    EndChoice,
     Last
 };
 

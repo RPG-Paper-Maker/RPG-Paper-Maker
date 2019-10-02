@@ -28,6 +28,7 @@ HEADERS += \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
+    Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
@@ -335,6 +336,7 @@ SOURCES += \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
+    Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
@@ -610,6 +612,7 @@ FORMS += \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
+    Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \

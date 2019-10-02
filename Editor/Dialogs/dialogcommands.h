@@ -56,6 +56,7 @@ private:
 
 private slots:
     void on_pushButtonShowText_clicked();
+    void on_pushButtonDisplayChoice_clicked();
     void on_pushButtonEndGame_clicked();
     void on_pushButtonChangeVariables_clicked();
     void on_pushButtonWhile_clicked();

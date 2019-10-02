@@ -58,7 +58,7 @@ public:
         = nullptr, QStandardItemModel *properties = nullptr, bool showPrimitive =
         true);
     void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
-        *properties);
+        *properties, bool isInteger = false);
     void initializeVariableParamProp(QStandardItemModel *parameters,
         QStandardItemModel *properties);
     void initializeFont(QStandardItemModel *parameters = nullptr,

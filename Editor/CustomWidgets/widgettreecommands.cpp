@@ -224,6 +224,9 @@ void WidgetTreeCommands::newCommand(QStandardItem* selected) {
             if (command->isBattleWithoutGameOver())
                 insertStartBattle(root, insertionRow);
             break;
+        case EventCommandKind::DisplayChoice:
+            insertChoiceBlocks(command, root, insertionRow);
+            break;
         default:
             break;
         }
@@ -277,6 +280,38 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
                     insertStartBattle(root, selected->row() + 1);
                 }
                 break;
+            case EventCommandKind::DisplayChoice:
+            {
+                QList<int> ids;
+                QList<int> newIds;
+                QList<QStandardItem *> previousCommands;
+                QStandardItem *item;
+                int i, l, row, id, index;
+
+                row = selected->row();
+                command->getChoicesIDs(ids);
+                command->getChoicesIDs(newIds);
+                // Remove all the previous choices
+                for (i = ids.size(); i >= 1; i--) {
+                    item = new QStandardItem;
+                    SystemReaction::copyCommandsItem(root->child(row + i),
+                        item);
+                    previousCommands.append(item);
+                    SystemCommonReaction::deleteCommands(root->child(row + i));
+                    root->removeRow(row + i);
+                }
+                // Add new choices and copy commands if same ID
+                for (i = 1, l = newIds.size(); i <= l; i++) {
+                    id = newIds.at(i);
+                    index = ids.indexOf(id);
+                    if (index == -1) {
+
+                    } else {
+
+                    }
+                }
+                break;
+            }
             default:
                 break;
             }
@@ -448,6 +483,35 @@ void WidgetTreeCommands::insertStartBattle(QStandardItem *root, int pos){
 
 // -------------------------------------------------------
 
+void WidgetTreeCommands::insertChoiceBlocks(EventCommand* command, QStandardItem
+    *root, int pos)
+{
+    int i, nb;
+
+    nb = command->getChoicesNumber();
+    for (i = 1; i <= nb; i++) {
+        this->insertChoiceBlock(i, root, pos++);
+    }
+    this->insertCommand(new EventCommand(EventCommandKind::EndChoice), root, pos);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::insertChoiceBlock(int index, QStandardItem *root, int
+    pos)
+{
+    QVector<QString> command;
+    QStandardItem *item;
+
+    command.append(QString::number(index));
+    item = this->insertCommand(new EventCommand(EventCommandKind::Choice,
+        command), root, pos);
+    SystemCommonReaction::addEmptyCommand(item);
+    this->expand(item->index());
+}
+
+// -------------------------------------------------------
+
 void WidgetTreeCommands::deleteEndBlock(QStandardItem *root, int row){
     EventCommand* endCommand = (EventCommand*)(root->child(row)->data()
                                                .value<quintptr>());
@@ -470,6 +534,12 @@ void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
     deleteEndBlock(root, row);
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row) {
+
 }
 
 // -------------------------------------------------------
@@ -568,6 +638,28 @@ void WidgetTreeCommands::selectChildren(QStandardItem* item){
             st = root->child(j-1);
             sm->select(st->index(), QItemSelectionModel::Select);
             selectChildren(st);
+            break;
+        case EventCommandKind::DisplayChoice:
+            int i, nbChoices;
+
+            sm->select(item->index(), QItemSelectionModel::Select);
+            j++;
+            nbChoices = command->getChoicesNumber();
+            for (i = 0; i < nbChoices; i++) {
+                st = root->child(j++);
+                sm->select(st->index(), QItemSelectionModel::Select);
+                selectChildrenOnly(st);
+            }
+            st = root->child(j);
+            sm->select(st->index(), QItemSelectionModel::Select);
+            break;
+        case EventCommandKind::Choice:
+            st = root->child(j - command->valueCommandAt(0).toInt());
+            this->selectChildren(st);
+            break;
+        case EventCommandKind::EndChoice:
+            st = root->child(j - 1);
+            this->selectChildren(st);
             break;
         default:
             break;

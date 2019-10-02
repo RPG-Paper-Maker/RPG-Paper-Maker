@@ -75,7 +75,6 @@ void SystemTroop::setCopy(const SystemTroop &troop) {
 
 void SystemTroop::read(const QJsonObject &json){
     SuperListItem::read(json);
-    QJsonArray tab;
 
     // Monsters list
     m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
@@ -86,9 +85,6 @@ void SystemTroop::read(const QJsonObject &json){
 
 void SystemTroop::write(QJsonObject &json) const{
     SuperListItem::write(json);
-    QJsonArray tab;
-    QJsonObject obj;
-    int l;
 
     // Monsters list
     SuperListItem::writeTree(m_monstersList, json, "l");

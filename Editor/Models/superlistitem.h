@@ -42,6 +42,8 @@ public:
     virtual void setId(int i);
     virtual QString name() const;
     virtual void setName(QString n);
+    void setDisplayID(bool b);
+
     virtual QString toString() const;
     virtual QString toStringName() const;
     static QString pathIconRed;
@@ -84,6 +86,7 @@ protected:
     int p_id;
     QString p_name;
     bool m_containsDatas;
+    bool m_displayID;
 };
 
 Q_DECLARE_METATYPE(SuperListItem)
