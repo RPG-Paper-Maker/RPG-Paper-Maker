@@ -42,7 +42,7 @@ public:
     bool isEmpty() const;
 
     virtual void getCommand(QVector<QString> &command);
-    virtual void initializeCommand(EventCommand *command, int &i);
+    virtual void initializeCommand(const EventCommand *command, int &i);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

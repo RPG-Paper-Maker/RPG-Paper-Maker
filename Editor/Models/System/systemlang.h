@@ -39,7 +39,7 @@ public:
     virtual QString name() const;
     virtual void setName(QString n);
     virtual void getCommand(QVector<QString> &command);
-    virtual void initializeCommand(EventCommand *command, int &i);
+    virtual void initializeCommand(const EventCommand *command, int &i);
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem& super);

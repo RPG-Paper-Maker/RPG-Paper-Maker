@@ -34,7 +34,7 @@ SystemFontName::SystemFontName(int i, QString n, PrimitiveValue *f) :
 }
 
 SystemFontName::~SystemFontName() {
-
+    delete m_font;
 }
 
 PrimitiveValue * SystemFontName::font() const {

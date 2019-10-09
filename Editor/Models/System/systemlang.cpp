@@ -68,7 +68,7 @@ void SystemLang::getCommand(QVector<QString> &command) {
 
 // -------------------------------------------------------
 
-void SystemLang::initializeCommand(EventCommand *command, int &i) {
+void SystemLang::initializeCommand(const EventCommand *command, int &i) {
     m_names->initializeCommand(command, i);
 }
 

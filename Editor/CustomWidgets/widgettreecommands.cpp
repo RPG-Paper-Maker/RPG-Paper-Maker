@@ -290,24 +290,35 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
 
                 row = selected->row();
                 command->getChoicesIDs(ids);
-                command->getChoicesIDs(newIds);
+                newCommand->getChoicesIDs(newIds);
                 // Remove all the previous choices
                 for (i = ids.size(); i >= 1; i--) {
                     item = new QStandardItem;
                     SystemReaction::copyCommandsItem(root->child(row + i),
                         item);
-                    previousCommands.append(item);
+                    previousCommands.insert(0, item);
                     SystemCommonReaction::deleteCommands(root->child(row + i));
                     root->removeRow(row + i);
                 }
                 // Add new choices and copy commands if same ID
-                for (i = 1, l = newIds.size(); i <= l; i++) {
+                for (i = 0, l = newIds.size(); i < l; i++) {
                     id = newIds.at(i);
                     index = ids.indexOf(id);
                     if (index == -1) {
-
+                        this->insertChoiceBlock(i + 1, root, row + i + 1);
                     } else {
-
+                        item = previousCommands.at(index);
+                        previousCommands.replace(index, nullptr);
+                        this->insertExistingChoiceBlock(i + 1, root, row + i + 1,
+                            item);
+                    }
+                }
+                // Delete unused pointers commands copies
+                for (i = 0; i < l; i++) {
+                    item = previousCommands.at(i);
+                    if (item != nullptr) {
+                        delete reinterpret_cast<EventCommand *>(item->data()
+                            .value<quintptr>());
                     }
                 }
                 break;
@@ -315,6 +326,9 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
             default:
                 break;
             }
+
+            // Select all
+            this->selectChildren(selected);
 
             delete command;
             selected->setData(QVariant::fromValue(
@@ -512,6 +526,21 @@ void WidgetTreeCommands::insertChoiceBlock(int index, QStandardItem *root, int
 
 // -------------------------------------------------------
 
+void WidgetTreeCommands::insertExistingChoiceBlock(int index, QStandardItem
+    *root, int pos, QStandardItem *item)
+{
+    QVector<QString> list;
+    EventCommand *command;
+
+    list.append(QString::number(index));
+    command = reinterpret_cast<EventCommand *>(item->data().value<quintptr>());
+    command->setCommands(list);
+    root->insertRow(pos, item);
+    this->expand(item->index());
+}
+
+// -------------------------------------------------------
+
 void WidgetTreeCommands::deleteEndBlock(QStandardItem *root, int row){
     EventCommand* endCommand = (EventCommand*)(root->child(row)->data()
                                                .value<quintptr>());
@@ -534,12 +563,6 @@ void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
     SystemCommonReaction::deleteCommands(root->child(row));
     root->removeRow(row);
     deleteEndBlock(root, row);
-}
-
-// -------------------------------------------------------
-
-void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row) {
-
 }
 
 // -------------------------------------------------------

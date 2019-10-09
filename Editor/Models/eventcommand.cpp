@@ -231,10 +231,9 @@ void EventCommand::getChoicesIDs(QList<int> &list) {
     while (i < l) {
         next = m_listCommand.at(i);
         if (next == RPM::DASH) {
-            list.append(m_listCommand.at(i++).toInt());
-            i++;
+            list.append(m_listCommand.at(++i).toInt());
         }
-        i += 2;
+        i += 3;
     }
 }
 
@@ -1312,13 +1311,34 @@ QString EventCommand::strChangeProperty(SystemCommonObject *object,
 QString EventCommand::strDisplayChoice(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
-    QString cancelIndex;
-    int i;
+    QStringList choices;
+    QString cancelIndex, next;
+    SystemLang *lang;
+    int i, l;
 
     i = 0;
+    l = this->commandsCount();
     cancelIndex = this->strProperty(i, object, parameters);
+    lang = nullptr;
+    while (i < l) {
+        next = m_listCommand.at(i);
+        if (next == RPM::DASH) {
+            i += 2;
+            if (lang != nullptr) {
+                choices << " - " + lang->name();
+                delete lang;
+            }
+            lang = new SystemLang;
+        }
+        lang->initializeCommand(this, i);
+    }
+    if (lang != nullptr) {
+        choices << " - " + lang->name();
+        delete lang;
+    }
 
-    return "Display a choice: [cancel index=" + cancelIndex + "]";
+    return "Display a choice: [cancel index=" + cancelIndex + "]\n" + choices
+        .join("\n");
 }
 
 // -------------------------------------------------------

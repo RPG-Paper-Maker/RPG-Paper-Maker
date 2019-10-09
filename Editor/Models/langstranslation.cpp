@@ -141,7 +141,7 @@ void LangsTranslation::getCommand(QVector<QString> &command) {
 
 // -------------------------------------------------------
 
-void LangsTranslation::initializeCommand(EventCommand *command, int &i) {
+void LangsTranslation::initializeCommand(const EventCommand *command, int &i) {
     int id;
     QString name;
 

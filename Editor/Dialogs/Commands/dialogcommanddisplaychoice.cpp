@@ -124,7 +124,7 @@ void DialogCommandDisplayChoice::initialize(EventCommand *command) {
     while (i < l) {
         next = command->valueCommandAt(i);
         if (next == RPM::DASH) {
-            id = command->valueCommandAt(i++).toInt();
+            id = command->valueCommandAt(++i).toInt();
             if (lang != nullptr) {
                 row = lang->getModelRow();
                 m_model->appendRow(row);
