@@ -18,6 +18,7 @@
 #include <cmath>
 #include "rpm.h"
 #include "common.h"
+#include "systemcommonreaction.h"
 
 // COLORS
 const QColor RPM::COLOR_GRAY_SELECTION_DARKER = QColor(60, 60, 60);
@@ -258,6 +259,7 @@ RPM::~RPM() {
     }
     delete m_engineSettings;
     delete m_translations;
+    this->clearCommands();
 }
 
 Project* RPM::project() const {
@@ -274,6 +276,18 @@ Translations * RPM::translations() const {
 
 void RPM::setProject(Project *p) {
     m_project = p;
+}
+
+QStandardItem * RPM::copiedCommandAt(int i) const {
+    return m_copiedCommands.at(i);
+}
+
+int RPM::copiedCommandsCount() const {
+    return m_copiedCommands.size();
+}
+
+void RPM::copiedCommandsAppend(QStandardItem *item) {
+    m_copiedCommands.append(item);
 }
 
 // -------------------------------------------------------
@@ -361,4 +375,18 @@ void RPM::loadEngineSettings() {
 
     m_engineSettings = new EngineSettings;
     m_engineSettings->read();
+}
+
+// -------------------------------------------------------
+
+void RPM::clearCommands() {
+    QStandardItem *copiedCommand;
+    int i, l;
+
+    for (i = 0, l = this->copiedCommandsCount(); i < l; i++) {
+        copiedCommand = this->copiedCommandAt(i);
+        SystemCommonReaction::deleteCommands(copiedCommand);
+        delete copiedCommand;
+    }
+    m_copiedCommands.clear();
 }

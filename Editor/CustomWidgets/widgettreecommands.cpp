@@ -66,15 +66,7 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
 
 WidgetTreeCommands::~WidgetTreeCommands()
 {
-    QStandardItem* copiedCommand;
-
     delete m_contextMenuCommonCommands;
-
-    for (int i = 0; i < m_copiedCommands.size(); i++){
-        copiedCommand = m_copiedCommands.at(i);
-        SystemCommonReaction::deleteCommands(copiedCommand);
-        delete copiedCommand;
-    }
 }
 
 // -------------------------------------------------------
@@ -132,7 +124,7 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
 
     if (!indexes.isEmpty()){
         item = p_model->itemFromIndex(indexes.at(0));
-        command = (EventCommand*) item->data().value<quintptr>();
+        command = reinterpret_cast<EventCommand *>(item->data().value<quintptr>());
 
         if (command != nullptr){
             QStandardItem* root = getRootOfCommand(item);
@@ -141,7 +133,8 @@ QList<QStandardItem*> WidgetTreeCommands::getAllSelected() const{
             for (int i = 1; i < indexes.size(); i++){
                 item = p_model->itemFromIndex(indexes.at(i));
                 if (getRootOfCommand(item) == root){
-                    command = (EventCommand*) item->data().value<quintptr>();
+                    command = reinterpret_cast<EventCommand *>(item->data()
+                        .value<quintptr>());
                     if (command != nullptr){
                         list.append(item);
                     }
@@ -342,29 +335,25 @@ void WidgetTreeCommands::editCommand(QStandardItem *selected,
 // -------------------------------------------------------
 //  copyCommand: copy the selected command
 
-void WidgetTreeCommands::copyCommand(){
+void WidgetTreeCommands::copyCommand() {
     QList<QStandardItem*> list = getAllSelected();
     QStandardItem* selected;
     QStandardItem* copiedCommand;
     EventCommand* command;
 
     // Clear previous copy
-    for (int i = 0; i < m_copiedCommands.size(); i++){
-        copiedCommand = m_copiedCommands.at(i);
-        SystemCommonReaction::deleteCommands(copiedCommand);
-        delete copiedCommand;
-    }
-    m_copiedCommands.clear();
+    RPM::get()->clearCommands();
 
     // Copy new commands
     for (int i = 0; i < list.size(); i++){
         selected = list.at(i);
-        command = (EventCommand*) selected->data().value<quintptr>();
+        command = reinterpret_cast<EventCommand *>(selected->data().value<
+            quintptr>());
 
-        if (command != nullptr && command->kind() != EventCommandKind::None){
+        if (command != nullptr && command->kind() != EventCommandKind::None) {
             copiedCommand = new QStandardItem;
             SystemCommonReaction::copyCommandsItem(selected, copiedCommand);
-            m_copiedCommands.append(copiedCommand);
+            RPM::get()->copiedCommandsAppend(copiedCommand);
         }
     }
 }
@@ -372,14 +361,18 @@ void WidgetTreeCommands::copyCommand(){
 // -------------------------------------------------------
 //  pasteCommand: paste the copied command in the selected command
 
-void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
-    QStandardItem* copiedCommand;
-    QStandardItem* root = getRootOfCommand(selected);
-    QStandardItem* copy;
+void WidgetTreeCommands::pasteCommand() {
+    QStandardItem *copiedCommand, *root, *copy, *selected;
+    int i, l;
+
+    this->deleteCommand();
+    selected = getSelected();
+    root = this->getRootOfCommand(selected);
 
     // Paste copy and fill a new list of copies
-    for (int i = 0; i < m_copiedCommands.size(); i++){
-        copiedCommand = m_copiedCommands.at(i);
+    root = getRootOfCommand(selected);
+    for (i = 0, l = RPM::get()->copiedCommandsCount(); i < l; i++) {
+        copiedCommand = RPM::get()->copiedCommandAt(i);
         copy = new QStandardItem;
         SystemCommonReaction::copyCommandsItem(copiedCommand, copy);
         int insertionRow = getInsertionRow(selected, root);
@@ -391,7 +384,7 @@ void WidgetTreeCommands::pasteCommand(QStandardItem* selected){
 
 // -------------------------------------------------------
 
-void WidgetTreeCommands::deleteCommand(){
+void WidgetTreeCommands::deleteCommand() {
     QList<QStandardItem*> list = getAllSelected();
     QStandardItem* selected;
     EventCommand* command;
@@ -400,9 +393,10 @@ void WidgetTreeCommands::deleteCommand(){
 
     for (int i = 0; i < list.size(); i++){
         selected = list.at(i);
-        command = (EventCommand*) selected->data().value<quintptr>();
+        command = reinterpret_cast<EventCommand *>(selected->data().value<
+            quintptr>());
 
-        if (command != nullptr && command->kind() != EventCommandKind::None){
+        if (command != nullptr && command->kind() != EventCommandKind::None) {
             root = getRootOfCommand(selected);
 
             // Delete selected command
@@ -424,8 +418,8 @@ void WidgetTreeCommands::deleteCommand(){
 void WidgetTreeCommands::openCommand() {
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        EventCommand* command = (EventCommand*)selected->data()
-                                .value<quintptr>();
+        EventCommand* command = reinterpret_cast<EventCommand *>(selected
+            ->data().value<quintptr>());
         // if empty, create a new command
         if (command->kind() == EventCommandKind::None){
             newCommand(selected);
@@ -542,8 +536,8 @@ void WidgetTreeCommands::insertExistingChoiceBlock(int index, QStandardItem
 // -------------------------------------------------------
 
 void WidgetTreeCommands::deleteEndBlock(QStandardItem *root, int row){
-    EventCommand* endCommand = (EventCommand*)(root->child(row)->data()
-                                               .value<quintptr>());
+    EventCommand* endCommand = reinterpret_cast<EventCommand *>(root->child(row)
+        ->data().value<quintptr>());
     root->removeRow(row);
     delete endCommand;
 }
@@ -570,8 +564,8 @@ void WidgetTreeCommands::deleteStartBattleBlock(QStandardItem *root, int row){
 void WidgetTreeCommands::updateAllNodesString(QStandardItem *item){
     for (int i = 0; i < item->rowCount(); i++){
         updateAllNodesString(item->child(i));
-        EventCommand* command = (EventCommand*) item->child(i)->data()
-                                .value<quintptr>();
+        EventCommand* command = reinterpret_cast<EventCommand *>(item->child(i)
+            ->data().value<quintptr>());
         item->child(i)->setText(command->toString(m_linkedObject,
                                                   m_parameters));
     }
@@ -1080,8 +1074,7 @@ void WidgetTreeCommands::contextCopy(){
 // -------------------------------------------------------
 
 void WidgetTreeCommands::contextPaste(){
-    QStandardItem* selected = getSelected();
-    pasteCommand(selected);
+    pasteCommand();
 }
 
 // -------------------------------------------------------

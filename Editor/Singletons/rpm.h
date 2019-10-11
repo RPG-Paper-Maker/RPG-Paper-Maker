@@ -171,6 +171,9 @@ public:
     EngineSettings * engineSettings() const;
     Translations * translations() const;
     void setProject(Project *p);
+    QStandardItem * copiedCommandAt(int i) const;
+    int copiedCommandsCount() const;
+    void copiedCommandsAppend(QStandardItem *item);
 
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
@@ -184,11 +187,13 @@ public:
     static QString translate(const QString &key);
 
     void loadEngineSettings();
+    void clearCommands();
 
 protected:
     Project *m_project;
     EngineSettings *m_engineSettings;
     Translations *m_translations;
+    QList<QStandardItem *> m_copiedCommands;
 };
 
 #endif // RPM_H

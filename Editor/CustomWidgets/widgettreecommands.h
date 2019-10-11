@@ -50,7 +50,6 @@ protected:
     QStandardItemModel* p_model;
     GameDatas* p_gameDatas;
     ContextMenuList* m_contextMenuCommonCommands;
-    QList<QStandardItem*> m_copiedCommands;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
     QString m_enteredCommand;
@@ -64,7 +63,7 @@ protected:
     void newCommand(QStandardItem *selected);
     void editCommand(QStandardItem *selected, EventCommand *command);
     void copyCommand();
-    void pasteCommand(QStandardItem *selected);
+    void pasteCommand();
     void openCommand();
     QStandardItem* insertCommand(EventCommand* command, QStandardItem* root,
                                  int pos);
