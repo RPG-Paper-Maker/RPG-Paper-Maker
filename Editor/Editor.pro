@@ -29,6 +29,7 @@ HEADERS += \
     CustomWidgets/widgetvideo.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
+    Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
@@ -337,6 +338,7 @@ SOURCES += \
     CustomWidgets/widgetvideo.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
+    Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
@@ -613,6 +615,7 @@ FORMS += \
     CustomWidgets/widgetvideo.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
+    Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \

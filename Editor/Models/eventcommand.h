@@ -147,6 +147,8 @@ private:
          QStandardItemModel *parameters) const;
     QString strDisplayChoice(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strScript(SystemCommonObject *object, QStandardItemModel *parameters
+        ) const;
     QString strChoice() const;
 };
 

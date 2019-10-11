@@ -56,6 +56,7 @@ enum class EventCommandKind {
     DisplayChoice,
     Choice,
     EndChoice,
+    Script,
     Last
 };
 

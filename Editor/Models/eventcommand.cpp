@@ -126,6 +126,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Change property...";
     case EventCommandKind::DisplayChoice:
         return "Display a choice...";
+    case EventCommandKind::Script:
+        return "Script...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -319,6 +321,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChoice(); break;
     case EventCommandKind::EndChoice:
         str += "End choice"; break;
+    case EventCommandKind::Script:
+        str += this->strScript(object, parameters); break;
     default:
         break;
     }
@@ -1345,6 +1349,24 @@ QString EventCommand::strDisplayChoice(SystemCommonObject *object,
 
 QString EventCommand::strChoice() const {
     return "Choice " + m_listCommand.at(0) + ":";
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strScript(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    QString script;
+    int i;
+
+    i = 0;
+    if (m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING) {
+        script = this->strProperty(i, object, parameters);
+    } else {
+        script = m_listCommand.at(i);
+    }
+
+    return "Script: " + script;
 }
 
 // -------------------------------------------------------

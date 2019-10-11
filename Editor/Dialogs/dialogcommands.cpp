@@ -28,6 +28,7 @@
 #include "dialogcommandstopsong.h"
 #include "dialogcommandchangeproperty.h"
 #include "dialogcommanddisplaychoice.h"
+#include "dialogcommandscript.h"
 
 // -------------------------------------------------------
 //
@@ -123,6 +124,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandChangeProperty(command, object, parameters);
     case EventCommandKind::DisplayChoice:
         return new DialogCommandDisplayChoice(command, object, parameters);
+    case EventCommandKind::Script:
+        return new DialogCommandScript(command, object, parameters);
     default:
         return nullptr;
     }
@@ -307,4 +310,10 @@ void DialogCommands::on_pushButtonPlayMusicEffect_clicked() {
 
 void DialogCommands::on_pushButtonChangeProperty_clicked() {
     openDialogCommand(EventCommandKind::ChangeProperty);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonScript_clicked() {
+    openDialogCommand(EventCommandKind::Script);
 }
