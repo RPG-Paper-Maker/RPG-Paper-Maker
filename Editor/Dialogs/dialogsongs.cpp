@@ -11,6 +11,7 @@
 
 #include "dialogsongs.h"
 #include "ui_dialogsongs.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,8 @@ DialogSongs::DialogSongs(QWidget *parent) :
     
     ui->widgetSongs->setAreNegIDsEnabled(false);
     ui->widgetSongs->initializePrimitives(nullptr, nullptr);
+    ui->widgetSongs->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     // Tree model
     ui->treeView->setModel(createFoldersModel());

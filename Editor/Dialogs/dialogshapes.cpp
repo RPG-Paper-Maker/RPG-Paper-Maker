@@ -11,6 +11,7 @@
 
 #include "dialogshapes.h"
 #include "ui_dialogshapes.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,6 +26,8 @@ DialogShapes::DialogShapes(QWidget *parent) :
     ui->setupUi(this);
 
     ui->panelShapes->setAreNegIDsEnabled(false);
+    ui->panelShapes->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     // Tree model
     ui->treeView->setModel(createFoldersModel());

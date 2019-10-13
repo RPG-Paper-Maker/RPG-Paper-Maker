@@ -11,6 +11,7 @@
 
 #include "dialogvideos.h"
 #include "ui_dialogvideos.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogVideos::DialogVideos(QWidget *parent) :
     ui->treeView->setModel(createFoldersModel());
     ui->treeView->expandAll();
     ui->widgetVideoPreview->setKind();
+    ui->widgetVideoPreview->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 }
 
 DialogVideos::~DialogVideos() {

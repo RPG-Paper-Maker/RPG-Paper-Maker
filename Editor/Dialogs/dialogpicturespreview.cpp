@@ -32,7 +32,8 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     ui->widget->setChooseRect(true);
     ui->widget->setPictureKind(kind);
     ui->widget->changePicture(picture);
-    ui->widget->showAvailableContent(false);
+    ui->widget->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));

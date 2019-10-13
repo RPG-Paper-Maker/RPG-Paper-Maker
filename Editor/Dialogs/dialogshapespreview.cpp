@@ -30,7 +30,8 @@ DialogShapesPreview::DialogShapesPreview(SuperListItem *shapeID,
     ui->setupUi(this);
     ui->widget->setShapeKind(kind);
     ui->widget->changeShape(shapeID);
-    ui->widget->showAvailableContent(false);
+    ui->widget->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));

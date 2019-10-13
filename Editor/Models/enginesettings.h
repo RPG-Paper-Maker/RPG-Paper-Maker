@@ -37,6 +37,7 @@ public:
     static const QString JSON_ROTATION_LEFT_RIGHT_CLICKS;
     static const QString JSON_ROTATION_ANGLES;
     static const QString JSON_UPDATER;
+    static const QString JSON_SHOW_AVAILABLE_CONTENT;
     static const QString THEME_DEFAULT;
     static const QString THEME_WHITE;
     static const QString THEME_WHITE_MAC;
@@ -64,6 +65,8 @@ public:
     void setRotationAngle(AxisKind ak, double a);
     bool updater() const;
     void setUpdater(bool u);
+    bool showAvailableContent() const;
+    void setShowAvailableContent(bool sac);
 
     void setDefault();
     QString getThemeContent() const;
@@ -86,6 +89,7 @@ protected:
     QList<bool> m_rotationLeftRightClicks;
     QList<double> m_rotationAngles;
     bool m_updater;
+    bool m_showAvailableContent;
 
     QString readContent(QString name) const;
 };

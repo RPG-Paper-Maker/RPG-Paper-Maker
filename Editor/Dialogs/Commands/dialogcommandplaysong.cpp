@@ -33,6 +33,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     ui->widget->setSongKind(kind);
     ui->widget->initializePrimitives(parameters, nullptr);
     ui->panelPrimitiveValueSongID->initializeNumber(parameters, nullptr);
+    ui->widget->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     if (command != nullptr) {
         initialize(command);

@@ -11,6 +11,7 @@
 
 #include "dialogpictures.h"
 #include "ui_dialogpictures.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,6 +26,8 @@ DialogPictures::DialogPictures(QWidget *parent) :
     ui->setupUi(this);
     
     ui->widgetPicturePreview->setAreNegIDsEnabled(false);
+    ui->widgetPicturePreview->showAvailableContent(RPM::get()->engineSettings()
+        ->showAvailableContent());
 
     // Tree model
     ui->treeView->setModel(createFoldersModel());

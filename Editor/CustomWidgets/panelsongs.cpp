@@ -459,6 +459,8 @@ void PanelSongs::showAvailableContent(bool b) {
     ui->pushButtonMove->setVisible(b);
     ui->pushButtonRefresh->setVisible(b);
     ui->pushButtonAdd->setVisible(b);
+    RPM::get()->engineSettings()->setShowAvailableContent(b);
+    RPM::get()->engineSettings()->write();
 }
 
 // -------------------------------------------------------

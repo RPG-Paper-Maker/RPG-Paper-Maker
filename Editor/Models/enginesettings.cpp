@@ -26,6 +26,7 @@ const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
 const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
 const QString EngineSettings::JSON_UPDATER = "updater";
+const QString EngineSettings::JSON_SHOW_AVAILABLE_CONTENT = "sac";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -43,7 +44,8 @@ EngineSettings::EngineSettings() :
     m_zoomPictures(0),
     m_theme(ThemeKind::Dark),
     m_firstTime(true),
-    m_updater(true)
+    m_updater(true),
+    m_showAvailableContent(true)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -137,6 +139,14 @@ bool EngineSettings::updater() const {
 
 void EngineSettings::setUpdater(bool u) {
     m_updater = u;
+}
+
+bool EngineSettings::showAvailableContent() const {
+    return m_showAvailableContent;
+}
+
+void EngineSettings::setShowAvailableContent(bool sac) {
+    m_showAvailableContent = sac;
 }
 
 // -------------------------------------------------------
@@ -297,6 +307,9 @@ void EngineSettings::read(const QJsonObject &json) {
     if (json.contains(JSON_UPDATER)) {
         m_updater = json[JSON_UPDATER].toBool();
     }
+    if (json.contains(JSON_SHOW_AVAILABLE_CONTENT)) {
+        m_showAvailableContent = json[JSON_SHOW_AVAILABLE_CONTENT].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -341,5 +354,8 @@ void EngineSettings::write(QJsonObject &json) const {
     json[JSON_ROTATION_ANGLES] = tab;
     if (!m_updater) {
         json[JSON_UPDATER] = m_updater;
+    }
+    if (!m_showAvailableContent) {
+        json[JSON_SHOW_AVAILABLE_CONTENT] = m_showAvailableContent;
     }
 }
