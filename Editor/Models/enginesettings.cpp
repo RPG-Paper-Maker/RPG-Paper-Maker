@@ -25,6 +25,7 @@ const QString EngineSettings::JSON_FIRST_TIME = "ft";
 const QString EngineSettings::JSON_ROTATION_OPERATIONS = "ro";
 const QString EngineSettings::JSON_ROTATION_LEFT_RIGHT_CLICKS = "rlrc";
 const QString EngineSettings::JSON_ROTATION_ANGLES = "ra";
+const QString EngineSettings::JSON_UPDATER = "updater";
 const QString EngineSettings::THEME_DEFAULT = "defaulttheme";
 const QString EngineSettings::THEME_WHITE = "whitetheme";
 const QString EngineSettings::THEME_WHITE_MAC ="whitemactheme";
@@ -41,7 +42,8 @@ EngineSettings::EngineSettings() :
     m_keyBoardDatas(new KeyBoardDatas),
     m_zoomPictures(0),
     m_theme(ThemeKind::Dark),
-    m_firstTime(true)
+    m_firstTime(true),
+    m_updater(true)
 {
     // Default mac theme should be white
     #ifdef Q_OS_MAC
@@ -127,6 +129,14 @@ double EngineSettings::rotationAngle(AxisKind ak) const {
 
 void EngineSettings::setRotationAngle(AxisKind ak, double a) {
     m_rotationAngles.replace(static_cast<int>(ak), a);
+}
+
+bool EngineSettings::updater() const {
+    return m_updater;
+}
+
+void EngineSettings::setUpdater(bool u) {
+    m_updater = u;
 }
 
 // -------------------------------------------------------
@@ -284,6 +294,9 @@ void EngineSettings::read(const QJsonObject &json) {
     for (i = 0, l = tab.size(); i < l; i++) {
         m_rotationAngles.replace(i, tab.at(i).toDouble());
     }
+    if (json.contains(JSON_UPDATER)) {
+        m_updater = json[JSON_UPDATER].toBool();
+    }
 }
 
 // -------------------------------------------------------
@@ -326,4 +339,7 @@ void EngineSettings::write(QJsonObject &json) const {
         tab.append(m_rotationAngles.at(i));
     }
     json[JSON_ROTATION_ANGLES] = tab;
+    if (!m_updater) {
+        json[JSON_UPDATER] = m_updater;
+    }
 }

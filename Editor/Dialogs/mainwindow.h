@@ -106,6 +106,7 @@ private slots:
     void on_actionShow_Hide_grid_triggered();
     void on_actionShow_Hide_square_informations_triggered();
     void on_actionPlay_triggered();
+    void on_actionAuto_update_toggled(bool checked);
     void on_actionAbout_triggered();
     void checkUpdate();
     void openRecentProject(QString path);

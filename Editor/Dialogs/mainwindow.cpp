@@ -57,6 +57,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Setting window title
     this->setWindowTitle(p_appName + " v." + Project::ENGINE_VERSION);
 
+    // Auto updater
+    ui->actionAuto_update->setChecked(RPM::get()->engineSettings()->updater());
+
     // Update main panel
     mainPanel = new PanelMainMenu(this);
     ui->centralWidget->layout()->addWidget(mainPanel);
@@ -718,6 +721,13 @@ void MainWindow::on_actionPlay_triggered() {
     } else {
         QMessageBox::critical(this, "No hero defined", "There is no hero defined. Please define one hero before trying to launch again.\n You can define an object in a map as hero by right clicking on it in object mode and clicking on \"Define as Hero\".");
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionAuto_update_toggled(bool checked) {
+    RPM::get()->engineSettings()->setUpdater(checked);
+    RPM::get()->engineSettings()->write();
 }
 
 // -------------------------------------------------------
