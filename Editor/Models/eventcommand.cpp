@@ -921,9 +921,6 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
     case 2:
         str += "object " + this->strMoveObjectID(parameters, i);
         break;
-    case 3:
-        str += "sender";
-        break;
     }
 
     return str;

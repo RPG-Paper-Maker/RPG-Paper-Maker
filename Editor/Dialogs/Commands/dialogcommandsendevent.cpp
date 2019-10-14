@@ -94,12 +94,6 @@ void DialogCommandSendEvent::initialize(EventCommand* command){
         ui->radioButtonObject->setChecked(true);
         ui->panelPrimitiveObjectID->initializeCommand(command, i);
         break;
-    case 3:
-        ui->radioButtonSender->setChecked(true);
-        break;
-    case 4:
-        ui->radioButtonHero->setChecked(true);
-        break;
     }
     m_event = ui->widgetObjectEvent->initializeCommand(command, i);
 }
@@ -119,22 +113,14 @@ EventCommand* DialogCommandSendEvent::getCommand() const{
 void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
     if (ui->radioButtonAll->isChecked()){
         command.append("0");
-    }
-    else if(ui->radioButtonDetection->isChecked()){
+    } else if(ui->radioButtonDetection->isChecked()){
         command.append("1");
         ui->panelPrimitiveDetectionID->getCommand(command);
         command.append(ui->checkBoxSenderNoReceive->isChecked() ? RPM
             ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
-    }
-    else if(ui->radioButtonObject->isChecked()) {
+    } else if(ui->radioButtonObject->isChecked()) {
         command.append("2");
         ui->panelPrimitiveObjectID->getCommand(command);
-    }
-    else if(ui->radioButtonSender->isChecked()){
-        command.append("3");
-    }
-    else if(ui->radioButtonHero->isChecked()){
-        command.append("4");
     }
 }
 
