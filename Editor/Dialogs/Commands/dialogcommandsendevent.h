@@ -44,8 +44,13 @@ protected:
 private:
     Ui::DialogCommandSendEvent *ui;
     SystemObjectEvent* m_event;
+    QStandardItemModel *m_modelObjects;
 
     void chooseTarget(QVector<QString> &command) const;
+
+public slots:
+    void on_radioButtonDetection_toggled(bool checked);
+    void on_radioButtonObject_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDSENDEVENT_H

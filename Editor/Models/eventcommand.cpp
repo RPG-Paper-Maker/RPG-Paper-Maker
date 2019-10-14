@@ -904,7 +904,7 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
     QStandardItemModel *parameters, int &i) const
 {
     QString str;
-    int index, id;
+    int index;
 
     index = m_listCommand.at(i++).toInt();
     switch (index) {
@@ -919,8 +919,7 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
         }
         break;
     case 2:
-        id = m_listCommand.at(i++).toInt();
-        str += "object " + QString::number(id);
+        str += "object " + this->strMoveObjectID(parameters, i);
         break;
     case 3:
         str += "sender";

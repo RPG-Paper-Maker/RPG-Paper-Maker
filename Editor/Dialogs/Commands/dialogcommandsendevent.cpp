@@ -43,6 +43,16 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
         ->project()->gameDatas()->systemDatas()->modelDetections(), parameters,
         properties);
 
+    // Objects
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    } else {
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
+        parameters, nullptr);
+
     initialize(command);
 
     if (test) {
@@ -54,6 +64,10 @@ DialogCommandSendEvent::~DialogCommandSendEvent()
 {
     delete ui;
     delete m_event;
+
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------
@@ -78,7 +92,7 @@ void DialogCommandSendEvent::initialize(EventCommand* command){
         break;
     case 2:
         ui->radioButtonObject->setChecked(true);
-        command->valueCommandAt(i++).toInt();
+        ui->panelPrimitiveObjectID->initializeCommand(command, i);
         break;
     case 3:
         ui->radioButtonSender->setChecked(true);
@@ -112,10 +126,9 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
         command.append(ui->checkBoxSenderNoReceive->isChecked() ? RPM
             ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
     }
-    else if(ui->radioButtonObject->isChecked()){
+    else if(ui->radioButtonObject->isChecked()) {
         command.append("2");
-        command.append("1");
-        // TODO
+        ui->panelPrimitiveObjectID->getCommand(command);
     }
     else if(ui->radioButtonSender->isChecked()){
         command.append("3");
@@ -123,4 +136,21 @@ void DialogCommandSendEvent::chooseTarget(QVector<QString> &command) const{
     else if(ui->radioButtonHero->isChecked()){
         command.append("4");
     }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void DialogCommandSendEvent::on_radioButtonDetection_toggled(bool checked) {
+    ui->panelPrimitiveDetectionID->setEnabled(checked);
+    ui->checkBoxSenderNoReceive->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandSendEvent::on_radioButtonObject_toggled(bool checked) {
+    ui->panelPrimitiveObjectID->setEnabled(checked);
 }
