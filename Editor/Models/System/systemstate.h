@@ -33,11 +33,13 @@ public:
     static const QString JSON_EVENT_COMMAND_ROUTE;
     static const QString JSON_SPEED_ID;
     static const QString JSON_FREQUENCY_ID;
+    static const QString JSON_EVENT_COMMAND_DETECTION;
 
     SystemState();
     SystemState(SuperListItem* state, MapEditorSubSelectionKind gk, int gid,
         int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
-        bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k);
+        bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k,
+        EventCommand *ecd);
     virtual ~SystemState();
 
     virtual QString name() const;
@@ -77,8 +79,11 @@ public:
     void setSetWithCamera(bool b);
     void setPixelOffset(bool b);
     void setKeepPosition(bool b);
+    EventCommand * eventCommandDetection() const;
+    void setEventCommandDetection(EventCommand *ecd);
 
     void removeRoute();
+    void removeDetection();
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
@@ -105,6 +110,7 @@ protected:
     bool m_setWithCamera;
     bool m_pixelOffset;
     bool m_keepPosition;
+    EventCommand *m_eventCommandDetection;
 };
 
 Q_DECLARE_METATYPE(SystemState)

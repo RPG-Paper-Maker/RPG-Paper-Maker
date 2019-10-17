@@ -150,7 +150,7 @@ void SystemCommonObject::setDefaultFirst() {
         ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
         ObjectMovingKind::Fix, nullptr, 1, 1, true, false, false, false, false,
-        true, true, false);
+        true, true, false, nullptr);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -217,7 +217,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
         ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::SpritesFace, 1, 0,
         0, ObjectMovingKind::Fix, nullptr, 1, 1, true, false, false, false,
-        false, true, true, false);
+        false, true, true, false, nullptr);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();
@@ -307,7 +307,7 @@ void SystemCommonObject::setDefaultStartupObject() {
         ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1);
     state = new SystemState(super, MapEditorSubSelectionKind::None, -1, 0, 0,
         ObjectMovingKind::Fix, nullptr, 1, 1, false, false, false, false, false,
-        false, false, false);
+        false, false, false, nullptr);
     row = state->getModelRow();
     m_states->appendRow(row);
     item = new QStandardItem();

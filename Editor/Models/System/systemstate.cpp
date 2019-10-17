@@ -19,6 +19,7 @@ const QString SystemState::JSON_OBJECT_MOVING_KIND = "omk";
 const QString SystemState::JSON_EVENT_COMMAND_ROUTE = "ecr";
 const QString SystemState::JSON_SPEED_ID = "s";
 const QString SystemState::JSON_FREQUENCY_ID = "f";
+const QString SystemState::JSON_EVENT_COMMAND_DETECTION = "ecd";
 
 // -------------------------------------------------------
 //
@@ -30,14 +31,16 @@ SystemState::SystemState() :
     SystemState(SuperListItem::getById(RPM::get()->project()->gameDatas()
         ->commonEventsDatas()->modelStates()->invisibleRootItem(), 1),
         MapEditorSubSelectionKind::None, -1, 0, 0, ObjectMovingKind::Fix,
-        nullptr, 1, 1, false, false, false, false, false, false, false, false)
+        nullptr, 1, 1, false, false, false, false, false, false, false, false,
+        nullptr)
 {
 
 }
 
 SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     gid, int x, int y, ObjectMovingKind omk, EventCommand *ecr, int sp, int fr,
-    bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k) :
+    bool m, bool s, bool cl, bool d, bool t, bool c, bool p, bool k,
+    EventCommand *ecd) :
     SuperListItem(state->id(), state->name()),
     m_state(state),
     m_graphicsKind(gk),
@@ -45,7 +48,7 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     m_indexX(x),
     m_indexY(y),
     m_objectMovingKind(omk),
-    m_eventCommandRoute(ecr),
+    m_eventCommandRoute(ecd),
     m_speedID(sp),
     m_frequencyID(fr),
     m_moveAnimation(m),
@@ -55,13 +58,15 @@ SystemState::SystemState(SuperListItem *state, MapEditorSubSelectionKind gk, int
     m_through(t),
     m_setWithCamera(c),
     m_pixelOffset(p),
-    m_keepPosition(k)
+    m_keepPosition(k),
+    m_eventCommandDetection(ecr)
 {
 
 }
 
 SystemState::~SystemState() {
     this->removeRoute();
+    this->removeDetection();
 }
 
 QString SystemState::name() const { return m_state->name(); }
@@ -166,6 +171,14 @@ void SystemState::setPixelOffset(bool b) { m_pixelOffset = b; }
 
 void SystemState::setKeepPosition(bool b) { m_keepPosition = b; }
 
+EventCommand * SystemState::eventCommandDetection() const {
+    return m_eventCommandDetection;
+}
+
+void SystemState::setEventCommandDetection(EventCommand *ecd) {
+    m_eventCommandDetection = ecd;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -176,6 +189,15 @@ void SystemState::removeRoute() {
     if (m_eventCommandRoute != nullptr) {
         delete m_eventCommandRoute;
         m_eventCommandRoute = nullptr;
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemState::removeDetection() {
+    if (m_eventCommandDetection != nullptr) {
+        delete m_eventCommandDetection;
+        m_eventCommandDetection = nullptr;
     }
 }
 
@@ -232,6 +254,11 @@ void SystemState::setCopy(const SystemState& state) {
     m_setWithCamera = state.m_setWithCamera;
     m_pixelOffset = state.m_pixelOffset;
     m_keepPosition = state.m_keepPosition;
+    this->removeDetection();
+    if (state.m_eventCommandDetection!= nullptr) {
+        m_eventCommandDetection = new EventCommand;
+        m_eventCommandDetection->setCopy(*state.m_eventCommandDetection);
+    }
 }
 
 // -------------------------------------------------------
@@ -281,16 +308,23 @@ void SystemState::read(const QJsonObject &json) {
     m_setWithCamera = json["cam"].toBool();
     m_pixelOffset = json["pix"].toBool();
     m_keepPosition = json["pos"].toBool();
+    if (json.contains(JSON_EVENT_COMMAND_DETECTION)) {
+        m_eventCommandDetection = new EventCommand;
+        m_eventCommandDetection->read(json[JSON_EVENT_COMMAND_DETECTION]
+            .toObject());
+    } else {
+        m_eventCommandDetection = nullptr;
+    }
 }
 
 // -------------------------------------------------------
 
-void SystemState::write(QJsonObject &json) const{
+void SystemState::write(QJsonObject &json) const {
     SuperListItem::write(json);
     QJsonArray tab;
     QJsonObject obj;
 
-    json["gk"] = (int) m_graphicsKind;
+    json["gk"] = static_cast<int>(m_graphicsKind);
     json["gid"] = m_graphicsId;
     if (m_graphicsId == 0) {
         tab.append(m_rectTileset.x());
@@ -323,4 +357,8 @@ void SystemState::write(QJsonObject &json) const{
     json["cam"] = m_setWithCamera;
     json["pix"] = m_pixelOffset;
     json["pos"] = m_keepPosition;
+    if (m_eventCommandDetection != nullptr) {
+        obj = m_eventCommandDetection->getJSON();
+        json[JSON_EVENT_COMMAND_DETECTION] = obj;
+    }
 }

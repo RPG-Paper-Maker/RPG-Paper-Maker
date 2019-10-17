@@ -19,6 +19,7 @@
 #include "rpm.h"
 #include "objectmovingkind.h"
 #include "dialogcommandmoveobject.h"
+#include "dialogcommandsendevent.h"
 
 // -------------------------------------------------------
 //
@@ -56,6 +57,12 @@ PanelObject::PanelObject(QWidget *parent) :
         sp_retain.setRetainSizeWhenHidden(true);
         widgetList[i]->setSizePolicy(sp_retain);
     }
+
+    // Detection button word wrap
+    m_labelDetection = new QLabel("", ui->pushButtonDetection);
+    m_layoutDetection = new QHBoxLayout(ui->pushButtonDetection);
+    m_layoutDetection->setContentsMargins(9, 0, 9, 0);
+    m_layoutDetection->addWidget(m_labelDetection, 0, Qt::AlignCenter);
 }
 
 PanelObject::~PanelObject()
@@ -64,6 +71,8 @@ PanelObject::~PanelObject()
         delete m_copiedReaction;
 
     delete ui;
+    delete m_labelDetection;
+    delete m_layoutDetection;
 }
 
 // -------------------------------------------------------
@@ -187,6 +196,8 @@ void PanelObject::showStateWidgets(bool b) {
     ui->labelGraphics->setVisible(b);
     ui->frameGraphics->setVisible(b);
     ui->comboBoxGraphics->setVisible(b);
+    ui->checkBoxDetection->setVisible(b);
+    ui->pushButtonDetection->setVisible(b);
 }
 
 // -------------------------------------------------------
@@ -205,6 +216,8 @@ void PanelObject::showInvisible(bool b) {
     ui->labelGraphics->setEnabled(!b);
     ui->frameGraphics->setEnabled(!b);
     ui->comboBoxGraphics->setEnabled(!b);
+    ui->checkBoxDetection->setEnabled(!b);
+    ui->pushButtonDetection->setEnabled(!b);
 }
 
 // -------------------------------------------------------
@@ -309,6 +322,13 @@ void PanelObject::updateStateOptions(SystemState *state) {
     ui->checkBoxThrough->setChecked(state->through());
     ui->checkBoxSetWithCamera->setChecked(state->setWithCamera());
     ui->checkBoxPixelOffset->setChecked(state->pixelOffset());
+}
+
+// -------------------------------------------------------
+
+void PanelObject::updateStateDetection(SystemState *state) {
+    ui->checkBoxDetection->setChecked(state->eventCommandDetection() != nullptr);
+    this->on_checkBoxDetection_toggled(state->eventCommandDetection() != nullptr);
 }
 
 // -------------------------------------------------------
@@ -432,6 +452,7 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
             // Update options state
             this->updateStateMoving(super);
             this->updateStateOptions(super);
+            this->updateStateDetection(super);
 
             showStateWidgets(true);
         }
@@ -589,6 +610,70 @@ void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index) {
             }
             super->setGraphicsKind(kind);
             ui->frameGraphics->repaint();
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxDetection_toggled(bool checked) {
+    QStandardItem *selected;
+
+    ui->pushButtonDetection->setEnabled(checked);
+    selected = ui->treeViewStates->getSelected();
+    if (selected != nullptr) {
+        SystemState *state;
+
+        state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
+        if (state != nullptr) {
+            m_labelDetection->setText(checked && state->eventCommandDetection()
+                != nullptr ? state->eventCommandDetection()->toString() : "...");
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_checkBoxDetection_clicked() {
+    if (ui->checkBoxDetection->isChecked()) {
+        this->on_pushButtonDetection_clicked();
+    } else {
+        QStandardItem *selected;
+
+        selected = ui->treeViewStates->getSelected();
+        if (selected != nullptr) {
+            SystemState *state;
+
+            state = reinterpret_cast<SystemState *>(selected->data().value<
+                quintptr>());
+            state->removeDetection();
+            state->setEventCommandDetection(nullptr);
+        }
+    }
+}
+
+// -------------------------------------------------------
+
+void PanelObject::on_pushButtonDetection_clicked() {
+    QStandardItem *selected;
+
+    selected = ui->treeViewStates->getSelected();
+    if (selected != nullptr) {
+        SystemState *state;
+        EventCommand *command;
+
+        state = reinterpret_cast<SystemState *>(selected->data().value<quintptr>());
+        command = state->eventCommandDetection();
+        DialogCommandSendEvent dialog(command, nullptr, nullptr);
+        if (dialog.exec() == QDialog::Accepted) {
+            state->removeDetection();
+            command = dialog.getCommand();
+            state->setEventCommandDetection(command);
+            m_labelDetection->setText(command->toString());
+        } else {
+            if (command == nullptr) {
+                ui->checkBoxDetection->setChecked(false);
+            }
         }
     }
 }

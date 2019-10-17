@@ -14,6 +14,8 @@
 
 #include <QCheckBox>
 #include <QPushButton>
+#include <QLabel>
+#include <QHBoxLayout>
 #include "systemcommonobject.h"
 #include "widgettreecommands.h"
 #include "systemstate.h"
@@ -54,6 +56,7 @@ public:
     SystemState * getSelectedState() const;
     void updateStateMoving(SystemState *state);
     void updateStateOptions(SystemState *state);
+    void updateStateDetection(SystemState *state);
     void passToSprite();
     void passToNone();
 
@@ -65,6 +68,8 @@ private:
     QVector<QCheckBox *> m_checkBoxes;
     QVector<QPushButton *> m_pushButtons;
     SystemReaction *m_copiedReaction;
+    QLabel *m_labelDetection;
+    QHBoxLayout *m_layoutDetection;
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);
@@ -88,6 +93,9 @@ private slots:
     void on_checkBoxSetWithCamera_toggled(bool checked);
     void on_checkBoxPixelOffset_toggled(bool checked);
     void on_comboBoxGraphics_currentIndexChanged(int index);
+    void on_checkBoxDetection_toggled(bool checked);
+    void on_checkBoxDetection_clicked();
+    void on_pushButtonDetection_clicked();
     void on_copyReaction();
     void on_pasteReaction();
 };

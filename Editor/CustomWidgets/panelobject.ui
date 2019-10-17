@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_6">
+    <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,1,0,0">
        <item>
@@ -89,23 +89,60 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0">
+       <property name="spacing">
+        <number>6</number>
+       </property>
        <item>
-        <widget class="QTabWidget" name="tabWidgetCommands">
-         <property name="currentIndex">
-          <number>0</number>
+        <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,0">
+         <property name="spacing">
+          <number>15</number>
          </property>
-         <widget class="QWidget" name="tab">
-          <attribute name="title">
-           <string>Tab 1</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QTreeView" name="treeView"/>
+         <item>
+          <widget class="QTabWidget" name="tabWidgetCommands">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Tab 1</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QTreeView" name="treeView"/>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+           <item>
+            <widget class="QCheckBox" name="checkBoxDetection">
+             <property name="text">
+              <string>Detection:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonDetection">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
-         </widget>
-        </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,1,1,0">
