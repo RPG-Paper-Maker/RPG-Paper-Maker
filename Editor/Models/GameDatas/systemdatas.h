@@ -16,6 +16,7 @@
 #include "serializable.h"
 #include "primitivevalue.h"
 #include "langstranslation.h"
+#include "systemplaysong.h"
 
 // -------------------------------------------------------
 //
@@ -45,6 +46,10 @@ public:
     static const QString JSON_LAST_MINOR_VERSION;
     static const QString JSON_MOUNTAIN_COLLISION_HEIGHT;
     static const QString JSON_MOUNTAIN_COLLISION_ANGLE;
+    static const QString JSON_SOUND_CURSOR;
+    static const QString JSON_SOUND_CONFIRMATION;
+    static const QString JSON_SOUND_CANCEL;
+    static const QString JSON_SOUND_IMPOSSIBLE;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -89,6 +94,10 @@ public:
     void setLastMajorVersion(int v);
     int lastMinorVersion() const;
     void setLastMinorVersion(int v);
+    SystemPlaySong * soundCursor() const;
+    SystemPlaySong * soundConfirmation() const;
+    SystemPlaySong * soundCancel() const;
+    SystemPlaySong * soundImpossible() const;
 
     void setDefault();
     void setDefaultColors();
@@ -100,6 +109,7 @@ public:
     void setDefaultSpeedFrequencies();
     void setDefaultFontSizes();
     void setDefaultFontNames();
+    void setDefaultSounds();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -130,6 +140,10 @@ private:
     QStandardItemModel *m_modelFontNames;
     int m_lastMajorVersion;
     int m_lastMinorVersion;
+    SystemPlaySong *m_soundCursor;
+    SystemPlaySong *m_soundConfirmation;
+    SystemPlaySong *m_soundCancel;
+    SystemPlaySong *m_soundImpossible;
 };
 
 #endif // SYSTEMDATAS_H

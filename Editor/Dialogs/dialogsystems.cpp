@@ -159,6 +159,14 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->comboBoxWindowSkin->setCurrentIndex(SuperListItem::getIndexById(RPM
         ::get()->project()->gameDatas()->systemDatas()->modelWindowSkins()
         ->invisibleRootItem(), id));
+
+    // Sounds
+    ui->widgetChooseCursor->initialize(gameDatas->systemDatas()->soundCursor());
+    ui->widgetChooseConfirmation->initialize(gameDatas->systemDatas()
+        ->soundConfirmation());
+    ui->widgetChooseCancel->initialize(gameDatas->systemDatas()->soundCancel());
+    ui->widgetChooseImpossible->initialize(gameDatas->systemDatas()
+        ->soundImpossible());
 }
 
 // -------------------------------------------------------

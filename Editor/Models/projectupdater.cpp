@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 9;
+const int ProjectUpdater::incompatibleVersionsCount = 10;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0"};
+     "1.3.0", "1.4.0"};
 
 // -------------------------------------------------------
 //
@@ -259,7 +259,7 @@ void ProjectUpdater::check() {
     QThread::sleep(1);
     m_project->gameDatas()->systemDatas()->setPathBR(
                 Common::pathCombine(QDir::currentPath(), RPM::PATH_BR));
-    m_project->writeSystemDatas();
+    m_project->writeAll();
     emit progress(100, "");
     QThread::sleep(1);
 
@@ -686,4 +686,10 @@ void ProjectUpdater::updateVersion_1_3_0_commands(QStandardItem *commands) {
             }
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_4_0() {
+    m_project->gameDatas()->systemDatas()->setDefaultSounds();
 }

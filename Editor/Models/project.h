@@ -87,6 +87,7 @@ public:
     void readCommonEvents();
     void readTitleScreenGameOver();
     void write(QString path);
+    void writeAll();
     void writeGameDatas();
     void writeLangsDatas();
     void writeTreeMapDatas();

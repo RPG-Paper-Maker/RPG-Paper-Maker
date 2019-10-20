@@ -37,6 +37,10 @@ const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
 const QString SystemDatas::JSON_SPEED_FREQUENCIES = "sf";
+const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
+const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
+const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
+const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 
 // -------------------------------------------------------
 //
@@ -62,7 +66,11 @@ SystemDatas::SystemDatas() :
     m_modelFontSizes(new QStandardItemModel),
     m_modelFontNames(new QStandardItemModel),
     m_lastMajorVersion(1),
-    m_lastMinorVersion(0)
+    m_lastMinorVersion(0),
+    m_soundCursor(new SystemPlaySong(-1, SongKind::Sound)),
+    m_soundConfirmation(new SystemPlaySong(-1, SongKind::Sound)),
+    m_soundCancel(new SystemPlaySong(-1, SongKind::Sound)),
+    m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound))
 {
 
 }
@@ -81,6 +89,11 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelSpeedFrequencies);
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
+
+    delete m_soundCursor;
+    delete m_soundConfirmation;
+    delete m_soundCancel;
+    delete m_soundImpossible;
 }
 
 void SystemDatas::read(QString path) {
@@ -215,6 +228,22 @@ void SystemDatas::setLastMinorVersion(int v) {
     m_lastMinorVersion = v;
 }
 
+SystemPlaySong * SystemDatas::soundCursor() const {
+    return m_soundCursor;
+}
+
+SystemPlaySong * SystemDatas::soundConfirmation() const {
+    return m_soundConfirmation;
+}
+
+SystemPlaySong * SystemDatas::soundCancel() const {
+    return m_soundCancel;
+}
+
+SystemPlaySong * SystemDatas::soundImpossible() const {
+    return m_soundImpossible;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -240,6 +269,7 @@ void SystemDatas::setDefault() {
     this->setDefaultSpeedFrequencies();
     this->setDefaultFontSizes();
     this->setDefaultFontNames();
+    this->setDefaultSounds();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -414,6 +444,19 @@ void SystemDatas::setDefaultFontNames() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultSounds() {
+    m_soundCursor->setId(3);
+    m_soundCursor->volume()->setNumberValue(10);
+    m_soundConfirmation->setId(2);
+    m_soundConfirmation->volume()->setNumberValue(50);
+    m_soundCancel->setId(1);
+    m_soundCancel->volume()->setNumberValue(50);
+    m_soundImpossible->setId(1);
+    m_soundImpossible->volume()->setNumberValue(50);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -553,6 +596,12 @@ void SystemDatas::read(const QJsonObject &json){
     // Version
     m_lastMajorVersion = json[JSON_LAST_MAJOR_VERSION].toInt();
     m_lastMinorVersion = json[JSON_LAST_MINOR_VERSION].toInt();
+
+    // Sounds
+    m_soundCursor->read(json[JSON_SOUND_CURSOR].toObject());
+    m_soundConfirmation->read(json[JSON_SOUND_CONFIRMATION].toObject());
+    m_soundCancel->read(json[JSON_SOUND_CANCEL].toObject());
+    m_soundImpossible->read(json[JSON_SOUND_IMPOSSIBLE].toObject());
 }
 
 // -------------------------------------------------------
@@ -701,4 +750,17 @@ void SystemDatas::write(QJsonObject &json) const{
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;
     json[JSON_LAST_MINOR_VERSION] = m_lastMinorVersion;
+
+    // Sound
+    obj = QJsonObject();
+    m_soundCursor->write(obj);
+    json[JSON_SOUND_CURSOR] = obj;
+    obj = QJsonObject();
+    m_soundConfirmation->write(obj);
+    json[JSON_SOUND_CONFIRMATION] = obj;
+    obj = QJsonObject();
+    m_soundCancel->write(obj);
+    json[JSON_SOUND_CANCEL] = obj;
+    m_soundImpossible->write(obj);
+    json[JSON_SOUND_IMPOSSIBLE] = obj;
 }

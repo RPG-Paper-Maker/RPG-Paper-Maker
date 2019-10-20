@@ -449,6 +449,12 @@ void Project::readTitleScreenGameOver() {
 
 void Project::write(QString path) {
     setPathCurrentProject(path);
+    this->writeAll();
+}
+
+// -------------------------------------------------------
+
+void Project::writeAll() {
     writeLangsDatas();
     writeKeyBoardDatas();
     writePicturesDatas();

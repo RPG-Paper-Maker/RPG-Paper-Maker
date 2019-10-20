@@ -37,7 +37,9 @@
         "Smooth camera rotation ingame hero",
         "Better focus keyboard mouse for editor",
         "Message error when wrong picture parsing template",
-        "Update OSX Qt version"
+        "Update OSX Qt version",
+        "Correct sound effect issues",
+        "Music and escape issue with battle music"
 	],
 	"finished": [
         true,
@@ -48,6 +50,7 @@
         true,
         true,
         true,
+        true,
         false,
         false,
         false,
@@ -71,6 +74,7 @@
         false,
         false,
         false,
-        false
+        true,
+        true
 	]
 }
