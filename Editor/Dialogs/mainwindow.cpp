@@ -14,6 +14,11 @@
 #include <QProcess>
 #include <QJsonDocument>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QEventLoop>
+#include <QUrl>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialognewproject.h"
@@ -733,10 +738,35 @@ void MainWindow::on_actionAuto_update_toggled(bool checked) {
 // -------------------------------------------------------
 
 void MainWindow::on_actionAbout_triggered() {
-    QString name, website, buildDate, copyright, patreonThanks;
+    QNetworkAccessManager manager;
+    QNetworkReply *reply;
+    QEventLoop loop;
+    QJsonObject doc;
+    QJsonDocument json;
+    QString name, website, buildDate, copyright, patreonThanks,
+        patreonPreviousThanks;
+    int i, l;
 
-    patreonThanks = "Florian Dufour, Keven Tremblay, Anana, Utrano, Dennis "
-        "Haase, Clark.";
+    // Get patreon names
+    reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
+        "RPG-Paper-Maker/RPG-Paper-Maker/develop"
+        "/EditorApp/Content/patreon.json")));
+
+    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    if (reply->error() != QNetworkReply::NetworkError::NoError) {
+        doc = QJsonDocument::fromJson(reply->readAll()).object();
+    }
+    if (doc.isEmpty()) {
+        Common::readOtherJSON(Common::pathCombine(
+                                 QDir::currentPath(),
+                                 RPM::PATH_PATREON),
+                              json);
+        doc = json.object();
+    }
+    patreonThanks = doc["current"].toString();
+    patreonPreviousThanks = doc["previous"].toString();
+
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
@@ -747,7 +777,9 @@ void MainWindow::on_actionAbout_triggered() {
 
     QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
         "\n" + website + "\n\nBuilt on " + buildDate +
-        "\n\nPatreon special thanks: " + patreonThanks + "\n\n" + copyright);
+        "\n\nThanks a lot to all the current Patreon donators and particularly:\n\n"
+        + patreonThanks + "\n\nAlso thanks to all the previous Patreon donators:\n\n"
+        + patreonPreviousThanks + "\n\n" + copyright);
 }
 
 // -------------------------------------------------------

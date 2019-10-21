@@ -137,6 +137,7 @@ public:
     static const QString PATH_ENGINE_SETTINGS;
     static const QString PATH_TRANSLATIONS;
     static const QString PATH_TRANSLATIONS_LANGUAGES;
+    static const QString PATH_PATREON;
     static const QString PATH_GAMES;
     static const QString PATH_TEXTURE_MISSING;
 

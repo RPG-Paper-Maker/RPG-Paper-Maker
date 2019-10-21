@@ -1,5 +1,11 @@
 {
-	"add": [],
+	"add": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/patreon.json",
+            "target": "Engine/Content/patreon.json"
+        }
+    ],
 	"remove": [],
 	"replace": [],
 	"features": [
@@ -53,7 +59,7 @@
         true,
         true,
         true,
-        false,
+        true,
         false,
         false,
         false,
