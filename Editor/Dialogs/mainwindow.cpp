@@ -745,7 +745,6 @@ void MainWindow::on_actionAbout_triggered() {
     QJsonDocument json;
     QString name, website, buildDate, copyright, patreonThanks,
         patreonPreviousThanks;
-    int i, l;
 
     // Get patreon names
     reply = manager.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
@@ -754,14 +753,13 @@ void MainWindow::on_actionAbout_triggered() {
 
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
-    if (reply->error() != QNetworkReply::NetworkError::NoError) {
+    if (reply->error() == QNetworkReply::NetworkError::NoError) {
         doc = QJsonDocument::fromJson(reply->readAll()).object();
-    }
-    if (doc.isEmpty()) {
-        Common::readOtherJSON(Common::pathCombine(
-                                 QDir::currentPath(),
-                                 RPM::PATH_PATREON),
-                              json);
+        Common::writeOtherJSON(Common::pathCombine(QDir::currentPath(), RPM
+            ::PATH_PATREON), doc);
+    } else {
+        Common::readOtherJSON(Common::pathCombine(QDir::currentPath(), RPM
+            ::PATH_PATREON), json);
         doc = json.object();
     }
     patreonThanks = doc["current"].toString();
