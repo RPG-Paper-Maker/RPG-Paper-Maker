@@ -271,6 +271,8 @@ void SystemCommonSkillItem::read(const QJsonObject &json){
     }
     if (json.contains(JSON_SOUND)) {
         m_sound->read(json[JSON_SOUND].toObject());
+    } else {
+        m_sound->updateName();
     }
     if (json.contains(JSON_ANIMATION_USER_ID)) {
         m_animationUserID->read(json[JSON_ANIMATION_USER_ID].toObject());
