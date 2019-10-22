@@ -128,6 +128,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Display a choice...";
     case EventCommandKind::Script:
         return "Script...";
+    case EventCommandKind::DisplayAPicture:
+        return "Display a picture...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -225,11 +227,10 @@ int EventCommand::getChoicesNumber() const {
 
 void EventCommand::getChoicesIDs(QList<int> &list) {
     QString next;
-    int i, l, nb;
+    int i, l;
 
     i = 2;
     l = this->commandsCount();
-    nb = 0;
     while (i < l) {
         next = m_listCommand.at(i);
         if (next == RPM::DASH) {
@@ -323,6 +324,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += "End choice"; break;
     case EventCommandKind::Script:
         str += this->strScript(object, parameters); break;
+    case EventCommandKind::DisplayAPicture:
+        str += this->strDisplayAPicture(object, parameters); break;
     default:
         break;
     }
@@ -1363,6 +1366,30 @@ QString EventCommand::strScript(SystemCommonObject *object, QStandardItemModel
     }
 
     return "Script: " + script;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strDisplayAPicture(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString id, index, origin, x, y, zoom, opacity, angle;
+    int i;
+
+    i = 0;
+    id = m_listCommand.at(i++);
+    index = this->strProperty(i, object, parameters);
+    origin = m_listCommand.at(i++) == RPM::TRUE_BOOL_STRING ? "Center" :
+        "Top / Left";
+    x = this->strProperty(i, object, parameters);
+    y = this->strProperty(i, object, parameters);
+    zoom = this->strProperty(i, object, parameters);
+    opacity = this->strProperty(i, object, parameters);
+    angle = this->strProperty(i, object, parameters);
+
+    return "Display a picture: ID " + id + " and index " + index + "\n    Origin="
+        + origin + ", X=" + x + ", Y=" + y + ", Zoom=" + zoom + "%, Opacity=" +
+        opacity + "%, Angle=" + angle + "°";
 }
 
 // -------------------------------------------------------

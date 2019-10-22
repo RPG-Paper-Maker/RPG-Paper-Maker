@@ -127,6 +127,8 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
         return RPM::PATH_TITLE_SCREEN;
     case PictureKind::Object3D:
         return RPM::PATH_TEXTURES_OBJECT_3D;
+    case PictureKind::Pictures:
+        return RPM::PATH_HUD_PICTURES;
     default:
         throw std::invalid_argument("Kind of picture path not implemented");
     }

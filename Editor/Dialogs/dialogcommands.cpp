@@ -29,6 +29,7 @@
 #include "dialogcommandchangeproperty.h"
 #include "dialogcommanddisplaychoice.h"
 #include "dialogcommandscript.h"
+#include "dialogcommanddisplayapicture.h"
 
 // -------------------------------------------------------
 //
@@ -126,6 +127,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandDisplayChoice(command, object, parameters);
     case EventCommandKind::Script:
         return new DialogCommandScript(command, object, parameters);
+    case EventCommandKind::DisplayAPicture:
+        return new DialogCommandDisplayAPicture(command, object, parameters);
     default:
         return nullptr;
     }
@@ -159,161 +162,167 @@ void DialogCommands::openNonDialogCommand(EventCommandKind kind){
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonShowText_clicked(){
-    openDialogCommand(EventCommandKind::ShowText);
+    this->openDialogCommand(EventCommandKind::ShowText);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonDisplayChoice_clicked() {
-    openDialogCommand(EventCommandKind::DisplayChoice);
+    this->openDialogCommand(EventCommandKind::DisplayChoice);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonEndGame_clicked(){
-    openNonDialogCommand(EventCommandKind::EndGame);
+    this->openNonDialogCommand(EventCommandKind::EndGame);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonChangeVariables_clicked(){
-    openDialogCommand(EventCommandKind::ChangeVariables);
+    this->openDialogCommand(EventCommandKind::ChangeVariables);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonWhile_clicked(){
-    openNonDialogCommand(EventCommandKind::While);
+    this->openNonDialogCommand(EventCommandKind::While);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonWhileBreak_clicked(){
-    openNonDialogCommand(EventCommandKind::WhileBreak);
+    this->openNonDialogCommand(EventCommandKind::WhileBreak);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonInputNumber_clicked(){
-    openDialogCommand(EventCommandKind::InputNumber);
+    this->openDialogCommand(EventCommandKind::InputNumber);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonCondition_clicked(){
-    openDialogCommand(EventCommandKind::If);
+    this->openDialogCommand(EventCommandKind::If);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonOpenMainMenu_clicked(){
-    openNonDialogCommand(EventCommandKind::OpenMainMenu);
+    this->openNonDialogCommand(EventCommandKind::OpenMainMenu);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonOpenSavesMenu_clicked(){
-    openNonDialogCommand(EventCommandKind::OpenSavesMenu);
+    this->openNonDialogCommand(EventCommandKind::OpenSavesMenu);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonModifyInventory_clicked(){
-    openDialogCommand(EventCommandKind::ModifyInventory);
+    this->openDialogCommand(EventCommandKind::ModifyInventory);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonModifyTeam_clicked(){
-    openDialogCommand(EventCommandKind::ModifyTeam);
+    this->openDialogCommand(EventCommandKind::ModifyTeam);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonStartBattle_clicked(){
-    openDialogCommand(EventCommandKind::StartBattle);
+    this->openDialogCommand(EventCommandKind::StartBattle);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonChangeState_clicked(){
-    openDialogCommand(EventCommandKind::ChangeState);
+    this->openDialogCommand(EventCommandKind::ChangeState);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonSendEvent_clicked(){
-    openDialogCommand(EventCommandKind::SendEvent);
+    this->openDialogCommand(EventCommandKind::SendEvent);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonTeleportObject_clicked(){
-    openDialogCommand(EventCommandKind::TeleportObject);
+    this->openDialogCommand(EventCommandKind::TeleportObject);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonMoveObject_clicked(){
-    openDialogCommand(EventCommandKind::MoveObject);
+    this->openDialogCommand(EventCommandKind::MoveObject);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonWait_clicked(){
-    openDialogCommand(EventCommandKind::Wait);
+    this->openDialogCommand(EventCommandKind::Wait);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonMoveCamera_clicked() {
-    openDialogCommand(EventCommandKind::MoveCamera);
+    this->openDialogCommand(EventCommandKind::MoveCamera);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonPlayMusic_clicked() {
-    openDialogCommand(EventCommandKind::PlayMusic);
+    this->openDialogCommand(EventCommandKind::PlayMusic);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonStopMusic_clicked() {
-    openDialogCommand(EventCommandKind::StopMusic);
+    this->openDialogCommand(EventCommandKind::StopMusic);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonPlayBackgroundSound_clicked() {
-    openDialogCommand(EventCommandKind::PlayBackgroundSound);
+    this->openDialogCommand(EventCommandKind::PlayBackgroundSound);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonStopBackgroundSound_clicked() {
-    openDialogCommand(EventCommandKind::StopBackgroundSound);
+    this->openDialogCommand(EventCommandKind::StopBackgroundSound);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonPlaySound_clicked() {
-    openDialogCommand(EventCommandKind::PlayASound);
+    this->openDialogCommand(EventCommandKind::PlayASound);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonPlayMusicEffect_clicked() {
-    openDialogCommand(EventCommandKind::PlayMusicEffect);
+    this->openDialogCommand(EventCommandKind::PlayMusicEffect);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonChangeProperty_clicked() {
-    openDialogCommand(EventCommandKind::ChangeProperty);
+    this->openDialogCommand(EventCommandKind::ChangeProperty);
 }
 
 // -------------------------------------------------------
 
 void DialogCommands::on_pushButtonScript_clicked() {
-    openDialogCommand(EventCommandKind::Script);
+    this->openDialogCommand(EventCommandKind::Script);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonDisplayPicture_clicked() {
+    this->openDialogCommand(EventCommandKind::DisplayAPicture);
 }

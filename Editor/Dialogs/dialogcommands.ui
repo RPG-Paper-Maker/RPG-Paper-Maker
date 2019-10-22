@@ -242,7 +242,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonDisplayPicture">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Display a picture...</string>
@@ -252,7 +252,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonSetMoveTurnPicture">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Set/Move/Turn a picture...</string>
@@ -262,7 +262,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonRemovePicture">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Remove a picture...</string>

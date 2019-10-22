@@ -77,11 +77,11 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     itemHUD->setIcon(icon);
     itemHUD->setText("HUD");
     itemPictures->appendRow(itemHUD);
-    listNames << "Bars" << "Facesets" << "Icons" << "WindowSkins" <<
-        "TitleScreen";
+    listNames << "Bars" << "Facesets" << "Icons" << "Pictures" << "TitleScreen"
+        << "WindowSkins";
     listEnums << PictureKind::Bars << PictureKind::Facesets <<
-        PictureKind::Icons << PictureKind::WindowSkins << PictureKind
-        ::TitleScreen;
+        PictureKind::Icons << PictureKind::Pictures << PictureKind
+        ::TitleScreen << PictureKind::WindowSkins;
     addfolders(icon, itemHUD, listNames, listEnums);
 
     // Textures 2D
@@ -94,10 +94,10 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     listNames.clear();
     listEnums.clear();
     listNames << "Autotiles" << "Battlers" << "Characters" << "Mountains" <<
-        "Tilesets" << "Walls" << "Objects 3D";
+        "Objects 3D" << "Tilesets" << "Walls";
     listEnums << PictureKind::Autotiles << PictureKind::Battlers <<
-        PictureKind::Characters << PictureKind::Mountains << PictureKind::Tilesets
-        << PictureKind::Walls << PictureKind::Object3D;
+        PictureKind::Characters << PictureKind::Mountains << PictureKind
+        ::Object3D << PictureKind::Tilesets << PictureKind::Walls;
     addfolders(icon, itemTextures2D, listNames, listEnums);
 
     return model;
@@ -128,11 +128,10 @@ void DialogPictures::addfolders(QIcon &icon,
 //
 // -------------------------------------------------------
 
-void DialogPictures::on_folderSelected(const QModelIndex& current,
-                                       const QModelIndex&)
+void DialogPictures::on_folderSelected(const QModelIndex &current, const
+    QModelIndex &)
 {
-    QStandardItemModel* model = (QStandardItemModel*) ui->treeView->model();
-    QStandardItem* item = model->itemFromIndex(current);
-    PictureKind k = item->data().value<PictureKind>();
-    ui->widgetPicturePreview->setPictureKind(k);
+    ui->widgetPicturePreview->setPictureKind(reinterpret_cast<QStandardItemModel
+        *>(ui->treeView->model())->itemFromIndex(current)->data().value<
+        PictureKind>());
 }

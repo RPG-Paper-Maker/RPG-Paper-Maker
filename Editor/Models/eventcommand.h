@@ -150,6 +150,8 @@ private:
     QString strScript(SystemCommonObject *object, QStandardItemModel *parameters
         ) const;
     QString strChoice() const;
+    QString strDisplayAPicture(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

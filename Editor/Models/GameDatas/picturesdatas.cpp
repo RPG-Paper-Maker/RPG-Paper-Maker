@@ -60,18 +60,19 @@ SystemPicture * PicturesDatas::missingPicture() const {
 void PicturesDatas::setDefault(){
     QList<QString> names;
 
-    setDefaultBars(names);
-    setDefaultFacesets(names);
-    setDefaultIcons(names);
-    setDefaultAutotiles(names);
-    setDefaultBattlers(names);
-    setDefaultCharacters(names);
-    setDefaultReliefs(names);
-    setDefaultTilesets(names);
-    setDefaultWalls(names);
-    setDefaultWindowSkins(names);
-    setDefaultTitleScreen(names);
-    setDefaultObjects3D(names);
+    this->setDefaultBars(names);
+    this->setDefaultFacesets(names);
+    this->setDefaultIcons(names);
+    this->setDefaultAutotiles(names);
+    this->setDefaultBattlers(names);
+    this->setDefaultCharacters(names);
+    this->setDefaultReliefs(names);
+    this->setDefaultTilesets(names);
+    this->setDefaultWalls(names);
+    this->setDefaultWindowSkins(names);
+    this->setDefaultTitleScreen(names);
+    this->setDefaultObjects3D(names);
+    this->setDefaultHUDPictures(names);
 }
 
 // -------------------------------------------------------
@@ -113,6 +114,12 @@ void PicturesDatas::setDefaultWindowSkins(QList<QString>& names) {
 void PicturesDatas::setDefaultTitleScreen(QList<QString>& names) {
     names << "background";
     setDefaultPictures(names, PictureKind::TitleScreen);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultHUDPictures(QList<QString>& names) {
+    setDefaultPictures(names, PictureKind::Pictures);
 }
 
 // -------------------------------------------------------

@@ -138,6 +138,8 @@ const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(PATH_HUD,
     "WindowSkins");
 const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(PATH_HUD,
     "TitleScreen");
+const QString RPM::PATH_HUD_PICTURES = Common::pathCombine(PATH_HUD,
+    "Pictures");
 const QString RPM::PATH_AUTOTILES = Common::pathCombine(PATH_TEXTURES_2D,
     "Autotiles");
 const QString RPM::PATH_CHARACTERS = Common::pathCombine(PATH_TEXTURES_2D,

@@ -393,7 +393,7 @@ void ProjectUpdater::updateVersion_0_5_2() {
 
     // Adding default songs
     m_project->songsDatas()->setDefault();
-    m_project->writeSongsDatas();;
+    m_project->writeSongsDatas();
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_SONGS);
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_MUSICS);
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_BACKGROUND_SOUNDS);
@@ -691,5 +691,8 @@ void ProjectUpdater::updateVersion_1_3_0_commands(QStandardItem *commands) {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_4_0() {
+    QList<QString> names;
+
     m_project->gameDatas()->systemDatas()->setDefaultSounds();
+    m_project->picturesDatas()->setDefaultHUDPictures(names);
 }

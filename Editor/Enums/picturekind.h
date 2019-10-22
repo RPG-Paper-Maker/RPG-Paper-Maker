@@ -36,6 +36,7 @@ enum class PictureKind {
     WindowSkins,
     TitleScreen,
     Object3D,
+    Pictures,
     Last
 };
 

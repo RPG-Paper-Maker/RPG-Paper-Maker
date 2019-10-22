@@ -82,6 +82,7 @@ private slots:
     void on_pushButtonPlayMusicEffect_clicked();
     void on_pushButtonChangeProperty_clicked();
     void on_pushButtonScript_clicked();
+    void on_pushButtonDisplayPicture_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -116,6 +116,7 @@ public:
     static const QString PATH_FACESETS;
     static const QString PATH_WINDOW_SKINS;
     static const QString PATH_TITLE_SCREEN;
+    static const QString PATH_HUD_PICTURES;
     static const QString PATH_AUTOTILES;
     static const QString PATH_CHARACTERS;
     static const QString PATH_TILESETS;
