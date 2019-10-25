@@ -83,6 +83,8 @@ private slots:
     void on_pushButtonChangeProperty_clicked();
     void on_pushButtonScript_clicked();
     void on_pushButtonDisplayPicture_clicked();
+    void on_pushButtonSetMoveTurnPicture_clicked();
+    void on_pushButtonRemovePicture_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

@@ -187,6 +187,8 @@ public:
     static void readTranslations();
     static void saveEngineSettings();
     static QString translate(const QString &key);
+    static QString boolToString(const bool b);
+    static bool stringToBool(const QString &s);
 
     void loadEngineSettings();
     void clearCommands();

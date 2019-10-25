@@ -374,6 +374,18 @@ QString RPM::translate(const QString &key) {
 
 // -------------------------------------------------------
 
+QString RPM::boolToString(const bool b) {
+    return b ? TRUE_BOOL_STRING : FALSE_BOOL_STRING;
+}
+
+// -------------------------------------------------------
+
+bool RPM::stringToBool(const QString &s) {
+    return s == TRUE_BOOL_STRING;
+}
+
+// -------------------------------------------------------
+
 void RPM::loadEngineSettings() {
     delete m_engineSettings;
 

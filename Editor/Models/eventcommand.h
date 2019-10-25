@@ -152,6 +152,10 @@ private:
     QString strChoice() const;
     QString strDisplayAPicture(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strSetMoveTurnAPicture(SystemCommonObject *object,
+        QStandardItemModel *parameters) const;
+    QString strRemoveAPicture(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

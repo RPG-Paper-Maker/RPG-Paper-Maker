@@ -55,7 +55,6 @@ void DialogCommandDisplayAPicture::initializePrimitives() {
     }
 
     ui->widgetPictureImage->setKind(PictureKind::Pictures);
-    m_pictureID->setId(-1);
     ui->widgetPictureImage->initializeSuper(m_pictureID);
     ui->panelPrimitiveID->initializeNumber(m_parameters, properties);
     ui->panelPrimitiveX->initializeNumber(m_parameters, properties, false);

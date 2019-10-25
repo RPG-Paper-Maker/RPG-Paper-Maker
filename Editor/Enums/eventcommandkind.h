@@ -58,6 +58,8 @@ enum class EventCommandKind {
     EndChoice,
     Script,
     DisplayAPicture,
+    SetMoveTurnAPicture,
+    RemoveAPicture,
     Last
 };
 

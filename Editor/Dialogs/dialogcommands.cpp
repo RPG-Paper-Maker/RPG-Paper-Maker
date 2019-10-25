@@ -30,6 +30,8 @@
 #include "dialogcommanddisplaychoice.h"
 #include "dialogcommandscript.h"
 #include "dialogcommanddisplayapicture.h"
+#include "dialogcommandsetmoveturnapicture.h"
+#include "dialogcommandremoveapicture.h"
 
 // -------------------------------------------------------
 //
@@ -129,6 +131,10 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandScript(command, object, parameters);
     case EventCommandKind::DisplayAPicture:
         return new DialogCommandDisplayAPicture(command, object, parameters);
+    case EventCommandKind::SetMoveTurnAPicture:
+        return new DialogCommandSetMoveTurnAPicture(command, object, parameters);
+    case EventCommandKind::RemoveAPicture:
+        return new DialogCommandRemoveAPicture(command, object, parameters);
     default:
         return nullptr;
     }
@@ -325,4 +331,16 @@ void DialogCommands::on_pushButtonScript_clicked() {
 
 void DialogCommands::on_pushButtonDisplayPicture_clicked() {
     this->openDialogCommand(EventCommandKind::DisplayAPicture);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonSetMoveTurnPicture_clicked() {
+    this->openDialogCommand(EventCommandKind::SetMoveTurnAPicture);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonRemovePicture_clicked() {
+    this->openDialogCommand(EventCommandKind::RemoveAPicture);
 }
