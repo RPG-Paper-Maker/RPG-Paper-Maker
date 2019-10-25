@@ -1395,7 +1395,7 @@ QString EventCommand::strDisplayAPicture(SystemCommonObject *object,
     opacity = this->strProperty(i, object, parameters);
     angle = this->strProperty(i, object, parameters);
 
-    return "Display a picture: ID " + id + " and index " + index + "\n    Origin="
+    return "Display a picture: ID=" + id + " and index=" + index + "\n    Origin="
         + origin + ", X=" + x + ", Y=" + y + ", Zoom=" + zoom + "%, Opacity=" +
         opacity + "%, Angle=" + angle + "°";
 }
@@ -1405,41 +1405,41 @@ QString EventCommand::strDisplayAPicture(SystemCommonObject *object,
 QString EventCommand::strSetMoveTurnAPicture(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
-    QStringList options;
-    QString index, time;
-    bool checked;
+    QString index, time, options;
+    bool checked, waitEnd;
     int i;
 
     i = 0;
     index = this->strProperty(i, object, parameters);
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Image ID: " + m_listCommand.at(i++);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Zoom: " + this->strProperty(i, object, parameters) + "%";
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Opacity: " + this->strProperty(i, object, parameters) + "%";
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    X: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Y: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Angle: " + this->strProperty(i, object, parameters) + "°";
+    }
     time = this->strProperty(i, object, parameters);
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "Image ID: " + m_listCommand.at(i++);
-    }
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "Zoom: " + this->strProperty(i, object, parameters) + "%";
-    }
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "Opacity: " + this->strProperty(i, object, parameters) + "%";
-    }
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "X: " + this->strProperty(i, object, parameters);
-    }
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "Y: " + this->strProperty(i, object, parameters);
-    }
-    checked = RPM::stringToBool(m_listCommand.at(i++));
-    if (checked) {
-        options << "Angle: " + this->strProperty(i, object, parameters) + "°";
-    }
+    waitEnd = RPM::stringToBool(m_listCommand.at(i++));
 
-    return "Set/Move/Turn a picture: index:" + index + " with time " + time +
-        "second(s): " + (options.size() > 0 ? "\n" + options.join("\n"): "-");
+    return "Set/Move/Turn a picture: index=" + index + " with time=" + time +
+        "second(s)" + (waitEnd ? "[Wait end]" : "") + ":" + options;
 }
 
 // -------------------------------------------------------
@@ -1449,7 +1449,7 @@ QString EventCommand::strRemoveAPicture(SystemCommonObject *object,
 {
     int i = 0;
 
-    return "Remove a picture: with index " + this->strProperty(i, object,
+    return "Remove a picture: index=" + this->strProperty(i, object,
         parameters);
 }
 

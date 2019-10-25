@@ -56,14 +56,16 @@ void DialogCommandSetMoveTurnAPicture::initializePrimitives() {
     }
 
     ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
-    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
     ui->widgetPictureImageID->setKind(PictureKind::Pictures);
     ui->widgetPictureImageID->initializeSuper(m_pictureID);
     ui->panelPrimitiveZoom->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveZoom->setNumberDoubleValue(100);
     ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
     ui->panelPrimitiveX->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
 }
 
 // -------------------------------------------------------
@@ -74,7 +76,6 @@ void DialogCommandSetMoveTurnAPicture::initialize(EventCommand *command) {
 
     i = 0;
     ui->panelPrimitiveIndex->initializeCommand(command, i);
-    ui->panelPrimitiveTime->initializeCommand(command, i);
     checked = RPM::stringToBool(command->valueCommandAt(i++));
     if (checked) {
         ui->checkBoxSet->setChecked(true);
@@ -112,6 +113,9 @@ void DialogCommandSetMoveTurnAPicture::initialize(EventCommand *command) {
         ui->checkBoxAngle->setChecked(true);
         ui->panelPrimitiveAngle->initializeCommand(command, i);
     }
+    ui->panelPrimitiveTime->initializeCommand(command, i);
+    ui->checkBoxWaitEnd->setChecked(RPM::stringToBool(command->valueCommandAt(
+        i++)));
 }
 
 // -------------------------------------------------------
@@ -120,7 +124,6 @@ EventCommand * DialogCommandSetMoveTurnAPicture::getCommand() const{
     QVector<QString> command;
 
     ui->panelPrimitiveIndex->getCommand(command);
-    ui->panelPrimitiveTime->getCommand(command);
     if (ui->checkBoxSet->isChecked()) {
         command.append(RPM::boolToString(ui->checkBoxImageID->isChecked()));
         if (ui->checkBoxImageID->isChecked()) {
@@ -160,6 +163,8 @@ EventCommand * DialogCommandSetMoveTurnAPicture::getCommand() const{
     } else {
         command.append(RPM::FALSE_BOOL_STRING);
     }
+    ui->panelPrimitiveTime->getCommand(command);
+    command.append(RPM::boolToString(ui->checkBoxWaitEnd->isChecked()));
 
     return new EventCommand(EventCommandKind::SetMoveTurnAPicture, command);
 }

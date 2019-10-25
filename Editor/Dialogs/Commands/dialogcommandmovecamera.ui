@@ -589,7 +589,7 @@
          <item>
           <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>seconds</string>
+            <string>second(s)</string>
            </property>
           </widget>
          </item>
