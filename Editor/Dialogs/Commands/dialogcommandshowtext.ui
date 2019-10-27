@@ -284,7 +284,7 @@
              </property>
              <item>
               <property name="text">
-               <string>Stroke color</string>
+               <string>Outline color</string>
               </property>
              </item>
             </widget>
@@ -442,7 +442,7 @@
         <widget class="QPlainTextEdit" name="plainTextMessage"/>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch=""/>
+        <layout class="QHBoxLayout" name="horizontalLayout_4"/>
        </item>
       </layout>
      </item>
@@ -462,15 +462,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

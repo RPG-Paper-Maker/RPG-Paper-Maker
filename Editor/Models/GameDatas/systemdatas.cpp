@@ -41,6 +41,7 @@ const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
 const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
+const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 
 // -------------------------------------------------------
 //
@@ -55,7 +56,6 @@ SystemDatas::SystemDatas() :
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
-    m_idWindowSkin(1),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
@@ -70,7 +70,8 @@ SystemDatas::SystemDatas() :
     m_soundCursor(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundConfirmation(new SystemPlaySong(-1, SongKind::Sound)),
     m_soundCancel(new SystemPlaySong(-1, SongKind::Sound)),
-    m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound))
+    m_soundImpossible(new SystemPlaySong(-1, SongKind::Sound)),
+    m_dialogBoxOptions(new EventCommand(EventCommandKind::SetDialogBoxOptions))
 {
 
 }
@@ -94,6 +95,7 @@ SystemDatas::~SystemDatas() {
     delete m_soundConfirmation;
     delete m_soundCancel;
     delete m_soundImpossible;
+    delete m_dialogBoxOptions;
 }
 
 void SystemDatas::read(QString path) {
@@ -168,14 +170,6 @@ bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
 
-int SystemDatas::idWindowSkin() const {
-    return m_idWindowSkin;
-}
-
-void SystemDatas::setIdWindowSkin(int i) {
-    m_idWindowSkin = i;
-}
-
 QStandardItemModel * SystemDatas::modelColors() const {
     return m_modelColors;
 }
@@ -244,6 +238,14 @@ SystemPlaySong * SystemDatas::soundImpossible() const {
     return m_soundImpossible;
 }
 
+EventCommand * SystemDatas::dialogBoxOptions() const {
+    return m_dialogBoxOptions;
+}
+
+void SystemDatas::setDialogBoxOptions(EventCommand *command) {
+    m_dialogBoxOptions = command;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -257,7 +259,6 @@ void SystemDatas::setDefault() {
     m_portionsRay = 6;
     m_squareSize = 16;
     m_framesAnimation = 4;
-    m_idWindowSkin = 1;
     m_pathBR = Common::pathCombine(QDir::currentPath(), RPM::PATH_BR);
 
     this->setDefaultColors();
@@ -270,6 +271,7 @@ void SystemDatas::setDefault() {
     this->setDefaultFontSizes();
     this->setDefaultFontNames();
     this->setDefaultSounds();
+    this->setDefaultDialogBoxOptions();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -457,6 +459,16 @@ void SystemDatas::setDefaultSounds() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultDialogBoxOptions() {
+    QVector<QString> command({"1","7","1","1","12","10","1","12","320","1","12",
+        "620","1","12","150","1","12","30","1","12","30","1","12","30","1","12",
+        "30","1","1","1","12","0","1","12","0","1","0","1","7","2","1","7","1",
+        "0","1","7","1","1","7","1"});
+    m_dialogBoxOptions->setCommands(command);
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -498,7 +510,6 @@ void SystemDatas::read(const QJsonObject &json){
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
     m_showBB = json.contains("bb");
-    m_idWindowSkin = json["wskin"].toInt();
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -602,6 +613,9 @@ void SystemDatas::read(const QJsonObject &json){
     m_soundConfirmation->read(json[JSON_SOUND_CONFIRMATION].toObject());
     m_soundCancel->read(json[JSON_SOUND_CANCEL].toObject());
     m_soundImpossible->read(json[JSON_SOUND_IMPOSSIBLE].toObject());
+
+    // Dialog box options
+    m_dialogBoxOptions->read(json[JSON_DIALOG_BOX_OPTIONS].toObject());
 }
 
 // -------------------------------------------------------
@@ -635,7 +649,6 @@ void SystemDatas::write(QJsonObject &json) const{
     json["frames"] = m_framesAnimation;
     if (m_showBB)
         json["bb"] = m_showBB;
-    json["wskin"] = m_idWindowSkin;
 
     // Colors
     jsonArray = QJsonArray();
@@ -763,4 +776,8 @@ void SystemDatas::write(QJsonObject &json) const{
     json[JSON_SOUND_CANCEL] = obj;
     m_soundImpossible->write(obj);
     json[JSON_SOUND_IMPOSSIBLE] = obj;
+
+    // Dialog box options
+    obj = m_dialogBoxOptions->getJSON();
+    json[JSON_DIALOG_BOX_OPTIONS] = obj;
 }

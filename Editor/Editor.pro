@@ -32,6 +32,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
     Dialogs/Commands/dialogcommandscript.h \
+    Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
@@ -344,6 +345,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
     Dialogs/Commands/dialogcommandscript.cpp \
+    Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
@@ -624,6 +626,7 @@ FORMS += \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
     Dialogs/Commands/dialogcommandscript.ui \
+    Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \

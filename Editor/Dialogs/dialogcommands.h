@@ -85,6 +85,7 @@ private slots:
     void on_pushButtonDisplayPicture_clicked();
     void on_pushButtonSetMoveTurnPicture_clicked();
     void on_pushButtonRemovePicture_clicked();
+    void on_pushButtonSetDialogBoxOptions_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

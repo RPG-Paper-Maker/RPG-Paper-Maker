@@ -76,7 +76,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonSetDialogBoxOptions">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Set dialog box options...</string>

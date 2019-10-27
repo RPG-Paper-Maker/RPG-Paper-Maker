@@ -50,6 +50,7 @@ public:
     static const QString JSON_SOUND_CONFIRMATION;
     static const QString JSON_SOUND_CANCEL;
     static const QString JSON_SOUND_IMPOSSIBLE;
+    static const QString JSON_DIALOG_BOX_OPTIONS;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -79,8 +80,6 @@ public:
     void setFramesAnimation(int f);
     bool showBB() const;
     void setShowBB(bool b);
-    int idWindowSkin() const;
-    void setIdWindowSkin(int i);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
@@ -98,6 +97,8 @@ public:
     SystemPlaySong * soundConfirmation() const;
     SystemPlaySong * soundCancel() const;
     SystemPlaySong * soundImpossible() const;
+    EventCommand * dialogBoxOptions() const;
+    void setDialogBoxOptions(EventCommand *command);
 
     void setDefault();
     void setDefaultColors();
@@ -110,6 +111,7 @@ public:
     void setDefaultFontSizes();
     void setDefaultFontNames();
     void setDefaultSounds();
+    void setDefaultDialogBoxOptions();
 
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
@@ -128,7 +130,6 @@ private:
     QString m_pathBR;
     int m_framesAnimation;
     bool m_showBB;
-    int m_idWindowSkin;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
@@ -144,6 +145,7 @@ private:
     SystemPlaySong *m_soundConfirmation;
     SystemPlaySong *m_soundCancel;
     SystemPlaySong *m_soundImpossible;
+    EventCommand *m_dialogBoxOptions;
 };
 
 #endif // SYSTEMDATAS_H

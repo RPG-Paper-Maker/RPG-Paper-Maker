@@ -451,7 +451,6 @@ void ProjectUpdater::updateVersion_1_0_0() {
     m_project->readSystemDatas();
     m_project->gameDatas()->systemDatas()->setDefaultColors();
     m_project->gameDatas()->systemDatas()->setDefaultWindowSkins();
-    m_project->gameDatas()->systemDatas()->setIdWindowSkin(1);
     m_project->writeSystemDatas();
 
     // Keyboard
@@ -695,4 +694,5 @@ void ProjectUpdater::updateVersion_1_4_0() {
 
     m_project->gameDatas()->systemDatas()->setDefaultSounds();
     m_project->picturesDatas()->setDefaultHUDPictures(names);
+    m_project->gameDatas()->systemDatas()->setDefaultDialogBoxOptions();
 }

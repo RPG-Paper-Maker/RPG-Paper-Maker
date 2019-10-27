@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-296</y>
+                <y>-523</y>
                 <width>252</width>
                 <height>1149</height>
                </rect>
@@ -567,12 +567,16 @@
                         <item>
                          <widget class="QLabel" name="label_10">
                           <property name="text">
-                           <string>Window skin:</string>
+                           <string>Default dialog box options:</string>
                           </property>
                          </widget>
                         </item>
                         <item>
-                         <widget class="QComboBox" name="comboBoxWindowSkin"/>
+                         <widget class="QPushButton" name="pushButtonDefaultDialogBoxOptions">
+                          <property name="text">
+                           <string>Select...</string>
+                          </property>
+                         </widget>
                         </item>
                         <item>
                          <widget class="QLabel" name="label_5">
@@ -1871,6 +1875,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
@@ -1885,12 +1895,6 @@
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -29,6 +29,7 @@
 #include "systemspeedfrequency.h"
 #include "systemfontsize.h"
 #include "systemfontname.h"
+#include "dialogcommandsetdialogboxoptions.h"
 
 // -------------------------------------------------------
 //
@@ -153,12 +154,6 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemFontName);
     ui->panelSuperListFontNames->initializeModel(gameDatas->systemDatas()
         ->modelFontNames());
-    int id = RPM::get()->project()->gameDatas()->systemDatas()->idWindowSkin();
-    SuperListItem::fillComboBox(ui->comboBoxWindowSkin, RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelWindowSkins());
-    ui->comboBoxWindowSkin->setCurrentIndex(SuperListItem::getIndexById(RPM
-        ::get()->project()->gameDatas()->systemDatas()->modelWindowSkins()
-        ->invisibleRootItem(), id));
 
     // Sounds
     ui->widgetChooseCursor->initialize(gameDatas->systemDatas()->soundCursor());
@@ -494,11 +489,17 @@ void DialogSystems::on_comboBoxBattleExp_currentIndexChanged(int index) {
 
 // -------------------------------------------------------
 
-void DialogSystems::on_comboBoxWindowSkin_currentIndexChanged(int index) {
-    if (index != -1) {
-        int id = SuperListItem::getIdByIndex(RPM::get()->project()->gameDatas()
-            ->systemDatas()->modelWindowSkins(), index);
-        RPM::get()->project()->gameDatas()->systemDatas()->setIdWindowSkin(id);
+void DialogSystems::on_pushButtonDefaultDialogBoxOptions_clicked() {
+    EventCommand *command;
+
+    command = RPM::get()->project()->gameDatas()->systemDatas()
+        ->dialogBoxOptions();
+    DialogCommandSetDialogBoxOptions dialog(command, nullptr, nullptr);
+    if (dialog.exec() == QDialog::Accepted) {
+        delete command;
+        command = dialog.getCommand();
+        RPM::get()->project()->gameDatas()->systemDatas()->setDialogBoxOptions(
+            command);
     }
 }
 

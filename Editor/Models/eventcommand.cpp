@@ -134,6 +134,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Set/Move/Turn a picture...";
     case EventCommandKind::RemoveAPicture:
         return "Remove a picture...";
+    case EventCommandKind::SetDialogBoxOptions:
+        return "Set dialog box options...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -334,6 +336,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strSetMoveTurnAPicture(object, parameters); break;
     case EventCommandKind::RemoveAPicture:
         str += this->strRemoveAPicture(object, parameters); break;
+    case EventCommandKind::SetDialogBoxOptions:
+        str += this->strSetDialogBoxOptions(object, parameters); break;
     default:
         break;
     }
@@ -1451,6 +1455,112 @@ QString EventCommand::strRemoveAPicture(SystemCommonObject *object,
 
     return "Remove a picture: index=" + this->strProperty(i, object,
         parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strSetDialogBoxOptions(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString options;
+    bool checked;
+    int i;
+
+    i = 0;
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    WindowSkin ID: " + this->strDataBaseId(i, object, RPM
+            ::get()->project()->gameDatas()->systemDatas()->modelWindowSkins(),
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    X: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Y: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Width: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Height: " + this->strProperty(i, object, parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Padding left: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Padding top: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Padding right: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Padding bottom: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Faceset position: " + QString(RPM::stringToBool(
+            m_listCommand.at(i++)) ? "Above" : "Behind");
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Faceset X: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Faceset Y: " + this->strProperty(i, object,
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text stroke: " + QString(RPM::stringToBool(
+            m_listCommand.at(i++)) ? "No" : "Yes");
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text color ID text: " + this->strDataBaseId(i, object,
+            RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text color ID stroke: " + this->strDataBaseId(i,
+            object, RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelColors(), parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text color ID background: " + this->strDataBaseId(i,
+            object, RPM::get()->project()->gameDatas()->systemDatas()
+            ->modelColors(), parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text size ID: " + this->strDataBaseId(i, object, RPM
+            ::get()->project()->gameDatas()->systemDatas()->modelFontSizes(),
+            parameters);
+    }
+    checked = RPM::stringToBool(m_listCommand.at(i++));
+    if (checked) {
+        options += "\n    Text font ID: " + this->strDataBaseId(i, object, RPM
+            ::get()->project()->gameDatas()->systemDatas()->modelFontNames(),
+            parameters);
+    }
+
+    return "Set dialog box options: " + options;
 }
 
 // -------------------------------------------------------

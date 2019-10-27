@@ -156,6 +156,8 @@ private:
         QStandardItemModel *parameters) const;
     QString strRemoveAPicture(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strSetDialogBoxOptions(SystemCommonObject *object,
+        QStandardItemModel *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)
