@@ -179,9 +179,9 @@ void DialogCommandSetMoveTurnAPicture::on_checkBoxSet_toggled(bool checked) {
     ui->checkBoxImageID->setEnabled(checked);
     ui->checkBoxZoom->setEnabled(checked);
     ui->checkBoxOpacity->setEnabled(checked);
-    this->on_checkBoxImageID_toggled(checked && ui->checkBoxImageID->isChecked());
-    this->on_checkBoxZoom_toggled(checked && ui->checkBoxZoom->isChecked());
-    this->on_checkBoxOpacity_toggled(checked && ui->checkBoxOpacity->isChecked());
+    ui->checkBoxImageID->setChecked(false);
+    ui->checkBoxZoom->setChecked(false);
+    ui->checkBoxOpacity->setChecked(false);
 }
 
 // -------------------------------------------------------
@@ -189,15 +189,15 @@ void DialogCommandSetMoveTurnAPicture::on_checkBoxSet_toggled(bool checked) {
 void DialogCommandSetMoveTurnAPicture::on_checkBoxMove_toggled(bool checked) {
     ui->checkBoxX->setEnabled(checked);
     ui->checkBoxY->setEnabled(checked);
-    this->on_checkBoxX_toggled(checked && ui->checkBoxX->isChecked());
-    this->on_checkBoxY_toggled(checked && ui->checkBoxY->isChecked());
+    ui->checkBoxX->setChecked(false);
+    ui->checkBoxY->setChecked(false);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandSetMoveTurnAPicture::on_checkBoxTurn_toggled(bool checked) {
     ui->checkBoxAngle->setEnabled(checked);
-    this->on_checkBoxAngle_toggled(checked && ui->checkBoxAngle->isChecked());
+    ui->checkBoxAngle->setChecked(false);
 }
 
 // -------------------------------------------------------

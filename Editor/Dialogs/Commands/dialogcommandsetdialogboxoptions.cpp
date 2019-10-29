@@ -414,12 +414,9 @@ void DialogCommandSetDialogBoxOptions::on_checkBoxTextColor_toggled(bool checked
     ui->checkBoxTextColorText->setEnabled(checked);
     ui->checkBoxTextColorStroke->setEnabled(checked);
     ui->checkBoxTextColorBackground->setEnabled(checked);
-    this->on_checkBoxTextColorText_toggled(checked && ui->checkBoxTextColorText
-        ->isChecked());
-    this->on_checkBoxTextColorStroke_toggled(checked && ui
-        ->checkBoxTextColorStroke->isChecked());
-    this->on_checkBoxTextColorBackground_toggled(checked && ui
-        ->checkBoxTextColorBackground->isChecked());
+    ui->checkBoxTextColorText->setChecked(false);
+    ui->checkBoxTextColorStroke->setChecked(false);
+    ui->checkBoxTextColorBackground->setChecked(false);
 }
 
 // -------------------------------------------------------
