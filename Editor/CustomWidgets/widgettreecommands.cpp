@@ -365,7 +365,6 @@ void WidgetTreeCommands::pasteCommand() {
     QStandardItem *copiedCommand, *root, *copy, *selected;
     int i, l;
 
-    this->deleteCommand();
     selected = getSelected();
     root = this->getRootOfCommand(selected);
 
