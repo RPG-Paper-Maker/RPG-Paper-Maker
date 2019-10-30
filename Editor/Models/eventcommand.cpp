@@ -15,6 +15,7 @@
 #include "primitivevaluekind.h"
 #include "systemobjectevent.h"
 #include "systemcommandmove.h"
+#include "conditionheroeskind.h"
 
 const QString EventCommand::JSON_KIND = "kind";
 const QString EventCommand::JSON_COMMANDS = "command";
@@ -575,15 +576,75 @@ QString EventCommand::strCondition(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
     QString condition;
-    int i, radioIndex, tabIndex;
+    bool checked;
+    int i, radioIndex, index;
 
     i = 1;
     radioIndex = m_listCommand.at(i++).toInt();
-    tabIndex = 0;
-    switch (tabIndex) {
+    switch (radioIndex) {
     case 0:
         condition = this->strConditionPageVariables(object, parameters, i,
             radioIndex);
+        break;
+    case 1:
+    {
+        index = m_listCommand.at(i++).toInt();
+        condition += RPM::ENUM_TO_STRING_CONDITION_HEROES.at(index) + " ";
+        if (index == static_cast<int>(ConditionHeroesKind
+            ::TheHeroeWithInstanceID))
+        {
+            condition += this->strProperty(i, object, parameters);
+        }
+        checked = RPM::stringToBool(m_listCommand.at(i++));
+        if (checked) {
+            condition += "in " + RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(
+                i++).toInt()) + " ";
+        }
+        switch (m_listCommand.at(i++).toInt()) {
+        case 0:
+            condition += "are named " + this->strProperty(i, object, parameters);
+            break;
+        case 1:
+            condition += "are in " + RPM::ENUM_TO_STRING_TEAM.at(m_listCommand
+                .at(i++).toInt());
+            break;
+        case 2:
+            condition += "are able to use the skill ID " + this->strDataBaseId(i
+                , object, RPM::get()->project()->gameDatas()->skillsDatas()
+                ->model(), parameters);
+            break;
+        case 3:
+            condition += "are equiped with ";
+            switch (m_listCommand.at(i++).toInt()) {
+            case 0:
+                condition += "weapon ID " + this->strDataBaseId(i, object, RPM
+                    ::get()->project()->gameDatas()->weaponsDatas()->model(),
+                    parameters);
+                break;
+            case 1:
+                condition += "armor ID " + this->strDataBaseId(i, object, RPM
+                    ::get()->project()->gameDatas()->armorsDatas()->model(),
+                    parameters);
+                break;
+            }
+            break;
+        case 4:
+            condition += "are under effect of status ID " + this->strDataBaseId(
+                i, object, RPM::get()->project()->gameDatas()->statusDatas()
+                ->model(), parameters);
+            break;
+        case 5:
+            condition += "Have the statistic ID " + this->strDataBaseId(i,
+                object, RPM::get()->project()->gameDatas()->battleSystemDatas()
+                ->modelCommonStatistics(), parameters);
+            condition += " " + RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand
+                .at(i++).toInt()) + " ";
+            condition += this->strProperty(i, object, parameters);
+            break;
+        }
+        break;
+    }
+    default:
         break;
     }
     return "if (" + condition + ")";

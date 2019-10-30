@@ -13,6 +13,7 @@
 #define DIALOGCOMMANDCONDITIONS_H
 
 #include <QDialog>
+#include <QButtonGroup>
 #include "dialogcommand.h"
 
 // -------------------------------------------------------
@@ -37,12 +38,16 @@ public:
         nullptr, bool hideElse = false, QWidget *parent = nullptr);
     virtual ~DialogCommandConditions();
 
-    void initializePrimitives(SystemCommonObject *object, QStandardItemModel
-        *parameters);
+    void initializePrimitives();
 
     virtual EventCommand * getCommand() const;
 
 protected:
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QButtonGroup *m_groupButtonMain, *m_groupButtonHeroesMain,
+        *m_groupButtonHeroesEquiped;
+
     virtual void initialize(EventCommand *command);
 
 private:
@@ -50,6 +55,18 @@ private:
 
 private slots:
     void on_radioButtonVariableParamProp_clicked(bool checked);
+    void on_radioButtonVariableParamProp_toggled(bool checked);
+    void on_radioButtonHeroes_clicked(bool checked);
+    void on_radioButtonHeroes_toggled(bool checked);
+    void on_comboBoxHeroes_currentIndexChanged(int index);
+    void on_radioButtonHeroesNamed_toggled(bool checked);
+    void on_radioButtonHeroesInTeam_toggled(bool checked);
+    void on_radioButtonHeroesSkill_toggled(bool checked);
+    void on_radioButtonHeroesEquiped_toggled(bool checked);
+    void on_radioButtonHeroesEquipedWeapon_toggled(bool checked);
+    void on_radioButtonHeroesEquipedArmor_toggled(bool checked);
+    void on_radioButtonHeroesStatus_toggled(bool checked);
+    void on_radioButtonHeroesStatistic_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H

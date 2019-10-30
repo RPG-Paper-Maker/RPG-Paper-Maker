@@ -235,6 +235,11 @@ const QStringList RPM::ENUM_TO_STRING_AXIS_KIND = {
     "X", "Y", "Z"
 };
 
+const QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {
+    "All the heroes", "None of the heroes", "At least one hero",
+    "The hero with instance ID"
+};
+
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;

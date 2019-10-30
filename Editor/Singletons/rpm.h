@@ -158,6 +158,7 @@ public:
     static const QStringList ENUM_TO_STRING_FORMULA_STAT;
     static const QStringList ENUM_TO_STRING_TITLE_SETTINGS;
     static const QStringList ENUM_TO_STRING_AXIS_KIND;
+    static const QStringList ENUM_TO_STRING_CONDITION_HEROES;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

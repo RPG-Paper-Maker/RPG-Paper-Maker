@@ -53,6 +53,7 @@ HEADERS += \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
     Enums/axiskind.h \
+    Enums/conditionheroeskind.h \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
     Enums/titlecommandkind.h \
