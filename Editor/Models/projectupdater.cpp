@@ -695,4 +695,37 @@ void ProjectUpdater::updateVersion_1_4_0() {
     m_project->gameDatas()->systemDatas()->setDefaultSounds();
     m_project->picturesDatas()->setDefaultHUDPictures(names);
     m_project->gameDatas()->systemDatas()->setDefaultDialogBoxOptions();
+
+    // Update command time for primitive
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_4_0_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_4_0_commands(QStandardItem *)));
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_4_0_commands(QStandardItem *commands) {
+    QStandardItem *child;
+    EventCommand *command;
+    QVector<QString> list;
+    int i, l;
+
+    for (i = 0, l = commands->rowCount(); i < l; i++) {
+        child = commands->child(i);
+        this->updateVersion_1_4_0_commands(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::Wait) {
+            double time;
+
+            // Transform time to primitive value
+            time = list.at(0).toDouble();
+            list.replace(0, QString::number(static_cast<int>(PrimitiveValueKind
+                ::NumberDouble)));
+            list.append(QString::number(time));
+            command->setCommands(list);
+        }
+    }
 }

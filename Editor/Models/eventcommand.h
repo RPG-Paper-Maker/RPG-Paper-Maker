@@ -118,7 +118,8 @@ private:
     QString strMoveObjectID(QStandardItemModel *parameters, int &i) const;
     QString strMoveObjectOptions(int &i) const;
     QString strMoveObjectMoves(int &i) const;
-    QString strWait() const;
+    QString strWait(SystemCommonObject *object, QStandardItemModel *parameters)
+        const;
     QString strMoveCamera(QStandardItemModel *parameters) const;
     QString strMoveCameraTarget(QStandardItemModel *parameters, int &i) const;
     QString strMoveCameraMove(QStandardItemModel *parameters, int &i, QString

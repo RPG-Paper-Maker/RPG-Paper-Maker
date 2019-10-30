@@ -59,6 +59,10 @@ void DialogCommandScript::initializePrimitives() {
 }
 
 // -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
 
 void DialogCommandScript::initialize(EventCommand *command) {
     QString checked;

@@ -305,7 +305,7 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     case EventCommandKind::MoveObject:
         str += this->strMoveObject(parameters); break;
     case EventCommandKind::Wait:
-        str += this->strWait(); break;
+        str += this->strWait(object, parameters); break;
     case EventCommandKind::MoveCamera:
         str += this->strMoveCamera(parameters); break;
     case EventCommandKind::PlayMusic:
@@ -1106,8 +1106,12 @@ QString EventCommand::strMoveObjectMoves(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strWait() const {
-    return "Wait: " + m_listCommand.at(0) + " seconds";
+QString EventCommand::strWait(SystemCommonObject *object, QStandardItemModel
+    *parameters) const
+{
+    int i = 0;
+
+    return "Wait: " + this->strProperty(i, object, parameters) + " second(s)";
 }
 
 // -------------------------------------------------------

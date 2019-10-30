@@ -100,7 +100,7 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::MoveObject:
         return new DialogCommandMoveObject(command, object, parameters);
     case EventCommandKind::Wait:
-        return new DialogCommandWait(command);
+        return new DialogCommandWait(command, object, parameters);
     case EventCommandKind::MoveCamera:
         return new DialogCommandMoveCamera(command, object, parameters);
     case EventCommandKind::PlayMusic:

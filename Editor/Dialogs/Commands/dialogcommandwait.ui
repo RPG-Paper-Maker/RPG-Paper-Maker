@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>229</width>
-    <height>90</height>
+    <width>399</width>
+    <height>91</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
     <number>10</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
      <property name="spacing">
       <number>15</number>
      </property>
@@ -41,19 +41,28 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox">
-         <property name="decimals">
-          <number>3</number>
+        <widget class="PanelPrimitiveValue" name="panelPrimitiveTime" native="true">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
-         <property name="maximum">
-          <double>9999.000000000000000</double>
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>27</height>
+          </size>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>seconds</string>
+          <string>second(s)</string>
          </property>
         </widget>
        </item>
@@ -73,6 +82,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

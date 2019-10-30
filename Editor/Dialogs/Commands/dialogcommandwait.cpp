@@ -18,15 +18,20 @@
 //
 // -------------------------------------------------------
 
-DialogCommandWait::DialogCommandWait(EventCommand *command, QWidget *parent) :
+DialogCommandWait::DialogCommandWait(EventCommand *command, SystemCommonObject
+    *object, QStandardItemModel *parameters, QWidget *parent) :
     DialogCommand(parent),
+    m_object(object),
+    m_parameters(parameters),
     ui(new Ui::DialogCommandWait)
 {
     ui->setupUi(this);
     
+    this->initializePrimitives();
 
-    if (command != nullptr)
+    if (command != nullptr) {
         initialize(command);
+    }
 }
 
 DialogCommandWait::~DialogCommandWait()
@@ -40,15 +45,37 @@ DialogCommandWait::~DialogCommandWait()
 //
 // -------------------------------------------------------
 
-void DialogCommandWait::initialize(EventCommand* command){
-    ui->doubleSpinBox->setValue(command->valueCommandAt(0).toDouble());
+void DialogCommandWait::initializePrimitives() {
+    QStandardItemModel *properties;
+
+    properties = nullptr;
+    if (m_object != nullptr){
+        properties = m_object->modelProperties();
+    }
+
+    ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogCommandWait::initialize(EventCommand *command) {
+    int i;
+
+    i = 0;
+    ui->panelPrimitiveTime->initializeCommand(command, i);
 }
 
 // -------------------------------------------------------
 
-EventCommand* DialogCommandWait::getCommand() const{
+EventCommand * DialogCommandWait::getCommand() const{
     QVector<QString> command;
-    command.append(QString::number(ui->doubleSpinBox->value()));
+
+    ui->panelPrimitiveTime->getCommand(command);
 
     return new EventCommand(EventCommandKind::Wait, command);
 }
+

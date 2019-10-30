@@ -32,11 +32,17 @@ class DialogCommandWait : public DialogCommand
 
 public:
     explicit DialogCommandWait(EventCommand *command = nullptr,
-                               QWidget *parent = 0);
+        SystemCommonObject *object = nullptr, QStandardItemModel *parameters =
+        nullptr, QWidget *parent = nullptr);
     virtual ~DialogCommandWait();
-    EventCommand* getCommand() const;
+
+    virtual EventCommand * getCommand() const;
 
 protected:
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+
+    void initializePrimitives();
     virtual void initialize(EventCommand* command);
 
 private:
