@@ -586,8 +586,7 @@ QString EventCommand::strCondition(SystemCommonObject *object,
         condition = this->strConditionPageVariables(object, parameters, i,
             radioIndex);
         break;
-    case 1:
-    {
+    case 1: {
         index = m_listCommand.at(i++).toInt();
         condition += RPM::ENUM_TO_STRING_CONDITION_HEROES.at(index) + " ";
         if (index == static_cast<int>(ConditionHeroesKind
@@ -641,6 +640,45 @@ QString EventCommand::strCondition(SystemCommonObject *object,
                 .at(i++).toInt()) + " ";
             condition += this->strProperty(i, object, parameters);
             break;
+        }
+        break;
+    }
+    case 2: {
+        condition =+ "Currency ID " + this->strDataBaseId(i, object, RPM::get()
+            ->project()->gameDatas()->systemDatas()->modelCurrencies(),
+            parameters);
+        condition += " " + RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++
+            ).toInt()) + " ";
+        condition += this->strProperty(i, object, parameters);
+        break;
+    }
+    case 3: {
+        condition =+ "Item ID " + this->strDataBaseId(i, object, RPM::get()
+            ->project()->gameDatas()->itemsDatas()->model(), parameters);
+        condition += " " + RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++
+            ).toInt()) + " ";
+        condition += this->strProperty(i, object, parameters);
+        break;
+    }
+    case 4: {
+        condition =+ "Weapon ID " + this->strDataBaseId(i, object, RPM::get()
+            ->project()->gameDatas()->weaponsDatas()->model(), parameters);
+        condition += " " + RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++
+            ).toInt()) + " ";
+        condition += this->strProperty(i, object, parameters);
+        if (RPM::stringToBool(m_listCommand.at(i++))) {
+            condition += " and check weapons equiped too";
+        }
+        break;
+    }
+    case 5: {
+        condition =+ "Armor ID " + this->strDataBaseId(i, object, RPM::get()
+            ->project()->gameDatas()->armorsDatas()->model(), parameters);
+        condition += " " + RPM::ENUM_TO_STRING_OPERATION.at(m_listCommand.at(i++
+            ).toInt()) + " ";
+        condition += this->strProperty(i, object, parameters);
+        if (RPM::stringToBool(m_listCommand.at(i++))) {
+            condition += " and check armors equiped too";
         }
         break;
     }

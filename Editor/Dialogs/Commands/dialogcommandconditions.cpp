@@ -67,6 +67,10 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain = new QButtonGroup;
     m_groupButtonMain->addButton(ui->radioButtonVariableParamProp);
     m_groupButtonMain->addButton(ui->radioButtonHeroes);
+    m_groupButtonMain->addButton(ui->radioButtonCurrency);
+    m_groupButtonMain->addButton(ui->radioButtonItem);
+    m_groupButtonMain->addButton(ui->radioButtonWeapon);
+    m_groupButtonMain->addButton(ui->radioButtonArmor);
     m_groupButtonHeroesMain = new QButtonGroup;
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesNamed);
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesInTeam);
@@ -88,6 +92,8 @@ void DialogCommandConditions::initializePrimitives() {
     ui->panelPrimitiveVariableParamPropTestValue->initializeProperty(
         m_parameters, properties);
     ui->panelPrimitiveVariableParamPropTestValue->showNumberDouble();
+
+    // Heroes
     ui->comboBoxHeroes->addItems(RPM::ENUM_TO_STRING_CONDITION_HEROES);
     ui->panelPrimitiveHeroInstanceID->initializeNumber(m_parameters, properties);
     ui->panelPrimitiveHeroInstanceID->showVariable();
@@ -116,6 +122,29 @@ void DialogCommandConditions::initializePrimitives() {
         properties);
     ui->panelPrimitiveHeroesStatisticValue->showNumberDouble();
 
+    // Possessions
+    ui->panelPrimitiveCurrencyID->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelCurrencies(), m_parameters
+        , properties);
+    ui->comboBoxOperationCurrency->addItems(RPM::ENUM_TO_STRING_OPERATION);
+    ui->panelPrimitiveCurrencyValue->initializeNumber(m_parameters, properties,
+        false);
+    ui->panelPrimitiveItemID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->itemsDatas()->model(), m_parameters, properties);
+    ui->comboBoxOperationItem->addItems(RPM::ENUM_TO_STRING_OPERATION);
+    ui->panelPrimitiveItemValue->initializeNumber(m_parameters, properties,
+        false);
+    ui->panelPrimitiveWeaponID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->weaponsDatas()->model(), m_parameters, properties);
+    ui->comboBoxOperationWeapon->addItems(RPM::ENUM_TO_STRING_OPERATION);
+    ui->panelPrimitiveWeaponValue->initializeNumber(m_parameters, properties,
+        false);
+    ui->panelPrimitiveArmorID->initializeDataBaseCommandId(RPM::get()->project()
+        ->gameDatas()->armorsDatas()->model(), m_parameters, properties);
+    ui->comboBoxOperationArmor->addItems(RPM::ENUM_TO_STRING_OPERATION);
+    ui->panelPrimitiveArmorValue->initializeNumber(m_parameters, properties,
+        false);
+
     this->on_radioButtonHeroes_toggled(false);
 }
 
@@ -140,8 +169,7 @@ void DialogCommandConditions::initialize(EventCommand *command) {
         ui->panelPrimitiveVariableParamPropTestValue->initializeCommand(command,
             i);
         break;
-    case 1:
-    {
+    case 1: {
         ui->radioButtonHeroes->setChecked(true);
         ui->comboBoxHeroes->setCurrentIndex(command->valueCommandAt(i++).toInt());
         if (ui->comboBoxHeroes->currentIndex() == static_cast<int>(
@@ -197,6 +225,46 @@ void DialogCommandConditions::initialize(EventCommand *command) {
             break;
         }
         tabIndex = 1;
+        break;
+    }
+    case 2: {
+        ui->radioButtonCurrency->setChecked(true);
+        ui->panelPrimitiveCurrencyID->initializeCommand(command, i);
+        ui->comboBoxOperationCurrency->setCurrentIndex(command->valueCommandAt(
+            i++).toInt());
+        ui->panelPrimitiveCurrencyValue->initializeCommand(command, i);
+        tabIndex = 2;
+        break;
+    }
+    case 3: {
+        ui->radioButtonItem->setChecked(true);
+        ui->panelPrimitiveItemID->initializeCommand(command, i);
+        ui->comboBoxOperationItem->setCurrentIndex(command->valueCommandAt(
+            i++).toInt());
+        ui->panelPrimitiveItemValue->initializeCommand(command, i);
+        tabIndex = 2;
+        break;
+    }
+    case 4: {
+        ui->radioButtonWeapon->setChecked(true);
+        ui->panelPrimitiveWeaponID->initializeCommand(command, i);
+        ui->comboBoxOperationWeapon->setCurrentIndex(command->valueCommandAt(
+            i++).toInt());
+        ui->panelPrimitiveWeaponValue->initializeCommand(command, i);
+        ui->checkBoxWeaponEquiped->setChecked(RPM::stringToBool(command
+            ->valueCommandAt(i++)));
+        tabIndex = 2;
+        break;
+    }
+    case 5: {
+        ui->radioButtonArmor->setChecked(true);
+        ui->panelPrimitiveArmorID->initializeCommand(command, i);
+        ui->comboBoxOperationArmor->setCurrentIndex(command->valueCommandAt(
+            i++).toInt());
+        ui->panelPrimitiveArmorValue->initializeCommand(command, i);
+        ui->checkBoxArmorEquiped->setChecked(RPM::stringToBool(command
+            ->valueCommandAt(i++)));
+        tabIndex = 2;
         break;
     }
     default:
@@ -256,6 +324,32 @@ EventCommand* DialogCommandConditions::getCommand() const {
                 ->currentIndex()));
             ui->panelPrimitiveHeroesStatisticValue->getCommand(command);
         }
+    } else if (ui->radioButtonCurrency->isChecked()) {
+        command.append("2");
+        ui->panelPrimitiveCurrencyID->getCommand(command);
+        command.append(QString::number(ui->comboBoxOperationCurrency
+            ->currentIndex()));
+        ui->panelPrimitiveCurrencyValue->getCommand(command);
+    } else if (ui->radioButtonItem->isChecked()) {
+        command.append("3");
+        ui->panelPrimitiveItemID->getCommand(command);
+        command.append(QString::number(ui->comboBoxOperationItem
+            ->currentIndex()));
+        ui->panelPrimitiveItemValue->getCommand(command);
+    } else if (ui->radioButtonWeapon->isChecked()) {
+        command.append("4");
+        ui->panelPrimitiveWeaponID->getCommand(command);
+        command.append(QString::number(ui->comboBoxOperationWeapon
+            ->currentIndex()));
+        ui->panelPrimitiveWeaponValue->getCommand(command);
+        command.append(RPM::boolToString(ui->checkBoxWeaponEquiped->isChecked()));
+    } else if (ui->radioButtonArmor->isChecked()) {
+        command.append("5");
+        ui->panelPrimitiveArmorID->getCommand(command);
+        command.append(QString::number(ui->comboBoxOperationArmor
+            ->currentIndex()));
+        ui->panelPrimitiveArmorValue->getCommand(command);
+        command.append(RPM::boolToString(ui->checkBoxArmorEquiped->isChecked()));
     }
 
     return new EventCommand(EventCommandKind::If, command);
@@ -267,17 +361,6 @@ EventCommand* DialogCommandConditions::getCommand() const {
 //
 // -------------------------------------------------------
 
-void DialogCommandConditions::on_radioButtonVariableParamProp_clicked(bool
-    checked)
-{
-    // Impossible to uncheck manually
-    if (!checked) {
-        ui->radioButtonVariableParamProp->setChecked(true);
-    }
-}
-
-// -------------------------------------------------------
-
 void DialogCommandConditions::on_radioButtonVariableParamProp_toggled(bool
     checked)
 {
@@ -285,15 +368,6 @@ void DialogCommandConditions::on_radioButtonVariableParamProp_toggled(bool
     ui->labelVariable->setEnabled(checked);
     ui->comboBoxVariableOperation->setEnabled(checked);
     ui->panelPrimitiveVariableParamPropTestValue->setEnabled(checked);
-}
-
-// -------------------------------------------------------
-
-void DialogCommandConditions::on_radioButtonHeroes_clicked(bool checked) {
-    // Impossible to uncheck manually
-    if (!checked) {
-        ui->radioButtonHeroes->setChecked(true);
-    }
 }
 
 // -------------------------------------------------------
@@ -389,4 +463,38 @@ void DialogCommandConditions::on_radioButtonHeroesStatistic_toggled(bool checked
     ui->panelPrimitiveHeroesStatisticID->setEnabled(checked);
     ui->comboBoxStatisticOperation->setEnabled(checked);
     ui->panelPrimitiveHeroesStatisticValue->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonCurrency_toggled(bool checked) {
+    ui->panelPrimitiveCurrencyID->setEnabled(checked);
+    ui->comboBoxOperationCurrency->setEnabled(checked);
+    ui->panelPrimitiveCurrencyValue->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonItem_toggled(bool checked) {
+    ui->panelPrimitiveItemID->setEnabled(checked);
+    ui->comboBoxOperationItem->setEnabled(checked);
+    ui->panelPrimitiveItemValue->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonWeapon_toggled(bool checked) {
+    ui->panelPrimitiveWeaponID->setEnabled(checked);
+    ui->comboBoxOperationWeapon->setEnabled(checked);
+    ui->panelPrimitiveWeaponValue->setEnabled(checked);
+    ui->checkBoxWeaponEquiped->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonArmor_toggled(bool checked) {
+    ui->panelPrimitiveArmorID->setEnabled(checked);
+    ui->comboBoxOperationArmor->setEnabled(checked);
+    ui->panelPrimitiveArmorValue->setEnabled(checked);
+    ui->checkBoxArmorEquiped->setEnabled(checked);
 }

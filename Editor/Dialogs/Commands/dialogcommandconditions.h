@@ -54,9 +54,7 @@ private:
     Ui::DialogCommandConditions *ui;
 
 private slots:
-    void on_radioButtonVariableParamProp_clicked(bool checked);
     void on_radioButtonVariableParamProp_toggled(bool checked);
-    void on_radioButtonHeroes_clicked(bool checked);
     void on_radioButtonHeroes_toggled(bool checked);
     void on_comboBoxHeroes_currentIndexChanged(int index);
     void on_radioButtonHeroesNamed_toggled(bool checked);
@@ -67,6 +65,10 @@ private slots:
     void on_radioButtonHeroesEquipedArmor_toggled(bool checked);
     void on_radioButtonHeroesStatus_toggled(bool checked);
     void on_radioButtonHeroesStatistic_toggled(bool checked);
+    void on_radioButtonCurrency_toggled(bool checked);
+    void on_radioButtonItem_toggled(bool checked);
+    void on_radioButtonWeapon_toggled(bool checked);
+    void on_radioButtonArmor_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H
