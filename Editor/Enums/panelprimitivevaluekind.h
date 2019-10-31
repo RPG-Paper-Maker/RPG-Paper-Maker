@@ -27,6 +27,7 @@ enum class PanelPrimitiveValueKind {
     DataBaseCommandId,
     Number,
     Message,
+    Switch,
     Property,
     VariableParamProp,
     Font

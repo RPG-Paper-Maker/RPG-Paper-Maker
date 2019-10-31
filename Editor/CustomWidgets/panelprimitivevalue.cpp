@@ -179,6 +179,22 @@ void PanelPrimitiveValue::initializeMessage(bool formula, QStandardItemModel
 
 // -------------------------------------------------------
 
+void PanelPrimitiveValue::initializeSwitch(QStandardItemModel *parameters,
+    QStandardItemModel *properties)
+{
+    m_kind = PanelPrimitiveValueKind::Switch;
+    addParameter(parameters);
+    addProperty(properties);
+    addSwitch();
+    addVariable();
+    initialize();
+
+    showSwitch();
+    setSwitchValue(m_model->switchValue());
+}
+
+// -------------------------------------------------------
+
 void PanelPrimitiveValue::initializeProperty(QStandardItemModel *parameters,
     QStandardItemModel *properties, bool isInteger)
 {
@@ -762,6 +778,7 @@ void PanelPrimitiveValue::initializeCommand(EventCommand *command, int &i) {
             setNumberValue(command->valueCommandAt(i++).toInt());
         }
         break;
+    case PanelPrimitiveValueKind::Switch:
     case PanelPrimitiveValueKind::Property:
         setKind(static_cast<PrimitiveValueKind>(command->valueCommandAt(i++)
             .toInt()));
@@ -818,6 +835,7 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
             command.append(QString::number(m_model->numberValue()));
         }
         break;
+    case PanelPrimitiveValueKind::Switch:
     case PanelPrimitiveValueKind::Property:
         command.append(QString::number(static_cast<int>(m_model->kind())));
 

@@ -57,6 +57,8 @@ public:
     void initializeMessage(bool formula, QStandardItemModel *parameters
         = nullptr, QStandardItemModel *properties = nullptr, bool showPrimitive =
         true);
+    void initializeSwitch(QStandardItemModel *parameters, QStandardItemModel
+        *properties);
     void initializeProperty(QStandardItemModel *parameters, QStandardItemModel
         *properties, bool isInteger = false);
     void initializeVariableParamProp(QStandardItemModel *parameters,

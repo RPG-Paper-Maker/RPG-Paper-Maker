@@ -71,6 +71,8 @@ void DialogCommandConditions::initializePrimitives() {
     m_groupButtonMain->addButton(ui->radioButtonItem);
     m_groupButtonMain->addButton(ui->radioButtonWeapon);
     m_groupButtonMain->addButton(ui->radioButtonArmor);
+    m_groupButtonMain->addButton(ui->radioButtonOthersKey);
+    m_groupButtonMain->addButton(ui->radioButtonOthersScript);
     m_groupButtonHeroesMain = new QButtonGroup;
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesNamed);
     m_groupButtonHeroesMain->addButton(ui->radioButtonHeroesInTeam);
@@ -144,6 +146,13 @@ void DialogCommandConditions::initializePrimitives() {
     ui->comboBoxOperationArmor->addItems(RPM::ENUM_TO_STRING_OPERATION);
     ui->panelPrimitiveArmorValue->initializeNumber(m_parameters, properties,
         false);
+
+    // Others
+    ui->panelPrimitiveOthersKeyID->initializeDataBaseCommandId(RPM::get()
+        ->project()->keyBoardDatas()->model(), m_parameters, properties);
+    ui->panelPrimitiveOthersKeyValue->initializeSwitch(m_parameters, properties);
+    ui->panelPrimitiveOthersScript->initializeMessage(true, m_parameters,
+        properties);
 
     this->on_radioButtonHeroes_toggled(false);
 }
@@ -267,6 +276,19 @@ void DialogCommandConditions::initialize(EventCommand *command) {
         tabIndex = 2;
         break;
     }
+    case 6: {
+        ui->radioButtonOthersKey->setChecked(true);
+        ui->panelPrimitiveOthersKeyID->initializeCommand(command, i);
+        ui->panelPrimitiveOthersKeyValue->initializeCommand(command, i);
+        tabIndex = 3;
+        break;
+    }
+    case 7: {
+        ui->radioButtonOthersScript->setChecked(true);
+        ui->panelPrimitiveOthersScript->initializeCommand(command, i);
+        tabIndex = 3;
+        break;
+    }
     default:
         break;
     }
@@ -350,6 +372,13 @@ EventCommand* DialogCommandConditions::getCommand() const {
             ->currentIndex()));
         ui->panelPrimitiveArmorValue->getCommand(command);
         command.append(RPM::boolToString(ui->checkBoxArmorEquiped->isChecked()));
+    } else if (ui->radioButtonOthersKey->isChecked()) {
+        command.append("6");
+        ui->panelPrimitiveOthersKeyID->getCommand(command);
+        ui->panelPrimitiveOthersKeyValue->getCommand(command);
+    } else if (ui->radioButtonOthersScript->isChecked()) {
+        command.append("7");
+        ui->panelPrimitiveOthersScript->getCommand(command);
     }
 
     return new EventCommand(EventCommandKind::If, command);
@@ -497,4 +526,18 @@ void DialogCommandConditions::on_radioButtonArmor_toggled(bool checked) {
     ui->comboBoxOperationArmor->setEnabled(checked);
     ui->panelPrimitiveArmorValue->setEnabled(checked);
     ui->checkBoxArmorEquiped->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonOthersKey_toggled(bool checked) {
+    ui->panelPrimitiveOthersKeyID->setEnabled(checked);
+    ui->labelOthersKey->setEnabled(checked);
+    ui->panelPrimitiveOthersKeyValue->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandConditions::on_radioButtonOthersScript_toggled(bool checked) {
+    ui->panelPrimitiveOthersScript->setEnabled(checked);
 }

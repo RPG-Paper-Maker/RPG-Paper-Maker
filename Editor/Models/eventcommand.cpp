@@ -682,6 +682,16 @@ QString EventCommand::strCondition(SystemCommonObject *object,
         }
         break;
     }
+    case 6: {
+        condition += "Key ID " + this->strDataBaseId(i, object, RPM::get(
+            )->project()->keyBoardDatas()->model(), parameters) + " is ";
+        condition += this->strProperty(i, object, parameters);
+        break;
+    }
+    case 7: {
+        condition += "Script:" + this->strProperty(i, object, parameters);
+        break;
+    }
     default:
         break;
     }

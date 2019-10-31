@@ -69,6 +69,8 @@ private slots:
     void on_radioButtonItem_toggled(bool checked);
     void on_radioButtonWeapon_toggled(bool checked);
     void on_radioButtonArmor_toggled(bool checked);
+    void on_radioButtonOthersKey_toggled(bool checked);
+    void on_radioButtonOthersScript_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCONDITIONS_H
