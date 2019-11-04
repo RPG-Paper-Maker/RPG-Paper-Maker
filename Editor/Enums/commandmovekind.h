@@ -24,7 +24,16 @@ enum class CommandMoveKind {
     MoveNorth,
     MoveSouth,
     MoveWest,
-    MoveEast
+    MoveEast,
+    MoveNorthWest,
+    MoveNorthEast,
+    MoveSouthWest,
+    MoveSouthEast,
+    MoveRandom,
+    MoveHero,
+    MoveOppositeHero,
+    MoveFront,
+    MoveBack
 };
 
 #endif // COMMANDMOVEKIND_H

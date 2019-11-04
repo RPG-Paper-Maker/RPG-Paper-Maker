@@ -53,6 +53,15 @@ private slots:
     void on_pushButtonStepSquareSouth_clicked();
     void on_pushButtonStepSquareWest_clicked();
     void on_pushButtonStepSquareEast_clicked();
+    void on_pushButtonStepSquareNorthWest_clicked();
+    void on_pushButtonStepSquareNorthEast_clicked();
+    void on_pushButtonStepSquareSouthWest_clicked();
+    void on_pushButtonStepSquareSouthEast_clicked();
+    void on_pushButtonStepSquareRandom_clicked();
+    void on_pushButtonStepSquareHero_clicked();
+    void on_pushButtonStepSquareOppositeHero_clicked();
+    void on_pushButtonStepSquareFront_clicked();
+    void on_pushButtonStepSquareBack_clicked();
 };
 
 #endif // DIALOGCOMMANDMOVEOBJECT_H

@@ -30,6 +30,12 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     m_modelObjects(nullptr)
 {
     ui->setupUi(this);
+
+    QSizePolicy sp_retain;
+    sp_retain = ui->pushButtonEmpty->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->pushButtonEmpty->setSizePolicy(sp_retain);
+    ui->pushButtonEmpty->hide();
     
     if (idObjectFixed) {
         ui->labelObjectID->hide();
@@ -150,23 +156,77 @@ EventCommand* DialogCommandMoveObject::getCommand() const{
 // -------------------------------------------------------
 
 void DialogCommandMoveObject::on_pushButtonStepSquareNorth_clicked(){
-    addMoveStepSquare(CommandMoveKind::MoveNorth);
+    this->addMoveStepSquare(CommandMoveKind::MoveNorth);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandMoveObject::on_pushButtonStepSquareSouth_clicked(){
-    addMoveStepSquare(CommandMoveKind::MoveSouth);
+    this->addMoveStepSquare(CommandMoveKind::MoveSouth);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandMoveObject::on_pushButtonStepSquareWest_clicked(){
-    addMoveStepSquare(CommandMoveKind::MoveWest);
+    this->addMoveStepSquare(CommandMoveKind::MoveWest);
 }
 
 // -------------------------------------------------------
 
 void DialogCommandMoveObject::on_pushButtonStepSquareEast_clicked(){
-    addMoveStepSquare(CommandMoveKind::MoveEast);
+    this->addMoveStepSquare(CommandMoveKind::MoveEast);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareNorthWest_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveNorthWest);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareNorthEast_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveNorthEast);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareSouthWest_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveSouthWest);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareSouthEast_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveSouthEast);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareRandom_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveRandom);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareHero_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveHero);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareOppositeHero_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveOppositeHero);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareFront_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveFront);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandMoveObject::on_pushButtonStepSquareBack_clicked() {
+    this->addMoveStepSquare(CommandMoveKind::MoveBack);
 }

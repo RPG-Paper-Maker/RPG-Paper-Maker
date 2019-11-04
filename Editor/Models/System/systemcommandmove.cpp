@@ -43,6 +43,15 @@ QString SystemCommandMove::toString() const{
     case CommandMoveKind::MoveSouth:
     case CommandMoveKind::MoveWest:
     case CommandMoveKind::MoveEast:
+    case CommandMoveKind::MoveNorthWest:
+    case CommandMoveKind::MoveNorthEast:
+    case CommandMoveKind::MoveSouthWest:
+    case CommandMoveKind::MoveSouthEast:
+    case CommandMoveKind::MoveRandom:
+    case CommandMoveKind::MoveHero:
+    case CommandMoveKind::MoveOppositeHero:
+    case CommandMoveKind::MoveFront:
+    case CommandMoveKind::MoveBack:
         QString stepSquare = m_command.at(i++) == "0" ? "square" : "step";
         QString dir;
         switch (kind){
@@ -54,6 +63,24 @@ QString SystemCommandMove::toString() const{
             dir = "West"; break;
         case CommandMoveKind::MoveEast:
             dir = "East"; break;
+        case CommandMoveKind::MoveNorthWest:
+            dir = "North West"; break;
+        case CommandMoveKind::MoveNorthEast:
+            dir = "North East"; break;
+        case CommandMoveKind::MoveSouthWest:
+            dir = "South West"; break;
+        case CommandMoveKind::MoveSouthEast:
+            dir = "South East"; break;
+        case CommandMoveKind::MoveRandom:
+            dir = "random"; break;
+        case CommandMoveKind::MoveHero:
+            dir = "hero"; break;
+        case CommandMoveKind::MoveOppositeHero:
+            dir = "opposite hero"; break;
+        case CommandMoveKind::MoveFront:
+            dir = "front"; break;
+        case CommandMoveKind::MoveBack:
+            dir = "back"; break;
         }
         str += "Move 1 " + stepSquare + " to " + dir;
         break;
@@ -80,6 +107,15 @@ void SystemCommandMove::initialize(const EventCommand *command, int& i){
     case CommandMoveKind::MoveSouth:
     case CommandMoveKind::MoveWest:
     case CommandMoveKind::MoveEast:
+    case CommandMoveKind::MoveNorthWest:
+    case CommandMoveKind::MoveNorthEast:
+    case CommandMoveKind::MoveSouthWest:
+    case CommandMoveKind::MoveSouthEast:
+    case CommandMoveKind::MoveRandom:
+    case CommandMoveKind::MoveHero:
+    case CommandMoveKind::MoveOppositeHero:
+    case CommandMoveKind::MoveFront:
+    case CommandMoveKind::MoveBack:
         break;
     }
 

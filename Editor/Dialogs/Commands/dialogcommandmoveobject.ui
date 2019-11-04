@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
-    <height>538</height>
+    <width>841</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,0">
          <property name="spacing">
@@ -88,7 +88,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>200</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -128,497 +128,494 @@
          <property name="title">
           <string>Moves</string>
          </property>
-         <widget class="QWidget" name="layoutWidget">
-          <property name="geometry">
-           <rect>
-            <x>15</x>
-            <y>26</y>
-            <width>535</width>
-            <height>453</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Step / square moves:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_3">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Change direction:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_4">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>17</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Change object properties:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QComboBox" name="comboBoxStepSquare">
-             <item>
-              <property name="text">
-               <string>Square</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Step</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="2">
-            <widget class="QComboBox" name="comboBox_2">
-             <item>
-              <property name="text">
-               <string>ON</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>OFF</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareNorth">
-             <property name="text">
-              <string>1 to North</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPushButton" name="pushButton_25">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to North</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareSouth">
-             <property name="text">
-              <string>1 to South</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QPushButton" name="pushButton_19">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to South</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QPushButton" name="pushButton_26">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Change speed...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareWest">
-             <property name="text">
-              <string>1 to West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QPushButton" name="pushButton_20">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QPushButton" name="pushButton_35">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Change frequency...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareEast">
-             <property name="text">
-              <string>1 to East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QPushButton" name="pushButton_16">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2">
-            <widget class="QPushButton" name="pushButton_31">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Move animation</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareNorthWest">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to North-West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QPushButton" name="pushButton_21">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to North-West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="2">
-            <widget class="QPushButton" name="pushButton_33">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Stop animation</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareNorthEast">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to North-East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="1">
-            <widget class="QPushButton" name="pushButton_17">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to North-East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="2">
-            <widget class="QPushButton" name="pushButton_34">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Fix direction</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareSouthWest">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to South-West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
-            <widget class="QPushButton" name="pushButton_15">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to South-West</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2">
-            <widget class="QPushButton" name="pushButton_36">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Through</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareSouthEast">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to South-East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="1">
-            <widget class="QPushButton" name="pushButton_24">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn to South-East</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="2">
-            <widget class="QPushButton" name="pushButton_23">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Set with camera</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareRandom">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to random</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="1">
-            <widget class="QPushButton" name="pushButton_18">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn 45° right</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="2">
-            <widget class="QPushButton" name="pushButton_28">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Change graphics...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareHero">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 to the hero</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="1">
-            <widget class="QPushButton" name="pushButton_14">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn 45° left</string>
-             </property>
-            </widget>
-           </item>
-           <item row="11" column="2">
-            <widget class="QPushButton" name="pushButton_27">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Change opacity...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareOppositeHero">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 opposite to the hero</string>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="1">
-            <widget class="QPushButton" name="pushButton_37">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Turn 180*</string>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="2">
-            <widget class="QPushButton" name="pushButton_29">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Change bending...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareFront">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 in front</string>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="1">
-            <widget class="QPushButton" name="pushButton_13">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Look at the hero</string>
-             </property>
-            </widget>
-           </item>
-           <item row="13" column="2">
-            <widget class="QPushButton" name="pushButton_32">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="14" column="0">
-            <widget class="QPushButton" name="pushButtonStepSquareBack">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>1 back</string>
-             </property>
-            </widget>
-           </item>
-           <item row="14" column="1">
-            <widget class="QPushButton" name="pushButton_22">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Look at the hero opposite</string>
-             </property>
-            </widget>
-           </item>
-           <item row="14" column="2">
-            <widget class="QPushButton" name="pushButton_30">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>....</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1,1">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Step / square moves:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBoxStepSquare">
+                <item>
+                 <property name="text">
+                  <string>Square</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Step</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareNorth">
+                <property name="text">
+                 <string>1 to North</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareSouth">
+                <property name="text">
+                 <string>1 to South</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareWest">
+                <property name="text">
+                 <string>1 to West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareEast">
+                <property name="text">
+                 <string>1 to East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareNorthWest">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to North-West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareNorthEast">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to North-East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareSouthWest">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to South-West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareSouthEast">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to South-East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareRandom">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to random</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareHero">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 to the hero</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareOppositeHero">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 opposite to the hero</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareFront">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 in front</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonStepSquareBack">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>1 back</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0,0,0,1,0,0,0,0">
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Change direction:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonEmpty">
+                <property name="text">
+                 <string>PushButton</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_25">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to North</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_19">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to South</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_20">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_16">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_21">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to North-West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_17">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to North-East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_15">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to South-West</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_24">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn to South-East</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_18">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn 45° right</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_14">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn 45° left</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_37">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Turn 180*</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_13">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Look at the hero</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_22">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Look at the hero opposite</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Change object properties:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_2">
+                <item>
+                 <property name="text">
+                  <string>ON</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>OFF</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_26">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change speed...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_35">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change frequency...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_31">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Move animation</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_33">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Stop animation</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_34">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Fix direction</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_36">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Through</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_23">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Set with camera</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_28">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change graphics...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_27">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change opacity...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_29">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Change bending...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_32">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_30">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>....</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_2">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
