@@ -137,6 +137,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Remove a picture...";
     case EventCommandKind::SetDialogBoxOptions:
         return "Set dialog box options...";
+    case EventCommandKind::TitleScreen:
+        return "Title screen...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -339,6 +341,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strRemoveAPicture(object, parameters); break;
     case EventCommandKind::SetDialogBoxOptions:
         str += this->strSetDialogBoxOptions(object, parameters); break;
+    case EventCommandKind::TitleScreen:
+        str += "Title screen"; break;
     default:
         break;
     }

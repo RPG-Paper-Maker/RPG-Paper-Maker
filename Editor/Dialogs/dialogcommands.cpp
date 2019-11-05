@@ -353,3 +353,9 @@ void DialogCommands::on_pushButtonRemovePicture_clicked() {
 void DialogCommands::on_pushButtonSetDialogBoxOptions_clicked() {
     this->openDialogCommand(EventCommandKind::SetDialogBoxOptions);
 }
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonTitleScreen_clicked() {
+    this->openNonDialogCommand(EventCommandKind::TitleScreen);
+}

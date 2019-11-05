@@ -61,6 +61,7 @@ enum class EventCommandKind {
     SetMoveTurnAPicture,
     RemoveAPicture,
     SetDialogBoxOptions,
+    TitleScreen,
     Last
 };
 
