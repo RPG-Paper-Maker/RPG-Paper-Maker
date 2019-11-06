@@ -35,6 +35,7 @@
 #include "dialogcommandremoveapicture.h"
 #include "dialogcommandsetdialogboxoptions.h"
 #include "dialogcommandchangescreentone.h"
+#include "dialogcommandremoveobjectfrommap.h"
 
 // -------------------------------------------------------
 //
@@ -143,6 +144,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandSetDialogBoxOptions(command, object, parameters);
     case EventCommandKind::ChangeScreenTone:
         return new DialogCommandChangeScreenTone(command, object, parameters);
+    case EventCommandKind::RemoveObjectFromMap:
+        return new DialogCommandRemoveObjectFromMap(command, object, parameters);
     default:
         return nullptr;
     }
@@ -372,4 +375,10 @@ void DialogCommands::on_pushButtonTitleScreen_clicked() {
 
 void DialogCommands::on_pushButtonChangeScreenTone_clicked() {
     this->openDialogCommand(EventCommandKind::ChangeScreenTone);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonRemoveObjectFromMap_clicked() {
+    this->openDialogCommand(EventCommandKind::RemoveObjectFromMap);
 }

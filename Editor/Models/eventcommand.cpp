@@ -141,6 +141,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Title screen...";
     case EventCommandKind::ChangeScreenTone:
         return "Change screen tone...";
+    case EventCommandKind::RemoveObjectFromMap:
+        return "Remove object from map...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -347,6 +349,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += "Title screen"; break;
     case EventCommandKind::ChangeScreenTone:
         str += this->strChangeScreenTone(object, parameters); break;
+    case EventCommandKind::RemoveObjectFromMap:
+        str += this->strRemoveObjectFromMap(object, parameters); break;
     default:
         break;
     }
@@ -1710,6 +1714,31 @@ QString EventCommand::strChangeScreenTone(SystemCommonObject *object,
 
     return "Change screen tone:\nR: " + red + "\nG: " + green + "\nB: " + blue +
         "\nGrey: " + grey + "\n" + color + time;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strRemoveObjectFromMap(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QStandardItemModel *modelObjects;
+    QString obj;
+    int i;
+
+    i = 0;
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        modelObjects = new QStandardItemModel;
+        Map::setModelObjects(modelObjects);
+    } else {
+        modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    obj = this->strDataBaseId(i, object, modelObjects, parameters);
+
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        SuperListItem::deleteModel(modelObjects);
+    }
+
+    return "Remove object from map: ID=" + obj;
 }
 
 // -------------------------------------------------------

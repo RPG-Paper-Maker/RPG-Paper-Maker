@@ -46,7 +46,7 @@ protected:
 
 private:
     Ui::DialogCommandMoveObject *ui;
-    QStandardItemModel* m_modelObjects;
+    QStandardItemModel *m_modelObjects;
 
 private slots:
     void on_pushButtonStepSquareNorth_clicked();

@@ -63,6 +63,7 @@ enum class EventCommandKind {
     SetDialogBoxOptions,
     TitleScreen,
     ChangeScreenTone,
+    RemoveObjectFromMap,
     Last
 };
 

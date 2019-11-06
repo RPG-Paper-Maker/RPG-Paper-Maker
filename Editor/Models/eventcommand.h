@@ -161,6 +161,8 @@ private:
         QStandardItemModel *parameters) const;
     QString strChangeScreenTone(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
+    QString strRemoveObjectFromMap(SystemCommonObject *object,
+        QStandardItemModel *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

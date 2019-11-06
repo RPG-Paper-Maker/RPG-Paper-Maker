@@ -154,9 +154,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonJumpLabel_6">
+               <widget class="QPushButton" name="pushButtonRemoveObjectFromMap">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Remove object from map...</string>

@@ -32,6 +32,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
+    Dialogs/Commands/dialogcommandremoveobjectfrommap.h \
     Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
@@ -347,6 +348,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
+    Dialogs/Commands/dialogcommandremoveobjectfrommap.cpp \
     Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
@@ -629,6 +631,7 @@ FORMS += \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \
+    Dialogs/Commands/dialogcommandremoveobjectfrommap.ui \
     Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \

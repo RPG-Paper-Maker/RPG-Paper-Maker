@@ -88,6 +88,7 @@ private slots:
     void on_pushButtonSetDialogBoxOptions_clicked();
     void on_pushButtonTitleScreen_clicked();
     void on_pushButtonChangeScreenTone_clicked();
+    void on_pushButtonRemoveObjectFromMap_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H
