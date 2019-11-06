@@ -45,7 +45,8 @@
         "Message error when wrong picture parsing template",
         "Update OSX Qt version",
         "Correct sound effect issues",
-        "Music and escape issue with battle music"
+        "Music and escape issue with battle music",
+        "Save error when object moved"
 	],
 	"finished": [
         true,
@@ -80,6 +81,7 @@
         false,
         false,
         false,
+        true,
         true,
         true
 	]

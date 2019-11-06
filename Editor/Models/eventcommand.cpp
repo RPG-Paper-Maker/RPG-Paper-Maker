@@ -143,6 +143,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Change screen tone...";
     case EventCommandKind::RemoveObjectFromMap:
         return "Remove object from map...";
+    case EventCommandKind::StopReaction:
+        return "Stop the reaction";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -351,6 +353,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strChangeScreenTone(object, parameters); break;
     case EventCommandKind::RemoveObjectFromMap:
         str += this->strRemoveObjectFromMap(object, parameters); break;
+    case EventCommandKind::StopReaction:
+        str += "Stop the reaction"; break;
     default:
         break;
     }

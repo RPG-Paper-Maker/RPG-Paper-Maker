@@ -64,6 +64,7 @@ enum class EventCommandKind {
     TitleScreen,
     ChangeScreenTone,
     RemoveObjectFromMap,
+    StopReaction,
     Last
 };
 

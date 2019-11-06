@@ -382,3 +382,9 @@ void DialogCommands::on_pushButtonChangeScreenTone_clicked() {
 void DialogCommands::on_pushButtonRemoveObjectFromMap_clicked() {
     this->openDialogCommand(EventCommandKind::RemoveObjectFromMap);
 }
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonStopReaction_clicked() {
+    this->openNonDialogCommand(EventCommandKind::StopReaction);
+}
