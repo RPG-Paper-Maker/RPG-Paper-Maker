@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>401</height>
+    <width>713</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Change screen tone...</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
+  <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">
     <number>15</number>
    </property>
@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <layout class="QGridLayout" name="gridLayout">
+        <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
@@ -43,48 +43,6 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveRed" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>250</width>
-             <height>27</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>138</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>48</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1" colspan="2">
           <widget class="QSlider" name="horizontalSliderRed">
            <property name="minimum">
             <number>-255</number>
@@ -106,19 +64,8 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Green:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveGreen" native="true">
+         <item row="0" column="2">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveRed" native="true">
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -133,33 +80,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>138</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="1" column="0">
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Green:</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>48</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
-         <item row="1" column="1" colspan="2">
+         <item row="1" column="1">
           <widget class="QSlider" name="horizontalSliderGreen">
            <property name="minimum">
             <number>-255</number>
@@ -181,19 +109,8 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Blue:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveBlue" native="true">
+         <item row="1" column="2">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveGreen" native="true">
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -208,33 +125,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Blue:</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>138</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>48</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1" colspan="2">
+         <item row="2" column="1">
           <widget class="QSlider" name="horizontalSliderBlue">
            <property name="minimum">
             <number>-255</number>
@@ -256,19 +154,8 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Grey:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="PanelPrimitiveValue" name="panelPrimitiveGrey" native="true">
+         <item row="2" column="2">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveBlue" native="true">
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -283,33 +170,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Grey:</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>138</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>48</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1" colspan="2">
+         <item row="3" column="1">
           <widget class="QSlider" name="horizontalSliderGrey">
            <property name="minimum">
             <number>0</number>
@@ -331,6 +199,22 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="2">
+          <widget class="PanelPrimitiveValue" name="panelPrimitiveGrey" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>27</height>
+            </size>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -338,7 +222,7 @@
          <item>
           <widget class="QCheckBox" name="checkBoxColor">
            <property name="text">
-            <string>Adding color:</string>
+            <string>Adding color ID:</string>
            </property>
           </widget>
          </item>
