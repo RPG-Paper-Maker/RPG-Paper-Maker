@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QMessageBox>
 #include "dialogcommands.h"
 #include "ui_dialogcommands.h"
 #include "dialogcommandshowtext.h"
@@ -50,13 +51,6 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
-
-    // Disable change property if no property available
-    if (object == nullptr || object->modelProperties() == nullptr || object
-        ->modelProperties()->invisibleRootItem()->rowCount() == 1)
-    {
-        ui->pushButtonChangeProperty->setEnabled(false);
-    }
 }
 
 DialogCommands::~DialogCommands()
@@ -126,6 +120,14 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
                                          SongKind::MusicEffect,
                                          command, object, parameters);
     case EventCommandKind::ChangeProperty:
+        // Warning if no property available
+        if (object == nullptr || object->modelProperties() == nullptr || object
+            ->modelProperties()->invisibleRootItem()->rowCount() == 1)
+        {
+            QMessageBox::information(nullptr, "Warning", "There are no properties "
+                "available to change.");
+            return nullptr;
+        }
         return new DialogCommandChangeProperty(command, object, parameters);
     case EventCommandKind::DisplayChoice:
         return new DialogCommandDisplayChoice(command, object, parameters);
@@ -151,13 +153,16 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
 void DialogCommands::openDialogCommand(EventCommandKind kind,
                                        EventCommand* command)
 {
-    DialogCommand* dialog = getDialogCommand(kind, command, m_linkedObject,
-                                             m_parameters);
-    if (dialog->exec() == QDialog::Accepted){
-        p_command = dialog->getCommand();
-        accept();
+    DialogCommand *dialog;
+
+    dialog = this->getDialogCommand(kind, command, m_linkedObject, m_parameters);
+    if (dialog != nullptr) {
+        if (dialog->exec() == QDialog::Accepted){
+            p_command = dialog->getCommand();
+            accept();
+        }
+        delete dialog;
     }
-    delete dialog;
 }
 
 // -------------------------------------------------------
