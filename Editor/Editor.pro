@@ -28,6 +28,7 @@ HEADERS += \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
+    Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
     Dialogs/Commands/dialogcommanddisplaychoice.h \
     Dialogs/Commands/dialogcommandremoveapicture.h \
@@ -342,6 +343,7 @@ SOURCES += \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
+    Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
     Dialogs/Commands/dialogcommanddisplaychoice.cpp \
     Dialogs/Commands/dialogcommandremoveapicture.cpp \
@@ -623,6 +625,7 @@ FORMS += \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
+    Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
     Dialogs/Commands/dialogcommanddisplaychoice.ui \
     Dialogs/Commands/dialogcommandremoveapicture.ui \

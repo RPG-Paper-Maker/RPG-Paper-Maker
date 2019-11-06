@@ -62,6 +62,7 @@ enum class EventCommandKind {
     RemoveAPicture,
     SetDialogBoxOptions,
     TitleScreen,
+    ChangeScreenTone,
     Last
 };
 

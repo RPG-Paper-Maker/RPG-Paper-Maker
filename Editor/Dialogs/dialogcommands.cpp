@@ -33,6 +33,7 @@
 #include "dialogcommandsetmoveturnapicture.h"
 #include "dialogcommandremoveapicture.h"
 #include "dialogcommandsetdialogboxoptions.h"
+#include "dialogcommandchangescreentone.h"
 
 // -------------------------------------------------------
 //
@@ -138,6 +139,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
         return new DialogCommandRemoveAPicture(command, object, parameters);
     case EventCommandKind::SetDialogBoxOptions:
         return new DialogCommandSetDialogBoxOptions(command, object, parameters);
+    case EventCommandKind::ChangeScreenTone:
+        return new DialogCommandChangeScreenTone(command, object, parameters);
     default:
         return nullptr;
     }
@@ -358,4 +361,10 @@ void DialogCommands::on_pushButtonSetDialogBoxOptions_clicked() {
 
 void DialogCommands::on_pushButtonTitleScreen_clicked() {
     this->openNonDialogCommand(EventCommandKind::TitleScreen);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonChangeScreenTone_clicked() {
+    this->openDialogCommand(EventCommandKind::ChangeScreenTone);
 }

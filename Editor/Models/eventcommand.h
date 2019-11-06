@@ -159,6 +159,8 @@ private:
         *parameters) const;
     QString strSetDialogBoxOptions(SystemCommonObject *object,
         QStandardItemModel *parameters) const;
+    QString strChangeScreenTone(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

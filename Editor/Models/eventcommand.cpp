@@ -139,6 +139,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Set dialog box options...";
     case EventCommandKind::TitleScreen:
         return "Title screen...";
+    case EventCommandKind::ChangeScreenTone:
+        return "Change screen tone...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -343,6 +345,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strSetDialogBoxOptions(object, parameters); break;
     case EventCommandKind::TitleScreen:
         str += "Title screen"; break;
+    case EventCommandKind::ChangeScreenTone:
+        str += this->strChangeScreenTone(object, parameters); break;
     default:
         break;
     }
@@ -1678,6 +1682,34 @@ QString EventCommand::strSetDialogBoxOptions(SystemCommonObject *object,
     }
 
     return "Set dialog box options: " + options;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strChangeScreenTone(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    QString red, green, blue, grey, operation, color, time;
+    int i;
+
+    i = 0;
+    red = this->strProperty(i, object, parameters);
+    green = this->strProperty(i, object, parameters);
+    blue = this->strProperty(i, object, parameters);
+    grey = this->strProperty(i, object, parameters) + "%";
+    if (RPM::stringToBool(m_listCommand.at(i++))) {
+        operation = RPM::stringToBool(m_listCommand.at(i++)) ? "-" : "+";
+        color = operation + " color " + this->strDataBaseId(i, object, RPM
+            ::get()->project()->gameDatas()->systemDatas()->modelColors(),
+            parameters) + "\n";
+    }
+    if (RPM::stringToBool(m_listCommand.at(i++))) {
+        time += "[Wait end] ";
+    }
+    time += "TIME: " + this->strProperty(i, object, parameters) + " seconds";
+
+    return "Change screen tone:\nR: " + red + "\nG: " + green + "\nB: " + blue +
+        "\nGrey: " + grey + "\n" + color + time;
 }
 
 // -------------------------------------------------------
