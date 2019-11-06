@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
@@ -603,19 +603,9 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_30">
                 <item>
-                 <widget class="QPushButton" name="pushButtonChangeWindowSkin">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Change windowskin...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QPushButton" name="pushButtonAllowForbidSaves">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Allow/Forbid saves...</string>
@@ -625,7 +615,7 @@
                 <item>
                  <widget class="QPushButton" name="pushButtonAllowForbidMainMenu">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Allow/Forbid main menu...</string>

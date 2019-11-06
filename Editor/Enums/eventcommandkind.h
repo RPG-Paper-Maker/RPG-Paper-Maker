@@ -65,6 +65,8 @@ enum class EventCommandKind {
     ChangeScreenTone,
     RemoveObjectFromMap,
     StopReaction,
+    AllowForbidSaves,
+    AllowForbidMainMenu,
     Last
 };
 

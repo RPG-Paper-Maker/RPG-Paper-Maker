@@ -32,7 +32,7 @@
         "Command remove object from map",
         "Command stop reaction",
         "Complete existing tilesets",
-        "Command allow / forbid main menu",
+        "Command allow / forbid main menu / saves",
         "Command change variables: object in map characteristics",
         "Command call common reaction",
         "Cave tileset"

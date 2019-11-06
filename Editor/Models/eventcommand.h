@@ -163,6 +163,10 @@ private:
         *parameters) const;
     QString strRemoveObjectFromMap(SystemCommonObject *object,
         QStandardItemModel *parameters) const;
+    QString strAllowForbidSaves(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strAllowForbidMainMenu(SystemCommonObject *object,
+        QStandardItemModel *parameters) const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

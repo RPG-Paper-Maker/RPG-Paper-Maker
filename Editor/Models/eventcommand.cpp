@@ -145,6 +145,10 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Remove object from map...";
     case EventCommandKind::StopReaction:
         return "Stop the reaction";
+    case EventCommandKind::AllowForbidSaves:
+        return "Allow/Forbid saves...";
+    case EventCommandKind::AllowForbidMainMenu:
+        return "Allow/Forbid main menu...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -355,6 +359,10 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strRemoveObjectFromMap(object, parameters); break;
     case EventCommandKind::StopReaction:
         str += "Stop the reaction"; break;
+    case EventCommandKind::AllowForbidSaves:
+        str += this->strAllowForbidSaves(object, parameters); break;
+    case EventCommandKind::AllowForbidMainMenu:
+        str += this->strAllowForbidMainMenu(object, parameters); break;
     default:
         break;
     }
@@ -1743,6 +1751,24 @@ QString EventCommand::strRemoveObjectFromMap(SystemCommonObject *object,
     }
 
     return "Remove object from map: ID=" + obj;
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strAllowForbidSaves(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    return "Allow saves: " + this->strProperty(i, object, parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strAllowForbidMainMenu(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
+    int i = 0;
+    return "Allow main menu: " + this->strProperty(i, object, parameters);
 }
 
 // -------------------------------------------------------

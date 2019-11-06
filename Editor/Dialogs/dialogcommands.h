@@ -90,6 +90,8 @@ private slots:
     void on_pushButtonChangeScreenTone_clicked();
     void on_pushButtonRemoveObjectFromMap_clicked();
     void on_pushButtonStopReaction_clicked();
+    void on_pushButtonAllowForbidSaves_clicked();
+    void on_pushButtonAllowForbidMainMenu_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

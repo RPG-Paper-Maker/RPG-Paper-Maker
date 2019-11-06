@@ -27,6 +27,7 @@ HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
+    Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
     Dialogs/Commands/dialogcommandchangescreentone.h \
     Dialogs/Commands/dialogcommanddisplayapicture.h \
@@ -343,6 +344,7 @@ SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
+    Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
     Dialogs/Commands/dialogcommandchangescreentone.cpp \
     Dialogs/Commands/dialogcommanddisplayapicture.cpp \
@@ -626,6 +628,7 @@ FORMS += \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
+    Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \
     Dialogs/Commands/dialogcommandchangescreentone.ui \
     Dialogs/Commands/dialogcommanddisplayapicture.ui \
