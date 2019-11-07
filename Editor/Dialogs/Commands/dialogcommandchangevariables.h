@@ -40,21 +40,25 @@ public:
     EventCommand* getCommand() const;
 
 protected:
-    virtual void initialize(EventCommand* command);
+    SystemCommonObject *m_object;
+    QStandardItemModel *m_parameters;
+    QStandardItemModel *m_modelObjects;
+
+    void initializePrimitives();
+
+    virtual void initialize(EventCommand *command);
 
 private:
     Ui::DialogCommandChangeVariables *ui;
-    QStandardItemModel* m_modelObjects;
-
-    void selection(QVector<QString> &command) const;
-    void operation(QVector<QString>& command) const;
-    void value(QVector<QString>& command) const;
 
 private slots:
     void on_radioButtonOneVariable_toggled(bool checked);
     void on_radioButtonRange_toggled(bool checked);
     void on_radioButtonNumber_toggled(bool checked);
     void on_radioButtonRandom_toggled(bool checked);
+    void on_radioButtonMessage_toggled(bool checked);
+    void on_radioButtonSwitch_toggled(bool checked);
+    void on_radioButtonObjectInMap_toggled(bool checked);
 };
 
 #endif // DIALOGCOMMANDCHANGEVARIABLES_H

@@ -240,6 +240,11 @@ const QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {
     "The hero with instance ID"
 };
 
+const QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {
+    "X square position", "Y square position", "Z square position",
+    "X pixel position", "Y pixel position", "Z pixel position", "orientation"
+};
+
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;

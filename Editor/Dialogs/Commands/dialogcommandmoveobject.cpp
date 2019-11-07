@@ -46,8 +46,7 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         m_modelObjects = new QStandardItemModel;
         Map::setModelObjects(m_modelObjects);
-    }
-    else{
+    } else {
         m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
     ui->widgetPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,

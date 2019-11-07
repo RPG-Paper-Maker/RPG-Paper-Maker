@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>647</width>
-    <height>628</height>
+    <height>694</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -212,13 +212,22 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <layout class="QGridLayout" name="gridLayout_5">
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="radioButtonNumber">
-              <property name="text">
-               <string>Number:</string>
+            <item row="2" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueRandom2" native="true">
+              <property name="enabled">
+               <bool>false</bool>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -235,29 +244,6 @@
                 <width>250</width>
                 <height>27</height>
                </size>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2" colspan="2">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>208</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButtonRandom">
-              <property name="text">
-               <string>Random:</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -303,6 +289,13 @@
               </property>
              </spacer>
             </item>
+            <item row="3" column="0">
+             <widget class="QRadioButton" name="radioButtonMessage">
+              <property name="text">
+               <string>Message:</string>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="0">
              <spacer name="horizontalSpacer_5">
               <property name="orientation">
@@ -316,8 +309,21 @@
               </property>
              </spacer>
             </item>
-            <item row="2" column="1">
-             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueRandom2" native="true">
+            <item row="3" column="2" colspan="2">
+             <spacer name="horizontalSpacer_13">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveMessage" native="true">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -335,6 +341,29 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radioButtonNumber">
+              <property name="text">
+               <string>Number:</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="2">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>208</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="2" column="2" colspan="2">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
@@ -347,6 +376,55 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButtonRandom">
+              <property name="text">
+               <string>Random number:</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QRadioButton" name="radioButtonSwitch">
+              <property name="text">
+               <string>Switch:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2" colspan="2">
+             <spacer name="horizontalSpacer_14">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="1">
+             <widget class="PanelPrimitiveValue" name="panelPrimitiveSwitch" native="true">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>250</width>
+                <height>27</height>
+               </size>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -670,9 +748,9 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_7">
             <item row="0" column="0" colspan="3">
-             <widget class="QRadioButton" name="radioButtonNumberStat_2">
+             <widget class="QRadioButton" name="radioButtonObjectInMap">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>An object in the map</string>
@@ -728,7 +806,7 @@
              </spacer>
             </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelObjectMapCharacteristic">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -738,7 +816,7 @@
              </widget>
             </item>
             <item row="1" column="2" colspan="2">
-             <widget class="QComboBox" name="comboBox_2">
+             <widget class="QComboBox" name="comboBoxObjectMapCharacteristics">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -754,46 +832,6 @@
                 <height>27</height>
                </size>
               </property>
-              <item>
-               <property name="text">
-                <string>X square position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Y square position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Z square position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>X pixel position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Y pixel position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Z pixel position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Orientation</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Ground level</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="1" column="4" colspan="2">

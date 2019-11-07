@@ -38,6 +38,10 @@ DialogCommandRemoveObjectFromMap::DialogCommandRemoveObjectFromMap(EventCommand
 
 DialogCommandRemoveObjectFromMap::~DialogCommandRemoveObjectFromMap() {
     delete ui;
+
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        SuperListItem::deleteModel(m_modelObjects);
+    }
 }
 
 // -------------------------------------------------------

@@ -81,10 +81,7 @@ private:
         *parameters = nullptr) const;
     QString strChangeVariables(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
-    QString strChangeVariablesSelection(int &i, QString &several) const;
     QString strChangeVariablesOperation(int &i) const;
-    QString strChangeVariablesValue(int &i, SystemCommonObject *object,
-        QStandardItemModel *parameters) const;
     QString strInputNumber() const;
     QString strCondition(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
@@ -111,17 +108,21 @@ private:
         *parameters, int &i) const;
     QString strTeleportObject(SystemCommonObject *object, QStandardItemModel
         *parameters) const;
-    QString strTeleportObjectPosition(SystemCommonObject*, QStandardItemModel
-        *parameters, int &i) const;
+    QString strTeleportObjectPosition(SystemCommonObject *object,
+        QStandardItemModel *parameters, int &i) const;
     QString strTeleportObjectOptions(int &i) const;
-    QString strMoveObject(QStandardItemModel *parameters) const;
-    QString strMoveObjectID(QStandardItemModel *parameters, int &i) const;
+    QString strMoveObject(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strMoveObjectID(SystemCommonObject *object, QStandardItemModel
+        *parameters, int &i) const;
     QString strMoveObjectOptions(int &i) const;
     QString strMoveObjectMoves(int &i) const;
     QString strWait(SystemCommonObject *object, QStandardItemModel *parameters)
         const;
-    QString strMoveCamera(QStandardItemModel *parameters) const;
-    QString strMoveCameraTarget(QStandardItemModel *parameters, int &i) const;
+    QString strMoveCamera(SystemCommonObject *object, QStandardItemModel
+        *parameters) const;
+    QString strMoveCameraTarget(SystemCommonObject *object, QStandardItemModel
+        *parameters, int &i) const;
     QString strMoveCameraMove(QStandardItemModel *parameters, int &i, QString
         &operation) const;
     QString strMoveCameraRotation(QStandardItemModel *parameters, int &i,

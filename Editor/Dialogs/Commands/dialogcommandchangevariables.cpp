@@ -19,47 +19,29 @@
 //
 // -------------------------------------------------------
 
-DialogCommandChangeVariables::DialogCommandChangeVariables(
-        EventCommand *command,
-        SystemCommonObject* ,
-        QStandardItemModel* parameters,
-        QWidget *parent) :
+DialogCommandChangeVariables::DialogCommandChangeVariables(EventCommand *command
+    , SystemCommonObject *object, QStandardItemModel *parameters, QWidget
+    *parent) :
     DialogCommand(parent),
+    m_object(object),
+    m_parameters(parameters),
+    m_modelObjects(nullptr),
     ui(new Ui::DialogCommandChangeVariables)
 {
     ui->setupUi(this);
 
-    ui->widgetVariableOne->initialize();
-    ui->panelPrimitiveValueNumber->initializeNumber(parameters, nullptr);
-    ui->panelPrimitiveValueRandom1->initializeNumber(parameters, nullptr);
-    ui->panelPrimitiveValueRandom2->initializeNumber(parameters, nullptr);
-    ui->panelPrimitiveValueInstanceID->initializeNumber(parameters, nullptr);
-    ui->panelPrimitiveValueNumberItem->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->weaponsDatas()->model(), parameters, nullptr);
-    ui->panelPrimitiveValueStatisticID->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
-        parameters, nullptr);
-    ui->panelPrimitiveValueTotalCurrency->initializeDataBaseCommandId(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelCurrencies(), parameters,
-        nullptr);
-    if (RPM::isInConfig){
-        m_modelObjects = new QStandardItemModel;
-        Map::setModelObjects(m_modelObjects);
-    }
-    else{
-        m_modelObjects = RPM::get()->project()->currentMap()->modelObjects();
-    }
-    ui->panelPrimitiveValueObjectsMap->initializeDataBaseCommandId(
-        m_modelObjects, parameters, nullptr);
+    this->initializePrimitives();
 
-    if (command != nullptr) initialize(command);
+    if (command != nullptr) {
+        this->initialize(command);
+    }
 }
 
 DialogCommandChangeVariables::~DialogCommandChangeVariables()
 {
     delete ui;
 
-    if (RPM::isInConfig) {
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(m_modelObjects);
     }
 }
@@ -70,15 +52,55 @@ DialogCommandChangeVariables::~DialogCommandChangeVariables()
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeVariables::initialize(EventCommand* command) {
+void DialogCommandChangeVariables::initializePrimitives() {
+    QStandardItemModel *properties;
+
+    properties = nullptr;
+    if (m_object != nullptr){
+        properties = m_object->modelProperties();
+    }
+
+    ui->widgetVariableOne->initialize();
+    ui->panelPrimitiveValueNumber->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveValueRandom1->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveValueRandom2->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveMessage->initializeMessage(false, m_parameters, properties);
+    ui->panelPrimitiveSwitch->initializeSwitch(m_parameters, properties);
+    ui->panelPrimitiveValueInstanceID->initializeNumber(m_parameters, properties);
+    ui->panelPrimitiveValueNumberItem->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->weaponsDatas()->model(), m_parameters,
+        properties);
+    ui->panelPrimitiveValueStatisticID->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics(),
+        m_parameters, properties);
+    ui->panelPrimitiveValueTotalCurrency->initializeDataBaseCommandId(RPM::get()
+        ->project()->gameDatas()->systemDatas()->modelCurrencies(), m_parameters
+        , properties);
+    if (RPM::isInConfig && !RPM::isInObjectConfig) {
+        m_modelObjects = new QStandardItemModel;
+        Map::setModelObjects(m_modelObjects);
+    } else {
+        m_modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
+    }
+    ui->panelPrimitiveValueObjectsMap->initializeDataBaseCommandId(
+        m_modelObjects, m_parameters, properties);
+    ui->comboBoxObjectMapCharacteristics->addItems(RPM
+        ::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC);
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::initialize(EventCommand *command) {
     int i = 0;
 
-    // Selection
-    switch(command->valueCommandAt(i++).toInt()){
+    switch(command->valueCommandAt(i++).toInt()) {
     case 0:
         ui->radioButtonOneVariable->setChecked(true);
-        ui->widgetVariableOne->setCurrentId(command->valueCommandAt(i++)
-                                            .toInt());
+        ui->widgetVariableOne->setCurrentId(command->valueCommandAt(i++).toInt());
         break;
     case 1:
         ui->radioButtonRange->setChecked(true);
@@ -86,18 +108,20 @@ void DialogCommandChangeVariables::initialize(EventCommand* command) {
         ui->spinBoxRange2->setValue(command->valueCommandAt(i++).toInt());
         break;
     }
-
-    // Operation
     switch (command->valueCommandAt(i++).toInt()) {
-    case 0: ui->radioButtonEquals->setChecked(true); break;
-    case 1: ui->radioButtonPlus->setChecked(true); break;
-    case 2: ui->radioButtonMinus->setChecked(true); break;
-    case 3: ui->radioButtonTimes->setChecked(true); break;
-    case 4: ui->radioButtonDivided->setChecked(true); break;
-    case 5: ui->radioButtonModulo->setChecked(true); break;
+    case 0:
+        ui->radioButtonEquals->setChecked(true); break;
+    case 1:
+        ui->radioButtonPlus->setChecked(true); break;
+    case 2:
+        ui->radioButtonMinus->setChecked(true); break;
+    case 3:
+        ui->radioButtonTimes->setChecked(true); break;
+    case 4:
+        ui->radioButtonDivided->setChecked(true); break;
+    case 5:
+        ui->radioButtonModulo->setChecked(true); break;
     }
-
-    // Value
     switch(command->valueCommandAt(i++).toInt()) {
     case 0:
         ui->radioButtonNumber->setChecked(true);
@@ -108,6 +132,20 @@ void DialogCommandChangeVariables::initialize(EventCommand* command) {
         ui->panelPrimitiveValueRandom1->initializeCommand(command, i);
         ui->panelPrimitiveValueRandom2->initializeCommand(command, i);
         break;
+    case 2:
+        ui->radioButtonMessage->setChecked(true);
+        ui->panelPrimitiveMessage->initializeCommand(command, i);
+        break;
+    case 3:
+        ui->radioButtonSwitch->setChecked(true);
+        ui->panelPrimitiveSwitch->initializeCommand(command, i);
+        break;
+    case 4:
+        ui->radioButtonObjectInMap->setChecked(true);
+        ui->panelPrimitiveValueObjectsMap->initializeCommand(command, i);
+        ui->comboBoxObjectMapCharacteristics->setCurrentIndex(command
+            ->valueCommandAt(i++).toInt());
+        break;
     }
 }
 
@@ -115,43 +153,28 @@ void DialogCommandChangeVariables::initialize(EventCommand* command) {
 
 EventCommand* DialogCommandChangeVariables::getCommand() const{
     QVector<QString> command;
-    selection(command); // Information about type of selection
-    operation(command); // Type of operation done
-    value(command); // Type of value given to the selected variable(s)
 
-    return new EventCommand(EventCommandKind::ChangeVariables, command);
-}
-
-// -------------------------------------------------------
-
-void DialogCommandChangeVariables::selection(QVector<QString>& command) const{
-    // If only selecting one variable...
-    if (ui->radioButtonOneVariable->isChecked()){
+    if (ui->radioButtonOneVariable->isChecked()) {
         command.append("0");
         command.append(QString::number(ui->widgetVariableOne->currentId()));
-    }
-    // If selecting a range of variables...
-    else if (ui->radioButtonRange->isChecked()){
+    } else if (ui->radioButtonRange->isChecked()) {
         command.append("1");
         command.append(ui->spinBoxRange1->text());
         command.append(ui->spinBoxRange2->text());
     }
-}
-
-// -------------------------------------------------------
-
-void DialogCommandChangeVariables::operation(QVector<QString>& command) const{
-    if (ui->radioButtonEquals->isChecked()) command.append("0");
-    else if (ui->radioButtonPlus->isChecked()) command.append("1");
-    else if (ui->radioButtonMinus->isChecked()) command.append("2");
-    else if (ui->radioButtonTimes->isChecked()) command.append("3");
-    else if (ui->radioButtonDivided->isChecked()) command.append("4");
-    else if (ui->radioButtonModulo->isChecked()) command.append("5");
-}
-
-// -------------------------------------------------------
-
-void DialogCommandChangeVariables::value(QVector<QString> &command) const {
+    if (ui->radioButtonEquals->isChecked()) {
+        command.append("0");
+    } else if (ui->radioButtonPlus->isChecked()) {
+        command.append("1");
+    } else if (ui->radioButtonMinus->isChecked()) {
+        command.append("2");
+    } else if (ui->radioButtonTimes->isChecked()) {
+        command.append("3");
+    } else if (ui->radioButtonDivided->isChecked()) {
+        command.append("4");
+    } else if (ui->radioButtonModulo->isChecked()) {
+        command.append("5");
+    }
     if (ui->radioButtonNumber->isChecked()) {
         command.append("0");
         ui->panelPrimitiveValueNumber->getCommand(command);
@@ -159,7 +182,20 @@ void DialogCommandChangeVariables::value(QVector<QString> &command) const {
         command.append("1");
         ui->panelPrimitiveValueRandom1->getCommand(command);
         ui->panelPrimitiveValueRandom2->getCommand(command);
+    } else if (ui->radioButtonMessage->isChecked()) {
+        command.append("2");
+        ui->panelPrimitiveMessage->getCommand(command);
+    } else if (ui->radioButtonSwitch->isChecked()) {
+        command.append("3");
+        ui->panelPrimitiveSwitch->getCommand(command);
+    } else if (ui->radioButtonObjectInMap->isChecked()) {
+        command.append("4");
+        ui->panelPrimitiveValueObjectsMap->getCommand(command);
+        command.append(QString::number(ui->comboBoxObjectMapCharacteristics
+            ->currentIndex()));
     }
+
+    return new EventCommand(EventCommandKind::ChangeVariables, command);
 }
 
 // -------------------------------------------------------
@@ -168,8 +204,8 @@ void DialogCommandChangeVariables::value(QVector<QString> &command) const {
 //
 // -------------------------------------------------------
 
-void DialogCommandChangeVariables::on_radioButtonOneVariable_toggled(
-        bool checked)
+void DialogCommandChangeVariables::on_radioButtonOneVariable_toggled(bool
+    checked)
 {
     ui->widgetVariableOne->setEnabled(checked);
 }
@@ -194,4 +230,26 @@ void DialogCommandChangeVariables::on_radioButtonRandom_toggled(bool checked) {
     ui->panelPrimitiveValueRandom1->setEnabled(checked);
     ui->labelRandom->setEnabled(checked);
     ui->panelPrimitiveValueRandom2->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::on_radioButtonMessage_toggled(bool checked) {
+    ui->panelPrimitiveMessage->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::on_radioButtonSwitch_toggled(bool checked) {
+    ui->panelPrimitiveSwitch->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogCommandChangeVariables::on_radioButtonObjectInMap_toggled(bool
+    checked)
+{
+    ui->panelPrimitiveValueObjectsMap->setEnabled(checked);
+    ui->labelObjectMapCharacteristic->setEnabled(checked);
+    ui->comboBoxObjectMapCharacteristics->setEnabled(checked);
 }

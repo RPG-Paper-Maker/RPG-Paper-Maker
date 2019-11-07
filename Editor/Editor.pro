@@ -61,6 +61,7 @@ HEADERS += \
     Enums/objectmovingkind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
+    Enums/variablemapobjectcharacteristickind.h \
     MapEditor/Map/map.h \
     Controls/controlmainwindow.h \
     MapEditor/mountain.h \

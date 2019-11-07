@@ -316,11 +316,11 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
     case EventCommandKind::TeleportObject:
         str += this->strTeleportObject(object, parameters); break;
     case EventCommandKind::MoveObject:
-        str += this->strMoveObject(parameters); break;
+        str += this->strMoveObject(object, parameters); break;
     case EventCommandKind::Wait:
         str += this->strWait(object, parameters); break;
     case EventCommandKind::MoveCamera:
-        str += this->strMoveCamera(parameters); break;
+        str += this->strMoveCamera(object, parameters); break;
     case EventCommandKind::PlayMusic:
         str += this->strPlayMusic(object, parameters); break;
     case EventCommandKind::StopMusic:
@@ -510,37 +510,48 @@ QString EventCommand::strShowText(SystemCommonObject *object, QStandardItemModel
 QString EventCommand::strChangeVariables(SystemCommonObject *object,
     QStandardItemModel *parameters) const
 {
-    QString several, selection, operation, value;
-    int i;
+    QString several, selection, operation, value, checked;
+    int i, index;
 
     i = 0;
-    several = "";
-    selection = this->strChangeVariablesSelection(i, several);
-    operation = this->strChangeVariablesOperation(i);
-    value = this->strChangeVariablesValue(i, object, parameters);
-
-    return "Change variable" + several + ": " + selection + " " + operation +
-        " " + value;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strChangeVariablesSelection(int &i, QString &several) const
-{
-    QString selection, str;
-
-    selection = m_listCommand.at(i++);
-    if (selection == RPM::FALSE_BOOL_STRING) {
-        str += RPM::get()->project()->gameDatas()->variablesDatas()
+    checked = m_listCommand.at(i++);
+    if (!RPM::stringToBool(checked)) {
+        selection += RPM::get()->project()->gameDatas()->variablesDatas()
             ->getVariableById(m_listCommand.at(i++).toInt())->toString();
     } else {
         several += "s";
-        str += m_listCommand.at(i++);
-        str += " to ";
-        str += m_listCommand.at(i++);
+        selection += m_listCommand.at(i++);
+        selection += " to ";
+        selection += m_listCommand.at(i++);
+    }
+    operation = this->strChangeVariablesOperation(i);
+    index = m_listCommand.at(i++).toInt();
+    switch (index) {
+    case 0:
+        value += this->strProperty(i, object, parameters);
+        break;
+    case 1:
+        value += "random number between ";
+        value += this->strProperty(i, object, parameters);
+        value += " and ";
+        value += this->strProperty(i, object, parameters);
+        break;
+    case 2:
+        value += "message " + this->strProperty(i, object, parameters);
+        break;
+    case 3:
+        value += "switch " + this->strProperty(i, object, parameters);
+        break;
+    case 4:
+        value += "An object in the map " + this->strMoveObjectID(object,
+            parameters, i) + " characteristic ";
+        value += RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC.at(
+            m_listCommand.at(i++).toInt());
+        break;
     }
 
-    return str;
+    return "Change variable" + several + ": " + selection + " " + operation +
+        " " + value;
 }
 
 // -------------------------------------------------------
@@ -561,26 +572,6 @@ QString EventCommand::strChangeVariablesOperation(int &i) const {
         str += "/";
     } else if (operation == "5") {
         str += "%";
-    }
-
-    return str;
-}
-
-// -------------------------------------------------------
-
-QString EventCommand::strChangeVariablesValue(int &i, SystemCommonObject *
-    , QStandardItemModel *parameters) const
-{
-    QString value, str;
-
-    value = m_listCommand.at(i++);
-    if (value == "0") {
-        str += strNumber(i, parameters);
-    } else if (value == "1") {
-        str += "random number between ";
-        str += this->strNumber(i, parameters);
-        str += " and ";
-        str += this->strNumber(i, parameters);
     }
 
     return str;
@@ -1067,7 +1058,7 @@ QString EventCommand::strSendEventTarget(SystemCommonObject *object,
         }
         break;
     case 2:
-        str += "object " + this->strMoveObjectID(parameters, i);
+        str += "object " + this->strMoveObjectID(object, parameters, i);
         break;
     }
 
@@ -1083,7 +1074,7 @@ QString EventCommand::strTeleportObject(SystemCommonObject *object,
     int i;
 
     i = 0;
-    strObj = this->strMoveObjectID(parameters, i);
+    strObj = this->strMoveObjectID(object, parameters, i);
     strPosition = this->strTeleportObjectPosition(object, parameters, i);
     strOptions = this->strTeleportObjectOptions(i);
 
@@ -1093,7 +1084,7 @@ QString EventCommand::strTeleportObject(SystemCommonObject *object,
 
 // -------------------------------------------------------
 
-QString EventCommand::strTeleportObjectPosition(SystemCommonObject*,
+QString EventCommand::strTeleportObjectPosition(SystemCommonObject *object,
     QStandardItemModel *parameters, int &i) const
 {
     QString id, x, y, yPlus, z;
@@ -1122,7 +1113,7 @@ QString EventCommand::strTeleportObjectPosition(SystemCommonObject*,
             "\n" + "\tY plus: " + yPlus + "\n" + "\tZ: " + z;
     }
 
-    return "\t" + this->strMoveObjectID(parameters, i) + "'s coordinates";
+    return "\t" + this->strMoveObjectID(object, parameters, i) + "'s coordinates";
 }
 
 // -------------------------------------------------------
@@ -1165,12 +1156,14 @@ QString EventCommand::strTeleportObjectOptions(int &i) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObject(QStandardItemModel *parameters) const {
+QString EventCommand::strMoveObject(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     QString strObj, strOptions, strMoves;
     int i;
 
     i = 0;
-    strObj = this->strMoveObjectID(parameters, i);
+    strObj = this->strMoveObjectID(object, parameters, i);
     strOptions = this->strMoveObjectOptions(i);
     strMoves = this->strMoveObjectMoves(i);
 
@@ -1179,7 +1172,8 @@ QString EventCommand::strMoveObject(QStandardItemModel *parameters) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveObjectID(QStandardItemModel *parameters, int &i) const
+QString EventCommand::strMoveObjectID(SystemCommonObject *object,
+    QStandardItemModel *parameters, int &i) const
 {
     QStandardItemModel *modelObjects;
     QString strObj;
@@ -1190,7 +1184,7 @@ QString EventCommand::strMoveObjectID(QStandardItemModel *parameters, int &i) co
     } else {
         modelObjects = RPM::get()->project()->currentMap(true)->modelObjects();
     }
-    strObj = this->strDataBaseId(i, nullptr, modelObjects, parameters);
+    strObj = this->strDataBaseId(i, object, modelObjects, parameters);
 
     if (RPM::isInConfig && !RPM::isInObjectConfig) {
         SuperListItem::deleteModel(modelObjects);
@@ -1249,12 +1243,14 @@ QString EventCommand::strWait(SystemCommonObject *object, QStandardItemModel
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCamera(QStandardItemModel *parameters) const {
+QString EventCommand::strMoveCamera(SystemCommonObject *object,
+    QStandardItemModel *parameters) const
+{
     QString target, operation, move, rotation, zoom, options;
     int i;
 
     i = 0;
-    target = this->strMoveCameraTarget(parameters, i);
+    target = this->strMoveCameraTarget(object, parameters, i);
     operation = this->strChangeVariablesOperation(i);
     move = this->strMoveCameraMove(parameters, i, operation);
     rotation = this->strMoveCameraRotation(parameters, i, operation);
@@ -1267,8 +1263,8 @@ QString EventCommand::strMoveCamera(QStandardItemModel *parameters) const {
 
 // -------------------------------------------------------
 
-QString EventCommand::strMoveCameraTarget(QStandardItemModel *parameters, int
-    &i) const
+QString EventCommand::strMoveCameraTarget(SystemCommonObject *object,
+    QStandardItemModel *parameters, int &i) const
 {
     int targetKind;
 
@@ -1277,7 +1273,7 @@ QString EventCommand::strMoveCameraTarget(QStandardItemModel *parameters, int
     case 0:
         return "Unchanged";
     case 1:
-        return "Object " + this->strMoveObjectID(parameters, i);
+        return "Object " + this->strMoveObjectID(object, parameters, i);
     }
 
     return "";
