@@ -349,7 +349,8 @@ void DialogSystems::initializeStates(GameDatas *gameDatas){
 
 // -------------------------------------------------------
 
-void DialogSystems::initializeCommonReactors(GameDatas *gameDatas){
+void DialogSystems::initializeCommonReactors(GameDatas *gameDatas) {
+    ui->treeViewCommonReactorsParameters->setUpdateId(true);
     ui->treeViewCommonReactorsParameters
             ->initializeNewItemInstance(new SystemCreateParameter);
     ui->panelSuperListCommonReactors->list()
@@ -371,7 +372,6 @@ void DialogSystems::initializeCommonReactors(GameDatas *gameDatas){
 void DialogSystems::updateCommonReactors(SystemCommonReaction *
                                          sysCommonReactor)
 {
-
     // Parameters
     ui->treeViewCommonReactorsParameters->initializeModel(sysCommonReactor
                                                           ->modelParameters());
@@ -379,6 +379,10 @@ void DialogSystems::updateCommonReactors(SystemCommonReaction *
     ui->treeViewCommonReactorsParameters->setColumnWidth(1,100);
 
     // Commands
+    RPM::get()->project()->setCurrentParameters(sysCommonReactor
+        ->modelParameters());
+    ui->treeCommandsView->initializeParameters(sysCommonReactor
+        ->modelParameters());
     ui->treeCommandsView->initializeModel(sysCommonReactor->modelCommands());
 
     // Options
@@ -548,7 +552,7 @@ void DialogSystems::on_pageCommonReactorsSelected(QModelIndex index,
 {
     QStandardItem* selected = ui->panelSuperListCommonReactors->list()
             ->getModel()->itemFromIndex(index);
-    if (selected != nullptr){
+    if (selected != nullptr) {
         updateCommonReactors((SystemCommonReaction*) selected->data()
                              .value<quintptr>());
     }
@@ -605,11 +609,17 @@ void DialogSystems::on_tabWidget_currentChanged(int index) {
     switch (index) {
     case 5:
         RPM::get()->project()->setCurrentObject(nullptr);
+        this->updateCommonReactors(reinterpret_cast<SystemCommonReaction *>(ui
+            ->panelSuperListCommonReactors->list()->getSelected()->data().value<
+            quintptr>()));
         break;
     case 6:
         RPM::get()->project()->setCurrentObject(reinterpret_cast<
             SystemCommonObject *>(ui->panelSuperListCommonObjects->list()
             ->getSelected()->data().value<quintptr>()));
+        this->updateCommonObjects(reinterpret_cast<SystemCommonObject *>(ui
+            ->panelSuperListCommonObjects->list()->getSelected()->data().value<
+            quintptr>()));
         break;
     default:
         break;

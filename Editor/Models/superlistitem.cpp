@@ -120,44 +120,59 @@ QString SuperListItem::idToString() const {
 
 // -------------------------------------------------------
 
-void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel){
-    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++)
-        delete (SuperListItem*) model->item(i)->data().value<quintptr>();
+void SuperListItem::deleteModel(QStandardItemModel *model, bool deleteModel) {
+    SuperListItem *super;
+    int i, l;
 
-    if (deleteModel)
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            quintptr>());
+        if (super != nullptr) {
+            delete super;
+        }
+    }
+    if (deleteModel) {
         delete model;
-    else
+    } else {
         model->clear();
+    }
 }
 
 // -------------------------------------------------------
 
-void SuperListItem::deleteModelTree(QStandardItem* item){
-    for (int i = 0; i < item->rowCount(); i++){
+void SuperListItem::deleteModelTree(QStandardItem *item) {
+    SuperListItem *super;
+    int i, l;
+
+    for (i = 0, l = item->rowCount(); i < l; i++) {
         deleteModelTree(item->child(i));
-        delete (SuperListItem*) item->child(i)->data().value<quintptr>();
+        super = reinterpret_cast<SuperListItem *>(item->child(i)->data().value<
+            quintptr>());
+        if (super != nullptr) {
+            delete super;
+        }
     }
 }
 
 // -------------------------------------------------------
 
 int SuperListItem::getIndexById(QStandardItem* item, int id, bool first) {
-    int l = item->rowCount()-1;
-    SuperListItem* s;
+    int l;
 
-    if (l > -1) {
-        for (int i = 0; i < l; i++){
-            s = (SuperListItem*) item->child(i)->data().value<quintptr>();
-            if (id == s->id()) return i;
-        }
+    l = item->rowCount();
+    if (l > 0) {
+        SuperListItem *s;
+        int i, j;
 
-        s = (SuperListItem*) item->child(l)->data().value<quintptr>();
-        if (s != nullptr && id == s->id())
-            return l;
-        else{
-            s = (SuperListItem*) item->child(0)->data().value<quintptr>();
-            if (s != nullptr && id == s->id())
-                return 0;
+        for (i = 0, j = 0; i < l; i++) {
+            s = reinterpret_cast<SuperListItem *>(item->child(i)->data().value<
+                quintptr>());
+            if (s != nullptr) {
+                if (id == s->id()) {
+                    return j;
+                }
+                j++;
+            }
         }
     }
 
@@ -167,37 +182,33 @@ int SuperListItem::getIndexById(QStandardItem* item, int id, bool first) {
 // -------------------------------------------------------
 
 int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
-    SuperListItem* s = nullptr;
+    SuperListItem *super;
 
-    if (index >= 0 && index < model->invisibleRootItem()->rowCount()) {
-        s = (SuperListItem*) model->item(index)->data().value<qintptr>();
-    }
+    super = SuperListItem::getByIndex(model, index);
 
-    return (s != nullptr) ? s->id() : -1;
+    return super == nullptr ? -1 : super->id();
 }
 
 // -------------------------------------------------------
 
 SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
-    int l = item->rowCount()-1;
+    int l;
 
-    if (l > -1){
-        SuperListItem* s;
+    l = item->rowCount();
+    if (l > 0) {
+        SuperListItem *s;
+        int i;
 
-        for (int i = 0; i < l; i++){
-            s = (SuperListItem*)(item->child(i)->data().value<quintptr>());
-            if (id == s->id()) return s;
-        }
-
-        s = (SuperListItem*)(item->child(l)->data().value<quintptr>());
-        if (s != nullptr && id == s->id())
-            return s;
-        else{
-            s = (SuperListItem*)(item->child(0)->data().value<quintptr>());
-            if (s != nullptr) {
-                if (first || id == s->id())
-                    return s;
+        for (i = 0; i < l; i++) {
+            s = reinterpret_cast<SuperListItem *>(item->child(i)->data().value<
+                quintptr>());
+            if (s != nullptr && id == s->id()) {
+                return s;
             }
+        }
+        if (first) {
+            return reinterpret_cast<SuperListItem *>(item->child(0)->data()
+                .value<quintptr>());
         }
     }
 
@@ -207,12 +218,23 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
 // -------------------------------------------------------
 
 SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) {
-    SuperListItem* s = nullptr;
+    int i, l;
 
-    if (index >= 0 && index < model->invisibleRootItem()->rowCount())
-        s = (SuperListItem*) model->item(index)->data().value<qintptr>();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++) {
+        SuperListItem *s;
 
-    return (s != nullptr) ? s : nullptr;
+        s = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            qintptr>());
+        if (s == nullptr) {
+            index++;
+        } else {
+            if (i == index) {
+                return s;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 // -------------------------------------------------------
@@ -220,13 +242,16 @@ SuperListItem * SuperListItem::getByIndex(QStandardItemModel* model, int index) 
 void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
     bool showID, bool nameOnly, bool showIcon)
 {
-    int l = model->invisibleRootItem()->rowCount()-1;
-    SuperListItem* sys;
-    QStandardItem* item;
-    QIcon icon;
+    int l;
 
-    if (l > -1) {
-        for (int i = 0; i <= l; i++) {
+    l = model->invisibleRootItem()->rowCount();
+    if (l > 0) {
+        SuperListItem *sys;
+        QStandardItem *item;
+        QIcon icon;
+        int i;
+
+        for (i = 0; i < l; i++) {
             item = model->item(i);
             sys = reinterpret_cast<SuperListItem *>(item->data().value<quintptr>
                 ());

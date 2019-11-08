@@ -938,7 +938,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonCallCommonReaction">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Call a common reaction...</string>

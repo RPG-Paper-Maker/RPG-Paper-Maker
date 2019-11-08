@@ -468,8 +468,18 @@ void PanelObject::on_stateChanged(QModelIndex index, QModelIndex) {
 void PanelObject::on_eventChanged(QModelIndex index, QModelIndex) {
     QStandardItem *selected = ui->treeViewEvents->getModel()->itemFromIndex(index);
     if (selected != nullptr) {
+        SystemObjectEvent *event;
+
+        event = reinterpret_cast<SystemObjectEvent *>(selected->data().value<
+            quintptr>());
+        if (event == nullptr) {
+            RPM::get()->project()->setCurrentParameters(nullptr);
+        } else {
+            RPM::get()->project()->setCurrentParameters(event->modelParameters());
+        }
         ui->tabWidgetCommands->setCurrentIndex(selected->row());
     } else {
+        RPM::get()->project()->setCurrentParameters(nullptr);
         ui->tabWidgetCommands->setCurrentIndex(-1);
     }
 }

@@ -49,6 +49,8 @@ public:
     void setCurrentMap(Map* m);
     SystemCommonObject * currentObject() const;
     void setCurrentObject(SystemCommonObject *object);
+    QStandardItemModel * currentParameters() const;
+    void setCurrentParameters(QStandardItemModel *parameters);
     GameDatas* gameDatas() const;
     TreeMapDatas* treeMapDatas() const;
     LangsDatas* langsDatas() const;
@@ -113,6 +115,7 @@ private:
     Map* p_currentMap;
     Map* p_currentMapConfig;
     SystemCommonObject *m_currentObject;
+    QStandardItemModel *m_currentParameters;
     GameDatas* p_gameDatas;
     TreeMapDatas* m_treeMapDatas;
     LangsDatas* m_langsDatas;

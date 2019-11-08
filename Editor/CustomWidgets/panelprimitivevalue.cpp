@@ -89,21 +89,22 @@ void PanelPrimitiveValue::initializePrimitives() {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::initializeParameterEvent(QStandardItemModel
-    *properties)
+    *properties, QStandardItemModel *parameters)
 {
     m_kind = PanelPrimitiveValueKind::ParameterEvent;
-    addDefault();
-    addAnything();
-    addNone();
-    addNumberDouble();
-    addMessage(false);
-    addSwitch();
-    addKeyBoard();
-    addProperty(properties);
-    setNumberDoubleValue(m_model->numberDoubleValue());
-    setMessageValue(m_model->messageValue());
-    setSwitchValue(m_model->switchValue());
-    initialize();
+    this->addDefault();
+    this->addAnything();
+    this->addNone();
+    this->addNumberDouble();
+    this->addMessage(false);
+    this->addSwitch();
+    this->addKeyBoard();
+    this->addProperty(properties);
+    this->addParameter(parameters);
+    this->setNumberDoubleValue(m_model->numberDoubleValue());
+    this->setMessageValue(m_model->messageValue());
+    this->setSwitchValue(m_model->switchValue());
+    this->initialize();
 }
 
 // -------------------------------------------------------

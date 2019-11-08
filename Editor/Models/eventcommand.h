@@ -168,6 +168,7 @@ private:
         *parameters) const;
     QString strAllowForbidMainMenu(SystemCommonObject *object,
         QStandardItemModel *parameters) const;
+    QString strCallACommonReaction() const;
 };
 
 Q_DECLARE_METATYPE(EventCommand)

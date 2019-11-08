@@ -80,6 +80,7 @@ void SystemParameter::setCopy(const SystemParameter& param) {
     m_parameter = param.m_parameter;
     m_value->setCopy(*param.m_value);
     m_value->setModelProperties(RPM::get()->project()->currentObjectProperties());
+    m_value->setModelParameter(RPM::get()->project()->currentParameters());
 }
 
 // -------------------------------------------------------
@@ -116,6 +117,7 @@ void SystemParameter::read(const QJsonObject &json) {
 
     m_value->read(json["v"].toObject());
     m_value->setModelProperties(RPM::get()->project()->currentObjectProperties());
+    m_value->setModelParameter(RPM::get()->project()->currentParameters());
 }
 
 // -------------------------------------------------------

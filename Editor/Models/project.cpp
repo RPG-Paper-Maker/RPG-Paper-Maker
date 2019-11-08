@@ -32,6 +32,7 @@ const int Project::MAX_PROJECTS_NUMBER = 6;
 Project::Project() :
     p_currentMap(nullptr),
     p_currentMapConfig(nullptr),
+    m_currentParameters(nullptr),
     p_gameDatas(new GameDatas),
     m_treeMapDatas(new TreeMapDatas),
     m_langsDatas(new LangsDatas),
@@ -83,6 +84,14 @@ SystemCommonObject * Project::currentObject() const {
 
 void Project::setCurrentObject(SystemCommonObject *object) {
     m_currentObject = object;
+}
+
+QStandardItemModel * Project::currentParameters() const {
+    return m_currentParameters;
+}
+
+void Project::setCurrentParameters(QStandardItemModel *parameters) {
+    m_currentParameters = parameters;
 }
 
 GameDatas* Project::gameDatas() const { return p_gameDatas; }

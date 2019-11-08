@@ -37,6 +37,7 @@
 #include "dialogcommandchangescreentone.h"
 #include "dialogcommandremoveobjectfrommap.h"
 #include "dialogcommandallowforbidsavesmainmenu.h"
+#include "dialogcommandcallacommonreaction.h"
 
 // -------------------------------------------------------
 //
@@ -151,6 +152,8 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::AllowForbidMainMenu:
         return new DialogCommandAllowForbidSavesMainMenu(kind, command, object,
             parameters);
+    case EventCommandKind::CallACommonReaction:
+        return new DialogCommandCallACommonReaction(command);
     default:
         return nullptr;
     }
@@ -404,4 +407,10 @@ void DialogCommands::on_pushButtonAllowForbidSaves_clicked() {
 
 void DialogCommands::on_pushButtonAllowForbidMainMenu_clicked() {
     this->openDialogCommand(EventCommandKind::AllowForbidMainMenu);
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::on_pushButtonCallCommonReaction_clicked() {
+    this->openDialogCommand(EventCommandKind::CallACommonReaction);
 }

@@ -16,6 +16,7 @@
 #include "systemobjectevent.h"
 #include "systemcommandmove.h"
 #include "conditionheroeskind.h"
+#include "systemcommonreaction.h"
 
 const QString EventCommand::JSON_KIND = "kind";
 const QString EventCommand::JSON_COMMANDS = "command";
@@ -149,6 +150,8 @@ QString EventCommand::kindToString(EventCommandKind kind) {
         return "Allow/Forbid saves...";
     case EventCommandKind::AllowForbidMainMenu:
         return "Allow/Forbid main menu...";
+    case EventCommandKind::CallACommonReaction:
+        return "Call a common reaction...";
     case EventCommandKind::None:
     case EventCommandKind::EndWhile:
         case EventCommandKind::InputNumber:
@@ -363,6 +366,8 @@ QString EventCommand::toString(SystemCommonObject *object, QStandardItemModel
         str += this->strAllowForbidSaves(object, parameters); break;
     case EventCommandKind::AllowForbidMainMenu:
         str += this->strAllowForbidMainMenu(object, parameters); break;
+    case EventCommandKind::CallACommonReaction:
+        str += this->strCallACommonReaction(); break;
     default:
         break;
     }
@@ -1765,6 +1770,17 @@ QString EventCommand::strAllowForbidMainMenu(SystemCommonObject *object,
 {
     int i = 0;
     return "Allow main menu: " + this->strProperty(i, object, parameters);
+}
+
+// -------------------------------------------------------
+
+QString EventCommand::strCallACommonReaction() const {
+    int i = 0;
+
+    return "Call a common reaction: " + reinterpret_cast<SystemCommonReaction *>
+        (SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelCommonReactors()->invisibleRootItem(),
+        m_listCommand.at(i++).toInt()))->toString();
 }
 
 // -------------------------------------------------------

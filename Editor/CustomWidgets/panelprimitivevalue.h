@@ -47,7 +47,8 @@ public:
 
     void updateModel();
     void initializePrimitives();
-    void initializeParameterEvent(QStandardItemModel *properties);
+    void initializeParameterEvent(QStandardItemModel *properties,
+        QStandardItemModel *parameters);
     void initializeNumberVariable();
     void initializeNumber(QStandardItemModel *parameters, QStandardItemModel
         *properties, bool isInteger = true);

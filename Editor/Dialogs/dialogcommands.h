@@ -92,6 +92,7 @@ private slots:
     void on_pushButtonStopReaction_clicked();
     void on_pushButtonAllowForbidSaves_clicked();
     void on_pushButtonAllowForbidMainMenu_clicked();
+    void on_pushButtonCallCommonReaction_clicked();
 };
 
 #endif // DIALOGCOMMANDS_H

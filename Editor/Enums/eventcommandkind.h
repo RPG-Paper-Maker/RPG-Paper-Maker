@@ -67,6 +67,7 @@ enum class EventCommandKind {
     StopReaction,
     AllowForbidSaves,
     AllowForbidMainMenu,
+    CallACommonReaction,
     Last
 };
 
