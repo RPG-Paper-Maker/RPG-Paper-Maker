@@ -23,7 +23,7 @@
 
 SystemCommonReaction::SystemCommonReaction() :
     SystemCommonReaction(1, "", new QStandardItemModel, new QStandardItemModel,
-                         false)
+        true)
 {
 
 }

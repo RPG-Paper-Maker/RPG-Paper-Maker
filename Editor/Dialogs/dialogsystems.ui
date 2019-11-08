@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-523</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1149</height>
                </rect>
@@ -1794,6 +1794,9 @@
               <widget class="QCheckBox" name="checkBoxCommonReactionBlockingHero">
                <property name="text">
                 <string>Block hero when reaction</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
