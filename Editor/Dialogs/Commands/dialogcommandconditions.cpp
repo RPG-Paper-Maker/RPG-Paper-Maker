@@ -498,6 +498,7 @@ void DialogCommandConditions::on_radioButtonHeroesStatistic_toggled(bool checked
 
 void DialogCommandConditions::on_radioButtonCurrency_toggled(bool checked) {
     ui->panelPrimitiveCurrencyID->setEnabled(checked);
+    ui->labelCurrencyIs->setEnabled(checked);
     ui->comboBoxOperationCurrency->setEnabled(checked);
     ui->panelPrimitiveCurrencyValue->setEnabled(checked);
 }
@@ -506,6 +507,7 @@ void DialogCommandConditions::on_radioButtonCurrency_toggled(bool checked) {
 
 void DialogCommandConditions::on_radioButtonItem_toggled(bool checked) {
     ui->panelPrimitiveItemID->setEnabled(checked);
+    ui->labelItemInventory->setEnabled(checked);
     ui->comboBoxOperationItem->setEnabled(checked);
     ui->panelPrimitiveItemValue->setEnabled(checked);
 }
@@ -514,6 +516,7 @@ void DialogCommandConditions::on_radioButtonItem_toggled(bool checked) {
 
 void DialogCommandConditions::on_radioButtonWeapon_toggled(bool checked) {
     ui->panelPrimitiveWeaponID->setEnabled(checked);
+    ui->labelWeaponInventory->setEnabled(checked);
     ui->comboBoxOperationWeapon->setEnabled(checked);
     ui->panelPrimitiveWeaponValue->setEnabled(checked);
     ui->checkBoxWeaponEquiped->setEnabled(checked);
@@ -523,6 +526,7 @@ void DialogCommandConditions::on_radioButtonWeapon_toggled(bool checked) {
 
 void DialogCommandConditions::on_radioButtonArmor_toggled(bool checked) {
     ui->panelPrimitiveArmorID->setEnabled(checked);
+    ui->labelArmorInventory->setEnabled(checked);
     ui->comboBoxOperationArmor->setEnabled(checked);
     ui->panelPrimitiveArmorValue->setEnabled(checked);
     ui->checkBoxArmorEquiped->setEnabled(checked);
