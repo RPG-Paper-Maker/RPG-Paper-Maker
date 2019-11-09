@@ -35,13 +35,12 @@
         "Command allow / forbid main menu / saves",
         "Command change variables: message, switch, object in map characteristics",
         "Command call common reaction",
-        "Cave tileset"
-
+        "Cave tileset",
+        "Effects: minimum maximum values"
     ],
 	"bugs": [
 		"Correct camera smooth when climbing mountains height",
         "Smooth camera rotation ingame hero",
-        "Message error when wrong picture parsing template",
         "Update OSX Qt version",
         "Correct sound effect issues",
         "Music and escape issue with battle music",
@@ -77,9 +76,9 @@
         true,
         true,
         false,
+        true
         true,
         true,
-        false,
         false,
         true,
         true,
