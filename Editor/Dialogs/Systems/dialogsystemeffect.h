@@ -41,6 +41,8 @@ private:
     SystemEffect &m_effect;
 
     void initialize();
+    void setMinimumEnabled(bool checked);
+    void setMaximumEnabled(bool checked);
     void setElementEnabled(bool checked);
     void setVarianceEnabled(bool checked);
     void setCriticalEnabled(bool checked);
@@ -54,6 +56,8 @@ public slots:
     void on_radioButtonCallCommonReaction_toggled(bool checked);
     void on_radioButtonSpecialAction_toggled(bool checked);
     void on_radioButtonScript_toggled(bool checked);
+    void on_checkBoxMinimum_toggled(bool checked);
+    void on_checkBoxMaximum_toggled(bool checked);
     void on_checkBoxElementID_toggled(bool checked);
     void on_checkBoxVariance_toggled(bool checked);
     void on_checkBoxCritical_toggled(bool checked);

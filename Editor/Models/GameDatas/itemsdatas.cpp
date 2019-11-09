@@ -96,12 +96,12 @@ void ItemsDatas::setDefault() {
         10, 100, 500, 20, 200, 600, 20, 200, 600, 0
     };
     QVector<SystemEffect *> effects[] = {
-        {SystemEffect::createDamage("-10")}, {SystemEffect::createDamage("-100")
-        }, {SystemEffect::createDamage("-2000")}, {SystemEffect::createDamageMP(
-        "-10")}, {SystemEffect::createDamageMP("-100")}, {SystemEffect
-        ::createDamageMP("-2000")}, {SystemEffect::createDamageTP("-10")}, {
-        SystemEffect::createDamageTP("-100")}, {SystemEffect::createDamageTP(
-        "-2000")}, {}
+        {SystemEffect::createDamage("-10", QString())}, {SystemEffect
+        ::createDamage("-100", QString())}, {SystemEffect::createDamage("-2000",
+        QString())}, {SystemEffect::createDamageMP("-10")}, {SystemEffect
+        ::createDamageMP("-100")}, {SystemEffect::createDamageMP("-2000")}, {
+        SystemEffect::createDamageTP("-10")}, {SystemEffect::createDamageTP(
+        "-100")}, {SystemEffect::createDamageTP("-2000")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
 

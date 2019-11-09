@@ -79,6 +79,12 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueDamageFormula->initializeModel(m_effect
         .damagesFormula());
     ui->panelPrimitiveValueDamageFormula->updateModel();
+    ui->checkBoxMinimum->setChecked(m_effect.isDamagesMinimum());
+    ui->panelPrimitiveMinimum->initializeMessageAndUpdate(m_effect
+        .damagesMinimum(), true);
+    ui->checkBoxMaximum->setChecked(m_effect.isDamagesMaximum());
+    ui->panelPrimitiveMaximum->initializeMessageAndUpdate(m_effect
+        .damagesMaximum(), true);
     ui->checkBoxElementID->setChecked(m_effect.isDamageElement());
     ui->panelPrimitiveValueElementID->initializeDataBaseCommandId(m_effect
         .damagesElementID()->modelDataBase());
@@ -150,6 +156,18 @@ void DialogSystemEffect::initialize() {
 
 // -------------------------------------------------------
 
+void DialogSystemEffect::setMinimumEnabled(bool checked) {
+    ui->panelPrimitiveMinimum->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::setMaximumEnabled(bool checked) {
+    ui->panelPrimitiveMaximum->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
 void DialogSystemEffect::setElementEnabled(bool checked) {
     ui->panelPrimitiveValueElementID->setEnabled(checked);
 }
@@ -188,14 +206,20 @@ void DialogSystemEffect::on_radioButtonDamages_toggled(bool checked) {
     ui->panelDamagesKind->setEnabled(checked);
     ui->labelWithFormula->setEnabled(checked);
     ui->panelPrimitiveValueDamageFormula->setEnabled(checked);
+    ui->checkBoxMinimum->setEnabled(checked);
+    this->setMinimumEnabled(checked ? m_effect.isDamagesMinimum() : false);
+    ui->checkBoxMaximum->setEnabled(checked);
+    this->setMaximumEnabled(checked ? m_effect.isDamagesMaximum() : false);
+    /*
     ui->checkBoxElementID->setEnabled(checked);
-    setPrecisionEnabled(checked ? m_effect.isDamageElement() : false);
+    */
+    this->setPrecisionEnabled(checked ? m_effect.isDamageElement() : false);
     ui->checkBoxVariance->setEnabled(checked);
-    setVarianceEnabled(checked ? m_effect.isDamageVariance() : false);
+    this->setVarianceEnabled(checked ? m_effect.isDamageVariance() : false);
     ui->checkBoxCritical->setEnabled(checked);
-    setCriticalEnabled(checked ? m_effect.isDamageCritical() : false);
+    this->setCriticalEnabled(checked ? m_effect.isDamageCritical() : false);
     ui->checkBoxPrecision->setEnabled(checked);
-    setPrecisionEnabled(checked ? m_effect.isDamagePrecision() : false);
+    this->setPrecisionEnabled(checked ? m_effect.isDamagePrecision() : false);
 }
 
 // -------------------------------------------------------
@@ -255,6 +279,24 @@ void DialogSystemEffect::on_radioButtonScript_toggled(bool checked) {
 
     // Enable
     ui->panelPrimitiveValueScript->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxMinimum_toggled(bool checked) {
+    m_effect.setIsDamagesMinimum(checked);
+
+    // Enable
+    setMinimumEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxMaximum_toggled(bool checked) {
+    m_effect.setIsDamagesMaximum(checked);
+
+    // Enable
+    setMaximumEnabled(checked);
 }
 
 // -------------------------------------------------------

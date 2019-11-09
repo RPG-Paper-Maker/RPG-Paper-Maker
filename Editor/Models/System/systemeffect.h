@@ -36,6 +36,10 @@ public:
     static const QString JSON_DAMAGES_CURRENCY_ID;
     static const QString JSON_DAMAGES_VARIABLE_ID;
     static const QString JSON_DAMAGES_FORMULA;
+    static const QString JSON_IS_DAMAGE_MINIMUM;
+    static const QString JSON_DAMAGE_MINIMUM;
+    static const QString JSON_IS_DAMAGE_MAXIMUM;
+    static const QString JSON_DAMAGE_MAXIMUM;
     static const QString JSON_IS_DAMAGE_ELEMENT;
     static const QString JSON_DAMAGE_ELEMENT_ID;
     static const QString JSON_IS_DAMAGE_VARIANCE;
@@ -57,9 +61,10 @@ public:
     SystemEffect();
     SystemEffect(EffectKind kind, DamagesKind damageKind, PrimitiveValue
         *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
-        damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
-        PrimitiveValue *damagesElementID, bool isDamageVariance,
-        PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
+        damagesVariableID, PrimitiveValue *damagesFormula, bool idmin,
+        PrimitiveValue *dmin, bool idmax, PrimitiveValue *dmax, bool
+        isDamageElement, PrimitiveValue *damagesElementID, bool isDamageVariance
+        , PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
         PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
         PrimitiveValue *damagesPrecisionFormula, bool isAddStatus,
         PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
@@ -74,6 +79,12 @@ public:
     PrimitiveValue * damagesCurrencyID() const;
     SuperListItem * damagesVariableID() const;
     PrimitiveValue * damagesFormula() const;
+    bool isDamagesMinimum() const;
+    void setIsDamagesMinimum(bool b);
+    PrimitiveValue * damagesMinimum() const;
+    bool isDamagesMaximum() const;
+    void setIsDamagesMaximum(bool b);
+    PrimitiveValue * damagesMaximum() const;
     bool isDamageElement() const;
     void setIsDamageElement(bool b);
     PrimitiveValue * damagesElementID() const;
@@ -100,11 +111,11 @@ public:
     PrimitiveValue * scriptFormula() const;
 
     static SystemEffect * createSpecialAction(EffectSpecialActionKind action);
-    static SystemEffect * createStat(int stat, QString formula, int element,
+    static SystemEffect * createStat(int stat, QString formula, QString min, int element,
         QString variance, QString critical, QString precision);
-    static SystemEffect * createDamage(QString formula, int element = -1,
-        QString variance = QString(), QString critical = QString(), QString
-        precision = QString());
+    static SystemEffect * createDamage(QString formula, QString min = QString(),
+        int element = -1, QString variance = QString(), QString critical =
+        QString(), QString precision = QString());
     static SystemEffect * createDamageMP(QString formula, int element = -1,
         QString variance = QString(), QString critical = QString(), QString
         precision = QString());
@@ -128,6 +139,10 @@ protected:
     PrimitiveValue *m_damagesCurrencyID;
     SuperListItem *m_damagesVariableID;
     PrimitiveValue *m_damagesFormula;
+    bool m_isDamagesMinimum;
+    PrimitiveValue *m_damagesMinimum;
+    bool m_isDamagesMaximum;
+    PrimitiveValue *m_damagesMaximum;
     bool m_isDamageElement;
     PrimitiveValue *m_damagesElementID;
     bool m_isDamageVariance;

@@ -68,8 +68,8 @@ void WeaponsDatas::setDefault() {
         40, 50
     };
     QVector<SystemEffect *> effects[] = {
-        {SystemEffect::createDamage("1 + u.atk - t.pdef", -1, "1")}, {SystemEffect
-        ::createDamage("2 + u.atk - t.pdef", -1, "1")}
+        {SystemEffect::createDamage("1 + u.atk - t.pdef", "0", -1, "1")}, {
+        SystemEffect::createDamage("2 + u.atk - t.pdef", "0", -1, "1")}
     };
     length = (sizeof(names)/sizeof(*names));
 

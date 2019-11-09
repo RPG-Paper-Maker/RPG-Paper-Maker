@@ -19,6 +19,10 @@ const QString SystemEffect::JSON_DAMAGES_STATISTIC_ID = "dsid";
 const QString SystemEffect::JSON_DAMAGES_CURRENCY_ID = "dcid";
 const QString SystemEffect::JSON_DAMAGES_VARIABLE_ID = "dvid";
 const QString SystemEffect::JSON_DAMAGES_FORMULA = "df";
+const QString SystemEffect::JSON_IS_DAMAGE_MINIMUM = "idmin";
+const QString SystemEffect::JSON_DAMAGE_MINIMUM = "dmin";
+const QString SystemEffect::JSON_IS_DAMAGE_MAXIMUM = "idmax";
+const QString SystemEffect::JSON_DAMAGE_MAXIMUM = "dmax";
 const QString SystemEffect::JSON_IS_DAMAGE_ELEMENT = "ide";
 const QString SystemEffect::JSON_DAMAGE_ELEMENT_ID = "deid";
 const QString SystemEffect::JSON_IS_DAMAGE_VARIANCE = "idv";
@@ -47,7 +51,8 @@ SystemEffect::SystemEffect() :
     SystemEffect(EffectKind::Damages, DamagesKind::Stat, PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), 1, PrimitiveValue
-        ::createDefaultMessageValue(), false, PrimitiveValue
+        ::createDefaultMessageValue(), true, new PrimitiveValue(QString("0")),
+        false, new PrimitiveValue(QString("0")), false, PrimitiveValue
         ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
         QString("100")), true, PrimitiveValue::createDefaultDataBaseValue(), new
@@ -62,8 +67,9 @@ SystemEffect::SystemEffect() :
 
 SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     PrimitiveValue *damagesStatisticID, PrimitiveValue *damagesCurrencyID, int
-    damagesVariableID, PrimitiveValue *damagesFormula, bool isDamageElement,
-    PrimitiveValue *damagesElementID, bool isDamageVariance, PrimitiveValue
+    damagesVariableID, PrimitiveValue *damagesFormula, bool idmin,
+    PrimitiveValue *dmin, bool idmax, PrimitiveValue *dmax, bool isDamageElement
+    , PrimitiveValue *damagesElementID, bool isDamageVariance, PrimitiveValue
     *damagesVarianceFormula, bool isDamageCritical, PrimitiveValue
     *damagesCriticalFormula, bool isDamagePrecision, PrimitiveValue
     *damagesPrecisionFormula, bool isAddStatus, PrimitiveValue *statusID,
@@ -78,6 +84,10 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     m_damagesCurrencyID(damagesCurrencyID),
     m_damagesVariableID(new SuperListItem(damagesVariableID, "")),
     m_damagesFormula(damagesFormula),
+    m_isDamagesMinimum(idmin),
+    m_damagesMinimum(dmin),
+    m_isDamagesMaximum(idmax),
+    m_damagesMaximum(dmax),
     m_isDamageElement(isDamageElement),
     m_damagesElementID(damagesElementID),
     m_isDamageVariance(isDamageVariance),
@@ -118,6 +128,8 @@ SystemEffect::~SystemEffect() {
     delete m_damagesCurrencyID;
     delete m_damagesVariableID;
     delete m_damagesFormula;
+    delete m_damagesMinimum;
+    delete m_damagesMaximum;
     delete m_damagesElementID;
     delete m_damagesVarianceFormula;
     delete m_damagesCriticalFormula;
@@ -156,6 +168,30 @@ SuperListItem * SystemEffect::damagesVariableID() const {
 
 PrimitiveValue * SystemEffect::damagesFormula() const {
     return m_damagesFormula;
+}
+
+bool SystemEffect::isDamagesMinimum() const {
+    return m_isDamagesMinimum;
+}
+
+void SystemEffect::setIsDamagesMinimum(bool b) {
+    m_isDamagesMinimum = b;
+}
+
+PrimitiveValue * SystemEffect::damagesMinimum() const {
+    return m_damagesMinimum;
+}
+
+bool SystemEffect::isDamagesMaximum() const {
+    return m_isDamagesMaximum;
+}
+
+void SystemEffect::setIsDamagesMaximum(bool b) {
+    m_isDamagesMaximum = b;
+}
+
+PrimitiveValue * SystemEffect::damagesMaximum() const {
+    return m_damagesMaximum;
 }
 
 bool SystemEffect::isDamageElement() const {
@@ -265,7 +301,8 @@ SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
     return new SystemEffect(EffectKind::SpecialActions, DamagesKind::Stat,
         PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), 1, PrimitiveValue
-        ::createDefaultMessageValue(), false, PrimitiveValue
+        ::createDefaultMessageValue(), true, new PrimitiveValue(0), false, new
+        PrimitiveValue(0),  false, PrimitiveValue
         ::createDefaultDataBaseValue(), false, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, new PrimitiveValue(
         QString("100")), true, PrimitiveValue::createDefaultDataBaseValue(), new
@@ -278,18 +315,20 @@ SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
 
 // -------------------------------------------------------
 
-SystemEffect * SystemEffect::createStat(int stat, QString formula, int element,
-    QString variance, QString critical, QString precision)
+SystemEffect * SystemEffect::createStat(int stat, QString formula, QString min,
+    int element, QString variance, QString critical, QString precision)
 {
     return new SystemEffect(EffectKind::Damages, DamagesKind::Stat, new
         PrimitiveValue(PrimitiveValueKind::DataBase, stat), PrimitiveValue
-        ::createDefaultDataBaseValue(), 1, new PrimitiveValue(formula), element
-        != -1, element == -1 ? PrimitiveValue::createDefaultDataBaseValue() :
-        new PrimitiveValue(PrimitiveValueKind::DataBase, element), !variance
-        .isEmpty(), new PrimitiveValue(variance.isEmpty() ? QString("0") :
-        variance), !critical.isEmpty(), new PrimitiveValue(critical.isEmpty() ?
-        QString("0") : critical), !precision.isEmpty(), new PrimitiveValue(
-        precision.isEmpty() ? QString("100") : precision), true, PrimitiveValue
+        ::createDefaultDataBaseValue(), 1, new PrimitiveValue(formula), !min
+        .isEmpty(), new PrimitiveValue(min.isEmpty() ? QString("0") : min),
+        false, new PrimitiveValue(QString("0")), element != -1, element == -1 ?
+        PrimitiveValue::createDefaultDataBaseValue() : new PrimitiveValue(
+        PrimitiveValueKind::DataBase, element), !variance.isEmpty(), new
+        PrimitiveValue(variance.isEmpty() ? QString("0") : variance), !critical
+        .isEmpty(), new PrimitiveValue(critical.isEmpty() ? QString("0") :
+        critical), !precision.isEmpty(), new PrimitiveValue(precision.isEmpty()
+        ? QString("100") : precision), true, PrimitiveValue
         ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
@@ -299,10 +338,10 @@ SystemEffect * SystemEffect::createStat(int stat, QString formula, int element,
 
 // -------------------------------------------------------
 
-SystemEffect * SystemEffect::createDamage(QString formula, int element, QString
-    variance, QString critical, QString precision)
+SystemEffect * SystemEffect::createDamage(QString formula, QString min, int
+    element, QString variance, QString critical, QString precision)
 {
-    return createStat(3, formula, element, variance, critical, precision);
+    return createStat(3, formula, min, element, variance, critical, precision);
 }
 
 // -------------------------------------------------------
@@ -310,7 +349,8 @@ SystemEffect * SystemEffect::createDamage(QString formula, int element, QString
 SystemEffect * SystemEffect::createDamageMP(QString formula, int element, QString
     variance, QString critical, QString precision)
 {
-    return createStat(4, formula, element, variance, critical, precision);
+    return createStat(4, formula, QString(), element, variance, critical,
+        precision);
 }
 
 // -------------------------------------------------------
@@ -318,7 +358,8 @@ SystemEffect * SystemEffect::createDamageMP(QString formula, int element, QStrin
 SystemEffect * SystemEffect::createDamageTP(QString formula, int element, QString
     variance, QString critical, QString precision)
 {
-    return createStat(5, formula, element, variance, critical, precision);
+    return createStat(5, formula, QString(), element, variance, critical,
+        precision);
 }
 
 // -------------------------------------------------------
@@ -358,6 +399,10 @@ void SystemEffect::setCopy(const SystemEffect& effect) {
     m_damagesCurrencyID->setCopy(*effect.m_damagesCurrencyID);
     m_damagesVariableID->setId(effect.m_damagesVariableID->id());
     m_damagesFormula->setCopy(*effect.m_damagesFormula);
+    m_isDamagesMinimum = effect.m_isDamagesMinimum;
+    m_damagesMinimum->setCopy(*effect.m_damagesMinimum);
+    m_isDamagesMaximum = effect.m_isDamagesMaximum;
+    m_damagesMaximum->setCopy(*effect.m_damagesMaximum);
     m_isDamageElement = effect.m_isDamageElement;
     m_damagesElementID->setCopy(*effect.m_damagesElementID);
     m_isDamageVariance = effect.m_isDamageVariance;
@@ -398,12 +443,15 @@ QString SystemEffect::toString() const {
         }
         text += "Damages on " + RPM::ENUM_TO_STRING_DAMAGES_KIND.at(m_damagesKind
             ->id()) + " " + textDamages + " with " + m_damagesFormula->toString()
-            + " " + (m_isDamageElement ? "[Element: " + m_damagesElementID
-            ->toString() + "]" : "") + (m_isDamageVariance ? "[Variance: " +
-            m_damagesVarianceFormula->toString() + "%]" : "") + (
-            m_isDamageCritical ? "[Critical : " + m_damagesCriticalFormula
-            ->toString() + "%]" : "") + (m_isDamagePrecision ? "[Precision: " +
-            m_damagesPrecisionFormula->toString() + "%]" : "");
+            + " " + (m_isDamagesMinimum ? "[Minimum: " + m_damagesMinimum
+            ->toString() + "]" : "") + (m_isDamagesMaximum? "[Maximum: " +
+            m_damagesMaximum->toString() + "]" : "") + (m_isDamageElement ?
+            "[Element: " + m_damagesElementID->toString() + "]" : "") + (
+            m_isDamageVariance ? "[Variance: " + m_damagesVarianceFormula
+            ->toString() + "%]" : "") + (m_isDamageCritical ? "[Critical : " +
+            m_damagesCriticalFormula->toString() + "%]" : "") + (
+            m_isDamagePrecision ? "[Precision: " + m_damagesPrecisionFormula
+            ->toString() + "%]" : "");
         break;
     }
     case EffectKind::Status:
@@ -469,10 +517,17 @@ void SystemEffect::read(const QJsonObject &json) {
         if (json.contains(JSON_DAMAGES_FORMULA)) {
             m_damagesFormula->read(json[JSON_DAMAGES_FORMULA].toObject());
         }
-        if (json.contains(JSON_IS_DAMAGE_ELEMENT)) {
-            m_isDamageElement = json[JSON_IS_DAMAGE_ELEMENT].toBool();
-            if (json.contains(JSON_DAMAGE_ELEMENT_ID)) {
-                m_damagesElementID->read(json[JSON_DAMAGE_ELEMENT_ID].toObject());
+        if (json.contains(JSON_IS_DAMAGE_MINIMUM)) {
+            m_isDamagesMinimum = json[JSON_IS_DAMAGE_MINIMUM].toBool();
+        } else {
+            if (json.contains(JSON_DAMAGE_MINIMUM)) {
+                m_damagesMinimum->read(json[JSON_DAMAGE_MINIMUM].toObject());
+            }
+        }
+        if (json.contains(JSON_IS_DAMAGE_MAXIMUM)) {
+            m_isDamagesMaximum = json[JSON_IS_DAMAGE_MAXIMUM].toBool();
+            if (json.contains(JSON_DAMAGE_MAXIMUM)) {
+                m_damagesMaximum->read(json[JSON_DAMAGE_MAXIMUM].toObject());
             }
         }
         if (json.contains(JSON_IS_DAMAGE_VARIANCE)) {
@@ -586,6 +641,23 @@ void SystemEffect::write(QJsonObject &json) const {
             obj = QJsonObject();
             m_damagesFormula->write(obj);
             json[JSON_DAMAGES_FORMULA] = obj;
+        }
+        if (m_isDamagesMinimum) {
+            if (!m_damagesMinimum->isDefaultNumberValue()) {
+                obj = QJsonObject();
+                m_damagesMinimum->write(obj);
+                json[JSON_DAMAGE_MINIMUM] = obj;
+            }
+        } else {
+            json[JSON_IS_DAMAGE_MINIMUM] = m_isDamagesMinimum;
+        }
+        if (m_isDamagesMaximum) {
+            json[JSON_IS_DAMAGE_MAXIMUM] = m_isDamagesMaximum;
+            if (!m_damagesMaximum->isDefaultNumberValue()) {
+                obj = QJsonObject();
+                m_damagesMaximum->write(obj);
+                json[JSON_DAMAGE_MAXIMUM] = obj;
+            }
         }
         if (m_isDamageElement) {
             json[JSON_IS_DAMAGE_ELEMENT] = m_isDamageElement;

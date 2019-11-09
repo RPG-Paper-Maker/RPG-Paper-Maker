@@ -99,17 +99,17 @@ void SkillsDatas::setDefault(){
     };
     QVector<SystemEffect *> effects[] = {
         {SystemEffect::createSpecialAction(EffectSpecialActionKind::ApplyWeapons
-        ), SystemEffect::createDamage("u.atk")}, {SystemEffect
+        ), SystemEffect::createDamage("u.atk", "0")}, {SystemEffect
         ::createSpecialAction(EffectSpecialActionKind::OpenSkills)}, {
         SystemEffect::createSpecialAction(EffectSpecialActionKind::OpenItems)},
         {SystemEffect::createSpecialAction(EffectSpecialActionKind::Escape)},
         {SystemEffect::createSpecialAction(EffectSpecialActionKind::EndTurn)},
-        {SystemEffect::createDamage("5 + u.mag", 1, "1")}, {SystemEffect
-        ::createDamage("3 + u.mag", -1, "1")}, {SystemEffect::createDamage(
-        "-5 - u.mag", -1, "1")}, {SystemEffect::createDamage("3 + u.mag", -1,
-        "1")}, {SystemEffect::createDamage("3 + u.mag", -1, "1")}, {SystemEffect
-        ::createDamage("3 + u.mag", -1, "1")}, {SystemEffect::createDamage(
-        "-3 - u.mag", -1, "1")}, {}
+        {SystemEffect::createDamage("5 + u.mag", "0", 1, "1")}, {SystemEffect
+        ::createDamage("3 + u.mag", "0", -1, "1")}, {SystemEffect::createDamage(
+        "-5 - u.mag", QString(), -1, "1")}, {SystemEffect::createDamage(
+        "3 + u.mag", "0", -1, "1")}, {SystemEffect::createDamage("3 + u.mag",
+        "0", -1, "1")}, {SystemEffect::createDamage("3 + u.mag", "0", -1, "1")},
+        {SystemEffect::createDamage("-3 - u.mag", QString(), -1, "1")}, {}
     };
     length = (sizeof(names)/sizeof(*names));
 
