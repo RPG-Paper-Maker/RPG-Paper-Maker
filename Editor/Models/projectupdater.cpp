@@ -178,8 +178,6 @@ void ProjectUpdater::updateCommands() {
     QJsonObject obj;
     int i, j, k, l, ll, lll;
 
-    m_project->readAll();
-
     // Map portions
     for (i = 0, l = m_listMapPortionsPaths.size(); i < l; i++) {
         mapPortions = m_listMapPortions.at(i);
@@ -725,6 +723,12 @@ void ProjectUpdater::updateVersion_1_4_0_commands(QStandardItem *commands) {
             list.replace(0, QString::number(static_cast<int>(PrimitiveValueKind
                 ::NumberDouble)));
             list.append(QString::number(time));
+            command->setCommands(list);
+        } else if (command->kind() == EventCommandKind::ShowText) {
+            list.insert(0, QString::number(static_cast<int>(PrimitiveValueKind
+                ::Message)));
+            list.insert(1, "");
+            list.insert(2, "-1");
             command->setCommands(list);
         }
     }
