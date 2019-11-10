@@ -1,6 +1,10 @@
 {
 	"add": [
         {
+            "source": "games",
+            "tree": true
+        },
+        {
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/patreon.json",
             "target": "Engine/Content/patreon.json"
@@ -39,10 +43,6 @@
             "source": "engineOsx",
             "tree": true,
             "os": ["m"]
-        },
-        {
-            "source": "games",
-            "tree": true
         },
         {
             "repo": "Basic-Ressources",
