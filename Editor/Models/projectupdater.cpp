@@ -692,6 +692,8 @@ void ProjectUpdater::updateVersion_1_4_0() {
 
     m_project->gameDatas()->systemDatas()->setDefaultSounds();
     m_project->picturesDatas()->setDefaultHUDPictures(names);
+    m_project->gameDatas()->systemDatas()->setDefaultFontSizes();
+    m_project->gameDatas()->systemDatas()->setDefaultFontNames();
     m_project->gameDatas()->systemDatas()->setDefaultDialogBoxOptions();
 
     // Update command time for primitive
