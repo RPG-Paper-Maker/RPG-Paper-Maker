@@ -466,6 +466,7 @@ void SystemDatas::setDefaultDialogBoxOptions() {
         "30","1","1","1","12","0","1","12","0","1","0","1","7","2","1","7","1",
         "0","1","7","1","1","7","1"});
     m_dialogBoxOptions->setCommands(command);
+    m_dialogBoxOptions->setKind(EventCommandKind::SetDialogBoxOptions);
 }
 
 // -------------------------------------------------------
