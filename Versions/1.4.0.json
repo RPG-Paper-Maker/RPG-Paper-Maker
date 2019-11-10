@@ -4,10 +4,62 @@
             "repo": "RPG-Paper-Maker",
             "source": "EditorApp/Content/patreon.json",
             "target": "Engine/Content/patreon.json"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Tilesets/cave.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/cave.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Walls/cave1.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/cave1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Walls/cave1.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/cave1.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Mountains/cave1.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/cave1.png"
         }
     ],
-	"remove": [],
-	"replace": [],
+	"remove": [
+        {
+            "target": "Engine/Content/osx/Game.app"
+        },
+        {
+            "target": "Engine/RPG-Paper-Maker.app"
+        }
+    ],
+	"replace": [
+        {
+            "source": "engineOsx",
+            "tree": true,
+            "os": ["m"]
+        },
+        {
+            "source": "games",
+            "tree": true
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Autotiles/general.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Autotiles/general.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Tilesets/beach.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/beach.png"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Pictures/Textures2D/Tilesets/plains.png",
+            "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/plains.png"
+        }
+    ],
 	"features": [
         "Finish display text command (variables, properties, parameters, icons, faceset, interlocutor, text color / size, heroes names)",
         "Display choices command",
@@ -75,15 +127,15 @@
         true,
         true,
         true,
-        false,
-        true
-        true,
-        true,
-        false,
         true,
         true,
         true,
-        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         true
 	]
 }
