@@ -622,7 +622,7 @@ void PanelSongs::on_pushButtonAdd_clicked() {
 
     // Open dialog box
     QStringList files = QFileDialog::getOpenFileNames(this, "Add new contents",
-        "", "Music (*.mp3 *.ogg, *.wav)");
+        "", "Music (*.mp3 *.ogg *.wav)");
     QString path;
 
     // Copy all the selected files
