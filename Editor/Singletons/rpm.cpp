@@ -123,7 +123,7 @@ const QString RPM::PATH_SHAPES_DATAS = Common::pathCombine(PATH_DATAS,
 const QString RPM::PATH_SAVES = Common::pathCombine(PATH_DATAS,
     "saves" + EXTENSION_JSON);
 const QString RPM::PATH_PICTURES = Common::pathCombine(FOLDER_CONTENT,
-    "Pictures");
+    "Images");
 const QString RPM::PATH_HUD = Common::pathCombine(PATH_PICTURES,
     "HUD");
 const QString RPM::PATH_TEXTURES_2D = Common::pathCombine(PATH_PICTURES,
