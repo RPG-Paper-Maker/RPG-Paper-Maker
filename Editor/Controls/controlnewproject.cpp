@@ -116,6 +116,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_OBJ);
     dir.mkpath(RPM::PATH_MTL);
     dir.mkpath(RPM::PATH_COLLISIONS);
+    dir.mkpath(RPM::PATH_HUD_PICTURES);
 
     // Create the default datas
     Project *previousProject = RPM::get()->project();

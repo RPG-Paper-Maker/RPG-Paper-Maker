@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 10;
+const int ProjectUpdater::incompatibleVersionsCount = 11;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0"};
+     "1.3.0", "1.4.0", "1.4.1"};
 
 // -------------------------------------------------------
 //
@@ -734,4 +734,20 @@ void ProjectUpdater::updateVersion_1_4_0_commands(QStandardItem *commands) {
             command->setCommands(list);
         }
     }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_4_1() {
+    QDir dir(m_project->pathCurrentProject());
+
+    if (!dir.exists(RPM::PATH_HUD_PICTURES)) {
+        dir.mkpath(RPM::PATH_HUD_PICTURES);
+    }
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
+
 }
