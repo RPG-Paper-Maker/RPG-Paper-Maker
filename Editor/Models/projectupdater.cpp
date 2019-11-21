@@ -750,10 +750,39 @@ void ProjectUpdater::updateVersion_1_4_1() {
     if (!dir.exists(RPM::PATH_HUD_PICTURES)) {
         dir.mkpath(RPM::PATH_HUD_PICTURES);
     }
+
+    // Update display choice index command
+    connect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_4_1_commands(QStandardItem *)));
+    this->updateCommands();
+    disconnect(this, SIGNAL(updatingCommands(QStandardItem *)), this, SLOT(
+        updateVersion_1_4_1_commands(QStandardItem *)));
 }
 
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
+    QStandardItem *child;
+    EventCommand *command;
+    QVector<QString> list;
+    int i, l;
 
+    for (i = 0, l = commands->rowCount(); i < l; i++) {
+        child = commands->child(i);
+        this->updateVersion_1_4_1_commands(child);
+        command = reinterpret_cast<EventCommand *>(child->data().value<quintptr>());
+        list = command->commands();
+        if (command->kind() == EventCommandKind::DisplayChoice) {
+            PrimitiveValueKind kind;
+
+            kind = static_cast<PrimitiveValueKind>(list.at(0).toInt());
+            if (kind == PrimitiveValueKind::Number) {
+                int value;
+
+                value = list.at(1).toInt();
+                list.replace(1, QString::number(value + 1));
+            }
+            command->setCommands(list);
+        }
+    }
 }

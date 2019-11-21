@@ -81,7 +81,7 @@ void DialogCommandDisplayChoice::initializeDefault() {
     row = lang->getModelRow();
     m_model->appendRow(row);
     m_model->appendRow(SuperListItem::getEmptyItem());
-    ui->panelPrimitiveCancelAutoIndex->setNumberValue(1);
+    ui->panelPrimitiveCancelAutoIndex->setNumberValue(2);
 }
 
 // -------------------------------------------------------
