@@ -364,6 +364,23 @@ void MapProperties::setDefaultStartupObject() {
 
 // -------------------------------------------------------
 
+void MapProperties::adjustPosition(QVector3D *position) {
+    if (position->x() / RPM::getSquareSize() >= m_length) {
+        position->setX((m_length - 1) * RPM::getSquareSize());
+    }
+    if (position->z() / RPM::getSquareSize() >= m_width) {
+        position->setZ((m_width - 1) * RPM::getSquareSize());
+    }
+    if (position->y() / RPM::getSquareSize() >= m_height) {
+        position->setY((m_height - 1) * RPM::getSquareSize());
+    }
+    if (position->y() / RPM::getSquareSize() < -m_depth) {
+        position->setY(-m_depth * RPM::getSquareSize());
+    }
+}
+
+// -------------------------------------------------------
+
 MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
     float &finalDistance, Position &finalPosition, QRay3D &ray, double
     cameraHAngle)

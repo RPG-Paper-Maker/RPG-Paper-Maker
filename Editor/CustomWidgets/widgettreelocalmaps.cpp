@@ -552,10 +552,14 @@ void WidgetTreeLocalMaps::contextEditMap(){
                 RPM::mapsToSave.remove(properties.id());
             }
             properties.save(path);
-            tag->reset();
             Map::correctMap(path, previousProperties, properties);
             TreeMapDatas::setName(selected, properties.name());
             RPM::get()->project()->writeTreeMapDatas();
+
+            // Adjust positions if map size was changed
+            properties.adjustPosition(tag->position());
+            properties.adjustPosition(tag->positionObject());
+
             showMap(selected);
 
             // Loading tileset texture

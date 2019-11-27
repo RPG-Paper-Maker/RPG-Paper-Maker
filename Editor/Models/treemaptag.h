@@ -12,8 +12,8 @@
 #ifndef TREEMAPTAG_H
 #define TREEMAPTAG_H
 
-#include "superlistitem.h"
 #include <QVector3D>
+#include "superlistitem.h"
 
 // -------------------------------------------------------
 //
@@ -42,6 +42,7 @@ public:
     void setCameraHorizontalAngle(double a);
     void setCameraVerticalAngle(double a);
     void reset();
+
     static void copyItem(const QStandardItem* from, QStandardItem* to);
     static void copyTree(const QStandardItem* from, QStandardItem* to);
 

@@ -90,6 +90,7 @@ public:
     void getPortionsNumber(int &lx, int &ld, int &lh, int &lz);
     void save(QString path, bool temp = false);
     void setDefaultStartupObject();
+    void adjustPosition(QVector3D *position);
     MapElement * updateRaycastingOverflowSprites(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray, double
         cameraHAngle);
