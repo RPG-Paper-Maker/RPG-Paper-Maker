@@ -42,6 +42,7 @@ void Map::writeDefaultMap(QString path){
     SystemMapObject super(1, "Hero", position);
     super.write(json);
     jsonObject.append(json);
+    properties.skyColorID()->setNumberValue(3);
     QString pathMap = writeMap(path, properties, jsonObject);
 
     // Portion
@@ -63,6 +64,7 @@ int Map::writeDefaultBattleMap(QString path) {
     MapProperties properties;
     properties.setId(Map::generateMapId());
     QJsonArray jsonObject;
+    properties.skyColorID()->setNumberValue(3);
     QString pathMap = writeMap(path, properties, jsonObject);
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
