@@ -204,9 +204,14 @@ void WidgetMapEditor::paintGL() {
     // Clear buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glClearColor(m_backgroundColor.red() / 255.0f, m_backgroundColor.green() /
-        255.0f, m_backgroundColor.blue() / 255.0f, m_backgroundColor.alpha() /
-        255.0f);
+    // CLear background color
+    if (m_control.map() == nullptr) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    } else {
+        glClearColor(m_backgroundColor.red() / 255.0f, m_backgroundColor.green()
+            / 255.0f, m_backgroundColor.blue() / 255.0f, m_backgroundColor
+            .alpha() / 255.0f);
+    }
 
     if (m_control.map() != nullptr) {
         p.beginNativePainting();
