@@ -671,6 +671,24 @@ int Map::generateObjectId() const {
 
 // -------------------------------------------------------
 
+bool Map::isOKPositionID(Position3D &p, int id) const {
+    SystemMapObject *super;
+    int i, l;
+
+    for (i = 0, l = m_modelObjects->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        super = reinterpret_cast<SystemMapObject *>(m_modelObjects->item(i)
+            ->data().value<quintptr>());
+        if (super->id() == id) {
+            return super->position() == p;
+        }
+    }
+
+    return true;
+}
+
+// -------------------------------------------------------
+
 QString Map::generateObjectName(int id) {
     return "OBJ" + Common::getFormatNumber(id);
 }

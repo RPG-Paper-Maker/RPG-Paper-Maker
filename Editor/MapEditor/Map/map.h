@@ -164,6 +164,7 @@ public:
     void save();
     bool isObjectIdExisting(int id) const;
     int generateObjectId() const;
+    bool isOKPositionID(Position3D &p, int id) const;
     static QString generateObjectName(int id);
 
 

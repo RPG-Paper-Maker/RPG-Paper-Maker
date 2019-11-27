@@ -150,9 +150,11 @@ void ControlMapEditor::pasteObject() {
 void ControlMapEditor::addObject(Position &p) {
     SystemCommonObject *object = new SystemCommonObject;
 
-    if (m_selectedObject != nullptr)
+    if (m_selectedObject != nullptr && m_map->isOKPositionID(p, m_selectedObject
+        ->id()))
+    {
         object->setCopy(*m_selectedObject);
-    else {
+    } else {
         object->setDefault();
         int id = m_map->generateObjectId();
         object->setId(id);
