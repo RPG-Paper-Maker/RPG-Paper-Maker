@@ -740,8 +740,8 @@ void ProjectUpdater::updateVersion_1_4_0_commands(QStandardItem *commands) {
 
 void ProjectUpdater::updateVersion_1_4_1() {
     QDir dir(m_project->pathCurrentProject());
-    QDir dirImages(Common::pathCombine(Common::pathCombine(m_project
-        ->pathCurrentProject(), RPM::FOLDER_CONTENT), "Pictures"));
+    QDir dirImages(Common::pathCombine(m_project
+        ->pathCurrentProject(), RPM::FOLDER_CONTENT));
 
     // Replace pictures folder name by images
     dirImages.rename("Pictures", "Images");
