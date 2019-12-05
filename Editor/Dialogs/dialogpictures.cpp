@@ -67,7 +67,7 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     itemPictures->setData(QVariant::fromValue(
                       reinterpret_cast<PictureKind>(PictureKind::None)));
     itemPictures->setIcon(icon);
-    itemPictures->setText("Pictures");
+    itemPictures->setText("Images");
     model->appendRow(itemPictures);
 
     // HUD
