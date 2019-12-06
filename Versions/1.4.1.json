@@ -1,0 +1,49 @@
+{
+	"add": [
+        {
+            "source": "games",
+            "tree": true
+        }
+    ],
+	"remove": [
+        {
+            "target": "Engine/Content/osx/Game.app"
+        },
+        {
+            "target": "Engine/RPG-Paper-Maker.app"
+        }
+    ],
+	"replace": [
+        {
+            "source": "engineOsx",
+            "tree": true,
+            "os": ["m"]
+        }
+    ],
+	"features": [
+        
+    ],
+	"bugs": [
+		"Mac OSX game play testing",
+        "Mac OSX menu map edior bug",
+        ".ogg files available in import",
+        "Create folder pictures on existing projects",
+        "Replace Pictures folder name by Images",
+        "Event command display text: cancel auto index starts at 1",
+        "Send event change window height",
+        "Condition possessions name in tab",
+        "New project first map and battle map should be background blue sky color",
+        "Limit pixel square size to 9999",
+        "Black screen when no map selected instead of previous back color",
+        "Cursor should not move after editing map properties",
+        "Trying to fix duplicate object ID issue",
+        "Crash when selecting a model in the drop down menu inside the Models editor (Systems manager)",
+        "Command screen tone bug background",
+        "Characters ID issues",
+        "Set/Move/Turn a picture command not working well for zooming",
+        "Battle death only showing first frame",
+        "Saving was not recording current map",
+        "State default is now the first state of the object and not 1",
+        "Command show text crashed when only containing a number"
+	]
+}
