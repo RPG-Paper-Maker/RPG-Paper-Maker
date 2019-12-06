@@ -824,36 +824,6 @@
                                         "files": [
                                             {
                                                 "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_tcime.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_tcime.dylib"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_pinyin.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_pinyin.dylib"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_openwnn.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_openwnn.dylib"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_thai.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_thai.dylib"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_hangul.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard/libqtvirtualkeyboard_hangul.dylib"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/virtualkeyboard"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/audio/libqtaudio_coreaudio.dylib",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/audio/libqtaudio_coreaudio.dylib"
                                             }
@@ -876,6 +846,11 @@
                                                 "repo": "Dependencies",
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/bearer/libqgenericbearer.dylib",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/bearer/libqgenericbearer.dylib"
+                                            },
+                                            {
+                                                "repo": "Dependencies",
+                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/bearer/libqcorewlanbearer.dylib",
+                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/bearer/libqcorewlanbearer.dylib"
                                             }
                                         ],
                                         "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/bearer"
@@ -924,26 +899,11 @@
                                             },
                                             {
                                                 "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/imageformats/libqmacheif.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/imageformats/libqmacheif.dylib"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/imageformats/libqwebp.dylib",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/imageformats/libqwebp.dylib"
                                             }
                                         ],
                                         "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/imageformats"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PlugIns/platforminputcontexts/libqtvirtualkeyboardplugin.dylib",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/platforminputcontexts/libqtvirtualkeyboardplugin.dylib"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns/platforminputcontexts"
                                     },
                                     {
                                         "files": [
@@ -1010,54 +970,6 @@
                                             {
                                                 "repo": "Dependencies",
                                                 "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/QtQuick",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/QtQuick"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Resources",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Resources"
-                                            },
-                                            {
-                                                "files": [
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
-                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/Current",
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/Current"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5/QtQuick",
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5/QtQuick"
-                                                            },
-                                                            {
-                                                                "files": [
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5/Resources/Info.plist",
-                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5/Resources/Info.plist"
-                                                                    }
-                                                                ],
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5/Resources"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions/5"
-                                                    }
-                                                ],
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework/Versions"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQuick.framework"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework/QtSvg",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework/QtSvg"
                                             },
@@ -1100,54 +1012,6 @@
                                             }
                                         ],
                                         "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Resources",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Resources"
-                                            },
-                                            {
-                                                "files": [
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
-                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/Current",
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/Current"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "files": [
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5/Resources/Info.plist",
-                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5/Resources/Info.plist"
-                                                                    }
-                                                                ],
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5/Resources"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5/QtDBus",
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5/QtDBus"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions/5"
-                                                    }
-                                                ],
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/Versions"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/QtDBus",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework/QtDBus"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtDBus.framework"
                                     },
                                     {
                                         "files": [
@@ -1394,54 +1258,6 @@
                                             {
                                                 "repo": "Dependencies",
                                                 "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Resources",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Resources"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/QtVirtualKeyboard",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/QtVirtualKeyboard"
-                                            },
-                                            {
-                                                "files": [
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
-                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/Current",
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/Current"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "files": [
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5/Resources/Info.plist",
-                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5/Resources/Info.plist"
-                                                                    }
-                                                                ],
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5/Resources"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5/QtVirtualKeyboard",
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5/QtVirtualKeyboard"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions/5"
-                                                    }
-                                                ],
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework/Versions"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtVirtualKeyboard.framework"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Resources",
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Resources"
                                             },
@@ -1532,54 +1348,6 @@
                                             }
                                         ],
                                         "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCore.framework"
-                                    },
-                                    {
-                                        "files": [
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Resources",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Resources"
-                                            },
-                                            {
-                                                "repo": "Dependencies",
-                                                "sl": true,
-                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/QtQml",
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/QtQml"
-                                            },
-                                            {
-                                                "files": [
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
-                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/Current",
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/Current"
-                                                    },
-                                                    {
-                                                        "files": [
-                                                            {
-                                                                "files": [
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5/Resources/Info.plist",
-                                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5/Resources/Info.plist"
-                                                                    }
-                                                                ],
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5/Resources"
-                                                            },
-                                                            {
-                                                                "repo": "Dependencies",
-                                                                "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5/QtQml",
-                                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5/QtQml"
-                                                            }
-                                                        ],
-                                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions/5"
-                                                    }
-                                                ],
-                                                "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework/Versions"
-                                            }
-                                        ],
-                                        "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtQml.framework"
                                     },
                                     {
                                         "files": [
@@ -10015,11 +9783,6 @@
                                                         "repo": "Dependencies",
                                                         "source": "Game/osx/Game.app/Contents/PlugIns/imageformats/libqtiff.dylib",
                                                         "target": "Engine/Content/osx/Game.app/Contents/PlugIns/imageformats/libqtiff.dylib"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "source": "Game/osx/Game.app/Contents/PlugIns/imageformats/libqsvg.dylib",
-                                                        "target": "Engine/Content/osx/Game.app/Contents/PlugIns/imageformats/libqsvg.dylib"
                                                     },
                                                     {
                                                         "repo": "Dependencies",
