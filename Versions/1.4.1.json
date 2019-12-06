@@ -18,6 +18,10 @@
             "source": "engineOsx",
             "tree": true,
             "os": ["m"]
+        },
+        {
+            "source": "br",
+            "tree": true
         }
     ],
 	"features": [
