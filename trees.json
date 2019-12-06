@@ -5,6 +5,476 @@
                 "files": [
                     {
                         "files": [
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Tilesets/cave.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/cave.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Tilesets/beach.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/beach.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Tilesets/plains.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/plains.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Tilesets/halloween.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/halloween.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Tilesets/inside.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets/inside.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Tilesets"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Autotiles/general.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Walls/inside2.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/inside2.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Walls/inside1.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/inside1.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Walls/cave1.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Walls/cave1.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Walls"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/grass.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/grass.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/halloween.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/halloween.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/desert.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/desert.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/halloween-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/halloween-noborders.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/grass-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/grass-noborders.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/desert-noborders.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/desert-noborders.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Mountains/cave1.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains/cave1.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Mountains"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/lucas.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/lucas.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/kate.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/kate.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/shana.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/shana.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/template.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/template.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/bibi.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/bibi.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Battlers/wooly.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers/wooly.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Battlers"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/table.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/table.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/fridge.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/fridge.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/chest.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/chest.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/cupboard.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/cupboard.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Objects3D/template.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D/template.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Objects3D"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/lucas.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/lucas.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/kate.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/kate.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/shana.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/shana.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/template.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/template.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/bibi.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/bibi.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/Textures2D/Characters/wooly.png",
+                                        "target": "Engine/Content/BR/Content/Images/Textures2D/Characters/wooly.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/Characters"
+                            }
+                        ],
+                        "target": "Engine/Content/BR/Content/Images/Textures2D"
+                    },
+                    {
+                        "files": [
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Facesets/lucas.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/lucas.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Facesets/kate.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/kate.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Facesets/shana.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/shana.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Facesets/bibi.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/bibi.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Facesets/wooly.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Facesets/wooly.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/Facesets"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Bars/hpBar.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Bars/hpBar.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Bars/spBar.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Bars/spBar.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Bars/mpBar.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Bars/mpBar.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/Bars"
+                            },
+                            {
+                                "files": [
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/Pictures"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/superHPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superHPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/grass.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/grass.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/MPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/MPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/superTPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superTPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/water.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/water.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/g.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/g.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/woodenSword.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/woodenSword.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/heal.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/heal.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/TPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/TPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/escape.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/escape.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/HPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/HPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/wind.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/wind.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/megaMPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaMPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/ironAxe.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/ironAxe.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/bronzeGreaves.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeGreaves.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/saphirNecklace.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/saphirNecklace.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/endTurn.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/endTurn.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/bronzeHelmet.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeHelmet.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/megaHPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaHPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/attack.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/attack.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/bandage.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bandage.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/bronzeMail.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeMail.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/superMPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/superMPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/concentration.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/concentration.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/saphirRing.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/saphirRing.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/bronzeVambraces.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/bronzeVambraces.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/skill.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/skill.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/fire.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/fire.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/darkness.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/darkness.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/xcoin.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/xcoin.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/key.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/key.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/blazingSword.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/blazingSword.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/megaTPPotion.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/megaTPPotion.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/item.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/item.png"
+                                    },
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Icons/light.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Icons/light.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/Icons"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/TitleScreen/background.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/TitleScreen/background.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/TitleScreen"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/WindowSkins/default.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/WindowSkins/default.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/WindowSkins"
+                            }
+                        ],
+                        "target": "Engine/Content/BR/Content/Images/HUD"
+                    }
+                ],
+                "target": "Engine/Content/BR/Content/Images"
+            },
+            {
+                "files": [
+                    {
+                        "files": [
                         ],
                         "target": "Engine/Content/BR/Content/Shapes/Collisions"
                     },
@@ -25,476 +495,6 @@
                 "files": [
                 ],
                 "target": "Engine/Content/BR/Content/Videos"
-            },
-            {
-                "files": [
-                    {
-                        "files": [
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Tilesets/cave.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/cave.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Tilesets/beach.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/beach.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Tilesets/plains.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/plains.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Tilesets/halloween.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/halloween.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Tilesets/inside.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets/inside.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Tilesets"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Autotiles/general.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Autotiles/general.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Autotiles"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Walls/inside2.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside2.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Walls/inside1.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/inside1.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Walls/cave1.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls/cave1.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Walls"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/grass.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/halloween.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/desert.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/halloween-noborders.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/halloween-noborders.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/grass-noborders.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/grass-noborders.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/desert-noborders.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/desert-noborders.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Mountains/cave1.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains/cave1.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Mountains"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/lucas.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/lucas.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/kate.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/kate.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/shana.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/shana.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/template.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/template.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/bibi.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/bibi.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Battlers/wooly.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers/wooly.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Battlers"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Objects3D/table.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/table.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Objects3D/fridge.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/fridge.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Objects3D/chest.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/chest.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Objects3D/cupboard.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/cupboard.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Objects3D/template.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D/template.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Objects3D"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/lucas.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/lucas.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/kate.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/kate.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/shana.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/shana.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/template.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/template.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/bibi.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/bibi.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/Textures2D/Characters/wooly.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters/wooly.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/Textures2D/Characters"
-                            }
-                        ],
-                        "target": "Engine/Content/BR/Content/Pictures/Textures2D"
-                    },
-                    {
-                        "files": [
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Facesets/lucas.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/lucas.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Facesets/kate.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/kate.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Facesets/shana.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/shana.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Facesets/bibi.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/bibi.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Facesets/wooly.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets/wooly.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/Facesets"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Bars/hpBar.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/hpBar.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Bars/spBar.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/spBar.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Bars/mpBar.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Bars/mpBar.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/Bars"
-                            },
-                            {
-                                "files": [
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/Pictures"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/superHPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superHPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/grass.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/grass.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/MPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/MPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/superTPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superTPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/water.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/water.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/g.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/g.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/woodenSword.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/woodenSword.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/heal.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/heal.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/TPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/TPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/escape.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/escape.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/HPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/HPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/wind.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/wind.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/megaMPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaMPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/ironAxe.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/ironAxe.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/bronzeGreaves.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeGreaves.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/saphirNecklace.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/saphirNecklace.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/endTurn.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/endTurn.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/bronzeHelmet.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeHelmet.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/megaHPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaHPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/attack.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/attack.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/bandage.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bandage.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/bronzeMail.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeMail.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/superMPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/superMPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/concentration.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/concentration.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/saphirRing.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/saphirRing.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/bronzeVambraces.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/bronzeVambraces.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/skill.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/skill.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/fire.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/fire.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/darkness.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/darkness.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/xcoin.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/xcoin.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/key.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/key.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/blazingSword.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/blazingSword.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/megaTPPotion.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/megaTPPotion.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/item.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/item.png"
-                                    },
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/Icons/light.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/Icons/light.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/Icons"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/TitleScreen/background.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen/background.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/TitleScreen"
-                            },
-                            {
-                                "files": [
-                                    {
-                                        "repo": "Basic-Ressources",
-                                        "source": "Content/Pictures/HUD/WindowSkins/default.png",
-                                        "target": "Engine/Content/BR/Content/Pictures/HUD/WindowSkins/default.png"
-                                    }
-                                ],
-                                "target": "Engine/Content/BR/Content/Pictures/HUD/WindowSkins"
-                            }
-                        ],
-                        "target": "Engine/Content/BR/Content/Pictures/HUD"
-                    }
-                ],
-                "target": "Engine/Content/BR/Content/Pictures"
             },
             {
                 "files": [
