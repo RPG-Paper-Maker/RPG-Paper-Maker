@@ -398,10 +398,14 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
 bool Objects3D::updateRaycastingAt(Position &position, Object3DDatas *object3D,
     float &finalDistance, Position &finalPosition, QRay3D &ray)
 {
-    float newDistance = object3D->intersection(ray);
-    if (Common::getMinDistance(finalDistance, newDistance)) {
-        finalPosition = position;
-        return true;
+    if (object3D != nullptr) {
+        float newDistance;
+
+        newDistance = object3D->intersection(ray);
+        if (Common::getMinDistance(finalDistance, newDistance)) {
+            finalPosition = position;
+            return true;
+        }
     }
 
     return false;
