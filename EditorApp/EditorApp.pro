@@ -28,7 +28,8 @@ SOURCES += \
 HEADERS +=
 
 # Use the Editor library
-LIBS += -L$$MAIN_PROJECT_DIR/Build/$$VARIANT/Editor -lRPG-Paper-Maker
+LIBS += -L$$ROOT_DESTDIR/Editor -l$$EDITOR_LIB_NAME     # Ex: -Lpath/to/RPG-Paper-Maker/Build/debug/Editor -lRPG-Paper-Maker
+PRE_TARGETDEPS += $$ROOT_DESTDIR/Editor/$$LIB_FILENAME  # Ex: path/to/RPG-Paper-Maker/Build/debug/Editor/RPG-Paper-Maker.lib
 
 
 #-------------------------------------------------
@@ -127,12 +128,10 @@ QMAKE_EXTRA_TARGETS += first copyGameResources
 # If you don't care preserving the destination folder, you can also delete DESTDIR entirely (in the custom clean command below)
 win32: APP_FILENAME = $${TARGET}.exe
 unix: APP_FILENAME = $$TARGET
-QMAKE_CLEAN += "$$DESTDIR/$$APP_FILENAME"
+QMAKE_CLEAN += $$DESTDIR/$$APP_FILENAME
 
 # Also add a custom clean command to remove the copied Content directory
 # (QMAKE_CLEAN only supports files)
 extraclean.commands = $$DEL_DIR_CMD $$DEST_CONTENT_DIR
 clean.depends = extraclean
 QMAKE_EXTRA_TARGETS += clean extraclean
-
-PRE_TARGETDEPS += $$ROOT_DESTDIR/Editor/libRPG-Paper-Maker.a

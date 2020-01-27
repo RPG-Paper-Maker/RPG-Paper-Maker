@@ -31,6 +31,12 @@ MAIN_PROJECT_DIR = $$PWD
 # Ex: path/to/RPG-Paper-Maker/Build/debug
 ROOT_DESTDIR = $$MAIN_PROJECT_DIR/Build/$$VARIANT
 
+# Output library name per platform
+# (useful for dependency change detection and cleanup)
+EDITOR_LIB_NAME = RPG-Paper-Maker
+win32: LIB_FILENAME = $${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB   # "RPG-Paper-Maker.lib"
+unix: LIB_FILENAME = lib$${EDITOR_LIB_NAME}.$$QMAKE_EXTENSION_STATICLIB # "libRPG-Paper-Maker.a"
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
