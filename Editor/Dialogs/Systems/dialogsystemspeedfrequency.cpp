@@ -43,6 +43,14 @@ void DialogSystemSpeedFrequency::initialize() {
     ui->lineEditName->setText(m_speedFrequency.name());
     ui->panelPrimitiveValue->initializeNumberAndUpdate(m_speedFrequency.value(),
         false);
+
+    // If frequency, change UI
+    if (!m_speedFrequency.isSpeed()) {
+        ui->labelValue->setText("Time:");
+        ui->labelX->hide();
+    } else {
+        ui->labelSeconds->hide();
+    }
 }
 
 // -------------------------------------------------------

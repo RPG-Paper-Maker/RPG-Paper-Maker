@@ -673,7 +673,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-276</y>
                 <width>624</width>
                 <height>916</height>
                </rect>
@@ -881,11 +881,11 @@
                       <bool>true</bool>
                      </property>
                      <property name="title">
-                      <string>Speed / Frequency</string>
+                      <string>Speeds</string>
                      </property>
                      <layout class="QGridLayout" name="gridLayout_12">
                       <item row="0" column="0">
-                       <widget class="PanelSuperList" name="panelSuperListSpeedFrequency" native="true">
+                       <widget class="PanelSuperList" name="panelSuperListSpeeds" native="true">
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
@@ -907,17 +907,32 @@
                     </widget>
                    </item>
                    <item>
-                    <spacer name="verticalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
+                    <widget class="QGroupBox" name="groupBox_34">
+                     <property name="title">
+                      <string>Frequencies</string>
                      </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>20</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                    </spacer>
+                     <layout class="QGridLayout" name="gridLayout_45">
+                      <item row="0" column="0">
+                       <widget class="PanelSuperList" name="panelSuperListFrequencies" native="true">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>250</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>250</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
                    </item>
                   </layout>
                  </item>

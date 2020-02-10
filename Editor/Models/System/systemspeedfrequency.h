@@ -28,12 +28,15 @@ class SystemSpeedFrequency : public SuperListItem
 {
 public:
     static const QString JSON_VALUE;
+    static const QString JSON_IS_SPEED;
 
     SystemSpeedFrequency();
-    SystemSpeedFrequency(int i, QString n, PrimitiveValue *v);
+    SystemSpeedFrequency(int i, QString n, PrimitiveValue *v, bool is);
     virtual ~SystemSpeedFrequency();
 
     PrimitiveValue * value() const;
+    bool isSpeed() const;
+    void setIsSpeed(bool is);
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
@@ -43,6 +46,7 @@ public:
 
 protected:
     PrimitiveValue *m_value;
+    bool m_isSpeed;
 };
 
 Q_DECLARE_METATYPE(SystemSpeedFrequency)

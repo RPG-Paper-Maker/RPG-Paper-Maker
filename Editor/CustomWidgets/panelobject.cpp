@@ -43,9 +43,9 @@ PanelObject::PanelObject(QWidget *parent) :
 
     // Moving
     SuperListItem::fillComboBox(ui->comboBoxSpeed, RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
+        ->gameDatas()->systemDatas()->modelSpeed(), false);
     SuperListItem::fillComboBox(ui->comboBoxFreq, RPM::get()->project()
-        ->gameDatas()->systemDatas()->modelSpeedFrequencies(), false);
+        ->gameDatas()->systemDatas()->modelFrequencies(), false);
 
     // Keep space when hiding widgets
     QSizePolicy sp_retain;
@@ -306,10 +306,10 @@ void PanelObject::updateStateMoving(SystemState *state) {
     ui->comboBoxMovingType->setCurrentIndex(static_cast<int>(state
         ->objectMovingKind()));
     ui->comboBoxSpeed->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->project()->gameDatas()->systemDatas()->modelSpeed()
         ->invisibleRootItem(), state->speedID()));
     ui->comboBoxFreq->setCurrentIndex(SuperListItem::getIndexById(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies()
+        ->project()->gameDatas()->systemDatas()->modelFrequencies()
         ->invisibleRootItem(), state->frequencyID()));
 }
 
@@ -530,7 +530,7 @@ void PanelObject::on_comboBoxSpeed_currentIndexChanged(int index) {
     }
     reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
         .value<quintptr>())->setSpeedID(SuperListItem::getIdByIndex(RPM::get()
-        ->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(), index));
+        ->project()->gameDatas()->systemDatas()->modelSpeed(), index));
 }
 
 // -------------------------------------------------------
@@ -541,7 +541,7 @@ void PanelObject::on_comboBoxFreq_currentIndexChanged(int index) {
     }
     reinterpret_cast<SystemState *>(ui->treeViewStates->getSelected()->data()
         .value<quintptr>())->setFrequencyID(SuperListItem::getIdByIndex(RPM
-        ::get()->project()->gameDatas()->systemDatas()->modelSpeedFrequencies(),
+        ::get()->project()->gameDatas()->systemDatas()->modelFrequencies(),
         index));
 }
 

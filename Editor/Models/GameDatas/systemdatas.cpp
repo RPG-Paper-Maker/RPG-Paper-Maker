@@ -36,7 +36,8 @@ const QString SystemDatas::JSON_LAST_MAJOR_VERSION = "lmva";
 const QString SystemDatas::JSON_LAST_MINOR_VERSION = "lmiv";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_HEIGHT = "mch";
 const QString SystemDatas::JSON_MOUNTAIN_COLLISION_ANGLE = "mca";
-const QString SystemDatas::JSON_SPEED_FREQUENCIES = "sf";
+const QString SystemDatas::JSON_SPEED = "sf";
+const QString SystemDatas::JSON_FREQUENCIES = "f";
 const QString SystemDatas::JSON_SOUND_CURSOR = "scu";
 const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
@@ -62,7 +63,8 @@ SystemDatas::SystemDatas() :
     m_modelWindowSkins(new QStandardItemModel),
     m_modelCameraProperties(new QStandardItemModel),
     m_modelDetections(new QStandardItemModel),
-    m_modelSpeedFrequencies(new QStandardItemModel),
+    m_modelSpeed(new QStandardItemModel),
+    m_modelFrequencies(new QStandardItemModel),
     m_modelFontSizes(new QStandardItemModel),
     m_modelFontNames(new QStandardItemModel),
     m_lastMajorVersion(1),
@@ -87,7 +89,8 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelWindowSkins);
     SuperListItem::deleteModel(m_modelCameraProperties);
     SuperListItem::deleteModel(m_modelDetections);
-    SuperListItem::deleteModel(m_modelSpeedFrequencies);
+    SuperListItem::deleteModel(m_modelSpeed);
+    SuperListItem::deleteModel(m_modelFrequencies);
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
 
@@ -194,9 +197,14 @@ QStandardItemModel * SystemDatas::modelDetections() const {
     return m_modelDetections;
 }
 
-QStandardItemModel * SystemDatas::modelSpeedFrequencies() const {
-    return m_modelSpeedFrequencies;
+QStandardItemModel * SystemDatas::modelSpeed() const {
+    return m_modelSpeed;
 }
+
+QStandardItemModel * SystemDatas::modelFrequencies() const {
+    return m_modelFrequencies;
+}
+
 
 QStandardItemModel * SystemDatas::modelFontSizes() const {
     return m_modelFontSizes;
@@ -267,7 +275,8 @@ void SystemDatas::setDefault() {
     this->setDefaultWindowSkins();
     this->setDefaultCameraProperties();
     this->setDefaultDetections();
-    this->setDefaultSpeedFrequencies();
+    this->setDefaultSpeed();
+    this->setDefaultFrequencies();
     this->setDefaultFontSizes();
     this->setDefaultFontNames();
     this->setDefaultSounds();
@@ -386,28 +395,42 @@ void SystemDatas::setDefaultDetections() {
 
 // -------------------------------------------------------
 
-void SystemDatas::setDefaultSpeedFrequencies() {
+void SystemDatas::setDefaultSpeed() {
     QList<QStandardItem *> row;
     SystemSpeedFrequency *speedFrequency;
 
     speedFrequency = new SystemSpeedFrequency(1, "Normal", new PrimitiveValue(
-        1.0));
+        1.0), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(2, "Low", new PrimitiveValue(0.75));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(2, "Low", new PrimitiveValue(0.75)
+        , true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
+    m_modelSpeed->appendRow(row);
     speedFrequency = new SystemSpeedFrequency(3, "Very low", new PrimitiveValue(
-        0.5));
+        0.5), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.5));
+    m_modelSpeed->appendRow(row);
+    speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.5)
+        , true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
+    m_modelSpeed->appendRow(row);
     speedFrequency = new SystemSpeedFrequency(5, "Very fast", new PrimitiveValue
-        (2.0));
+        (2.0), true);
     row = speedFrequency->getModelRow();
-    m_modelSpeedFrequencies->appendRow(row);
+    m_modelSpeed->appendRow(row);
+}
+
+// -------------------------------------------------------
+
+void SystemDatas::setDefaultFrequencies() {
+    QList<QStandardItem *> row;
+    SystemSpeedFrequency *speedFrequency;
+
+    speedFrequency = new SystemSpeedFrequency(1, "Instantaneous", new
+        PrimitiveValue(0.0), false);
+    row = speedFrequency->getModelRow();
+    m_modelFrequencies->appendRow(row);
 }
 
 // -------------------------------------------------------
@@ -487,7 +510,8 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelWindowSkins, false);
     SuperListItem::deleteModel(m_modelCameraProperties, false);
     SuperListItem::deleteModel(m_modelDetections, false);
-    SuperListItem::deleteModel(m_modelSpeedFrequencies, false);
+    SuperListItem::deleteModel(m_modelSpeed, false);
+    SuperListItem::deleteModel(m_modelFrequencies, false);
     SuperListItem::deleteModel(m_modelFontSizes, false);
     SuperListItem::deleteModel(m_modelFontNames, false);
 
@@ -579,12 +603,19 @@ void SystemDatas::read(const QJsonObject &json){
     }
 
     // Speed frequencies
-    jsonList = json[JSON_SPEED_FREQUENCIES].toArray();
+    jsonList = json[JSON_SPEED].toArray();
     for (int i = 0; i < jsonList.size(); i++){
         SystemSpeedFrequency *speedFrequency = new SystemSpeedFrequency;
         speedFrequency->read(jsonList[i].toObject());
         row = speedFrequency->getModelRow();
-        m_modelSpeedFrequencies->appendRow(row);
+        m_modelSpeed->appendRow(row);
+    }
+    jsonList = json[JSON_FREQUENCIES].toArray();
+    for (int i = 0; i < jsonList.size(); i++){
+        SystemSpeedFrequency *speedFrequency = new SystemSpeedFrequency;
+        speedFrequency->read(jsonList[i].toObject());
+        row = speedFrequency->getModelRow();
+        m_modelFrequencies->appendRow(row);
     }
 
     // Font size
@@ -726,16 +757,27 @@ void SystemDatas::write(QJsonObject &json) const{
 
     // Speed frequencies
     jsonArray = QJsonArray();
-    l = m_modelSpeedFrequencies->invisibleRootItem()->rowCount();
+    l = m_modelSpeed->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++) {
         QJsonObject jsonCommon;
         SystemSpeedFrequency *speedFrequency = reinterpret_cast<
-            SystemSpeedFrequency *>(m_modelSpeedFrequencies->item(i)->data()
+            SystemSpeedFrequency *>(m_modelSpeed->item(i)->data()
             .value<quintptr>());
         speedFrequency->write(jsonCommon);
         jsonArray.append(jsonCommon);
     }
-    json[JSON_SPEED_FREQUENCIES] = jsonArray;
+    json[JSON_SPEED] = jsonArray;
+    jsonArray = QJsonArray();
+    l = m_modelFrequencies->invisibleRootItem()->rowCount();
+    for (int i = 0; i < l; i++) {
+        QJsonObject jsonCommon;
+        SystemSpeedFrequency *speedFrequency = reinterpret_cast<
+            SystemSpeedFrequency *>(m_modelFrequencies->item(i)->data()
+            .value<quintptr>());
+        speedFrequency->write(jsonCommon);
+        jsonArray.append(jsonCommon);
+    }
+    json[JSON_FREQUENCIES] = jsonArray;
 
     // Font size
     jsonArray = QJsonArray();

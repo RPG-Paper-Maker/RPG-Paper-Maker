@@ -92,7 +92,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListWindowSkins->showEditName(false);
     ui->panelSuperListCameraProperties->showEditName(false);
     ui->panelSuperListDetections->showEditName(false);
-    ui->panelSuperListSpeedFrequency->showEditName(false);
+    ui->panelSuperListSpeeds->showEditName(false);
+    ui->panelSuperListFrequencies->showEditName(false);
     ui->panelSuperListFontSizes->showEditName(false);
     ui->panelSuperListFontNames->showEditName(false);
 
@@ -102,7 +103,8 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListColors->list()->setCanEdit(true);
     ui->panelSuperListDetections->list()->setCanEdit(true);
     ui->panelSuperListCurrencies->list()->setCanEdit(true);
-    ui->panelSuperListSpeedFrequency->list()->setCanEdit(true);
+    ui->panelSuperListSpeeds->list()->setCanEdit(true);
+    ui->panelSuperListFrequencies->list()->setCanEdit(true);
     ui->panelSuperListFontSizes->list()->setCanEdit(true);
     ui->panelSuperListFontNames->list()->setCanEdit(true);
 
@@ -142,10 +144,14 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemDetection);
     ui->panelSuperListDetections->initializeModel(gameDatas->systemDatas()
         ->modelDetections());
-    ui->panelSuperListSpeedFrequency->list()->initializeNewItemInstance(new
+    ui->panelSuperListSpeeds->list()->initializeNewItemInstance(new
         SystemSpeedFrequency);
-    ui->panelSuperListSpeedFrequency->initializeModel(gameDatas->systemDatas()
-        ->modelSpeedFrequencies());
+    ui->panelSuperListSpeeds->initializeModel(gameDatas->systemDatas()
+        ->modelSpeed());
+    ui->panelSuperListFrequencies->list()->initializeNewItemInstance(new
+        SystemSpeedFrequency(-1, "", new PrimitiveValue(0.0), false));
+    ui->panelSuperListFrequencies->initializeModel(gameDatas->systemDatas()
+        ->modelFrequencies());
     ui->panelSuperListFontSizes->list()->initializeNewItemInstance(new
         SystemFontSize);
     ui->panelSuperListFontSizes->initializeModel(gameDatas->systemDatas()

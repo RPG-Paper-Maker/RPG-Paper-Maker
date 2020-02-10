@@ -307,7 +307,7 @@
                    <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>x</string>
+                   <string>=</string>
                   </property>
                  </widget>
                 </item>
