@@ -43,6 +43,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
@@ -60,6 +61,7 @@ HEADERS += \
     Enums/conditionheroeskind.h \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
+    Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
     Enums/variablemapobjectcharacteristickind.h \
@@ -74,6 +76,7 @@ HEADERS += \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
     Models/System/systemmountain.h \
+    Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
@@ -362,6 +365,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
@@ -386,6 +390,7 @@ SOURCES += \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
     Models/System/systemmountain.cpp \
+    Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
@@ -647,6 +652,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \

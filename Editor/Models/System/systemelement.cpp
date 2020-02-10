@@ -11,6 +11,9 @@
 
 #include "systemelement.h"
 #include "dialogsystemelement.h"
+#include "rpm.h"
+
+const QString SystemElement::JSON_EFFICIENCY = "e";
 
 // -------------------------------------------------------
 //
@@ -18,24 +21,27 @@
 //
 // -------------------------------------------------------
 
-SystemElement::SystemElement() : SystemLang()
-{
-    m_efficiency = new QStandardItemModel();
-}
-
-SystemElement::SystemElement(int i, LangsTranslation* names,
-                             QStandardItemModel* efficiency) :
-    SystemLang(i,names),
-    m_efficiency(efficiency)
+SystemElement::SystemElement() :
+    SystemElement(1, new LangsTranslation, -1)
 {
 
 }
 
-SystemElement::~SystemElement(){
-    delete m_efficiency;
+SystemElement::SystemElement(int i, LangsTranslation* names, int ii) :
+    SystemIcon(i,names, ii),
+    m_modelEfficiency(new QStandardItemModel)
+{
+
 }
 
-QStandardItemModel* SystemElement::efficiency() const { return m_efficiency; }
+SystemElement::~SystemElement() {
+    this->clearEfficiency();
+    SuperListItem::deleteModel(m_modelEfficiency);
+}
+
+QStandardItemModel * SystemElement::modelEfficiency() const {
+    return m_modelEfficiency;
+}
 
 // -------------------------------------------------------
 //
@@ -43,12 +49,82 @@ QStandardItemModel* SystemElement::efficiency() const { return m_efficiency; }
 //
 // -------------------------------------------------------
 
-bool SystemElement::openDialog(){
+void SystemElement::clearEfficiency() {
+    QHash<int, PrimitiveValue *>::iterator i;
+
+    for (i = m_efficiency.begin(); i != m_efficiency.end(); i++) {
+        delete *i;
+    }
+    m_efficiency.clear();
+}
+
+// -------------------------------------------------------
+
+void SystemElement::addEfficiencyDouble(int id, double d) {
+    m_efficiency.insert(id, new PrimitiveValue(d));
+}
+
+// -------------------------------------------------------
+
+void SystemElement::updateEfficiency() {
+    SystemElement *element;
+    PrimitiveValue *prim;
+    SystemPrimitive *sys;
+    int i, l;
+
+    SuperListItem::deleteModel(m_modelEfficiency, false);
+    m_modelEfficiency->setHorizontalHeaderLabels(QStringList({"Elements",
+        "Efficiency"}));
+
+    for (i = 0, l = RPM::get()->project()->gameDatas()->battleSystemDatas()
+        ->modelElements()->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        element = reinterpret_cast<SystemElement *>(RPM::get()->project()
+            ->gameDatas()->battleSystemDatas()->modelElements()->item(i)->data()
+            .value<quintptr>());
+        prim = m_efficiency.value(element->id());
+        prim = prim == nullptr ? new PrimitiveValue(1.0) : prim->createCopy();
+        sys = new SystemPrimitive(element->id(), element->name(), prim,
+            SystemPrimitiveKind::ElementEfficiency);
+        m_modelEfficiency->appendRow(sys->getModelRow());
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemElement::updateEfficiencyChange() {
+    PrimitiveValue *prim;
+    SystemPrimitive *sys;
+    int i, l;
+
+    for (i = 0, l = m_modelEfficiency->invisibleRootItem()->rowCount(); i < l;
+         i++)
+    {
+        sys = reinterpret_cast<SystemPrimitive *>(m_modelEfficiency->item(i)
+            ->data().value<quintptr>());
+
+        prim = m_efficiency.value(sys->id());
+        if (prim != nullptr) {
+            delete prim;
+        }
+        m_efficiency.insert(sys->id(), sys->prim()->createCopy());
+    }
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+bool SystemElement::openDialog() {
     SystemElement element;
     element.setCopy(*this);
     DialogSystemElement dialog(element);
-    if (dialog.exec() == QDialog::Accepted){
-        setCopy(element);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        element.updateEfficiencyChange();
+        this->setCopy(element);
         return true;
     }
     return false;
@@ -64,36 +140,20 @@ SuperListItem* SystemElement::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemElement::setCopy(const SystemElement& element){
-    SystemLang::setCopy(element);
-    m_efficiency->setHorizontalHeaderLabels(QStringList({"Elements",
-                                                         "Efficiency(%)"}));
-    QStandardItem* itemElement;
-    QStandardItem* itemEfficiency;
-    QList<QStandardItem*> row;
-    SuperListItem* sysElement;
-    int efficiencyElement;
-    int l;
+void SystemElement::setCopy(const SystemIcon &super) {
+    SystemIcon::setCopy(super);
+    const SystemElement *element;
 
-    l = element.efficiency()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l; i++){
-        itemElement = new QStandardItem;
-        itemEfficiency = new QStandardItem;
-        row = QList<QStandardItem*>();
-        sysElement = (SuperListItem*) element.efficiency()->item(i)->data()
-                .value<quintptr>();
-        efficiencyElement = element.efficiency()->item(i,1)->data()
-                .value<int>();
-        itemElement->setData(QVariant::fromValue(
-                                 reinterpret_cast<quintptr>(sysElement)));
-        itemElement->setText(sysElement->toString());
-        itemEfficiency->setData(QVariant::fromValue(efficiencyElement));
-        itemEfficiency->setText(QString::number(efficiencyElement));
-
-        row.append(itemElement);
-        row.append(itemEfficiency);
-        m_efficiency->appendRow(row);
+    element = reinterpret_cast<const SystemElement *>(&super);
+    this->clearEfficiency();
+    SuperListItem::deleteModel(m_modelEfficiency, false);
+    QHash<int, PrimitiveValue *>::const_iterator i;
+    for (i = element->m_efficiency.begin(); i != element->m_efficiency.end();
+        i++)
+    {
+        m_efficiency.insert(i.key(), i.value()->createCopy());
     }
+    this->updateEfficiency();
 }
 
 // -------------------------------------------------------
@@ -103,53 +163,41 @@ void SystemElement::setCopy(const SystemElement& element){
 // -------------------------------------------------------
 
 void SystemElement::read(const QJsonObject &json){
-    SystemLang::read(json);
-}
-
-// -------------------------------------------------------
-
-void SystemElement::readEfficiency(QStandardItemModel* model,
-                                   const QJsonObject &json)
-{
-    QJsonArray jsonEfficiencies = json["efficiency"].toArray();
-    m_efficiency->setHorizontalHeaderLabels(QStringList({"Elements",
-                                                         "Efficiency(%)"}));
-
-    QStandardItem* itemElement;
-    QStandardItem* itemEfficiency;
-    SuperListItem* element;
-    QList<QStandardItem*> row;
-    int efficiencyElement;
-    for (int j = 0; j < model->invisibleRootItem()->rowCount(); j++){
-        row = QList<QStandardItem*>();
-        efficiencyElement = jsonEfficiencies[j].toInt();
-        element = SuperListItem::getById(model->invisibleRootItem(), j+1);
-        itemElement = new QStandardItem;
-        itemElement->setData(QVariant::fromValue(
-                                 reinterpret_cast<quintptr>(element)));
-        itemElement->setText(element->toString());
-        itemEfficiency = new QStandardItem;
-        itemEfficiency->setData(QVariant::fromValue(efficiencyElement));
-        itemEfficiency->setText(QString::number(efficiencyElement));
-
-        row.append(itemElement);
-        row.append(itemEfficiency);
-        m_efficiency->appendRow(row);
-    }
-}
-
-// -------------------------------------------------------
-
-void SystemElement::write(QJsonObject &json) const{
-    SystemLang::write(json);
+    SystemIcon::read(json);
     QJsonArray tab;
-    for (int i = 0; i < m_efficiency->invisibleRootItem()->rowCount(); i++)
-        tab.append(0);
+    QJsonObject obj;
+    PrimitiveValue *prim;
+    int i, l;
 
-    for (int i = 0; i < m_efficiency->invisibleRootItem()->rowCount(); i++){
-        int id = ((SuperListItem*)(m_efficiency->item(i)->data()
-                                   .value<quintptr>()))->id();
-        tab[id-1] = m_efficiency->item(i,1)->data().value<int>();
+    this->clearEfficiency();
+    tab = json[JSON_EFFICIENCY].toArray();
+    for (i = 0, l = tab.size(); i < l; i++) {
+        obj = tab.at(i).toObject();
+        prim = new PrimitiveValue;
+        prim->read(obj[RPM::JSON_VALUE].toObject());
+        m_efficiency.insert(obj[RPM::JSON_KEY].toInt(), prim);
     }
-    json["efficiency"] = tab;
+}
+
+// -------------------------------------------------------
+
+void SystemElement::write(QJsonObject &json) const {
+    SystemIcon::write(json);
+    QJsonArray tab;
+    QJsonObject obj;
+    QJsonObject objValue;
+    QHash<int, PrimitiveValue *>::const_iterator i;
+
+    for (i = m_efficiency.begin(); i != m_efficiency.end(); i++) {
+        if (i.value()->numberDoubleValue() != 1.0) {
+            objValue = QJsonObject();
+            i.value()->write(objValue);
+            obj = QJsonObject();
+            obj[RPM::JSON_KEY] = i.key();
+            obj[RPM::JSON_VALUE] = objValue;
+            tab.append(obj);
+        }
+    }
+
+    json[JSON_EFFICIENCY] = tab;
 }

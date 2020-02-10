@@ -359,6 +359,14 @@ void PrimitiveValue::getCommandParameter(QVector<QString> &command) {
 
 // -------------------------------------------------------
 
+PrimitiveValue * PrimitiveValue::createCopy() const{
+    PrimitiveValue *prim = new PrimitiveValue;
+    prim->setCopy(*this);
+    return prim;
+}
+
+// -------------------------------------------------------
+
 void PrimitiveValue::setCopy(const PrimitiveValue &prim) {
     m_kind = prim.kind();
 

@@ -299,52 +299,27 @@ void BattleSystemDatas::setDefaultBattleMaps(){
 
 // -------------------------------------------------------
 
-void BattleSystemDatas::setDefaultElements(){
-    SystemElement* sysElement;
-    QStandardItem* itemElement;
-    QStandardItem* itemEfficiency;
-    QStandardItem* item;
-    SuperListItem* element;
-    QList<QStandardItem*> row;
-    QStandardItemModel* efficiency;
-    QString names[] = {"Fire", "Water", "Grass"};
-    QVector<int> efficiencies[] = {QVector<int>({100, 50, 200}), // Fire
-                                   QVector<int>({200, 100, 50}), // Water
-                                   QVector<int>({50, 200, 100})}; // Grass
+void BattleSystemDatas::setDefaultElements() {
+    QString names[] = { "Fire", "Water", "Plant" };
+    int icons[] = { 11, 12, 34 };
+    QVector<double> efficiencies[] = {
+        QVector<double>({ 1.0, 0.5, 2.0 }), // Fire
+        QVector<double>({ 2.0, 1.0, 0.5 }), // Water
+        QVector<double>({ 0.5, 2.0, 1.0 }) // Grass
+    };
+    SystemElement *sysElement;
     int length = (sizeof(names)/sizeof(*names));
+    int i, j;
 
-    // First create all the elements
-    for (int i = 0; i < length; i++){
-        item = new QStandardItem();
-        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]));
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysElement)));
-        item->setText(sysElement->toString());
-        m_modelElements->appendRow(item);
-    }
-
-    // Fill the efficiencies
-    for (int i = 0; i < length; i++){
-        sysElement =
-                (SystemElement*) SuperListItem::getById(m_modelElements
-                                                        ->invisibleRootItem(),
-                                                        i+1);
-        efficiency = sysElement->efficiency();
-        for (int j = 0; j < efficiencies[i].size(); j++){
-            row = QList<QStandardItem*>();
-            element = SuperListItem::getById(m_modelElements
-                                             ->invisibleRootItem(), j+1);
-            itemElement = new QStandardItem;
-            itemElement->setData(QVariant::fromValue(
-                                     reinterpret_cast<quintptr>(element)));
-            itemElement->setText(element->toString());
-            itemEfficiency = new QStandardItem;
-            itemEfficiency->setData(QVariant::fromValue(efficiencies[i][j]));
-            itemEfficiency->setText(QString::number(efficiencies[i][j]) + "%");
-            row.append(itemElement);
-            row.append(itemEfficiency);
-            efficiency->appendRow(row);
+    // Create all the elements and add efficiencies
+    for (i = 0; i < length; i++){
+        sysElement = new SystemElement(i+1, new LangsTranslation(names[i]),
+            icons[i]);
+        for (j = 0; j < length; j++) {
+            sysElement->addEfficiencyDouble(j + 1, efficiencies[i][j]);
         }
+
+        m_modelElements->appendRow(sysElement->getModelRow());
     }
 }
 
@@ -445,6 +420,7 @@ void BattleSystemDatas::read(const QJsonObject &json){
     QStandardItem* item;
     QJsonObject obj;
     QJsonArray jsonList;
+    SystemElement *sysElement;
 
     // Clear
     SuperListItem::deleteModel(m_modelCommonEquipment, false);
@@ -537,19 +513,9 @@ void BattleSystemDatas::read(const QJsonObject &json){
     // Elements
     jsonList = json[jsonElements].toArray();
     for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SystemElement* sysElement = new SystemElement;
+        sysElement = new SystemElement;
         sysElement->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysElement)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysElement->toString());
-        m_modelElements->appendRow(item);
-    }
-    for (int i = 0; i < jsonList.size(); i++){
-        SystemElement* sysElement = reinterpret_cast<SystemElement*>(
-            m_modelElements->item(i)->data().value<quintptr>());
-        sysElement->readEfficiency(m_modelElements, jsonList[i].toObject());
+        m_modelElements->appendRow(sysElement->getModelRow());
     }
 
     // Statistics

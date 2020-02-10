@@ -34,7 +34,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -673,7 +673,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-276</y>
+                <y>0</y>
                 <width>624</width>
                 <height>916</height>
                </rect>
@@ -1177,7 +1177,7 @@
              <item>
               <widget class="QGroupBox" name="groupBox_22">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="title">
                 <string>Elements</string>
@@ -1186,7 +1186,7 @@
                 <item row="0" column="0">
                  <widget class="PanelSuperList" name="panelSuperListElements" native="true">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>

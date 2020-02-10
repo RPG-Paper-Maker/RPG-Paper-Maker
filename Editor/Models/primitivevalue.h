@@ -68,6 +68,7 @@ public:
     bool isDefaultMessageValue() const;
     void initializeCommandParameter(const EventCommand *command, int& i);
     void getCommandParameter(QVector<QString> &command);
+    PrimitiveValue * createCopy() const;
     void setCopy(const PrimitiveValue &prim);
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
