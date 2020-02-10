@@ -530,6 +530,12 @@ void SystemEffect::read(const QJsonObject &json) {
                 m_damagesMaximum->read(json[JSON_DAMAGE_MAXIMUM].toObject());
             }
         }
+        if (json.contains(JSON_IS_DAMAGE_ELEMENT)) {
+            m_isDamageElement = json[JSON_IS_DAMAGE_ELEMENT].toBool();
+            if (json.contains(JSON_DAMAGE_ELEMENT_ID)) {
+                m_damagesElementID->read(json[JSON_DAMAGE_ELEMENT_ID].toObject());
+            }
+        }
         if (json.contains(JSON_IS_DAMAGE_VARIANCE)) {
             m_isDamageVariance = json[JSON_IS_DAMAGE_VARIANCE].toBool();
             if (json.contains(JSON_DAMAGE_VARIANCE_FORMULA)) {
