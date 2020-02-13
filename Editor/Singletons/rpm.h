@@ -116,6 +116,7 @@ public:
     static const QString PATH_FACESETS;
     static const QString PATH_WINDOW_SKINS;
     static const QString PATH_TITLE_SCREEN;
+    static const QString PATH_HUD_ANIMATIONS;
     static const QString PATH_HUD_PICTURES;
     static const QString PATH_AUTOTILES;
     static const QString PATH_CHARACTERS;
@@ -146,6 +147,8 @@ public:
     static const int PORTION_SIZE;
     static const int BASIC_SQUARE_SIZE;
     static const int MAX_PIXEL_SIZE;
+    static const int SCREEN_BASIC_WIDTH;
+    static const int SCREEN_BASIC_HEIGHT;
 
     // ENUM TO STRING
     static const QStringList ENUM_TO_STRING_DAMAGES_KIND;

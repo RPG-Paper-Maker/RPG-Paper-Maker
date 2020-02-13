@@ -37,6 +37,7 @@ enum class PictureKind {
     TitleScreen,
     Object3D,
     Pictures,
+    Animations,
     Last
 };
 

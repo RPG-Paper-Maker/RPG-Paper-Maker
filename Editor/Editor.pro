@@ -24,6 +24,7 @@ HEADERS += \
     CustomWidgets/panelsubtransformation.h \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/panelvideos.h \
+    CustomWidgets/widgetanimation.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
@@ -346,6 +347,7 @@ SOURCES += \
     CustomWidgets/panelsubtransformation.cpp \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/panelvideos.cpp \
+    CustomWidgets/widgetanimation.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \

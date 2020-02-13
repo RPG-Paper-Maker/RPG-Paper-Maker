@@ -791,4 +791,5 @@ void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
 
 void ProjectUpdater::updateVersion_1_5_0() {
     m_project->gameDatas()->systemDatas()->setDefaultFrequencies();
+    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_HUD_ANIMATIONS);
 }

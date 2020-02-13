@@ -74,6 +74,9 @@ private:
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
 
+protected:
+    virtual void showEvent(QShowEvent *event);
+
 private slots:
     void on_tabWidget_currentChanged(int index);
     void on_pageItemsSelected(QModelIndex index, QModelIndex);

@@ -10,6 +10,7 @@
 */
 
 #include <QTreeWidget>
+#include <QScrollBar>
 #include "dialogdatas.h"
 #include "ui_dialogdatas.h"
 #include "datastabkind.h"
@@ -269,6 +270,7 @@ void DialogDatas::updateClass(SystemClass* sysClass) {
 // -------------------------------------------------------
 
 void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
+    ui->widgetAnimation->setScrollArea(ui->scrollAreaAnimation);
     ui->panelSuperListAnimations->list()->initializeNewItemInstance(new
         SystemAnimation);
     ui->panelSuperListAnimations->initializeModel(gameDatas->animationsDatas()
@@ -385,6 +387,22 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
         RPM::get()->project()->writeSpecialsDatas();
     else
         RPM::get()->project()->readSpecialsDatas();
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogDatas::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+
+    // Scroll area for animations centered
+    ui->scrollAreaAnimation->horizontalScrollBar()->setValue(ui
+        ->scrollAreaAnimation->horizontalScrollBar()->maximum() / 2);
+    ui->scrollAreaAnimation->verticalScrollBar()->setSliderPosition(ui
+        ->scrollAreaAnimation->verticalScrollBar()->maximum() / 2);
 }
 
 // -------------------------------------------------------

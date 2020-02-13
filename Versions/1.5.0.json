@@ -43,9 +43,9 @@
         "Common battle commands display skill text in list"
 	],
     "finished": [
-        false,
-        false,
-        false,
+        true,
+        true,
+        true,
         false,
         false,
         false,

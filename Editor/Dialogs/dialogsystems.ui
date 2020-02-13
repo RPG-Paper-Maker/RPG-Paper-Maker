@@ -1893,12 +1893,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetTextLang</class>
-   <extends>QWidget</extends>
-   <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -1913,6 +1907,12 @@
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

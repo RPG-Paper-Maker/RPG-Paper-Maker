@@ -77,10 +77,10 @@ QStandardItemModel* DialogPictures::createFoldersModel() const{
     itemHUD->setIcon(icon);
     itemHUD->setText("HUD");
     itemPictures->appendRow(itemHUD);
-    listNames << "Bars" << "Facesets" << "Icons" << "Pictures" << "TitleScreen"
-        << "WindowSkins";
-    listEnums << PictureKind::Bars << PictureKind::Facesets <<
-        PictureKind::Icons << PictureKind::Pictures << PictureKind
+    listNames << "Animations" << "Bars" << "Facesets" << "Icons" << "Pictures"
+        << "TitleScreen" << "WindowSkins";
+    listEnums << PictureKind::Animations << PictureKind::Bars << PictureKind
+        ::Facesets << PictureKind::Icons << PictureKind::Pictures << PictureKind
         ::TitleScreen << PictureKind::WindowSkins;
     addfolders(icon, itemHUD, listNames, listEnums);
 

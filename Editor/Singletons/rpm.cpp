@@ -138,6 +138,8 @@ const QString RPM::PATH_WINDOW_SKINS = Common::pathCombine(PATH_HUD,
     "WindowSkins");
 const QString RPM::PATH_TITLE_SCREEN = Common::pathCombine(PATH_HUD,
     "TitleScreen");
+const QString RPM::PATH_HUD_ANIMATIONS = Common::pathCombine(PATH_HUD,
+    "Animations");
 const QString RPM::PATH_HUD_PICTURES = Common::pathCombine(PATH_HUD,
     "Pictures");
 const QString RPM::PATH_AUTOTILES = Common::pathCombine(PATH_TEXTURES_2D,
@@ -193,6 +195,8 @@ const QString RPM::PATH_TEXTURE_MISSING = ":/textures/Ressources/missing.png";
 const int RPM::PORTION_SIZE = 16;
 const int RPM::BASIC_SQUARE_SIZE = 32;
 const int RPM::MAX_PIXEL_SIZE = 4096;
+const int RPM::SCREEN_BASIC_WIDTH = 640;
+const int RPM::SCREEN_BASIC_HEIGHT = 480;
 
 // ENUM TO STRING
 const QStringList RPM::ENUM_TO_STRING_DAMAGES_KIND = {
