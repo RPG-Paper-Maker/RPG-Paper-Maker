@@ -17,6 +17,7 @@
 #include "systemanimationframe.h"
 #include "animationpositionkind.h"
 #include "widgetanimationtexture.h"
+#include "contextmenulist.h"
 
 // -------------------------------------------------------
 //
@@ -39,6 +40,7 @@ public:
     void setWidgetAnimationTexture(WidgetAnimationTexture *wat);
 
 protected:
+    ContextMenuList *m_contextMenu;
     QScrollArea *m_scrollArea;
     QImage m_imageBattler;
     int m_idBattler;
@@ -48,17 +50,29 @@ protected:
     WidgetAnimationTexture *m_widgetAnimationTexture;
     SystemAnimationFrameElement *m_hoveredElement;
     SystemAnimationFrameElement *m_selectedElement;
+    SystemAnimationFrameElement *m_copiedElement;
     bool m_moving;
     int m_mouseOffsetX;
     int m_mouseOffsetY;
+    int m_lastMouseX;
+    int m_lastMouseY;
 
     void updateBattlerPicture(int id);
+    void updateContextMenuCan();
 
+    virtual void keyPressEvent(QKeyEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void mouseLeaveEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
+
+private slots:
+    void showContextMenu(const QPoint &p);
+    void contextEdit();
+    void contextCopy();
+    void contextPaste();
+    void contextDelete();
 };
 
 #endif // WIDGETANIMATION_H

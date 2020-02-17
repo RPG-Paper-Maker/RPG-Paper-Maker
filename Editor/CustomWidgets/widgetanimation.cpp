@@ -14,6 +14,7 @@
 #include <QApplication>
 #include "widgetanimation.h"
 #include "rpm.h"
+#include "common.h"
 
 const int WidgetAnimation::ELEMENT_INDEX_SIZE = 16;
 
@@ -31,15 +32,23 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_currentFrame(nullptr),
     m_widgetAnimationTexture(nullptr),
     m_hoveredElement(nullptr),
+    m_selectedElement(nullptr),
+    m_copiedElement(nullptr),
     m_moving(false),
     m_mouseOffsetX(0),
-    m_mouseOffsetY(0)
+    m_mouseOffsetY(0),
+    m_lastMouseX(0),
+    m_lastMouseY(0)
 {
     this->setFocus();
     this->setMouseTracking(true);
     this->setFixedWidth(RPM::SCREEN_BASIC_WIDTH);
     this->setFixedHeight(RPM::SCREEN_BASIC_HEIGHT);
     this->updateBattlerPicture(m_idBattler);
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_contextMenu = ContextMenuList::createContextSuperList(this);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT
+        (showContextMenu(const QPoint &)));
 }
 
 void WidgetAnimation::setScrollArea(QScrollArea *scrollArea) {
@@ -76,34 +85,82 @@ void WidgetAnimation::updateBattlerPicture(int id) {
 }
 
 // -------------------------------------------------------
+
+void WidgetAnimation::updateContextMenuCan() {
+    m_contextMenu->canEdit(m_selectedElement != nullptr);
+    m_contextMenu->canCopy(m_selectedElement != nullptr);
+    m_contextMenu->canPaste(m_copiedElement != nullptr);
+    m_contextMenu->canDelete(m_selectedElement != nullptr);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void WidgetAnimation::keyPressEvent(QKeyEvent *event) {
+    QList<QAction *> actions;
+    QKeySequence seq;
+    QAction* action;
+
+    seq = Common::getKeySequence(event);
+    actions = m_contextMenu->actions();
+
+    // Forcing shortcuts
+    action = actions.at(5);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        this->contextDelete();
+        return;
+    }
+    action = actions.at(0);
+    if (Common::isPressingEnter(event) && action->isEnabled()) {
+        this->contextEdit();
+        return;
+    }
+    action = actions.at(2);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        contextCopy();
+        return;
+    }
+    action = actions.at(3);
+    if (action->shortcut().matches(seq) && action->isEnabled()) {
+        contextPaste();
+        return;
+    }
+}
+
 // -------------------------------------------------------
 
 void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
     SystemAnimationFrameElement *element;
     int x, y, i;
 
+    this->setFocus();
+
     // Update text coords
     x = event->x();
     y = event->y();
+    m_lastMouseX = x;
+    m_lastMouseY = y;
     if (m_positionKind != AnimationPositionKind::ScreenCenter) {
         x -= RPM::SCREEN_BASIC_WIDTH / 2;
         y -= RPM::SCREEN_BASIC_HEIGHT / 2;
     }
     m_textCoords = "[" + QString::number(x) + "," + QString::number(y) + "]";
 
+    // Update current hovered
     if (m_moving) {
         m_selectedElement->setX(x - m_mouseOffsetX);
         m_selectedElement->setY(y - m_mouseOffsetY);
-    } else { // Update current hovered
+    } else {
         m_hoveredElement = nullptr;
         for (i = m_currentFrame->elementsCount() - 1; i >= 0; i--) {
             element = m_currentFrame->elementAt(i);
-            if (x >= element->x() && x <= element->x() + WidgetAnimationTexture
-                ::MAX_SIZE && y >= element->y() && y <= element->y() +
-                WidgetAnimationTexture::MAX_SIZE)
+            if (x >= element->x() - WidgetAnimationTexture::MAX_SIZE / 2 && x <=
+                element->x() + WidgetAnimationTexture::MAX_SIZE / 2 && y >=
+                element->y() - WidgetAnimationTexture::MAX_SIZE / 2 && y <=
+                element->y() + WidgetAnimationTexture::MAX_SIZE / 2)
             {
                 m_hoveredElement = element;
                 break;
@@ -117,6 +174,7 @@ void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
 // -------------------------------------------------------
 
 void WidgetAnimation::mousePressEvent(QMouseEvent *event) {
+    this->setFocus();
     if (event->buttons() & Qt::LeftButton) {
         int x, y;
 
@@ -130,17 +188,22 @@ void WidgetAnimation::mousePressEvent(QMouseEvent *event) {
             m_selectedElement = m_currentFrame->addElement(x, y,
                 m_widgetAnimationTexture->currentRow(), m_widgetAnimationTexture
                 ->currentColumn());
+            m_hoveredElement = m_selectedElement;
         } else {
             m_selectedElement = m_hoveredElement;
-            m_moving = true;
-            m_mouseOffsetX = x - m_selectedElement->x();
-            m_mouseOffsetY = y - m_selectedElement->y();
         }
+        m_moving = true;
+        m_mouseOffsetX = x - m_selectedElement->x();
+        m_mouseOffsetY = y - m_selectedElement->y();
+        this->repaint();
+    } else if (event->buttons() & Qt::RightButton) {
+        m_selectedElement = m_hoveredElement;
         this->repaint();
     }
+    this->updateContextMenuCan();
 }
 
-void WidgetAnimation::mouseReleaseEvent(QMouseEvent *event) {
+void WidgetAnimation::mouseReleaseEvent(QMouseEvent *) {
     m_moving = false;
 }
 
@@ -193,8 +256,8 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
         painter.setFont(font);
         for (i = 0, l = m_currentFrame->elementsCount(); i < l; i++) {
             element = m_currentFrame->elementAt(i);
-            x = element->x();
-            y = element->y();
+            x = element->x() - WidgetAnimationTexture::MAX_SIZE / 2;
+            y = element->y() - WidgetAnimationTexture::MAX_SIZE / 2;
             if (m_positionKind != AnimationPositionKind::ScreenCenter) {
                 x += RPM::SCREEN_BASIC_WIDTH / 2;
                 y += RPM::SCREEN_BASIC_HEIGHT / 2;
@@ -211,6 +274,8 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
                 WidgetAnimationTexture::MAX_SIZE);
             painter.drawRect(x + 1, y + 1, WidgetAnimationTexture::MAX_SIZE - 2,
                 WidgetAnimationTexture::MAX_SIZE - 2);
+            painter.fillRect(x, y, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE, RPM
+                ::COLOR_PURPLE_SELCTION_BACKGROUND);
             painter.drawRect(x, y, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
             painter.drawRect(x, y, ELEMENT_INDEX_SIZE + 1, ELEMENT_INDEX_SIZE +
                 1);
@@ -241,4 +306,56 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
         painter.drawText(m_scrollArea->width() + offsetX - fm.width(coords) -
             m_scrollArea->verticalScrollBar()->width(), 10 + offsetY, coords);
     }
+}
+
+// -------------------------------------------------------
+//
+//  SLOTS
+//
+// -------------------------------------------------------
+
+void WidgetAnimation::showContextMenu(const QPoint &p) {
+    this->updateContextMenuCan();
+    m_contextMenu->showContextMenu(p);
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::contextEdit() {
+
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::contextCopy() {
+    m_copiedElement = reinterpret_cast<SystemAnimationFrameElement *>(
+        m_selectedElement->createCopy());
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::contextPaste() {
+    SystemAnimationFrameElement *element;
+    int x, y;
+
+    x = m_lastMouseX;
+    y = m_lastMouseY;
+    if (m_positionKind != AnimationPositionKind::ScreenCenter) {
+        x -= RPM::SCREEN_BASIC_WIDTH / 2;
+        y -= RPM::SCREEN_BASIC_HEIGHT / 2;
+    }
+    element = reinterpret_cast<SystemAnimationFrameElement *>(m_copiedElement
+        ->createCopy());
+    element->setX(x);
+    element->setY(y);
+    element->setId(m_currentFrame->getElementMaxIndex() + 1);
+    m_currentFrame->addElement(element);
+    this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::contextDelete() {
+    m_currentFrame->deleteElement(m_selectedElement);
+    this->repaint();
 }

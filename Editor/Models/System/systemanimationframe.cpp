@@ -51,10 +51,7 @@ SystemAnimationFrameElement * SystemAnimationFrame::elementAt(int i) const {
 //
 // -------------------------------------------------------
 
-SystemAnimationFrameElement * SystemAnimationFrame::addElement(int x, int y, int
-    row, int column)
-{
-    SystemAnimationFrameElement *element;
+int SystemAnimationFrame::getElementMaxIndex() const {
     int i, l, index, id;
 
     index = 0;
@@ -64,10 +61,41 @@ SystemAnimationFrameElement * SystemAnimationFrame::addElement(int x, int y, int
             index = id;
         }
     }
-    element = new SystemAnimationFrameElement(index + 1, "", x, y, row, column);
-    m_elements.append(element);
+
+    return index;
+}
+
+// -------------------------------------------------------
+
+SystemAnimationFrameElement * SystemAnimationFrame::addElement(int x, int y, int
+    row, int column)
+{
+    SystemAnimationFrameElement *element;
+
+    element = new SystemAnimationFrameElement(this->getElementMaxIndex() + 1, ""
+        , x, y, row, column);
+    this->addElement(element);
 
     return element;
+}
+
+// -------------------------------------------------------
+
+void SystemAnimationFrame::addElement(SystemAnimationFrameElement *element)
+{
+    m_elements.append(element);
+}
+
+// -------------------------------------------------------
+
+void SystemAnimationFrame::deleteElement(SystemAnimationFrameElement *element) {
+    for (int i = 0, l = m_elements.size(); i < l; i++) {
+        if (element == m_elements.at(i)) {
+            m_elements.removeAt(i);
+            delete element;
+            break;
+        }
+    }
 }
 
 // -------------------------------------------------------

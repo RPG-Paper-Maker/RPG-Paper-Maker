@@ -34,7 +34,10 @@ public:
     int elementsCount() const;
     SystemAnimationFrameElement * elementAt(int i) const;
 
+    int getElementMaxIndex() const;
     SystemAnimationFrameElement * addElement(int x, int y, int row, int column);
+    void addElement(SystemAnimationFrameElement *element);
+    void deleteElement(SystemAnimationFrameElement *element);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

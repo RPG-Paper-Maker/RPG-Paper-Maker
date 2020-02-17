@@ -285,11 +285,14 @@ ContextMenuList * ContextMenuList::createContextObject(QWidget *parent) {
 // -------------------------------------------------------
 
 ContextMenuList * ContextMenuList::createContextPraticable(QWidget *parent) {
-    ContextMenuList *menu = new ContextMenuList(parent);
+    ContextMenuList *menu;
+    QAction *actionEdit, *actionDelete;
+
+    menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionEdit = new QAction("Edit", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
+    actionEdit = new QAction("Edit", parent);
+    actionDelete = new QAction("Delete", parent);
     menu->setActionEdit(actionEdit);
     menu->setActionDelete(actionDelete);
 
