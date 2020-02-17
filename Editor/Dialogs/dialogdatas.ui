@@ -663,7 +663,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="WidgetPicture" name="widgetPictureTileset_3" native="true">
+                   <widget class="WidgetPicture" name="widgetPictureAnimation" native="true">
                     <property name="minimumSize">
                      <size>
                       <width>200</width>
@@ -686,7 +686,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="comboBox"/>
+                   <widget class="QComboBox" name="comboBoxAnimationPosition"/>
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_3">
@@ -724,7 +724,7 @@
                     </property>
                     <layout class="QGridLayout" name="gridLayout_13">
                      <item row="0" column="0">
-                      <widget class="PanelSuperList" name="panelSuperListFontSizes" native="true">
+                      <widget class="PanelSuperList" name="panelSuperListAnimationFrames" native="true">
                        <property name="enabled">
                         <bool>true</bool>
                        </property>
@@ -891,7 +891,7 @@
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QSpinBox" name="spinBox">
+                                  <widget class="QSpinBox" name="spinBoxAnimationRows">
                                    <property name="minimum">
                                     <number>1</number>
                                    </property>
@@ -912,7 +912,7 @@
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QSpinBox" name="spinBox_2">
+                                  <widget class="QSpinBox" name="spinBoxAnimationColumns">
                                    <property name="minimum">
                                     <number>1</number>
                                    </property>
@@ -944,34 +944,43 @@
                          </layout>
                         </item>
                         <item>
-                         <widget class="QGroupBox" name="groupBox_5">
-                          <property name="title">
-                           <string>Texture</string>
+                         <widget class="QScrollArea" name="scrollArea_4">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>112</height>
+                           </size>
                           </property>
-                          <layout class="QGridLayout" name="gridLayout_15">
-                           <item row="0" column="0">
-                            <widget class="QScrollArea" name="scrollArea_5">
-                             <property name="widgetResizable">
-                              <bool>true</bool>
-                             </property>
-                             <widget class="QWidget" name="scrollAreaWidgetContents_5">
-                              <property name="geometry">
-                               <rect>
-                                <x>0</x>
-                                <y>0</y>
-                                <width>611</width>
-                                <height>68</height>
-                               </rect>
-                              </property>
-                              <layout class="QGridLayout" name="gridLayout_30">
-                               <item row="0" column="0">
-                                <widget class="QWidget" name="widget_3" native="true"/>
-                               </item>
-                              </layout>
-                             </widget>
-                            </widget>
-                           </item>
-                          </layout>
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_6">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>635</width>
+                             <height>110</height>
+                            </rect>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_15">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <item row="0" column="0">
+                             <widget class="WidgetAnimationTexture" name="widgetAnimationTexture" native="true"/>
+                            </item>
+                           </layout>
+                          </widget>
                          </widget>
                         </item>
                        </layout>
@@ -1470,6 +1479,12 @@
    <class>WidgetAnimation</class>
    <extends>QWidget</extends>
    <header>widgetanimation.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetAnimationTexture</class>
+   <extends>QWidget</extends>
+   <header>widgetanimationtexture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

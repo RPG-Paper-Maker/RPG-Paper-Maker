@@ -48,6 +48,7 @@ public:
     static const QColor COLOR_FORTY_TRANSPARENT;
     static const QColor COLOR_GREY;
     static const QColor COLOR_MENU_SELECTION_BLUE;
+    static const QColor COLOR_CURSOR_SELECTION;
 
     // COMMON JSON
     static const QString JSON_KEY;
@@ -163,6 +164,7 @@ public:
     static const QStringList ENUM_TO_STRING_AXIS_KIND;
     static const QStringList ENUM_TO_STRING_CONDITION_HEROES;
     static const QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
+    static const QStringList ENUM_TO_STRING_ANIMATION_POSITION_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

@@ -14,6 +14,9 @@
 
 #include <QWidget>
 #include <QScrollArea>
+#include "systemanimationframe.h"
+#include "animationpositionkind.h"
+#include "widgetanimationtexture.h"
 
 // -------------------------------------------------------
 //
@@ -27,16 +30,26 @@ class WidgetAnimation : public QWidget
 {
     Q_OBJECT
 public:
+    static const int ELEMENT_INDEX_SIZE;
+
     explicit WidgetAnimation(QWidget *parent = nullptr);
     void setScrollArea(QScrollArea *scrollArea);
+    void setAnimationPositionKind(AnimationPositionKind pk);
+    void setCurrentFrame(SystemAnimationFrame *cf);
+    void setWidgetAnimationTexture(WidgetAnimationTexture *wat);
 
 protected:
     QScrollArea *m_scrollArea;
     QImage m_imageBattler;
     int m_idBattler;
     QString m_textCoords;
+    AnimationPositionKind m_positionKind;
+    SystemAnimationFrame *m_currentFrame;
+    WidgetAnimationTexture *m_widgetAnimationTexture;
+    SystemAnimationFrameElement *m_hoveredElement;
+    SystemAnimationFrameElement *m_selectedElement;
 
-    void updateBattlePicture(int id);
+    void updateBattlerPicture(int id);
 
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseLeaveEvent(QMouseEvent *);

@@ -25,6 +25,7 @@ HEADERS += \
     CustomWidgets/paneltransformations.h \
     CustomWidgets/panelvideos.h \
     CustomWidgets/widgetanimation.h \
+    CustomWidgets/widgetanimationtexture.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
@@ -58,6 +59,7 @@ HEADERS += \
     Controls/controlnewproject.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
+    Enums/animationpositionkind.h \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
     Enums/mountaincollisionkind.h \
@@ -72,6 +74,8 @@ HEADERS += \
     MapEditor/mountains.h \
     MapEditor/textureseveral.h \
     Models/GameDatas/videosdatas.h \
+    Models/System/systemanimationframe.h \
+    Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
@@ -348,6 +352,7 @@ SOURCES += \
     CustomWidgets/paneltransformations.cpp \
     CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetanimation.cpp \
+    CustomWidgets/widgetanimationtexture.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
@@ -387,6 +392,8 @@ SOURCES += \
     MapEditor/mountains.cpp \
     MapEditor/textureseveral.cpp \
     Models/GameDatas/videosdatas.cpp \
+    Models/System/systemanimationframe.cpp \
+    Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \

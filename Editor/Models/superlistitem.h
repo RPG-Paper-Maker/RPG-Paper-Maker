@@ -74,6 +74,10 @@ public:
         const QJsonObject &json, const QString &name);
     static void writeTree(QStandardItemModel *model, QJsonObject &json, const
         QString &name);
+    static void readList(QStandardItemModel *model, SuperListItem *newInstance,
+        const QJsonObject &json, const QString &name);
+    static void writeList(QStandardItemModel *model, QJsonObject &json, const
+        QString &name);
     void reset();
     virtual void getIcon(QIcon &icon);
 

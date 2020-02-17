@@ -14,6 +14,8 @@
 
 #include <QMetaType>
 #include "superlistitem.h"
+#include "animationpositionkind.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -26,12 +28,41 @@
 class SystemAnimation : public SuperListItem
 {
 public:
-    SystemAnimation();
-    SystemAnimation(int i, QString n);
-    virtual ~SystemAnimation();
+    static const QString JSON_PICTURE_ID;
+    static const QString JSON_POSITION_KIND;
+    static const QString JSON_FRAMES;
+    static const QString JSON_ROWS;
+    static const QString JSON_COLUMNS;
+    static const int DEFAULT_ROWS;
+    static const int DEFAULT_COLUMNS;
 
+    SystemAnimation();
+    SystemAnimation(int i, QString n, int pid, AnimationPositionKind pk, int r =
+        DEFAULT_ROWS, int c = DEFAULT_COLUMNS);
+    virtual ~SystemAnimation();
+    int pictureID() const;
+    void setPictureID(int pid);
+    AnimationPositionKind positionKind() const;
+    void setPositionKind(AnimationPositionKind pk);
+    QStandardItemModel * framesModel() const;
+    int rows() const;
+    void setRows(int r);
+    int columns() const;
+    void setColumns(int c);
+
+    SystemPicture * picture() const;
+
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
+
+protected:
+    int m_pictureID;
+    AnimationPositionKind m_positionKind;
+    QStandardItemModel *m_framesModel;
+    int m_rows;
+    int m_columns;
 };
 
 Q_DECLARE_METATYPE(SystemAnimation)

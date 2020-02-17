@@ -263,14 +263,23 @@ void DialogDatas::initializeClasses(GameDatas *gameDatas){
 // -------------------------------------------------------
 
 void DialogDatas::updateClass(SystemClass* sysClass) {
-
     ui->panelDatasClass->update(sysClass, sysClass);
 }
 
 // -------------------------------------------------------
 
 void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
+    ui->widgetAnimation->setWidgetAnimationTexture(ui->widgetAnimationTexture);
+    ui->widgetPictureAnimation->setKind(PictureKind::Animations);
+    ui->comboBoxAnimationPosition->addItems(RPM
+        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
+    connect(ui->comboBoxAnimationPosition, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(on_comboboxAnimationPositionKindChanged(int)));
+    connect(ui->widgetPictureAnimation, SIGNAL(pictureChanged(SystemPicture *)),
+        this, SLOT(on_animationPictureChanged(SystemPicture *)));
     ui->widgetAnimation->setScrollArea(ui->scrollAreaAnimation);
+    ui->panelSuperListAnimationFrames->list()->initializeNewItemInstance(new
+        SystemAnimationFrame);
     ui->panelSuperListAnimations->list()->initializeNewItemInstance(new
         SystemAnimation);
     ui->panelSuperListAnimations->initializeModel(gameDatas->animationsDatas()
@@ -282,12 +291,30 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
         0, 0);
     ui->panelSuperListAnimations->list()->setIndex(0);
     on_pageAnimationsSelected(index, index);
+    connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageAnimationFramesSelected(QModelIndex, QModelIndex)));
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::updateAnimation(SystemAnimation *) {
+void DialogDatas::updateAnimation(SystemAnimation *animation) {
+    ui->widgetPictureAnimation->setPicture(animation->picture());
+    ui->spinBoxAnimationRows->setValue(animation->rows());
+    ui->spinBoxAnimationColumns->setValue(animation->columns());
+    ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(animation
+        ->positionKind()));
+    ui->panelSuperListAnimationFrames->initializeModel(animation->framesModel());
+    QModelIndex index = ui->panelSuperListAnimationFrames->list()->getModel()
+        ->index(0, 0);
+    ui->panelSuperListAnimationFrames->list()->setIndex(0);
+    this->on_pageAnimationFramesSelected(index, index);
+}
 
+// -------------------------------------------------------
+
+void DialogDatas::updateAnimationFrame(SystemAnimationFrame *animationFrame) {
+    ui->widgetAnimation->setCurrentFrame(animationFrame);
 }
 
 // -------------------------------------------------------
@@ -542,6 +569,19 @@ void DialogDatas::on_pageAnimationsSelected(QModelIndex index, QModelIndex){
 
 // -------------------------------------------------------
 
+void DialogDatas::on_pageAnimationFramesSelected(QModelIndex index, QModelIndex) {
+    QStandardItem *selected;
+
+    selected = ui->panelSuperListAnimationFrames->list()->getModel()
+        ->itemFromIndex(index);
+    if (selected != nullptr) {
+        this->updateAnimationFrame(reinterpret_cast<SystemAnimationFrame *>(
+            selected->data().value<quintptr>()));
+    }
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListStatus->list()->getModel()
         ->itemFromIndex(index);
@@ -553,12 +593,46 @@ void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
 
 // -------------------------------------------------------
 
-void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture){
-    SystemTileset* tileset = (SystemTileset*) ui->panelSuperListTilesets->list()
-            ->getSelected()->data().value<quintptr>();
-
-    tileset->setPictureID(picture->id());
+void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture) {
+    reinterpret_cast<SystemTileset *>(ui->panelSuperListTilesets->list()
+        ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
     ui->widgetTilesetPictureSettings->updateImage(picture);
+}
+
+// -------------------------------------------------------
+
+
+void DialogDatas::on_animationPictureChanged(SystemPicture *picture) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListTilesets->list()
+        ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
+    ui->widgetAnimationTexture->updatePicture(picture->id());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_comboboxAnimationPositionKindChanged(int index) {
+    AnimationPositionKind positionKind;
+
+    positionKind = static_cast<AnimationPositionKind>(index);
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setPositionKind(positionKind);
+    ui->widgetAnimation->repaint();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_spinBoxAnimationRows_valueChanged(int i) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setRows(i);
+    ui->widgetAnimationTexture->setRows(i);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_spinBoxAnimationColumns_valueChanged(int i) {
+    reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
+        ->getSelected()->data().value<quintptr>())->setColumns(i);
+    ui->widgetAnimationTexture->setColumns(i);
 }
 
 // -------------------------------------------------------

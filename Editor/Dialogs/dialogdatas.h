@@ -26,6 +26,7 @@
 #include "systemtileset.h"
 #include "systemanimation.h"
 #include "systemstatus.h"
+#include "systemanimationframe.h"
 
 // -------------------------------------------------------
 //
@@ -67,7 +68,8 @@ private:
     void initializeClasses(GameDatas *gameDatas);
     void updateClass(SystemClass *sysClass);
     void initializeAnimations(GameDatas *gameDatas);
-    void updateAnimation(SystemAnimation *sysAnimation);
+    void updateAnimation(SystemAnimation *animation);
+    void updateAnimationFrame(SystemAnimationFrame *animationFrame);
     void initializeStatus(GameDatas *gameDatas);
     void updateStatus(SystemStatus *sysStatus);
     void initializeTilesets(GameDatas *gameDatas);
@@ -89,12 +91,17 @@ private slots:
     void on_pageTroopSelected(QModelIndex index, QModelIndex);
     void on_pageTilesetSelected(QModelIndex index, QModelIndex);
     void on_pageAnimationsSelected(QModelIndex index, QModelIndex);
+    void on_pageAnimationFramesSelected(QModelIndex index, QModelIndex);
     void on_pageStatusSelected(QModelIndex index, QModelIndex);
     void on_pushButtonAutotiles_clicked();
     void on_pushButtonSpriteWalls_clicked();
     void on_pushButtonMountains_clicked();
     void on_pushButton3DObjects_clicked();
-    void on_tilesetPictureChanged(SystemPicture* picture);
+    void on_tilesetPictureChanged(SystemPicture *picture);
+    void on_animationPictureChanged(SystemPicture *picture);
+    void on_comboboxAnimationPositionKindChanged(int index);
+    void on_spinBoxAnimationRows_valueChanged(int i);
+    void on_spinBoxAnimationColumns_valueChanged(int i);
 };
 
 #endif // DIALOGDATAS_H

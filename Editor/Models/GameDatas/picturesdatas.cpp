@@ -57,7 +57,7 @@ SystemPicture * PicturesDatas::missingPicture() const {
 //
 // -------------------------------------------------------
 
-void PicturesDatas::setDefault(){
+void PicturesDatas::setDefault() {
     QList<QString> names;
 
     this->setDefaultBars(names);
@@ -73,6 +73,7 @@ void PicturesDatas::setDefault(){
     this->setDefaultTitleScreen(names);
     this->setDefaultObjects3D(names);
     this->setDefaultHUDPictures(names);
+    this->setDefaultAnimations(names);
 }
 
 // -------------------------------------------------------
@@ -188,6 +189,13 @@ void PicturesDatas::setDefaultWalls(QList<QString>& names) {
 void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
     names << "chest" << "cupboard" << "fridge" << "table";
     setDefaultPictures(names, PictureKind::Object3D);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultAnimations(QList<QString>& names) {
+    names << "unnamed";
+    this->setDefaultPictures(names, PictureKind::Animations);
 }
 
 // -------------------------------------------------------

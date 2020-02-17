@@ -34,6 +34,7 @@ const QColor RPM::COLOR_ALMOST_TRANSPARENT = QColor(0, 0, 0, 20);
 const QColor RPM::COLOR_FORTY_TRANSPARENT = QColor(0, 0, 0, 40);
 const QColor RPM::COLOR_GREY = QColor(90, 90, 90);
 const QColor RPM::COLOR_MENU_SELECTION_BLUE = QColor(47, 139, 196);
+const QColor RPM::COLOR_CURSOR_SELECTION = QColor(100, 130, 170, 100);
 
 // COMMON JSON
 const QString RPM::JSON_KEY = "k";
@@ -247,6 +248,10 @@ const QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {
 const QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {
     "X square position", "Y square position", "Z square position",
     "X pixel position", "Y pixel position", "Z pixel position", "orientation"
+};
+
+const QStringList RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = {
+    "Top", "Middle", "Bottom", "Screen center"
 };
 
 // OTHER STATIC VALUES

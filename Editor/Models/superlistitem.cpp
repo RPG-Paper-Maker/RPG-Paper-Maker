@@ -369,20 +369,8 @@ void SuperListItem::copy(QStandardItemModel *model,
 void SuperListItem::readTree(QStandardItemModel *model, SuperListItem
     *newInstance, const QJsonObject &json, const QString &name)
 {
-    QList<QStandardItem*> row;
-    SuperListItem *super;
-    QJsonArray tab;
-
-    tab = json[name].toArray();
-    for (int i = 0; i < tab.size(); i++) {
-        super = newInstance->createCopy();
-        super->read(tab.at(i).toObject());
-        row = super->getModelRow();
-        model->appendRow(row);
-    }
+    SuperListItem::readList(model, newInstance, json, name);
     model->appendRow(SuperListItem::getEmptyItem());
-
-    delete newInstance;
 }
 
 // -------------------------------------------------------
@@ -410,6 +398,46 @@ void SuperListItem::writeTree(QStandardItemModel *model, QJsonObject &json,
     if (!tab.isEmpty()) {
         json[name] = tab;
     }
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::readList(QStandardItemModel *model, SuperListItem
+    *newInstance, const QJsonObject &json, const QString &name)
+{
+    QList<QStandardItem*> row;
+    SuperListItem *super;
+    QJsonArray tab;
+
+    tab = json[name].toArray();
+    for (int i = 0; i < tab.size(); i++) {
+        super = newInstance->createCopy();
+        super->read(tab.at(i).toObject());
+        row = super->getModelRow();
+        model->appendRow(row);
+    }
+
+    delete newInstance;
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::writeList(QStandardItemModel *model, QJsonObject &json,
+    const QString &name)
+{
+    SuperListItem *super;
+    QJsonArray tab;
+    QJsonObject obj;
+
+    for (int i = 0; i < model->invisibleRootItem()->rowCount(); i++) {
+        obj = QJsonObject();
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data().value<
+            quintptr>());
+        super->write(obj);
+        tab.append(obj);
+    }
+
+    json[name] = tab;
 }
 
 // -------------------------------------------------------

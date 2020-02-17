@@ -790,6 +790,12 @@ void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_5_0() {
+    QList<QString> names;
+
     m_project->gameDatas()->systemDatas()->setDefaultFrequencies();
+    m_project->picturesDatas()->setDefaultAnimations(names);
+    SuperListItem::deleteModel(m_project->gameDatas()->animationsDatas()
+        ->model(), false);
+    m_project->gameDatas()->animationsDatas()->setDefault();
     QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_HUD_ANIMATIONS);
 }
