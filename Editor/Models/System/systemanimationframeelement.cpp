@@ -82,6 +82,12 @@ void SystemAnimationFrameElement::setTexColumn(int tc) {
 //
 // -------------------------------------------------------
 
+QString SystemAnimationFrameElement::getPositionString() const {
+    return "[" + QString::number(m_x) + "," + QString::number(m_y) + "]";
+}
+
+// -------------------------------------------------------
+
 void SystemAnimationFrameElement::correctPosition(AnimationPositionKind previous
     , AnimationPositionKind after)
 {

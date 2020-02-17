@@ -11,6 +11,7 @@
 
 #include <QPainter>
 #include <QScrollBar>
+#include <QApplication>
 #include "widgetanimation.h"
 #include "rpm.h"
 
@@ -29,7 +30,10 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_positionKind(AnimationPositionKind::Middle),
     m_currentFrame(nullptr),
     m_widgetAnimationTexture(nullptr),
-    m_hoveredElement(nullptr)
+    m_hoveredElement(nullptr),
+    m_moving(false),
+    m_mouseOffsetX(0),
+    m_mouseOffsetY(0)
 {
     this->setFocus();
     this->setMouseTracking(true);
@@ -77,29 +81,6 @@ void WidgetAnimation::updateBattlerPicture(int id) {
 //
 // -------------------------------------------------------
 
-void WidgetAnimation::mousePressEvent(QMouseEvent *event) {
-    if (event->buttons() & Qt::LeftButton) {
-        int x, y;
-
-        if (m_hoveredElement == nullptr) {
-            x = event->x();
-            y = event->y();
-            if (m_positionKind != AnimationPositionKind::ScreenCenter) {
-                x -= RPM::SCREEN_BASIC_WIDTH / 2;
-                y -= RPM::SCREEN_BASIC_HEIGHT / 2;
-            }
-            m_selectedElement = m_currentFrame->addElement(x, y,
-                m_widgetAnimationTexture->currentRow(), m_widgetAnimationTexture
-                ->currentColumn());
-        } else {
-            m_selectedElement = m_hoveredElement;
-        }
-        this->repaint();
-    }
-}
-
-// -------------------------------------------------------
-
 void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
     SystemAnimationFrameElement *element;
     int x, y, i;
@@ -113,20 +94,54 @@ void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
     }
     m_textCoords = "[" + QString::number(x) + "," + QString::number(y) + "]";
 
-    // Update current hovered
-    m_hoveredElement = nullptr;
-    for (i = m_currentFrame->elementsCount() - 1; i >= 0; i--) {
-        element = m_currentFrame->elementAt(i);
-        if (x >= element->x() && x <= element->x() + WidgetAnimationTexture
-            ::MAX_SIZE && y >= element->y() && y <= element->y() +
-            WidgetAnimationTexture::MAX_SIZE)
-        {
-            m_hoveredElement = element;
-            break;
+    if (m_moving) {
+        m_selectedElement->setX(x - m_mouseOffsetX);
+        m_selectedElement->setY(y - m_mouseOffsetY);
+    } else { // Update current hovered
+        m_hoveredElement = nullptr;
+        for (i = m_currentFrame->elementsCount() - 1; i >= 0; i--) {
+            element = m_currentFrame->elementAt(i);
+            if (x >= element->x() && x <= element->x() + WidgetAnimationTexture
+                ::MAX_SIZE && y >= element->y() && y <= element->y() +
+                WidgetAnimationTexture::MAX_SIZE)
+            {
+                m_hoveredElement = element;
+                break;
+            }
         }
     }
 
     this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::mousePressEvent(QMouseEvent *event) {
+    if (event->buttons() & Qt::LeftButton) {
+        int x, y;
+
+        x = event->x();
+        y = event->y();
+        if (m_positionKind != AnimationPositionKind::ScreenCenter) {
+            x -= RPM::SCREEN_BASIC_WIDTH / 2;
+            y -= RPM::SCREEN_BASIC_HEIGHT / 2;
+        }
+        if (m_hoveredElement == nullptr) {
+            m_selectedElement = m_currentFrame->addElement(x, y,
+                m_widgetAnimationTexture->currentRow(), m_widgetAnimationTexture
+                ->currentColumn());
+        } else {
+            m_selectedElement = m_hoveredElement;
+            m_moving = true;
+            m_mouseOffsetX = x - m_selectedElement->x();
+            m_mouseOffsetY = y - m_selectedElement->y();
+        }
+        this->repaint();
+    }
+}
+
+void WidgetAnimation::mouseReleaseEvent(QMouseEvent *event) {
+    m_moving = false;
 }
 
 // -------------------------------------------------------
@@ -216,5 +231,14 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
         ->value();
     painter.setPen(RPM::COLOR_ALMOST_WHITE);
     font.setPixelSize(13);
-    painter.drawText(10 + offsetX, 20 + offsetY, m_textCoords);
+    painter.drawText(offsetX, 10 + offsetY, m_textCoords);
+    if (m_selectedElement != nullptr) {
+        QFontMetrics fm(font);
+        QString coords;
+
+        coords = m_selectedElement->getPositionString();
+        painter.setPen(RPM::COLOR_MENU_SELECTION_BLUE);
+        painter.drawText(m_scrollArea->width() + offsetX - fm.width(coords) -
+            m_scrollArea->verticalScrollBar()->width(), 10 + offsetY, coords);
+    }
 }

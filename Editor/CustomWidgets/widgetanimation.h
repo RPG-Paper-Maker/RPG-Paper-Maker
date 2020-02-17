@@ -48,12 +48,16 @@ protected:
     WidgetAnimationTexture *m_widgetAnimationTexture;
     SystemAnimationFrameElement *m_hoveredElement;
     SystemAnimationFrameElement *m_selectedElement;
+    bool m_moving;
+    int m_mouseOffsetX;
+    int m_mouseOffsetY;
 
     void updateBattlerPicture(int id);
 
     virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mouseLeaveEvent(QMouseEvent *);
     virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void mouseLeaveEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
 };
 

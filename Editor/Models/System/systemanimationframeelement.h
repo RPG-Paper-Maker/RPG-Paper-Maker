@@ -43,6 +43,7 @@ public:
     int texColumn() const;
     void setTexColumn(int tc);
 
+    QString getPositionString() const;
     void correctPosition(AnimationPositionKind previous, AnimationPositionKind
         after);
 
