@@ -63,6 +63,7 @@ AnimationPositionKind SystemAnimation::positionKind() const {
 }
 
 void SystemAnimation::setPositionKind(AnimationPositionKind pk) {
+    this->correctAllPositions(m_positionKind, pk);
     m_positionKind = pk;
 }
 
@@ -104,6 +105,24 @@ SystemPicture * SystemAnimation::picture() const {
     }
 
     return picture;
+}
+
+// -------------------------------------------------------
+
+void SystemAnimation::correctAllPositions(AnimationPositionKind previous,
+    AnimationPositionKind after)
+{
+    SystemAnimationFrame *frame;
+    int i, j, l, ll;
+
+    for (i = 0, l = m_framesModel->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        frame = reinterpret_cast<SystemAnimationFrame *>(m_framesModel->item(i)
+            ->data().value<quintptr>());
+        for (j = 0, ll = frame->elementsCount(); j < ll; j++) {
+            frame->elementAt(j)->correctPosition(previous, after);
+        }
+    }
 }
 
 // -------------------------------------------------------

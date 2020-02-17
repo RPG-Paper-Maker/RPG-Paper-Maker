@@ -10,6 +10,7 @@
 */
 
 #include "systemanimationframeelement.h"
+#include "rpm.h"
 
 const QString SystemAnimationFrameElement::JSON_X = "x";
 const QString SystemAnimationFrameElement::JSON_Y = "y";
@@ -73,6 +74,28 @@ int SystemAnimationFrameElement::texColumn() const {
 
 void SystemAnimationFrameElement::setTexColumn(int tc) {
     m_texColumn = tc;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void SystemAnimationFrameElement::correctPosition(AnimationPositionKind previous
+    , AnimationPositionKind after)
+{
+    if (previous == AnimationPositionKind::ScreenCenter && after !=
+        AnimationPositionKind::ScreenCenter)
+    {
+        m_x -= RPM::SCREEN_BASIC_WIDTH / 2;
+        m_y -= RPM::SCREEN_BASIC_HEIGHT / 2;
+    } else if (after == AnimationPositionKind::ScreenCenter && previous !=
+        AnimationPositionKind::ScreenCenter)
+    {
+        m_x += RPM::SCREEN_BASIC_WIDTH / 2;
+        m_y += RPM::SCREEN_BASIC_HEIGHT / 2;
+    }
 }
 
 // -------------------------------------------------------

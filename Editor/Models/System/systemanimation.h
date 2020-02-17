@@ -51,6 +51,8 @@ public:
     void setColumns(int c);
 
     SystemPicture * picture() const;
+    void correctAllPositions(AnimationPositionKind previous,
+        AnimationPositionKind after);
 
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

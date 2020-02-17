@@ -43,10 +43,8 @@ public:
     int texColumn() const;
     void setTexColumn(int tc);
 
-    int getCorrectedX(AnimationPositionKind pk) const;
-    void setCorrectedX(AnimationPositionKind pk);
-    int getCorrectedY(AnimationPositionKind pk) const;
-    void setCorrectedY(AnimationPositionKind pk);
+    void correctPosition(AnimationPositionKind previous, AnimationPositionKind
+        after);
 
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);

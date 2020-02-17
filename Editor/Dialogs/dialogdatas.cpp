@@ -616,7 +616,7 @@ void DialogDatas::on_comboboxAnimationPositionKindChanged(int index) {
     positionKind = static_cast<AnimationPositionKind>(index);
     reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
         ->getSelected()->data().value<quintptr>())->setPositionKind(positionKind);
-    ui->widgetAnimation->repaint();
+    ui->widgetAnimation->setAnimationPositionKind(positionKind);
 }
 
 // -------------------------------------------------------
