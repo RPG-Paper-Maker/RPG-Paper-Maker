@@ -29,6 +29,7 @@ HEADERS += \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
+    Dialogs/Animations/dialoganimationcopyframes.h \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.h \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
@@ -357,6 +358,7 @@ SOURCES += \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
+    Dialogs/Animations/dialoganimationcopyframes.cpp \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.cpp \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
@@ -647,6 +649,7 @@ FORMS += \
     CustomWidgets/widgetmountainselector.ui \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
+    Dialogs/Animations/dialoganimationcopyframes.ui \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.ui \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \

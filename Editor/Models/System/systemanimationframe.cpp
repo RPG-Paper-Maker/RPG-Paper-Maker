@@ -138,6 +138,7 @@ void SystemAnimationFrame::setCopy(const SuperListItem &super) {
     const SystemAnimationFrame *sys;
     int i, l;
 
+    SuperListItem::setCopy(super);
     sys = reinterpret_cast<const SystemAnimationFrame *>(&super);
     for (i = 0, l = m_elements.size(); i < l; i++) {
         delete m_elements.at(i);

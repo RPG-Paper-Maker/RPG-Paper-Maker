@@ -826,7 +826,7 @@
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_3">
+                                <widget class="QPushButton" name="pushButtonCopyFrames">
                                  <property name="text">
                                   <string>Copy frames...</string>
                                  </property>
