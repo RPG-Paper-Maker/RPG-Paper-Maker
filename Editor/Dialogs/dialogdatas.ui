@@ -833,7 +833,7 @@
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_4">
+                                <widget class="QPushButton" name="pushButtonClearFrames">
                                  <property name="text">
                                   <string>Clear frames...</string>
                                  </property>

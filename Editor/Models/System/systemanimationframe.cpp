@@ -32,9 +32,7 @@ SystemAnimationFrame::SystemAnimationFrame(int i, QString n) :
 }
 
 SystemAnimationFrame::~SystemAnimationFrame() {
-    for (int i = 0, l = m_elements.size(); i < l; i++) {
-        delete m_elements.at(i);
-    }
+    this->clear();
 }
 
 int SystemAnimationFrame::elementsCount() const {
@@ -63,6 +61,15 @@ int SystemAnimationFrame::getElementMaxIndex() const {
     }
 
     return index;
+}
+
+// -------------------------------------------------------
+
+void SystemAnimationFrame::clear() {
+    for (int i = 0, l = m_elements.size(); i < l; i++) {
+        delete m_elements.at(i);
+    }
+    m_elements.clear();
 }
 
 // -------------------------------------------------------
@@ -140,10 +147,7 @@ void SystemAnimationFrame::setCopy(const SuperListItem &super) {
 
     SuperListItem::setCopy(super);
     sys = reinterpret_cast<const SystemAnimationFrame *>(&super);
-    for (i = 0, l = m_elements.size(); i < l; i++) {
-        delete m_elements.at(i);
-    }
-    m_elements.clear();
+    this->clear();
     for (i = 0, l = sys->m_elements.size(); i < l; i++) {
         m_elements.append(reinterpret_cast<SystemAnimationFrameElement *>(sys
             ->m_elements.at(i)->createCopy()));

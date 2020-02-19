@@ -23,6 +23,7 @@
 #include "dialogtilesetspecialelements.h"
 #include "dialogpicturespreview.h"
 #include "dialoganimationcopyframes.h"
+#include "dialoganimationclearframes.h"
 
 // -------------------------------------------------------
 //
@@ -678,29 +679,21 @@ void DialogDatas::on_pushButtonChangeBattler_clicked() {
 void DialogDatas::on_pushButtonCopyFrames_clicked() {
     DialogAnimationCopyFrames dialog;
     if (dialog.exec() == QDialog::Accepted) {
-        SystemAnimation *animation;
-        SystemAnimationFrame *frameCopy, *framePaste;
-        int i, l, offset, from, to;
-
-        offset = dialog.paste();
-        animation = reinterpret_cast<SystemAnimation *>(ui
+        dialog.copyFrames(reinterpret_cast<SystemAnimation *>(ui
             ->panelSuperListAnimations->list()->getSelected()->data().value<
-            quintptr>());
-        from = dialog.from();
-        to = dialog.to();
-        for (i = from; i <= to; i++) {
-            frameCopy = reinterpret_cast<SystemAnimationFrame *>(SuperListItem
-                ::getById(animation->framesModel()->invisibleRootItem(), i,
-                false));
-            if (frameCopy != nullptr) {
-                framePaste = reinterpret_cast<SystemAnimationFrame *>(
-                    SuperListItem::getById(animation->framesModel()
-                    ->invisibleRootItem(), i - from + offset, false));
-                if (framePaste != nullptr) {
-                    framePaste->setCopy(*frameCopy);
-                }
-            }
-        }
+            quintptr>()));
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonClearFrames_clicked() {
+    DialogAnimationClearFrames dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.clearFrames(reinterpret_cast<SystemAnimation *>(ui
+            ->panelSuperListAnimations->list()->getSelected()->data().value<
+            quintptr>()));
         ui->widgetAnimation->repaint();
     }
 }

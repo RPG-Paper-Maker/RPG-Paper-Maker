@@ -11,6 +11,7 @@
 
 #include "dialoganimationcopyframes.h"
 #include "ui_dialoganimationcopyframes.h"
+#include "systemanimationframe.h"
 
 // -------------------------------------------------------
 //
@@ -35,18 +36,24 @@ DialogAnimationCopyFrames::~DialogAnimationCopyFrames() {
 //
 // -------------------------------------------------------
 
-int DialogAnimationCopyFrames::from() const {
-    return ui->spinBoxFrom->value();
-}
+void DialogAnimationCopyFrames::copyFrames(SystemAnimation *animation) {
+    SystemAnimationFrame *frameCopy, *framePaste;
+    int i, offset, from, to;
 
-// -------------------------------------------------------
-
-int DialogAnimationCopyFrames::to() const {
-    return ui->spinBoxTo->value();
-}
-
-// -------------------------------------------------------
-
-int DialogAnimationCopyFrames::paste() const {
-    return ui->spinBoxPaste->value();
+    offset = ui->spinBoxPaste->value();
+    from = ui->spinBoxFrom->value();
+    to = ui->spinBoxTo->value();
+    for (i = from; i <= to; i++) {
+        frameCopy = reinterpret_cast<SystemAnimationFrame *>(SuperListItem
+            ::getById(animation->framesModel()->invisibleRootItem(), i,
+            false));
+        if (frameCopy != nullptr) {
+            framePaste = reinterpret_cast<SystemAnimationFrame *>(
+                SuperListItem::getById(animation->framesModel()
+                ->invisibleRootItem(), i - from + offset, false));
+            if (framePaste != nullptr) {
+                framePaste->setCopy(*frameCopy);
+            }
+        }
+    }
 }

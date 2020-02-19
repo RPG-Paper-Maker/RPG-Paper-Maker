@@ -35,6 +35,7 @@ public:
     SystemAnimationFrameElement * elementAt(int i) const;
 
     int getElementMaxIndex() const;
+    void clear();
     SystemAnimationFrameElement * addElement(int x, int y, int row, int column);
     void addElement(SystemAnimationFrameElement *element);
     void deleteElement(SystemAnimationFrameElement *element);

@@ -104,6 +104,7 @@ private slots:
     void on_spinBoxAnimationColumns_valueChanged(int i);
     void on_pushButtonChangeBattler_clicked();
     void on_pushButtonCopyFrames_clicked();
+    void on_pushButtonClearFrames_clicked();
     void on_pushButtonApplyTexture_clicked();
 };
 

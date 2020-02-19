@@ -9,36 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-#ifndef DIALOGANIMATIONCOPYFRAMES_H
-#define DIALOGANIMATIONCOPYFRAMES_H
+#ifndef DIALOGANIMATIONCLEARFRAMES_H
+#define DIALOGANIMATIONCLEARFRAMES_H
 
 #include <QDialog>
 #include "systemanimation.h"
 
 // -------------------------------------------------------
 //
-//  CLASS DialogAnimationCopyFrames
+//  CLASS DialogAnimationClearFrames
 //
-//  A dialog used for copying frames in animations.
+//  A dialog used for clearing frames in animations.
 //
 // -------------------------------------------------------
 
+
 namespace Ui {
-class DialogAnimationCopyFrames;
+class DialogAnimationClearFrames;
 }
 
-class DialogAnimationCopyFrames : public QDialog
+class DialogAnimationClearFrames : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogAnimationCopyFrames(QWidget *parent = nullptr);
-    ~DialogAnimationCopyFrames();
+    explicit DialogAnimationClearFrames(QWidget *parent = nullptr);
+    ~DialogAnimationClearFrames();
 
-    void copyFrames(SystemAnimation *animation);
+    void clearFrames(SystemAnimation *animation);
 
 private:
-    Ui::DialogAnimationCopyFrames *ui;
+    Ui::DialogAnimationClearFrames *ui;
 };
 
-#endif // DIALOGANIMATIONCOPYFRAMES_H
+#endif // DIALOGANIMATIONCLEARFRAMES_H
