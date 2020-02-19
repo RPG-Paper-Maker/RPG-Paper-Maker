@@ -35,6 +35,7 @@ public:
     void setColumns(int c);
     int currentRow() const;
     int currentColumn() const;
+    const QImage & baseImage() const;
     const QImage & image() const;
 
     void updatePicture(int id);

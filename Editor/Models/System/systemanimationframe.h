@@ -38,6 +38,7 @@ public:
     SystemAnimationFrameElement * addElement(int x, int y, int row, int column);
     void addElement(SystemAnimationFrameElement *element);
     void deleteElement(SystemAnimationFrameElement *element);
+    void reorder(SystemAnimationFrameElement *element);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

@@ -403,3 +403,26 @@ bool Common::getMinDistance(float& finalDistance, float newDistance) {
 
     return false;
 }
+
+// -------------------------------------------------------
+
+QPoint Common::rotatePoint(int x, int y, int cx, int cy, double angle) {
+      double s, c, xNew, yNew;
+
+      s = qSin(angle * (M_PI / 180.0));
+      c = qCos(angle * (M_PI / 180.0));
+
+      // translate point back to origin:
+      x -= cx;
+      y -= cy;
+
+      // rotate point
+      xNew = x * c - y * s;
+      yNew = x * s + y * c;
+
+      // translate point back:
+      x = qRound(xNew + cx);
+      y = qRound(yNew + cy);
+
+      return QPoint(x, y);
+}

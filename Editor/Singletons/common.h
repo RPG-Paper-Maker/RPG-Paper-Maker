@@ -54,6 +54,7 @@ public:
     static QString keyToString(int keyInt);
     static bool isPressingEnter(QKeyEvent *event);
     static bool getMinDistance(float &finalDistance, float newDistance);
+    static QPoint rotatePoint(int x, int y, int cx, int cy, double angle);
 };
 
 #endif // COMMON_H

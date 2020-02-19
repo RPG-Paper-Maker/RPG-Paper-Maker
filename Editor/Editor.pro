@@ -40,6 +40,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
+    Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
     Dialogs/Systems/dialogsystemdetection.h \
@@ -367,6 +368,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
+    Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
     Dialogs/Systems/dialogsystemdetection.cpp \
@@ -656,6 +658,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
+    Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \
     Dialogs/Systems/dialogsystemdetection.ui \

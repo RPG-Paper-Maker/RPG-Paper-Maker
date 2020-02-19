@@ -30,9 +30,23 @@ public:
     static const QString JSON_Y;
     static const QString JSON_TEX_ROW;
     static const QString JSON_TEX_COLUMN;
+    static const QString JSON_ZOOM;
+    static const QString JSON_ANGLE;
+    static const QString JSON_FLIP_VERTICALY;
+    static const QString JSON_OPACITY;
+    static const int DEFAULT_X;
+    static const int DEFAULT_Y;
+    static const int DEFAULT_TEX_ROW;
+    static const int DEFAULT_TEX_COLUMN;
+    static const double DEFAULT_ZOOM;
+    static const double DEFAULT_ANGLE;
+    static const bool DEFAULT_FLIP_VERTICALY;
+    static const double DEFAULT_OPACITY;
 
     SystemAnimationFrameElement();
-    SystemAnimationFrameElement(int i, QString n, int x, int y, int tr, int tc);
+    SystemAnimationFrameElement(int i, QString n, int x, int y, int tr, int tc,
+        double z = DEFAULT_ZOOM, double a = DEFAULT_ANGLE, bool fv =
+        DEFAULT_FLIP_VERTICALY, double o = DEFAULT_OPACITY);
     virtual ~SystemAnimationFrameElement();
     int x() const;
     void setX(int x);
@@ -42,11 +56,20 @@ public:
     void setTexRow(int tr);
     int texColumn() const;
     void setTexColumn(int tc);
+    double zoom() const;
+    void setZoom(double z);
+    double angle() const;
+    void setAngle(double a);
+    bool flipVerticaly() const;
+    void setFlipVerticaly(bool fv);
+    double opacity() const;
+    void setOpacity(double o);
 
     QString getPositionString() const;
     void correctPosition(AnimationPositionKind previous, AnimationPositionKind
         after);
 
+    virtual bool openDialog();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
@@ -57,6 +80,10 @@ protected:
     int m_y;
     int m_texRow;
     int m_texColumn;
+    double m_zoom;
+    double m_angle;
+    bool m_flipVerticaly;
+    double m_opacity;
 };
 
 #endif // SYSTEMANIMATIONFRAMEELEMENT_H

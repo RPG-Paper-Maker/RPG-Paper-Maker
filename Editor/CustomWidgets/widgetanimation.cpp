@@ -134,7 +134,7 @@ void WidgetAnimation::keyPressEvent(QKeyEvent *event) {
 
 void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
     SystemAnimationFrameElement *element;
-    int x, y, i;
+    int x, y;
 
     this->setFocus();
 
@@ -154,13 +154,23 @@ void WidgetAnimation::mouseMoveEvent(QMouseEvent *event) {
         m_selectedElement->setX(x - m_mouseOffsetX);
         m_selectedElement->setY(y - m_mouseOffsetY);
     } else {
+        QRect rect;
+        int i, ex, ey, w, h, cx, cy;
+
         m_hoveredElement = nullptr;
         for (i = m_currentFrame->elementsCount() - 1; i >= 0; i--) {
             element = m_currentFrame->elementAt(i);
-            if (x >= element->x() - WidgetAnimationTexture::MAX_SIZE / 2 && x <=
-                element->x() + WidgetAnimationTexture::MAX_SIZE / 2 && y >=
-                element->y() - WidgetAnimationTexture::MAX_SIZE / 2 && y <=
-                element->y() + WidgetAnimationTexture::MAX_SIZE / 2)
+            cx = element->x();
+            cy = element->y();
+            w = qRound(m_widgetAnimationTexture->baseImage().width() /
+                m_widgetAnimationTexture->columns() * (element->zoom() / 100.0));
+            h = qRound(m_widgetAnimationTexture->baseImage().height() /
+                m_widgetAnimationTexture->rows() * (element->zoom() / 100.0));
+            ex = cx - (w / 2);
+            ey = cy - (h / 2);
+            rect.setCoords(ex, ey, ex + w, ey + h);
+            if (rect.contains(Common::rotatePoint(x, y, cx, cy, -element
+                ->angle())))
             {
                 m_hoveredElement = element;
                 break;
@@ -220,7 +230,10 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     SystemAnimationFrameElement *element;
     QFont font;
-    int i, l, offsetX, offsetY, frames, x, y;
+    int i, l, offsetX, offsetY, frames, x, y, w, h, hw, hh;
+
+    // Anti aliasing
+    painter.setRenderHint(QPainter::Antialiasing);
 
     // Background
     painter.fillRect(0, 0, RPM::SCREEN_BASIC_WIDTH, RPM::SCREEN_BASIC_HEIGHT,
@@ -252,40 +265,63 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
 
     // Elements
     if (m_currentFrame != nullptr) {
+        QRect rectTarget, rectSource;
+        int sx, sy, sw, sh;
+        double angle, flip;
+
         font.setPixelSize(10);
         painter.setFont(font);
         for (i = 0, l = m_currentFrame->elementsCount(); i < l; i++) {
             element = m_currentFrame->elementAt(i);
-            x = element->x() - WidgetAnimationTexture::MAX_SIZE / 2;
-            y = element->y() - WidgetAnimationTexture::MAX_SIZE / 2;
+            sx = element->texColumn() * (m_widgetAnimationTexture->image()
+                .width() / m_widgetAnimationTexture->rows());
+            sy = element->texRow() * (m_widgetAnimationTexture->image().height()
+                / m_widgetAnimationTexture->columns());
+            sw = m_widgetAnimationTexture->baseImage().width() /
+                m_widgetAnimationTexture->columns();
+            sh = m_widgetAnimationTexture->baseImage().height() /
+                m_widgetAnimationTexture->rows();
+            w = qRound(m_widgetAnimationTexture->baseImage().width() /
+                m_widgetAnimationTexture->columns() * (element->zoom() / 100.0));
+            h = qRound(m_widgetAnimationTexture->baseImage().height() /
+                m_widgetAnimationTexture->rows() * (element->zoom() / 100.0));
+            hw = w / 2;
+            hh = h / 2;
+            x = element->x() - hw;
+            y = element->y() - hh;
             if (m_positionKind != AnimationPositionKind::ScreenCenter) {
                 x += RPM::SCREEN_BASIC_WIDTH / 2;
                 y += RPM::SCREEN_BASIC_HEIGHT / 2;
             }
-            painter.drawImage(x, y, m_widgetAnimationTexture->image(),
-                element->texColumn() * (m_widgetAnimationTexture->image()
-                .width() / m_widgetAnimationTexture->rows()), element->texRow()
-                * (m_widgetAnimationTexture->image().height() /
-                m_widgetAnimationTexture->columns()), WidgetAnimationTexture
-                ::MAX_SIZE, WidgetAnimationTexture::MAX_SIZE);
+            angle = element->angle();
+            flip = element->flipVerticaly() ? 180.0 : 0.0;
+            painter.translate(x + hw, y + hh);
+            painter.rotate(angle);
+            painter.setOpacity(element->opacity() / 100.0);
+            rectTarget.setCoords(-hw, -hh, -hw + w, -hw + h);
+            rectSource.setCoords(sx, sy, sx + sw, sy + sh);
+            painter.rotate(flip);
+            painter.drawImage(rectTarget, m_widgetAnimationTexture->image(),
+                rectSource);
+            painter.rotate(-flip);
+            painter.setOpacity(1.0);
             painter.setPen(element == m_selectedElement ? RPM
                 ::COLOR_MENU_SELECTION_BLUE : RPM::COLOR_PURPLE_SELECTION);
-            painter.drawRect(x, y, WidgetAnimationTexture::MAX_SIZE,
-                WidgetAnimationTexture::MAX_SIZE);
-            painter.drawRect(x + 1, y + 1, WidgetAnimationTexture::MAX_SIZE - 2,
-                WidgetAnimationTexture::MAX_SIZE - 2);
-            painter.fillRect(x, y, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE, RPM
-                ::COLOR_PURPLE_SELCTION_BACKGROUND);
-            painter.drawRect(x, y, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
-            painter.drawRect(x, y, ELEMENT_INDEX_SIZE + 1, ELEMENT_INDEX_SIZE +
-                1);
-            painter.drawText(x + 4, y + ELEMENT_INDEX_SIZE - 4, QString::number(
-                element->id()));
+            painter.drawRect(-hw, -hh, w, h);
+            painter.drawRect(-hw + 1, -hh + 1, w - 2, h - 2);
+            painter.fillRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE,
+                RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
+            painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
+            painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE + 1,
+                ELEMENT_INDEX_SIZE + 1);
+            painter.drawText(-hw + 4, -hh + ELEMENT_INDEX_SIZE - 4, QString
+                ::number(element->id()));
             if (m_hoveredElement == element) {
-                painter.fillRect(x, y, WidgetAnimationTexture::MAX_SIZE,
-                    WidgetAnimationTexture::MAX_SIZE, RPM
+                painter.fillRect(-hw, -hh, w, h, RPM
                     ::COLOR_GRAY_HOVER_BACKGROUND);
             }
+            painter.rotate(-angle);
+            painter.translate(-x - w / 2, -y - h / 2);
         }
     }
 
@@ -322,7 +358,10 @@ void WidgetAnimation::showContextMenu(const QPoint &p) {
 // -------------------------------------------------------
 
 void WidgetAnimation::contextEdit() {
-
+    if (m_selectedElement->openDialog()) {
+        m_currentFrame->reorder(m_selectedElement);
+        this->repaint();
+    }
 }
 
 // -------------------------------------------------------

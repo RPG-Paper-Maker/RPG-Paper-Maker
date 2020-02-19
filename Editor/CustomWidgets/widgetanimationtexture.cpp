@@ -63,6 +63,10 @@ int WidgetAnimationTexture::currentColumn() const {
     return m_currentColumn;
 }
 
+const QImage & WidgetAnimationTexture::baseImage() const {
+    return m_baseImage;
+}
+
 const QImage & WidgetAnimationTexture::image() const {
     return m_image;
 }

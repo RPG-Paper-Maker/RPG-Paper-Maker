@@ -99,6 +99,28 @@ void SystemAnimationFrame::deleteElement(SystemAnimationFrameElement *element) {
 }
 
 // -------------------------------------------------------
+
+void SystemAnimationFrame::reorder(SystemAnimationFrameElement *element) {
+    int i, l;
+
+    // Remove edited element
+    for (i = 0, l = m_elements.size(); i < l; i++) {
+        if (element == m_elements.at(i)) {
+            m_elements.removeAt(i);
+            break;
+        }
+    }
+    // Re-place it in the right order according to new index
+    for (i = 0, l = m_elements.size(); i < l; i++) {
+        if (m_elements.at(i)->id() >= element->id()) {
+            m_elements.insert(i, element);
+            return;
+        }
+    }
+    m_elements.append(element);
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
