@@ -812,7 +812,7 @@
                              <item row="0" column="0">
                               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0">
                                <item>
-                                <widget class="QPushButton" name="pushButton_2">
+                                <widget class="QPushButton" name="pushButtonChangeBattler">
                                  <property name="text">
                                   <string>Change battler...</string>
                                  </property>
@@ -847,7 +847,7 @@
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_9">
+                                <widget class="QPushButton" name="pushButtonApplyTexture">
                                  <property name="text">
                                   <string>Apply texture</string>
                                  </property>

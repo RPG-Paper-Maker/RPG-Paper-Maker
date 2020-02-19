@@ -11,6 +11,7 @@
 
 #include <QTreeWidget>
 #include <QScrollBar>
+#include <QMessageBox>
 #include "dialogdatas.h"
 #include "ui_dialogdatas.h"
 #include "datastabkind.h"
@@ -20,6 +21,7 @@
 #include "systemclassskill.h"
 #include "systemmonstertroop.h"
 #include "dialogtilesetspecialelements.h"
+#include "dialogpicturespreview.h"
 
 // -------------------------------------------------------
 //
@@ -593,6 +595,30 @@ void DialogDatas::on_pageStatusSelected(QModelIndex index, QModelIndex){
 
 // -------------------------------------------------------
 
+void DialogDatas::on_pushButtonAutotiles_clicked() {
+    openSpecialElementsDialog(PictureKind::Autotiles);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonSpriteWalls_clicked() {
+    openSpecialElementsDialog(PictureKind::Walls);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonMountains_clicked() {
+    openSpecialElementsDialog(PictureKind::Mountains);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButton3DObjects_clicked() {
+    openSpecialElementsDialog(PictureKind::Object3D);
+}
+
+// -------------------------------------------------------
+
 void DialogDatas::on_tilesetPictureChanged(SystemPicture* picture) {
     reinterpret_cast<SystemTileset *>(ui->panelSuperListTilesets->list()
         ->getSelected()->data().value<quintptr>())->setPictureID(picture->id());
@@ -625,6 +651,7 @@ void DialogDatas::on_spinBoxAnimationRows_valueChanged(int i) {
     reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
         ->getSelected()->data().value<quintptr>())->setRows(i);
     ui->widgetAnimationTexture->setRows(i);
+    ui->widgetAnimation->repaint();
 }
 
 // -------------------------------------------------------
@@ -633,28 +660,29 @@ void DialogDatas::on_spinBoxAnimationColumns_valueChanged(int i) {
     reinterpret_cast<SystemAnimation *>(ui->panelSuperListAnimations->list()
         ->getSelected()->data().value<quintptr>())->setColumns(i);
     ui->widgetAnimationTexture->setColumns(i);
+    ui->widgetAnimation->repaint();
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::on_pushButtonAutotiles_clicked() {
-    openSpecialElementsDialog(PictureKind::Autotiles);
+void DialogDatas::on_pushButtonChangeBattler_clicked() {
+    DialogPicturesPreview dialog(ui->widgetAnimation->pictureBattler(),
+        PictureKind::Battlers);
+
+    dialog.exec();
+    ui->widgetAnimation->updateBattlerPicture(dialog.picture()->id());
 }
 
 // -------------------------------------------------------
 
-void DialogDatas::on_pushButtonSpriteWalls_clicked() {
-    openSpecialElementsDialog(PictureKind::Walls);
-}
-
-// -------------------------------------------------------
-
-void DialogDatas::on_pushButtonMountains_clicked() {
-    openSpecialElementsDialog(PictureKind::Mountains);
-}
-
-// -------------------------------------------------------
-
-void DialogDatas::on_pushButton3DObjects_clicked() {
-    openSpecialElementsDialog(PictureKind::Object3D);
+void DialogDatas::on_pushButtonApplyTexture_clicked() {
+    if (ui->widgetAnimation->selectedElement() == nullptr) {
+        QMessageBox::information(this, "Warning", "Select an element to apply.");
+    } else {
+        ui->widgetAnimation->selectedElement()->setTexRow(ui
+            ->widgetAnimationTexture->currentRow());
+        ui->widgetAnimation->selectedElement()->setTexColumn(ui
+            ->widgetAnimationTexture->currentColumn());
+        this->repaint();
+    }
 }

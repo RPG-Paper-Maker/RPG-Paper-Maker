@@ -130,8 +130,11 @@ void WidgetAnimationTexture::paintEvent(QPaintEvent *) {
     pen.setColor(RPM::COLOR_ALMOST_BLACK);
     painter.setPen(pen);
     painter.drawRect(x, 0, MAX_SIZE, MAX_SIZE);
-    painter.drawRect(x + 2, 2, MAX_SIZE - 4, MAX_SIZE - 4);
+    painter.drawRect(x + 1, 1, MAX_SIZE - 2, MAX_SIZE - 2);
+    painter.drawRect(x + 4, 4, MAX_SIZE - 8, MAX_SIZE - 8);
+    painter.drawRect(x + 5, 5, MAX_SIZE - 10, MAX_SIZE - 10);
     pen.setColor(RPM::COLOR_ALMOST_WHITE);
     painter.setPen(pen);
-    painter.drawRect(x + 1, 1, MAX_SIZE - 2, MAX_SIZE - 2);
+    painter.drawRect(x + 2, 2, MAX_SIZE - 4, MAX_SIZE - 4);
+    painter.drawRect(x + 3, 3, MAX_SIZE - 6, MAX_SIZE - 6);
 }

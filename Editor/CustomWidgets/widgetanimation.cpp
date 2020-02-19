@@ -62,11 +62,17 @@ void WidgetAnimation::setAnimationPositionKind(AnimationPositionKind pk) {
 
 void WidgetAnimation::setCurrentFrame(SystemAnimationFrame *cf) {
     m_currentFrame = cf;
+    m_selectedElement = nullptr;
+    m_hoveredElement = nullptr;
     this->repaint();
 }
 
 void WidgetAnimation::setWidgetAnimationTexture(WidgetAnimationTexture *wat) {
     m_widgetAnimationTexture = wat;
+}
+
+SystemAnimationFrameElement * WidgetAnimation::selectedElement() const {
+    return m_selectedElement;
 }
 
 // -------------------------------------------------------
@@ -82,6 +88,14 @@ void WidgetAnimation::updateBattlerPicture(int id) {
         ::Battlers)->invisibleRootItem(), m_idBattler))->getPath(PictureKind
         ::Battlers));
     this->repaint();
+}
+
+// -------------------------------------------------------
+
+SystemPicture * WidgetAnimation::pictureBattler() const {
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(PictureKind::Battlers)
+        ->invisibleRootItem(), m_idBattler, true));
 }
 
 // -------------------------------------------------------
@@ -128,6 +142,12 @@ void WidgetAnimation::keyPressEvent(QKeyEvent *event) {
         contextPaste();
         return;
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::mouseDoubleClickEvent(QMouseEvent *) {
+    this->contextEdit();
 }
 
 // -------------------------------------------------------
@@ -294,16 +314,20 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
                 y += RPM::SCREEN_BASIC_HEIGHT / 2;
             }
             angle = element->angle();
-            flip = element->flipVerticaly() ? 180.0 : 0.0;
+            flip = element->flipVerticaly() ? -1 : 1;
+            painter.save();
             painter.translate(x + hw, y + hh);
+            painter.scale(flip, 1);
             painter.rotate(angle);
             painter.setOpacity(element->opacity() / 100.0);
             rectTarget.setCoords(-hw, -hh, -hw + w, -hw + h);
             rectSource.setCoords(sx, sy, sx + sw, sy + sh);
-            painter.rotate(flip);
             painter.drawImage(rectTarget, m_widgetAnimationTexture->image(),
                 rectSource);
-            painter.rotate(-flip);
+            painter.restore();
+            painter.save();
+            painter.translate(x + hw, y + hh);
+            painter.rotate(angle);
             painter.setOpacity(1.0);
             painter.setPen(element == m_selectedElement ? RPM
                 ::COLOR_MENU_SELECTION_BLUE : RPM::COLOR_PURPLE_SELECTION);
@@ -320,8 +344,7 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
                 painter.fillRect(-hw, -hh, w, h, RPM
                     ::COLOR_GRAY_HOVER_BACKGROUND);
             }
-            painter.rotate(-angle);
-            painter.translate(-x - w / 2, -y - h / 2);
+            painter.restore();
         }
     }
 
@@ -396,5 +419,7 @@ void WidgetAnimation::contextPaste() {
 
 void WidgetAnimation::contextDelete() {
     m_currentFrame->deleteElement(m_selectedElement);
+    m_selectedElement = nullptr;
+    m_hoveredElement = nullptr;
     this->repaint();
 }

@@ -102,6 +102,8 @@ private slots:
     void on_comboboxAnimationPositionKindChanged(int index);
     void on_spinBoxAnimationRows_valueChanged(int i);
     void on_spinBoxAnimationColumns_valueChanged(int i);
+    void on_pushButtonChangeBattler_clicked();
+    void on_pushButtonApplyTexture_clicked();
 };
 
 #endif // DIALOGDATAS_H

@@ -18,6 +18,7 @@
 #include "animationpositionkind.h"
 #include "widgetanimationtexture.h"
 #include "contextmenulist.h"
+#include "systempicture.h"
 
 // -------------------------------------------------------
 //
@@ -38,6 +39,10 @@ public:
     void setAnimationPositionKind(AnimationPositionKind pk);
     void setCurrentFrame(SystemAnimationFrame *cf);
     void setWidgetAnimationTexture(WidgetAnimationTexture *wat);
+    SystemAnimationFrameElement * selectedElement() const;
+
+    SystemPicture * pictureBattler() const;
+    void updateBattlerPicture(int id);
 
 protected:
     ContextMenuList *m_contextMenu;
@@ -57,10 +62,10 @@ protected:
     int m_lastMouseX;
     int m_lastMouseY;
 
-    void updateBattlerPicture(int id);
     void updateContextMenuCan();
 
     virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *);
