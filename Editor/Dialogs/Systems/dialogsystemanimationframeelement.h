@@ -15,6 +15,14 @@
 #include <QDialog>
 #include "systemanimationframeelement.h"
 
+// -------------------------------------------------------
+//
+//  CLASS DialogSystemAnimationFrameElement
+//
+//  A dialog used for editing an animation frame element system.
+//
+// -------------------------------------------------------
+
 namespace Ui {
 class DialogSystemAnimationFrameElement;
 }

@@ -159,8 +159,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>837</width>
-                <height>544</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
@@ -235,8 +235,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>837</width>
-                <height>544</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
@@ -998,6 +998,11 @@
                      <attribute name="title">
                       <string>Sound effects / flashs</string>
                      </attribute>
+                     <layout class="QGridLayout" name="gridLayout_30">
+                      <item row="0" column="0">
+                       <widget class="WidgetSuperTree" name="treeViewEffects"/>
+                      </item>
+                     </layout>
                     </widget>
                    </widget>
                   </item>
@@ -1159,7 +1164,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>245</width>
+                  <width>154</width>
                   <height>686</height>
                  </rect>
                 </property>

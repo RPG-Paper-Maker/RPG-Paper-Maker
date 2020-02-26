@@ -196,6 +196,7 @@ SuperListItem* SystemPlaySong::createCopy() const {
 void SystemPlaySong::setCopy(const SystemPlaySong& super) {
     SuperListItem::setCopy(super);
 
+    p_id = super.p_id;
     m_volume->setCopy(*super.m_volume);
     m_isStart = super.m_isStart;
     m_start->setCopy(*super.m_start);

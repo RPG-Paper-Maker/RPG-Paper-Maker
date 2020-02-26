@@ -44,6 +44,7 @@ HEADERS += \
     Dialogs/Commands/dialogcommandscript.h \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.h \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.h \
+    Dialogs/Systems/dialogsystemanimationframeeffect.h \
     Dialogs/Systems/dialogsystemanimationframeelement.h \
     Dialogs/Systems/dialogsystembattlemap.h \
     Dialogs/Systems/dialogsystemcameraproperties.h \
@@ -64,6 +65,7 @@ HEADERS += \
     Controls/controlnewproject.h \
     CustomWidgets/widgetmapeditor.h \
     CustomWidgets/panelproject.h \
+    Enums/animationeffectconditionkind.h \
     Enums/animationpositionkind.h \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
@@ -80,6 +82,7 @@ HEADERS += \
     MapEditor/textureseveral.h \
     Models/GameDatas/videosdatas.h \
     Models/System/systemanimationframe.h \
+    Models/System/systemanimationframeeffect.h \
     Models/System/systemanimationframeelement.h \
     Models/System/systemcameraproperties.h \
     Models/System/systemdetection.h \
@@ -376,6 +379,7 @@ SOURCES += \
     Dialogs/Commands/dialogcommandscript.cpp \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.cpp \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.cpp \
+    Dialogs/Systems/dialogsystemanimationframeeffect.cpp \
     Dialogs/Systems/dialogsystemanimationframeelement.cpp \
     Dialogs/Systems/dialogsystembattlemap.cpp \
     Dialogs/Systems/dialogsystemcameraproperties.cpp \
@@ -403,6 +407,7 @@ SOURCES += \
     MapEditor/textureseveral.cpp \
     Models/GameDatas/videosdatas.cpp \
     Models/System/systemanimationframe.cpp \
+    Models/System/systemanimationframeeffect.cpp \
     Models/System/systemanimationframeelement.cpp \
     Models/System/systemcameraproperties.cpp \
     Models/System/systemdetection.cpp \
@@ -670,6 +675,7 @@ FORMS += \
     Dialogs/Commands/dialogcommandscript.ui \
     Dialogs/Commands/dialogcommandsetdialogboxoptions.ui \
     Dialogs/Commands/dialogcommandsetmoveturnapicture.ui \
+    Dialogs/Systems/dialogsystemanimationframeeffect.ui \
     Dialogs/Systems/dialogsystemanimationframeelement.ui \
     Dialogs/Systems/dialogsystembattlemap.ui \
     Dialogs/Systems/dialogsystemcameraproperties.ui \

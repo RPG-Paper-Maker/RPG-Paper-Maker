@@ -382,12 +382,14 @@ void SuperListItem::copy(QStandardItemModel *model,
                            QStandardItemModel *modelToCopy)
 {
     QList<QStandardItem*> row;
-    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount()-1; i++){
+    for (int i = 0; i < modelToCopy->invisibleRootItem()->rowCount(); i++){
         SuperListItem* super = reinterpret_cast<SuperListItem *>(modelToCopy
             ->item(i)->data().value<quintptr>());
-        SuperListItem* newSuper = super->createCopy();
-        row = newSuper->getModelRow();
-        model->appendRow(row);
+        if (super != nullptr) {
+            SuperListItem* newSuper = super->createCopy();
+            row = newSuper->getModelRow();
+            model->appendRow(row);
+        }
     }
     model->appendRow(SuperListItem::getEmptyItem());
 }

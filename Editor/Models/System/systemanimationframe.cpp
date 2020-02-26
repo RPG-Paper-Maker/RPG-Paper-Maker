@@ -10,8 +10,10 @@
 */
 
 #include "systemanimationframe.h"
+#include "systemanimationframeeffect.h"
 
 const QString SystemAnimationFrame::JSON_ELEMENTS = "e";
+const QString SystemAnimationFrame::JSON_EFFECTS = "ef";
 
 // -------------------------------------------------------
 //
@@ -26,13 +28,15 @@ SystemAnimationFrame::SystemAnimationFrame() :
 }
 
 SystemAnimationFrame::SystemAnimationFrame(int i, QString n) :
-    SuperListItem(i, n)
+    SuperListItem(i, n),
+    m_modelEffects(new QStandardItemModel)
 {
 
 }
 
 SystemAnimationFrame::~SystemAnimationFrame() {
-    this->clear();
+    this->clearElements();
+    SuperListItem::deleteModel(m_modelEffects);
 }
 
 int SystemAnimationFrame::elementsCount() const {
@@ -41,6 +45,10 @@ int SystemAnimationFrame::elementsCount() const {
 
 SystemAnimationFrameElement * SystemAnimationFrame::elementAt(int i) const {
     return m_elements.at(i);
+}
+
+QStandardItemModel * SystemAnimationFrame::modelEffects() const {
+    return m_modelEffects;
 }
 
 // -------------------------------------------------------
@@ -66,11 +74,25 @@ int SystemAnimationFrame::getElementMaxIndex() const {
 // -------------------------------------------------------
 
 void SystemAnimationFrame::clear() {
+    this->clearElements();
+    this->setName("");
+    SuperListItem::deleteModel(m_modelEffects, false);
+}
+
+// -------------------------------------------------------
+
+void SystemAnimationFrame::clearElements() {
     for (int i = 0, l = m_elements.size(); i < l; i++) {
         delete m_elements.at(i);
     }
     m_elements.clear();
-    this->setName("");
+}
+
+// -------------------------------------------------------
+
+void SystemAnimationFrame::initializeHeader() {
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Type / ID",
+        "Condition"}));
 }
 
 // -------------------------------------------------------
@@ -169,11 +191,14 @@ void SystemAnimationFrame::setCopy(const SuperListItem &super) {
 
     SuperListItem::setCopy(super);
     sys = reinterpret_cast<const SystemAnimationFrame *>(&super);
-    this->clear();
+    this->clearElements();
     for (i = 0, l = sys->m_elements.size(); i < l; i++) {
         m_elements.append(reinterpret_cast<SystemAnimationFrameElement *>(sys
             ->m_elements.at(i)->createCopy()));
     }
+    SuperListItem::deleteModel(m_modelEffects, false);
+    SuperListItem::copy(m_modelEffects, sys->m_modelEffects);
+    this->initializeHeader();
 }
 
 // -------------------------------------------------------
@@ -184,12 +209,19 @@ void SystemAnimationFrame::read(const QJsonObject &json) {
     SystemAnimationFrameElement *element;
     int i, l;
 
+    // Clear
+    SuperListItem::deleteModel(m_modelEffects, false);
+
     tab = json[JSON_ELEMENTS].toArray();
     for (i = 0, l = tab.size(); i < l; i++) {
         element = new SystemAnimationFrameElement;
         element->read(tab.at(i).toObject());
         m_elements.append(element);
     }
+
+    this->initializeHeader();
+    SuperListItem::readTree(m_modelEffects, new SystemAnimationFrameEffect, json
+        , JSON_EFFECTS);
 }
 
 // -------------------------------------------------------
@@ -208,4 +240,6 @@ void SystemAnimationFrame::write(QJsonObject &json) const {
     if (!tab.isEmpty()) {
         json[JSON_ELEMENTS] = tab;
     }
+
+    SuperListItem::writeTree(m_modelEffects, json, JSON_EFFECTS);
 }

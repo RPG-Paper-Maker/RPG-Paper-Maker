@@ -165,6 +165,7 @@ public:
     static const QStringList ENUM_TO_STRING_CONDITION_HEROES;
     static const QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
     static const QStringList ENUM_TO_STRING_ANIMATION_POSITION_KIND;
+    static const QStringList ENUM_TO_STRING_ANIMATION_CONDITION_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

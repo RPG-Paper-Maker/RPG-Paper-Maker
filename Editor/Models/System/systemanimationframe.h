@@ -27,15 +27,19 @@ class SystemAnimationFrame : public SuperListItem
 {
 public:
     static const QString JSON_ELEMENTS;
+    static const QString JSON_EFFECTS;
 
     SystemAnimationFrame();
     SystemAnimationFrame(int i, QString n);
     virtual ~SystemAnimationFrame();
     int elementsCount() const;
     SystemAnimationFrameElement * elementAt(int i) const;
+    QStandardItemModel * modelEffects() const;
 
     int getElementMaxIndex() const;
     void clear();
+    void clearElements();
+    void initializeHeader();
     SystemAnimationFrameElement * addElement(int x, int y, int row, int column);
     void addElement(SystemAnimationFrameElement *element);
     void deleteElement(SystemAnimationFrameElement *element);
@@ -49,6 +53,7 @@ public:
 
 protected:
     QList<SystemAnimationFrameElement *> m_elements;
+    QStandardItemModel *m_modelEffects;
 };
 
 Q_DECLARE_METATYPE(SystemAnimationFrame)

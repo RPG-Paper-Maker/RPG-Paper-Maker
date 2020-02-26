@@ -254,6 +254,10 @@ const QStringList RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = {
     "Top", "Middle", "Bottom", "Screen center"
 };
 
+const QStringList RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND = {
+    "None", "Hit", "Miss", "Critical"
+};
+
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
 QSet<int> RPM::mapsUndoRedo;

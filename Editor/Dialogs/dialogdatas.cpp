@@ -20,6 +20,7 @@
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
 #include "systemmonstertroop.h"
+#include "systemanimationframeeffect.h"
 #include "dialogtilesetspecialelements.h"
 #include "dialogpicturespreview.h"
 #include "dialoganimationcopyframes.h"
@@ -275,6 +276,8 @@ void DialogDatas::updateClass(SystemClass* sysClass) {
 
 void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     ui->widgetAnimation->setWidgetAnimationTexture(ui->widgetAnimationTexture);
+    ui->treeViewEffects->initializeNewItemInstance(new
+        SystemAnimationFrameEffect);
     ui->widgetPictureAnimation->setKind(PictureKind::Animations);
     ui->comboBoxAnimationPosition->addItems(RPM
         ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
@@ -320,6 +323,9 @@ void DialogDatas::updateAnimation(SystemAnimation *animation) {
 
 void DialogDatas::updateAnimationFrame(SystemAnimationFrame *animationFrame) {
     ui->widgetAnimation->setCurrentFrame(animationFrame);
+    ui->treeViewEffects->initializeModel(animationFrame->modelEffects());
+    ui->treeViewEffects->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewEffects->header()->setSectionResizeMode(1, QHeaderView::Interactive);
 }
 
 // -------------------------------------------------------
@@ -574,7 +580,8 @@ void DialogDatas::on_pageAnimationsSelected(QModelIndex index, QModelIndex){
 
 // -------------------------------------------------------
 
-void DialogDatas::on_pageAnimationFramesSelected(QModelIndex index, QModelIndex) {
+void DialogDatas::on_pageAnimationFramesSelected(QModelIndex index, QModelIndex)
+{
     QStandardItem *selected;
 
     selected = ui->panelSuperListAnimationFrames->list()->getModel()

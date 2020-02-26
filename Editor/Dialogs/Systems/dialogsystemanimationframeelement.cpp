@@ -29,8 +29,7 @@ DialogSystemAnimationFrameElement::DialogSystemAnimationFrameElement(
     this->initialize();
 }
 
-DialogSystemAnimationFrameElement::~DialogSystemAnimationFrameElement()
-{
+DialogSystemAnimationFrameElement::~DialogSystemAnimationFrameElement() {
     delete ui;
 }
 
