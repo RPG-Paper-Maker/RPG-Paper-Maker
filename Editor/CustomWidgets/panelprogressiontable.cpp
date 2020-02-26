@@ -33,6 +33,8 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
         SLOT(on_spinBoxInitValueChanged(int)));
     connect(ui->panelPrimitiveValueFinal, SIGNAL(numberUpdated(int)), this,
         SLOT(on_spinBoxFinalValueChanged(int)));
+    connect(ui->widgetSliderProgression, SIGNAL(equationChanged(int)), this, SLOT
+        (on_sliderProgressionValueChanged(int)));
 
     Q_FOREACH(QSlider * sl, findChildren<QSlider *>()) {
         sl->installEventFilter(this);
@@ -129,7 +131,7 @@ void PanelProgressionTable::on_spinBoxFinalValueChanged(int i) {
 
 // -------------------------------------------------------
 
-void PanelProgressionTable::on_horizontalSlider_valueChanged(int i) {
+void PanelProgressionTable::on_sliderProgressionValueChanged(int i) {
     m_progression->setEquation(i);
     updateProgress();
 }
@@ -143,7 +145,7 @@ void PanelProgressionTable::on_pushButtonReset_clicked() {
     ui->panelPrimitiveValueInitial->updateKind();
     ui->panelPrimitiveValueFinal->updateValue(true);
     ui->panelPrimitiveValueFinal->updateKind();
-    ui->horizontalSlider->setValue(m_progression->equation());
+    ui->widgetSliderProgression->setEquation(m_progression->equation());
     m_updating = false;
     updateProgress();
 }

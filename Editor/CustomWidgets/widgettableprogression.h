@@ -38,15 +38,6 @@ public:
         QHash<int, int> *subTable = nullptr);
     void updateWithEasing(SystemProgressionTable* progression, WidgetChart
         *chartView, int finalLevel);
-    int easingLinear(double x, int start, int change, int duration);
-    int easingQuadraticIn(double x, int start, int change, int duration);
-    int easingQuadraticOut(double x, int start, int change, int duration);
-    int easingCubicIn(double x, int start, int change, int duration);
-    int easingCubicOut(double x, int start, int change, int duration);
-    int easingQuarticIn(double x, int start, int change, int duration);
-    int easingQuarticOut(double x, int start, int change, int duration);
-    int easingQuinticIn(double x, int start, int change, int duration);
-    int easingQuinticOut(double x, int start, int change, int duration);
     void updateTotal();
 
 protected:

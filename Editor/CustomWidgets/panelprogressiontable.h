@@ -60,7 +60,7 @@ public slots:
     void on_tabWidget_currentChanged(int index);
     void on_spinBoxInitValueChanged(int);
     void on_spinBoxFinalValueChanged(int i);
-    void on_horizontalSlider_valueChanged(int i);
+    void on_sliderProgressionValueChanged(int i);
     void on_pushButtonReset_clicked();
 };
 

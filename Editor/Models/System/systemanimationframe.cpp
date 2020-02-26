@@ -70,6 +70,7 @@ void SystemAnimationFrame::clear() {
         delete m_elements.at(i);
     }
     m_elements.clear();
+    this->setName("");
 }
 
 // -------------------------------------------------------
@@ -125,6 +126,27 @@ void SystemAnimationFrame::reorder(SystemAnimationFrameElement *element) {
         }
     }
     m_elements.append(element);
+}
+
+// -------------------------------------------------------
+
+QList<SystemAnimationFrameElement *> SystemAnimationFrame::getAllElementsWithID(
+    int id)
+{
+    QList<SystemAnimationFrameElement *> elements;
+    SystemAnimationFrameElement *element;
+    int i, l;
+
+    for (i = 0, l = m_elements.size(); i < l; i++) {
+        element = m_elements.at(i);
+        if (element->id() > id) {
+            return elements;
+        } else if (element->id() == id) {
+            elements.append(element);
+        }
+    }
+
+    return elements;
 }
 
 // -------------------------------------------------------

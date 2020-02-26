@@ -38,15 +38,19 @@ DialogAnimationClearFrames::~DialogAnimationClearFrames() {
 
 void DialogAnimationClearFrames::clearFrames(SystemAnimation *animation) {
     SystemAnimationFrame *frame;
+    QStandardItem *item;
     int i, from, to;
 
     from = ui->spinBoxFrom->value();
     to = ui->spinBoxTo->value();
     for (i = from; i <= to; i++) {
-        frame = reinterpret_cast<SystemAnimationFrame *>(SuperListItem::getById(
-            animation->framesModel()->invisibleRootItem(), i, false));
-        if (frame != nullptr) {
+        item = SuperListItem::getItemByID(animation->framesModel()
+            ->invisibleRootItem(), i , false);
+        if (item != nullptr) {
+            frame = reinterpret_cast<SystemAnimationFrame *>(item->data().value<
+                quintptr>());
             frame->clear();
+            item->setText(frame->toString());
         }
     }
 }

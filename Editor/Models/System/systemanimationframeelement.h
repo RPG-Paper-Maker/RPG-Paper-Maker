@@ -44,8 +44,9 @@ public:
     static const double DEFAULT_OPACITY;
 
     SystemAnimationFrameElement();
-    SystemAnimationFrameElement(int i, QString n, int x, int y, int tr, int tc,
-        double z = DEFAULT_ZOOM, double a = DEFAULT_ANGLE, bool fv =
+    SystemAnimationFrameElement(int i, QString n, int x = DEFAULT_X, int y =
+        DEFAULT_Y, int tr = DEFAULT_TEX_ROW, int tc = DEFAULT_TEX_COLUMN, double
+        z = DEFAULT_ZOOM, double a = DEFAULT_ANGLE, bool fv =
         DEFAULT_FLIP_VERTICALY, double o = DEFAULT_OPACITY);
     virtual ~SystemAnimationFrameElement();
     int x() const;

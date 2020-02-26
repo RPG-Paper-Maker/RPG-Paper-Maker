@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>258</width>
-    <height>317</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,11 +27,18 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>Final value:</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -48,8 +55,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>218</width>
-              <height>88</height>
+              <width>502</width>
+              <height>170</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -95,19 +102,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" rowspan="4">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>98</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="2" column="0">
       <widget class="PanelPrimitiveValue" name="panelPrimitiveValueInitial" native="true">
        <property name="minimumSize">
@@ -124,12 +118,18 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>Final value:</string>
+     <item row="1" column="1" rowspan="4">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>98</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item row="4" column="0">
       <widget class="PanelPrimitiveValue" name="panelPrimitiveValueFinal" native="true">
@@ -147,60 +147,20 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Slow</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Linear</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Fast</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="6" column="0" colspan="2">
-      <widget class="QSlider" name="horizontalSlider">
-       <property name="minimum">
-        <number>-4</number>
-       </property>
-       <property name="maximum">
-        <number>4</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="tickPosition">
-        <enum>QSlider::TicksAbove</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonReset">
        <property name="text">
         <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="WidgetSliderProgression" name="widgetSliderProgression" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -224,6 +184,12 @@
    <class>WidgetChart</class>
    <extends>QFrame</extends>
    <header>widgetchart.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSliderProgression</class>
+   <extends>QWidget</extends>
+   <header>widgetsliderprogression.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

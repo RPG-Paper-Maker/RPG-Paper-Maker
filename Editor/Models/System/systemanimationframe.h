@@ -40,6 +40,7 @@ public:
     void addElement(SystemAnimationFrameElement *element);
     void deleteElement(SystemAnimationFrameElement *element);
     void reorder(SystemAnimationFrameElement *element);
+    QList<SystemAnimationFrameElement *> getAllElementsWithID(int id);
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

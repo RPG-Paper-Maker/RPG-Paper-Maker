@@ -158,28 +158,8 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
         value = m_table->value(i + 1, -1);
         specificValue = value != -1;
         if (!specificValue) {
-            switch (progression->equation()) {
-            case 0:
-                value = easingLinear(x, start, change, duration); break;
-            case -1:
-                value = easingQuadraticIn(x, start, change, duration); break;
-            case 1:
-                value = easingQuadraticOut(x, start, change, duration); break;
-            case -2:
-                value = easingCubicIn(x, start, change, duration); break;
-            case 2:
-                value = easingCubicOut(x, start, change, duration); break;
-            case -3:
-                value = easingQuarticIn(x, start, change, duration); break;
-            case 3:
-                value = easingQuarticOut(x, start, change, duration); break;
-            case -4:
-                value = easingQuinticIn(x, start, change, duration); break;
-            case 4:
-                value = easingQuinticOut(x, start, change, duration); break;
-            default:
-                value = 0;
-            }
+            value = SystemProgressionTable::easing(progression->equation(), x,
+                start, change, duration);
         }
 
         itemLevel = new QTableWidgetItem(QString::number(i + 1));
@@ -207,89 +187,6 @@ void WidgetTableProgression::updateWithEasing(SystemProgressionTable*
         0, value, 5);
 
     m_completing = false;
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingLinear(double x, int start, int change,
-    int duration)
-{
-    return qFloor(change * x / duration + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuadraticIn(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return qFloor(change * x * x + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuadraticOut(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return qFloor(-change * x * (x - 2) + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingCubicIn(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return qFloor(change * x * x * x + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingCubicOut(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    x--;
-    return qFloor(change * (x * x * x + 1) + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuarticIn(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return qFloor(change * x * x * x * x + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuarticOut(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    x--;
-    return qFloor(-change * (x * x * x * x - 1) + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuinticIn(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    return qFloor(change * x * x * x * x * x + start);
-}
-
-// -------------------------------------------------------
-
-int WidgetTableProgression::easingQuinticOut(double x, int start, int change,
-    int duration)
-{
-    x /= duration;
-    x--;
-    return qFloor(change * (x * x * x * x * x + 1) + start);
 }
 
 // -------------------------------------------------------

@@ -37,9 +37,7 @@ const double SystemAnimationFrameElement::DEFAULT_OPACITY = 100.0;
 // -------------------------------------------------------
 
 SystemAnimationFrameElement::SystemAnimationFrameElement() :
-    SystemAnimationFrameElement(1, "", DEFAULT_X, DEFAULT_Y, DEFAULT_TEX_ROW,
-        DEFAULT_TEX_COLUMN, DEFAULT_ZOOM, DEFAULT_ANGLE, DEFAULT_FLIP_VERTICALY,
-        DEFAULT_OPACITY)
+    SystemAnimationFrameElement(1, "")
 {
 
 }

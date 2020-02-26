@@ -24,6 +24,7 @@
 #include "dialogpicturespreview.h"
 #include "dialoganimationcopyframes.h"
 #include "dialoganimationclearframes.h"
+#include "dialoganimationcreatetransition.h"
 
 // -------------------------------------------------------
 //
@@ -692,6 +693,18 @@ void DialogDatas::on_pushButtonClearFrames_clicked() {
     DialogAnimationClearFrames dialog;
     if (dialog.exec() == QDialog::Accepted) {
         dialog.clearFrames(reinterpret_cast<SystemAnimation *>(ui
+            ->panelSuperListAnimations->list()->getSelected()->data().value<
+            quintptr>()));
+        ui->widgetAnimation->repaint();
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonCreateTransition_clicked() {
+    DialogAnimationCreateTransition dialog;
+    if (dialog.exec() == QDialog::Accepted) {
+        dialog.createTransition(reinterpret_cast<SystemAnimation *>(ui
             ->panelSuperListAnimations->list()->getSelected()->data().value<
             quintptr>()));
         ui->widgetAnimation->repaint();

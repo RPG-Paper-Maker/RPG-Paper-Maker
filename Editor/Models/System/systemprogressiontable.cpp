@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QtMath>
 #include "systemprogressiontable.h"
 
 const QString SystemProgressionTable::JSON_INITIAL_VALUE = "i";
@@ -66,6 +67,126 @@ QHash<int, int> * SystemProgressionTable::table() {
 //
 //  INTERMEDIARY METHODS
 //
+// -------------------------------------------------------
+
+int SystemProgressionTable::easing(int e, double x, double start, double
+    change, double duration)
+{
+    return qFloor(easingDouble(e, x, start, change, duration));
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingDouble(int e, double x, double start, double
+    change, double duration)
+{
+    switch (e) {
+    case 0:
+        return easingLinear(x, start, change, duration);
+    case -1:
+        return easingQuadraticIn(x, start, change, duration);
+    case 1:
+        return easingQuadraticOut(x, start, change, duration);
+    case -2:
+        return easingCubicIn(x, start, change, duration);
+    case 2:
+        return easingCubicOut(x, start, change, duration);
+    case -3:
+        return easingQuarticIn(x, start, change, duration);
+    case 3:
+        return easingQuarticOut(x, start, change, duration);
+    case -4:
+        return easingQuinticIn(x, start, change, duration);
+    case 4:
+        return easingQuinticOut(x, start, change, duration);
+    default:
+        return 0.0;
+    }
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingLinear(double x, double start, double
+    change, double duration)
+{
+    return change * x / duration + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuadraticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuadraticOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return -change * x * (x - 2) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingCubicIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingCubicOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x + 1) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuarticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuarticOut(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    x--;
+    return -change * (x * x * x * x - 1) + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuinticIn(double x, double start, double
+    change, double duration)
+{
+    x /= duration;
+    return change * x * x * x * x * x + start;
+}
+
+// -------------------------------------------------------
+
+double SystemProgressionTable::easingQuinticOut(double x, double start,
+    double change, double duration)
+{
+    x /= duration;
+    x--;
+    return change * (x * x * x * x * x + 1) + start;
+}
+
 // -------------------------------------------------------
 
 void SystemProgressionTable::reset() {

@@ -191,7 +191,7 @@ int SuperListItem::getIdByIndex(QStandardItemModel* model, int index){
 
 // -------------------------------------------------------
 
-SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
+SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first) {
     int l;
 
     l = item->rowCount();
@@ -209,6 +209,34 @@ SuperListItem* SuperListItem::getById(QStandardItem* item, int id, bool first){
         if (first) {
             return reinterpret_cast<SuperListItem *>(item->child(0)->data()
                 .value<quintptr>());
+        }
+    }
+
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+QStandardItem * SuperListItem::getItemByID(QStandardItem *item, int id, bool
+    first)
+{
+    int l;
+
+    l = item->rowCount();
+    if (l > 0) {
+        SuperListItem *s;
+        QStandardItem *row;
+        int i;
+
+        for (i = 0; i < l; i++) {
+            row = item->child(i);
+            s = reinterpret_cast<SuperListItem *>(row->data().value<quintptr>());
+            if (s != nullptr && id == s->id()) {
+                return row;
+            }
+        }
+        if (first) {
+            return item->child(0);
         }
     }
 

@@ -62,6 +62,8 @@ public:
     static int getIdByIndex(QStandardItemModel* model, int index);
     static SuperListItem* getById(QStandardItem* item, int id,
                                   bool first = true);
+    static QStandardItem * getItemByID(QStandardItem *item, int id, bool first =
+        true);
     static SuperListItem* getByIndex(QStandardItemModel* model, int index);
     static void fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
         bool showID = true, bool nameOnly = false, bool showIcon = false);

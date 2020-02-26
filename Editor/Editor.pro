@@ -27,10 +27,12 @@ HEADERS += \
     CustomWidgets/widgetanimation.h \
     CustomWidgets/widgetanimationtexture.h \
     CustomWidgets/widgetmountainselector.h \
+    CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
     CustomWidgets/widgetvideo.h \
     Dialogs/Animations/dialoganimationclearframes.h \
     Dialogs/Animations/dialoganimationcopyframes.h \
+    Dialogs/Animations/dialoganimationcreatetransition.h \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.h \
     Dialogs/Commands/dialogcommandcallacommonreaction.h \
     Dialogs/Commands/dialogcommandchangeproperty.h \
@@ -357,10 +359,12 @@ SOURCES += \
     CustomWidgets/widgetanimation.cpp \
     CustomWidgets/widgetanimationtexture.cpp \
     CustomWidgets/widgetmountainselector.cpp \
+    CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \
     CustomWidgets/widgetvideo.cpp \
     Dialogs/Animations/dialoganimationclearframes.cpp \
     Dialogs/Animations/dialoganimationcopyframes.cpp \
+    Dialogs/Animations/dialoganimationcreatetransition.cpp \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.cpp \
     Dialogs/Commands/dialogcommandcallacommonreaction.cpp \
     Dialogs/Commands/dialogcommandchangeproperty.cpp \
@@ -649,10 +653,12 @@ FORMS += \
     CustomWidgets/paneltransformations.ui \
     CustomWidgets/panelvideos.ui \
     CustomWidgets/widgetmountainselector.ui \
+    CustomWidgets/widgetsliderprogression.ui \
     CustomWidgets/widgettilesettexture.ui \
     CustomWidgets/widgetvideo.ui \
     Dialogs/Animations/dialoganimationclearframes.ui \
     Dialogs/Animations/dialoganimationcopyframes.ui \
+    Dialogs/Animations/dialoganimationcreatetransition.ui \
     Dialogs/Commands/dialogcommandallowforbidsavesmainmenu.ui \
     Dialogs/Commands/dialogcommandcallacommonreaction.ui \
     Dialogs/Commands/dialogcommandchangeproperty.ui \

@@ -42,6 +42,29 @@ public:
     void setEquation(int i);
     QHash<int, int> * table();
 
+    static int easing(int e, double x, double start, double change, double
+        duration);
+    static double easingDouble(int e, double x, double start, double change,
+        double duration);
+    static double easingLinear(double x, double start, double change, double
+        duration);
+    static double easingQuadraticIn(double x, double start, double change,
+        double duration);
+    static double easingQuadraticOut(double x, double start, double change,
+        double duration);
+    static double easingCubicIn(double x, double start, double change, double
+        duration);
+    static double easingCubicOut(double x, double start, double change, double
+        duration);
+    static double easingQuarticIn(double x, double start, double change, double
+        duration);
+    static double easingQuarticOut(double x, double start, double change, double
+        duration);
+    static double easingQuinticIn(double x, double start, double change,
+        double duration);
+    static double easingQuinticOut(double x, double start, double change,
+        double duration);
+
     void reset();
     bool isDefault() const;
 

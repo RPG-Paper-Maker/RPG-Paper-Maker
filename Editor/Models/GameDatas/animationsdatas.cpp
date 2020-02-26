@@ -11,6 +11,7 @@
 
 #include "animationsdatas.h"
 #include "systemanimation.h"
+#include "systemanimationframe.h"
 #include "rpm.h"
 #include "common.h"
 
@@ -46,10 +47,8 @@ QStandardItemModel* AnimationsDatas::model() const {
 // -------------------------------------------------------
 
 void AnimationsDatas::setDefault() {
-    int i, length;
     SystemAnimation *animation;
-    QStandardItem *item;
-
+    int i, length;
     QString names[] = {
         "Attack"
     };
@@ -61,11 +60,9 @@ void AnimationsDatas::setDefault() {
     for (i = 0; i < length; i++) {
         animation = new SystemAnimation(i + 1, names[i], pictureIDs[i],
             AnimationPositionKind::Middle);
-        item = new QStandardItem;
-        item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(animation)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(animation->toString());
-        m_model->appendRow(item);
+        animation->framesModel()->appendRow((new SystemAnimationFrame)
+            ->getModelRow());
+        m_model->appendRow(animation->getModelRow());
     }
 }
 
