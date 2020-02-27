@@ -451,6 +451,8 @@ void DialogDatas::showEvent(QShowEvent *event) {
         ->scrollAreaAnimation->horizontalScrollBar()->maximum() / 2);
     ui->scrollAreaAnimation->verticalScrollBar()->setSliderPosition(ui
         ->scrollAreaAnimation->verticalScrollBar()->maximum() / 2);
+
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 // -------------------------------------------------------

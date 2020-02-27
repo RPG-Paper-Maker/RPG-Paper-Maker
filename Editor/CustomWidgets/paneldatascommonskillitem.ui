@@ -297,7 +297,7 @@
            <item row="8" column="0">
             <widget class="QLabel" name="labelUserAnimation">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>User animation ID:</string>
@@ -307,7 +307,7 @@
            <item row="8" column="1" colspan="2">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationUser" native="true">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
@@ -326,7 +326,7 @@
            <item row="9" column="0">
             <widget class="QLabel" name="labelTargetAnimation">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Target animation ID:</string>
@@ -336,7 +336,7 @@
            <item row="9" column="1" colspan="2">
             <widget class="PanelPrimitiveValue" name="panelPrimitiveValueAnimationTarget" native="true">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="minimumSize">
               <size>
