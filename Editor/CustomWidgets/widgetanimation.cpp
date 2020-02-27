@@ -16,6 +16,7 @@
 #include "widgetanimation.h"
 #include "rpm.h"
 #include "common.h"
+#include "systemanimationframeeffect.h"
 
 const int WidgetAnimation::ELEMENT_INDEX_SIZE = 16;
 
@@ -40,11 +41,14 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_mouseOffsetY(0),
     m_lastMouseX(0),
     m_lastMouseY(0),
-    m_currentPlayedFrame(-1),
+    m_currentPlayedFrameID(-1),
     m_modelFrames(nullptr),
     m_condition(AnimationEffectConditionKind::None),
-    m_timer(new QTimer)
+    m_mediaPlaylistSoundEffect(new QMediaPlaylist),
+    m_mediaPlayerSoundEffect(new QMediaPlayer)
 {
+    //int i, l;
+
     this->setFocus();
     this->setMouseTracking(true);
     this->setFixedWidth(RPM::SCREEN_BASIC_WIDTH);
@@ -54,7 +58,26 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextSuperList(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT
         (showContextMenu(const QPoint &)));
+
+    // Load every sounds
+    /*
+    for (i = 0, l = RPM::get()->project()->songsDatas()->model(SongKind::Sound)
+        ->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        m_mediaPlaylistSoundEffect->addMedia(QUrl::fromLocalFile(reinterpret_cast<
+            SystemSong *>(RPM::get()->project()->songsDatas()->model(SongKind
+            ::Sound)->item(i)->data().value<quintptr>())->getPath(SongKind
+            ::Sound)));
+    }
+    m_mediaPlaylistSoundEffect->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    m_mediaPlayerSoundEffect->setPlaylist(m_mediaPlaylistSoundEffect);*/
+
     updateAnimation();
+}
+
+WidgetAnimation::~WidgetAnimation() {
+    delete m_mediaPlayerSoundEffect;
+    delete m_mediaPlaylistSoundEffect;
 }
 
 void WidgetAnimation::setScrollArea(QScrollArea *scrollArea) {
@@ -111,7 +134,7 @@ void WidgetAnimation::playAnimation(AnimationEffectConditionKind condition,
 {
     m_modelFrames = modelFrames;
     m_condition = condition;
-    m_currentPlayedFrame = 1;
+    m_currentPlayedFrameID = 0;
 }
 
 // -------------------------------------------------------
@@ -306,9 +329,8 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
     if (m_currentFrame != nullptr) {
         font.setPixelSize(10);
         painter.setFont(font);
-        currentFrame = m_currentPlayedFrame == -1 ? m_currentFrame :
-            reinterpret_cast<SystemAnimationFrame *>(SuperListItem::getById(
-            m_modelFrames->invisibleRootItem(), m_currentPlayedFrame));
+        currentFrame = m_currentPlayedFrameID == -1 ? m_currentFrame :
+            m_currentPlayedFrame;
         for (i = 0, l = currentFrame->elementsCount(); i < l; i++) {
             element = currentFrame->elementAt(i);
             sx = element->texColumn() * (m_widgetAnimationTexture->image()
@@ -347,7 +369,7 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
             painter.translate(x + hw, y + hh);
             painter.rotate(angle);
             painter.setOpacity(1.0);
-            if (m_currentPlayedFrame == -1) {
+            if (m_currentPlayedFrameID == -1) {
                 painter.setPen(element == m_selectedElement ? RPM
                     ::COLOR_MENU_SELECTION_BLUE : RPM::COLOR_PURPLE_SELECTION);
                 painter.drawRect(-hw, -hh, w, h);
@@ -370,7 +392,7 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
     }
 
     // HUD
-    if (m_currentPlayedFrame == -1) {
+    if (m_currentPlayedFrameID == -1) {
         offsetX = m_scrollArea == nullptr ? 0 : m_scrollArea
             ->horizontalScrollBar()->value();
         offsetY = m_scrollArea == nullptr ? 0 : m_scrollArea
@@ -450,13 +472,41 @@ void WidgetAnimation::contextDelete() {
 // -------------------------------------------------------
 
 void WidgetAnimation::updateAnimation() {
-    if (m_currentPlayedFrame != -1) {
-        m_currentPlayedFrame++;
-        if (m_currentPlayedFrame > m_modelFrames->invisibleRootItem()->rowCount()) {
-            m_currentPlayedFrame = -1;
+    if (m_currentPlayedFrameID != -1) {
+        m_currentPlayedFrameID++;
+
+        // If finished
+        if (m_currentPlayedFrameID > m_modelFrames->invisibleRootItem()->rowCount())
+        {
+            m_currentPlayedFrameID = -1;
             emit this->animationFinished();
+        } else {
+            m_currentPlayedFrame = reinterpret_cast<SystemAnimationFrame *>(
+                SuperListItem::getById(m_modelFrames->invisibleRootItem(),
+                m_currentPlayedFrameID));
         }
         this->repaint();
+
+        // Play sounds
+        /*
+        if (m_currentPlayedFrameID != -1) {
+            SystemAnimationFrameEffect *effect;
+            int i, l;
+            for (i = 0, l = m_currentPlayedFrame->modelEffects()
+                ->invisibleRootItem()->rowCount(); i < l; i++)
+            {
+                effect = reinterpret_cast<SystemAnimationFrameEffect *>(
+                    m_currentPlayedFrame->modelEffects()->item(i)->data().value<
+                    quintptr>());
+                if (effect != nullptr && effect->isSoundEffect()) {
+                    m_mediaPlaylistSoundEffect->setCurrentIndex(SuperListItem
+                        ::getIndexById(RPM::get()->project()->songsDatas()
+                        ->model(SongKind::Sound)->invisibleRootItem(), effect
+                        ->soundEffect()->id()));
+                    m_mediaPlayerSoundEffect->play();
+                }
+            }
+        }*/
     }
     QTimer::singleShot(0, this, SLOT(updateAnimation()));
 }

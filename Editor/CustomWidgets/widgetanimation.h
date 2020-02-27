@@ -15,6 +15,8 @@
 #include <QWidget>
 #include <QScrollArea>
 #include <QTimer>
+#include <QMediaPlaylist>
+#include <QMediaPlayer>
 #include "systemanimationframe.h"
 #include "animationpositionkind.h"
 #include "widgetanimationtexture.h"
@@ -37,6 +39,7 @@ public:
     static const int ELEMENT_INDEX_SIZE;
 
     explicit WidgetAnimation(QWidget *parent = nullptr);
+    ~WidgetAnimation();
     void setScrollArea(QScrollArea *scrollArea);
     void setAnimationPositionKind(AnimationPositionKind pk);
     void setCurrentFrame(SystemAnimationFrame *cf);
@@ -65,10 +68,12 @@ protected:
     int m_mouseOffsetY;
     int m_lastMouseX;
     int m_lastMouseY;
-    int m_currentPlayedFrame;
+    int m_currentPlayedFrameID;
     QStandardItemModel *m_modelFrames;
     AnimationEffectConditionKind m_condition;
-    QTimer *m_timer;
+    SystemAnimationFrame *m_currentPlayedFrame;
+    QMediaPlaylist *m_mediaPlaylistSoundEffect;
+    QMediaPlayer *m_mediaPlayerSoundEffect;
 
     void updateContextMenuCan();
 
