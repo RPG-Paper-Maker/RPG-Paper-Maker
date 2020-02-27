@@ -14,11 +14,13 @@
 
 #include <QWidget>
 #include <QScrollArea>
+#include <QTimer>
 #include "systemanimationframe.h"
 #include "animationpositionkind.h"
 #include "widgetanimationtexture.h"
 #include "contextmenulist.h"
 #include "systempicture.h"
+#include "animationeffectconditionkind.h"
 
 // -------------------------------------------------------
 //
@@ -43,6 +45,8 @@ public:
 
     SystemPicture * pictureBattler() const;
     void updateBattlerPicture(int id);
+    void playAnimation(AnimationEffectConditionKind condition,
+        QStandardItemModel *modelFrames);
 
 protected:
     ContextMenuList *m_contextMenu;
@@ -61,6 +65,10 @@ protected:
     int m_mouseOffsetY;
     int m_lastMouseX;
     int m_lastMouseY;
+    int m_currentPlayedFrame;
+    QStandardItemModel *m_modelFrames;
+    AnimationEffectConditionKind m_condition;
+    QTimer *m_timer;
 
     void updateContextMenuCan();
 
@@ -72,12 +80,16 @@ protected:
     virtual void mouseLeaveEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
 
+signals:
+    void animationFinished();
+
 private slots:
     void showContextMenu(const QPoint &p);
     void contextEdit();
     void contextCopy();
     void contextPaste();
     void contextDelete();
+    void updateAnimation();
 };
 
 #endif // WIDGETANIMATION_H

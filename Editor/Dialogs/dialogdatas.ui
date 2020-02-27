@@ -159,8 +159,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>98</width>
-                <height>28</height>
+                <width>837</width>
+                <height>544</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
@@ -235,8 +235,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>98</width>
-                <height>28</height>
+                <width>837</width>
+                <height>544</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
@@ -861,21 +861,21 @@
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_6">
+                                <widget class="QPushButton" name="pushButtonPlayHit">
                                  <property name="text">
                                   <string>Play hit</string>
                                  </property>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_7">
+                                <widget class="QPushButton" name="pushButtonPlayMiss">
                                  <property name="text">
                                   <string>Play miss</string>
                                  </property>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QPushButton" name="pushButton_8">
+                                <widget class="QPushButton" name="pushButtonPlayCrit">
                                  <property name="text">
                                   <string>Play crit</string>
                                  </property>
@@ -1164,7 +1164,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>154</width>
+                  <width>245</width>
                   <height>686</height>
                  </rect>
                 </property>

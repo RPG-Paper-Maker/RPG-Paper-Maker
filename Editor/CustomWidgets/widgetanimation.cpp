@@ -12,6 +12,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QApplication>
+#include <QTime>
 #include "widgetanimation.h"
 #include "rpm.h"
 #include "common.h"
@@ -38,7 +39,11 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_mouseOffsetX(0),
     m_mouseOffsetY(0),
     m_lastMouseX(0),
-    m_lastMouseY(0)
+    m_lastMouseY(0),
+    m_currentPlayedFrame(-1),
+    m_modelFrames(nullptr),
+    m_condition(AnimationEffectConditionKind::None),
+    m_timer(new QTimer)
 {
     this->setFocus();
     this->setMouseTracking(true);
@@ -49,6 +54,7 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextSuperList(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT
         (showContextMenu(const QPoint &)));
+    updateAnimation();
 }
 
 void WidgetAnimation::setScrollArea(QScrollArea *scrollArea) {
@@ -81,6 +87,14 @@ SystemAnimationFrameElement * WidgetAnimation::selectedElement() const {
 //
 // -------------------------------------------------------
 
+SystemPicture * WidgetAnimation::pictureBattler() const {
+    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
+        ->project()->picturesDatas()->model(PictureKind::Battlers)
+        ->invisibleRootItem(), m_idBattler, true));
+}
+
+// -------------------------------------------------------
+
 void WidgetAnimation::updateBattlerPicture(int id) {
     m_idBattler = id;
     m_imageBattler = QImage(reinterpret_cast<SystemPicture *>(SuperListItem
@@ -92,10 +106,12 @@ void WidgetAnimation::updateBattlerPicture(int id) {
 
 // -------------------------------------------------------
 
-SystemPicture * WidgetAnimation::pictureBattler() const {
-    return reinterpret_cast<SystemPicture *>(SuperListItem::getById(RPM::get()
-        ->project()->picturesDatas()->model(PictureKind::Battlers)
-        ->invisibleRootItem(), m_idBattler, true));
+void WidgetAnimation::playAnimation(AnimationEffectConditionKind condition,
+    QStandardItemModel *modelFrames)
+{
+    m_modelFrames = modelFrames;
+    m_condition = condition;
+    m_currentPlayedFrame = 1;
 }
 
 // -------------------------------------------------------
@@ -249,8 +265,11 @@ void WidgetAnimation::mouseLeaveEvent(QMouseEvent *) {
 void WidgetAnimation::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     SystemAnimationFrameElement *element;
+    SystemAnimationFrame *currentFrame;
     QFont font;
-    int i, l, offsetX, offsetY, frames, x, y, w, h, hw, hh;
+    QRect rectTarget, rectSource;
+    int i, l, offsetX, offsetY, frames, x, y, w, h, hw, hh, sx, sy, sw, sh;
+    double angle, flip;
 
     // Anti aliasing
     painter.setRenderHint(QPainter::Antialiasing);
@@ -285,14 +304,13 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
 
     // Elements
     if (m_currentFrame != nullptr) {
-        QRect rectTarget, rectSource;
-        int sx, sy, sw, sh;
-        double angle, flip;
-
         font.setPixelSize(10);
         painter.setFont(font);
-        for (i = 0, l = m_currentFrame->elementsCount(); i < l; i++) {
-            element = m_currentFrame->elementAt(i);
+        currentFrame = m_currentPlayedFrame == -1 ? m_currentFrame :
+            reinterpret_cast<SystemAnimationFrame *>(SuperListItem::getById(
+            m_modelFrames->invisibleRootItem(), m_currentPlayedFrame));
+        for (i = 0, l = currentFrame->elementsCount(); i < l; i++) {
+            element = currentFrame->elementAt(i);
             sx = element->texColumn() * (m_widgetAnimationTexture->image()
                 .width() / m_widgetAnimationTexture->rows());
             sy = element->texRow() * (m_widgetAnimationTexture->image().height()
@@ -329,41 +347,46 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
             painter.translate(x + hw, y + hh);
             painter.rotate(angle);
             painter.setOpacity(1.0);
-            painter.setPen(element == m_selectedElement ? RPM
-                ::COLOR_MENU_SELECTION_BLUE : RPM::COLOR_PURPLE_SELECTION);
-            painter.drawRect(-hw, -hh, w, h);
-            painter.drawRect(-hw + 1, -hh + 1, w - 2, h - 2);
-            painter.fillRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE,
-                RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
-            painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE, ELEMENT_INDEX_SIZE);
-            painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE + 1,
-                ELEMENT_INDEX_SIZE + 1);
-            painter.drawText(-hw + 4, -hh + ELEMENT_INDEX_SIZE - 4, QString
-                ::number(element->id()));
-            if (m_hoveredElement == element) {
-                painter.fillRect(-hw, -hh, w, h, RPM
-                    ::COLOR_GRAY_HOVER_BACKGROUND);
+            if (m_currentPlayedFrame == -1) {
+                painter.setPen(element == m_selectedElement ? RPM
+                    ::COLOR_MENU_SELECTION_BLUE : RPM::COLOR_PURPLE_SELECTION);
+                painter.drawRect(-hw, -hh, w, h);
+                painter.drawRect(-hw + 1, -hh + 1, w - 2, h - 2);
+                painter.fillRect(-hw, -hh, ELEMENT_INDEX_SIZE,
+                    ELEMENT_INDEX_SIZE, RPM::COLOR_PURPLE_SELCTION_BACKGROUND);
+                painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE,
+                    ELEMENT_INDEX_SIZE);
+                painter.drawRect(-hw, -hh, ELEMENT_INDEX_SIZE + 1,
+                    ELEMENT_INDEX_SIZE + 1);
+                painter.drawText(-hw + 4, -hh + ELEMENT_INDEX_SIZE - 4, QString
+                    ::number(element->id()));
+                if (m_hoveredElement == element) {
+                    painter.fillRect(-hw, -hh, w, h, RPM
+                        ::COLOR_GRAY_HOVER_BACKGROUND);
+                }
             }
             painter.restore();
         }
     }
 
     // HUD
-    offsetX = m_scrollArea == nullptr ? 0 : m_scrollArea->horizontalScrollBar()
-        ->value();
-    offsetY = m_scrollArea == nullptr ? 0 : m_scrollArea->verticalScrollBar()
-        ->value();
-    painter.setPen(RPM::COLOR_ALMOST_WHITE);
-    font.setPixelSize(13);
-    painter.drawText(offsetX, 10 + offsetY, m_textCoords);
-    if (m_selectedElement != nullptr) {
-        QFontMetrics fm(font);
-        QString coords;
+    if (m_currentPlayedFrame == -1) {
+        offsetX = m_scrollArea == nullptr ? 0 : m_scrollArea
+            ->horizontalScrollBar()->value();
+        offsetY = m_scrollArea == nullptr ? 0 : m_scrollArea
+            ->verticalScrollBar()->value();
+        painter.setPen(RPM::COLOR_ALMOST_WHITE);
+        font.setPixelSize(13);
+        painter.drawText(offsetX, 10 + offsetY, m_textCoords);
+        if (m_selectedElement != nullptr) {
+            QFontMetrics fm(font);
+            QString coords;
 
-        coords = m_selectedElement->getPositionString();
-        painter.setPen(RPM::COLOR_MENU_SELECTION_BLUE);
-        painter.drawText(m_scrollArea->width() + offsetX - fm.width(coords) -
-            m_scrollArea->verticalScrollBar()->width(), 10 + offsetY, coords);
+            coords = m_selectedElement->getPositionString();
+            painter.setPen(RPM::COLOR_MENU_SELECTION_BLUE);
+            painter.drawText(m_scrollArea->width() + offsetX - fm.width(coords) -
+                m_scrollArea->verticalScrollBar()->width(), 10 + offsetY, coords);
+        }
     }
 }
 
@@ -422,4 +445,18 @@ void WidgetAnimation::contextDelete() {
     m_selectedElement = nullptr;
     m_hoveredElement = nullptr;
     this->repaint();
+}
+
+// -------------------------------------------------------
+
+void WidgetAnimation::updateAnimation() {
+    if (m_currentPlayedFrame != -1) {
+        m_currentPlayedFrame++;
+        if (m_currentPlayedFrame > m_modelFrames->invisibleRootItem()->rowCount()) {
+            m_currentPlayedFrame = -1;
+            emit this->animationFinished();
+        }
+        this->repaint();
+    }
+    QTimer::singleShot(0, this, SLOT(updateAnimation()));
 }

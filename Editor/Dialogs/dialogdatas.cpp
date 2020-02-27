@@ -278,6 +278,8 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     ui->widgetAnimation->setWidgetAnimationTexture(ui->widgetAnimationTexture);
     ui->treeViewEffects->initializeNewItemInstance(new
         SystemAnimationFrameEffect);
+    connect(ui->widgetAnimation, SIGNAL(animationFinished()), this, SLOT(
+        onAnimationFinished()));
     ui->widgetPictureAnimation->setKind(PictureKind::Animations);
     ui->comboBoxAnimationPosition->addItems(RPM
         ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
@@ -425,6 +427,14 @@ void DialogDatas::openSpecialElementsDialog(PictureKind kind) {
         RPM::get()->project()->writeSpecialsDatas();
     else
         RPM::get()->project()->readSpecialsDatas();
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::playAnimation(AnimationEffectConditionKind condition) {
+    this->setEnabled(false);
+    ui->widgetAnimation->playAnimation(condition, ui
+        ->panelSuperListAnimationFrames->list()->getModel());
 }
 
 // -------------------------------------------------------
@@ -730,4 +740,28 @@ void DialogDatas::on_pushButtonApplyTexture_clicked() {
             ->widgetAnimationTexture->currentColumn());
         ui->widgetAnimation->repaint();
     }
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayHit_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Hit);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayMiss_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Miss);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::on_pushButtonPlayCrit_clicked() {
+    this->playAnimation(AnimationEffectConditionKind::Critical);
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::onAnimationFinished() {
+    this->setEnabled(true);
 }

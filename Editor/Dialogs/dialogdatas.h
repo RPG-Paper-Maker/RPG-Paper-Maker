@@ -27,6 +27,7 @@
 #include "systemanimation.h"
 #include "systemstatus.h"
 #include "systemanimationframe.h"
+#include "animationeffectconditionkind.h"
 
 // -------------------------------------------------------
 //
@@ -75,6 +76,7 @@ private:
     void initializeTilesets(GameDatas *gameDatas);
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
+    void playAnimation(AnimationEffectConditionKind condition);
 
 protected:
     virtual void showEvent(QShowEvent *event);
@@ -107,6 +109,10 @@ private slots:
     void on_pushButtonClearFrames_clicked();
     void on_pushButtonCreateTransition_clicked();
     void on_pushButtonApplyTexture_clicked();
+    void on_pushButtonPlayHit_clicked();
+    void on_pushButtonPlayMiss_clicked();
+    void on_pushButtonPlayCrit_clicked();
+    void onAnimationFinished();
 };
 
 #endif // DIALOGDATAS_H
