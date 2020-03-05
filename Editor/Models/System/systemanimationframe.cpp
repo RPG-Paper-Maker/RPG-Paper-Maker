@@ -77,6 +77,8 @@ void SystemAnimationFrame::clear() {
     this->clearElements();
     this->setName("");
     SuperListItem::deleteModel(m_modelEffects, false);
+    m_modelEffects->appendRow(SuperListItem::getEmptyItem());
+    this->initializeHeader();
 }
 
 // -------------------------------------------------------

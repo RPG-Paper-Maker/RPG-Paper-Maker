@@ -336,10 +336,10 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
             m_currentPlayedFrame;
         for (i = 0, l = currentFrame->elementsCount(); i < l; i++) {
             element = currentFrame->elementAt(i);
-            sx = element->texColumn() * (m_widgetAnimationTexture->image()
+            sx = element->texColumn() * (m_widgetAnimationTexture->baseImage()
                 .width() / m_widgetAnimationTexture->rows());
-            sy = element->texRow() * (m_widgetAnimationTexture->image().height()
-                / m_widgetAnimationTexture->columns());
+            sy = element->texRow() * (m_widgetAnimationTexture->baseImage()
+                .height() / m_widgetAnimationTexture->columns());
             sw = m_widgetAnimationTexture->baseImage().width() /
                 m_widgetAnimationTexture->columns();
             sh = m_widgetAnimationTexture->baseImage().height() /
@@ -365,7 +365,7 @@ void WidgetAnimation::paintEvent(QPaintEvent *) {
             painter.setOpacity(element->opacity() / 100.0);
             rectTarget.setCoords(-hw, -hh, -hw + w, -hw + h);
             rectSource.setCoords(sx, sy, sx + sw, sy + sh);
-            painter.drawImage(rectTarget, m_widgetAnimationTexture->image(),
+            painter.drawImage(rectTarget, m_widgetAnimationTexture->baseImage(),
                 rectSource);
             painter.restore();
             painter.save();

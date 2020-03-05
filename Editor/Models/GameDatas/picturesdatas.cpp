@@ -194,7 +194,7 @@ void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
 // -------------------------------------------------------
 
 void PicturesDatas::setDefaultAnimations(QList<QString>& names) {
-    names << "unnamed";
+    names << "basic";
     this->setDefaultPictures(names, PictureKind::Animations);
 }
 
