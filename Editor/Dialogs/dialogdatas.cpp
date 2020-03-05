@@ -296,11 +296,11 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     QModelIndex index = ui->panelSuperListAnimations->list()->getModel()->index(
         0, 0);
     ui->panelSuperListAnimations->list()->setIndex(0);
-    ui->comboBoxAnimationPosition->addItems(RPM
-        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
     AnimationPositionKind pos = reinterpret_cast<SystemAnimation *>(ui
         ->panelSuperListAnimations->list()->getSelected()->data().value<quintptr
         >())->positionKind();
+    ui->comboBoxAnimationPosition->addItems(RPM
+        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
     ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(pos));
     on_pageAnimationsSelected(index, index);
     connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
