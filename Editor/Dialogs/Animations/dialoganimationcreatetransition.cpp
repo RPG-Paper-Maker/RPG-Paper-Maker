@@ -112,6 +112,8 @@ void DialogAnimationCreateTransition::createTransition(SystemAnimation
                 }
                 for (m = 0, ll = elementsTransition.size(); m < ll; m++) {
                     elementTransition = elementsTransition.at(m);
+                    elementTransition->setTexRow(texRow);
+                    elementTransition->setTexColumn(texCol);
                     if (isX) {
                         elementTransition->setX(newX);
                     }
