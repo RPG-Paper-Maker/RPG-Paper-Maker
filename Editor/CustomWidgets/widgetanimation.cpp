@@ -124,6 +124,9 @@ void WidgetAnimation::updateBattlerPicture(int id) {
         ::getById(RPM::get()->project()->picturesDatas()->model(PictureKind
         ::Battlers)->invisibleRootItem(), m_idBattler))->getPath(PictureKind
         ::Battlers));
+    m_imageBattler = m_imageBattler.scaled(static_cast<int>(m_imageBattler
+        .width() * RPM::coefReverseSquareSize()), static_cast<int>(
+        m_imageBattler.height() * RPM::coefReverseSquareSize()));
     this->repaint();
 }
 
