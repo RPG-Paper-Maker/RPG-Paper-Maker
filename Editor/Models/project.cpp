@@ -139,6 +139,7 @@ void Project::setDefault(){
     m_songsDatas->setDefault();
     m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
+    p_gameDatas->readAnimations(p_pathCurrentProject);
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
     m_specialElementsDatas->setDefault();

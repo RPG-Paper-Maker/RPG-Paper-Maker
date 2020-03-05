@@ -281,10 +281,6 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     connect(ui->widgetAnimation, SIGNAL(animationFinished()), this, SLOT(
         onAnimationFinished()));
     ui->widgetPictureAnimation->setKind(PictureKind::Animations);
-    ui->comboBoxAnimationPosition->addItems(RPM
-        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
-    connect(ui->comboBoxAnimationPosition, SIGNAL(currentIndexChanged(int)),
-        this, SLOT(on_comboboxAnimationPositionKindChanged(int)));
     connect(ui->widgetPictureAnimation, SIGNAL(pictureChanged(SystemPicture *)),
         this, SLOT(on_animationPictureChanged(SystemPicture *)));
     ui->widgetAnimation->setScrollArea(ui->scrollAreaAnimation);
@@ -300,6 +296,12 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
     QModelIndex index = ui->panelSuperListAnimations->list()->getModel()->index(
         0, 0);
     ui->panelSuperListAnimations->list()->setIndex(0);
+    ui->comboBoxAnimationPosition->addItems(RPM
+        ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
+    AnimationPositionKind pos = reinterpret_cast<SystemAnimation *>(ui
+        ->panelSuperListAnimations->list()->getSelected()->data().value<quintptr
+        >())->positionKind();
+    ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(pos));
     on_pageAnimationsSelected(index, index);
     connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
         currentChanged(QModelIndex, QModelIndex)), this, SLOT(
@@ -658,7 +660,7 @@ void DialogDatas::on_animationPictureChanged(SystemPicture *picture) {
 
 // -------------------------------------------------------
 
-void DialogDatas::on_comboboxAnimationPositionKindChanged(int index) {
+void DialogDatas::on_comboBoxAnimationPosition_currentIndexChanged(int index) {
     AnimationPositionKind positionKind;
 
     positionKind = static_cast<AnimationPositionKind>(index);

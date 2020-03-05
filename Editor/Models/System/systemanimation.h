@@ -33,6 +33,8 @@ public:
     static const QString JSON_FRAMES;
     static const QString JSON_ROWS;
     static const QString JSON_COLUMNS;
+    static const int DEFAULT_PICTURE_ID;
+    static const AnimationPositionKind DEFAULT_POSITION_KIND;
     static const int DEFAULT_ROWS;
     static const int DEFAULT_COLUMNS;
 
@@ -54,6 +56,7 @@ public:
     void correctAllPositions(AnimationPositionKind previous,
         AnimationPositionKind after);
 
+    virtual void setDefault();
     virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);

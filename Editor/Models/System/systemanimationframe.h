@@ -46,6 +46,7 @@ public:
     void reorder(SystemAnimationFrameElement *element);
     QList<SystemAnimationFrameElement *> getAllElementsWithID(int id);
 
+    virtual void setDefault();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);

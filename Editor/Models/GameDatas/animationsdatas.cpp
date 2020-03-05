@@ -47,23 +47,7 @@ QStandardItemModel* AnimationsDatas::model() const {
 // -------------------------------------------------------
 
 void AnimationsDatas::setDefault() {
-    SystemAnimation *animation;
-    int i, length;
-    QString names[] = {
-        "Attack"
-    };
-    int pictureIDs[] = {
-        1
-    };
-    length = (sizeof(names)/sizeof(*names));
 
-    for (i = 0; i < length; i++) {
-        animation = new SystemAnimation(i + 1, names[i], pictureIDs[i],
-            AnimationPositionKind::Middle);
-        animation->framesModel()->appendRow((new SystemAnimationFrame)
-            ->getModelRow());
-        m_model->appendRow(animation->getModelRow());
-    }
 }
 
 // -------------------------------------------------------

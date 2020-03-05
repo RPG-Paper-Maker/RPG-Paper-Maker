@@ -130,8 +130,9 @@ void SkillsDatas::setDefault(){
             PrimitiveValueKind::None) : new PrimitiveValue(targetConditions[i]),
             new PrimitiveValue(PrimitiveValueKind::None), availablesKind[i], new
             SystemPlaySong(songsID[i], SongKind::Sound), new PrimitiveValue(
-            PrimitiveValueKind::None), new PrimitiveValue(PrimitiveValueKind
-            ::None), modelCosts, modelEffects);
+            PrimitiveValueKind::None), i == 0 ? new PrimitiveValue(
+            PrimitiveValueKind::DataBase, 1) : new PrimitiveValue(
+            PrimitiveValueKind::None), modelCosts, modelEffects);
         m_model->appendRow(skill->getModelRow());
     }
 }

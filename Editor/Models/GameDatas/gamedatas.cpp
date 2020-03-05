@@ -141,7 +141,6 @@ void GameDatas::setDefault(){
     m_systemDatas->setDefault();
     setDefaultItemsCharacters();
     m_tilesetsDatas->setDefault();
-    m_animationsDatas->setDefault();
     m_statusDatas->setDefault();
     m_titleScreenGameOverDatas->setDefault();
 }

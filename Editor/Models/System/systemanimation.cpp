@@ -18,6 +18,9 @@ const QString SystemAnimation::JSON_POSITION_KIND = "pk";
 const QString SystemAnimation::JSON_FRAMES = "f";
 const QString SystemAnimation::JSON_ROWS = "r";
 const QString SystemAnimation::JSON_COLUMNS = "c";
+const int SystemAnimation::DEFAULT_PICTURE_ID = 1;
+const AnimationPositionKind SystemAnimation::DEFAULT_POSITION_KIND =
+    AnimationPositionKind::Middle;
 const int SystemAnimation::DEFAULT_ROWS = 5;
 const int SystemAnimation::DEFAULT_COLUMNS = 5;
 
@@ -28,8 +31,8 @@ const int SystemAnimation::DEFAULT_COLUMNS = 5;
 // -------------------------------------------------------
 
 SystemAnimation::SystemAnimation() :
-    SystemAnimation(1, "", 1, AnimationPositionKind::Top, DEFAULT_ROWS,
-        DEFAULT_COLUMNS)
+    SystemAnimation(1, "", DEFAULT_PICTURE_ID, DEFAULT_POSITION_KIND,
+        DEFAULT_ROWS, DEFAULT_COLUMNS)
 {
 
 }
@@ -131,6 +134,16 @@ void SystemAnimation::correctAllPositions(AnimationPositionKind previous,
 //
 // -------------------------------------------------------
 
+void SystemAnimation::setDefault() {
+    SystemAnimationFrame *frame;
+
+    frame = new SystemAnimationFrame;
+    frame->setDefault();
+    m_framesModel->appendRow(frame->getModelRow());
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemAnimation::createCopy() const{
     SystemAnimation* super = new SystemAnimation;
     super->setCopy(*this);
@@ -174,10 +187,10 @@ void SystemAnimation::read(const QJsonObject &json) {
 void SystemAnimation::write(QJsonObject &json) const {
     SuperListItem::write(json);
 
-    if (m_pictureID != 1) {
+    if (m_pictureID != DEFAULT_PICTURE_ID) {
         json[JSON_PICTURE_ID] = m_pictureID;
     }
-    if (m_positionKind != AnimationPositionKind::Top) {
+    if (m_positionKind != DEFAULT_POSITION_KIND) {
         json[JSON_POSITION_KIND] = static_cast<int>(m_positionKind);
     }
     SuperListItem::writeList(m_framesModel, json, JSON_FRAMES);

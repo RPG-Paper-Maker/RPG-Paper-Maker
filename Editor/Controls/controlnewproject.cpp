@@ -123,6 +123,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     Project *previousProject = RPM::get()->project();
     Project *project = new Project();
     RPM::get()->setProject(project);
+    project->setPathCurrentProject(pathDir);
     project->setDefault();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->write(pathDir);

@@ -101,7 +101,7 @@ private slots:
     void on_pushButton3DObjects_clicked();
     void on_tilesetPictureChanged(SystemPicture *picture);
     void on_animationPictureChanged(SystemPicture *picture);
-    void on_comboboxAnimationPositionKindChanged(int index);
+    void on_comboBoxAnimationPosition_currentIndexChanged(int index);
     void on_spinBoxAnimationRows_valueChanged(int i);
     void on_spinBoxAnimationColumns_valueChanged(int i);
     void on_pushButtonChangeBattler_clicked();

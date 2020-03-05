@@ -24,7 +24,7 @@ const QString SystemAnimationFrame::JSON_EFFECTS = "ef";
 SystemAnimationFrame::SystemAnimationFrame() :
     SystemAnimationFrame(1, "")
 {
-
+    m_modelEffects->appendRow(SuperListItem::getEmptyItem());
 }
 
 SystemAnimationFrame::SystemAnimationFrame(int i, QString n) :
@@ -177,6 +177,12 @@ QList<SystemAnimationFrameElement *> SystemAnimationFrame::getAllElementsWithID(
 //
 //  VIRTUAL FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemAnimationFrame::setDefault() {
+    this->initializeHeader();
+}
+
 // -------------------------------------------------------
 
 SuperListItem * SystemAnimationFrame::createCopy() const {
