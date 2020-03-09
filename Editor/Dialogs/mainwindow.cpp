@@ -657,7 +657,9 @@ void MainWindow::on_actionMountains_triggered() {
 // -------------------------------------------------------
 
 void MainWindow::on_actionSet_BR_path_folder_triggered(){
-    DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR());
+    DialogLocation dialog(project->gameDatas()->systemDatas()->pathBR(), Common
+        ::pathCombine(QDir::currentPath(), RPM::PATH_BR));
+
     if (openDialog(dialog) == QDialog::Accepted){
         project->gameDatas()->systemDatas()->setPathBR(dialog.location());
         project->writeSystemDatas();

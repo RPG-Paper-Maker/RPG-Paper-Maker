@@ -31,15 +31,18 @@ class DialogLocation : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogLocation(QString location, QWidget *parent = 0);
+    explicit DialogLocation(QString location, QString autov = QString(), QWidget
+        *parent = nullptr);
     ~DialogLocation();
     QString location() const;
 
 private:
     Ui::DialogLocation *ui;
+    QString m_auto;
 
 private slots:
     void on_pushButton_clicked();
+    void on_pushButtonAuto_clicked();
 };
 
 #endif // DIALOGLOCATION_H

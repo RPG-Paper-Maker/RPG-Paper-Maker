@@ -19,23 +19,25 @@
 //
 // -------------------------------------------------------
 
-DialogLocation::DialogLocation(QString location, QWidget *parent) :
+DialogLocation::DialogLocation(QString location, QString autov, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogLocation)
 {
     ui->setupUi(this);
     
-
     ui->lineEdit->setText(location);
     ui->lineEdit->setCursorPosition(0);
+    m_auto = autov;
+    ui->pushButtonAuto->setVisible(!m_auto.isEmpty());
 }
 
-DialogLocation::~DialogLocation()
-{
+DialogLocation::~DialogLocation() {
     delete ui;
 }
 
-QString DialogLocation::location() const { return ui->lineEdit->text(); }
+QString DialogLocation::location() const {
+    return ui->lineEdit->text();
+}
 
 // -------------------------------------------------------
 //
@@ -43,9 +45,18 @@ QString DialogLocation::location() const { return ui->lineEdit->text(); }
 //
 // -------------------------------------------------------
 
-void DialogLocation::on_pushButton_clicked(){
-    QString dir = QFileDialog::getExistingDirectory(this,"Select a location",
-                                                    location());
-    if (dir.count() > 0)
+void DialogLocation::on_pushButton_clicked() {
+    QString dir;
+
+    dir = QFileDialog::getExistingDirectory(this,"Select a location", this
+        ->location());
+    if (dir.count() > 0) {
         ui->lineEdit->setText(dir);
+    }
+}
+
+// -------------------------------------------------------
+
+void DialogLocation::on_pushButtonAuto_clicked() {
+    ui->lineEdit->setText(m_auto);
 }
