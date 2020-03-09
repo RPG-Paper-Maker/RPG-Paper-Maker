@@ -390,36 +390,39 @@ SuperListItem* SystemEffect::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemEffect::setCopy(const SystemEffect& effect) {
-    SuperListItem::setCopy(effect);
+void SystemEffect::setCopy(const SuperListItem &super) {
+    const SystemEffect *effect;
 
-    m_kind = effect.m_kind;
-    m_damagesKind->setId(effect.m_damagesKind->id());
-    m_damagesStatisticID->setCopy(*effect.m_damagesStatisticID);
-    m_damagesCurrencyID->setCopy(*effect.m_damagesCurrencyID);
-    m_damagesVariableID->setId(effect.m_damagesVariableID->id());
-    m_damagesFormula->setCopy(*effect.m_damagesFormula);
-    m_isDamagesMinimum = effect.m_isDamagesMinimum;
-    m_damagesMinimum->setCopy(*effect.m_damagesMinimum);
-    m_isDamagesMaximum = effect.m_isDamagesMaximum;
-    m_damagesMaximum->setCopy(*effect.m_damagesMaximum);
-    m_isDamageElement = effect.m_isDamageElement;
-    m_damagesElementID->setCopy(*effect.m_damagesElementID);
-    m_isDamageVariance = effect.m_isDamageVariance;
-    m_damagesVarianceFormula->setCopy(*effect.m_damagesVarianceFormula);
-    m_isDamageCritical = effect.m_isDamageCritical;
-    m_damagesCriticalFormula->setCopy(*effect.m_damagesCriticalFormula);
-    m_isDamagePrecision = effect.m_isDamagePrecision;
-    m_damagesPrecisionFormula->setCopy(*effect.m_damagesPrecisionFormula);
-    m_isAddStatus = effect.m_isAddStatus;
-    m_statusID->setCopy(*effect.m_statusID);
-    m_statusPrecisionFormula->setCopy(*effect.m_statusPrecisionFormula);
-    m_isAddSkill = effect.m_isAddSkill;
-    m_addSkillID->setCopy(*effect.m_addSkillID);
-    m_performSkillID->setCopy(*effect.m_performSkillID);
-    m_commonReactionID->setCopy(*effect.m_commonReactionID);
-    m_specialActionKind = effect.m_specialActionKind;
-    m_scriptFormula->setCopy(*effect.m_scriptFormula);
+    SuperListItem::setCopy(super);
+
+    effect = reinterpret_cast<const SystemEffect *>(&super);
+    m_kind = effect->m_kind;
+    m_damagesKind->setId(effect->m_damagesKind->id());
+    m_damagesStatisticID->setCopy(*effect->m_damagesStatisticID);
+    m_damagesCurrencyID->setCopy(*effect->m_damagesCurrencyID);
+    m_damagesVariableID->setId(effect->m_damagesVariableID->id());
+    m_damagesFormula->setCopy(*effect->m_damagesFormula);
+    m_isDamagesMinimum = effect->m_isDamagesMinimum;
+    m_damagesMinimum->setCopy(*effect->m_damagesMinimum);
+    m_isDamagesMaximum = effect->m_isDamagesMaximum;
+    m_damagesMaximum->setCopy(*effect->m_damagesMaximum);
+    m_isDamageElement = effect->m_isDamageElement;
+    m_damagesElementID->setCopy(*effect->m_damagesElementID);
+    m_isDamageVariance = effect->m_isDamageVariance;
+    m_damagesVarianceFormula->setCopy(*effect->m_damagesVarianceFormula);
+    m_isDamageCritical = effect->m_isDamageCritical;
+    m_damagesCriticalFormula->setCopy(*effect->m_damagesCriticalFormula);
+    m_isDamagePrecision = effect->m_isDamagePrecision;
+    m_damagesPrecisionFormula->setCopy(*effect->m_damagesPrecisionFormula);
+    m_isAddStatus = effect->m_isAddStatus;
+    m_statusID->setCopy(*effect->m_statusID);
+    m_statusPrecisionFormula->setCopy(*effect->m_statusPrecisionFormula);
+    m_isAddSkill = effect->m_isAddSkill;
+    m_addSkillID->setCopy(*effect->m_addSkillID);
+    m_performSkillID->setCopy(*effect->m_performSkillID);
+    m_commonReactionID->setCopy(*effect->m_commonReactionID);
+    m_specialActionKind = effect->m_specialActionKind;
+    m_scriptFormula->setCopy(*effect->m_scriptFormula);
 }
 
 // -------------------------------------------------------

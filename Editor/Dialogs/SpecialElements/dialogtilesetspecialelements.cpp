@@ -57,6 +57,7 @@ void DialogTilesetSpecialElements::initialize() {
     SuperListItem::copyModel(model, m_tileset->model(m_kind));
 
     ui->panelSuperList->list()->setCanBrutRemove(true);
+    ui->panelSuperList->list()->setCanCopyPaste(false);
     ui->panelSuperList->showButtonMax(false);
     ui->panelSuperList->showEditName(false);
     ui->panelSuperList->initializeModel(model);

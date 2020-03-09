@@ -32,8 +32,10 @@ public:
     virtual ~SystemTroop();
     QStandardItemModel* monstersList() const;
 
+    void initializeHeaders();
+
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemTroop &troop);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

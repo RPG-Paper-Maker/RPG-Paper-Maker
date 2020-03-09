@@ -38,10 +38,8 @@ public:
     static int getPreviewSize(int size);
 
     virtual SystemPicture* picture() const;
-
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemAutotile &super);
-
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 };

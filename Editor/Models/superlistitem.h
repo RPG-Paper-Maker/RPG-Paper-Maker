@@ -69,6 +69,8 @@ public:
         bool showID = true, bool nameOnly = false, bool showIcon = false);
     static void copyModel(QStandardItemModel* model,
                           QStandardItemModel* baseModel);
+    static void replaceModel(QStandardItemModel* model, QStandardItemModel
+        *baseModel);
     static SuperListItem* getnewInstance(PictureKind kind);
     static QStandardItem * getEmptyItem();
     static void copy(QStandardItemModel *model, QStandardItemModel *modelToCopy);

@@ -49,10 +49,13 @@ void SystemIcon::setPictureID(int id) {
 //
 // -------------------------------------------------------
 
-void SystemIcon::setCopy(const SystemIcon& icon){
-    SystemLang::setCopy(icon);
+void SystemIcon::setCopy(const SuperListItem &super) {
+    const SystemIcon *icon;
 
-    m_pictureID = icon.m_pictureID;
+    SystemLang::setCopy(super);
+
+    icon = reinterpret_cast<const SystemIcon *>(&super);
+    m_pictureID = icon->m_pictureID;
 }
 
 // -------------------------------------------------------

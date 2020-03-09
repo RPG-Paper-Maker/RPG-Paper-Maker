@@ -210,10 +210,23 @@ SuperListItem* SystemTileset::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemTileset::setCopy(const SystemTileset& super){
+void SystemTileset::setCopy(const SuperListItem &super) {
+    const SystemTileset *tileset;
+
     SuperListItem::setCopy(super);
 
-    m_pictureID = super.m_pictureID;
+    tileset = reinterpret_cast<const SystemTileset *>(&super);
+    m_pictureID = tileset->m_pictureID;
+
+    // Models
+    SuperListItem::deleteModel(m_modelAutotiles, false);
+    SuperListItem::copyModel(m_modelAutotiles, tileset->m_modelAutotiles);
+    SuperListItem::deleteModel(m_modelSpriteWalls, false);
+    SuperListItem::copyModel(m_modelSpriteWalls, tileset->m_modelSpriteWalls);
+    SuperListItem::deleteModel(m_modelMountains, false);
+    SuperListItem::copyModel(m_modelMountains, tileset->m_modelMountains);
+    SuperListItem::deleteModel(m_model3DObjects, false);
+    SuperListItem::copyModel(m_model3DObjects, tileset->m_model3DObjects);
 }
 
 // -------------------------------------------------------

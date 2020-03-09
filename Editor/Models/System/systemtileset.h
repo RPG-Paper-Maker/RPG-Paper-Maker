@@ -45,7 +45,6 @@ public:
     void updateModelSpriteWalls();
     void updateModel3DObjects();
     void updateModelMountains();
-
     static void updateModel(QStandardItemModel* model,
                             QStandardItemModel* completeModel);
     static void moveModel(QStandardItemModel* model,
@@ -53,7 +52,7 @@ public:
                           int index);
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemTileset &super);
+    virtual void setCopy(const SuperListItem &super);
 
     virtual void read(const QJsonObject &json);
     static void readModel(const QJsonObject &json, QString key,

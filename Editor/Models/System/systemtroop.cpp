@@ -27,18 +27,30 @@ SystemTroop::SystemTroop(int i, QString n, QStandardItemModel* monstersList) :
     SuperListItem(i,n),
     m_monstersList(monstersList)
 {
-
+    this->initializeHeaders();
 }
 
-SystemTroop::~SystemTroop(){
+SystemTroop::~SystemTroop() {
     SuperListItem::deleteModel(m_monstersList);
 }
 
-QStandardItemModel* SystemTroop::monstersList() const { return m_monstersList; }
+QStandardItemModel * SystemTroop::monstersList() const {
+    return m_monstersList;
+}
 
 // -------------------------------------------------------
 //
-//  READ / WRITE
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void SystemTroop::initializeHeaders() {
+    m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
+}
+
+// -------------------------------------------------------
+//
+//  VIRTUAL FUNCTIONS
 //
 // -------------------------------------------------------
 
@@ -50,34 +62,39 @@ SuperListItem * SystemTroop::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemTroop::setCopy(const SystemTroop &troop) {
-    SuperListItem::setCopy(troop);
-
-    // Currencies
-    QList<QStandardItem *> row;
+void SystemTroop::setCopy(const SuperListItem &super) {
+    const SystemTroop *troop;
     QStandardItem *item;
     SystemMonsterTroop *sys;
-    m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
-    for (int i = 0, l = troop.m_monstersList->invisibleRootItem()->rowCount();
-         i < l - 1; i++)
+
+    SuperListItem::setCopy(super);
+    troop = reinterpret_cast<const SystemTroop *>(&super);
+
+    // Currencies
+    SuperListItem::deleteModel(m_monstersList, false);
+    for (int i = 0, l = troop->m_monstersList->invisibleRootItem()->rowCount();
+         i < l; i++)
     {
-        sys = reinterpret_cast<SystemMonsterTroop *>(troop.m_monstersList->item(
-            i)->data().value<quintptr>());
-        row = sys->createCopy()->getModelRow();
-        m_monstersList->appendRow(row);
+        sys = reinterpret_cast<SystemMonsterTroop *>(troop->m_monstersList->item
+            (i)->data().value<quintptr>());
+        if (sys != nullptr) {
+            m_monstersList->appendRow(sys->createCopy()->getModelRow());
+        }
     }
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_monstersList->appendRow(item);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------
 
-void SystemTroop::read(const QJsonObject &json){
+void SystemTroop::read(const QJsonObject &json) {
     SuperListItem::read(json);
 
+    this->initializeHeaders();
+
     // Monsters list
-    m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
     SuperListItem::readTree(m_monstersList, new SystemMonsterTroop, json, "l");
 }
 

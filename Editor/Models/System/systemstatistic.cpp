@@ -72,10 +72,14 @@ SuperListItem* SystemStatistic::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemStatistic::setCopy(const SystemStatistic& statistic){
-    SystemLang::setCopy(statistic);
-    m_abbreviation = statistic.abbreviation();
-    m_isFix = statistic.m_isFix;
+void SystemStatistic::setCopy(const SuperListItem &super) {
+    const SystemStatistic *statistic;
+
+    SystemLang::setCopy(super);
+
+    statistic = reinterpret_cast<const SystemStatistic *>(&super);
+    m_abbreviation = statistic->abbreviation();
+    m_isFix = statistic->m_isFix;
 }
 
 // -------------------------------------------------------

@@ -25,10 +25,12 @@
 WidgetSuperList::WidgetSuperList(QWidget *parent) :
     QListView(parent),
     m_newItemInstance(nullptr),
+    m_copiedItem(nullptr),
     m_canBrutRemove(false),
     m_hasContextMenu(true),
     m_canEdit(false),
-    m_areNegIDsEnabled(true)
+    m_areNegIDsEnabled(true),
+    m_canCopyPaste(true)
 {
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setDragDropMode(QAbstractItemView::InternalMove);
@@ -49,8 +51,12 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
 WidgetSuperList::~WidgetSuperList()
 {
     delete m_contextMenu;
-    if (m_newItemInstance != nullptr)
+    if (m_newItemInstance != nullptr) {
         delete m_newItemInstance;
+    }
+    if (m_copiedItem != nullptr) {
+        delete m_copiedItem;
+    }
 }
 
 void WidgetSuperList::setCanBrutRemove(bool b) { m_canBrutRemove = b; }
@@ -67,6 +73,10 @@ void WidgetSuperList::setCanDragAndDrop(bool b) {
 
 void WidgetSuperList::setAreNegIDsEnabled(bool b) {
     m_areNegIDsEnabled = b;
+}
+
+void WidgetSuperList::setCanCopyPaste(bool b) {
+    m_canCopyPaste = b;
 }
 
 QStandardItemModel *WidgetSuperList::getModel() const { return p_model; }
@@ -185,15 +195,71 @@ void WidgetSuperList::updateKeyboardUpDown(int offset) {
 
 // -------------------------------------------------------
 
-void WidgetSuperList::brutDelete(QStandardItem* item){
-    SuperListItem* super = (SuperListItem*) item->data().value<qintptr>();
+void WidgetSuperList::copy(QStandardItem *selected) {
+    SuperListItem *super;
 
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
+    if (m_copiedItem == nullptr) {
+        m_copiedItem = super->createCopy();
+    } else {
+        m_copiedItem->setCopy(*super);
+    }
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::paste(QStandardItem *selected) {
+    SuperListItem *super;
+    QModelIndex index;
+    int row;
+    int id;
+
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
+    id = super->id();
+    super->setCopy(*m_copiedItem);
+    super->setId(id);
+    index = selected->index();
+    row = selected->row();
+    p_model->removeRow(row);
+    p_model->insertRow(row, super->getModelRow());
+    this->selectionModel()->clear();
+    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+    emit updated();
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::brutDelete(QStandardItem *selected) {
+    SuperListItem *super;
+
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<qintptr>());
     if (super->id() > 0) {
-        delete ((SuperListItem*) item->data().value<qintptr>());
-        p_model->removeRow(item->row());
+        delete super;
+        p_model->removeRow(selected->row());
 
         emit updated();
     }
+}
+
+// -------------------------------------------------------
+
+void WidgetSuperList::deleteClear(QStandardItem *selected) {
+    SuperListItem *super;
+    QModelIndex index;
+    int row, id;
+
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<qintptr>());
+    row = selected->row();
+    index = selected->index();
+    id = super->id();
+    delete super;
+    p_model->removeRow(row);
+    super = m_newItemInstance->createCopy();
+    super->setId(id);
+    super->setDefault();
+    p_model->insertRow(row, super->getModelRow());
+    this->selectionModel()->clear();
+    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
 }
 
 // -------------------------------------------------------
@@ -279,9 +345,9 @@ void WidgetSuperList::showContextMenu(const QPoint & p){
         QStandardItem* selected = getSelected();
         if (selected != nullptr){
             m_contextMenu->canEdit(m_canEdit);
-            m_contextMenu->canCopy(false);
-            m_contextMenu->canPaste(false);
-            m_contextMenu->canDelete(m_canBrutRemove);
+            m_contextMenu->canCopy(m_canCopyPaste);
+            m_contextMenu->canPaste(m_canCopyPaste && m_copiedItem != nullptr);
+            m_contextMenu->canDelete(true);
             m_contextMenu->showContextMenu(p);
         }
     }
@@ -289,29 +355,44 @@ void WidgetSuperList::showContextMenu(const QPoint & p){
 
 // -------------------------------------------------------
 
-void WidgetSuperList::contextEdit(){
+void WidgetSuperList::contextEdit() {
     QStandardItem* selected = getSelected();
     openDialog(selected->index());
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperList::contextCopy(){
+void WidgetSuperList::contextCopy() {
+    QStandardItem *selected;
 
+    selected = getSelected();
+    if (selected != nullptr) {
+        this->copy(selected);
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperList::contextPaste(){
+void WidgetSuperList::contextPaste() {
+    QStandardItem *selected;
 
+    selected = getSelected();
+    if (selected != nullptr) {
+        this->paste(selected);
+    }
 }
 
 // -------------------------------------------------------
 
-void WidgetSuperList::contextDelete(){
-    QStandardItem* selected = getSelected();
-    if (selected != nullptr){
-        if (m_canBrutRemove)
-            brutDelete(selected);
+void WidgetSuperList::contextDelete() {
+    QStandardItem *selected;
+
+    selected = getSelected();
+    if (selected != nullptr) {
+        if (m_canBrutRemove) {
+            this->brutDelete(selected);
+        } else {
+            this->deleteClear(selected);
+        }
     }
 }

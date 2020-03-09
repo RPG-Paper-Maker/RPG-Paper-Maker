@@ -40,6 +40,7 @@ public:
     QStandardItemModel* modelLoots() const;
     QStandardItemModel* modelActions() const;
 
+    void initializeHeaders();
     void deleteCurrencies();
     void insertCurrency(int id, SystemProgressionTable *table);
     void insertDefaultCurrency(int id);
@@ -47,7 +48,7 @@ public:
     SystemProgressionTable *currencyProgressionAt(int id);
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemMonster& monster);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

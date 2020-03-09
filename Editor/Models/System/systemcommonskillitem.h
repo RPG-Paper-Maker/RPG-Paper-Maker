@@ -79,8 +79,10 @@ public:
     QStandardItemModel * modelEffects() const;
     QStandardItemModel * modelCharacteristics() const;
 
+    void initializeHeaders();
+
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemCommonSkillItem &skillItem);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -39,13 +39,12 @@ SystemMonster::SystemMonster(int i, LangsTranslation *names, int idClass, int
     m_modelLoots(loots),
     m_modelActions(actions)
 {
-    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Name", "N", "P", "I",
-        "F"}));
+    this->initializeHeaders();
 }
 
 SystemMonster::~SystemMonster() {
     delete m_experience;
-    deleteCurrencies();
+    this->deleteCurrencies();
     SuperListItem::deleteModel(m_modelLoots);
     delete m_modelActions;
 }
@@ -70,6 +69,13 @@ QStandardItemModel* SystemMonster::modelActions() const {
 //
 //  INTERMEDIARY FUNCTIONS
 //
+// -------------------------------------------------------
+
+void SystemMonster::initializeHeaders() {
+    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Name", "N", "P", "I",
+        "F"}));
+}
+
 // -------------------------------------------------------
 
 void SystemMonster::deleteCurrencies() {
@@ -124,37 +130,41 @@ SuperListItem* SystemMonster::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemMonster::setCopy(const SystemMonster& monster){
-    SystemHero::setCopy(monster);
-    QStandardItem* item;
-    QList<QStandardItem*> row;
-    int l;
+void SystemMonster::setCopy(const SuperListItem &super) {
+    const SystemMonster *monster;
+    QStandardItem *item;
+    QList<QStandardItem *> row;
+    QHash<int, SystemProgressionTable *>::const_iterator i;
+    int j, l;
+
+    SystemHero::setCopy(super);
+    monster = reinterpret_cast<const SystemMonster *>(&super);
 
     // Experience
-    m_experience->setCopy(*monster.m_experience);
+    m_experience->setCopy(*monster->m_experience);
 
     // Currencies
-    deleteCurrencies();
-    QHash<int, SystemProgressionTable *>::const_iterator i;
-    for (i = monster.m_currencies.begin(); i != monster.m_currencies.end(); i++)
+    this->deleteCurrencies();
+    for (i = monster->m_currencies.begin(); i != monster->m_currencies.end();
+         i++)
     {
         m_currencies.insert(i.key(), reinterpret_cast<SystemProgressionTable *>(
             i.value()->createCopy()));
     }
 
     // Loots
-    l = monster.modelLoots()->invisibleRootItem()->rowCount();
-    for (int i = 0; i < l - 1; i++){
-        SystemLoot* loot = new SystemLoot;
-        SystemLoot* lootCopy = (SystemLoot*) monster.modelLoots()->item(i)
-                ->data().value<qintptr>();
-        loot->setCopy(*lootCopy);
-        row = loot->getModelRow();
-        m_modelLoots->appendRow(row);
+    SuperListItem::deleteModel(m_modelLoots, false);
+    for (j = 0, l = monster->modelLoots()->invisibleRootItem()->rowCount(); j <
+         l - 1; j++)
+    {
+        m_modelLoots->appendRow(reinterpret_cast<SystemLoot *>(monster
+            ->modelLoots()->item(j)->data().value<qintptr>())->createCopy()
+            ->getModelRow());
     }
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_modelLoots->appendRow(item);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

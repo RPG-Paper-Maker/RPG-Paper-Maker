@@ -103,17 +103,20 @@ SuperListItem* SystemStatisticProgression::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemStatisticProgression::setCopy(const SystemStatisticProgression&
-                                         statisticProgression)
+void SystemStatisticProgression::setCopy(const SuperListItem &super)
 {
-    SuperListItem::setCopy(statisticProgression);
-    p_id = statisticProgression.p_id;
+    const SystemStatisticProgression *progression;
+    QHash<int, int>::const_iterator i;
 
-    m_max->setCopy(*statisticProgression.m_max);
-    m_isFix = statisticProgression.m_isFix;
-    m_table->setCopy(*statisticProgression.m_table);
-    m_random->setCopy(*statisticProgression.m_random);
-    m_formula->setCopy(*statisticProgression.m_formula);
+    SuperListItem::setCopy(super);
+
+    progression = reinterpret_cast<const SystemStatisticProgression *>(&super);
+    p_id = progression->p_id;
+    m_max->setCopy(*progression->m_max);
+    m_isFix = progression->m_isFix;
+    m_table->setCopy(*progression->m_table);
+    m_random->setCopy(*progression->m_random);
+    m_formula->setCopy(*progression->m_formula);
 }
 
 // -------------------------------------------------------

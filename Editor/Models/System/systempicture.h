@@ -56,7 +56,7 @@ public:
     void setDefaultCharacterTileset();
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemPicture &super);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem*> getModelRow() const;
     virtual void getIcon(QIcon &icon);
     virtual void read(const QJsonObject &json);

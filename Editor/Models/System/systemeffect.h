@@ -127,7 +127,7 @@ public:
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemEffect &effect);
+    virtual void setCopy(const SuperListItem &super);
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

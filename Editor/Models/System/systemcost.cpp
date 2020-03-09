@@ -130,14 +130,17 @@ SuperListItem* SystemCost::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCost::setCopy(const SystemCost& cost) {
-    SuperListItem::setCopy(cost);
+void SystemCost::setCopy(const SuperListItem &super) {
+    const SystemCost *cost;
 
-    m_kind->setId(cost.m_kind->id());
-    m_statisticID->setCopy(*cost.m_statisticID);
-    m_currencyID->setCopy(*cost.m_currencyID);
-    m_variableID->setId(cost.m_variableID->id());
-    m_valueFormula->setCopy(*cost.m_valueFormula);
+    SuperListItem::setCopy(super);
+
+    cost = reinterpret_cast<const SystemCost *>(&super);
+    m_kind->setId(cost->m_kind->id());
+    m_statisticID->setCopy(*cost->m_statisticID);
+    m_currencyID->setCopy(*cost->m_currencyID);
+    m_variableID->setId(cost->m_variableID->id());
+    m_valueFormula->setCopy(*cost->m_valueFormula);
 }
 
 // -------------------------------------------------------

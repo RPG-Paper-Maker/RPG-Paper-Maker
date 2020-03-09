@@ -213,14 +213,26 @@ bool SystemProgressionTable::isDefault() const {
 //
 // -------------------------------------------------------
 
-void SystemProgressionTable::setCopy(const SystemProgressionTable& progression)
+SuperListItem * SystemProgressionTable::createCopy() const {
+    SystemProgressionTable *super = new SystemProgressionTable;
+    super->setCopy(*this);
+    return super;
+}
+
+// -------------------------------------------------------
+
+void SystemProgressionTable::setCopy(const SuperListItem &super)
 {
-    m_initialValue->setCopy(*progression.m_initialValue);
-    m_finalValue->setCopy(*progression.m_finalValue);
-    m_equation = progression.m_equation;
-    m_table.clear();
+    const SystemProgressionTable *table;
     QHash<int, int>::const_iterator i;
-    for (i = progression.m_table.begin(); i != progression.m_table.end(); i++) {
+
+    table = reinterpret_cast<const SystemProgressionTable *>(&super);
+
+    m_initialValue->setCopy(*table->m_initialValue);
+    m_finalValue->setCopy(*table->m_finalValue);
+    m_equation = table->m_equation;
+    m_table.clear();
+    for (i = table->m_table.begin(); i != table->m_table.end(); i++) {
         m_table.insert(i.key(), i.value());
     }
 }

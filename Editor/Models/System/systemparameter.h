@@ -34,7 +34,7 @@ public:
     PrimitiveValue* value() const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemParameter &param);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem*> getModelRow() const;
 
     virtual void read(const QJsonObject &json);

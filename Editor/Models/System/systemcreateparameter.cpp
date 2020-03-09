@@ -67,12 +67,16 @@ SuperListItem* SystemCreateParameter::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemCreateParameter::setCopy(const SystemCreateParameter& param){
-    SuperListItem::setCopy(param);
-    p_id = param.p_id;
+void SystemCreateParameter::setCopy(const SuperListItem &super) {
+    const SystemCreateParameter *param;
+
+    SuperListItem::setCopy(super);
+
+    param = reinterpret_cast<const SystemCreateParameter *>(&super);
+    p_id = param->p_id;
 
     // Default value
-    m_defaultValue->setCopy(*param.defaultValue());
+    m_defaultValue->setCopy(*param->defaultValue());
 }
 
 // -------------------------------------------------------

@@ -31,9 +31,11 @@ public:
                          QStandardItemModel *commands, bool bHero);
     virtual ~SystemCommonReaction();
     QStandardItemModel* modelParameters() const;
-    virtual SuperListItem* createCopy() const;
-    void setCopy(const SystemCommonReaction& copy);
 
+    void initializeHeaders();
+
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SuperListItem& super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

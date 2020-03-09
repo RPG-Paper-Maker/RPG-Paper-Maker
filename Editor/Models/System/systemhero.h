@@ -49,7 +49,7 @@ public:
     int maxLevel() const;
 
     virtual SuperListItem* createCopy() const;
-    void setCopy(const SystemHero& hero);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -1203,10 +1203,10 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_30">
                 <item row="0" column="0">
-                 <widget class="PanelSuperList" name="panelSuperListCommonBattleCommands" native="true">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
+                 <widget class="WidgetSuperTree" name="treeViewBattleCommands">
+                  <attribute name="headerVisible">
+                   <bool>false</bool>
+                  </attribute>
                  </widget>
                 </item>
                </layout>
@@ -1893,15 +1893,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetPicture</class>

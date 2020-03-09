@@ -61,7 +61,7 @@ SuperListItem* SystemMountain::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemMountain::setCopy(const SystemMountain& super) {
+void SystemMountain::setCopy(const SuperListItem &super) {
     SystemSpecialElement::setCopy(super);
 }
 

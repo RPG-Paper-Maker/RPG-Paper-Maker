@@ -31,9 +31,10 @@ public:
     virtual ~SystemClassSkill();
     int level() const;
     void setLevel(int i);
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemClassSkill &skill);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem*> getModelRow() const;
 
     virtual void read(const QJsonObject &json);

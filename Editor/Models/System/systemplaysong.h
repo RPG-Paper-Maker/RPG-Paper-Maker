@@ -55,7 +55,7 @@ public:
     bool isNone() const;
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemPlaySong &super);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

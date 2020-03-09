@@ -445,15 +445,17 @@ void SystemCommonObject::setCopy(const SuperListItem &super) {
     m_inheritanceId = object->inheritanceId();
 
     // Properties
+    SuperListItem::deleteModel(m_properties, false);
     SuperListItem::copy(m_properties, object->m_properties);
 
     // Events
     RPM::get()->project()->setCurrentObject(this);
+    SuperListItem::deleteModel(m_events, false);
     SuperListItem::copy(m_events, object->m_events);
 
     // States
+    SuperListItem::deleteModel(m_states, false);
     SuperListItem::copy(m_states, object->m_states);
-
 }
 
 // -------------------------------------------------------

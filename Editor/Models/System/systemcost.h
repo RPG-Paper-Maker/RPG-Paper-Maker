@@ -50,7 +50,7 @@ public:
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemCost &cost);
+    virtual void setCopy(const SuperListItem &super);
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

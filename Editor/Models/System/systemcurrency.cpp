@@ -58,7 +58,7 @@ SuperListItem* SystemCurrency::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemCurrency::setCopy(const SystemCurrency& super){
+void SystemCurrency::setCopy(const SuperListItem &super) {
     SystemIcon::setCopy(super);
 }
 

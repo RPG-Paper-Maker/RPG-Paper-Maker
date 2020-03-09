@@ -62,12 +62,15 @@ SuperListItem* SystemReaction::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemReaction::setCopy(const SystemReaction& copy){
-    SuperListItem::setCopy(copy);
-    p_id = copy.p_id;
+void SystemReaction::setCopy(const SuperListItem &super) {
+    const SystemReaction *reaction;
 
-    copyCommands(copy.m_modelCommands, m_modelCommands);
-    m_blockingHero = copy.m_blockingHero;
+    SuperListItem::setCopy(super);
+
+    reaction = reinterpret_cast<const SystemReaction *>(&super);
+    p_id = reaction->p_id;
+    copyCommands(reaction->m_modelCommands, m_modelCommands);
+    m_blockingHero = reaction->m_blockingHero;
 }
 
 // -------------------------------------------------------

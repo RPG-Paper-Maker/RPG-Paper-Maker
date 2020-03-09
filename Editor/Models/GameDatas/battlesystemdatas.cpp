@@ -389,11 +389,11 @@ void BattleSystemDatas::setDefaultCommonStatistics(){
 void BattleSystemDatas::setDefaultCommonBattleCommand(){
     int i = 1;
     SystemBattleCommand* items[] = {
-        new SystemBattleCommand(i++, new LangsTranslation("Attack"), 1),
-        new SystemBattleCommand(i++, new LangsTranslation("Skill"), 2),
-        new SystemBattleCommand(i++, new LangsTranslation("Item"), 3),
-        new SystemBattleCommand(i++, new LangsTranslation("Escape"), 4),
-        new SystemBattleCommand(i++, new LangsTranslation("End turn"), 5),
+        new SystemBattleCommand(i++, "Attack", 1),
+        new SystemBattleCommand(i++, "Skill", 2),
+        new SystemBattleCommand(i++, "Item", 3),
+        new SystemBattleCommand(i++, "Escape", 4),
+        new SystemBattleCommand(i++, "End turn", 5),
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -532,17 +532,8 @@ void BattleSystemDatas::read(const QJsonObject &json){
     }
 
     // Battle commands
-    jsonList = json[jsonCommonBattleCommand].toArray();
-    for (int i = 0; i < jsonList.size(); i++){
-        item = new QStandardItem;
-        SystemBattleCommand* sysBattleCommand = new SystemBattleCommand;
-        sysBattleCommand->read(jsonList[i].toObject());
-        item->setData(QVariant::fromValue(
-                          reinterpret_cast<quintptr>(sysBattleCommand)));
-        item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
-        item->setText(sysBattleCommand->toString());
-        m_modelCommonBattleCommand->appendRow(item);
-    }
+    SuperListItem::readTree(m_modelCommonBattleCommand, new SystemBattleCommand,
+        json, jsonCommonBattleCommand);
 }
 
 // -------------------------------------------------------
@@ -650,15 +641,6 @@ void BattleSystemDatas::write(QJsonObject &json) const{
     json[jsonCommonStatistics] = jsonArray;
 
     // Battle commands
-    l = m_modelCommonBattleCommand->invisibleRootItem()->rowCount();
-    jsonArray = QJsonArray();
-    for (int i = 0; i < l; i++){
-        QJsonObject jsonCommon;
-        SystemBattleCommand* sysBattleCommand = reinterpret_cast
-            <SystemBattleCommand*>(m_modelCommonBattleCommand->item(i)->data()
-            .value<quintptr>());
-        sysBattleCommand->write(jsonCommon);
-        jsonArray.append(jsonCommon);
-    }
-    json[jsonCommonBattleCommand] = jsonArray;
+    SuperListItem::writeTree(m_modelCommonBattleCommand, json,
+        jsonCommonBattleCommand);
 }

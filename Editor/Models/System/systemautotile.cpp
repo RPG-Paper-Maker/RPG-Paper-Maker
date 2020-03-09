@@ -64,7 +64,7 @@ SuperListItem* SystemAutotile::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemAutotile::setCopy(const SystemAutotile& super){
+void SystemAutotile::setCopy(const SuperListItem &super) {
     SystemSpecialElement::setCopy(super);
 }
 

@@ -288,10 +288,13 @@ SuperListItem* SystemCustomShape::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCustomShape::setCopy(const SystemCustomShape& super){
+void SystemCustomShape::setCopy(const SuperListItem &super) {
+    const SystemCustomShape *shape;
+
     SuperListItem::setCopy(super);
 
-    m_isBR = super.m_isBR;
+    shape = reinterpret_cast<const SystemCustomShape *>(&super);
+    m_isBR = shape->m_isBR;
 }
 
 // -------------------------------------------------------

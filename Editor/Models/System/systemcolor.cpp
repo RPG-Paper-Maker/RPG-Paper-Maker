@@ -74,9 +74,12 @@ SuperListItem * SystemColor::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemColor::setCopy(const SystemColor &color) {
-    SuperListItem::setCopy(color);
-    m_color = color.m_color;
+void SystemColor::setCopy(const SuperListItem &super) {
+    const SystemColor *color;
+
+    SuperListItem::setCopy(super);
+    color = reinterpret_cast<const SystemColor *>(&super);
+    m_color = color->m_color;
 }
 
 // -------------------------------------------------------

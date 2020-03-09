@@ -126,6 +126,9 @@ void WidgetSuperTree::setItem(QStandardItem *selected, SuperListItem* super) {
             (SuperListItem*)(selected->data().value<quintptr>());
 
     QStandardItem* root = getRootOfItem(selected);
+    if (m_updateId) {
+        super->setId(previous == nullptr ? getNewId(p_model) : previous->id());
+    }
     QList<QStandardItem*> row = super->getModelRow();
     int index = selected->row();
     if (previous != nullptr)

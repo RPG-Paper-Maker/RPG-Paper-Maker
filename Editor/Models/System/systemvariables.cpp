@@ -84,12 +84,15 @@ void SystemVariables::setDefaultVariables(bool i) {
         varItem = new QStandardItem;
         var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? "Lucas "
             "instance ID" : "");
-        varItem->setData(QVariant::fromValue(reinterpret_cast<quintptr>(var)));
-        varItem->setFlags(varItem->flags() ^ (Qt::ItemIsDropEnabled));
-        varItem->setText(var->toString());
-        p_model->invisibleRootItem()->appendRow(varItem);
+        p_model->invisibleRootItem()->appendRow(var->getModelRow());
     }
     setName(QString("Page ") + QString::number(id()));
+}
+
+// -------------------------------------------------------
+
+void SystemVariables::setDefault() {
+    this->setDefaultVariables(false);
 }
 
 // -------------------------------------------------------
@@ -98,6 +101,19 @@ SuperListItem* SystemVariables::createCopy() const{
     SystemVariables* super = new SystemVariables;
     super->setCopy(*this);
     return super;
+}
+
+// -------------------------------------------------------
+
+void SystemVariables::setCopy(const SuperListItem &super) {
+    const SystemVariables *variables;
+
+    variables = reinterpret_cast<const SystemVariables *>(&super);
+    if (p_model->invisibleRootItem()->rowCount() == 0) {
+        SuperListItem::copyModel(p_model, variables->p_model);
+    } else {
+        SuperListItem::replaceModel(p_model, variables->p_model);
+    }
 }
 
 // -------------------------------------------------------

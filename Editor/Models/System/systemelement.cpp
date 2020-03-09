@@ -140,10 +140,10 @@ SuperListItem* SystemElement::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemElement::setCopy(const SystemIcon &super) {
-    SystemIcon::setCopy(super);
+void SystemElement::setCopy(const SuperListItem &super) {
     const SystemElement *element;
 
+    SystemIcon::setCopy(super);
     element = reinterpret_cast<const SystemElement *>(&super);
     this->clearEfficiency();
     SuperListItem::deleteModel(m_modelEfficiency, false);

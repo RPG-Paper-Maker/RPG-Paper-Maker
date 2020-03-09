@@ -31,9 +31,11 @@ public:
     SystemEvent(int i, QString n, QStandardItemModel* parameters);
     virtual ~SystemEvent();
     QStandardItemModel* modelParameters() const;
-    virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemEvent &item);
 
+    void initializeHeaders();
+
+    virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

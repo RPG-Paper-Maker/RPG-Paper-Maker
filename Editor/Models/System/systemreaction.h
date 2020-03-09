@@ -35,7 +35,7 @@ public:
     bool blockingHero() const;
     void setBlockingHero(bool b);
     virtual SuperListItem* createCopy() const;
-    void setCopy(const SystemReaction& copy);
+    virtual void setCopy(const SuperListItem& super);
     static void addEmptyCommand(QStandardItem *root);
     static void addCommand(QStandardItem *root, EventCommand* command);
     static void addCommandWithoutText(QStandardItem *root,

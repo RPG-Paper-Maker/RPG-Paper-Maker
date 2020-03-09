@@ -37,6 +37,7 @@ public:
     void setCanEdit(bool b);
     void setAreNegIDsEnabled(bool b);
     void setCanDragAndDrop(bool b);
+    void setCanCopyPaste(bool b);
     void initializeModel(QStandardItemModel* m);
     void initializeNewItemInstance(SuperListItem *item);
     QStandardItemModel* getModel() const;
@@ -55,12 +56,17 @@ private:
     QStandardItemModel* p_model;
     SuperListItem* m_newItemInstance; 
     ContextMenuList* m_contextMenu;
+    SuperListItem *m_copiedItem;
     bool m_canBrutRemove;
     bool m_hasContextMenu;
     bool m_canEdit;
     bool m_areNegIDsEnabled;
+    bool m_canCopyPaste;
 
-    void brutDelete(QStandardItem* item);
+    void copy(QStandardItem *selected);
+    void paste(QStandardItem *selected);
+    void brutDelete(QStandardItem *selected);
+    void deleteClear(QStandardItem *selected);
 
 private slots:
     void openDialog(QModelIndex);

@@ -117,10 +117,13 @@ SuperListItem* SystemSong::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemSong::setCopy(const SystemSong& super){
+void SystemSong::setCopy(const SuperListItem &super) {
+    const SystemSong *song;
+
     SuperListItem::setCopy(super);
 
-    m_isBR = super.m_isBR;
+    song = reinterpret_cast<const SystemSong *>(&super);
+    m_isBR = song->m_isBR;
 }
 
 // -------------------------------------------------------

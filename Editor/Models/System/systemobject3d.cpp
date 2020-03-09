@@ -66,7 +66,7 @@ SuperListItem* SystemObject3D::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemObject3D::setCopy(const SystemObject3D& super){
+void SystemObject3D::setCopy(const SuperListItem &super){
     SystemSpecialElement::setCopy(super);
 }
 

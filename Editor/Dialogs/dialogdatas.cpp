@@ -303,9 +303,6 @@ void DialogDatas::initializeAnimations(GameDatas *gameDatas) {
         ::ENUM_TO_STRING_ANIMATION_POSITION_KIND);
     ui->comboBoxAnimationPosition->setCurrentIndex(static_cast<int>(pos));
     on_pageAnimationsSelected(index, index);
-    connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
-        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
-        on_pageAnimationFramesSelected(QModelIndex, QModelIndex)));
 }
 
 // -------------------------------------------------------
@@ -320,6 +317,9 @@ void DialogDatas::updateAnimation(SystemAnimation *animation) {
     QModelIndex index = ui->panelSuperListAnimationFrames->list()->getModel()
         ->index(0, 0);
     ui->panelSuperListAnimationFrames->list()->setIndex(0);
+    connect(ui->panelSuperListAnimationFrames->list()->selectionModel(), SIGNAL(
+        currentChanged(QModelIndex, QModelIndex)), this, SLOT(
+        on_pageAnimationFramesSelected(QModelIndex, QModelIndex)));
     this->on_pageAnimationFramesSelected(index, index);
 }
 

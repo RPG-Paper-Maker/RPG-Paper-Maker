@@ -311,8 +311,8 @@ void SuperListItem::fillComboBox(QComboBox* comboBox, QStandardItemModel* model,
 
 // -------------------------------------------------------
 
-void SuperListItem::copyModel(QStandardItemModel* model,
-                                             QStandardItemModel* baseModel)
+void SuperListItem::copyModel(QStandardItemModel* model, QStandardItemModel*
+    baseModel)
 {
     SuperListItem* super, *superBase;
     QList<QStandardItem*> row;
@@ -324,6 +324,25 @@ void SuperListItem::copyModel(QStandardItemModel* model,
         super->setId(superBase->id());
         row = super->getModelRow();
         model->appendRow(row);
+    }
+}
+
+// -------------------------------------------------------
+
+void SuperListItem::replaceModel(QStandardItemModel* model, QStandardItemModel*
+    baseModel)
+{
+    SuperListItem* super, *superBase;
+    int i, l;
+
+    for (i = 0, l = baseModel->invisibleRootItem()->rowCount(); i < l; i++) {
+        super = reinterpret_cast<SuperListItem *>(model->item(i)->data()
+            .value<quintptr>());
+        superBase = reinterpret_cast<SuperListItem *>(baseModel->item(i)->data()
+            .value<quintptr>());
+        super->setCopy(*superBase);
+        model->removeRow(i);
+        model->insertRow(i, super->getModelRow());
     }
 }
 

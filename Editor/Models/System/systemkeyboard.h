@@ -41,7 +41,7 @@ public:
     virtual QString toString() const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemKeyBoard &k);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem*> getModelRow() const;
 
     virtual void read(const QJsonObject &json);

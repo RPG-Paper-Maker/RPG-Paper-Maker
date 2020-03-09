@@ -39,7 +39,7 @@ public:
     QString getLocalPath(SongKind kind) const;
 
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemSong &super);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem*> getModelRow() const;
 
     virtual void read(const QJsonObject &json);

@@ -36,7 +36,10 @@ public:
     virtual QString idToString() const;
     SuperListItem* getById(int id) const;
     void setDefaultVariables(bool i);
+
+    virtual void setDefault();
     virtual SuperListItem* createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     void readCommand(const QJsonArray &json);
     virtual void write(QJsonObject &json) const;

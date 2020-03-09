@@ -20,20 +20,19 @@
 // -------------------------------------------------------
 
 SystemBattleCommand::SystemBattleCommand() :
-    SystemBattleCommand(1, new LangsTranslation, 1)
+    SystemBattleCommand(1, "", 1)
 {
 
 }
 
-SystemBattleCommand::SystemBattleCommand(int i, LangsTranslation* names,
-                                         int idSkill) :
-    SystemLang(i,names),
+SystemBattleCommand::SystemBattleCommand(int i, QString name, int idSkill) :
+    SuperListItem(i, name),
     m_idSkill(idSkill)
 {
 
 }
 
-SystemBattleCommand::~SystemBattleCommand(){
+SystemBattleCommand::~SystemBattleCommand() {
 
 }
 
@@ -47,7 +46,7 @@ void SystemBattleCommand::setIdSkill(int i) { m_idSkill = i; }
 //
 // -------------------------------------------------------
 
-void SystemBattleCommand::updateName(){
+void SystemBattleCommand::updateName() {
     p_name = SuperListItem::getById(
                 RPM::get()->project()->gameDatas()->skillsDatas()->model()
                 ->invisibleRootItem(),
@@ -56,13 +55,13 @@ void SystemBattleCommand::updateName(){
 
 // -------------------------------------------------------
 
-void SystemBattleCommand::setDefault(){
+void SystemBattleCommand::setDefault() {
     updateName();
 }
 
 // -------------------------------------------------------
 
-bool SystemBattleCommand::openDialog(){
+bool SystemBattleCommand::openDialog() {
     SystemBattleCommand battleCommand;
     battleCommand.setCopy(*this);
     DialogSystemBattleCommand dialog(battleCommand);
@@ -83,10 +82,14 @@ SuperListItem* SystemBattleCommand::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemBattleCommand::setCopy(const SystemBattleCommand& battleCommand){
-    SystemLang::setCopy(battleCommand);
+void SystemBattleCommand::setCopy(const SuperListItem &super) {
+    const SystemBattleCommand *command;
 
-    m_idSkill = battleCommand.m_idSkill;
+    SuperListItem::setCopy(super);
+
+    command = reinterpret_cast<const SystemBattleCommand *>(&super);
+    p_id = command->p_id;
+    m_idSkill = command->m_idSkill;
 }
 
 // -------------------------------------------------------

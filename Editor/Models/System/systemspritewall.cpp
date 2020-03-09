@@ -61,7 +61,7 @@ SuperListItem* SystemSpriteWall::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemSpriteWall::setCopy(const SystemSpriteWall& super){
+void SystemSpriteWall::setCopy(const SuperListItem &super){
     SystemSpecialElement::setCopy(super);
 }
 

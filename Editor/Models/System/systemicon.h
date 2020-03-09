@@ -34,7 +34,7 @@ public:
     int pictureID() const;
     void setPictureID(int id);
 
-    virtual void setCopy(const SystemIcon& icon);
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

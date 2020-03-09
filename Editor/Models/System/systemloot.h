@@ -52,7 +52,7 @@ public:
 
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
-    virtual void setCopy(const SystemLoot &loot);
+    virtual void setCopy(const SuperListItem &super);
     virtual QList<QStandardItem *> getModelRow() const;
     virtual QString toString() const;
     virtual void read(const QJsonObject &json);

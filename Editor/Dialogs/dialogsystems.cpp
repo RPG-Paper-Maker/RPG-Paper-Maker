@@ -175,14 +175,12 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
 void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
 
     // Don't show edit name
-    ui->panelSuperListCommonBattleCommands->showEditName(false);
     ui->panelSuperListCommonStatistics->showEditName(false);
     ui->panelSuperListElements->showEditName(false);
     ui->panelSuperListWeaponsKind->showEditName(false);
     ui->panelSuperListArmorsKind->showEditName(false);
 
     // Allow editions
-    ui->panelSuperListCommonBattleCommands->list()->setCanEdit(true);
     ui->panelSuperListCommonStatistics->list()->setCanEdit(true);
     ui->panelSuperListElements->list()->setCanEdit(true);
     ui->panelSuperListWeaponsKind->list()->setCanEdit(true);
@@ -191,6 +189,7 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     // Update ID
     ui->treeViewBattleMap->setUpdateId(true);
     ui->treeViewBattleMap->setCanBeEmpty(false);
+    ui->treeViewBattleCommands->setCanBeEmpty(false);
 
     // Fill combo boxes
     updateStatisticsBase();
@@ -219,6 +218,10 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
     ui->treeViewBattleMap->initializeModel(gameDatas->battleSystemDatas()
         ->modelBattleMaps());
     ui->treeViewBattleMap->initializeNewItemInstance(new SystemBattleMap);
+    ui->treeViewBattleCommands->initializeModel(gameDatas->battleSystemDatas()
+        ->modelCommonBattleCommand());
+    ui->treeViewBattleCommands->initializeNewItemInstance(new
+        SystemBattleCommand);
     ui->panelSuperListWeaponsKind->initializeModel(gameDatas
         ->battleSystemDatas()->modelWeaponsKind());
     ui->panelSuperListWeaponsKind->list()->initializeNewItemInstance(
@@ -239,10 +242,6 @@ void DialogSystems::initializeBattleSystem(GameDatas *gameDatas){
         ->battleSystemDatas()->modelCommonStatistics());
     ui->panelSuperListCommonStatistics->list()->initializeNewItemInstance(
         new SystemStatistic);
-    ui->panelSuperListCommonBattleCommands->list()->initializeModel(gameDatas
-        ->battleSystemDatas()->modelCommonBattleCommand());
-    ui->panelSuperListCommonBattleCommands->list()->initializeNewItemInstance(
-        new SystemBattleCommand);
 }
 
 // -------------------------------------------------------

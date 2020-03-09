@@ -56,10 +56,11 @@ public:
 
     static SystemClass * createInheritanceClass();
 
+    void initializeHeaders();
     void reset();
     void setClassValues();
 
-    virtual SuperListItem* createCopy() const;
+    virtual SuperListItem * createCopy() const;
     virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;

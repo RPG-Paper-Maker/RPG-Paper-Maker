@@ -193,19 +193,21 @@ SuperListItem* SystemPlaySong::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemPlaySong::setCopy(const SystemPlaySong& super) {
+void SystemPlaySong::setCopy(const SuperListItem &super) {
+    const SystemPlaySong *play;
+
     SuperListItem::setCopy(super);
 
-    p_id = super.p_id;
-    m_volume->setCopy(*super.m_volume);
-    m_isStart = super.m_isStart;
-    m_start->setCopy(*super.m_start);
-    m_isEnd = super.m_isEnd;
-    m_end->setCopy(*super.m_end);
-    m_isSelectedByID = super.m_isSelectedByID;
-    m_valueID->setCopy(*super.m_valueID);
-
-    updateName();
+    play = reinterpret_cast<const SystemPlaySong *>(&super);
+    p_id = play->p_id;
+    m_volume->setCopy(*play->m_volume);
+    m_isStart = play->m_isStart;
+    m_start->setCopy(*play->m_start);
+    m_isEnd = play->m_isEnd;
+    m_end->setCopy(*play->m_end);
+    m_isSelectedByID = play->m_isSelectedByID;
+    m_valueID->setCopy(*play->m_valueID);
+    this->updateName();
 }
 
 // -------------------------------------------------------

@@ -266,22 +266,26 @@ SuperListItem* SystemObjectEvent::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
-    SuperListItem::setCopy(event);
-    p_id = event.p_id;
+void SystemObjectEvent::setCopy(const SuperListItem &super) {
+    const SystemObjectEvent *event;
+
+    SuperListItem::setCopy(super);
+
+    event = reinterpret_cast<const SystemObjectEvent *>(&super);
+    p_id = event->p_id;
 
     SystemParameter* param;
     QList<QStandardItem *> row;
     int l;
 
-    m_isSystem = event.m_isSystem;
+    m_isSystem = event->m_isSystem;
 
     // Parameters
     clearParameters();
-    l = event.m_modelParameters->invisibleRootItem()->rowCount();
+    l = event->m_modelParameters->invisibleRootItem()->rowCount();
     for (int i = 0; i < l; i++){
         param = new SystemParameter;
-        param->setCopy(*((SystemParameter*) event.m_modelParameters->item(i)
+        param->setCopy(*((SystemParameter*) event->m_modelParameters->item(i)
                          ->data().value<quintptr>()));
         row = param->getModelRow();
         m_modelParameters->appendRow(row);
@@ -290,7 +294,7 @@ void SystemObjectEvent::setCopy(const SystemObjectEvent& event){
     // Reactions
     clearReactions();
     QHash<int, SystemReaction*>::const_iterator i;
-    for (i = event.m_reactions.begin(); i != event.m_reactions.end(); i++){
+    for (i = event->m_reactions.begin(); i != event->m_reactions.end(); i++){
         SystemReaction* reaction = new SystemReaction;
         reaction->setCopy(*i.value());
         m_reactions[i.key()] = reaction;

@@ -68,7 +68,8 @@ public:
     void reset();
     bool isDefault() const;
 
-    void setCopy(const SystemProgressionTable& progression);
+    virtual SuperListItem * createCopy() const;
+    virtual void setCopy(const SuperListItem &super);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

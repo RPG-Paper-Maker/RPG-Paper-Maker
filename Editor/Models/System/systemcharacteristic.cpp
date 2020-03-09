@@ -371,42 +371,44 @@ SuperListItem* SystemCharacteristic::createCopy() const {
 
 // -------------------------------------------------------
 
-void SystemCharacteristic::setCopy(const SystemCharacteristic& characteristic) {
-    SuperListItem::setCopy(characteristic);
+void SystemCharacteristic::setCopy(const SuperListItem &super) {
+    const SystemCharacteristic *characteristic;
     int i, l;
 
-    m_kind = characteristic.m_kind;
-    m_isIncreaseDecrease = characteristic.m_isIncreaseDecrease;
-    m_increaseDecreaseKind->setId(characteristic.m_increaseDecreaseKind->id());
-    m_statValueID->setCopy(*characteristic.m_statValueID);
-    m_elementResID->setCopy(*characteristic.m_elementResID);
-    m_statusResID->setCopy(*characteristic.m_statusResID);
-    m_currencyGainID->setCopy(*characteristic.m_currencyGainID);
-    m_skillCostID->setCopy(*characteristic.m_skillCostID);
-    m_isAllSkillCost = characteristic.m_isAllSkillCost;
-    m_variableID->setId(characteristic.m_variableID->id());
-    m_operation = characteristic.m_operation;
-    m_value->setCopy(*characteristic.m_value);
-    m_unit = characteristic.m_unit;
-    m_script->setCopy(*characteristic.m_script);
-    m_isAllowEquip = characteristic.m_isAllowEquip;
-    m_isAllowEquipWeapon = characteristic.m_isAllowEquipWeapon;
-    m_equipWeaponTypeID->setCopy(*characteristic.m_equipWeaponTypeID);
-    m_equipArmorTypeID->setCopy(*characteristic.m_equipArmorTypeID);
-    m_isAllowChangeEquipment = characteristic.m_isAllowChangeEquipment;
-    m_changeEquipmentID->setCopy(*characteristic.m_changeEquipmentID);
-    m_beginEquipmentID->setCopy(*characteristic.m_beginEquipmentID);
-    m_isBeginWeapon = characteristic.m_isBeginWeapon;
-    m_beginWeaponArmorID->setCopy(*characteristic.m_beginWeaponArmorID);
+    SuperListItem::setCopy(super);
+    characteristic = reinterpret_cast<const SystemCharacteristic *>(&super);
+    m_kind = characteristic->m_kind;
+    m_isIncreaseDecrease = characteristic->m_isIncreaseDecrease;
+    m_increaseDecreaseKind->setId(characteristic->m_increaseDecreaseKind->id());
+    m_statValueID->setCopy(*characteristic->m_statValueID);
+    m_elementResID->setCopy(*characteristic->m_elementResID);
+    m_statusResID->setCopy(*characteristic->m_statusResID);
+    m_currencyGainID->setCopy(*characteristic->m_currencyGainID);
+    m_skillCostID->setCopy(*characteristic->m_skillCostID);
+    m_isAllSkillCost = characteristic->m_isAllSkillCost;
+    m_variableID->setId(characteristic->m_variableID->id());
+    m_operation = characteristic->m_operation;
+    m_value->setCopy(*characteristic->m_value);
+    m_unit = characteristic->m_unit;
+    m_script->setCopy(*characteristic->m_script);
+    m_isAllowEquip = characteristic->m_isAllowEquip;
+    m_isAllowEquipWeapon = characteristic->m_isAllowEquipWeapon;
+    m_equipWeaponTypeID->setCopy(*characteristic->m_equipWeaponTypeID);
+    m_equipArmorTypeID->setCopy(*characteristic->m_equipArmorTypeID);
+    m_isAllowChangeEquipment = characteristic->m_isAllowChangeEquipment;
+    m_changeEquipmentID->setCopy(*characteristic->m_changeEquipmentID);
+    m_beginEquipmentID->setCopy(*characteristic->m_beginEquipmentID);
+    m_isBeginWeapon = characteristic->m_isBeginWeapon;
+    m_beginWeaponArmorID->setCopy(*characteristic->m_beginWeaponArmorID);
     m_beginWeaponArmorID->setModelDataBase(m_modelBeginWeaponArmor);
 
     // Model weapon armor (begin)
     m_modelBeginWeaponArmor->clear();
-    for (i = 0, l = characteristic.m_modelBeginWeaponArmor->invisibleRootItem()
+    for (i = 0, l = characteristic->m_modelBeginWeaponArmor->invisibleRootItem()
         ->rowCount(); i < l; i++)
     {
         m_modelBeginWeaponArmor->insertRow(i, reinterpret_cast<
-            SystemCommonSkillItem *>(characteristic.m_modelBeginWeaponArmor->item
+            SystemCommonSkillItem *>(characteristic->m_modelBeginWeaponArmor->item
             (i)->data().value<quintptr>())->getModelRow());
     }
 }

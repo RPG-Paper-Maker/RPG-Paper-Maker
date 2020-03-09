@@ -35,8 +35,7 @@ SystemCommonReaction::SystemCommonReaction(int i, QString n,
     SystemReaction(i, n, commands, bHero),
     m_modelParameters(params)
 {
-    m_modelParameters->setHorizontalHeaderLabels(
-                QStringList({"Name","Default value"}));
+    this->initializeHeaders();
 }
 
 SystemCommonReaction::~SystemCommonReaction()
@@ -54,6 +53,13 @@ QStandardItemModel* SystemCommonReaction::modelParameters() const {
 //
 // -------------------------------------------------------
 
+void SystemCommonReaction::initializeHeaders() {
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name",
+        "Default value"}));
+}
+
+// -------------------------------------------------------
+
 SuperListItem* SystemCommonReaction::createCopy() const{
     SystemCommonReaction* super = new SystemCommonReaction;
     super->setCopy(*this);
@@ -62,12 +68,17 @@ SuperListItem* SystemCommonReaction::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemCommonReaction::setCopy(const SystemCommonReaction& copy){
-    SystemReaction::setCopy(copy);
-    p_id = copy.p_id;
+void SystemCommonReaction::setCopy(const SuperListItem &super) {
+    const SystemCommonReaction *reaction;
+
+    SystemReaction::setCopy(super);
+    reaction = reinterpret_cast<const SystemCommonReaction *>(&super);
+    p_id = reaction->p_id;
 
     // parameters
-    SuperListItem::copy(m_modelParameters, copy.m_modelParameters);
+    SuperListItem::deleteModel(m_modelParameters, false);
+    SuperListItem::copy(m_modelParameters, reaction->m_modelParameters);
+    this->initializeHeaders();
 }
 
 // -------------------------------------------------------

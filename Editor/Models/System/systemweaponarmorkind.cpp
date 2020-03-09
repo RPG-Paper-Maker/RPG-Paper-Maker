@@ -130,12 +130,13 @@ SuperListItem* SystemWeaponArmorKind::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemWeaponArmorKind::setCopy(const SystemWeaponArmorKind&
-                                    weaponArmorKind)
-{
-    SystemLang::setCopy(weaponArmorKind);
+void SystemWeaponArmorKind::setCopy(const SuperListItem &super) {
+    const SystemWeaponArmorKind *kind;
 
-    m_equipment = weaponArmorKind.m_equipment;
+    SystemLang::setCopy(super);
+
+    kind = reinterpret_cast<const SystemWeaponArmorKind *>(&super);
+    m_equipment = kind->m_equipment;
 }
 
 // -------------------------------------------------------

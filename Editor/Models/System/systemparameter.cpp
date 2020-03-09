@@ -73,12 +73,15 @@ SuperListItem* SystemParameter::createCopy() const{
 
 // -------------------------------------------------------
 
-void SystemParameter::setCopy(const SystemParameter& param) {
-    SuperListItem::setCopy(param);
-    p_id = param.p_id;
+void SystemParameter::setCopy(const SuperListItem &super) {
+    const SystemParameter *param;
 
-    m_parameter = param.m_parameter;
-    m_value->setCopy(*param.m_value);
+    SuperListItem::setCopy(super);
+
+    param = reinterpret_cast<const SystemParameter *>(&super);
+    p_id = param->p_id;
+    m_parameter = param->m_parameter;
+    m_value->setCopy(*param->m_value);
     m_value->setModelProperties(RPM::get()->project()->currentObjectProperties());
     m_value->setModelParameter(RPM::get()->project()->currentParameters());
 }

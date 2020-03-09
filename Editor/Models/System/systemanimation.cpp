@@ -153,11 +153,15 @@ SuperListItem* SystemAnimation::createCopy() const{
 // -------------------------------------------------------
 
 void SystemAnimation::setCopy(const SuperListItem &super) {
-    const SystemAnimation *sys;
+    const SystemAnimation *animation;
 
-    sys = reinterpret_cast<const SystemAnimation *>(&super);
-    m_rows = sys->m_rows;
-    m_columns = sys->m_columns;
+    animation = reinterpret_cast<const SystemAnimation *>(&super);
+    m_pictureID = animation->pictureID();
+    m_positionKind = animation->m_positionKind;
+    SuperListItem::deleteModel(m_framesModel, false);
+    SuperListItem::copyModel(m_framesModel, animation->m_framesModel);
+    m_rows = animation->m_rows;
+    m_columns = animation->m_columns;
 }
 
 // -------------------------------------------------------
