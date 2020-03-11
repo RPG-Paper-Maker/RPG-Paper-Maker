@@ -52,6 +52,8 @@ DialogDatas::DialogDatas(GameDatas *gameDatas, QWidget *parent) :
     initializeStatus(gameDatas);
 
     ui->panelSuperListClasses->list()->setFocus(Qt::FocusReason::MouseFocusReason);
+
+    this->translate();
 }
 
 DialogDatas::~DialogDatas()
@@ -437,6 +439,14 @@ void DialogDatas::playAnimation(AnimationEffectConditionKind condition) {
     this->setEnabled(false);
     ui->widgetAnimation->playAnimation(condition, ui
         ->panelSuperListAnimationFrames->list()->getModel());
+}
+
+// -------------------------------------------------------
+
+void DialogDatas::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

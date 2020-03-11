@@ -52,6 +52,7 @@ private:
 
     int getInheritValue(int v1, int v2);
     void updateExperience();
+    void translate();
 
 public slots:
     void on_spinBoxClassInitialLevel_valueChanged(int i);

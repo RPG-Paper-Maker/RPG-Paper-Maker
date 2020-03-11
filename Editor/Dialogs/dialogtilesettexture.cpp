@@ -33,6 +33,8 @@ DialogTilesetTexture::DialogTilesetTexture(int pictureID, QRect &rect, QWidget
         ::Tilesets)->invisibleRootItem(), pictureID))->getPath(PictureKind
         ::Tilesets));
     ui->widget->setCurrentTexture(rect);
+
+    this->translate();
 }
 
 DialogTilesetTexture::~DialogTilesetTexture()
@@ -51,4 +53,12 @@ QRect DialogTilesetTexture::getRect() const {
     ui->widget->currentTexture(rect);
 
     return rect;
+}
+
+//-------------------------------------------------
+
+void DialogTilesetTexture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

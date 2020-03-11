@@ -41,6 +41,8 @@ public:
 private:
     Ui::DialogVariables *ui;
 
+    void translate();
+
 private slots:
     void on_pageSelected(QModelIndex index, QModelIndex);
     void on_buttonBox_clicked(QAbstractButton *button);

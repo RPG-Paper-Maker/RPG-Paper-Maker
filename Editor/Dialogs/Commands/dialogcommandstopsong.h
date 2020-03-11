@@ -47,6 +47,8 @@ protected:
 
 private:
     Ui::DialogCommandStopSong *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDSTOPSONG_H

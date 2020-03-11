@@ -38,6 +38,8 @@ DialogPicturesPreview::DialogPicturesPreview(SystemPicture* picture,
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
     connect(this, SIGNAL(dialogIsClosing()), this, SLOT(on_rejected()));
+
+    this->translate();
 }
 
 DialogPicturesPreview::~DialogPicturesPreview()
@@ -81,6 +83,14 @@ void DialogPicturesPreview::currentTexture(QRect& rect) const{
 
 void DialogPicturesPreview::setAreNegIDsEnabled(bool b) {
     ui->widget->setAreNegIDsEnabled(b);
+}
+
+//-------------------------------------------------
+
+void DialogPicturesPreview::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

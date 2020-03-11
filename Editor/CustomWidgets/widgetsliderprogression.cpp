@@ -11,6 +11,7 @@
 
 #include "widgetsliderprogression.h"
 #include "ui_widgetsliderprogression.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -23,6 +24,8 @@ WidgetSliderProgression::WidgetSliderProgression(QWidget *parent) :
     ui(new Ui::WidgetSliderProgression)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 WidgetSliderProgression::~WidgetSliderProgression() {
@@ -43,6 +46,13 @@ int WidgetSliderProgression::equation() const {
 
 void WidgetSliderProgression::setEquation(int e) {
     ui->horizontalSlider->setValue(e);
+}
+
+//-------------------------------------------------
+
+void WidgetSliderProgression::translate()
+{
+
 }
 
 // -------------------------------------------------------

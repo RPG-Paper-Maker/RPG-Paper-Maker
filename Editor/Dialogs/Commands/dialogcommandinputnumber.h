@@ -42,6 +42,8 @@ protected:
 
 private:
     Ui::DialogCommandInputNumber *ui;
+
+    void translate();
 };
 
 #endif // DIALOGINPUTNUMBER_H

@@ -47,6 +47,8 @@ private:
     SystemTileset* m_tileset;
     PictureKind m_kind;
 
+    void translate();
+
 public slots:
     void on_pushButtonMove_clicked();
     void on_pushButtonDelete_clicked();

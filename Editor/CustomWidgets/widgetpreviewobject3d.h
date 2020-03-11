@@ -43,11 +43,11 @@ protected:
     SystemObject3D *m_object3DShape;
     Camera *m_camera;
     bool m_isInitialized;
-
-    // OpenGL
     QOpenGLShaderProgram *m_program;
     int u_modelviewProjection;
     QOpenGLTexture *m_texture;
+
+    void translate();
 
     virtual void resizeGL(int width, int height);
     virtual void initializeGL();

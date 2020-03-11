@@ -32,9 +32,22 @@ DialogCompleteListStates::DialogCompleteListStates(QWidget *parent) :
     QModelIndex index = ui->panelSuperListStates->list()->getModel()
         ->index(0,0);
     ui->panelSuperListStates->list()->setCurrentIndex(index);
+
+    this->translate();
 }
 
 DialogCompleteListStates::~DialogCompleteListStates()
 {
     delete ui;
+}
+
+// -------------------------------------------------------
+//
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void DialogCompleteListStates::translate() {
+    //this->setWindowTitle(RPM::);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

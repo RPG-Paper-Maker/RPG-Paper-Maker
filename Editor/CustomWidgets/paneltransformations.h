@@ -43,6 +43,8 @@ public:
 private:
     Ui::PanelTransformations *ui;
 
+    void translate();
+
 protected:
     Position *m_mapElementPosition;
 

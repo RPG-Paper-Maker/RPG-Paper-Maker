@@ -41,6 +41,7 @@ private:
     SystemCost &m_cost;
 
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMCOST_H

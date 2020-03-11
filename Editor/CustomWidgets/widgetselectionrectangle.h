@@ -50,6 +50,7 @@ class WidgetSelectionRectangle  : public QWidget
         int m_realY;
 
         void drawSquare(QPainter& painter, int x, int y, float zoom);
+        void translate();
 };
 
 #endif // WIDGETSELECTIONRECTANGLE_H

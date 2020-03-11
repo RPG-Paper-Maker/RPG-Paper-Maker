@@ -43,6 +43,8 @@ DialogSongs::DialogSongs(QWidget *parent) :
     sp_retain = ui->widgetSongs->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->widgetSongs->setSizePolicy(sp_retain);
+
+    this->translate();
 }
 
 DialogSongs::~DialogSongs()
@@ -98,6 +100,14 @@ void DialogSongs::addfolders(QIcon &icon,
         item->setText(names.at(i));
         root->appendRow(item);
     }
+}
+
+//-------------------------------------------------
+
+void DialogSongs::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

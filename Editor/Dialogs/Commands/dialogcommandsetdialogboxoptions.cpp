@@ -11,7 +11,6 @@
 
 #include "dialogcommandsetdialogboxoptions.h"
 #include "ui_dialogcommandsetdialogboxoptions.h"
-
 #include "rpm.h"
 
 // -------------------------------------------------------
@@ -35,6 +34,8 @@ DialogCommandSetDialogBoxOptions::DialogCommandSetDialogBoxOptions(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandSetDialogBoxOptions::~DialogCommandSetDialogBoxOptions() {
@@ -89,6 +90,14 @@ void DialogCommandSetDialogBoxOptions::initializePrimitives() {
     ui->panelPrimitiveTextFont->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelFontNames(), m_parameters,
         properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandSetDialogBoxOptions::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

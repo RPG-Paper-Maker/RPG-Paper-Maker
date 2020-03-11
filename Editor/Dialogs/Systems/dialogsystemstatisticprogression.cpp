@@ -29,6 +29,8 @@ DialogSystemStatisticProgression::DialogSystemStatisticProgression(
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemStatisticProgression::~DialogSystemStatisticProgression() {
@@ -84,6 +86,14 @@ void DialogSystemStatisticProgression::initialize() {
         .formula());
     ui->panelPrimitiveValueFormula->updateValue(true);
     ui->panelPrimitiveValueFormula->updateKind();
+}
+
+//-------------------------------------------------
+
+void DialogSystemStatisticProgression::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

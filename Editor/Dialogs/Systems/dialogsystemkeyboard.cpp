@@ -12,6 +12,7 @@
 #include "dialogsystemkeyboard.h"
 #include "ui_dialogsystemkeyboard.h"
 #include <QLabel>
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -30,6 +31,8 @@ DialogSystemKeyBoard::DialogSystemKeyBoard(SystemKeyBoard& key,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemKeyBoard::~DialogSystemKeyBoard()
@@ -62,6 +65,14 @@ void DialogSystemKeyBoard::updateLabel(bool wait){
         str += " [WAITING FOR A SHORTCUT]";
 
     ui->label->setText(str);
+}
+
+//-------------------------------------------------
+
+void DialogSystemKeyBoard::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

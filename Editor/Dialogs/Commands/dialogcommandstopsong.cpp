@@ -11,6 +11,7 @@
 
 #include "dialogcommandstopsong.h"
 #include "ui_dialogcommandstopsong.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -33,6 +34,8 @@ DialogCommandStopSong::DialogCommandStopSong(QString title, SongKind kind,
     ui->panelPrimitiveValueSeconds->initializeNumber(parameters, nullptr);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandStopSong::~DialogCommandStopSong()
@@ -58,6 +61,14 @@ EventCommandKind DialogCommandStopSong::getCommandKind() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandStopSong::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandStopSong::initialize(EventCommand* command) {
     int i = 0;

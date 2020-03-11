@@ -28,6 +28,8 @@ DialogMapProperties::DialogMapProperties(MapProperties &properties,
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogMapProperties::~DialogMapProperties()
@@ -83,6 +85,14 @@ void DialogMapProperties::initialize() {
     ui->panelObject->initializeModel(m_mapProperties.startupObject());
     ui->panelObject->updateModel();
     ui->panelObject->showInvisible(true);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

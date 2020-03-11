@@ -50,6 +50,8 @@ protected:
 private:
     Ui::DialogCommandSetMoveTurnAPicture *ui;
 
+    void translate();
+
 public slots:
     void on_checkBoxSet_toggled(bool checked);
     void on_checkBoxMove_toggled(bool checked);

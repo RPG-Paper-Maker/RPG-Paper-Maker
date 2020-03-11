@@ -41,6 +41,7 @@ private:
     SystemCurrency& m_currency;
 
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMCURRENCY_H

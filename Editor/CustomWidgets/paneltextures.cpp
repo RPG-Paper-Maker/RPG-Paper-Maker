@@ -34,6 +34,8 @@ PanelTextures::PanelTextures(QWidget *parent) :
     m_currentObjects3DID(-1)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelTextures::~PanelTextures() {
@@ -510,6 +512,13 @@ void PanelTextures::updateShow() {
         this->showTileset();
         break;
     }
+}
+
+//-------------------------------------------------
+
+void PanelTextures::translate()
+{
+
 }
 
 // -------------------------------------------------------

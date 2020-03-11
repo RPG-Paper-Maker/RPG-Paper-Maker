@@ -49,6 +49,8 @@ protected:
 private:
     Ui::DialogCommandChangeScreenTone *ui;
 
+    void translate();
+
 public slots:
     void on_checkBoxColor_toggled(bool checked);
     void on_spinBoxRedValueChanged(int value);

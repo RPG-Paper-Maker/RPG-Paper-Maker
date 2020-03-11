@@ -41,7 +41,9 @@ private:
     Ui::DialogKeyBoardControls *ui;
     KeyBoardDatas* m_gameKeyBoardDatas;
     bool m_canUpdateKey;
+
     void updateMenuControls();
+    void translate();
 
 private slots:
     void on_comboBoxAction_currentIndexChanged(int index);

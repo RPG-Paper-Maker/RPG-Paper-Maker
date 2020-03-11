@@ -34,6 +34,8 @@ DialogExport::DialogExport(Project* project, QWidget *parent) :
         ->lastMajorVersion());
     ui->spinBoxMinorVersion->setValue(project->gameDatas()->systemDatas()
         ->lastMinorVersion());
+
+    this->translate();
 }
 
 DialogExport::~DialogExport()
@@ -46,6 +48,12 @@ DialogExport::~DialogExport()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+void DialogExport::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 //-------------------------------------------------
 //

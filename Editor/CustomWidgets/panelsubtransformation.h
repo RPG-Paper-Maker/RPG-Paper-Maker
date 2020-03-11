@@ -48,6 +48,8 @@ public:
 private:
     Ui::PanelSubTransformation *ui;
 
+    void translate();
+
 protected:
     Position *m_mapElementPosition;
     AxisKind m_axisKind;

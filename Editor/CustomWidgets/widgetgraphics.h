@@ -40,9 +40,11 @@ protected:
     bool m_selected;
     int m_borderOffset;
 
-    void mousePressEvent(QMouseEvent*);
-    void mouseDoubleClickEvent(QMouseEvent*);
-    void paintEvent(QPaintEvent*event);
+    void translate();
+
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseDoubleClickEvent(QMouseEvent*);
+    virtual void paintEvent(QPaintEvent*event);
 };
 
 #endif // WIDGETGRAPHICS_H

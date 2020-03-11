@@ -37,6 +37,8 @@ public:
 private:
     Ui::PanelMainMenu *ui;
 
+    void translate();
+
 signals:
     void openingProject(QString path);
 

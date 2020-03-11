@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cost...</string>
+   <string>Set cost...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="leftMargin">
@@ -123,15 +123,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelDamagesKind</class>
-   <extends>QWidget</extends>
-   <header>paneldamageskind.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelDamagesKind</class>
+   <extends>QWidget</extends>
+   <header>paneldamageskind.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

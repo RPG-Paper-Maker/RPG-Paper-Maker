@@ -40,6 +40,8 @@ public:
 private:
     Ui::WidgetSliderProgression *ui;
 
+    void translate();
+
 signals:
     void equationChanged(int e);
 

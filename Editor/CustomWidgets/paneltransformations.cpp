@@ -27,6 +27,8 @@ PanelTransformations::PanelTransformations(QWidget *parent) :
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 PanelTransformations::~PanelTransformations()
@@ -76,6 +78,13 @@ void PanelTransformations::deletePosition() {
 void PanelTransformations::updateText() {
     ui->labelSelectedObject->setText(m_mapElementPosition == nullptr ?
         "[NONE]\n\n\n\n" : m_mapElementPosition->toString(RPM::getSquareSize()));
+}
+
+//-------------------------------------------------
+
+void PanelTransformations::translate()
+{
+
 }
 
 // -------------------------------------------------------

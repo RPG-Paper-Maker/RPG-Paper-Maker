@@ -12,6 +12,7 @@
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
 #include <QtMath>
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,11 +33,20 @@ DialogProgress::DialogProgress(QWidget *parent) :
 
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowFlags(Qt::WindowTitleHint);
+
+    this->translate();
 }
 
 DialogProgress::~DialogProgress()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogProgress::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
 }
 
 // -------------------------------------------------------

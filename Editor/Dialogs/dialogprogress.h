@@ -41,6 +41,8 @@ private:
     int m_beginValue;
     int m_endValue;
 
+    void translate();
+
 public slots:
     void setValueLabel(int v, QString s);
     void setDescription(QString s);

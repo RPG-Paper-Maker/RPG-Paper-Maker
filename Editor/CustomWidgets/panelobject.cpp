@@ -63,6 +63,8 @@ PanelObject::PanelObject(QWidget *parent) :
     m_layoutDetection = new QHBoxLayout(ui->pushButtonDetection);
     m_layoutDetection->setContentsMargins(9, 0, 9, 0);
     m_layoutDetection->addWidget(m_labelDetection, 0, Qt::AlignCenter);
+
+    this->translate();
 }
 
 PanelObject::~PanelObject()
@@ -341,6 +343,13 @@ void PanelObject::passToSprite() {
 
 void PanelObject::passToNone() {
     ui->comboBoxGraphics->setCurrentIndex(0);
+}
+
+//-------------------------------------------------
+
+void PanelObject::translate()
+{
+
 }
 
 // -------------------------------------------------------

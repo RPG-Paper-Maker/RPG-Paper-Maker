@@ -35,6 +35,8 @@ DialogCommandAllowForbidSavesMainMenu::DialogCommandAllowForbidSavesMainMenu(
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandAllowForbidSavesMainMenu::~DialogCommandAllowForbidSavesMainMenu() {
@@ -58,6 +60,14 @@ void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
     this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ?
         "Allow/Forbid saves..." : "Allow/Forbid main menu...");
     ui->panelPrimitiveAllow->initializeSwitch(m_parameters, properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandAllowForbidSavesMainMenu::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

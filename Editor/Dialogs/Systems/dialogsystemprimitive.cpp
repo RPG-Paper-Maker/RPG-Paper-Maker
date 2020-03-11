@@ -11,6 +11,7 @@
 
 #include "dialogsystemprimitive.h"
 #include "ui_dialogsystemprimitive.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,6 +26,8 @@ DialogSystemPrimitive::DialogSystemPrimitive(SystemPrimitive &prim, QWidget
     ui(new Ui::DialogSystemPrimitive)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogSystemPrimitive::~DialogSystemPrimitive() {
@@ -40,4 +43,12 @@ DialogSystemPrimitive::~DialogSystemPrimitive() {
 void DialogSystemPrimitive::initializeNumberVariableDouble(QString title) {
     this->setWindowTitle(title);
     ui->widget->initializeNumberAndUpdate(m_prim.prim(), false);
+}
+
+//-------------------------------------------------
+
+void DialogSystemPrimitive::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

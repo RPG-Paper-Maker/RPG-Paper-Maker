@@ -50,6 +50,8 @@ private:
     Project *m_project;
     QTimer *m_timerUpdate;
 
+    void translate();
+
 public slots:
     void updateMenu();
     void on_menuBarPressed();

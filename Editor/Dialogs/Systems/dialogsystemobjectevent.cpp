@@ -11,6 +11,7 @@
 
 #include "dialogsystemobjectevent.h"
 #include "ui_dialogsystemobjectevent.h"
+#include "rpm.h"
 
 DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
                                                  QWidget *parent) :
@@ -21,6 +22,8 @@ DialogSystemObjectEvent::DialogSystemObjectEvent(SystemObjectEvent &event,
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemObjectEvent::~DialogSystemObjectEvent()
@@ -36,4 +39,12 @@ DialogSystemObjectEvent::~DialogSystemObjectEvent()
 
 void DialogSystemObjectEvent::initialize(){
     ui->widget->initialize(&m_event);
+}
+
+//-------------------------------------------------
+
+void DialogSystemObjectEvent::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

@@ -47,6 +47,8 @@ protected:
 
 private:
     Ui::DialogCommandWait *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDWAIT_H

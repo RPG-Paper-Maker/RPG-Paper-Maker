@@ -11,6 +11,7 @@
 
 #include "dialogsystemcameraproperties.h"
 #include "ui_dialogsystemcameraproperties.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemCameraProperties::DialogSystemCameraProperties(
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemCameraProperties::~DialogSystemCameraProperties()
@@ -63,6 +66,14 @@ void DialogSystemCameraProperties::initialize() {
         false);
     ui->panelPrimitiveFar->initializeNumberAndUpdate(m_cameraProperties.farCam(),
         false);
+}
+
+//-------------------------------------------------
+
+void DialogSystemCameraProperties::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

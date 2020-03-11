@@ -39,6 +39,8 @@ public:
 
 private:
     Ui::DialogAnimationCopyFrames *ui;
+
+    void translate();
 };
 
 #endif // DIALOGANIMATIONCOPYFRAMES_H

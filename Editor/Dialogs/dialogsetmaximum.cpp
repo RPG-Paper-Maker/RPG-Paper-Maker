@@ -13,6 +13,7 @@
 #include "ui_dialogsetmaximum.h"
 #include "superlistitem.h"
 #include <QMessageBox>
+#include "rpm.h"
 
 const QString DialogSetMaximum::STR_WARNING = "This maximum is incorrect "
     "because it will delete IDs. Please reorder your stuff properly.";
@@ -33,6 +34,8 @@ DialogSetMaximum::DialogSetMaximum(QStandardItemModel* model, int max,
 
     ui->spinBoxMaximum->setMaximum(max);
     ui->spinBoxMaximum->setValue(model->invisibleRootItem()->rowCount());
+
+    this->translate();
 }
 
 DialogSetMaximum::~DialogSetMaximum()
@@ -72,6 +75,14 @@ bool DialogSetMaximum::isOrderedMax(QStandardItemModel* model, int limit) {
 
 bool DialogSetMaximum::isOrdered(int limit) const{
     return isOrderedMax(m_model, limit);
+}
+
+//-------------------------------------------------
+
+void DialogSetMaximum::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

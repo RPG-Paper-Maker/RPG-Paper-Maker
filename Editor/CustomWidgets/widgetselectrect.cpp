@@ -12,6 +12,7 @@
 #include "widgetselectrect.h"
 #include "ui_widgetselectrect.h"
 #include "dialogrect.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,8 @@ WidgetSelectRect::WidgetSelectRect(QWidget *parent) :
     m_selecting(false)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 WidgetSelectRect::~WidgetSelectRect()
@@ -51,6 +54,13 @@ void WidgetSelectRect::setRect(QRectF *rect) {
 
 void WidgetSelectRect::updateLabel(QString label) {
     ui->label->setText(label);
+}
+
+//-------------------------------------------------
+
+void WidgetSelectRect::translate()
+{
+
 }
 
 // -------------------------------------------------------

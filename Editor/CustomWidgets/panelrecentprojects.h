@@ -37,6 +37,8 @@ protected:
     QStaticText m_staticTitle;
     int m_indexSelectedProject;
 
+    void translate();
+
     virtual void leaveEvent(QEvent *);
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);

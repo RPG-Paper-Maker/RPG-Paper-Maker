@@ -40,6 +40,8 @@ private:
     Ui::DialogLocation *ui;
     QString m_auto;
 
+    void translate();
+
 private slots:
     void on_pushButton_clicked();
     void on_pushButtonAuto_clicked();

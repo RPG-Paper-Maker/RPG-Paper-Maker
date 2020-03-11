@@ -11,6 +11,7 @@
 
 #include "dialogsystemkeyboardgeneral.h"
 #include "ui_dialogsystemkeyboardgeneral.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogSystemKeyBoardGeneral::DialogSystemKeyBoardGeneral(SystemKeyBoard& key,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemKeyBoardGeneral::~DialogSystemKeyBoardGeneral()
@@ -47,6 +50,14 @@ void DialogSystemKeyBoardGeneral::initialize(){
     ui->lineEditAbbreviation->setText(m_key.abbreviation());
     ui->lineEditDescription->setText(m_key.name());
     ui->labelShortcut->setText(m_key.shortCutString());
+}
+
+//-------------------------------------------------
+
+void DialogSystemKeyBoardGeneral::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

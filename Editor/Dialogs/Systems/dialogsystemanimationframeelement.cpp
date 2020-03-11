@@ -11,6 +11,7 @@
 
 #include "dialogsystemanimationframeelement.h"
 #include "ui_dialogsystemanimationframeelement.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemAnimationFrameElement::DialogSystemAnimationFrameElement(
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemAnimationFrameElement::~DialogSystemAnimationFrameElement() {
@@ -47,6 +50,14 @@ void DialogSystemAnimationFrameElement::initialize() {
     ui->doubleSpinBoxAngle->setValue(m_element.angle());
     ui->checkBoxFlipVerticaly->setChecked(m_element.flipVerticaly());
     ui->doubleSpinBoxOpacity->setValue(m_element.opacity());
+}
+
+//-------------------------------------------------
+
+void DialogSystemAnimationFrameElement::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

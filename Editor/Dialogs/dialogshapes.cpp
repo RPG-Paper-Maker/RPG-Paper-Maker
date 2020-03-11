@@ -40,6 +40,8 @@ DialogShapes::DialogShapes(QWidget *parent) :
     sp_retain = ui->panelShapes->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->panelShapes->setSizePolicy(sp_retain);
+
+    this->translate();
 }
 
 DialogShapes::~DialogShapes()
@@ -92,6 +94,14 @@ void DialogShapes::addfolders(QIcon &icon, QStandardItem* root, QList<QString>
         item->setText(names.at(i));
         root->appendRow(item);
     }
+}
+
+//-------------------------------------------------
+
+void DialogShapes::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

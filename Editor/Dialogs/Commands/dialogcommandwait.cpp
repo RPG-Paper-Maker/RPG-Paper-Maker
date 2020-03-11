@@ -11,6 +11,7 @@
 
 #include "dialogcommandwait.h"
 #include "ui_dialogcommandwait.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandWait::DialogCommandWait(EventCommand *command, SystemCommonObject
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandWait::~DialogCommandWait()
@@ -54,6 +57,14 @@ void DialogCommandWait::initializePrimitives() {
     }
 
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandWait::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

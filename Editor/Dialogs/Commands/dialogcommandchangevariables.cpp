@@ -35,6 +35,8 @@ DialogCommandChangeVariables::DialogCommandChangeVariables(EventCommand *command
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandChangeVariables::~DialogCommandChangeVariables()
@@ -86,6 +88,14 @@ void DialogCommandChangeVariables::initializePrimitives() {
         m_modelObjects, m_parameters, properties);
     ui->comboBoxObjectMapCharacteristics->addItems(RPM
         ::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC);
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeVariables::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

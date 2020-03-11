@@ -11,6 +11,7 @@
 
 #include "dialogcommandchangeproperty.h"
 #include "ui_dialogcommandchangeproperty.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandChangeProperty::DialogCommandChangeProperty(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandChangeProperty::~DialogCommandChangeProperty() {
@@ -83,6 +86,14 @@ void DialogCommandChangeProperty::initialize(EventCommand *command) {
     }
 
     ui->panelPrimitiveNewValue->initializeCommand(command, i);
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeProperty::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

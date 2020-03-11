@@ -51,6 +51,8 @@ protected:
     int m_indexX;
     int m_indexY;
 
+    void translate();
+
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };

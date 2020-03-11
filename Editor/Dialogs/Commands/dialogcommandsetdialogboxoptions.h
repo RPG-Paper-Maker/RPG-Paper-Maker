@@ -49,6 +49,8 @@ protected:
 private:
     Ui::DialogCommandSetDialogBoxOptions *ui;
 
+    void translate();
+
 public slots:
     void on_checkBoxWindowSkinID_toggled(bool checked);
     void on_checkBoxX_toggled(bool checked);

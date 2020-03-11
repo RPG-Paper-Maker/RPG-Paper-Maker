@@ -51,6 +51,8 @@ PanelVideos::PanelVideos(QWidget *parent) :
         int)), this, SLOT(deletingContent(SuperListItem *, int)));
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+
+    this->translate();
 }
 
 PanelVideos::~PanelVideos()
@@ -211,6 +213,13 @@ void PanelVideos::moveContent(){
 void PanelVideos::updateVideos() {
     m_video = reinterpret_cast<SystemVideo *>(ui->widgetPanelIDs->list()
         ->getSelected()->data().value<qintptr>());
+}
+
+//-------------------------------------------------
+
+void PanelVideos::translate()
+{
+
 }
 
 // -------------------------------------------------------

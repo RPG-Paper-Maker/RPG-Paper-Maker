@@ -38,6 +38,8 @@ public:
 
 private:
     Ui::DialogSpecialElements *ui;
+
+    void translate();
 };
 
 #endif // DIALOGSPECIALELEMENTS_H

@@ -92,12 +92,13 @@ protected:
     void updateAvailableCommands();
     bool isMouseSelectingCommand(const QPoint &pos);
     void updateKeyboardUpDown(int offset);
+    void translate();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
-    void paintEvent(QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
 
 private slots:
     void onSelectionChanged(QModelIndex index, QModelIndex indexBefore);

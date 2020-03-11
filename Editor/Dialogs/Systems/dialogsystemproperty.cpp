@@ -28,6 +28,8 @@ DialogSystemProperty::DialogSystemProperty(SystemProperty &property, QWidget
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemProperty::~DialogSystemProperty() {
@@ -46,6 +48,14 @@ void DialogSystemProperty::initialize()
     ui->panelPrimitiveValueInitial->initializeModel(m_property.initialValue());
     ui->panelPrimitiveValueInitial->initializePropertyAndUpdate(m_property
         .initialValue(), nullptr, nullptr);
+}
+
+//-------------------------------------------------
+
+void DialogSystemProperty::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

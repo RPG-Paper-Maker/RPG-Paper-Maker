@@ -48,6 +48,8 @@ private:
     Ui::PanelDatasMonster *ui;
     PanelSuperList *m_panelSuperList;
 
+    void translate();
+
 public slots:
     void on_maxLevelChanged(int lvl);
 };

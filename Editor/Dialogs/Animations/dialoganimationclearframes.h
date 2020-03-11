@@ -40,6 +40,8 @@ public:
 
 private:
     Ui::DialogAnimationClearFrames *ui;
+
+    void translate();
 };
 
 #endif // DIALOGANIMATIONCLEARFRAMES_H

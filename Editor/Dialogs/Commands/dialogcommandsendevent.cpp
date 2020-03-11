@@ -58,6 +58,8 @@ DialogCommandSendEvent::DialogCommandSendEvent(EventCommand *command,
     if (test) {
         delete command;
     }
+
+    this->translate();
 }
 
 DialogCommandSendEvent::~DialogCommandSendEvent()
@@ -75,6 +77,14 @@ DialogCommandSendEvent::~DialogCommandSendEvent()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandSendEvent::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandSendEvent::initialize(EventCommand* command){
     int i = 0;

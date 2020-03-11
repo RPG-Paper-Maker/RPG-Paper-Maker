@@ -11,6 +11,7 @@
 
 #include "panelproject.h"
 #include "ui_panelproject.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -41,6 +42,8 @@ PanelProject::PanelProject(QWidget *parent) :
 
     // Menu bar
     ui->widgetMenuBar->initializeRightMenu();
+
+    this->translate();
 }
 
 PanelProject::PanelProject(QWidget *parent, Project *p) :
@@ -95,6 +98,13 @@ WidgetMapEditor * PanelProject::widgetMapEditor() const {
 
 WidgetTreeLocalMaps * PanelProject::widgetTreeLocalMaps() const {
     return ui->treeViewLocalMaps;
+}
+
+//-------------------------------------------------
+
+void PanelProject::translate()
+{
+
 }
 
 // -------------------------------------------------------

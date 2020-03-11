@@ -50,6 +50,8 @@ protected:
 
 private:
     Ui::DialogCommandDisplayChoice *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDDISPLAYCHOICE_H

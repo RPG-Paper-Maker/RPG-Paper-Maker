@@ -13,6 +13,7 @@
 #include "panelsuperlist.h"
 #include "ui_panelsuperlist.h"
 #include "dialogsetmaximum.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ PanelSuperList::PanelSuperList(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->widgetTextLang->hide();
+
+    this->translate();
 }
 
 PanelSuperList::~PanelSuperList()
@@ -101,6 +104,12 @@ void PanelSuperList::showEditName(bool b) {
 void PanelSuperList::updateMaximum(int max) {
     list()->setMaximum(max);
     emit maximumChanged();
+}
+
+// -------------------------------------------------------
+
+void PanelSuperList::translate() {
+    ui->pushButtonMaximum->setText(RPM::translate(Translations::SET_MAX));
 }
 
 // -------------------------------------------------------

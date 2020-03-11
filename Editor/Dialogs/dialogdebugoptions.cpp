@@ -27,6 +27,8 @@ DialogDebugOptions::DialogDebugOptions(QWidget *parent) :
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogDebugOptions::~DialogDebugOptions()
@@ -43,6 +45,14 @@ DialogDebugOptions::~DialogDebugOptions()
 void DialogDebugOptions::initialize() {
     ui->checkBoxBB->setChecked(RPM::get()->project()->gameDatas()
                                ->systemDatas()->showBB());
+}
+
+// -------------------------------------------------------
+
+void DialogDebugOptions::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

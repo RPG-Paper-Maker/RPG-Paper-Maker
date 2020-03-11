@@ -11,6 +11,7 @@
 
 #include "dialogcommandchangestate.h"
 #include "ui_dialogcommandchangestate.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandChangeState::DialogCommandChangeState(
 
     initializeStateId();
     if(command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandChangeState::~DialogCommandChangeState()
@@ -54,6 +57,14 @@ void DialogCommandChangeState::initializeStateId(){
     }
     ui->widgetStateId->initializeDataBaseCommandId(dataBase, m_parameters,
                                                    properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeState::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

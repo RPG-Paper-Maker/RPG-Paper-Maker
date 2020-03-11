@@ -33,6 +33,8 @@ DialogCommandScript::DialogCommandScript(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandScript::~DialogCommandScript() {
@@ -56,6 +58,14 @@ void DialogCommandScript::initializePrimitives() {
     ui->panelPrimitiveScript->initializeMessage(false, m_parameters, properties,
         false);
     ui->panelPrimitiveScript->showVariable();
+}
+
+//-------------------------------------------------
+
+void DialogCommandScript::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

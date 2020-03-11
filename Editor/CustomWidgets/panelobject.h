@@ -71,6 +71,8 @@ private:
     QLabel *m_labelDetection;
     QHBoxLayout *m_layoutDetection;
 
+    void translate();
+
 private slots:
     void on_lineEditName_textChanged(const QString &text);
     void on_checkBoxOneEventPerFrame_toggled(bool checked);

@@ -86,6 +86,7 @@ private:
     void updateVolume(int volume);
     void stopOnEnd(int end, qint64 pos, QMediaPlayer *player);
     void setVisibleStartEnd(bool b);
+    void translate();
 
 public slots:
     void showAvailableContent(bool b);

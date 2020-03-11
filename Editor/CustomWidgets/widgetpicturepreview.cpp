@@ -26,7 +26,7 @@ WidgetPicturePreview::WidgetPicturePreview(QWidget *parent) :
     m_indexX(0),
     m_indexY(0)
 {
-
+    this->translate();
 }
 
 WidgetPicturePreview::~WidgetPicturePreview()
@@ -130,6 +130,13 @@ void WidgetPicturePreview::updateRectangle(){
 
 void WidgetPicturePreview::updateRectangleCharacter(){
     m_selectionRectangle->setRectangle(m_indexX, m_indexY, 1, 1);
+}
+
+//-------------------------------------------------
+
+void WidgetPicturePreview::translate()
+{
+
 }
 
 // -------------------------------------------------------

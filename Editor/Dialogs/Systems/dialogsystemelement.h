@@ -39,7 +39,9 @@ public:
 private:
     Ui::DialogSystemElement *ui;
     SystemElement& m_element;
+
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMELEMENT_H

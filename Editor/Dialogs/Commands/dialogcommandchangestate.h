@@ -50,6 +50,7 @@ private:
      void initializeStateId();
      void selectionState(QVector<QString>& command) const;
      void operation(QVector<QString>& command) const;
+     void translate();
 };
 
 #endif // DIALOGCOMMANDCHANGESTATE_H

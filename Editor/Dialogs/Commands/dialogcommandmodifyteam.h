@@ -41,8 +41,10 @@ protected:
 
 private:
     Ui::DialogCommandModifyTeam *ui;
+
     void getNewInstance(QVector<QString> &command) const;
     void getAddRemove(QVector<QString> &command) const;
+    void translate();
 
 private slots:
     void on_radioButtonNewInstance_toggled(bool checked);

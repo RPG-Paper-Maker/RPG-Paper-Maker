@@ -30,6 +30,8 @@ WidgetSong::WidgetSong(QWidget *parent) :
     item->setSizeHint(QSize(item->sizeHint().width(),
                             ui->listWidget->height() - 4));
     ui->listWidget->addItem(item);
+
+    this->translate();
 }
 
 WidgetSong::~WidgetSong()
@@ -64,6 +66,13 @@ void WidgetSong::openDialog() {
     if (dialog.exec() == QDialog::Accepted) {
         update();
     }
+}
+
+//-------------------------------------------------
+
+void WidgetSong::translate()
+{
+
 }
 
 // -------------------------------------------------------

@@ -39,6 +39,8 @@ DialogCommandModifyInventory::DialogCommandModifyInventory(
                                 ->gameDatas()->armorsDatas()->model());
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandModifyInventory::~DialogCommandModifyInventory()
@@ -51,6 +53,14 @@ DialogCommandModifyInventory::~DialogCommandModifyInventory()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandModifyInventory::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandModifyInventory::initialize(EventCommand* command){
     int i = 0;

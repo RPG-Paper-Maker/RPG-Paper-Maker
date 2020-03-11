@@ -39,6 +39,8 @@ DialogCommandPlaySong::DialogCommandPlaySong(QString title, SongKind kind,
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandPlaySong::DialogCommandPlaySong(QString title, SystemPlaySong
@@ -96,6 +98,13 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+//-------------------------------------------------
+
+void DialogCommandPlaySong::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandPlaySong::initialize(EventCommand* command) {
     int i = 0;

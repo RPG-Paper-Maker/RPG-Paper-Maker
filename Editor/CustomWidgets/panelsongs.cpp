@@ -124,6 +124,8 @@ PanelSongs::PanelSongs(QWidget *parent) :
         double)));
     connect(ui->panelPrimitiveValueEnd->doubleSpinBoxNumber(), SIGNAL(
         valueChanged(double)), this, SLOT(on_doubleSpinBoxEndValueChanged(double)));
+
+    this->translate();
 }
 
 PanelSongs::~PanelSongs()
@@ -445,6 +447,13 @@ void PanelSongs::setVisibleStartEnd(bool b) {
     ui->checkBoxEnd->setVisible(b);
     ui->panelPrimitiveValueEnd->setVisible(b);
     ui->labelSeconds2->setVisible(b);
+}
+
+//-------------------------------------------------
+
+void PanelSongs::translate()
+{
+
 }
 
 // -------------------------------------------------------

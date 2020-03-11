@@ -34,6 +34,8 @@ DialogCommandRemoveObjectFromMap::DialogCommandRemoveObjectFromMap(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandRemoveObjectFromMap::~DialogCommandRemoveObjectFromMap() {
@@ -67,6 +69,14 @@ void DialogCommandRemoveObjectFromMap::initializePrimitives() {
 
     ui->panelPrimitiveObjectID->initializeDataBaseCommandId(m_modelObjects,
         m_parameters, properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandRemoveObjectFromMap::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

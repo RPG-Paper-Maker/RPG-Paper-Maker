@@ -28,6 +28,8 @@ DialogSystemMonsterTroop::DialogSystemMonsterTroop(SystemMonsterTroop
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
@@ -50,6 +52,14 @@ void DialogSystemMonsterTroop::initialize(){
                                             ->model()->invisibleRootItem(),
                                             m_monsterTroop.id()));
     ui->spinBoxLevel->setValue(m_monsterTroop.level());
+}
+
+//-------------------------------------------------
+
+void DialogSystemMonsterTroop::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

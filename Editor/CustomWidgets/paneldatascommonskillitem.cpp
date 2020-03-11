@@ -29,6 +29,8 @@ PanelDatasCommonSkillItem::PanelDatasCommonSkillItem(QWidget *parent) :
     m_model(nullptr)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelDatasCommonSkillItem::~PanelDatasCommonSkillItem()
@@ -219,6 +221,13 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
     ui->panelPrimitiveValueAnimationTarget->initializeModel(m_model
         ->animationTargetID());
     ui->panelPrimitiveValueAnimationTarget->updateModel();
+}
+
+//-------------------------------------------------
+
+void PanelDatasCommonSkillItem::translate()
+{
+
 }
 
 // -------------------------------------------------------

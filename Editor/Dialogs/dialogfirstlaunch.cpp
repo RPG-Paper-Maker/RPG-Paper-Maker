@@ -11,6 +11,7 @@
 
 #include "dialogfirstlaunch.h"
 #include "ui_dialogfirstlaunch.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,6 +26,8 @@ DialogFirstLaunch::DialogFirstLaunch(QWidget *parent) :
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogFirstLaunch::~DialogFirstLaunch() {
@@ -52,6 +55,12 @@ void DialogFirstLaunch::initialize() {
         ".php/features\">here</a>.</p><p>You can also find <strong>guides for "
         "using RPG Paper Maker like a pro</strong> <a href=\"https://rpg-paper-"
         "maker.github.io/\">here</a>.</p>");
+}
+
+// -------------------------------------------------------
+
+void DialogFirstLaunch::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
 }
 
 // -------------------------------------------------------

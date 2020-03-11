@@ -32,6 +32,7 @@ private:
     SystemProperty &m_property;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_lineEditName_textEdited(const QString &text);

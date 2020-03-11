@@ -15,6 +15,7 @@
 #include "ui_widgetmenubarmapeditor.h"
 #include "common.h"
 #include "mainwindow.h"
+#include "rpm.h"
 
 QColor WidgetMenuBarMapEditor::colorBackgroundSelected(95, 158, 160);
 QColor WidgetMenuBarMapEditor::colorBackgroundRightSelected(120, 163, 131);
@@ -49,6 +50,8 @@ WidgetMenuBarMapEditor::WidgetMenuBarMapEditor(QWidget *parent, bool selection) 
         actions().at(static_cast<int>(m_selectionKind))->setProperty("selection",
             true);
     }
+
+    this->translate();
 }
 
 WidgetMenuBarMapEditor::~WidgetMenuBarMapEditor()
@@ -499,6 +502,13 @@ void WidgetMenuBarMapEditor::enableAllRight() {
     actionPin()->setEnabled(true);
     actionLayerNone()->setEnabled(true);
     actionLayerOn()->setEnabled(true);
+}
+
+//-------------------------------------------------
+
+void WidgetMenuBarMapEditor::translate()
+{
+
 }
 
 // -------------------------------------------------------

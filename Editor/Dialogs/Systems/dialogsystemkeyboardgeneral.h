@@ -31,7 +31,9 @@ public:
 private:
     Ui::DialogSystemKeyBoardGeneral *ui;
     SystemKeyBoard& m_key;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_pushButtonChange_clicked();

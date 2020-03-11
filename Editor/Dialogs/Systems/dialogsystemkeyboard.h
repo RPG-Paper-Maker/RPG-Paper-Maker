@@ -35,7 +35,9 @@ private:
     SystemKeyBoard& m_key;
     QSet<int> m_keysPressed;
     QVector<int> m_currentShortcut;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_pushButtonRemoveLast_clicked();

@@ -56,6 +56,7 @@ private:
     void updateMountain(SystemMountain *mountain);
     void initializeObjects3D();
     void updateObject3D(SystemObject3D *object);
+    void translate();
 
 private slots:
     void on_tilesetSelected(QModelIndex index, QModelIndex);

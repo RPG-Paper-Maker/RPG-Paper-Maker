@@ -71,6 +71,8 @@ protected:
 private:
     Ui::DialogCommandShowText *ui;
 
+    void translate();
+
 public slots:
     void on_pushButtonBold_clicked();
     void on_pushButtonItalic_clicked();

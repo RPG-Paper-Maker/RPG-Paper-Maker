@@ -56,6 +56,7 @@ private:
     void deleteContent(QString path);
     void moveContent();
     void updateVideos();
+    void translate();
 
 public slots:
     void showAvailableContent(bool b);

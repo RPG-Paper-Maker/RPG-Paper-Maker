@@ -47,6 +47,8 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     m_contextMenuDirectory = ContextMenuList::createContextDirectory(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
+
+    this->translate();
 }
 
 WidgetTreeLocalMaps::~WidgetTreeLocalMaps()
@@ -387,6 +389,13 @@ bool WidgetTreeLocalMaps::setCurrentIndexFirstMap(QStandardItem* item) {
     }
 
     return false;
+}
+
+//-------------------------------------------------
+
+void WidgetTreeLocalMaps::translate()
+{
+
 }
 
 // -------------------------------------------------------

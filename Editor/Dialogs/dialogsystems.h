@@ -46,6 +46,7 @@ protected:
 
 private:
     Ui::DialogSystems *ui;
+
     void initializeSystem(GameDatas *gameDatas);
     void initializeBattleSystem(GameDatas *gameDatas);
     void updateStatisticsBase();
@@ -58,6 +59,7 @@ private:
     void updateCommonReactors(SystemCommonReaction *sysCommonReactor);
     void initializeCommonObjects(GameDatas *gameDatas);
     void updateCommonObjects(SystemCommonObject *sysCommonObject);
+    void translate();
 
 private slots:
     void on_spinBoxScreenWidth_valueChanged(int i);

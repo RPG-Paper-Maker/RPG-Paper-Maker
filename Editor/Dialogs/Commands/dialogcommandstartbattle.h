@@ -46,6 +46,8 @@ private:
     SystemCommonObject* m_object;
     QStandardItemModel* m_parameters;
 
+    void translate();
+
 private slots:
     void on_radioButtonVariableConstant_toggled(bool checked);
     void on_radioButtonID_toggled(bool checked);

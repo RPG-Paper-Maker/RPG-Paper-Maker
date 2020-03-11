@@ -56,6 +56,8 @@ DialogCommandTeleportObject::DialogCommandTeleportObject(
                                                             nullptr);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandTeleportObject::~DialogCommandTeleportObject()
@@ -72,6 +74,14 @@ DialogCommandTeleportObject::~DialogCommandTeleportObject()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandTeleportObject::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandTeleportObject::initialize(EventCommand* command){
     int i = 0;

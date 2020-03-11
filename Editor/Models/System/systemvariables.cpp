@@ -62,12 +62,16 @@ QString SystemVariables::idToString() const
 
 // -------------------------------------------------------
 
-SuperListItem* SystemVariables::getById(int id) const{
-    for (int i = 0; i < variablesPerPage; i++){
-        SuperListItem* s = (SuperListItem*)(p_model->invisibleRootItem()
-                                            ->child(i)->data()
-                                            .value<quintptr>());
-        if (id == s->id()) return s;
+SuperListItem* SystemVariables::getById(int id) const {
+    SuperListItem *s;
+    int i;
+
+    for (i = 0; i < variablesPerPage; i++) {
+        s = reinterpret_cast<SuperListItem *>(p_model->invisibleRootItem()
+            ->child(i)->data().value<quintptr>());
+        if (id == s->id()) {
+            return s;
+        }
     }
 
     return nullptr;
@@ -76,12 +80,10 @@ SuperListItem* SystemVariables::getById(int id) const{
 // -------------------------------------------------------
 
 void SystemVariables::setDefaultVariables(bool i) {
-    QStandardItem *varItem;
     SuperListItem *var;
     int j, l;
 
     for (j = 1, l = SystemVariables::variablesPerPage; j <= l; j++) {
-        varItem = new QStandardItem;
         var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? "Lucas "
             "instance ID" : "");
         p_model->invisibleRootItem()->appendRow(var->getModelRow());

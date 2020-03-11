@@ -45,6 +45,7 @@ private:
     void initialize();
     void updateZoom(int zoom);
     void enableAll(bool b);
+    void translate();
 
     virtual void closeEvent(QCloseEvent *event);
 

@@ -38,7 +38,9 @@ public:
 private:
     Ui::DialogSystemName *ui;
     SuperListItem& m_model;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);

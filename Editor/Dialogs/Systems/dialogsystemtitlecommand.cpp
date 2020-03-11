@@ -11,6 +11,7 @@
 
 #include "dialogsystemtitlecommand.h"
 #include "ui_dialogsystemtitlecommand.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -35,6 +36,8 @@ DialogSystemTitleCommand::DialogSystemTitleCommand(SystemTitleCommand &tc,
     ui->plainTextEditScript->hide();
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemTitleCommand::~DialogSystemTitleCommand() {
@@ -52,6 +55,14 @@ void DialogSystemTitleCommand::initialize() {
     ui->comboBoxTypeCommand->setCurrentIndex(static_cast<int>(m_titleCommand
         .kind()));
     ui->plainTextEditScript->insertPlainText(m_titleCommand.script());
+}
+
+//-------------------------------------------------
+
+void DialogSystemTitleCommand::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

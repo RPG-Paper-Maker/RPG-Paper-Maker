@@ -11,6 +11,7 @@
 
 #include "dialogsystemspeedfrequency.h"
 #include "ui_dialogsystemspeedfrequency.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemSpeedFrequency::DialogSystemSpeedFrequency(SystemSpeedFrequency &sf,
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemSpeedFrequency::~DialogSystemSpeedFrequency() {
@@ -51,6 +54,14 @@ void DialogSystemSpeedFrequency::initialize() {
     } else {
         ui->labelSeconds->hide();
     }
+}
+
+//-------------------------------------------------
+
+void DialogSystemSpeedFrequency::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

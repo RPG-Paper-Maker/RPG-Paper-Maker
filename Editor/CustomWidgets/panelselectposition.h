@@ -43,6 +43,8 @@ public:
 private:
     Ui::PanelSelectPosition *ui;
 
+    void translate();
+
 private slots:
     void on_pushButtonSelect_clicked();
 };

@@ -47,6 +47,8 @@ private:
     SuperListItem *m_variableID;
     SuperListItem *m_kind;
 
+    void translate();
+
 public slots:
     void on_comboBoxChoice_currentIndexChanged(int index);
 };

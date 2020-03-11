@@ -49,6 +49,8 @@ protected:
 
 private:
     Ui::DialogCommandAllowForbidSavesMainMenu *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDALLOWFORBIDSAVESMAINMENU_H

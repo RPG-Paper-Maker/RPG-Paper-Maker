@@ -29,7 +29,7 @@ WidgetPreviewObject3D::WidgetPreviewObject3D(QWidget *parent) :
     m_program(nullptr),
     m_texture(nullptr)
 {
-
+    this->translate();
 }
 
 WidgetPreviewObject3D::~WidgetPreviewObject3D() {
@@ -110,6 +110,13 @@ void WidgetPreviewObject3D::updateObject() {
         m_object->getCenter(center);
         m_camera->updateTarget(center);
     }
+}
+
+//-------------------------------------------------
+
+void WidgetPreviewObject3D::translate()
+{
+
 }
 
 // -------------------------------------------------------

@@ -12,6 +12,7 @@
 #include <QHeaderView>
 #include <QtMath>
 #include "widgettableprogression.h"
+#include "rpm.h"
 
 const QString WidgetTableProgression::NAME_LEVEL = "Level";
 const QColor WidgetTableProgression::EDITED_COLOR = Qt::green;
@@ -33,6 +34,8 @@ WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
     connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(
         int, int)));
     setEditable(true);
+
+    this->translate();
 }
 
 WidgetTableProgression::~WidgetTableProgression() {
@@ -200,6 +203,13 @@ void WidgetTableProgression::updateTotal() {
             m_totalWidget->item(i, 1)->setText(QString::number(total));
         }
     }
+}
+
+//-------------------------------------------------
+
+void WidgetTableProgression::translate()
+{
+
 }
 
 // -------------------------------------------------------

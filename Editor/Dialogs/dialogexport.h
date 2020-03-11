@@ -41,6 +41,8 @@ protected:
 private:
     Ui::DialogExport *ui;
 
+    void translate();
+
 private slots:
     void on_pushButtonLocation_clicked();
     void accept();

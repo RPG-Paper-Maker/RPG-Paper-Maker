@@ -50,6 +50,8 @@ public:
 private:
     Ui::DialogSelectPosition *ui;
 
+    void translate();
+
 private slots:
     void accept();
 };

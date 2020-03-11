@@ -39,7 +39,9 @@ public:
 private:
     Ui::DialogSystemStatisticProgression *ui;
     SystemStatisticProgression& m_statisticProgression;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_comboBoxStatistic_currentIndexChanged(int index);

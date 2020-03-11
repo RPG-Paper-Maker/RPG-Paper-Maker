@@ -49,6 +49,8 @@ protected:
 private:
     Ui::DialogCommandPlaySong *ui;
 
+    void translate();
+
 public slots:
     virtual void accept();
     virtual void reject();

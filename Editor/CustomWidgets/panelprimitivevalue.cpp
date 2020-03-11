@@ -36,6 +36,8 @@ PanelPrimitiveValue::PanelPrimitiveValue(QWidget *parent) :
     Q_FOREACH(QComboBox * sp, findChildren<QComboBox*>()) {
         sp->installEventFilter(this);
     }
+
+    this->translate();
 }
 
 PanelPrimitiveValue::~PanelPrimitiveValue()
@@ -861,6 +863,13 @@ void PanelPrimitiveValue::getCommand(QVector<QString> &command) {
         }
         break;
     }
+}
+
+//-------------------------------------------------
+
+void PanelPrimitiveValue::translate()
+{
+
 }
 
 // -------------------------------------------------------

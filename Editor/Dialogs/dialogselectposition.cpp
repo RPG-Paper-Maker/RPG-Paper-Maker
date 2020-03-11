@@ -28,6 +28,8 @@ DialogSelectPosition::DialogSelectPosition(int idMap, int x, int y, int yPlus,
     ui->setupUi(this);
 
     ui->panelSelectPositionMaps->initialize(idMap, x, y, yPlus, z);
+
+    this->translate();
 }
 
 DialogSelectPosition::~DialogSelectPosition()
@@ -67,6 +69,14 @@ int DialogSelectPosition::z() const {
 
 TreeMapTag * DialogSelectPosition::currentTag() const {
     return ui->panelSelectPositionMaps->currentTag();
+}
+
+//-------------------------------------------------
+
+void DialogSelectPosition::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 //--------------------------------------------

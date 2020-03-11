@@ -55,6 +55,7 @@ private:
     void deleteContent(QString path);
     void moveContent();
     void updateShape();
+    void translate();
 
 public slots:
     void showAvailableContent(bool b);

@@ -11,6 +11,7 @@
 
 #include "panelprogressiontable.h"
 #include "ui_panelprogressiontable.h"
+#include "rpm.h"
 
 const QString PanelProgressionTable::NAME_EXPERIENCE = "Experience";
 
@@ -39,6 +40,8 @@ PanelProgressionTable::PanelProgressionTable(QWidget *parent) :
     Q_FOREACH(QSlider * sl, findChildren<QSlider *>()) {
         sl->installEventFilter(this);
     }
+
+    this->translate();
 }
 
 PanelProgressionTable::~PanelProgressionTable()
@@ -89,6 +92,13 @@ void PanelProgressionTable::updateProgress() {
 
 void PanelProgressionTable::gotoGraph() {
     ui->tabWidget->setCurrentIndex(1);
+}
+
+//-------------------------------------------------
+
+void PanelProgressionTable::translate()
+{
+
 }
 
 // -------------------------------------------------------

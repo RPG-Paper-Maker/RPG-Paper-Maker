@@ -26,7 +26,7 @@ WidgetChart::WidgetChart(QWidget *parent) :
     m_penGrey(Qt::darkGray, 1),
     m_penText(RPM::COLOR_ALMOST_BLACK)
 {
-
+    this->translate();
 }
 
 WidgetChart::~WidgetChart() {
@@ -103,6 +103,13 @@ void WidgetChart::updateScale() {
         m_linesY << QPoint(this->width() - (offsetX / 2), y);
         m_linesY << QPoint((offsetX / 2) - 5, y);
     }
+}
+
+//-------------------------------------------------
+
+void WidgetChart::translate()
+{
+
 }
 
 // -------------------------------------------------------

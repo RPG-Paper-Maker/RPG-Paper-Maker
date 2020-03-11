@@ -47,6 +47,8 @@ private:
     CustomShapeKind m_kind;
     SuperListItem *m_shapeID;
 
+    void translate();
+
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);
     void on_pushButton_clicked();

@@ -11,7 +11,7 @@
 
 #include "dialogsystemcost.h"
 #include "ui_dialogsystemcost.h"
-
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +27,8 @@ DialogSystemCost::DialogSystemCost(SystemCost &cost, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCost::~DialogSystemCost() {
@@ -49,4 +51,12 @@ void DialogSystemCost::initialize() {
     ui->panelPrimitiveValue->initializeMessage(true);
     ui->panelPrimitiveValue->initializeModel(m_cost.valueFormula());
     ui->panelPrimitiveValue->updateModel();
+}
+
+//-------------------------------------------------
+
+void DialogSystemCost::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

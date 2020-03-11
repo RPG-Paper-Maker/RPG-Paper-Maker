@@ -11,6 +11,7 @@
 
 #include "dialogcommandinputnumber.h"
 #include "ui_dialogcommandinputnumber.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogCommandInputNumber::DialogCommandInputNumber(EventCommand *command,
     ui->widgetVariable->initialize();
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandInputNumber::~DialogCommandInputNumber()
@@ -40,6 +43,14 @@ DialogCommandInputNumber::~DialogCommandInputNumber()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandInputNumber::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandInputNumber::initialize(EventCommand* command){
     ui->widgetVariable->setCurrentId(command->valueCommandAt(0).toInt());

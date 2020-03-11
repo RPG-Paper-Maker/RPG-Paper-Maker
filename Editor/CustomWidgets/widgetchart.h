@@ -54,6 +54,8 @@ protected:
     int m_yMax;
     int m_yTick;
 
+    void translate();
+
     virtual void paintEvent(QPaintEvent *event);
 };
 

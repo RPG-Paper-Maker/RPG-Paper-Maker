@@ -90,6 +90,7 @@ private:
     int getCurrentID() const;
     void updateCurrentID(int id);
     void updateImageSpecial(SystemSpecialElement *special);
+    void translate();
 
 private slots:
     void onSplitterMoved(int, int);

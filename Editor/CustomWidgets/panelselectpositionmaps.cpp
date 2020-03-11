@@ -29,6 +29,8 @@ PanelSelectPositionMaps::PanelSelectPositionMaps(QWidget *parent) :
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
     m_treeMapDatas->read(RPM::get()->project()->pathCurrentProject());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
+
+    this->translate();
 }
 
 PanelSelectPositionMaps::~PanelSelectPositionMaps()
@@ -85,6 +87,13 @@ void PanelSelectPositionMaps::initialize(int idMap, int x, int y, int yPlus, int
     QVector3D position(x * RPM::get()->getSquareSize(), y * RPM::get()
         ->getSquareSize() + yPlus, z * RPM::get()->getSquareSize());
     ui->treeViewLocalMaps->setMap(idMap, position);
+}
+
+//-------------------------------------------------
+
+void PanelSelectPositionMaps::translate()
+{
+
 }
 
 //--------------------------------------------

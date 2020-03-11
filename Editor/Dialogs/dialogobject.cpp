@@ -29,9 +29,19 @@ DialogObject::DialogObject(SystemCommonObject *object, QWidget *parent) :
                                ->commonEventsDatas()->modelCommonObjects());
     ui->widget->initializeModel(object);
     ui->widget->updateModel();
+
+    this->translate();
 }
 
 DialogObject::~DialogObject()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogObject::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

@@ -88,6 +88,8 @@ private:
     QAction *m_actionLayerNone;
     QAction *m_actionLayerOn;
 
+    void translate();
+
 protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

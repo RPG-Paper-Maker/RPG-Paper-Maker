@@ -12,6 +12,7 @@
 #include "mainwindow.h"
 #include "panelmainmenu.h"
 #include "ui_panelmainmenu.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -24,10 +25,12 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     ui(new Ui::PanelMainMenu)
 {
     ui->setupUi(this);
-    ui->pushButtonNewProject->setAutoFillBackground(true);
 
-    connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this,
-        SLOT(openRecentProject(QString)));
+    ui->pushButtonNewProject->setAutoFillBackground(true);
+    this->connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this
+        , SLOT(openRecentProject(QString)));
+
+    this->translate();
 }
 
 PanelMainMenu::~PanelMainMenu()
@@ -37,22 +40,39 @@ PanelMainMenu::~PanelMainMenu()
 
 // -------------------------------------------------------
 //
+//  INTERMEDIARY FUNCTIONS
+//
+// -------------------------------------------------------
+
+void PanelMainMenu::translate()
+{
+    ui->pushButtonNewProject->setText(RPM::translate(Translations::NEW_PROJECT)
+        + RPM::DOT_DOT_DOT);
+    ui->pushButtonOpenProject->setText(RPM::translate(Translations::OPEN_PROJECT
+        ) + RPM::DOT_DOT_DOT);
+}
+
+// -------------------------------------------------------
+//
 //  SLOTS
 //
 // -------------------------------------------------------
 
-void PanelMainMenu::on_pushButtonNewProject_clicked() {
+void PanelMainMenu::on_pushButtonNewProject_clicked()
+{
     reinterpret_cast<MainWindow *>(parent()->parent())->newProject();
 }
 
 // -------------------------------------------------------
 
-void PanelMainMenu::on_pushButtonOpenProject_clicked() {
+void PanelMainMenu::on_pushButtonOpenProject_clicked()
+{
     reinterpret_cast<MainWindow *>(parent()->parent())->openExistingProject();
 }
 
 // -------------------------------------------------------
 
-void PanelMainMenu::openRecentProject(QString path) {
+void PanelMainMenu::openRecentProject(QString path)
+{
     emit openingProject(path);
 }

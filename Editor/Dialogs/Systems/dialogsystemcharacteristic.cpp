@@ -29,6 +29,8 @@ DialogSystemCharacteristic::DialogSystemCharacteristic(SystemCharacteristic
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCharacteristic::~DialogSystemCharacteristic() {
@@ -147,6 +149,14 @@ void DialogSystemCharacteristic::uncheckAllRadiosCharacters() {
     ui->radioButtonEquip->setAutoExclusive(true);
     ui->radioButtonEquipmentChange->setAutoExclusive(true);
     ui->radioButtonBeginEquipment->setAutoExclusive(true);
+}
+
+//-------------------------------------------------
+
+void DialogSystemCharacteristic::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

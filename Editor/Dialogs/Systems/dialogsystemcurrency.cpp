@@ -11,6 +11,7 @@
 
 #include "dialogsystemcurrency.h"
 #include "ui_dialogsystemcurrency.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemCurrency::DialogSystemCurrency(SystemCurrency &currency, QWidget
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCurrency::~DialogSystemCurrency()
@@ -43,4 +46,12 @@ DialogSystemCurrency::~DialogSystemCurrency()
 void DialogSystemCurrency::initialize(){
     ui->widgetName->initializeNamesLang(&m_currency);
     ui->widgetIcon->initializeIcon(&m_currency);
+}
+
+//-------------------------------------------------
+
+void DialogSystemCurrency::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

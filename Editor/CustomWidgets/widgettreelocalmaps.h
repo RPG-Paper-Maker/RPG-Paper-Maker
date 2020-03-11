@@ -76,6 +76,7 @@ private:
     void deleteMapTemp(QString &path, QStandardItem* item);
     QStandardItem* getMap(int id, QStandardItem* item);
     void updateTileset();
+    void translate();
 
 public slots:
     void on_selectionChanged(QModelIndex, QModelIndex);

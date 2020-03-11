@@ -40,6 +40,8 @@ public:
 
 private:
     Ui::DialogTilesetTexture *ui;
+
+    void translate();
 };
 
 #endif // DIALOGTILESETTEXTURE_H

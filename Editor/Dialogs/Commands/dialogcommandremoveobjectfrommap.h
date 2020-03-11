@@ -49,6 +49,8 @@ protected:
 
 private:
     Ui::DialogCommandRemoveObjectFromMap *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDREMOVEOBJECTFROMMAP_H

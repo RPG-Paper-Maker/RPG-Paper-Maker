@@ -46,6 +46,7 @@ private:
 
     void initializeCommonSkill();
     void updateCommonSkill();
+    void translate();
 
 protected:
     SystemCommonSkillItem *m_model;

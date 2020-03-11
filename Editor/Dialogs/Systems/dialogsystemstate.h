@@ -41,6 +41,7 @@ private:
     bool m_needUpdate;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_comboBox_currentIndexChanged(int index);

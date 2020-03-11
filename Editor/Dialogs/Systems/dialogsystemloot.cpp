@@ -27,6 +27,8 @@ DialogSystemLoot::DialogSystemLoot(SystemLoot &loot, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemLoot::~DialogSystemLoot() {
@@ -129,6 +131,14 @@ void DialogSystemLoot::radioChanged(bool checked, LootKind kind) {
         panel->updateValue();
         m_loot.updateName();
     }
+}
+
+//-------------------------------------------------
+
+void DialogSystemLoot::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

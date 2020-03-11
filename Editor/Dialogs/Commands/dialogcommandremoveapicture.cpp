@@ -11,6 +11,7 @@
 
 #include "dialogcommandremoveapicture.h"
 #include "ui_dialogcommandremoveapicture.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -32,6 +33,8 @@ DialogCommandRemoveAPicture::DialogCommandRemoveAPicture(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandRemoveAPicture::~DialogCommandRemoveAPicture() {
@@ -53,6 +56,14 @@ void DialogCommandRemoveAPicture::initializePrimitives() {
     }
 
     ui->panelPrimitiveIndex->initializeNumber(m_parameters, properties);
+}
+
+//-------------------------------------------------
+
+void DialogCommandRemoveAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

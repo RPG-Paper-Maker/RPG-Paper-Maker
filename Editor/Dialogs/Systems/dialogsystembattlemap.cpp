@@ -35,6 +35,8 @@ DialogSystemBattleMap::DialogSystemBattleMap(SystemBattleMap &battleMap,
     position = battleMap.position();
     ui->panelSelectPositionMaps->initialize(battleMap.idMap(), position.x(),
         position.y(), position.getYpx(RPM::getSquareSize()), position.z());
+
+    this->translate();
 }
 
 DialogSystemBattleMap::~DialogSystemBattleMap()
@@ -50,6 +52,14 @@ DialogSystemBattleMap::~DialogSystemBattleMap()
 
 TreeMapTag * DialogSystemBattleMap::currentTag() const {
     return ui->panelSelectPositionMaps->currentTag();
+}
+
+//-------------------------------------------------
+
+void DialogSystemBattleMap::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 //--------------------------------------------

@@ -37,6 +37,8 @@ DialogCommandModifyTeam::DialogCommandModifyTeam(EventCommand *command,
     ui->comboBoxAddRemoveTeam->addItems(RPM::ENUM_TO_STRING_TEAM);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandModifyTeam::~DialogCommandModifyTeam()
@@ -49,6 +51,14 @@ DialogCommandModifyTeam::~DialogCommandModifyTeam()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandModifyTeam::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandModifyTeam::initialize(EventCommand* command){
     int i = 0;

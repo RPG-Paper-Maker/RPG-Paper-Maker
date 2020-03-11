@@ -33,11 +33,21 @@ DialogVideosPreview::DialogVideosPreview(SuperListItem *videoID, QWidget *parent
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
+
+    this->translate();
 }
 
 DialogVideosPreview::~DialogVideosPreview()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogVideosPreview::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

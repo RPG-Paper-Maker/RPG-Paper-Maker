@@ -63,6 +63,10 @@ public:
 
     // STRING SYMBOLS
     static const QString DASH;
+    static const QString COLON;
+    static const QString DOT_DOT_DOT;
+    static const QString BRACKET_LEFT;
+    static const QString BRACKET_RIGHT;
     static const QString TRUE_BOOL_STRING;
     static const QString FALSE_BOOL_STRING;
 
@@ -152,20 +156,23 @@ public:
     static const int SCREEN_BASIC_HEIGHT;
 
     // ENUM TO STRING
-    static const QStringList ENUM_TO_STRING_DAMAGES_KIND;
-    static const QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
-    static const QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
-    static const QStringList ENUM_TO_STRING_OS_KIND;
-    static const QStringList ENUM_TO_STRING_TEAM;
-    static const QStringList ENUM_TO_STRING_OPERATION;
-    static const QStringList ENUM_TO_STRING_OPERATION_SIMPLE;
-    static const QStringList ENUM_TO_STRING_FORMULA_STAT;
-    static const QStringList ENUM_TO_STRING_TITLE_SETTINGS;
-    static const QStringList ENUM_TO_STRING_AXIS_KIND;
-    static const QStringList ENUM_TO_STRING_CONDITION_HEROES;
-    static const QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
-    static const QStringList ENUM_TO_STRING_ANIMATION_POSITION_KIND;
-    static const QStringList ENUM_TO_STRING_ANIMATION_CONDITION_KIND;
+    static QStringList ENUM_TO_STRING_DAMAGES_KIND;
+    static QStringList ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND;
+    static QStringList ENUM_TO_STRING_INCREASE_DECREASE_KIND;
+    static QStringList ENUM_TO_STRING_OS_KIND;
+    static QStringList ENUM_TO_STRING_TEAM;
+    static QStringList ENUM_TO_STRING_OPERATION;
+    static QStringList ENUM_TO_STRING_OPERATION_SIMPLE;
+    static QStringList ENUM_TO_STRING_FORMULA_STAT;
+    static QStringList ENUM_TO_STRING_TITLE_SETTINGS;
+    static QStringList ENUM_TO_STRING_AXIS_KIND;
+    static QStringList ENUM_TO_STRING_CONDITION_HEROES;
+    static QStringList ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC;
+    static QStringList ENUM_TO_STRING_ANIMATION_POSITION_KIND;
+    static QStringList ENUM_TO_STRING_ANIMATION_CONDITION_KIND;
+    static QStringList ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND;
+    static QStringList ENUM_TO_STRING_OBJECT_COLLISION_KIND;
+    static QStringList ENUM_TO_STRING_EVENT_COMMAND_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

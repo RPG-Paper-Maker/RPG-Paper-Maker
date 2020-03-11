@@ -47,6 +47,7 @@ private:
     QStandardItemModel* m_model;
 
     bool isOrdered(int limit) const;
+    void translate();
 
 private slots:
     void accept();

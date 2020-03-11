@@ -45,6 +45,8 @@ public:
 private:
     Ui::DialogSongs *ui;
 
+    void translate();
+
 private slots:
     void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };

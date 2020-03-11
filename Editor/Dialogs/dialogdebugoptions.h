@@ -36,7 +36,9 @@ public:
 
 private:
     Ui::DialogDebugOptions *ui;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_checkBoxBB_toggled(bool checked);

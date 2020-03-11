@@ -49,6 +49,8 @@ PanelShapes::PanelShapes(QWidget *parent) :
         int)), this, SLOT(deletingContent(SuperListItem *, int)));
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+
+    this->translate();
 }
 
 PanelShapes::~PanelShapes()
@@ -219,6 +221,13 @@ void PanelShapes::moveContent() {
 void PanelShapes::updateShape() {
     m_shape = reinterpret_cast<SystemCustomShape *>(ui->widgetPanelIDs->list()
         ->getSelected()->data().value<qintptr>());
+}
+
+//-------------------------------------------------
+
+void PanelShapes::translate()
+{
+
 }
 
 // -------------------------------------------------------

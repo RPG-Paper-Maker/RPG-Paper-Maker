@@ -11,6 +11,7 @@
 
 #include "dialogsystemstatistic.h"
 #include "ui_dialogsystemstatistic.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -28,6 +29,8 @@ DialogSystemStatistic::DialogSystemStatistic(SystemStatistic &statistic,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemStatistic::~DialogSystemStatistic()
@@ -53,6 +56,14 @@ void DialogSystemStatistic::initialize(){
         ui->radioButtonFix->setChecked(true);
     else
         ui->radioButtonBar->setChecked(true);
+}
+
+//-------------------------------------------------
+
+void DialogSystemStatistic::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -38,6 +38,7 @@
 #include "dialogcommandremoveobjectfrommap.h"
 #include "dialogcommandallowforbidsavesmainmenu.h"
 #include "dialogcommandcallacommonreaction.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -54,6 +55,8 @@ DialogCommands::DialogCommands(SystemCommonObject *object,
     m_parameters(parameters)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogCommands::~DialogCommands()
@@ -181,6 +184,88 @@ void DialogCommands::openDialogCommand(EventCommandKind kind,
 void DialogCommands::openNonDialogCommand(EventCommandKind kind){
     p_command = new EventCommand(kind);
     accept();
+}
+
+// -------------------------------------------------------
+
+void DialogCommands::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COMMANDS));
+    ui->pushButtonShowText->setText(EventCommand::kindToString(EventCommandKind
+        ::ShowText));
+    ui->pushButtonChangeVariables->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeVariables));
+    ui->pushButtonEndGame->setText(EventCommand::kindToString(EventCommandKind
+        ::EndGame));
+    ui->pushButtonWhile->setText(EventCommand::kindToString(EventCommandKind
+        ::While));
+    ui->pushButtonWhileBreak->setText(EventCommand::kindToString(
+        EventCommandKind::WhileBreak));
+    ui->pushButtonInputNumber->setText(EventCommand::kindToString(
+        EventCommandKind::InputNumber));
+    ui->pushButtonCondition->setText(EventCommand::kindToString(EventCommandKind
+        ::If));
+    ui->pushButtonOpenMainMenu->setText(EventCommand::kindToString(
+        EventCommandKind::OpenMainMenu));
+    ui->pushButtonOpenSavesMenu->setText(EventCommand::kindToString(
+        EventCommandKind::OpenSavesMenu));
+    ui->pushButtonModifyInventory->setText(EventCommand::kindToString(
+        EventCommandKind::ModifyInventory));
+    ui->pushButtonModifyTeam->setText(EventCommand::kindToString(
+        EventCommandKind::ModifyTeam));
+    ui->pushButtonStartBattle->setText(EventCommand::kindToString(
+        EventCommandKind::StartBattle));
+    ui->pushButtonChangeState->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeState));
+    ui->pushButtonSendEvent->setText(EventCommand::kindToString(EventCommandKind
+        ::SendEvent));
+    ui->pushButtonTeleportObject->setText(EventCommand::kindToString(
+        EventCommandKind::TeleportObject));
+    ui->pushButtonMoveObject->setText(EventCommand::kindToString(
+        EventCommandKind::MoveObject));
+    ui->pushButtonWait->setText(EventCommand::kindToString(EventCommandKind
+        ::Wait));
+    ui->pushButtonMoveCamera->setText(EventCommand::kindToString(
+        EventCommandKind::MoveCamera));
+    ui->pushButtonPlayMusic->setText(EventCommand::kindToString(EventCommandKind
+        ::PlayMusic));
+    ui->pushButtonStopMusic->setText(EventCommand::kindToString(EventCommandKind
+        ::StopMusic));
+    ui->pushButtonPlayBackgroundSound->setText(EventCommand::kindToString(
+        EventCommandKind::PlayBackgroundSound));
+    ui->pushButtonStopBackgroundSound->setText(EventCommand::kindToString(
+        EventCommandKind::StopBackgroundSound));
+    ui->pushButtonPlaySound->setText(EventCommand::kindToString(EventCommandKind
+        ::PlayASound));
+    ui->pushButtonPlayMusicEffect->setText(EventCommand::kindToString(
+        EventCommandKind::PlayMusicEffect));
+    ui->pushButtonChangeProperty->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeProperty));
+    ui->pushButtonDisplayChoice->setText(EventCommand::kindToString(
+        EventCommandKind::DisplayChoice));
+    ui->pushButtonScript->setText(EventCommand::kindToString(EventCommandKind
+        ::Script));
+    ui->pushButtonDisplayPicture->setText(EventCommand::kindToString(
+        EventCommandKind::DisplayAPicture));
+    ui->pushButtonSetMoveTurnPicture->setText(EventCommand::kindToString(
+        EventCommandKind::SetMoveTurnAPicture));
+    ui->pushButtonRemovePicture->setText(EventCommand::kindToString(
+        EventCommandKind::RemoveAPicture));
+    ui->pushButtonSetDialogBoxOptions->setText(EventCommand::kindToString(
+        EventCommandKind::SetDialogBoxOptions));
+    ui->pushButtonTitleScreen->setText(EventCommand::kindToString(
+        EventCommandKind::TitleScreen));
+    ui->pushButtonChangeScreenTone->setText(EventCommand::kindToString(
+        EventCommandKind::ChangeScreenTone));
+    ui->pushButtonRemoveObjectFromMap->setText(EventCommand::kindToString(
+        EventCommandKind::RemoveObjectFromMap));
+    ui->pushButtonStopReaction->setText(EventCommand::kindToString(
+        EventCommandKind::StopReaction));
+    ui->pushButtonAllowForbidSaves->setText(EventCommand::kindToString(
+        EventCommandKind::AllowForbidSaves));
+    ui->pushButtonAllowForbidMainMenu->setText(EventCommand::kindToString(
+        EventCommandKind::AllowForbidMainMenu));
+    ui->pushButtonCallCommonReaction->setText(EventCommand::kindToString(
+        EventCommandKind::CallACommonReaction));
 }
 
 // -------------------------------------------------------

@@ -38,8 +38,10 @@ public:
 private:
     Ui::DialogSystemLoot *ui;
     SystemLoot& m_loot;
+
     void initialize();
     void radioChanged(bool checked, LootKind kind);
+    void translate();
 
 private slots:
     void on_radioButtonItemToggled(bool checked);

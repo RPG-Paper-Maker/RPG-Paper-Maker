@@ -38,6 +38,7 @@ private:
     Ui::DialogGeneralOptions *ui;
 
     void initialize();
+    void translate();
 
 public slots:
     virtual void accept();

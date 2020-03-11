@@ -50,6 +50,8 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
         int)), this, SLOT(deletingContent(SuperListItem *, int)));
     connect(ui->treeViewAvailableContent, SIGNAL(doubleClicked(QModelIndex)),
         this, SLOT(on_treeViewAvailableContentDoubleClicked(QModelIndex)));
+
+    this->translate();
 }
 
 PanelPicturePreview::~PanelPicturePreview()
@@ -266,6 +268,13 @@ void PanelPicturePreview::updatePicture() {
 void PanelPicturePreview::showPictureWidget(bool b) {
     ui->widgetPreview->setVisible(b);
     ui->widgetTileset->setVisible(!b);
+}
+
+//-------------------------------------------------
+
+void PanelPicturePreview::translate()
+{
+
 }
 
 // -------------------------------------------------------

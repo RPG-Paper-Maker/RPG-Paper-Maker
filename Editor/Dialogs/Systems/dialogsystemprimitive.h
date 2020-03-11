@@ -45,6 +45,7 @@ private:
     Ui::DialogSystemPrimitive *ui;
 
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMPRIMITIVE_H

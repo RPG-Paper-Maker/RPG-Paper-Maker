@@ -31,6 +31,8 @@ DialogCollisions::DialogCollisions(QWidget *parent) :
     this->initializeWalls();
     this->initializeMountains();
     this->initializeObjects3D();
+
+    this->translate();
 }
 
 DialogCollisions::~DialogCollisions()
@@ -189,6 +191,8 @@ void DialogCollisions::initializeMountains() {
         currentChanged(QModelIndex, QModelIndex)), this, SLOT(
         on_mountainSelected(QModelIndex, QModelIndex)));
     ui->widgetShowPicture->setCover(true);
+    ui->comboBoxCollisionMountains->addItems(RPM
+        ::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND);
 
     // Select the first mountain
     index = ui->panelSuperListMountains->list()->getModel()->index(0, 0);
@@ -226,6 +230,8 @@ void DialogCollisions::initializeObjects3D() {
         on_object3DSelected(QModelIndex, QModelIndex)));
 
     // Disable comobox
+    ui->comboBoxCollisionObject3D->addItems(RPM
+        ::ENUM_TO_STRING_OBJECT_COLLISION_KIND);
     modelIndex = ui->comboBoxCollisionObject3D->model()->index(3, 0);
     ui->comboBoxCollisionObject3D->model()->setData(modelIndex, v, Qt::UserRole
         - 1);
@@ -280,6 +286,29 @@ void DialogCollisions::updateObject3D(SystemObject3D *object) {
     // Object previewer
     ui->widgetPreviewObject3D->loadObject(object);
     ui->widgetPreviewObject3D->updateObject();
+}
+
+// -------------------------------------------------------
+
+void DialogCollisions::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::TILESETS));
+    ui->groupBoxTilesets->setTitle(RPM::translate(Translations::TILESETS));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::CHARACTERS));
+    ui->groupBoxCharacters->setTitle(RPM::translate(Translations::CHARACTERS));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::AUTOTILES));
+    ui->groupBoxAutotiles->setTitle(RPM::translate(Translations::AUTOTILES));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::WALLS));
+    ui->groupBoxWalls->setTitle(RPM::translate(Translations::WALLS));
+    ui->tabWidget->setTabText(4, RPM::translate(Translations::MOUNTAINS));
+    ui->groupBoxMountains->setTitle(RPM::translate(Translations::MOUNTAINS));
+    ui->labelCollisionMountains->setText(RPM::translate(Translations::COLLISIONS
+        ) + RPM::COLON);
+    ui->tabWidget->setTabText(5, RPM::translate(Translations::THREED_OBJECTS));
+    ui->groupBoxObjects3D->setTitle(RPM::translate(Translations::THREED_OBJECTS));
+    ui->labelCollisionsO->setText(RPM::translate(Translations::COLLISIONS) + RPM
+        ::COLON);
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------
@@ -353,13 +382,18 @@ void DialogCollisions::on_object3DSelected(QModelIndex index, QModelIndex) {
 void DialogCollisions::on_comboBoxCollisionMountains_currentIndexChanged(int
     index)
 {
+    QStandardItem *item;
     SystemMountain *mountain;
 
-    mountain = reinterpret_cast<SystemMountain *>(ui->panelSuperListMountains
-        ->list()->getSelected()->data().value<quintptr>());
-    if (mountain != nullptr) {
-        mountain->setMountainCollisionKind(static_cast<MountainCollisionKind>(
-            index));
+    item = ui->panelSuperListMountains->list()->getSelected();
+
+    if (item != nullptr) {
+        mountain = reinterpret_cast<SystemMountain *>(item->data().value<
+            quintptr>());
+        if (mountain != nullptr) {
+            mountain->setMountainCollisionKind(static_cast<MountainCollisionKind
+                >(index));
+        }
     }
 }
 
@@ -368,13 +402,17 @@ void DialogCollisions::on_comboBoxCollisionMountains_currentIndexChanged(int
 void DialogCollisions::on_comboBoxCollisionObject3D_currentIndexChanged(int
     index)
 {
+    QStandardItem *item;
     SystemObject3D *object;
 
-    object = reinterpret_cast<SystemObject3D *>(ui->panelSuperListObjects3D
-        ->list()->getSelected()->data().value<quintptr>());
-    if (object != nullptr) {
-        object->setCollisionKind(static_cast<ObjectCollisionKind>(index));
-        ui->widgetShapeCollisions->setVisible(object->collisionKind() ==
-            ObjectCollisionKind::Custom);
+    item = ui->panelSuperListObjects3D->list()->getSelected();
+
+    if (item != nullptr) {
+        object = reinterpret_cast<SystemObject3D *>(item->data().value<quintptr>());
+        if (object != nullptr) {
+            object->setCollisionKind(static_cast<ObjectCollisionKind>(index));
+            ui->widgetShapeCollisions->setVisible(object->collisionKind() ==
+                ObjectCollisionKind::Custom);
+        }
     }
 }

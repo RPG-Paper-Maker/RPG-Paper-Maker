@@ -12,6 +12,7 @@
 #include <QColorDialog>
 #include "dialogsystemcolor.h"
 #include "ui_dialogsystemcolor.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemColor::DialogSystemColor(SystemColor& color, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemColor::~DialogSystemColor()
@@ -57,6 +60,14 @@ void DialogSystemColor::setBackgroundColor(QColor& color) {
         color.red()) + "," + QString::number(color.green()) + "," +
         QString::number(color.blue()) + "," + QString::number(color.alpha()) +
         ");");
+}
+
+//-------------------------------------------------
+
+void DialogSystemColor::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

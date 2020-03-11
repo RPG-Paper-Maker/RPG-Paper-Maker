@@ -28,6 +28,8 @@ DialogSystemParameter::DialogSystemParameter(SystemParameter &param,
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemParameter::~DialogSystemParameter()
@@ -48,4 +50,12 @@ void DialogSystemParameter::initialize() {
     ui->widgetValue->initializeModel(m_param.value());
     ui->widgetValue->initializeParameterEvent(object == nullptr ? nullptr :
         object->modelProperties(), RPM::get()->project()->currentParameters());
+}
+
+//-------------------------------------------------
+
+void DialogSystemParameter::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

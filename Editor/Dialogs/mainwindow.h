@@ -69,6 +69,7 @@ private:
     QString p_version;
 
     void updateTextures();
+    void translate();
 
 protected:
     virtual void closeEvent(QCloseEvent *event);

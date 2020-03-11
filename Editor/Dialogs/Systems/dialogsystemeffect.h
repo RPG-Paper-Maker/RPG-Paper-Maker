@@ -47,6 +47,7 @@ private:
     void setVarianceEnabled(bool checked);
     void setCriticalEnabled(bool checked);
     void setPrecisionEnabled(bool checked);
+    void translate();
 
 public slots:
     void on_radioButtonDamages_toggled(bool checked);

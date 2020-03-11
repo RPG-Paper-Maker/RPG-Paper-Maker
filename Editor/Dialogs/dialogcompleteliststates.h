@@ -36,6 +36,8 @@ public:
 
 private:
     Ui::DialogCompleteListStates *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMPLETELISTSTATES_H

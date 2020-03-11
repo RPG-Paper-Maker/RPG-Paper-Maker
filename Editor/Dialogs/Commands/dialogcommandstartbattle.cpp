@@ -50,6 +50,8 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
     ui->panelPrimitiveValueTransitionColorEnd->showDataBase();
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandStartBattle::~DialogCommandStartBattle()
@@ -62,6 +64,14 @@ DialogCommandStartBattle::~DialogCommandStartBattle()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandStartBattle::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandStartBattle::initialize(EventCommand* command){
     int i = 0;

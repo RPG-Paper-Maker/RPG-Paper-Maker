@@ -41,6 +41,7 @@ private:
     SystemMonsterTroop& m_monsterTroop;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_comboBoxMonster_currentIndexChanged(int index);

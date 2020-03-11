@@ -28,6 +28,8 @@ DialogSystemEffect::DialogSystemEffect(SystemEffect &effect, QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemEffect::~DialogSystemEffect() {
@@ -191,6 +193,14 @@ void DialogSystemEffect::setCriticalEnabled(bool checked) {
 void DialogSystemEffect::setPrecisionEnabled(bool checked) {
     ui->panelPrimitiveValuePrecision->setEnabled(checked);
     ui->labelPercentPrecision->setEnabled(checked);
+}
+
+//-------------------------------------------------
+
+void DialogSystemEffect::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

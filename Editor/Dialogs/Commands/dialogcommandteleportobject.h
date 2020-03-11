@@ -46,6 +46,8 @@ private:
     Ui::DialogCommandTeleportObject *ui;
     QStandardItemModel* m_modelObjects;
 
+    void translate();
+
 private slots:
    void on_radioButtonSelect_toggled(bool checked);
    void on_radioButtonNumber_toggled(bool checked);

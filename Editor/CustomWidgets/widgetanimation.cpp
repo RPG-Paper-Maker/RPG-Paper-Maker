@@ -73,6 +73,8 @@ WidgetAnimation::WidgetAnimation(QWidget *parent) :
     m_mediaPlayerSoundEffect->setPlaylist(m_mediaPlaylistSoundEffect);*/
 
     updateAnimation();
+
+    this->translate();
 }
 
 WidgetAnimation::~WidgetAnimation() {
@@ -147,6 +149,13 @@ void WidgetAnimation::updateContextMenuCan() {
     m_contextMenu->canCopy(m_selectedElement != nullptr);
     m_contextMenu->canPaste(m_copiedElement != nullptr);
     m_contextMenu->canDelete(m_selectedElement != nullptr);
+}
+
+//-------------------------------------------------
+
+void WidgetAnimation::translate()
+{
+
 }
 
 // -------------------------------------------------------

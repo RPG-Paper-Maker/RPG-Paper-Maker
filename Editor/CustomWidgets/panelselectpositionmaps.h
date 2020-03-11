@@ -49,6 +49,8 @@ private:
     Ui::PanelSelectPositionMaps *ui;
     TreeMapDatas* m_treeMapDatas;
 
+    void translate();
+
 private slots:
     void on_spinBoxX_valueChanged(int i);
     void on_spinBoxY_valueChanged(int i);

@@ -46,6 +46,8 @@ protected:
     WidgetTableProgression *m_totalWidget;
     QColor m_editedColor;
 
+    void translate();
+
 public slots:
     void on_cellChanged(int row, int column);
 };

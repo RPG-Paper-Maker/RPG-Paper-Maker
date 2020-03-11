@@ -11,6 +11,7 @@
 
 #include "dialogsystemcreateparameter.h"
 #include "ui_dialogsystemcreateparameter.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,6 +30,8 @@ DialogSystemCreateParameter::DialogSystemCreateParameter(
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemCreateParameter::~DialogSystemCreateParameter()
@@ -46,6 +49,14 @@ void DialogSystemCreateParameter::initialize(){
     ui->lineEditName->setText(m_param.name());
     ui->widgetDefaultValue->initializeModel(m_param.defaultValue());
     ui->widgetDefaultValue->initializePrimitives();
+}
+
+//-------------------------------------------------
+
+void DialogSystemCreateParameter::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

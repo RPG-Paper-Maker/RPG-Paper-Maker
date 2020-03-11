@@ -35,6 +35,8 @@ WidgetAnimationTexture::WidgetAnimationTexture(QWidget *parent) :
     this->setFixedWidth(640);
     this->setFixedHeight(480);
     this->updatePicture(m_idPicture);
+
+    this->translate();
 }
 
 int WidgetAnimationTexture::rows() const {
@@ -90,6 +92,13 @@ void WidgetAnimationTexture::updatePicture(int id) {
     this->setGeometry(0, 0, width, MAX_SIZE);
     this->setFixedSize(width, MAX_SIZE);
     this->repaint();
+}
+
+//-------------------------------------------------
+
+void WidgetAnimationTexture::translate()
+{
+
 }
 
 // -------------------------------------------------------

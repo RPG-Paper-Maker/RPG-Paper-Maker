@@ -27,6 +27,8 @@ WidgetTilesetSettings::WidgetTilesetSettings(QWidget *parent) :
     ui->setupUi(this);
     ui->checkBoxRepeat->hide();
     updateZoom(RPM::get()->engineSettings()->zoomPictures());
+
+    this->translate();
 }
 
 WidgetTilesetSettings::~WidgetTilesetSettings()
@@ -109,6 +111,13 @@ void WidgetTilesetSettings::showRepeat() {
 void WidgetTilesetSettings::disableNone(bool b) {
     ui->horizontalSlider->setEnabled(!b);
     ui->checkBoxRepeat->setEnabled(!b);
+}
+
+//-------------------------------------------------
+
+void WidgetTilesetSettings::translate()
+{
+
 }
 
 // -------------------------------------------------------

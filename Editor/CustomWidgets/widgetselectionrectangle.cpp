@@ -31,6 +31,8 @@ WidgetSelectionRectangle::WidgetSelectionRectangle(QWidget *parent) :
     m_realY = 0;
     m_squareWidth = RPM::BASIC_SQUARE_SIZE;
     m_squareHeight = RPM::BASIC_SQUARE_SIZE;
+
+    this->translate();
 }
 
 WidgetSelectionRectangle::~WidgetSelectionRectangle()
@@ -242,4 +244,11 @@ void WidgetSelectionRectangle::drawSquare(QPainter &painter,
                       m_textureCursor,
                       QRect(0, BORDER_SIZE, BORDER_SIZE, 1)
                       );
+}
+
+//-------------------------------------------------
+
+void WidgetSelectionRectangle::translate()
+{
+
 }

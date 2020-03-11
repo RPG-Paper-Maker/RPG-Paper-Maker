@@ -52,6 +52,8 @@ DialogRect::DialogRect(QRectF *rect, bool controlSquare, QWidget *parent) :
         ui->spinBoxX->setValue(static_cast<int>(rect->x()));
         ui->spinBoxY->setValue(static_cast<int>(rect->y()));
     }
+
+    this->translate();
 }
 
 DialogRect::~DialogRect()
@@ -93,6 +95,13 @@ int DialogRect::getOne() {
 
 int DialogRect::getTwo() {
     return RPM::coefSquareSize() * 2;
+}
+
+//-------------------------------------------------
+
+void DialogRect::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
 }
 
 // -------------------------------------------------------

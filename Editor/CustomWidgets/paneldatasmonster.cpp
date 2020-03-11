@@ -27,6 +27,8 @@ PanelDatasMonster::PanelDatasMonster(QWidget *parent) :
     ui(new Ui::PanelDatasMonster)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelDatasMonster::~PanelDatasMonster()
@@ -120,6 +122,13 @@ void PanelDatasMonster::updateClasses() {
 
 void PanelDatasMonster::updateClass() {
     ui->panelDatasCharacter->updateClass();
+}
+
+//-------------------------------------------------
+
+void PanelDatasMonster::translate()
+{
+
 }
 
 // -------------------------------------------------------

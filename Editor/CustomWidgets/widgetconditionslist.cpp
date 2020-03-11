@@ -11,6 +11,7 @@
 
 #include "widgetconditionslist.h"
 #include "dialogcommandconditions.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -21,7 +22,7 @@
 WidgetConditionsList::WidgetConditionsList(QWidget *parent) :
     QListView(parent)
 {
-
+    this->translate();
 }
 
 void WidgetConditionsList::initializeModel(QStandardItemModel *m) {
@@ -42,6 +43,14 @@ void WidgetConditionsList::updateAllNodesString() {
         m_model->item(i)->setText(command->toString());
     }
 }
+
+//-------------------------------------------------
+
+void WidgetConditionsList::translate()
+{
+
+}
+
 // -------------------------------------------------------
 //
 //  EVENTS

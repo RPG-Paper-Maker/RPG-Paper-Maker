@@ -42,6 +42,8 @@ WidgetSuperTree::WidgetSuperTree(QWidget *parent) :
     m_contextMenuCommonCommands = ContextMenuList::createContextCommand(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
+
+    this->translate();
 }
 
 WidgetSuperTree::~WidgetSuperTree()
@@ -292,6 +294,13 @@ void WidgetSuperTree::updateKeyboardUpDown(int offset) {
                 QItemSelectionModel::Select | QItemSelectionModel::Rows);
         }
     }
+}
+
+//-------------------------------------------------
+
+void WidgetSuperTree::translate()
+{
+
 }
 
 // -------------------------------------------------------

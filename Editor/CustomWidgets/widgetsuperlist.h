@@ -67,6 +67,7 @@ private:
     void paste(QStandardItem *selected);
     void brutDelete(QStandardItem *selected);
     void deleteClear(QStandardItem *selected);
+    void translate();
 
 private slots:
     void openDialog(QModelIndex);

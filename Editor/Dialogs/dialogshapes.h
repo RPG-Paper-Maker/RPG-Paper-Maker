@@ -42,6 +42,8 @@ public:
 private:
     Ui::DialogShapes *ui;
 
+    void translate();
+
 private slots:
     void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };

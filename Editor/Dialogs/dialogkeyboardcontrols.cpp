@@ -11,6 +11,7 @@
 
 #include "dialogkeyboardcontrols.h"
 #include "ui_dialogkeyboardcontrols.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -49,6 +50,8 @@ DialogKeyBoardControls::DialogKeyBoardControls(Project* project,
 
     // Menu controls
     updateMenuControls();
+
+    this->translate();
 }
 
 DialogKeyBoardControls::~DialogKeyBoardControls()
@@ -112,6 +115,14 @@ void DialogKeyBoardControls::updateMenuControls(){
                                             m_gameKeyBoardDatas->keyRight()));
 
     m_canUpdateKey = true;
+}
+
+// -------------------------------------------------------
+
+void DialogKeyBoardControls::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

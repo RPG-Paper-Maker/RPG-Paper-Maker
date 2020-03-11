@@ -46,6 +46,7 @@ private:
 
     void updateEvent(SystemEvent *ev);
     void updateParameters(SystemEvent *);
+    void translate();
 
 private slots:
     void on_comboBoxEventsSystemCurrentIndexChanged(int index);

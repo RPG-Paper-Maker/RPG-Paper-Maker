@@ -53,6 +53,8 @@ private:
     int m_maximum;
     bool m_isLang;
 
+    void translate();
+
 private slots:
     void on_lineEditName_textChanged(const QString &s);
     void onlangTextChanged(const QString &s);

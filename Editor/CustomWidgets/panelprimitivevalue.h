@@ -126,6 +126,7 @@ private:
     PanelPrimitiveValueKind m_kind;
 
     void initialize();
+    void translate();
 
 signals:
     void numberUpdated(int i);

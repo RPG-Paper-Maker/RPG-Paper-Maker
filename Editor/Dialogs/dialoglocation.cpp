@@ -12,6 +12,7 @@
 #include "dialoglocation.h"
 #include "ui_dialoglocation.h"
 #include <QFileDialog>
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -29,6 +30,8 @@ DialogLocation::DialogLocation(QString location, QString autov, QWidget *parent)
     ui->lineEdit->setCursorPosition(0);
     m_auto = autov;
     ui->pushButtonAuto->setVisible(!m_auto.isEmpty());
+
+    this->translate();
 }
 
 DialogLocation::~DialogLocation() {
@@ -37,6 +40,14 @@ DialogLocation::~DialogLocation() {
 
 QString DialogLocation::location() const {
     return ui->lineEdit->text();
+}
+
+// -------------------------------------------------------
+
+void DialogLocation::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

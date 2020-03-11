@@ -67,6 +67,7 @@ private:
     void moveContent();
     void updatePicture();
     void showPictureWidget(bool b);
+    void translate();
 
 public slots:
     void showAvailableContent(bool b);

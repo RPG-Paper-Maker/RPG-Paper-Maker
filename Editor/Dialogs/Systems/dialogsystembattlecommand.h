@@ -40,7 +40,9 @@ public:
 private:
     Ui::DialogSystemBattleCommand *ui;
     SystemBattleCommand& m_battleCommand;
+
     void initialize();
+    void translate();
 
 public slots:
     void on_comboBoxSkill_currentIndexChanged(int index);

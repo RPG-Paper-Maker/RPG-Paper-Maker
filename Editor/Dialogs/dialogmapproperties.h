@@ -40,6 +40,7 @@ private:
     MapProperties& m_mapProperties;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_spinBoxLength_valueChanged(int i);

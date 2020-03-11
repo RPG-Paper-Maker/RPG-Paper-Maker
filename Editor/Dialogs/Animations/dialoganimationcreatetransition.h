@@ -39,6 +39,8 @@ public:
 
 private:
     Ui::DialogAnimationCreateTransition *ui;
+
+    void translate();
 };
 
 #endif // DIALOGANIMATIONCREATETRANSITION_H

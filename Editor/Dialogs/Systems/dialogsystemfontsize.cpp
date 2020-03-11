@@ -11,6 +11,7 @@
 
 #include "dialogsystemfontsize.h"
 #include "ui_dialogsystemfontsize.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemFontSize::DialogSystemFontSize(SystemFontSize &fontSize, QWidget
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemFontSize::~DialogSystemFontSize() {
@@ -42,4 +45,12 @@ DialogSystemFontSize::~DialogSystemFontSize() {
 void DialogSystemFontSize::initialize() {
     ui->lineEditName->setText(m_fontSize.name());
     ui->panelPrimitiveSize->initializeNumberAndUpdate(m_fontSize.size());
+}
+
+//-------------------------------------------------
+
+void DialogSystemFontSize::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

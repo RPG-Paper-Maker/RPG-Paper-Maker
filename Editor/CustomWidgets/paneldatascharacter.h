@@ -50,6 +50,8 @@ private:
     Ui::PanelDatasCharacter *ui;
     PanelSuperList *m_panelSuperList;
 
+    void translate();
+
 private slots:
     void on_comboBoxClass_currentIndexChanged(int index);
     void on_battlerPictureChanged(SystemPicture *picture);

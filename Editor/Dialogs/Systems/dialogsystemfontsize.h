@@ -44,6 +44,7 @@ private:
     Ui::DialogSystemFontSize *ui;
 
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMFONTSIZE_H

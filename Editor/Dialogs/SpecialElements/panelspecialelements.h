@@ -55,6 +55,7 @@ private:
     void showCustomObject();
     void showCustomObjectCollision(bool b);
     SystemSpecialElement * currentElement() const;
+    void translate();
 
 private slots:
     void on_pageSelected(QModelIndex index, QModelIndex);

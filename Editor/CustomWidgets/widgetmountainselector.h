@@ -46,6 +46,8 @@ public:
 private:
     Ui::WidgetMountainSelector *ui;
 
+    void translate();
+
 public slots:
     void on_spinBoxSquareWidth_valueChanged(int);
     void on_spinBoxPixelWidth_valueChanged(int);

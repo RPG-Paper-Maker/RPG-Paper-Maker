@@ -11,6 +11,7 @@
 
 #include "dialogsystemlang.h"
 #include "ui_dialogsystemlang.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -26,6 +27,8 @@ DialogSystemLang::DialogSystemLang(SystemLang &model, QWidget *parent) :
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemLang::~DialogSystemLang()
@@ -41,4 +44,12 @@ DialogSystemLang::~DialogSystemLang()
 
 void DialogSystemLang::initialize(){
     ui->widgetName->initializeNamesLang(&m_model);
+}
+
+//-------------------------------------------------
+
+void DialogSystemLang::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

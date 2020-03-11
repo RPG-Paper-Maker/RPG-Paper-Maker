@@ -48,6 +48,8 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
 
     if (command != nullptr) initialize(command);
+
+    this->translate();
 }
 
 DialogCommandMoveCamera::~DialogCommandMoveCamera()
@@ -63,6 +65,14 @@ DialogCommandMoveCamera::~DialogCommandMoveCamera()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandMoveCamera::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandMoveCamera::initialize(EventCommand* command) {
     int i = 0;

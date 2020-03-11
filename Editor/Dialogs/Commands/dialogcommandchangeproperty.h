@@ -51,6 +51,8 @@ protected:
 
 private:
     Ui::DialogCommandChangeProperty *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDCHANGEPROPERTY_H

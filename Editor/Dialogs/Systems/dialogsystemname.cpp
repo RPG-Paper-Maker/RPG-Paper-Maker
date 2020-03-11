@@ -11,6 +11,7 @@
 
 #include "dialogsystemname.h"
 #include "ui_dialogsystemname.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemName::DialogSystemName(SuperListItem& model, QWidget *parent) :
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemName::~DialogSystemName()
@@ -42,6 +45,14 @@ DialogSystemName::~DialogSystemName()
 
 void DialogSystemName::initialize(){
     ui->lineEditName->setText(m_model.name());
+}
+
+//-------------------------------------------------
+
+void DialogSystemName::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -51,6 +51,8 @@ protected:
 private:
     Ui::DialogCommandChangeVariables *ui;
 
+    void translate();
+
 private slots:
     void on_radioButtonOneVariable_toggled(bool checked);
     void on_radioButtonRange_toggled(bool checked);

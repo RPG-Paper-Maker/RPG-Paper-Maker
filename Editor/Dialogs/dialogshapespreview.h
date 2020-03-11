@@ -45,6 +45,8 @@ private:
     SuperListItem *m_shapeID;
     int m_initialShapeID;
 
+    void translate();
+
 private slots:
     void on_accepted();
     void on_rejected();

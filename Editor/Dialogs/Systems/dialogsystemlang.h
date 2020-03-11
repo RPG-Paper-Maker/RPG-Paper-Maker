@@ -38,7 +38,9 @@ public:
 private:
     Ui::DialogSystemLang *ui;
     SystemLang& m_model;
+
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMLANG_H

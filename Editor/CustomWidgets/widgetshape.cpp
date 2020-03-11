@@ -31,6 +31,8 @@ WidgetShape::WidgetShape(QWidget *parent) :
     item->setSizeHint(QSize(item->sizeHint().width(), ui->listWidget->height() -
         4));
     ui->listWidget->addItem(item);
+
+    this->translate();
 }
 
 WidgetShape::~WidgetShape() {
@@ -73,6 +75,13 @@ void WidgetShape::openDialog(){
             emit shapeChanged();
         }
     }
+}
+
+//-------------------------------------------------
+
+void WidgetShape::translate()
+{
+
 }
 
 // -------------------------------------------------------

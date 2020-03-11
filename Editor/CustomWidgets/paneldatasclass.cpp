@@ -14,6 +14,7 @@
 #include "ui_paneldatasclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "rpm.h"
 
 const QString PanelDatasClass::NAME_EXPERIENCE = "Experience";
 
@@ -33,6 +34,8 @@ PanelDatasClass::PanelDatasClass(QWidget *parent) :
     Q_FOREACH(QSpinBox * sp, findChildren<QSpinBox*>()) {
         sp->installEventFilter(this);
     }
+
+    this->translate();
 }
 
 PanelDatasClass::~PanelDatasClass()
@@ -124,6 +127,13 @@ void PanelDatasClass::updateExperience() {
         ui->tableWidgetNextLevel->updateWithBaseInflation(expBase, expInflation,
             maxLevel, m_originalClass->expTable());
     }
+}
+
+//-------------------------------------------------
+
+void PanelDatasClass::translate()
+{
+
 }
 
 // -------------------------------------------------------

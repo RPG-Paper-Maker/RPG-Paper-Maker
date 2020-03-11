@@ -12,6 +12,7 @@
 #include "dialoganimationcopyframes.h"
 #include "ui_dialoganimationcopyframes.h"
 #include "systemanimationframe.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -24,6 +25,8 @@ DialogAnimationCopyFrames::DialogAnimationCopyFrames(QWidget *parent) :
     ui(new Ui::DialogAnimationCopyFrames)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogAnimationCopyFrames::~DialogAnimationCopyFrames() {
@@ -56,4 +59,12 @@ void DialogAnimationCopyFrames::copyFrames(SystemAnimation *animation) {
             }
         }
     }
+}
+
+//-------------------------------------------------
+
+void DialogAnimationCopyFrames::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

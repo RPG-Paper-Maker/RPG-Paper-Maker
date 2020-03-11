@@ -12,6 +12,7 @@
 #include "dialoganimationclearframes.h"
 #include "ui_dialoganimationclearframes.h"
 #include "systemanimationframe.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -24,6 +25,8 @@ DialogAnimationClearFrames::DialogAnimationClearFrames(QWidget *parent) :
     ui(new Ui::DialogAnimationClearFrames)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogAnimationClearFrames::~DialogAnimationClearFrames() {
@@ -53,4 +56,12 @@ void DialogAnimationClearFrames::clearFrames(SystemAnimation *animation) {
             item->setText(frame->toString());
         }
     }
+}
+
+//-------------------------------------------------
+
+void DialogAnimationClearFrames::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

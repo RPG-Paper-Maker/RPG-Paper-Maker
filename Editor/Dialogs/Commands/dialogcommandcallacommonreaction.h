@@ -48,6 +48,8 @@ protected:
 private:
     Ui::DialogCommandCallACommonReaction *ui;
 
+    void translate();
+
 public slots:
     void on_comboBoxCommonReaction_currentIndexChanged(int index);
 };

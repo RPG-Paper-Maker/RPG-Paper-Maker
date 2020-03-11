@@ -44,6 +44,8 @@ private:
     SuperListItem *m_videoID;
     int m_initialVideoID;
 
+    void translate();
+
 private slots:
     void on_accepted();
     void on_rejected();

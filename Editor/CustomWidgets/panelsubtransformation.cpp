@@ -26,6 +26,8 @@ PanelSubTransformation::PanelSubTransformation(QWidget *parent) :
     m_axisKind(AxisKind::X)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelSubTransformation::~PanelSubTransformation() {
@@ -109,6 +111,13 @@ void PanelSubTransformation::updatePositionClick(bool positive) {
             emit positionChanged(previousPosition);
         }
     }
+}
+
+//-------------------------------------------------
+
+void PanelSubTransformation::translate()
+{
+
 }
 
 // -------------------------------------------------------

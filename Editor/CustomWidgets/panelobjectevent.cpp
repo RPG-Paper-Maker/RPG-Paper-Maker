@@ -34,6 +34,8 @@ PanelObjectEvent::PanelObjectEvent(QWidget *parent) :
         ->project()->gameDatas()->commonEventsDatas()->modelEventsSystem());
     SuperListItem::fillComboBox(ui->comboBoxEventsUser, RPM::get()->project()
         ->gameDatas()->commonEventsDatas()->modelEventsUser());
+
+    this->translate();
 }
 
 PanelObjectEvent::~PanelObjectEvent()
@@ -141,6 +143,13 @@ void PanelObjectEvent::getCommandObjectEvent(QVector<QString> &command) const {
         command.append(QString::number(param->id()));
         param->value()->getCommandParameter(command);
     }
+}
+
+//-------------------------------------------------
+
+void PanelObjectEvent::translate()
+{
+
 }
 
 // -------------------------------------------------------

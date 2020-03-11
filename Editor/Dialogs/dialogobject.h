@@ -37,6 +37,8 @@ public:
 
 private:
     Ui::DialogObject *ui;
+
+    void translate();
 };
 
 #endif // DIALOGOBJECT_H

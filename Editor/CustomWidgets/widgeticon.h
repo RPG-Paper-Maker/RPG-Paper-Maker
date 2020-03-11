@@ -41,6 +41,8 @@ public:
 private:
     Ui::WidgetIcon *ui;
 
+    void translate();
+
 protected:
     SystemIcon *m_icon;
 

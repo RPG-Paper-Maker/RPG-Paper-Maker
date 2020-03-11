@@ -31,6 +31,8 @@ DialogVariables::DialogVariables(QWidget *parent) :
     ui->panelList->showButtonMax(false);
     ui->panelListPages->list()->initializeNewItemInstance(new SystemVariables);
     ui->panelListPages->setMaximumLimit(400);
+
+    this->translate();
 }
 
 DialogVariables::~DialogVariables()
@@ -62,6 +64,14 @@ int DialogVariables::getSelectedId() const{
             ->itemFromIndex(ui->panelList->list()->selectionModel()
                             ->currentIndex());
     return ((SuperListItem*)selected->data().value<quintptr>())->id();
+}
+
+//-------------------------------------------------
+
+void DialogVariables::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -28,6 +28,8 @@ DialogSystemAnimationFrameEffect::DialogSystemAnimationFrameEffect(
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemAnimationFrameEffect::~DialogSystemAnimationFrameEffect() {
@@ -48,6 +50,14 @@ void DialogSystemAnimationFrameEffect::initialize() {
     ui->radioButtonSoundEffect->setChecked(m_effect.isSoundEffect());
     ui->widgetSongSoundEffect->initialize(m_effect.soundEffect());
     ui->comboBoxCondition->setCurrentIndex(indexCondition);
+}
+
+//-------------------------------------------------
+
+void DialogSystemAnimationFrameEffect::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

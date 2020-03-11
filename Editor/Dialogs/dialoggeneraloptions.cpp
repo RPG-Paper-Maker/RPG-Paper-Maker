@@ -27,6 +27,8 @@ DialogGeneralOptions::DialogGeneralOptions(QWidget *parent) :
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogGeneralOptions::~DialogGeneralOptions()
@@ -49,6 +51,14 @@ void DialogGeneralOptions::initialize() {
         SLOT(on_comboBoxThemeCurrentIndexChanged(int)));
     ui->comboBoxTheme->setCurrentIndex(static_cast<int>(RPM::get()
         ->engineSettings()->theme()));
+}
+
+// -------------------------------------------------------
+
+void DialogGeneralOptions::translate() {
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

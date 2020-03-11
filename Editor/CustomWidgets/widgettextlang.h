@@ -44,6 +44,7 @@ private:
     SystemLang *m_lang;
 
     void initializeNames();
+    void translate();
 
 private slots:
     void on_lineEdit_textChanged(const QString &text);

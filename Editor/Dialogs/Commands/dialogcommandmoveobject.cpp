@@ -66,6 +66,8 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     model->appendRow(item);
     ui->treeView->setCurrentIndex(model->index(model->invisibleRootItem()
                                                ->rowCount()-1, 0));
+
+    this->translate();
 }
 
 DialogCommandMoveObject::~DialogCommandMoveObject()
@@ -84,6 +86,14 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void DialogCommandMoveObject::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
+}
 
 void DialogCommandMoveObject::initialize(EventCommand* command){
     int i = 0;

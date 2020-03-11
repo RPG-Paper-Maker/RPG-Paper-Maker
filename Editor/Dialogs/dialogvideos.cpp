@@ -31,6 +31,8 @@ DialogVideos::DialogVideos(QWidget *parent) :
     ui->widgetVideoPreview->setKind();
     ui->widgetVideoPreview->showAvailableContent(RPM::get()->engineSettings()
         ->showAvailableContent());
+
+    this->translate();
 }
 
 DialogVideos::~DialogVideos() {
@@ -56,4 +58,12 @@ QStandardItemModel* DialogVideos::createFoldersModel() const {
     model->appendRow(item);
 
     return model;
+}
+
+//-------------------------------------------------
+
+void DialogVideos::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

@@ -42,6 +42,8 @@ public:
 private:
     Ui::DialogCommandMoveCamera *ui;
 
+    void translate();
+
 protected:
     virtual void initialize(EventCommand* command);
     QStandardItemModel* m_modelObjects;

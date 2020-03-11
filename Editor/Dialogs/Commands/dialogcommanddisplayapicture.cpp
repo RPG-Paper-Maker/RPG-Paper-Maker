@@ -34,6 +34,8 @@ DialogCommandDisplayAPicture::DialogCommandDisplayAPicture(EventCommand *command
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandDisplayAPicture::~DialogCommandDisplayAPicture() {
@@ -64,6 +66,14 @@ void DialogCommandDisplayAPicture::initializePrimitives() {
     ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandDisplayAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

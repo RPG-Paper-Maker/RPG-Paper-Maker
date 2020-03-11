@@ -48,6 +48,8 @@ private:
     Ui::DialogCommandMoveObject *ui;
     QStandardItemModel *m_modelObjects;
 
+    void translate();
+
 private slots:
     void on_pushButtonStepSquareNorth_clicked();
     void on_pushButtonStepSquareSouth_clicked();

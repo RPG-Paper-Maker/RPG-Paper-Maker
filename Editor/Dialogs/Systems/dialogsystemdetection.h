@@ -51,6 +51,7 @@ private:
 
     void initialize();
     void updateMap();
+    void translate();
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);

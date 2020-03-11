@@ -40,7 +40,9 @@ public:
 private:
     Ui::DialogSystemObjectEvent *ui;
     SystemObjectEvent& m_event;
+
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMOBJECTEVENT_H

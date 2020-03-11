@@ -53,6 +53,8 @@ private:
     bool m_updating;
     int m_maxLevel;
 
+    void translate();
+
 signals:
     void finalValueUpdated(int f);
 

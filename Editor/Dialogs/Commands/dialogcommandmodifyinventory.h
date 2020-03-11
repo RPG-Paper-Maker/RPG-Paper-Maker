@@ -41,9 +41,11 @@ protected:
 
 private:
     Ui::DialogCommandModifyInventory *ui;
+
     void selection(QVector<QString> &command) const;
     void operation(QVector<QString>& command) const;
     void value(QVector<QString>& command) const;
+    void translate();
 
 private slots:
     void on_radioButtonItem_toggled(bool checked);

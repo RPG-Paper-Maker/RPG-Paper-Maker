@@ -49,6 +49,8 @@ protected:
 
 private:
     Ui::DialogCommandDisplayAPicture *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDDISPLAYAPICTURE_H

@@ -48,6 +48,8 @@ protected:
 
 private:
     Ui::DialogCommandRemoveAPicture *ui;
+
+    void translate();
 };
 
 #endif // DIALOGCOMMANDREMOVEAPICTURE_H

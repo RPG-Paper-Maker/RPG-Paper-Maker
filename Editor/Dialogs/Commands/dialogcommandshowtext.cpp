@@ -49,6 +49,8 @@ DialogCommandShowText::DialogCommandShowText(EventCommand *command,
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandShowText::~DialogCommandShowText() {
@@ -139,6 +141,14 @@ void DialogCommandShowText::insertNoValueTag(QString tag) {
     ui->plainTextMessage->insertPlainText("[" + tag + "]" + ui->plainTextMessage
         ->textCursor().selectedText() + "[/" + tag + "]");
     ui->plainTextMessage->setFocus();
+}
+
+//-------------------------------------------------
+
+void DialogCommandShowText::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

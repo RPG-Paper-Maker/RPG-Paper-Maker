@@ -26,6 +26,8 @@ PanelDamagesKind::PanelDamagesKind(QWidget *parent) :
     ui(new Ui::PanelDamagesKind)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelDamagesKind::~PanelDamagesKind()
@@ -87,6 +89,13 @@ void PanelDamagesKind::showElement() {
         ui->widgetVariable->show();
         break;
     }
+}
+
+//-------------------------------------------------
+
+void PanelDamagesKind::translate()
+{
+
 }
 
 // -------------------------------------------------------

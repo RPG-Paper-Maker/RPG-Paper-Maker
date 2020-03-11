@@ -77,6 +77,7 @@ private:
     void updateTileset(SystemTileset *sysTileset);
     void openSpecialElementsDialog(PictureKind kind);
     void playAnimation(AnimationEffectConditionKind condition);
+    void translate();
 
 protected:
     virtual void showEvent(QShowEvent *event);

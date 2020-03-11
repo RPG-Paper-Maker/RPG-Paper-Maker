@@ -11,6 +11,7 @@
 
 #include "dialogsystemelement.h"
 #include "ui_dialogsystemelement.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -27,6 +28,8 @@ DialogSystemElement::DialogSystemElement(SystemElement& element,
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemElement::~DialogSystemElement()
@@ -50,4 +53,12 @@ void DialogSystemElement::initialize(){
     ui->treeViewEfficiency->setCanBeEmpty(false);
     ui->treeViewEfficiency->setCanMove(false);
     ui->treeViewEfficiency->setCanCreateDelete(false);
+}
+
+//-------------------------------------------------
+
+void DialogSystemElement::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

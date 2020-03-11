@@ -41,6 +41,7 @@ private:
     SystemTitleCommand &m_titleCommand;
 
     void initialize();
+    void translate();
 
 private slots:
     void on_comboBoxTypeCommand_currentIndexChanged(int index);

@@ -46,6 +46,7 @@ private:
     float translateFromSpinValue(int px);
     int getOne();
     int getTwo();
+    void translate();
 
 private slots:
     void on_spinBoxX_valueChanged(int i);

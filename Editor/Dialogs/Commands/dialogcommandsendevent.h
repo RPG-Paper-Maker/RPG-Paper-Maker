@@ -47,6 +47,7 @@ private:
     QStandardItemModel *m_modelObjects;
 
     void chooseTarget(QVector<QString> &command) const;
+    void translate();
 
 public slots:
     void on_radioButtonDetection_toggled(bool checked);

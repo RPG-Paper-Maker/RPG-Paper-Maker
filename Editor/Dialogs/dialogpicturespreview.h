@@ -55,6 +55,8 @@ private:
     PictureKind m_kind;
     int m_initialPictureID;
 
+    void translate();
+
 private slots:
     void on_accepted();
     void on_rejected();

@@ -36,6 +36,8 @@ DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
     ui->setupUi(this);
 
     this->initialize();
+
+    this->translate();
 }
 
 DialogSystemDetection::~DialogSystemDetection()
@@ -81,6 +83,14 @@ void DialogSystemDetection::updateMap() {
     ui->widgetMapEditor->needUpdateMapDetection(&m_detection, m_position,
         m_positionObject, m_cameraDistance, m_cameraHorizontalAngle,
         m_cameraVerticalAngle);
+}
+
+//-------------------------------------------------
+
+void DialogSystemDetection::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

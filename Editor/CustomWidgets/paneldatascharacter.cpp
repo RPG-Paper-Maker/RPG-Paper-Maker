@@ -28,6 +28,8 @@ PanelDatasCharacter::PanelDatasCharacter(QWidget *parent) :
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 PanelDatasCharacter::~PanelDatasCharacter()
@@ -112,6 +114,13 @@ void PanelDatasCharacter::updateClasses() {
 void PanelDatasCharacter::updateClass() {
     SystemHero *hero = currentHero();
     ui->panelDatasClass->update(hero->classInherit(), hero->getClass());
+}
+
+//-------------------------------------------------
+
+void PanelDatasCharacter::translate()
+{
+
 }
 
 // -------------------------------------------------------

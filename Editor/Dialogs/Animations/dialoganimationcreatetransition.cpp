@@ -13,6 +13,7 @@
 #include "ui_dialoganimationcreatetransition.h"
 #include "systemanimationframe.h"
 #include "systemprogressiontable.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -25,6 +26,8 @@ DialogAnimationCreateTransition::DialogAnimationCreateTransition(QWidget *parent
     ui(new Ui::DialogAnimationCreateTransition)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 DialogAnimationCreateTransition::~DialogAnimationCreateTransition()
@@ -133,4 +136,12 @@ void DialogAnimationCreateTransition::createTransition(SystemAnimation
             }
         }
     }
+}
+
+//-------------------------------------------------
+
+void DialogAnimationCreateTransition::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

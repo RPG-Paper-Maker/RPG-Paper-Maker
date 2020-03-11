@@ -43,6 +43,8 @@ private:
     Ui::DialogSystemBattleMap *ui;
     SystemBattleMap &m_battleMap;
 
+    void translate();
+
 private slots:
     void accept();
 };

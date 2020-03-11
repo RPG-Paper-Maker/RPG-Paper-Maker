@@ -29,6 +29,8 @@ DialogSystemState::DialogSystemState(SystemState& state, QWidget *parent) :
     ui->setupUi(this);
     
     initialize();
+
+    this->translate();
 }
 
 DialogSystemState::~DialogSystemState()
@@ -51,6 +53,14 @@ void DialogSystemState::initialize(){
                                 ->gameDatas()->commonEventsDatas()
                                 ->modelStates());
     ui->comboBox->setCurrentIndex(stateIndex);
+}
+
+//-------------------------------------------------
+
+void DialogSystemState::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

@@ -38,6 +38,8 @@ protected:
 
 private:
     QStandardItemModel *m_model;
+
+    void translate();
 };
 
 #endif // WIDGETCONDITIONSLIST_H

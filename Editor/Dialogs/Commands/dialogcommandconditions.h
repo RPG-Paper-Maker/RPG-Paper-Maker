@@ -53,6 +53,8 @@ protected:
 private:
     Ui::DialogCommandConditions *ui;
 
+    void translate();
+
 private slots:
     void on_radioButtonVariableParamProp_toggled(bool checked);
     void on_radioButtonHeroes_toggled(bool checked);

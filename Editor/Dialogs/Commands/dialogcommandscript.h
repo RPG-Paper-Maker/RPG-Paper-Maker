@@ -49,6 +49,8 @@ protected:
 private:
     Ui::DialogCommandScript *ui;
 
+    void translate();
+
 public slots:
     void on_checkBoxDynamic_toggled(bool checked);
 };

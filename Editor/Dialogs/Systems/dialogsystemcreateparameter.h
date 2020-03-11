@@ -39,7 +39,9 @@ public:
 private:
     Ui::DialogSystemCreateParameter *ui;
     SystemCreateParameter& m_param;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);

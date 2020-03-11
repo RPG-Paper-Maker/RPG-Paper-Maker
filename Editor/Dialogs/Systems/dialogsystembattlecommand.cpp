@@ -30,6 +30,8 @@ DialogSystemBattleCommand::DialogSystemBattleCommand(
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemBattleCommand::~DialogSystemBattleCommand()
@@ -54,6 +56,14 @@ void DialogSystemBattleCommand::initialize(){
     SuperListItem::fillComboBox(ui->comboBoxSkill, RPM::get()->project()
                                 ->gameDatas()->skillsDatas()->model());
     ui->comboBoxSkill->setCurrentIndex(index);
+}
+
+//-------------------------------------------------
+
+void DialogSystemBattleCommand::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

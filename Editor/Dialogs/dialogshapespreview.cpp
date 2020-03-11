@@ -35,11 +35,21 @@ DialogShapesPreview::DialogShapesPreview(SuperListItem *shapeID,
 
     connect(this, SIGNAL(accepted()), this, SLOT(on_accepted()));
     connect(this, SIGNAL(rejected()), this, SLOT(on_rejected()));
+
+    this->translate();
 }
 
 DialogShapesPreview::~DialogShapesPreview()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogShapesPreview::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

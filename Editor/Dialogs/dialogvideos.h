@@ -39,6 +39,8 @@ public:
 
 private:
     Ui::DialogVideos *ui;
+
+    void translate();
 };
 
 #endif // DIALOGVIDEOS_H

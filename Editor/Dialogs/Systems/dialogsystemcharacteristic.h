@@ -44,6 +44,7 @@ private:
     void initialize();
     void setRadioCharacters();
     void uncheckAllRadiosCharacters();
+    void translate();
 
 public slots:
     void on_radioButtonBuff_toggled(bool checked);

@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
+    <width>240</width>
     <height>89</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Battle command</string>
+   <string>Set battle command</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -36,7 +36,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Skill:</string>
+          <string>Skill ID:</string>
          </property>
         </widget>
        </item>

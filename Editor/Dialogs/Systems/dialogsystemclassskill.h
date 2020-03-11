@@ -39,7 +39,9 @@ public:
 private:
     Ui::DialogSystemClassSkill *ui;
     SystemClassSkill& m_skill;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_comboBoxSkill_currentIndexChanged(int index);

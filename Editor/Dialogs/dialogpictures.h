@@ -44,6 +44,8 @@ public:
 private:
     Ui::DialogPictures *ui;
 
+    void translate();
+
 private slots:
     void on_folderSelected(const QModelIndex& current, const QModelIndex&);
 };

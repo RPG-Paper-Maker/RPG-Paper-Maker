@@ -35,6 +35,8 @@ DialogCommandSetMoveTurnAPicture::DialogCommandSetMoveTurnAPicture(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandSetMoveTurnAPicture::~DialogCommandSetMoveTurnAPicture() {
@@ -66,6 +68,14 @@ void DialogCommandSetMoveTurnAPicture::initializePrimitives() {
     ui->panelPrimitiveY->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveTime->initializeNumber(m_parameters, properties, false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandSetMoveTurnAPicture::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

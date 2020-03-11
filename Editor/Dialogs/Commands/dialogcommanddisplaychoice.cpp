@@ -36,6 +36,8 @@ DialogCommandDisplayChoice::DialogCommandDisplayChoice(EventCommand *command,
     } else {
         this->initializeDefault();
     }
+
+    this->translate();
 }
 
 DialogCommandDisplayChoice::~DialogCommandDisplayChoice() {
@@ -82,6 +84,14 @@ void DialogCommandDisplayChoice::initializeDefault() {
     m_model->appendRow(row);
     m_model->appendRow(SuperListItem::getEmptyItem());
     ui->panelPrimitiveCancelAutoIndex->setNumberValue(2);
+}
+
+//-------------------------------------------------
+
+void DialogCommandDisplayChoice::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

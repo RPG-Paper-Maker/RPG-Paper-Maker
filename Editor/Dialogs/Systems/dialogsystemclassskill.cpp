@@ -29,6 +29,8 @@ DialogSystemClassSkill::DialogSystemClassSkill(SystemClassSkill &skill,
     
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemClassSkill::~DialogSystemClassSkill()
@@ -55,6 +57,14 @@ void DialogSystemClassSkill::initialize(){
 
     // Level
     ui->spinBoxLevel->setValue(m_skill.level());
+}
+
+//-------------------------------------------------
+
+void DialogSystemClassSkill::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

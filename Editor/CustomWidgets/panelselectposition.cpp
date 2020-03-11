@@ -12,6 +12,7 @@
 #include "panelselectposition.h"
 #include "ui_panelselectposition.h"
 #include "dialogselectposition.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -24,6 +25,8 @@ PanelSelectPosition::PanelSelectPosition(QWidget *parent) :
     ui(new Ui::PanelSelectPosition)
 {
     ui->setupUi(this);
+
+    this->translate();
 }
 
 PanelSelectPosition::~PanelSelectPosition()
@@ -36,6 +39,13 @@ PanelSelectPosition::~PanelSelectPosition()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
+
+//-------------------------------------------------
+
+void PanelSelectPosition::translate()
+{
+
+}
 
 void PanelSelectPosition::initialize(EventCommand *command, int &i) {
     ui->labelIDMap->setText(command->valueCommandAt(i++));

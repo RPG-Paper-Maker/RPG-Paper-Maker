@@ -50,9 +50,11 @@ private:
     EventCommand* p_command;
     SystemCommonObject* m_linkedObject;
     QStandardItemModel* m_parameters;
-    void openDialogCommand(EventCommandKind kind,
-                           EventCommand *command = nullptr);
+
+    void openDialogCommand(EventCommandKind kind, EventCommand *command =
+        nullptr);
     void openNonDialogCommand(EventCommandKind kind);
+    void translate();
 
 private slots:
     void on_pushButtonShowText_clicked();

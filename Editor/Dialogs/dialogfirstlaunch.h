@@ -39,6 +39,8 @@ public:
 private:
     Ui::DialogFirstLaunch *ui;
 
+    void translate();
+
 public slots:
     void on_pushButtonOK_clicked();
 };

@@ -51,6 +51,8 @@ private:
     PictureKind m_kind;
     float m_zoom;
 
+    void translate();
+
 protected:
     virtual void showEvent(QShowEvent *event);
 

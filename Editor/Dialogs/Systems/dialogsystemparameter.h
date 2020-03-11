@@ -38,7 +38,9 @@ public:
 private:
     Ui::DialogSystemParameter *ui;
     SystemParameter& m_param;
+
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMPARAMETER_H

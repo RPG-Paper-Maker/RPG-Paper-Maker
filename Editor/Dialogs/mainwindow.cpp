@@ -76,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Menu bar enabled actions
     enableNoGame();
+
+    this->translate();
 }
 
 MainWindow::~MainWindow()
@@ -368,6 +370,111 @@ void MainWindow::cleanRecentProjectsActions() {
         ui->menuOpen_project->removeAction(action);
         delete action;
     }
+}
+
+// -------------------------------------------------------
+
+void MainWindow::translate() {
+    ui->menuFile->setTitle(RPM::translate(Translations::FILE));
+    ui->menuEdition->setTitle(RPM::translate(Translations::EDITION));
+    ui->menuManagement->setTitle(RPM::translate(Translations::MANAGEMENT));
+    ui->menuSpecials->setTitle(RPM::translate(Translations::SPECIAL_ELEMENTS));
+    ui->menuDisplay->setTitle(RPM::translate(Translations::DISPLAY));
+    ui->menuOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->menuTest->setTitle(RPM::translate(Translations::TEST));
+    ui->menuHelp->setTitle(RPM::translate(Translations::HELP));
+    ui->actionNew_project->setText(RPM::translate(Translations::NEW_PROJECT));
+    ui->actionNew_project->setIconText(RPM::translate(Translations
+        ::NEW_PROJECT_TOOL));
+    ui->menuOpen_project->setTitle(RPM::translate(Translations::OPEN_PROJECT));
+    ui->actionBrowse->setText(RPM::translate(Translations::BROWSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionBrowse->setIconText(RPM::translate(Translations::OPEN_PROJECT_TOOL));
+    ui->actionSave->setText(RPM::translate(Translations::SAVE));
+    ui->actionSave->setIconText(RPM::translate(Translations::SAVE_TOOL));
+    ui->actionSave_all->setText(RPM::translate(Translations::SAVE_ALL));
+    ui->actionSave_all->setIconText(RPM::translate(Translations::SAVE_ALL_TOOL));
+    ui->actionExport_standalone->setText(RPM::translate(Translations
+        ::EXPORT_STANDALONE) + RPM::DOT_DOT_DOT);
+    ui->actionClose_project->setText(RPM::translate(Translations::CLOSE_PROJECT));
+    ui->actionQuit->setText(RPM::translate(Translations::QUIT));
+    ui->actionUndo->setText(RPM::translate(Translations::UNDO));
+    ui->actionRedo->setText(RPM::translate(Translations::REDO));
+    ui->actionHeight_up->setText(RPM::translate(Translations::HEIGHT_UP));
+    ui->actionHeight_plus_up->setText(RPM::translate(Translations
+        ::HEIGHT_PLUS_UP));
+    ui->actionHeight_down->setText(RPM::translate(Translations::HEIGHT_DOWN));
+    ui->actionHeight_plus_down->setText(RPM::translate(Translations
+        ::HEIGHT_PLUS_DOWN));
+    ui->actionDatas_manager->setText(RPM::translate(Translations
+        ::DATAS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionDatas_manager->setIconText(RPM::translate(Translations
+        ::DATAS_MANAGER_TOOL));
+    ui->actionSystems_manager->setText(RPM::translate(Translations
+        ::SYSTEMS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionSystems_manager->setIconText(RPM::translate(Translations
+        ::SYSTEMS_MANAGER_TOOL));
+    ui->actionVariables_manager->setText(RPM::translate(Translations
+        ::VARIABLES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionVariables_manager->setIconText(RPM::translate(Translations
+        ::VARIABLES_MANAGER_TOOL));
+    ui->actionCollisions_manager->setText(RPM::translate(Translations
+        ::COLLISIONS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionCollisions_manager->setIconText(RPM::translate(Translations
+        ::COLLISIONS_MANAGER_TOOL));
+    ui->actionKeyboard_controls->setText(RPM::translate(Translations
+        ::KEYBOARD_CONTROLS) + RPM::DOT_DOT_DOT);
+    ui->actionKeyboard_controls->setIconText(RPM::translate(Translations
+        ::KEYBOARD_CONTROLS_TOOL));
+    ui->actionScripts_manager->setText(RPM::translate(Translations
+        ::SCRIPTS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionScripts_manager->setIconText(RPM::translate(Translations
+        ::SCRIPTS_MANAGER_TOOL));
+    ui->actionPictures_manager->setText(RPM::translate(Translations
+        ::PICTURES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionPictures_manager->setIconText(RPM::translate(Translations
+        ::PICTURES_MANAGER_TOOL));
+    ui->actionSongs_manager->setText(RPM::translate(Translations
+        ::SONGS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionSongs_manager->setIconText(RPM::translate(Translations
+        ::SONGS_MANAGER_TOOL));
+    ui->actionShapes_manager->setText(RPM::translate(Translations
+        ::SHAPES_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionShapes_manager->setIconText(RPM::translate(Translations
+        ::SHAPES_MANAGER_TOOL));
+    ui->actionAutotiles->setText(RPM::translate(Translations::AUTOTILES) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionAutotiles->setIconText(RPM::translate(Translations::AUTOTILES_TOOL));
+    ui->actionAnimated_Autotiles->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES) + RPM::DOT_DOT_DOT);
+    ui->actionAnimated_Autotiles->setIconText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES_TOOL));
+    ui->actionSprite_walls->setText(RPM::translate(Translations::WALLS) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionSprite_walls->setIconText(RPM::translate(Translations::WALLS_TOOL));
+    ui->action3D_objects->setText(RPM::translate(Translations::THREED_OBJECTS) +
+        RPM::DOT_DOT_DOT);
+    ui->action3D_objects->setIconText(RPM::translate(Translations
+        ::THREED_OBJECTS_TOOL));
+    ui->actionMountains->setText(RPM::translate(Translations::MOUNTAINS) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionMountains->setIconText(RPM::translate(Translations::MOUNTAINS_TOOL));
+    ui->actionSet_BR_path_folder->setText(RPM::translate(Translations
+        ::SET_BR_PATH_FOLDER) + RPM::DOT_DOT_DOT);
+    ui->actionDebug_options->setText(RPM::translate(Translations
+        ::DEBUG_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->actionGeneral_options->setText(RPM::translate(Translations
+        ::GENERAL_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->actionShow_Hide_grid->setText(RPM::translate(Translations
+        ::SHOW_HIDE_GRID));
+    ui->actionShow_Hide_square_informations->setText(RPM::translate(Translations
+        ::SHOW_HIDE_SQUARE_INFORMATION));
+    ui->actionPlay->setText(RPM::translate(Translations::PLAY));
+    ui->actionPlay->setIconText(RPM::translate(Translations::PLAY_TOOL));
+    ui->actionAbout->setText(RPM::translate(Translations::ABOUT) + RPM
+        ::DOT_DOT_DOT);
+    ui->actionAuto_update->setText(RPM::translate(Translations
+        ::AUTO_DISPLAY_UPDATER));
 }
 
 // -------------------------------------------------------

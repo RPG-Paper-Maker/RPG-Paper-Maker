@@ -43,6 +43,7 @@ private:
     Ui::DialogSystemFontName *ui;
 
     void initialize();
+    void translate();
 };
 
 #endif // DIALOGSYSTEMFONTNAME_H

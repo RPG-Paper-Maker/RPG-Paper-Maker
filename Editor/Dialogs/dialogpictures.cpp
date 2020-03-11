@@ -42,6 +42,8 @@ DialogPictures::DialogPictures(QWidget *parent) :
     sp_retain = ui->widgetPicturePreview->sizePolicy();
     sp_retain.setRetainSizeWhenHidden(true);
     ui->widgetPicturePreview->setSizePolicy(sp_retain);
+
+    this->translate();
 }
 
 DialogPictures::~DialogPictures() {
@@ -120,6 +122,14 @@ void DialogPictures::addfolders(QIcon &icon,
         item->setText(names.at(i));
         root->appendRow(item);
     }
+}
+
+//-------------------------------------------------
+
+void DialogPictures::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

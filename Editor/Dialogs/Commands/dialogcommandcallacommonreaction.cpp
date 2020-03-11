@@ -33,6 +33,8 @@ DialogCommandCallACommonReaction::DialogCommandCallACommonReaction(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandCallACommonReaction::~DialogCommandCallACommonReaction() {
@@ -65,6 +67,14 @@ void DialogCommandCallACommonReaction::clearParameters() {
     ui->treeViewParameters->setColumnWidth(0,100);
     ui->treeViewParameters->setColumnWidth(1,250);
     ui->treeViewParameters->setColumnWidth(2,100);
+}
+
+//-------------------------------------------------
+
+void DialogCommandCallACommonReaction::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

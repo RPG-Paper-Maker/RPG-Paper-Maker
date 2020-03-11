@@ -39,6 +39,8 @@ DialogCommandConditions::DialogCommandConditions(EventCommand *command,
     if (command != nullptr) {
         initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandConditions::~DialogCommandConditions()
@@ -155,6 +157,14 @@ void DialogCommandConditions::initializePrimitives() {
         properties);
 
     this->on_radioButtonHeroes_toggled(false);
+}
+
+//-------------------------------------------------
+
+void DialogCommandConditions::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

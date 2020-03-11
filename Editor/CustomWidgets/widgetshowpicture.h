@@ -57,6 +57,8 @@ protected:
     int m_height;
     bool m_drawBackgorund;
 
+    void translate();
+
     virtual void paintEvent(QPaintEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *);

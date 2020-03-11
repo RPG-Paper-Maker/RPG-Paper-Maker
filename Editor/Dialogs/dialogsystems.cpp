@@ -56,6 +56,8 @@ DialogSystems::DialogSystems(GameDatas *gameDatas, QWidget *parent) :
         sp->installEventFilter(this);
         sp->clearFocus();
     }
+
+    this->translate();
 }
 
 DialogSystems::~DialogSystems()
@@ -429,6 +431,14 @@ void DialogSystems::initializeCommonObjects(GameDatas *gameDatas){
 void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject) {
     ui->widgetCommonObject->initializeModel(sysCommonObject);
     ui->widgetCommonObject->updateModel();
+}
+
+//-------------------------------------------------
+
+void DialogSystems::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

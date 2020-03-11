@@ -47,6 +47,8 @@ private:
     bool m_dialogOpened;
     bool m_selecting;
 
+    void translate();
+
 public slots:
     void on_pushButtonEnter_clicked();
     void on_pushButtonSelect_clicked();

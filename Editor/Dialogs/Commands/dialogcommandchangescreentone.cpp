@@ -34,6 +34,8 @@ DialogCommandChangeScreenTone::DialogCommandChangeScreenTone(EventCommand
     if (command != nullptr) {
         this->initialize(command);
     }
+
+    this->translate();
 }
 
 DialogCommandChangeScreenTone::~DialogCommandChangeScreenTone() {
@@ -71,6 +73,14 @@ void DialogCommandChangeScreenTone::initializePrimitives() {
         int)), this, SLOT(on_spinBoxBlueValueChanged(int)));
     connect(ui->panelPrimitiveGrey->spinBoxNumber(), SIGNAL(valueChanged(
         int)), this, SLOT(on_spinBoxGreyValueChanged(int)));
+}
+
+//-------------------------------------------------
+
+void DialogCommandChangeScreenTone::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

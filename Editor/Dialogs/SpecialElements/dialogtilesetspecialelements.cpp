@@ -34,6 +34,8 @@ DialogTilesetSpecialElements::DialogTilesetSpecialElements(
                 RPM::get()->project()->specialElementsDatas()->model(kind),
                 kind);
     initialize();
+
+    this->translate();
 }
 
 DialogTilesetSpecialElements::~DialogTilesetSpecialElements()
@@ -89,6 +91,14 @@ void DialogTilesetSpecialElements::remove() {
     int index = ui->panelSuperList->list()->getIndex();
     if (index >= 0)
         model()->removeRow(index);
+}
+
+//-------------------------------------------------
+
+void DialogTilesetSpecialElements::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

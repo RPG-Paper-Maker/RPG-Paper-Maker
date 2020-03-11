@@ -41,6 +41,7 @@ private:
     SystemAnimationFrameElement &m_element;
 
     void initialize();
+    void translate();
 
 public slots:
     void on_spinBoxIndex_valueChanged(int i);

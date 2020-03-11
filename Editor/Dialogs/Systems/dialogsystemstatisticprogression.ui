@@ -121,7 +121,7 @@
        <item row="0" column="0" colspan="4">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Informations</string>
+          <string>Information</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -129,7 +129,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>Statistic:</string>
+               <string>Statistic ID:</string>
               </property>
              </widget>
             </item>
@@ -224,15 +224,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelProgressionTable</class>
-   <extends>QWidget</extends>
-   <header>panelprogressiontable.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelProgressionTable</class>
+   <extends>QWidget</extends>
+   <header>panelprogressiontable.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

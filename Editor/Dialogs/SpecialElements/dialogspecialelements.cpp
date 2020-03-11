@@ -31,9 +31,19 @@ DialogSpecialElements::DialogSpecialElements(PictureKind kind,
     ui->widget->initialize(
                 RPM::get()->project()->specialElementsDatas()->model(kind),
                 kind);
+
+    this->translate();
 }
 
 DialogSpecialElements::~DialogSpecialElements()
 {
     delete ui;
+}
+
+//-------------------------------------------------
+
+void DialogSpecialElements::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

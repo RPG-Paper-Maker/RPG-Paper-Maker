@@ -42,7 +42,9 @@ public:
 private:
     Ui::DialogSystemColor *ui;
     SystemColor& m_color;
+
     void initialize();
+    void translate();
 
 private slots:
     void on_lineEditColor_textChanged(const QString &text);

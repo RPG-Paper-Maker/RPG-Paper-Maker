@@ -34,6 +34,8 @@ PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     m_spacersSize.append(ui->horizontalSpacer_7->geometry().size());
 
     this->showBox();
+
+    this->translate();
 }
 
 PanelSpecialElements::~PanelSpecialElements()
@@ -290,6 +292,13 @@ SystemSpecialElement * PanelSpecialElements::currentElement()
     }
 
     return nullptr;
+}
+
+//-------------------------------------------------
+
+void PanelSpecialElements::translate()
+{
+
 }
 
 // -------------------------------------------------------

@@ -76,6 +76,7 @@ protected:
     QMediaPlayer *m_mediaPlayerSoundEffect;
 
     void updateContextMenuCan();
+    void translate();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *);

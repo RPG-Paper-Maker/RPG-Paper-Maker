@@ -27,6 +27,8 @@ WidgetMountainSelector::WidgetMountainSelector(QWidget *parent) :
     ui->setupUi(this);
 
     this->updateAngle();
+
+    this->translate();
 }
 
 WidgetMountainSelector::~WidgetMountainSelector()
@@ -87,6 +89,13 @@ void WidgetMountainSelector::updateAngle() {
         ->value() * RPM::get()->getSquareSize() + ui->spinBoxPixelHeight
         ->value()) / width));
     ui->labelAngle->setText("(angle = " + QString::number(angle) + "°)");
+}
+
+//-------------------------------------------------
+
+void WidgetMountainSelector::translate()
+{
+
 }
 
 // -------------------------------------------------------

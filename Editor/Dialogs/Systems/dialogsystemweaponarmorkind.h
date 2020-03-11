@@ -39,7 +39,9 @@ public:
 private:
     Ui::DialogSystemWeaponArmorKind *ui;
     SystemWeaponArmorKind& m_weaponArmorKind;
+
     void initialize();
+    void translate();
 
 public slots:
     virtual void accept();

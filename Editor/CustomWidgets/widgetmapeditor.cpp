@@ -74,6 +74,8 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_control.setContextMenu(m_contextMenu);
 
     m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
+
+    this->translate();
 }
 
 WidgetMapEditor::~WidgetMapEditor()
@@ -564,6 +566,13 @@ void WidgetMapEditor::updateCursor() {
         }
         setCursor(*cursor);
     }
+}
+
+//-------------------------------------------------
+
+void WidgetMapEditor::translate()
+{
+
 }
 
 // -------------------------------------------------------

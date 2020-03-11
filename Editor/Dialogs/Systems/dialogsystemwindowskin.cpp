@@ -27,13 +27,14 @@ DialogSystemWindowSkin::DialogSystemWindowSkin(SystemWindowSkin& windowSkin,
     ui->setupUi(this);
 
     initialize();
+
+    this->translate();
 }
 
 DialogSystemWindowSkin::~DialogSystemWindowSkin()
 {
     delete ui;
 }
-
 
 // -------------------------------------------------------
 //
@@ -172,6 +173,14 @@ void DialogSystemWindowSkin::enableAll(bool b) {
     ui->groupBoxBackground->setEnabled(b);
     ui->groupBoxArrows->setEnabled(b);
     ui->groupBoxTexts->setEnabled(b);
+}
+
+//-------------------------------------------------
+
+void DialogSystemWindowSkin::translate()
+{
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
 // -------------------------------------------------------

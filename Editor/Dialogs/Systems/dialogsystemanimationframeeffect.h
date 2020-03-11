@@ -41,6 +41,7 @@ private:
     SystemAnimationFrameEffect &m_effect;
 
     void initialize();
+    void translate();
 
 public slots:
     void on_radioButtonSoundEffect_toggled(bool checked);
