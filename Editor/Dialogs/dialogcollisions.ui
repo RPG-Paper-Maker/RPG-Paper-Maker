@@ -450,12 +450,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetPreviewObject3D</class>
-   <extends>QWidget</extends>
-   <header>widgetpreviewobject3d.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetShowPicture</class>
    <extends>QWidget</extends>
    <header>widgetshowpicture.h</header>
@@ -465,6 +459,12 @@
    <class>PanelSuperList</class>
    <extends>QWidget</extends>
    <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPreviewObject3D</class>
+   <extends>QWidget</extends>
+   <header>widgetpreviewobject3d.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

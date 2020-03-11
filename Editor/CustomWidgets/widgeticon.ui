@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelIcon">
        <property name="text">
         <string>Icon:</string>
        </property>

@@ -34,7 +34,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1">
        <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelName">
          <property name="text">
           <string>Name:</string>
          </property>
@@ -57,7 +57,7 @@
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelSize">
          <property name="text">
           <string>Size:</string>
          </property>

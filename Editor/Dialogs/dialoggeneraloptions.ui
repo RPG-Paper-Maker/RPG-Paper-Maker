@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>347</width>
+    <width>388</width>
     <height>89</height>
    </rect>
   </property>
@@ -34,7 +34,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelTheme">
          <property name="text">
           <string>Theme (need restart):</string>
          </property>

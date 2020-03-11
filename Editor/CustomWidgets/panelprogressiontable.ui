@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0">
      <item row="3" column="0">
-      <widget class="QLabel" name="label_17">
+      <widget class="QLabel" name="labelFinalValue">
        <property name="text">
         <string>Final value:</string>
        </property>
@@ -55,8 +55,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>502</width>
-              <height>170</height>
+              <width>218</width>
+              <height>88</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -96,7 +96,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_16">
+      <widget class="QLabel" name="labelInitialValue">
        <property name="text">
         <string>Initial value:</string>
        </property>

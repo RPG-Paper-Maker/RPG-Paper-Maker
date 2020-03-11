@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxFramesToCopy">
          <property name="title">
           <string>Frames to copy</string>
          </property>
@@ -42,7 +42,7 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,1">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labelFrom">
               <property name="text">
                <string>From:</string>
               </property>
@@ -71,7 +71,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelTo">
               <property name="text">
                <string>To:</string>
               </property>
@@ -120,7 +120,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="labelPasteFromFrame">
            <property name="text">
             <string>Paste from frame: </string>
            </property>

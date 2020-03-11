@@ -90,6 +90,10 @@ void DialogCommandSetDialogBoxOptions::initializePrimitives() {
     ui->panelPrimitiveTextFont->initializeDataBaseCommandId(RPM::get()
         ->project()->gameDatas()->systemDatas()->modelFontNames(), m_parameters,
         properties);
+    ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::BEHIND));
+    ui->comboBoxFacesetPosition->addItem(RPM::translate(Translations::ABOVE));
+    ui->comboBoxTextStroke->addItem(RPM::translate(Translations::YES));
+    ui->comboBoxTextStroke->addItem(RPM::translate(Translations::NO));
 }
 
 //-------------------------------------------------

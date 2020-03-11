@@ -124,7 +124,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxMoves">
          <property name="title">
           <string>Moves</string>
          </property>
@@ -153,18 +153,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxStepSquare">
-                <item>
-                 <property name="text">
-                  <string>Square</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Step</string>
-                 </property>
-                </item>
-               </widget>
+               <widget class="QComboBox" name="comboBoxStepSquare"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonStepSquareNorth">
@@ -639,15 +628,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -36,7 +36,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelCameraPropertiesID">
            <property name="text">
             <string>Camera properties ID:</string>
            </property>
@@ -94,15 +94,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelSelectPositionMaps</class>
-   <extends>QWidget</extends>
-   <header>panelselectpositionmaps.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelSelectPositionMaps</class>
+   <extends>QWidget</extends>
+   <header>panelselectpositionmaps.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

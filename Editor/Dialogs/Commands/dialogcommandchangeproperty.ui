@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxSelection">
          <property name="title">
           <string>Selection</string>
          </property>
@@ -42,7 +42,7 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labelPropertyID">
               <property name="text">
                <string>Property ID:</string>
               </property>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="groupBoxOperation">
          <property name="title">
           <string>Operation</string>
          </property>
@@ -141,7 +141,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBoxValue">
          <property name="title">
           <string>Value</string>
          </property>
@@ -149,7 +149,7 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,1">
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelNewValue">
               <property name="text">
                <string>New value:</string>
               </property>

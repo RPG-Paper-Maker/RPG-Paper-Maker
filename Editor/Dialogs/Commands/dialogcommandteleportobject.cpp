@@ -165,11 +165,11 @@ void DialogCommandTeleportObject::on_radioButtonSelect_toggled(bool checked){
 //--------------------------------------------
 
 void DialogCommandTeleportObject::on_radioButtonNumber_toggled(bool checked){
-    ui->label_2->setEnabled(checked);
-    ui->label_3->setEnabled(checked);
-    ui->label_4->setEnabled(checked);
-    ui->label_5->setEnabled(checked);
-    ui->label_6->setEnabled(checked);
+    ui->labelIDMap->setEnabled(checked);
+    ui->labelX->setEnabled(checked);
+    ui->labelY->setEnabled(checked);
+    ui->labelYPlus->setEnabled(checked);
+    ui->labelZ->setEnabled(checked);
     ui->widgetIdMap->setEnabled(checked);
     ui->widgetX->setEnabled(checked);
     ui->widgetY->setEnabled(checked);

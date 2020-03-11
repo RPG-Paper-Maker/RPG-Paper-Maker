@@ -28,6 +28,14 @@ DialogSystemCharacteristic::DialogSystemCharacteristic(SystemCharacteristic
 {
     ui->setupUi(this);
 
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::INCREASE));
+    ui->comboBoxIncreaseDecrease->addItem(RPM::translate(Translations::DECREASE));
+    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
+        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::ALL));
+    ui->comboBoxSkillCostAll->addItem(RPM::translate(Translations::SPECIFIC));
+    ui->comboBoxUnit->addItem(RPM::translate(Translations::FIX));
+
     initialize();
 
     this->translate();
@@ -49,8 +57,6 @@ SystemCharacteristic & DialogSystemCharacteristic::characteristic() const {
 
 void DialogSystemCharacteristic::initialize() {
     int index = m_characteristic.increaseDecreaseKind()->id();
-    ui->comboBoxIncreaseDecreaseKind->addItems(RPM
-        ::ENUM_TO_STRING_INCREASE_DECREASE_KIND);
 
     // Temporary disable combobox
     QModelIndex modelIndex;

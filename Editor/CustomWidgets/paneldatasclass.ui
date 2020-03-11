@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_37" rowstretch="2,1">
      <item row="0" column="0">
-      <widget class="QGroupBox" name="groupBox_30">
+      <widget class="QGroupBox" name="groupBoxExperience">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -153,14 +153,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_16">
+             <widget class="QLabel" name="labelBase">
               <property name="text">
                <string>Base:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_14">
+             <widget class="QLabel" name="labelInitialLevel">
               <property name="text">
                <string>Initial level:</string>
               </property>
@@ -186,7 +186,7 @@
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QLabel" name="label_15">
+             <widget class="QLabel" name="labelMaxLevel">
               <property name="text">
                <string>Max level:</string>
               </property>
@@ -231,7 +231,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QLabel" name="label_17">
+             <widget class="QLabel" name="labelInflation">
               <property name="text">
                <string>Inflation:</string>
               </property>
@@ -252,7 +252,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QGroupBox" name="groupBox_20">
+      <widget class="QGroupBox" name="groupBoxStatisticsProgression">
        <property name="title">
         <string>Statistics progression</string>
        </property>
@@ -265,11 +265,11 @@
           <property name="indentation">
            <number>0</number>
           </property>
-          <attribute name="headerDefaultSectionSize">
-           <number>57</number>
-          </attribute>
           <attribute name="headerMinimumSectionSize">
            <number>2</number>
+          </attribute>
+          <attribute name="headerDefaultSectionSize">
+           <number>57</number>
           </attribute>
           <attribute name="headerStretchLastSection">
            <bool>false</bool>
@@ -280,7 +280,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QGroupBox" name="groupBox_29">
+      <widget class="QGroupBox" name="groupBoxCharacteristics">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -299,7 +299,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QGroupBox" name="groupBox_21">
+      <widget class="QGroupBox" name="groupBoxSkillsToLearn">
        <property name="title">
         <string>Skills to learn</string>
        </property>
@@ -321,11 +321,11 @@
           <property name="indentation">
            <number>0</number>
           </property>
-          <attribute name="headerDefaultSectionSize">
-           <number>57</number>
-          </attribute>
           <attribute name="headerMinimumSectionSize">
            <number>2</number>
+          </attribute>
+          <attribute name="headerDefaultSectionSize">
+           <number>57</number>
           </attribute>
           <attribute name="headerStretchLastSection">
            <bool>false</bool>

@@ -10,6 +10,7 @@
 */
 
 #include <QPushButton>
+#include <QMessageBox>
 #include "translations.h"
 #include "rpm.h"
 #include "common.h"
@@ -659,6 +660,57 @@ const QString Translations::BOTTOM = "bottom";
 const QString Translations::SCREEN_CENTER = "screen.center";
 const QString Translations::HIT = "hit";
 const QString Translations::MISS = "miss";
+const QString Translations::USER = "user";
+const QString Translations::AN_ENEMY = "an.enemy";
+const QString Translations::AN_ALLY = "an.ally";
+const QString Translations::ALL_ENEMIES = "all.enemies";
+const QString Translations::ALL_ALLIES = "all.allies";
+const QString Translations::BATTLE_ONLY = "battle.only";
+const QString Translations::MAIN_MENU_ONLY = "main.menu.only";
+const QString Translations::ALWAYS = "always";
+const QString Translations::NEVER = "never";
+const QString Translations::ROUTE = "route";
+const QString Translations::TOP_LEFT = "top.left";
+const QString Translations::CENTER = "center";
+const QString Translations::SQUARE = "square";
+const QString Translations::STEP = "step";
+const QString Translations::BEHIND = "behind";
+const QString Translations::ABOVE = "above";
+const QString Translations::YES = "yes";
+const QString Translations::NO = "no";
+const QString Translations::FADE_IN = "fade.in";
+const QString Translations::ZOOM_IN = "zoom.in";
+const QString Translations::FADE_OUT = "fade.out";
+const QString Translations::ZOOM_OUT = "zoom.out";
+const QString Translations::BOX = "box";
+const QString Translations::SPHERE = "sphere";
+const QString Translations::CYLINDER = "cylinder";
+const QString Translations::CONE = "cone";
+const QString Translations::CAPSULE = "capsule";
+const QString Translations::STRETCH = "stretch";
+const QString Translations::PERFECT_SIZE = "perfect.size";
+const QString Translations::INCREASE = "increase";
+const QString Translations::DECREASE = "decrease";
+const QString Translations::SPECIFIC = "specific";
+const QString Translations::CIRCLE = "circle";
+const QString Translations::RECTANGLE = "rectangle";
+const QString Translations::STAGING = "staging";
+const QString Translations::STRUCTURE = "structure";
+const QString Translations::DIALOGS = "dialogs";
+const QString Translations::VISUAL_EFFECTS = "visual.effects";
+const QString Translations::MOVES_ANIMATIONS_CAMERA = "moves.animations.camera";
+const QString Translations::MEDIA = "media";
+const QString Translations::MENUS = "menus";
+const QString Translations::MUSICS_SOUNDS = "musics.sounds";
+const QString Translations::OBJETS_INTERACTIONS = "objects.interactions";
+const QString Translations::SYSTEM_PARAMETERS = "system.parameters";
+const QString Translations::HEROES_ENEMIES = "heroes.enemies";
+const QString Translations::SYNTAX = "syntax";
+const QString Translations::ADVANCED = "advanced";
+const QString Translations::SLOPES = "slopes";
+const QString Translations::CLOSE = "close";
+const QString Translations::WINDOW = "window";
+const QString Translations::FULL_SCREEN = "full.screen";
 
 // -------------------------------------------------------
 //
@@ -666,13 +718,19 @@ const QString Translations::MISS = "miss";
 //
 // -------------------------------------------------------
 
-Translations::Translations() :
-    m_currentLanguage("fr") // Put english language by default
+Translations::Translations()
 {
-
+    QFile file(RPM::PATH_TRANSLATIONS_CURRENT_LANGUAGE);
+    if(!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::information(nullptr, "Error", file.errorString());
+    }
+    QTextStream in(&file);
+    m_currentLanguage = in.readLine();
+    file.close();
 }
 
-Translations::~Translations() {
+Translations::~Translations()
+{
 
 }
 
@@ -682,7 +740,8 @@ Translations::~Translations() {
 //
 // -------------------------------------------------------
 
-void Translations::read() {
+void Translations::read()
+{
     // Define all existing languages
     this->readLanguages();
 
@@ -692,7 +751,8 @@ void Translations::read() {
 
 // -------------------------------------------------------
 
-void Translations::readLanguages() {
+void Translations::readLanguages()
+{
     QJsonDocument doc;
     QJsonObject obj;
     QJsonArray tab;
@@ -712,7 +772,8 @@ void Translations::readLanguages() {
 
 // -------------------------------------------------------
 
-void Translations::readTranslations() {
+void Translations::readTranslations()
+{
     QJsonDocument doc;
     QJsonObject obj;
     QStringList keys;
@@ -732,13 +793,15 @@ void Translations::readTranslations() {
 
 // -------------------------------------------------------
 
-QString Translations::get(const QString &key) {
+QString Translations::get(const QString &key)
+{
     return m_translations.value(key);
 }
 
 // -------------------------------------------------------
 
-void Translations::translateButtonBox(QDialogButtonBox *buttonBox) {
+void Translations::translateButtonBox(QDialogButtonBox *buttonBox)
+{
     buttonBox->button(QDialogButtonBox::Ok)->setText(RPM::translate(Translations
         ::OK));
     buttonBox->button(QDialogButtonBox::Cancel)->setText(RPM::translate(

@@ -48,10 +48,10 @@
       </widget>
      </item>
      <item>
-      <widget class="WidgetMapEditor" name="widgetMap" native="true"/>
+      <widget class="WidgetMapEditor" name="widgetMap"/>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxCoordinates">
        <property name="title">
         <string>Coordinates</string>
        </property>
@@ -61,7 +61,7 @@
           <item>
            <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
             <item row="0" column="0">
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labelX">
               <property name="text">
                <string>X:</string>
               </property>
@@ -81,7 +81,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelY">
               <property name="text">
                <string>Y:</string>
               </property>
@@ -98,7 +98,7 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="labelYPlus">
               <property name="text">
                <string>Y plus:</string>
               </property>
@@ -112,7 +112,7 @@
              </widget>
             </item>
             <item row="3" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelZ">
               <property name="text">
                <string>Z:</string>
               </property>
@@ -152,7 +152,7 @@
  <customwidgets>
   <customwidget>
    <class>WidgetMapEditor</class>
-   <extends>QWidget</extends>
+   <extends>QOpenGLWidget</extends>
    <header>widgetmapeditor.h</header>
    <container>1</container>
   </customwidget>

@@ -36,7 +36,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelName">
            <property name="text">
             <string>Name:</string>
            </property>
@@ -71,7 +71,7 @@
         <widget class="WidgetIcon" name="widgetIcon" native="true"/>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxEfficiency">
          <property name="title">
           <string>Efficiency</string>
          </property>
@@ -110,6 +110,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
@@ -120,11 +125,6 @@
    <extends>QWidget</extends>
    <header>widgeticon.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -31,7 +31,7 @@ PanelPicturePreview::PanelPicturePreview(QWidget *parent) :
     m_areNegIDsEnabled(true)
 {
     ui->setupUi(this);
-    ui->groupBox->hide();
+    ui->groupBoxOptions->hide();
 
     ui->widgetPanelIDs->showButtonMax(false);
     ui->widgetPanelIDs->list()->setCanBrutRemove(true);
@@ -105,7 +105,7 @@ void PanelPicturePreview::setAreNegIDsEnabled(bool b) {
 void PanelPicturePreview::setChooseRect(bool b) {
     ui->widgetPreview->setChooseRect(b);
     if (b)
-        ui->groupBox->show();
+        ui->groupBoxOptions->show();
 }
 
 // -------------------------------------------------------

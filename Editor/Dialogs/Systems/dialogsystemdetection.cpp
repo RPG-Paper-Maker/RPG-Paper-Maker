@@ -35,6 +35,9 @@ DialogSystemDetection::DialogSystemDetection(SystemDetection &detection, QWidget
 {
     ui->setupUi(this);
 
+    ui->comboBoxAutomatic->addItem(RPM::translate(Translations::CIRCLE));
+    ui->comboBoxAutomatic->addItem(RPM::translate(Translations::RECTANGLE));
+
     this->initialize();
 
     this->translate();

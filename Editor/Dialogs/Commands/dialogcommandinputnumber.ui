@@ -31,7 +31,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelVariableAssigment">
          <property name="text">
           <string>Variable assignment:</string>
          </property>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string></string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -34,7 +34,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
        <item>
-        <widget class="QGroupBox" name="groupBox_22">
+        <widget class="QGroupBox" name="groupBoxForTileset">
          <property name="minimumSize">
           <size>
            <width>0</width>

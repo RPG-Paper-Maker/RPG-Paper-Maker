@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1,0">
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxSelection">
        <property name="title">
         <string>Selection</string>
        </property>
@@ -139,7 +139,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="groupBoxOperation">
        <property name="title">
         <string>Operation</string>
        </property>
@@ -197,7 +197,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="groupBoxValue">
        <property name="minimumSize">
         <size>
          <width>0</width>

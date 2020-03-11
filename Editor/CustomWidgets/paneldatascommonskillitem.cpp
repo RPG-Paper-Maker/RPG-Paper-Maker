@@ -64,6 +64,8 @@ void PanelDatasCommonSkillItem::initialize(CommonSkillItemKind kind) {
     ui->treeViewCost->initializeNewItemInstance(new SystemCost);
     ui->treeViewEffects->initializeNewItemInstance(new SystemEffect);
     ui->treeViewCharacteristics->initializeNewItemInstance(new SystemCharacteristic);
+    ui->comboBoxTarget->addItems(RPM::ENUM_TO_STRING_TARGET_KIND);
+    ui->comboBoxAvailable->addItems(RPM::ENUM_TO_STRING_AVAILABLE_KIND);
 
     switch (m_kind) {
     case CommonSkillItemKind::Skill:

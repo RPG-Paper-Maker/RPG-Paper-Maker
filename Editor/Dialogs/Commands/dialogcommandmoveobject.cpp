@@ -58,6 +58,8 @@ DialogCommandMoveObject::DialogCommandMoveObject(EventCommand *command,
     ui->treeView->initializeModel(model);
     ui->treeView->setHasContextMenu(false);
     ui->treeView->setCanBeControled(false);
+    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::SQUARE));
+    ui->comboBoxStepSquare->addItem(RPM::translate(Translations::STEP));
 
     if (command != nullptr) initialize(command);
 

@@ -38,7 +38,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
            <item>
-            <widget class="QLabel" name="label_11">
+            <widget class="QLabel" name="labelName">
              <property name="text">
               <string>Name:</string>
              </property>
@@ -50,7 +50,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupBoxField">
            <property name="title">
             <string>Field</string>
            </property>
@@ -58,7 +58,7 @@
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,1">
               <item row="0" column="0">
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="labelLeft">
                 <property name="text">
                  <string>Left:</string>
                 </property>
@@ -97,7 +97,7 @@
                </spacer>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="labelRight">
                 <property name="text">
                  <string>Right:</string>
                 </property>
@@ -123,7 +123,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="labelTop">
                 <property name="text">
                  <string>Top:</string>
                 </property>
@@ -149,7 +149,7 @@
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="labelBot">
                 <property name="text">
                  <string>Bot:</string>
                 </property>
@@ -180,7 +180,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="groupBoxNewBoxHeight">
            <property name="title">
             <string>New box height</string>
            </property>
@@ -188,7 +188,7 @@
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1">
               <item row="0" column="0">
-               <widget class="QLabel" name="label_5">
+               <widget class="QLabel" name="labelSquares">
                 <property name="text">
                  <string>Square(s):</string>
                 </property>
@@ -230,7 +230,7 @@
                </spacer>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_6">
+               <widget class="QLabel" name="labelPixels">
                 <property name="text">
                  <string>Pixel(s):</string>
                 </property>
@@ -261,7 +261,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_4">
+          <widget class="QGroupBox" name="groupBoxAutomatic">
            <property name="title">
             <string>Automatic</string>
            </property>
@@ -269,18 +269,7 @@
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_7">
               <item row="0" column="0" colspan="3">
-               <widget class="QComboBox" name="comboBoxAutomatic">
-                <item>
-                 <property name="text">
-                  <string>Circle</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Rectangle</string>
-                 </property>
-                </item>
-               </widget>
+               <widget class="QComboBox" name="comboBoxAutomatic"/>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="labelRadiusLength">
@@ -389,14 +378,14 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="labelDescription">
            <property name="text">
             <string>Left click: add a new detection box  / Right click: remove and existing detection box</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="WidgetMapEditor" name="widgetMapEditor" native="true"/>
+          <widget class="WidgetMapEditor" name="widgetMapEditor"/>
          </item>
         </layout>
        </item>
@@ -419,7 +408,7 @@
  <customwidgets>
   <customwidget>
    <class>WidgetMapEditor</class>
-   <extends>QWidget</extends>
+   <extends>QOpenGLWidget</extends>
    <header>widgetmapeditor.h</header>
    <container>1</container>
   </customwidget>

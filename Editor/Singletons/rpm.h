@@ -144,6 +144,7 @@ public:
     static const QString PATH_ENGINE_SETTINGS;
     static const QString PATH_TRANSLATIONS;
     static const QString PATH_TRANSLATIONS_LANGUAGES;
+    static const QString PATH_TRANSLATIONS_CURRENT_LANGUAGE;
     static const QString PATH_PATREON;
     static const QString PATH_GAMES;
     static const QString PATH_TEXTURE_MISSING;
@@ -173,6 +174,10 @@ public:
     static QStringList ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND;
     static QStringList ENUM_TO_STRING_OBJECT_COLLISION_KIND;
     static QStringList ENUM_TO_STRING_EVENT_COMMAND_KIND;
+    static QStringList ENUM_TO_STRING_TARGET_KIND;
+    static QStringList ENUM_TO_STRING_AVAILABLE_KIND;
+    static QStringList ENUM_TO_STRING_OBJECT_MOVING_KIND;
+    static QStringList ENUM_TO_STRING_SHAPE_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

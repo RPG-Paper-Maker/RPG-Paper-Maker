@@ -86,7 +86,7 @@ void PanelSuperList::setMaximumLimit(int max) {
 
 void PanelSuperList::showEditName(bool b) {
     if (b) {
-        ui->label->show();
+        ui->labelName->show();
         if (m_isLang) {
             ui->widgetTextLang->show();
             ui->lineEditName->hide();
@@ -94,7 +94,7 @@ void PanelSuperList::showEditName(bool b) {
             ui->lineEditName->show();
         }
     } else {
-        ui->label->hide();
+        ui->labelName->hide();
         ui->lineEditName->hide();
     }
 }

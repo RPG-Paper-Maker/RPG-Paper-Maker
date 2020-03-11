@@ -66,6 +66,8 @@ void DialogCommandDisplayAPicture::initializePrimitives() {
     ui->panelPrimitiveOpacity->initializeNumber(m_parameters, properties, false);
     ui->panelPrimitiveOpacity->setNumberDoubleValue(100);
     ui->panelPrimitiveAngle->initializeNumber(m_parameters, properties, false);
+    ui->comboBoxOrigin->addItem(RPM::translate(Translations::TOP_LEFT));
+    ui->comboBoxOrigin->addItem(RPM::translate(Translations::CENTER));
 }
 
 //-------------------------------------------------
@@ -85,7 +87,7 @@ void DialogCommandDisplayAPicture::initialize(EventCommand *command) {
     m_pictureID->setId(command->valueCommandAt(i++).toInt());
     ui->widgetPictureImage->initializeSuper(m_pictureID);
     ui->panelPrimitiveID->initializeCommand(command, i);
-    ui->comboBox->setCurrentIndex(command->valueCommandAt(i++) == RPM
+    ui->comboBoxOrigin->setCurrentIndex(command->valueCommandAt(i++) == RPM
         ::TRUE_BOOL_STRING ? 1 : 0);
     ui->panelPrimitiveX->initializeCommand(command, i);
     ui->panelPrimitiveY->initializeCommand(command, i);
@@ -101,8 +103,8 @@ EventCommand * DialogCommandDisplayAPicture::getCommand() const {
 
     command.append(QString::number(m_pictureID->id()));
     ui->panelPrimitiveID->getCommand(command);
-    command.append(ui->comboBox->currentIndex() == 1 ? RPM::TRUE_BOOL_STRING :
-        RPM::FALSE_BOOL_STRING);
+    command.append(ui->comboBoxOrigin->currentIndex() == 1 ? RPM
+        ::TRUE_BOOL_STRING : RPM::FALSE_BOOL_STRING);
     ui->panelPrimitiveX->getCommand(command);
     ui->panelPrimitiveY->getCommand(command);
     ui->panelPrimitiveZoom->getCommand(command);

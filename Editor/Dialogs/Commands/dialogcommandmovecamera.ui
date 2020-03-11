@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxCameraTarget">
          <property name="title">
           <string>Camera target</string>
          </property>
@@ -124,7 +124,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_5">
+        <widget class="QGroupBox" name="groupBoxOperation">
          <property name="title">
           <string>Operation</string>
          </property>
@@ -185,7 +185,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBoxMove">
          <property name="title">
           <string>Move</string>
          </property>
@@ -233,7 +233,7 @@
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
                   <item>
-                   <widget class="QLabel" name="label">
+                   <widget class="QLabel" name="labelX">
                     <property name="text">
                      <string>X:</string>
                     </property>
@@ -256,25 +256,14 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="comboBoxX">
-                    <item>
-                     <property name="text">
-                      <string>Square(s)</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Pixel(s)</string>
-                     </property>
-                    </item>
-                   </widget>
+                   <widget class="QComboBox" name="comboBoxX"/>
                   </item>
                  </layout>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0">
                   <item>
-                   <widget class="QLabel" name="label_3">
+                   <widget class="QLabel" name="labelY">
                     <property name="text">
                      <string>Y:</string>
                     </property>
@@ -297,25 +286,14 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="comboBoxY">
-                    <item>
-                     <property name="text">
-                      <string>Square(s)</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Pixel(s)</string>
-                     </property>
-                    </item>
-                   </widget>
+                   <widget class="QComboBox" name="comboBoxY"/>
                   </item>
                  </layout>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
                   <item>
-                   <widget class="QLabel" name="label_2">
+                   <widget class="QLabel" name="labelZ">
                     <property name="text">
                      <string>Z:</string>
                     </property>
@@ -338,18 +316,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="comboBoxZ">
-                    <item>
-                     <property name="text">
-                      <string>Square(s)</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Pixel(s)</string>
-                     </property>
-                    </item>
-                   </widget>
+                   <widget class="QComboBox" name="comboBoxZ"/>
                   </item>
                  </layout>
                 </item>
@@ -376,7 +343,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="groupBoxRotation">
          <property name="title">
           <string>Rotation</string>
          </property>
@@ -410,7 +377,7 @@
             <item>
              <layout class="QGridLayout" name="gridLayout_4">
               <item row="0" column="0">
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="labelHorizontal">
                 <property name="text">
                  <string>Horizontal:</string>
                 </property>
@@ -453,7 +420,7 @@
                </spacer>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_6">
+               <widget class="QLabel" name="labelVertical">
                 <property name="text">
                  <string>Vertical:</string>
                 </property>
@@ -490,7 +457,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="groupBoxZoom">
          <property name="title">
           <string>Zoom</string>
          </property>
@@ -498,7 +465,7 @@
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,1">
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="labelDistance">
               <property name="text">
                <string>Distance:</string>
               </property>
@@ -564,7 +531,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="labelTime">
            <property name="text">
             <string>Time:</string>
            </property>
@@ -587,7 +554,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="labelSeconds">
            <property name="text">
             <string>second(s)</string>
            </property>

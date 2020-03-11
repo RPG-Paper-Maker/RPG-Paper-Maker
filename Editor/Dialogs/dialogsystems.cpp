@@ -88,6 +88,9 @@ bool DialogSystems::eventFilter(QObject *o, QEvent *e) {
 void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     SystemDatas *systemDatas;
 
+    ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::WINDOW));
+    ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::FULL_SCREEN));
+
     // Don't show edit name
     ui->panelSuperListColors->showEditName(false);
     ui->panelSuperListCurrencies->showEditName(false);

@@ -34,7 +34,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxEffect">
          <property name="title">
           <string>Effect</string>
          </property>

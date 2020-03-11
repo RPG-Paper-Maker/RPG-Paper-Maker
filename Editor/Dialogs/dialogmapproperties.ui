@@ -38,7 +38,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_8">
            <item row="0" column="0">
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="labelName">
              <property name="text">
               <string>Name:</string>
              </property>
@@ -74,7 +74,7 @@
             </spacer>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="labelTileset">
              <property name="text">
               <string>Tileset:</string>
              </property>
@@ -99,7 +99,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="groupBoxSizes">
            <property name="title">
             <string>Sizes</string>
            </property>
@@ -115,7 +115,7 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <widget class="QLabel" name="label_3">
+                 <widget class="QLabel" name="labelLength">
                   <property name="text">
                    <string>Length:</string>
                   </property>
@@ -154,7 +154,7 @@
               <item row="0" column="1">
                <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <widget class="QLabel" name="label_4">
+                 <widget class="QLabel" name="labelWidth">
                   <property name="text">
                    <string>Width:</string>
                   </property>
@@ -200,7 +200,7 @@
               <item row="1" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_4">
                 <item>
-                 <widget class="QLabel" name="label_5">
+                 <widget class="QLabel" name="labelheight">
                   <property name="text">
                    <string>Height:</string>
                   </property>
@@ -236,7 +236,7 @@
               <item row="1" column="1">
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
-                 <widget class="QLabel" name="label_6">
+                 <widget class="QLabel" name="labelDepth">
                   <property name="text">
                    <string>Depth:</string>
                   </property>
@@ -271,7 +271,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_5">
            <item row="1" column="0">
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="labelBackgroundSound">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -294,7 +294,7 @@
             </spacer>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="labelMusic">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -320,7 +320,7 @@
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="labelCameraPropID">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -364,7 +364,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="groupBoxSky">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -648,15 +648,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetTextLang</class>
-   <extends>QWidget</extends>
-   <header>widgettextlang.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetTextLang</class>
+   <extends>QWidget</extends>
+   <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

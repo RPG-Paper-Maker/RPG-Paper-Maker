@@ -108,7 +108,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="labelDescription">
              <property name="text">
               <string>Description:</string>
              </property>
@@ -161,36 +161,6 @@
                <height>27</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>The user</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>An enemy</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>An ally</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>All enemies</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>All allies</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="5" column="0">
@@ -243,26 +213,6 @@
                <height>27</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Battle only</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Main menu only</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Always</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Never</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="7" column="0">
@@ -446,6 +396,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetSuperTree</class>
    <extends>QTreeView</extends>
    <header>widgetsupertree.h</header>
@@ -460,12 +416,6 @@
    <class>WidgetSong</class>
    <extends>QWidget</extends>
    <header>widgetsong.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

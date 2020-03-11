@@ -48,6 +48,14 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
         RPM::get()->project()->gameDatas()->systemDatas()->modelColors(),
         m_parameters, nullptr);
     ui->panelPrimitiveValueTransitionColorEnd->showDataBase();
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::FADE_IN) +
+        RPM::DOT_DOT_DOT);
+    ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::ZOOM_IN));
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::FADE_OUT) +
+        RPM::DOT_DOT_DOT);
+    ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::ZOOM_OUT));
 
     if (command != nullptr) initialize(command);
 
@@ -201,11 +209,11 @@ void DialogCommandStartBattle::on_radioButtonSelect_toggled(bool checked){
 //--------------------------------------------
 
 void DialogCommandStartBattle::on_radioButtonNumber_toggled(bool checked){
-    ui->label_7->setEnabled(checked);
-    ui->label_8->setEnabled(checked);
-    ui->label_9->setEnabled(checked);
-    ui->label_10->setEnabled(checked);
-    ui->label_11->setEnabled(checked);
+    ui->labelIDMAp->setEnabled(checked);
+    ui->labelX->setEnabled(checked);
+    ui->labelY->setEnabled(checked);
+    ui->labelYPlus->setEnabled(checked);
+    ui->labelZ->setEnabled(checked);
     ui->widgetIdMap->setEnabled(checked);
     ui->widgetX->setEnabled(checked);
     ui->widgetY->setEnabled(checked);

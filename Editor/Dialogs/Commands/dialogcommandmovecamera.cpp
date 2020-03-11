@@ -46,6 +46,12 @@ DialogCommandMoveCamera::DialogCommandMoveCamera(EventCommand *command,
     ui->widgetNumberV->initializeNumber(parameters, nullptr, false);
     ui->widgetNumberDistance->initializeNumber(parameters, nullptr);
     ui->widgetNumberTime->initializeNumber(parameters, nullptr, false);
+    ui->comboBoxX->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxX->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxY->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxY->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxZ->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxZ->addItem(RPM::translate(Translations::PIXEL_S));
 
     if (command != nullptr) initialize(command);
 

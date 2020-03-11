@@ -36,7 +36,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelAbbreviation">
            <property name="text">
             <string>Abbreviation (for JavaScript):</string>
            </property>
@@ -50,7 +50,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="labelDescription">
            <property name="text">
             <string>Description:</string>
            </property>
@@ -64,7 +64,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelShortcut_2">
            <property name="text">
             <string>Shortcut:</string>
            </property>

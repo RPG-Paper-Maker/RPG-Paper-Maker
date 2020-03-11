@@ -64,6 +64,12 @@ PanelObject::PanelObject(QWidget *parent) :
     m_layoutDetection->setContentsMargins(9, 0, 9, 0);
     m_layoutDetection->addWidget(m_labelDetection, 0, Qt::AlignCenter);
 
+    // Comboboxes
+    ui->comboBoxMovingType->addItems(RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND);
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::NONE));
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FIX_SPRITE));
+    ui->comboBoxGraphics->addItem(RPM::translate(Translations::FACE_SPRITE));
+
     this->translate();
 }
 
@@ -514,6 +520,9 @@ void PanelObject::on_blockingHeroChanged(bool c) {
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxMovingType_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
     QStandardItem *selected;
     bool isRoute;
 
@@ -612,6 +621,9 @@ void PanelObject::on_checkBoxPixelOffset_toggled(bool checked) {
 // -------------------------------------------------------
 
 void PanelObject::on_comboBoxGraphics_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
     QStandardItem *selected = ui->treeViewStates->getSelected();
 
     if (selected != nullptr) {

@@ -34,7 +34,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelObjectID">
          <property name="text">
           <string>Object ID:</string>
          </property>
@@ -72,7 +72,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxPosition">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -145,7 +145,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelIDMap">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -200,7 +200,7 @@
              </spacer>
             </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="labelX">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -229,7 +229,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelY">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -258,7 +258,7 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="labelYPlus">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -287,7 +287,7 @@
              </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelZ">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -366,7 +366,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="groupBoxOptions">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -377,7 +377,7 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="labelDirection">
             <property name="text">
              <string>Direction:</string>
             </property>
@@ -445,7 +445,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_8">
+           <widget class="QLabel" name="labelShadingBefore">
             <property name="text">
              <string>Shading before:</string>
             </property>
@@ -466,7 +466,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLabel" name="label_11">
+           <widget class="QLabel" name="labelShadingAfter">
             <property name="text">
              <string>Shading after:</string>
             </property>

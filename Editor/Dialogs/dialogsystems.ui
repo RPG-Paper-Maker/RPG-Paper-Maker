@@ -81,7 +81,7 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QLabel" name="label_3">
+                    <widget class="QLabel" name="labelGameName">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -112,7 +112,7 @@
                   </layout>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_2">
+                  <widget class="QGroupBox" name="groupBoxGameNativeResolution">
                    <property name="enabled">
                     <bool>true</bool>
                    </property>
@@ -128,7 +128,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label">
+                         <widget class="QLabel" name="labelWidth">
                           <property name="maximumSize">
                            <size>
                             <width>16777215</width>
@@ -158,7 +158,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_2">
+                         <widget class="QLabel" name="labelheight">
                           <property name="maximumSize">
                            <size>
                             <width>16777215</width>
@@ -183,23 +183,12 @@
                        </layout>
                       </item>
                       <item row="1" column="0" colspan="2">
-                       <widget class="QComboBox" name="comboBoxScreenWindow">
-                        <item>
-                         <property name="text">
-                          <string>Window</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Full screen</string>
-                         </property>
-                        </item>
-                       </widget>
+                       <widget class="QComboBox" name="comboBoxScreenWindow"/>
                       </item>
                      </layout>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QCheckBox" name="checkBox">
+                     <widget class="QCheckBox" name="checkBoxDisplayConsole">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -212,7 +201,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox">
+                  <widget class="QGroupBox" name="groupBoxMapProperties">
                    <property name="enabled">
                     <bool>true</bool>
                    </property>
@@ -234,7 +223,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_4">
+                         <widget class="QLabel" name="labelSquareSize">
                           <property name="text">
                            <string>Square size (in px):</string>
                           </property>
@@ -264,7 +253,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_6">
+                         <widget class="QLabel" name="labelRayPortionsEditor">
                           <property name="enabled">
                            <bool>false</bool>
                           </property>
@@ -288,7 +277,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_20">
+                         <widget class="QLabel" name="labelRayPortionsIngame">
                           <property name="enabled">
                            <bool>false</bool>
                           </property>
@@ -312,7 +301,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_9">
+                         <widget class="QLabel" name="labelMountainsCollisionHeightLimit1">
                           <property name="enabled">
                            <bool>true</bool>
                           </property>
@@ -322,7 +311,7 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLabel" name="label_21">
+                         <widget class="QLabel" name="labelMountainsCollisionHeightLimit2">
                           <property name="text">
                            <string>limit (in px):</string>
                           </property>
@@ -352,7 +341,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_25">
+                         <widget class="QLabel" name="labelMountainsCollisionAngleLimit1">
                           <property name="enabled">
                            <bool>true</bool>
                           </property>
@@ -362,7 +351,7 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLabel" name="label_26">
+                         <widget class="QLabel" name="labelMountainsCollisionAngleLimit2">
                           <property name="text">
                            <string>limit (in degrees):</string>
                           </property>
@@ -392,7 +381,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_23">
+                         <widget class="QLabel" name="labelAnimationFrames">
                           <property name="text">
                            <string>Animation frames:</string>
                           </property>
@@ -422,7 +411,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_33">
+                  <widget class="QGroupBox" name="groupBoxGlobalSounds">
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -436,7 +425,7 @@
                     <item row="0" column="0">
                      <layout class="QVBoxLayout" name="verticalLayout_28">
                       <item>
-                       <widget class="QLabel" name="label_16">
+                       <widget class="QLabel" name="labelCursor">
                         <property name="text">
                          <string>Cursor:</string>
                         </property>
@@ -459,7 +448,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLabel" name="label_17">
+                       <widget class="QLabel" name="labelConfirmation">
                         <property name="text">
                          <string>Confirmation:</string>
                         </property>
@@ -482,7 +471,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLabel" name="label_24">
+                       <widget class="QLabel" name="labelCancel">
                         <property name="text">
                          <string>Cancel:</string>
                         </property>
@@ -505,7 +494,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLabel" name="label_27">
+                       <widget class="QLabel" name="labelImpossible">
                         <property name="text">
                          <string>Impossible:</string>
                         </property>
@@ -546,7 +535,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_3">
+                  <widget class="QGroupBox" name="groupBoxOtheOptions">
                    <property name="enabled">
                     <bool>true</bool>
                    </property>
@@ -565,7 +554,7 @@
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="label_10">
+                         <widget class="QLabel" name="labelDefaultDialogBoxOptions">
                           <property name="text">
                            <string>Default dialog box options:</string>
                           </property>
@@ -579,7 +568,7 @@
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLabel" name="label_5">
+                         <widget class="QLabel" name="labelMaxNumberOfSaveSlots">
                           <property name="enabled">
                            <bool>false</bool>
                           </property>
@@ -609,7 +598,7 @@
                          <number>0</number>
                         </property>
                         <item row="0" column="0" colspan="2">
-                         <widget class="QLabel" name="label_7">
+                         <widget class="QLabel" name="labelPriceOfSoldItem">
                           <property name="enabled">
                            <bool>false</bool>
                           </property>
@@ -629,7 +618,7 @@
                          </widget>
                         </item>
                         <item row="1" column="1">
-                         <widget class="QLabel" name="label_8">
+                         <widget class="QLabel" name="labelPercentOfDefaultPrice">
                           <property name="enabled">
                            <bool>false</bool>
                           </property>
@@ -684,7 +673,7 @@
                  <item>
                   <layout class="QVBoxLayout" name="verticalLayout_12">
                    <item>
-                    <widget class="QGroupBox" name="groupBox_4">
+                    <widget class="QGroupBox" name="groupBoxFontSizes">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -709,7 +698,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_7">
+                    <widget class="QGroupBox" name="groupBoxWindowSkins">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -734,7 +723,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_31">
+                    <widget class="QGroupBox" name="groupBoxDetections">
                      <property name="title">
                       <string>Detections</string>
                      </property>
@@ -760,7 +749,7 @@
                  <item>
                   <layout class="QVBoxLayout" name="verticalLayout_13">
                    <item>
-                    <widget class="QGroupBox" name="groupBox_5">
+                    <widget class="QGroupBox" name="groupBoxFontNames">
                      <property name="title">
                       <string>Font names</string>
                      </property>
@@ -788,7 +777,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_8">
+                    <widget class="QGroupBox" name="groupBoxCurrencies">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -819,7 +808,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_32">
+                    <widget class="QGroupBox" name="groupBoxCameraProperties">
                      <property name="title">
                       <string>Camera properties</string>
                      </property>
@@ -845,7 +834,7 @@
                  <item>
                   <layout class="QVBoxLayout" name="verticalLayout_14">
                    <item>
-                    <widget class="QGroupBox" name="groupBox_6">
+                    <widget class="QGroupBox" name="groupBoxColors">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -876,7 +865,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_9">
+                    <widget class="QGroupBox" name="groupBoxSpeeds">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -907,7 +896,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QGroupBox" name="groupBox_34">
+                    <widget class="QGroupBox" name="groupBoxFrequencies">
                      <property name="title">
                       <string>Frequencies</string>
                      </property>
@@ -964,7 +953,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QLabel" name="label_18">
+                <widget class="QLabel" name="labelStatisticAssociatedToLevel">
                  <property name="text">
                   <string>Statistic associated to level:</string>
                  </property>
@@ -974,7 +963,7 @@
                 <widget class="QComboBox" name="comboBoxBattleLevel"/>
                </item>
                <item>
-                <widget class="QLabel" name="label_19">
+                <widget class="QLabel" name="labelStatisticAssociatedToExp">
                  <property name="text">
                   <string>Statistic associated to exp:</string>
                  </property>
@@ -986,7 +975,7 @@
               </layout>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_19">
+              <widget class="QGroupBox" name="groupBoxFormulas">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1003,7 +992,7 @@
                 <item row="0" column="0">
                  <layout class="QVBoxLayout" name="verticalLayout_21">
                   <item>
-                   <widget class="QLabel" name="label_14">
+                   <widget class="QLabel" name="labelIsDead">
                     <property name="text">
                      <string>Is dead:</string>
                     </property>
@@ -1026,7 +1015,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_15">
+                   <widget class="QLabel" name="labelCriticalInfluence">
                     <property name="text">
                      <string>Critical influence:</string>
                     </property>
@@ -1054,7 +1043,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_18">
+              <widget class="QGroupBox" name="groupBoxMusics">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1068,7 +1057,7 @@
                 <item row="0" column="0">
                  <layout class="QVBoxLayout" name="verticalLayout_16">
                   <item>
-                   <widget class="QLabel" name="label_11">
+                   <widget class="QLabel" name="labelBattle">
                     <property name="text">
                      <string>Battle:</string>
                     </property>
@@ -1091,7 +1080,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_12">
+                   <widget class="QLabel" name="labelLevelUp">
                     <property name="text">
                      <string>Level up:</string>
                     </property>
@@ -1114,7 +1103,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_13">
+                   <widget class="QLabel" name="labelVictory">
                     <property name="text">
                      <string>Victory:</string>
                     </property>
@@ -1155,7 +1144,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_16">
+              <widget class="QGroupBox" name="groupBoxBattleMaps">
                <property name="title">
                 <string>Battle maps</string>
                </property>
@@ -1175,7 +1164,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_31" stretch="1,1">
              <item>
-              <widget class="QGroupBox" name="groupBox_22">
+              <widget class="QGroupBox" name="groupBoxElements">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1194,7 +1183,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_23">
+              <widget class="QGroupBox" name="groupBoxCommonBattleCommands">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1217,7 +1206,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_32" stretch="1,1">
              <item>
-              <widget class="QGroupBox" name="groupBox_24">
+              <widget class="QGroupBox" name="groupBoxCommonStatistics">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1236,7 +1225,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_25">
+              <widget class="QGroupBox" name="groupBoxCommonEquipments">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1265,7 +1254,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_33">
              <item>
-              <widget class="QGroupBox" name="groupBox_26">
+              <widget class="QGroupBox" name="groupBoxWeaponsKind">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1284,7 +1273,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_27">
+              <widget class="QGroupBox" name="groupBoxArmorsKind">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -1316,7 +1305,7 @@
          <item row="0" column="0">
           <layout class="QVBoxLayout" name="verticalLayout_23" stretch="1,0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_20">
+            <widget class="QGroupBox" name="groupBoxTitleScreen">
              <property name="title">
               <string>Title screen</string>
              </property>
@@ -1326,7 +1315,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_24" stretch="0,0,0,1">
                   <item>
-                   <widget class="QGroupBox" name="groupBox_28">
+                   <widget class="QGroupBox" name="groupBoxTitleScreenBackground">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1418,7 +1407,7 @@
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
                     <item>
-                     <widget class="QLabel" name="label_22">
+                     <widget class="QLabel" name="labelMusic">
                       <property name="text">
                        <string>Music:</string>
                       </property>
@@ -1488,7 +1477,7 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="groupBox_29">
+                 <widget class="QGroupBox" name="groupBoxMenuCommands">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
@@ -1519,7 +1508,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="groupBox_30">
+                 <widget class="QGroupBox" name="groupBoxSettingsConfiguration">
                   <property name="title">
                    <string>Settings configuration</string>
                   </property>
@@ -1547,7 +1536,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_21">
+            <widget class="QGroupBox" name="groupBoxGameOver">
              <property name="title">
               <string>Game over</string>
              </property>
@@ -1561,7 +1550,7 @@
         <attribute name="title">
          <string>Main menu</string>
         </attribute>
-        <widget class="QGroupBox" name="groupBox_17">
+        <widget class="QGroupBox" name="groupBoxItemsTypes">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -1597,7 +1586,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
              <item>
-              <widget class="QGroupBox" name="groupBox_12">
+              <widget class="QGroupBox" name="groupBoxEvents">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1636,7 +1625,7 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_18" stretch="0,1">
                <item>
-                <widget class="QGroupBox" name="groupBox_13">
+                <widget class="QGroupBox" name="groupBoxParameters">
                  <property name="title">
                   <string>Parameters</string>
                  </property>
@@ -1674,7 +1663,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
              <item>
-              <widget class="QGroupBox" name="groupBox_15">
+              <widget class="QGroupBox" name="groupBoxStates">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1737,7 +1726,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_10">
+            <widget class="QGroupBox" name="groupBoxCommonReactions">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1778,7 +1767,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
                <item>
-                <widget class="QGroupBox" name="groupBox_11">
+                <widget class="QGroupBox" name="groupBoxParameters_2">
                  <property name="title">
                   <string>Parameters</string>
                  </property>
@@ -1832,7 +1821,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
            <item>
-            <widget class="QGroupBox" name="groupBox_14">
+            <widget class="QGroupBox" name="groupBoxModels">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1893,15 +1882,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelSuperList</class>
+   <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
+   <header>panelprimitivevalue.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
    <class>WidgetPicture</class>
@@ -1910,21 +1894,26 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetSong</class>
    <extends>QWidget</extends>
    <header>widgetsong.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

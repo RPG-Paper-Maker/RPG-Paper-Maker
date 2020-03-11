@@ -36,7 +36,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelName">
            <property name="text">
             <string>Name:</string>
            </property>

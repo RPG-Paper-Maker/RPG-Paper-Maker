@@ -189,6 +189,8 @@ const QString RPM::PATH_TRANSLATIONS = Common::pathCombine(FOLDER_CONTENT,
     "translations");
 const QString RPM::PATH_TRANSLATIONS_LANGUAGES = Common::pathCombine(RPM
     ::PATH_TRANSLATIONS, "languages" + EXTENSION_JSON);
+const QString RPM::PATH_TRANSLATIONS_CURRENT_LANGUAGE = Common::pathCombine(RPM
+    ::PATH_TRANSLATIONS, "current-language");
 const QString RPM::PATH_PATREON = Common::pathCombine(FOLDER_CONTENT, "patreon"
     + EXTENSION_JSON);
 const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
@@ -218,9 +220,13 @@ QStringList RPM::ENUM_TO_STRING_CONDITION_HEROES = {};
 QStringList RPM::ENUM_TO_STRING_VARIABLE_MAP_OBJECT_CHARACTERISTIC = {};
 QStringList RPM::ENUM_TO_STRING_ANIMATION_POSITION_KIND = {};
 QStringList RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND = {};
-QStringList RPM::RPM::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND = {};
-QStringList RPM::RPM::ENUM_TO_STRING_OBJECT_COLLISION_KIND = {};
-QStringList RPM::RPM::ENUM_TO_STRING_EVENT_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_OBJECT_COLLISION_KIND = {};
+QStringList RPM::ENUM_TO_STRING_EVENT_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TARGET_KIND = {};
+QStringList RPM::ENUM_TO_STRING_AVAILABLE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = {};
+QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -501,6 +507,33 @@ void RPM::readTranslations() {
         RPM::translate(Translations::ALLOW_FORBID_MAIN_MENU) + RPM::DOT_DOT_DOT,
         RPM::translate(Translations::CALL_A_COMMON_REACTION) + RPM::DOT_DOT_DOT,
         ""
+    });
+    RPM::ENUM_TO_STRING_TARGET_KIND = QStringList({
+        RPM::translate(Translations::NONE),
+        RPM::translate(Translations::USER),
+        RPM::translate(Translations::AN_ENEMY),
+        RPM::translate(Translations::AN_ALLY),
+        RPM::translate(Translations::ALL_ENEMIES),
+        RPM::translate(Translations::ALL_ALLIES)
+    });
+    RPM::ENUM_TO_STRING_AVAILABLE_KIND = QStringList({
+        RPM::translate(Translations::BATTLE_ONLY),
+        RPM::translate(Translations::MAIN_MENU_ONLY),
+        RPM::translate(Translations::ALWAYS),
+        RPM::translate(Translations::NEVER)
+    });
+    RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = QStringList({
+        RPM::translate(Translations::FIX),
+        RPM::translate(Translations::RANDOM),
+        RPM::translate(Translations::ROUTE)
+    });
+    RPM::ENUM_TO_STRING_SHAPE_KIND = QStringList({
+        RPM::translate(Translations::BOX),
+        RPM::translate(Translations::SPHERE),
+        RPM::translate(Translations::CYLINDER),
+        RPM::translate(Translations::CONE),
+        RPM::translate(Translations::CAPSULE),
+        RPM::translate(Translations::CUSTOM)
     });
 }
 

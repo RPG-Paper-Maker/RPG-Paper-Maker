@@ -31,7 +31,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
        <item>
-        <widget class="QLabel" name="label_13">
+        <widget class="QLabel" name="labelClass">
          <property name="text">
           <string>Class:</string>
          </property>
@@ -48,7 +48,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBoxFaceset">
          <property name="title">
           <string>Faceset</string>
          </property>
@@ -162,7 +162,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxBattler">
          <property name="title">
           <string>Battler</string>
          </property>

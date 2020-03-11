@@ -31,7 +31,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelTopFloor">
          <property name="text">
           <string>Top floor:</string>
          </property>
@@ -50,7 +50,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="groupBoxBorderWidth">
        <property name="title">
         <string>Border width</string>
        </property>
@@ -58,7 +58,7 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="labelWidthSquares">
             <property name="text">
              <string>Square(s):</string>
             </property>
@@ -91,7 +91,7 @@
            </spacer>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="labelWidthPixels">
             <property name="text">
              <string>Pixel(s):</string>
             </property>
@@ -121,7 +121,7 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="labelHeightSquares">
             <property name="text">
              <string>Square(s):</string>
             </property>
@@ -157,7 +157,7 @@
            </spacer>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="labelHeightPixels">
             <property name="text">
              <string>Pixel(s):</string>
             </property>

@@ -34,7 +34,7 @@
      <item>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelIndex">
          <property name="text">
           <string>Index:</string>
          </property>
@@ -63,7 +63,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelX">
          <property name="text">
           <string>X:</string>
          </property>
@@ -92,7 +92,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="labelZoom">
          <property name="text">
           <string>Zoom:</string>
          </property>
@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="labelAngle">
          <property name="text">
           <string>Angle:</string>
          </property>
@@ -171,7 +171,7 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_6">
+        <widget class="QLabel" name="labelOpacity">
          <property name="text">
           <string>Opacity:</string>
          </property>

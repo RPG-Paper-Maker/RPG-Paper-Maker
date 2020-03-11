@@ -26,6 +26,9 @@ DialogSystemWindowSkin::DialogSystemWindowSkin(SystemWindowSkin& windowSkin,
 {
     ui->setupUi(this);
 
+    ui->comboBoxOptionBackground->addItem(RPM::translate(Translations::STRETCH));
+    ui->comboBoxOptionBackground->addItem(RPM::translate(Translations::REPEAT));
+
     initialize();
 
     this->translate();
@@ -166,7 +169,7 @@ void DialogSystemWindowSkin::updateZoom(int zoom) {
 // -------------------------------------------------------
 
 void DialogSystemWindowSkin::enableAll(bool b) {
-    ui->label->setEnabled(b);
+    ui->labelPicture->setEnabled(b);
     ui->widgetPicture->setEnabled(b);
     ui->groupBoxSideBorders->setEnabled(b);
     ui->groupBoxBorders->setEnabled(b);

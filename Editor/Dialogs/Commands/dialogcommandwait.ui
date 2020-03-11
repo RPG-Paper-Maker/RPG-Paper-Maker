@@ -34,7 +34,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelTime">
          <property name="text">
           <string>Time:</string>
          </property>
@@ -60,7 +60,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelSeconds">
          <property name="text">
           <string>second(s)</string>
          </property>

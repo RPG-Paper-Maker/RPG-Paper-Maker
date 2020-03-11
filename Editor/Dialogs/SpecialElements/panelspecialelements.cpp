@@ -33,6 +33,13 @@ PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     m_spacersSize.append(ui->horizontalSpacer_6->geometry().size());
     m_spacersSize.append(ui->horizontalSpacer_7->geometry().size());
 
+    ui->comboBoxShape->addItems(RPM::ENUM_TO_STRING_SHAPE_KIND);
+    ui->comboBoxCollision->addItems(RPM::ENUM_TO_STRING_OBJECT_COLLISION_KIND);
+    ui->comboBoxCollisionMountains->addItems(RPM
+        ::ENUM_TO_STRING_MOUNTAIN_COLLISION_KIND);
+    ui->comboBoxStretch->addItem(RPM::translate(Translations::STRETCH));
+    ui->comboBoxStretch->addItem(RPM::translate(Translations::PERFECT_SIZE));
+
     this->showBox();
 
     this->translate();
@@ -283,6 +290,9 @@ void PanelSpecialElements::showCustomObjectCollision(bool b) {
 SystemSpecialElement * PanelSpecialElements::currentElement()
     const
 {
+    if (m_model == nullptr) {
+        return nullptr;
+    }
     QStandardItem *selected;
 
     selected = this->superList()->list()->getSelected();
