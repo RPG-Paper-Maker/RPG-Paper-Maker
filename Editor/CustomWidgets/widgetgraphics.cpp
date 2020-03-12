@@ -26,7 +26,7 @@ WidgetGraphics::WidgetGraphics(QWidget *parent) :
     m_selected(false),
     m_borderOffset(5)
 {
-    this->translate();
+
 }
 
 void WidgetGraphics::setState(SystemState* s) {
@@ -60,13 +60,6 @@ PictureKind WidgetGraphics::getPictureKind(bool check) {
     default:
         return PictureKind::None;
     }
-}
-
-//-------------------------------------------------
-
-void WidgetGraphics::translate()
-{
-
 }
 
 // -------------------------------------------------------

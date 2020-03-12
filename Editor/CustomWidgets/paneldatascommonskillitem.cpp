@@ -229,7 +229,30 @@ void PanelDatasCommonSkillItem::updateCommonSkill() {
 
 void PanelDatasCommonSkillItem::translate()
 {
-
+    ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
+    ui->labelPrice->setText(RPM::translate(Translations::PRICE) + RPM::COLON);
+    ui->labelSound->setText(RPM::translate(Translations::SOUND_EFFECT) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::MAIN_MENU) +
+        RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelTarget->setText(RPM::translate(Translations::TARGET) + RPM::COLON);
+    ui->labelAvailable->setText(RPM::translate(Translations::AVAILABLE) + RPM
+        ::COLON);
+    ui->labelConditions->setText(RPM::translate(Translations::CONDITION_FORMULA)
+        + RPM::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
+    ui->labelUserAnimation->setText(RPM::translate(Translations
+        ::USER_ANIMATION_ID) + RPM::COLON);
+    ui->labelTargetAnimation->setText(RPM::translate(Translations
+        ::TARGET_ANIMATION_ID) + RPM::COLON);
+    ui->labelTargetConditions->setText(RPM::translate(Translations
+        ::TARGET_CONDITIONS_FORMULA) + RPM::COLON);
+    ui->checkBoxConsumable->setText(RPM::translate(Translations::CONSOMABLE));
+    ui->checkBoxOneHand->setText(RPM::translate(Translations::ONE_HAND));
+    ui->groupBoxCosts->setTitle(RPM::translate(Translations::COSTS));
+    ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
+    ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations
+        ::CHARACTERISTICS));
 }
 
 // -------------------------------------------------------

@@ -32,8 +32,6 @@ WidgetShowPicture::WidgetShowPicture(QWidget *parent) :
     m_drawBackgorund(true)
 {
     this->setMouseTracking(true);
-
-    this->translate();
 }
 
 void WidgetShowPicture::setActivateCoef(bool b) {
@@ -151,13 +149,6 @@ void WidgetShowPicture::updateSizePosition() {
             height);
         setFixedSize(width, height);
     }
-}
-
-//-------------------------------------------------
-
-void WidgetShowPicture::translate()
-{
-
 }
 
 // -------------------------------------------------------

@@ -120,7 +120,9 @@ void PanelDatasCharacter::updateClass() {
 
 void PanelDatasCharacter::translate()
 {
-
+    ui->labelClass->setText(RPM::translate(Translations::CLASS) + RPM::COLON);
+    ui->groupBoxFaceset->setTitle(RPM::translate(Translations::FACESET));
+    ui->groupBoxBattler->setTitle(RPM::translate(Translations::BATTLER));
 }
 
 // -------------------------------------------------------

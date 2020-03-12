@@ -43,8 +43,6 @@ public:
 private:
     Ui::WidgetTilesetTexture *ui;
 
-    void translate();
-
 protected:
     int m_pictureID;
     QRect m_rect;

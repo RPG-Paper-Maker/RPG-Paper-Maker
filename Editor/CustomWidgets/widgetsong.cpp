@@ -30,8 +30,6 @@ WidgetSong::WidgetSong(QWidget *parent) :
     item->setSizeHint(QSize(item->sizeHint().width(),
                             ui->listWidget->height() - 4));
     ui->listWidget->addItem(item);
-
-    this->translate();
 }
 
 WidgetSong::~WidgetSong()
@@ -55,24 +53,19 @@ void WidgetSong::initialize(SystemPlaySong *song)
 // -------------------------------------------------------
 
 void WidgetSong::update() {
-    ui->listWidget->item(0)->setText(m_song->isSelectedByID() ? "By ID: " +
-        m_song->valueID()->toString() : m_song->toString());
+    ui->listWidget->item(0)->setText(m_song->isSelectedByID() ? RPM::translate(
+        Translations::BY_ID) + RPM::COLON + RPM::SPACE + m_song->valueID()
+        ->toString() : m_song->toString());
 }
 
 // -------------------------------------------------------
 
 void WidgetSong::openDialog() {
-    DialogCommandPlaySong dialog("Choose a song", m_song);
+    DialogCommandPlaySong dialog(RPM::translate(Translations::CHOOSE_A_SONG),
+        m_song);
     if (dialog.exec() == QDialog::Accepted) {
         update();
     }
-}
-
-//-------------------------------------------------
-
-void WidgetSong::translate()
-{
-
 }
 
 // -------------------------------------------------------

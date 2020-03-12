@@ -47,8 +47,6 @@ private:
     int p_currentId;
     SuperListItem *m_super;
 
-    void translate();
-
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);
     void on_pushButton_clicked();

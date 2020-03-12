@@ -40,8 +40,6 @@ protected:
     bool m_selected;
     int m_borderOffset;
 
-    void translate();
-
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseDoubleClickEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*event);

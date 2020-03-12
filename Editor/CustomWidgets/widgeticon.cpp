@@ -53,7 +53,7 @@ void WidgetIcon::initializeIcon(SystemIcon *icon) {
 
 void WidgetIcon::translate()
 {
-
+    ui->labelIcon->setText(RPM::translate(Translations::ICON) + RPM::COLON);
 }
 
 // -------------------------------------------------------

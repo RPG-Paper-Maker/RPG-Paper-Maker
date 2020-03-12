@@ -499,43 +499,43 @@ void PanelPrimitiveValue::hideAll() {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addDefault() {
-    ui->comboBoxChoice->addItem("Default", static_cast<int>(
-        PrimitiveValueKind::Default));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::DEFAULT),
+        static_cast<int>(PrimitiveValueKind::Default));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addAnything() {
-    ui->comboBoxChoice->addItem("Anything", static_cast<int>(
-        PrimitiveValueKind::Anything));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::ANYTHING),
+        static_cast<int>(PrimitiveValueKind::Anything));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addNone() {
-    ui->comboBoxChoice->addItem("None", static_cast<int>(
-        PrimitiveValueKind::None));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::NONE), static_cast<
+        int>(PrimitiveValueKind::None));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addNumber() {
-    ui->comboBoxChoice->addItem("Number", static_cast<int>(
-        PrimitiveValueKind::Number));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::NUMBER),
+        static_cast<int>(PrimitiveValueKind::Number));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addNumberDouble() {
-    ui->comboBoxChoice->addItem("Number", static_cast<int>(
-        PrimitiveValueKind::NumberDouble));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::NUMBER),
+        static_cast<int>(PrimitiveValueKind::NumberDouble));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addVariable() {
-    ui->comboBoxChoice->addItem("Variable", static_cast<int>(
-        PrimitiveValueKind::Variable));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::VARIABLE),
+        static_cast<int>(PrimitiveValueKind::Variable));
     ui->widgetVariable->initialize(1);
     connect(ui->widgetVariable->list(), SIGNAL(itemChanged(QListWidgetItem *)),
         this, SLOT(on_variableChanged(QListWidgetItem *)));
@@ -545,8 +545,8 @@ void PanelPrimitiveValue::addVariable() {
 
 void PanelPrimitiveValue::addParameter(QStandardItemModel *model) {
     if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
-        ui->comboBoxChoice->addItem("Parameter", static_cast<int>(
-            PrimitiveValueKind::Parameter));
+        ui->comboBoxChoice->addItem(RPM::translate(Translations::PARAMETER),
+            static_cast<int>(PrimitiveValueKind::Parameter));
         m_model->setModelParameter(model);
         SuperListItem::fillComboBox(ui->comboBoxParameter, model);
         connect(ui->comboBoxParameter, SIGNAL(currentIndexChanged(int)), this,
@@ -558,8 +558,8 @@ void PanelPrimitiveValue::addParameter(QStandardItemModel *model) {
 
 void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
     if (model != nullptr && model->invisibleRootItem()->rowCount() > 1) {
-        ui->comboBoxChoice->addItem("Property", static_cast<int>(
-            PrimitiveValueKind::Property));
+        ui->comboBoxChoice->addItem(RPM::translate(Translations::PROPERTY),
+            static_cast<int>(PrimitiveValueKind::Property));
         m_model->setModelProperties(model);
         SuperListItem::fillComboBox(ui->comboBoxProperty, model);
         connect(ui->comboBoxProperty, SIGNAL(currentIndexChanged(int)), this,
@@ -571,8 +571,8 @@ void PanelPrimitiveValue::addProperty(QStandardItemModel *model) {
 
 void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
     if (model != nullptr && model->invisibleRootItem()->rowCount() > 0) {
-        ui->comboBoxChoice->insertItem(0, "Selection", static_cast<int>(
-            PrimitiveValueKind::DataBase));
+        ui->comboBoxChoice->insertItem(0, RPM::translate(Translations::SELECTION
+            ), static_cast<int>(PrimitiveValueKind::DataBase));
         m_model->setModelDataBase(model);
         SuperListItem::fillComboBox(ui->comboBoxDataBase, model);
         connect(ui->comboBoxDataBase, SIGNAL(currentIndexChanged(int)), this,
@@ -584,29 +584,30 @@ void PanelPrimitiveValue::addDataBase(QStandardItemModel *model) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addMessage(bool formula) {
-    ui->comboBoxChoice->addItem(formula ? "Formula" : "Text", static_cast<int
-        >(PrimitiveValueKind::Message));
+    ui->comboBoxChoice->addItem(formula ? RPM::translate(Translations::FORMULA)
+        : RPM::translate(Translations::TEXT), static_cast<int>(
+        PrimitiveValueKind::Message));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addScript() {
-    ui->comboBoxChoice->addItem("Script", static_cast<int>(
-        PrimitiveValueKind::Script));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::SCRIPT),
+        static_cast<int>(PrimitiveValueKind::Script));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addSwitch() {
-    ui->comboBoxChoice->addItem("Switch", static_cast<int>(
-        PrimitiveValueKind::Switch));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::SWITCH),
+        static_cast<int>(PrimitiveValueKind::Switch));
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addKeyBoard() {
-    ui->comboBoxChoice->addItem("Keyboard", static_cast<int>(
-        PrimitiveValueKind::KeyBoard));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::KEYBOARD),
+        static_cast<int>(PrimitiveValueKind::KeyBoard));
     SuperListItem::fillComboBox(ui->comboBoxKeyBoard, RPM::get()->project()
         ->keyBoardDatas()->model());
     connect(ui->comboBoxKeyBoard, SIGNAL(currentIndexChanged(int)), this,
@@ -616,8 +617,8 @@ void PanelPrimitiveValue::addKeyBoard() {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::addFont() {
-    ui->comboBoxChoice->addItem("Font", static_cast<int>(PrimitiveValueKind
-        ::Font));
+    ui->comboBoxChoice->addItem(RPM::translate(Translations::FONT), static_cast<
+        int>(PrimitiveValueKind::Font));
 }
 
 // -------------------------------------------------------

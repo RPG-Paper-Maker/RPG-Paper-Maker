@@ -49,8 +49,6 @@ protected:
     int m_currentRow;
     int m_currentColumn;
 
-    void translate();
-
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);
 };

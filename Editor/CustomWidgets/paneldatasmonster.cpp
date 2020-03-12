@@ -128,7 +128,13 @@ void PanelDatasMonster::updateClass() {
 
 void PanelDatasMonster::translate()
 {
-
+    ui->labelLoots->setText(RPM::translate(Translations::LOOTS) + RPM::COLON);
+    ui->labelCurrencies->setText(RPM::translate(Translations::CURRENCIES) + RPM
+        ::COLON);
+    ui->labelExperience->setText(RPM::translate(Translations::EXPERIENCE) + RPM
+        ::COLON);
+    ui->groupBoxActions->setTitle(RPM::translate(Translations::ACTIONS));
+    ui->groupBoxRewards->setTitle(RPM::translate(Translations::REWARDS));
 }
 
 // -------------------------------------------------------

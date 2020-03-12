@@ -105,8 +105,9 @@ void PanelShapes::setShapeKind(CustomShapeKind kind) {
             on_listIndexChanged(QModelIndex,QModelIndex)));
 
         // Update checkBox
-        ui->checkBoxContent->setText("Show available content of " +
-            SystemCustomShape::getLocalFolder(kind));
+        ui->checkBoxContent->setText(RPM::translate(Translations
+            ::SHOW_AVAILABLE_CONTENT) + RPM::SPACE + SystemCustomShape
+            ::getLocalFolder(kind));
     }
 }
 
@@ -199,7 +200,9 @@ void PanelShapes::loadContentFromFolder(QString path, bool isBR) {
 
 void PanelShapes::deleteContent(QString path) {
     if (!QFile(path).remove()) {
-        QMessageBox::warning(this, "Warning", "Could not delete file at " + path);
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::COULD_NOT_DELETE_FILE_AT) + RPM::SPACE +
+            path + RPM::DOT);
     }
 }
 
@@ -227,7 +230,9 @@ void PanelShapes::updateShape() {
 
 void PanelShapes::translate()
 {
-
+    ui->checkBoxContent->setText(RPM::translate(Translations
+        ::SHOW_AVAILABLE_CONTENT));
+    ui->pushButtonRefresh->setText(RPM::translate(Translations::REFRESH));
 }
 
 // -------------------------------------------------------
@@ -277,8 +282,9 @@ void PanelShapes::on_pushButtonRefresh_clicked() {
 void PanelShapes::on_pushButtonAdd_clicked() {
 
     // Open dialog box
-    QStringList files = QFileDialog::getOpenFileNames(this, "Add new contents",
-        "", SystemCustomShape::getShapeExtensionBrowse(m_shapeKind));
+    QStringList files = QFileDialog::getOpenFileNames(this, RPM::translate(
+        Translations::ADD_NEW_CONTENTS), "", SystemCustomShape
+        ::getShapeExtensionBrowse(m_shapeKind));
     QString path;
 
     // Copy all the selected files
@@ -287,8 +293,9 @@ void PanelShapes::on_pushButtonAdd_clicked() {
         if (!QFile::copy(path, Common::pathCombine(SystemCustomShape::getFolder(
             m_shapeKind, false), QFileInfo(path).fileName())))
         {
-            QMessageBox::warning(this, "Warning", "Could not copy file at " +
-                path);
+            QMessageBox::warning(this, RPM::translate(Translations::WARNING),
+                RPM::translate(Translations::COULD_NOT_COPY_FILE_AT) + RPM
+                ::SPACE + path + RPM::DOT);
         }
     }
 
@@ -305,9 +312,11 @@ void PanelShapes::deletingContent(SuperListItem *super, int row) {
     // If is BR, ask if sure action before
     if (reinterpret_cast<SystemCustomShape *>(super)->isBR()) {
         loadAvailableContent(row);
-        QMessageBox::StandardButton box = QMessageBox::question(this,
-            "Deleting image", "You are trying to remove a BR shape. "
-            "Are you sure you want to do it?", QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+            ::translate(Translations::DELETING_SHAPE), RPM::translate(
+            Translations::YOUR_TRYING_REMOVE_BR_SHAPE) + RPM::DOT + RPM::SPACE +
+            RPM::translate(Translations::ARE_YOU_SURE_WANT_DO_IT), QMessageBox
+            ::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes) {
             deleteContent(path);

@@ -14,7 +14,6 @@
 #include "widgettableprogression.h"
 #include "rpm.h"
 
-const QString WidgetTableProgression::NAME_LEVEL = "Level";
 const QColor WidgetTableProgression::EDITED_COLOR = Qt::green;
 const QColor WidgetTableProgression::SUB_EDITED_COLOR = Qt::cyan;
 
@@ -34,8 +33,6 @@ WidgetTableProgression::WidgetTableProgression(QWidget *parent) :
     connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(on_cellChanged(
         int, int)));
     setEditable(true);
-
-    this->translate();
 }
 
 WidgetTableProgression::~WidgetTableProgression() {
@@ -80,7 +77,8 @@ void WidgetTableProgression::initialize(int rows, QString progression) {
     m_completing = true;
     setRowCount(rows);
     setColumnCount(2);
-    setHorizontalHeaderItem(0, new QTableWidgetItem(NAME_LEVEL));
+    setHorizontalHeaderItem(0, new QTableWidgetItem(RPM::translate(Translations
+        ::LEVEL)));
     setHorizontalHeaderItem(1, new QTableWidgetItem(progression));
     verticalHeader()->hide();
 }
@@ -203,13 +201,6 @@ void WidgetTableProgression::updateTotal() {
             m_totalWidget->item(i, 1)->setText(QString::number(total));
         }
     }
-}
-
-//-------------------------------------------------
-
-void WidgetTableProgression::translate()
-{
-
 }
 
 // -------------------------------------------------------

@@ -23,7 +23,7 @@ WidgetTilesetSelector::WidgetTilesetSelector(QWidget *parent) :
     m_isResizable(true),
     m_selectionRectangle(new WidgetSelectionRectangle)
 {
-    this->translate();
+
 }
 
 WidgetTilesetSelector::~WidgetTilesetSelector()
@@ -121,13 +121,6 @@ void WidgetTilesetSelector::makeSelection(int x, int y, float zoom){
 
 void WidgetTilesetSelector::selectNone() {
     m_selectionRectangle->selectNone();
-}
-
-//-------------------------------------------------
-
-void WidgetTilesetSelector::translate()
-{
-
 }
 
 // -------------------------------------------------------

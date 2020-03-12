@@ -119,8 +119,6 @@ private:
     QImage m_imageHeight;
     QImage m_imageHeightPlus;
 
-    void translate();
-
 public slots:
     void update();
     void onFirstPressure();

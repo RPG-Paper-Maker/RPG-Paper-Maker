@@ -47,8 +47,6 @@ WidgetTreeLocalMaps::WidgetTreeLocalMaps(QWidget *parent) :
     m_contextMenuDirectory = ContextMenuList::createContextDirectory(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
-
-    this->translate();
 }
 
 WidgetTreeLocalMaps::~WidgetTreeLocalMaps()
@@ -391,13 +389,6 @@ bool WidgetTreeLocalMaps::setCurrentIndexFirstMap(QStandardItem* item) {
     return false;
 }
 
-//-------------------------------------------------
-
-void WidgetTreeLocalMaps::translate()
-{
-
-}
-
 // -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
@@ -521,7 +512,7 @@ void WidgetTreeLocalMaps::contextNewMap(){
 void WidgetTreeLocalMaps::contextNewDirectory(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        SuperListItem super(-1, "Directory");
+        SuperListItem super(-1, RPM::translate(Translations::DIRECTORY));
         DialogSystemName dialog(super);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createDir(super.name());
@@ -624,10 +615,9 @@ void WidgetTreeLocalMaps::contextPaste(){
 void WidgetTreeLocalMaps::contextDeleteMap(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        QMessageBox::StandardButton box =
-               QMessageBox::warning(this, "Warning",
-                                    "Are you sure you want to delete this map?",
-                                    QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
+            ::translate(Translations::WARNING), RPM::translate(Translations
+            ::ARE_YOU_SURE_DELETE_THIS_MAP), QMessageBox::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes){
             deleteMap(selected);
@@ -644,12 +634,11 @@ void WidgetTreeLocalMaps::contextDeleteMap(){
 void WidgetTreeLocalMaps::contextDeleteDirectory(){
     QStandardItem* selected = getSelected();
     if (selected != nullptr){
-        QMessageBox::StandardButton box =
-                QMessageBox::warning(this, "Warning",
-                                     "Are you sure you want to delete this "
-                                     "directory?\n This will delete all the "
-                                     "maps inside this folder.",
-                                      QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::warning(this, RPM
+            ::translate(Translations::WARNING), RPM::translate(Translations
+            ::ARE_YOU_SURE_DELETE_THIS_DIRECTORY) + RPM::NEW_LINE + RPM::SPACE +
+            RPM::translate(Translations::THIS_WILL_DELETE_ALL_MAPS_INSIDE_FOLDER
+            ) + RPM::DOT, QMessageBox::Yes | QMessageBox::No);
 
         if (box == QMessageBox::Yes){
             deleteDirectory(selected);

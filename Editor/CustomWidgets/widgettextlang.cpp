@@ -26,8 +26,6 @@ WidgetTextLang::WidgetTextLang(QWidget *parent) :
     m_lang(nullptr)
 {
     ui->setupUi(this);
-
-    this->translate();
 }
 
 WidgetTextLang::~WidgetTextLang()
@@ -69,13 +67,6 @@ void WidgetTextLang::initializeNames() {
     }
 
     lineEdit()->setText(mainName);
-}
-
-//-------------------------------------------------
-
-void WidgetTextLang::translate()
-{
-
 }
 
 // -------------------------------------------------------

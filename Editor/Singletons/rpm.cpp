@@ -50,9 +50,20 @@ const QString RPM::EXTENSION_JPG = ".jpg";
 // STRING SYMBOLS
 const QString RPM::DASH = "-";
 const QString RPM::COLON = ":";
+const QString RPM::DOT = ".";
 const QString RPM::DOT_DOT_DOT = "...";
-const QString RPM::BRACKET_LEFT = "(";
-const QString RPM::BRACKET_RIGHT = ")";
+const QString RPM::SPACE = " ";
+const QString RPM::NEW_LINE = "\n";
+const QString RPM::PARENTHESIS_LEFT = "(";
+const QString RPM::PARENTHESIS_RIGHT = ")";
+const QString RPM::BRACKET_LEFT = "[";
+const QString RPM::BRACKET_RIGHT = "]";
+const QString RPM::EQUAL = "=";
+const QString RPM::PLUS = "+";
+const QString RPM::MINUS = "-";
+const QString RPM::TIMES = "*";
+const QString RPM::DIVIDED_BY = "/";
+const QString RPM::MODULO = "%";
 const QString RPM::TRUE_BOOL_STRING = "1";
 const QString RPM::FALSE_BOOL_STRING = "0";
 
@@ -386,20 +397,20 @@ void RPM::readTranslations() {
         "=", "!=", ">=", "<=", ">", "<"
     });
     RPM::ENUM_TO_STRING_OPERATION = QStringList({
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(0) + " " + RPM::BRACKET_LEFT +
-            RPM::translate(Translations::EQUAL_TO) + RPM::BRACKET_RIGHT,
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(1) + " " + RPM::BRACKET_LEFT +
-            RPM::translate(Translations::NOT_EQUAL_TO) + RPM::BRACKET_RIGHT,
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(2) + " " + RPM::BRACKET_LEFT +
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(0) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::EQUAL_TO) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(1) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::NOT_EQUAL_TO) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(2) + " " + RPM::PARENTHESIS_LEFT +
             RPM::translate(Translations::GREATER_THAN_OR_EQUAL_TO) + RPM
-            ::BRACKET_RIGHT,
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(3) + " " + RPM::BRACKET_LEFT +
+            ::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(3) + " " + RPM::PARENTHESIS_LEFT +
             RPM::translate(Translations::LESSER_THAN_OR_EQUAL_TO) + RPM
-            ::BRACKET_RIGHT,
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(4) + " " + RPM::BRACKET_LEFT +
-            RPM::translate(Translations::GREATER_THAN) + RPM::BRACKET_RIGHT,
-        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(5) + " " + RPM::BRACKET_LEFT +
-            RPM::translate(Translations::LESSER_THAN) + RPM::BRACKET_RIGHT,
+            ::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(4) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::GREATER_THAN) + RPM::PARENTHESIS_RIGHT,
+        RPM::ENUM_TO_STRING_OPERATION_SIMPLE.at(5) + " " + RPM::PARENTHESIS_LEFT +
+            RPM::translate(Translations::LESSER_THAN) + RPM::PARENTHESIS_RIGHT,
     });
     RPM::ENUM_TO_STRING_FORMULA_STAT = QStringList({
         RPM::translate(Translations::STATISTIC),

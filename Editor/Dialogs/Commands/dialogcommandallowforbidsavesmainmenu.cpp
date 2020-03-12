@@ -57,8 +57,9 @@ void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
         properties = m_object->modelProperties();
     }
 
-    this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ?
-        "Allow/Forbid saves..." : "Allow/Forbid main menu...");
+    this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ? RPM
+        ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT : RPM
+        ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT);
     ui->panelPrimitiveAllow->initializeSwitch(m_parameters, properties);
 }
 
@@ -66,7 +67,7 @@ void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
 
 void DialogCommandAllowForbidSavesMainMenu::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    ui->labelAllow->setText(RPM::translate(Translations::ALLOW) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

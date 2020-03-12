@@ -47,8 +47,6 @@ protected:
     int u_modelviewProjection;
     QOpenGLTexture *m_texture;
 
-    void translate();
-
     virtual void resizeGL(int width, int height);
     virtual void initializeGL();
     virtual void paintGL();

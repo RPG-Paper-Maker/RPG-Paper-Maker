@@ -149,7 +149,12 @@ void PanelObjectEvent::getCommandObjectEvent(QVector<QString> &command) const {
 
 void PanelObjectEvent::translate()
 {
-
+    ui->radioButtonEventUser->setText(RPM::translate(Translations::EVENT_USER) +
+        RPM::COLON);
+    ui->radioButtonEventSystem->setText(RPM::translate(Translations
+        ::EVENT_SYSTEM) + RPM::COLON);
+    ui->groupBoxParameterValues->setTitle(RPM::translate(Translations
+        ::PARAMETER_VALUES));
 }
 
 // -------------------------------------------------------

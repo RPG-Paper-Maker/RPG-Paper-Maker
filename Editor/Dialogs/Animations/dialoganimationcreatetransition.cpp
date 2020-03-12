@@ -142,6 +142,20 @@ void DialogAnimationCreateTransition::createTransition(SystemAnimation
 
 void DialogAnimationCreateTransition::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::CREATE_TRANSITION));
+    ui->labelTo->setText(RPM::translate(Translations::TO) + RPM::COLON);
+    ui->labelFrom->setText(RPM::translate(Translations::FROM) + RPM::COLON);
+    ui->labelToIndex->setText(RPM::translate(Translations::TO) + RPM::COLON);
+    ui->labelFromIndex->setText(RPM::translate(Translations::FROM) + RPM::COLON);
+    ui->groupBoxFrames->setTitle(RPM::translate(Translations::FRAMES) + RPM
+        ::COLON);
+    ui->groupBoxElementsIndex->setTitle(RPM::translate(Translations
+        ::ELEMENTS_INDEX));
+    ui->checkBoxX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->checkBoxY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->checkBoxZoom->setText(RPM::translate(Translations::ZOOM) + RPM::COLON);
+    ui->checkBoxAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->checkBoxOpacity->setText(RPM::translate(Translations::OPACITY) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

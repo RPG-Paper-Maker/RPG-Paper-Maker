@@ -62,8 +62,6 @@ WidgetTreeCommands::WidgetTreeCommands(QWidget *parent) :
 
     // Commands list
     initializeCommandsList();
-
-    this->translate();
 }
 
 WidgetTreeCommands::~WidgetTreeCommands()
@@ -846,13 +844,6 @@ void WidgetTreeCommands::updateKeyboardUpDown(int offset) {
             }
         }
     }
-}
-
-//-------------------------------------------------
-
-void WidgetTreeCommands::translate()
-{
-
 }
 
 // -------------------------------------------------------

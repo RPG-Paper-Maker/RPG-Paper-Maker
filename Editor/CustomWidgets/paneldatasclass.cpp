@@ -133,7 +133,25 @@ void PanelDatasClass::updateExperience() {
 
 void PanelDatasClass::translate()
 {
-
+    ui->groupBoxExperience->setTitle(RPM::translate(Translations::EXPERIENCE));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::TO_NEXT_LEVEL));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::TOTAL));
+    ui->labelInitialLevel->setText(RPM::translate(Translations::INITIAL_LEVEL) +
+        RPM::COLON);
+    ui->labelMaxLevel->setText(RPM::translate(Translations::MAX_LEVEL) + RPM
+        ::COLON);
+    ui->labelBase->setText(RPM::translate(Translations::BASE) + RPM::COLON);
+    ui->labelInflation->setText(RPM::translate(Translations::INFLATION) + RPM
+        ::COLON);
+    ui->groupBoxCharacteristics->setTitle(RPM::translate(Translations
+        ::CHARACTERISTICS));
+    ui->groupBoxStatisticsProgression->setTitle(RPM::translate(Translations
+        ::STATISTICS_PROGRESSION));
+    ui->groupBoxSkillsToLearn->setTitle(RPM::translate(Translations
+        ::SKILLS_TO_LEARN));
+    ui->pushButtonReset->setText(RPM::translate(Translations::RESET));
+    ui->pushButtonSetClassValues->setText(RPM::translate(Translations
+        ::SET_TO_CLASS_VALUES));
 }
 
 // -------------------------------------------------------

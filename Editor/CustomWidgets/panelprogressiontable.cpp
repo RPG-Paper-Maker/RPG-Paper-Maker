@@ -98,7 +98,13 @@ void PanelProgressionTable::gotoGraph() {
 
 void PanelProgressionTable::translate()
 {
-
+    ui->labelFinalValue->setText(RPM::translate(Translations::FINAL_VALUE) + RPM
+        ::COLON);
+    ui->labelInitialValue->setText(RPM::translate(Translations::INITIAL_VALUE) +
+        RPM::COLON);
+    ui->pushButtonReset->setText(RPM::translate(Translations::RESET));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::TABLE));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::GRAPH));
 }
 
 // -------------------------------------------------------

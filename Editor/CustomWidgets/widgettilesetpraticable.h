@@ -85,7 +85,6 @@ protected:
     void deleteCollision();
     float getSquareProportion() const;
     bool canDraw(QPoint &mousePoint) const;
-    void translate();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

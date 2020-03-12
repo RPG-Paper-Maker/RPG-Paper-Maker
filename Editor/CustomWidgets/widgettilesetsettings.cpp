@@ -117,7 +117,10 @@ void WidgetTilesetSettings::disableNone(bool b) {
 
 void WidgetTilesetSettings::translate()
 {
-
+    ui->checkBoxRepeat->setText(RPM::translate(Translations::REPEAT));
+    ui->groupBoxZoom->setTitle(RPM::translate(Translations::ZOOM));
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::PRATICABLE));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::DIRECTIONS));
 }
 
 // -------------------------------------------------------

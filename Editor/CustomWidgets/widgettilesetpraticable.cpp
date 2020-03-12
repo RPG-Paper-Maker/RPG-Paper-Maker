@@ -46,8 +46,6 @@ WidgetTilesetPraticable::WidgetTilesetPraticable(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextPraticable(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
-
-    this->translate();
 }
 
 WidgetTilesetPraticable::~WidgetTilesetPraticable() {
@@ -481,13 +479,6 @@ bool WidgetTilesetPraticable::canDraw(QPoint& mousePoint) const {
 
     return (!SystemPicture::getByID(m_pictureID, m_kind)->repeatCollisions() ||
         (!rectBot.contains(mousePoint) && !rectTop.contains(mousePoint)));
-}
-
-//-------------------------------------------------
-
-void WidgetTilesetPraticable::translate()
-{
-
 }
 
 // -------------------------------------------------------

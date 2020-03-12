@@ -20,7 +20,6 @@ class WidgetTableProgression : public QTableWidget
 {
     Q_OBJECT
 public:
-    static const QString NAME_LEVEL;
     static const QColor EDITED_COLOR;
     static const QColor SUB_EDITED_COLOR;
 
@@ -45,8 +44,6 @@ protected:
     QHash<int, int> *m_table;
     WidgetTableProgression *m_totalWidget;
     QColor m_editedColor;
-
-    void translate();
 
 public slots:
     void on_cellChanged(int row, int column);

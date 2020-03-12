@@ -44,7 +44,6 @@ protected:
 
     void makeSelection(int x, int y, float zoom = 1.0f);
     int getPreviewSize(int size) const;
-    void translate();
 
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *);

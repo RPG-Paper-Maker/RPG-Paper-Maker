@@ -46,8 +46,6 @@ WidgetSuperList::WidgetSuperList(QWidget *parent) :
     m_contextMenu = ContextMenuList::createContextSuperList(this);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showContextMenu(const QPoint &)));
-
-    this->translate();
 }
 
 WidgetSuperList::~WidgetSuperList()
@@ -262,13 +260,6 @@ void WidgetSuperList::deleteClear(QStandardItem *selected) {
     p_model->insertRow(row, super->getModelRow());
     this->selectionModel()->clear();
     this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-}
-
-//-------------------------------------------------
-
-void WidgetSuperList::translate()
-{
-
 }
 
 // -------------------------------------------------------

@@ -55,7 +55,6 @@ protected:
     QPoint m_hoveredBot;
 
     void updateImageGeneral();
-    void translate();
 
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *event);

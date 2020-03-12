@@ -47,8 +47,6 @@ private:
     SystemCommonObject* m_object;
     QStandardItemModel* m_parameters;
 
-    void translate();
-
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem*);
     void on_pushButton_clicked();

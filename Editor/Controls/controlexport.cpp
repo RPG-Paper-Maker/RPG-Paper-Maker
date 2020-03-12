@@ -90,14 +90,20 @@ QString ControlExport::createBrowser(QString location) {
 QString ControlExport::copyAllProject(QString location, QString projectName,
     QString path, QDir dirLocation)
 {
-    if (!QDir::isAbsolutePath(location))
-        return "The path location needs to be absolute.";
+    if (!QDir::isAbsolutePath(location)) {
+        return RPM::translate(Translations::PATH_LOCATION_NEEDS_ABSOLUTE) + RPM
+            ::DOT;
+    }
     if (!dirLocation.exists())
-        return "The path location doesn't exists.";
+        return RPM::translate(Translations::PATH_LOCATION_DOESNT_EXISTS) + RPM
+                ::DOT;
     if (!dirLocation.mkdir(projectName)) {
         QMessageBox::StandardButton box = QMessageBox::question(nullptr,
-            "Existing folder", "The directory " + projectName + " already "
-            "exists.\nWould you like to overwrite the existing folder?",
+            RPM::translate(Translations::EXISTING_FOLDER), RPM::translate(
+            Translations::THE_DIRECTORY) + RPM::SPACE + projectName + RPM::SPACE
+            + RPM::translate(Translations::ALREADY_EXISTS) + RPM::DOT + RPM
+            ::NEW_LINE + RPM::translate(Translations
+            ::QUESTION_OVERWRITE_EXISTING_FOLDER),
             QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             QDir(path).removeRecursively();
@@ -112,8 +118,11 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
     QString pathContentProject = Common::pathCombine(m_project
         ->pathCurrentProject(), "Content");
     QString pathContent = Common::pathCombine(path, "Content");
-    if (!Common::copyPath(pathContentProject, pathContent))
-        return "Error while copying Content directory. Please retry.";
+    if (!Common::copyPath(pathContentProject, pathContent)) {
+        return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
+            RPM::DOT + RPM::SPACE + RPM::translate(Translations::PLEASE_RETRY) +
+            RPM::DOT;
+    }
 
     return nullptr;
 }
@@ -195,7 +204,8 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
     QString pathExecutable = Common::pathCombine("Content", executableFolder);
 
     if (!Common::copyPath(pathExecutable, path))
-        return "Could not copy in " + pathExecutable;
+        return RPM::translate(Translations::COULD_NOT_COPY_IN) + RPM::SPACE +
+            pathExecutable;
 
     // Pictures
     copyBRPictures(path);

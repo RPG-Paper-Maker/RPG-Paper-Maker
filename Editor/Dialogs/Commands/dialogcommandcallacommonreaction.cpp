@@ -61,8 +61,9 @@ void DialogCommandCallACommonReaction::initializePrimitives() {
 void DialogCommandCallACommonReaction::clearParameters() {
     SuperListItem::deleteModel(m_modelParameters);
     m_modelParameters = new QStandardItemModel;
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name", "Value",
-        "Default value"}));
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE), RPM::translate
+        (Translations::DEFAULT_VALUE)}));
     ui->treeViewParameters->initializeModel(m_modelParameters);
     ui->treeViewParameters->setColumnWidth(0,100);
     ui->treeViewParameters->setColumnWidth(1,250);
@@ -73,7 +74,12 @@ void DialogCommandCallACommonReaction::clearParameters() {
 
 void DialogCommandCallACommonReaction::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::CALL_A_COMMON_REACTION) +
+        RPM::DOT_DOT_DOT);
+    ui->labelCommonReaction->setText(RPM::translate(Translations
+        ::COMMON_REACTION) + RPM::COLON);
+    ui->groupBoxParameterValues->setTitle(RPM::translate(Translations
+        ::PARAMETER_VALUES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

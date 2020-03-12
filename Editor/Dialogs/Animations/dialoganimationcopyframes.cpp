@@ -65,6 +65,13 @@ void DialogAnimationCopyFrames::copyFrames(SystemAnimation *animation) {
 
 void DialogAnimationCopyFrames::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::COPY_FRAMES) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelTo->setText(RPM::translate(Translations::TO) + RPM::COLON);
+    ui->labelFrom->setText(RPM::translate(Translations::FROM) + RPM::COLON);
+    ui->labelPasteFromFrame->setText(RPM::translate(Translations
+        ::PASTE_FROM_FRAME) + RPM::COLON);
+    ui->groupBoxFramesToCopy->setTitle(RPM::translate(Translations
+        ::FRAMES_TO_COPY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

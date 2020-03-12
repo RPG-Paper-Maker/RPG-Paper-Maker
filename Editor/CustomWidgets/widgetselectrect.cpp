@@ -60,7 +60,10 @@ void WidgetSelectRect::updateLabel(QString label) {
 
 void WidgetSelectRect::translate()
 {
-
+    ui->pushButtonEnter->setText(RPM::translate(Translations::ENTER) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonSelect->setText(RPM::translate(Translations::SELECT) + RPM
+        ::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------

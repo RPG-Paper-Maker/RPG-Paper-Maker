@@ -22,7 +22,7 @@ WidgetAutotilesSelector::WidgetAutotilesSelector(QWidget *parent) :
     QWidget(parent),
     m_selectionRectangle(new WidgetSelectionRectangle)
 {
-    this->translate();
+
 }
 
 WidgetAutotilesSelector::~WidgetAutotilesSelector()
@@ -84,13 +84,6 @@ void WidgetAutotilesSelector::setImage(SystemAutotile *autotile) {
 
 void WidgetAutotilesSelector::makeSelection(int x, int y, float zoom) {
     m_selectionRectangle->makeFirstSelection(x, y, zoom);
-}
-
-//-------------------------------------------------
-
-void WidgetAutotilesSelector::translate()
-{
-
 }
 
 // -------------------------------------------------------

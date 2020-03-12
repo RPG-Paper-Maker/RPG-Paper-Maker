@@ -52,7 +52,9 @@ void WidgetSliderProgression::setEquation(int e) {
 
 void WidgetSliderProgression::translate()
 {
-
+    ui->labelFast->setText(RPM::translate(Translations::FAST));
+    ui->labelSlow->setText(RPM::translate(Translations::SLOW));
+    ui->labelLinear->setText(RPM::translate(Translations::LINEAR));
 }
 
 // -------------------------------------------------------

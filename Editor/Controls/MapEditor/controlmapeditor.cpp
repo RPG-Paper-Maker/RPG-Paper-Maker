@@ -1382,9 +1382,11 @@ QString ControlMapEditor::getSquareInfos(MapEditorSelectionKind kind,
         if (!m_map->isInGrid(position)) {
             m_lastSquareInfos = "";
         } else {
-            m_lastSquareInfos = (element == nullptr ? "[NONE]" : "[" + (isObject
-                ? "OBJECT" : element->toString()) + "]") + "\n" + position
-                .toString(m_map->squareSize());
+            m_lastSquareInfos = (element == nullptr ? "[" + RPM::translate(
+                Translations::NONE).toUpper() +  "]" : "[" + (isObject
+                ? RPM::translate(Translations::OBJECT).toUpper() : element
+                ->toString()) + "]") + "\n" + position.toString(m_map
+                ->squareSize());
         }
     }
 

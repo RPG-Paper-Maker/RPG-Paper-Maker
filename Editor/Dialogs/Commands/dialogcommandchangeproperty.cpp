@@ -92,7 +92,19 @@ void DialogCommandChangeProperty::initialize(EventCommand *command) {
 
 void DialogCommandChangeProperty::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_PROPERTY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelNewValue->setText(RPM::translate(Translations::NEW_VALUE) + RPM::COLON);
+    ui->labelPropertyID->setText(RPM::translate(Translations::PROPERTY_ID) + RPM::COLON);
+    ui->groupBoxValue->setTitle(RPM::translate(Translations::VALUE));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    ui->radioButtonPlus->setText(RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::translate(Translations::DIVIDED_BY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

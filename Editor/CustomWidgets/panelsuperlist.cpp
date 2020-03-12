@@ -109,6 +109,7 @@ void PanelSuperList::updateMaximum(int max) {
 // -------------------------------------------------------
 
 void PanelSuperList::translate() {
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     ui->pushButtonMaximum->setText(RPM::translate(Translations::SET_MAX));
 }
 
@@ -154,9 +155,11 @@ void PanelSuperList::on_pushButtonMinus_pressed() {
     if (DialogSetMaximum::isOrderedMax(list()->getModel(), value)) {
         updateMaximum(value);
     } else {
-        message = value == 0 ? "You cannot remove the last element because that"
-            " list cannot be empty." : DialogSetMaximum::STR_WARNING;
-        QMessageBox::information(this, "Warning", message);
+        message = value == 0 ? RPM::translate(Translations
+            ::CANNOT_REMOVE_LAST_ELEMENT_LIST_EMPTY) + RPM::DOT :
+            DialogSetMaximum::STR_WARNING;
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            message);
     }
 }
 

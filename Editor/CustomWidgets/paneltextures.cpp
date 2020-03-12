@@ -284,24 +284,23 @@ QString PanelTextures::createlabelText() {
     QString kindText = "";
     switch (m_kind) {
     case PictureKind::Autotiles:
-        kindText = "autotile";
+        kindText = RPM::translate(Translations::AUTOTILE).toLower();
         break;
     case PictureKind::Walls:
-        kindText = "wall";
+        kindText = RPM::translate(Translations::WALL).toLower();
         break;
     case PictureKind::Mountains:
-        kindText = "mountain";
+        kindText = RPM::translate(Translations::MOUNTAIN).toLower();
         break;
     case PictureKind::Object3D:
-        kindText = "3D object";
+        kindText = RPM::translate(Translations::THREED_OBJECT).toLower();
         break;
     default:
         break;
     }
 
-    return "You don't have any " + kindText + " in this tileset. You can add "
-        "it thanks to the button update list here or in the tileset tab in the "
-        "datas manager.";
+    return RPM::translate(Translations::PANEL_TEXTURES_TEXT_1) + RPM::SPACE +
+        kindText + RPM::translate(Translations::PANEL_TEXTURES_TEXT_2);
 }
 
 // -------------------------------------------------------
@@ -518,7 +517,8 @@ void PanelTextures::updateShow() {
 
 void PanelTextures::translate()
 {
-
+    ui->pushButtonUpdateList->setText(RPM::translate(Translations::UPDATE_LIST)
+        + RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------

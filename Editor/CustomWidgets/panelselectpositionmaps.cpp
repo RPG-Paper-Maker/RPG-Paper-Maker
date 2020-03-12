@@ -93,7 +93,11 @@ void PanelSelectPositionMaps::initialize(int idMap, int x, int y, int yPlus, int
 
 void PanelSelectPositionMaps::translate()
 {
-
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->groupBoxCoordinates->setTitle(RPM::translate(Translations::COORDINATES));
 }
 
 //--------------------------------------------

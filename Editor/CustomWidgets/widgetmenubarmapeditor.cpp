@@ -508,7 +508,24 @@ void WidgetMenuBarMapEditor::enableAllRight() {
 
 void WidgetMenuBarMapEditor::translate()
 {
-
+    ui->menuEvents->setTitle(RPM::translate(Translations::OBJECT));
+    ui->menuFloors->setTitle(RPM::translate(Translations::FLOOR));
+    ui->menuMountain->setTitle(RPM::translate(Translations::MOUNTAIN));
+    ui->menu3D_object->setTitle(RPM::translate(Translations::THREED_OBJECT));
+    ui->menuFace_Sprite->setTitle(RPM::translate(Translations::FACE_SPRITE));
+    ui->actionSlope->setText(RPM::translate(Translations::SLOPE));
+    ui->actionFloors->setText(RPM::translate(Translations::FLOOR));
+    ui->actionObject->setText(RPM::translate(Translations::OBJECT));
+    ui->actionAutotile->setText(RPM::translate(Translations::AUTOTILE));
+    ui->actionMountain->setText(RPM::translate(Translations::MOUNTAIN));
+    ui->action3D_object->setText(RPM::translate(Translations::THREED_OBJECT));
+    ui->actionFix_Sprite->setText(RPM::translate(Translations::FIX_SPRITE));
+    ui->actionFace_Sprite->setText(RPM::translate(Translations::FACE_SPRITE));
+    ui->actionWall_Sprite->setText(RPM::translate(Translations::WALL));
+    ui->actionDouble_Sprite->setText(RPM::translate(Translations::DOUBLE_SPRITE));
+    ui->actionQuadra_Sprite->setText(RPM::translate(Translations::QUADRA_SPRITE));
+    ui->actionAnimated_Autotile->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILE));
 }
 
 // -------------------------------------------------------

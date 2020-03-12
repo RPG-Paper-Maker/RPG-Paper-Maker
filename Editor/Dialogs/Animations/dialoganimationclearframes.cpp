@@ -62,6 +62,9 @@ void DialogAnimationClearFrames::clearFrames(SystemAnimation *animation) {
 
 void DialogAnimationClearFrames::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::CLEAR_FRAMES) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelTo->setText(RPM::translate(Translations::TO) + RPM::COLON);
+    ui->labelFrom->setText(RPM::translate(Translations::FROM) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

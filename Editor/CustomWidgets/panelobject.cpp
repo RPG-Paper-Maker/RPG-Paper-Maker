@@ -355,7 +355,37 @@ void PanelObject::passToNone() {
 
 void PanelObject::translate()
 {
-
+    ui->labelFreq->setText(RPM::translate(Translations::FREQ) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelType->setText(RPM::translate(Translations::TYPE) + RPM::COLON);
+    ui->labelModel->setText(RPM::translate(Translations::MODEL) + RPM::COLON);
+    ui->labelSpeed->setText(RPM::translate(Translations::SPEED) + RPM::COLON);
+    ui->labelEvents->setText(RPM::translate(Translations::EVENTS) + RPM::COLON);
+    ui->labelStates->setText(RPM::translate(Translations::STATES) + RPM::COLON);
+    ui->labelGraphics->setText(RPM::translate(Translations::GRAPHICS) + RPM
+        ::COLON);
+    ui->labelProperties->setText(RPM::translate(Translations::PROPERTIES) + RPM
+        ::COLON);
+    ui->groupBoxMoving->setTitle(RPM::translate(Translations::MOVING));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->checkBoxThrough->setText(RPM::translate(Translations::THROUGH));
+    ui->checkBoxDetection->setText(RPM::translate(Translations::DETECTION) + RPM
+        ::COLON);
+    ui->checkBoxPixelOffset->setText(RPM::translate(Translations::PIXEL_OFFSET));
+    ui->checkBoxDirectionFix->setText(RPM::translate(Translations::DIRECTION_FIX));
+    ui->checkBoxKeepPosition->setText(RPM::translate(Translations::KEEP_POSITION));
+    ui->checkBoxMoveAnimation->setText(RPM::translate(Translations
+        ::MOVE_ANIMATION));
+    ui->checkBoxSetWithCamera->setText(RPM::translate(Translations
+        ::SET_WITH_CAMERA));
+    ui->checkBoxStopAnimation->setText(RPM::translate(Translations
+        ::STOP_ANIMATION));
+    ui->checkBoxClimbAnimation->setText(RPM::translate(Translations
+        ::CLIMB_ANIMATION));
+    ui->checkBoxOneEventPerFrame->setText(RPM::translate(Translations
+        ::ONLY_ONE_EVENT_PER_FRAME));
+    ui->pushButtonEditRoute->setText(RPM::translate(Translations::EDIT_ROUTE) +
+        RPM::DOT_DOT_DOT);
 }
 
 // -------------------------------------------------------

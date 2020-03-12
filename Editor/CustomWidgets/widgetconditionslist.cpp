@@ -22,7 +22,7 @@
 WidgetConditionsList::WidgetConditionsList(QWidget *parent) :
     QListView(parent)
 {
-    this->translate();
+
 }
 
 void WidgetConditionsList::initializeModel(QStandardItemModel *m) {
@@ -42,13 +42,6 @@ void WidgetConditionsList::updateAllNodesString() {
             ->data().value<quintptr>());
         m_model->item(i)->setText(command->toString());
     }
-}
-
-//-------------------------------------------------
-
-void WidgetConditionsList::translate()
-{
-
 }
 
 // -------------------------------------------------------

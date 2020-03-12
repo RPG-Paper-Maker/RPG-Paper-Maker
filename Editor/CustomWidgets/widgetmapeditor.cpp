@@ -74,8 +74,6 @@ WidgetMapEditor::WidgetMapEditor(QWidget *parent) :
     m_control.setContextMenu(m_contextMenu);
 
     m_elapsedTime = QTime::currentTime().msecsSinceStartOfDay();
-
-    this->translate();
 }
 
 WidgetMapEditor::~WidgetMapEditor()
@@ -568,13 +566,6 @@ void WidgetMapEditor::updateCursor() {
     }
 }
 
-//-------------------------------------------------
-
-void WidgetMapEditor::translate()
-{
-
-}
-
 // -------------------------------------------------------
 //
 //  EVENTS
@@ -620,10 +611,10 @@ void WidgetMapEditor::mouseMoveEvent(QMouseEvent *event) {
         // Tooltip for height
         if (m_menuBar != nullptr) {
             if (event->pos().x() <= 50 && event->pos().y() <= 50) {
-                QToolTip::showText(this->mapToGlobal(event->pos()), "To change "
-                    "height square, use CTRL+mousewheel or CTRL+arrowUpDown.\n"
-                    "To change height plus, use CTRL+SHIFT+mousewheel or "
-                    "CTRL+SHIFT+arrowUpDown");
+                QToolTip::showText(this->mapToGlobal(event->pos()), RPM
+                    ::translate(Translations::CHANGE_HEIGHT_TOOLTIP_1) + RPM
+                    ::DOT + RPM::NEW_LINE + RPM::SPACE + RPM::translate(
+                    Translations::CHANGE_HEIGHT_TOOLTIP_2) + RPM::DOT);
             } else {
                 QToolTip::hideText();
             }

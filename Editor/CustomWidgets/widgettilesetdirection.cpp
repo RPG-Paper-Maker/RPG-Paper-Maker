@@ -36,7 +36,6 @@ WidgetTilesetDirection::WidgetTilesetDirection(QWidget *parent) :
     m_imageArrowHover = m_imageArrowHover.scaled(m_imageArrowHover.width()*2,
                                                  m_imageArrowHover.height()*2);
 
-    this->translate();
 }
 
 // -------------------------------------------------------
@@ -178,13 +177,6 @@ void WidgetTilesetDirection::drawArrow(QPainter &painter, QPoint& hoveredPoint,
             painter.fillRect(rect, RPM::COLOR_GRAY_HOVER_BACKGROUND);
         painter.drawRect(rect);
     }
-}
-
-//-------------------------------------------------
-
-void WidgetTilesetDirection::translate()
-{
-
 }
 
 // -------------------------------------------------------

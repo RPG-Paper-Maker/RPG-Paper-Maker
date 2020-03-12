@@ -32,8 +32,6 @@ WidgetTilesetTexture::WidgetTilesetTexture(QWidget *parent) :
                             ui->listWidget->height() - 4));
     ui->listWidget->addItem(item);
     this->updateText();
-
-    this->translate();
 }
 
 WidgetTilesetTexture::~WidgetTilesetTexture()
@@ -72,13 +70,6 @@ void WidgetTilesetTexture::openDialog() {
         m_rect = dialog.getRect();
         updateText();
     }
-}
-
-//-------------------------------------------------
-
-void WidgetTilesetTexture::translate()
-{
-
 }
 
 // -------------------------------------------------------

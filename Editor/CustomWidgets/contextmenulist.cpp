@@ -10,6 +10,7 @@
 */
 
 #include "contextmenulist.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -83,11 +84,13 @@ ContextMenuList * ContextMenuList::createContextCommand(QWidget *parent) {
     ContextMenuList *menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionNew = new QAction("New", parent);
-    QAction *actionEdit = new QAction("Edit", parent);
-    QAction *actionCopy = new QAction("Copy", parent);
-    QAction *actionPaste = new QAction("Paste", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
+    QAction *actionNew = new QAction(RPM::translate(Translations::NEW), parent);
+    QAction *actionEdit = new QAction(RPM::translate(Translations::EDIT), parent);
+    QAction *actionCopy = new QAction(RPM::translate(Translations::COPY), parent);
+    QAction *actionPaste = new QAction(RPM::translate(Translations::PASTE),
+        parent);
+    QAction *actionDelete = new QAction(RPM::translate(Translations::DELETE),
+        parent);
     menu->setActionNew(actionNew);
     menu->setActionEdit(actionEdit);
     menu->setActionCopy(actionCopy);
@@ -126,10 +129,10 @@ ContextMenuList * ContextMenuList::createContextSuperList(QWidget *parent) {
     ContextMenuList *menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionEdit = new QAction("Edit", parent);
-    QAction *actionCopy = new QAction("Copy", parent);
-    QAction *actionPaste = new QAction("Paste", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
+    QAction *actionEdit = new QAction(RPM::translate(Translations::EDIT), parent);
+    QAction *actionCopy = new QAction(RPM::translate(Translations::COPY), parent);
+    QAction *actionPaste = new QAction(RPM::translate(Translations::PASTE), parent);
+    QAction *actionDelete = new QAction(RPM::translate(Translations::DELETE), parent);
     menu->setActionEdit(actionEdit);
     menu->setActionCopy(actionCopy);
     menu->setActionPaste(actionPaste);
@@ -164,9 +167,11 @@ ContextMenuList * ContextMenuList::createContextMap(QWidget *parent) {
     ContextMenuList *menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionEdit = new QAction("Edit map properties", parent);
-    QAction *actionCopy = new QAction("Copy", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
+    QAction *actionEdit = new QAction(RPM::translate(Translations
+        ::EDIT_MAP_PROPERTIES), parent);
+    QAction *actionCopy = new QAction(RPM::translate(Translations::COPY), parent);
+    QAction *actionDelete = new QAction(RPM::translate(Translations::DELETE),
+        parent);
     menu->setActionDelete(actionDelete);
 
     // Editing shortcut
@@ -195,12 +200,17 @@ ContextMenuList * ContextMenuList::createContextDirectory(QWidget *parent) {
     ContextMenuList *menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionNewMap = new QAction("New map", parent);
-    QAction *actionNewDirectory = new QAction("New directory", parent);
-    QAction *actionEdit = new QAction("Edit name", parent);
-    QAction *actionCopy = new QAction("Copy", parent);
-    QAction *actionPaste = new QAction("Paste", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
+    QAction *actionNewMap = new QAction(RPM::translate(Translations::NEW_MAP),
+        parent);
+    QAction *actionNewDirectory = new QAction(RPM::translate(Translations
+        ::NEW_DIRECTORY), parent);
+    QAction *actionEdit = new QAction(RPM::translate(Translations::EDIT_NAME),
+        parent);
+    QAction *actionCopy = new QAction(RPM::translate(Translations::COPY), parent);
+    QAction *actionPaste = new QAction(RPM::translate(Translations::PASTE),
+        parent);
+    QAction *actionDelete = new QAction(RPM::translate(Translations::DELETE),
+        parent);
     menu->setActionPaste(actionPaste);
     menu->setActionDelete(actionDelete);
 
@@ -239,12 +249,15 @@ ContextMenuList * ContextMenuList::createContextObject(QWidget *parent) {
     ContextMenuList *menu = new ContextMenuList(parent);
 
     // Creating actions
-    QAction *actionNew = new QAction("New", parent);
-    QAction *actionEdit = new QAction("Edit", parent);
-    QAction *actionCopy = new QAction("Copy", parent);
-    QAction *actionPaste = new QAction("Paste", parent);
-    QAction *actionDelete = new QAction("Delete", parent);
-    QAction *actionHero = new QAction("Define as the hero", parent);
+    QAction *actionNew = new QAction(RPM::translate(Translations::NEW), parent);
+    QAction *actionEdit = new QAction(RPM::translate(Translations::EDIT), parent);
+    QAction *actionCopy = new QAction(RPM::translate(Translations::COPY), parent);
+    QAction *actionPaste = new QAction(RPM::translate(Translations::PASTE),
+        parent);
+    QAction *actionDelete = new QAction(RPM::translate(Translations::DELETE),
+        parent);
+    QAction *actionHero = new QAction(RPM::translate(Translations
+        ::DEFINE_AS_THE_HERO), parent);
     menu->setActionNew(actionNew);
     menu->setActionEdit(actionEdit);
     menu->setActionCopy(actionCopy);
@@ -291,8 +304,8 @@ ContextMenuList * ContextMenuList::createContextPraticable(QWidget *parent) {
     menu = new ContextMenuList(parent);
 
     // Creating actions
-    actionEdit = new QAction("Edit", parent);
-    actionDelete = new QAction("Delete", parent);
+    actionEdit = new QAction(RPM::translate(Translations::EDIT), parent);
+    actionDelete = new QAction(RPM::translate(Translations::DELETE), parent);
     menu->setActionEdit(actionEdit);
     menu->setActionDelete(actionDelete);
 

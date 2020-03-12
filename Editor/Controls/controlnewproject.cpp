@@ -69,14 +69,20 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Checking if the project can be created
     if (dirName.count() == 0)
-        return "The directory name can't be empty.";
+        return RPM::translate(Translations::DIRECTORY_NAME_CANT_EMPTY) + RPM
+            ::DOT;
     if (!QDir::isAbsolutePath(location))
-        return "The path location " + location + " needs to be absolute.";
+        return RPM::translate(Translations::THE_PATH_LOCATION) + RPM::SPACE +
+            location + RPM::SPACE + RPM::translate(Translations
+            ::NEEDS_TO_BE_ABSOLUTE) + RPM::DOT;
     if (!pathLocation.exists())
-        return "The path location " + location + " doesn't exists.";
+        return RPM::translate(Translations::THE_PATH_LOCATION) + RPM::SPACE +
+            location + RPM::SPACE + RPM::translate(Translations::DOESNT_EXISTS)
+            + RPM::DOT;
     if (!pathLocation.mkdir(dirName)) {
-        return "The directory " + dirName + " already exists in " + location +
-            ".";
+        return RPM::translate(Translations::THE_DIRECTORY) + RPM::SPACE +
+            dirName + RPM::SPACE + RPM::translate(Translations
+            ::ALREADY_EXISTS_IN) + RPM::SPACE + location + RPM::DOT;
     }
 
     // If all is ok, then let's fill the project folder
@@ -88,8 +94,10 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathDir,
         "Content")))
     {
-        return "Error while copying Content directory. Please verify if " +
-            pathBasicContent + " folder exists.";
+        return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
+            RPM::DOT + RPM::SPACE + RPM::translate(Translations
+            ::PLEASE_VERIFY_IF) + RPM::SPACE + pathBasicContent + RPM::SPACE +
+            RPM::translate(Translations::FOLDER_EXISTS);
     }
 
     // Create folders
@@ -133,8 +141,9 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
 
     // Copying a basic project content
     if (!project->copyOSFiles()) {
-        return "Error while copying excecutable and libraries. "
-            "Please retry with a new project.";
+        return RPM::translate(Translations::ERROR_COPYING_EXECUTABLE_LIBRARIES)
+            + RPM::DOT + RPM::SPACE + RPM::translate(Translations
+            ::PLEASE_RETRY_WITH_NEW_PROJECT);
     }
 
     // Create saves

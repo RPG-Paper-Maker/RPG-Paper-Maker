@@ -32,8 +32,6 @@ WidgetVariable::WidgetVariable(QWidget *parent) :
     item->setSizeHint(QSize(item->sizeHint().width(),
                             ui->listWidget->height() - 4));
     ui->listWidget->addItem(item);
-
-    this->translate();
 }
 
 WidgetVariable::~WidgetVariable()
@@ -96,13 +94,6 @@ void WidgetVariable::openDialog(){
     if (dialog.exec() == QDialog::Accepted){
         setCurrentId(dialog.getSelectedId());
     }
-}
-
-//-------------------------------------------------
-
-void WidgetVariable::translate()
-{
-
 }
 
 // -------------------------------------------------------

@@ -92,7 +92,6 @@ protected:
     void updateAvailableCommands();
     bool isMouseSelectingCommand(const QPoint &pos);
     void updateKeyboardUpDown(int offset);
-    void translate();
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

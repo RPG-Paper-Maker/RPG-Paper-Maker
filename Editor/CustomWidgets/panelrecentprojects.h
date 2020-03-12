@@ -25,7 +25,6 @@ public:
     static const int RECT_Y_TITLE;
     static const int RECT_OFFSET_Y_NAME;
     static const int RECT_OFFSET_Y_LINK;
-    static const QString MESSAGE_EMPTY;
 
     explicit PanelRecentProjects(QWidget *parent = nullptr);
     ~PanelRecentProjects();

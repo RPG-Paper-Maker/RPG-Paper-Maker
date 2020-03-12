@@ -64,9 +64,20 @@ public:
     // STRING SYMBOLS
     static const QString DASH;
     static const QString COLON;
+    static const QString DOT;
     static const QString DOT_DOT_DOT;
+    static const QString SPACE;
+    static const QString NEW_LINE;
+    static const QString PARENTHESIS_LEFT;
+    static const QString PARENTHESIS_RIGHT;
     static const QString BRACKET_LEFT;
     static const QString BRACKET_RIGHT;
+    static const QString EQUAL;
+    static const QString PLUS;
+    static const QString MINUS;
+    static const QString TIMES;
+    static const QString DIVIDED_BY;
+    static const QString MODULO;
     static const QString TRUE_BOOL_STRING;
     static const QString FALSE_BOOL_STRING;
 

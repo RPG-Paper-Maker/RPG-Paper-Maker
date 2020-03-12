@@ -73,7 +73,6 @@ private:
 
     QStandardItem* getRootOfItem(QStandardItem* selected);
     void setItem(QStandardItem *selected, SuperListItem* super);
-    void translate();
 
     virtual void newItem(QStandardItem *selected);
     virtual void editItem(QStandardItem *selected);
