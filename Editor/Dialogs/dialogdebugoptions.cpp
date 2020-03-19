@@ -50,8 +50,9 @@ void DialogDebugOptions::initialize() {
 // -------------------------------------------------------
 
 void DialogDebugOptions::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
-
+    this->setWindowTitle(RPM::translate(Translations::DEBUG_OPTIONS) + RPM
+        ::DOT_DOT_DOT);
+    ui->checkBoxBB->setText(RPM::translate(Translations::SHOW_COLLISIONS_BB));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

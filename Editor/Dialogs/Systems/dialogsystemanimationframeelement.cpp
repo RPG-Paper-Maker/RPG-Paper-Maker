@@ -56,7 +56,16 @@ void DialogSystemAnimationFrameElement::initialize() {
 
 void DialogSystemAnimationFrameElement::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_ELEMENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZoom->setText(RPM::translate(Translations::ZOOM) + RPM::COLON);
+    ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->labelIndex->setText(RPM::translate(Translations::INDEX) + RPM::COLON);
+    ui->labelOpacity->setText(RPM::translate(Translations::OPACITY) + RPM::COLON);
+    ui->checkBoxFlipVerticaly->setText(RPM::translate(Translations
+        ::FLIP_VERTICALY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

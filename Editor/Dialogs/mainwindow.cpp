@@ -140,9 +140,8 @@ void MainWindow::newProject(){
 // -------------------------------------------------------
 
 void MainWindow::openExistingProject(){
-    QString file = QFileDialog::getOpenFileName(this, "Open a project",
-                                                RPM::PATH_GAMES,
-                                                "RPG Paper Maker (*.rpm)");
+    QString file = QFileDialog::getOpenFileName(this, RPM::translate(
+        Translations::OPEN_PROJECT), RPM::PATH_GAMES, "RPG Paper Maker (*.rpm)");
     if (file.count() > 0) openProject(Common::getDirectoryPath(file));
 }
 
@@ -310,13 +309,10 @@ void MainWindow::updateTextures(){
 bool MainWindow::close() {
     if (project != nullptr) {
         if (RPM::mapsToSave.count() > 0){
-            QMessageBox::StandardButton box =
-                    QMessageBox::question(this, "Quit",
-                                          "You have some maps that are not "
-                                          "saved. Do you want to save all?",
-                                          QMessageBox::Yes | QMessageBox::No |
-                                          QMessageBox::Cancel);
-
+            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+                ::translate(Translations::QUIT), RPM::translate(Translations
+                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
+                QMessageBox::No | QMessageBox::Cancel);
             if (box == QMessageBox::Yes)
                 saveAllMaps();
             else if (box == QMessageBox::No)
@@ -434,6 +430,10 @@ void MainWindow::translate() {
         ::PICTURES_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionPictures_manager->setIconText(RPM::translate(Translations
         ::PICTURES_MANAGER_TOOL));
+    ui->actionVideos_manager->setText(RPM::translate(Translations
+        ::VIDEOS_MANAGER) + RPM::DOT_DOT_DOT);
+    ui->actionVideos_manager->setIconText(RPM::translate(Translations
+        ::VIDEOS_MANAGER_TOOL));
     ui->actionSongs_manager->setText(RPM::translate(Translations
         ::SONGS_MANAGER) + RPM::DOT_DOT_DOT);
     ui->actionSongs_manager->setIconText(RPM::translate(Translations
@@ -807,9 +807,10 @@ void MainWindow::on_actionShow_Hide_square_informations_triggered() {
 void MainWindow::on_actionPlay_triggered() {
     if (RPM::get()->project()->isHeroDefined()) {
         if (RPM::mapsToSave.count() > 0) {
-            QMessageBox::StandardButton box = QMessageBox::question(this, "Save"
-                , "You have some maps that are not saved. Do you want to save "
-                "all?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            QMessageBox::StandardButton box = QMessageBox::question(this, RPM
+                ::translate(Translations::SAVE), RPM::translate(Translations
+                ::YOU_HAVE_MAPS_NOT_SAVED), QMessageBox::Yes |
+                QMessageBox::No | QMessageBox::Cancel);
             if (box == QMessageBox::Yes) {
                 saveAllMaps();
             } else if (box == QMessageBox::Cancel) {
@@ -833,7 +834,9 @@ void MainWindow::on_actionPlay_triggered() {
         gameProcess->start("\"" + Common::pathCombine(project
             ->pathCurrentProject(), execName) + "\"");
     } else {
-        QMessageBox::critical(this, "No hero defined", "There is no hero defined. Please define one hero before trying to launch again.\n You can define an object in a map as hero by right clicking on it in object mode and clicking on \"Define as Hero\".");
+        QMessageBox::critical(this, RPM::translate(Translations::NO_HERO_DEFINED
+            ), RPM::translate(Translations::NO_HERO_DEFINED_DESCRIPTION) + RPM
+            ::DOT);
     }
 }
 
@@ -877,24 +880,24 @@ void MainWindow::on_actionAbout_triggered() {
     name = "RPG Paper Maker";
     website = "http://rpg-paper-maker.com/";
     buildDate = Project::LAST_BUILD_DATE;
-    copyright = "RPG Paper Maker Copyright (C) 2017-2019 Wano\n\n"
-        "RPG Paper Maker is free for non commercial use. You don't have any fee "
-        "to pay as long as you don't plan to publish commercial games done with "
-        "RPG Paper Maker.";
-
-    QMessageBox::about(this, "About", name + " " + Project::ENGINE_VERSION +
-        "\n" + website + "\n\nBuilt on " + buildDate +
-        "\n\nThanks a lot to all the current Patreon donators and particularly:\n\n"
-        + patreonThanks + "\n\nAlso thanks to all the previous Patreon donators:\n\n"
-        + patreonPreviousThanks + "\n\n" + copyright);
+    copyright =  "RPG Paper Maker Copyright (C) 2017-2020 Wano\n\n" + RPM
+        ::translate(Translations::COPYRIGHT) + RPM::DOT;
+    QMessageBox::about(this, RPM::translate(Translations::ABOUT), name + RPM
+        ::SPACE + Project::ENGINE_VERSION + RPM::NEW_LINE + website + RPM
+        ::NEW_LINE + RPM::NEW_LINE + RPM::translate(Translations::BUILT_ON) +
+        RPM::SPACE + buildDate + RPM::NEW_LINE + RPM::NEW_LINE + RPM::translate(
+        Translations::THANKS_PATREON) + RPM::COLON + RPM::NEW_LINE + RPM
+        ::NEW_LINE + patreonThanks + RPM::NEW_LINE + RPM::NEW_LINE + RPM
+        ::translate(Translations::THANKS_PATREON_PREVIOUS) + RPM::COLON + RPM::
+        NEW_LINE + RPM::NEW_LINE + patreonPreviousThanks + RPM::NEW_LINE + RPM
+        ::NEW_LINE + copyright);
 }
 
 // -------------------------------------------------------
 
 void MainWindow::checkUpdate() {
-    QMessageBox::information(this, "Restart",
-                             "The engine is going to be restarted.");
-
+    QMessageBox::information(this, RPM::translate(Translations::RESTART), RPM
+        ::translate(Translations::ENGINE_GOING_RESTARTED) + RPM::DOT);
     QString realApplicationName;
     #ifdef Q_OS_WIN
         realApplicationName = "RPG Paper Maker temp.exe";

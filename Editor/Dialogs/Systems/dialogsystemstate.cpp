@@ -59,7 +59,11 @@ void DialogSystemState::initialize(){
 
 void DialogSystemState::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_A_STATE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelState->setText(RPM::translate(Translations::STATE_ID) + RPM::COLON);
+    ui->pushButtonStates->setText(RPM::translate(Translations
+        ::UPDATE_COMPLETE_LIST) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

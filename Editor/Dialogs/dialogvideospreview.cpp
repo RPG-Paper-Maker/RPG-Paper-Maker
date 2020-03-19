@@ -46,7 +46,8 @@ DialogVideosPreview::~DialogVideosPreview()
 
 void DialogVideosPreview::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_VIDEO) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -20,7 +20,7 @@
 // -------------------------------------------------------
 
 SystemPicture::SystemPicture() :
-    SystemPicture(-1, "<None>", false)
+    SystemPicture(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }
@@ -141,13 +141,13 @@ QString SystemPicture::getLocalFolder(PictureKind kind) {
 QString SystemPicture::getPictureTitle(PictureKind kind) {
     switch(kind) {
     case PictureKind::Autotiles:
-        return "Autotiles";
+        return RPM::translate(Translations::AUTOTILES);
     case PictureKind::Walls:
-        return "Walls";
+        return RPM::translate(Translations::WALLS);
     case PictureKind::Object3D:
-        return "3D objects";
+        return RPM::translate(Translations::THREED_OBJECTS);
     case PictureKind::Mountains:
-        return "Mountains";
+        return RPM::translate(Translations::MOUNTAINS);
     default:
         return "";
     }

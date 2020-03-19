@@ -51,17 +51,24 @@ DialogSystemTitleCommand::~DialogSystemTitleCommand() {
 // -------------------------------------------------------
 
 void DialogSystemTitleCommand::initialize() {
+    int index;
+
     ui->widgetTextLangName->initializeNamesTrans(m_titleCommand.names());
-    ui->comboBoxTypeCommand->setCurrentIndex(static_cast<int>(m_titleCommand
-        .kind()));
     ui->plainTextEditScript->insertPlainText(m_titleCommand.script());
+    index = static_cast<int>(m_titleCommand.kind());
+    ui->comboBoxTypeCommand->addItems(RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND);
+    ui->comboBoxTypeCommand->setCurrentIndex(index);
 }
 
 //-------------------------------------------------
 
 void DialogSystemTitleCommand::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_TITLE_COMMAND) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelTypeCommand->setText(RPM::translate(Translations::TYPE_OF_COMMAND)
+        + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

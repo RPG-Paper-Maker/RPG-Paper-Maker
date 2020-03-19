@@ -101,7 +101,17 @@ int DialogRect::getTwo() {
 
 void DialogRect::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_RECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelXpx->setText(RPM::translate(Translations::PX));
+    ui->labelYpx->setText(RPM::translate(Translations::PX));
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelHeight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
+    ui->labelWidthpx->setText(RPM::translate(Translations::PX));
+    ui->labelHeightpx->setText(RPM::translate(Translations::PX));
+    ui->pushButtonClose->setText(RPM::translate(Translations::CLOSE));
 }
 
 // -------------------------------------------------------

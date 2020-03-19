@@ -66,7 +66,9 @@ EventCommandKind DialogCommandStopSong::getCommandKind() const {
 
 void DialogCommandStopSong::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    ui->labelDisappearWithTime->setText(RPM::translate(Translations
+        ::DISAPPEAR_WITH_TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

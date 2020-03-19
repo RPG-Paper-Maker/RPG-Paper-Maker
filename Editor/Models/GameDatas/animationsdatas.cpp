@@ -47,7 +47,13 @@ QStandardItemModel* AnimationsDatas::model() const {
 // -------------------------------------------------------
 
 void AnimationsDatas::setDefault() {
+    SystemAnimation *animation;
+    QStandardItem *item;
 
+    item = m_model->item(0);
+    animation = reinterpret_cast<SystemAnimation *>(item->data().value<quintptr>());
+    animation->setName(RPM::translate(Translations::ATTACK));
+    item->setText(animation->toString());
 }
 
 // -------------------------------------------------------

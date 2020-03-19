@@ -56,6 +56,6 @@ void DialogSystemParameter::initialize() {
 
 void DialogSystemParameter::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_PARAMETER));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

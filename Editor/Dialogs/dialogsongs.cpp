@@ -106,7 +106,8 @@ void DialogSongs::addfolders(QIcon &icon,
 
 void DialogSongs::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SONGS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

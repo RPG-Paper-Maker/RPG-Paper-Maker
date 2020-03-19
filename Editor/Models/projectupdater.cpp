@@ -225,9 +225,11 @@ void ProjectUpdater::updateCommands() {
 // -------------------------------------------------------
 
 void ProjectUpdater::check() {
-    emit progress(10, "Copying the previous project...");
+    emit progress(10, RPM::translate(Translations::COPYING_PREVIOUS_PROJECT) +
+        RPM::DOT_DOT_DOT);
     copyPreviousProject();
-    emit progress(80, "Checking incompatible versions...");
+    emit progress(80, RPM::translate(Translations
+        ::CHECKING_INCOMPATIBLE_VERSIONS) + RPM::DOT_DOT_DOT);
 
     // Updating for incompatible versions
     int index = incompatibleVersionsCount;
@@ -244,16 +246,17 @@ void ProjectUpdater::check() {
     // Updating for each version
     m_project->readAll();
     for (int i = index; i < incompatibleVersionsCount; i++) {
-        emit progress(80, "Checking version " + incompatibleVersions[i] +
-                      "...");
+        emit progress(80, RPM::translate(Translations::CHECKING_VERSION) + RPM
+            ::SPACE + incompatibleVersions[i] + RPM::DOT_DOT_DOT);
         updateVersion(incompatibleVersions[i]);
     }
 
     // Copy recent executable and scripts
-    emit progress(95, "Copying recent executable and scripts");
+    emit progress(95, RPM::translate(Translations
+        ::COPYING_RECENT_EXECUTABLE_SCRIPTS));
     copyExecutable();
     copySystemScripts();
-    emit progress(99, "Correcting the BR path");
+    emit progress(99, RPM::translate(Translations::CORRECTING_BR_PATH));
     QThread::sleep(1);
     m_project->gameDatas()->systemDatas()->setPathBR(
                 Common::pathCombine(QDir::currentPath(), RPM::PATH_BR));

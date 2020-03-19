@@ -90,8 +90,28 @@ void DialogMapProperties::initialize() {
 // -------------------------------------------------------
 
 void DialogMapProperties::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
-
+    this->setWindowTitle(RPM::translate(Translations::MAP_PROPERTIES) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations
+        ::MAP_STARTUP_REACTIONS));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::BATTLES));
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelDepth->setText(RPM::translate(Translations::DEPTH) + RPM::COLON);
+    ui->labelMusic->setText(RPM::translate(Translations::MUSIC) + RPM::COLON);
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelLength->setText(RPM::translate(Translations::LENGTH) + RPM::COLON);
+    ui->labelheight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
+    ui->labelTileset->setText(RPM::translate(Translations::TILESET) + RPM::COLON);
+    ui->labelCameraPropID->setText(RPM::translate(Translations
+        ::CAMERA_PROPERTIES_ID) + RPM::COLON);
+    ui->labelBackgroundSound->setText(RPM::translate(Translations
+        ::BACKGROUND_SOUND) + RPM::COLON);
+    ui->radioButtonColor->setText(RPM::translate(Translations::COLOR_ID) + RPM
+        ::COLON);
+    ui->radioButtonSkybox->setText(RPM::translate(Translations::SKYBOX) + RPM
+        ::COLON);
+    ui->groupBoxSky->setTitle(RPM::translate(Translations::SKY));
+    ui->groupBoxSizes->setTitle(RPM::translate(Translations::SIZE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

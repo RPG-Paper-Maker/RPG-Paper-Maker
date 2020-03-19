@@ -64,7 +64,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
          <item>
-          <widget class="QLabel" name="labelShortcut_2">
+          <widget class="QLabel" name="labelShortcutLabel">
            <property name="text">
             <string>Shortcut:</string>
            </property>

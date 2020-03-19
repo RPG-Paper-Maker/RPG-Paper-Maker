@@ -276,12 +276,13 @@ void Map::setModelObjects(QStandardItemModel* model){
 
     item = new QStandardItem;
     Position3D position;
-    super = new SystemMapObject(-1, "This object", position);
+    super = new SystemMapObject(-1, RPM::translate(Translations::THIS_OBJECT),
+        position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);
     item = new QStandardItem;
-    super = new SystemMapObject(0, "Hero", position);
+    super = new SystemMapObject(0, RPM::translate(Translations::HERO), position);
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->name());
     model->appendRow(item);

@@ -46,7 +46,7 @@ DialogProgress::~DialogProgress()
 
 void DialogProgress::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::IN_PROGRESS));
 }
 
 // -------------------------------------------------------

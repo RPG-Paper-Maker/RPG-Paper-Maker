@@ -97,13 +97,17 @@ void TitleScreenGameOverDatas::setDefault() {
     m_titleBackgroundVideoID->setId(-1);
     m_titleMusic->setId(1);
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation("New game"), TitleCommandKind::NewGame))->getModelRow());
+        LangsTranslation(RPM::translate(Translations::NEW_GAME)),
+        TitleCommandKind::NewGame))->getModelRow());
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation("Load game"), TitleCommandKind::LoadGame))->getModelRow());
+        LangsTranslation(RPM::translate(Translations::LOAD_GAME)),
+        TitleCommandKind::LoadGame))->getModelRow());
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation("Settings"), TitleCommandKind::Settings))->getModelRow());
+        LangsTranslation(RPM::translate(Translations::SETTINGS)),
+        TitleCommandKind::Settings))->getModelRow());
     m_modelTitleCommands->appendRow((new SystemTitleCommand(-1, new
-        LangsTranslation("Exit"), TitleCommandKind::Exit))->getModelRow());
+        LangsTranslation(RPM::translate(Translations::EXIT)), TitleCommandKind
+        ::Exit))->getModelRow());
     item = new QStandardItem;
     super = new SuperListItem(0, RPM::ENUM_TO_STRING_TITLE_SETTINGS.at(
         static_cast<int>(TitleSettingKind::KeyboardAssignment)));

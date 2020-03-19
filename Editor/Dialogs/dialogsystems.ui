@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-523</y>
                 <width>252</width>
                 <height>1149</height>
                </rect>
@@ -1882,12 +1882,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PanelPrimitiveValue</class>
-   <extends>QWidget</extends>
-   <header>panelprimitivevalue.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>WidgetPicture</class>
    <extends>QWidget</extends>
    <header>widgetpicture.h</header>
@@ -1899,6 +1893,18 @@
    <header>widgetsupertree.h</header>
   </customwidget>
   <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PanelPrimitiveValue</class>
+   <extends>QWidget</extends>
+   <header>panelprimitivevalue.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WidgetTextLang</class>
    <extends>QWidget</extends>
    <header>widgettextlang.h</header>
@@ -1908,12 +1914,6 @@
    <class>WidgetSong</class>
    <extends>QWidget</extends>
    <header>widgetsong.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelSuperList</class>
-   <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

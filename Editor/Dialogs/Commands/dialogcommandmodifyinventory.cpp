@@ -58,7 +58,29 @@ DialogCommandModifyInventory::~DialogCommandModifyInventory()
 
 void DialogCommandModifyInventory::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::MODIFY_INVENTORY) + RPM
+        ::DOT_DOT_DOT);
+    ui->radioButtonItem->setText(RPM::translate(Translations::ITEM_ID) + RPM
+        ::COLON);
+    ui->radioButtonArmor->setText(RPM::translate(Translations::ARMOR_ID) + RPM
+        ::COLON);
+    ui->radioButtonWeapon->setText(RPM::translate(Translations::WEAPON_ID) + RPM
+        ::COLON);
+    ui->groupBoxNumber->setTitle(RPM::translate(Translations::NUMBER));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::PARENTHESIS_LEFT + RPM::MINUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::PARENTHESIS_LEFT + RPM::TIMES + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::PARENTHESIS_LEFT + RPM::EQUAL + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

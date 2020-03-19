@@ -49,9 +49,16 @@ void ItemsDatas::setDefault() {
     SystemItem *sys;
 
     QString names[] = {
-        "HP potion", "Super HP potion", "Mega HP potion", "MP potion",
-        "Super MP potion", "Mega MP potion", "TP potion", "Super TP potion",
-        "Mega TP potion", "Key"
+        RPM::translate(Translations::HP_POTION),
+        RPM::translate(Translations::SUPER_HP_POTION),
+        RPM::translate(Translations::MEGA_HP_POTION),
+        RPM::translate(Translations::MP_POTION),
+        RPM::translate(Translations::SUPER_MP_POTION),
+        RPM::translate(Translations::MEGA_MP_POTION),
+        RPM::translate(Translations::TP_POTION),
+        RPM::translate(Translations::SUPER_TP_POTION),
+        RPM::translate(Translations::MEGA_TP_POTION),
+        RPM::translate(Translations::KEY)
     };
     int iconsID[] = {
         16, 17, 18, 19, 20, 21, 22, 23, 24, 25
@@ -63,16 +70,16 @@ void ItemsDatas::setDefault() {
         true, true, true, true, true, true, true, true, true, false
     };
     QString descriptions[] = {
-        "A small potion recovering your HP.",
-        "A medium potion recovering your HP.",
-        "A large potion recovering your HP.",
-        "A small potion recovering your MP.",
-        "A medium potion recovering your MP.",
-        "A large potion recovering your MP.",
-        "A small potion recovering your TP.",
-        "A medium potion recovering your TP.",
-        "A large potion recovering your TP.",
-        "A key that can be used for opening a closed door."
+        RPM::translate(Translations::HP_POTION_DESCRIPTION),
+        RPM::translate(Translations::SUPER_HP_POTION_DESCRIPTION),
+        RPM::translate(Translations::MEGA_HP_POTION_DESCRIPTION),
+        RPM::translate(Translations::MP_POTION_DESCRIPTION),
+        RPM::translate(Translations::SUPER_MP_POTION_DESCRIPTION),
+        RPM::translate(Translations::MEGA_MP_POTION_DESCRIPTION),
+        RPM::translate(Translations::TP_POTION_DESCRIPTION),
+        RPM::translate(Translations::SUPER_TP_POTION_DESCRIPTION),
+        RPM::translate(Translations::MEGA_TP_POTION_DESCRIPTION),
+        RPM::translate(Translations::KEY)
     };
     TargetKind targetsKind[] = {
         TargetKind::Ally, TargetKind::Ally, TargetKind::Ally, TargetKind::Ally,

@@ -142,7 +142,8 @@ void DialogAnimationCreateTransition::createTransition(SystemAnimation
 
 void DialogAnimationCreateTransition::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::CREATE_TRANSITION));
+    this->setWindowTitle(RPM::translate(Translations::CREATE_TRANSITION) + RPM
+        ::DOT_DOT_DOT);
     ui->labelTo->setText(RPM::translate(Translations::TO) + RPM::COLON);
     ui->labelFrom->setText(RPM::translate(Translations::FROM) + RPM::COLON);
     ui->labelToIndex->setText(RPM::translate(Translations::TO) + RPM::COLON);

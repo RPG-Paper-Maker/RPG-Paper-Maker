@@ -11,6 +11,7 @@
 
 #include "systemanimationframe.h"
 #include "systemanimationframeeffect.h"
+#include "rpm.h"
 
 const QString SystemAnimationFrame::JSON_ELEMENTS = "e";
 const QString SystemAnimationFrame::JSON_EFFECTS = "ef";
@@ -93,8 +94,8 @@ void SystemAnimationFrame::clearElements() {
 // -------------------------------------------------------
 
 void SystemAnimationFrame::initializeHeader() {
-    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Type / ID",
-        "Condition"}));
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::TYPE_ID), RPM::translate(Translations::CONDITION)}));
 }
 
 // -------------------------------------------------------

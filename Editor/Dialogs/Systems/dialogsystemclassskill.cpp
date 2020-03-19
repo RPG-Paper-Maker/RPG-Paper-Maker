@@ -63,7 +63,11 @@ void DialogSystemClassSkill::initialize(){
 
 void DialogSystemClassSkill::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_SKILL_LEARN) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
+    ui->labelSkillID->setText(RPM::translate(Translations::SKILL_ID) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

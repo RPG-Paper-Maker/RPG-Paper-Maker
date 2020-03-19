@@ -70,7 +70,9 @@ int DialogVariables::getSelectedId() const{
 
 void DialogVariables::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::VARIABLES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->groupBoxVariables->setTitle(RPM::translate(Translations::VARIABLES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

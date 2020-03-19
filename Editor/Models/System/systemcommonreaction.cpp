@@ -54,8 +54,8 @@ QStandardItemModel* SystemCommonReaction::modelParameters() const {
 // -------------------------------------------------------
 
 void SystemCommonReaction::initializeHeaders() {
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name",
-        "Default value"}));
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
 }
 
 // -------------------------------------------------------

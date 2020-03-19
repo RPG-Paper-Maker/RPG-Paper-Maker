@@ -56,7 +56,17 @@ DialogCommandModifyTeam::~DialogCommandModifyTeam()
 
 void DialogCommandModifyTeam::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::MODIFY_TEAM) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelInInstance->setText(RPM::translate(Translations::IN));
+    ui->labelOfInstance->setText(RPM::translate(Translations::OF));
+    ui->labelStockVariable->setText(RPM::translate(Translations
+        ::STOCK_INSTANCE_ID_IN));
+    ui->radioButtonHero->setText(RPM::translate(Translations::HERO) + RPM::DOT);
+    ui->radioButtonMonster->setText(RPM::translate(Translations::MONSTER_ID) +
+        RPM::DOT);
+    ui->radioButtonNewInstance->setText(RPM::translate(Translations
+        ::CREATE_NEW_INSTANCE_WITH_LEVEL));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

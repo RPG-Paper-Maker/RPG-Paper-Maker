@@ -33,9 +33,8 @@ PanelTransformations::PanelTransformations(QWidget *parent) :
 
 PanelTransformations::~PanelTransformations()
 {
-    delete ui;
-
     this->deletePosition();
+    delete ui;
 }
 
 // -------------------------------------------------------

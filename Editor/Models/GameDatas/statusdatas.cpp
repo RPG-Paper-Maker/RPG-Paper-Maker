@@ -51,7 +51,7 @@ void StatusDatas::setDefault() {
     QStandardItem *item;
 
     QString names[] = {
-        "KO"
+        RPM::translate(Translations::KO)
     };
     int iconsID[] = {
         -1

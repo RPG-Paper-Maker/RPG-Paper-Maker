@@ -137,7 +137,21 @@ void DialogSystemLoot::radioChanged(bool checked, LootKind kind) {
 
 void DialogSystemLoot::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_LOOT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelAnd->setText(RPM::translate(Translations::AND));
+    ui->labelNumber->setText(RPM::translate(Translations::NUMBER) + RPM::COLON);
+    ui->labelProbability->setText(RPM::translate(Translations::PROBABILITY) +
+        RPM::COLON);
+    ui->labelLevelBetween->setText(RPM::translate(Translations::LEVEL_BETWEEN) +
+        RPM::COLON);
+    ui->radioButtonItem->setText(RPM::translate(Translations::ITEM_ID) + RPM
+        ::COLON);
+    ui->radioButtonArmor->setText(RPM::translate(Translations::ARMOR_ID) + RPM
+        ::COLON);
+    ui->radioButtonWeapon->setText(RPM::translate(Translations::WEAPON_ID) + RPM
+        ::COLON);
+    ui->groupBoxLoot->setTitle(RPM::translate(Translations::LOOT));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

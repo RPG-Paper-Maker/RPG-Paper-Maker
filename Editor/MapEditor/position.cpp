@@ -12,6 +12,7 @@
 #include <QtMath>
 #include "position.h"
 #include "common.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -292,19 +293,33 @@ void Position::getBotRight(Position& position) const {
 void Position::getStringLayerYPlus(QString& infos, int squareSize) const {
     int yPlus = getYpx(squareSize);
     if (yPlus > 0) {
-        infos += "y+ = " + QString::number(yPlus) + "px\n";
+        infos += RPM::translate(Translations::Y) + "+ = " + QString::number(
+            yPlus) + RPM::translate(Translations::PX) + RPM::NEW_LINE;
     }
-    infos += "Layer = " + QString::number(m_layer) + "\nAngles = [" + QString
-        ::number(m_angleX) + ", " + QString::number(m_angleY) + ", " + QString
-        ::number(m_angleZ) + "]\nCenter x = " + QString::number(m_centerX) +
-        "%\nCenter z = " + QString::number(m_centerZ) + "%";
+    infos += RPM::translate(Translations::LAYER) + RPM::SPACE + RPM::EQUAL + RPM
+        ::SPACE + QString::number(m_layer) + RPM::NEW_LINE + RPM::translate(
+        Translations::ANGLES) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + RPM
+        ::BRACKET_LEFT + RPM::SPACE + QString::number(m_angleX) + ", " + QString
+        ::number(m_angleY) + ", " + QString::number(m_angleZ) + RPM
+        ::BRACKET_RIGHT + RPM::NEW_LINE + RPM::translate(Translations::CENTER) +
+        RPM::SPACE + RPM::translate(Translations::X) + RPM::SPACE + RPM::EQUAL +
+        RPM::SPACE + QString::number(m_centerX) + "%" + RPM::NEW_LINE + RPM
+        ::translate(Translations::CENTER) + RPM::SPACE + RPM::translate(
+        Translations::Z) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString
+        ::number(m_centerZ) + "%";
 }
 
 // -------------------------------------------------------
 
 QString Position::toString(int squareSize) const {
-    QString infos = "[x = " + QString::number(m_x) + ", y = " +
-            QString::number(m_y) + ", z = " + QString::number(m_z) + "]\n";
+    QString infos;
+
+    infos = RPM::BRACKET_LEFT + RPM::translate(Translations::X) + RPM::SPACE +
+        RPM::EQUAL + RPM::SPACE + QString::number(m_x) + "," + RPM::SPACE + RPM
+        ::translate(Translations::Y) + RPM::SPACE + RPM::EQUAL + RPM::SPACE +
+        QString::number(m_y) + "," + RPM::SPACE + RPM::translate(Translations::Z
+        ) + RPM::SPACE + RPM::EQUAL + RPM::SPACE + QString::number(m_z) + RPM
+        ::BRACKET_RIGHT + RPM::NEW_LINE;
     getStringLayerYPlus(infos, squareSize);
 
     return infos;

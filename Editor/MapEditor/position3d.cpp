@@ -11,6 +11,7 @@
 
 #include "position3d.h"
 #include "mapproperties.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -86,8 +87,9 @@ void Position3D::setCopy(const Position3D &position) {
 // -------------------------------------------------------
 
 QString Position3D::toString() const {
-    QString infos = "[" + QString::number(m_x) + "," + QString::number(m_y) +
-        "," + QString::number(m_y_plus) + "," + QString::number(m_z) + "]";
+    QString infos = RPM::BRACKET_LEFT + QString::number(m_x) + "," + QString
+        ::number(m_y) + "," + QString::number(m_y_plus) + "," + QString::number(
+        m_z) + RPM::BRACKET_RIGHT;
 
     return infos;
 }

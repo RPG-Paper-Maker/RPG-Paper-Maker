@@ -62,7 +62,10 @@ void DialogSystemBattleCommand::initialize(){
 
 void DialogSystemBattleCommand::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_BATTLE_COMMAND) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelSkillID->setText(RPM::translate(Translations::SKILL_ID) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -134,7 +134,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="labelStepSquareMoves">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -278,7 +278,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0,0,0,0,0,0,0,1,0,0,0,0">
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="labelChangeDirection">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -441,7 +441,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
               <item>
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="labelChangeObjectProperties">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>

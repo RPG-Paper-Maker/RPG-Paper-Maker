@@ -94,7 +94,39 @@ void DialogCommandChangeVariables::initializePrimitives() {
 
 void DialogCommandChangeVariables::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_VARIABLES) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelRange->setText(RPM::translate(Translations::TO).toLower());
+    ui->labelRandom->setText(RPM::translate(Translations::RANDOM) + RPM::COLON);
+    ui->labelObjectMapCharacteristic->setText(RPM::translate(Translations
+        ::CHARACTERISTIC).toLower() + RPM::COLON);
+    ui->radioButtonRange->setText(RPM::translate(Translations::RANGE) + RPM
+        ::COLON);
+    ui->radioButtonNumber->setText(RPM::translate(Translations::NUMBER) + RPM
+        ::COLON);
+    ui->radioButtonRandom->setText(RPM::translate(Translations::RANDOM) + RPM
+        ::COLON);
+    ui->radioButtonMessage->setText(RPM::translate(Translations::MESSAGE) + RPM
+        ::COLON);
+    ui->radioButtonOneVariable->setText(RPM::translate(Translations
+        ::ONE_VARIABLE) + RPM::COLON);
+    ui->radioButtonObjectInMap->setText(RPM::translate(Translations
+        ::AN_OBJECT_IN_MAP) + RPM::COLON);
+    ui->groupBoxValue->setTitle(RPM::translate(Translations::VALUE));
+    ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
+    ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
+    ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::PARENTHESIS_LEFT + RPM::MINUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::PARENTHESIS_LEFT + RPM::TIMES + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::PARENTHESIS_LEFT + RPM::EQUAL + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

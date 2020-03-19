@@ -49,6 +49,7 @@ const QString RPM::EXTENSION_JPG = ".jpg";
 
 // STRING SYMBOLS
 const QString RPM::DASH = "-";
+const QString RPM::SLASH = "/";
 const QString RPM::COLON = ":";
 const QString RPM::DOT = ".";
 const QString RPM::DOT_DOT_DOT = "...";
@@ -238,6 +239,7 @@ QStringList RPM::ENUM_TO_STRING_TARGET_KIND = {};
 QStringList RPM::ENUM_TO_STRING_AVAILABLE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = {};
 QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
+QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -545,6 +547,13 @@ void RPM::readTranslations() {
         RPM::translate(Translations::CONE),
         RPM::translate(Translations::CAPSULE),
         RPM::translate(Translations::CUSTOM)
+    });
+    RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = QStringList({
+        RPM::translate(Translations::NEW_GAME),
+        RPM::translate(Translations::LOAD_GAME),
+        RPM::translate(Translations::SETTINGS),
+        RPM::translate(Translations::EXIT),
+        RPM::translate(Translations::SCRIPT)
     });
 }
 

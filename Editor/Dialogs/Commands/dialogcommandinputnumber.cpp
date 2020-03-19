@@ -48,7 +48,9 @@ DialogCommandInputNumber::~DialogCommandInputNumber()
 
 void DialogCommandInputNumber::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::INPUT_NUMBER) + RPM
+        ::DOT_DOT_DOT);
+
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

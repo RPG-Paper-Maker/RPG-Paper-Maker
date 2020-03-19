@@ -444,22 +444,34 @@ QString SystemEffect::toString() const {
             textDamages = QString::number(m_damagesVariableID->id());
             break;
         }
-        text += "Damages on " + RPM::ENUM_TO_STRING_DAMAGES_KIND.at(m_damagesKind
-            ->id()) + " " + textDamages + " with " + m_damagesFormula->toString()
-            + " " + (m_isDamagesMinimum ? "[Minimum: " + m_damagesMinimum
-            ->toString() + "]" : "") + (m_isDamagesMaximum? "[Maximum: " +
-            m_damagesMaximum->toString() + "]" : "") + (m_isDamageElement ?
-            "[Element: " + m_damagesElementID->toString() + "]" : "") + (
-            m_isDamageVariance ? "[Variance: " + m_damagesVarianceFormula
-            ->toString() + "%]" : "") + (m_isDamageCritical ? "[Critical : " +
-            m_damagesCriticalFormula->toString() + "%]" : "") + (
-            m_isDamagePrecision ? "[Precision: " + m_damagesPrecisionFormula
-            ->toString() + "%]" : "");
+        text += RPM::translate(Translations::DAMAGES_ON) + RPM::SPACE + RPM
+            ::ENUM_TO_STRING_DAMAGES_KIND.at(m_damagesKind->id()) + RPM::SPACE +
+            textDamages + RPM::SPACE + RPM::translate(Translations::WITH)
+            .toLower() + RPM::SPACE + m_damagesFormula->toString() + RPM::SPACE
+            + (m_isDamagesMinimum ? RPM::BRACKET_LEFT + RPM::translate(
+            Translations::MINIMUM) + RPM::COLON + RPM::SPACE + m_damagesMinimum
+            ->toString() + RPM::BRACKET_RIGHT : "") + (m_isDamagesMaximum ? RPM
+            ::BRACKET_RIGHT + RPM::translate(Translations::MAXIMUM) + RPM::COLON
+            + RPM::SPACE + m_damagesMaximum->toString() + RPM::BRACKET_RIGHT :
+            "") + (m_isDamageElement ? RPM::BRACKET_LEFT + RPM::translate(
+            Translations::ELEMENT_ID) + RPM::COLON + RPM::SPACE +
+            m_damagesElementID->toString() + RPM::BRACKET_RIGHT : "") + (
+            m_isDamageVariance ? RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::VARIANCE) + RPM::COLON + RPM::SPACE + m_damagesVarianceFormula
+            ->toString() + "%" + RPM::BRACKET_RIGHT : "") + (m_isDamageCritical
+            ? RPM::BRACKET_LEFT + RPM::translate(Translations::CRITICAL) + RPM
+            ::COLON + RPM::SPACE + m_damagesCriticalFormula->toString() + "%" +
+            RPM::BRACKET_RIGHT : "") + (m_isDamagePrecision ? RPM::BRACKET_LEFT
+            + RPM::translate(Translations::PRECISION) + RPM::COLON + RPM::SPACE
+            + m_damagesPrecisionFormula->toString() + "%" + RPM::BRACKET_RIGHT :
+            "");
         break;
     }
     case EffectKind::Status:
-        text += QString(m_isAddStatus ? "Add" : "Remove") + " status " +
-            m_statusID->toString() + " with precision " +
+        text += QString(m_isAddStatus ? RPM::translate(Translations::ADD) : RPM
+            ::translate(Translations::REMOVE)) + RPM::SPACE + RPM::translate(
+            Translations::STATUS) + RPM::SPACE + m_statusID->toString() + RPM
+            ::SPACE + "with precision " +
             m_statusPrecisionFormula->toString() + "%";
         break;
     case EffectKind::AddRemoveSkill:
@@ -473,12 +485,13 @@ QString SystemEffect::toString() const {
         text += "Call common reaction " + m_commonReactionID->toString();
         break;
     case EffectKind::SpecialActions:
-        text += "Special action: " + RPM
-            ::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND.at(static_cast<int>(
-            m_specialActionKind));
+        text += RPM::translate(Translations::SPECIAL_ACTION) + RPM::COLON + RPM
+            ::SPACE + RPM::ENUM_TO_STRING_EFFECT_SPECIAL_ACTION_KIND.at(
+            static_cast<int>(m_specialActionKind));
         break;
     case EffectKind::Script:
-        text += "Script: " + m_scriptFormula->toString();
+        text += RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
+            m_scriptFormula->toString();
         break;
     }
 

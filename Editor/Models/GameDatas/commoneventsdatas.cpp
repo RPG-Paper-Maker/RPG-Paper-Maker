@@ -80,32 +80,42 @@ void CommonEventsDatas::setDefault(){
 
     // Events system
     QStringList namesEventsSystem;
-    namesEventsSystem << "Time" << "Chronometer" << "KeyPress" << "KeyRelease";
+    namesEventsSystem << RPM::translate(Translations::TIME) << RPM::translate(
+        Translations::CHRONOMETER) << RPM::translate(Translations::KEYPRESS) <<
+        RPM::translate(Translations::KEYRELEASE);
     QList<QVector<SystemCreateParameter*>> parametersSystem;
     parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1,"Interval",new PrimitiveValue(0)),
-            new SystemCreateParameter(2,"Repeat",new PrimitiveValue(true))});
+            new SystemCreateParameter(1, RPM::translate(Translations::INTERVAL),
+                new PrimitiveValue(0)),
+            new SystemCreateParameter(2, RPM::translate(Translations::REPEAT),
+                new PrimitiveValue(true))
+    });
     parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1,"Left",new PrimitiveValue(0))});
+            new SystemCreateParameter(1, RPM::translate(Translations::LEFT_TIME)
+                , new PrimitiveValue(0))});
     parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1,"ID",new PrimitiveValue),
-            new SystemCreateParameter(2,"Repeat",new PrimitiveValue(false)),
-            new SystemCreateParameter(3,"Immediate Repeat",
-                                      new PrimitiveValue(false))});
+            new SystemCreateParameter(1, RPM::translate(Translations::ID), new
+                PrimitiveValue),
+            new SystemCreateParameter(2, RPM::translate(Translations::REPEAT),
+                new PrimitiveValue(false)),
+            new SystemCreateParameter(3, RPM::translate(Translations
+                ::IMMEDIATE_REPEAT), new PrimitiveValue(false))});
     parametersSystem << QVector<SystemCreateParameter*>({
-            new SystemCreateParameter(1,"ID",new PrimitiveValue)});
+            new SystemCreateParameter(1, RPM::translate(Translations::ID), new
+                PrimitiveValue)});
     setDefaultEvent(m_modelEventsSystem, namesEventsSystem, parametersSystem);
 
     // Events user
     QStringList namesEventsUser;
-    namesEventsUser << "Hero action" << "Hero touch";
+    namesEventsUser << RPM::translate(Translations::HERO_ACTION) << RPM
+        ::translate(Translations::HERO_TOUCH);
     QList<QVector<SystemCreateParameter*>> parametersUser;
     parametersUser << QVector<SystemCreateParameter *>({}) << QVector<
         SystemCreateParameter *>({});
     setDefaultEvent(m_modelEventsUser, namesEventsUser, parametersUser);
 
     // States
-    super = new SuperListItem(1, "Normal");
+    super = new SuperListItem(1, RPM::translate(Translations::NORMAL));
     item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
     item->setText(super->toString());

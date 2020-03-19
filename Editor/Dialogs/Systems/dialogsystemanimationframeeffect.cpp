@@ -56,7 +56,17 @@ void DialogSystemAnimationFrameEffect::initialize() {
 
 void DialogSystemAnimationFrameEffect::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_ANIMATION_EFFECT) +
+        RPM::DOT_DOT_DOT);
+    ui->labelCondition->setText(RPM::translate(Translations::CONDITION) + RPM
+        ::COLON);
+    ui->groupBoxEffect->setTitle(RPM::translate(Translations::EFFECT));
+    ui->radioButtonFlash->setText(RPM::translate(Translations::FLASH) + RPM
+        ::COLON);
+    ui->radioButtonSoundEffect->setText(RPM::translate(Translations
+        ::SOUND_EFFECT) + RPM::COLON);
+    ui->pushButtonFlash->setText(RPM::translate(Translations::EDIT) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

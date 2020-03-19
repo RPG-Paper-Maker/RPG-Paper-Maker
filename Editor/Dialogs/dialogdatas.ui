@@ -740,7 +740,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QTabWidget" name="tabWidget_2">
+                   <widget class="QTabWidget" name="tabWidgetAnimation">
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
@@ -1062,7 +1062,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="labelStatusAvailable">
              <property name="text">
               <string>This option is not available yet</string>
              </property>

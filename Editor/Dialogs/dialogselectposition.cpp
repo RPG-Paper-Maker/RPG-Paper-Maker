@@ -75,7 +75,8 @@ TreeMapTag * DialogSelectPosition::currentTag() const {
 
 void DialogSelectPosition::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_MAP_POSITION) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -87,8 +88,9 @@ void DialogSelectPosition::translate()
 
 void DialogSelectPosition::accept() {
     if (currentTag()->isDir()) {
-        QMessageBox::warning(this, "Warning", "You should select a map and not "
-            "a folder.");
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::YOU_SHOULD_SELECT_MAP_NOT_FOLDER) + RPM
+            ::DOT);
     } else{
         QDialog::accept();
     }

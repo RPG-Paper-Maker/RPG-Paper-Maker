@@ -291,7 +291,8 @@ void DialogCollisions::updateObject3D(SystemObject3D *object) {
 // -------------------------------------------------------
 
 void DialogCollisions::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
+    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
     ui->tabWidget->setTabText(0, RPM::translate(Translations::TILESETS));
     ui->groupBoxTilesets->setTitle(RPM::translate(Translations::TILESETS));
     ui->tabWidget->setTabText(1, RPM::translate(Translations::CHARACTERS));

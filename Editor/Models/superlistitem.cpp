@@ -493,7 +493,7 @@ void SuperListItem::writeList(QStandardItemModel *model, QJsonObject &json,
 
 void SuperListItem::reset() {
     p_id = -1;
-    p_name = "<None>";
+    p_name = "<" + RPM::translate(Translations::NONE) + ">";
 }
 
 // -------------------------------------------------------

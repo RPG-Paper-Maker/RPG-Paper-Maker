@@ -444,8 +444,84 @@ void DialogDatas::playAnimation(AnimationEffectConditionKind condition) {
 // -------------------------------------------------------
 
 void DialogDatas::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
-
+    this->setWindowTitle(RPM::translate(Translations::DATAS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::CLASSES));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::HEROES));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::MONSTERS));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::TROOPS));
+    ui->tabWidget->setTabText(4, RPM::translate(Translations::ITEMS));
+    ui->tabWidget->setTabText(5, RPM::translate(Translations::WEAPONS));
+    ui->tabWidget->setTabText(6, RPM::translate(Translations::ARMORS));
+    ui->tabWidget->setTabText(7, RPM::translate(Translations::SKILLS));
+    ui->tabWidget->setTabText(8, RPM::translate(Translations::ANIMATIONS));
+    ui->tabWidget->setTabText(9, RPM::translate(Translations::STATUS));
+    ui->tabWidget->setTabText(10, RPM::translate(Translations::TILESETS));
+    ui->tabWidgetAnimation->setTabText(0, RPM::translate(Translations::GRAPHICS));
+    ui->tabWidgetAnimation->setTabText(1, RPM::translate(Translations
+        ::SOUND_EFFECTS_FLASHS));
+    ui->groupBoxItems->setTitle(RPM::translate(Translations::ITEMS));
+    ui->groupBoxArmors->setTitle(RPM::translate(Translations::ARMORS));
+    ui->groupBoxHeroes->setTitle(RPM::translate(Translations::HEROES));
+    ui->groupBoxSkills->setTitle(RPM::translate(Translations::SKILLS));
+    ui->groupBoxStates->setTitle(RPM::translate(Translations::STATES));
+    ui->groupBoxStatus->setTitle(RPM::translate(Translations::STATUS));
+    ui->groupBoxTroops->setTitle(RPM::translate(Translations::TROOPS));
+    ui->groupBoxClasses->setTitle(RPM::translate(Translations::CLASSES));
+    ui->groupBoxWeapons->setTitle(RPM::translate(Translations::WEAPONS));
+    ui->groupBoxMonsters->setTitle(RPM::translate(Translations::MONSTERS));
+    ui->groupBoxTilesets->setTitle(RPM::translate(Translations::TILESETS));
+    ui->groupBoxAnimations->setTitle(RPM::translate(Translations::ANIMATIONS));
+    ui->groupBoxMonstersList->setTitle(RPM::translate(Translations
+        ::MONSTERS_LIST));
+    ui->groupBoxAnimationFrames->setTitle(RPM::translate(Translations::FRAMES));
+    ui->labelRows->setText(RPM::translate(Translations::ROWS) + RPM::COLON);
+    ui->labelWalls->setText(RPM::translate(Translations::WALLS) + RPM::COLON);
+    ui->labelSlopes->setText(RPM::translate(Translations::SLOPES) + RPM::COLON);
+    ui->labelColumns->setText(RPM::translate(Translations::COLUMNS) + RPM::COLON);
+    ui->labelPosition->setText(RPM::translate(Translations::POSITION) + RPM
+        ::COLON);
+    ui->label3DObjects->setText(RPM::translate(Translations::THREED_OBJECTS) +
+        RPM::COLON);
+    ui->labelAutotiles->setText(RPM::translate(Translations::AUTOTILES) + RPM
+        ::COLON);
+    ui->labelMountains->setText(RPM::translate(Translations::MOUNTAINS) + RPM
+        ::COLON);
+    ui->labelTilesetPicture->setText(RPM::translate(Translations::PICTURE) + RPM
+        ::COLON);
+    ui->labelAnimationPicture->setText(RPM::translate(Translations::PICTURE) +
+        RPM::COLON);
+    ui->labelAnimatedAutotiles->setText(RPM::translate(Translations
+        ::ANIMATED_AUTOTILES) + RPM::COLON);
+    ui->labelStatusAvailable->setText(RPM::translate(Translations
+        ::THIS_OPTION_NOT_AVAILABLE_YET));
+    ui->pushButtonSlopes->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonPlayHit->setText(RPM::translate(Translations::PLAY_HIT));
+    ui->pushButtonPlayCrit->setText(RPM::translate(Translations::PLAY_CRIT));
+    ui->pushButtonPlayMiss->setText(RPM::translate(Translations::PLAY_MISS));
+    ui->pushButton3DObjects->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonAutotiles->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonMountains->setText(RPM::translate(Translations::CHOOSE) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonTroopTest->setText(RPM::translate(Translations::TEST) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonCopyFrames->setText(RPM::translate(Translations::COPY_FRAMES)
+        + RPM::DOT_DOT_DOT);
+    ui->pushButtonClearFrames->setText(RPM::translate(Translations::CLEAR_FRAMES
+        ) + RPM::DOT_DOT_DOT);
+    ui->pushButtonSpriteWalls->setText(RPM::translate(Translations::CHOOSE) +
+        RPM::DOT_DOT_DOT);
+    ui->pushButtonApplyTexture->setText(RPM::translate(Translations
+        ::APPLY_TEXTURE));
+    ui->pushButtonChangeBattler->setText(RPM::translate(Translations
+        ::CHANGE_BATTLER) + RPM::DOT_DOT_DOT);
+    ui->pushButtonCreateTransition->setText(RPM::translate(Translations
+        ::CREATE_TRANSITION) + RPM::DOT_DOT_DOT);
+    ui->pushButtonAnimatedAutotiles->setText(RPM::translate(Translations::CHOOSE
+        ) + RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -746,7 +822,8 @@ void DialogDatas::on_pushButtonCreateTransition_clicked() {
 
 void DialogDatas::on_pushButtonApplyTexture_clicked() {
     if (ui->widgetAnimation->selectedElement() == nullptr) {
-        QMessageBox::information(this, "Warning", "Select an element to apply.");
+        QMessageBox::information(this, RPM::translate(Translations::WARNING),
+            RPM::translate(Translations::SELECT_ELEMENT_TO_APPLY) + RPM::DOT);
     } else {
         ui->widgetAnimation->selectedElement()->setTexRow(ui
             ->widgetAnimationTexture->currentRow());

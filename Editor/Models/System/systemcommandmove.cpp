@@ -11,6 +11,7 @@
 
 #include "systemcommandmove.h"
 #include "commandmovekind.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -52,37 +53,40 @@ QString SystemCommandMove::toString() const{
     case CommandMoveKind::MoveOppositeHero:
     case CommandMoveKind::MoveFront:
     case CommandMoveKind::MoveBack:
-        QString stepSquare = m_command.at(i++) == "0" ? "square" : "step";
+        QString stepSquare = m_command.at(i++) == "0" ? RPM::translate(
+            Translations::SQUARE) : RPM::translate(Translations::STEP);
         QString dir;
         switch (kind){
         case CommandMoveKind::MoveNorth:
-            dir = "North"; break;
+            dir = RPM::translate(Translations::NORTH); break;
         case CommandMoveKind::MoveSouth:
-            dir = "South"; break;
+            dir = RPM::translate(Translations::SOUTH); break;
         case CommandMoveKind::MoveWest:
-            dir = "West"; break;
+            dir = RPM::translate(Translations::WEST); break;
         case CommandMoveKind::MoveEast:
-            dir = "East"; break;
+            dir = RPM::translate(Translations::EAST); break;
         case CommandMoveKind::MoveNorthWest:
-            dir = "North West"; break;
+            dir = RPM::translate(Translations::NORTH_WEST); break;
         case CommandMoveKind::MoveNorthEast:
-            dir = "North East"; break;
+            dir = RPM::translate(Translations::NORTH_EAST); break;
         case CommandMoveKind::MoveSouthWest:
-            dir = "South West"; break;
+            dir = RPM::translate(Translations::SOUTH_WEST); break;
         case CommandMoveKind::MoveSouthEast:
-            dir = "South East"; break;
+            dir = RPM::translate(Translations::SOUTH_EAST); break;
         case CommandMoveKind::MoveRandom:
-            dir = "random"; break;
+            dir = RPM::translate(Translations::RANDOM).toLower(); break;
         case CommandMoveKind::MoveHero:
-            dir = "hero"; break;
+            dir = RPM::translate(Translations::HERO).toLower(); break;
         case CommandMoveKind::MoveOppositeHero:
-            dir = "opposite hero"; break;
+            dir = RPM::translate(Translations::OPPOSITE_HERO).toLower(); break;
         case CommandMoveKind::MoveFront:
-            dir = "front"; break;
+            dir = RPM::translate(Translations::FRONT).toLower(); break;
         case CommandMoveKind::MoveBack:
-            dir = "back"; break;
+            dir = RPM::translate(Translations::BACK).toLower(); break;
         }
-        str += "Move 1 " + stepSquare + " to " + dir;
+        str += RPM::translate(Translations::MOVE_1) + RPM::SPACE + stepSquare +
+            RPM::SPACE + RPM::translate(Translations::TO).toLower() + RPM::SPACE
+            + dir;
         break;
     }
 

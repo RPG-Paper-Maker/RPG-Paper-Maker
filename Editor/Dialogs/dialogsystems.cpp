@@ -440,7 +440,119 @@ void DialogSystems::updateCommonObjects(SystemCommonObject *sysCommonObject) {
 
 void DialogSystems::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SYSTEMS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::SYSTEM));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::BATTLE_SYSTEM));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations
+        ::TITLE_SCREEN_GAME_OVER));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::MAIN_MENU));
+    ui->tabWidget->setTabText(4, RPM::translate(Translations::EVENTS_STATES));
+    ui->tabWidget->setTabText(5, RPM::translate(Translations::COMMON_REACTIONS));
+    ui->tabWidget->setTabText(6, RPM::translate(Translations::MODELS));
+    ui->labelMusic->setText(RPM::translate(Translations::MUSIC) + RPM::COLON);
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelBattle->setText(RPM::translate(Translations::BATTLE) + RPM::COLON);
+    ui->labelCancel->setText(RPM::translate(Translations::CANCEL) + RPM::COLON);
+    ui->labelCursor->setText(RPM::translate(Translations::CURSOR) + RPM::COLON);
+    ui->labelIsDead->setText(RPM::translate(Translations::IS_DEAD) + RPM::COLON);
+    ui->labelheight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
+    ui->labelLevelUp->setText(RPM::translate(Translations::LEVEL_UP) + RPM
+        ::COLON);
+    ui->labelVictory->setText(RPM::translate(Translations::VICTORY) + RPM
+        ::COLON);
+    ui->labelGameName->setText(RPM::translate(Translations::GAME_NAME) + RPM
+        ::COLON);
+    ui->labelImpossible->setText(RPM::translate(Translations::IMPOSSIBLE) + RPM
+        ::COLON);
+    ui->labelSquareSize->setText(RPM::translate(Translations::SQUARE_SIZE) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations::IN_PX) +
+        RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelConfirmation->setText(RPM::translate(Translations::CONFIRMATION) +
+        RPM::COLON);
+    ui->labelAnimationFrames->setText(RPM::translate(Translations
+        ::ANIMATION_FRAMES) + RPM::COLON);
+    ui->labelPriceOfSoldItem->setText(RPM::translate(Translations
+        ::PRICE_SOLD_ITEM) + RPM::COLON);
+    ui->labelCriticalInfluence->setText(RPM::translate(Translations
+        ::CRITICAL_INFLUENCE) + RPM::COLON);
+    ui->labelRayPortionsEditor->setText(RPM::translate(Translations
+        ::RAY_PORTIONS) + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(
+        Translations::EDITOR) + RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelRayPortionsIngame->setText(RPM::translate(Translations
+        ::RAY_PORTIONS) + RPM::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(
+        Translations::INGAME) + RPM::PARENTHESIS_RIGHT + RPM::COLON);
+    ui->labelMaxNumberOfSaveSlots->setText(RPM::translate(Translations
+        ::MAX_NUMBER_SAVE_SLOTS) + RPM::COLON);
+    ui->labelPercentOfDefaultPrice->setText("%" + RPM::SPACE + RPM::translate(
+        Translations::OF_DEFAULT_PRICE));
+    ui->labelDefaultDialogBoxOptions->setText(RPM::translate(Translations
+        ::DEFAULT_DIALOG_BOX_OPTIONS) + RPM::COLON);
+    ui->labelStatisticAssociatedToExp->setText(RPM::translate(Translations
+        ::STATISTIC_ASSOCIATED_EXP) + RPM::COLON);
+    ui->labelStatisticAssociatedToLevel->setText(RPM::translate(Translations
+        ::STATISTIC_ASSOCIATED_LEVEL) + RPM::COLON);
+    ui->labelMountainsCollisionAngleLimit1->setText(RPM::translate(Translations
+        ::MOUNTAIN_COLLISION_ANGLE_LIMIT_1));
+    ui->labelMountainsCollisionAngleLimit2->setText(RPM::translate(Translations
+        ::MOUNTAIN_COLLISION_ANGLE_LIMIT_2) + RPM::COLON);
+    ui->labelMountainsCollisionHeightLimit1->setText(RPM::translate(Translations
+        ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_1));
+    ui->labelMountainsCollisionHeightLimit2->setText(RPM::translate(Translations
+        ::MOUNTAIN_COLLISION_HEIGHT_LIMIT_2) + RPM::COLON);
+    ui->radioButtonImage->setText(RPM::translate(Translations::IMAGE) + RPM
+        ::COLON);
+    ui->radioButtonVideo->setText(RPM::translate(Translations::VIDEO) + RPM
+        ::COLON);
+    ui->checkBoxDisplayConsole->setText(RPM::translate(Translations
+        ::DISPLAY_CONSOLE));
+    ui->checkBoxCommonReactionBlockingHero->setText(RPM::translate(Translations
+        ::BLOCK_HERO_WHEN_REACTION));
+    ui->groupBoxColors->setTitle(RPM::translate(Translations::COLORS));
+    ui->groupBoxEvents->setTitle(RPM::translate(Translations::EVENTS));
+    ui->groupBoxModels->setTitle(RPM::translate(Translations::MODELS));
+    ui->groupBoxMusics->setTitle(RPM::translate(Translations::MUSICS));
+    ui->groupBoxSpeeds->setTitle(RPM::translate(Translations::SPEEDS));
+    ui->groupBoxStates->setTitle(RPM::translate(Translations::STATES));
+    ui->groupBoxElements->setTitle(RPM::translate(Translations::ELEMENTS));
+    ui->groupBoxFormulas->setTitle(RPM::translate(Translations::FORMULAS));
+    ui->groupBoxGameOver->setTitle(RPM::translate(Translations::GAME_OVER));
+    ui->groupBoxFontNames->setTitle(RPM::translate(Translations::FONT_NAMES));
+    ui->groupBoxFontSizes->setTitle(RPM::translate(Translations::FONT_SIZES));
+    ui->groupBoxArmorsKind->setTitle(RPM::translate(Translations::ARMORS_KIND));
+    ui->groupBoxBattleMaps->setTitle(RPM::translate(Translations::BATTLE_MAPS));
+    ui->groupBoxCurrencies->setTitle(RPM::translate(Translations::CURRENCIES));
+    ui->groupBoxDetections->setTitle(RPM::translate(Translations::DETECTIONS));
+    ui->groupBoxItemsTypes->setTitle(RPM::translate(Translations::ITEMS_TYPES));
+    ui->groupBoxParameters->setTitle(RPM::translate(Translations::PARAMETERS));
+    ui->groupBoxFrequencies->setTitle(RPM::translate(Translations::FREQUENCIES));
+    ui->groupBoxOtheOptions->setTitle(RPM::translate(Translations::OTHER_OPTIONS));
+    ui->groupBoxTitleScreen->setTitle(RPM::translate(Translations::TITLE_SCREEN));
+    ui->groupBoxWeaponsKind->setTitle(RPM::translate(Translations::WEAPONS_KIND));
+    ui->groupBoxWindowSkins->setTitle(RPM::translate(Translations::WINDOW_SKINS));
+    ui->groupBoxGlobalSounds->setTitle(RPM::translate(Translations
+        ::GLOBAL_SOUNDS));
+    ui->groupBoxMenuCommands->setTitle(RPM::translate(Translations
+        ::MENU_COMMANDS));
+    ui->groupBoxParameters_2->setTitle(RPM::translate(Translations::PARAMETERS));
+    ui->groupBoxMapProperties->setTitle(RPM::translate(Translations
+        ::MAP_PROPERTIES));
+    ui->groupBoxCommonReactions->setTitle(RPM::translate(Translations
+        ::COMMON_REACTIONS));
+    ui->groupBoxCameraProperties->setTitle(RPM::translate(Translations
+        ::CAMERA_PROPERTIES));
+    ui->groupBoxCommonEquipments->setTitle(RPM::translate(Translations
+        ::COMMON_EQUIPMENTS));
+    ui->groupBoxCommonStatistics->setTitle(RPM::translate(Translations
+        ::COMMON_STATISTICS));
+    ui->groupBoxCommonBattleCommands->setTitle(RPM::translate(Translations
+        ::COMMON_BATTLE_COMMANDS));
+    ui->groupBoxGameNativeResolution->setTitle(RPM::translate(Translations
+        ::GAME_NATIVE_RESOLUTION));
+    ui->groupBoxSettingsConfiguration->setTitle(RPM::translate(Translations
+        ::SETTINGS_CONFIGURATION));
+    ui->groupBoxTitleScreenBackground->setTitle(RPM::translate(Translations
+        ::BACKGROUND));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

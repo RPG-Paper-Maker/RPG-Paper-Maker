@@ -92,7 +92,25 @@ void DialogSystemDetection::updateMap() {
 
 void DialogSystemDetection::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_DETECTION) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelBot->setText(RPM::translate(Translations::BOT) + RPM::COLON);
+    ui->labelTop->setText(RPM::translate(Translations::TOP) + RPM::COLON);
+    ui->labelLeft->setText(RPM::translate(Translations::LEFT) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelRight->setText(RPM::translate(Translations::RIGHT) + RPM::COLON);
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelPixels->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelSquares->setText(RPM::translate(Translations::SQUARE_S));
+    ui->labelDescription->setText(RPM::translate(Translations
+        ::DETECTION_DESCRIPTION));
+    ui->labelRadiusLength->setText(RPM::translate(Translations::RADIUS) + RPM
+        ::COLON);
+    ui->groupBoxField->setTitle(RPM::translate(Translations::FIELD));
+    ui->groupBoxAutomatic->setTitle(RPM::translate(Translations::AUTOMATIC));
+    ui->groupBoxNewBoxHeight->setTitle(RPM::translate(Translations
+        ::NEW_BOX_HEIGHT));
+    ui->pushButtonGenerate->setText(RPM::translate(Translations::GENERATE));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -189,7 +207,8 @@ void DialogSystemDetection::on_comboBoxAutomatic_currentIndexChanged(int index)
 {
     ui->labelWidth->setVisible(index == 1);
     ui->spinBoxWidth->setVisible(index == 1);
-    ui->labelRadiusLength->setText(index == 0 ? "Radius" : "Length");
+    ui->labelRadiusLength->setText(index == 0 ? RPM::translate(Translations
+        ::RADIUS) : RPM::translate(Translations::LENGTH));
     ui->spinBoxRadiusLength->setValue(index == 0 ? m_radius : m_length);
 }
 

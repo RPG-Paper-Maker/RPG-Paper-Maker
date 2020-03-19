@@ -140,6 +140,7 @@ void Project::setDefault(){
     m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
     p_gameDatas->readAnimations(p_pathCurrentProject);
+    p_gameDatas->animationsDatas()->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
     m_specialElementsDatas->setDefault();
@@ -198,25 +199,28 @@ bool Project::readVersion(){
     QTextStream in(&file);
     m_version = in.readLine();
     file.close();
-    QString information = "This project is under " + m_version + " version but"
-                          + " your current RPG Paper Maker version is " +
-                          Project::ENGINE_VERSION;
+    QString information = RPM::translate(Translations::VERSION_PB_1) + RPM::SPACE
+        + m_version + RPM::SPACE + RPM::translate(Translations::VERSION_PB_2) +
+        RPM::SPACE + Project::ENGINE_VERSION + RPM::DOT;
 
     int dBefore = Common::versionDifferent(m_version, "0.3.0");
 
     // If impossible to convert the version
     if (dBefore == -2) {
-        QMessageBox::critical(nullptr, "Error: could not find project version",
-                              "Impossible to convert" + m_version + ".");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::COULD_NOT_FIND_PROJECT_VERSION) + RPM::DOT, RPM::translate(
+            Translations::IMPOSSIBLE_TO_CONVERT) + RPM::SPACE + m_version + RPM
+            ::DOT);
         return false;
     }
 
     // If version < 0.3.0, tell that the project updater didn't existed yet
     if (dBefore == -1) {
-        QMessageBox::critical(nullptr, "Error: impossible conversion",
-                              information + " and the projects cannot be " +
-                              "updated if the project version is inferior to " +
-                              "0.3.0.");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
+            ::translate(Translations::IMPOSSIBLE_CONVERSION_2) + RPM::DOT);
         return false;
     }
 
@@ -224,9 +228,10 @@ bool Project::readVersion(){
 
     // If the project if superior to the engine
     if (d == 1) {
-        QMessageBox::critical(nullptr, "Error: impossible conversion",
-                              information + ". Please try to update a new " +
-                              "version of the engine and retry.");
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+            ::COLON + RPM::SPACE + RPM::translate(Translations
+            ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
+            ::translate(Translations::IMPOSSIBLE_CONVERSION_3) + RPM::DOT);
         return false;
     }
 
@@ -235,13 +240,12 @@ bool Project::readVersion(){
         QDir dirProject(p_pathCurrentProject);
         QString previousFolderName = dirProject.dirName() +
                                      "-" + m_version;
-        QMessageBox::StandardButton box =
-            QMessageBox::question(nullptr, "Error: conversion needed",
-                                  information + ". Convert the project? (a " +
-                                  "copy of your current project will be " +
-                                  "created under the name " + previousFolderName
-                                  + ".",
-                                  QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
+            ::translate(Translations::ERROR) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::CONVERSION_NEEDED), information + RPM
+            ::SPACE + RPM::translate(Translations::CONVERT_PROJECT) + RPM::SPACE
+            + previousFolderName + RPM::PARENTHESIS_RIGHT + RPM::DOT,
+            QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             DialogProgress dialog;
             QThread* thread = new QThread(qApp->parent());
@@ -278,17 +282,18 @@ bool Project::readOS() {
 
     // Compare
     if (computerOS != projectOS) {
-        QString information = "This project is configured for " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(projectOSInteger) + " OS but you seems to be on " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + " OS.";
-        QString question = "Would you like to convert the project for " +
-                RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + " OS? (This will only keep" +
-                " \"Content\" folder, and \"game.rpm\", all the other " +
-                " files will be removed in the root of the project)";
-        QMessageBox::StandardButton box =
-                QMessageBox::question(nullptr, "Error: incompatible OS",
-                             information + "\n" + question,
-                             QMessageBox::Yes | QMessageBox::No);
+        QString information = RPM::translate(Translations::INCOMPATIBLE_OS_1) +
+            RPM::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(projectOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_2) + RPM
+            ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_3) + RPM::DOT;
+        QString question = RPM::translate(Translations::INCOMPATIBLE_OS_4) + RPM
+            ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
+            ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_5) + RPM::DOT;
+        QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
+            ::translate(Translations::ERROR) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::INCOMPATIBLE_OS), information + RPM
+            ::NEW_LINE + question, QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {
             removeOSFiles();
             copyOSFiles();
@@ -582,7 +587,8 @@ void Project::writeTitleScreenGameOver() {
 QString Project::createRPMFile() {
     QFile file(Common::pathCombine(p_pathCurrentProject, "game.rpm"));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return "Error while creating game.rpm file";
+        return RPM::translate(Translations::ERROR_WHILE_CREATING_RPM_FILE) + RPM
+            ::DOT;
     QTextStream out(&file);
     out << Project::ENGINE_VERSION;
 

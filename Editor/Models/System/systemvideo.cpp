@@ -22,7 +22,7 @@ const QString SystemVideo::JSON_BR = "br";
 // -------------------------------------------------------
 
 SystemVideo::SystemVideo() :
-    SystemVideo(-1, "<None>", false)
+    SystemVideo(-1, "<" + RPM::translate(Translations::NONE) + ">", false)
 {
 
 }

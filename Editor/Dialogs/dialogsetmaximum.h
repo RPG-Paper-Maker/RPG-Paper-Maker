@@ -33,8 +33,6 @@ class DialogSetMaximum : public QDialog
     Q_OBJECT
 
 public:
-    static const QString STR_WARNING;
-
     explicit DialogSetMaximum(QStandardItemModel* model, int max,
                               QWidget *parent = nullptr);
     ~DialogSetMaximum();

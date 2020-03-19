@@ -48,6 +48,8 @@ DialogCompleteListStates::~DialogCompleteListStates()
 // -------------------------------------------------------
 
 void DialogCompleteListStates::translate() {
-    //this->setWindowTitle(RPM::);
+    this->setWindowTitle(RPM::translate(Translations::COMPLETE_LIST) + RPM
+        ::DOT_DOT_DOT);
+    ui->groupBoxStates->setTitle(RPM::translate(Translations::STATES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

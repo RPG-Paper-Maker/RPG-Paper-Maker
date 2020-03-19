@@ -66,7 +66,11 @@ void DialogSystemColor::setBackgroundColor(QColor& color) {
 
 void DialogSystemColor::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_COLOR) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->pushButtonColor->setText(RPM::translate(Translations::CHANGE_COLOR) +
+        RPM::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

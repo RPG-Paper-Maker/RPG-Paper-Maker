@@ -56,7 +56,16 @@ void DialogSystemKeyBoardGeneral::initialize(){
 
 void DialogSystemKeyBoardGeneral::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_KEYBOARD) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelShortcutLabel->setText(RPM::translate(Translations::SHORTCUT) + RPM
+        ::COLON);
+    ui->labelDescription->setText(RPM::translate(Translations::DESCRIPTION) +
+        RPM::COLON);
+    ui->labelAbbreviation->setText(RPM::translate(Translations::ABBREVIATION_JS)
+        + RPM::COLON);
+    ui->pushButtonChange->setText(RPM::translate(Translations::CHANGE) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -39,7 +39,7 @@ void Map::writeDefaultMap(QString path){
     QJsonObject json;
 
     Position position(7, 0, 0, 7, 0);
-    SystemMapObject super(1, "Hero", position);
+    SystemMapObject super(1, RPM::translate(Translations::HERO), position);
     super.write(json);
     jsonObject.append(json);
     properties.skyColorID()->setNumberValue(3);
@@ -49,8 +49,9 @@ void Map::writeDefaultMap(QString path){
     Portion globalPortion(0, 0, 0);
     MapPortion mapPortion(globalPortion);
     mapPortion.fillWithFloor(&properties);
-    SystemCommonObject* o = new SystemCommonObject(1, "Hero", false, 2, new
-        QStandardItemModel, new QStandardItemModel, new QStandardItemModel);
+    SystemCommonObject* o = new SystemCommonObject(1, RPM::translate(
+        Translations::HERO), false, 2, new QStandardItemModel, new
+        QStandardItemModel, new QStandardItemModel);
     QJsonObject previous;
     MapEditorSubSelectionKind previousType;
     mapPortion.addObject(position, o, previous, previousType);

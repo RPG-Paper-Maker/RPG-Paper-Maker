@@ -94,17 +94,25 @@ void DialogCommandChangeProperty::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::CHANGE_PROPERTY) + RPM
         ::DOT_DOT_DOT);
-    ui->labelNewValue->setText(RPM::translate(Translations::NEW_VALUE) + RPM::COLON);
-    ui->labelPropertyID->setText(RPM::translate(Translations::PROPERTY_ID) + RPM::COLON);
+    ui->labelNewValue->setText(RPM::translate(Translations::NEW_VALUE) + RPM
+        ::COLON);
+    ui->labelPropertyID->setText(RPM::translate(Translations::PROPERTY_ID) + RPM
+        ::COLON);
     ui->groupBoxValue->setTitle(RPM::translate(Translations::VALUE));
     ui->groupBoxOperation->setTitle(RPM::translate(Translations::OPERATION));
     ui->groupBoxSelection->setTitle(RPM::translate(Translations::SELECTION));
-    ui->radioButtonPlus->setText(RPM::translate(Translations::PLUS));
-    ui->radioButtonMinus->setText(RPM::translate(Translations::MINUS));
-    ui->radioButtonTimes->setText(RPM::translate(Translations::TIMES));
-    ui->radioButtonEquals->setText(RPM::translate(Translations::EQUALS));
-    ui->radioButtonModulo->setText(RPM::translate(Translations::MODULO));
-    ui->radioButtonDivided->setText(RPM::translate(Translations::DIVIDED_BY));
+    ui->radioButtonPlus->setText(RPM::PARENTHESIS_LEFT + RPM::PLUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::PLUS));
+    ui->radioButtonMinus->setText(RPM::PARENTHESIS_LEFT + RPM::MINUS + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MINUS));
+    ui->radioButtonTimes->setText(RPM::PARENTHESIS_LEFT + RPM::TIMES + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::TIMES));
+    ui->radioButtonEquals->setText(RPM::PARENTHESIS_LEFT + RPM::EQUAL + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::EQUALS));
+    ui->radioButtonModulo->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::MODULO));
+    ui->radioButtonDivided->setText(RPM::PARENTHESIS_LEFT + RPM::MODULO + RPM
+        ::PARENTHESIS_RIGHT + RPM::translate(Translations::DIVIDED_BY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

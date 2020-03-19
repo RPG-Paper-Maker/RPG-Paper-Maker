@@ -51,7 +51,8 @@ const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 // -------------------------------------------------------
 
 SystemDatas::SystemDatas() :
-    m_projectName(new LangsTranslation("Project without name")),
+    m_projectName(new LangsTranslation(RPM::translate(Translations
+        ::PROJECT_WITHOUT_NAME))),
     m_mountainCollisionHeight(new PrimitiveValue(4)),
     m_mountainCollisionAngle(new PrimitiveValue(45.0)),
     m_idMapHero(1),
@@ -291,7 +292,11 @@ void SystemDatas::setDefault() {
 void SystemDatas::setDefaultColors() {
     QStandardItem *item;
     SystemColor *color;
-    QString namesColors[] = {"Black", "White", "BlueSky"};
+    QString namesColors[] = {
+        RPM::translate(Translations::BLACK),
+        RPM::translate(Translations::WHITE),
+        RPM::translate(Translations::BLUE_SKY)
+    };
     int r[] = {0, 255, 199};
     int g[] = {0, 255, 224};
     int b[] = {0, 255, 221};
@@ -312,7 +317,10 @@ void SystemDatas::setDefaultColors() {
 void SystemDatas::setDefaultCurrencies() {
     QStandardItem *item;
     SystemCurrency *currency;
-    QString namesCurrencies[] = {"G", "XCoin"};
+    QString namesCurrencies[] = {
+        RPM::translate(Translations::G),
+        RPM::translate(Translations::XCOIN)
+    };
     int picCurrencies[] = {1, 2};
     int length = (sizeof(namesCurrencies)/sizeof(*namesCurrencies));
     for (int i = 0; i < length; i++){
@@ -332,7 +340,10 @@ void SystemDatas::setDefaultCurrencies() {
 void SystemDatas::setDefaultItemsTypes() {
     QStandardItem *item;
     SuperListItem *sys;
-    QString namesItemsKind[] = {"ingredient", "key items"};
+    QString namesItemsKind[] = {
+        RPM::translate(Translations::INGREDIENT),
+        RPM::translate(Translations::KEY_ITEMS)
+    };
     int length = (sizeof(namesItemsKind)/sizeof(*namesItemsKind));
     for (int i = 0; i < length; i++){
         item = new QStandardItem;
@@ -348,13 +359,13 @@ void SystemDatas::setDefaultItemsTypes() {
 
 void SystemDatas::setDefaultWindowSkins() {
     QStandardItem *item = new QStandardItem;
-    SystemWindowSkin *sys = new SystemWindowSkin(1, "Default", 1, QRectF(0, 0, 8,
-        8), QRectF(8, 0, 8, 8), QRectF(0, 8, 8, 8), QRectF(8, 8, 8, 8), QRectF(
-        16, 8, 8, 2), QRectF(16, 10, 8, 2), QRectF(16, 0, 2, 8), QRectF(18, 0,
-        2, 8), QRectF(0, 18, 72, 36), QRectF(0, 54, 72, 36), false, QRectF(88,
-        0, 80, 16), QRectF(24, 0, 64, 18), QRectF(168, 0, 16, 22), QRectF(72, 22
-        , 120, 18), QRectF(72, 40, 120, 18), QRectF(72, 58, 120, 18), QRectF(72,
-        76, 38, 14));
+    SystemWindowSkin *sys = new SystemWindowSkin(1, RPM::translate(Translations
+        ::DEFAULT), 1, QRectF(0, 0, 8, 8), QRectF(8, 0, 8, 8), QRectF(0, 8, 8,
+        8), QRectF(8, 8, 8, 8), QRectF(16, 8, 8, 2), QRectF(16, 10, 8, 2),
+        QRectF(16, 0, 2, 8), QRectF(18, 0, 2, 8), QRectF(0, 18, 72, 36), QRectF(
+        0, 54, 72, 36), false, QRectF(88, 0, 80, 16), QRectF(24, 0, 64, 18),
+        QRectF(168, 0, 16, 22), QRectF(72, 22, 120, 18), QRectF(72, 40, 120, 18)
+        , QRectF(72, 58, 120, 18), QRectF(72, 76, 38, 14));
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(sys)));
     item->setFlags(item->flags() ^ (Qt::ItemIsDropEnabled));
     item->setText(sys->toString());
@@ -367,12 +378,14 @@ void SystemDatas::setDefaultCameraProperties() {
     QList<QStandardItem *> row;
     SystemCameraProperties *cameraProperties;
 
-    cameraProperties = new SystemCameraProperties(1, "Outside");
+    cameraProperties = new SystemCameraProperties(1, RPM::translate(Translations
+        ::OUTSIDE));
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
-    cameraProperties = new SystemCameraProperties(2, "Battle", new
-        PrimitiveValue(360.0), new PrimitiveValue(SystemCameraProperties
-        ::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(60.0));
+    cameraProperties = new SystemCameraProperties(2, RPM::translate(Translations
+        ::BATTLE), new PrimitiveValue(360.0), new PrimitiveValue(
+        SystemCameraProperties::DEFAULT_HORIZONTAL_ANGLE), new PrimitiveValue(
+        60.0));
     row = cameraProperties->getModelRow();
     m_modelCameraProperties->appendRow(row);
 }
@@ -383,11 +396,13 @@ void SystemDatas::setDefaultDetections() {
     QList<QStandardItem *> row;
     SystemDetection *detection;
 
-    detection = new SystemDetection(1, "Front", 0, 0, 0, 1);
+    detection = new SystemDetection(1, RPM::translate(Translations::FRONT), 0, 0
+        , 0, 1);
     detection->setDefault();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
-    detection = new SystemDetection(2, "Self", 0, 0, 0, 0);
+    detection = new SystemDetection(2, RPM::translate(Translations::SELF), 0, 0,
+        0, 0);
     detection->setSelf();
     row = detection->getModelRow();
     m_modelDetections->appendRow(row);
@@ -399,24 +414,24 @@ void SystemDatas::setDefaultSpeed() {
     QList<QStandardItem *> row;
     SystemSpeedFrequency *speedFrequency;
 
-    speedFrequency = new SystemSpeedFrequency(1, "Normal", new PrimitiveValue(
-        1.0), true);
+    speedFrequency = new SystemSpeedFrequency(1, RPM::translate(Translations
+        ::NORMAL), new PrimitiveValue(1.0), true);
     row = speedFrequency->getModelRow();
     m_modelSpeed->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(2, "Low", new PrimitiveValue(0.75)
-        , true);
+    speedFrequency = new SystemSpeedFrequency(2, RPM::translate(Translations
+        ::LOW), new PrimitiveValue(0.75), true);
     row = speedFrequency->getModelRow();
     m_modelSpeed->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(3, "Very low", new PrimitiveValue(
-        0.5), true);
+    speedFrequency = new SystemSpeedFrequency(3, RPM::translate(Translations
+        ::VERY_LOW), new PrimitiveValue(0.5), true);
     row = speedFrequency->getModelRow();
     m_modelSpeed->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(4, "Fast", new PrimitiveValue(1.5)
-        , true);
+    speedFrequency = new SystemSpeedFrequency(4, RPM::translate(Translations
+        ::FAST), new PrimitiveValue(1.5), true);
     row = speedFrequency->getModelRow();
     m_modelSpeed->appendRow(row);
-    speedFrequency = new SystemSpeedFrequency(5, "Very fast", new PrimitiveValue
-        (2.0), true);
+    speedFrequency = new SystemSpeedFrequency(5, RPM::translate(Translations
+        ::VERY_FAST), new PrimitiveValue(2.0), true);
     row = speedFrequency->getModelRow();
     m_modelSpeed->appendRow(row);
 }
@@ -427,8 +442,8 @@ void SystemDatas::setDefaultFrequencies() {
     QList<QStandardItem *> row;
     SystemSpeedFrequency *speedFrequency;
 
-    speedFrequency = new SystemSpeedFrequency(1, "Instantaneous", new
-        PrimitiveValue(0.0), false);
+    speedFrequency = new SystemSpeedFrequency(1, RPM::translate(Translations
+        ::INSTANTANEOUS), new PrimitiveValue(0.0), false);
     row = speedFrequency->getModelRow();
     m_modelFrequencies->appendRow(row);
 }
@@ -439,19 +454,24 @@ void SystemDatas::setDefaultFontSizes() {
     QList<QStandardItem *> row;
     SystemFontSize *fontSize;
 
-    fontSize = new SystemFontSize(1, "Normal", new PrimitiveValue(13));
+    fontSize = new SystemFontSize(1, RPM::translate(Translations::NORMAL), new
+        PrimitiveValue(13));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(2, "Small", new PrimitiveValue(10));
+    fontSize = new SystemFontSize(2, RPM::translate(Translations::SMALL), new
+        PrimitiveValue(10));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(3, "Very small", new PrimitiveValue(7));
+    fontSize = new SystemFontSize(3, RPM::translate(Translations::VERY_SMALL),
+        new PrimitiveValue(7));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(4, "Big", new PrimitiveValue(16));
+    fontSize = new SystemFontSize(4, RPM::translate(Translations::BIG), new
+        PrimitiveValue(16));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
-    fontSize = new SystemFontSize(5, "Very big", new PrimitiveValue(19));
+    fontSize = new SystemFontSize(5, RPM::translate(Translations::VERY_BIG), new
+        PrimitiveValue(19));
     row = fontSize->getModelRow();
     m_modelFontSizes->appendRow(row);
 }

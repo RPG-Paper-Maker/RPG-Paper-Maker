@@ -72,8 +72,10 @@ QStandardItemModel* SystemMonster::modelActions() const {
 // -------------------------------------------------------
 
 void SystemMonster::initializeHeaders() {
-    m_modelLoots->setHorizontalHeaderLabels(QStringList({"Name", "N", "P", "I",
-        "F"}));
+    m_modelLoots->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::NUMBER_SHORT), RPM
+        ::translate(Translations::PROBABILITY_SHORT), RPM::translate(
+        Translations::INITIAL_SHORT), RPM::translate(Translations::FINAL_SHORT)}));
 }
 
 // -------------------------------------------------------

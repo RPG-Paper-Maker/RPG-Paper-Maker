@@ -227,8 +227,15 @@ void BattleSystemDatas::setDefaultOptions() {
 void BattleSystemDatas::setDefaultWeaponsKind() {
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    QString names[] = {"Sword", "Axe", "Spear", "Tome", "Staff", "Bow",
-                       "Firearm"};
+    QString names[] = {
+        RPM::translate(Translations::SWORD),
+        RPM::translate(Translations::AXE),
+        RPM::translate(Translations::SPEAR),
+        RPM::translate(Translations::TOME),
+        RPM::translate(Translations::STAFF),
+        RPM::translate(Translations::BOW),
+        RPM::translate(Translations::FIREARM)
+    };
     QList<bool> equipmentsAssigment =
             QList<bool>({true,true,false,false,false,false,false});
     int length = (sizeof(names)/sizeof(*names));
@@ -251,8 +258,18 @@ void BattleSystemDatas::setDefaultWeaponsKind() {
 void BattleSystemDatas::setDefaultArmorsKind(){
     SystemWeaponArmorKind* sysWeaponArmorKind;
     QStandardItem* item;
-    QString names[] = {"Helmet", "Cap", "Mail", "Vest", "Vambraces",
-                       "Guards", "Greaves", "Leggings", "Ring", "Necklace"};
+    QString names[] = {
+        RPM::translate(Translations::SWORD),
+        RPM::translate(Translations::CAP),
+        RPM::translate(Translations::MAIL),
+        RPM::translate(Translations::VEST),
+        RPM::translate(Translations::VAMBRACES),
+        RPM::translate(Translations::GUARDS),
+        RPM::translate(Translations::GREAVES),
+        RPM::translate(Translations::LEGGINGS),
+        RPM::translate(Translations::RING),
+        RPM::translate(Translations::NECKLACE)
+    };
     QList<bool> equipmentsAssigment[] = {
         QList<bool>({false,false,true,false,false,false,false}),
         QList<bool>({false,false,true,false,false,false,false}),
@@ -285,7 +302,8 @@ void BattleSystemDatas::setDefaultArmorsKind(){
 
 void BattleSystemDatas::setDefaultBattleMaps(){
     SuperListItem::deleteModel(m_modelBattleMaps, false);
-    SystemBattleMap* sysBattleMap = new SystemBattleMap(1, "Default", new
+    SystemBattleMap* sysBattleMap = new SystemBattleMap(1, RPM::translate(
+        Translations::DEFAULT), new
         PrimitiveValue(PrimitiveValueKind::DataBase, 2), 2, Position3D(8, 0, 0,
         7));
     QStandardItem* item = new QStandardItem;
@@ -300,7 +318,11 @@ void BattleSystemDatas::setDefaultBattleMaps(){
 // -------------------------------------------------------
 
 void BattleSystemDatas::setDefaultElements() {
-    QString names[] = { "Fire", "Water", "Plant" };
+    QString names[] = {
+        RPM::translate(Translations::FIRE),
+        RPM::translate(Translations::WATER),
+        RPM::translate(Translations::PLANT)
+    };
     int icons[] = { 11, 12, 34 };
     QVector<double> efficiencies[] = {
         QVector<double>({ 1.0, 0.5, 2.0 }), // Fire
@@ -328,13 +350,20 @@ void BattleSystemDatas::setDefaultElements() {
 void BattleSystemDatas::setDefaultCommonEquipment(){
     int i = 1;
     SystemLang* items[] = {
-        new SystemLang(i++, new LangsTranslation("Left hand")),
-        new SystemLang(i++, new LangsTranslation("Right hand")),
-        new SystemLang(i++, new LangsTranslation("Head")),
-        new SystemLang(i++, new LangsTranslation("Chest")),
-        new SystemLang(i++, new LangsTranslation("Arms")),
-        new SystemLang(i++, new LangsTranslation("Legs")),
-        new SystemLang(i++, new LangsTranslation("Accessory"))
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::LEFT_HAND))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::RIGHT_HAND))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::HEAD))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::CHEST))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::ARMS))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::LEGS))),
+        new SystemLang(i++, new LangsTranslation(RPM::translate(Translations
+            ::ACCESSORY)))
     };
     int length = (sizeof(items)/sizeof(*items));
     QStandardItem* item;
@@ -354,21 +383,30 @@ void BattleSystemDatas::setDefaultCommonEquipment(){
 void BattleSystemDatas::setDefaultCommonStatistics(){
     int i = 1;
     SystemStatistic* items[] = {
-        new SystemStatistic(i++, new LangsTranslation("Lv."), "lv", true),
-        new SystemStatistic(i++, new LangsTranslation("Exp."), "xp", false),
-        new SystemStatistic(i++, new LangsTranslation("HP"), "hp", false),
-        new SystemStatistic(i++, new LangsTranslation("MP"), "mp", false),
-        new SystemStatistic(i++, new LangsTranslation("TP"), "tp", false),
-        new SystemStatistic(i++, new LangsTranslation("Attack"), "atk", true),
-        new SystemStatistic(i++, new LangsTranslation("Magic"), "mag", true),
-        new SystemStatistic(i++, new LangsTranslation("Strength"), "str", true),
-        new SystemStatistic(i++, new LangsTranslation("Intelligence"), "int",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("P. Defense"), "pdef",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("M. defense"), "mdef",
-        true),
-        new SystemStatistic(i++, new LangsTranslation("Agility"), "agi", true)
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::LV)), "lv", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::EXP)), "xp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::HP)), "hp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::MP)), "mp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::TP)), "tp", false),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::ATTACK)), "atk", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::MAGIC)), "mag", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::STRENGTH)), "str", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::INTELLIGENCE)), "int", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::P_DEFENSE)), "pdef", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::M_DEFENSE)), "mdef", true),
+        new SystemStatistic(i++, new LangsTranslation(RPM::translate(
+            Translations::AGILITY)), "agi", true)
     };
 
     int length = (sizeof(items)/sizeof(*items));
@@ -389,11 +427,11 @@ void BattleSystemDatas::setDefaultCommonStatistics(){
 void BattleSystemDatas::setDefaultCommonBattleCommand(){
     int i = 1;
     SystemBattleCommand* items[] = {
-        new SystemBattleCommand(i++, "Attack", 1),
-        new SystemBattleCommand(i++, "Skill", 2),
-        new SystemBattleCommand(i++, "Item", 3),
-        new SystemBattleCommand(i++, "Escape", 4),
-        new SystemBattleCommand(i++, "End turn", 5),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ATTACK), 1),
+        new SystemBattleCommand(i++, RPM::translate(Translations::SKILL), 2),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ITEM), 3),
+        new SystemBattleCommand(i++, RPM::translate(Translations::ESCAPE), 4),
+        new SystemBattleCommand(i++, RPM::translate(Translations::END_TURN), 5),
     };
 
     int length = (sizeof(items)/sizeof(*items));

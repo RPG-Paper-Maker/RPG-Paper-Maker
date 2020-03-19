@@ -58,7 +58,10 @@ TreeMapTag * DialogSystemBattleMap::currentTag() const {
 
 void DialogSystemBattleMap::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_BATTLE_MAP) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelCameraPropertiesID->setText(RPM::translate(Translations
+        ::CAMERA_PROPERTIES_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -70,8 +73,8 @@ void DialogSystemBattleMap::translate()
 
 void DialogSystemBattleMap::accept() {
     if (currentTag()->isDir()) {
-        QMessageBox::warning(this, "Warning", "You should select a map and not "
-            "a folder.");
+        QMessageBox::warning(this, RPM::translate(Translations::WARNING), RPM
+            ::translate(Translations::YOU_SHOULD_SELECT_MAP_NOT_FOLDER));
     } else {
         Position3D position(ui->panelSelectPositionMaps->x(), ui
             ->panelSelectPositionMaps->y(), ui->panelSelectPositionMaps->yPlus()

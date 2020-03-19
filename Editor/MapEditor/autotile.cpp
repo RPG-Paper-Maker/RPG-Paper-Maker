@@ -11,6 +11,7 @@
 
 #include "autotile.h"
 #include "map.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -67,7 +68,7 @@ MapEditorSubSelectionKind AutotileDatas::getSubKind() const{
 }
 
 QString AutotileDatas::toString() const {
-    return "AUTOTILE";
+    return RPM::translate(Translations::AUTOTILE).toUpper();
 }
 
 // -------------------------------------------------------

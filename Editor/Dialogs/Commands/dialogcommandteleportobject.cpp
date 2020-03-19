@@ -79,7 +79,19 @@ DialogCommandTeleportObject::~DialogCommandTeleportObject()
 
 void DialogCommandTeleportObject::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::TELEPORT_OBJECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::POSITION));
+    ui->groupBoxPosition->setTitle(RPM::translate(Translations::POSITION));
+    ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

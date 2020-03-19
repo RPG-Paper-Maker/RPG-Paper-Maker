@@ -12,6 +12,7 @@
 #include "systemevent.h"
 #include "systemcreateparameter.h"
 #include "widgetsupertree.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -47,8 +48,8 @@ QStandardItemModel* SystemEvent::modelParameters() const {
 // -------------------------------------------------------
 
 void SystemEvent::initializeHeaders() {
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name",
-        "Default value"}));
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::DEFAULT_VALUE)}));
 }
 
 // -------------------------------------------------------

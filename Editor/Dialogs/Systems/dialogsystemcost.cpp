@@ -57,6 +57,9 @@ void DialogSystemCost::initialize() {
 
 void DialogSystemCost::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_COST) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelWithValue->setText(RPM::translate(Translations::WITH_VALUE));
+    ui->labelApplyCostOn->setText(RPM::translate(Translations::APPLY_COST_ON));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

@@ -74,7 +74,18 @@ void DialogCommandDisplayAPicture::initializePrimitives() {
 
 void DialogCommandDisplayAPicture::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::DISPLAY_A_PICTURE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZoom->setText(RPM::translate(Translations::ZOOM) + RPM::COLON);
+    ui->labelAngle->setText(RPM::translate(Translations::ANGLE) + RPM::COLON);
+    ui->labelIndex->setText(RPM::translate(Translations::INDEX) + RPM::COLON);
+    ui->labelOrigin->setText(RPM::translate(Translations::ORIGIN) + RPM::COLON);
+    ui->labelImageID->setText(RPM::translate(Translations::IMAGE_ID) + RPM::COLON);
+    ui->labelOpacity->setText(RPM::translate(Translations::OPACITY) + RPM::COLON);
+    ui->groupBoxEffects->setTitle(RPM::translate(Translations::EFFECTS));
+    ui->groupBoxCoordinates->setTitle(RPM::translate(Translations::COORDINATES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

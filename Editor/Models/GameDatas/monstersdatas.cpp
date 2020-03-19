@@ -56,7 +56,8 @@ void MonstersDatas::setDefault(QStandardItem* ,
     QStandardItemModel* actions;
     SuperListItem* sys = nullptr;
     SystemLoot* loot;
-    LangsTranslation* names[] = {new LangsTranslation("Wooly")};
+    LangsTranslation* names[] = {new LangsTranslation(RPM::translate(
+        Translations::WOOLY))};
     int classesIds[] = {5};
     int battlersIds[] = {5};
     int facesetsIds[] = {5};

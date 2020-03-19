@@ -102,7 +102,8 @@ EventCommandKind DialogCommandPlaySong::getCommandKind() const {
 
 void DialogCommandPlaySong::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    ui->checkBoxSongID->setText(RPM::translate(Translations::SELECT_SONG_ID) +
+        RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
