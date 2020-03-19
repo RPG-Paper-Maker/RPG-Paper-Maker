@@ -29,6 +29,7 @@ public:
     static const QString JSON_EXPERIENCE;
     static const QString JSON_CURRENCIES;
     static const QString JSON_LOOTS;
+    static const QString JSON_ACTIONS;
 
     SystemMonster();
     SystemMonster(int i, LangsTranslation* names, int idClass, int idBattler,

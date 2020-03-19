@@ -51,6 +51,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemdetection.h \
     Dialogs/Systems/dialogsystemfontname.h \
     Dialogs/Systems/dialogsystemfontsize.h \
+    Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
@@ -69,8 +70,11 @@ HEADERS += \
     Enums/animationpositionkind.h \
     Enums/axiskind.h \
     Enums/conditionheroeskind.h \
+    Enums/monsteractionkind.h \
+    Enums/monsteractiontargetkind.h \
     Enums/mountaincollisionkind.h \
     Enums/objectmovingkind.h \
+    Enums/operationkind.h \
     Enums/systemprimitivekind.h \
     Enums/titlecommandkind.h \
     Enums/titlesettingkind.h \
@@ -88,6 +92,7 @@ HEADERS += \
     Models/System/systemdetection.h \
     Models/System/systemfontname.h \
     Models/System/systemfontsize.h \
+    Models/System/systemmonsteraction.h \
     Models/System/systemmountain.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
@@ -386,6 +391,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemdetection.cpp \
     Dialogs/Systems/dialogsystemfontname.cpp \
     Dialogs/Systems/dialogsystemfontsize.cpp \
+    Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
@@ -413,6 +419,7 @@ SOURCES += \
     Models/System/systemdetection.cpp \
     Models/System/systemfontname.cpp \
     Models/System/systemfontsize.cpp \
+    Models/System/systemmonsteraction.cpp \
     Models/System/systemmountain.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
@@ -682,6 +689,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemdetection.ui \
     Dialogs/Systems/dialogsystemfontname.ui \
     Dialogs/Systems/dialogsystemfontsize.ui \
+    Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \

@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
     splash.show();
     a.processEvents();
-    QTimer::singleShot(2000, &splash, &QWidget::close);
+    QTimer::singleShot(1000, &splash, &QWidget::close);
 
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN
