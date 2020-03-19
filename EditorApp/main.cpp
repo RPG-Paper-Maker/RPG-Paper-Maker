@@ -14,6 +14,7 @@
 #include <QStyleFactory>
 #include <QStandardPaths>
 #include <QDir>
+#include <QSplashScreen>
 #include "mainwindow.h"
 #include "rpm.h"
 #include "common.h"
@@ -61,6 +62,14 @@ int main(int argc, char *argv[]) {
         bin.cdUp();
     #endif
     QDir::setCurrent(bin.absolutePath());
+
+    // Splash screen
+    QPixmap pixmap(Common::pathCombine(Common::pathCombine(QDir::currentPath(),
+        RPM::FOLDER_CONTENT), "splash.png"));
+    QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+    splash.show();
+    a.processEvents();
+    QTimer::singleShot(2000, &splash, &QWidget::close);
 
     // Detect if applciation name need to be changed according to OS
     #ifdef Q_OS_WIN
