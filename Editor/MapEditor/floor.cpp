@@ -11,6 +11,7 @@
 
 #include "floor.h"
 #include "lands.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -56,7 +57,7 @@ MapEditorSubSelectionKind FloorDatas::getSubKind() const{
 }
 
 QString FloorDatas::toString() const {
-    return "FLOOR";
+    return RPM::translate(Translations::FLOOR).toUpper();
 }
 
 // -------------------------------------------------------

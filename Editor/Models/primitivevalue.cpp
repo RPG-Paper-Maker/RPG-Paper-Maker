@@ -180,25 +180,28 @@ PrimitiveValue * PrimitiveValue::createDefaultMessageValue() {
 QString PrimitiveValue::toString() const {
     switch (m_kind) {
     case PrimitiveValueKind::Default:
-        return "Default";
+        return RPM::translate(Translations::DEFAULT);
     case PrimitiveValueKind::Anything:
-        return "Anything";
+        return RPM::translate(Translations::ANYTHING);
     case PrimitiveValueKind::None:
-        return "None";
+        return RPM::translate(Translations::NONE);
     case PrimitiveValueKind::Number:
         return QString::number(m_numberValue);
     case PrimitiveValueKind::NumberDouble:
         return QString::number(m_numberDoubleValue);
     case PrimitiveValueKind::Variable:
-        return "Variable: " + RPM::get()->project()->gameDatas()
-            ->variablesDatas()->getVariableById(m_numberValue)->toString();
+        return RPM::translate(Translations::VARIABLE) + RPM::COLON + RPM::SPACE
+            + RPM::get()->project()->gameDatas()->variablesDatas()
+            ->getVariableById(m_numberValue)->toString();
     case PrimitiveValueKind::Parameter:
-        return this->modelParameter() == nullptr ? "" : "Parameter: " +
-            SuperListItem::getById(this->modelParameter()->invisibleRootItem(),
-            m_numberValue)->toString();
+        return this->modelParameter() == nullptr ? "" : RPM::translate(
+            Translations::PARAMETER) + RPM::COLON + RPM::SPACE + SuperListItem
+            ::getById(this->modelParameter()->invisibleRootItem(), m_numberValue
+            )->toString();
     case PrimitiveValueKind::Property:
-        return this->modelProperties() == nullptr ? "" : "Property: " +
-            SuperListItem::getById(this->modelProperties()->invisibleRootItem(),
+        return this->modelProperties() == nullptr ? "" : RPM::translate(
+            Translations::PROPERTY) + RPM::COLON + RPM::SPACE + SuperListItem
+            ::getById(this->modelProperties()->invisibleRootItem(),
             m_numberValue)->toString();
     case PrimitiveValueKind::DataBase:
         return this->modelDataBase() == nullptr ? "" : SuperListItem::getById(
@@ -208,12 +211,14 @@ QString PrimitiveValue::toString() const {
     case PrimitiveValueKind::Font:
         return m_messageValue;
     case PrimitiveValueKind::Script:
-        return "Script > " + m_messageValue;
+        return RPM::translate(Translations::SCRIPT) + RPM::SPACE + ">" + RPM
+            ::SPACE + m_messageValue;
     case PrimitiveValueKind::Switch:
         return (m_switchValue ? "ON" : "OFF");
     case PrimitiveValueKind::KeyBoard:
-        return "Kb:" + reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById
-            (RPM::get()->project()->keyBoardDatas()->model()
+        return RPM::translate(Translations::KEYBOARD_SHORT) + RPM::COLON + RPM
+            ::SPACE + reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById(
+            RPM::get()->project()->keyBoardDatas()->model()
             ->invisibleRootItem(), m_numberValue))->toString();
     }
 
@@ -230,7 +235,7 @@ void PrimitiveValue::labelTab(QString &str) const {
     case PrimitiveValueKind::Default:
         break;
     case PrimitiveValueKind::None:
-        str += "NONE";
+        str += RPM::translate(Translations::NONE).toUpper();
         break;
     case PrimitiveValueKind::Number:
         str += QString::number(m_numberValue);
@@ -239,8 +244,9 @@ void PrimitiveValue::labelTab(QString &str) const {
         str += QString::number(m_numberDoubleValue);
         break;
     case PrimitiveValueKind::Variable:
-        str += "V>" + RPM::get()->project()->gameDatas()->variablesDatas()
-            ->getVariableById(m_numberValue)->name();
+        str += RPM::translate(Translations::VARIABLE_SHORT) + ">" + RPM::get()
+            ->project()->gameDatas()->variablesDatas()->getVariableById(
+            m_numberValue)->name();
         break;
     case PrimitiveValueKind::Message:
         str += "\"" + m_messageValue + "\"";
@@ -252,14 +258,15 @@ void PrimitiveValue::labelTab(QString &str) const {
         str += (m_switchValue ? "ON" : "OFF");
         break;
     case PrimitiveValueKind::KeyBoard:
-        str += "KB>" + reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById
-            (RPM::get()->project()->keyBoardDatas()->model()
-            ->invisibleRootItem(), m_numberValue))->abbreviation();
+        str += RPM::translate(Translations::KEYBOARD_SHORT) + ">" +
+            reinterpret_cast<SystemKeyBoard *>(SuperListItem::getById(RPM::get()
+            ->project()->keyBoardDatas()->model()->invisibleRootItem(),
+            m_numberValue))->abbreviation();
         break;
     case PrimitiveValueKind::Property:
-        str += "P>" + SuperListItem::getById(RPM::get()->project()
-            ->currentObject()->modelProperties()->invisibleRootItem(),
-            m_numberValue)->name();
+        str += RPM::translate(Translations::PROPERTY_SHORT) + ">" +
+            SuperListItem::getById(RPM::get()->project()->currentObject()
+            ->modelProperties()->invisibleRootItem(), m_numberValue)->name();
         break;
     case PrimitiveValueKind::Font:
         str += m_messageValue;

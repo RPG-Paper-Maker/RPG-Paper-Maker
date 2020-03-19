@@ -157,7 +157,7 @@ void PanelSuperList::on_pushButtonMinus_pressed() {
     } else {
         message = value == 0 ? RPM::translate(Translations
             ::CANNOT_REMOVE_LAST_ELEMENT_LIST_EMPTY) + RPM::DOT :
-            DialogSetMaximum::STR_WARNING;
+            RPM::translate(Translations::WARNING_MAXIMUM) + RPM::DOT;
         QMessageBox::information(this, RPM::translate(Translations::WARNING),
             message);
     }

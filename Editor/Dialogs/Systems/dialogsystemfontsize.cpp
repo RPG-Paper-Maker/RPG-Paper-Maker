@@ -51,6 +51,9 @@ void DialogSystemFontSize::initialize() {
 
 void DialogSystemFontSize::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_FONT_SIZE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelSize->setText(RPM::translate(Translations::SIZE) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

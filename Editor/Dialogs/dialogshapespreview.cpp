@@ -48,7 +48,8 @@ DialogShapesPreview::~DialogShapesPreview()
 
 void DialogShapesPreview::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_SHAPE) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

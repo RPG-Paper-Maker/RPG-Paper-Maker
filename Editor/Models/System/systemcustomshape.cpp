@@ -26,7 +26,8 @@ const QString SystemCustomShape::PARSE_FACE = "f ";
 // -------------------------------------------------------
 
 SystemCustomShape::SystemCustomShape() :
-    SystemCustomShape(-1, "<None>", false)
+    SystemCustomShape(-1, "<" + RPM::translate(Translations::NONE).toUpper() +
+        ">", false)
 {
 
 }
@@ -119,7 +120,7 @@ QString SystemCustomShape::getShapeTitle(CustomShapeKind kind) {
     case CustomShapeKind::MTL:
         return "MTL";
     case CustomShapeKind::Collisions:
-        return "Collisions";
+        return RPM::translate(Translations::COLLISIONS);
     default:
         return "";
     }

@@ -74,11 +74,13 @@ void DialogCommandDisplayChoice::initializeDefault() {
     SystemLang *lang;
     QList<QStandardItem *> row;
 
-    lang = new SystemLang(1, new LangsTranslation("Yes"));
+    lang = new SystemLang(1, new LangsTranslation(RPM::translate(Translations
+        ::YES)));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
-    lang = new SystemLang(2, new LangsTranslation("No"));
+    lang = new SystemLang(2, new LangsTranslation(RPM::translate(Translations
+        ::NO)));
     lang->setDisplayID(false);
     row = lang->getModelRow();
     m_model->appendRow(row);
@@ -90,7 +92,12 @@ void DialogCommandDisplayChoice::initializeDefault() {
 
 void DialogCommandDisplayChoice::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::DISPLAY_CHOICES) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelCancelAutoIndex->setText(RPM::translate(Translations
+        ::CANCEL_AUTO_INDEX) + RPM::COLON);
+    ui->groupBoxChoices->setTitle(RPM::translate(Translations::CHOICES));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

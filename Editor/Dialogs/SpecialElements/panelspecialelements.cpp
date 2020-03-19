@@ -21,7 +21,8 @@
 
 PanelSpecialElements::PanelSpecialElements(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PanelSpecialElements)
+    ui(new Ui::PanelSpecialElements),
+    m_model(nullptr)
 {
     ui->setupUi(this);
 
@@ -290,9 +291,6 @@ void PanelSpecialElements::showCustomObjectCollision(bool b) {
 SystemSpecialElement * PanelSpecialElements::currentElement()
     const
 {
-    if (m_model == nullptr) {
-        return nullptr;
-    }
     QStandardItem *selected;
 
     selected = this->superList()->list()->getSelected();
@@ -308,7 +306,29 @@ SystemSpecialElement * PanelSpecialElements::currentElement()
 
 void PanelSpecialElements::translate()
 {
-
+    ui->labelMtl->setText(RPM::translate(Translations::MTL) + RPM::COLON);
+    ui->labelDepth->setText(RPM::translate(Translations::DEPTH) + RPM::COLON);
+    ui->labelScale->setText(RPM::translate(Translations::SCALE) + RPM::COLON);
+    ui->labelShape->setText(RPM::translate(Translations::SHAPE) + RPM::COLON);
+    ui->labelWidth->setText(RPM::translate(Translations::WIDTH) + RPM::COLON);
+    ui->labelHeight->setText(RPM::translate(Translations::HEIGHT) + RPM::COLON);
+    ui->labelObject->setText(RPM::translate(Translations::OBJECT) + RPM::COLON);
+    ui->labelTexture->setText(RPM::translate(Translations::TEXTURE) + RPM::COLON);
+    ui->labelCollisions->setText(RPM::translate(Translations::COLLISIONS) + RPM
+        ::COLON);
+    ui->labelDepthPixels->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelSizeTexture->setText(RPM::translate(Translations::TEXTURE) + RPM
+        ::COLON);
+    ui->labelWidthPixels->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelDepthSquares->setText(RPM::translate(Translations::SQUARE_S));
+    ui->labelHeightPixels->setText(RPM::translate(Translations::PIXEL_S));
+    ui->labelCollisionMountains->setText(RPM::translate(Translations::COLLISIONS
+        ) + RPM::COLON);
+    ui->labelWidthSquares->setText(RPM::translate(Translations::SQUARE_S));
+    ui->labelHeightSquares->setText(RPM::translate(Translations::SQUARE_S));
+    ui->groupBoxSize->setTitle(RPM::translate(Translations::SIZE));
+    ui->groupBoxCompleteList->setTitle(RPM::translate(Translations
+        ::COMPLETE_LIST));
 }
 
 // -------------------------------------------------------
@@ -329,6 +349,10 @@ void PanelSpecialElements::on_pageSelected(QModelIndex, QModelIndex) {
 // -------------------------------------------------------
 
 void PanelSpecialElements::on_comboBoxShape_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
+
     SystemSpecialElement *element;
 
     element = this->currentElement();
@@ -379,6 +403,10 @@ void PanelSpecialElements::on_objChanged() {
 // -------------------------------------------------------
 
 void PanelSpecialElements::on_comboBoxCollision_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
+
     SystemSpecialElement *element;
 
     element = this->currentElement();
@@ -476,6 +504,10 @@ void PanelSpecialElements::on_spinBoxPixelsDepth_valueChanged(int i) {
 // -------------------------------------------------------
 
 void PanelSpecialElements::on_comboBoxStretch_currentIndexChanged(int index) {
+    if (m_model == nullptr) {
+        return;
+    }
+
     SystemSpecialElement *element;
 
     element = this->currentElement();
@@ -490,6 +522,10 @@ void PanelSpecialElements::on_comboBoxStretch_currentIndexChanged(int index) {
 void PanelSpecialElements::on_comboBoxCollisionMountains_currentIndexChanged(int
     index)
 {
+    if (m_model == nullptr) {
+        return;
+    }
+
     SystemSpecialElement *element;
 
     element = this->currentElement();

@@ -111,8 +111,9 @@ QList<QStandardItem *> SystemAnimationFrameEffect::getModelRow() const {
     QStandardItem *itemTypeID = new QStandardItem;
     QStandardItem *itemCondition = new QStandardItem;
     itemTypeID->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemTypeID->setText(SuperListItem::beginningText + (m_isSoundEffect ?
-        "Sound effect" : "Flash") + " / " + m_soundEffect->toString());
+    itemTypeID->setText(SuperListItem::beginningText + (m_isSoundEffect ? RPM
+        ::translate(Translations::SOUND_EFFECT) : RPM::translate(Translations
+        ::FLASH)) + " / " + m_soundEffect->toString());
     itemTypeID->setFlags(itemTypeID->flags() ^ (Qt::ItemIsDropEnabled));
     itemCondition->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemCondition->setText(RPM::ENUM_TO_STRING_ANIMATION_CONDITION_KIND.at(

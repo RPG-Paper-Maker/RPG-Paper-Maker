@@ -59,6 +59,7 @@ QRect DialogTilesetTexture::getRect() const {
 
 void DialogTilesetTexture::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_TILESET_RECT) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

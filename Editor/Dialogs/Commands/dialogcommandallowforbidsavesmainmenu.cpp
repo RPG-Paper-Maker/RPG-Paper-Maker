@@ -59,7 +59,7 @@ void DialogCommandAllowForbidSavesMainMenu::initializePrimitives() {
 
     this->setWindowTitle(m_kind == EventCommandKind::AllowForbidSaves ? RPM
         ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT : RPM
-        ::translate(Translations::ALLOW_FORBID_SAVES) + RPM::DOT_DOT_DOT);
+        ::translate(Translations::ALLOW_FORBID_MAIN_MENU) + RPM::DOT_DOT_DOT);
     ui->panelPrimitiveAllow->initializeSwitch(m_parameters, properties);
 }
 

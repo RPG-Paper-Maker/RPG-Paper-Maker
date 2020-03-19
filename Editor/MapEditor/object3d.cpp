@@ -115,7 +115,8 @@ MapEditorSubSelectionKind Object3DDatas::getSubKind() const {
 // -------------------------------------------------------
 
 QString Object3DDatas::toString() const {
-    return "3D OBJECT - " + m_datas->name();
+    return RPM::translate(Translations::THREED_OBJECT).toUpper() + RPM::SPACE +
+        RPM::DASH + RPM::SPACE + m_datas->name();
 }
 
 // -------------------------------------------------------

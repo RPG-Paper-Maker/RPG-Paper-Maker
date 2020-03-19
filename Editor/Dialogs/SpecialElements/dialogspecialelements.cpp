@@ -44,6 +44,5 @@ DialogSpecialElements::~DialogSpecialElements()
 
 void DialogSpecialElements::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

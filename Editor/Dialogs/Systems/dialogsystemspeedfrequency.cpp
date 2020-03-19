@@ -49,7 +49,7 @@ void DialogSystemSpeedFrequency::initialize() {
 
     // If frequency, change UI
     if (!m_speedFrequency.isSpeed()) {
-        ui->labelValue->setText("Time:");
+        ui->labelValue->setText(RPM::translate(Translations::TIME) + RPM::COLON);
         ui->labelX->hide();
     } else {
         ui->labelSeconds->hide();
@@ -60,7 +60,11 @@ void DialogSystemSpeedFrequency::initialize() {
 
 void DialogSystemSpeedFrequency::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_SPEED_FREQUENCY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelValue->setText(RPM::translate(Translations::VALUE) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

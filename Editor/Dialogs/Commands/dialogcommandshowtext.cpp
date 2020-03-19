@@ -45,12 +45,11 @@ DialogCommandShowText::DialogCommandShowText(EventCommand *command,
 {
     ui->setupUi(this);
     
+    this->translate();
     this->initializeWidgets(object, parameters);
     if (command != nullptr) {
         this->initialize(command);
     }
-
-    this->translate();
 }
 
 DialogCommandShowText::~DialogCommandShowText() {
@@ -147,7 +146,27 @@ void DialogCommandShowText::insertNoValueTag(QString tag) {
 
 void DialogCommandShowText::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SHOW_TEXT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelFaceset->setText(RPM::translate(Translations::FACESET) + RPM
+        ::COLON);
+    ui->labelInterlocutor->setText(RPM::translate(Translations::INTERLOCUTOR) +
+        RPM::COLON);
+    ui->comboBoxIcon->addItem(QIcon(":/icons/Ressources/picture.png"),
+        RPM::translate(Translations::ICON));
+    ui->comboBoxFontName->addItem(RPM::translate(Translations::FONT_NAME));
+    ui->comboBoxFontSize->addItem(RPM::translate(Translations::FONT_SIZE));
+    ui->comboBoxHeroName->addItem(QIcon(":/icons/Ressources/datas.png"),
+        RPM::translate(Translations::HERO_NAME));
+    ui->comboBoxVariable->addItem(QIcon(":/icons/Ressources/variables.png"),
+        RPM::translate(Translations::VARIABLE));
+    ui->comboBoxBackColor->addItem(RPM::translate(Translations::BACK_COLOR));
+    ui->comboBoxTextColor->addItem(RPM::translate(Translations::TEXT_COLOR));
+    ui->comboBoxParameters->addItem(QIcon(":/icons/Ressources/scripts.png"),
+        RPM::translate(Translations::PARAMETER));
+    ui->comboBoxProperties->addItem(QIcon(":/icons/Ressources/systems.png"),
+        RPM::translate(Translations::PROPERTY));
+    ui->comboBoxStrokeColor->addItem(RPM::translate(Translations::OUTLINE_COLOR));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

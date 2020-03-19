@@ -64,6 +64,7 @@ QStandardItemModel* DialogVideos::createFoldersModel() const {
 
 void DialogVideos::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::VIDEOS_MANAGER) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

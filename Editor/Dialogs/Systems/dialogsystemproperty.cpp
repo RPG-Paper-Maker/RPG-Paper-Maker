@@ -54,7 +54,11 @@ void DialogSystemProperty::initialize()
 
 void DialogSystemProperty::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_PROPERTY) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelInitialValue->setText(RPM::translate(Translations::INITIAL_VALUE) +
+        RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

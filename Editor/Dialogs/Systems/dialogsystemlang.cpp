@@ -50,6 +50,8 @@ void DialogSystemLang::initialize(){
 
 void DialogSystemLang::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_NAME) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

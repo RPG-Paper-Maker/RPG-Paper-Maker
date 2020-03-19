@@ -59,11 +59,13 @@ void DialogSystemKeyBoard::initialize(){
 // -------------------------------------------------------
 
 void DialogSystemKeyBoard::updateLabel(bool wait){
-    QString str = m_key.shortCutString() + " ...";
+    QString str;
 
-    if (wait)
-        str += " [WAITING FOR A SHORTCUT]";
-
+    str = m_key.shortCutString() + RPM::SPACE + RPM::DOT_DOT_DOT;
+    if (wait) {
+        str += RPM::SPACE + RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::WAITING_FOR_SHORTCUT).toUpper() + RPM::BRACKET_RIGHT;
+    }
     ui->label->setText(str);
 }
 
@@ -71,7 +73,10 @@ void DialogSystemKeyBoard::updateLabel(bool wait){
 
 void DialogSystemKeyBoard::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::ENTER_SHORTCUTS) + RPM
+        ::DOT_DOT_DOT);
+    ui->pushButtonRemoveAll->setText(RPM::translate(Translations::REMOVE_ALL));
+    ui->pushButtonRemoveLast->setText(RPM::translate(Translations::REMOVE_LAST));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

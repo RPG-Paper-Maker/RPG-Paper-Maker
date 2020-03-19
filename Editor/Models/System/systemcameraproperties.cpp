@@ -116,7 +116,7 @@ PrimitiveValue * SystemCameraProperties::farCam() const {
 // -------------------------------------------------------
 
 bool SystemCameraProperties::openDialog() {
-    SystemCameraProperties cameraProperties;;
+    SystemCameraProperties cameraProperties;
     cameraProperties.setCopy(*this);
     DialogSystemCameraProperties dialog(cameraProperties);
 

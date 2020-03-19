@@ -64,7 +64,9 @@ void DialogCommandScript::initializePrimitives() {
 
 void DialogCommandScript::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SCRIPT) + RPM::DOT_DOT_DOT);
+    ui->checkBoxDynamic->setText(RPM::translate(Translations::USE_DYNAMIC) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

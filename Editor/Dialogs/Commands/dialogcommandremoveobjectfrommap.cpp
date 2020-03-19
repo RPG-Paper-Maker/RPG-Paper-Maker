@@ -75,7 +75,10 @@ void DialogCommandRemoveObjectFromMap::initializePrimitives() {
 
 void DialogCommandRemoveObjectFromMap::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::REMOVE_OBJECT_FROM_MAP) +
+        RPM::DOT_DOT_DOT);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

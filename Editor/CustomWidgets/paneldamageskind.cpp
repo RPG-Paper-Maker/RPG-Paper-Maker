@@ -26,8 +26,6 @@ PanelDamagesKind::PanelDamagesKind(QWidget *parent) :
     ui(new Ui::PanelDamagesKind)
 {
     ui->setupUi(this);
-
-    ui->comboBoxChoice->addItems(RPM::ENUM_TO_STRING_DAMAGES_KIND);
 }
 
 PanelDamagesKind::~PanelDamagesKind()
@@ -49,7 +47,8 @@ void PanelDamagesKind::initialize(PrimitiveValue *statisticID, PrimitiveValue
     m_variableID = variableID;
     m_kind = kind;
     int index = m_kind->id();
-
+    ui->comboBoxChoice->clear();
+    ui->comboBoxChoice->addItems(RPM::ENUM_TO_STRING_DAMAGES_KIND);
     ui->comboBoxChoice->setCurrentIndex(index);
     ui->panelPrimitiveValueStatistic->initializeDataBaseCommandId(m_statisticID
         ->modelDataBase());

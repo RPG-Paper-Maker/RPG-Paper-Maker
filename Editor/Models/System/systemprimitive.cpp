@@ -10,6 +10,7 @@
 */
 
 #include "dialogsystemprimitive.h"
+#include "rpm.h"
 
 const QString SystemPrimitive::JSON_PRIM = "p";
 const QString SystemPrimitive::JSON_KIND = "K";
@@ -61,7 +62,8 @@ bool SystemPrimitive::openDialog() {
 
     switch (m_kind) {
     case SystemPrimitiveKind::ElementEfficiency:
-        dialog.initializeNumberVariableDouble("Enter a number efficiency...");
+        dialog.initializeNumberVariableDouble(RPM::translate(Translations
+            ::ENTER_NUMBER_EFFICIENCY) + RPM::DOT_DOT_DOT);
         break;
     }
 

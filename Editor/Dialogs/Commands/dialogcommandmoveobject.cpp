@@ -93,7 +93,48 @@ DialogCommandMoveObject::~DialogCommandMoveObject()
 
 void DialogCommandMoveObject::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::MOVE_OBJECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelObjectID->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    ui->labelChangeDirection->setText(RPM::translate(Translations
+        ::CHANGE_DIRECTION) + RPM::COLON);
+    ui->labelStepSquareMoves->setText(RPM::translate(Translations
+        ::STEP_SQUARE_MOVES) + RPM::COLON);
+    ui->labelChangeObjectProperties->setText(RPM::translate(Translations
+        ::CHANGE_OBJECT_PROPERTIES) + RPM::COLON);
+    ui->checkBoxIgnore->setText(RPM::translate(Translations
+        ::IGNORE_IF_IMPOSSIBLE));
+    ui->checkBoxWaitEnd->setText(RPM::translate(Translations::WAIT_END));
+    ui->checkBoxCameraOrientation->setText(RPM::translate(Translations
+        ::WITH_CAMERA_ORIENTATION));
+    ui->pushButtonStepSquareBack->setText(RPM::translate(Translations
+        ::ONE_BACK));
+    ui->pushButtonStepSquareEast->setText(RPM::translate(Translations
+        ::ONE_TO_EAST));
+    ui->pushButtonStepSquareHero->setText(RPM::translate(Translations
+        ::ONE_TO_HERO));
+    ui->pushButtonStepSquareWest->setText(RPM::translate(Translations
+        ::ONE_TO_WEST));
+    ui->pushButtonStepSquareFront->setText(RPM::translate(Translations
+        ::ONE_IN_FRONT));
+    ui->pushButtonStepSquareNorth->setText(RPM::translate(Translations
+        ::ONE_TO_NORTH));
+    ui->pushButtonStepSquareSouth->setText(RPM::translate(Translations
+        ::ONE_TO_SOUTH));
+    ui->pushButtonStepSquareRandom->setText(RPM::translate(Translations
+        ::ONE_TO_RANDOME));
+    ui->pushButtonStepSquareNorthEast->setText(RPM::translate(Translations
+        ::ONE_TO_NORTH_EAST));
+    ui->pushButtonStepSquareNorthWest->setText(RPM::translate(Translations
+        ::ONE_TO_NORTH_WEST));
+    ui->pushButtonStepSquareSouthEast->setText(RPM::translate(Translations
+        ::ONE_TO_SOUTH_EAST));
+    ui->pushButtonStepSquareSouthWest->setText(RPM::translate(Translations
+        ::ONE_TO_SOUTH_WEST));
+    ui->pushButtonStepSquareOppositeHero->setText(RPM::translate(Translations
+        ::ONE_OPPOSITE_TO_HERO));
+    ui->groupBoxMoves->setTitle(RPM::translate(Translations::MOVES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

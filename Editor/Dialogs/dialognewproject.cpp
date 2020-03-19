@@ -76,14 +76,19 @@ void DialogNewProject::filterDirectoryName(const QString & s)
 
 void DialogNewProject::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT) + RPM
+        ::DOT_DOT_DOT);
     ui->labelProjectName->setText(RPM::translate(Translations::PROJECT_NAME) +
         RPM::COLON);
-    ui->labelDirectoryName->setText(RPM::translate(Translations::DIRECTORY_NAME
-        + RPM::COLON));
-    ui->labelLocation->setText(RPM::translate(Translations::LOCATION + RPM
-        ::COLON));
+    ui->labelDirectoryName->setText(RPM::translate(Translations::DIRECTORY_NAME)
+        + RPM::COLON);
+    ui->labelLocation->setText(RPM::translate(Translations::LOCATION) + RPM
+        ::COLON);
     ui->checkBoxAutoGenerate->setText(RPM::translate(Translations::AUTO_GENERATE));
+    ui->lineEditProjectName->setText(RPM::translate(Translations
+        ::PROJECT_WITHOUT_NAME));
+    ui->lineEditDirectoryName->setText(RPM::translate(Translations
+        ::PROJECT_WITHOUT_NAME_FOLDER));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -133,7 +138,7 @@ void DialogNewProject::accept()
         ->lineEditDirectoryName->text(), ui->lineEditLocation->text());
     if (message != nullptr)
     {
-        QMessageBox::critical(this,"Error",message);
+        QMessageBox::critical(this, RPM::translate(Translations::ERROR), message);
     } else
     {
         QDialog::accept();

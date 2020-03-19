@@ -63,7 +63,9 @@ void DialogCommandWait::initializePrimitives() {
 
 void DialogCommandWait::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::WAIT) + RPM::DOT_DOT_DOT);
+    ui->labelTime->setText(RPM::translate(Translations::TIME) + RPM::COLON);
+    ui->labelSeconds->setText(RPM::translate(Translations::SECONDS));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -82,7 +82,17 @@ DialogCommandSendEvent::~DialogCommandSendEvent()
 
 void DialogCommandSendEvent::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SEND_EVENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->checkBoxSenderNoReceive->setText(RPM::translate(Translations
+        ::SENDER_CANT_RECEIVE));
+    ui->radioButtonAll->setText(RPM::translate(Translations::ALL));
+    ui->radioButtonObject->setText(RPM::translate(Translations::OBJECT_ID) + RPM
+        ::COLON);
+    ui->radioButtonDetection->setText(RPM::translate(Translations::DETECTION_ID)
+        + RPM::COLON);
+    ui->groupBoxEvent->setTitle(RPM::translate(Translations::EVENT));
+    ui->groupBoxTarget->setTitle(RPM::translate(Translations::TARGET));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

@@ -45,6 +45,7 @@ void DialogSystemObjectEvent::initialize(){
 
 void DialogSystemObjectEvent::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_EVENT) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

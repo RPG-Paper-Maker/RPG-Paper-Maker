@@ -77,7 +77,27 @@ DialogCommandStartBattle::~DialogCommandStartBattle()
 
 void DialogCommandStartBattle::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::START_BATTLE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelEnd->setText(RPM::translate(Translations::END) + RPM::COLON);
+    ui->labelIDMAp->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelStart->setText(RPM::translate(Translations::START) + RPM::COLON);
+    ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
+    ui->checkBoxEscape->setText(RPM::translate(Translations::ALLOW_ESCAPE));
+    ui->checkBoxGameOver->setText(RPM::translate(Translations
+        ::DEFEAT_CAUSES_GAME_OVER));
+    ui->radioButtonID->setText(RPM::translate(Translations::ID) + RPM::COLON);
+    ui->radioButtonRandom->setText(RPM::translate(Translations::RANDOM) + RPM
+        ::SPACE + RPM::PARENTHESIS_LEFT + RPM::translate(Translations
+        ::IN_MAP_PROPERTY) + RPM::PARENTHESIS_RIGHT);
+    ui->radioButtonVariableConstant->setText(RPM::translate(Translations::ID));
+    ui->groupBoxOptions->setTitle(RPM::translate(Translations::OPTIONS));
+    ui->groupBoxTroopID->setTitle(RPM::translate(Translations::TROOP_ID));
+    ui->groupBoxBattleMap->setTitle(RPM::translate(Translations::BATTLE_MAP));
+    ui->groupBoxTransition->setTitle(RPM::translate(Translations::TRANSITION));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

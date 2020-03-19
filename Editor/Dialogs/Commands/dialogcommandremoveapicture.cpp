@@ -62,7 +62,10 @@ void DialogCommandRemoveAPicture::initializePrimitives() {
 
 void DialogCommandRemoveAPicture::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::REMOVE_A_PICTURE) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelImageIndex->setText(RPM::translate(Translations::IMAGE_INDEX) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

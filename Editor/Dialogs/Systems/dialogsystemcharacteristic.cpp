@@ -161,7 +161,12 @@ void DialogSystemCharacteristic::uncheckAllRadiosCharacters() {
 
 void DialogSystemCharacteristic::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_CHARACTERISTIC) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelWith->setText(RPM::translate(Translations::BUFF) + RPM::COLON);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::BUFF));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::CHARACTER_SPECIFIC));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::OTHER));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

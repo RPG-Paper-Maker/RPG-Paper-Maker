@@ -105,33 +105,35 @@ DialogCommand* DialogCommands::getDialogCommand(EventCommandKind kind,
     case EventCommandKind::MoveCamera:
         return new DialogCommandMoveCamera(command, object, parameters);
     case EventCommandKind::PlayMusic:
-        return new DialogCommandPlaySong("Play a music", SongKind::Music,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations::PLAY_MUSIC
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
     case EventCommandKind::StopMusic:
-        return new DialogCommandStopSong("Stop a music", SongKind::Music,
-                                         command, object, parameters);
+        return new DialogCommandStopSong(RPM::translate(Translations::STOP_MUSIC
+            ) + RPM::DOT_DOT_DOT, SongKind::Music, command, object, parameters);
     case EventCommandKind::PlayBackgroundSound:
-        return new DialogCommandPlaySong("Play a background sound",
-                                         SongKind::BackgroundSound,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT , SongKind
+            ::BackgroundSound, command, object, parameters);
     case EventCommandKind::StopBackgroundSound:
-        return new DialogCommandStopSong("Stop a background sound",
-                                         SongKind::BackgroundSound,
-                                         command, object, parameters);
+        return new DialogCommandStopSong(RPM::translate(Translations
+            ::PLAY_BACKGROUND_SOUND) + RPM::DOT_DOT_DOT, SongKind
+            ::BackgroundSound, command, object, parameters);
     case EventCommandKind::PlayASound:
-        return new DialogCommandPlaySong("Play a sound", SongKind::Sound,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_A_SOUND) + RPM::DOT_DOT_DOT, SongKind::Sound, command, object
+            , parameters);
     case EventCommandKind::PlayMusicEffect:
-        return new DialogCommandPlaySong("Play a music effect",
-                                         SongKind::MusicEffect,
-                                         command, object, parameters);
+        return new DialogCommandPlaySong(RPM::translate(Translations
+            ::PLAY_MUSIC_EFFECT) + RPM::DOT_DOT_DOT, SongKind::MusicEffect,
+            command, object, parameters);
     case EventCommandKind::ChangeProperty:
         // Warning if no property available
         if (object == nullptr || object->modelProperties() == nullptr || object
             ->modelProperties()->invisibleRootItem()->rowCount() == 1)
         {
-            QMessageBox::information(nullptr, "Warning", "There are no properties "
-                "available to change.");
+            QMessageBox::information(nullptr, RPM::translate(Translations
+                ::WARNING), RPM::translate(Translations::THERE_ARE_NO_PROPERTIES
+                ) + RPM::DOT);
             return nullptr;
         }
         return new DialogCommandChangeProperty(command, object, parameters);
@@ -189,7 +191,12 @@ void DialogCommands::openNonDialogCommand(EventCommandKind kind){
 // -------------------------------------------------------
 
 void DialogCommands::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COMMANDS));
+    this->setWindowTitle(RPM::translate(Translations::COMMANDS) + RPM
+        ::DOT_DOT_DOT);
+    ui->tabWidget->setTabText(0, RPM::translate(Translations::STAGING));
+    ui->tabWidget->setTabText(1, RPM::translate(Translations::MAP));
+    ui->tabWidget->setTabText(2, RPM::translate(Translations::BATTLE));
+    ui->tabWidget->setTabText(3, RPM::translate(Translations::STRUCTURE));
     ui->pushButtonShowText->setText(EventCommand::kindToString(EventCommandKind
         ::ShowText));
     ui->pushButtonChangeVariables->setText(EventCommand::kindToString(
@@ -266,6 +273,28 @@ void DialogCommands::translate() {
         EventCommandKind::AllowForbidMainMenu));
     ui->pushButtonCallCommonReaction->setText(EventCommand::kindToString(
         EventCommandKind::CallACommonReaction));
+    ui->groupBoxTeam->setTitle(RPM::translate(Translations::TEAM));
+    ui->groupBoxTime->setTitle(RPM::translate(Translations::TIME));
+    ui->groupBoxMedia->setTitle(RPM::translate(Translations::MEDIA));
+    ui->groupBoxMenus->setTitle(RPM::translate(Translations::MENUS));
+    ui->groupBoxMusics->setTitle(RPM::translate(Translations::MUSICS));
+    ui->groupBoxSyntax->setTitle(RPM::translate(Translations::SYNTAX));
+    ui->groupBoxBattles->setTitle(RPM::translate(Translations::BATTLES));
+    ui->groupBoxDialogs->setTitle(RPM::translate(Translations::DIALOGS));
+    ui->groupBoxAdvanced->setTitle(RPM::translate(Translations::ADVANCED));
+    ui->groupBoxVariables->setTitle(RPM::translate(Translations::VARIABLES));
+    ui->groupBoxMusicsSounds->setTitle(RPM::translate(Translations
+        ::MUSICS_SOUNDS));
+    ui->groupBoxHeroesEnemies->setTitle(RPM::translate(Translations
+        ::HEROES_ENEMIES));
+    ui->groupBoxVisualEffects->setTitle(RPM::translate(Translations
+        ::VISUAL_EFFECTS));
+    ui->groupBoxSystemParameters->setTitle(RPM::translate(Translations
+        ::SYSTEM_PARAMETERS));
+    ui->groupBoxObjectsInteractions->setTitle(RPM::translate(Translations
+        ::OBJETS_INTERACTIONS));
+    ui->groupBoxMoveAnimationsCamera->setTitle(RPM::translate(Translations
+        ::MOVES_ANIMATIONS_CAMERA));
 }
 
 // -------------------------------------------------------

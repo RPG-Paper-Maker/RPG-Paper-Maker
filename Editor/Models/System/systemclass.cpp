@@ -12,6 +12,7 @@
 #include "systemclass.h"
 #include "systemstatisticprogression.h"
 #include "systemclassskill.h"
+#include "rpm.h"
 
 const QString SystemClass::jsonInitialLevel = "iniL";
 const QString SystemClass::jsonMaxLevel = "mxL";
@@ -121,9 +122,11 @@ SystemClass * SystemClass::createInheritanceClass() {
 // -------------------------------------------------------
 
 void SystemClass::initializeHeaders() {
-    m_statisticsProgression->setHorizontalHeaderLabels(
-                QStringList({"Statistic","Initial","Final"}));
-    m_skills->setHorizontalHeaderLabels(QStringList({"Skills","Levels"}));
+    m_statisticsProgression->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::STATISTIC), RPM::translate(Translations
+        ::INITIAL), RPM::translate(Translations::FINAL)}));
+    m_skills->setHorizontalHeaderLabels(QStringList({RPM::translate(Translations
+        ::SKILLS), RPM::translate(Translations::LEVELS)}));
 }
 
 // -------------------------------------------------------

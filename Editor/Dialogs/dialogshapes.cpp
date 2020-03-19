@@ -100,7 +100,8 @@ void DialogShapes::addfolders(QIcon &icon, QStandardItem* root, QList<QString>
 
 void DialogShapes::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SHAPES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

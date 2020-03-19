@@ -49,6 +49,5 @@ void DialogSystemPrimitive::initializeNumberVariableDouble(QString title) {
 
 void DialogSystemPrimitive::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

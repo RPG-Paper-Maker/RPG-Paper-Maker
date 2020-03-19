@@ -72,7 +72,24 @@ void DialogSystemCameraProperties::initialize() {
 
 void DialogSystemCameraProperties::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_CAMERA_PROPERTIES) +
+        RPM::DOT_DOT_DOT);
+    ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
+    ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
+    ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
+    ui->labelFar->setText(RPM::translate(Translations::FAR) + RPM::COLON);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelNear->setText(RPM::translate(Translations::NEAR) + RPM::COLON);
+    ui->labelDistance->setText(RPM::translate(Translations::DISTANCE) + RPM
+        ::COLON);
+    ui->labelFieldOfView->setText(RPM::translate(Translations::FIELD_OF_VIEW) +
+        RPM::COLON);
+    ui->labelVerticalAngle->setText(RPM::translate(Translations::VERTICAL_ANGLE)
+        + RPM::COLON);
+    ui->labelHorizontalAngle->setText(RPM::translate(Translations
+        ::HORIZONTAL_ANGLE) + RPM::COLON);
+    ui->groupBoxTargetOffset->setTitle(RPM::translate(Translations
+        ::TARGET_OFFSET));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

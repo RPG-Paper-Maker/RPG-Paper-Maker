@@ -59,6 +59,9 @@ void DialogSystemElement::initialize(){
 
 void DialogSystemElement::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_ELEMENT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->groupBoxEfficiency->setTitle(RPM::translate(Translations::EFFICIENCY));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }

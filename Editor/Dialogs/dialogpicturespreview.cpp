@@ -89,7 +89,8 @@ void DialogPicturesPreview::setAreNegIDsEnabled(bool b) {
 
 void DialogPicturesPreview::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SELECT_PICTURE) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

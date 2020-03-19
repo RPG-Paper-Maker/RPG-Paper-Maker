@@ -44,7 +44,8 @@ DialogGeneralOptions::~DialogGeneralOptions()
 
 void DialogGeneralOptions::initialize() {
     QStringList themes;
-    themes << "Dark" << "White";
+    themes << RPM::translate(Translations::DARK) << RPM::translate(Translations
+        ::WHITE);
     ui->comboBoxTheme->addItems(themes);
 
     connect(ui->comboBoxTheme, SIGNAL(currentIndexChanged(int)), this,
@@ -56,8 +57,11 @@ void DialogGeneralOptions::initialize() {
 // -------------------------------------------------------
 
 void DialogGeneralOptions::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
-
+    this->setWindowTitle(RPM::translate(Translations::GENERAL_OPTIONS) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelTheme->setText(RPM::translate(Translations::THEME) + RPM
+        ::PARENTHESIS_LEFT + RPM::translate(Translations::NEED_RESTART) + RPM
+        ::PARENTHESIS_RIGHT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

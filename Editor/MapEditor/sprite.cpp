@@ -126,13 +126,13 @@ MapEditorSubSelectionKind SpriteDatas::getSubKind() const { return m_kind; }
 QString SpriteDatas::toString() const {
     switch (m_kind) {
     case MapEditorSubSelectionKind::SpritesFace:
-        return "SPRITE FACE";
+        return RPM::translate(Translations::FACE_SPRITE).toUpper();
     case MapEditorSubSelectionKind::SpritesFix:
-        return "SPRITE FIX";
+        return RPM::translate(Translations::FIX_SPRITE).toUpper();
     case MapEditorSubSelectionKind::SpritesDouble:
-        return "SPRITE DOUBLE";
+        return RPM::translate(Translations::DOUBLE_SPRITE).toUpper();
     case MapEditorSubSelectionKind::SpritesQuadra:
-        return "SPRITE QUADRA";
+        return RPM::translate(Translations::QUADRA_SPRITE).toUpper();
     default:
         return "";
     }
@@ -767,7 +767,7 @@ float SpriteWallDatas::intersectionPlane(double angle, QRay3D& ray) {
 // -------------------------------------------------------
 
 QString SpriteWallDatas::toString() const {
-    return "SPRITE WALL";
+    return RPM::translate(Translations::WALL).toUpper();
 }
 
 // -------------------------------------------------------

@@ -76,13 +76,13 @@ QString SystemSong::getLocalFolder(SongKind kind){
 QString SystemSong::getSongTitle(SongKind kind) {
     switch(kind) {
     case SongKind::Music:
-        return "Musics";
+        return RPM::translate(Translations::MUSICS);
     case SongKind::BackgroundSound:
-        return "Background sounds";
+        return RPM::translate(Translations::BACKGROUND_SOUNDS);
     case SongKind::Sound:
-        return "Sounds";
+        return RPM::translate(Translations::SOUNDS);
     case SongKind::MusicEffect:
-        return "Music effects";
+        return RPM::translate(Translations::MUSIC_EFFECTS);
     default:
         return "";
     }

@@ -11,6 +11,7 @@
 
 #include "systemtroop.h"
 #include "systemmonstertroop.h"
+#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -45,7 +46,8 @@ QStandardItemModel * SystemTroop::monstersList() const {
 // -------------------------------------------------------
 
 void SystemTroop::initializeHeaders() {
-    m_monstersList->setHorizontalHeaderLabels(QStringList({"Monster","Level"}));
+    m_monstersList->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::MONSTER), RPM::translate(Translations::LEVEL)}));
 }
 
 // -------------------------------------------------------

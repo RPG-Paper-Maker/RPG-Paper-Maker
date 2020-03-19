@@ -449,7 +449,7 @@ MapEditorSubSelectionKind MountainDatas::getSubKind() const {
 // -------------------------------------------------------
 
 QString MountainDatas::toString() const {
-    return "MOUNTAIN";
+    return RPM::translate(Translations::MOUNTAIN).toUpper();
 }
 
 // -------------------------------------------------------

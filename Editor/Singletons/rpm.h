@@ -63,6 +63,7 @@ public:
 
     // STRING SYMBOLS
     static const QString DASH;
+    static const QString SLASH;
     static const QString COLON;
     static const QString DOT;
     static const QString DOT_DOT_DOT;
@@ -189,6 +190,7 @@ public:
     static QStringList ENUM_TO_STRING_AVAILABLE_KIND;
     static QStringList ENUM_TO_STRING_OBJECT_MOVING_KIND;
     static QStringList ENUM_TO_STRING_SHAPE_KIND;
+    static QStringList ENUM_TO_STRING_TITLE_COMMAND_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

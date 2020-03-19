@@ -222,11 +222,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Font size</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -237,11 +232,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Font name</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -252,11 +242,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Text color</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -267,11 +252,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Back color</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -282,11 +262,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Outline color</string>
-              </property>
-             </item>
             </widget>
            </item>
           </layout>
@@ -310,15 +285,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Variable</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../../ressources.qrc">
-                <normaloff>:/icons/Ressources/variables.png</normaloff>:/icons/Ressources/variables.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -335,15 +301,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Parameter</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../../ressources.qrc">
-                <normaloff>:/icons/Ressources/scripts.png</normaloff>:/icons/Ressources/scripts.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -360,15 +317,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Property</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../../ressources.qrc">
-                <normaloff>:/icons/Ressources/systems.png</normaloff>:/icons/Ressources/systems.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -385,15 +333,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Hero name</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../../ressources.qrc">
-                <normaloff>:/icons/Ressources/datas.png</normaloff>:/icons/Ressources/datas.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -410,15 +349,6 @@
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>Icon</string>
-              </property>
-              <property name="icon">
-               <iconset resource="../../ressources.qrc">
-                <normaloff>:/icons/Ressources/picture.png</normaloff>:/icons/Ressources/picture.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>

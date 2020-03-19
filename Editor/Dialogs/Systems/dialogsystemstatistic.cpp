@@ -62,7 +62,14 @@ void DialogSystemStatistic::initialize(){
 
 void DialogSystemStatistic::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_STATISTIC) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
+    ui->labelScriptAbbreviation->setText(RPM::translate(Translations
+        ::SCRIPT_ABBREVIATION) + RPM::COLON);
+    ui->radioButtonBar->setText(RPM::translate(Translations::BAR));
+    ui->radioButtonFix->setText(RPM::translate(Translations::FIX));
+    ui->groupBoxProperties->setTitle(RPM::translate(Translations::PROPERTIES));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

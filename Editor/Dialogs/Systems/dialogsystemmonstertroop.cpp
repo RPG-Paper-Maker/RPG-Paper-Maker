@@ -58,7 +58,10 @@ void DialogSystemMonsterTroop::initialize(){
 
 void DialogSystemMonsterTroop::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_MONSTER_TROOP) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelLevel->setText(RPM::translate(Translations::LEVEL) + RPM::COLON);
+    ui->labelMonster->setText(RPM::translate(Translations::MONSTER) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

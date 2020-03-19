@@ -44,12 +44,13 @@ PanelSelectPosition::~PanelSelectPosition()
 
 void PanelSelectPosition::translate()
 {
-    ui->labelIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
+    ui->labelLIDMap->setText(RPM::translate(Translations::MAP_ID) + RPM::COLON);
     ui->labelYPlus->setText(RPM::translate(Translations::Y_PLUS) + RPM::COLON);
     ui->labelLX->setText(RPM::translate(Translations::X) + RPM::COLON);
     ui->labelLY->setText(RPM::translate(Translations::Y) + RPM::COLON);
     ui->labelLZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
-    ui->pushButtonSelect->setText(RPM::translate(Translations::SELECT));
+    ui->pushButtonSelect->setText(RPM::translate(Translations::SELECT) + RPM
+        ::DOT_DOT_DOT);
 }
 
 void PanelSelectPosition::initialize(EventCommand *command, int &i) {

@@ -221,9 +221,9 @@ void SystemObjectEvent::updateParameters()
 
     SuperListItem::deleteModel(m_modelParameters);
     m_modelParameters = newModel;
-    m_modelParameters->setHorizontalHeaderLabels(QStringList({"Name", "Value",
-                                                              "Default value"})
-                                                 );
+    m_modelParameters->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::NAME), RPM::translate(Translations::VALUE), RPM::translate
+        (Translations::DEFAULT_VALUE)}));
 }
 
 // -------------------------------------------------------

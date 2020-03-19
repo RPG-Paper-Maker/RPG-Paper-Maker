@@ -84,11 +84,12 @@ void SystemVariables::setDefaultVariables(bool i) {
     int j, l;
 
     for (j = 1, l = SystemVariables::variablesPerPage; j <= l; j++) {
-        var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? "Lucas "
-            "instance ID" : "");
+        var = new SuperListItem(j + ((id()-1) * l), i && j == 1 ? RPM::translate
+            (Translations::LUCAS_INSTANCE_ID) : "");
         p_model->invisibleRootItem()->appendRow(var->getModelRow());
     }
-    setName(QString("Page ") + QString::number(id()));
+    setName(RPM::translate(Translations::PAGE) + RPM::SPACE + QString::number(id
+        ()));
 }
 
 // -------------------------------------------------------

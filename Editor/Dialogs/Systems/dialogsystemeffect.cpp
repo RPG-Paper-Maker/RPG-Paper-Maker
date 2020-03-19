@@ -199,7 +199,25 @@ void DialogSystemEffect::setPrecisionEnabled(bool checked) {
 
 void DialogSystemEffect::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::SET_EFFECT) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelWithFormula->setText(RPM::translate(Translations::WITH_FORMULA) +
+        RPM::COLON);
+    ui->radioButtonDamages->setText(RPM::translate(Translations::DAMAGES_ON));
+    ui->radioButtonSpecialAction->setText(RPM::translate(Translations
+        ::SPECIAL_ACTION) + RPM::COLON);
+    ui->checkBoxMaximum->setText(RPM::translate(Translations::MAXIMUM) + RPM
+        ::COLON);
+    ui->checkBoxMinimum->setText(RPM::translate(Translations::MINIMUM) + RPM
+        ::COLON);
+    ui->checkBoxCritical->setText(RPM::translate(Translations::CRITICAL) + RPM
+        ::COLON);
+    ui->checkBoxVariance->setText(RPM::translate(Translations::VARIANCE) + RPM
+        ::COLON);
+    ui->checkBoxElementID->setText(RPM::translate(Translations::ELEMENT_ID) +
+        RPM::COLON);
+    ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM
+        ::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

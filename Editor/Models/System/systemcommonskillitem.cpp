@@ -176,9 +176,12 @@ QStandardItemModel * SystemCommonSkillItem::modelCharacteristics() const {
 // -------------------------------------------------------
 
 void SystemCommonSkillItem::initializeHeaders() {
-    m_modelCosts->setHorizontalHeaderLabels(QStringList({"Cost"}));
-    m_modelEffects->setHorizontalHeaderLabels(QStringList({"Effect"}));
-    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({"Characteristic"}));
+    m_modelCosts->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::COST)}));
+    m_modelEffects->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::EFFECT)}));
+    m_modelCharacteristics->setHorizontalHeaderLabels(QStringList({RPM
+        ::translate(Translations::CHARACTERISTIC)}));
 }
 
 // -------------------------------------------------------

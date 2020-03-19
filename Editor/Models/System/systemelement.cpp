@@ -73,8 +73,8 @@ void SystemElement::updateEfficiency() {
     int i, l;
 
     SuperListItem::deleteModel(m_modelEfficiency, false);
-    m_modelEfficiency->setHorizontalHeaderLabels(QStringList({"Elements",
-        "Efficiency"}));
+    m_modelEfficiency->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::ELEMENTS), RPM::translate(Translations::EFFICIENCY)}));
 
     for (i = 0, l = RPM::get()->project()->gameDatas()->battleSystemDatas()
         ->modelElements()->invisibleRootItem()->rowCount(); i < l; i++)

@@ -420,9 +420,10 @@ QString SystemCharacteristic::toString() const {
     switch (m_kind) {
     case CharacteristicKind::IncreaseDecrease:
     {
-        text += QString(m_isIncreaseDecrease ? "Increase" : "Decrease") + " " +
+        text += QString(m_isIncreaseDecrease ? RPM::translate(Translations
+            ::INCREASE) : RPM::translate(Translations::DECREASE)) + RPM::SPACE +
             RPM::ENUM_TO_STRING_INCREASE_DECREASE_KIND.at(m_increaseDecreaseKind
-            ->id()) + " ";
+            ->id()) + RPM::SPACE;
         switch (static_cast<IncreaseDecreaseKind>(m_increaseDecreaseKind->id()))
         {
         case IncreaseDecreaseKind::StatValue:
@@ -438,7 +439,9 @@ QString SystemCharacteristic::toString() const {
             text += m_currencyGainID->toString();
             break;
         case IncreaseDecreaseKind::SkillCost:
-            text += m_isAllSkillCost ? "(all)" : m_skillCostID->toString();
+            text += m_isAllSkillCost ? RPM::PARENTHESIS_LEFT + RPM::translate(
+                Translations::ALL).toLower() + RPM::PARENTHESIS_RIGHT :
+                m_skillCostID->toString();
             break;
         case IncreaseDecreaseKind::Variable:
             text += QString::number(m_variableID->id());
@@ -451,21 +454,30 @@ QString SystemCharacteristic::toString() const {
         break;
     }
     case CharacteristicKind::AllowForbidEquip:
-        text += (m_isAllowEquip ? "Allow" : "Forbid") + QString(" equip ") + (
-            m_isAllowEquipWeapon ? "weapon " + m_equipWeaponTypeID->toString() :
-            "armor " + m_equipArmorTypeID->toString());
+        text += (m_isAllowEquip ? RPM::translate(Translations::ALLOW) : RPM
+            ::translate(Translations::FORBID)) + RPM::SPACE + RPM::translate(
+            Translations::EQUIP).toLower() + RPM::SPACE + (m_isAllowEquipWeapon
+            ? RPM::translate(Translations::WEAPON_ID).toLower() + RPM::SPACE +
+            m_equipWeaponTypeID->toString() : RPM::translate(Translations
+            ::ARMOR_ID).toLower() + RPM::SPACE + m_equipArmorTypeID->toString());
         break;
     case CharacteristicKind::AllowForbidChange:
-        text += (m_isAllowChangeEquipment ? "Allow" : "Forbid") + QString(
-            " change equipment ") + m_changeEquipmentID->toString();
+        text += (m_isAllowChangeEquipment ? RPM::translate(Translations::ALLOW)
+            : RPM::translate(Translations::FORBID)) + RPM::SPACE + RPM
+            ::translate(Translations::CHANGE_EQUIPMENT).toLower() + RPM::SPACE +
+            m_changeEquipmentID->toString();
         break;
     case CharacteristicKind::BeginEquipment:
-        text += "Begin equiment " + m_beginEquipmentID->toString() + " with " +
-            (m_isBeginWeapon ? "weapon" : "armor") + " " + m_beginWeaponArmorID
-            ->toString();
+        text += RPM::translate(Translations::BEGIN_EQUIPMENT) + RPM::SPACE +
+            m_beginEquipmentID->toString() + RPM::SPACE + RPM::translate(
+            Translations::WITH).toLower() + RPM::SPACE + (m_isBeginWeapon ? RPM
+            ::translate(Translations::WEAPON_ID).toLower() : RPM::translate(
+            Translations::ARMOR_ID).toLower()) + RPM::SPACE +
+            m_beginWeaponArmorID->toString();
         break;
     case CharacteristicKind::Script:
-        text += "Script: " + m_script->toString();
+        text += RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
+            m_script->toString();
         break;
     }
 

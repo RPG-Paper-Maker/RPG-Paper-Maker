@@ -128,7 +128,8 @@ void DialogPictures::addfolders(QIcon &icon,
 
 void DialogPictures::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    this->setWindowTitle(RPM::translate(Translations::PICTURES_MANAGER) + RPM
+        ::DOT_DOT_DOT);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

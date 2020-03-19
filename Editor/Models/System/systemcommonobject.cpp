@@ -122,7 +122,7 @@ void SystemCommonObject::setDefaultFirst() {
 
     // ID and name
     setId(1);
-    setName("Basic");
+    setName(RPM::translate(Translations::BASIC));
 
     modelEventsUser = RPM::get()->project()->gameDatas()->commonEventsDatas()
         ->modelEventsUser();
@@ -170,7 +170,7 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
 
     // ID and name
     setId(2);
-    setName("Hero");
+    setName(RPM::translate(Translations::HERO));
 
     // Properties
     item = new QStandardItem();

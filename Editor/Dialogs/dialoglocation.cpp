@@ -45,8 +45,11 @@ QString DialogLocation::location() const {
 // -------------------------------------------------------
 
 void DialogLocation::translate() {
-    this->setWindowTitle(RPM::translate(Translations::COLLISIONS_MANAGER));
-
+    this->setWindowTitle(RPM::translate(Translations::CHOOSE_LOCATION) + RPM
+        ::DOT_DOT_DOT);
+    ui->labelLocation->setText(RPM::translate(Translations::LOCATION) + RPM
+        ::COLON);
+    ui->pushButtonAuto->setText(RPM::translate(Translations::AUTO));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -59,8 +62,8 @@ void DialogLocation::translate() {
 void DialogLocation::on_pushButton_clicked() {
     QString dir;
 
-    dir = QFileDialog::getExistingDirectory(this,"Select a location", this
-        ->location());
+    dir = QFileDialog::getExistingDirectory(this, RPM::translate(Translations
+        ::SELECT_A_LOCATION), this->location());
     if (dir.count() > 0) {
         ui->lineEdit->setText(dir);
     }

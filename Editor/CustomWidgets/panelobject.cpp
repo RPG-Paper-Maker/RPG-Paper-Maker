@@ -288,7 +288,8 @@ void PanelObject::updateReactionsWidgets() {
             // Checkboxes and buttons
             variant = QVariant::fromValue(reinterpret_cast<quintptr>(event
                 ->reactionAt(super->id())));
-            checkbox = new QCheckBox("Block hero when reaction");
+            checkbox = new QCheckBox(RPM::translate(Translations
+                ::BLOCK_HERO_WHEN_REACTION));
             checkbox->setProperty("reaction", variant);
             connect(checkbox, SIGNAL(toggled(bool)), this, SLOT(
                 on_blockingHeroChanged(bool)));

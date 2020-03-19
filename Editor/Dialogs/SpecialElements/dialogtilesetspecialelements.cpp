@@ -97,7 +97,7 @@ void DialogTilesetSpecialElements::remove() {
 
 void DialogTilesetSpecialElements::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::NEW_PROJECT));
+    ui->groupBoxForTileset->setTitle(RPM::translate(Translations::FOR_TILESET));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
