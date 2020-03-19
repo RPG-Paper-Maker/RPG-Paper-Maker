@@ -123,7 +123,7 @@ Thank you for considering contributing to the RPM! Just see our [Contributing Gu
 
 ### :innocent: Code of Conduct
 
-In order to ensure that the CodeZipCore community is welcoming to all, please review and abide by the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+In order to ensure that the RPM community is welcoming to all, please review and abide by the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
 
 ## :mega: Feature requests
 
