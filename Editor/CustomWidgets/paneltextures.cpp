@@ -300,7 +300,8 @@ QString PanelTextures::createlabelText() {
     }
 
     return RPM::translate(Translations::PANEL_TEXTURES_TEXT_1) + RPM::SPACE +
-        kindText + RPM::translate(Translations::PANEL_TEXTURES_TEXT_2);
+        kindText + RPM::SPACE + RPM::translate(Translations
+        ::PANEL_TEXTURES_TEXT_2);
 }
 
 // -------------------------------------------------------
