@@ -240,6 +240,7 @@ QStringList RPM::ENUM_TO_STRING_AVAILABLE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_OBJECT_MOVING_KIND = {};
 QStringList RPM::ENUM_TO_STRING_SHAPE_KIND = {};
 QStringList RPM::ENUM_TO_STRING_TITLE_COMMAND_KIND = {};
+QStringList RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = {};
 
 // OTHER STATIC VALUES
 QSet<int> RPM::mapsToSave;
@@ -554,6 +555,10 @@ void RPM::readTranslations() {
         RPM::translate(Translations::SETTINGS),
         RPM::translate(Translations::EXIT),
         RPM::translate(Translations::SCRIPT)
+    });
+    RPM::ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND = QStringList({
+        RPM::translate(Translations::RANDOM),
+        RPM::translate(Translations::WEAK_ENEMIES)
     });
 }
 

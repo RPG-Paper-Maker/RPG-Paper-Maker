@@ -1080,6 +1080,16 @@ const QString Translations::RESTART = "restart";
 const QString Translations::ENGINE_GOING_RESTARTED = "engine.going.restarted";
 const QString Translations::MAP = "map";
 const QString Translations::THERE_ARE_NO_PROPERTIES = "there.are.no.properties";
+const QString Translations::WEAK_ENEMIES = "weak.enemies";
+const QString Translations::CONDITIONS = "conditions";
+const QString Translations::PRIORITY = "priority";
+const QString Translations::NUMBER_MAX = "number.max";
+const QString Translations::VALUE_IS = "value.is";
+const QString Translations::DO_NOTHING = "do.nothing";
+const QString Translations::USE_ITEM_ID = "use.item.id";
+const QString Translations::USE_SKILL_ID = "use.skill.id";
+const QString Translations::IS_UNDER_EFFECT_OF_STATUS_ID = "is.under.effect.of.status.id";
+const QString Translations::TURN_VALUE_IS = "turn.value.is";
 
 // -------------------------------------------------------
 //

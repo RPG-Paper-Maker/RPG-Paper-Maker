@@ -1060,5 +1060,15 @@
     "restart": "Redémarrer",
     "engine.going.restarted": "Le logiciel va être redémarré",
     "map": "Carte",
-    "there.are.no.properties": "Il n'y a pas de propriétés disponibles à changer"
+    "there.are.no.properties": "Il n'y a pas de propriétés disponibles à changer",
+    "weak.enemies": "Enemmies faibles",
+    "conditions": "Conditions",
+    "priority": "Priorité",
+    "number.max": "Nombre max",
+    "value.is": "Valeur est",
+    "do.nothing": "Ne rien faire",
+    "use.item.id": "Utiliser l'objet d'ID",
+    "use.skill.id": "Utiliser la compétence d'ID",
+    "is.under.effect.of.status.id": "Est sous l'effet du statut d'ID",
+    "turn.value.is": "La valeur de tour est"
 }

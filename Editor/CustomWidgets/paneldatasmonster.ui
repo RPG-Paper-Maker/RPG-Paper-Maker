@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>1081</height>
+    <height>1238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -142,9 +142,27 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBoxActions">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="title">
         <string>Actions</string>
        </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="WidgetSuperTree" name="treeViewActions">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>150</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

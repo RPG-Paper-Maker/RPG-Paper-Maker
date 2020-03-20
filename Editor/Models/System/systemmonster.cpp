@@ -13,10 +13,12 @@
 #include "rpm.h"
 #include "systemcurrency.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 const QString SystemMonster::JSON_EXPERIENCE = "xp";
 const QString SystemMonster::JSON_CURRENCIES = "cur";
 const QString SystemMonster::JSON_LOOTS = "loots";
+const QString SystemMonster::JSON_ACTIONS = "a";
 
 // -------------------------------------------------------
 //
@@ -76,6 +78,10 @@ void SystemMonster::initializeHeaders() {
         Translations::NAME), RPM::translate(Translations::NUMBER_SHORT), RPM
         ::translate(Translations::PROBABILITY_SHORT), RPM::translate(
         Translations::INITIAL_SHORT), RPM::translate(Translations::FINAL_SHORT)}));
+    m_modelActions->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::ACTION), RPM::translate(Translations::CONDITIONS), RPM
+        ::translate(Translations::PRIORITY), RPM::translate(Translations
+        ::PROBABILITY)}));
 }
 
 // -------------------------------------------------------
@@ -199,6 +205,10 @@ void SystemMonster::read(const QJsonObject &json){
 
     // Loots
     SuperListItem::readTree(m_modelLoots, new SystemLoot, json, JSON_LOOTS);
+
+    // Actions
+    SuperListItem::readTree(m_modelActions, new SystemMonsterAction, json,
+        JSON_ACTIONS);
 }
 
 // -------------------------------------------------------
@@ -230,4 +240,7 @@ void SystemMonster::write(QJsonObject &json) const{
 
     // Loots
     SuperListItem::writeTree(m_modelLoots, json, JSON_LOOTS);
+
+    // Actions
+    SuperListItem::writeTree(m_modelActions, json, JSON_ACTIONS);
 }

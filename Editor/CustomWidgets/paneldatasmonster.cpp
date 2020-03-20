@@ -15,6 +15,7 @@
 #include "rpm.h"
 #include "systemcurrency.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 // -------------------------------------------------------
 //
@@ -56,6 +57,7 @@ void PanelDatasMonster::initialize() {
         int)), this, SLOT(on_maxLevelChanged(int)));
 
     ui->treeViewLoots->initializeNewItemInstance(new SystemLoot);
+    ui->treeViewActions->initializeNewItemInstance(new SystemMonsterAction);
 }
 
 // -------------------------------------------------------
@@ -103,6 +105,13 @@ void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
     ui->treeViewLoots->header()->setSectionResizeMode(2, QHeaderView::Interactive);
     ui->treeViewLoots->header()->setSectionResizeMode(3, QHeaderView::Interactive);
     ui->treeViewLoots->header()->setSectionResizeMode(4, QHeaderView::Interactive);
+
+    // Actions
+    ui->treeViewActions->initializeModel(monster->modelActions());
+    ui->treeViewActions->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewActions->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(2, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(3, QHeaderView::Interactive);
 }
 
 // -------------------------------------------------------

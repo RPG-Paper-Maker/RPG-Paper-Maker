@@ -191,6 +191,7 @@ public:
     static QStringList ENUM_TO_STRING_OBJECT_MOVING_KIND;
     static QStringList ENUM_TO_STRING_SHAPE_KIND;
     static QStringList ENUM_TO_STRING_TITLE_COMMAND_KIND;
+    static QStringList ENUM_TO_STRING_MONSTER_ACTION_TARGET_KIND;
 
     // OTHER STATIC VALUES
     static QSet<int> mapsToSave;

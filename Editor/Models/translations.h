@@ -1092,6 +1092,16 @@ public:
     static const QString ENGINE_GOING_RESTARTED;
     static const QString MAP;
     static const QString THERE_ARE_NO_PROPERTIES;
+    static const QString WEAK_ENEMIES;
+    static const QString CONDITIONS;
+    static const QString PRIORITY;
+    static const QString NUMBER_MAX;
+    static const QString VALUE_IS;
+    static const QString DO_NOTHING;
+    static const QString USE_ITEM_ID;
+    static const QString USE_SKILL_ID;
+    static const QString IS_UNDER_EFFECT_OF_STATUS_ID;
+    static const QString TURN_VALUE_IS;
 
     Translations();
     virtual ~Translations();
