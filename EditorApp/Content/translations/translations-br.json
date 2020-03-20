@@ -1059,5 +1059,15 @@
     "restart": "Reiniciar",
     "engine.going.restarted": "A engine será reiniciada",
     "map": "Mapa",
-    "there.are.no.properties": "Não há propriedades disponíveis para alteração"
+	"there.are.no.properties": "Não há propriedades disponíveis para alteração",
+	"weak.enemies": "Inimigos fracos",
+    "conditions": "Condições",
+    "priority": "Prioridade",
+    "number.max": "Número máx",
+    "value.is": "Valor é",
+    "do.nothing": "Fazer nada",
+    "use.item.id": "Usar item de ID",
+    "use.skill.id": "Usar habilidade de ID",
+    "is.under.effect.of.status.id": "Está sob efeito do status de ID",
+    "turn.value.is": "Valor do turno é"
 }
