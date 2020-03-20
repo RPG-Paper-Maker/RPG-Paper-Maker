@@ -1,10 +1,12 @@
 {
 	"names": [
 		"English", 
-		"Français"
+		"Français",
+		"Português (Brasil)"
 	],
 	"short": [
 		"eng",
-		"fr"
+		"fr",
+		"br"
 	]
 }

@@ -502,8 +502,6 @@ public:
     static const QString TOP;
     static const QString BOT;
     static const QString NEW_BOX_HEIGHT;
-    static const QString BIG_SQUARE_S;
-    static const QString BIG_PIXEL_S;
     static const QString AUTOMATIC;
     static const QString RADIUS;
     static const QString GENERATE;

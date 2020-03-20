@@ -62,9 +62,9 @@ void DialogCommandModifyTeam::translate()
     ui->labelOfInstance->setText(RPM::translate(Translations::OF));
     ui->labelStockVariable->setText(RPM::translate(Translations
         ::STOCK_INSTANCE_ID_IN));
-    ui->radioButtonHero->setText(RPM::translate(Translations::HERO) + RPM::DOT);
+    ui->radioButtonHero->setText(RPM::translate(Translations::HERO) + RPM::COLON);
     ui->radioButtonMonster->setText(RPM::translate(Translations::MONSTER_ID) +
-        RPM::DOT);
+        RPM::COLON);
     ui->radioButtonNewInstance->setText(RPM::translate(Translations
         ::CREATE_NEW_INSTANCE_WITH_LEVEL));
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
