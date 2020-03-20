@@ -78,6 +78,10 @@ void SystemMonster::initializeHeaders() {
         Translations::NAME), RPM::translate(Translations::NUMBER_SHORT), RPM
         ::translate(Translations::PROBABILITY_SHORT), RPM::translate(
         Translations::INITIAL_SHORT), RPM::translate(Translations::FINAL_SHORT)}));
+    m_modelActions->setHorizontalHeaderLabels(QStringList({RPM::translate(
+        Translations::ACTION), RPM::translate(Translations::CONDITIONS), RPM
+        ::translate(Translations::PRIORITY), RPM::translate(Translations
+        ::PROBABILITY)}));
 }
 
 // -------------------------------------------------------

@@ -108,6 +108,10 @@ void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
 
     // Actions
     ui->treeViewActions->initializeModel(monster->modelActions());
+    ui->treeViewActions->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeViewActions->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(2, QHeaderView::Interactive);
+    ui->treeViewActions->header()->setSectionResizeMode(3, QHeaderView::Interactive);
 }
 
 // -------------------------------------------------------

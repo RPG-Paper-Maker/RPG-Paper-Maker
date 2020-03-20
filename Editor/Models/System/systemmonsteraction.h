@@ -32,6 +32,7 @@ public:
     static const QString JSON_ACTION_KIND;
     static const QString JSON_SKILL_ID;
     static const QString JSON_ITEM_ID;
+    static const QString JSON_ITEM_NUMBER_MAX;
     static const QString JSON_PRIORITY;
     static const QString JSON_TARGET_KIND;
     static const QString JSON_IS_CONDITION_TURN;
@@ -52,6 +53,7 @@ public:
     static const MonsterActionKind DEFAULT_ACTION_KIND;
     static const int DEFAULT_SKILL_ID;
     static const int DEFAULT_ITEM_ID;
+    static const int DEFAULT_ITEM_NUMBER_MAX;
     static const int DEFAULT_PRIORITY;
     static const MonsterActionTargetKind DEFAULT_TARGET_KIND;
     static const bool DEFAULT_IS_CONDITION_TURN;
@@ -75,6 +77,7 @@ public:
         DEFAULT_ACTION_KIND, PrimitiveValue *sid = new PrimitiveValue(
         PrimitiveValueKind::DataBase, DEFAULT_SKILL_ID), PrimitiveValue *iid =
         new PrimitiveValue(PrimitiveValueKind::DataBase, DEFAULT_ITEM_ID),
+        PrimitiveValue *inm = new PrimitiveValue(DEFAULT_ITEM_NUMBER_MAX),
         PrimitiveValue *p = new PrimitiveValue(DEFAULT_PRIORITY),
         MonsterActionTargetKind tk = DEFAULT_TARGET_KIND, bool ict =
         DEFAULT_IS_CONDITION_TURN, OperationKind okt =
@@ -97,6 +100,7 @@ public:
     void setActionKind(MonsterActionKind ak);
     PrimitiveValue * skillID() const;
     PrimitiveValue * itemID() const;
+    PrimitiveValue * itemNumberMax() const;
     PrimitiveValue * priority() const;
     MonsterActionTargetKind targetKind() const;
     void setTargetKind(MonsterActionTargetKind tk);
@@ -127,6 +131,7 @@ public:
     QString conditionsToString() const;
     int calculateProbability() const;
 
+    virtual QString toString() const;
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
@@ -138,6 +143,7 @@ protected:
     MonsterActionKind m_actionKind;
     PrimitiveValue *m_skillID;
     PrimitiveValue *m_itemID;
+    PrimitiveValue *m_itemNumberMax;
     PrimitiveValue *m_priority;
     MonsterActionTargetKind m_targetKind;
     bool m_isConditionTurn;

@@ -15,6 +15,7 @@
 const QString SystemMonsterAction::JSON_ACTION_KIND = "ak";
 const QString SystemMonsterAction::JSON_SKILL_ID = "sid";
 const QString SystemMonsterAction::JSON_ITEM_ID = "iid";
+const QString SystemMonsterAction::JSON_ITEM_NUMBER_MAX = "inm";
 const QString SystemMonsterAction::JSON_PRIORITY = "p";
 const QString SystemMonsterAction::JSON_TARGET_KIND = "tk";
 const QString SystemMonsterAction::JSON_IS_CONDITION_TURN = "ict";
@@ -36,6 +37,7 @@ const MonsterActionKind SystemMonsterAction::DEFAULT_ACTION_KIND =
     MonsterActionKind::UseItem;
 const int SystemMonsterAction::DEFAULT_SKILL_ID = 1;
 const int SystemMonsterAction::DEFAULT_ITEM_ID = 1;
+const int SystemMonsterAction::DEFAULT_ITEM_NUMBER_MAX = 1;
 const int SystemMonsterAction::DEFAULT_PRIORITY = 0;
 const MonsterActionTargetKind SystemMonsterAction::DEFAULT_TARGET_KIND =
     MonsterActionTargetKind::Random;
@@ -71,15 +73,17 @@ SystemMonsterAction::SystemMonsterAction() :
 }
 
 SystemMonsterAction::SystemMonsterAction(int i, QString name, MonsterActionKind
-    ak, PrimitiveValue *sid, PrimitiveValue *iid, PrimitiveValue *p,
-    MonsterActionTargetKind tk, bool ict, OperationKind okt, PrimitiveValue
-    *tvc, bool ics, PrimitiveValue *stid, OperationKind oks, PrimitiveValue
-    *svc, bool icv, SuperListItem *vid, OperationKind okv, PrimitiveValue
-    *vvc, bool icst, PrimitiveValue *stsid, bool icsc, PrimitiveValue *s) :
+    ak, PrimitiveValue *sid, PrimitiveValue *iid, PrimitiveValue *inm,
+    PrimitiveValue *p, MonsterActionTargetKind tk, bool ict, OperationKind okt,
+    PrimitiveValue *tvc, bool ics, PrimitiveValue *stid, OperationKind oks,
+    PrimitiveValue *svc, bool icv, SuperListItem *vid, OperationKind okv,
+    PrimitiveValue *vvc, bool icst, PrimitiveValue *stsid, bool icsc,
+    PrimitiveValue *s) :
     SuperListItem(i, name),
     m_actionKind(ak),
     m_skillID(sid),
     m_itemID(iid),
+    m_itemNumberMax(inm),
     m_priority(p),
     m_targetKind(tk),
     m_isConditionTurn(ict),
@@ -112,6 +116,7 @@ SystemMonsterAction::~SystemMonsterAction()
 {
     delete m_skillID;
     delete m_itemID;
+    delete m_itemNumberMax;
     delete m_priority;
     delete m_turnValueCompare;
     delete m_statisticID;
@@ -140,6 +145,11 @@ PrimitiveValue * SystemMonsterAction::skillID() const
 PrimitiveValue * SystemMonsterAction::itemID() const
 {
     return m_itemID;
+}
+
+PrimitiveValue * SystemMonsterAction::itemNumberMax() const
+{
+    return m_itemNumberMax;
 }
 
 PrimitiveValue * SystemMonsterAction::priority() const
@@ -296,6 +306,12 @@ int SystemMonsterAction::calculateProbability() const
 //
 // -------------------------------------------------------
 
+QString SystemMonsterAction::toString() const {
+    return "";
+}
+
+// -------------------------------------------------------
+
 bool SystemMonsterAction::openDialog()
 {
     SystemMonsterAction action;
@@ -330,6 +346,7 @@ void SystemMonsterAction::setCopy(const SuperListItem &super)
     m_actionKind = monster->m_actionKind;
     m_skillID->setCopy(*m_skillID);
     m_itemID->setCopy(*m_itemID);
+    m_itemNumberMax->setCopy(*m_itemNumberMax);
     m_priority->setCopy(*m_priority);
     m_targetKind = monster->m_targetKind;
     m_isConditionTurn = monster->m_isConditionTurn;
@@ -402,6 +419,10 @@ void SystemMonsterAction::read(const QJsonObject &json)
     if (json.contains(JSON_ITEM_ID))
     {
         m_itemID->read(json[JSON_ITEM_ID].toObject());
+    }
+    if (json.contains(JSON_ITEM_NUMBER_MAX))
+    {
+        m_itemNumberMax->read(json[JSON_ITEM_NUMBER_MAX].toObject());
     }
     if (json.contains(JSON_PRIORITY))
     {
@@ -503,6 +524,13 @@ void SystemMonsterAction::write(QJsonObject &json) const
         obj = QJsonObject();
         m_itemID->write(obj);
         json[JSON_ITEM_ID] = obj;
+    }
+    if (m_itemNumberMax->kind() != PrimitiveValueKind::Number || m_itemNumberMax
+        ->numberValue() != DEFAULT_ITEM_NUMBER_MAX)
+    {
+        obj = QJsonObject();
+        m_itemNumberMax->write(obj);
+        json[JSON_ITEM_NUMBER_MAX] = obj;
     }
     if (m_priority->kind() != PrimitiveValueKind::Number || m_priority
         ->numberValue() != DEFAULT_PRIORITY)

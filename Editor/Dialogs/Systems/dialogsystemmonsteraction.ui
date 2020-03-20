@@ -104,6 +104,9 @@
               </item>
               <item row="2" column="2">
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueNumberMax" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -120,6 +123,9 @@
               </item>
               <item row="1" column="2">
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueItemID" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -276,17 +282,17 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxCompareTurnValueIs"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelTo_Turn">
-                <property name="text">
-                 <string>to</string>
+               <widget class="QComboBox" name="comboBoxCompareTurnValueIs">
+                <property name="enabled">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueTurnTo" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -327,6 +333,9 @@
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueStatisticID" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -343,23 +352,26 @@
               </item>
               <item>
                <widget class="QLabel" name="labelValueIs_StatisticID">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>value is</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxCompareStatisticID"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelTo_StatisticID">
-                <property name="text">
-                 <string>to</string>
+               <widget class="QComboBox" name="comboBoxCompareStatisticID">
+                <property name="enabled">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueStatisticTo" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -400,6 +412,9 @@
               </item>
               <item>
                <widget class="WidgetVariable" name="widgetVariable" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -416,23 +431,26 @@
               </item>
               <item>
                <widget class="QLabel" name="labelValueIs_Variable">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>value is</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxCompareVariableValue"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelTo_VariableValue">
-                <property name="text">
-                 <string>to</string>
+               <widget class="QComboBox" name="comboBoxCompareVariableValue">
+                <property name="enabled">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueVariableTo" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -473,6 +491,9 @@
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueStatusID" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>
@@ -513,6 +534,9 @@
               </item>
               <item>
                <widget class="PanelPrimitiveValue" name="panelPrimitiveValueScript" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>250</width>

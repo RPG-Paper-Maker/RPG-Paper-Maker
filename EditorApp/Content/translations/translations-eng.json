@@ -1060,5 +1060,15 @@
     "restart": "Restart",
     "engine.going.restarted": "The engine is going to be restarted",
     "map": "Map",
-    "there.are.no.properties": "There are no properties available to change"
+    "there.are.no.properties": "There are no properties available to change",
+    "weak.enemies": "Weak enemies",
+    "conditions": "Conditions",
+    "priority": "Priority",
+    "number.max": "Number max",
+    "value.is": "Value is",
+    "do.nothing": "Do nothing",
+    "use.item.id": "Use item ID",
+    "use.skill.id": "User skill ID",
+    "is.under.effect.of.status.id": "Is under effect of status ID",
+    "turn.value.is": "Turn value is"
 }
