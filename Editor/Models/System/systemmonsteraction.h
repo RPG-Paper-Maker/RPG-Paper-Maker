@@ -29,8 +29,69 @@
 class SystemMonsterAction : public SuperListItem
 {
 public:
+    static const QString JSON_ACTION_KIND;
+    static const QString JSON_SKILL_ID;
+    static const QString JSON_ITEM_ID;
+    static const QString JSON_PRIORITY;
+    static const QString JSON_TARGET_KIND;
+    static const QString JSON_IS_CONDITION_TURN;
+    static const QString JSON_OPERATION_KIND_TURN;
+    static const QString JSON_TURN_VALUE_COMPARE;
+    static const QString JSON_IS_CONDITION_STATISTIC;
+    static const QString JSON_STATISTIC_ID;
+    static const QString JSON_OPERATION_KIND_STATISTIC;
+    static const QString JSON_STATISTIC_VALUE_COMPARE;
+    static const QString JSON_IS_CONDITION_VARIABLE;
+    static const QString JSON_VARIABLE_ID;
+    static const QString JSON_OPERATION_KIND_VARIABLE;
+    static const QString JSON_VARIABLE_VALUE_COMPARE;
+    static const QString JSON_IS_CONDITION_STATUS;
+    static const QString JSON_STATUS_ID;
+    static const QString JSON_IS_CONDITION_SCRIPT;
+    static const QString JSON_SCRIPT;
+    static const MonsterActionKind DEFAULT_ACTION_KIND;
+    static const int DEFAULT_SKILL_ID;
+    static const int DEFAULT_ITEM_ID;
+    static const int DEFAULT_PRIORITY;
+    static const MonsterActionTargetKind DEFAULT_TARGET_KIND;
+    static const bool DEFAULT_IS_CONDITION_TURN;
+    static const OperationKind DEFAULT_OPERATION_KIND_TURN;
+    static const int DEFAULT_TURN_VALUE_COMPARE;
+    static const bool DEFAULT_IS_CONDITION_STATISTIC;
+    static const int DEFAULT_STATISTIC_ID;
+    static const OperationKind DEFAULT_OPERATION_KIND_STATISTIC;
+    static const int DEFAULT_STATISTIC_VALUE_COMPARE;
+    static const bool DEFAULT_IS_CONDITION_VARIABLE;
+    static const int DEFAULT_VARIABLE_ID;
+    static const OperationKind DEFAULT_OPERATION_KIND_VARIABLE;
+    static const int DEFAULT_VARIABLE_VALUE_COMPARE;
+    static const bool DEFAULT_IS_CONDITION_STATUS;
+    static const int DEFAULT_STATUS_ID;
+    static const bool DEFAULT_IS_CONDITION_SCRIPT;
+    static const QString DEFAULT_SCRIPT;
+
     SystemMonsterAction();
-    SystemMonsterAction(int i, QString name, PrimitiveValue *iid);
+    SystemMonsterAction(int i, QString name, MonsterActionKind ak =
+        DEFAULT_ACTION_KIND, PrimitiveValue *sid = new PrimitiveValue(
+        PrimitiveValueKind::DataBase, DEFAULT_SKILL_ID), PrimitiveValue *iid =
+        new PrimitiveValue(PrimitiveValueKind::DataBase, DEFAULT_ITEM_ID),
+        PrimitiveValue *p = new PrimitiveValue(DEFAULT_PRIORITY),
+        MonsterActionTargetKind tk = DEFAULT_TARGET_KIND, bool ict =
+        DEFAULT_IS_CONDITION_TURN, OperationKind okt =
+        DEFAULT_OPERATION_KIND_TURN, PrimitiveValue *tvc = new PrimitiveValue(
+        DEFAULT_TURN_VALUE_COMPARE), bool ics = DEFAULT_IS_CONDITION_STATISTIC,
+        PrimitiveValue *stid = new PrimitiveValue(PrimitiveValueKind::DataBase,
+        DEFAULT_STATISTIC_ID), OperationKind oks =
+        DEFAULT_OPERATION_KIND_STATISTIC, PrimitiveValue *svc = new
+        PrimitiveValue(DEFAULT_STATISTIC_VALUE_COMPARE), bool icv =
+        DEFAULT_IS_CONDITION_VARIABLE, SuperListItem *vid = new SuperListItem(
+        DEFAULT_VARIABLE_ID), OperationKind okv =
+        DEFAULT_OPERATION_KIND_VARIABLE, PrimitiveValue *vvc = new
+        PrimitiveValue(DEFAULT_VARIABLE_VALUE_COMPARE), bool icst =
+        DEFAULT_IS_CONDITION_STATUS, PrimitiveValue *stsid = new PrimitiveValue(
+        PrimitiveValueKind::DataBase, DEFAULT_STATUS_ID), bool icsc =
+        DEFAULT_IS_CONDITION_SCRIPT, PrimitiveValue *s = new PrimitiveValue(
+        DEFAULT_SCRIPT));
     virtual ~SystemMonsterAction();
     MonsterActionKind actionKind() const;
     void setActionKind(MonsterActionKind ak);
@@ -63,9 +124,13 @@ public:
     void setIsConditionScript(bool icsc);
     PrimitiveValue * script() const;
 
+    QString conditionsToString() const;
+    int calculateProbability() const;
+
     virtual bool openDialog();
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);
+    virtual QList<QStandardItem*> getModelRow() const;
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 
