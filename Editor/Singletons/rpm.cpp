@@ -301,6 +301,16 @@ void RPM::copiedCommandsAppend(QStandardItem *item) {
     m_copiedCommands.append(item);
 }
 
+SuperListItem * RPM::selectedMonster() const
+{
+    return m_selectedMonster;
+}
+
+void RPM::setSelectedMonster(SuperListItem *si)
+{
+    m_selectedMonster = si;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS

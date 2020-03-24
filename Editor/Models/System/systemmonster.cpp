@@ -125,6 +125,25 @@ SystemProgressionTable * SystemMonster::currencyProgressionAt(int id) {
 }
 
 // -------------------------------------------------------
+
+void SystemMonster::updateProbabilities()
+{
+    QStandardItem *item;
+    SystemMonsterAction *action;
+    int i, l;
+
+    for (i = 0, l = m_modelActions->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        item = m_modelActions->item(i);
+        action = reinterpret_cast<SystemMonsterAction *>(item->data().value<
+            quintptr>());
+        if (action != nullptr) {
+            item->setText(action->probabilityToString());
+        }
+    }
+}
+
+// -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
 //
@@ -186,8 +205,8 @@ void SystemMonster::read(const QJsonObject &json){
     QJsonArray tab;
     QJsonObject obj, objHash;
     QJsonArray jsonRow;
-    QList<QStandardItem *> row;
     SystemProgressionTable *table;
+    SystemMonsterAction *action;
     int i, l;
 
     // Experience
@@ -195,7 +214,8 @@ void SystemMonster::read(const QJsonObject &json){
 
     // Currencies
     tab = json[JSON_CURRENCIES].toArray();
-    for (i = 0, l = tab.size(); i < l; i++) {
+    for (i = 0, l = tab.size(); i < l; i++)
+    {
         objHash = tab.at(i).toObject();
         obj = objHash["v"].toObject();
         table = new SystemProgressionTable;
@@ -207,6 +227,7 @@ void SystemMonster::read(const QJsonObject &json){
     SuperListItem::readTree(m_modelLoots, new SystemLoot, json, JSON_LOOTS);
 
     // Actions
+    RPM::get()->setSelectedMonster(this);
     SuperListItem::readTree(m_modelActions, new SystemMonsterAction, json,
         JSON_ACTIONS);
 }

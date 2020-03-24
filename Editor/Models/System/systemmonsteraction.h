@@ -17,6 +17,7 @@
 #include "monsteractionkind.h"
 #include "monsteractiontargetkind.h"
 #include "operationkind.h"
+#include "systemmonster.h"
 
 // -------------------------------------------------------
 //
@@ -105,7 +106,7 @@ public:
     MonsterActionTargetKind targetKind() const;
     void setTargetKind(MonsterActionTargetKind tk);
     bool isConditionTurn() const;
-    void setIsCOnditionTurn(bool ict);
+    void setIsConditionTurn(bool ict);
     OperationKind operationKindTurn() const;
     void setOperationKindTurn(OperationKind okt);
     PrimitiveValue * turnValueCompare() const;
@@ -127,9 +128,13 @@ public:
     bool isConditionScript() const;
     void setIsConditionScript(bool icsc);
     PrimitiveValue * script() const;
+    SystemMonster * monster() const;
+    void setMonster(SystemMonster *monster);
+    bool editing() const;
 
     QString conditionsToString() const;
-    int calculateProbability() const;
+    double calculateProbability(int p = -1) const;
+    QString probabilityToString(int p = -1) const;
 
     virtual QString toString() const;
     virtual bool openDialog();
@@ -161,6 +166,8 @@ protected:
     PrimitiveValue *m_statusID;
     bool m_isConditionScript;
     PrimitiveValue *m_script;
+    SystemMonster *m_monster;
+    bool m_editing;
 };
 
 #endif // SYSTEMMONSTERACTION_H

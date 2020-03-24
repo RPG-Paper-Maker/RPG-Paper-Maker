@@ -27,11 +27,17 @@ private:
 public slots:
     void on_radioButtonUseItemID_toggled(bool checked);
     void on_radioButtonUseSkillID_toggled(bool checked);
+    void on_radioButtonDoNothing_toggled(bool checked);
     void on_checkBoxScript_toggled(bool checked);
     void on_checkBoxStatisticID_toggled(bool checked);
     void on_checkBoxTurnValueIs_toggled(bool checked);
     void on_checkBoxVariableValue_toggled(bool checked);
     void on_checkBoxIsUnderEffectOfStatus_toggled(bool checked);
+    void on_comboBoxTarget_currentIndexChanged(int index);
+    void on_comboBoxCompareTurnValueIs_currentIndexChanged(int index);
+    void on_comboBoxCompareStatisticID_currentIndexChanged(int index);
+    void on_comboBoxCompareVariableValue_currentIndexChanged(int index);
+    void on_priorityUpdated(int p);
 };
 
 #endif // DIALOGSYSTEMMONSTERACTION_H

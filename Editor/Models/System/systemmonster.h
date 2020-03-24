@@ -47,6 +47,7 @@ public:
     void insertDefaultCurrency(int id);
     void removeCurrency(int id);
     SystemProgressionTable *currencyProgressionAt(int id);
+    void updateProbabilities();
 
     virtual SuperListItem* createCopy() const;
     virtual void setCopy(const SuperListItem &super);

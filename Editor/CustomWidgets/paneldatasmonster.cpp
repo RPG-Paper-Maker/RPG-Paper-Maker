@@ -55,7 +55,8 @@ int PanelDatasMonster::finalLevel() const {
 void PanelDatasMonster::initialize() {
     connect(ui->panelDatasCharacter->panelDatasClass(), SIGNAL(maxLevelUpdated(
         int)), this, SLOT(on_maxLevelChanged(int)));
-
+    connect(ui->treeViewActions, SIGNAL(needsUpdateJson(SuperListItem *)), this,
+        SLOT(on_treeViewActionsNeedsUpdateJson(SuperListItem *)));
     ui->treeViewLoots->initializeNewItemInstance(new SystemLoot);
     ui->treeViewActions->initializeNewItemInstance(new SystemMonsterAction);
 }
@@ -112,6 +113,7 @@ void PanelDatasMonster::update(SystemMonster *monster, int classIndex) {
     ui->treeViewActions->header()->setSectionResizeMode(1, QHeaderView::Interactive);
     ui->treeViewActions->header()->setSectionResizeMode(2, QHeaderView::Interactive);
     ui->treeViewActions->header()->setSectionResizeMode(3, QHeaderView::Interactive);
+    ui->treeViewActions->updateAbsoluteAllNodesString(); // For probability
 }
 
 // -------------------------------------------------------
@@ -155,4 +157,11 @@ void PanelDatasMonster::translate()
 void PanelDatasMonster::on_maxLevelChanged(int lvl) {
     ui->panelProgressionTableRewardExp->setMaxLevel(lvl);
     ui->panelProgressionTableRewardExp->updateProgress();
+}
+
+// -------------------------------------------------------
+
+void PanelDatasMonster::on_treeViewActionsNeedsUpdateJson(SuperListItem *)
+{
+    ui->treeViewActions->updateAbsoluteAllNodesString();
 }

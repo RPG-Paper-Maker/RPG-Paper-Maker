@@ -645,8 +645,14 @@ void DialogDatas::on_pageHeroSelected(QModelIndex index, QModelIndex){
 void DialogDatas::on_pageMonsterSelected(QModelIndex index, QModelIndex){
     QStandardItem* selected = ui->panelSuperListMonsters->list()->getModel()
             ->itemFromIndex(index);
+    SystemMonster *monster;
     if (selected != nullptr)
-        updateMonster((SystemMonster*)selected->data().value<quintptr>());
+    {
+        monster = reinterpret_cast<SystemMonster *>(selected->data().value<
+            quintptr>());
+        RPM::get()->setSelectedMonster(monster);
+        updateMonster(monster);
+    }
 }
 
 // -------------------------------------------------------

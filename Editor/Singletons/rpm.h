@@ -210,6 +210,8 @@ public:
     QStandardItem * copiedCommandAt(int i) const;
     int copiedCommandsCount() const;
     void copiedCommandsAppend(QStandardItem *item);
+    SuperListItem * selectedMonster() const;
+    void setSelectedMonster(SuperListItem *si);
 
     static void writeJSON(QString path, const Serializable &obj);
     static void readJSON(QString path, Serializable &obj);
@@ -232,6 +234,7 @@ protected:
     EngineSettings *m_engineSettings;
     Translations *m_translations;
     QList<QStandardItem *> m_copiedCommands;
+    SuperListItem *m_selectedMonster;
 };
 
 #endif // RPM_H

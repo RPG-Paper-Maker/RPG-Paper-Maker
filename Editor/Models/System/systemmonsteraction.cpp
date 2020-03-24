@@ -34,11 +34,11 @@ const QString SystemMonsterAction::JSON_STATUS_ID = "stsid";
 const QString SystemMonsterAction::JSON_IS_CONDITION_SCRIPT = "icsc";
 const QString SystemMonsterAction::JSON_SCRIPT = "s";
 const MonsterActionKind SystemMonsterAction::DEFAULT_ACTION_KIND =
-    MonsterActionKind::UseItem;
+    MonsterActionKind::UseSkill;
 const int SystemMonsterAction::DEFAULT_SKILL_ID = 1;
 const int SystemMonsterAction::DEFAULT_ITEM_ID = 1;
 const int SystemMonsterAction::DEFAULT_ITEM_NUMBER_MAX = 1;
-const int SystemMonsterAction::DEFAULT_PRIORITY = 0;
+const int SystemMonsterAction::DEFAULT_PRIORITY = 10;
 const MonsterActionTargetKind SystemMonsterAction::DEFAULT_TARGET_KIND =
     MonsterActionTargetKind::Random;
 const bool SystemMonsterAction::DEFAULT_IS_CONDITION_TURN = false;
@@ -100,7 +100,9 @@ SystemMonsterAction::SystemMonsterAction(int i, QString name, MonsterActionKind
     m_isConditionStatus(icst),
     m_statusID(stsid),
     m_isConditionScript(icsc),
-    m_script(s)
+    m_script(s),
+    m_monster(nullptr),
+    m_editing(false)
 {
     m_skillID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->skillsDatas()->model());
@@ -110,6 +112,8 @@ SystemMonsterAction::SystemMonsterAction(int i, QString name, MonsterActionKind
         ->battleSystemDatas()->modelCommonStatistics());
     m_statusID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->statusDatas()->model());
+    this->setMonster(reinterpret_cast<SystemMonster *>(RPM::get()
+        ->selectedMonster()));
 }
 
 SystemMonsterAction::~SystemMonsterAction()
@@ -172,7 +176,7 @@ bool SystemMonsterAction::isConditionTurn() const
     return m_isConditionTurn;
 }
 
-void SystemMonsterAction::setIsCOnditionTurn(bool ict)
+void SystemMonsterAction::setIsConditionTurn(bool ict)
 {
     m_isConditionTurn = ict;
 }
@@ -282,6 +286,21 @@ PrimitiveValue * SystemMonsterAction::script() const
     return m_script;
 }
 
+SystemMonster * SystemMonsterAction::monster() const
+{
+    return m_monster;
+}
+
+void SystemMonsterAction::setMonster(SystemMonster *monster)
+{
+    m_monster = monster;
+}
+
+bool SystemMonsterAction::editing() const
+{
+    return m_editing;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -290,14 +309,71 @@ PrimitiveValue * SystemMonsterAction::script() const
 
 QString SystemMonsterAction::conditionsToString() const
 {
-    return "";
+    QStringList conditions;
+
+    if (m_isConditionTurn) {
+        conditions << RPM::translate(Translations::TURN_VALUE_IS);
+    }
+    if (m_isConditionStatistic) {
+        conditions << RPM::translate(Translations::STATISTIC_ID);
+    }
+    if (m_isConditionVariable) {
+        conditions << RPM::translate(Translations::VARIABLE);
+    }
+    if (m_isConditionStatus) {
+        conditions << RPM::translate(Translations::IS_UNDER_EFFECT_OF_STATUS_ID);
+    }
+    if (m_isConditionScript) {
+        conditions << RPM::translate(Translations::SCRIPT);
+    }
+
+    return conditions.join(" | ");
 }
 
 // -------------------------------------------------------
 
-int SystemMonsterAction::calculateProbability() const
+double SystemMonsterAction::calculateProbability(int p) const
 {
-    return 100;
+    if (m_monster == nullptr) {
+        return -1;
+    }
+
+    SystemMonsterAction *action;
+    double sum;
+    int i, l;
+
+    sum = 0;
+    for (i = 0, l = m_monster->modelActions()->invisibleRootItem()->rowCount();
+         i < l; i++)
+    {
+        action = reinterpret_cast<SystemMonsterAction *>(m_monster
+            ->modelActions()->item(i)->data().value<quintptr>());
+        if (action != nullptr)
+        {
+            if (action->priority()->kind() == PrimitiveValueKind::Number)
+            {
+                if (!action->editing())
+                {
+                    sum += action->priority()->numberValue();
+                }
+            } else
+            {
+                return -1;
+            }
+        }
+    }
+    sum += (p < 0 ? 0 : p);
+
+    return sum == 0.0 ? 0 : (m_priority->numberValue() / sum) * 100.0;
+}
+
+// -------------------------------------------------------
+
+QString SystemMonsterAction::probabilityToString(int p) const
+{
+    double proba = this->calculateProbability(p);
+
+    return proba < 0 ? "?" : QString::number(proba);
 }
 
 // -------------------------------------------------------
@@ -307,7 +383,25 @@ int SystemMonsterAction::calculateProbability() const
 // -------------------------------------------------------
 
 QString SystemMonsterAction::toString() const {
-    return "";
+    QString txt;
+
+    txt = SuperListItem::beginningText;
+    switch (m_actionKind)
+    {
+    case MonsterActionKind::UseSkill:
+        txt += RPM::translate(Translations::USE_SKILL_ID) + RPM::SPACE +
+            m_skillID->toString();
+        break;
+    case MonsterActionKind::UseItem:
+        txt += RPM::translate(Translations::USE_ITEM_ID) + RPM::SPACE + m_itemID
+            ->toString() + RPM::SPACE + RPM::translate(Translations::NUMBER_MAX)
+            + RPM::SPACE + m_itemNumberMax->toString();
+        break;
+    case MonsterActionKind::DoNothing:
+        txt += RPM::translate(Translations::DO_NOTHING);
+        break;
+    }
+    return txt;
 }
 
 // -------------------------------------------------------
@@ -315,13 +409,21 @@ QString SystemMonsterAction::toString() const {
 bool SystemMonsterAction::openDialog()
 {
     SystemMonsterAction action;
+    SystemMonster *monster;
+
+    monster = action.monster();
     action.setCopy(*this);
+    action.setMonster(monster);
+    m_editing = true;
     DialogSystemMonsterAction dialog(action);
     if (dialog.exec() == QDialog::Accepted)
     {
-        setCopy(action);
+        this->setCopy(action);
+        m_editing = false;
+
         return true;
     }
+    m_editing = false;
 
     return false;
 }
@@ -344,10 +446,10 @@ void SystemMonsterAction::setCopy(const SuperListItem &super)
     SuperListItem::setCopy(super);
     monster = reinterpret_cast<const SystemMonsterAction *>(&super);
     m_actionKind = monster->m_actionKind;
-    m_skillID->setCopy(*m_skillID);
-    m_itemID->setCopy(*m_itemID);
-    m_itemNumberMax->setCopy(*m_itemNumberMax);
-    m_priority->setCopy(*m_priority);
+    m_skillID->setCopy(*monster->m_skillID);
+    m_itemID->setCopy(*monster->m_itemID);
+    m_itemNumberMax->setCopy(*monster->m_itemNumberMax);
+    m_priority->setCopy(*monster->m_priority);
     m_targetKind = monster->m_targetKind;
     m_isConditionTurn = monster->m_isConditionTurn;
     m_operationKindTurn = monster->m_operationKindTurn;
@@ -359,11 +461,12 @@ void SystemMonsterAction::setCopy(const SuperListItem &super)
     m_isConditionVariable = monster->m_isConditionVariable;
     m_variableID->setCopy(*monster->m_variableID);
     m_operationKindVariable = monster->m_operationKindVariable;
-    m_variableValueCompare->setCopy(*m_variableValueCompare);
+    m_variableValueCompare->setCopy(*monster->m_variableValueCompare);
     m_isConditionStatus = monster->m_isConditionStatus;
     m_statusID->setCopy(*monster->m_statusID);
     m_isConditionScript = monster->m_isConditionScript;
     m_script->setCopy(*monster->script());
+    m_monster = monster->m_monster;
 }
 
 // -------------------------------------------------------
@@ -382,7 +485,7 @@ QList<QStandardItem *> SystemMonsterAction::getModelRow() const
     itemPriority = new QStandardItem;
     itemProbability = new QStandardItem;
     itemAction->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemAction->setText(toString());
+    itemAction->setText(this->toString());
     itemAction->setFlags(itemAction->flags() ^ (Qt::ItemIsDropEnabled));
     itemConditions->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
     itemConditions->setText(this->conditionsToString());
@@ -391,7 +494,7 @@ QList<QStandardItem *> SystemMonsterAction::getModelRow() const
     itemPriority->setText(m_priority->toString());
     itemPriority->setFlags(itemPriority->flags() ^ (Qt::ItemIsDropEnabled));
     itemProbability->setData(QVariant::fromValue(reinterpret_cast<quintptr>(this)));
-    itemProbability->setText(QString::number(this->calculateProbability()));
+    itemProbability->setText(this->probabilityToString());
     itemProbability->setFlags(itemProbability->flags() ^ (Qt::ItemIsDropEnabled));
     row.append(itemAction);
     row.append(itemConditions);
@@ -497,6 +600,7 @@ void SystemMonsterAction::read(const QJsonObject &json)
     {
         m_script->read(json[JSON_SCRIPT].toObject());
     }
+    m_monster = reinterpret_cast<SystemMonster *>(RPM::get()->selectedMonster());
 }
 
 // -------------------------------------------------------
@@ -511,22 +615,25 @@ void SystemMonsterAction::write(QJsonObject &json) const
     {
         json[JSON_ACTION_KIND] = static_cast<int>(m_actionKind);
     }
-    if (m_skillID->kind() != PrimitiveValueKind::DataBase || m_skillID
-        ->numberValue() != DEFAULT_SKILL_ID)
+    if (m_actionKind == MonsterActionKind::UseSkill && (m_skillID->kind() !=
+        PrimitiveValueKind::DataBase || m_skillID->numberValue() !=
+        DEFAULT_SKILL_ID))
     {
         obj = QJsonObject();
         m_skillID->write(obj);
         json[JSON_SKILL_ID] = obj;
     }
-    if (m_itemID->kind() != PrimitiveValueKind::DataBase || m_itemID
-        ->numberValue() != DEFAULT_ITEM_ID)
+    if (m_actionKind == MonsterActionKind::UseItem && (m_itemID->kind() !=
+        PrimitiveValueKind::DataBase || m_itemID->numberValue() !=
+        DEFAULT_ITEM_ID))
     {
         obj = QJsonObject();
         m_itemID->write(obj);
         json[JSON_ITEM_ID] = obj;
     }
-    if (m_itemNumberMax->kind() != PrimitiveValueKind::Number || m_itemNumberMax
-        ->numberValue() != DEFAULT_ITEM_NUMBER_MAX)
+    if (m_actionKind == MonsterActionKind::UseItem && (m_itemNumberMax->kind()
+        != PrimitiveValueKind::Number || m_itemNumberMax->numberValue() !=
+        DEFAULT_ITEM_NUMBER_MAX))
     {
         obj = QJsonObject();
         m_itemNumberMax->write(obj);
@@ -547,81 +654,96 @@ void SystemMonsterAction::write(QJsonObject &json) const
     {
         json[JSON_IS_CONDITION_TURN] = m_isConditionTurn;
     }
-    if (m_operationKindTurn != DEFAULT_OPERATION_KIND_TURN)
+    if (m_isConditionTurn)
     {
-        json[JSON_OPERATION_KIND_TURN] = static_cast<int>(m_operationKindTurn);
-    }
-    if (m_turnValueCompare->kind() != PrimitiveValueKind::Number ||
-        m_turnValueCompare->numberValue() != DEFAULT_TURN_VALUE_COMPARE)
-    {
-        obj = QJsonObject();
-        m_turnValueCompare->write(obj);
-        json[JSON_TURN_VALUE_COMPARE] = obj;
+        if (m_operationKindTurn != DEFAULT_OPERATION_KIND_TURN)
+        {
+            json[JSON_OPERATION_KIND_TURN] = static_cast<int>(m_operationKindTurn);
+        }
+        if (m_turnValueCompare->kind() != PrimitiveValueKind::Number ||
+            m_turnValueCompare->numberValue() != DEFAULT_TURN_VALUE_COMPARE)
+        {
+            obj = QJsonObject();
+            m_turnValueCompare->write(obj);
+            json[JSON_TURN_VALUE_COMPARE] = obj;
+        }
     }
     if (m_isConditionStatistic != DEFAULT_IS_CONDITION_STATISTIC)
     {
         json[JSON_IS_CONDITION_STATISTIC] = m_isConditionStatistic;
     }
-    if (m_statisticID->kind() != PrimitiveValueKind::DataBase || m_statisticID
-        ->numberValue() != DEFAULT_STATISTIC_ID)
+    if (m_isConditionStatistic)
     {
-        obj = QJsonObject();
-        m_statisticID->write(obj);
-        json[JSON_STATISTIC_ID] = obj;
-    }
-    if (m_operationKindStatistic != DEFAULT_OPERATION_KIND_STATISTIC)
-    {
-        json[JSON_OPERATION_KIND_STATISTIC] = static_cast<int>(
-            m_operationKindStatistic);
-    }
-    if (m_statisticValueCompare->kind() != PrimitiveValueKind::Number ||
-        m_statisticValueCompare->numberValue() !=
-        DEFAULT_STATISTIC_VALUE_COMPARE)
-    {
-        obj = QJsonObject();
-        m_statisticValueCompare->write(obj);
-        json[JSON_STATISTIC_VALUE_COMPARE] = obj;
+        if (m_statisticID->kind() != PrimitiveValueKind::DataBase || m_statisticID
+            ->numberValue() != DEFAULT_STATISTIC_ID)
+        {
+            obj = QJsonObject();
+            m_statisticID->write(obj);
+            json[JSON_STATISTIC_ID] = obj;
+        }
+        if (m_operationKindStatistic != DEFAULT_OPERATION_KIND_STATISTIC)
+        {
+            json[JSON_OPERATION_KIND_STATISTIC] = static_cast<int>(
+                m_operationKindStatistic);
+        }
+        if (m_statisticValueCompare->kind() != PrimitiveValueKind::Number ||
+            m_statisticValueCompare->numberValue() !=
+            DEFAULT_STATISTIC_VALUE_COMPARE)
+        {
+            obj = QJsonObject();
+            m_statisticValueCompare->write(obj);
+            json[JSON_STATISTIC_VALUE_COMPARE] = obj;
+        }
     }
     if (m_isConditionVariable != DEFAULT_IS_CONDITION_VARIABLE)
     {
         json[JSON_IS_CONDITION_VARIABLE] = m_isConditionVariable;
     }
-    if (m_variableID->id() != DEFAULT_VARIABLE_ID)
+    if (m_isConditionVariable)
     {
-        json[JSON_IS_CONDITION_VARIABLE] = m_variableID->id();
-    }
-    if (m_operationKindVariable != DEFAULT_OPERATION_KIND_VARIABLE)
-    {
-        json[JSON_OPERATION_KIND_VARIABLE] = static_cast<int>(
-            m_operationKindVariable);
-    }
-    if (m_variableValueCompare->kind() != PrimitiveValueKind::Number ||
-        m_variableValueCompare->numberValue() != DEFAULT_VARIABLE_VALUE_COMPARE)
-    {
-        obj = QJsonObject();
-        m_variableValueCompare->write(obj);
-        json[JSON_VARIABLE_VALUE_COMPARE] = obj;
+        if (m_variableID->id() != DEFAULT_VARIABLE_ID)
+        {
+            json[JSON_IS_CONDITION_VARIABLE] = m_variableID->id();
+        }
+        if (m_operationKindVariable != DEFAULT_OPERATION_KIND_VARIABLE)
+        {
+            json[JSON_OPERATION_KIND_VARIABLE] = static_cast<int>(
+                m_operationKindVariable);
+        }
+        if (m_variableValueCompare->kind() != PrimitiveValueKind::Number ||
+            m_variableValueCompare->numberValue() != DEFAULT_VARIABLE_VALUE_COMPARE)
+        {
+            obj = QJsonObject();
+            m_variableValueCompare->write(obj);
+            json[JSON_VARIABLE_VALUE_COMPARE] = obj;
+        }
     }
     if (m_isConditionStatus != DEFAULT_IS_CONDITION_STATUS)
     {
         json[JSON_IS_CONDITION_STATUS] = m_isConditionStatus;
     }
-    if (m_statusID->kind() != PrimitiveValueKind::DataBase || m_statusID
-        ->numberValue() != DEFAULT_STATUS_ID)
+    if (m_isConditionStatus)
     {
-        obj = QJsonObject();
-        m_statusID->write(obj);
-        json[JSON_STATUS_ID] = obj;
+        if (m_statusID->kind() != PrimitiveValueKind::DataBase || m_statusID
+            ->numberValue() != DEFAULT_STATUS_ID)
+        {
+            obj = QJsonObject();
+            m_statusID->write(obj);
+            json[JSON_STATUS_ID] = obj;
+        }
     }
     if (m_isConditionScript != DEFAULT_IS_CONDITION_SCRIPT)
     {
         json[JSON_IS_CONDITION_SCRIPT] = m_isConditionScript;
     }
-    if (m_script->kind() != PrimitiveValueKind::Message || m_script
-        ->messageValue() != DEFAULT_SCRIPT)
+    if (m_isConditionScript)
     {
-        obj = QJsonObject();
-        m_script->write(obj);
-        json[JSON_SCRIPT] = obj;
+        if (m_script->kind() != PrimitiveValueKind::Message || m_script
+            ->messageValue() != DEFAULT_SCRIPT)
+        {
+            obj = QJsonObject();
+            m_script->write(obj);
+            json[JSON_SCRIPT] = obj;
+        }
     }
 }

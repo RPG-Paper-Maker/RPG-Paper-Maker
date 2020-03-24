@@ -52,6 +52,7 @@ private:
 
 public slots:
     void on_maxLevelChanged(int lvl);
+    void on_treeViewActionsNeedsUpdateJson(SuperListItem *);
 };
 
 #endif // PANELDATASMONSTER_H
