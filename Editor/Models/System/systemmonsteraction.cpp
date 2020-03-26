@@ -34,7 +34,7 @@ const QString SystemMonsterAction::JSON_STATUS_ID = "stsid";
 const QString SystemMonsterAction::JSON_IS_CONDITION_SCRIPT = "icsc";
 const QString SystemMonsterAction::JSON_SCRIPT = "s";
 const MonsterActionKind SystemMonsterAction::DEFAULT_ACTION_KIND =
-    MonsterActionKind::UseSkill;
+    MonsterActionKind::DoNothing;
 const int SystemMonsterAction::DEFAULT_SKILL_ID = 1;
 const int SystemMonsterAction::DEFAULT_ITEM_ID = 1;
 const int SystemMonsterAction::DEFAULT_ITEM_NUMBER_MAX = 1;
@@ -459,14 +459,14 @@ void SystemMonsterAction::setCopy(const SuperListItem &super)
     m_operationKindStatistic = monster->m_operationKindStatistic;
     m_statisticValueCompare->setCopy(*monster->m_statisticValueCompare);
     m_isConditionVariable = monster->m_isConditionVariable;
-    m_variableID->setCopy(*monster->m_variableID);
+    m_variableID->setId(monster->m_variableID->id());
     m_operationKindVariable = monster->m_operationKindVariable;
     m_variableValueCompare->setCopy(*monster->m_variableValueCompare);
     m_isConditionStatus = monster->m_isConditionStatus;
     m_statusID->setCopy(*monster->m_statusID);
     m_isConditionScript = monster->m_isConditionScript;
     m_script->setCopy(*monster->script());
-    m_monster = monster->m_monster;
+    m_monster = reinterpret_cast<SystemMonster *>(RPM::get()->selectedMonster());
 }
 
 // -------------------------------------------------------
@@ -703,7 +703,7 @@ void SystemMonsterAction::write(QJsonObject &json) const
     {
         if (m_variableID->id() != DEFAULT_VARIABLE_ID)
         {
-            json[JSON_IS_CONDITION_VARIABLE] = m_variableID->id();
+            json[JSON_VARIABLE_ID] = m_variableID->id();
         }
         if (m_operationKindVariable != DEFAULT_OPERATION_KIND_VARIABLE)
         {

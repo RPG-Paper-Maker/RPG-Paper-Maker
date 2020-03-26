@@ -52,10 +52,12 @@ DialogCommandStartBattle::DialogCommandStartBattle(EventCommand* command,
     ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::FADE_IN) +
         RPM::DOT_DOT_DOT);
     ui->comboBoxTransitionStart->addItem(RPM::translate(Translations::ZOOM_IN));
+    ui->comboBoxTransitionStart->setCurrentIndex(2);
     ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::NONE));
     ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::FADE_OUT) +
         RPM::DOT_DOT_DOT);
     ui->comboBoxTransitionEnd->addItem(RPM::translate(Translations::ZOOM_OUT));
+    ui->comboBoxTransitionEnd->setCurrentIndex(2);
 
     if (command != nullptr) initialize(command);
 

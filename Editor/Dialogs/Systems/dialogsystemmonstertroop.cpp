@@ -43,14 +43,15 @@ DialogSystemMonsterTroop::~DialogSystemMonsterTroop()
 //
 // -------------------------------------------------------
 
-void DialogSystemMonsterTroop::initialize(){
+void DialogSystemMonsterTroop::initialize()
+{
+    int index;
+
+    index = SuperListItem::getIndexById(RPM::get()->project()->gameDatas()
+        ->monstersDatas()->model()->invisibleRootItem(), m_monsterTroop.id());
     SuperListItem::fillComboBox(ui->comboBoxMonster, RPM::get()->project()
-                                ->gameDatas()->monstersDatas()->model());
-    ui->comboBoxMonster->setCurrentIndex(
-                SuperListItem::getIndexById(RPM::get()->project()
-                                            ->gameDatas()->monstersDatas()
-                                            ->model()->invisibleRootItem(),
-                                            m_monsterTroop.id()));
+        ->gameDatas()->monstersDatas()->model());
+    ui->comboBoxMonster->setCurrentIndex(index);
     ui->spinBoxLevel->setValue(m_monsterTroop.level());
 }
 
