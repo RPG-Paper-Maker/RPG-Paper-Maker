@@ -1101,6 +1101,7 @@ public:
     static const QString IS_UNDER_EFFECT_OF_STATUS_ID;
     static const QString TURN_VALUE_IS;
     static const QString STOCK_VALUE_IN;
+    static const QString TEMPORARILY_CHANGE_TARGET;
 
     Translations();
     virtual ~Translations();

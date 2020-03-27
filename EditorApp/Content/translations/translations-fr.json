@@ -1068,5 +1068,6 @@
     "use.skill.id": "Utiliser la compétence d'ID",
     "is.under.effect.of.status.id": "Est sous l'effet du statut d'ID",
     "turn.value.is": "La valeur de tour est",
-    "stock.value.in": "Stocker la valeur dans"
+    "stock.value.in": "Stocker la valeur dans",
+    "temporarily.change.target": "Temporairement changer la cible"
 }

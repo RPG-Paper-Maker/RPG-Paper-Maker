@@ -42,6 +42,8 @@ const QString SystemEffect::JSON_PERFORM_SKILL_ID = "psid";
 const QString SystemEffect::JSON_COMMON_REACTION_ID = "crid";
 const QString SystemEffect::JSON_SPECIAL_ACTION_KIND = "sak";
 const QString SystemEffect::JSON_SCRIPT_FORMULA = "sf";
+const QString SystemEffect::JSON_IS_TEMPORARILY_CHANGE_TARGET = "itct";
+const QString SystemEffect::JSON_TEMPORARILY_CHANGE_TARGET_FORMULA = "tctf";
 
 // -------------------------------------------------------
 //
@@ -62,7 +64,8 @@ SystemEffect::SystemEffect() :
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
-        PrimitiveValue::createDefaultMessageValue())
+        PrimitiveValue::createDefaultMessageValue(), false, new PrimitiveValue(
+        QString()))
 {
 
 }
@@ -78,7 +81,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
     isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
     PrimitiveValue *commonReactionID, EffectSpecialActionKind specialActionKind,
-    PrimitiveValue *scriptFormula) :
+    PrimitiveValue *scriptFormula, bool itct, PrimitiveValue *tctf) :
     SuperListItem(-1, "", true),
     m_kind(kind),
     m_damagesKind(new SuperListItem(static_cast<int>(damageKind), "")),
@@ -108,7 +111,9 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     m_performSkillID(performSkillID),
     m_commonReactionID(commonReactionID),
     m_specialActionKind(specialActionKind),
-    m_scriptFormula(scriptFormula)
+    m_scriptFormula(scriptFormula),
+    m_isTemporarilyChangeTarget(itct),
+    m_temporarilyChangeTargetFormula(tctf)
 {
     m_damagesStatisticID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->battleSystemDatas()->modelCommonStatistics());
@@ -145,6 +150,7 @@ SystemEffect::~SystemEffect() {
     delete m_performSkillID;
     delete m_commonReactionID;
     delete m_scriptFormula;
+    delete m_temporarilyChangeTargetFormula;
 }
 
 EffectKind SystemEffect::kind() const {
@@ -310,6 +316,21 @@ PrimitiveValue * SystemEffect::scriptFormula() const {
     return m_scriptFormula;
 }
 
+bool SystemEffect::isTemporarilyChangeTarget() const
+{
+    return m_isTemporarilyChangeTarget;
+}
+
+void SystemEffect::setIsTemporarilyChangeTarget(bool itct)
+{
+    m_isTemporarilyChangeTarget = itct;
+}
+
+PrimitiveValue * SystemEffect::temporarilyChangeTargetFormula() const
+{
+    return m_temporarilyChangeTargetFormula;
+}
+
 // -------------------------------------------------------
 //
 //  INTERMEDIARY FUNCTIONS
@@ -330,7 +351,7 @@ SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), action, PrimitiveValue
-        ::createDefaultMessageValue());
+        ::createDefaultMessageValue(), false, new PrimitiveValue(QString()));
 }
 
 // -------------------------------------------------------
@@ -353,7 +374,8 @@ SystemEffect * SystemEffect::createStat(int stat, QString formula, QString min,
         ("100")), true, PrimitiveValue::createDefaultDataBaseValue(),
         PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
         ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
-        PrimitiveValue::createDefaultMessageValue());
+        PrimitiveValue::createDefaultMessageValue(), false, new PrimitiveValue(
+        QString()));
 }
 
 // -------------------------------------------------------
@@ -445,6 +467,9 @@ void SystemEffect::setCopy(const SuperListItem &super) {
     m_commonReactionID->setCopy(*effect->m_commonReactionID);
     m_specialActionKind = effect->m_specialActionKind;
     m_scriptFormula->setCopy(*effect->m_scriptFormula);
+    m_isTemporarilyChangeTarget = effect->m_isTemporarilyChangeTarget;
+    m_temporarilyChangeTargetFormula->setCopy(*effect
+        ->m_temporarilyChangeTargetFormula);
 }
 
 // -------------------------------------------------------
@@ -517,6 +542,12 @@ QString SystemEffect::toString() const {
         text += RPM::translate(Translations::SCRIPT) + RPM::COLON + RPM::SPACE +
             m_scriptFormula->toString();
         break;
+    }
+    if (m_isTemporarilyChangeTarget)
+    {
+        text += RPM::BRACKET_LEFT + RPM::translate(Translations
+            ::TEMPORARILY_CHANGE_TARGET) + RPM::COLON + RPM::SPACE +
+            m_temporarilyChangeTargetFormula->toString() + RPM::BRACKET_RIGHT;
     }
 
     return text;
@@ -646,6 +677,16 @@ void SystemEffect::read(const QJsonObject &json) {
             m_scriptFormula->read(json[JSON_SCRIPT_FORMULA].toObject());
         }
         break;
+    }
+    if (json.contains(JSON_IS_TEMPORARILY_CHANGE_TARGET))
+    {
+        m_isTemporarilyChangeTarget = json[JSON_IS_TEMPORARILY_CHANGE_TARGET]
+            .toBool();
+        if (json.contains(JSON_TEMPORARILY_CHANGE_TARGET_FORMULA))
+        {
+            m_temporarilyChangeTargetFormula->read(json[
+                JSON_TEMPORARILY_CHANGE_TARGET_FORMULA].toObject());
+        }
     }
 }
 
@@ -825,5 +866,17 @@ void SystemEffect::write(QJsonObject &json) const {
             json[JSON_SCRIPT_FORMULA] = obj;
         }
         break;
+    }
+    if (m_isTemporarilyChangeTarget)
+    {
+        json[JSON_IS_TEMPORARILY_CHANGE_TARGET] = m_isTemporarilyChangeTarget;
+        if (m_temporarilyChangeTargetFormula->kind() != PrimitiveValueKind
+            ::Message || !m_temporarilyChangeTargetFormula->messageValue()
+            .isEmpty())
+        {
+            obj = QJsonObject();
+            m_temporarilyChangeTargetFormula->write(obj);
+            json[JSON_TEMPORARILY_CHANGE_TARGET_FORMULA] = obj;
+        }
     }
 }

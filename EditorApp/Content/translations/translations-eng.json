@@ -1068,5 +1068,6 @@
     "use.skill.id": "Use skill ID",
     "is.under.effect.of.status.id": "Is under effect of status ID",
     "turn.value.is": "Turn value is",
-    "stock.value.in": "Stock value in"
+    "stock.value.in": "Stock value in",
+    "temporarily.change.target": "Temporarily change target"
 }

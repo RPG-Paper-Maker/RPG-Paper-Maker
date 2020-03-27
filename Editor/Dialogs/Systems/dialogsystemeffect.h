@@ -68,6 +68,7 @@ public slots:
     void on_comboBoxAddRemoveStatus_currentIndexChanged(int index);
     void on_comboBoxAddRemoveSkill_currentIndexChanged(int index);
     void on_comboBoxSpecialAction_currentIndexChanged(int index);
+    void on_checkBoxTemporarilyChangeTarget_toggled(bool checked);
 };
 
 #endif // DIALOGSYSTEMEFFECT_H

@@ -59,6 +59,8 @@ public:
     static const QString JSON_COMMON_REACTION_ID;
     static const QString JSON_SPECIAL_ACTION_KIND;
     static const QString JSON_SCRIPT_FORMULA;
+    static const QString JSON_IS_TEMPORARILY_CHANGE_TARGET;
+    static const QString JSON_TEMPORARILY_CHANGE_TARGET_FORMULA;
 
     SystemEffect();
     SystemEffect(EffectKind kind, DamagesKind damageKind, PrimitiveValue
@@ -73,7 +75,7 @@ public:
         *statusPrecisionFormula, bool isAddSkill, PrimitiveValue *addSkillID,
         PrimitiveValue *performSkillID, PrimitiveValue *commonReactionID,
         EffectSpecialActionKind specialActionKind, PrimitiveValue
-        *scriptFormula);
+        *scriptFormula, bool itct, PrimitiveValue *tctf);
     virtual ~SystemEffect();
     EffectKind kind() const;
     void setKind(EffectKind k);
@@ -115,6 +117,9 @@ public:
     EffectSpecialActionKind specialActionKind() const;
     void setSpecialActionKind(EffectSpecialActionKind k);
     PrimitiveValue * scriptFormula() const;
+    bool isTemporarilyChangeTarget() const;
+    void setIsTemporarilyChangeTarget(bool itct);
+    PrimitiveValue * temporarilyChangeTargetFormula() const;
 
     static SystemEffect * createSpecialAction(EffectSpecialActionKind action);
     static SystemEffect * createStat(int stat, QString formula, QString min, int element,
@@ -168,6 +173,8 @@ protected:
     PrimitiveValue *m_commonReactionID;
     EffectSpecialActionKind m_specialActionKind;
     PrimitiveValue *m_scriptFormula;
+    bool m_isTemporarilyChangeTarget;
+    PrimitiveValue *m_temporarilyChangeTargetFormula;
 };
 
 Q_DECLARE_METATYPE(SystemEffect)

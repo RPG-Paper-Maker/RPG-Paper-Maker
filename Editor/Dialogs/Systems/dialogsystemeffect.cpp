@@ -157,6 +157,12 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueScript->initializeModel(m_effect
         .scriptFormula());
     ui->panelPrimitiveValueScript->updateModel();
+
+    // Temporarily change target
+    ui->checkBoxTemporarilyChangeTarget->setChecked(m_effect
+        .isTemporarilyChangeTarget());
+    ui->panelPrimitiveValueTemporarilyChangeTarget->initializeMessageAndUpdate(
+        m_effect.temporarilyChangeTargetFormula(), true);
 }
 
 // -------------------------------------------------------
@@ -230,6 +236,8 @@ void DialogSystemEffect::translate()
         ::COLON);
     ui->checkBoxStockValueIn->setText(RPM::translate(Translations
         ::STOCK_VALUE_IN) + RPM::COLON);
+    ui->checkBoxTemporarilyChangeTarget->setText(RPM::translate(Translations
+        ::TEMPORARILY_CHANGE_TARGET) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -408,4 +416,12 @@ void DialogSystemEffect::on_comboBoxSpecialAction_currentIndexChanged(int
     index)
 {
     m_effect.setSpecialActionKind(static_cast<EffectSpecialActionKind>(index));
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxTemporarilyChangeTarget_toggled(bool checked)
+{
+    m_effect.setIsTemporarilyChangeTarget(checked);
+    ui->panelPrimitiveValueTemporarilyChangeTarget->setEnabled(checked);
 }
