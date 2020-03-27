@@ -48,6 +48,8 @@ public:
     static const QString JSON_DAMAGE_CRITICAL_FORMULA;
     static const QString JSON_IS_DAMAGE_PRECISION;
     static const QString JSON_DAMAGE_PRECISION_FORMULA;
+    static const QString JSON_IS_DAMAGE_STOCK_VARIABLE;
+    static const QString JSON_DAMAGE_STOCK_VARIABLE;
     static const QString JSON_IS_ADD_STATUS;
     static const QString JSON_STATUS_ID;
     static const QString JSON_STATUS_PRECISION_FORMULA;
@@ -66,11 +68,12 @@ public:
         isDamageElement, PrimitiveValue *damagesElementID, bool isDamageVariance
         , PrimitiveValue *damagesVarianceFormula, bool isDamageCritical,
         PrimitiveValue *damagesCriticalFormula, bool isDamagePrecision,
-        PrimitiveValue *damagesPrecisionFormula, bool isAddStatus,
-        PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
-        isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
-        PrimitiveValue *commonReactionID, EffectSpecialActionKind
-        specialActionKind, PrimitiveValue *scriptFormula);
+        PrimitiveValue *damagesPrecisionFormula, bool idsv, SuperListItem *dsv,
+        bool isAddStatus, PrimitiveValue *statusID, PrimitiveValue
+        *statusPrecisionFormula, bool isAddSkill, PrimitiveValue *addSkillID,
+        PrimitiveValue *performSkillID, PrimitiveValue *commonReactionID,
+        EffectSpecialActionKind specialActionKind, PrimitiveValue
+        *scriptFormula);
     virtual ~SystemEffect();
     EffectKind kind() const;
     void setKind(EffectKind k);
@@ -97,6 +100,9 @@ public:
     bool isDamagePrecision() const;
     void setIsDamagePrecision(bool b);
     PrimitiveValue * damagesPrecisionFormula() const;
+    bool isDamageStockVariable() const;
+    void setIsDamageStockVariable(bool idsv);
+    SuperListItem * damagesStockVariable() const;
     bool isAddStatus() const;
     void setIsAddStatus(bool b);
     PrimitiveValue * statusID() const;
@@ -151,6 +157,8 @@ protected:
     PrimitiveValue *m_damagesCriticalFormula;
     bool m_isDamagePrecision;
     PrimitiveValue *m_damagesPrecisionFormula;
+    bool m_isDamageStockVariable;
+    SuperListItem *m_damagesStockVariable;
     bool m_isAddStatus;
     PrimitiveValue *m_statusID;
     PrimitiveValue *m_statusPrecisionFormula;

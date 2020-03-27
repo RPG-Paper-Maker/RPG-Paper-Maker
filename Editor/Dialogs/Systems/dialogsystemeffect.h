@@ -47,6 +47,7 @@ private:
     void setVarianceEnabled(bool checked);
     void setCriticalEnabled(bool checked);
     void setPrecisionEnabled(bool checked);
+    void setStockVariableEnabled(bool checked);
     void translate();
 
 public slots:
@@ -63,6 +64,7 @@ public slots:
     void on_checkBoxVariance_toggled(bool checked);
     void on_checkBoxCritical_toggled(bool checked);
     void on_checkBoxPrecision_toggled(bool checked);
+    void on_checkBoxStockValueIn_toggled(bool checked);
     void on_comboBoxAddRemoveStatus_currentIndexChanged(int index);
     void on_comboBoxAddRemoveSkill_currentIndexChanged(int index);
     void on_comboBoxSpecialAction_currentIndexChanged(int index);

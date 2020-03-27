@@ -108,6 +108,9 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValuePrecision->initializeModel(m_effect
         .damagesPrecisionFormula());
     ui->panelPrimitiveValuePrecision->updateModel();
+    ui->checkBoxStockValueIn->setChecked(m_effect.isDamageStockVariable());
+    ui->widgetVariableStockValueIn->initializeSuper(m_effect
+        .damagesStockVariable());
 
     // Status
     ui->comboBoxAddRemoveStatus->setCurrentIndex(m_effect.isAddStatus() ? 0 : 1);
@@ -195,6 +198,13 @@ void DialogSystemEffect::setPrecisionEnabled(bool checked) {
     ui->labelPercentPrecision->setEnabled(checked);
 }
 
+// -------------------------------------------------------
+
+void DialogSystemEffect::setStockVariableEnabled(bool checked)
+{
+    ui->widgetVariableStockValueIn->setEnabled(checked);
+}
+
 //-------------------------------------------------
 
 void DialogSystemEffect::translate()
@@ -218,6 +228,8 @@ void DialogSystemEffect::translate()
         RPM::COLON);
     ui->checkBoxPrecision->setText(RPM::translate(Translations::PRECISION) + RPM
         ::COLON);
+    ui->checkBoxStockValueIn->setText(RPM::translate(Translations
+        ::STOCK_VALUE_IN) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 
@@ -238,16 +250,17 @@ void DialogSystemEffect::on_radioButtonDamages_toggled(bool checked) {
     this->setMinimumEnabled(checked ? m_effect.isDamagesMinimum() : false);
     ui->checkBoxMaximum->setEnabled(checked);
     this->setMaximumEnabled(checked ? m_effect.isDamagesMaximum() : false);
-    /*
     ui->checkBoxElementID->setEnabled(checked);
-    */
-    this->setPrecisionEnabled(checked ? m_effect.isDamageElement() : false);
+    this->setElementEnabled(checked ? m_effect.isDamageElement() : false);
     ui->checkBoxVariance->setEnabled(checked);
     this->setVarianceEnabled(checked ? m_effect.isDamageVariance() : false);
     ui->checkBoxCritical->setEnabled(checked);
     this->setCriticalEnabled(checked ? m_effect.isDamageCritical() : false);
     ui->checkBoxPrecision->setEnabled(checked);
     this->setPrecisionEnabled(checked ? m_effect.isDamagePrecision() : false);
+    ui->checkBoxStockValueIn->setEnabled(checked);
+    this->setStockVariableEnabled(checked ? m_effect.isDamageStockVariable() :
+        false);
 }
 
 // -------------------------------------------------------
@@ -361,6 +374,16 @@ void DialogSystemEffect::on_checkBoxPrecision_toggled(bool checked) {
 
     // Enable
     setPrecisionEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_checkBoxStockValueIn_toggled(bool checked)
+{
+    m_effect.setIsDamageStockVariable(checked);
+
+    // Enable
+    setStockVariableEnabled(checked);
 }
 
 // -------------------------------------------------------

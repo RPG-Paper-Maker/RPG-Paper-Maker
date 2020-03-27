@@ -1069,5 +1069,6 @@
     "use.item.id": "ID Utilizar objeto",
     "use.skill.id": "ID Habilidad de usuario",
     "is.under.effect.of.status.id": "Se encuentra bajo el efecto de ID de estatus",
-    "turn.value.is": "El valor del turno es"
+    "turn.value.is": "El valor del turno es",
+    "stock.value.in": "Stock value in"
 }
