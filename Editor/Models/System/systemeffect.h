@@ -56,7 +56,7 @@ public:
     static const QString JSON_IS_ADD_SKILL;
     static const QString JSON_ADD_SKILL_ID;
     static const QString JSON_PERFORM_SKILL_ID;
-    static const QString JSON_COMMON_REACTION_ID;
+    static const QString JSON_COMMON_REACTION;
     static const QString JSON_SPECIAL_ACTION_KIND;
     static const QString JSON_SCRIPT_FORMULA;
     static const QString JSON_IS_TEMPORARILY_CHANGE_TARGET;
@@ -73,7 +73,7 @@ public:
         PrimitiveValue *damagesPrecisionFormula, bool idsv, SuperListItem *dsv,
         bool isAddStatus, PrimitiveValue *statusID, PrimitiveValue
         *statusPrecisionFormula, bool isAddSkill, PrimitiveValue *addSkillID,
-        PrimitiveValue *performSkillID, PrimitiveValue *commonReactionID,
+        PrimitiveValue *performSkillID, EventCommand *commonReaction,
         EffectSpecialActionKind specialActionKind, PrimitiveValue
         *scriptFormula, bool itct, PrimitiveValue *tctf);
     virtual ~SystemEffect();
@@ -113,7 +113,8 @@ public:
     void setIsAddSkill(bool b);
     PrimitiveValue * addSkillID() const;
     PrimitiveValue * performSkillID() const;
-    PrimitiveValue * commonReactionID() const;
+    EventCommand * commonReaction() const;
+    void setCommonReaction(EventCommand *cr);
     EffectSpecialActionKind specialActionKind() const;
     void setSpecialActionKind(EffectSpecialActionKind k);
     PrimitiveValue * scriptFormula() const;
@@ -170,7 +171,7 @@ protected:
     bool m_isAddSkill;
     PrimitiveValue *m_addSkillID;
     PrimitiveValue *m_performSkillID;
-    PrimitiveValue *m_commonReactionID;
+    EventCommand * m_commonReaction;
     EffectSpecialActionKind m_specialActionKind;
     PrimitiveValue *m_scriptFormula;
     bool m_isTemporarilyChangeTarget;

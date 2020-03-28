@@ -1,4 +1,4 @@
-/*
+﻿/*
     RPG Paper Maker Copyright (C) 2017-2019 Wano
 
     RPG Paper Maker engine is under proprietary license.
@@ -39,7 +39,7 @@ const QString SystemEffect::JSON_STATUS_PRECISION_FORMULA = "spf";
 const QString SystemEffect::JSON_IS_ADD_SKILL= "iask";
 const QString SystemEffect::JSON_ADD_SKILL_ID = "asid";
 const QString SystemEffect::JSON_PERFORM_SKILL_ID = "psid";
-const QString SystemEffect::JSON_COMMON_REACTION_ID = "crid";
+const QString SystemEffect::JSON_COMMON_REACTION = "cr";
 const QString SystemEffect::JSON_SPECIAL_ACTION_KIND = "sak";
 const QString SystemEffect::JSON_SCRIPT_FORMULA = "sf";
 const QString SystemEffect::JSON_IS_TEMPORARILY_CHANGE_TARGET = "itct";
@@ -62,10 +62,9 @@ SystemEffect::SystemEffect() :
         QString("100")), false, new SuperListItem(1), true, PrimitiveValue
         ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
-        ::createDefaultDataBaseValue(), PrimitiveValue
-        ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
-        PrimitiveValue::createDefaultMessageValue(), false, new PrimitiveValue(
-        QString()))
+        ::createDefaultDataBaseValue(), nullptr, EffectSpecialActionKind
+        ::ApplyWeapons, PrimitiveValue::createDefaultMessageValue(), false, new
+        PrimitiveValue(QString()))
 {
 
 }
@@ -80,7 +79,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     *damagesPrecisionFormula, bool idsv, SuperListItem *dsv, bool isAddStatus,
     PrimitiveValue *statusID, PrimitiveValue *statusPrecisionFormula, bool
     isAddSkill, PrimitiveValue *addSkillID, PrimitiveValue *performSkillID,
-    PrimitiveValue *commonReactionID, EffectSpecialActionKind specialActionKind,
+    EventCommand *commonReaction, EffectSpecialActionKind specialActionKind,
     PrimitiveValue *scriptFormula, bool itct, PrimitiveValue *tctf) :
     SuperListItem(-1, "", true),
     m_kind(kind),
@@ -109,7 +108,7 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
     m_isAddSkill(isAddSkill),
     m_addSkillID(addSkillID),
     m_performSkillID(performSkillID),
-    m_commonReactionID(commonReactionID),
+    m_commonReaction(commonReaction),
     m_specialActionKind(specialActionKind),
     m_scriptFormula(scriptFormula),
     m_isTemporarilyChangeTarget(itct),
@@ -127,8 +126,6 @@ SystemEffect::SystemEffect(EffectKind kind, DamagesKind damageKind,
         ->skillsDatas()->model());
     m_performSkillID->setModelDataBase(RPM::get()->project()->gameDatas()
         ->skillsDatas()->model());
-    m_commonReactionID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->commonEventsDatas()->modelCommonReactors());
 }
 
 SystemEffect::~SystemEffect() {
@@ -148,7 +145,10 @@ SystemEffect::~SystemEffect() {
     delete m_statusPrecisionFormula;
     delete m_addSkillID;
     delete m_performSkillID;
-    delete m_commonReactionID;
+    if (m_commonReaction != nullptr)
+    {
+        delete m_commonReaction;
+    }
     delete m_scriptFormula;
     delete m_temporarilyChangeTargetFormula;
 }
@@ -300,8 +300,13 @@ PrimitiveValue * SystemEffect::performSkillID() const {
     return m_performSkillID;
 }
 
-PrimitiveValue * SystemEffect::commonReactionID() const {
-    return m_commonReactionID;
+EventCommand * SystemEffect::commonReaction() const {
+    return m_commonReaction;
+}
+
+void SystemEffect::setCommonReaction(EventCommand *cr)
+{
+    m_commonReaction = cr;
 }
 
 EffectSpecialActionKind SystemEffect::specialActionKind() const {
@@ -349,8 +354,7 @@ SystemEffect * SystemEffect::createSpecialAction(EffectSpecialActionKind action)
         QString("100")), false, new SuperListItem(1), true, PrimitiveValue
         ::createDefaultDataBaseValue(), new PrimitiveValue(QString("100")), true
         , PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
-        ::createDefaultDataBaseValue(), PrimitiveValue
-        ::createDefaultDataBaseValue(), action, PrimitiveValue
+        ::createDefaultDataBaseValue(), nullptr, action, PrimitiveValue
         ::createDefaultMessageValue(), false, new PrimitiveValue(QString()));
 }
 
@@ -372,10 +376,9 @@ SystemEffect * SystemEffect::createStat(int stat, QString formula, QString min,
         ? QString("100") : precision), false, new SuperListItem(1), true,
         PrimitiveValue::createDefaultDataBaseValue(), new PrimitiveValue(QString
         ("100")), true, PrimitiveValue::createDefaultDataBaseValue(),
-        PrimitiveValue::createDefaultDataBaseValue(), PrimitiveValue
-        ::createDefaultDataBaseValue(), EffectSpecialActionKind::ApplyWeapons,
-        PrimitiveValue::createDefaultMessageValue(), false, new PrimitiveValue(
-        QString()));
+        PrimitiveValue::createDefaultDataBaseValue(), nullptr,
+        EffectSpecialActionKind::ApplyWeapons, PrimitiveValue
+        ::createDefaultMessageValue(), false, new PrimitiveValue(QString()));
 }
 
 // -------------------------------------------------------
@@ -464,7 +467,21 @@ void SystemEffect::setCopy(const SuperListItem &super) {
     m_isAddSkill = effect->m_isAddSkill;
     m_addSkillID->setCopy(*effect->m_addSkillID);
     m_performSkillID->setCopy(*effect->m_performSkillID);
-    m_commonReactionID->setCopy(*effect->m_commonReactionID);
+    if (effect->m_commonReaction == nullptr)
+    {
+        if (m_commonReaction != nullptr)
+        {
+            delete m_commonReaction;
+        }
+        m_commonReaction = nullptr;
+    } else
+    {
+        if (m_commonReaction == nullptr)
+        {
+            m_commonReaction = new EventCommand;
+        }
+        m_commonReaction->setCopy(*effect->m_commonReaction);
+    }
     m_specialActionKind = effect->m_specialActionKind;
     m_scriptFormula->setCopy(*effect->m_scriptFormula);
     m_isTemporarilyChangeTarget = effect->m_isTemporarilyChangeTarget;
@@ -531,7 +548,8 @@ QString SystemEffect::toString() const {
         text += "Perform skill " + m_performSkillID->toString();
         break;
     case EffectKind::CommonReaction:
-        text += "Call common reaction " + m_commonReactionID->toString();
+        text += m_commonReaction == nullptr ? RPM::translate(Translations
+            ::CALL_A_COMMON_REACTION) : m_commonReaction->toString();
         break;
     case EffectKind::SpecialActions:
         text += RPM::translate(Translations::SPECIAL_ACTION) + RPM::COLON + RPM
@@ -662,8 +680,12 @@ void SystemEffect::read(const QJsonObject &json) {
         }
         break;
     case EffectKind::CommonReaction:
-        if (json.contains(JSON_COMMON_REACTION_ID)) {
-            m_commonReactionID->read(json[JSON_COMMON_REACTION_ID].toObject());
+        if (json.contains(JSON_COMMON_REACTION)) {
+            if (m_commonReaction == nullptr)
+            {
+                m_commonReaction = new EventCommand;
+            }
+            m_commonReaction->read(json[JSON_COMMON_REACTION].toObject());
         }
         break;
     case EffectKind::SpecialActions:
@@ -844,12 +866,9 @@ void SystemEffect::write(QJsonObject &json) const {
         }
         break;
     case EffectKind::CommonReaction:
-        if (m_commonReactionID->kind() != PrimitiveValueKind::DataBase ||
-            m_commonReactionID->numberValue() != 1)
+        if (m_commonReaction != nullptr)
         {
-            obj = QJsonObject();
-            m_commonReactionID->write(obj);
-            json[JSON_COMMON_REACTION_ID] = obj;
+            json[JSON_COMMON_REACTION] = m_commonReaction->getJSON();
         }
         break;
     case EffectKind::SpecialActions:

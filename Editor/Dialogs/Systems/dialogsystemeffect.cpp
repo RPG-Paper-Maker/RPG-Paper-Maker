@@ -13,6 +13,7 @@
 #include "ui_dialogsystemeffect.h"
 #include "rpm.h"
 #include "common.h"
+#include "dialogcommandcallacommonreaction.h"
 
 // -------------------------------------------------------
 //
@@ -138,13 +139,6 @@ void DialogSystemEffect::initialize() {
     ui->panelPrimitiveValueSkillPerform->initializeModel(m_effect
         .performSkillID());
     ui->panelPrimitiveValueSkillPerform->updateModel();
-
-    // Common reaction
-    ui->panelPrimitiveValueCommonReaction->initializeDataBaseCommandId(m_effect
-        .commonReactionID()->modelDataBase());
-    ui->panelPrimitiveValueCommonReaction->initializeModel(m_effect
-        .commonReactionID());
-    ui->panelPrimitiveValueCommonReaction->updateModel();
 
     // Special Action
     index = static_cast<int>(m_effect.specialActionKind());
@@ -309,7 +303,7 @@ void DialogSystemEffect::on_radioButtonCallCommonReaction_toggled(bool checked) 
     m_effect.setKind(EffectKind::CommonReaction);
 
     // Enable
-    ui->panelPrimitiveValueCommonReaction->setEnabled(checked);
+    ui->pushButtonSelect_CallCommonReaction->setEnabled(checked);
 }
 
 // -------------------------------------------------------
@@ -424,4 +418,18 @@ void DialogSystemEffect::on_checkBoxTemporarilyChangeTarget_toggled(bool checked
 {
     m_effect.setIsTemporarilyChangeTarget(checked);
     ui->panelPrimitiveValueTemporarilyChangeTarget->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemEffect::on_pushButtonSelect_CallCommonReaction_clicked()
+{
+    DialogCommandCallACommonReaction dialog(m_effect.commonReaction());
+    if (dialog.exec() == QDialog::Accepted){
+        if (m_effect.commonReaction() != nullptr)
+        {
+            delete m_effect.commonReaction();
+        }
+        m_effect.setCommonReaction(dialog.getCommand());
+    }
 }

@@ -98,6 +98,7 @@ void PanelPrimitiveValue::initializeParameterEvent(QStandardItemModel
     this->addAnything();
     this->addNone();
     this->addNumberDouble();
+    this->addVariable();
     this->addMessage(false);
     this->addSwitch();
     this->addKeyBoard();

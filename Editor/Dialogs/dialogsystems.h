@@ -42,7 +42,8 @@ public:
     int getSquareSize() const;
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
+    virtual bool eventFilter(QObject *o, QEvent *e);
+    virtual void closeEvent(QCloseEvent *event);
 
 private:
     Ui::DialogSystems *ui;

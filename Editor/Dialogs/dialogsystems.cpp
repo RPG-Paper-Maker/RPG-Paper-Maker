@@ -85,6 +85,14 @@ bool DialogSystems::eventFilter(QObject *o, QEvent *e) {
 
 // -------------------------------------------------------
 
+void DialogSystems::closeEvent(QCloseEvent *event)
+{
+    RPM::get()->project()->setCurrentObject(nullptr);
+    QDialog::closeEvent(event);
+}
+
+// -------------------------------------------------------
+
 void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     SystemDatas *systemDatas;
 
