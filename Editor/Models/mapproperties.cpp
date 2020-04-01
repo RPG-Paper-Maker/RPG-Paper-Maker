@@ -629,7 +629,7 @@ void MapProperties::read(const QJsonObject &json){
         .toBool() : false;
     m_skyPictureID = new SuperListItem(-1);
     if (m_isSkyImage) {
-        m_skyPictureID->read(json[JSON_SKY_PICTURE_ID].toObject());
+        m_skyPictureID->setId(json[JSON_SKY_PICTURE_ID].toInt());
     }
     m_skyboxID = new PrimitiveValue(PrimitiveValueKind::DataBase, 1);
     if (!m_isSkyColor && !m_isSkyImage)

@@ -118,6 +118,7 @@ private:
     QImage m_imageLayerOn;
     QImage m_imageHeight;
     QImage m_imageHeightPlus;
+    QImage m_imageBackground;
 
 public slots:
     void update();

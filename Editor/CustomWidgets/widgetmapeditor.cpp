@@ -155,6 +155,14 @@ Map * WidgetMapEditor::loadMap(int idMap, QVector3D *position, QVector3D
         SystemColor *>(SuperListItem::getById(RPM::get()->project()->gameDatas()
         ->systemDatas()->modelColors()->invisibleRootItem(), map
         ->mapProperties()->skyColorID()->numberValue()))->color();
+    if (m_control.map()->mapProperties()->isSkyImage())
+    {
+        m_imageBackground = QImage(reinterpret_cast<SystemPicture *>(
+            SuperListItem::getById(RPM::get()->project()->picturesDatas()->model
+            (PictureKind::Pictures)->invisibleRootItem(), m_control.map()
+            ->mapProperties()->skyPictureID()->id()))->getPath(PictureKind
+            ::Pictures));
+    }
 
     return map;
 }
@@ -179,15 +187,17 @@ void WidgetMapEditor::initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y,
 
 // -------------------------------------------------------
 
-void WidgetMapEditor::initializeGL() {
-
+void WidgetMapEditor::initializeGL()
+{
     // Initialize OpenGL Backend
     initializeOpenGLFunctions();
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 
     isGLInitialized = true;
     if (m_needUpdateMap)
+    {
         initializeMap();
+    }
 }
 
 // -------------------------------------------------------
@@ -214,6 +224,12 @@ void WidgetMapEditor::paintGL() {
     }
 
     if (m_control.map() != nullptr) {
+        if (m_control.map()->mapProperties()->isSkyImage())
+        {
+            p.begin(this);
+            p.drawImage(QRect(0, 0, this->width(), this->height()), m_imageBackground);
+            p.end();
+        }
         p.beginNativePainting();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
