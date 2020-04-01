@@ -74,6 +74,7 @@ void PicturesDatas::setDefault() {
     this->setDefaultObjects3D(names);
     this->setDefaultHUDPictures(names);
     this->setDefaultAnimations(names);
+    this->setDefaultSkyBoxes(names);
 }
 
 // -------------------------------------------------------
@@ -196,6 +197,31 @@ void PicturesDatas::setDefaultObjects3D(QList<QString> &names) {
 void PicturesDatas::setDefaultAnimations(QList<QString>& names) {
     names << "basic";
     this->setDefaultPictures(names, PictureKind::Animations);
+}
+
+// -------------------------------------------------------
+
+void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
+{
+    names << "ocean-front" << "ocean-back"<< "ocean-top" << "ocean-bottom" <<
+        "ocean-left" << "ocean-right";
+    QList<SystemPicture*> pictures;
+    int i;
+
+    pictures << new SystemPicture;
+    for (i = 0; i < names.size() ; i++)
+        pictures << new SystemPicture(i + 1, names.at(i) + ".jpg", true);
+
+    QStandardItemModel* model = new QStandardItemModel;
+    QList<QStandardItem*> row;
+
+    for (int i = 0; i < pictures.size(); i++){
+        row = pictures.at(i)->getModelRow();
+        model->appendRow(row);
+    }
+    m_models[PictureKind::SkyBoxes] = model;
+
+    names.clear();
 }
 
 // -------------------------------------------------------

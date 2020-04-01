@@ -793,6 +793,7 @@ void ProjectUpdater::updateVersion_1_4_1_commands(QStandardItem *commands) {
 // -------------------------------------------------------
 
 void ProjectUpdater::updateVersion_1_5_0() {
+    QDir dir(m_project->pathCurrentProject());
     QList<QString> names;
 
     m_project->gameDatas()->systemDatas()->setDefaultFrequencies();
@@ -800,5 +801,6 @@ void ProjectUpdater::updateVersion_1_5_0() {
     SuperListItem::deleteModel(m_project->gameDatas()->animationsDatas()
         ->model(), false);
     m_project->gameDatas()->animationsDatas()->setDefault();
-    QDir(m_project->pathCurrentProject()).mkpath(RPM::PATH_HUD_ANIMATIONS);
+    dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
+    dir.mkpath(RPM::PATH_SKY_BOXES);
 }

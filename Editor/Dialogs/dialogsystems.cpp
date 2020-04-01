@@ -30,6 +30,7 @@
 #include "systemfontsize.h"
 #include "systemfontname.h"
 #include "dialogcommandsetdialogboxoptions.h"
+#include "systemskybox.h"
 
 // -------------------------------------------------------
 //
@@ -109,6 +110,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListFrequencies->showEditName(false);
     ui->panelSuperListFontSizes->showEditName(false);
     ui->panelSuperListFontNames->showEditName(false);
+    ui->panelSuperListSkyBoxes->showEditName(false);
 
     // Allow editions
     ui->panelSuperListWindowSkins->list()->setCanEdit(true);
@@ -120,6 +122,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListFrequencies->list()->setCanEdit(true);
     ui->panelSuperListFontSizes->list()->setCanEdit(true);
     ui->panelSuperListFontNames->list()->setCanEdit(true);
+    ui->panelSuperListSkyBoxes->list()->setCanEdit(true);
 
     // Values
     systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
@@ -173,6 +176,10 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
         SystemFontName);
     ui->panelSuperListFontNames->initializeModel(gameDatas->systemDatas()
         ->modelFontNames());
+    ui->panelSuperListSkyBoxes->list()->initializeNewItemInstance(new
+        SystemSkyBox);
+    ui->panelSuperListSkyBoxes->initializeModel(gameDatas->systemDatas()
+        ->modelSkyBoxes());
 
     // Sounds
     ui->widgetChooseCursor->initialize(gameDatas->systemDatas()->soundCursor());

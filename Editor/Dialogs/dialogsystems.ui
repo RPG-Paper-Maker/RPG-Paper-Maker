@@ -64,7 +64,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-523</y>
+                <y>0</y>
                 <width>252</width>
                 <height>1149</height>
                </rect>
@@ -662,9 +662,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-576</y>
                 <width>624</width>
-                <height>916</height>
+                <height>1216</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_36">
@@ -733,6 +733,25 @@
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>250</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox">
+                     <property name="title">
+                      <string>Sky boxes</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_46">
+                      <item row="0" column="0">
+                       <widget class="PanelSuperList" name="panelSuperListSkyBoxes" native="true">
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
@@ -829,6 +848,19 @@
                      </layout>
                     </widget>
                    </item>
+                   <item>
+                    <spacer name="verticalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
                   </layout>
                  </item>
                  <item>
@@ -922,6 +954,19 @@
                       </item>
                      </layout>
                     </widget>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_4">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
                    </item>
                   </layout>
                  </item>

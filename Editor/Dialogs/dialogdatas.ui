@@ -1447,26 +1447,26 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>PanelDatasClass</class>
    <extends>QWidget</extends>
    <header>paneldatasclass.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
    <class>PanelDatasCharacter</class>
    <extends>QWidget</extends>
    <header>paneldatascharacter.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PanelSuperList</class>
-   <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -26,6 +26,7 @@ SystemSpeedFrequency::SystemSpeedFrequency() :
 {
 
 }
+
 SystemSpeedFrequency::SystemSpeedFrequency(int i, QString n, PrimitiveValue *v,
     bool is) :
     SuperListItem (i, n),

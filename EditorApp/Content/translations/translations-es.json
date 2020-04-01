@@ -1071,6 +1071,6 @@
     "is.under.effect.of.status.id": "Se encuentra bajo el efecto de ID de estatus",
     "turn.value.is": "El valor del turno es",
     "stock.value.in": "Stock value in",
-    "stock.value.in": "Stock value in",
-    "temporarily.change.target": "Temporarily change target"
+    "temporarily.change.target": "Temporarily change target",
+    "set.sky.box": "Set skybox"
 }

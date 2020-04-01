@@ -38,6 +38,7 @@ enum class PictureKind {
     Object3D,
     Pictures,
     Animations,
+    SkyBoxes,
     Last
 };
 

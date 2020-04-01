@@ -21,6 +21,7 @@
 #include "systemspeedfrequency.h"
 #include "systemfontname.h"
 #include "systemfontsize.h"
+#include "systemskybox.h"
 
 const QString SystemDatas::JSON_PROJECT_NAME = "pn";
 const QString SystemDatas::JSON_SCREEN_WIDTH = "sw";
@@ -43,6 +44,7 @@ const QString SystemDatas::JSON_SOUND_CONFIRMATION = "sco";
 const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
+const QString SystemDatas::JSON_SKY_BOXES = "sb";
 
 // -------------------------------------------------------
 //
@@ -68,6 +70,7 @@ SystemDatas::SystemDatas() :
     m_modelFrequencies(new QStandardItemModel),
     m_modelFontSizes(new QStandardItemModel),
     m_modelFontNames(new QStandardItemModel),
+    m_modelSkyBoxes(new QStandardItemModel),
     m_lastMajorVersion(1),
     m_lastMinorVersion(0),
     m_soundCursor(new SystemPlaySong(-1, SongKind::Sound)),
@@ -94,6 +97,7 @@ SystemDatas::~SystemDatas() {
     SuperListItem::deleteModel(m_modelFrequencies);
     SuperListItem::deleteModel(m_modelFontSizes);
     SuperListItem::deleteModel(m_modelFontNames);
+    SuperListItem::deleteModel(m_modelSkyBoxes);
 
     delete m_soundCursor;
     delete m_soundConfirmation;
@@ -215,6 +219,11 @@ QStandardItemModel * SystemDatas::modelFontNames() const {
     return m_modelFontNames;
 }
 
+QStandardItemModel * SystemDatas::modelSkyBoxes() const
+{
+    return m_modelSkyBoxes;
+}
+
 int SystemDatas::lastMajorVersion() const {
     return m_lastMajorVersion;
 }
@@ -282,6 +291,7 @@ void SystemDatas::setDefault() {
     this->setDefaultFontNames();
     this->setDefaultSounds();
     this->setDefaultDialogBoxOptions();
+    this->setDefaultSkyBoxes();
 
     m_lastMajorVersion = 1;
     m_lastMinorVersion = 0;
@@ -513,6 +523,14 @@ void SystemDatas::setDefaultDialogBoxOptions() {
 }
 
 // -------------------------------------------------------
+
+void SystemDatas::setDefaultSkyBoxes()
+{
+    m_modelSkyBoxes->appendRow((new SystemSkyBox(1, RPM::translate(Translations
+        ::SKY), 1, 2, 3, 4, 5, 6))->getModelRow());
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //
@@ -534,6 +552,7 @@ void SystemDatas::read(const QJsonObject &json){
     SuperListItem::deleteModel(m_modelFrequencies, false);
     SuperListItem::deleteModel(m_modelFontSizes, false);
     SuperListItem::deleteModel(m_modelFontNames, false);
+    SuperListItem::deleteModel(m_modelSkyBoxes, false);
 
     // Other options
     m_projectName->read(json[JSON_PROJECT_NAME].toObject());
@@ -655,6 +674,8 @@ void SystemDatas::read(const QJsonObject &json){
         row = fontname->getModelRow();
         m_modelFontNames->appendRow(row);
     }
+    SuperListItem::readList(m_modelSkyBoxes, new SystemSkyBox, json,
+        JSON_SKY_BOXES);
 
     // Version
     m_lastMajorVersion = json[JSON_LAST_MAJOR_VERSION].toInt();
@@ -822,6 +843,7 @@ void SystemDatas::write(QJsonObject &json) const{
         jsonArray.append(jsonCommon);
     }
     json[JSON_FONT_NAMES] = jsonArray;
+    SuperListItem::writeList(m_modelSkyBoxes, json, JSON_SKY_BOXES);
 
     // Version
     json[JSON_LAST_MAJOR_VERSION] = m_lastMajorVersion;

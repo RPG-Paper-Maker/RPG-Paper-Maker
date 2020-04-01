@@ -54,6 +54,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemmonsteraction.h \
     Dialogs/Systems/dialogsystemprimitive.h \
     Dialogs/Systems/dialogsystemproperty.h \
+    Dialogs/Systems/dialogsystemskybox.h \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogfirstlaunch.h \
@@ -96,6 +97,7 @@ HEADERS += \
     Models/System/systemmountain.h \
     Models/System/systemprimitive.h \
     Models/System/systemproperty.h \
+    Models/System/systemskybox.h \
     Models/System/systemspeedfrequency.h \
     Models/System/systemtitlecommand.h \
     Models/System/systemvideo.h \
@@ -394,6 +396,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemmonsteraction.cpp \
     Dialogs/Systems/dialogsystemprimitive.cpp \
     Dialogs/Systems/dialogsystemproperty.cpp \
+    Dialogs/Systems/dialogsystemskybox.cpp \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogfirstlaunch.cpp \
@@ -423,6 +426,7 @@ SOURCES += \
     Models/System/systemmountain.cpp \
     Models/System/systemprimitive.cpp \
     Models/System/systemproperty.cpp \
+    Models/System/systemskybox.cpp \
     Models/System/systemspeedfrequency.cpp \
     Models/System/systemtitlecommand.cpp \
     Models/System/systemvideo.cpp \
@@ -692,6 +696,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemmonsteraction.ui \
     Dialogs/Systems/dialogsystemprimitive.ui \
     Dialogs/Systems/dialogsystemproperty.ui \
+    Dialogs/Systems/dialogsystemskybox.ui \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogfirstlaunch.ui \

@@ -143,6 +143,7 @@ public:
     static const QString PATH_MOUNTAINS;
     static const QString PATH_TEXTURES_OBJECT_3D;
     static const QString PATH_BATTLERS;
+    static const QString PATH_SKY_BOXES;
     static const QString PATH_VIDEOS;
     static const QString PATH_SONGS;
     static const QString PATH_MUSICS;

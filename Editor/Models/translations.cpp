@@ -1090,6 +1090,7 @@ const QString Translations::IS_UNDER_EFFECT_OF_STATUS_ID = "is.under.effect.of.s
 const QString Translations::TURN_VALUE_IS = "turn.value.is";
 const QString Translations::STOCK_VALUE_IN = "stock.value.in";
 const QString Translations::TEMPORARILY_CHANGE_TARGET = "temporarily.change.target";
+const QString Translations::SET_SKY_BOX = "set.sky.box";
 
 // -------------------------------------------------------
 //
