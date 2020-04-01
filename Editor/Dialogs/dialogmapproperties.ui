@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1100</width>
-    <height>575</height>
+    <height>572</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -383,7 +383,7 @@
               <item row="0" column="0">
                <widget class="QRadioButton" name="radioButtonColor">
                 <property name="text">
-                 <string>Color</string>
+                 <string>Color ID:</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -406,7 +406,7 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="2" rowspan="2">
+              <item row="0" column="2" rowspan="3">
                <spacer name="horizontalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -414,18 +414,63 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
-                  <height>38</height>
+                  <height>98</height>
                  </size>
                 </property>
                </spacer>
               </item>
               <item row="1" column="0">
-               <widget class="QRadioButton" name="radioButtonSkybox">
+               <widget class="QRadioButton" name="radioButtonPicture">
+                <property name="text">
+                 <string>Picture:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="WidgetPicture" name="widgetPictureSky" native="true">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QRadioButton" name="radioButtonSkybox">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="text">
-                 <string>Skybox</string>
+                 <string>Skybox ID:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="PanelPrimitiveValue" name="panelPrimitiveValueSkyBoxID" native="true">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>250</width>
+                  <height>27</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -475,8 +520,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>632</width>
-                <height>460</height>
+                <width>610</width>
+                <height>457</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
@@ -669,6 +714,12 @@
    <class>PanelObject</class>
    <extends>QWidget</extends>
    <header>panelobject.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

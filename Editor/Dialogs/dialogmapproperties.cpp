@@ -73,8 +73,24 @@ void DialogMapProperties::initialize() {
     ui->spinBoxDepth->setValue(m_mapProperties.depth());
 
     // Sky
+    if (m_mapProperties.isSkyColor())
+    {
+        ui->radioButtonColor->setChecked(true);
+    } else {
+        if (m_mapProperties.isSkyImage())
+        {
+            ui->radioButtonPicture->setChecked(true);
+        } else
+        {
+            ui->radioButtonSkybox->setChecked(true);
+        }
+    }
     ui->panelPrimitiveValueSkyColor->initializeDataBaseAndUpdate(m_mapProperties
         .skyColorID());
+    ui->widgetPictureSky->setKind(PictureKind::Pictures);
+    ui->widgetPictureSky->initializeSuper(m_mapProperties.skyPictureID());
+    ui->panelPrimitiveValueSkyBoxID->initializeDataBaseAndUpdate(m_mapProperties
+        .skyboxID());
 
     ui->widgetConstantVariableSteps->initializeNumberVariable();
     ui->widgetConstantVariableStepsVariation->initializeNumberVariable();
@@ -108,7 +124,9 @@ void DialogMapProperties::translate() {
         ::BACKGROUND_SOUND) + RPM::COLON);
     ui->radioButtonColor->setText(RPM::translate(Translations::COLOR_ID) + RPM
         ::COLON);
-    ui->radioButtonSkybox->setText(RPM::translate(Translations::SKYBOX) + RPM
+    ui->radioButtonSkybox->setText(RPM::translate(Translations::PICTURE) + RPM
+        ::COLON);
+    ui->radioButtonSkybox->setText(RPM::translate(Translations::SKYBOX_ID) + RPM
         ::COLON);
     ui->groupBoxSky->setTitle(RPM::translate(Translations::SKY));
     ui->groupBoxSizes->setTitle(RPM::translate(Translations::SIZE));
@@ -149,4 +167,29 @@ void DialogMapProperties::on_comboBoxTilesetCurrentIndexChanged(int index){
     m_mapProperties.setTilesetID(reinterpret_cast<SystemTileset*>(RPM::get()
         ->project()->gameDatas()->tilesetsDatas()->model()->item(index)->data()
         .value<qintptr>())->id());
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::on_radioButtonColor_toggled(bool checked)
+{
+    m_mapProperties.setIsSkyColor(checked);
+    ui->panelPrimitiveValueSkyColor->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::on_radioButtonPicture_toggled(bool checked)
+{
+    m_mapProperties.setIsSkyImage(checked);
+    ui->widgetPictureSky->setEnabled(checked);
+}
+
+// -------------------------------------------------------
+
+void DialogMapProperties::on_radioButtonSkybox_toggled(bool checked)
+{
+    m_mapProperties.setIsSkyColor(ui->radioButtonColor->isChecked());
+    m_mapProperties.setIsSkyImage(ui->radioButtonPicture->isChecked());
+    ui->panelPrimitiveValueSkyBoxID->setEnabled(checked);
 }

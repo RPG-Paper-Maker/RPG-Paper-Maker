@@ -188,7 +188,7 @@
 	"camera.prop": "Camera prop. ID",
 	"sky": "Sky",
 	"color": "Color",
-	"skybox": "Skybox",
+	"skybox.id": "Skybox ID",
 	"map.startup.reactions": "Map startup reactions",
 	"battles": "Battles",
 	"welcome.first.launch": "Welcome to RPG Paper Maker!",

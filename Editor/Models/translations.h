@@ -219,7 +219,7 @@ public:
     static const QString CAMERA_PROP;
     static const QString SKY;
     static const QString COLOR;
-    static const QString SKYBOX;
+    static const QString SKYBOX_ID;
     static const QString MAP_STARTUP_REACTIONS;
     static const QString BATTLES;
     static const QString WELCOME_FIRST_LAUNCH;

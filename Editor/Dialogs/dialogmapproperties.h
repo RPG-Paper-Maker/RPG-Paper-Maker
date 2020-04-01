@@ -32,7 +32,7 @@ class DialogMapProperties : public QDialog
     Q_OBJECT
 
 public:
-    DialogMapProperties(MapProperties& properties, QWidget *parent = 0);
+    DialogMapProperties(MapProperties& properties, QWidget *parent = nullptr);
     ~DialogMapProperties();
 
 private:
@@ -48,6 +48,9 @@ private slots:
     void on_spinBoxHeight_valueChanged(int i);
     void on_spinBoxDepth_valueChanged(int i);
     void on_comboBoxTilesetCurrentIndexChanged(int index);
+    void on_radioButtonColor_toggled(bool checked);
+    void on_radioButtonPicture_toggled(bool checked);
+    void on_radioButtonSkybox_toggled(bool checked);
 };
 
 #endif // DIALOGMAPPROPERTIES_H
