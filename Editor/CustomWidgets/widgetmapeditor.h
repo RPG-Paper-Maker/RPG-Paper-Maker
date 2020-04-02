@@ -51,6 +51,8 @@ public:
         int cameraDistance, double cameraHorizontalAngle, double
         cameraVerticalAngle);
     void deleteMap();
+    void loadSkyBoxTexture();
+    QImage createSkyBoxImage(int id);
     void initializeSpinBoxesCoords(QSpinBox *x, QSpinBox *y, QSpinBox *yPlus,
         QSpinBox *z);
     void resizeGL(int width, int height);
@@ -119,6 +121,9 @@ private:
     QImage m_imageHeight;
     QImage m_imageHeightPlus;
     QImage m_imageBackground;
+    QOpenGLTexture *m_textureSkyBox;
+    QOpenGLShaderProgram m_programSkyBox;
+    QOpenGLBuffer m_vertexBufSkyBox;
 
 public slots:
     void update();

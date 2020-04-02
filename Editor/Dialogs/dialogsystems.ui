@@ -662,7 +662,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-576</y>
+                <y>-564</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>
@@ -746,6 +746,9 @@
                    </item>
                    <item>
                     <widget class="QGroupBox" name="groupBox">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
                      <property name="title">
                       <string>Sky boxes</string>
                      </property>
@@ -1927,23 +1930,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WidgetPicture</class>
-   <extends>QWidget</extends>
-   <header>widgetpicture.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSuperTree</class>
-   <extends>QTreeView</extends>
-   <header>widgetsupertree.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PanelSuperList</class>
-   <extends>QWidget</extends>
-   <header>panelsuperlist.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PanelPrimitiveValue</class>
    <extends>QWidget</extends>
    <header>panelprimitivevalue.h</header>
@@ -1965,6 +1951,23 @@
    <class>PanelObject</class>
    <extends>QWidget</extends>
    <header>panelobject.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetPicture</class>
+   <extends>QWidget</extends>
+   <header>widgetpicture.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSuperTree</class>
+   <extends>QTreeView</extends>
+   <header>widgetsupertree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PanelSuperList</class>
+   <extends>QWidget</extends>
+   <header>panelsuperlist.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
