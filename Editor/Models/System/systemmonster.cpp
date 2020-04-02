@@ -159,10 +159,7 @@ SuperListItem* SystemMonster::createCopy() const {
 
 void SystemMonster::setCopy(const SuperListItem &super) {
     const SystemMonster *monster;
-    QStandardItem *item;
-    QList<QStandardItem *> row;
     QHash<int, SystemProgressionTable *>::const_iterator i;
-    int j, l;
 
     SystemHero::setCopy(super);
     monster = reinterpret_cast<const SystemMonster *>(&super);
@@ -181,29 +178,11 @@ void SystemMonster::setCopy(const SuperListItem &super) {
 
     // Loots
     SuperListItem::deleteModel(m_modelLoots, false);
-    for (j = 0, l = monster->modelLoots()->invisibleRootItem()->rowCount(); j <
-         l - 1; j++)
-    {
-        m_modelLoots->appendRow(reinterpret_cast<SystemLoot *>(monster
-            ->modelLoots()->item(j)->data().value<qintptr>())->createCopy()
-            ->getModelRow());
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelLoots->appendRow(item);
+    SuperListItem::copy(m_modelLoots, monster->m_modelLoots);
 
     // Loots
     SuperListItem::deleteModel(m_modelActions, false);
-    for (j = 0, l = monster->modelActions()->invisibleRootItem()->rowCount(); j
-         < l - 1; j++)
-    {
-        m_modelActions->appendRow(reinterpret_cast<SystemLoot *>(monster
-            ->modelActions()->item(j)->data().value<qintptr>())->createCopy()
-            ->getModelRow());
-    }
-    item = new QStandardItem();
-    item->setText(SuperListItem::beginningText);
-    m_modelActions->appendRow(item);
+    SuperListItem::copy(m_modelActions, monster->m_modelActions);
 
     this->initializeHeaders();
 }
@@ -221,6 +200,10 @@ void SystemMonster::read(const QJsonObject &json){
     QJsonArray jsonRow;
     SystemProgressionTable *table;
     int i, l;
+
+    SuperListItem::deleteModel(m_modelLoots, false);
+    SuperListItem::deleteModel(m_modelActions, false);
+    this->initializeHeaders();
 
     // Experience
     m_experience->read(json[JSON_EXPERIENCE].toObject());
