@@ -1091,6 +1091,9 @@ const QString Translations::TURN_VALUE_IS = "turn.value.is";
 const QString Translations::STOCK_VALUE_IN = "stock.value.in";
 const QString Translations::TEMPORARILY_CHANGE_TARGET = "temporarily.change.target";
 const QString Translations::SET_SKY_BOX = "set.sky.box";
+const QString Translations::HELP_ENGINE_1 = "help.engine.1";
+const QString Translations::HELP_ENGINE_2 = "help.engine.2";
+const QString Translations::HELP_ENGINE_3 = "help.engine.3";
 
 // -------------------------------------------------------
 //

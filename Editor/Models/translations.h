@@ -1103,6 +1103,9 @@ public:
     static const QString STOCK_VALUE_IN;
     static const QString TEMPORARILY_CHANGE_TARGET;
     static const QString SET_SKY_BOX;
+    static const QString HELP_ENGINE_1;
+    static const QString HELP_ENGINE_2;
+    static const QString HELP_ENGINE_3;
 
     Translations();
     virtual ~Translations();

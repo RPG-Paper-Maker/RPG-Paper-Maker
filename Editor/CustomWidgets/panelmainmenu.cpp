@@ -55,7 +55,11 @@ void PanelMainMenu::translate()
         + RPM::DOT_DOT_DOT);
     ui->pushButtonOpenProject->setText(RPM::translate(Translations::OPEN_PROJECT
         ) + RPM::DOT_DOT_DOT);
-    ui->labelCommercial->setText("<a href=\"https://store.steampowered.com/app/1118650/RPG_Paper_Maker__Commercial_edition/\" style=\"color: tomato;\">Buy the commercial edition here!</a> Or...");
+    ui->labelHelpEngine->setText(RPM::translate(Translations::HELP_ENGINE_1));
+    ui->labelCommercial->setText("<a href=\"https://store.steampowered.com/app/"
+        "1118650/RPG_Paper_Maker__Commercial_edition/\" style=\"color: tomato;"
+        "\">" + RPM::translate(Translations::HELP_ENGINE_2) + "</a> " + RPM
+        ::translate(Translations::HELP_ENGINE_3));
 }
 
 // -------------------------------------------------------

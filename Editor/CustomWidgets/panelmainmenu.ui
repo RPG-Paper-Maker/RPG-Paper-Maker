@@ -162,7 +162,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelHelpEngine">
            <property name="text">
             <string>Help us making the engine live and keep being free!</string>
            </property>
