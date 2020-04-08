@@ -129,5 +129,6 @@
     </qresource>
     <qresource prefix="/images">
         <file>Ressources/kate.png</file>
+        <file>Ressources/become-patreon.png</file>
     </qresource>
 </RCC>

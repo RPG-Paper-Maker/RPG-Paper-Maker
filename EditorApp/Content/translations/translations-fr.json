@@ -1070,5 +1070,8 @@
     "turn.value.is": "La valeur de tour est",
     "stock.value.in": "Stocker la valeur dans",
     "temporarily.change.target": "Temporairement changer la cible",
-    "set.sky.box": "Modifier la skybox"
+    "set.sky.box": "Modifier la skybox",
+    "help.engine.1": "Aidez-nous à faire vivre le logiciel et le garder gratuit !",
+    "help.engine.2": "Achetez l'édition commerciale ici !",
+    "help.engine.3": "Ou..."
 }

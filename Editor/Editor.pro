@@ -26,6 +26,7 @@ HEADERS += \
     CustomWidgets/panelvideos.h \
     CustomWidgets/widgetanimation.h \
     CustomWidgets/widgetanimationtexture.h \
+    CustomWidgets/widgetbuttonimage.h \
     CustomWidgets/widgetmountainselector.h \
     CustomWidgets/widgetsliderprogression.h \
     CustomWidgets/widgettilesettexture.h \
@@ -368,6 +369,7 @@ SOURCES += \
     CustomWidgets/panelvideos.cpp \
     CustomWidgets/widgetanimation.cpp \
     CustomWidgets/widgetanimationtexture.cpp \
+    CustomWidgets/widgetbuttonimage.cpp \
     CustomWidgets/widgetmountainselector.cpp \
     CustomWidgets/widgetsliderprogression.cpp \
     CustomWidgets/widgettilesettexture.cpp \

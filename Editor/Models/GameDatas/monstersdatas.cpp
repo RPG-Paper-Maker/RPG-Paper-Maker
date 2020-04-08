@@ -15,6 +15,7 @@
 #include "systemmonster.h"
 #include "lootkind.h"
 #include "systemloot.h"
+#include "systemmonsteraction.h"
 
 // -------------------------------------------------------
 //
@@ -50,6 +51,7 @@ void MonstersDatas::setDefault(QStandardItem* ,
                                QStandardItem* modelArmors)
 {
     SystemMonster* monster;
+    SystemMonsterAction *action;
     QStandardItem* item;
     QList<QStandardItem *> row;
     QStandardItemModel* loots;
@@ -119,7 +121,6 @@ void MonstersDatas::setDefault(QStandardItem* ,
 
         // Actions
         actions = new QStandardItemModel;
-        // TODO
 
         monster = new SystemMonster(i+1, names[i], classesIds[i], battlersIds[i],
             facesetsIds[i], SystemClass::createInheritanceClass(),
@@ -127,6 +128,9 @@ void MonstersDatas::setDefault(QStandardItem* ,
             , new PrimitiveValue(experiencesFinal[i]), experiencesEquation[i]),
             loots, actions);
         monster->insertCurrency(i + 1, currenciesProgression[i]);
+        action = new SystemMonsterAction(-1, "", MonsterActionKind::UseSkill);
+        action->setMonster(monster);
+        actions->appendRow(action->getModelRow());
         item = new QStandardItem;
         item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(monster)));
         item->setText(monster->toString());

@@ -46,6 +46,7 @@ private slots:
     void on_pushButtonNewProject_clicked();
     void on_pushButtonOpenProject_clicked();
     void openRecentProject(QString path);
+    void on_widgetPatreon_clicked();
 };
 
 #endif // PANELMAINMENU_H

@@ -1070,7 +1070,10 @@
     "use.skill.id": "ID Habilidad de usuario",
     "is.under.effect.of.status.id": "Se encuentra bajo el efecto de ID de estatus",
     "turn.value.is": "El valor del turno es",
-    "stock.value.in": "Stock value in",
-    "temporarily.change.target": "Temporarily change target",
-    "set.sky.box": "Set skybox"
+    "stock.value.in": "Valor de stock en",
+    "temporarily.change.target": "Cambiar temporalmente el objetivo",
+    "set.sky.box": "Establecer skybox",
+    "help.engine.1": "¡Ayúdanos a hacer funcionar el motor y mantenerlo libre!",
+    "help.engine.2": "¡Compre la edición comercial aquí!",
+    "help.engine.3": "O..."
 }

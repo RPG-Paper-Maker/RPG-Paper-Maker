@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+#include <QDesktopServices>
 #include "mainwindow.h"
 #include "panelmainmenu.h"
 #include "ui_panelmainmenu.h"
@@ -27,6 +28,10 @@ PanelMainMenu::PanelMainMenu(QWidget *parent) :
     ui->setupUi(this);
 
     ui->pushButtonNewProject->setAutoFillBackground(true);
+    ui->widgetPatreon->updateImage(":/images/Ressources/become-patreon.png", 0.5);
+    ui->labelCommercial->setTextFormat(Qt::RichText);
+    ui->labelCommercial->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->labelCommercial->setOpenExternalLinks(true);
     this->connect(ui->panelRecentProjects, SIGNAL(openingProject(QString)), this
         , SLOT(openRecentProject(QString)));
 
@@ -50,6 +55,7 @@ void PanelMainMenu::translate()
         + RPM::DOT_DOT_DOT);
     ui->pushButtonOpenProject->setText(RPM::translate(Translations::OPEN_PROJECT
         ) + RPM::DOT_DOT_DOT);
+    ui->labelCommercial->setText("<a href=\"https://store.steampowered.com/app/1118650/RPG_Paper_Maker__Commercial_edition/\" style=\"color: tomato;\">Buy the commercial edition here!</a> Or...");
 }
 
 // -------------------------------------------------------
@@ -75,4 +81,11 @@ void PanelMainMenu::on_pushButtonOpenProject_clicked()
 void PanelMainMenu::openRecentProject(QString path)
 {
     emit openingProject(path);
+}
+
+// -------------------------------------------------------
+
+void PanelMainMenu::on_widgetPatreon_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://www.patreon.com/bePatron?u=14575421"));
 }
