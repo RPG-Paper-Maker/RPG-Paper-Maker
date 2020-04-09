@@ -622,16 +622,6 @@
                   </property>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QPushButton" name="pushButtonChangeGeneralOptions">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Change general options...</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </item>
              </layout>
