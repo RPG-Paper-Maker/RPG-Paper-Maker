@@ -370,9 +370,9 @@ void Map::readJSONArray(QStandardItemModel *model, const QJsonArray & tab) {
         objects.insert(super->id(), super);
     }
     for (i = 1; i <= max; i++) {
-        item = new QStandardItem;
         super = objects.value(i);
         if (super != nullptr) {
+            item = new QStandardItem;
             item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(super)));
             item->setText(super->toString());
             model->appendRow(item);
