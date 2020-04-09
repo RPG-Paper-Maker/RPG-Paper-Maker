@@ -37,9 +37,11 @@ public:
     QStandardItemModel* modelStates() const;
     QStandardItemModel* modelCommonReactors() const;
     QStandardItemModel* modelCommonObjects() const;
+
     void setDefault();
     void setDefaultEvent(QStandardItemModel* model, QStringList &namesEvents,
                          QList<QVector<SystemCreateParameter*>> &parameters);
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

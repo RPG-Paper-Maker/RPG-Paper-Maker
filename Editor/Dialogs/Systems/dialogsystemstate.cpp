@@ -48,7 +48,7 @@ void DialogSystemState::initialize(){
     int stateIndex = SuperListItem::getIndexById(
                 RPM::get()->project()->gameDatas()->commonEventsDatas()
                 ->modelStates()->invisibleRootItem(),
-                m_state.id());
+                m_state.id(), true);
     SuperListItem::fillComboBox(ui->comboBox, RPM::get()->project()
                                 ->gameDatas()->commonEventsDatas()
                                 ->modelStates());
@@ -85,8 +85,12 @@ void DialogSystemState::on_comboBox_currentIndexChanged(int index) {
 // -------------------------------------------------------
 
 void DialogSystemState::on_pushButtonStates_clicked() {
-    DialogCompleteListStates dialog;
+    QStandardItemModel *copyModelStates;
 
+    copyModelStates = new QStandardItemModel;
+    SuperListItem::copyModel(copyModelStates, RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelStates());
+    DialogCompleteListStates dialog;
     if (dialog.exec() == QDialog::Accepted) {
         m_needUpdate = false;
         RPM::get()->project()->writeCommonEvents();
@@ -94,6 +98,10 @@ void DialogSystemState::on_pushButtonStates_clicked() {
         m_needUpdate = true;
         initialize();
     } else {
-        RPM::get()->project()->readCommonEvents();
+        SuperListItem::deleteModel(RPM::get()->project()->gameDatas()
+            ->commonEventsDatas()->modelStates(), false);
+        SuperListItem::copyModel(RPM::get()->project()
+            ->gameDatas()->commonEventsDatas()->modelStates(), copyModelStates);
     }
+    SuperListItem::deleteModel(copyModelStates);
 }

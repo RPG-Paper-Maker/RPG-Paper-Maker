@@ -69,9 +69,15 @@ SystemState::~SystemState() {
     this->removeDetection();
 }
 
-QString SystemState::name() const { return m_state->name(); }
+QString SystemState::name() const {
+    return this->state()->name();
+}
 
-SuperListItem* SystemState::state() const { return m_state; }
+SuperListItem* SystemState::state() const
+{
+    return SuperListItem::getById(RPM::get()->project()->gameDatas()
+        ->commonEventsDatas()->modelStates()->invisibleRootItem(), id());
+}
 
 void SystemState::setState(SuperListItem* s) {
     m_state = s;
