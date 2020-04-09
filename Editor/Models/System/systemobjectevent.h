@@ -41,6 +41,7 @@ public:
     virtual void setDefault();
     void setDefaultHero();
     void addReaction(int id, SystemReaction* reaction);
+    SystemReaction * removeReaction(int id, bool deleteReaction = true);
     void addParameter(SystemParameter* parameter);
     void clearReactions();
     void clearParameters();

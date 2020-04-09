@@ -768,3 +768,28 @@ void PanelObject::on_pasteReaction() {
     SystemReaction::copyCommands(m_copiedReaction->modelCommands(), reaction
         ->modelCommands());
 }
+
+// -------------------------------------------------------
+
+void PanelObject::on_treeViewStates_idChanged(int previousID, int newID)
+{
+    QStandardItemModel *model;
+    SystemObjectEvent *event;
+    SystemReaction *reaction;
+    int i, l;
+
+    model = ui->treeViewEvents->getModel();
+    for (i = 0, l = model->invisibleRootItem()->rowCount(); i < l; i++)
+    {
+        event = reinterpret_cast<SystemObjectEvent *>(model->item(i)->data()
+            .value<quintptr>());
+        if (event != nullptr)
+        {
+            reaction = event->removeReaction(previousID, false);
+            if (reaction != nullptr)
+            {
+                event->addReaction(newID, reaction);
+            }
+        }
+    }
+}

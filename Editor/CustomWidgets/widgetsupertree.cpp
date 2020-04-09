@@ -156,15 +156,26 @@ void WidgetSuperTree::newItem(QStandardItem* selected){
 
 void WidgetSuperTree::editItem(QStandardItem *selected){
     SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    int previousID, newID;
+
+    previousID = super->id();
     if (super->openDialog())
+    {
+        newID = super->id();
+        if (previousID != newID)
+        {
+            emit idChanged(previousID, newID);
+        }
         setItem(selected, super);
+    }
 }
 
 // -------------------------------------------------------
 
 void WidgetSuperTree::copyItem(QStandardItem* selected){
-    SuperListItem* super = (SuperListItem*)(selected->data().value<quintptr>());
+    SuperListItem *super;
 
+    super = reinterpret_cast<SuperListItem *>(selected->data().value<quintptr>());
     if (m_copiedItem == nullptr)
         m_copiedItem = super->createCopy();
     else

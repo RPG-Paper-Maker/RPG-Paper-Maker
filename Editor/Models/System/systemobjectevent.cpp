@@ -121,6 +121,25 @@ void SystemObjectEvent::addReaction(int id, SystemReaction* reaction){
 
 // -------------------------------------------------------
 
+SystemReaction * SystemObjectEvent::removeReaction(int id, bool deleteReaction)
+{
+    SystemReaction *reaction;
+
+    reaction = m_reactions.value(id);
+    if (reaction != nullptr)
+    {
+        m_reactions.remove(id);
+        if (deleteReaction)
+        {
+            delete reaction;
+            return nullptr;
+        }
+    }
+    return reaction;
+}
+
+// -------------------------------------------------------
+
 void SystemObjectEvent::addParameter(SystemParameter* parameter){
     QStandardItem* item = new QStandardItem;
     item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(parameter)));

@@ -100,6 +100,7 @@ private slots:
     void on_pushButtonDetection_clicked();
     void on_copyReaction();
     void on_pasteReaction();
+    void on_treeViewStates_idChanged(int previousID, int newID);
 };
 
 #endif // PANELOBJECT_H
