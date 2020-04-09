@@ -29,6 +29,7 @@ DialogCommandModifyInventory::DialogCommandModifyInventory(
     ui->setupUi(this);
     
     ui->widgetNumber->initializeNumberVariable();
+    ui->widgetNumber->setNumberValue(1);
 
     // Initilize comboBoxes
     SuperListItem::fillComboBox(ui->comboBoxItem, RPM::get()->project()
@@ -53,8 +54,6 @@ DialogCommandModifyInventory::~DialogCommandModifyInventory()
 //  INTERMEDIARY FUNCTIONS
 //
 // -------------------------------------------------------
-
-//-------------------------------------------------
 
 void DialogCommandModifyInventory::translate()
 {
