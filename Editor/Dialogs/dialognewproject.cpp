@@ -138,7 +138,7 @@ void DialogNewProject::accept()
         ->lineEditDirectoryName->text(), ui->lineEditLocation->text());
     if (message != nullptr)
     {
-        QMessageBox::critical(this, RPM::translate(Translations::ERROR), message);
+        QMessageBox::critical(this, RPM::translate(Translations::ERROR_MESSAGE), message);
     } else
     {
         QDialog::accept();

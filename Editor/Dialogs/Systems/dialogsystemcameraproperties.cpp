@@ -77,9 +77,9 @@ void DialogSystemCameraProperties::translate()
     ui->labelX->setText(RPM::translate(Translations::X) + RPM::COLON);
     ui->labelY->setText(RPM::translate(Translations::Y) + RPM::COLON);
     ui->labelZ->setText(RPM::translate(Translations::Z) + RPM::COLON);
-    ui->labelFar->setText(RPM::translate(Translations::FAR) + RPM::COLON);
+    ui->labelFar->setText(RPM::translate(Translations::FAR_MESSAGE) + RPM::COLON);
     ui->labelName->setText(RPM::translate(Translations::NAME) + RPM::COLON);
-    ui->labelNear->setText(RPM::translate(Translations::NEAR) + RPM::COLON);
+    ui->labelNear->setText(RPM::translate(Translations::NEAR_MESSAGE) + RPM::COLON);
     ui->labelDistance->setText(RPM::translate(Translations::DISTANCE) + RPM
         ::COLON);
     ui->labelFieldOfView->setText(RPM::translate(Translations::FIELD_OF_VIEW) +

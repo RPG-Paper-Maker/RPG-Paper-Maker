@@ -347,11 +347,11 @@ public:
     static const QString VARIABLES_PARAM_PROP;
     static const QString POSSESSIONS;
     static const QString OTHERS;
-    static const QString THIS;
+    static const QString THIS_MESSAGE;
     static const QString IS;
     static const QString ADD_ELSE_CONDITIONS_NOT_APPLY;
     static const QString HERO_MAYBE_MORE;
-    static const QString IN;
+    static const QString IN_MESSAGE;
     static const QString ARE_NAMED;
     static const QString ARE_IN;
     static const QString ARE_ABLE_SKILL_ID;
@@ -481,8 +481,8 @@ public:
     static const QString HORIZONTAL_ANGLE;
     static const QString VERTICAL_ANGLE;
     static const QString FIELD_OF_VIEW;
-    static const QString NEAR;
-    static const QString FAR;
+    static const QString NEAR_MESSAGE;
+    static const QString FAR_MESSAGE;
     static const QString SET_CHARACTERISTIC;
     static const QString BUFF;
     static const QString CHARACTER_SPECIFIC;
@@ -742,7 +742,7 @@ public:
     static const QString NEW;
     static const QString COPY;
     static const QString PASTE;
-    static const QString DELETE;
+    static const QString DELETE_MESSAGE;
     static const QString EDIT_MAP_PROPERTIES;
     static const QString NEW_MAP;
     static const QString NEW_DIRECTORY;
@@ -799,7 +799,7 @@ public:
     static const QString HEAL_DAMAGE;
     static const QString THIS_OPTION_NOT_AVAILABLE_YET;
     static const QString SELECT_ELEMENT_TO_APPLY;
-    static const QString ERROR;
+    static const QString ERROR_MESSAGE;
     static const QString TILESET;
     static const QString PROJECT_WITHOUT_NAME;
     static const QString PROJECT_WITHOUT_NAME_FOLDER;

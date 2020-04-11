@@ -543,7 +543,7 @@ QString EventCommand::strCondition(SystemCommonObject *object,
         }
         checked = RPM::stringToBool(m_listCommand.at(i++));
         if (checked) {
-            condition += RPM::translate(Translations::IN).toLower() + RPM::SPACE
+            condition += RPM::translate(Translations::IN_MESSAGE).toLower() + RPM::SPACE
                 + RPM::ENUM_TO_STRING_TEAM.at(m_listCommand.at(i++).toInt()) +
                 RPM::SPACE;
         }
@@ -785,7 +785,7 @@ QString EventCommand::strModifyTeamInstance(int &i, QStandardItemModel
 
     return RPM::translate(Translations::CREATE_NEW_INSTANCE_WITH_LEVEL)
         .toLower() + RPM::SPACE + level + RPM::SPACE + RPM::translate(
-        Translations::IN).toLower() + RPM::SPACE + teamNew + RPM::SPACE + RPM
+        Translations::IN_MESSAGE).toLower() + RPM::SPACE + teamNew + RPM::SPACE + RPM
         ::translate(Translations::OF).toLower() + RPM::SPACE + character + RPM
         ::SPACE + RPM::translate(Translations::AND_STOCK_IN_VARIABLE) + RPM
         ::SPACE + stockVariable;

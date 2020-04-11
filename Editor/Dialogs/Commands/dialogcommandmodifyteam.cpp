@@ -58,7 +58,7 @@ void DialogCommandModifyTeam::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::MODIFY_TEAM) + RPM
         ::DOT_DOT_DOT);
-    ui->labelInInstance->setText(RPM::translate(Translations::IN));
+    ui->labelInInstance->setText(RPM::translate(Translations::IN_MESSAGE));
     ui->labelOfInstance->setText(RPM::translate(Translations::OF));
     ui->labelStockVariable->setText(RPM::translate(Translations
         ::STOCK_INSTANCE_ID_IN));

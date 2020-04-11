@@ -197,7 +197,7 @@ void DialogCommandConditions::translate()
         ::ARE_EQUIPED_WITH));
     ui->radioButtonHeroesStatistic->setText(RPM::translate(Translations
         ::HAVE_STATISTIC_ID));
-    ui->radioButtonVariableParamProp->setText(RPM::translate(Translations::THIS));
+    ui->radioButtonVariableParamProp->setText(RPM::translate(Translations::THIS_MESSAGE));
     ui->radioButtonHeroesEquipedArmor->setText(RPM::translate(Translations
         ::ARMOR_ID) + RPM::COLON);
     ui->radioButtonHeroesEquipedWeapon->setText(RPM::translate(Translations
@@ -209,7 +209,7 @@ void DialogCommandConditions::translate()
     ui->tabWidget->setTabText(3, RPM::translate(Translations::OTHERS));
     ui->checkBox->setText(RPM::translate(Translations
         ::ADD_ELSE_CONDITIONS_NOT_APPLY));
-    ui->checkBoxInTeam->setText(RPM::translate(Translations::IN));
+    ui->checkBoxInTeam->setText(RPM::translate(Translations::IN_MESSAGE));
     ui->checkBoxArmorEquiped->setText(RPM::translate(Translations
         ::CHECK_ARMORS_EQUIPED_TOO));
     ui->checkBoxWeaponEquiped->setText(RPM::translate(Translations

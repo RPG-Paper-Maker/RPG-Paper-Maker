@@ -207,7 +207,7 @@ bool Project::readVersion(){
 
     // If impossible to convert the version
     if (dBefore == -2) {
-        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
             ::COLON + RPM::SPACE + RPM::translate(Translations
             ::COULD_NOT_FIND_PROJECT_VERSION) + RPM::DOT, RPM::translate(
             Translations::IMPOSSIBLE_TO_CONVERT) + RPM::SPACE + m_version + RPM
@@ -217,7 +217,7 @@ bool Project::readVersion(){
 
     // If version < 0.3.0, tell that the project updater didn't existed yet
     if (dBefore == -1) {
-        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
             ::COLON + RPM::SPACE + RPM::translate(Translations
             ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
             ::translate(Translations::IMPOSSIBLE_CONVERSION_2) + RPM::DOT);
@@ -228,7 +228,7 @@ bool Project::readVersion(){
 
     // If the project if superior to the engine
     if (d == 1) {
-        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR) + RPM
+        QMessageBox::critical(nullptr, RPM::translate(Translations::ERROR_MESSAGE) + RPM
             ::COLON + RPM::SPACE + RPM::translate(Translations
             ::IMPOSSIBLE_CONVERSION_1), information + RPM::SPACE + RPM
             ::translate(Translations::IMPOSSIBLE_CONVERSION_3) + RPM::DOT);
@@ -241,7 +241,7 @@ bool Project::readVersion(){
         QString previousFolderName = dirProject.dirName() +
                                      "-" + m_version;
         QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
-            ::translate(Translations::ERROR) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
             ::translate(Translations::CONVERSION_NEEDED), information + RPM
             ::SPACE + RPM::translate(Translations::CONVERT_PROJECT) + RPM::SPACE
             + previousFolderName + RPM::PARENTHESIS_RIGHT + RPM::DOT,
@@ -291,7 +291,7 @@ bool Project::readOS() {
             ::SPACE + RPM::ENUM_TO_STRING_OS_KIND.at(computerOSInteger) + RPM
             ::SPACE + RPM::translate(Translations::INCOMPATIBLE_OS_5) + RPM::DOT;
         QMessageBox::StandardButton box = QMessageBox::question(nullptr, RPM
-            ::translate(Translations::ERROR) + RPM::COLON + RPM::SPACE + RPM
+            ::translate(Translations::ERROR_MESSAGE) + RPM::COLON + RPM::SPACE + RPM
             ::translate(Translations::INCOMPATIBLE_OS), information + RPM
             ::NEW_LINE + question, QMessageBox::Yes | QMessageBox::No);
         if (box == QMessageBox::Yes) {

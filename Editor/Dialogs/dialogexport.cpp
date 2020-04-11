@@ -99,7 +99,7 @@ void DialogExport::accept() {
 
     if (message != nullptr) {
         if (message != RPM::DASH) {
-            QMessageBox::critical(this, RPM::translate(Translations::ERROR),
+            QMessageBox::critical(this, RPM::translate(Translations::ERROR_MESSAGE),
                 message);
         }
     } else {
