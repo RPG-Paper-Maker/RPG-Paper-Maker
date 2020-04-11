@@ -800,7 +800,11 @@ void ProjectUpdater::updateVersion_1_5_0() {
     m_project->picturesDatas()->setDefaultAnimations(names);
     SuperListItem::deleteModel(m_project->gameDatas()->animationsDatas()
         ->model(), false);
+    QFile::remove(Common::pathCombine(m_project->pathCurrentProject(), RPM::PATH_ANIMATIONS));
+    QFile::copy(Common::pathCombine(Common::pathCombine(QDir::currentPath(), RPM::PATH_BASIC), RPM::PATH_ANIMATIONS), Common::pathCombine(m_project->pathCurrentProject(), RPM::PATH_ANIMATIONS));
+    m_project->gameDatas()->readAnimations(m_project->pathCurrentProject());
     m_project->gameDatas()->animationsDatas()->setDefault();
     dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
     dir.mkpath(RPM::PATH_SKY_BOXES);
+    m_project->picturesDatas()->setDefaultSkyBoxes(names);
 }

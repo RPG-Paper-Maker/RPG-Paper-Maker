@@ -203,8 +203,9 @@ void PicturesDatas::setDefaultAnimations(QList<QString>& names) {
 
 void PicturesDatas::setDefaultSkyBoxes(QList<QString>& names)
 {
+    /*
     names << "ocean-front" << "ocean-back"<< "ocean-top" << "ocean-bottom" <<
-        "ocean-left" << "ocean-right";
+        "ocean-left" << "ocean-right";*/
     QList<SystemPicture*> pictures;
     int i;
 
