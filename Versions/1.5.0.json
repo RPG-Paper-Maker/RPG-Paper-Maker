@@ -1,7 +1,104 @@
 {
-	"add": [],
+	"add": [
+        {
+            "files": [
+                {
+                    "repo": "Basic-Ressources",
+                    "source": "Content/Images/HUD/Animations/basic.png",
+                    "target": "Engine/Content/BR/Content/Images/HUD/Animations/basic.png"
+                }
+            ],
+            "target": "Engine/Content/BR/Content/Images/HUD/Animations"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Hit.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Hit.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Dead.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Dead.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Heal.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Heal.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Up.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Up.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Malus.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Malus.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Poison.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Poison.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Confuse.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Confuse.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Bip.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Bip.wav"
+        },
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Songs/Sounds/Mana.wav",
+            "target": "Engine/Content/BR/Content/Songs/Sounds/Mana.wav"
+        },
+        {
+            "files": [
+            ],
+            "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/basic/Content/Datas/animations.json",
+            "target": "Engine/Content/basic/Content/Datas/animations.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-es.json",
+            "target": "Engine/Content/translations/translations-es.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-br.json",
+            "target": "Engine/Content/translations/translations-br.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/current-language",
+            "target": "Engine/Content/translations/current-language"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/splash.png",
+            "target": "Engine/Content/splash.png"
+        }
+    ],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-eng.json",
+            "target": "Engine/Content/translations/translations-eng.json"
+        },
+        {
+            "repo": "RPG-Paper-Maker",
+            "source": "EditorApp/Content/translations/translations-fr.json",
+            "target": "Engine/Content/translations/translations-fr.json"
+        }
+    ],
 	"features": [
         "New behavior for frequency",
         "New behavior center image in display picture command",
