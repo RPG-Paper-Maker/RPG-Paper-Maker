@@ -47,6 +47,11 @@
                             },
                             {
                                 "files": [
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/Textures2D/SkyBoxes"
+                            },
+                            {
+                                "files": [
                                     {
                                         "repo": "Basic-Ressources",
                                         "source": "Content/Images/Textures2D/Walls/inside2.png",
@@ -449,6 +454,16 @@
                                 "files": [
                                     {
                                         "repo": "Basic-Ressources",
+                                        "source": "Content/Images/HUD/Animations/basic.png",
+                                        "target": "Engine/Content/BR/Content/Images/HUD/Animations/basic.png"
+                                    }
+                                ],
+                                "target": "Engine/Content/BR/Content/Images/HUD/Animations"
+                            },
+                            {
+                                "files": [
+                                    {
+                                        "repo": "Basic-Ressources",
                                         "source": "Content/Images/HUD/TitleScreen/background.png",
                                         "target": "Engine/Content/BR/Content/Images/HUD/TitleScreen/background.png"
                                     }
@@ -502,8 +517,28 @@
                         "files": [
                             {
                                 "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Hit.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Hit.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Dead.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Dead.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
                                 "source": "Content/Songs/Sounds/Levelup.wav",
                                 "target": "Engine/Content/BR/Content/Songs/Sounds/Levelup.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Heal.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Heal.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Up.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Up.wav"
                             },
                             {
                                 "repo": "Basic-Ressources",
@@ -512,8 +547,33 @@
                             },
                             {
                                 "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Malus.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Malus.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
                                 "source": "Content/Songs/Sounds/Confirmation.wav",
                                 "target": "Engine/Content/BR/Content/Songs/Sounds/Confirmation.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Poison.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Poison.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Confuse.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Confuse.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Bip.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Bip.wav"
+                            },
+                            {
+                                "repo": "Basic-Ressources",
+                                "source": "Content/Songs/Sounds/Mana.wav",
+                                "target": "Engine/Content/BR/Content/Songs/Sounds/Mana.wav"
                             },
                             {
                                 "repo": "Basic-Ressources",
@@ -599,6 +659,11 @@
                                 "files": [
                                     {
                                         "repo": "RPG-Paper-Maker",
+                                        "source": "EditorApp/Content/basic/Content/Datas/animations.json",
+                                        "target": "Engine/Content/basic/Content/Datas/animations.json"
+                                    },
+                                    {
+                                        "repo": "RPG-Paper-Maker",
                                         "source": "EditorApp/Content/basic/Content/Datas/settings.json",
                                         "target": "Engine/Content/basic/Content/Datas/settings.json"
                                     }
@@ -630,11 +695,31 @@
                     },
                     {
                         "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-es.json",
+                        "target": "Engine/Content/translations/translations-es.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-eng.json",
                         "target": "Engine/Content/translations/translations-eng.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-br.json",
+                        "target": "Engine/Content/translations/translations-br.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/current-language",
+                        "target": "Engine/Content/translations/current-language"
                     }
                 ],
                 "target": "Engine/Content/translations"
+            },
+            {
+                "repo": "RPG-Paper-Maker",
+                "source": "EditorApp/Content/splash.png",
+                "target": "Engine/Content/splash.png"
             }
         ],
         "target": "Engine/Content/"
@@ -12228,6 +12313,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/datas-animations.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/datas-animations.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/camera.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/camera.js"
             },
@@ -12257,6 +12347,11 @@
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-item.js"
             },
             {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-animation-frame-effect.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-animation-frame-effect.js"
+            },
+            {
                 "files": [
                     {
                         "repo": "Game-Scripts",
@@ -12280,6 +12375,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/map-infos.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/map-infos.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-monster-action.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-monster-action.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -12385,6 +12485,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/object-3d-box.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/object-3d-box.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-animation-frame-element.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-animation-frame-element.js"
             },
             {
                 "repo": "Game-Scripts",
@@ -12518,6 +12623,11 @@
             },
             {
                 "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-animation.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-animation.js"
+            },
+            {
+                "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/window-box.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/window-box.js"
             },
@@ -12550,6 +12660,11 @@
                 "repo": "Game-Scripts",
                 "source": "Content/Datas/Scripts/System/map-element.js",
                 "target": "Engine/Content/basic/Content/Datas/Scripts/System/map-element.js"
+            },
+            {
+                "repo": "Game-Scripts",
+                "source": "Content/Datas/Scripts/System/system-animation-frame.js",
+                "target": "Engine/Content/basic/Content/Datas/Scripts/System/system-animation-frame.js"
             },
             {
                 "repo": "Game-Scripts",
