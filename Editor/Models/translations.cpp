@@ -1094,6 +1094,7 @@ const QString Translations::SET_SKY_BOX = "set.sky.box";
 const QString Translations::HELP_ENGINE_1 = "help.engine.1";
 const QString Translations::HELP_ENGINE_2 = "help.engine.2";
 const QString Translations::HELP_ENGINE_3 = "help.engine.3";
+const QString Translations::SELECT_A_LANGUAGE = "select.a.language";
 
 // -------------------------------------------------------
 //
@@ -1103,18 +1104,27 @@ const QString Translations::HELP_ENGINE_3 = "help.engine.3";
 
 Translations::Translations()
 {
-    QFile file(RPM::PATH_TRANSLATIONS_CURRENT_LANGUAGE);
-    if(!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::information(nullptr, "Error", file.errorString());
-    }
-    QTextStream in(&file);
-    m_currentLanguage = in.readLine();
-    file.close();
+
 }
 
 Translations::~Translations()
 {
 
+}
+
+QStringList Translations::languagesNames() const
+{
+    return m_languagesNames;
+}
+
+int Translations::indexOfLanguagesShort(QString s) const
+{
+    return m_languagesShort.indexOf(s);
+}
+
+QString Translations::languagesShortAt(int i) const
+{
+    return m_languagesShort.at(i);
 }
 
 // -------------------------------------------------------
@@ -1164,10 +1174,11 @@ void Translations::readTranslations()
     int i, l;
 
     Common::readOtherJSON(Common::pathCombine(RPM::PATH_TRANSLATIONS,
-        Translations::JSON_TRANSLATIONS + RPM::DASH + m_currentLanguage + RPM
-        ::EXTENSION_JSON), doc);
+        Translations::JSON_TRANSLATIONS + RPM::DASH + RPM::get()
+        ->engineSettings()->currentLanguage() + RPM::EXTENSION_JSON), doc);
     obj = doc.object();
     keys = obj.keys();
+    m_translations.clear();
     for (i = 0, l = keys.size(); i < l; i++) {
         key = keys.at(i);
         m_translations.insert(key, obj[key].toString());

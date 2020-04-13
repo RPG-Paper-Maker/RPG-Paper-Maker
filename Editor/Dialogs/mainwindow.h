@@ -58,6 +58,7 @@ public:
     void updateRecentProjects(QString projectName, QString path);
     void updateMenuRecentProjects();
     void cleanRecentProjectsActions();
+    void translate();
 
 private:
     Ui::MainWindow *ui;
@@ -69,7 +70,6 @@ private:
     QString p_version;
 
     void updateTextures();
-    void translate();
 
 protected:
     virtual void closeEvent(QCloseEvent *event);

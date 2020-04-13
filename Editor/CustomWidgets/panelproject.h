@@ -45,12 +45,12 @@ public:
     WidgetMapEditor * widgetMapEditor() const;
     WidgetTreeLocalMaps * widgetTreeLocalMaps() const;
 
+    void translate();
+
 private:
     Ui::PanelProject *ui;
     Project *m_project;
     QTimer *m_timerUpdate;
-
-    void translate();
 
 public slots:
     void updateMenu();

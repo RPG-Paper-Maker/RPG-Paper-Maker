@@ -475,6 +475,7 @@ void MainWindow::translate() {
         ::DOT_DOT_DOT);
     ui->actionAuto_update->setText(RPM::translate(Translations
         ::AUTO_DISPLAY_UPDATER));
+    reinterpret_cast<PanelMainMenu *>(mainPanel)->translate();
 }
 
 // -------------------------------------------------------

@@ -32,11 +32,11 @@ public:
     void initialize();
     bool isMouseSelecting(const QPoint &pos);
 
+    void translate();
+
 protected:
     QStaticText m_staticTitle;
     int m_indexSelectedProject;
-
-    void translate();
 
     virtual void leaveEvent(QEvent *);
     virtual void mousePressEvent(QMouseEvent *);

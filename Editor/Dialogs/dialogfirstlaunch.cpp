@@ -51,12 +51,14 @@ void DialogFirstLaunch::initialize() {
         "</p><p>" + RPM::translate(Translations::FIRST_LAUNCH_2) + RPM::SPACE +
         "<strong>" + RPM::translate(Translations::FIRST_LAUNCH_3) + "</strong>"
         + RPM::DOT + RPM::SPACE + RPM::translate(Translations::FIRST_LAUNCH_4) +
-        RPM::SPACE + "<a href=\"http://rpg-paper-maker.com/index.php/features\">"
-        + RPM::translate(Translations::HERE) + "</a>.</p><p>" + RPM::SPACE + RPM
-        ::translate(Translations::FIRST_LAUNCH_5) + RPM::SPACE + "<strong>" +
-        RPM::translate(Translations::FIRST_LAUNCH_6) + RPM::SPACE +
-        "</strong><a href=\"https://rpg-paper-maker.github.io/\">" + RPM
-        ::translate(Translations::HERE) + "</a>.</p>");
+        RPM::SPACE + "<a href=\"http://rpg-paper-maker.com/index.php/features\""
+        " style=\"color: tomato;\">" + RPM::translate(Translations::HERE) +
+        "</a>.</p><p>" + RPM::SPACE + RPM::translate(Translations
+        ::FIRST_LAUNCH_5) + RPM::SPACE + "<strong>" + RPM::translate(
+        Translations::FIRST_LAUNCH_6) + RPM::SPACE +
+        "</strong><a href=\"https://rpg-paper-maker.gitbook.io/rpg-paper-maker/"
+        "\" style=\"color: tomato;\">" + RPM::translate(Translations::HERE) +
+        "</a>.</p>");
 }
 
 // -------------------------------------------------------

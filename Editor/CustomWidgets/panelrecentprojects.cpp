@@ -32,7 +32,9 @@ PanelRecentProjects::PanelRecentProjects(QWidget *parent) :
 {
     this->setMouseTracking(true);
 
-    initialize();
+    this->initialize();
+
+    this->translate();
 }
 
 PanelRecentProjects::~PanelRecentProjects() {
@@ -42,10 +44,7 @@ PanelRecentProjects::~PanelRecentProjects() {
 // -------------------------------------------------------
 
 void PanelRecentProjects::initialize() {
-    // Title content
     m_staticTitle.setTextFormat(Qt::RichText);
-    m_staticTitle.setText("<h2>" + RPM::translate(Translations::RECENT_PROJECTS)
-        + ":</h2>");
 }
 
 // -------------------------------------------------------
@@ -66,7 +65,8 @@ bool PanelRecentProjects::isMouseSelecting(const QPoint &pos) {
 
 void PanelRecentProjects::translate()
 {
-
+    m_staticTitle.setText("<h2>" + RPM::translate(Translations::RECENT_PROJECTS)
+        + ":</h2>");
 }
 
 // -------------------------------------------------------

@@ -34,10 +34,10 @@ public:
     explicit PanelMainMenu(QWidget *parent = nullptr);
     ~PanelMainMenu();
 
+    void translate();
+
 private:
     Ui::PanelMainMenu *ui;
-
-    void translate();
 
 signals:
     void openingProject(QString path);

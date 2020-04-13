@@ -59,6 +59,7 @@ HEADERS += \
     Dialogs/Systems/dialogsystemspeedfrequency.h \
     Dialogs/Systems/dialogsystemtitlecommand.h \
     Dialogs/dialogfirstlaunch.h \
+    Dialogs/dialogselectlanguage.h \
     Dialogs/dialogtilesettexture.h \
     Dialogs/dialogvideos.h \
     Dialogs/dialogvideospreview.h \
@@ -402,6 +403,7 @@ SOURCES += \
     Dialogs/Systems/dialogsystemspeedfrequency.cpp \
     Dialogs/Systems/dialogsystemtitlecommand.cpp \
     Dialogs/dialogfirstlaunch.cpp \
+    Dialogs/dialogselectlanguage.cpp \
     Dialogs/dialogtilesettexture.cpp \
     Dialogs/dialogvideos.cpp \
     Dialogs/dialogvideospreview.cpp \
@@ -702,6 +704,7 @@ FORMS += \
     Dialogs/Systems/dialogsystemspeedfrequency.ui \
     Dialogs/Systems/dialogsystemtitlecommand.ui \
     Dialogs/dialogfirstlaunch.ui \
+    Dialogs/dialogselectlanguage.ui \
     Dialogs/dialogtilesettexture.ui \
     Dialogs/dialogvideos.ui \
     Dialogs/dialogvideospreview.ui \

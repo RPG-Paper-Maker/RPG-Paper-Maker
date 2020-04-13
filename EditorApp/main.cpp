@@ -19,6 +19,7 @@
 #include "rpm.h"
 #include "common.h"
 #include "dialogfirstlaunch.h"
+#include "dialogselectlanguage.h"
 
 //-------------------------------------------------
 //
@@ -109,10 +110,18 @@ int main(int argc, char *argv[]) {
     MainWindow *w = MainWindow::get();
     w->showMaximized();
 
+    // Show first launch language selection
+    DialogSelectLanguage dialogLanguage;
+    if (RPM::get()->engineSettings()->firstTimeLanguages()) {
+        dialogLanguage.exec();
+        RPM::get()->engineSettings()->setFirstTimeLanguages(false);
+        RPM::get()->engineSettings()->write();
+    }
+
     // Show first launch window
-    DialogFirstLaunch dialog;
+    DialogFirstLaunch dialogFirstLaunch;
     if (RPM::get()->engineSettings()->firstTime()) {
-        dialog.show();
+        dialogFirstLaunch.show();
         RPM::get()->engineSettings()->setFirstTime(false);
         RPM::get()->engineSettings()->write();
     }

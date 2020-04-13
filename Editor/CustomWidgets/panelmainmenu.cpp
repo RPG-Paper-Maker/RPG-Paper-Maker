@@ -60,6 +60,7 @@ void PanelMainMenu::translate()
         "1118650/RPG_Paper_Maker__Commercial_edition/\" style=\"color: tomato;"
         "\">" + RPM::translate(Translations::HELP_ENGINE_2) + "</a> " + RPM
         ::translate(Translations::HELP_ENGINE_3));
+    ui->panelRecentProjects->translate();
 }
 
 // -------------------------------------------------------

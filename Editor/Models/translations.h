@@ -1106,9 +1106,13 @@ public:
     static const QString HELP_ENGINE_1;
     static const QString HELP_ENGINE_2;
     static const QString HELP_ENGINE_3;
+    static const QString SELECT_A_LANGUAGE;
 
     Translations();
     virtual ~Translations();
+    QStringList languagesNames() const;
+    int indexOfLanguagesShort(QString s) const;
+    QString languagesShortAt(int i) const;
 
     void read();
     void readLanguages();
@@ -1117,7 +1121,6 @@ public:
     void translateButtonBox(QDialogButtonBox *buttonBox);
 
 protected:
-    QString m_currentLanguage;
     QStringList m_languagesNames;
     QStringList m_languagesShort;
     QHash<QString, QString> m_translations;
