@@ -43,6 +43,8 @@ public:
     static QStandardItem* addMap(QStandardItem *root, int i, TreeMapTag *tag);
     static void setName(QStandardItem *item, QString name);
 
+    void translate();
+
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

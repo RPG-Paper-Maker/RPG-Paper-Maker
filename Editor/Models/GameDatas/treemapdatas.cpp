@@ -118,6 +118,13 @@ void TreeMapDatas::setName(QStandardItem *item, QString name){
 }
 
 // -------------------------------------------------------
+
+void TreeMapDatas::translate()
+{
+    m_model->item(0)->setText(RPM::translate(Translations::MAPS));
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

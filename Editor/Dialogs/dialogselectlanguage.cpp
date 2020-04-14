@@ -56,7 +56,7 @@ void DialogSelectLanguage::initialize()
 
 void DialogSelectLanguage::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::SELECT_A_LANGUAGE) + RPM
+    this->setWindowTitle(RPM::translate(Translations::CHANGE_LANGUAGE) + RPM
         ::DOT_DOT_DOT);
     ui->pushButtonOK->setText(RPM::translate(Translations::OK));
 }
@@ -74,4 +74,5 @@ void DialogSelectLanguage::on_comboBox_currentIndexChanged(int index)
     RPM::get()->translations()->readTranslations();
     MainWindow::get()->translate();
     this->translate();
+    RPM::get()->engineSettings()->write();
 }

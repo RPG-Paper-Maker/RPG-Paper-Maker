@@ -1106,7 +1106,7 @@ public:
     static const QString HELP_ENGINE_1;
     static const QString HELP_ENGINE_2;
     static const QString HELP_ENGINE_3;
-    static const QString SELECT_A_LANGUAGE;
+    static const QString CHANGE_LANGUAGE;
 
     Translations();
     virtual ~Translations();

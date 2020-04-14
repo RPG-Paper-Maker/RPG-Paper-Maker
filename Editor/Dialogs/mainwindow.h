@@ -68,6 +68,7 @@ private:
     int openDialog(QDialog& dialog);
     QString p_appName;
     QString p_version;
+    bool m_isMainMenu;
 
     void updateTextures();
 
@@ -104,6 +105,7 @@ private slots:
     void on_actionSet_BR_path_folder_triggered();
     void on_actionDebug_options_triggered();
     void on_actionGeneral_options_triggered();
+    void on_actionChange_language_triggered();
     void on_actionShow_Hide_grid_triggered();
     void on_actionShow_Hide_square_informations_triggered();
     void on_actionPlay_triggered();

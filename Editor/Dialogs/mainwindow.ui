@@ -94,6 +94,8 @@
     <addaction name="actionSet_BR_path_folder"/>
     <addaction name="actionDebug_options"/>
     <addaction name="actionGeneral_options"/>
+    <addaction name="actionChange_language"/>
+    <addaction name="actionAuto_update"/>
    </widget>
    <widget class="QMenu" name="menuSpecials">
     <property name="title">
@@ -128,7 +130,6 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
-    <addaction name="actionAuto_update"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdition"/>
@@ -655,6 +656,11 @@
    </property>
    <property name="text">
     <string>Auto display updater</string>
+   </property>
+  </action>
+  <action name="actionChange_language">
+   <property name="text">
+    <string>Change language...</string>
    </property>
   </action>
  </widget>

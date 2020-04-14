@@ -42,6 +42,7 @@
 #include "dialogshapes.h"
 #include "dialogvideos.h"
 #include "common.h"
+#include "dialogselectlanguage.h"
 
 // -------------------------------------------------------
 //
@@ -51,7 +52,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_isMainMenu(true)
 {
     p_appName = "RPG Paper Maker";
     gameProcess = new QProcess(this);
@@ -157,6 +159,7 @@ void MainWindow::openProject(QString pathProject) {
                 ->projectName()->mainName(), pathProject);
             enableGame();
             replaceMainPanel(new PanelProject(this, project));
+            m_isMainMenu = false;
         }
         else {
             delete project;
@@ -184,6 +187,7 @@ bool MainWindow::closeProject(){
     connect(panel, SIGNAL(openingProject(QString)), this, SLOT(
         openRecentProject(QString)));
     replaceMainPanel(panel);
+    m_isMainMenu = true;
 
     return true;
 }
@@ -212,6 +216,10 @@ void MainWindow::enableAll(bool b){
     ui->actionClose_project->setEnabled(b);
     ui->actionUndo->setEnabled(b);
     ui->actionRedo->setEnabled(b);
+    ui->actionHeight_up->setEnabled(b);
+    ui->actionHeight_down->setEnabled(b);
+    ui->actionHeight_plus_up->setEnabled(b);
+    ui->actionHeight_plus_down->setEnabled(b);
     ui->actionDatas_manager->setEnabled(b);
     ui->actionSystems_manager->setEnabled(b);
     ui->actionVariables_manager->setEnabled(b);
@@ -251,6 +259,10 @@ void MainWindow::enableGame(){ // When a project is opened
     ui->actionClose_project->setEnabled(true);
     ui->actionUndo->setEnabled(true);
     ui->actionRedo->setEnabled(true);
+    ui->actionHeight_up->setEnabled(true);
+    ui->actionHeight_down->setEnabled(true);
+    ui->actionHeight_plus_up->setEnabled(true);
+    ui->actionHeight_plus_down->setEnabled(true);
     ui->actionDatas_manager->setEnabled(true);
     ui->actionSystems_manager->setEnabled(true);
     ui->actionVariables_manager->setEnabled(true);
@@ -465,6 +477,8 @@ void MainWindow::translate() {
         ::DEBUG_OPTIONS) + RPM::DOT_DOT_DOT);
     ui->actionGeneral_options->setText(RPM::translate(Translations
         ::GENERAL_OPTIONS) + RPM::DOT_DOT_DOT);
+    ui->actionChange_language->setText(RPM::translate(Translations
+        ::CHANGE_LANGUAGE) + RPM::DOT_DOT_DOT);
     ui->actionShow_Hide_grid->setText(RPM::translate(Translations
         ::SHOW_HIDE_GRID));
     ui->actionShow_Hide_square_informations->setText(RPM::translate(Translations
@@ -475,7 +489,13 @@ void MainWindow::translate() {
         ::DOT_DOT_DOT);
     ui->actionAuto_update->setText(RPM::translate(Translations
         ::AUTO_DISPLAY_UPDATER));
-    reinterpret_cast<PanelMainMenu *>(mainPanel)->translate();
+    if (m_isMainMenu)
+    {
+        reinterpret_cast<PanelMainMenu *>(mainPanel)->translate();
+    } else
+    {
+        reinterpret_cast<PanelProject *>(mainPanel)->translate();
+    }
 }
 
 // -------------------------------------------------------
@@ -788,6 +808,14 @@ void MainWindow::on_actionDebug_options_triggered() {
 
 void MainWindow::on_actionGeneral_options_triggered() {
     DialogGeneralOptions dialog;
+    openDialog(dialog);
+}
+
+// -------------------------------------------------------
+
+void MainWindow::on_actionChange_language_triggered()
+{
+    DialogSelectLanguage dialog;
     openDialog(dialog);
 }
 

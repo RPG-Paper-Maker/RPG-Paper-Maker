@@ -104,7 +104,11 @@ WidgetTreeLocalMaps * PanelProject::widgetTreeLocalMaps() const {
 
 void PanelProject::translate()
 {
-
+    ui->widgetMenuBar->translate();
+    if (ui->treeViewLocalMaps->getModel() != nullptr)
+    {
+        RPM::get()->project()->treeMapDatas()->translate();
+    }
 }
 
 // -------------------------------------------------------

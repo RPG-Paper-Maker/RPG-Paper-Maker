@@ -73,6 +73,8 @@ public:
     void toggleSelection();
     int countSelectionKind() const;
 
+    void translate();
+
 private:
     Ui::WidgetMenuBarMapEditor *ui;
     MapEditorSelectionKind m_selectionKind;
@@ -87,8 +89,6 @@ private:
     QAction *m_actionPin;
     QAction *m_actionLayerNone;
     QAction *m_actionLayerOn;
-
-    void translate();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
