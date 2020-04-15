@@ -695,23 +695,18 @@
                     },
                     {
                         "repo": "RPG-Paper-Maker",
+                        "source": "EditorApp/Content/translations/translations-en.json",
+                        "target": "Engine/Content/translations/translations-en.json"
+                    },
+                    {
+                        "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-es.json",
                         "target": "Engine/Content/translations/translations-es.json"
                     },
                     {
                         "repo": "RPG-Paper-Maker",
-                        "source": "EditorApp/Content/translations/translations-eng.json",
-                        "target": "Engine/Content/translations/translations-eng.json"
-                    },
-                    {
-                        "repo": "RPG-Paper-Maker",
                         "source": "EditorApp/Content/translations/translations-br.json",
                         "target": "Engine/Content/translations/translations-br.json"
-                    },
-                    {
-                        "repo": "RPG-Paper-Maker",
-                        "source": "EditorApp/Content/translations/current-language",
-                        "target": "Engine/Content/translations/current-language"
                     }
                 ],
                 "target": "Engine/Content/translations"
