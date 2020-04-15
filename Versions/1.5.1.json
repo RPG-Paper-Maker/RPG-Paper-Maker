@@ -5,8 +5,13 @@
 	"features": [
         "French / Espanol / Português (Brasil) translations available"
     ],
-	"bugs": [],
+	"bugs": [
+        "Improve image weird stretch in different resolution",
+        "Animation position wrong in different resolution"
+    ],
     "finished": [
-        false
+        true,
+        true,
+        true
     ]
 }
