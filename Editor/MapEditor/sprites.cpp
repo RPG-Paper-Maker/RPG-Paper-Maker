@@ -484,9 +484,10 @@ MapElement* Sprites::updateRaycasting(int squareSize, float &finalDistance,
         Portion portion;
         map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
+        bool remove = false;
         MapElement* newElement = mapPortion->updateRaycastingOverflowSprite(
                     squareSize, position, finalDistance, finalPosition, ray,
-                    cameraHAngle);
+                    cameraHAngle, remove);
         if (newElement != nullptr)
             element = newElement;
     }

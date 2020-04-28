@@ -445,15 +445,22 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
                                                         float &finalDistance,
                                                         Position &finalPosition,
                                                         QRay3D& ray,
-                                                        double cameraHAngle)
+                                                        double cameraHAngle,
+                                                       bool &remove)
 {
     SpriteDatas* sprite = m_sprites->spriteAt(position);
 
-    if (m_sprites->updateRaycastingAt(position, sprite, squareSize,
-                                      finalDistance, finalPosition, ray,
-                                      cameraHAngle))
+    if (sprite == nullptr)
     {
-        return sprite;
+        remove = true;
+    } else
+    {
+        if (m_sprites->updateRaycastingAt(position, sprite, squareSize,
+                                          finalDistance, finalPosition, ray,
+                                          cameraHAngle))
+        {
+            return sprite;
+        }
     }
 
     return nullptr;
@@ -462,15 +469,21 @@ MapElement* MapPortion::updateRaycastingOverflowSprite(int squareSize,
 // -------------------------------------------------------
 
 MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
-    float &finalDistance, Position &finalPosition, QRay3D& ray)
+    float &finalDistance, Position &finalPosition, QRay3D& ray, bool &remove)
 {
     Object3DDatas *object3D;
 
     object3D = m_objects3D->object3DAt(position);
-    if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
-        finalPosition, ray))
+    if (object3D == nullptr)
     {
-        return object3D;
+        remove = true;
+    } else
+    {
+        if (m_objects3D->updateRaycastingAt(position, object3D, finalDistance,
+            finalPosition, ray))
+        {
+            return object3D;
+        }
     }
 
     return nullptr;
@@ -479,15 +492,21 @@ MapElement* MapPortion::updateRaycastingOverflowObject3D(Position& position,
 // -------------------------------------------------------
 
 MapElement * MapPortion::updateRaycastingOverflowMountain(Position &position,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove)
 {
     MountainDatas *mountain;
 
     mountain = m_mountains->mountainAt(position);
-    if (m_mountains->updateRaycastingAt(position, mountain, finalDistance,
-        finalPosition, ray))
+    if (mountain == nullptr)
     {
-        return mountain;
+        remove = true;
+    } else
+    {
+        if (m_mountains->updateRaycastingAt(position, mountain, finalDistance,
+            finalPosition, ray))
+        {
+            return mountain;
+        }
     }
 
     return nullptr;

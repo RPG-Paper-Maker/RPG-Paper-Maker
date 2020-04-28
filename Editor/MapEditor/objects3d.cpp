@@ -361,6 +361,7 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
     &finalPosition, QRay3D &ray)
 {
     MapElement* element = nullptr;
+    bool remove;
 
     for (QHash<Position, Object3DDatas *>::iterator i = m_all.begin(); i !=
         m_all.end(); i++)
@@ -384,7 +385,7 @@ MapElement* Objects3D::updateRaycasting(float &finalDistance, Position
         map->getLocalPortion(position, portion);
         MapPortion* mapPortion = map->mapPortion(portion);
         MapElement* newElement = mapPortion->updateRaycastingOverflowObject3D(
-            position, finalDistance, finalPosition, ray);
+            position, finalDistance, finalPosition, ray, remove);
         if (newElement != nullptr) {
             element = newElement;
         }

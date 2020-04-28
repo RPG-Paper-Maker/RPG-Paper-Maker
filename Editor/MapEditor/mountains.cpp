@@ -445,6 +445,7 @@ MapElement* Mountains::updateRaycasting(float &finalDistance, Position
     MountainDatas *mountain;
     Map *map;
     MapPortion *mapPortion;
+    bool remove;
 
     element = nullptr;
     for (QHash<Position, MountainDatas *>::iterator i = m_all.begin(); i !=
@@ -468,7 +469,7 @@ MapElement* Mountains::updateRaycasting(float &finalDistance, Position
         map->getLocalPortion(position, portion);
         mapPortion = map->mapPortion(portion);
         newElement = mapPortion->updateRaycastingOverflowMountain(position,
-            finalDistance, finalPosition, ray);
+            finalDistance, finalPosition, ray, remove);
         if (newElement != nullptr) {
             element = newElement;
         }

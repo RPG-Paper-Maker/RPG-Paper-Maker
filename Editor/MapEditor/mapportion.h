@@ -131,11 +131,11 @@ public:
                                                float &finalDistance,
                                                Position &finalPosition,
                                                QRay3D& ray,
-                                               double cameraHAngle);
+                                               double cameraHAngle, bool &remove);
     MapElement * updateRaycastingOverflowObject3D(Position &position, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove);
     MapElement * updateRaycastingOverflowMountain(Position &position, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &remove);
     MapElement* getMapElementAt(Position& position,
                                 MapEditorSelectionKind kind,
                                 MapEditorSubSelectionKind subKind);

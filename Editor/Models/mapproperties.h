@@ -102,11 +102,11 @@ public:
     void adjustPosition(QVector3D *position);
     MapElement * updateRaycastingOverflowSprites(Portion &portion, float
         &finalDistance, Position &finalPosition, QRay3D &ray, double
-        cameraHAngle);
+        cameraHAngle, bool &save);
     MapElement * updateRaycastingOverflowObjects3D(Portion &portion, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &save);
     MapElement * updateRaycastingOverflowMountains(Portion &portion, float
-        &finalDistance, Position &finalPosition, QRay3D &ray);
+        &finalDistance, Position &finalPosition, QRay3D &ray, bool &save);
     void readOverflow(const QJsonArray &tab, QHash<Portion, QSet<Position> *>
         &overflow);
     void writeOverflow(QJsonObject &json, const QHash<Portion, QSet<Position> *>

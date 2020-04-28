@@ -426,14 +426,15 @@ void MapProperties::adjustPosition(QVector3D *position) {
 
 MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
     float &finalDistance, Position &finalPosition, QRay3D &ray, double
-    cameraHAngle)
+    cameraHAngle, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowSprites.value(portion);
@@ -444,13 +445,29 @@ MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowSprite(map
                     ->squareSize(), position, finalDistance, finalPosition, ray,
-                    cameraHAngle);
-                if (element != nullptr) {
-                    return element;
+                    cameraHAngle, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 
@@ -460,14 +477,15 @@ MapElement * MapProperties::updateRaycastingOverflowSprites(Portion &portion,
 // -------------------------------------------------------
 
 MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowObjects3D.value(portion);
@@ -478,12 +496,28 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowObject3D(position,
-                    finalDistance, finalPosition, ray);
-                if (element != nullptr) {
-                    return element;
+                    finalDistance, finalPosition, ray, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 
@@ -493,14 +527,15 @@ MapElement * MapProperties::updateRaycastingOverflowObjects3D(Portion& portion,
 // -------------------------------------------------------
 
 MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
-    float &finalDistance, Position &finalPosition, QRay3D &ray)
+    float &finalDistance, Position &finalPosition, QRay3D &ray, bool &save)
 {
-    QSet<Position> *positions;
+    QSet<Position> *positions, positionsRemove;
     MapElement *element;
     QSet<Position>::iterator i;
     Map *map;
     Position position;
     MapPortion *mapPortion;
+    bool remove;
 
     map = RPM::get()->project()->currentMap();
     positions = m_outOverflowMountains.value(portion);
@@ -511,12 +546,28 @@ MapElement * MapProperties::updateRaycastingOverflowMountains(Portion& portion,
             map->getLocalPortion(position, portion);
             mapPortion = map->mapPortion(portion);
             if (mapPortion != nullptr) {
+                remove = false;
                 element = mapPortion->updateRaycastingOverflowMountain(position
-                    , finalDistance, finalPosition, ray);
-                if (element != nullptr) {
-                    return element;
+                    , finalDistance, finalPosition, ray, remove);
+                if (remove)
+                {
+                    positionsRemove.insert(position);
+                } else
+                {
+                    if (element != nullptr) {
+                        return element;
+                    }
                 }
             }
+        }
+        if (!positionsRemove.isEmpty())
+        {
+            for (i = positionsRemove.begin(); i != positionsRemove.end(); i++)
+            {
+                positions->remove(*i);
+            }
+            positionsRemove.clear();
+            save = true;
         }
     }
 

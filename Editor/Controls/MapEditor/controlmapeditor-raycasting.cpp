@@ -65,21 +65,27 @@ void ControlMapEditor::updateRaycasting(MapEditorSelectionKind selectionKind,
         mapPortion = m_map->mapPortion(portion);
         if (mapPortion == nullptr) {
             globalPortion = m_map->getGlobalFromLocalPortion(portion);
+            bool save;
+            save = false;
             if (m_elementOnSprite == nullptr) {
                 m_elementOnSprite = m_map->mapProperties()
                     ->updateRaycastingOverflowSprites(globalPortion,
                     m_distanceSprite, m_positionOnSprite, m_ray, m_camera
-                    ->horizontalAngle());
+                    ->horizontalAngle(), save);
             }
             if (m_elementOnObject3D == nullptr) {
                 m_elementOnObject3D = m_map->mapProperties()
                     ->updateRaycastingOverflowObjects3D(globalPortion,
-                    m_distanceObject3D, m_positionOnObject3D, m_ray);
+                    m_distanceObject3D, m_positionOnObject3D, m_ray, save);
             }
             if (m_elementOnMountain == nullptr) {
                 m_elementOnMountain = m_map->mapProperties()
                     ->updateRaycastingOverflowMountains(globalPortion,
-                    m_distanceMountain, m_positionOnMountain, m_ray);
+                    m_distanceMountain, m_positionOnMountain, m_ray, save);
+            }
+            if (save)
+            {
+                m_needMapInfosToSave = save;
             }
         }
         else {
