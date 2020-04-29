@@ -53,6 +53,8 @@ public:
                                   int squareSize, Position &position, int width,
                                   int height, bool front);
 
+    virtual MapElement * createCopy();
+    virtual void setCopy(const MapElement &element);
     virtual void read(const QJsonObject &json);
     virtual void write(QJsonObject &json) const;
 

@@ -84,11 +84,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     gameProcess->close();
     delete gameProcess;
     gameProcess = nullptr;
     cleanRecentProjectsActions();
+    delete ui;
     RPM::kill();
 }
 

@@ -117,6 +117,25 @@ void MapElement::getPosSizeCenter(
 //
 // -------------------------------------------------------
 
+MapElement * MapElement::createCopy()
+{
+    MapElement *element = new MapElement;
+    element->setCopy(*this);
+    return element;
+}
+
+// -------------------------------------------------------
+
+void MapElement::setCopy(const MapElement &element)
+{
+    m_xOffset = element.m_xOffset;
+    m_yOffset = element.m_yOffset;
+    m_zOffset = element.m_zOffset;
+    m_isHovered = element.m_isHovered;
+}
+
+// -------------------------------------------------------
+
 void MapElement::read(const QJsonObject & json){
     if (json.contains(MapElement::jsonX))
         m_xOffset = json[MapElement::jsonX].toInt();

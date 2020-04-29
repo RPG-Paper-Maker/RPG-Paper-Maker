@@ -292,7 +292,7 @@ bool Sprites::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 
 bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
                            QJsonObject &previousObj,
-                           MapEditorSubSelectionKind &previousType)
+                           MapEditorSubSelectionKind &previousType, bool deletePtr)
 {
     SpriteDatas* previousSprite = removeSprite(portionsOverflow, p);
     bool changed = false;
@@ -301,7 +301,10 @@ bool Sprites::deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
         previousSprite->write(previousObj);
         previousType = previousSprite->getSubKind();
         changed = true;
-        delete previousSprite;
+        if (deletePtr)
+        {
+            delete previousSprite;
+        }
     }
 
     return changed;

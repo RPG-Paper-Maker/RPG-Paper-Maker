@@ -93,7 +93,7 @@ public:
         *object3D, QJsonObject &previousObj, MapEditorSubSelectionKind
         &previousType);
     bool deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
-        QJsonObject &previousObj, MapEditorSubSelectionKind &previousType);
+        QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, bool deletePtr = true);
     void removeObjects3DOut(MapProperties& properties);
     MapElement *updateRaycasting(float& finalDistance, Position &finalPosition,
         QRay3D &ray);

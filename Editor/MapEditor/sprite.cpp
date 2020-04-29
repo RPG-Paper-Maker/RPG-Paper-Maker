@@ -400,6 +400,33 @@ float SpriteDatas::intersectionPlane(double angle, QRay3D& ray)
 }
 
 // -------------------------------------------------------
+
+MapElement * SpriteDatas::createCopy()
+{
+    SpriteDatas *element = new SpriteDatas;
+    element->setCopy(*this);
+    return element;
+}
+
+// -------------------------------------------------------
+
+void SpriteDatas::setCopy(const MapElement &element)
+{
+    const SpriteDatas *sprite;
+
+    MapElement::setCopy(element);
+
+    sprite = reinterpret_cast<const SpriteDatas *>(&element);
+    m_kind = sprite->m_kind;
+    m_textureRect->setX(sprite->m_textureRect->x());
+    m_textureRect->setY(sprite->m_textureRect->y());
+    m_textureRect->setWidth(sprite->m_textureRect->width());
+    m_textureRect->setHeight(sprite->m_textureRect->height());
+    m_front = sprite->m_front;
+    m_vertices = sprite->m_vertices;
+}
+
+// -------------------------------------------------------
 //
 //  READ / WRITE
 //

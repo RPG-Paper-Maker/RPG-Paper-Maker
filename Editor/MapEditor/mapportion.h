@@ -66,7 +66,7 @@ public:
     bool deleteSprite(QSet<Portion>& portionsOverflow, Position& p,
                       QList<QJsonObject> &previous,
                       QList<MapEditorSubSelectionKind> &previousType,
-                      QList<Position>& positions);
+                      QList<Position>& positions, bool deletePtr = true);
     bool addSpriteWall(Position& position, SpriteWallDatas *sprite,
                        QJsonObject &previous,
                        MapEditorSubSelectionKind &previousType);
@@ -77,7 +77,7 @@ public:
         &previousType);
     bool deleteObject3D(QSet<Portion> &portionsOverflow, Position &p, QList<
         QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType,
-        QList<Position> &positions);
+        QList<Position> &positions, bool deletePtr = true);
     bool addMountain(QSet<Portion> &portionsOverflow, Position &p, MountainDatas
         *mountain, QJsonObject &previous, MapEditorSubSelectionKind
         &previousType, QSet<MapPortion *> &update, QSet<MapPortion *> &save,

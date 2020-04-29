@@ -78,7 +78,7 @@ public:
                    MapEditorSubSelectionKind &previousType);
     bool deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
                       QJsonObject &previousObj,
-                      MapEditorSubSelectionKind &previousType);
+                      MapEditorSubSelectionKind &previousType, bool deletePtr = true);
     void setSpriteWall(Position& p, SpriteWallDatas* sprite);
     SpriteWallDatas* removeSpriteWall(Position& p);
     bool addSpriteWall(Position& p, SpriteWallDatas *sprite,

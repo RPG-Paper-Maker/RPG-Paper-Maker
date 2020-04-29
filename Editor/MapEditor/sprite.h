@@ -98,6 +98,8 @@ public:
     float intersection(int squareSize, QRay3D& ray, Position& position,
                        double cameraHAngle);
     float intersectionPlane(double angle, QRay3D& ray);
+    virtual MapElement * createCopy();
+    virtual void setCopy(const MapElement &element);
 
     static QString jsonFront;
 

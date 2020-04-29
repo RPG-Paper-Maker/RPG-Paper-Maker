@@ -319,7 +319,7 @@ bool Objects3D::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
 // -------------------------------------------------------
 
 bool Objects3D::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
-    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType)
+    QJsonObject &previousObj, MapEditorSubSelectionKind &previousType, bool deletePtr)
 {
     Object3DDatas *previousObject3D;
     bool changed;
@@ -330,7 +330,10 @@ bool Objects3D::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
         previousObject3D->write(previousObj);
         previousType = previousObject3D->getSubKind();
         changed = true;
-        delete previousObject3D;
+        if (deletePtr)
+        {
+            delete previousObject3D;
+        }
     }
 
     return changed;

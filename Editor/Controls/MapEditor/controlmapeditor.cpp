@@ -1430,20 +1430,21 @@ void ControlMapEditor::onTransformationPositionChanged(Position &newPosition,
         QJsonObject obj;
 
         element = mapPortion->updateElementPosition(previousPosition, k);
-        if (k == MapEditorSelectionKind::Sprites) {
-            SpriteDatas *sprite;
+        if (element != nullptr)
+        {
+            if (k == MapEditorSelectionKind::Sprites) {
+                SpriteDatas *sprite;
 
-            sprite = new SpriteDatas(*reinterpret_cast<SpriteDatas *>(
-                element));
-            this->eraseSprite(previousPosition);
-            this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
-        } else {
-            Object3DDatas *object3D;
+                sprite = reinterpret_cast<SpriteDatas *>(element);
+                this->eraseSprite(previousPosition, false, false);
+                this->stockSprite(newPosition, sprite, sprite->getSubKind(), false);
+            } else {
+                Object3DDatas *object3D;
 
-            object3D = Object3DDatas::instanciate(reinterpret_cast<Object3DDatas
-                *>(element)->datas());
-            this->eraseObject3D(previousPosition);
-            this->stockObject3D(newPosition, object3D);
+                object3D = (reinterpret_cast<Object3DDatas *>(element));
+                this->eraseObject3D(previousPosition, false, false);
+                this->stockObject3D(newPosition, object3D);
+            }
         }
     }
 }

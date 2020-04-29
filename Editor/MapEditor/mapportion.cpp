@@ -138,11 +138,11 @@ bool MapPortion::addSprite(QSet<Portion>& portionsOverflow, Position& p,
 bool MapPortion::deleteSprite(QSet<Portion> &portionsOverflow, Position& p,
                               QList<QJsonObject> &previous,
                               QList<MapEditorSubSelectionKind> &previousType,
-                              QList<Position> &positions)
+                              QList<Position> &positions, bool deletePtr)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_sprites->deleteSprite(portionsOverflow, p, prev, kind);
+    bool changed = m_sprites->deleteSprite(portionsOverflow, p, prev, kind, deletePtr);
 
     if (changed) {
         previous.append(prev);
@@ -188,11 +188,11 @@ bool MapPortion::addObject3D(QSet<Portion> &portionsOverflow, Position &p,
 
 bool MapPortion::deleteObject3D(QSet<Portion> &portionsOverflow, Position &p,
     QList<QJsonObject> &previous, QList<MapEditorSubSelectionKind> &previousType
-    , QList<Position> &positions)
+    , QList<Position> &positions, bool deletePtr)
 {
     QJsonObject prev;
     MapEditorSubSelectionKind kind = MapEditorSubSelectionKind::None;
-    bool changed = m_objects3D->deleteObject3D(portionsOverflow, p, prev, kind);
+    bool changed = m_objects3D->deleteObject3D(portionsOverflow, p, prev, kind, deletePtr);
 
     if (changed) {
         previous.append(prev);
