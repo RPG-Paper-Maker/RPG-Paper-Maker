@@ -380,16 +380,13 @@ SystemState * SystemCommonObject::getFirstState() const {
             ::get()->project()->gameDatas()->commonEventsDatas()
             ->modelCommonObjects()->invisibleRootItem(), m_inheritanceId));
         state = obj->getFirstState();
-        if (state != nullptr) {
-            return state;
-        }
     }
-    if (m_states->invisibleRootItem()->rowCount() > 0) {
+    if (m_states->invisibleRootItem()->rowCount() > 1) {
         return reinterpret_cast<SystemState *>(m_states->item(0)->data().value<
             qintptr>());
     }
 
-    return nullptr;
+    return state;
 }
 
 // -------------------------------------------------------
