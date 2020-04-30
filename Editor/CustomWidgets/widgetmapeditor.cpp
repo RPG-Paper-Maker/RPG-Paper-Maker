@@ -194,6 +194,7 @@ void WidgetMapEditor::deleteMap() {
 
 void WidgetMapEditor::loadSkyBoxTexture()
 {
+    /*
     SystemSkyBox *skyBox;
 
     skyBox = reinterpret_cast<SystemSkyBox *>(SuperListItem::getById(RPM::get()
@@ -232,7 +233,7 @@ void WidgetMapEditor::loadSkyBoxTexture()
     m_textureSkyBox->generateMipMaps();
     m_textureSkyBox->setWrapMode(QOpenGLTexture::ClampToEdge);
     m_textureSkyBox->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    m_textureSkyBox->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    m_textureSkyBox->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);*/
 
 }
 
@@ -266,6 +267,7 @@ void WidgetMapEditor::initializeGL()
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
     isGLInitialized = true;
 
+    /*
     m_programSkyBox.addShaderFromSourceCode(
                     QOpenGLShader::Vertex,
                     R"(
@@ -358,7 +360,7 @@ void WidgetMapEditor::initializeGL()
 
             //m_programSkyBox.setUniformValue(m_programSkyBox.uniformLocation("uTexture"), 0);
             m_vertexBufSkyBox.release();
-            m_programSkyBox.release();
+            m_programSkyBox.release();*/
 
     if (m_needUpdateMap)
     {
@@ -473,6 +475,7 @@ void WidgetMapEditor::paintGL() {
             .y(), viewMatrix.row(2).z());
 
         // Paint
+        /*
         if (!m_control.map()->mapProperties()->isSkyColor() && !m_control.map()
             ->mapProperties()->isSkyImage())
         {
@@ -486,7 +489,7 @@ void WidgetMapEditor::paintGL() {
             m_vertexBufSkyBox.release();
             m_textureSkyBox->release();
             m_programSkyBox.release();
-        }
+        }*/
         m_control.paintGL(modelviewProjection, cameraRightWorldSpace,
             cameraUpWorldSpace, cameraDeepWorldSpace, kind, subKind, drawKind);
         p.endNativePainting();
