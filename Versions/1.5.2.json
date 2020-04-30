@@ -1,53 +1,21 @@
 {
 	"add": [],
 	"remove": [],
-	"replace": [],
+	"replace": [
+        {
+            "repo": "Basic-Ressources",
+            "source": "Content/Images/Textures2D/Autotiles/general.png",
+            "target": "Engine/Content/BR/Content/Images/Textures2D/Autotiles/general.png"
+        }
+    ],
 	"features": [
-        "Antialiasing",
-        "Skybox",
-        "Command label",
-        "Command comment",
-        "Command modify statistic",
-        "Command change a skill",
-        "Command change name",
-        "Command change equipment",
-        "Command shake screen",
-        "Command flash screen",
-        "Command move camera (complete)",
-        "Command modify money",
-        "Command modify inventory: default value + 1",
-        "Command modify inventory: selection choose by ID",
-        "Command change state: choose object and a map",
-        "Copy files manager correctly copying symlinks",
-        "Demo game (in BR)",
-        "Menu open BR game"
     ],
 	"bugs": [
-        "Mountains issues with different width",
-		"Move square command go through mountains",
-        "Sometimes command crashing when deleting it"
-	],
-    "finished": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-    ]
+        "Windows only bug sometimes crash with rotation",
+        "Windows only vertical lines on floors",
+        "No transparency on general autotile picture",
+        "Double faceset in show text command",
+        "Error when skill have no effects",
+        "Error in inheritance models algorithm"
+	]
 }
