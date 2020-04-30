@@ -45,6 +45,9 @@ private:
 
 private slots:
     void on_lineEditName_textChanged(const QString &text);
+    void on_comboBoxX_currentIndexChanged(int index);
+    void on_comboBoxY_currentIndexChanged(int index);
+    void on_comboBoxZ_currentIndexChanged(int index);
 };
 
 #endif // DIALOGSYSTEMCAMERAPROPERTIES_H

@@ -16,6 +16,7 @@
         "No transparency on general autotile picture",
         "Double faceset in show text command",
         "Error when skill have no effects",
-        "Error in inheritance models algorithm"
+        "Error in inheritance models algorithm",
+        "Target offset in camera properties not working"
 	]
 }

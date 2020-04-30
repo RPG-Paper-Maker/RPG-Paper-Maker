@@ -44,6 +44,8 @@ DialogSystemCameraProperties::~DialogSystemCameraProperties()
 // -------------------------------------------------------
 
 void DialogSystemCameraProperties::initialize() {
+    int index;
+
     ui->lineEditName->setText(m_cameraProperties.name());
 
     ui->panelPrimitiveDistance->initializeNumberAndUpdate(m_cameraProperties
@@ -59,6 +61,18 @@ void DialogSystemCameraProperties::initialize() {
         m_cameraProperties.targetOffsetY());
     ui->panelPrimitiveTargetOffsetZ->initializeNumberAndUpdate(
         m_cameraProperties.targetOffsetZ());
+    index = m_cameraProperties.isSquareTargetOffsetX() ? 0 : 1;
+    ui->comboBoxX->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxX->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxX->setCurrentIndex(index);
+    index = m_cameraProperties.isSquareTargetOffsetY() ? 0 : 1;
+    ui->comboBoxY->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxY->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxY->setCurrentIndex(index);
+    index = m_cameraProperties.isSquareTargetOffsetZ() ? 0 : 1;
+    ui->comboBoxZ->addItem(RPM::translate(Translations::SQUARE_S));
+    ui->comboBoxZ->addItem(RPM::translate(Translations::PIXEL_S));
+    ui->comboBoxZ->setCurrentIndex(index);
 
     ui->panelPrimitiveFOV->initializeNumberAndUpdate(m_cameraProperties
         .fieldOfView(), false);
@@ -103,4 +117,25 @@ void DialogSystemCameraProperties::on_lineEditName_textChanged(const QString
     &text)
 {
     m_cameraProperties.setName(text);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCameraProperties::on_comboBoxX_currentIndexChanged(int index)
+{
+    m_cameraProperties.setIsSquareTargetOffsetX(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCameraProperties::on_comboBoxY_currentIndexChanged(int index)
+{
+    m_cameraProperties.setIsSquareTargetOffsetY(index == 0);
+}
+
+// -------------------------------------------------------
+
+void DialogSystemCameraProperties::on_comboBoxZ_currentIndexChanged(int index)
+{
+    m_cameraProperties.setIsSquareTargetOffsetZ(index == 0);
 }

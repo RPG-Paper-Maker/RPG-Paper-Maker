@@ -18,6 +18,9 @@ const QString SystemCameraProperties::JSON_VERTICAL_ANGLE = "va";
 const QString SystemCameraProperties::JSON_TARGET_OFFSET_X = "tox";
 const QString SystemCameraProperties::JSON_TARGET_OFFSET_Y = "toy";
 const QString SystemCameraProperties::JSON_TARGET_OFFSET_Z = "toz";
+const QString SystemCameraProperties::JSON_IS_SQUARE_TARGET_OFFSET_X = "istox";
+const QString SystemCameraProperties::JSON_IS_SQUARE_TARGET_OFFSET_Y = "istoy";
+const QString SystemCameraProperties::JSON_IS_SQUARE_TARGET_OFFSET_Z = "istoz";
 const QString SystemCameraProperties::JSON_FIELD_OF_VIEW = "fov";
 const QString SystemCameraProperties::JSON_NEAR = "n";
 const QString SystemCameraProperties::JSON_FAR = "f";
@@ -27,6 +30,9 @@ const double SystemCameraProperties::DEFAULT_VERTICAL_ANGLE = 55.0;
 const int SystemCameraProperties::DEFAULT_TARGET_OFFSET_X = 0;
 const int SystemCameraProperties::DEFAULT_TARGET_OFFSET_Y = 0;
 const int SystemCameraProperties::DEFAULT_TARGET_OFFSET_Z = 0;
+const bool SystemCameraProperties::DEFAULT_IS_SQUARE_TARGET_OFFSET_X = true;
+const bool SystemCameraProperties::DEFAULT_IS_SQUARE_TARGET_OFFSET_Y = true;
+const bool SystemCameraProperties::DEFAULT_IS_SQUARE_TARGET_OFFSET_Z = true;
 const double SystemCameraProperties::DEFAULT_FIELD_OF_VIEW = 45.0;
 const double SystemCameraProperties::DEFAULT_NEAR = 1.0;
 const double SystemCameraProperties::DEFAULT_FAR = 100000.0;
@@ -45,8 +51,8 @@ SystemCameraProperties::SystemCameraProperties() :
 
 SystemCameraProperties::SystemCameraProperties(int i, QString n, PrimitiveValue
     *d, PrimitiveValue *ha, PrimitiveValue *va, PrimitiveValue *tox,
-    PrimitiveValue *toy, PrimitiveValue *toz, PrimitiveValue *fov,
-    PrimitiveValue *ne, PrimitiveValue *f) :
+    PrimitiveValue *toy, PrimitiveValue *toz, bool istox, bool istoy, bool istoz
+    , PrimitiveValue *fov, PrimitiveValue *ne, PrimitiveValue *f) :
     SuperListItem(i, n),
     m_distance(d),
     m_horizontalAngle(ha),
@@ -54,6 +60,9 @@ SystemCameraProperties::SystemCameraProperties(int i, QString n, PrimitiveValue
     m_targetOffsetX(tox),
     m_targetOffsetY(toy),
     m_targetOffsetZ(toz),
+    m_isSquareTargetOffsetX(istox),
+    m_isSquareTargetOffsetY(istoy),
+    m_isSquareTargetOffsetZ(istoz),
     m_fieldOfView(fov),
     m_near(ne),
     m_far(f)
@@ -109,6 +118,36 @@ PrimitiveValue * SystemCameraProperties::farCam() const {
     return m_far;
 }
 
+bool SystemCameraProperties::isSquareTargetOffsetX() const
+{
+    return m_isSquareTargetOffsetX;
+}
+
+void SystemCameraProperties::setIsSquareTargetOffsetX(bool istox)
+{
+    m_isSquareTargetOffsetX = istox;
+}
+
+bool SystemCameraProperties::isSquareTargetOffsetY() const
+{
+    return m_isSquareTargetOffsetY;
+}
+
+void SystemCameraProperties::setIsSquareTargetOffsetY(bool istoy)
+{
+    m_isSquareTargetOffsetY = istoy;
+}
+
+bool SystemCameraProperties::isSquareTargetOffsetZ() const
+{
+    return m_isSquareTargetOffsetZ;
+}
+
+void SystemCameraProperties::setIsSquareTargetOffsetZ(bool istoz)
+{
+    m_isSquareTargetOffsetZ = istoz;
+}
+
 // -------------------------------------------------------
 //
 //  VIRTUAL FUNCTIONS
@@ -150,6 +189,9 @@ void SystemCameraProperties::setCopy(const SuperListItem &super) {
     m_targetOffsetX->setCopy(*cameraProperties->m_targetOffsetX);
     m_targetOffsetY->setCopy(*cameraProperties->m_targetOffsetY);
     m_targetOffsetZ->setCopy(*cameraProperties->m_targetOffsetZ);
+    m_isSquareTargetOffsetX = cameraProperties->m_isSquareTargetOffsetX;
+    m_isSquareTargetOffsetY = cameraProperties->m_isSquareTargetOffsetY;
+    m_isSquareTargetOffsetZ = cameraProperties->m_isSquareTargetOffsetZ;
     m_fieldOfView->setCopy(*cameraProperties->m_fieldOfView);
     m_near->setCopy(*cameraProperties->m_near);
     m_far->setCopy(*cameraProperties->m_far);
@@ -177,6 +219,15 @@ void SystemCameraProperties::read(const QJsonObject &json) {
     }
     if (json.contains(JSON_TARGET_OFFSET_Z)) {
         m_targetOffsetZ->read(json[JSON_TARGET_OFFSET_Z].toObject());
+    }
+    if (json.contains(JSON_IS_SQUARE_TARGET_OFFSET_X)) {
+        m_isSquareTargetOffsetX = json[JSON_TARGET_OFFSET_X].toBool();
+    }
+    if (json.contains(JSON_IS_SQUARE_TARGET_OFFSET_Y)) {
+        m_isSquareTargetOffsetY = json[JSON_TARGET_OFFSET_Y].toBool();
+    }
+    if (json.contains(JSON_IS_SQUARE_TARGET_OFFSET_Z)) {
+        m_isSquareTargetOffsetZ = json[JSON_TARGET_OFFSET_Z].toBool();
     }
     if (json.contains(JSON_FIELD_OF_VIEW)) {
         m_fieldOfView->read(json[JSON_FIELD_OF_VIEW].toObject());
@@ -219,26 +270,38 @@ void SystemCameraProperties::write(QJsonObject &json) const {
         m_verticalAngle->write(obj);
         json[JSON_VERTICAL_ANGLE] = obj;
     }
-    if (m_targetOffsetX->kind() != PrimitiveValueKind::Number || !qFuzzyCompare(
-        m_targetOffsetX->numberDoubleValue(), DEFAULT_TARGET_OFFSET_X))
+    if (m_targetOffsetX->kind() != PrimitiveValueKind::Number || m_targetOffsetX
+        ->numberValue() != DEFAULT_TARGET_OFFSET_X)
     {
         obj = QJsonObject();
         m_targetOffsetX->write(obj);
         json[JSON_TARGET_OFFSET_X] = obj;
     }
-    if (m_targetOffsetY->kind() != PrimitiveValueKind::Number || !qFuzzyCompare(
-        m_targetOffsetY->numberDoubleValue(), DEFAULT_TARGET_OFFSET_Y))
+    if (m_targetOffsetY->kind() != PrimitiveValueKind::Number || m_targetOffsetY
+        ->numberValue() != DEFAULT_TARGET_OFFSET_Y)
     {
         obj = QJsonObject();
         m_targetOffsetY->write(obj);
         json[JSON_TARGET_OFFSET_Y] = obj;
     }
-    if (m_targetOffsetZ->kind() != PrimitiveValueKind::Number || !qFuzzyCompare(
-        m_targetOffsetZ->numberDoubleValue(), DEFAULT_TARGET_OFFSET_Z))
+    if (m_targetOffsetZ->kind() != PrimitiveValueKind::Number || m_targetOffsetZ
+        ->numberValue() != DEFAULT_TARGET_OFFSET_Z)
     {
         obj = QJsonObject();
         m_targetOffsetZ->write(obj);
         json[JSON_TARGET_OFFSET_Z] = obj;
+    }
+    if (m_isSquareTargetOffsetX != DEFAULT_IS_SQUARE_TARGET_OFFSET_X)
+    {
+        json[JSON_IS_SQUARE_TARGET_OFFSET_X] = m_isSquareTargetOffsetX;
+    }
+    if (m_isSquareTargetOffsetY != DEFAULT_IS_SQUARE_TARGET_OFFSET_Y)
+    {
+        json[JSON_IS_SQUARE_TARGET_OFFSET_Y] = m_isSquareTargetOffsetY;
+    }
+    if (m_isSquareTargetOffsetZ != DEFAULT_IS_SQUARE_TARGET_OFFSET_Z)
+    {
+        json[JSON_IS_SQUARE_TARGET_OFFSET_Z] = m_isSquareTargetOffsetZ;
     }
     if (m_fieldOfView->kind() != PrimitiveValueKind::NumberDouble ||
         !qFuzzyCompare(m_fieldOfView->numberDoubleValue(), DEFAULT_FIELD_OF_VIEW))

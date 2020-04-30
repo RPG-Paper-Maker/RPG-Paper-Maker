@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
+    <width>428</width>
     <height>460</height>
    </rect>
   </property>
@@ -136,7 +136,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1">
+           <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
             <item row="0" column="0">
              <widget class="QLabel" name="labelX">
               <property name="text">
@@ -160,14 +160,17 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2" rowspan="3">
+            <item row="0" column="2">
+             <widget class="QComboBox" name="comboBoxX"/>
+            </item>
+            <item row="0" column="3" rowspan="3">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>68</width>
+                <width>17</width>
                 <height>78</height>
                </size>
               </property>
@@ -196,6 +199,9 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="2">
+             <widget class="QComboBox" name="comboBoxY"/>
+            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="labelZ">
               <property name="text">
@@ -218,6 +224,9 @@
                </size>
               </property>
              </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="comboBoxZ"/>
             </item>
            </layout>
           </item>
