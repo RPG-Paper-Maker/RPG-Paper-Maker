@@ -18,6 +18,7 @@
         "Error when skill have no effects",
         "Error in inheritance models algorithm",
         "Target offset in camera properties not working",
-        "Display incorrect first state of an object in map editor with model"
+        "Display incorrect first state of an object in map editor with model",
+        "Faceset dialog box option position not working"
 	]
 }
