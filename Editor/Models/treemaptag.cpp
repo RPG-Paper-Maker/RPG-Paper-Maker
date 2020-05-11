@@ -105,6 +105,7 @@ void TreeMapTag::copyItem(const QStandardItem* from,
     if (tag != nullptr){
         TreeMapTag* copyTag = new TreeMapTag;
         copyTag->setCopy(*tag);
+        copyTag->setId(tag->id());
         to->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(copyTag)));
         to->setText(from->text());
@@ -120,8 +121,8 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             QString pathMapsTemp = Common::pathCombine(
                         pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMapSource = Common::pathCombine(pathMaps, mapName);
-            QString pathMapTarget = Common::pathCombine(pathMapsTemp, "copy");
-            QDir(pathMapsTemp).mkdir("copy");
+            QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
+            QDir(pathMapsTemp).mkdir(mapName);
 
             // Copy content
             Common::copyPath(pathMapSource, pathMapTarget);
@@ -154,10 +155,11 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
     if (tag != nullptr){
         TreeMapTag* copyTag = new TreeMapTag;
         copyTag->setCopy(*tag);
+        copyTag->setId(tag->id());
         to->setData(QVariant::fromValue(
                           reinterpret_cast<quintptr>(copyTag)));
         to->setText(from->text());
-        QString iconName = copyTag->isDir() ? "dir" : "map";
+        QString iconName = tag->isDir() ? "dir" : "map";
         to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
 
         // Paste content
@@ -168,7 +170,8 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
             QString pathMapsTemp =
                     Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMap =
-                    Common::pathCombine(pathMapsTemp, "copy");
+                    Common::pathCombine(pathMapsTemp, Map::generateMapName(
+                                            tag->id()));
             int newId = Map::generateMapId();
             QString newMapName = Map::generateMapName(newId);
             MapProperties properties(pathMap);

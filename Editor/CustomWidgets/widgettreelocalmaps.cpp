@@ -313,21 +313,29 @@ void WidgetTreeLocalMaps::updateTileset(){
 
 // -------------------------------------------------------
 
-void WidgetTreeLocalMaps::reload() {
-
+void WidgetTreeLocalMaps::reload()
+{
     // Loading map
-    if (m_widgetMapEditor != nullptr){
-        QStandardItem* selected = getSelected();
-        TreeMapTag* tag = reinterpret_cast<TreeMapTag*>(selected->data().value
-            <quintptr>());
+    if (m_widgetMapEditor != nullptr)
+    {
+        QStandardItem *selected;
 
-        if (tag->id() == -1)
-            hideMap();
-        else
-            showMap(selected);
+        selected = getSelected();
+        if (selected != nullptr)
+        {
+            TreeMapTag *tag;
 
-        // Loading tileset texture
-        updateTileset();
+            tag = reinterpret_cast<TreeMapTag*>(selected->data().value<quintptr>());
+            if (tag->id() == -1)
+            {
+                this->hideMap();
+            } else {
+                this->showMap(selected);
+            }
+
+            // Loading tileset texture
+            this->updateTileset();
+        }
     }
 }
 
@@ -365,11 +373,21 @@ void WidgetTreeLocalMaps::cleanCopy(){
 
 void WidgetTreeLocalMaps::paste(QStandardItem* item){
     QStandardItem* copy = new QStandardItem;
+    QModelIndex index;
 
     // Insert tree
     TreeMapTag::copyTree(m_copied, copy);
     item->insertRow(item->rowCount(), copy);
     RPM::get()->project()->writeTreeMapDatas();
+
+    // Select the pasted map node
+    index = copy->index();
+    this->selectionModel()->clear();
+    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+        ::Select);
+
+    // If dir, expand all
+    this->expandAllNode(copy);
 }
 
 // -------------------------------------------------------
@@ -387,6 +405,19 @@ bool WidgetTreeLocalMaps::setCurrentIndexFirstMap(QStandardItem* item) {
     }
 
     return false;
+}
+
+// -------------------------------------------------------
+
+void WidgetTreeLocalMaps::expandAllNode(QStandardItem *item)
+{
+    int i, l;
+
+    for (i = 0, l = item->rowCount(); i < l; i++)
+    {
+        this->expandAllNode(item->child(i));
+    }
+    this->setExpanded(item->index(), true);
 }
 
 // -------------------------------------------------------
@@ -496,13 +527,20 @@ void WidgetTreeLocalMaps::contextNewMap(){
         DialogMapProperties dialog(properties);
         if (dialog.exec() == QDialog::Accepted){
             TreeMapTag* tag = TreeMapTag::createMap(properties.name(), id);
-            TreeMapDatas::addMap(selected, selected->rowCount(), tag);
+            QStandardItem *item = TreeMapDatas::addMap(selected, selected
+                ->rowCount(), tag);
             Map::writeNewMap(RPM::get()->project()->pathCurrentProject(),
                              properties);
             RPM::get()->project()->writeTreeMapDatas();
 
             // Loading tileset texture
             updateTileset();
+
+            // Select the new map node
+            QModelIndex index = item->index();
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+                ::Select);
         }
     }
 }
@@ -519,8 +557,15 @@ void WidgetTreeLocalMaps::contextNewDirectory(){
             QStandardItem* item = TreeMapDatas::addDir(selected,
                                                        selected->rowCount(),
                                                        tag);
-            this->expand(item->index());
+            QModelIndex index;
+            index = item->index();
+            this->expand(index);
             RPM::get()->project()->writeTreeMapDatas();
+
+            // Select the new directory node
+            this->selectionModel()->clear();
+            this->selectionModel()->setCurrentIndex(index, QItemSelectionModel
+                ::Select);
         }
     }
 }

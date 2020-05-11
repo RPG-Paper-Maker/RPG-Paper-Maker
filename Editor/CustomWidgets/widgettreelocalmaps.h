@@ -57,6 +57,7 @@ public:
     void cleanCopy();
     void paste(QStandardItem* item);
     bool setCurrentIndexFirstMap(QStandardItem* item);
+    void expandAllNode(QStandardItem *item);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
