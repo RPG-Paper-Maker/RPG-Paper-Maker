@@ -111,17 +111,17 @@ void TreeMapTag::copyItem(const QStandardItem* from,
         QString iconName = copyTag->isDir() ? "dir" : "map";
         to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
 
-        if (!copyTag->isDir()){
+        if (!tag->isDir()){
             QString mapName =
-                    Map::generateMapName(copyTag->id());
+                    Map::generateMapName(tag->id());
             QString pathMaps = Common::pathCombine(
                         RPM::get()->project()->pathCurrentProject(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp = Common::pathCombine(
                         pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMapSource = Common::pathCombine(pathMaps, mapName);
-            QString pathMapTarget = Common::pathCombine(pathMapsTemp, mapName);
-            QDir(pathMapsTemp).mkdir(mapName);
+            QString pathMapTarget = Common::pathCombine(pathMapsTemp, "copy");
+            QDir(pathMapsTemp).mkdir("copy");
 
             // Copy content
             Common::copyPath(pathMapSource, pathMapTarget);
@@ -161,16 +161,14 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
         to->setIcon(QIcon(":/icons/Ressources/" + iconName + ".png"));
 
         // Paste content
-        if (!copyTag->isDir()){
+        if (!tag->isDir()){
             QString pathMaps = Common::pathCombine(
                         RPM::get()->project()->pathCurrentProject(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp =
                     Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);
             QString pathMap =
-                    Common::pathCombine(pathMapsTemp,
-                                       Map::generateMapName(
-                                           copyTag->id()));
+                    Common::pathCombine(pathMapsTemp, "copy");
             int newId = Map::generateMapId();
             QString newMapName = Map::generateMapName(newId);
             MapProperties properties(pathMap);

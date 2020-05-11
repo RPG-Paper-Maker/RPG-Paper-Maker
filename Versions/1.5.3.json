@@ -25,7 +25,8 @@
 	"bugs": [
         "Mountains issues with different width",
 		"Move square command go through mountains",
-        "Sometimes command crashing when deleting it"
+        "Sometimes command crashing when deleting it",
+        "Copy paste maps always copying first map"
 	],
     "finished": [
         false,
