@@ -79,7 +79,7 @@ void ProjectUpdater::copyPreviousProject() {
 
 void ProjectUpdater::getAllPathsMapsPortions()
 {
-    QString pathMaps = Common::pathCombine(m_project->pathCurrentProject(),
+    QString pathMaps = Common::pathCombine(m_project->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     QDirIterator directories(pathMaps, QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -157,7 +157,7 @@ void ProjectUpdater::copySystemScripts() {
     QString pathScripts = Common::pathCombine(pathBasic,
                                              RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QString pathProjectScripts =
-            Common::pathCombine(m_project->pathCurrentProject(),
+            Common::pathCombine(m_project->pathCurrentProjectApp(),
                                RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir dir(pathProjectScripts);
     dir.removeRecursively();

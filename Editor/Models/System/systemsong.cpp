@@ -49,7 +49,7 @@ void SystemSong::setIsBR(bool b) { m_isBR = b; }
 QString SystemSong::getFolder(SongKind kind, bool isBR) {
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : RPM::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }

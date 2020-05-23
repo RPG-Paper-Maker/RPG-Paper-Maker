@@ -53,7 +53,7 @@ Map::Map(int id) :
 {
     QString realName = Map::generateMapName(id);
     QString pathMaps = Common::pathCombine(RPM::get()->project()
-                                          ->pathCurrentProject(),
+                                          ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     m_pathMap = Common::pathCombine(pathMaps, realName);
 
@@ -696,7 +696,7 @@ QString Map::generateObjectName(int id) {
 
 bool Map::isMapIdExisting(int id){
     QDirIterator directories(Common::pathCombine(RPM::get()->project()
-                                                ->pathCurrentProject(),
+                                                ->pathCurrentProjectApp(),
                                                 RPM::PATH_MAPS),
                              QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -715,7 +715,7 @@ bool Map::isMapIdExisting(int id){
 
 int Map::generateMapId(){
     int id;
-    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+    QDir dir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
                                 RPM::PATH_MAPS));
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     int nbMaps = static_cast<int>(dir.count());

@@ -88,11 +88,25 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     // If all is ok, then let's fill the project folder
 
     // Copying a basic project content
-    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
-    QString pathBasicContent = Common::pathCombine( Common::pathCombine(
-        pathContent, "basic"), "Content");
-    if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathDir,
-        "Content")))
+    QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
+        ::FOLDER_CONTENT);
+    QString pathBasicContent = Common::pathCombine(Common::pathCombine(
+        pathContent, "basic"), RPM::FOLDER_CONTENT);
+    QString pathResources = Common::pathCombine(pathDir, RPM::FOLDER_RESOURCES);
+    QString pathApp = Common::pathCombine(pathResources, RPM::FOLDER_APP);
+    Project *previousProject = RPM::get()->project();
+    Project *project = new Project();
+    RPM::get()->setProject(project);
+    project->setPathCurrentProject(pathDir);
+
+    // Copying a basic project content
+    if (!project->copyOSFiles()) {
+        return RPM::translate(Translations::ERROR_COPYING_EXECUTABLE_LIBRARIES)
+            + RPM::DOT + RPM::SPACE + RPM::translate(Translations
+            ::PLEASE_RETRY_WITH_NEW_PROJECT);
+    }
+    if (!Common::copyPath(pathBasicContent, Common::pathCombine(pathApp,
+        RPM::FOLDER_CONTENT)))
     {
         return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
             RPM::DOT + RPM::SPACE + RPM::translate(Translations
@@ -101,6 +115,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     }
 
     // Create folders
+    dir = QDir(pathApp);
     dir.mkpath(RPM::PATH_BARS);
     dir.mkpath(RPM::PATH_ICONS);
     dir.mkpath(RPM::PATH_FACESETS);
@@ -129,10 +144,6 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     dir.mkpath(RPM::PATH_HUD_PICTURES);
 
     // Create the default datas
-    Project *previousProject = RPM::get()->project();
-    Project *project = new Project();
-    RPM::get()->setProject(project);
-    project->setPathCurrentProject(pathDir);
     project->setDefault();
     project->gameDatas()->systemDatas()->projectName()->setAllNames(projectName);
     project->write(pathDir);
@@ -140,27 +151,20 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
     if (error != nullptr)
         return error;
 
-    // Copying a basic project content
-    if (!project->copyOSFiles()) {
-        return RPM::translate(Translations::ERROR_COPYING_EXECUTABLE_LIBRARIES)
-            + RPM::DOT + RPM::SPACE + RPM::translate(Translations
-            ::PLEASE_RETRY_WITH_NEW_PROJECT);
-    }
-
     // Create saves
     QJsonArray tab;
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
     tab.append(QJsonValue());
-    Common::writeArrayJSON(Common::pathCombine(pathDir, RPM::PATH_SAVES), tab);
+    Common::writeArrayJSON(Common::pathCombine(pathApp, RPM::PATH_SAVES), tab);
 
     // Creating first empty map
     dir.mkdir(RPM::PATH_MAPS);
     dir.mkdir(Common::pathCombine(RPM::PATH_MAPS,
         RPM::FOLDER_TEMP_MAP));
-    Map::writeDefaultMap(pathDir);
-    Map::writeDefaultBattleMap(pathDir);
+    Map::writeDefaultMap(pathApp);
+    Map::writeDefaultBattleMap(pathApp);
 
     // Restoring project
     RPM::get()->setProject(previousProject);

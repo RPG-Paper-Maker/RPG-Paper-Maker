@@ -852,7 +852,7 @@ void MainWindow::on_actionPlay_triggered() {
         #ifdef Q_OS_WIN
             execName += ".exe";
         #elif __linux__
-            execName += ".sh";
+            execName += "";
         #else
             execName += ".app";
         #endif

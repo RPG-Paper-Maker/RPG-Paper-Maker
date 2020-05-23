@@ -114,14 +114,30 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
     }
 
     // Copy Content
-    QDir(m_project->pathCurrentProject()).mkdir("Content");
+    QDir(m_project->pathCurrentProject()).mkdir(RPM::FOLDER_RESOURCES);
+    QString pathResources = Common::pathCombine(m_project->pathCurrentProject(),
+        RPM::FOLDER_RESOURCES);
+    QDir(pathResources).mkdir(RPM::FOLDER_APP);
+    QDir(m_project->pathCurrentProjectApp()).mkdir(RPM::FOLDER_CONTENT);
     QString pathContentProject = Common::pathCombine(m_project
-        ->pathCurrentProject(), "Content");
-    QString pathContent = Common::pathCombine(path, "Content");
+        ->pathCurrentProjectApp(), RPM::FOLDER_CONTENT);
+    QString pathContent = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::FOLDER_CONTENT);
     if (!Common::copyPath(pathContentProject, pathContent)) {
         return RPM::translate(Translations::ERROR_COPYING_CONTENT_DIRECTORY) +
             RPM::DOT + RPM::SPACE + RPM::translate(Translations::PLEASE_RETRY) +
             RPM::DOT;
+    }
+
+    // Copy extra files for desktop
+    if (!QFile::copy(Common::pathCombine(m_project->pathCurrentProjectApp(), RPM
+        ::FILE_MAIN), Common::pathCombine(path, RPM::PATH_MAIN)) || !QFile::copy
+        (Common::pathCombine(m_project->pathCurrentProjectApp(), RPM::FILE_INDEX
+        ), Common::pathCombine(path, RPM::PATH_INDEX)) || !QFile::copy(Common
+        ::pathCombine(m_project->pathCurrentProjectApp(), RPM::FILE_PACKAGE),
+        Common::pathCombine(path, RPM::PATH_PACKAGE)))
+    {
+        return "-";
     }
 
     return nullptr;
@@ -132,10 +148,12 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
 void ControlExport::removeWebNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
+    QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
-    QString pathScripts = Common::pathCombine(path, RPM::PATH_SCRIPTS_SYSTEM_DIR);
+    QString pathScripts = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_SCRIPTS_SYSTEM_DIR);
     QDir(Common::pathCombine(pathScripts, "desktop")).removeRecursively();
     removeMapsTemp(pathDatas);
 }
@@ -145,7 +163,8 @@ void ControlExport::removeWebNoNeed(QString path) {
 void ControlExport::removeDesktopNoNeed(QString path) {
 
     // Remove useless datas
-    QString pathDatas = Common::pathCombine(path, RPM::PATH_DATAS);
+    QString pathDatas = Common::pathCombine(Common::pathCombine(path, RPM
+        ::PATH_APP), RPM::PATH_DATAS);
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
@@ -208,7 +227,7 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
             pathExecutable;
 
     // Pictures
-    copyBRPictures(path);
+    copyBRPictures(Common::pathCombine(path, RPM::PATH_APP));
 
     // Save last version
     RPM::get()->project()->gameDatas()->systemDatas()->setLastMajorVersion(major);

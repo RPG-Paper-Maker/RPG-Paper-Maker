@@ -87,7 +87,7 @@ void WidgetTreeLocalMaps::initializeModel(QStandardItemModel* m){
 
 void WidgetTreeLocalMaps::initializeProject(Project* p){
     m_project = p;
-    m_pathProject = p->pathCurrentProject();
+    m_pathProject = p->pathCurrentProjectApp();
 }
 
 QStandardItem* WidgetTreeLocalMaps::getSelected() const{
@@ -130,7 +130,7 @@ void WidgetTreeLocalMaps::updateNodesSaved(QStandardItem* item){
 
 void WidgetTreeLocalMaps::deleteAllMapTemp(){
     QString pathMaps = Common::pathCombine(RPM::get()->project()
-                                          ->pathCurrentProject(),
+                                          ->pathCurrentProjectApp(),
                                           RPM::PATH_MAPS);
     deleteMapTemp(pathMaps, m_model->invisibleRootItem());
 }
@@ -237,7 +237,7 @@ void WidgetTreeLocalMaps::deleteMap(QStandardItem* item){
             Common::pathCombine(RPM::PATH_MAPS,
                                Map::generateMapName(tag->id()));
 
-    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProject(),
+    QDir(Common::pathCombine(RPM::get()->project()->pathCurrentProjectApp(),
                             mapPath)).removeRecursively();
 
     // Remove from tree
@@ -283,7 +283,7 @@ void WidgetTreeLocalMaps::updateTileset(){
         else {
             QString path = Common::pathCombine(
                             Common::pathCombine(RPM::get()->project()
-                                               ->pathCurrentProject(),
+                                               ->pathCurrentProjectApp(),
                                                RPM::PATH_MAPS),
                             Map::generateMapName(tag->id()));
             MapProperties properties(path);
@@ -529,7 +529,7 @@ void WidgetTreeLocalMaps::contextNewMap(){
             TreeMapTag* tag = TreeMapTag::createMap(properties.name(), id);
             QStandardItem *item = TreeMapDatas::addMap(selected, selected
                 ->rowCount(), tag);
-            Map::writeNewMap(RPM::get()->project()->pathCurrentProject(),
+            Map::writeNewMap(RPM::get()->project()->pathCurrentProjectApp(),
                              properties);
             RPM::get()->project()->writeTreeMapDatas();
 
@@ -579,7 +579,7 @@ void WidgetTreeLocalMaps::contextEditMap(){
             <quintptr>());
         QString path = Common::pathCombine(
                         Common::pathCombine(RPM::get()->project()
-                                           ->pathCurrentProject(),
+                                           ->pathCurrentProjectApp(),
                                            RPM::PATH_MAPS),
                         Map::generateMapName(tag->id()));
         MapProperties properties(path);

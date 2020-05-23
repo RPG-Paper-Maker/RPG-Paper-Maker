@@ -27,7 +27,7 @@ PanelSelectPositionMaps::PanelSelectPositionMaps(QWidget *parent) :
     ui->setupUi(this);
 
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
-    m_treeMapDatas->read(RPM::get()->project()->pathCurrentProject());
+    m_treeMapDatas->read(RPM::get()->project()->pathCurrentProjectApp());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
 
     this->translate();

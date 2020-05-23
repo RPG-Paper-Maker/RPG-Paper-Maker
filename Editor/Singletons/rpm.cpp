@@ -46,6 +46,8 @@ const QString RPM::EXTENSION_QSS = ".qss";
 const QString RPM::EXTENSION_RPM = ".rpm";
 const QString RPM::EXTENSION_PNG = ".png";
 const QString RPM::EXTENSION_JPG = ".jpg";
+const QString RPM::EXTENSION_JS = ".js";
+const QString RPM::EXTENSION_HTML = ".html";
 
 // STRING SYMBOLS
 const QString RPM::DASH = "-";
@@ -71,13 +73,19 @@ const QString RPM::FALSE_BOOL_STRING = "0";
 // FILE / FOLDER NAMES
 const QString RPM::FILE_MAP_INFOS = "infos" + EXTENSION_JSON;
 const QString RPM::FILE_MAP_OBJECTS = "objects" + EXTENSION_JSON;
+const QString RPM::FILE_MAIN = "main" + EXTENSION_JS;
+const QString RPM::FILE_INDEX = "index" + EXTENSION_HTML;
+const QString RPM::FILE_PACKAGE = "package" + EXTENSION_JSON;
 const QString RPM::FOLDER_GAMES = "RPG Paper Maker Games";
 const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
 const QString RPM::FOLDER_TEMP_MAP = "temp";
 const QString RPM::FOLDER_UNDO_REDO_TEMP_MAP = "tempUndoRedo";
+const QString RPM::FOLDER_RESOURCES = "resources";
+const QString RPM::FOLDER_APP = "app";
 
 // PATHS
+const QString RPM::PATH_APP = Common::pathCombine(FOLDER_RESOURCES, FOLDER_APP);
 const QString RPM::PATH_BASIC = Common::pathCombine(FOLDER_CONTENT, "basic");
 const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
 const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");
@@ -211,6 +219,9 @@ const QString RPM::PATH_GAMES = Common::pathCombine(QStandardPaths
     ::writableLocation(QStandardPaths::StandardLocation::DocumentsLocation),
     FOLDER_GAMES);
 const QString RPM::PATH_TEXTURE_MISSING = ":/textures/Ressources/missing.png";
+const QString RPM::PATH_MAIN = Common::pathCombine(PATH_APP, FILE_MAIN);
+const QString RPM::PATH_INDEX = Common::pathCombine(PATH_APP, FILE_INDEX);
+const QString RPM::PATH_PACKAGE = Common::pathCombine(PATH_APP, FILE_PACKAGE);
 
 // INTEGERS
 const int RPM::PORTION_SIZE = 16;

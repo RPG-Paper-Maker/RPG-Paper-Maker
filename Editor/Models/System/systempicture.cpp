@@ -94,7 +94,7 @@ SystemPicture * SystemPicture::getByID(int id, PictureKind kind) {
 QString SystemPicture::getFolder(PictureKind kind, bool isBR){
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
                             ->pathBR()
-                          : RPM::get()->project()->pathCurrentProject();
+                          : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder(kind));
 }

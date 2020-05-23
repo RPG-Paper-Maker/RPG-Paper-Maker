@@ -60,6 +60,8 @@ public:
     static const QString EXTENSION_RPM;
     static const QString EXTENSION_PNG;
     static const QString EXTENSION_JPG;
+    static const QString EXTENSION_JS;
+    static const QString EXTENSION_HTML;
 
     // STRING SYMBOLS
     static const QString DASH;
@@ -85,13 +87,19 @@ public:
     // FILE / FOLDER NAMES
     static const QString FILE_MAP_INFOS;
     static const QString FILE_MAP_OBJECTS;
+    static const QString FILE_MAIN;
+    static const QString FILE_INDEX;
+    static const QString FILE_PACKAGE;
     static const QString FOLDER_GAMES;
     static const QString FOLDER_DESKTOP;
     static const QString FOLDER_CONTENT;
     static const QString FOLDER_TEMP_MAP;
     static const QString FOLDER_UNDO_REDO_TEMP_MAP;
+    static const QString FOLDER_RESOURCES;
+    static const QString FOLDER_APP;
 
     // PATHS
+    static const QString PATH_APP;
     static const QString PATH_BASIC;
     static const QString PATH_BR;
     static const QString PATH_DATAS;
@@ -161,6 +169,9 @@ public:
     static const QString PATH_PATREON;
     static const QString PATH_GAMES;
     static const QString PATH_TEXTURE_MISSING;
+    static const QString PATH_MAIN;
+    static const QString PATH_INDEX;
+    static const QString PATH_PACKAGE;
 
     // INTEGERS
     static const int PORTION_SIZE;

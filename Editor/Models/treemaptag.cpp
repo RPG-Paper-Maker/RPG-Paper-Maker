@@ -116,7 +116,7 @@ void TreeMapTag::copyItem(const QStandardItem* from,
             QString mapName =
                     Map::generateMapName(tag->id());
             QString pathMaps = Common::pathCombine(
-                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp = Common::pathCombine(
                         pathMaps, RPM::FOLDER_TEMP_MAP);
@@ -165,7 +165,7 @@ void TreeMapTag::copyTree(const QStandardItem* from, QStandardItem* to){
         // Paste content
         if (!tag->isDir()){
             QString pathMaps = Common::pathCombine(
-                        RPM::get()->project()->pathCurrentProject(),
+                        RPM::get()->project()->pathCurrentProjectApp(),
                         RPM::PATH_MAPS);
             QString pathMapsTemp =
                     Common::pathCombine(pathMaps, RPM::FOLDER_TEMP_MAP);

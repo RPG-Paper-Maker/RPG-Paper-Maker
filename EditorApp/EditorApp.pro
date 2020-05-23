@@ -78,6 +78,15 @@ DEST_OSX = \"$$shell_path($$DEST_CONTENT_DIR/osx)\"
 FROM_WEB= \"$$shell_path($$MODS_PATH/Game/web$$SLASH_END)\"
 DEST_WEB = \"$$shell_path($$DEST_CONTENT_DIR/web)\"
 
+FROM_MAIN= \"$$shell_path($$MODS_PATH/main.js)\"
+DEST_MAIN = \"$$shell_path($$DEST_CONTENT_DIR/main.js)\"
+
+FROM_INDEX= \"$$shell_path($$MODS_PATH/index.html)\"
+DEST_INDEX = \"$$shell_path($$DEST_CONTENT_DIR/index.html)\"
+
+FROM_PACKAGE= \"$$shell_path($$MODS_PATH/package.json)\"
+DEST_PACKAGE = \"$$shell_path($$DEST_CONTENT_DIR/package.json)\"
+
 # Define custom commands
 
 # Create build Editor directory in case it wasn't created for the target yet
@@ -113,7 +122,10 @@ copyGameResources.commands = \
     $$SYNC_PURGE_CMD    $$FROM_WIN      $$DEST_WIN      $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_LINUX    $$DEST_LINUX    $$escape_expand(\n\t) \
     $$SYNC_PURGE_CMD    $$FROM_OSX      $$DEST_OSX      $$escape_expand(\n\t) \
-    $$SYNC_PURGE_CMD    $$FROM_WEB      $$DEST_WEB
+    $$SYNC_PURGE_CMD    $$FROM_WEB      $$DEST_WEB      $$escape_expand(\n\t) \
+    $$QMAKE_COPY        $$FROM_MAIN     $$DEST_MAIN     $$escape_expand(\n\t) \
+    $$QMAKE_COPY        $$FROM_INDEX    $$DEST_INDEX     $$escape_expand(\n\t) \
+    $$QMAKE_COPY        $$FROM_PACKAGE  $$DEST_PACKAGE
 
 # Setup all those extra commands
 first.depends = $(first) copyGameResources

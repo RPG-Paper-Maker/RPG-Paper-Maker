@@ -44,6 +44,7 @@ public:
     static const int MAX_PROJECTS_NUMBER;
     void setDefault();
     QString pathCurrentProject() const;
+    QString pathCurrentProjectApp() const;
     void setPathCurrentProject(QString s);
     Map* currentMap(bool force = false) const;
     void setCurrentMap(Map* m);

@@ -61,7 +61,7 @@ SystemVideo * SystemVideo::getByID(int id) {
 
 QString SystemVideo::getFolder(bool isBR) {
     QString folder = isBR ? RPM::get()->project()->gameDatas()->systemDatas()
-        ->pathBR() : RPM::get()->project()->pathCurrentProject();
+        ->pathBR() : RPM::get()->project()->pathCurrentProjectApp();
 
     return Common::pathCombine(folder, getLocalFolder());
 }

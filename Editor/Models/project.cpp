@@ -65,6 +65,11 @@ Project::~Project()
 
 QString Project::pathCurrentProject() const{ return p_pathCurrentProject; }
 
+QString Project::pathCurrentProjectApp() const
+{
+    return Common::pathCombine(p_pathCurrentProject, RPM::PATH_APP);
+}
+
 void Project::setPathCurrentProject(QString s){ p_pathCurrentProject = s; }
 
 Map* Project::currentMap(bool force) const {
@@ -139,7 +144,7 @@ void Project::setDefault(){
     m_songsDatas->setDefault();
     m_shapesDatas->setDefault();
     p_gameDatas->setDefault();
-    p_gameDatas->readAnimations(p_pathCurrentProject);
+    p_gameDatas->readAnimations(this->pathCurrentProjectApp());
     p_gameDatas->animationsDatas()->setDefault();
     m_treeMapDatas->setDefault();
     m_scriptsDatas->setDefault();
@@ -310,7 +315,7 @@ bool Project::readOS() {
 OSKind Project::getProjectOS() {
     if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.exe")).exists())
         return OSKind::Window;
-    else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game.sh")).exists())
+    else if (QFile(Common::pathCombine(p_pathCurrentProject,"Game")).exists())
         return OSKind::Linux;
     else
         return OSKind::Mac;
@@ -331,7 +336,16 @@ OSKind Project::getComputerOS() {
 // -------------------------------------------------------
 
 bool Project::copyOSFiles() {
-    QString pathContent = Common::pathCombine(QDir::currentPath(), "Content");
+    QString path;
+    QDir(QDir::currentPath()).mkdir(RPM::FOLDER_RESOURCES);
+    QString pathResources = Common::pathCombine(QDir::currentPath(), RPM
+        ::FOLDER_RESOURCES);
+    QDir(pathResources).mkdir(RPM::FOLDER_APP);
+    QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
+        ::FOLDER_CONTENT);
+    QString pathMain = Common::pathCombine(pathContent, RPM::FILE_MAIN);
+    QString pathIndex = Common::pathCombine(pathContent, RPM::FILE_INDEX);
+    QString pathPackage = Common::pathCombine(pathContent, RPM::FILE_PACKAGE);
 
     // Copy excecutable and libraries according to current OS
     QString strOS = "";
@@ -344,8 +358,25 @@ bool Project::copyOSFiles() {
     #endif
 
     // Copying a basic project content
-    return Common::copyPath(Common::pathCombine(pathContent, strOS),
-                           p_pathCurrentProject);
+    if (!Common::copyPath(Common::pathCombine(pathContent, strOS),
+        p_pathCurrentProject))
+    {
+        return false;
+    }
+
+    // Copy extra files for desktop
+    QDir(p_pathCurrentProject).mkdir(RPM::FOLDER_RESOURCES);
+    QDir(Common::pathCombine(p_pathCurrentProject, RPM::FOLDER_RESOURCES)).mkdir
+        (RPM::FOLDER_APP);
+    if (!QFile::copy(pathMain, Common::pathCombine(p_pathCurrentProject, RPM
+        ::PATH_MAIN)) || !QFile::copy(pathIndex, Common::pathCombine(
+        p_pathCurrentProject, RPM::PATH_INDEX)) || !QFile::copy(pathPackage,
+        Common::pathCombine(p_pathCurrentProject, RPM::PATH_PACKAGE)))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 // -------------------------------------------------------
@@ -358,7 +389,7 @@ void Project::removeOSFiles() {
     // Remove directories exept Content
     while (directories.hasNext()){
         directories.next();
-        if (directories.fileName() != "Content")
+        if (directories.fileName() != "resources")
             QDir(directories.filePath()).removeRecursively();
     }
 
@@ -373,91 +404,91 @@ void Project::removeOSFiles() {
 // -------------------------------------------------------
 
 void Project::readGameDatas(){
-    p_gameDatas->read(p_pathCurrentProject);
+    p_gameDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readLangsDatas(){
-    m_langsDatas->read(p_pathCurrentProject);
+    m_langsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTreeMapDatas(){
-    m_treeMapDatas->read(p_pathCurrentProject);
+    m_treeMapDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readScriptsDatas(){
-    m_scriptsDatas->read(p_pathCurrentProject);
+    m_scriptsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readKeyBoardDatas(){
-    m_keyBoardDatas->read(p_pathCurrentProject);
+    m_keyBoardDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readPicturesDatas(){
-    m_picturesDatas->read(p_pathCurrentProject);
+    m_picturesDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readVideosDatas() {
-    m_videosDatas->read(p_pathCurrentProject);
+    m_videosDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSongsDatas(){
-    m_songsDatas->read(p_pathCurrentProject);
+    m_songsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readShapesDatas(){
-    m_shapesDatas->read(p_pathCurrentProject);
+    m_shapesDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSpecialsDatas() {
-    m_specialElementsDatas->read(p_pathCurrentProject);
+    m_specialElementsDatas->read(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readSystemDatas(){
-    p_gameDatas->readSystem(p_pathCurrentProject);
+    p_gameDatas->readSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readBattleSystemDatas() {
-    p_gameDatas->readBattleSystem(p_pathCurrentProject);
+    p_gameDatas->readBattleSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTilesetsDatas() {
-    p_gameDatas->readTilesets(p_pathCurrentProject);
+    p_gameDatas->readTilesets(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readCommonEvents() {
-    p_gameDatas->readCommonEvents(p_pathCurrentProject);
+    p_gameDatas->readCommonEvents(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::readTitleScreenGameOver() {
-    p_gameDatas->readTitleScreenGameOver(p_pathCurrentProject);
+    p_gameDatas->readTitleScreenGameOver(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
@@ -485,69 +516,69 @@ void Project::writeAll() {
 // -------------------------------------------------------
 
 void Project::writeGameDatas(){
-    p_gameDatas->write(p_pathCurrentProject);
+    p_gameDatas->write(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeLangsDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_LANGS), *m_langsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeTreeMapDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_TREE_MAP), *m_treeMapDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeScriptsDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_SCRIPTS), *m_scriptsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeKeyBoardDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_KEYBOARD), *m_keyBoardDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writePicturesDatas(){
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_PICTURES_DATAS), *m_picturesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeVideosDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_VIDEOS_DATAS), *m_videosDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSongsDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_SONGS_DATAS), *m_songsDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeShapesDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject, RPM
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(), RPM
         ::PATH_SHAPES_DATAS), *m_shapesDatas);
 }
 
 // -------------------------------------------------------
 
 void Project::writeSpecialsDatas() {
-    RPM::writeJSON(Common::pathCombine(p_pathCurrentProject,
+    RPM::writeJSON(Common::pathCombine(this->pathCurrentProjectApp(),
                                         RPM::PATH_SPECIAL_ELEMENTS),
                      *m_specialElementsDatas);
 }
@@ -555,31 +586,31 @@ void Project::writeSpecialsDatas() {
 // -------------------------------------------------------
 
 void Project::writeSystemDatas(){
-    p_gameDatas->writeSystem(p_pathCurrentProject);
+    p_gameDatas->writeSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeBattleSystemDatas() {
-    p_gameDatas->writeBattleSystem(p_pathCurrentProject);
+    p_gameDatas->writeBattleSystem(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeTilesetsDatas() {
-    p_gameDatas->writeTilesets(p_pathCurrentProject);
+    p_gameDatas->writeTilesets(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeCommonEvents() {
-    p_gameDatas->writeCommonEvents(p_pathCurrentProject);
+    p_gameDatas->writeCommonEvents(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
 
 void Project::writeTitleScreenGameOver() {
-    p_gameDatas->writeTitleScreenGameOver(p_pathCurrentProject);
+    p_gameDatas->writeTitleScreenGameOver(this->pathCurrentProjectApp());
 }
 
 // -------------------------------------------------------
