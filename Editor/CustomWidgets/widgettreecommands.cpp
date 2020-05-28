@@ -399,9 +399,9 @@ void WidgetTreeCommands::deleteCommand() {
             root = getRootOfCommand(selected);
 
             // Delete selected command
-            SystemCommonReaction::deleteCommands(selected);
             row = selected->row();
             root->removeRow(row);
+            SystemCommonReaction::deleteCommands(selected);
         }
     }
 
