@@ -92,8 +92,7 @@ QString ControlNewproject::createNewProject(QString projectName, QString dirName
         ::FOLDER_CONTENT);
     QString pathBasicContent = Common::pathCombine(Common::pathCombine(
         pathContent, "basic"), RPM::FOLDER_CONTENT);
-    QString pathResources = Common::pathCombine(pathDir, RPM::FOLDER_RESOURCES);
-    QString pathApp = Common::pathCombine(pathResources, RPM::FOLDER_APP);
+    QString pathApp = Common::pathCombine(pathDir, RPM::PATH_APP);
     Project *previousProject = RPM::get()->project();
     Project *project = new Project();
     RPM::get()->setProject(project);

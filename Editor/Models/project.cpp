@@ -336,11 +336,6 @@ OSKind Project::getComputerOS() {
 // -------------------------------------------------------
 
 bool Project::copyOSFiles() {
-    QString path;
-    QDir(QDir::currentPath()).mkdir(RPM::FOLDER_RESOURCES);
-    QString pathResources = Common::pathCombine(QDir::currentPath(), RPM
-        ::FOLDER_RESOURCES);
-    QDir(pathResources).mkdir(RPM::FOLDER_APP);
     QString pathContent = Common::pathCombine(QDir::currentPath(), RPM
         ::FOLDER_CONTENT);
     QString pathMain = Common::pathCombine(pathContent, RPM::FILE_MAIN);
@@ -365,9 +360,6 @@ bool Project::copyOSFiles() {
     }
 
     // Copy extra files for desktop
-    QDir(p_pathCurrentProject).mkdir(RPM::FOLDER_RESOURCES);
-    QDir(Common::pathCombine(p_pathCurrentProject, RPM::FOLDER_RESOURCES)).mkdir
-        (RPM::FOLDER_APP);
     if (!QFile::copy(pathMain, Common::pathCombine(p_pathCurrentProject, RPM
         ::PATH_MAIN)) || !QFile::copy(pathIndex, Common::pathCombine(
         p_pathCurrentProject, RPM::PATH_INDEX)) || !QFile::copy(pathPackage,
@@ -382,22 +374,110 @@ bool Project::copyOSFiles() {
 // -------------------------------------------------------
 
 void Project::removeOSFiles() {
-    QDirIterator directories(p_pathCurrentProject,
-                             QDir::Dirs | QDir::NoDotAndDotDot);
-    QDirIterator files(p_pathCurrentProject, QDir::Files);
+    QString path;
+    #ifdef Q_OS_MACOS
+        QDirIterator d1(p_pathCurrentProject, QDir::Dirs | QDir::NoDotAndDotDot);
+        QDirIterator f1(p_pathCurrentProject, QDir::Files);
+        while (d1.hasNext())
+        {
+            d1.next();
+            // Remove everything but Game.app
+            if (d1.fileName() == "Game.app")
+            {
+                QString p2 = Common::pathCombine(p_pathCurrentProject,
+                    "Game.app");
+                QDirIterator d2(p2, QDir::Dirs | QDir::NoDotAndDotDot);
+                QDirIterator f2(p2, QDir::Files);
+                while (d2.hasNext())
+                {
+                    // Remove everything but Contents
+                    if (d2.fileName() != "Contents")
+                    {
+                        QDir(d2.filePath()).removeRecursively();
+                    } else
+                    {
+                        path = Common::pathCombine(p2, "Contents");
+                    }
+                }
+                while (f2.hasNext())
+                {
+                    QFile(f2.filePath()).remove();
+                }
+            } else
+            {
+                QDir(d1.filePath()).removeRecursively();
+            }
+        }
+        while (f1.hasNext())
+        {
+            f1.next();
+            if (f1.fileName() != "game.rpm")
+            {
+                QFile(f1.filePath()).remove();
+            }
+        }
+    #else
+        path = p_pathCurrentProject;
+    #endif
 
-    // Remove directories exept Content
-    while (directories.hasNext()){
-        directories.next();
-        if (directories.fileName() != "resources")
-            QDir(directories.filePath()).removeRecursively();
+
+    QDirIterator d3(path, QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator f3(path, QDir::Files);
+
+    // Remove directories
+    while (d3.hasNext())
+    {
+        d3.next();
+
+        // Remove everything but resources
+        if (d3.fileName() == RPM::FOLDER_RESOURCES)
+        {
+            path = Common::pathCombine(path, RPM::FOLDER_RESOURCES);
+            QDirIterator d4(path, QDir::Dirs | QDir::NoDotAndDotDot);
+            QDirIterator f4(path, QDir::Files);
+            while (d4.hasNext())
+            {
+                // Remove everything but app
+                if (d4.fileName() == RPM::FOLDER_APP)
+                {
+                    path = Common::pathCombine(path, RPM::FOLDER_APP);
+                    QDirIterator d5(path, QDir::Dirs | QDir::NoDotAndDotDot);
+                    QDirIterator f5(path, QDir::Files);
+                    while (d5.hasNext())
+                    {
+                        // Remove everything but Content
+                        if (d5.fileName() != RPM::FOLDER_CONTENT)
+                        {
+                            QDir(d5.filePath()).removeRecursively();
+                        }
+                    }
+                    while (f5.hasNext())
+                    {
+                        QFile(f5.filePath()).remove();
+                    }
+                } else
+                {
+                    QDir(d4.filePath()).removeRecursively();
+                }
+            }
+            while (f4.hasNext())
+            {
+                QFile(f4.filePath()).remove();
+            }
+        } else
+        {
+            QDir(d3.filePath()).removeRecursively();
+        }
     }
 
     // Remove files exept game.rpm
-    while (files.hasNext()){
-        files.next();
-        if (files.fileName() != "game.rpm")
-            QFile(files.filePath()).remove();
+    while (f3.hasNext())
+    {
+        f3.next();
+        if (f3.fileName() != "game.rpm")
+        {
+            QFile(f3.filePath()).remove();
+        }
     }
 }
 

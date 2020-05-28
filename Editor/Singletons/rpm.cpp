@@ -81,11 +81,20 @@ const QString RPM::FOLDER_DESKTOP = "desktop";
 const QString RPM::FOLDER_CONTENT = "Content";
 const QString RPM::FOLDER_TEMP_MAP = "temp";
 const QString RPM::FOLDER_UNDO_REDO_TEMP_MAP = "tempUndoRedo";
-const QString RPM::FOLDER_RESOURCES = "resources";
 const QString RPM::FOLDER_APP = "app";
+#ifdef Q_OS_MACOS
+    const QString RPM::FOLDER_RESOURCES = "Resources";
+#else
+    const QString RPM::FOLDER_RESOURCES = "resources";
+#endif
 
 // PATHS
-const QString RPM::PATH_APP = Common::pathCombine(FOLDER_RESOURCES, FOLDER_APP);
+#ifdef Q_OS_MACOS
+    const QString RPM::PATH_RESOURCES = Common::pathCombine(Common::pathCombine("Game.app", "Contents"), FOLDER_RESOURCES);
+#else
+    const QString RPM::PATH_RESOURCES = FOLDER_RESOURCES;
+#endif
+const QString RPM::PATH_APP = Common::pathCombine(PATH_RESOURCES, FOLDER_APP);
 const QString RPM::PATH_BASIC = Common::pathCombine(FOLDER_CONTENT, "basic");
 const QString RPM::PATH_BR = Common::pathCombine(FOLDER_CONTENT, "BR");
 const QString RPM::PATH_DATAS = Common::pathCombine(FOLDER_CONTENT, "Datas");

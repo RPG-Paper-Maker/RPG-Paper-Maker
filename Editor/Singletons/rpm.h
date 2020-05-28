@@ -99,6 +99,7 @@ public:
     static const QString FOLDER_APP;
 
     // PATHS
+    static const QString PATH_RESOURCES;
     static const QString PATH_APP;
     static const QString PATH_BASIC;
     static const QString PATH_BR;

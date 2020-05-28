@@ -53,16 +53,30 @@ QString ControlExport::createDesktop(QString location, OSKind os, bool, int
         osMessage + "-v" + QString::number(major) + "." + QString::number(minor);
     QString path = Common::pathCombine(location, projectName);
 
-    // Copying all the project
-    message = copyAllProject(location, projectName, path, dirLocation);
-    if (message != nullptr || message == "-") {
+    // Create the folder
+    message = createFolder(location, projectName, path, dirLocation);
+    if (message != nullptr || message == "-")
+    {
+        return message;
+    }
+    // Copy dependencies
+    message = generateDesktopStuff(path, os, major, minor);
+    if (message != nullptr)
+    {
+        return message;
+    }
+
+    // Copy Content folder and extra files
+    message = copyAllProject(path);
+    if (message != nullptr)
+    {
         return message;
     }
 
     // Remove all the files that are no longer needed here
     removeDesktopNoNeed(path);
 
-    return generateDesktopStuff(path, os, major, minor);
+    return nullptr;
 }
 
 // -------------------------------------------------------
@@ -75,7 +89,7 @@ QString ControlExport::createBrowser(QString location) {
     QString path = Common::pathCombine(location, projectName);
 
     // Copying all the project
-    message = copyAllProject(location, projectName, path, dirLocation);
+    message = copyAllProject(path);
     if (message != nullptr)
         return message;
 
@@ -87,7 +101,7 @@ QString ControlExport::createBrowser(QString location) {
 
 // -------------------------------------------------------
 
-QString ControlExport::copyAllProject(QString location, QString projectName,
+QString ControlExport::createFolder(QString location, QString projectName,
     QString path, QDir dirLocation)
 {
     if (!QDir::isAbsolutePath(location)) {
@@ -113,11 +127,14 @@ QString ControlExport::copyAllProject(QString location, QString projectName,
         }
     }
 
+    return nullptr;
+}
+
+// -------------------------------------------------------
+
+QString ControlExport::copyAllProject(QString path)
+{
     // Copy Content
-    QDir(m_project->pathCurrentProject()).mkdir(RPM::FOLDER_RESOURCES);
-    QString pathResources = Common::pathCombine(m_project->pathCurrentProject(),
-        RPM::FOLDER_RESOURCES);
-    QDir(pathResources).mkdir(RPM::FOLDER_APP);
     QDir(m_project->pathCurrentProjectApp()).mkdir(RPM::FOLDER_CONTENT);
     QString pathContentProject = Common::pathCombine(m_project
         ->pathCurrentProjectApp(), RPM::FOLDER_CONTENT);
@@ -168,6 +185,8 @@ void ControlExport::removeDesktopNoNeed(QString path) {
     QFile(Common::pathCombine(pathDatas, "treeMap.json")).remove();
     QFile(Common::pathCombine(pathDatas, "scripts.json")).remove();
     QFile(Common::pathCombine(pathDatas, "pictures.json")).remove();
+    this->copyBRPictures(Common::pathCombine(path, RPM::PATH_APP));
+
     removeMapsTemp(pathDatas);
 }
 
@@ -225,9 +244,6 @@ QString ControlExport::generateDesktopStuff(QString path, OSKind os, int major,
     if (!Common::copyPath(pathExecutable, path))
         return RPM::translate(Translations::COULD_NOT_COPY_IN) + RPM::SPACE +
             pathExecutable;
-
-    // Pictures
-    copyBRPictures(Common::pathCombine(path, RPM::PATH_APP));
 
     // Save last version
     RPM::get()->project()->gameDatas()->systemDatas()->setLastMajorVersion(major);
