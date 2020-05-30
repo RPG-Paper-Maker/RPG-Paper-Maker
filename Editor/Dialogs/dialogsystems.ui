@@ -66,7 +66,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>252</width>
-                <height>1149</height>
+                <height>1178</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_13">
@@ -120,6 +120,16 @@
                     <string>Game native resolution</string>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_3">
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="checkBoxDisplayConsole">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="text">
+                       <string>Display console</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="0" column="0">
                      <layout class="QGridLayout" name="gridLayout_2">
                       <item row="0" column="0">
@@ -187,13 +197,10 @@
                       </item>
                      </layout>
                     </item>
-                    <item row="1" column="0">
-                     <widget class="QCheckBox" name="checkBoxDisplayConsole">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
+                    <item row="2" column="0">
+                     <widget class="QCheckBox" name="checkBoxAntialiasing">
                       <property name="text">
-                       <string>Display console</string>
+                       <string>Antialiasing</string>
                       </property>
                      </widget>
                     </item>
@@ -216,7 +223,7 @@
                    </property>
                    <layout class="QGridLayout" name="gridLayout_5">
                     <item row="0" column="0">
-                     <layout class="QVBoxLayout" name="verticalLayout_27">
+                     <layout class="QVBoxLayout" name="verticalLayout_30">
                       <item>
                        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
                         <property name="spacing">
@@ -662,7 +669,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-564</y>
+                <y>0</y>
                 <width>624</width>
                 <height>1216</height>
                </rect>

@@ -45,6 +45,8 @@ const QString SystemDatas::JSON_SOUND_CANCEL = "sca";
 const QString SystemDatas::JSON_SOUND_IMPOSSIBLE = "si";
 const QString SystemDatas::JSON_DIALOG_BOX_OPTIONS = "dbo";
 const QString SystemDatas::JSON_SKY_BOXES = "sb";
+const QString SystemDatas::JSON_ANTIALIASING = "aa";
+const bool SystemDatas::DEFAULT_ANTIALIASING = false;
 
 // -------------------------------------------------------
 //
@@ -60,6 +62,7 @@ SystemDatas::SystemDatas() :
     m_idMapHero(1),
     m_idObjectHero(1),
     m_showBB(false),
+    m_antialiasing(false),
     m_modelColors(new QStandardItemModel),
     m_modelCurrencies(new QStandardItemModel),
     m_modelItemsTypes(new QStandardItemModel),
@@ -177,6 +180,16 @@ void SystemDatas::setFramesAnimation(int f) { m_framesAnimation = f; }
 bool SystemDatas::showBB() const { return m_showBB; }
 
 void SystemDatas::setShowBB(bool b) { m_showBB = b; }
+
+bool SystemDatas::antialiasing() const
+{
+    return m_antialiasing;
+}
+
+void SystemDatas::setAntialiasing(bool aa)
+{
+    m_antialiasing = aa;
+}
 
 QStandardItemModel * SystemDatas::modelColors() const {
     return m_modelColors;
@@ -574,6 +587,10 @@ void SystemDatas::read(const QJsonObject &json){
     m_pathBR = json["pathBR"].toString();
     m_framesAnimation = json["frames"].toInt();
     m_showBB = json.contains("bb");
+    if (json.contains(JSON_ANTIALIASING))
+    {
+        m_antialiasing = json[JSON_ANTIALIASING].toBool();
+    }
 
     // Colors
     jsonList = json[JSON_COLORS].toArray();
@@ -722,6 +739,10 @@ void SystemDatas::write(QJsonObject &json) const{
     json["frames"] = m_framesAnimation;
     if (m_showBB)
         json["bb"] = m_showBB;
+    if (m_antialiasing != DEFAULT_ANTIALIASING)
+    {
+        json[JSON_ANTIALIASING] = m_antialiasing;
+    }
 
     // Colors
     jsonArray = QJsonArray();

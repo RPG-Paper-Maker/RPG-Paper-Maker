@@ -22,8 +22,8 @@
         "Copy files manager correctly copying symlinks",
         "Demo game (in BR)",
         "Menu open BR game",
-        "Add in systems the frame number for stop and start movement animation",
-        "After creating / pasting a new map / directory, select it"
+        "After creating / pasting a new map / directory, select it",
+        "New effect: select damage on HP by default"
     ],
 	"bugs": [
         "Mountains issues with different width",
@@ -33,7 +33,12 @@
         "Ingame crash when using start battle command with manual battle map position",
         "When using other battle maps, problem with camera use",
         "Windows only low FPS when in battle",
-        "Weird collision with invisible hero"
+        "Weird collision with invisible hero",
+        "Going into another battle after you got a teamate killed in the one before let the character still appear alive",
+        "Battle option no game over when defeat: camera not changed",
+        "Battle option no game over when defeat: crash ingame when running a new battle with 0 HP",
+        "Battle option no game over when defeat: battle music doesn't stop",
+        "Equip bug every time you try to equip something ingame"
 	],
     "finished": [
         2,
@@ -55,16 +60,21 @@
         0,
         1,
         0,
-        0,
         2,
+        2
 
         0,
         0,
-        0,
+        2,
         2,
         0,
         0,
         2,
+        0,
+        0,
+        0,
+        0,
+        0,
         0
     ]
 }

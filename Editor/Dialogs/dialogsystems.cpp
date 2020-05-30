@@ -133,6 +133,7 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->spinBoxScreenHeight->setEnabled(systemDatas->isScreenWindow());
     ui->comboBoxScreenWindow->setCurrentIndex(systemDatas->isScreenWindow() ? 0
         : 1);
+    ui->checkBoxAntialiasing->setChecked(systemDatas->antialiasing());
     ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
     ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas
         ->mountainCollisionHeight());
@@ -596,6 +597,13 @@ void DialogSystems::on_comboBoxScreenWindow_currentIndexChanged(int index) {
         isScreenWindow);
     ui->spinBoxScreenWidth->setEnabled(isScreenWindow);
     ui->spinBoxScreenHeight->setEnabled(isScreenWindow);
+}
+
+// -------------------------------------------------------
+
+void DialogSystems::on_checkBoxAntialiasing_toggled(bool checked)
+{
+    RPM::get()->project()->gameDatas()->systemDatas()->setAntialiasing(checked);
 }
 
 // -------------------------------------------------------

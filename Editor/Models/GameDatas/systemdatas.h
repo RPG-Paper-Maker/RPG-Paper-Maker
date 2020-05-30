@@ -53,6 +53,8 @@ public:
     static const QString JSON_SOUND_IMPOSSIBLE;
     static const QString JSON_DIALOG_BOX_OPTIONS;
     static const QString JSON_SKY_BOXES;
+    static const QString JSON_ANTIALIASING;
+    static const bool DEFAULT_ANTIALIASING;
 
     SystemDatas();
     virtual ~SystemDatas();
@@ -82,6 +84,8 @@ public:
     void setFramesAnimation(int f);
     bool showBB() const;
     void setShowBB(bool b);
+    bool antialiasing() const;
+    void setAntialiasing(bool aa);
     QStandardItemModel * modelColors() const;
     QStandardItemModel * modelCurrencies() const;
     QStandardItemModel * modelItemsTypes() const;
@@ -136,6 +140,7 @@ private:
     QString m_pathBR;
     int m_framesAnimation;
     bool m_showBB;
+    bool m_antialiasing;
     QStandardItemModel *m_modelColors;
     QStandardItemModel *m_modelCurrencies;
     QStandardItemModel *m_modelItemsTypes;
