@@ -52,8 +52,8 @@ const QString SystemEffect::JSON_TEMPORARILY_CHANGE_TARGET_FORMULA = "tctf";
 // -------------------------------------------------------
 
 SystemEffect::SystemEffect() :
-    SystemEffect(EffectKind::Damages, DamagesKind::Stat, PrimitiveValue
-        ::createDefaultDataBaseValue(), PrimitiveValue
+    SystemEffect(EffectKind::Damages, DamagesKind::Stat, new PrimitiveValue(
+        PrimitiveValueKind::DataBase, RPM::get()->project()->gameDatas()->battleSystemDatas()->modelCommonStatistics()->invisibleRootItem()->rowCount() < 3 ? 1 : 3), PrimitiveValue
         ::createDefaultDataBaseValue(), 1, PrimitiveValue
         ::createDefaultMessageValue(), true, new PrimitiveValue(QString("0")),
         false, new PrimitiveValue(QString("0")), false, PrimitiveValue
@@ -585,10 +585,7 @@ void SystemEffect::read(const QJsonObject &json) {
         }
         switch (static_cast<DamagesKind>(m_damagesKind->id())) {
         case DamagesKind::Stat:
-            if (json.contains(JSON_DAMAGES_STATISTIC_ID)) {
-                m_damagesStatisticID->read(json[JSON_DAMAGES_STATISTIC_ID]
-                    .toObject());
-            }
+            m_damagesStatisticID->read(json[JSON_DAMAGES_STATISTIC_ID].toObject());
             break;
         case DamagesKind::Currency:
             if (json.contains(JSON_DAMAGES_CURRENCY_ID)) {
@@ -728,13 +725,9 @@ void SystemEffect::write(QJsonObject &json) const {
         }
         switch (static_cast<DamagesKind>(m_damagesKind->id())) {
         case DamagesKind::Stat:
-            if (m_damagesStatisticID->kind() != PrimitiveValueKind::DataBase ||
-                m_damagesStatisticID->numberValue() != 1)
-            {
-                obj = QJsonObject();
-                m_damagesStatisticID->write(obj);
-                json[JSON_DAMAGES_STATISTIC_ID] = obj;
-            }
+            obj = QJsonObject();
+            m_damagesStatisticID->write(obj);
+            json[JSON_DAMAGES_STATISTIC_ID] = obj;
             break;
         case DamagesKind::Currency:
             if (m_damagesCurrencyID->kind() != PrimitiveValueKind::DataBase ||
