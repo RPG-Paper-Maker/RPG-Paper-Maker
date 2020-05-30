@@ -38,7 +38,8 @@
         "Battle option no game over when defeat: camera not changed",
         "Battle option no game over when defeat: crash ingame when running a new battle with 0 HP",
         "Battle option no game over when defeat: battle music doesn't stop",
-        "Equip bug every time you try to equip something ingame"
+        "Equip bug every time you try to equip something ingame",
+        "Window / Fullscreen bug when opening datas always window"
 	],
     "finished": [
         2,
@@ -75,6 +76,7 @@
         0,
         0,
         0,
-        0
+        2,
+        2
     ]
 }

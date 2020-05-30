@@ -95,10 +95,11 @@ void DialogSystems::closeEvent(QCloseEvent *event)
 // -------------------------------------------------------
 
 void DialogSystems::initializeSystem(GameDatas *gameDatas) {
-    SystemDatas *systemDatas;
-
+    SystemDatas *systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
+    int index = systemDatas->isScreenWindow() ? 0 : 1;
     ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::WINDOW));
     ui->comboBoxScreenWindow->addItem(RPM::translate(Translations::FULL_SCREEN));
+    ui->comboBoxScreenWindow->setCurrentIndex(index);
 
     // Don't show edit name
     ui->panelSuperListColors->showEditName(false);
@@ -125,14 +126,11 @@ void DialogSystems::initializeSystem(GameDatas *gameDatas) {
     ui->panelSuperListSkyBoxes->list()->setCanEdit(true);
 
     // Values
-    systemDatas = RPM::get()->project()->gameDatas()->systemDatas();
     ui->widgetGameName->initializeNamesTrans(systemDatas->projectName());
     ui->spinBoxScreenWidth->setValue(systemDatas->screenWidth());
     ui->spinBoxScreenHeight->setValue(systemDatas->screenHeight());
     ui->spinBoxScreenWidth->setEnabled(systemDatas->isScreenWindow());
     ui->spinBoxScreenHeight->setEnabled(systemDatas->isScreenWindow());
-    ui->comboBoxScreenWindow->setCurrentIndex(systemDatas->isScreenWindow() ? 0
-        : 1);
     ui->checkBoxAntialiasing->setChecked(systemDatas->antialiasing());
     ui->spinBoxSquareSize->setValue(systemDatas->squareSize());
     ui->widgetMountainCollisionHeight->initializeNumberAndUpdate(systemDatas
