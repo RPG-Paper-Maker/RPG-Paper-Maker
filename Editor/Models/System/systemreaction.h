@@ -40,7 +40,8 @@ public:
     static void addCommand(QStandardItem *root, EventCommand* command);
     static void addCommandWithoutText(QStandardItem *root,
                                       EventCommand* command);
-    static void deleteCommands(QStandardItem* item);
+    static void deleteCommands(QStandardItem *item);
+    static void getCommands(QList<EventCommand *> &list, QStandardItem *item);
     static void copyCommands(const QStandardItemModel *from,
                              QStandardItemModel *to);
     static void copyCommandsItem(const QStandardItem *from, QStandardItem* to);

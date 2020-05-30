@@ -399,9 +399,14 @@ void WidgetTreeCommands::deleteCommand() {
             root = getRootOfCommand(selected);
 
             // Delete selected command
+            QList<EventCommand *> list;
+            SystemCommonReaction::getCommands(list, selected);
             row = selected->row();
             root->removeRow(row);
-            SystemCommonReaction::deleteCommands(selected);
+            for (int j = 0, l = list.size(); j < l; j++)
+            {
+                delete list.at(j);
+            }
         }
     }
 

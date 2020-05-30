@@ -132,14 +132,37 @@ void SystemReaction::copyCommandsItem(const QStandardItem* from,
 
 // -------------------------------------------------------
 
-void SystemReaction::deleteCommands(QStandardItem* item){
-    EventCommand* command = (EventCommand*) item->data().value<quintptr>();
+void SystemReaction::deleteCommands(QStandardItem *item)
+{
+    EventCommand *command = reinterpret_cast<EventCommand *>(item->data().value<
+        quintptr>());
 
     for (int i = 0; i < item->rowCount(); i++)
+    {
         deleteCommands(item->child(i));
-
+    }
     if (command != nullptr)
+    {
         delete command;
+    }
+}
+
+// -------------------------------------------------------
+
+void SystemReaction::getCommands(QList<EventCommand *> &list, QStandardItem
+    *item)
+{
+    EventCommand *command = reinterpret_cast<EventCommand *>(item->data().value<
+        quintptr>());
+
+    for (int i = 0; i < item->rowCount(); i++)
+    {
+        getCommands(list, item->child(i));
+    }
+    if (command != nullptr)
+    {
+        list << command;
+    }
 }
 
 // -------------------------------------------------------
