@@ -825,7 +825,6 @@ void ProjectUpdater::updateVersion_1_5_3() {
         QDir(path).removeRecursively();
         dir.mkdir("Game.app");
         path = Common::pathCombine(path, "Contents");
-        QDir(path).mkdir(RPM::FOLDER_RESOURCES);
     #endif
     QDir(path).mkdir(RPM::FOLDER_RESOURCES);
     path = Common::pathCombine(path, RPM::FOLDER_RESOURCES);

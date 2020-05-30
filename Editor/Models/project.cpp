@@ -390,6 +390,7 @@ void Project::removeOSFiles() {
                 QDirIterator f2(p2, QDir::Files);
                 while (d2.hasNext())
                 {
+                    d2.next();
                     // Remove everything but Contents
                     if (d2.fileName() != "Contents")
                     {
@@ -401,6 +402,7 @@ void Project::removeOSFiles() {
                 }
                 while (f2.hasNext())
                 {
+                    f2.next();
                     QFile(f2.filePath()).remove();
                 }
             } else
