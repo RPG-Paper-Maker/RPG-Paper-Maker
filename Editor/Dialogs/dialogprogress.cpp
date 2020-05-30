@@ -12,7 +12,7 @@
 #include "dialogprogress.h"
 #include "ui_dialogprogress.h"
 #include <QtMath>
-#include "rpm.h"
+//#include "rpm.h"
 
 // -------------------------------------------------------
 //
@@ -46,7 +46,7 @@ DialogProgress::~DialogProgress()
 
 void DialogProgress::translate()
 {
-    this->setWindowTitle(RPM::translate(Translations::IN_PROGRESS));
+    //this->setWindowTitle(RPM::translate(Translations::IN_PROGRESS));
 }
 
 // -------------------------------------------------------

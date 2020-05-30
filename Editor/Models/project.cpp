@@ -19,8 +19,8 @@
 #include <QApplication>
 #include <QThread>
 
-const QString Project::ENGINE_VERSION = "1.5.2";
-const QString Project::LAST_BUILD_DATE = "May 3 2020";
+const QString Project::ENGINE_VERSION = "1.5.3";
+const QString Project::LAST_BUILD_DATE = "May 30 2020";
 const int Project::MAX_PROJECTS_NUMBER = 6;
 
 // -------------------------------------------------------
@@ -437,6 +437,8 @@ void Project::removeOSFiles() {
             QDirIterator f4(path, QDir::Files);
             while (d4.hasNext())
             {
+                d4.next();
+
                 // Remove everything but app
                 if (d4.fileName() == RPM::FOLDER_APP)
                 {
@@ -445,6 +447,8 @@ void Project::removeOSFiles() {
                     QDirIterator f5(path, QDir::Files);
                     while (d5.hasNext())
                     {
+                        d5.next();
+
                         // Remove everything but Content
                         if (d5.fileName() != RPM::FOLDER_CONTENT)
                         {
@@ -453,6 +457,7 @@ void Project::removeOSFiles() {
                     }
                     while (f5.hasNext())
                     {
+                        f5.next();
                         QFile(f5.filePath()).remove();
                     }
                 } else
@@ -462,6 +467,7 @@ void Project::removeOSFiles() {
             }
             while (f4.hasNext())
             {
+                f4.next();
                 QFile(f4.filePath()).remove();
             }
         } else

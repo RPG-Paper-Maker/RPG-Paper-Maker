@@ -204,9 +204,15 @@ QString PrimitiveValue::toString() const {
             ::getById(this->modelProperties()->invisibleRootItem(),
             m_numberValue)->toString();
     case PrimitiveValueKind::DataBase:
-        return this->modelDataBase() == nullptr ? "" : SuperListItem::getById(
-            this->modelDataBase()->invisibleRootItem(), m_numberValue)
-            ->toString();
+    {
+        if (this->modelDataBase() == nullptr)
+        {
+            return nullptr;
+        }
+        SuperListItem *super = SuperListItem::getById(this->modelDataBase()
+            ->invisibleRootItem(), m_numberValue);
+        return super == nullptr ? "" : super->toString();
+    }
     case PrimitiveValueKind::Message:
     case PrimitiveValueKind::Font:
         return m_messageValue;

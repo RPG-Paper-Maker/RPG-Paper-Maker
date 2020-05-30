@@ -19,11 +19,11 @@
 #include "titlesettingkind.h"
 #include "systemcommonreaction.h"
 
-const int ProjectUpdater::incompatibleVersionsCount = 12;
+const int ProjectUpdater::incompatibleVersionsCount = 13;
 
 QString ProjectUpdater::incompatibleVersions[incompatibleVersionsCount]
     {"0.3.1", "0.4.0", "0.4.3", "0.5.2", "1.0.0", "1.1.1", "1.2.0", "1.2.1",
-     "1.3.0", "1.4.0", "1.4.1", "1.5.0"};
+     "1.3.0", "1.4.0", "1.4.1", "1.5.0", "1.5.3"};
 
 // -------------------------------------------------------
 //
@@ -810,4 +810,30 @@ void ProjectUpdater::updateVersion_1_5_0() {
     dir.mkpath(RPM::PATH_HUD_ANIMATIONS);
     dir.mkpath(RPM::PATH_SKY_BOXES);
     m_project->picturesDatas()->setDefaultSkyBoxes(names);
+}
+
+// -------------------------------------------------------
+
+void ProjectUpdater::updateVersion_1_5_3() {
+    QDir dir(m_project->pathCurrentProject());
+    QList<QString> names;
+    QString path = m_project->pathCurrentProject();
+
+    // Change Content folder location
+    #ifdef Q_OS_MACOS
+        path = Common::pathCombine(path, "Game.app");
+        QDir(path).removeRecursively();
+        dir.mkdir("Game.app");
+        path = Common::pathCombine(path, "Contents");
+        QDir(path).mkdir(RPM::FOLDER_RESOURCES);
+    #endif
+    QDir(path).mkdir(RPM::FOLDER_RESOURCES);
+    path = Common::pathCombine(path, RPM::FOLDER_RESOURCES);
+    QDir(path).mkdir(RPM::FOLDER_APP);
+    path = Common::pathCombine(path, RPM::FOLDER_APP);
+    Common::copyPath(Common::pathCombine(m_project->pathCurrentProject(), RPM
+        ::FOLDER_CONTENT), Common::pathCombine(path, RPM::FOLDER_CONTENT));
+
+    // Read content again
+    m_project->readAll();
 }

@@ -234,12 +234,15 @@ void SystemSpecialElement::updateCustomCollisionName() {
 void SystemSpecialElement::updateGenericObjectName(SuperListItem *obj,
     CustomShapeKind kind)
 {
-    SuperListItem *super;
-
-    super = SuperListItem::getById(RPM::get()->project()->shapesDatas()->model(
-        kind)->invisibleRootItem(), obj->id());
-    if (super != nullptr) {
-        obj->setName(super->name());
+    QStandardItemModel *model = RPM::get()->project()->shapesDatas()->model(
+        kind);
+    if (model != nullptr)
+    {
+        SuperListItem *super = SuperListItem::getById(model->invisibleRootItem()
+            , obj->id());
+        if (super != nullptr) {
+            obj->setName(super->name());
+        }
     }
 }
 

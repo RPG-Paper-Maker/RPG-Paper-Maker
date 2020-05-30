@@ -125,9 +125,19 @@ void SystemPlaySong::setDefault() {
 // -------------------------------------------------------
 
 void SystemPlaySong::updateName() {
-    if (!m_isSelectedByID) {
-        p_name = SuperListItem::getById(RPM::get()->project()->songsDatas()
-            ->model(m_kind)->invisibleRootItem(), p_id)->name();
+    if (!m_isSelectedByID)
+    {
+        QStandardItemModel *model = RPM::get()->project()->songsDatas()->model(
+            m_kind);
+        if (model != nullptr)
+        {
+            SuperListItem *super = SuperListItem::getById(model
+                ->invisibleRootItem(), p_id);
+            if (super != nullptr)
+            {
+                p_name = super->name();
+            }
+        }
     }
 }
 

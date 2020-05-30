@@ -23,7 +23,8 @@
         "Demo game (in BR)",
         "Menu open BR game",
         "After creating / pasting a new map / directory, select it",
-        "New effect: select damage on HP by default"
+        "New effect: select damage on HP by default",
+        "New updater for translations and new game framework"
     ],
 	"bugs": [
         "Mountains issues with different width",
@@ -61,6 +62,7 @@
         0,
         1,
         0,
+        2,
         2,
         2
 
