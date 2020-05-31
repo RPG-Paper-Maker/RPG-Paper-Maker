@@ -2617,6 +2617,13 @@
                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Resources"
                                                     },
                                                     {
+                                                        "exe": true,
+                                                        "repo": "Dependencies",
+                                                        "sl": true,
+                                                        "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Electron Framework",
+                                                        "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Electron Framework"
+                                                    },
+                                                    {
                                                         "repo": "Dependencies",
                                                         "sl": true,
                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Libraries",
