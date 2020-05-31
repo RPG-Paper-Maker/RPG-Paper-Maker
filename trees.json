@@ -831,6 +831,7 @@
                     {
                         "files": [
                             {
+                                "exe": true,
                                 "repo": "Dependencies",
                                 "source": "Engine/linux/libraries/QtMultimedia/qmldir",
                                 "target": "Engine/libraries/QtMultimedia/qmldir"
@@ -1039,6 +1040,7 @@
                                 "target": "Engine/RPG-Paper-Maker.app/Contents/PlugIns"
                             },
                             {
+                                "exe": true,
                                 "repo": "Dependencies",
                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/PkgInfo",
                                 "target": "Engine/RPG-Paper-Maker.app/Contents/PkgInfo"
@@ -1048,6 +1050,7 @@
                                     {
                                         "files": [
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework/QtSvg",
@@ -1070,6 +1073,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework/Versions/5/QtSvg",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtSvg.framework/Versions/5/QtSvg"
@@ -1122,6 +1126,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia"
@@ -1133,6 +1138,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimedia.framework/Versions"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimedia.framework/QtMultimedia",
@@ -1170,6 +1176,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtWidgets.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtWidgets.framework/Versions/5/QtWidgets",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtWidgets.framework/Versions/5/QtWidgets"
@@ -1181,6 +1188,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtWidgets.framework/Versions"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtWidgets.framework/QtWidgets",
@@ -1218,6 +1226,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Versions/5/QtGui",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Versions/5/QtGui"
@@ -1229,6 +1238,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/Versions"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtGui.framework/QtGui",
@@ -1246,6 +1256,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtNetwork.framework/Resources"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtNetwork.framework/QtNetwork",
@@ -1272,6 +1283,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtNetwork.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtNetwork.framework/Versions/5/QtNetwork",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtNetwork.framework/Versions/5/QtNetwork"
@@ -1314,6 +1326,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimediaWidgets.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimediaWidgets.framework/Versions/5/QtMultimediaWidgets",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimediaWidgets.framework/Versions/5/QtMultimediaWidgets"
@@ -1325,6 +1338,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimediaWidgets.framework/Versions"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtMultimediaWidgets.framework/QtMultimediaWidgets",
@@ -1342,6 +1356,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Resources"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/QtOpenGL",
@@ -1368,6 +1383,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Versions/5/QtOpenGL",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtOpenGL.framework/Versions/5/QtOpenGL"
@@ -1384,6 +1400,7 @@
                                     {
                                         "files": [
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCore.framework/QtCore",
@@ -1406,6 +1423,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtCore.framework/Versions/5/QtCore",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtCore.framework/Versions/5/QtCore"
@@ -1458,6 +1476,7 @@
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/Resources"
                                                             },
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/QtPrintSupport",
                                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework/Versions/5/QtPrintSupport"
@@ -1469,6 +1488,7 @@
                                                 "target": "Engine/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework/Versions"
                                             },
                                             {
+                                                "exe": true,
                                                 "repo": "Dependencies",
                                                 "sl": true,
                                                 "source": "Engine/osx/RPG-Paper-Maker.app/Contents/Frameworks/QtPrintSupport.framework/QtPrintSupport",
@@ -2013,6 +2033,7 @@
                         "target": "Engine/Content/win32/resources.pak"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/win32/version",
                         "target": "Engine/Content/win32/version"
@@ -2052,6 +2073,7 @@
                             {
                                 "files": [
                                     {
+                                        "exe": true,
                                         "repo": "Dependencies",
                                         "source": "Game/win32/resources/app/empty",
                                         "target": "Engine/Content/win32/resources/app/empty"
@@ -2095,6 +2117,7 @@
                     {
                         "files": [
                             {
+                                "exe": true,
                                 "repo": "Dependencies",
                                 "source": "Game/osx/Game.app/Icon\r",
                                 "target": "Engine/Content/osx/Game.app/Icon\r"
@@ -2111,6 +2134,7 @@
                                             {
                                                 "files": [
                                                     {
+                                                        "exe": true,
                                                         "repo": "Dependencies",
                                                         "source": "Game/osx/Game.app/Contents/Resources/app/empty",
                                                         "target": "Engine/Content/osx/Game.app/Contents/Resources/app/empty"
@@ -2122,6 +2146,7 @@
                                         "target": "Engine/Content/osx/Game.app/Contents/Resources"
                                     },
                                     {
+                                        "exe": true,
                                         "repo": "Dependencies",
                                         "source": "Game/osx/Game.app/Contents/PkgInfo",
                                         "target": "Engine/Content/osx/Game.app/Contents/PkgInfo"
@@ -2437,6 +2462,7 @@
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/ReactiveCocoa.framework/Versions/A/Headers"
                                                                     },
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/ReactiveCocoa.framework/Versions/A/ReactiveCocoa",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/ReactiveCocoa.framework/Versions/A/ReactiveCocoa"
@@ -2460,6 +2486,7 @@
                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/ReactiveCocoa.framework/Headers"
                                                     },
                                                     {
+                                                        "exe": true,
                                                         "repo": "Dependencies",
                                                         "sl": true,
                                                         "source": "Game/osx/Game.app/Contents/Frameworks/ReactiveCocoa.framework/ReactiveCocoa",
@@ -2473,6 +2500,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (Renderer).app/Contents/PkgInfo",
                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (Renderer).app/Contents/PkgInfo"
@@ -2485,6 +2513,7 @@
                                                             {
                                                                 "files": [
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (Renderer).app/Contents/MacOS/Electron Helper (Renderer)",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (Renderer).app/Contents/MacOS/Electron Helper (Renderer)"
@@ -2519,6 +2548,7 @@
                                                                     {
                                                                         "files": [
                                                                             {
+                                                                                "exe": true,
                                                                                 "repo": "Dependencies",
                                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt",
                                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt"
@@ -2577,6 +2607,7 @@
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Squirrel.framework/Versions/A/Headers"
                                                                     },
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
@@ -2600,6 +2631,7 @@
                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Squirrel.framework/Headers"
                                                     },
                                                     {
+                                                        "exe": true,
                                                         "repo": "Dependencies",
                                                         "sl": true,
                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Squirrel.framework/Squirrel",
@@ -3252,6 +3284,7 @@
                                                                     {
                                                                         "files": [
                                                                             {
+                                                                                "exe": true,
                                                                                 "repo": "Dependencies",
                                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
                                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler"
@@ -3279,6 +3312,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (Plugin).app/Contents/PkgInfo",
                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (Plugin).app/Contents/PkgInfo"
@@ -3291,6 +3325,7 @@
                                                             {
                                                                 "files": [
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (Plugin).app/Contents/MacOS/Electron Helper (Plugin)",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (Plugin).app/Contents/MacOS/Electron Helper (Plugin)"
@@ -3309,6 +3344,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper.app/Contents/PkgInfo",
                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper.app/Contents/PkgInfo"
@@ -3321,6 +3357,7 @@
                                                             {
                                                                 "files": [
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper.app/Contents/MacOS/Electron Helper",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper.app/Contents/MacOS/Electron Helper"
@@ -3373,6 +3410,7 @@
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Mantle.framework/Versions/A/Modules"
                                                                     },
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Mantle.framework/Versions/A/Mantle",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
@@ -3450,6 +3488,7 @@
                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Mantle.framework/Modules"
                                                     },
                                                     {
+                                                        "exe": true,
                                                         "repo": "Dependencies",
                                                         "sl": true,
                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Mantle.framework/Mantle",
@@ -3469,6 +3508,7 @@
                                                     {
                                                         "files": [
                                                             {
+                                                                "exe": true,
                                                                 "repo": "Dependencies",
                                                                 "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (GPU).app/Contents/PkgInfo",
                                                                 "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (GPU).app/Contents/PkgInfo"
@@ -3481,6 +3521,7 @@
                                                             {
                                                                 "files": [
                                                                     {
+                                                                        "exe": true,
                                                                         "repo": "Dependencies",
                                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Helper (GPU).app/Contents/MacOS/Electron Helper (GPU)",
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Helper (GPU).app/Contents/MacOS/Electron Helper (GPU)"
@@ -3520,6 +3561,7 @@
                         "target": "Engine/Content/osx/Game.app"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/osx/version",
                         "target": "Engine/Content/osx/version"
@@ -3530,6 +3572,7 @@
                         "target": "Engine/Content/osx/LICENSES.chromium.html"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/osx/LICENSE",
                         "target": "Engine/Content/osx/LICENSE"
@@ -3870,6 +3913,7 @@
                         "target": "Engine/Content/linux/libEGL.so"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/linux/chrome-sandbox",
                         "target": "Engine/Content/linux/chrome-sandbox"
@@ -3880,6 +3924,7 @@
                         "target": "Engine/Content/linux/resources.pak"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/linux/version",
                         "target": "Engine/Content/linux/version"
@@ -3900,6 +3945,7 @@
                         "target": "Engine/Content/linux/icudtl.dat"
                     },
                     {
+                        "exe": true,
                         "repo": "Dependencies",
                         "source": "Game/linux/LICENSE",
                         "target": "Engine/Content/linux/LICENSE"
@@ -3909,6 +3955,7 @@
                             {
                                 "files": [
                                     {
+                                        "exe": true,
                                         "repo": "Dependencies",
                                         "source": "Game/linux/resources/app/empty",
                                         "target": "Engine/Content/linux/resources/app/empty"
