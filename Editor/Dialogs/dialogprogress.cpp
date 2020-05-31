@@ -29,8 +29,9 @@ DialogProgress::DialogProgress(QWidget *parent) :
     m_endValue(0)
 {
     ui->setupUi(this);
-    
 
+    ui->labelDescription->setWordWrap(true);
+    
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowFlags(Qt::WindowTitleHint);
 

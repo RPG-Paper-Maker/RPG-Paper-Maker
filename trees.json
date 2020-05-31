@@ -1688,12 +1688,6 @@
                         "target": "Engine/Content/win32/swiftshader"
                     },
                     {
-                        "exe": true,
-                        "repo": "Dependencies",
-                        "source": "Game/win32/Game.exe",
-                        "target": "Engine/Content/win32/Game.exe"
-                    },
-                    {
                         "repo": "Dependencies",
                         "source": "Game/win32/libEGL.dll",
                         "target": "Engine/Content/win32/libEGL.dll"
@@ -2625,12 +2619,6 @@
                                                     {
                                                         "repo": "Dependencies",
                                                         "sl": true,
-                                                        "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Electron Framework",
-                                                        "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Electron Framework"
-                                                    },
-                                                    {
-                                                        "repo": "Dependencies",
-                                                        "sl": true,
                                                         "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Libraries",
                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Libraries"
                                                     },
@@ -3213,11 +3201,6 @@
                                                                             }
                                                                         ],
                                                                         "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Resources"
-                                                                    },
-                                                                    {
-                                                                        "repo": "Dependencies",
-                                                                        "source": "Game/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework",
-                                                                        "target": "Engine/Content/osx/Game.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
                                                                     },
                                                                     {
                                                                         "files": [
@@ -3898,12 +3881,6 @@
                         "repo": "Dependencies",
                         "source": "Game/linux/LICENSES.chromium.html",
                         "target": "Engine/Content/linux/LICENSES.chromium.html"
-                    },
-                    {
-                        "exe": true,
-                        "repo": "Dependencies",
-                        "source": "Game/linux/Game",
-                        "target": "Engine/Content/linux/Game"
                     },
                     {
                         "repo": "Dependencies",
