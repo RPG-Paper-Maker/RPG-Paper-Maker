@@ -7,7 +7,8 @@
         "Antialiasing",
         "After creating / pasting a new map / directory, select it",
         "New effect: select damage on HP by default",
-        "New updater for translations and new game framework"
+        "New updater for translations and new game framework",
+        "Copy files manager correctly copying symlinks"
     ],
 	"bugs": [
         "Sometimes command crashing when deleting it",
