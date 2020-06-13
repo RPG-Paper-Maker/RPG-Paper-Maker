@@ -412,8 +412,10 @@ void WidgetTreeCommands::deleteCommand() {
 
     // Select node below
     if (row != -1) {
-        this->selectionModel()->select(this->getModel()->item(row)->index(),
-            QItemSelectionModel::SelectCurrent);
+        QStandardItem *item = this->getModel()->item(row);
+        this->selectionModel()->select(item->index(), QItemSelectionModel
+            ::SelectCurrent);
+        this->selectChildren(item);
     }
 }
 

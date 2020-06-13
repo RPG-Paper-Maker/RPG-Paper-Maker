@@ -21,6 +21,12 @@
         "Menu open BR game"
     ],
 	"bugs": [
+        "Variable command crashing ingame",
+        "Delayed musics",
+        "Dealed damages overlap",
+        "Deleting command select command below but not the entire node",
+        "Weird space ingame on display text command node separation",
+        "Weird display text for interlocutor small delay displaying",
         "Mountains issues with different width",
 		"Move square command go through mountains",
         "Ingame crash when using start battle command with manual battle map position",
@@ -47,8 +53,14 @@
         0,
         0,
         1,
-        0
+        0,
 
+        2,
+        2,
+        0,
+        2,
+        0,
+        0,
         0,
         0,
         0,
