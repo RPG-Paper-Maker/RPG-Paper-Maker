@@ -13,17 +13,17 @@ IF EXIST %pathMods% (
 )
 mkdir %pathMods%
 
-set sourcePathModsScript=%pathRepos%\Game\Content\Datas\Scripts
+set sourcePathModsScript=%pathRepos%\Game-Scripts\Content\Datas\Scripts
 set pathModsScript=%pathMods%\Scripts
-CALL :copy_mod %sourcePathModsScript% %pathModsScript% Game
+CALL :copy_mod %sourcePathModsScript% %pathModsScript% Game-Scripts
 
-set sourceFile=%pathRepos%\Game\main.js
+set sourceFile=%pathRepos%\Game-Scripts\main.js
 set destinationFile=%pathMods%\main.js
 copy /Y %sourceFile% %destinationFile%
-set sourceFile=%pathRepos%\Game\index.html
+set sourceFile=%pathRepos%\Game-Scripts\index.html
 set destinationFile=%pathMods%\index.html
 copy /Y %sourceFile% %destinationFile%
-set sourceFile=%pathRepos%\Game\package.json
+set sourceFile=%pathRepos%\Game-Scripts\package.json
 set destinationFile=%pathMods%\package.json
 copy /Y %sourceFile% %destinationFile%
 

@@ -980,13 +980,17 @@ void PanelPrimitiveValue::on_comboBoxKeyBoardCurrentIndexChanged(int index) {
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::on_lineEditMessage_textChanged(const QString &text) {
+    int p = ui->lineEditMessage->cursorPosition();
     setMessageValue(text);
+    ui->lineEditMessage->setCursorPosition(p);
 }
 
 // -------------------------------------------------------
 
 void PanelPrimitiveValue::on_lineEditScript_textChanged(const QString &text) {
+    int p = ui->lineEditScript->cursorPosition();
     setMessageValue(text);
+    ui->lineEditMessage->setCursorPosition(p);
 }
 
 // -------------------------------------------------------
