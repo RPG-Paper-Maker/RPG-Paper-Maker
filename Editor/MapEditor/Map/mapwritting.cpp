@@ -91,10 +91,8 @@ QString Map::writeMap(QString path, MapProperties& properties,
                      properties);
 
     // Portions
-    int lx = (properties.length() - 1) / RPM::PORTION_SIZE;
-    int ld = (properties.depth() - 1) / RPM::PORTION_SIZE;
-    int lh = (properties.height() - 1) / RPM::PORTION_SIZE;
-    int lz = (properties.width() - 1) / RPM::PORTION_SIZE;
+    int lx, ld, lh, lz;
+    properties.getPortionsNumber(lx, ld, lh, lz);
     for (int i = 0; i <= lx; i++){
         for (int j = -ld; j <= lh; j++){
             for (int k = 0; k <= lz; k++){
