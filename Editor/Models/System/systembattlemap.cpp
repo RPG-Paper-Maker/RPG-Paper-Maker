@@ -13,7 +13,6 @@
 #include "dialogsystembattlemap.h"
 #include "rpm.h"
 
-const QString SystemBattleMap::JSON_CAMERA_PROPERTIES_ID = "cpi";
 const QString SystemBattleMap::JSON_ID_MAP = "idm";
 const QString SystemBattleMap::JSON_POSITION = "p";
 
@@ -29,23 +28,18 @@ SystemBattleMap::SystemBattleMap() :
 
 }
 
-SystemBattleMap::SystemBattleMap(int i, QString name, PrimitiveValue *cpi, int
+SystemBattleMap::SystemBattleMap(int i, QString name, int
     im, Position3D p) :
     SuperListItem(i, name),
-    m_cameraPropertiesID(cpi),
     m_idMap(im),
     m_position(p)
 {
-    m_cameraPropertiesID->setModelDataBase(RPM::get()->project()->gameDatas()
-        ->systemDatas()->modelcameraProperties());
+
 }
 
-SystemBattleMap::~SystemBattleMap() {
-    delete m_cameraPropertiesID;
-}
+SystemBattleMap::~SystemBattleMap()
+{
 
-PrimitiveValue * SystemBattleMap::cameraPropertiesID() const {
-    return m_cameraPropertiesID;
 }
 
 int SystemBattleMap::idMap() const {
@@ -99,7 +93,6 @@ void SystemBattleMap::setCopy(const SuperListItem &super) {
     SuperListItem::setCopy(super);
 
     battleMap = reinterpret_cast<const SystemBattleMap *>(&super);
-    m_cameraPropertiesID->setCopy(*battleMap->m_cameraPropertiesID);
     m_idMap = battleMap->m_idMap;
     m_position.setCopy(battleMap->m_position);
 }
@@ -119,9 +112,6 @@ QString SystemBattleMap::toString() const {
 void SystemBattleMap::read(const QJsonObject &json){
     SuperListItem::read(json);
 
-    if (json.contains(JSON_CAMERA_PROPERTIES_ID)) {
-        m_cameraPropertiesID->read(json[JSON_CAMERA_PROPERTIES_ID].toObject());
-    }
     m_idMap = json[JSON_ID_MAP].toInt();
     m_position.read(json[JSON_POSITION].toArray());
 }
@@ -133,11 +123,6 @@ void SystemBattleMap::write(QJsonObject &json) const{
     QJsonObject obj;
     QJsonArray tab;
 
-    if (!m_cameraPropertiesID->isDefaultDataBaseValue()) {
-        obj = QJsonObject();
-        m_cameraPropertiesID->write(obj);
-        json[JSON_CAMERA_PROPERTIES_ID] = obj;
-    }
     json[JSON_ID_MAP] = m_idMap;
     m_position.write(tab);
     json[JSON_POSITION] = tab;

@@ -30,8 +30,6 @@ DialogSystemBattleMap::DialogSystemBattleMap(SystemBattleMap &battleMap,
 
     ui->setupUi(this);
 
-    ui->panelPrimitiveCameraPropertiesID->initializeDataBaseAndUpdate(battleMap
-        .cameraPropertiesID());
     position = battleMap.position();
     ui->panelSelectPositionMaps->initialize(battleMap.idMap(), position.x(),
         position.y(), position.getYpx(RPM::getSquareSize()), position.z());
@@ -60,8 +58,6 @@ void DialogSystemBattleMap::translate()
 {
     this->setWindowTitle(RPM::translate(Translations::SET_BATTLE_MAP) + RPM
         ::DOT_DOT_DOT);
-    ui->labelCameraPropertiesID->setText(RPM::translate(Translations
-        ::CAMERA_PROPERTIES_ID) + RPM::COLON);
     RPM::get()->translations()->translateButtonBox(ui->buttonBox);
 }
 

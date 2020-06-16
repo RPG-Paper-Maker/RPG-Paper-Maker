@@ -64,6 +64,7 @@ void Map::writeDefaultMap(QString path){
 int Map::writeDefaultBattleMap(QString path) {
     MapProperties properties;
     properties.setId(Map::generateMapId());
+    properties.cameraProperties()->setNumberValue(2);
     QJsonArray jsonObject;
     properties.skyColorID()->setNumberValue(3);
     QString pathMap = writeMap(path, properties, jsonObject);

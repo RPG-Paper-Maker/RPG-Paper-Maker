@@ -593,17 +593,6 @@ void ProjectUpdater::updateVersion_1_3_0() {
 
     // Camera properties + battle map default camera properties
     m_project->gameDatas()->systemDatas()->setDefaultCameraProperties();
-    QStandardItemModel *modelBattleMaps = m_project->gameDatas()
-        ->battleSystemDatas()->modelBattleMaps();
-    SystemBattleMap *battleMap;
-    for (i = 0, l = modelBattleMaps->invisibleRootItem()->rowCount(); i < l; i++)
-    {
-        battleMap = reinterpret_cast<SystemBattleMap *>(modelBattleMaps->item(i)
-            ->data().value<quintptr>());
-        if (battleMap != nullptr) {
-            battleMap->cameraPropertiesID()->setNumberValue(2);
-        }
-    }
     m_project->writeBattleSystemDatas();
 
     // Detections
