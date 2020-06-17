@@ -31,6 +31,8 @@
         "Change state not working on hero",
         "Event command display / set / move / turn not centered correctly",
         "When creating a map with depth > 0, crash",
+        "3D custom object no collisions",
+        "New battle maps not updating map name",
         "Mountains issues with different width",
 		"Move square command go through mountains",
         "Ingame crash when using start battle command with manual battle map position",
@@ -59,6 +61,8 @@
         0,
         0,
 
+        2,
+        2,
         2,
         2,
         2,

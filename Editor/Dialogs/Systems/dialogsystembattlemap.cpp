@@ -77,6 +77,7 @@ void DialogSystemBattleMap::accept() {
             , ui->panelSelectPositionMaps->z());
         m_battleMap.setIDMap(ui->panelSelectPositionMaps->idMap());
         m_battleMap.setPosition(position);
+        m_battleMap.setName(ui->panelSelectPositionMaps->mapName());
         QDialog::accept();
     }
 }
