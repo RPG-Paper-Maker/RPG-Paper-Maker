@@ -44,6 +44,7 @@ public:
     void initializeModel(QStandardItemModel* m);
     QStandardItem* getSelected() const;
     QStandardItemModel* getModel() const;
+
     static void updateNodeSaved(QStandardItem* item);
     void updateAllNodesSaved();
     void deleteAllMapTemp();
@@ -58,6 +59,7 @@ public:
     void paste(QStandardItem* item);
     bool setCurrentIndexFirstMap(QStandardItem* item);
     void expandAllNode(QStandardItem *item);
+    void disableContextMenu();
 
 protected:
     virtual void keyPressEvent(QKeyEvent *event);

@@ -421,6 +421,13 @@ void WidgetTreeLocalMaps::expandAllNode(QStandardItem *item)
 }
 
 // -------------------------------------------------------
+
+void WidgetTreeLocalMaps::disableContextMenu()
+{
+    this->setContextMenuPolicy(Qt::NoContextMenu);
+}
+
+// -------------------------------------------------------
 //
 //  CONTEXT MENU SLOTS
 //

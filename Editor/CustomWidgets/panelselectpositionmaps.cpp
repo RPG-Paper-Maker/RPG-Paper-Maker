@@ -29,6 +29,7 @@ PanelSelectPositionMaps::PanelSelectPositionMaps(QWidget *parent) :
     ui->treeViewLocalMaps->initializeWidgetMapEditor(ui->widgetMap);
     m_treeMapDatas->read(RPM::get()->project()->pathCurrentProjectApp());
     ui->treeViewLocalMaps->initializeModel(m_treeMapDatas->model());
+    ui->treeViewLocalMaps->disableContextMenu();
 
     this->translate();
 }
