@@ -190,7 +190,7 @@ public:
     void addObject(Position &p);
     void stockObject(Position &p, SystemCommonObject *object,
         bool undoRedo = false, bool move = false);
-    void removeObject(Position &p);
+    bool removeObject(Position &p);
     void eraseObject(Position &p, bool undoRedo = false, bool move = false);
     void moveObject(Position &p);
     void updateMapObjects();

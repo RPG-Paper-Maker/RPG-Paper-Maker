@@ -52,7 +52,7 @@ void ControlMapEditor::showObjectMenuContext(){
     m_contextMenu->canCopy(!isEmpty);
     m_contextMenu->canPaste(m_copiedObject != nullptr);
     m_contextMenu->canDelete(!isEmpty);
-    m_contextMenu->canHero(!isEmpty);
+    m_contextMenu->canHero(true);
 
     // Show menu context
     m_contextMenu->showContextMenu(m_mouse);
@@ -62,13 +62,40 @@ void ControlMapEditor::showObjectMenuContext(){
 
 void ControlMapEditor::defineAsHero() {
     SystemDatas *datas = RPM::get()->project()->gameDatas()->systemDatas();
+    Position position;
+    m_cursorObject->getPosition3D(position);
+
+    // If no object selected, create a fresh new object with hero model
+    if (m_selectedObject == nullptr)
+    {
+        // Remove previous object
+        if (datas->idMapHero() != -1)
+        {
+            if (datas->idMapHero() == m_map->mapProperties()->id())
+            {
+                Position posPrevious;
+                SystemMapObject *mapObject = reinterpret_cast<SystemMapObject *>
+                    (SuperListItem::getById(m_map->modelObjects()
+                    ->invisibleRootItem(), datas->idObjectHero()));
+                posPrevious = mapObject->position();
+                if (m_map->isInGrid(posPrevious))
+                {
+                    this->eraseObject(posPrevious);
+                }
+            }
+        }
+        m_selectedObject = new SystemCommonObject;
+        m_selectedObject->setId(m_map->generateObjectId());
+        m_selectedObject->setName(RPM::translate(Translations::HERO));
+        m_selectedObject->setInheritance(2);
+        stockObject(position, m_selectedObject);
+        m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
+    }
     datas->setIdMapHero(m_map->mapProperties()->id());
     datas->setIdObjectHero(m_selectedObject->id());
     RPM::get()->project()->writeSystemDatas();
 
     // Update cursor position
-    Position3D position;
-    m_cursorObject->getPosition3D(position);
     setStartPosition(position);
 }
 
@@ -213,11 +240,13 @@ void ControlMapEditor::stockObject(Position &p, SystemCommonObject *object,
 
 // -------------------------------------------------------
 
-void ControlMapEditor::removeObject(Position &p){
+bool ControlMapEditor::removeObject(Position &p){
     if (m_map->isInGrid(p)) {
         eraseObject(p);
         m_controlUndoRedo.addState(m_map->mapProperties()->id(), m_changes);
+        return true;
     }
+    return false;
 }
 
 // -------------------------------------------------------

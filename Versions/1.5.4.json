@@ -43,7 +43,8 @@
         "Going into another battle after you got a teamate killed in the one before let the character still appear alive",
         "Battle option no game over when defeat: camera not changed",
         "Battle option no game over when defeat: crash ingame when running a new battle with 0 HP",
-        "Battle option no game over when defeat: battle music doesn't stop"
+        "Battle option no game over when defeat: battle music doesn't stop",
+        "Remove About window shortcut in conflit with define as hero"
 	],
     "finished": [
         0,
@@ -61,7 +62,7 @@
         0,
         1,
         0,
-        0,
+        2,
         2,
 
         2,
@@ -82,6 +83,7 @@
         2,
         2,
         2,
+        0,
         0,
         0,
         0,
