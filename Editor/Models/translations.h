@@ -1107,6 +1107,7 @@ public:
     static const QString HELP_ENGINE_2;
     static const QString HELP_ENGINE_3;
     static const QString CHANGE_LANGUAGE;
+    static const QString ENEMY_TOUCH;
 
     Translations();
     virtual ~Translations();

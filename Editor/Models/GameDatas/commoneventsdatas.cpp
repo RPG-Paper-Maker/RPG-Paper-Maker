@@ -108,10 +108,11 @@ void CommonEventsDatas::setDefault(){
     // Events user
     QStringList namesEventsUser;
     namesEventsUser << RPM::translate(Translations::HERO_ACTION) << RPM
-        ::translate(Translations::HERO_TOUCH);
+        ::translate(Translations::HERO_TOUCH) << RPM::translate(Translations
+        ::ENEMY_TOUCH);
     QList<QVector<SystemCreateParameter*>> parametersUser;
     parametersUser << QVector<SystemCreateParameter *>({}) << QVector<
-        SystemCreateParameter *>({});
+        SystemCreateParameter *>({}) << QVector<SystemCreateParameter *>({});
     setDefaultEvent(m_modelEventsUser, namesEventsUser, parametersUser);
 
     // States

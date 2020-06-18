@@ -18,7 +18,8 @@
         "Command change state: choose object and a map",
         "Demo game (in BR)",
         "Menu open BR game",
-        "Change define as hero so it create a new object with model hero"
+        "Change define as hero so it create a new object with model hero",
+        "Adding enemy touch event"
     ],
 	"bugs": [
         "Variable command crashing ingame",
@@ -61,6 +62,7 @@
         1,
         0,
         0,
+        2,
 
         2,
         2,
@@ -79,7 +81,7 @@
         0,
         2,
         2,
-        0,
+        2,
         0,
         0,
         0,

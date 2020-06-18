@@ -844,7 +844,7 @@
     "interval": "Intervale",
     "immediate.repeat": "Répéter immédiatement",
     "hero.action": "Action du héro",
-    "hero.touch": "Touché du héro",
+    "hero.touch": "Au contact du héro",
     "lucas": "Lucas",
     "kate": "Kate",
     "bibi": "Bibi",
@@ -1074,5 +1074,6 @@
     "help.engine.1": "Aidez-nous à faire vivre le logiciel et le garder gratuit !",
     "help.engine.2": "Achetez l'édition commerciale ici !",
     "help.engine.3": "Ou...",
-    "change.language": "Changer de langue"
+    "change.language": "Changer de langue",
+    "enemy.touch": "Au contact de l'enemi"
 }

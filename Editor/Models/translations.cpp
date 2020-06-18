@@ -1095,6 +1095,7 @@ const QString Translations::HELP_ENGINE_1 = "help.engine.1";
 const QString Translations::HELP_ENGINE_2 = "help.engine.2";
 const QString Translations::HELP_ENGINE_3 = "help.engine.3";
 const QString Translations::CHANGE_LANGUAGE = "change.language";
+const QString Translations::ENEMY_TOUCH = "enemy.touch";
 
 // -------------------------------------------------------
 //

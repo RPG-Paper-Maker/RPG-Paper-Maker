@@ -207,6 +207,22 @@ void SystemCommonObject::setDefaultHero(QStandardItemModel *modelEventsSystem,
         ::TRUE_BOOL_STRING, "1", "1"}));
     setDefaultHeroKeyPressEvent(modelEventsSystem, 13, false, false,
         EventCommandKind::OpenMainMenu, QVector<QString>({}));
+    SystemObjectEvent *event = new SystemObjectEvent(1, RPM::translate(
+        Translations::TIME), new QStandardItemModel, true);
+    event->addParameter(new SystemParameter(1, "", nullptr, new PrimitiveValue(
+        PrimitiveValueKind::Default)));
+    event->addParameter(new SystemParameter(2, "", nullptr, new PrimitiveValue(
+        PrimitiveValueKind::Default)));
+    event->setDefaultHero();
+    SystemReaction *reaction = event->reactionAt(1);
+    QVector<QString> list = QVector<QString>({"1", "7", "2", "1", "1", "3"});
+    EventCommand *command = new EventCommand(EventCommandKind::SendEvent, list);
+    SystemCommonReaction::addCommandWithoutText(reaction->modelCommands()
+        ->invisibleRootItem(), command);
+    item = new QStandardItem;
+    item->setData(QVariant::fromValue(reinterpret_cast<quintptr>(event)));
+    item->setText(toString());
+    m_events->appendRow(item);
     item = new QStandardItem();
     item->setText(SuperListItem::beginningText);
     m_events->appendRow(item);
