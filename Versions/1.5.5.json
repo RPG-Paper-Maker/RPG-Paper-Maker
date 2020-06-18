@@ -1,0 +1,50 @@
+{
+	"add": [],
+	"remove": [],
+	"replace": [],
+	"features": [
+        "Skybox",
+        "Command label",
+        "Command comment",
+        "Command modify statistic",
+        "Command change a skill",
+        "Command change name",
+        "Command change equipment",
+        "Command shake screen",
+        "Command flash screen",
+        "Command move camera (complete)",
+        "Command modify money",
+        "Command modify inventory: selection choose by ID",
+        "Command change state: choose object and a map",
+        "Demo game (in BR)",
+        "Menu open BR game",
+        "Start a battle command: escape node",
+        "Frame duration for objects moving in system manager"
+    ],
+	"bugs": [
+        "Mountains issues with different width",
+		"Move square command go through mountains"
+	],
+    "finished": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+
+        0,
+        0
+    ]
+}
