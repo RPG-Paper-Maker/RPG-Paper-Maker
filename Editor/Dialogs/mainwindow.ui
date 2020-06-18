@@ -568,9 +568,6 @@
    <property name="text">
     <string>About</string>
    </property>
-   <property name="shortcut">
-    <string>H</string>
-   </property>
   </action>
   <action name="actionHeight_up">
    <property name="icon">
