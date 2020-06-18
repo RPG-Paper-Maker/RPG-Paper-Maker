@@ -3935,12 +3935,6 @@
                         "target": "Engine/Content/linux/LICENSES.chromium.html"
                     },
                     {
-                        "exe": true,
-                        "repo": "Dependencies",
-                        "source": "Game/linux/Game",
-                        "target": "Engine/Content/linux/Game"
-                    },
-                    {
                         "repo": "Dependencies",
                         "source": "Game/linux/snapshot_blob.bin",
                         "target": "Engine/Content/linux/snapshot_blob.bin"
